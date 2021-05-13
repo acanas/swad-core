@@ -32,7 +32,7 @@
 
 #include "swad_account.h"
 #include "swad_announcement.h"
-#include "swad_attendance.h"
+#include "swad_attendance_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"

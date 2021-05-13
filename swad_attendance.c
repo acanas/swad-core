@@ -34,6 +34,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_attendance.h"
+#include "swad_attendance_database.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -106,20 +107,14 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct Att_Event *Event);
 static void Att_ResetAttendanceEvent (struct Att_Event *Event);
 static void Att_FreeListAttEvents (struct Att_Events *Events);
-static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Att_PutParamSelectedAttCod (void *Events);
 static void Att_PutParamAttCod (long AttCod);
 static long Att_GetParamAttCod (void);
 
-static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
-static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod);
-static void Att_CreateGrps (long AttCod);
+static void Att_CreateGroups (long AttCod);
 static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Event);
-
-static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod);
-static void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod);
 
 static void Att_ShowEvent (struct Att_Events *Events);
 
@@ -133,18 +128,13 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
 				 const char *Title,const char *Txt,
 				 const char *Class);
 static void Att_PutParamsCodGrps (long AttCod);
-static void Att_GetNumStdsTotalWhoAreInAttEvent (struct Att_Event *Event);
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 							 long LstSelectedUsrCods[],
 							 unsigned NumUsrsInList);
-static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present);
 static bool Att_CheckIfUsrIsPresentInAttEvent (long AttCod,long UsrCod);
 static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,
                                                              char CommentStd[Cns_MAX_BYTES_TEXT + 1],
                                                              char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
-static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool Present,
-                                                  const char *CommentStd,const char *CommentTch);
-static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 
 static void Att_ReqListOrPrintUsrsAttendanceCrs (void *TypeOfView);
 static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView);
@@ -247,74 +237,80 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
                  Att_PutIconsInListOfAttEvents,Events,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
-     {
-      Set_BeginSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeAtt,
-                                  Att_ParamsWhichGroupsToShow,&Events);
-      Set_EndSettingsHead ();
-     }
-
-   /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
-				  Events,-1L);
-
-   if (Events->Num)
-     {
-      /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-      HTM_TR_Begin (NULL);
-
-      HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-      for (Order  = Dat_START_TIME;
-	   Order <= Dat_END_TIME;
-	   Order++)
+      /***** Select whether show only my groups or all groups *****/
+      if (Gbl.Crs.Grps.NumGrps)
 	{
-	 HTM_TH_Begin (1,1,"LM");
-
-	 Frm_BeginForm (ActSeeAtt);
-         WhichGroups = Grp_GetParamWhichGroups ();
-	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
-	 Dat_PutHiddenParamOrder (Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Events->SelectedOrder)
-	    HTM_U_Begin ();
-	 HTM_Txt (Txt_START_END_TIME[Order]);
-	 if (Order == Events->SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-
-	 HTM_TH_End ();
+	 Set_BeginSettingsHead ();
+	 Grp_ShowFormToSelWhichGrps (ActSeeAtt,
+				     Att_ParamsWhichGroupsToShow,&Events);
+	 Set_EndSettingsHead ();
 	}
-      HTM_TH (1,1,"LM",Txt_Event);
-      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
 
-      HTM_TR_End ();
+      /***** Write links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
+				     Events,-1L);
 
-      /***** Write all the attendance events *****/
-      for (NumAttEvent  = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
-	   NumAttEvent <= Pagination.LastItemVisible;
-	   NumAttEvent++)
-	 Att_ShowOneAttEvent (Events,
-	                      &Events->Lst[NumAttEvent - 1],
-	                      false);
+      if (Events->Num)
+	{
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (2);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No events created
-      Ale_ShowAlert (Ale_INFO,Txt_No_events);
+	    /***** Table head *****/
+	    HTM_TR_Begin (NULL);
 
-   /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
-				  Events,-1L);
+	       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+	       for (Order  = Dat_START_TIME;
+		    Order <= Dat_END_TIME;
+		    Order++)
+		 {
+		  HTM_TH_Begin (1,1,"LM");
 
-   /***** Button to create a new attendance event *****/
-   if (ICanEdit)
-      Att_PutButtonToCreateNewAttEvent (Events);
+		     Frm_BeginForm (ActSeeAtt);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
+		     Dat_PutHiddenParamOrder (Order);
+
+			HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+
+			   if (Order == Events->SelectedOrder)
+			      HTM_U_Begin ();
+			   HTM_Txt (Txt_START_END_TIME[Order]);
+			   if (Order == Events->SelectedOrder)
+			      HTM_U_End ();
+
+			HTM_BUTTON_End ();
+
+		     Frm_EndForm ();
+
+		  HTM_TH_End ();
+		 }
+	       HTM_TH (1,1,"LM",Txt_Event);
+	       HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+
+	    HTM_TR_End ();
+
+	    /***** Write all the attendance events *****/
+	    for (NumAttEvent  = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
+		 NumAttEvent <= Pagination.LastItemVisible;
+		 NumAttEvent++)
+	       Att_ShowOneAttEvent (Events,
+				    &Events->Lst[NumAttEvent - 1],
+				    false);
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+	}
+      else	// No events created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_events);
+
+      /***** Write again links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
+				     Events,-1L);
+
+      /***** Button to create a new attendance event *****/
+      if (ICanEdit)
+	 Att_PutButtonToCreateNewAttEvent (Events);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -398,9 +394,14 @@ static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events)
   {
    extern const char *Txt_New_event;
 
+   /***** Begin form *****/
    Frm_BeginForm (ActFrmNewAtt);
    Att_PutParamsToCreateNewAttEvent (Events);
-   Btn_PutConfirmButton (Txt_New_event);
+
+      /***** Button to create new event *****/
+      Btn_PutConfirmButton (Txt_New_event);
+
+   /***** End form *****/
    Frm_EndForm ();
   }
 
@@ -456,7 +457,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 
    /***** Get data of this attendance event *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (Event);
-   Att_GetNumStdsTotalWhoAreInAttEvent (Event);
+   Event->NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInAttEvent (Event->AttCod);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Event->AttCod,&Anchor);
@@ -465,105 +466,107 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
    /* Forms to remove/edit this attendance event */
    HTM_TR_Begin (NULL);
 
-   if (ShowOnlyThisAttEventComplete)
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-   else
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         Att_PutFormsToRemEditOneAttEvent (Events,Event,Anchor);
-	 break;
-      default:
-         break;
-     }
-   HTM_TD_End ();
-
-   /* Start/end date/time */
-   UniqueId++;
-   for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	StartEndTime++)
-     {
-      if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
       if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
-		       Id,
-		       Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
-						      "DATE_RED_LIGHT") :
-				       (Event->Open ? "DATE_GREEN" :
-						      "DATE_RED"));
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
-		       Id,
-		       Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
-						      "DATE_RED_LIGHT") :
-				       (Event->Open ? "DATE_GREEN" :
-						      "DATE_RED"),
-		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x7);
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Att_PutFormsToRemEditOneAttEvent (Events,Event,Anchor);
+	    break;
+	 default:
+	    break;
+	}
       HTM_TD_End ();
-      free (Id);
-     }
 
-   /* Attendance event title */
-   if (ShowOnlyThisAttEventComplete)
-      HTM_TD_Begin ("class=\"LT\"");
-   else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title,
-	                Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-	                                "BT_LINK LT ASG_TITLE");
-   HTM_ARTICLE_End ();
-   HTM_TD_End ();
+      /* Start/end date/time */
+      UniqueId++;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 if (ShowOnlyThisAttEventComplete)
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+			  Id,
+			  Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
+							 "DATE_RED_LIGHT") :
+					  (Event->Open ? "DATE_GREEN" :
+							 "DATE_RED"));
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+			  Id,
+			  Event->Hidden ? (Event->Open ? "DATE_GREEN_LIGHT" :
+							 "DATE_RED_LIGHT") :
+					  (Event->Open ? "DATE_GREEN" :
+							 "DATE_RED"),
+			  Gbl.RowEvenOdd);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x7);
+	 HTM_TD_End ();
+	 free (Id);
+	}
 
-   /* Number of students in this event */
-   if (ShowOnlyThisAttEventComplete)
-      HTM_TD_Begin ("class=\"%s RT\"",
-		    Event->Hidden ? "ASG_TITLE_LIGHT" :
-				    "ASG_TITLE");
-   else
-      HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
-		    Event->Hidden ? "ASG_TITLE_LIGHT" :
-				    "ASG_TITLE",
-		    Gbl.RowEvenOdd);
-   HTM_Unsigned (Event->NumStdsTotal);
-   HTM_TD_End ();
+      /* Attendance event title */
+      if (ShowOnlyThisAttEventComplete)
+	 HTM_TD_Begin ("class=\"LT\"");
+      else
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_ARTICLE_Begin (Anchor);
+      Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title,
+			   Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+					   "BT_LINK LT ASG_TITLE");
+      HTM_ARTICLE_End ();
+      HTM_TD_End ();
+
+      /* Number of students in this event */
+      if (ShowOnlyThisAttEventComplete)
+	 HTM_TD_Begin ("class=\"%s RT\"",
+		       Event->Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE");
+      else
+	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+		       Event->Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE",
+		       Gbl.RowEvenOdd);
+      HTM_Unsigned (Event->NumStdsTotal);
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Write second row of data of this attendance event *****/
    HTM_TR_Begin (NULL);
 
-   /* Author of the attendance event */
-   if (ShowOnlyThisAttEventComplete)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Att_WriteAttEventAuthor (Event);
-   HTM_TD_End ();
+      /* Author of the attendance event */
+      if (ShowOnlyThisAttEventComplete)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Att_WriteAttEventAuthor (Event);
+      HTM_TD_End ();
 
-   /* Text of the attendance event */
-   Att_GetAttEventDescriptionFromDB (Event->AttCod,Description);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   Str_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   if (ShowOnlyThisAttEventComplete)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Gbl.Crs.Grps.NumGrps)
-      Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Event);
-   HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "DAT_LIGHT" :
-        	                                 "DAT");
-   HTM_Txt (Description);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /* Text of the attendance event */
+      Att_DB_GetAttEventDescription (Event->AttCod,Description);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+      Str_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      if (ShowOnlyThisAttEventComplete)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      if (Gbl.Crs.Grps.NumGrps)
+	 Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Event);
+
+      HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "DAT_LIGHT" :
+						    "DAT");
+	 HTM_Txt (Description);
+      HTM_DIV_End ();
+
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -641,33 +644,15 @@ static void Att_PutParams (void *Events)
   }
 
 /*****************************************************************************/
-/********************* List all the attendance events ************************/
+/************************ List all attendance events *************************/
 /*****************************************************************************/
 
 static void Att_GetListAttEvents (struct Att_Events *Events,
                                   Att_OrderNewestOldest_t OrderNewestOldest)
   {
-   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = " AND Hidden='N'",
-      [Rol_GST    ] = " AND Hidden='N'",
-      [Rol_USR    ] = " AND Hidden='N'",
-      [Rol_STD    ] = " AND Hidden='N'",
-      [Rol_NET    ] = " AND Hidden='N'",
-      [Rol_TCH    ] = "",
-      [Rol_DEG_ADM] = " AND Hidden='N'",
-      [Rol_CTR_ADM] = " AND Hidden='N'",
-      [Rol_INS_ADM] = " AND Hidden='N'",
-      [Rol_SYS_ADM] = "",
-     };
-   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME][Att_NUM_ORDERS_NEWEST_OLDEST] =
-     {
-      [Dat_START_TIME][Att_NEWEST_FIRST] = "StartTime DESC,EndTime DESC,Title DESC",
-      [Dat_START_TIME][Att_OLDEST_FIRST] = "StartTime,EndTime,Title",
-
-      [Dat_END_TIME  ][Att_NEWEST_FIRST] = "EndTime DESC,StartTime DESC,Title DESC",
-      [Dat_END_TIME  ][Att_OLDEST_FIRST] = "EndTime,StartTime,Title",
-     };
+   extern unsigned (*Att_DB_GetListAttEvents[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+							             Dat_StartEndTime_t SelectedOrder,
+							             Att_OrderNewestOldest_t OrderNewestOldest);
    MYSQL_RES *mysql_res;
    unsigned NumAttEvent;
 
@@ -675,43 +660,14 @@ static void Att_GetListAttEvents (struct Att_Events *Events,
       Att_FreeListAttEvents (Events);
 
    /***** Get list of attendance events from database *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-      Events->Num = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get attendance events",
-		      "SELECT AttCod"
-		       " FROM att_events"
-		      " WHERE CrsCod=%ld"
-		        "%s"
-		        " AND (AttCod NOT IN"
-			     " (SELECT AttCod"
-			      " FROM att_groups)"
-			     " OR"
-			     " AttCod IN"
-			     " (SELECT att_groups.AttCod"
-			        " FROM grp_users,"
-				      "att_groups"
-			       " WHERE grp_users.UsrCod=%ld"
-			         " AND att_groups.GrpCod=grp_users.GrpCod))"
-		      " ORDER BY %s",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
-   else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      Events->Num = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get attendance events",
-		      "SELECT AttCod"
-		       " FROM att_events"
-		      " WHERE CrsCod=%ld%s"
-		      " ORDER BY %s",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
-		      OrderBySubQuery[Events->SelectedOrder][OrderNewestOldest]);
-
+   Events->Num = Att_DB_GetListAttEvents[Gbl.Crs.Grps.WhichGrps] (&mysql_res,
+	                                                          Events->SelectedOrder,
+	                                                          OrderNewestOldest);
    if (Events->Num) // Attendance events found...
      {
       /***** Create list of attendance events *****/
-      if ((Events->Lst = calloc (Events->Num,sizeof (*Events->Lst))) == NULL)
+      if ((Events->Lst = calloc ((size_t) Events->Num,
+                                 sizeof (*Events->Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the attendance events codes *****/
@@ -765,20 +721,7 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
    if (Event->AttCod > 0)
      {
       /***** Build query *****/
-      NumAttEvents = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get attendance event data",
-		      "SELECT AttCod,"					// row[0]
-			     "CrsCod,"					// row[1]
-			     "Hidden,"					// row[2]
-			     "UsrCod,"					// row[3]
-			     "UNIX_TIMESTAMP(StartTime),"		// row[4]
-			     "UNIX_TIMESTAMP(EndTime),"			// row[5]
-			     "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
-			     "CommentTchVisible,"			// row[7]
-			     "Title"					// row[8]
-		       " FROM att_events"
-		      " WHERE AttCod=%ld",
-		      Event->AttCod);
+      NumAttEvents = Att_DB_GetDataOfAttEventByCod (&mysql_res,Event->AttCod);
 
       /***** Get data of attendance event from database *****/
       if ((Found = (NumAttEvents != 0))) // Attendance event found...
@@ -786,10 +729,8 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get code of the attendance event (row[0]) */
+	 /* Get code of attendance event (row[0]) and code of course (row[1]) */
 	 Event->AttCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get code of the course (row[1]) */
 	 Event->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	 /* Get whether the attendance event is hidden or not (row[2]) */
@@ -856,22 +797,6 @@ static void Att_FreeListAttEvents (struct Att_Events *Events)
       Events->Num       = 0;
       Events->LstIsRead = false;
      }
-  }
-
-/*****************************************************************************/
-/***************** Get attendance event text from database *******************/
-/*****************************************************************************/
-
-static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get text of attendance event from database *****/
-   DB_QuerySELECTString (Description,Cns_MAX_BYTES_TEXT,"can not get attendance event text",
-		         "SELECT Txt"
-			  " FROM att_events"
-		         " WHERE AttCod=%ld"
-			   " AND CrsCod=%ld",
-		         AttCod,
-		         Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -980,10 +905,10 @@ void Att_GetAndRemAttEvent (void)
 void Att_RemoveAttEventFromDB (long AttCod)
   {
    /***** Remove users registered in the attendance event *****/
-   Att_RemoveAllUsrsFromAnAttEvent (AttCod);
+   Att_DB_RemoveAllUsrsFromAnAttEvent (AttCod);
 
    /***** Remove all the groups of this attendance event *****/
-   Att_RemoveAllTheGrpsAssociatedToAnAttEvent (AttCod);
+   Att_DB_RemoveGrpsAssociatedToAnAttEvent (AttCod);
 
    /***** Remove attendance event *****/
    Att_DB_RemoveAttEventFromCurrentCrs (AttCod);
@@ -1005,23 +930,17 @@ void Att_HideAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Hide attendance event *****/
-   DB_QueryUPDATE ("can not hide attendance event",
-		   "UPDATE att_events"
-		     " SET Hidden='Y'"
-		   " WHERE AttCod=%ld"
-		     " AND CrsCod=%ld",
-                   Event.AttCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Att_DB_HideAttEvent (Event.AttCod);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
   }
 
 /*****************************************************************************/
-/************************* Show an attendance event **************************/
+/************************ Unhide an attendance event *************************/
 /*****************************************************************************/
 
-void Att_ShowAttEvent (void)
+void Att_UnhideAttEvent (void)
   {
    struct Att_Event Event;
 
@@ -1032,35 +951,11 @@ void Att_ShowAttEvent (void)
    /***** Get data of the attendance event from database *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
-   /***** Hide attendance event *****/
-   DB_QueryUPDATE ("can not show attendance event",
-		   "UPDATE att_events"
-		     " SET Hidden='N'"
-		   " WHERE AttCod=%ld"
-		     " AND CrsCod=%ld",
-                   Event.AttCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Unhide attendance event *****/
+   Att_DB_UnhideAttEvent (Event.AttCod);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
-  }
-
-/*****************************************************************************/
-/***** Check if the title or the folder of an attendance event exists ********/
-/*****************************************************************************/
-
-static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
-  {
-   /***** Get number of attendance events
-          with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar attendance events",
-			  "SELECT COUNT(*)"
-			   " FROM att_events"
-			  " WHERE CrsCod=%ld"
-			    " AND %s='%s'"
-			    " AND AttCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Field,Value,AttCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1123,7 +1018,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
       /* Get text of the attendance event from database */
-      Att_GetAttEventDescriptionFromDB (Event.AttCod,Description);
+      Att_DB_GetAttEventDescription (Event.AttCod,Description);
      }
 
    /***** Begin form *****/
@@ -1139,83 +1034,83 @@ void Att_RequestCreatOrEditAttEvent (void)
    Grp_PutParamWhichGroups (&WhichGroups);
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
-   /***** Begin box and table *****/
-   if (ItsANewAttEvent)
-      Box_BoxTableBegin (NULL,Txt_New_event,
-                         NULL,NULL,
-			 Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,
-                         Event.Title[0] ? Event.Title :
-                	                  Txt_Edit_event,
-                	 NULL,NULL,
-			 Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      if (ItsANewAttEvent)
+	 Box_BoxTableBegin (NULL,Txt_New_event,
+			    NULL,NULL,
+			    Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
+      else
+	 Box_BoxTableBegin (NULL,
+			    Event.Title[0] ? Event.Title :
+					     Txt_Edit_event,
+			    NULL,NULL,
+			    Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
 
-   /***** Attendance event title *****/
-   HTM_TR_Begin (NULL);
+      /***** Attendance event title *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Event.Title,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Event.TimeUTC,
-					    Dat_FORM_SECONDS_ON,
-					    SetHMS);
+      /***** Assignment start and end dates *****/
+      Dat_PutFormStartEndClientLocalDateTimes (Event.TimeUTC,
+					       Dat_FORM_SECONDS_ON,
+					       SetHMS);
 
-   /***** Visibility of comments *****/
-   HTM_TR_Begin (NULL);
+      /***** Visibility of comments *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","ComTchVisible",Txt_Teachers_comment);
+	 /* Label */
+	 Frm_LabelColumn ("RT","ComTchVisible",Txt_Teachers_comment);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-                     "id=\"ComTchVisible\" name=\"ComTchVisible\"");
-   HTM_OPTION (HTM_Type_STRING,"N",!Event.CommentTchVisible,false,
-	       "%s",Txt_Hidden_MALE_PLURAL);
-   HTM_OPTION (HTM_Type_STRING,"Y",Event.CommentTchVisible,false,
-	       "%s",Txt_Visible_MALE_PLURAL);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      "id=\"ComTchVisible\" name=\"ComTchVisible\"");
+	       HTM_OPTION (HTM_Type_STRING,"N",!Event.CommentTchVisible,false,
+			   "%s",Txt_Hidden_MALE_PLURAL);
+	       HTM_OPTION (HTM_Type_STRING,"Y",Event.CommentTchVisible,false,
+			   "%s",Txt_Visible_MALE_PLURAL);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Attendance event description *****/
-   HTM_TR_Begin (NULL);
+      /***** Attendance event description *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Description);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewAttEvent)
-      HTM_Txt (Description);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+	       if (!ItsANewAttEvent)
+		  HTM_Txt (Description);
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Groups *****/
-   Att_ShowLstGrpsToEditAttEvent (Event.AttCod);
+      /***** Groups *****/
+      Att_ShowLstGrpsToEditAttEvent (Event.AttCod);
 
-   /***** End table, send button and end box *****/
-   if (ItsANewAttEvent)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewAttEvent)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_event);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1244,42 +1139,43 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Groups);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("100%",NULL,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,0);
+	 HTM_TD_Begin ("class=\"LT\"");
+	    Box_BoxTableBegin ("100%",NULL,
+			       NULL,NULL,
+			       NULL,Box_NOT_CLOSABLE,0);
 
-      /***** First row: checkbox to select the whole course *****/
-      HTM_TR_Begin (NULL);
+	       /***** First row: checkbox to select the whole course *****/
+	       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-		          "id=\"WholeCrs\" value=\"Y\"%s"
-		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod) ? "" :
-				                                                       " checked=\"checked\"");
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+		  HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		     HTM_LABEL_Begin (NULL);
+			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
+					    "id=\"WholeCrs\" value=\"Y\"%s"
+					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
+					    Grp_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod) ? "" :
+													 " checked=\"checked\"");
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
 
-      HTM_TR_End ();
+	       HTM_TR_End ();
 
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               Grp_ATT_EVENT,AttCod);
+	       /***** List the groups for each group type *****/
+	       for (NumGrpTyp = 0;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp++)
+		  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+							Grp_ATT_EVENT,AttCod);
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-      HTM_TD_End ();
+	    /***** End table and box *****/
+	    Box_BoxTableEnd ();
+	 HTM_TD_End ();
+
       HTM_TR_End ();
      }
 
@@ -1337,7 +1233,7 @@ void Att_ReceiveFormAttEvent (void)
    if (ReceivedAtt.Title[0])	// If there's an attendance event title
      {
       /* If title of attendance event was in database... */
-      if (Att_CheckIfSimilarAttEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
+      if (Att_DB_CheckIfSimilarAttEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
         {
          ReceivedAttEventIsCorrect = false;
 
@@ -1391,30 +1287,11 @@ void Att_ReceiveFormAttEvent (void)
 void Att_CreateAttEvent (struct Att_Event *Event,const char *Description)
   {
    /***** Create a new attendance event *****/
-   Event->AttCod =
-   DB_QueryINSERTandReturnCode ("can not create new attendance event",
-				"INSERT INTO att_events"
-				" (CrsCod,Hidden,UsrCod,"
-				  "StartTime,EndTime,"
-				  "CommentTchVisible,Title,Txt)"
-				" VALUES"
-				" (%ld,'%c',%ld,"
-				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				  "'%c','%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Event->Hidden ? 'Y' :
-					        'N',
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Event->TimeUTC[Att_START_TIME],
-				Event->TimeUTC[Att_END_TIME  ],
-				Event->CommentTchVisible ? 'Y' :
-							 'N',
-				Event->Title,
-				Description);
+   Event->AttCod = Att_DB_CreateAttEvent (Event,Description);
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Att_CreateGrps (Event->AttCod);
+      Att_CreateGroups (Event->AttCod);
   }
 
 /*****************************************************************************/
@@ -1424,101 +1301,30 @@ void Att_CreateAttEvent (struct Att_Event *Event,const char *Description)
 void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description)
   {
    /***** Update the data of the attendance event *****/
-   DB_QueryUPDATE ("can not update attendance event",
-		   "UPDATE att_events"
-		     " SET Hidden='%c',"
-		          "StartTime=FROM_UNIXTIME(%ld),"
-		          "EndTime=FROM_UNIXTIME(%ld),"
-		          "CommentTchVisible='%c',"
-		          "Title='%s',"
-		          "Txt='%s'"
-		   " WHERE AttCod=%ld"
-		     " AND CrsCod=%ld",
-                   Event->Hidden ? 'Y' :
-        	                   'N',
-                   Event->TimeUTC[Att_START_TIME],
-                   Event->TimeUTC[Att_END_TIME  ],
-                   Event->CommentTchVisible ? 'Y' :
-        	                              'N',
-                   Event->Title,
-                   Description,
-                   Event->AttCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Att_DB_UpdateAttEvent (Event,Description);
 
    /***** Update groups *****/
    /* Remove old groups */
-   Att_RemoveAllTheGrpsAssociatedToAnAttEvent (Event->AttCod);
+   Att_DB_RemoveGrpsAssociatedToAnAttEvent (Event->AttCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Att_CreateGrps (Event->AttCod);
-  }
-
-/*****************************************************************************/
-/****************** Remove groups of an attendance event *********************/
-/*****************************************************************************/
-
-static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod)
-  {
-   /***** Remove groups of the attendance event *****/
-   DB_QueryDELETE ("can not remove the groups"
-		   " associated to an attendance event",
-		   "DELETE FROM att_groups"
-		   " WHERE AttCod=%ld",
-		   AttCod);
-  }
-
-/*****************************************************************************/
-/************* Remove one group from all the attendance events ***************/
-/*****************************************************************************/
-
-void Att_RemoveGroup (long GrpCod)
-  {
-   /***** Remove group from all the attendance events *****/
-   DB_QueryDELETE ("can not remove group from the associations"
-	           " between attendance events and groups",
-		   "DELETE FROM att_groups"
-		   " WHERE GrpCod=%ld",
-		   GrpCod);
-  }
-
-/*****************************************************************************/
-/******** Remove groups of one type from all the attendance events ***********/
-/*****************************************************************************/
-
-void Att_RemoveGroupsOfType (long GrpTypCod)
-  {
-   /***** Remove group from all the attendance events *****/
-   DB_QueryDELETE ("can not remove groups of a type from the associations"
-		   " between attendance events and groups",
-		   "DELETE FROM att_groups"
-		   " USING grp_groups,"
-		          "att_groups"
-		   " WHERE grp_groups.GrpTypCod=%ld"
-		     " AND grp_groups.GrpCod=att_groups.GrpCod",
-                   GrpTypCod);
+      Att_CreateGroups (Event->AttCod);
   }
 
 /*****************************************************************************/
 /***************** Create groups of an attendance event **********************/
 /*****************************************************************************/
 
-static void Att_CreateGrps (long AttCod)
+static void Att_CreateGroups (long AttCod)
   {
-   unsigned NumGrpSel;
+   unsigned NumGrp;
 
    /***** Create groups of the attendance event *****/
-   for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
-	NumGrpSel++)
-      /* Create group */
-      DB_QueryINSERT ("can not associate a group to an attendance event",
-		      "INSERT INTO att_groups"
-		      " (AttCod,GrpCod)"
-		      " VALUES"
-		      " (%ld,%ld)",
-                      AttCod,
-		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+   for (NumGrp = 0;
+	NumGrp < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrp++)
+      Att_DB_CreateGroup (AttCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp]);
   }
 
 /*****************************************************************************/
@@ -1533,122 +1339,59 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
    extern const char *Txt_The_whole_course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumGrp;
    unsigned NumGrps;
+   unsigned NumGrp;
 
    /***** Get groups associated to an attendance event from database *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-		   "SELECT grp_types.GrpTypName,"	// row[0]
-			  "grp_groups.GrpName,"		// row[1]
-			  "roo_rooms.ShortName"		// row[2]
-		    " FROM (att_groups,"
-			   "grp_groups,"
-			   "grp_types)"
-		    " LEFT JOIN roo_rooms"
-		      " ON grp_groups.RooCod=roo_rooms.RooCod"
-		   " WHERE att_groups.AttCod=%ld"
-		     " AND att_groups.GrpCod=grp_groups.GrpCod"
-		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
-		   Event->AttCod);
+   NumGrps = Att_DB_GetGroupsAssociatedToEvent (&mysql_res,Event->AttCod);
 
-   /***** Write heading *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? "ASG_GRP_LIGHT" :
-        	                               "ASG_GRP");
-   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-                                    Txt_Groups);
+        	                                 "ASG_GRP");
 
-   /***** Write groups *****/
-   if (NumGrps) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumGrp = 0;
-	   NumGrp < NumGrps;
-	   NumGrp++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
+      /***** Write heading *****/
+      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
+				       Txt_Groups);
 
-         /* Write group type name (row[0]) and group name (row[1]) */
-         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+      /***** Write groups *****/
+      if (NumGrps) // Groups found...
+	{
+	 /* Get and write the group types and names */
+	 for (NumGrp = 0;
+	      NumGrp < NumGrps;
+	      NumGrp++)
+	   {
+	    /* Get next group */
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Write the name of the room (row[2]) */
-	 if (row[2])	// May be NULL because of LEFT JOIN
-	    if (row[2][0])
-               HTM_TxtF ("&nbsp;(%s)",row[2]);
+	    /* Write group type name (row[0]) and group name (row[1]) */
+	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-	 /* Write separator */
-         if (NumGrps >= 2)
-           {
-            if (NumGrp == NumGrps - 2)
-               HTM_TxtF (" %s ",Txt_and);
-            if (NumGrps >= 3)
-              if (NumGrp < NumGrps - 2)
-                  HTM_Txt (", ");
-           }
-        }
-     }
-   else
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	    /* Write the name of the room (row[2]) */
+	    if (row[2])	// May be NULL because of LEFT JOIN
+	       if (row[2][0])
+		  HTM_TxtF ("&nbsp;(%s)",row[2]);
 
+	    /* Write separator */
+	    if (NumGrps >= 2)
+	      {
+	       if (NumGrp == NumGrps - 2)
+		  HTM_TxtF (" %s ",Txt_and);
+	       if (NumGrps >= 3)
+		 if (NumGrp < NumGrps - 2)
+		     HTM_Txt (", ");
+	      }
+	   }
+	}
+      else
+	 HTM_TxtF ("%s&nbsp;%s",
+	           Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+
+   /***** End container *****/
    HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/*********** Remove all users registered in an attendance event **************/
-/*****************************************************************************/
-
-static void Att_RemoveAllUsrsFromAnAttEvent (long AttCod)
-  {
-   DB_QueryDELETE ("can not remove attendance event",
-		   "DELETE FROM att_users"
-		   " WHERE AttCod=%ld",
-		   AttCod);
-  }
-
-/*****************************************************************************/
-/* Remove one user from all the attendance events where he/she is registered */
-/*****************************************************************************/
-
-void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user from all attendance events",
-		   "DELETE FROM att_users"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/*********** Remove one student from all the attendance events ***************/
-/*****************************************************************************/
-
-void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
-  {
-   DB_QueryDELETE ("can not remove user from attendance events of a course",
-		   "DELETE FROM att_users"
-		   " USING att_events,"
-		          "att_users"
-		   " WHERE att_events.CrsCod=%ld"
-		     " AND att_events.AttCod=att_users.AttCod"
-		     " AND att_users.UsrCod=%ld",
-                   CrsCod,UsrCod);
-  }
-
-/*****************************************************************************/
-/*********************** Remove an attendance event **************************/
-/*****************************************************************************/
-
-static void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod)
-  {
-   DB_QueryDELETE ("can not remove attendance event",
-		   "DELETE FROM att_events"
-		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   AttCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1658,103 +1401,13 @@ static void Att_DB_RemoveAttEventFromCurrentCrs (long AttCod)
 void Att_RemoveCrsAttEvents (long CrsCod)
   {
    /***** Remove students *****/
-   DB_QueryDELETE ("can not remove all the students registered"
-		   " in events of a course",
-		   "DELETE FROM att_users"
-		   " USING att_events,"
-		          "att_users"
-		   " WHERE att_events.CrsCod=%ld"
-		     " AND att_events.AttCod=att_users.AttCod",
-                   CrsCod);
+   Att_DB_RemoveUsrsFromCrsAttEvents (CrsCod);
 
    /***** Remove groups *****/
-   DB_QueryDELETE ("can not remove all the groups associated"
-		   " to attendance events of a course",
-		   "DELETE FROM att_groups"
-		   " USING att_events,"
-		          "att_groups"
-		   " WHERE att_events.CrsCod=%ld"
-		     " AND att_events.AttCod=att_groups.AttCod",
-                   CrsCod);
+   Att_DB_RemoveGrpsAssociatedToCrsAttEvents (CrsCod);
 
    /***** Remove attendance events *****/
-   DB_QueryDELETE ("can not remove all the attendance events of a course",
-		   "DELETE FROM att_events"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/*************** Get number of attendance events in a course *****************/
-/*****************************************************************************/
-
-unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod)
-  {
-   /***** Get number of attendance events in a course from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of attendance events in course",
-		  "SELECT COUNT(*)"
-		   " FROM att_events"
-		  " WHERE CrsCod=%ld",
-		  CrsCod);
-  }
-
-/*****************************************************************************/
-/*************** Get number of courses with attendance events ****************/
-/*****************************************************************************/
-// Returns the number of courses with attendance events
-// in this location (all the platform, current degree or current course)
-
-unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
-  {
-   /***** Get number of courses with attendance events from database *****/
-   switch (Scope)
-     {
-      case Hie_Lvl_SYS:
-         return DB_QueryCOUNT ("can not get number of courses with attendance events",
-			       "SELECT COUNT(DISTINCT CrsCod)"
-				" FROM att_events"
-			       " WHERE CrsCod>0");
-      case Hie_Lvl_INS:
-         return DB_QueryCOUNT ("can not get number of courses with attendance events",
-			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
-				" FROM ctr_centers,"
-				      "deg_degrees,"
-				      "crs_courses,"
-				      "att_events"
-			       " WHERE ctr_centers.InsCod=%ld"
-				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				 " AND deg_degrees.DegCod=crs_courses.DegCod"
-				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
-         return DB_QueryCOUNT ("can not get number of courses with attendance events",
-			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
-				" FROM deg_degrees,"
-				      "crs_courses,"
-				      "att_events"
-			       " WHERE deg_degrees.CtrCod=%ld"
-				 " AND deg_degrees.DegCod=crs_courses.DegCod"
-				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
-         return DB_QueryCOUNT ("can not get number of courses with attendance events",
-			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
-				" FROM crs_courses,"
-				      "att_events"
-			       " WHERE crs_courses.DegCod=%ld"
-				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
-         return DB_QueryCOUNT ("can not get number of courses with attendance events",
-			       "SELECT COUNT(DISTINCT CrsCod)"
-				" FROM att_events"
-			       " WHERE CrsCod=%ld",
-			       Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
-     }
+   Att_DB_RemoveCrsAttEvents (CrsCod);
   }
 
 /*****************************************************************************/
@@ -1769,78 +1422,23 @@ unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
    MYSQL_ROW row;
    unsigned NumAttEvents;
 
+   /***** Set default values *****/
+   NumAttEvents = 0;
+   *NumNotif = 0;
+
    /***** Get number of attendance events from database *****/
-   switch (Scope)
+   if (Att_DB_GetNumAttEvents (&mysql_res,Scope))
      {
-      case Hie_Lvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM att_events"
-			 " WHERE CrsCod>0");
-         break;
-      case Hie_Lvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(att_events.NumNotif)"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "att_events"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case Hie_Lvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(att_events.NumNotif)"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "att_events"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case Hie_Lvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(att_events.NumNotif)"	// row[1]
-			  " FROM crs_courses,"
-			        "att_events"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=att_events.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case Hie_Lvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of attendance events",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM att_events"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get number of attendance events *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&NumAttEvents) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of attendance events.");
 
-   /***** Get number of attendance events *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumAttEvents) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of attendance events.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of notifications of attendance events.");
+      /***** Get number of notifications by email *****/
+      if (row[1])
+	 if (sscanf (row[1],"%u",NumNotif) != 1)
+	    Err_ShowErrorAndExit ("Error when getting number of notifications of attendance events.");
      }
-   else
-      *NumNotif = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1883,8 +1481,9 @@ static void Att_ShowEvent (struct Att_Events *Events)
                       NULL,NULL,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
 
-   Event.AttCod = Events->AttCod;
-   Att_ShowOneAttEvent (Events,&Event,true);
+      /***** Show attendance event *****/
+      Event.AttCod = Events->AttCod;
+      Att_ShowOneAttEvent (Events,&Event,true);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1996,73 +1595,73 @@ static void Att_ListAttStudents (struct Att_Events *Events,
                  NULL,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
-   /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,Events,
-                                      Grp_MY_GROUPS);
+      /***** Form to select groups *****/
+      Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,Events,
+					 Grp_MY_GROUPS);
 
-   /***** Begin section with user list *****/
-   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+      /***** Begin section with user list *****/
+      HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
-   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
-     {
-      /***** Get my preference about photos in users' list for current course *****/
-      Usr_GetMyPrefAboutListWithPhotosFromDB ();
+	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
+	   {
+	    /***** Get my preference about photos in users' list for current course *****/
+	    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&UsrDat);
 
-      /* Begin form */
-      Frm_BeginForm (ActRecAttStd);
-      Att_PutParamAttCod (Event->AttCod);
-      Grp_PutParamsCodGrps ();
+	    /* Begin form */
+	    Frm_BeginForm (ActRecAttStd);
+	    Att_PutParamAttCod (Event->AttCod);
+	    Grp_PutParamsCodGrps ();
 
-      /* Begin table */
-      HTM_TABLE_BeginWideMarginPadding (2);
+	       /* Begin table */
+	       HTM_TABLE_BeginWideMarginPadding (2);
 
-      /* Header */
-      HTM_TR_Begin (NULL);
+		  /* Header */
+		  HTM_TR_Begin (NULL);
 
-      HTM_TH_Empty (3);
-      if (Gbl.Usrs.Listing.WithPhotos)
-         HTM_TH_Empty (1);
-      HTM_TH (1,2,"LM",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-      HTM_TH (1,1,"LM",Txt_Student_comment);
-      HTM_TH (1,1,"LM",Txt_Teachers_comment);
+		     HTM_TH_Empty (3);
+		     if (Gbl.Usrs.Listing.WithPhotos)
+			HTM_TH_Empty (1);
+		     HTM_TH (1,2,"LM",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+		     HTM_TH (1,1,"LM",Txt_Student_comment);
+		     HTM_TH (1,1,"LM",Txt_Teachers_comment);
 
-      HTM_TR_End ();
+		  HTM_TR_End ();
 
-      /* List of students */
-      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-	   NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-	   NumUsr++)
-        {
-	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+		  /* List of students */
+		  for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+		       NumUsr++)
+		    {
+		     /* Copy user's basic data from list */
+		     Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
-	 /* Get list of user's IDs */
-         ID_GetListIDsFromUsrCod (&UsrDat);
+		     /* Get list of user's IDs */
+		     ID_GetListIDsFromUsrCod (&UsrDat);
 
-         Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,Event);
-        }
+		     Att_WriteRowUsrToCallTheRoll (NumUsr + 1,&UsrDat,Event);
+		    }
 
-      /* End table */
-      HTM_TABLE_End ();
+	       /* End table */
+	       HTM_TABLE_End ();
 
-      /* Send button */
-      Btn_PutConfirmButton (Txt_Save_changes);
+	       /* Send button */
+	       Btn_PutConfirmButton (Txt_Save_changes);
 
-      /***** End form *****/
-      Frm_EndForm ();
+	    /***** End form *****/
+	    Frm_EndForm ();
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
-   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
-      /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STD);
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&UsrDat);
+	   }
+	 else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+	    /***** Show warning indicating no students found *****/
+	    Usr_ShowWarningNoUsersFound (Rol_STD);
 
-   /***** End section with user list *****/
-   HTM_SECTION_End ();
+      /***** End section with user list *****/
+      HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2122,92 +1721,95 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    /***** Check if this student is already present in the current event *****/
    Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
 
-   /***** Icon to show if the user is already present *****/
+   /***** Begin table row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-   HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
-   Att_PutCheckOrCross (Present);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   /***** Checkbox to select user *****/
-   HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "id=\"Std%u\" value=\"%s\"%s%s",
-	               NumUsr,UsrDat->EnUsrCod,
-		       Present ? " checked=\"checked\"" : "",
-		       ICanChangeStdAttendance ? "" : " disabled=\"disabled\"");
-   HTM_TD_End ();
-
-   /***** Write number of student in the list *****/
-   HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_N" :
-				    "DAT",
-		 Gbl.RowEvenOdd);
-   HTM_Unsigned (NumUsr);
-   HTM_TD_End ();
-
-   /***** Show student's photo *****/
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+      /***** Icon to show if the user is already present *****/
+      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
+	    Att_PutCheckOrCross (Present);
+	 HTM_LABEL_End ();
       HTM_TD_End ();
-     }
 
-   /***** Write user's ID ******/
-   HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL",
-		 Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_TD_End ();
+      /***** Checkbox to select user *****/
+      HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Std%u\" value=\"%s\"%s%s",
+			     NumUsr,UsrDat->EnUsrCod,
+			     Present ? " checked=\"checked\"" : "",
+			     ICanChangeStdAttendance ? "" : " disabled=\"disabled\"");
+      HTM_TD_End ();
 
-   /***** Write student's name *****/
-   HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL",
-		 Gbl.RowEvenOdd);
-   HTM_Txt (UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   HTM_TxtF (", %s",UsrDat->FrstName);
-   HTM_TD_End ();
+      /***** Write number of student in the list *****/
+      HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_N" :
+				       "DAT",
+		    Gbl.RowEvenOdd);
+	 HTM_Unsigned (NumUsr);
+      HTM_TD_End ();
 
-   /***** Student's comment: write form or text */
-   HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanEditStdComment)	// Show with form
-     {
-      HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\"",
-	                  UsrDat->EnUsrCod);
-      HTM_Txt (CommentStd);
-      HTM_TEXTAREA_End ();
-     }
-   else				// Show without form
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CommentStd,Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CommentStd);
-     }
-   HTM_TD_End ();
+      /***** Show student's photo *****/
+      if (Gbl.Usrs.Listing.WithPhotos)
+	{
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+	 HTM_TD_End ();
+	}
 
-   /***** Teacher's comment: write form, text or nothing */
-   HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanEditTchComment)		// Show with form
-     {
-      HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\"",
-			  UsrDat->EnUsrCod);
-      HTM_Txt (CommentTch);
-      HTM_TEXTAREA_End ();
-     }
-   else	if (Event->CommentTchVisible)	// Show without form
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CommentTch,Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CommentTch);
-     }
-   HTM_TD_End ();
+      /***** Write user's ID ******/
+      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_SMALL_N" :
+				       "DAT_SMALL",
+		    Gbl.RowEvenOdd);
+	 ID_WriteUsrIDs (UsrDat,NULL);
+      HTM_TD_End ();
+
+      /***** Write student's name *****/
+      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_SMALL_N" :
+				       "DAT_SMALL",
+		    Gbl.RowEvenOdd);
+	 HTM_Txt (UsrDat->Surname1);
+	 if (UsrDat->Surname2[0])
+	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	 HTM_TxtF (", %s",UsrDat->FrstName);
+      HTM_TD_End ();
+
+      /***** Student's comment: write form or text */
+      HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (ICanEditStdComment)	// Show with form
+	   {
+	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\"",
+				UsrDat->EnUsrCod);
+	       HTM_Txt (CommentStd);
+	    HTM_TEXTAREA_End ();
+	   }
+	 else				// Show without form
+	   {
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      CommentStd,Cns_MAX_BYTES_TEXT,false);
+	    HTM_Txt (CommentStd);
+	   }
+      HTM_TD_End ();
+
+      /***** Teacher's comment: write form, text or nothing */
+      HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (ICanEditTchComment)		// Show with form
+	   {
+	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\"",
+				UsrDat->EnUsrCod);
+	       HTM_Txt (CommentTch);
+	    HTM_TEXTAREA_End ();
+	   }
+	 else	if (Event->CommentTchVisible)	// Show without form
+	   {
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      CommentTch,Cns_MAX_BYTES_TEXT,false);
+	    HTM_Txt (CommentTch);
+	   }
+      HTM_TD_End ();
+
+   /***** End table row *****/
    HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -2221,12 +1823,17 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
 				 const char *Title,const char *Txt,
 				 const char *Class)
   {
+   /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
    Att_PutParamAttCod (AttEvent->AttCod);
    Att_PutParamsCodGrps (AttEvent->AttCod);
-   HTM_BUTTON_SUBMIT_Begin (Title,Class,NULL);
-   HTM_Txt (Txt);
-   HTM_BUTTON_End ();
+
+      /***** Link to view attendance event *****/
+      HTM_BUTTON_SUBMIT_Begin (Title,Class,NULL);
+	 HTM_Txt (Txt);
+      HTM_BUTTON_End ();
+
+   /***** End form *****/
    Frm_EndForm ();
   }
 
@@ -2246,12 +1853,7 @@ static void Att_PutParamsCodGrps (long AttCod)
 
    /***** Get groups associated to an attendance event from database *****/
    if (Gbl.Crs.Grps.NumGrps)
-      NumGrps = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-		      "SELECT GrpCod"	// row[0]
-		       " FROM att_groups"
-		      " WHERE att_groups.AttCod=%ld",
-		      AttCod);
+      NumGrps = Att_DB_GetGrpCodsAssociatedToEvent (&mysql_res,AttCod);
    else
       NumGrps = 0;
 
@@ -2324,11 +1926,11 @@ void Att_RegisterMeAsStdInAttEvent (void)
 	  CommentStd[0] ||
 	  CommentTch[0])
 	 /***** Register student *****/
-	 Att_RegUsrInAttEventChangingComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                       Present,CommentStd,CommentTch);
+	 Att_DB_RegUsrInAttEventChangingComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                          Present,CommentStd,CommentTch);
       else
 	 /***** Remove student *****/
-	 Att_RemoveUsrFromAttEvent (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 Att_DB_RemoveUsrFromAttEvent (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Write final message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Your_comment_has_been_updated);
@@ -2443,11 +2045,11 @@ void Att_RegisterStudentsInAttEvent (void)
 	     CommentStd[0] ||
 	     CommentTch[0])
 	    /***** Register student *****/
-	    Att_RegUsrInAttEventChangingComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,
-					          Present,CommentStd,CommentTch);
+	    Att_DB_RegUsrInAttEventChangingComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,
+					             Present,CommentStd,CommentTch);
 	 else
 	    /***** Remove student *****/
-	    Att_RemoveUsrFromAttEvent (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod);
+	    Att_DB_RemoveUsrFromAttEvent (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod);
 
 	 if (Present)
             NumStdsPresent++;
@@ -2477,22 +2079,6 @@ void Att_RegisterStudentsInAttEvent (void)
   }
 
 /*****************************************************************************/
-/******* Get number of students from a list who attended to an event *********/
-/*****************************************************************************/
-
-static void Att_GetNumStdsTotalWhoAreInAttEvent (struct Att_Event *Event)
-  {
-   /***** Count number of students registered in an event in database *****/
-   Event->NumStdsTotal = (unsigned)
-   DB_QueryCOUNT ("can not get number of students registered in an event",
-		  "SELECT COUNT(*)"
-		   " FROM att_users"
-		  " WHERE AttCod=%ld"
-		    " AND Present='Y'",
-		  Event->AttCod);
-  }
-
-/*****************************************************************************/
 /********* Get number of users from a list who attended to an event **********/
 /*****************************************************************************/
 
@@ -2509,16 +2095,8 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
       Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
 				 &SubQueryUsrs);
 
-      /***** Get number of users in attendance event from database ****/
-      NumUsrsInAttEvent = (unsigned)
-      DB_QueryCOUNT ("can not get number of students from a list"
-	             " who are registered in an event",
-		     "SELECT COUNT(*)"
-		      " FROM att_users"
-	             " WHERE AttCod=%ld"
-		       " AND UsrCod IN (%s)"
-		       " AND Present='Y'",
-	  	     AttCod,SubQueryUsrs);
+      /***** Get number of users from list in attendance event from database ****/
+      NumUsrsInAttEvent = Att_DB_GetNumStdsFromListWhoAreInAttEvent (AttCod,SubQueryUsrs);
 
       /***** Free memory for subquery string *****/
       Usr_FreeSubqueryUsrCods (SubQueryUsrs);
@@ -2533,42 +2111,11 @@ static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 /***************** Check if a student attended to an event *******************/
 /*****************************************************************************/
 
-static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present)
-  {
-   char StrPresent[1 + 1];
-
-   /***** Check if a student is registered in an event in database *****/
-   DB_QuerySELECTString (StrPresent,1,"can not check if a student"
-	                              " is already registered in an event",
-		         "SELECT Present"
-			  " FROM att_users"
-		         " WHERE AttCod=%ld"
-			   " AND UsrCod=%ld",
-		         AttCod,
-		         UsrCod);
-   switch (StrPresent[0])
-     {
-      case '\0':
-	 *Present = false;
-	 return false;
-      case 'Y':
-	 *Present = true;
-	 return true;
-      default:
-	 *Present = false;
-	 return true;
-     }
-  }
-
-/*****************************************************************************/
-/***************** Check if a student attended to an event *******************/
-/*****************************************************************************/
-
 static bool Att_CheckIfUsrIsPresentInAttEvent (long AttCod,long UsrCod)
   {
    bool Present;
 
-   Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present);
+   Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present);
 
    return Present;
   }
@@ -2586,16 +2133,7 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
    bool Present;
 
    /***** Check if a students is registered in an event in database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if a student"
-				  " is already registered in an event",
-		       "SELECT Present,"		// row[0]
-			      "CommentStd,"	// row[1]
-			      "CommentTch"	// row[2]
-			" FROM att_users"
-		       " WHERE AttCod=%ld"
-			 " AND UsrCod=%ld",
-		       AttCod,
-		       UsrCod))
+   if (Att_DB_GetPresentAndComments (&mysql_res,AttCod,UsrCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -2629,73 +2167,14 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
    bool Present;
 
    /***** Check if user is already in table att_users (present or not) *****/
-   if (Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_users
+   if (Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_users
      {
-      // If already present ==> nothing to do
-      if (!Present)
+      if (!Present)	// If already present ==> nothing to do
 	 /***** Set user as present in database *****/
-	 DB_QueryUPDATE ("can not set user as present in an event",
-			 "UPDATE att_users"
-			   " SET Present='Y'"
-			 " WHERE AttCod=%ld"
-			   " AND UsrCod=%ld",
-		         AttCod,
-		         UsrCod);
+	 Att_DB_SetUsrAsPresent (AttCod,UsrCod);
      }
-   else			// User is not in table att_users
-      Att_RegUsrInAttEventChangingComments (AttCod,UsrCod,true,"","");
-  }
-
-/*****************************************************************************/
-/********* Register a user in an attendance event changing comments **********/
-/*****************************************************************************/
-
-static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool Present,
-                                                  const char *CommentStd,const char *CommentTch)
-  {
-   /***** Register user as assistant to an event in database *****/
-   DB_QueryREPLACE ("can not register user in an event",
-		    "REPLACE INTO att_users"
-		    " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
-		    " VALUES"
-		    " (%ld,%ld,'%c','%s','%s')",
-                    AttCod,
-                    UsrCod,
-                    Present ? 'Y' :
-        	              'N',
-                    CommentStd,
-                    CommentTch);
-  }
-
-/*****************************************************************************/
-/********************** Remove a user from an event **************************/
-/*****************************************************************************/
-
-static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod)
-  {
-   /***** Remove user if there is no comment in database *****/
-   DB_QueryDELETE ("can not remove student from an event",
-		   "DELETE FROM att_users"
-		   " WHERE AttCod=%ld"
-		     " AND UsrCod=%ld",
-                   AttCod,UsrCod);
-  }
-
-/*****************************************************************************/
-/************ Remove users absent without comments from an event *************/
-/*****************************************************************************/
-
-void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
-  {
-   /***** Clean table att_users *****/
-   DB_QueryDELETE ("can not remove users absent"
-	           " without comments from an event",
-		   "DELETE FROM att_users"
-		   " WHERE AttCod=%ld"
-		     " AND Present='N'"
-		     " AND CommentStd=''"
-		     " AND CommentTch=''",
-	           AttCod);
+   else									// User is not in table att_users
+      Att_DB_RegUsrInAttEventChangingComments (AttCod,UsrCod,true,"","");
   }
 
 /*****************************************************************************/
@@ -3144,6 +2623,7 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
    extern const char *Txt_Show_more_details;
 
    /***** Button to show more details *****/
+   /* Begin form */
    Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
@@ -3151,7 +2631,11 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
    if (Events->StrAttCodsSelected)
       if (Events->StrAttCodsSelected[0])
 	 Par_PutHiddenParamString (NULL,"AttCods",Events->StrAttCodsSelected);
+
+   /* Button */
    Btn_PutConfirmButton (Txt_Show_more_details);
+
+   /* End form */
    Frm_EndForm ();
   }
 
@@ -3194,98 +2678,98 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	 break;
      }
 
-   /***** Begin form to update the attendance
-	  depending on the events selected *****/
-   if (NormalView)
-     {
-      Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
-      Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-     }
+      /***** Begin form to update the attendance
+	     depending on the events selected *****/
+      if (NormalView)
+	{
+	 Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
+	 Grp_PutParamsCodGrps ();
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	}
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+	 /***** Heading row *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TH (1,4,"LM",Txt_Event);
-   HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+	    HTM_TH (1,4,"LM",Txt_Event);
+	    HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** List the events *****/
-   for (NumAttEvent = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
-	NumAttEvent < Events->Num;
-	NumAttEvent++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-     {
-      /* Get data of the attendance event from database */
-      Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
-      Att_GetNumStdsTotalWhoAreInAttEvent (&Events->Lst[NumAttEvent]);
+	 /***** List the events *****/
+	 for (NumAttEvent = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
+	      NumAttEvent < Events->Num;
+	      NumAttEvent++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	   {
+	    /* Get data of the attendance event from database */
+	    Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
+	    Events->Lst[NumAttEvent].NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInAttEvent (Events->Lst[NumAttEvent].AttCod);
 
-      /* Write a row for this event */
-      HTM_TR_Begin (NULL);
+	    /* Write a row for this event */
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "id=\"Event%u\" value=\"%ld\"%s",
-			  NumAttEvent,Events->Lst[NumAttEvent].AttCod,
-			  Events->Lst[NumAttEvent].Selected ? " checked=\"checked\"" :
-				                              "");
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
+				      "id=\"Event%u\" value=\"%ld\"%s",
+				      NumAttEvent,Events->Lst[NumAttEvent].AttCod,
+				      Events->Lst[NumAttEvent].Selected ? " checked=\"checked\"" :
+									  "");
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
-      HTM_TxtF ("%u:",NumAttEvent + 1);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
+		     HTM_TxtF ("%u:",NumAttEvent + 1);
+		  HTM_LABEL_End ();
+	       HTM_TD_End ();
 
-      if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
-      HTM_SPAN_Begin ("id=\"%s\"",Id);
-      HTM_SPAN_End ();
-      HTM_LABEL_End ();
-      Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,true,0x7);
-      HTM_TD_End ();
-      free (Id);
+	       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+		  if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
+		     HTM_SPAN_Begin ("id=\"%s\"",Id);
+		     HTM_SPAN_End ();
+		  HTM_LABEL_End ();
+		  Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						true,true,true,0x7);
+		  free (Id);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Txt (Events->Lst[NumAttEvent].Title);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_Txt (Events->Lst[NumAttEvent].Title);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsTotal);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsTotal);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    HTM_TR_End ();
+	   }
 
-   /***** Put button to refresh *****/
-   if (NormalView)
-     {
-      HTM_TR_Begin (NULL);
+	 /***** Put button to refresh *****/
+	 if (NormalView)
+	   {
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-      HTM_BUTTON_Animated_Begin (Txt_Update_attendance,
-	                         The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-				 NULL);
-      Ico_PutCalculateIconWithText (Txt_Update_attendance);
-      HTM_BUTTON_End ();
-      HTM_TD_End ();
+	       HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
+		  HTM_BUTTON_Animated_Begin (Txt_Update_attendance,
+					     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+					     NULL);
+		     Ico_PutCalculateIconWithText (Txt_Update_attendance);
+		  HTM_BUTTON_End ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    HTM_TR_End ();
+	   }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
-   /***** End form *****/
-   if (NormalView)
-      Frm_EndForm ();
+      /***** End form *****/
+      if (NormalView)
+	 Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3335,64 +2819,64 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
    /***** Begin section with attendance table *****/
    HTM_SECTION_Begin (Att_ATTENDANCE_TABLE_ID);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginCenterPadding (2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginCenterPadding (2);
 
-   /***** Heading row *****/
-   Att_WriteTableHeadSeveralAttEvents (Events);
+	 /***** Heading row *****/
+	 Att_WriteTableHeadSeveralAttEvents (Events);
 
-   /***** List the users *****/
-   for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-	NumUsr < NumUsrsInList;
-	NumUsr++)
-     {
-      UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
-                                                   Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	 if (Usr_CheckIfICanViewAtt (&UsrDat))
+	 /***** List the users *****/
+	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	      NumUsr < NumUsrsInList;
+	      NumUsr++)
 	   {
-	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-	    Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat);
-	   }
-     }
-
-   /***** Last row with the total of users present in each event *****/
-   if (NumUsrsInList > 1)
-     {
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N LINE_TOP RM\"",
-		    Gbl.Usrs.Listing.WithPhotos ? 4 :
-						  3);
-      HTM_TxtColon (Txt_Number_of_users);
-      HTM_TD_End ();
-
-      for (NumAttEvent = 0, Total = 0;
-	   NumAttEvent < Events->Num;
-	   NumAttEvent++)
-	 if (Events->Lst[NumAttEvent].Selected)
-	   {
-	    HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-	    HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
-	    HTM_TD_End ();
-
-	    Total += Events->Lst[NumAttEvent].NumStdsFromList;
+	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,		// Get from the database the data of the student
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	       if (Usr_CheckIfICanViewAtt (&UsrDat))
+		 {
+		  UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat);
+		 }
 	   }
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-      HTM_Unsigned (Total);
-      HTM_TD_End ();
+	 /***** Last row with the total of users present in each event *****/
+	 if (NumUsrsInList > 1)
+	   {
+	    HTM_TR_Begin (NULL);
 
-      HTM_TR_End ();
-     }
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_N LINE_TOP RM\"",
+			     Gbl.Usrs.Listing.WithPhotos ? 4 :
+							   3);
+		  HTM_TxtColon (Txt_Number_of_users);
+	       HTM_TD_End ();
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	       for (NumAttEvent = 0, Total = 0;
+		    NumAttEvent < Events->Num;
+		    NumAttEvent++)
+		  if (Events->Lst[NumAttEvent].Selected)
+		    {
+		     HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+			HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsFromList);
+		     HTM_TD_End ();
 
-   /***** Button to show more details *****/
-   if (PutButtonShowDetails)
-      Att_PutButtonToShowDetails (Events);
+		     Total += Events->Lst[NumAttEvent].NumStdsFromList;
+		    }
+
+	       HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+		  HTM_Unsigned (Total);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+	   }
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Button to show more details *****/
+      if (PutButtonShowDetails)
+	 Att_PutButtonToShowDetails (Events);
 
    /***** End section with attendance table *****/
    HTM_SECTION_End ();
@@ -3414,29 +2898,29 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,Gbl.Usrs.Listing.WithPhotos ? 4 :
-				           3,
-           "LM",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
+      HTM_TH (1,Gbl.Usrs.Listing.WithPhotos ? 4 :
+					      3,
+	      "LM",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
 
-   for (NumAttEvent = 0;
-	NumAttEvent < Events->Num;
-	NumAttEvent++)
-      if (Events->Lst[NumAttEvent].Selected)
-	{
-	 /***** Get data of this attendance event *****/
-	 Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
+      for (NumAttEvent = 0;
+	   NumAttEvent < Events->Num;
+	   NumAttEvent++)
+	 if (Events->Lst[NumAttEvent].Selected)
+	   {
+	    /***** Get data of this attendance event *****/
+	    Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
 
-	 /***** Put link to this attendance event *****/
-	 HTM_TH_Begin (1,1,"CM");
-	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),"%u",NumAttEvent + 1);
-	 Att_PutLinkAttEvent (&Events->Lst[NumAttEvent],
-			      Events->Lst[NumAttEvent].Title,
-			      StrNumAttEvent,
-			      "BT_LINK TIT_TBL");
-	 HTM_TH_End ();
-	}
+	    /***** Put link to this attendance event *****/
+	    HTM_TH_Begin (1,1,"CM");
+	       snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),"%u",NumAttEvent + 1);
+	       Att_PutLinkAttEvent (&Events->Lst[NumAttEvent],
+				    Events->Lst[NumAttEvent].Title,
+				    StrNumAttEvent,
+				    "BT_LINK TIT_TBL");
+	    HTM_TH_End ();
+	   }
 
-   HTM_TH (1,1,"RM",Txt_Attendance);
+      HTM_TH (1,1,"RM",Txt_Attendance);
 
    HTM_TR_End ();
   }
@@ -3455,64 +2939,64 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
    /***** Write number of user in the list *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_N" :
-				    "DAT",
-		 Gbl.RowEvenOdd);
-   HTM_Unsigned (NumUsr + 1);
-   HTM_TD_End ();
-
-   /***** Show user's photo *****/
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+      HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_N" :
+				       "DAT",
+		    Gbl.RowEvenOdd);
+	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
-     }
 
-   /***** Write user's ID ******/
-   HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL",
-		 Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_TD_End ();
-
-   /***** Write user's name *****/
-   HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL",
-		 Gbl.RowEvenOdd);
-   HTM_Txt (UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   HTM_TxtF (", %s",UsrDat->FrstName);
-   HTM_TD_End ();
-
-   /***** Check/cross to show if the user is present/absent *****/
-   for (NumAttEvent = 0, NumTimesPresent = 0;
-	NumAttEvent < Events->Num;
-	NumAttEvent++)
-      if (Events->Lst[NumAttEvent].Selected)
+      /***** Show user's photo *****/
+      if (Gbl.Usrs.Listing.WithPhotos)
 	{
-	 /* Check if this student is already registered in the current event */
-	 // Here it is not necessary to get comments
-	 Present = Att_CheckIfUsrIsPresentInAttEvent (Events->Lst[NumAttEvent].AttCod,
-	                                              UsrDat->UsrCod);
-
-	 /* Write check or cross */
-	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-	 Att_PutCheckOrCross (Present);
+	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
 	 HTM_TD_End ();
-
-	 if (Present)
-	    NumTimesPresent++;
 	}
 
-   /***** Last column with the number of times this user is present *****/
-   HTM_TD_Begin ("class=\"DAT_N RM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Unsigned (NumTimesPresent);
-   HTM_TD_End ();
+      /***** Write user's ID ******/
+      HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_SMALL_N" :
+				       "DAT_SMALL",
+		    Gbl.RowEvenOdd);
+	 ID_WriteUsrIDs (UsrDat,NULL);
+      HTM_TD_End ();
+
+      /***** Write user's name *****/
+      HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_SMALL_N" :
+				       "DAT_SMALL",
+		    Gbl.RowEvenOdd);
+	 HTM_Txt (UsrDat->Surname1);
+	 if (UsrDat->Surname2[0])
+	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+	 HTM_TxtF (", %s",UsrDat->FrstName);
+      HTM_TD_End ();
+
+      /***** Check/cross to show if the user is present/absent *****/
+      for (NumAttEvent = 0, NumTimesPresent = 0;
+	   NumAttEvent < Events->Num;
+	   NumAttEvent++)
+	 if (Events->Lst[NumAttEvent].Selected)
+	   {
+	    /* Check if this student is already registered in the current event */
+	    // Here it is not necessary to get comments
+	    Present = Att_CheckIfUsrIsPresentInAttEvent (Events->Lst[NumAttEvent].AttCod,
+							 UsrDat->UsrCod);
+
+	    /* Write check or cross */
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       Att_PutCheckOrCross (Present);
+	    HTM_TD_End ();
+
+	    if (Present)
+	       NumTimesPresent++;
+	   }
+
+      /***** Last column with the number of times this user is present *****/
+      HTM_TD_Begin ("class=\"DAT_N RM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Unsigned (NumTimesPresent);
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -3531,13 +3015,14 @@ static void Att_PutCheckOrCross (bool Present)
    if (Present)
      {
       HTM_DIV_Begin ("class=\"ATT_CHECK\" title=\"%s\"",Txt_Present);
-      HTM_Txt ("&check;");
+	 HTM_Txt ("&check;");
      }
    else
      {
       HTM_DIV_Begin ("class=\"ATT_CROSS\" title=\"%s\"",Txt_Absent);
-      HTM_Txt ("&cross;");
+	 HTM_Txt ("&cross;");
      }
+
    HTM_DIV_End ();
   }
 
@@ -3559,29 +3044,29 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
    /***** Begin section with attendance details *****/
    HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Details,
-                      NULL,NULL,
-	              NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_Details,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** List students with attendance details *****/
-   for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-	NumUsr < NumUsrsInList;
-	NumUsr++)
-     {
-      UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
-                                                   Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	 if (Usr_CheckIfICanViewAtt (&UsrDat))
+	 /***** List students with attendance details *****/
+	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	      NumUsr < NumUsrsInList;
+	      NumUsr++)
 	   {
-	    UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-	    Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
+	    UsrDat.UsrCod = LstSelectedUsrCods[NumUsr];
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get from the database the data of the student
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	       if (Usr_CheckIfICanViewAtt (&UsrDat))
+		 {
+		  UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		  Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
+		 }
 	   }
-     }
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
 
    /***** End section with attendance details *****/
    HTM_SECTION_End ();
@@ -3612,42 +3097,45 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
    NumUsr++;
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_N" :
-				    "DAT",
-		 Gbl.RowEvenOdd);
-   HTM_TxtF ("%u:",NumUsr);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_N" :
+				       "DAT",
+		    Gbl.RowEvenOdd);
+      HTM_TxtF ("%u:",NumUsr);
+      HTM_TD_End ();
 
-   /***** Show student's photo *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
-   Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
-   HTM_TD_End ();
+      /***** Show student's photo *****/
+      HTM_TD_Begin ("colspan=\"2\" class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+      HTM_TD_End ();
 
-   /***** Write user's ID ******/
-   HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TABLE_Begin (NULL);
-   HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
 
-   HTM_TD_Begin ("class=\"%s LM\"",
-		 UsrDat->Accepted ? "DAT_N" :
-				    "DAT");
-   ID_WriteUsrIDs (UsrDat,NULL);
-   HTM_TD_End ();
+	 HTM_TABLE_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-   /***** Write student's name *****/
-   HTM_TD_Begin ("class=\"%s LM\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL");
-   HTM_Txt (UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
-   HTM_TxtF (", %s",UsrDat->FrstName);
-   HTM_TD_End ();
+	       /***** Write user's ID ******/
+	       HTM_TD_Begin ("class=\"%s LM\"",
+			     UsrDat->Accepted ? "DAT_N" :
+						"DAT");
+		  ID_WriteUsrIDs (UsrDat,NULL);
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
-   HTM_TABLE_End ();
-   HTM_TD_End ();
+	       /***** Write student's name *****/
+	       HTM_TD_Begin ("class=\"%s LM\"",
+			     UsrDat->Accepted ? "DAT_SMALL_N" :
+						"DAT_SMALL");
+		  HTM_Txt (UsrDat->Surname1);
+		  if (UsrDat->Surname2[0])
+		     HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
+		  HTM_TxtF (", %s",UsrDat->FrstName);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+	 HTM_TABLE_End ();
+
+      HTM_TD_End ();
+
    HTM_TR_End ();
 
    /***** List the events with students *****/
@@ -3658,7 +3146,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	{
 	 /***** Get data of the attendance event from database *****/
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
-         Att_GetNumStdsTotalWhoAreInAttEvent (&Events->Lst[NumAttEvent]);
+         Events->Lst[NumAttEvent].NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInAttEvent (Events->Lst[NumAttEvent].AttCod);
 
 	 /***** Get comments for this student *****/
 	 Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Events->Lst[NumAttEvent].AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
@@ -3670,31 +3158,31 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_ColouredEmpty (1);
+	    HTM_TD_ColouredEmpty (1);
 
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
-		       Present ? "DAT_GREEN" :
-				 "DAT_RED",
-		       Gbl.RowEvenOdd);
-	 HTM_TxtF ("%u:",NumAttEvent + 1);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+			  Present ? "DAT_GREEN" :
+				    "DAT_RED",
+			  Gbl.RowEvenOdd);
+	       HTM_TxtF ("%u:",NumAttEvent + 1);
+	    HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-         Att_PutCheckOrCross (Present);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	       Att_PutCheckOrCross (Present);
+	    HTM_TD_End ();
 
-	 if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_SPAN_Begin ("id=\"%s\"",Id);
-	 HTM_SPAN_End ();
-         HTM_BR ();
-	 HTM_Txt (Events->Lst[NumAttEvent].Title);
-	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,true,0x7);
-	 HTM_TD_End ();
-         free (Id);
+	    HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	       if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_SPAN_Begin ("id=\"%s\"",Id);
+	       HTM_SPAN_End ();
+	       HTM_BR ();
+	       HTM_Txt (Events->Lst[NumAttEvent].Title);
+	       Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					     true,true,true,0x7);
+	       free (Id);
+	    HTM_TD_End ();
 
 	 HTM_TR_End ();
 
@@ -3703,39 +3191,39 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	   {
 	    HTM_TR_Begin (NULL);
 
-	    HTM_TD_ColouredEmpty (2);
+	       HTM_TD_ColouredEmpty (2);
 
-	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-	    HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
 
-	    HTM_DL_Begin ();
-	    if (ShowCommentStd)
-	      {
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 CommentStd,Cns_MAX_BYTES_TEXT,false);
-	       HTM_DT_Begin ();
-	       HTM_TxtColon (Txt_Student_comment);
-	       HTM_DT_End ();
-	       HTM_DD_Begin ();
-	       HTM_Txt (CommentStd);
-	       HTM_DD_End ();
-	      }
-	    if (ShowCommentTch)
-	      {
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 CommentTch,Cns_MAX_BYTES_TEXT,false);
-	       HTM_DT_Begin ();
-	       HTM_TxtColon (Txt_Teachers_comment);
-	       HTM_DT_End ();
-	       HTM_DD_Begin ();
-	       HTM_Txt (CommentTch);
-	       HTM_DD_End ();
-	      }
-	    HTM_DL_End ();
+		  HTM_DL_Begin ();
+		     if (ShowCommentStd)
+		       {
+			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+					  CommentStd,Cns_MAX_BYTES_TEXT,false);
+			HTM_DT_Begin ();
+			   HTM_TxtColon (Txt_Student_comment);
+			HTM_DT_End ();
+			HTM_DD_Begin ();
+			   HTM_Txt (CommentStd);
+			HTM_DD_End ();
+		       }
+		     if (ShowCommentTch)
+		       {
+			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+					  CommentTch,Cns_MAX_BYTES_TEXT,false);
+			HTM_DT_Begin ();
+			   HTM_TxtColon (Txt_Teachers_comment);
+			HTM_DT_End ();
+			HTM_DD_Begin ();
+			   HTM_Txt (CommentTch);
+			HTM_DD_End ();
+		       }
+		  HTM_DL_End ();
 
-	    HTM_TD_End ();
+	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 	   }

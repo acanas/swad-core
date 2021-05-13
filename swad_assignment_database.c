@@ -39,6 +39,17 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/****************************** Public variables *****************************/
+/*****************************************************************************/
+
+unsigned (*Asg_DB_GetListAssignments[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+                                                             Dat_StartEndTime_t SelectedOrder) =
+  {
+   [Grp_MY_GROUPS ] = Asg_DB_GetListAssignmentsMyGrps,
+   [Grp_ALL_GROUPS] = Asg_DB_GetListAssignmentsAllGrps,
+  };
+
+/*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
@@ -64,10 +75,6 @@ static const char *Asg_DB_OrderSubQuery[Dat_NUM_START_END_TIME] =
 		      "StartTime DESC,"
 		      "Title DESC",
   };
-
-/*****************************************************************************/
-/***************************** Private variables *****************************/
-/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -364,7 +371,7 @@ unsigned Asg_DB_GetGrps (MYSQL_RES **mysql_res,long AsgCod)
 /********************* Create a group of an assignment ************************/
 /*****************************************************************************/
 
-void Asg_DB_CreateGrp (long AsgCod,long GrpCod)
+void Asg_DB_CreateGroup (long AsgCod,long GrpCod)
   {
    DB_QueryINSERT ("can not associate a group to an assignment",
 		   "INSERT INTO asg_groups"
@@ -410,7 +417,7 @@ void Asg_DB_RemoveGroupsOfType (long GrpTypCod)
 /********************* Remove groups of an assignment ************************/
 /*****************************************************************************/
 
-void Asg_DB_RemoveAllGrpsAssociatedToAnAssignment (long AsgCod)
+void Asg_DB_RemoveGrpsAssociatedToAnAssignment (long AsgCod)
   {
    /***** Remove groups of the assignment *****/
    DB_QueryDELETE ("can not remove the groups associated to an assignment",

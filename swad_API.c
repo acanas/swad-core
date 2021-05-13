@@ -103,7 +103,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 
 #include "swad_account.h"
 #include "swad_API.h"
-#include "swad_attendance.h"
+#include "swad_attendance_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_file_browser.h"
@@ -3182,7 +3182,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
       free (SubQueryAllUsrs);
 
       /* Clean attendance users table */
-      Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Event.AttCod);
+      Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Event.AttCod);
      }
 
    /***** Free memory used for user's data *****/

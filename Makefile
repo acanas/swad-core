@@ -29,7 +29,7 @@
 OBJS = swad_account.o swad_account_database.o swad_action.o swad_agenda.o \
        swad_agenda_database.o swad_alert.o swad_announcement.o \
        swad_announcement_database.o swad_API.o swad_assignment.o \
-       swad_assignment_database.o swad_attendance.o \
+       swad_assignment_database.o swad_attendance.o swad_attendance_database.o \
        swad_banner.o swad_box.o swad_building.o swad_button.o \
        swad_calendar.o swad_call_for_exam.o swad_center.o \
        swad_center_config.o swad_chat.o swad_config.o swad_connected.o \

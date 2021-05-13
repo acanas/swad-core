@@ -98,7 +98,7 @@ static void Asg_PutParamAsgCod (long AsgCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
 static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt);
 static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt);
-static void Asg_CreateGrps (long AsgCod);
+static void Asg_CreateGroups (long AsgCod);
 static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *Asg);
 static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
 
@@ -684,25 +684,20 @@ static void Asg_PutParams (void *Assignments)
 
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
   {
+   extern unsigned (*Asg_DB_GetListAssignments[Grp_NUM_WHICH_GROUPS]) (MYSQL_RES **mysql_res,
+                                                                       Dat_StartEndTime_t SelectedOrder);
    MYSQL_RES *mysql_res;
-   unsigned NumAsgs;
    unsigned NumAsg;
 
    if (Assignments->LstIsRead)
       Asg_FreeListAssignments (Assignments);
 
    /***** Get list of assignments from database *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-      NumAsgs = Asg_DB_GetListAssignmentsMyGrps (&mysql_res,Assignments->SelectedOrder);
-   else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      NumAsgs = Asg_DB_GetListAssignmentsAllGrps (&mysql_res,Assignments->SelectedOrder);
-
-   if (NumAsgs) // Assignments found...
+   Assignments->Num = Asg_DB_GetListAssignments[Gbl.Crs.Grps.WhichGrps] (&mysql_res,Assignments->SelectedOrder);
+   if (Assignments->Num) // Assignments found...
      {
-      Assignments->Num = (unsigned) NumAsgs;
-
       /***** Create list of assignments *****/
-      if ((Assignments->LstAsgCods = calloc (NumAsgs,
+      if ((Assignments->LstAsgCods = calloc ((size_t) Assignments->Num,
                                              sizeof (*Assignments->LstAsgCods))) == NULL)
          Err_NotEnoughMemoryExit ();
 
@@ -714,8 +709,6 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
          if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) <= 0)
             Err_WrongAssignmentExit ();
      }
-   else
-      Assignments->Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -993,7 +986,7 @@ void Asg_RemoveAssignment (void)
       Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Asg.Folder);
 
    /***** Remove all the groups of this assignment *****/
-   Asg_DB_RemoveAllGrpsAssociatedToAnAssignment (Asg.AsgCod);
+   Asg_DB_RemoveGrpsAssociatedToAnAssignment (Asg.AsgCod);
 
    /***** Remove assignment *****/
    Asg_DB_RemoveAssignment (Asg.AsgCod);
@@ -1469,7 +1462,7 @@ static void Asg_CreateAssignment (struct Asg_Assignment *Asg,const char *Txt)
 
    /***** Create groups *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Asg_CreateGrps (Asg->AsgCod);
+      Asg_CreateGroups (Asg->AsgCod);
   }
 
 /*****************************************************************************/
@@ -1483,26 +1476,26 @@ static void Asg_UpdateAssignment (struct Asg_Assignment *Asg,const char *Txt)
 
    /***** Update groups *****/
    /* Remove old groups */
-   Asg_DB_RemoveAllGrpsAssociatedToAnAssignment (Asg->AsgCod);
+   Asg_DB_RemoveGrpsAssociatedToAnAssignment (Asg->AsgCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Asg_CreateGrps (Asg->AsgCod);
+      Asg_CreateGroups (Asg->AsgCod);
   }
 
 /*****************************************************************************/
 /********************* Create groups of an assignment ************************/
 /*****************************************************************************/
 
-static void Asg_CreateGrps (long AsgCod)
+static void Asg_CreateGroups (long AsgCod)
   {
-   unsigned NumGrpSel;
+   unsigned NumGrp;
 
    /***** Create groups of the assignment *****/
-   for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
-	NumGrpSel++)
-      Asg_DB_CreateGrp (AsgCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+   for (NumGrp = 0;
+	NumGrp < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrp++)
+      Asg_DB_CreateGroup (AsgCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp]);
   }
 
 /*****************************************************************************/

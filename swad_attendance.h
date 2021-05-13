@@ -96,21 +96,13 @@ void Att_GetAndRemAttEvent (void);
 void Att_RemoveAttEventFromDB (long AttCod);
 
 void Att_HideAttEvent (void);
-void Att_ShowAttEvent (void);
+void Att_UnhideAttEvent (void);
 void Att_ReceiveFormAttEvent (void);
 void Att_CreateAttEvent (struct Att_Event *Event,const char *Description);
 void Att_UpdateAttEvent (struct Att_Event *Event,const char *Description);
-void Att_RemoveGroupsOfType (long GrpTypCod);
-void Att_RemoveGroup (long GrpCod);
-
-void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod);
-void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod);
 
 void Att_RemoveCrsAttEvents (long CrsCod);
 
-unsigned Att_DB_GetNumAttEventsInCrs(long CrsCod);
-
-unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope);
 unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif);
 
 void Att_SeeOneAttEvent (void);
@@ -119,7 +111,6 @@ void Att_RegisterMeAsStdInAttEvent (void);
 void Att_RegisterStudentsInAttEvent (void);
 
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod);
-void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
 
 void Att_ReqListUsrsAttendanceCrs (void);
 void Att_ListMyAttendanceCrs (void);

@@ -30,6 +30,7 @@
 #include "swad_assignment.h"
 #include "swad_database.h"
 #include "swad_file_browser.h"
+#include "swad_group.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -63,10 +64,10 @@ void Asg_DB_RemoveAssignment (long AsgCod);
 bool Asg_DB_CheckIfICanDoAssignment (long AsgCod);
 
 unsigned Asg_DB_GetGrps (MYSQL_RES **mysql_res,long AsgCod);
-void Asg_DB_CreateGrp (long AsgCod,long GrpCod);
+void Asg_DB_CreateGroup (long AsgCod,long GrpCod);
 void Asg_DB_RemoveGroup (long GrpCod);
 void Asg_DB_RemoveGroupsOfType (long GrpTypCod);
-void Asg_DB_RemoveAllGrpsAssociatedToAnAssignment (long AsgCod);
+void Asg_DB_RemoveGrpsAssociatedToAnAssignment (long AsgCod);
 
 void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long CrsCod);
 void Asg_DB_RemoveCrsAssignments (long CrsCod);
