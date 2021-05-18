@@ -1,7 +1,7 @@
 // swad_banner.h: banners
 
-#ifndef _SWAD_BANNER
-#define _SWAD_BANNER
+#ifndef _SWAD_BAN
+#define _SWAD_BAN
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -56,7 +56,7 @@ struct Ban_Banner
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Ban_SeeBanners (void);
+void Ban_ShowAllBanners (void);
 void Ban_EditBanners (void);
 
 void Ban_PutIconToViewBanners (void);

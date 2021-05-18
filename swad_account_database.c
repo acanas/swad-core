@@ -28,6 +28,7 @@
 #include "swad_account.h"
 #include "swad_account_database.h"
 #include "swad_calendar.h"
+#include "swad_database.h"
 #include "swad_global.h"
 
 /*****************************************************************************/

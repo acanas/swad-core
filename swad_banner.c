@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_banner.h"
+#include "swad_banner_database.h"
 #include "swad_box.h"
 #include "swad_constant.h"
 #include "swad_database.h"
@@ -84,7 +85,7 @@ static void Ban_PutIconToEditBanners (void);
 static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
                                      const struct Ban_Banner *Ban);
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
-                                MYSQL_RES **mysql_res,unsigned NumBanners);
+                                MYSQL_RES **mysql_res);
 static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 
 static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
@@ -96,13 +97,9 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide);
 
 static void Ban_RenameBanner (struct Ban_Banner *Ban,
                               Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod);
-static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
-				 const char *NewBanName);
 
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban);
 static void Ban_PutHeadBanners (void);
-static void Ban_CreateBanner (const struct Ban_Banner *Ban);
 
 static void Ban_SetBanCodClicked (long BanCod);
 
@@ -127,7 +124,7 @@ static struct Ban_Banner *Ban_GetEditingBanner (void)
 /***************************** List all banners ******************************/
 /*****************************************************************************/
 
-void Ban_SeeBanners (void)
+void Ban_ShowAllBanners (void)
   {
    extern const char *Hlp_SYSTEM_Banners;
    extern const char *Txt_Banners;
@@ -135,43 +132,32 @@ void Ban_SeeBanners (void)
    extern const char *Txt_New_banner;
    struct Ban_Banners Banners;
    MYSQL_RES *mysql_res;
-   unsigned NumBanners;
 
    /***** Reset banners *****/
    Ban_ResetBanners (&Banners);
 
    /***** Get list of banners *****/
-   NumBanners = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get banners",
-		   "SELECT BanCod,"	// row[0]
-			  "Hidden,"	// row[1]
-			  "ShortName,"	// row[2]
-			  "FullName,"	// row[3]
-			  "Img,"	// row[4]
-			  "WWW"		// row[5]
-		    " FROM ban_banners"
-		   " WHERE Hidden='N'"
-		   " ORDER BY ShortName");
-   Ban_GetListBanners (&Banners,&mysql_res,NumBanners);
+   Banners.Num = Ban_DB_GetVisibleBanners (&mysql_res);
+   Ban_GetListBanners (&Banners,&mysql_res);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
                  Ban_PutIconsListingBanners,NULL,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
-   /***** Write all banners *****/
-   if (Banners.Num)	// There are banners
-      Ban_WriteListOfBanners (&Banners);
-   else			// No banners created
-      Ale_ShowAlert (Ale_INFO,Txt_No_banners);
+      /***** Write all banners *****/
+      if (Banners.Num)	// There are banners
+	 Ban_WriteListOfBanners (&Banners);
+      else		// No banners created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_banners);
 
-   /***** Button to create banner *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-     {
-      Frm_BeginForm (ActEdiBan);
-      Btn_PutConfirmButton (Txt_New_banner);
-      Frm_EndForm ();
-     }
+      /***** Button to create banner *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	{
+	 Frm_BeginForm (ActEdiBan);
+	    Btn_PutConfirmButton (Txt_New_banner);
+	 Frm_EndForm ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -198,12 +184,12 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
      {
       /* Write data of this banner */
       HTM_LI_Begin (NULL);
-      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-                   Banners->Lst[NumBan].WWW,
-                   Banners->Lst[NumBan].FullName);
-      HTM_IMG (Cfg_URL_BANNER_PUBLIC,Banners->Lst[NumBan].Img,Banners->Lst[NumBan].FullName,
-	       "class=\"BANNER\"");
-      HTM_A_End ();
+	 HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+		      Banners->Lst[NumBan].WWW,
+		      Banners->Lst[NumBan].FullName);
+	    HTM_IMG (Cfg_URL_BANNER_PUBLIC,Banners->Lst[NumBan].Img,Banners->Lst[NumBan].FullName,
+		     "class=\"BANNER\"");
+	 HTM_A_End ();
       HTM_LI_End ();
      }
 
@@ -260,32 +246,22 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
    MYSQL_RES *mysql_res;
-   unsigned NumBanners;
 
    /***** Get list of banners *****/
-   NumBanners = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get banners",
-		   "SELECT BanCod,"	// row[0]
-			  "Hidden,"	// row[1]
-			  "ShortName,"	// row[2]
-			  "FullName,"	// row[3]
-			  "Img,"	// row[4]
-			  "WWW"		// row[5]
-		    " FROM ban_banners"
-		   " ORDER BY ShortName");
-   Ban_GetListBanners (Banners,&mysql_res,NumBanners);
+   Banners->Num = Ban_DB_GetAllBanners (&mysql_res);
+   Ban_GetListBanners (Banners,&mysql_res);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,
                  Ban_PutIconsEditingBanners,NULL,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
-   /***** Put a form to create a new banner *****/
-   Ban_PutFormToCreateBanner (Ban);
+      /***** Put a form to create a new banner *****/
+      Ban_PutFormToCreateBanner (Ban);
 
-   /***** Forms to edit current banners *****/
-   if (Banners->Num)
-      Ban_ListBannersForEdition (Banners);
+      /***** Forms to edit current banners *****/
+      if (Banners->Num)
+	 Ban_ListBannersForEdition (Banners);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -299,17 +275,15 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
 /*****************************************************************************/
 
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
-                                MYSQL_RES **mysql_res,unsigned NumBanners)
+                                MYSQL_RES **mysql_res)
   {
    MYSQL_ROW row;
    unsigned NumBan;
    struct Ban_Banner *Ban;
 
    /***** Get banners from database *****/
-   Banners->Num = NumBanners;
    if (Banners->Num) // Banners found...
      {
-
       /***** Create list with banners *****/
       if ((Banners->Lst = calloc ((size_t) Banners->Num,sizeof (*Banners->Lst))) == NULL)
 	 Err_NotEnoughMemoryExit ();
@@ -361,15 +335,7 @@ void Ban_GetDataOfBannerByCod (struct Ban_Banner *Ban)
    if (Ban->BanCod > 0)
      {
       /***** Get data of a banner from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a banner",
-			  "SELECT Hidden,"	// row[0]
-				 "ShortName,"	// row[1]
-				 "FullName,"	// row[2]
-				 "Img,"		// row[3]
-				 "WWW"		// row[4]
-			   " FROM ban_banners"
-			  " WHERE BanCod=%ld",
-			  Ban->BanCod)) // Banner found...
+      if (Ban_DB_GetDataOfBannerByCod (&mysql_res,Ban->BanCod)) // Banner found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -445,91 +411,96 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** Table head *****/
-   Ban_PutHeadBanners ();
+      /***** Table head *****/
+      Ban_PutHeadBanners ();
 
-   /***** Write all the banners *****/
-   for (NumBan = 0;
-	NumBan < Banners->Num;
-	NumBan++)
-     {
-      Ban = &Banners->Lst[NumBan];
-      Banners->BanCodToEdit = Ban->BanCod;
+      /***** Write all the banners *****/
+      for (NumBan = 0;
+	   NumBan < Banners->Num;
+	   NumBan++)
+	{
+	 Ban = &Banners->Lst[NumBan];
+	 Banners->BanCodToEdit = Ban->BanCod;
 
-      /* Set anchor string */
-      Frm_SetAnchorStr (Ban->BanCod,&Anchor);
+	 /* Set anchor string */
+	 Frm_SetAnchorStr (Ban->BanCod,&Anchor);
 
-      /* Put icon to remove banner */
-      HTM_TR_Begin (NULL);
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActRemBan,NULL,
-                                     Ban_PutParamBanCodToEdit,&Banners->BanCodToEdit);
-      HTM_TD_End ();
+	    /* Put icon to remove banner */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToRemove (ActRemBan,NULL,
+					      Ban_PutParamBanCodToEdit,
+					      &Banners->BanCodToEdit);
+	    HTM_TD_End ();
 
-      /* Put icon to hide/show banner */
-      HTM_TD_Begin ("class=\"BM\"");
-      if (Ban->Hidden)
-         Ico_PutContextualIconToUnhide (ActShoBan,Anchor,
-                                        Ban_PutParamBanCodToEdit,&Banners->BanCodToEdit);
-      else
-         Ico_PutContextualIconToHide (ActHidBan,Anchor,
-                                      Ban_PutParamBanCodToEdit,&Banners->BanCodToEdit);
-      HTM_TD_End ();
+	    /* Put icon to hide/show banner */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       if (Ban->Hidden)
+		  Ico_PutContextualIconToUnhide (ActShoBan,Anchor,
+						 Ban_PutParamBanCodToEdit,
+						 &Banners->BanCodToEdit);
+	       else
+		  Ico_PutContextualIconToHide (ActHidBan,Anchor,
+					       Ban_PutParamBanCodToEdit,
+					       &Banners->BanCodToEdit);
+	    HTM_TD_End ();
 
-      /* Banner code */
-      HTM_TD_Begin ("class=\"%s RM\"",
-		    Ban->Hidden ? "DAT_LIGHT" :
-				  "DAT");
-      HTM_ARTICLE_Begin (Anchor);
-      HTM_Long (Ban->BanCod);
-      HTM_ARTICLE_End ();
-      HTM_TD_End ();
+	    /* Banner code */
+	    HTM_TD_Begin ("class=\"%s RM\"",
+			  Ban->Hidden ? "DAT_LIGHT" :
+					"DAT");
+	       HTM_ARTICLE_Begin (Anchor);
+		  HTM_Long (Ban->BanCod);
+	       HTM_ARTICLE_End ();
+	    HTM_TD_End ();
 
-      /* Banner short name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenBanSho);
-      Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Banner short name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenBanSho);
+	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Banner full name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenBanFul);
-      Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Banner full name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenBanFul);
+	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Banner image */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgBanImg);
-      Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"12\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Banner image */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgBanImg);
+	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"12\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Banner WWW */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgBanWWW);
-      Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
-      HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
-		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Banner WWW */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgBanWWW);
+	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW_NARROW\""
+				 " required=\"required\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /* Free anchor string */
-      Frm_FreeAnchorStr (Anchor);
-     }
+	 /* Free anchor string */
+	 Frm_FreeAnchorStr (Anchor);
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -580,10 +551,7 @@ void Ban_RemoveBanner (void)
    Ban_GetDataOfBannerByCod (&Ban);
 
    /***** Remove banner *****/
-   DB_QueryDELETE ("can not remove a banner",
-		   "DELETE FROM ban_banners"
-		   " WHERE BanCod=%ld",
-		   Ban.BanCod);
+   Ban_DB_RemoveBanner (Ban.BanCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -645,13 +613,7 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
 
    /***** Mark file as hidden/visible in database *****/
    if (Ban->Hidden != Hide)
-      DB_QueryUPDATE ("can not change status of a banner in database",
-		      "UPDATE ban_banners"
-		        " SET Hidden='%c'"
-		      " WHERE BanCod=%ld",
-	              Hide ? 'Y' :
-		             'N',
-	              Ban->BanCod);
+      Ban_DB_ShowOrHideBanner (Ban->BanCod,Hide);
   }
 
 /*****************************************************************************/
@@ -743,14 +705,14 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
       if (strcmp (CurrentBanName,NewBanName))	// Different names
         {
          /***** If banner was in database... *****/
-         if (Ban_CheckIfBannerNameExists (ParamName,NewBanName,Ban->BanCod))
+         if (Ban_DB_CheckIfBannerNameExists (ParamName,NewBanName,Ban->BanCod))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_banner_X_already_exists,
                              NewBanName);
          else
            {
             /* Update the table changing old name by new name */
-            Ban_UpdateBanNameDB (Ban->BanCod,FieldName,NewBanName);
+            Ban_DB_UpdateBanName (Ban->BanCod,FieldName,NewBanName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -759,6 +721,7 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
            }
         }
       else	// The same name
+         /* Write warning message */
 	 Ale_CreateAlert (Ale_INFO,NULL,
 	                  Txt_The_name_of_the_banner_X_has_not_changed,
                           CurrentBanName);
@@ -769,45 +732,12 @@ static void Ban_RenameBanner (struct Ban_Banner *Ban,
   }
 
 /*****************************************************************************/
-/********************* Check if the name of banner exists ********************/
-/*****************************************************************************/
-
-static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
-  {
-   /***** Get number of banners with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a banner already existed",
-		          "SELECT COUNT(*)"
-		           " FROM ban_banners"
-			  " WHERE %s='%s'"
-			    " AND BanCod<>%ld",
-			  FieldName,Name,
-			  BanCod) != 0);
-  }
-
-/*****************************************************************************/
-/***************** Update banner name in table of banners ********************/
-/*****************************************************************************/
-
-static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
-				 const char *NewBanName)
-  {
-   /***** Update banner changing old name by new name *****/
-   DB_QueryUPDATE ("can not update the name of a banner",
-		   "UPDATE ban_banners"
-		     " SET %s='%s'"
-		   " WHERE BanCod=%ld",
-	           FieldName,NewBanName,
-	           BanCod);
-  }
-
-/*****************************************************************************/
 /*********************** Change the image of a banner ************************/
 /*****************************************************************************/
 
 void Ban_ChangeBannerImg (void)
   {
    extern const char *Txt_The_new_image_is_X;
-   extern const char *Txt_You_can_not_leave_the_image_empty;
    struct Ban_Banner Ban;
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
@@ -829,21 +759,16 @@ void Ban_ChangeBannerImg (void)
    if (NewImg[0])
      {
       /* Update the table changing old image by new image */
-      DB_QueryUPDATE ("can not update the image of a banner",
-		      "UPDATE ban_banners"
-		        " SET Img='%s'"
-		      " WHERE BanCod=%ld",
-                      NewImg,
-                      Ban.BanCod);
+      Ban_DB_UpdateBanImg (Ban.BanCod,NewImg);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_image_is_X,
                        NewImg);
      }
    else
-      Ale_CreateAlert (Ale_WARNING,NULL,
-	               Txt_You_can_not_leave_the_image_empty);
+      /* Write warning message */
+      Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update image *****/
    Str_Copy (Ban.Img,NewImg,sizeof (Ban.Img) - 1);
@@ -880,19 +805,15 @@ void Ban_ChangeBannerWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_QueryUPDATE ("can not update the web of a banner",
-		      "UPDATE ban_banners"
-		        " SET WWW='%s'"
-		      " WHERE BanCod=%ld",
-                      NewWWW,
-                      Ban.BanCod);
+      Ban_DB_UpdateBanWWW (Ban.BanCod,NewWWW);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_web_address_is_X,
                        NewWWW);
      }
    else
+      /* Write warning message */
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
 
    /***** Update web *****/
@@ -934,56 +855,62 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
    /***** Begin form *****/
    Frm_BeginForm (ActNewBan);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_banner,
-                      NULL,NULL,
-                      Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_banner,
+			 NULL,NULL,
+			 Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Ban_PutHeadBanners ();
+	 /***** Write heading *****/
+	 Ban_PutHeadBanners ();
 
-   /***** Banner code *****/
-   HTM_TR_Begin (NULL);
+	 /***** Table row for input fields *****/
+	 /* Begin table row */
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    /* Banner code */
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   HTM_TD_Empty (1);
+	    HTM_TD_Empty (1);
 
-   /***** Banner short name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /* Banner short name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_SHORT_NAME\""
+			       " required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Banner full name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /* Banner full name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_FULL_NAME\""
+			       " required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Banner image *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"12\" required=\"required\"");
-   HTM_TD_End ();
+	    /* Banner image */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"12\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Banner WWW *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-   HTM_TD_End ();
+	    /* Banner WWW */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			      "class=\"INPUT_WWW_NARROW\""
+			      " required=\"required\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 /* End table row */
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_banner);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_banner);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1001,16 +928,19 @@ static void Ban_PutHeadBanners (void)
    extern const char *Txt_Image;
    extern const char *Txt_WWW;
 
+   /***** Begin table row *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"LM",Txt_Image);
-   HTM_TH (1,1,"LM",Txt_WWW);
+      /****** Head cells *****/
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_Short_name);
+      HTM_TH (1,1,"LM",Txt_Full_name);
+      HTM_TH (1,1,"LM",Txt_Image);
+      HTM_TH (1,1,"LM",Txt_WWW);
 
+   /***** End table row *****/
    HTM_TR_End ();
   }
 
@@ -1047,11 +977,11 @@ void Ban_ReceiveFormNewBanner (void)
        Ban.FullName[0])	// If there's a banner name
      {
       /***** If name of banner was in database... *****/
-      if (Ban_CheckIfBannerNameExists ("ShortName",Ban.ShrtName,-1L))
+      if (Ban_DB_CheckIfBannerNameExists ("ShortName",Ban.ShrtName,-1L))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_banner_X_already_exists,
                           Ban.ShrtName);
-      else if (Ban_CheckIfBannerNameExists ("FullName",Ban.FullName,-1L))
+      else if (Ban_DB_CheckIfBannerNameExists ("FullName",Ban.FullName,-1L))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_banner_X_already_exists,
                           Ban.FullName);
@@ -1063,7 +993,7 @@ void Ban_ReceiveFormNewBanner (void)
                           Txt_You_must_specify_the_URL_of_the_new_banner);
       else	// Add new banner to database
         {
-         Ban_CreateBanner (&Ban);
+         Ban_DB_CreateBanner (&Ban);
 	 Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
 			  Ban.ShrtName);
         }
@@ -1077,24 +1007,6 @@ void Ban_ReceiveFormNewBanner (void)
   }
 
 /*****************************************************************************/
-/**************************** Create a new banner ****************************/
-/*****************************************************************************/
-
-static void Ban_CreateBanner (const struct Ban_Banner *Ban)
-  {
-   /***** Create a new banner *****/
-   DB_QueryINSERT ("can not create banner",
-		   "INSERT INTO ban_banners"
-		   " (Hidden,ShortName,FullName,Img,WWW)"
-		   " VALUES"
-		   " ('N','%s','%s','%s','%s')",
-                   Ban->ShrtName,
-                   Ban->FullName,
-                   Ban->Img,
-                   Ban->WWW);
-  }
-
-/*****************************************************************************/
 /************************* Write menu with some banners **********************/
 /*****************************************************************************/
 
@@ -1102,7 +1014,6 @@ void Ban_WriteMenuWithBanners (void)
   {
    struct Ban_Banners Banners;
    MYSQL_RES *mysql_res;
-   unsigned NumBanners;
    unsigned NumBan;
 
    /***** Reset banners *****/
@@ -1110,36 +1021,31 @@ void Ban_WriteMenuWithBanners (void)
 
    /***** Get random banner *****/
    // The banner(s) will change once in a while
-   NumBanners = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get banners",
-		   "SELECT BanCod,"	// row[0]
-			  "Hidden,"	// row[1]
-			  "ShortName,"	// row[2]
-			  "FullName,"	// row[3]
-			  "Img,"	// row[4]
-			  "WWW"		// row[5]
-		    " FROM ban_banners"
-		   " WHERE Hidden='N'"
-		   " ORDER BY RAND(%lu)"
-		   " LIMIT %u",
-		   (unsigned long) (Gbl.StartExecutionTimeUTC /
-				    Cfg_TIME_TO_CHANGE_BANNER),
-		   Cfg_NUMBER_OF_BANNERS);
-   Ban_GetListBanners (&Banners,&mysql_res,NumBanners);
+   Banners.Num = Ban_DB_GetRandomBanners (&mysql_res);
+   Ban_GetListBanners (&Banners,&mysql_res);
 
-   /***** Write all the banners *****/
+   /***** Write all banners *****/
    for (NumBan = 0;
 	NumBan < Banners.Num;
 	NumBan++)
      {
-      /* Write data of this banner */
+      /***** Write data of this banner *****/
+      /* Begin container */
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActClkBan);
-      Ban_PutParamBanCod (Banners.Lst[NumBan].BanCod);
-      Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
-      HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,
-		       Banners.Lst[NumBan].FullName,"BANNER");
-      Frm_EndForm ();
+
+         /* Begin form */
+	 Frm_BeginForm (ActClkBan);
+	 Ban_PutParamBanCod (Banners.Lst[NumBan].BanCod);
+	 Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
+
+	    /* Banner image */
+	    HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,
+			     Banners.Lst[NumBan].FullName,"BANNER");
+
+	 /* End form */
+	 Frm_EndForm ();
+
+      /* End container */
       HTM_DIV_End ();
      }
 

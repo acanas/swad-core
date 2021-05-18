@@ -27,6 +27,7 @@
 
 #include "swad_announcement.h"
 #include "swad_announcement_database.h"
+#include "swad_database.h"
 #include "swad_global.h"
 
 /*****************************************************************************/

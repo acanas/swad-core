@@ -57978,27 +57978,6 @@ const char *Txt_You_can_not_leave_the_field_empty =
 	"Voc&ecirc; n&atilde;o pode deixar o campo vazio.";
 #endif
 
-const char *Txt_You_can_not_leave_the_image_empty =
-#if   L==1	// ca
-	"No puede dejar la imagen vac&iacute;a.";	// Necessita traduccio
-#elif L==2	// de
-	"You can not leave the image empty.";		// Need Übersetzung
-#elif L==3	// en
-	"You can not leave the image empty.";
-#elif L==4	// es
-	"No puede dejar la imagen vac&iacute;a.";
-#elif L==5	// fr
-	"You can not leave the image empty.";		// Besoin de traduction
-#elif L==6	// gn
-	"No puede dejar la imagen vac&iacute;a.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi lasciare l'image vuota.";
-#elif L==8	// pl
-	"You can not leave the image empty.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode deixar a imagem vazia.";
-#endif
-
 const char *Txt_You_can_not_paste_file_or_folder_here =
 #if   L==1	// ca
 	"No puede pegar un archivo o carpeta aqu&iacute;.";		// Necessita traduccio

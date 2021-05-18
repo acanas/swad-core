@@ -27,8 +27,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
 #include "swad_assignment.h"
-#include "swad_database.h"
 #include "swad_file_browser.h"
 #include "swad_group.h"
 

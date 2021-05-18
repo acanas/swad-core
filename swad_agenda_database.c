@@ -26,30 +26,13 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For calloc
-// #include <string.h>		// For string functions
 
 #include "swad_agenda.h"
 #include "swad_agenda_database.h"
-// #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_date.h"
 #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_group.h"
-// #include "swad_HTML.h"
-// #include "swad_notification.h"
-// #include "swad_pagination.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
-// #include "swad_privacy.h"
-// #include "swad_QR.h"
-// #include "swad_setting.h"
-// #include "swad_string.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
