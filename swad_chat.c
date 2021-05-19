@@ -31,6 +31,7 @@
 
 #include "swad_box.h"
 #include "swad_chat.h"
+#include "swad_chat_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -70,7 +71,6 @@ extern struct Globals Gbl;
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS]);
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName);
-static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode);
 
 /*****************************************************************************/
 /****************** List available whiteboard/chat rooms *********************/
@@ -128,103 +128,107 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Box_BoxBegin (NULL,Txt_Chat_rooms,
                  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
-   HTM_UL_Begin ("class=\"LIST_TREE\"");
 
-   /***** Title of top level *****/
-   HTM_LI_Begin ("class=\"DAT\"");
-   Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
-   HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
-   HTM_LI_End ();
+      /***** Begin list *****/
+      HTM_UL_Begin ("class=\"LIST_TREE\"");
 
-   /***** Link to chat available for all the users *****/
-   IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
-                           !Gbl.Usrs.Me.MyDegs.Num);
-   snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
-	     Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
-   Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
-   Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
-   Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
+	 /***** Title of top level *****/
+	 HTM_LI_Begin ("class=\"DAT\"");
+	    Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
+	    HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
+	 HTM_LI_End ();
 
-   IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegs.Num;
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
-                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
-         Cht_WriteLinkToChat1 ("GBL_STD",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
-                               ThisRoomFullName,1,IsLastItemInLevel);
-	 Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
-	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
-         break;
-      case Rol_NET:
-      case Rol_TCH:
-         snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
-                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
-         Cht_WriteLinkToChat1 ("GBL_TCH",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-                               ThisRoomFullName,1,IsLastItemInLevel);
-	 Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
-	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
-         break;
-      default:
-         break;
-     }
+	 /***** Link to chat available for all the users *****/
+	 IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
+				 !Gbl.Usrs.Me.MyDegs.Num);
+	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
+		   Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
+	 Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
+	    Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
+	 Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
-   /***** Link to chat of users from my degrees *****/
-   for (NumMyDeg = 0;
-	NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
-	NumMyDeg++)
-     {
-      /* Get data of this degree */
-      Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
-      if (!Deg_GetDataOfDegreeByCod (&Deg))
-         Err_WrongDegreeExit ();
-
-      /* Link to the room of this degree */
-      IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);
-      snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.DegCod);
-      snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
-		Deg.ShrtName);
-      snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-		Txt_Degree,Deg.ShrtName);
-      Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
-      Lgo_DrawLogo (Hie_Lvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
-      Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
-
-      /* Get my courses in this degree from database */
-      NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_res);
-      for (NumCrs = 0;
-	   NumCrs < NumCrss;
-	   NumCrs++)
-	{
-	 /* Get next course */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get course code */
-	 if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	 IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegs.Num;
+	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
-	    /* Get data of this course */
-	    Crs_GetDataOfCourseByCod (&Crs);
-
-	    /* Link to the room of this course */
-	    IsLastItemInLevel[2] = (NumCrs == NumCrss - 1);
-	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
-		      Crs.CrsCod);
-	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
-		      Crs.ShrtName);
-	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
-		      Txt_Course,Crs.ShrtName);
-	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
-	    Ico_PutIcon ("chalkboard-teacher.svg",ThisRoomFullName,"ICO16x16");
-	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
+	    case Rol_STD:
+	       snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
+			 Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
+	       Cht_WriteLinkToChat1 ("GBL_STD",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
+				     ThisRoomFullName,1,IsLastItemInLevel);
+		  Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
+	       Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
+			 Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
+	       Cht_WriteLinkToChat1 ("GBL_TCH",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+				     ThisRoomFullName,1,IsLastItemInLevel);
+		  Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
+	       Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
+	       break;
+	    default:
+	       break;
 	   }
-	}
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
+	 /***** Link to chat of users from my degrees *****/
+	 for (NumMyDeg = 0;
+	      NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
+	      NumMyDeg++)
+	   {
+	    /* Get data of this degree */
+	    Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
+	    if (!Deg_GetDataOfDegreeByCod (&Deg))
+	       Err_WrongDegreeExit ();
+
+	    /* Link to the room of this degree */
+	    IsLastItemInLevel[1] = (NumMyDeg == Gbl.Usrs.Me.MyDegs.Num - 1);
+	    snprintf (ThisRoomCode,sizeof (ThisRoomCode),"DEG_%ld",Deg.DegCod);
+	    snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
+		      Deg.ShrtName);
+	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
+		      Txt_Degree,Deg.ShrtName);
+	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
+	       Lgo_DrawLogo (Hie_Lvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
+	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
+
+	    /* Get my courses in this degree from database */
+	    NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_res);
+	    for (NumCrs = 0;
+		 NumCrs < NumCrss;
+		 NumCrs++)
+	      {
+	       /* Get next course */
+	       row = mysql_fetch_row (mysql_res);
+
+	       /* Get course code */
+	       if ((Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+		 {
+		  /* Get data of this course */
+		  Crs_GetDataOfCourseByCod (&Crs);
+
+		  /* Link to the room of this course */
+		  IsLastItemInLevel[2] = (NumCrs == NumCrss - 1);
+		  snprintf (ThisRoomCode,sizeof (ThisRoomCode),"CRS_%ld",
+			    Crs.CrsCod);
+		  snprintf (ThisRoomShrtName,sizeof (ThisRoomShrtName),"%s",
+			    Crs.ShrtName);
+		  snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
+			    Txt_Course,Crs.ShrtName);
+		  Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
+		     Ico_PutIcon ("chalkboard-teacher.svg",ThisRoomFullName,"ICO16x16");
+		  Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
+		 }
+	      }
+
+	    /***** Free structure that stores the query result *****/
+	    DB_FreeMySQLResult (&mysql_res);
+	   }
+
+      /***** End list *****/
+      HTM_UL_End ();
 
    /***** End box *****/
-   HTM_UL_End ();
    Box_BoxEnd ();
   }
 
@@ -243,14 +247,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    unsigned NumRoom;
 
    /***** Get chat rooms with connected users from database *****/
-   NumRooms = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get chat rooms with connected users",
-		   "SELECT RoomCode,"		// row[0]
-			  "NumUsrs"		// row[1]
-		    " FROM cht_rooms"
-		   " WHERE NumUsrs>0"
-		   " ORDER BY NumUsrs DESC,"
-			     "RoomCode");
+   NumRooms = Cht_DB_GetListOfChatRoomsWithUsrs (&mysql_res);
    if (NumRooms) // If not empty chat rooms found
      {
       /***** Begin box and table *****/
@@ -258,34 +255,32 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
                          NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
-      /***** Write heading *****/
-      HTM_TR_Begin (NULL);
+	 /***** Write heading *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TH (1,1,"CM LIGHT_BLUE",Txt_CHAT_Room_code);
+	    HTM_TH (1,1,"LM LIGHT_BLUE",Txt_Number_of_users);
+	 HTM_TR_End ();
 
-      HTM_TH (1,1,"CM LIGHT_BLUE",Txt_CHAT_Room_code);
-      HTM_TH (1,1,"LM LIGHT_BLUE",Txt_Number_of_users);
+	 /***** Loop over chat rooms *****/
+	 for (NumRoom = 0;
+	      NumRoom < NumRooms;
+	      NumRoom++)
+	   {
+	    /* Get next chat room */
+	    row = mysql_fetch_row (mysql_res);
 
-      HTM_TR_End ();
+	    HTM_TR_Begin (NULL);
 
-      /***** Loop over chat rooms *****/
-      for (NumRoom = 0;
-	   NumRoom < NumRooms;
-	   NumRoom++)
-	{
-	 /* Get next chat room */
-	 row = mysql_fetch_row (mysql_res);
+	       HTM_TD_Begin ("class=\"DAT LM\"");
+		  HTM_Txt (row[0]);
+	       HTM_TD_End ();
 
-         HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Txt (row[1]);
+	       HTM_TD_End ();
 
-         HTM_TD_Begin ("class=\"DAT LM\"");
-         HTM_Txt (row[0]);
-         HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-         HTM_Txt (row[1]);
-	 HTM_TD_End ();
-
-         HTM_TR_End ();
-        }
+	    HTM_TR_End ();
+	   }
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -304,32 +299,48 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
 
+   /***** Begin list item *****/
    HTM_LI_Begin (NULL);
-   Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
-   Frm_BeginForm (ActCht);
-   Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
 
-   HTM_BUTTON_SUBMIT_Begin (RoomFullName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
+
+      /***** Begin form *****/
+      Frm_BeginForm (ActCht);
+
+	 Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
+
+	 /* Begin button */
+	 HTM_BUTTON_SUBMIT_Begin (RoomFullName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
   {
    extern const char *Txt_connected_PLURAL;
    extern const char *Txt_connected_SINGULAR;
-   unsigned NumUsrsInRoom = Cht_GetNumUsrsInChatRoom (RoomCode);
+   unsigned NumUsrsInRoom = Cht_DB_GetNumUsrsInChatRoom (RoomCode);
 
-   if (NumUsrsInRoom)
-      HTM_STRONG_Begin ();
-   HTM_TxtF ("&nbsp;%s",RoomFullName);
-   if (NumUsrsInRoom > 1)
-      HTM_TxtF (" [%d %s]",NumUsrsInRoom,Txt_connected_PLURAL);
-   else if (NumUsrsInRoom == 1)
-      HTM_TxtF (" [1 %s]",Txt_connected_SINGULAR);
-   if (NumUsrsInRoom)
-      HTM_STRONG_End ();
-   HTM_BUTTON_End ();
+            /* Begin strong if room has users */
+	    if (NumUsrsInRoom)
+	       HTM_STRONG_Begin ();
 
-   Frm_EndForm ();
+	    /* Room name and users */
+	    HTM_TxtF ("&nbsp;%s",RoomFullName);
+	    if (NumUsrsInRoom > 1)
+	       HTM_TxtF (" [%d %s]",NumUsrsInRoom,Txt_connected_PLURAL);
+	    else if (NumUsrsInRoom == 1)
+	       HTM_TxtF (" [1 %s]",Txt_connected_SINGULAR);
+
+            /* End strong if room has users */
+	    if (NumUsrsInRoom)
+	       HTM_STRONG_End ();
+
+	 /* End button */
+	 HTM_BUTTON_End ();
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End list item *****/
    HTM_LI_End ();
   }
 
@@ -342,21 +353,6 @@ void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtN
    Par_PutHiddenParamString (NULL,"RoomCode",RoomCode);
    Par_PutHiddenParamString (NULL,"RoomShrtName",RoomShrtName);
    Par_PutHiddenParamString (NULL,"RoomFullName",RoomFullName);
-  }
-
-/*****************************************************************************/
-/*************** Get number of users connected to a chat room ****************/
-/*****************************************************************************/
-
-static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
-  {
-   /***** Get number of users connected to chat rooms from database *****/
-   return DB_QuerySELECTUnsigned ("can not get number of users"
-				  " connected to a chat room",
-				  "SELECT NumUsrs"
-				   " FROM cht_rooms"
-				  " WHERE RoomCode='%s'",
-				  RoomCode);
   }
 
 /*****************************************************************************/
