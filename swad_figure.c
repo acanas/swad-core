@@ -3501,8 +3501,8 @@ static void Fig_GetAndShowGamesStats (void)
    double NumGamesPerCourse = 0.0;
 
    /***** Get the number of games from this location *****/
-   if ((NumGames = Gam_GetNumGames (Gbl.Scope.Current)))
-      if ((NumCoursesWithGames = Gam_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
+   if ((NumGames = Gam_DB_GetNumGames (Gbl.Scope.Current)))
+      if ((NumCoursesWithGames = Gam_DB_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
          NumGamesPerCourse = (double) NumGames / (double) NumCoursesWithGames;
 
    /***** Begin box and table *****/

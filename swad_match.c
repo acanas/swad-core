@@ -355,45 +355,45 @@ void Mch_ListMatches (struct Gam_Games *Games,
                  Mch_PutIconsInListOfMatches,Games,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my groups or all groups *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 if (Gbl.Crs.Grps.NumGrps)
-	   {
-	    Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelWhichGrps (ActSeeGam,
-					Gam_PutParams,Games);
-	    Set_EndSettingsHead ();
-	   }
-	 break;
-      default:
-	 break;
-     }
+      /***** Select whether show only my groups or all groups *****/
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    if (Gbl.Crs.Grps.NumGrps)
+	      {
+	       Set_BeginSettingsHead ();
+	       Grp_ShowFormToSelWhichGrps (ActSeeGam,
+					   Gam_PutParams,Games);
+	       Set_EndSettingsHead ();
+	      }
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Show the table with the matches *****/
-   if (NumMatches)
-      Mch_ListOneOrMoreMatches (Games,Game,NumMatches,mysql_res);
+      /***** Show the table with the matches *****/
+      if (NumMatches)
+	 Mch_ListOneOrMoreMatches (Games,Game,NumMatches,mysql_res);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
-   /***** Put button to play a new match in this game *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 if (PutFormNewMatch)
-	    Mch_PutFormNewMatch (Game);	// Form to fill in data and start playing a new match
-	 else
-	    Gam_PutButtonNewMatch (Games,Game->GamCod);	// Button to create a new match
-	 break;
-      default:
-	 break;
-     }
+      /***** Put button to play a new match in this game *****/
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    if (PutFormNewMatch)
+	       Mch_PutFormNewMatch (Game);	// Form to fill in data and start playing a new match
+	    else
+	       Gam_PutButtonNewMatch (Games,Game->GamCod);	// Button to create a new match
+	    break;
+	 default:
+	    break;
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -496,77 +496,79 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    /***** Reset match *****/
    Mch_ResetMatch (&Match);
 
-   /***** Write the heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
-   /***** Write rows *****/
-   for (NumMatch = 0, UniqueId = 1;
-	NumMatch < NumMatches;
-	NumMatch++, UniqueId++)
-     {
-      Gbl.RowEvenOdd = NumMatch % 2;
+      /***** Write the heading *****/
+      Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
-      /***** Get match data from row *****/
-      Mch_GetMatchDataFromRow (mysql_res,&Match);
-
-      if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match))
+      /***** Write rows *****/
+      for (NumMatch = 0, UniqueId = 1;
+	   NumMatch < NumMatches;
+	   NumMatch++, UniqueId++)
 	{
-	 /***** Build anchor string *****/
-	 if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 Gbl.RowEvenOdd = NumMatch % 2;
 
-	 /***** First row for this match with match data ****/
-	 /* Begin first row */
-	 HTM_TR_Begin (NULL);
+	 /***** Get match data from row *****/
+	 Mch_GetMatchDataFromRow (mysql_res,&Match);
 
-	 /* Icons */
-	 if (ICanEditMatches)
-	    Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
+	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match))
+	   {
+	    /***** Build anchor string *****/
+	    if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
+	       Err_NotEnoughMemoryExit ();
 
-	 /* Match player */
-	 Mch_ListOneOrMoreMatchesAuthor (&Match);
+	    /***** First row for this match with match data ****/
+	    /* Begin first row */
+	    HTM_TR_Begin (NULL);
 
-	 /* Start/end date/time */
-	 Mch_ListOneOrMoreMatchesTimes (&Match,UniqueId);
+	       /* Icons */
+	       if (ICanEditMatches)
+		  Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
 
-	 /* Title and groups */
-	 Mch_ListOneOrMoreMatchesTitleGrps (&Match,Anchor);
+	       /* Match player */
+	       Mch_ListOneOrMoreMatchesAuthor (&Match);
 
-	 /* Number of players who have played the match */
-	 Mch_ListOneOrMoreMatchesNumPlayers (&Match);
+	       /* Start/end date/time */
+	       Mch_ListOneOrMoreMatchesTimes (&Match,UniqueId);
 
-	 /* Match status */
-	 Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
+	       /* Title and groups */
+	       Mch_ListOneOrMoreMatchesTitleGrps (&Match,Anchor);
 
-	 /* Match result visible? */
-	 Mch_ListOneOrMoreMatchesResult (Games,&Match);
+	       /* Number of players who have played the match */
+	       Mch_ListOneOrMoreMatchesNumPlayers (&Match);
 
-	 /* End first row */
-	 HTM_TR_End ();
+	       /* Match status */
+	       Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
 
-	 /***** Second row for this match used for edition ****/
-	 if (Gbl.Action.Act == ActEdiMch &&		// Editing...
-             Match.MchCod == Games->MchCod.Selected)	// ...this match
-	    /***** Check if I can edit this match *****/
-	    if (Mch_CheckIfICanEditThisMatch (&Match))
-	      {
-	       /* Begin second row */
-	       HTM_TR_Begin (NULL);
+	       /* Match result visible? */
+	       Mch_ListOneOrMoreMatchesResult (Games,&Match);
 
-	       /* Form to edit match */
-	       HTM_TD_Begin ("colspan=\"8\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-	       Mch_PutFormExistingMatch (Games,&Match,Anchor);	// Form to fill in data and edit this match
-	       HTM_TD_End ();
+	    /* End first row */
+	    HTM_TR_End ();
 
-	       /* End second row */
-	       HTM_TR_End ();
-	      }
+	    /***** Second row for this match used for edition ****/
+	    if (Gbl.Action.Act == ActEdiMch &&		// Editing...
+		Match.MchCod == Games->MchCod.Selected)	// ...this match
+	       /***** Check if I can edit this match *****/
+	       if (Mch_CheckIfICanEditThisMatch (&Match))
+		 {
+		  /* Begin second row */
+		  HTM_TR_Begin (NULL);
 
-	 /***** Free anchor string *****/
-	 free (Anchor);
+		     /* Form to edit match */
+		     HTM_TD_Begin ("colspan=\"8\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+			Mch_PutFormExistingMatch (Games,&Match,Anchor);	// Form to fill in data and edit this match
+		     HTM_TD_End ();
+
+		  /* End second row */
+		  HTM_TR_End ();
+		 }
+
+	    /***** Free anchor string *****/
+	    free (Anchor);
+	   }
 	}
-     }
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -588,18 +590,18 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Column for icons *****/
-   if (ICanEditMatches)
-      HTM_TH_Empty (1);
+      /***** Column for icons *****/
+      if (ICanEditMatches)
+	 HTM_TH_Empty (1);
 
-   /***** The rest of columns *****/
-   HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]);
-   HTM_TH (1,1,"LT",Txt_Match);
-   HTM_TH (1,1,"RT",Txt_Players);
-   HTM_TH (1,1,"CT",Txt_Status);
-   HTM_TH (1,1,"CT",Txt_Results);
+      /***** The rest of columns *****/
+      HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
+      HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
+      HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]);
+      HTM_TH (1,1,"LT",Txt_Match);
+      HTM_TH (1,1,"RT",Txt_Players);
+      HTM_TH (1,1,"CT",Txt_Status);
+      HTM_TH (1,1,"CT",Txt_Results);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -664,21 +666,21 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
   {
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-   if (Mch_CheckIfICanEditThisMatch (Match))
-     {
-      Games->GamCod         = Match->GamCod;
-      Games->MchCod.Current = Match->MchCod;
+      if (Mch_CheckIfICanEditThisMatch (Match))
+	{
+	 Games->GamCod         = Match->GamCod;
+	 Games->MchCod.Current = Match->MchCod;
 
-      /***** Put icon to remove the match *****/
-      Ico_PutContextualIconToRemove (ActReqRemMch,NULL,
-                                     Mch_PutParamsEdit,Games);
+	 /***** Put icon to remove the match *****/
+	 Ico_PutContextualIconToRemove (ActReqRemMch,NULL,
+					Mch_PutParamsEdit,Games);
 
-      /***** Put icon to edit the match *****/
-      Ico_PutContextualIconToEdit (ActEdiMch,Anchor,
-				   Mch_PutParamsEdit,Games);
-     }
-   else
-      Ico_PutIconRemovalNotAllowed ();
+	 /***** Put icon to edit the match *****/
+	 Ico_PutContextualIconToEdit (ActEdiMch,Anchor,
+				      Mch_PutParamsEdit,Games);
+	}
+      else
+	 Ico_PutIconRemovalNotAllowed ();
 
    HTM_TD_End ();
   }
@@ -691,7 +693,7 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match)
   {
    /***** Match author (teacher) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Usr_WriteAuthor1Line (Match->UsrCod,false);
+      Usr_WriteAuthor1Line (Match->UsrCod,false);
    HTM_TD_End ();
   }
 
@@ -715,9 +717,9 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigne
 		    Match->Status.Showing == Mch_END ? "DATE_RED" :
 						       "DATE_GREEN",
 		    Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x7);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x7);
       HTM_TD_End ();
       free (Id);
      }
@@ -734,24 +736,26 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
    extern const char *Txt_Resume;
 
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
+      HTM_ARTICLE_Begin (Anchor);
 
-   /***** Match title *****/
-   Frm_BeginForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
-						       ActResMch);
-   Mch_PutParamMchCod (Match->MchCod);
-   HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-								 Txt_Resume,
-			    "BT_LINK LT ASG_TITLE",NULL);
-   HTM_Txt (Match->Title);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+	 /***** Match title *****/
+	 Frm_BeginForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
+							     ActResMch);
+	 Mch_PutParamMchCod (Match->MchCod);
 
-   /***** Groups whose students can answer this match *****/
-   if (Gbl.Crs.Grps.NumGrps)
-      Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (Match);
+	    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+									  Txt_Resume,
+				     "BT_LINK LT ASG_TITLE",NULL);
+	       HTM_Txt (Match->Title);
+	    HTM_BUTTON_End ();
 
-   HTM_ARTICLE_End ();
+	 Frm_EndForm ();
+
+	 /***** Groups whose students can answer this match *****/
+	 if (Gbl.Crs.Grps.NumGrps)
+	    Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (Match);
+
+      HTM_ARTICLE_End ();
    HTM_TD_End ();
   }
 
@@ -785,37 +789,38 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 			     "grp_groups.GrpName",
 		   Match->MchCod);
 
-   /***** Write heading *****/
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
-   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-                                    Txt_Groups);
 
-   /***** Write groups *****/
-   if (NumGrps) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumGrp = 0;
-	   NumGrp < NumGrps;
-	   NumGrp++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
+      /***** Write heading *****/
+      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
+				       Txt_Groups);
 
-         /* Write group type name and group name */
-         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+      /***** Write groups *****/
+      if (NumGrps) // Groups found...
+	{
+	 /* Get and write the group types and names */
+	 for (NumGrp = 0;
+	      NumGrp < NumGrps;
+	      NumGrp++)
+	   {
+	    /* Get next group */
+	    row = mysql_fetch_row (mysql_res);
 
-         if (NumGrps >= 2)
-           {
-            if (NumGrp == NumGrps - 2)
-               HTM_TxtF (" %s ",Txt_and);
-            if (NumGrps >= 3)
-              if (NumGrp < NumGrps - 2)
-                  HTM_Txt (", ");
-           }
-        }
-     }
-   else
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	    /* Write group type name and group name */
+	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+
+	    if (NumGrps >= 2)
+	      {
+	       if (NumGrp == NumGrps - 2)
+		  HTM_TxtF (" %s ",Txt_and);
+	       if (NumGrps >= 3)
+		 if (NumGrp < NumGrps - 2)
+		     HTM_Txt (", ");
+	      }
+	   }
+	}
+      else
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -831,7 +836,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Unsigned (Mch_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
+      HTM_Unsigned (Mch_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
 
@@ -846,23 +851,23 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
-   if (Match->Status.Showing != Mch_END)	// Match not over
-     {
-      /* Current question index / total of questions */
-      HTM_DIV_Begin ("class=\"DAT\"");
-      HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
-      HTM_DIV_End ();
-     }
+      if (Match->Status.Showing != Mch_END)	// Match not over
+	{
+	 /* Current question index / total of questions */
+	 HTM_DIV_Begin ("class=\"DAT\"");
+	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
+	 HTM_DIV_End ();
+	}
 
-   /* Icon to join match or resume match */
-   Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
-								       ActResMch,
-				  NULL,
-				  Mch_PutParamsPlay,&Match->MchCod,
-				  Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
-					                             "play.svg",
-				  Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-								       Txt_Resume);
+      /* Icon to join match or resume match */
+      Lay_PutContextualLinkOnlyIcon (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
+									  ActResMch,
+				     NULL,
+				     Mch_PutParamsPlay,&Match->MchCod,
+				     Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
+									"play.svg",
+				     Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+									  Txt_Resume);
 
    HTM_TD_End ();
   }
@@ -1457,37 +1462,37 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
    Frm_StartFormAnchor (ActChgMch,Anchor);
    Mch_PutParamsEdit (Games);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Match->Title,
-                      NULL,NULL,
-		      Hlp_ASSESSMENT_Games_matches,Box_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Match->Title,
+			 NULL,NULL,
+			 Hlp_ASSESSMENT_Games_matches,Box_CLOSABLE,2);
 
-   /***** Match title *****/
-   HTM_TR_Begin (NULL);
+	    /***** Match title *****/
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	       /* Label */
+	       Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Match->Title,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Title\" size=\"45\" required=\"required\"");
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Groups *****/
-   Mch_ShowLstGrpsToEditMatch (Match->MchCod);
+	    /***** Groups *****/
+	    Mch_ShowLstGrpsToEditMatch (Match->MchCod);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
-   /***** Put button to submit the form *****/
-   Btn_PutConfirmButton (Txt_Save_changes);
+      /***** Put button to submit the form *****/
+      Btn_PutConfirmButton (Txt_Save_changes);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1507,46 +1512,46 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
    /***** Begin section for a new match *****/
    HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActNewMch);
-   Gam_PutParamGameCod (Game->GamCod);
-   Gam_PutParamQstInd (0);	// Start by first question in game
+      /***** Begin form *****/
+      Frm_BeginForm (ActNewMch);
+      Gam_PutParamGameCod (Game->GamCod);
+      Gam_PutParamQstInd (0);	// Start by first question in game
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_match,
-                      NULL,NULL,
-		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
+	 /***** Begin box and table *****/
+	 Box_BoxTableBegin (NULL,Txt_New_match,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
-   /***** Match title *****/
-   HTM_TR_Begin (NULL);
+	    /***** Match title *****/
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	       /* Label */
+	       Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Game->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Mch_MAX_CHARS_TITLE,Game->Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" size=\"45\" required=\"required\"");
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Groups *****/
-   Mch_ShowLstGrpsToEditMatch (-1L);
+	    /***** Groups *****/
+	    Mch_ShowLstGrpsToEditMatch (-1L);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** Put icon to submit the form *****/
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"play.svg",
-		    Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
+	 /***** Put icon to submit the form *****/
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"play.svg",
+			  Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	 /***** End box *****/
+	 Box_BoxEnd ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End section for a new match *****/
    HTM_SECTION_End ();
@@ -1571,42 +1576,45 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Groups);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("95%",NULL,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,0);
+	 HTM_TD_Begin ("class=\"LT\"");
 
-      /***** First row: checkbox to select the whole course *****/
-      HTM_TR_Begin (NULL);
+	    Box_BoxTableBegin ("95%",NULL,
+			       NULL,NULL,
+			       NULL,Box_NOT_CLOSABLE,0);
 
-      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-		          "id=\"WholeCrs\" value=\"Y\"%s"
-		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("mch_groups","MchCod",MchCod) ? "" :
-				                                                       " checked=\"checked\"");
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	       /***** First row: checkbox to select the whole course *****/
+	       HTM_TR_Begin (NULL);
 
-      HTM_TR_End ();
+		  HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		     HTM_LABEL_Begin (NULL);
+			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
+					    "id=\"WholeCrs\" value=\"Y\"%s"
+					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
+					    Grp_CheckIfAssociatedToGrps ("mch_groups","MchCod",MchCod) ? "" :
+													 " checked=\"checked\"");
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
 
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-					       Grp_MATCH,MchCod);
+	       HTM_TR_End ();
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-      HTM_TD_End ();
+	       /***** List the groups for each group type *****/
+	       for (NumGrpTyp = 0;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp++)
+		  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+							Grp_MATCH,MchCod);
+
+	    /***** End table and box *****/
+	    Box_BoxTableEnd ();
+
+	 HTM_TD_End ();
+
       HTM_TR_End ();
      }
 
@@ -2189,7 +2197,7 @@ void Mch_PlayPauseMatch (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
+      Mch_ShowMatchStatusForTch (&Match);
    HTM_DIV_End ();
   }
 
@@ -2225,7 +2233,7 @@ void Mch_ChangeNumColsMch (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
+      Mch_ShowMatchStatusForTch (&Match);
    HTM_DIV_End ();
   }
 
@@ -2260,7 +2268,7 @@ void Mch_ToggleVisResultsMchQst (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
+      Mch_ShowMatchStatusForTch (&Match);
    HTM_DIV_End ();
   }
 
@@ -2292,7 +2300,7 @@ void Mch_BackMatch (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
+      Mch_ShowMatchStatusForTch (&Match);
    HTM_DIV_End ();
   }
 
@@ -2324,7 +2332,7 @@ void Mch_ForwardMatch (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
+      Mch_ShowMatchStatusForTch (&Match);
    HTM_DIV_End ();
   }
 
@@ -2364,7 +2372,7 @@ static void Mch_SetMatchStatusToPrev (struct Mch_Match *Match)
 static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
   {
    /***** Get index of the previous question *****/
-   Match->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Match->GamCod,
+   Match->Status.QstInd = Gam_DB_GetPrevQuestionIndexInGame (Match->GamCod,
 							  Match->Status.QstInd);
    if (Match->Status.QstInd)		// Start of questions not reached
      {
@@ -2427,7 +2435,7 @@ static void Mch_SetMatchStatusToNext (struct Mch_Match *Match)
 static void Mch_SetMatchStatusToNextQst (struct Mch_Match *Match)
   {
    /***** Get index of the next question *****/
-   Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
+   Match->Status.QstInd = Gam_DB_GetNextQuestionIndexInGame (Match->GamCod,
 							  Match->Status.QstInd);
 
    /***** Get question code *****/
@@ -2582,24 +2590,24 @@ static void Mch_ShowLeftColumnTch (struct Mch_Match *Match)
    /***** Start left container *****/
    HTM_DIV_Begin ("class=\"MCH_LEFT_TCH\"");
 
-   /***** Refreshable part *****/
-   HTM_DIV_Begin ("id=\"match_left\" class=\"MCH_REFRESHABLE_TEACHER\"");
-   Mch_ShowRefreshablePartTch (Match);
-   HTM_DIV_End ();
+      /***** Refreshable part *****/
+      HTM_DIV_Begin ("id=\"match_left\" class=\"MCH_REFRESHABLE_TEACHER\"");
+	 Mch_ShowRefreshablePartTch (Match);
+      HTM_DIV_End ();
 
-   /***** Put forms to start countdown *****/
-   Mch_PutFormsCountdown (Match);
+      /***** Put forms to start countdown *****/
+      Mch_PutFormsCountdown (Match);
 
-   /***** Buttons *****/
-   Mch_PutMatchControlButtons (Match);
+      /***** Buttons *****/
+      Mch_PutMatchControlButtons (Match);
 
-   /***** Put forms to choice which projects to show *****/
-   Set_BeginSettingsHead ();
-   Mch_ShowFormColumns (Match);
-   Set_EndSettingsHead ();
+      /***** Put forms to choice which projects to show *****/
+      Set_BeginSettingsHead ();
+	 Mch_ShowFormColumns (Match);
+      Set_EndSettingsHead ();
 
-   /***** Write button to request viewing results *****/
-   Mch_PutCheckboxResult (Match);
+      /***** Write button to request viewing results *****/
+      Mch_PutCheckboxResult (Match);
 
    /***** End left container *****/
    HTM_DIV_End ();
@@ -2637,11 +2645,11 @@ static void Mch_WriteElapsedTimeInMch (struct Mch_Match *Match)
 
    HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
 
-   /***** Get elapsed time in match *****/
-   Mch_GetElapsedTimeInMatch (Match,&Time);
+      /***** Get elapsed time in match *****/
+      Mch_GetElapsedTimeInMatch (Match,&Time);
 
-   /***** Write elapsed time in hh:mm'ss" format *****/
-   Dat_WriteHoursMinutesSeconds (&Time);
+      /***** Write elapsed time in hh:mm'ss" format *****/
+      Dat_WriteHoursMinutesSeconds (&Time);
 
    HTM_DIV_End ();
   }
@@ -2656,17 +2664,17 @@ static void Mch_WriteElapsedTimeInQst (struct Mch_Match *Match)
 
    HTM_DIV_Begin ("class=\"MCH_TIME_QST\"");
 
-   switch (Match->Status.Showing)
-     {
-      case Mch_START:
-      case Mch_END:
-         HTM_Hyphen ();	// Do not write elapsed time
-         break;
-      default:
-	 Mch_GetElapsedTimeInQuestion (Match,&Time);
-	 Dat_WriteHoursMinutesSeconds (&Time);
-	 break;
-     }
+      switch (Match->Status.Showing)
+	{
+	 case Mch_START:
+	 case Mch_END:
+	    HTM_Hyphen ();	// Do not write elapsed time
+	    break;
+	 default:
+	    Mch_GetElapsedTimeInQuestion (Match,&Time);
+	    Dat_WriteHoursMinutesSeconds (&Time);
+	    break;
+	}
 
    HTM_DIV_End ();
   }
@@ -2681,35 +2689,37 @@ static void Mch_WriteNumRespondersQst (struct Mch_Match *Match)
 
    /***** Begin block *****/
    HTM_DIV_Begin ("class=\"MCH_NUM_ANSWERERS\"");
-   HTM_Txt (Txt_MATCH_respond);
-   HTM_BR ();
-   HTM_STRONG_Begin ();
 
-   /***** Write number of responders *****/
-   switch (Match->Status.Showing)
-     {
-      case Mch_START:
-      case Mch_END:
-         HTM_Hyphen ();	// Do not write number of responders
-         break;
-      default:
-	 HTM_Unsigned (Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,
-					             Match->Status.QstInd));
-	 break;
-     }
+      HTM_Txt (Txt_MATCH_respond);
+      HTM_BR ();
+      HTM_STRONG_Begin ();
 
-   /***** Write number of players *****/
-   if (Match->Status.Playing)	// Match is being played
-     {
-      /* Get current number of players */
-      Mch_GetNumPlayers (Match);
+	 /***** Write number of responders *****/
+	 switch (Match->Status.Showing)
+	   {
+	    case Mch_START:
+	    case Mch_END:
+	       HTM_Hyphen ();	// Do not write number of responders
+	       break;
+	    default:
+	       HTM_Unsigned (Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,
+							   Match->Status.QstInd));
+	       break;
+	   }
 
-      /* Show current number of players */
-      HTM_TxtF ("/%u",Match->Status.NumPlayers);
-     }
+	 /***** Write number of players *****/
+	 if (Match->Status.Playing)	// Match is being played
+	   {
+	    /* Get current number of players */
+	    Mch_GetNumPlayers (Match);
+
+	    /* Show current number of players */
+	    HTM_TxtF ("/%u",Match->Status.NumPlayers);
+	   }
+
+      HTM_STRONG_End ();
 
    /***** End block *****/
-   HTM_STRONG_End ();
    HTM_DIV_End ();
   }
 
@@ -2752,21 +2762,21 @@ static void Mch_PutCountdownAndHourglassIcon (struct Mch_Match *Match)
 
    /***** Write countdown and put hourglass icon *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
-   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_BUTTON_Begin (Txt_Countdown,Class,NULL);
+      HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+	 HTM_BUTTON_BUTTON_Begin (Txt_Countdown,Class,NULL);
 
-   /* Countdown */
-   if (Match->Status.Countdown > 0)
-      HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
-   else
-      HTM_NBSP ();
-   HTM_BR ();
+	    /* Countdown */
+	    if (Match->Status.Countdown > 0)
+	       HTM_TxtF ("&nbsp;%02ld&Prime;",Match->Status.Countdown);
+	    else
+	       HTM_NBSP ();
+	    HTM_BR ();
 
-   /* Icon */
-   HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
+	    /* Icon */
+	    HTM_TxtF ("<i class=\"fas %s\"></i>",Icon);
 
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
+	 HTM_BUTTON_End ();
+      HTM_DIV_End ();
    HTM_DIV_End ();
   }
 
@@ -2779,11 +2789,11 @@ static void Mch_PutFormsCountdown (struct Mch_Match *Match)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_HOURGLASS\"");
 
-   /***** Put forms to start countdown *****/
-   Mch_PutFormCountdown (Match,-1                          ,"MCH_GREEN"    );
-   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_LARGE ,"MCH_LIMEGREEN");
-   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_MEDIUM,"MCH_YELLOW"   );
-   Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_SMALL ,"MCH_RED"      );
+      /***** Put forms to start countdown *****/
+      Mch_PutFormCountdown (Match,-1                          ,"MCH_GREEN"    );
+      Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_LARGE ,"MCH_LIMEGREEN");
+      Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_MEDIUM,"MCH_YELLOW"   );
+      Mch_PutFormCountdown (Match,Mch_COUNTDOWN_SECONDS_SMALL ,"MCH_RED"      );
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -2811,29 +2821,29 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
       Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
      }
 
-   /***** Put icon *****/
-   HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
+      /***** Put icon *****/
+      HTM_DIV_Begin ("class=\"MCH_SMALLBUTTON_CONT\"");
 
-   HTM_BUTTON_SUBMIT_Begin (PutForm ? Txt_Countdown :
-				      NULL,
-			    Str_BuildStringStr (PutForm ? "BT_LINK MCH_BUTTON_ON %s" :
-				                          "BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
-						Color),
-			    NULL);
-   Str_FreeString ();
+	 HTM_BUTTON_SUBMIT_Begin (PutForm ? Txt_Countdown :
+					    NULL,
+				  Str_BuildStringStr (PutForm ? "BT_LINK MCH_BUTTON_ON %s" :
+								"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
+						      Color),
+				  NULL);
+	 Str_FreeString ();
 
-   HTM_NBSP ();
-   if (Seconds >= 0)
-      HTM_TxtF ("%ld&Prime;",Seconds);
-   else
-     {
-      HTM_Txt ("&infin;");
-      HTM_NBSP ();
-     }
+	    HTM_NBSP ();
+	    if (Seconds >= 0)
+	       HTM_TxtF ("%ld&Prime;",Seconds);
+	    else
+	      {
+	       HTM_Txt ("&infin;");
+	       HTM_NBSP ();
+	      }
 
-   HTM_BUTTON_End ();
+	 HTM_BUTTON_End ();
 
-   HTM_DIV_End ();
+      HTM_DIV_End ();
 
    /***** End form *****/
    if (PutForm)
@@ -2877,29 +2887,29 @@ static void Mch_ShowLeftColumnStd (const struct Mch_Match *Match,
    /***** Start left container *****/
    HTM_DIV_Begin ("class=\"MCH_LEFT_STD\"");
 
-   /***** Top *****/
-   HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
-   HTM_DIV_End ();
+      /***** Top *****/
+      HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
+      HTM_DIV_End ();
 
-   /***** Write number of question *****/
-   Mch_ShowNumQstInMch (Match);
+      /***** Write number of question *****/
+      Mch_ShowNumQstInMch (Match);
 
-   switch (Match->Status.Showing)
-     {
-      case Mch_START:
-      case Mch_END:
-	 break;
-      default:
-	 /***** Write whether question is answered or not *****/
-	 Mch_PutIfAnswered (Match,Answered);
+      switch (Match->Status.Showing)
+	{
+	 case Mch_START:
+	 case Mch_END:
+	    break;
+	 default:
+	    /***** Write whether question is answered or not *****/
+	    Mch_PutIfAnswered (Match,Answered);
 
-	 if (Match->Status.Playing &&			// Match is being played
-	     Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
-	     Answered)				// I have answered this question
-	    /***** Put icon to remove my answet *****/
-	    Mch_PutIconToRemoveMyAnswer (Match);
-	 break;
-     }
+	    if (Match->Status.Playing &&			// Match is being played
+		Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
+		Answered)				// I have answered this question
+	       /***** Put icon to remove my answet *****/
+	       Mch_PutIconToRemoveMyAnswer (Match);
+	    break;
+	}
 
    /***** End left container *****/
    HTM_DIV_End ();
@@ -2918,34 +2928,34 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
    /***** Start right container *****/
    HTM_DIV_Begin ("class=\"MCH_RIGHT_STD\"");
 
-   /***** Top row *****/
-   Mch_ShowMatchTitleStd (Match);
+      /***** Top row *****/
+      Mch_ShowMatchTitleStd (Match);
 
-   /***** Bottom row *****/
-   if (Match->Status.Playing)			// Match is being played
-     {
-      if (Match->Status.Showing == Mch_END)	// Match over
-	 Mch_ShowWaitImage (Txt_Please_wait_);
-      else					// Match not over
+      /***** Bottom row *****/
+      if (Match->Status.Playing)			// Match is being played
 	{
-	 HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");
-
-	 /***** Update players ******/
-	 if (Mch_RegisterMeAsPlayerInMatch (Match))
+	 if (Match->Status.Showing == Mch_END)	// Match over
+	    Mch_ShowWaitImage (Txt_Please_wait_);
+	 else					// Match not over
 	   {
-	    if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
-	       /* Show current question and possible answers */
-	       if (!Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update))
-                  Ale_ShowAlert (Ale_ERROR,"Wrong question.");
-	   }
-	 else
-	    Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
+	    HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");
 
-	 HTM_DIV_End ();
+	       /***** Update players ******/
+	       if (Mch_RegisterMeAsPlayerInMatch (Match))
+		 {
+		  if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
+		     /* Show current question and possible answers */
+		     if (!Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update))
+			Ale_ShowAlert (Ale_ERROR,"Wrong question.");
+		 }
+	       else
+		  Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
+
+	    HTM_DIV_End ();
+	   }
 	}
-     }
-   else						// Match is not being played
-      Mch_ShowWaitImage (Txt_Please_wait_);
+      else						// Match is not being played
+	 Mch_ShowWaitImage (Txt_Please_wait_);
 
    /***** End right container *****/
    HTM_DIV_End ();
@@ -2959,21 +2969,21 @@ static void Mch_ShowNumQstInMch (const struct Mch_Match *Match)
   {
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_MATCH_End;
-   unsigned NumQsts = Gam_GetNumQstsGame (Match->GamCod);
+   unsigned NumQsts = Gam_DB_GetNumQstsGame (Match->GamCod);
 
    HTM_DIV_Begin ("class=\"MCH_NUM_QST\"");
-   switch (Match->Status.Showing)
-     {
-      case Mch_START:	// Not started
-         HTM_Txt (Txt_MATCH_Start);
-         break;
-      case Mch_END:	// Match over
-         HTM_Txt (Txt_MATCH_End);
-         break;
-      default:
-         HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
-         break;
-     }
+      switch (Match->Status.Showing)
+	{
+	 case Mch_START:	// Not started
+	    HTM_Txt (Txt_MATCH_Start);
+	    break;
+	 case Mch_END:	// Match over
+	    HTM_Txt (Txt_MATCH_End);
+	    break;
+	 default:
+	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
+	    break;
+	}
    HTM_DIV_End ();
   }
 
@@ -2992,59 +3002,59 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
    /***** Start buttons container *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTONS_CONT\"");
 
-   /***** Left button *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_LEFT_CONT\"");
-   switch (Match->Status.Showing)
-     {
-      case Mch_START:
-	 /* Put button to close browser tab */
-	 Mch_PutBigButtonClose ();
-	 break;
-      default:
-	 /* Put button to go back */
-	 Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
-			   Mch_ICON_PREVIOUS,Txt_Go_back);
-	 break;
-     }
-   HTM_DIV_End ();
+      /***** Left button *****/
+      HTM_DIV_Begin ("class=\"MCH_BUTTON_LEFT_CONT\"");
+	 switch (Match->Status.Showing)
+	   {
+	    case Mch_START:
+	       /* Put button to close browser tab */
+	       Mch_PutBigButtonClose ();
+	       break;
+	    default:
+	       /* Put button to go back */
+	       Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
+				 Mch_ICON_PREVIOUS,Txt_Go_back);
+	       break;
+	   }
+      HTM_DIV_End ();
 
-   /***** Center button *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_CENTER_CONT\"");
-   if (Match->Status.Playing)					// Match is being played
-      /* Put button to pause match */
-      Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
-			Mch_ICON_PAUSE,Txt_Pause);
-   else								// Match is paused, not being played
-     {
-      switch (Match->Status.Showing)
-        {
-	 case Mch_START:		// Match just started, before first question
-	    /* Put button to start playing match */
+      /***** Center button *****/
+      HTM_DIV_Begin ("class=\"MCH_BUTTON_CENTER_CONT\"");
+	 if (Match->Status.Playing)					// Match is being played
+	    /* Put button to pause match */
 	    Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
-			      Mch_ICON_PLAY,Txt_Start);
-	    break;
-	 case Mch_END:			// Match over
-	    /* Put disabled button to play match */
-	    Mch_PutBigButtonHidden (Mch_ICON_PLAY);
-	    break;
-	 default:
-	    /* Put button to resume match */
-	    Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
-			      Mch_ICON_PLAY,Txt_Resume);
-        }
-     }
-   HTM_DIV_End ();
+			      Mch_ICON_PAUSE,Txt_Pause);
+	 else								// Match is paused, not being played
+	   {
+	    switch (Match->Status.Showing)
+	      {
+	       case Mch_START:		// Match just started, before first question
+		  /* Put button to start playing match */
+		  Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
+				    Mch_ICON_PLAY,Txt_Start);
+		  break;
+	       case Mch_END:			// Match over
+		  /* Put disabled button to play match */
+		  Mch_PutBigButtonHidden (Mch_ICON_PLAY);
+		  break;
+	       default:
+		  /* Put button to resume match */
+		  Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
+				    Mch_ICON_PLAY,Txt_Resume);
+	      }
+	   }
+      HTM_DIV_End ();
 
-   /***** Right button *****/
-   HTM_DIV_Begin ("class=\"MCH_BUTTON_RIGHT_CONT\"");
-   if (Match->Status.Showing == Mch_END)	// Match over
-      /* Put button to close browser tab */
-      Mch_PutBigButtonClose ();
-   else						// Match not over
-      /* Put button to show answers */
-      Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
-			Mch_ICON_NEXT,Txt_Go_forward);
-   HTM_DIV_End ();
+      /***** Right button *****/
+      HTM_DIV_Begin ("class=\"MCH_BUTTON_RIGHT_CONT\"");
+	 if (Match->Status.Showing == Mch_END)	// Match over
+	    /* Put button to close browser tab */
+	    Mch_PutBigButtonClose ();
+	 else						// Match not over
+	    /* Put button to show answers */
+	    Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
+			      Mch_ICON_NEXT,Txt_Go_forward);
+      HTM_DIV_End ();
 
    /***** End buttons container *****/
    HTM_DIV_End ();
@@ -3080,20 +3090,20 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 		     (Match->Status.NumCols == NumCols) ? "MCH_NUM_COL_ON" :
 							  "MCH_NUM_COL_OFF");
 
-      /* Begin form */
-      Frm_BeginForm (ActChgNumColMch);
-      Mch_PutParamMchCod (Match->MchCod);	// Current match being played
-      Mch_PutParamNumCols (NumCols);		// Number of columns
+	 /* Begin form */
+	 Frm_BeginForm (ActChgNumColMch);
+	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+	 Mch_PutParamNumCols (NumCols);		// Number of columns
 
-      /* Number of columns */
-      Ico_PutSettingIconLink (NumColsIcon[NumCols],
-			      Str_BuildStringLongStr ((long) NumCols,
-						      NumCols == 1 ? Txt_column :
-								     Txt_columns));
-      Str_FreeString ();
+	    /* Number of columns */
+	    Ico_PutSettingIconLink (NumColsIcon[NumCols],
+				    Str_BuildStringLongStr ((long) NumCols,
+							    NumCols == 1 ? Txt_column :
+									   Txt_columns));
+	    Str_FreeString ();
 
-      /* End form */
-      Frm_EndForm ();
+	 /* End form */
+	 Frm_EndForm ();
 
       /* End container for this option */
       HTM_DIV_End ();
@@ -3123,20 +3133,20 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActChgVisResMchQst);
-   Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+      /***** Begin form *****/
+      Frm_BeginForm (ActChgVisResMchQst);
+      Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-   /***** Put icon with link *****/
-   HTM_BUTTON_SUBMIT_Begin (Txt_View_results,"BT_LINK DAT ICO_HIGHLIGHT",NULL);
-   HTM_TxtF ("<i class=\"%s\"></i>",
-	     Match->Status.ShowQstResults ? "fas fa-toggle-on" :
-		                            "fas fa-toggle-off");
-   HTM_TxtF ("&nbsp;%s",Txt_View_results);
-   HTM_BUTTON_End ();
+	 /***** Put icon with link *****/
+	 HTM_BUTTON_SUBMIT_Begin (Txt_View_results,"BT_LINK DAT ICO_HIGHLIGHT",NULL);
+	    HTM_TxtF ("<i class=\"%s\"></i>",
+		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
+						     "fas fa-toggle-off");
+	    HTM_TxtF ("&nbsp;%s",Txt_View_results);
+	 HTM_BUTTON_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -3155,36 +3165,36 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED\"");
 
-   /***** Put icon with link *****/
-   if (Match->Status.Playing &&			// Match is being played
-       Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
-       Answered)				// I have answered this question
-     {
-      /* Begin form */
-      Frm_BeginForm (ActSeeMchAnsQstStd);
-      Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+      /***** Put icon with link *****/
+      if (Match->Status.Playing &&			// Match is being played
+	  Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
+	  Answered)				// I have answered this question
+	{
+	 /* Begin form */
+	 Frm_BeginForm (ActSeeMchAnsQstStd);
+	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-      HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
-      HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
-      HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
-      HTM_BUTTON_End ();
+	    HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
+	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
+	       HTM_TxtF ("&nbsp;%s",Txt_MATCH_QUESTION_Answered);
+	    HTM_BUTTON_End ();
 
-      /* End form */
-      Frm_EndForm ();
-     }
-   else
-     {
-      HTM_DIV_Begin ("class=\"%s\"",Answered ? "DAT_SMALL_GREEN" :
-	                                       "DAT_SMALL_RED");
-      HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
-		Answered ? "fas fa-check-circle" :
-		           "fas fa-exclamation-circle",
-		Answered ? Txt_MATCH_QUESTION_Answered :
-		           Txt_MATCH_QUESTION_Unanswered);
-      HTM_TxtF ("&nbsp;%s",Answered ? Txt_MATCH_QUESTION_Answered :
-		                      Txt_MATCH_QUESTION_Unanswered);
-      HTM_DIV_End ();
-     }
+	 /* End form */
+	 Frm_EndForm ();
+	}
+      else
+	{
+	 HTM_DIV_Begin ("class=\"%s\"",Answered ? "DAT_SMALL_GREEN" :
+						  "DAT_SMALL_RED");
+	    HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
+		      Answered ? "fas fa-check-circle" :
+				 "fas fa-exclamation-circle",
+		      Answered ? Txt_MATCH_QUESTION_Answered :
+				 Txt_MATCH_QUESTION_Unanswered);
+	    HTM_TxtF ("&nbsp;%s",Answered ? Txt_MATCH_QUESTION_Answered :
+					    Txt_MATCH_QUESTION_Unanswered);
+	 HTM_DIV_End ();
+	}
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -3201,20 +3211,21 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_REM_MY_ANS\"");
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActRemMchAnsQstStd);
-   Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-   Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+      /***** Begin form *****/
+      Frm_BeginForm (ActRemMchAnsQstStd);
+      Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+      Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 
-   /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,"BT_LINK MCH_BUTTON_ON ICO_DARKRED");
-   HTM_Txt ("<i class=\"fas fa-trash\"></i>");
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
+	 /***** Put icon with link *****/
+	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+	    HTM_BUTTON_OnMouseDown_Begin (Txt_Delete_my_answer,
+	                                  "BT_LINK MCH_BUTTON_ON ICO_DARKRED");
+	       HTM_Txt ("<i class=\"fas fa-trash\"></i>");
+	    HTM_BUTTON_End ();
+	 HTM_DIV_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -3228,7 +3239,7 @@ static void Mch_ShowMatchTitleTch (const struct Mch_Match *Match)
   {
    /***** Match title *****/
    HTM_DIV_Begin ("class=\"MCH_TOP LT\"");
-   HTM_Txt (Match->Title);
+      HTM_Txt (Match->Title);
    HTM_DIV_End ();
   }
 
@@ -3236,7 +3247,7 @@ static void Mch_ShowMatchTitleStd (const struct Mch_Match *Match)
   {
    /***** Match title *****/
    HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
-   HTM_Txt (Match->Title);
+      HTM_Txt (Match->Title);
    HTM_DIV_End ();
   }
 
@@ -3275,39 +3286,39 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
       /* Begin container */
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
-      /* Write stem */
-      Tst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
-			true);	// Visible
+	 /* Write stem */
+	 Tst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
+			   true);	// Visible
 
-      /* Show media */
-      Med_ShowMedia (&Question.Media,
-		     "TEST_MED_EDIT_LIST_CONT",
-		     "TEST_MED_EDIT_LIST");
+	 /* Show media */
+	 Med_ShowMedia (&Question.Media,
+			"TEST_MED_EDIT_LIST_CONT",
+			"TEST_MED_EDIT_LIST");
 
-      /***** Write answers? *****/
-      switch (Match->Status.Showing)
-	{
-	 case Mch_ANSWERS:
-	    if (Match->Status.Playing)			// Match is being played
-	       /* Write answers */
+	 /***** Write answers? *****/
+	 switch (Match->Status.Showing)
+	   {
+	    case Mch_ANSWERS:
+	       if (Match->Status.Playing)			// Match is being played
+		  /* Write answers */
+		  Mch_WriteAnswersMatchResult (Match,
+					       &Question,
+					       "MCH_TCH_ANS",
+					       false);	// Don't show result
+	       else					// Match is paused, not being played
+		  Mch_ShowWaitImage (Txt_MATCH_Paused);
+	       break;
+	    case Mch_RESULTS:
+	       /* Write answers with results */
 	       Mch_WriteAnswersMatchResult (Match,
-	                                    &Question,
+					    &Question,
 					    "MCH_TCH_ANS",
-					    false);	// Don't show result
-	    else					// Match is paused, not being played
-	       Mch_ShowWaitImage (Txt_MATCH_Paused);
-	    break;
-	 case Mch_RESULTS:
-	    /* Write answers with results */
-	    Mch_WriteAnswersMatchResult (Match,
-	                                 &Question,
-					 "MCH_TCH_ANS",
-					 true);		// Show result
-	    break;
-	 default:
-	    /* Don't write anything */
-	    break;
-	}
+					    true);		// Show result
+	       break;
+	    default:
+	       /* Don't write anything */
+	       break;
+	   }
 
       /* End container */
       HTM_DIV_End ();				// Bottom
@@ -3362,63 +3373,63 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (0);
 
-   /***** Show options distributed in columns *****/
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      /***** Start row? *****/
-      if (NumOpt % Match->Status.NumCols == 0)
+      /***** Show options distributed in columns *****/
+      for (NumOpt = 0;
+	   NumOpt < Question->Answer.NumOptions;
+	   NumOpt++)
 	{
-	 HTM_TR_Begin (NULL);
-	 RowIsOpen = true;
+	 /***** Start row? *****/
+	 if (NumOpt % Match->Status.NumCols == 0)
+	   {
+	    HTM_TR_Begin (NULL);
+	    RowIsOpen = true;
+	   }
+
+	    /***** Write letter for this option *****/
+	    HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
+	       HTM_DIV_Begin ("class=\"MCH_TCH_BUTTON BT_%c\"",'A' + (char) NumOpt);
+		  HTM_TxtF ("%c",'a' + (char) NumOpt);
+	       HTM_DIV_End ();
+	    HTM_TD_End ();
+
+	    /***** Write the option text and the result *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",Match->Status.QstInd,NumOpt,Class);
+		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+	       HTM_LABEL_End ();
+	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
+			      "TEST_MED_SHOW_CONT",
+			      "TEST_MED_SHOW");
+
+	       /* Show result (number of users who answered? */
+	       if (ShowResult)
+		 {
+		  /* Get number of users who selected this answer */
+		  NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (Match->MchCod,Match->Status.QstInd,Indexes[NumOpt]);
+
+		  /* Draw proportional bar for this answer */
+		  Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
+				      Question->Answer.Options[Indexes[NumOpt]].Correct);
+		 }
+	       else
+		  /* Draw empty bar for this answer
+		     in order to show the same layout that the one shown with results */
+		  Mch_DrawBarNumUsrs (0,0,
+				      false);	// Not used when length of bar is 0
+
+	    HTM_TD_End ();
+
+	 /***** End row? *****/
+	 if (NumOpt % Match->Status.NumCols == Match->Status.NumCols - 1)
+	   {
+	    HTM_TR_End ();
+	    RowIsOpen = false;
+	   }
 	}
-
-      /***** Write letter for this option *****/
-      HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
-      HTM_DIV_Begin ("class=\"MCH_TCH_BUTTON BT_%c\"",'A' + (char) NumOpt);
-      HTM_TxtF ("%c",'a' + (char) NumOpt);
-      HTM_DIV_End ();
-      HTM_TD_End ();
-
-      /***** Write the option text and the result *****/
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%06u_%u\" class=\"%s\"",Match->Status.QstInd,NumOpt,Class);
-      HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-      HTM_LABEL_End ();
-      Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_MED_SHOW_CONT",
-                     "TEST_MED_SHOW");
-
-      /* Show result (number of users who answered? */
-      if (ShowResult)
-	{
-	 /* Get number of users who selected this answer */
-	 NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (Match->MchCod,Match->Status.QstInd,Indexes[NumOpt]);
-
-	 /* Draw proportional bar for this answer */
-	 Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
-	                     Question->Answer.Options[Indexes[NumOpt]].Correct);
-	}
-      else
-         /* Draw empty bar for this answer
-            in order to show the same layout that the one shown with results */
-         Mch_DrawBarNumUsrs (0,0,
-                             false);	// Not used when length of bar is 0
-
-      HTM_TD_End ();
 
       /***** End row? *****/
-      if (NumOpt % Match->Status.NumCols == Match->Status.NumCols - 1)
-	{
-         HTM_TR_End ();
-	 RowIsOpen = false;
-	}
-     }
-
-   /***** End row? *****/
-   if (RowIsOpen)
-      HTM_TR_End ();
+      if (RowIsOpen)
+	 HTM_TR_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -3443,45 +3454,45 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (8);
 
-   for (NumOpt = 0;
-	NumOpt < NumOptions;
-	NumOpt++)
-     {
-      /***** Start row *****/
-      HTM_TR_Begin (NULL);
+      for (NumOpt = 0;
+	   NumOpt < NumOptions;
+	   NumOpt++)
+	{
+	 /***** Start row *****/
+	 HTM_TR_Begin (NULL);
 
-      /***** Write letter for this option *****/
-      /* Begin table cell */
-      HTM_TD_Begin ("class=\"MCH_STD_CELL\"");
+	    /***** Write letter for this option *****/
+	    /* Begin table cell */
+	    HTM_TD_Begin ("class=\"MCH_STD_CELL\"");
 
-      /* Form with button.
-	 Sumitting onmousedown instead of default onclick
-	 is necessary in order to be fast
-	 and not lose clicks due to refresh */
-      Frm_BeginForm (ActAnsMchQstStd);
-      Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-      Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-      Mch_PutParamNumOpt (NumOpt);		// Number of button
+	       /* Form with button.
+		  Sumitting onmousedown instead of default onclick
+		  is necessary in order to be fast
+		  and not lose clicks due to refresh */
+	       Frm_BeginForm (ActAnsMchQstStd);
+	       Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+	       Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+	       Mch_PutParamNumOpt (NumOpt);		// Number of button
 
-      if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
-		    UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
-		    Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
-							     "",
-		    'A' + (char) NumOpt) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
-      HTM_TxtF ("%c",'a' + (char) NumOpt);
-      HTM_BUTTON_End ();
-      free (Class);
+		  if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
+				UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
+				Update == Mch_CHANGE_STATUS_BY_STUDENT ? " MCH_STD_ANSWER_SELECTED" :
+									 "",
+				'A' + (char) NumOpt) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  HTM_BUTTON_OnMouseDown_Begin (NULL,Class);
+		     HTM_TxtF ("%c",'a' + (char) NumOpt);
+		  HTM_BUTTON_End ();
+		  free (Class);
 
-      Frm_EndForm ();
+	       Frm_EndForm ();
 
-      /* End table cell */
-      HTM_TD_End ();
+	    /* End table cell */
+	    HTM_TD_End ();
 
-      /***** End row *****/
-      HTM_TR_End ();
-     }
+	 /***** End row *****/
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -3598,23 +3609,23 @@ static void Mch_DrawEmptyScoreRow (unsigned NumRow,double MinScore,double MaxSco
    /***** Draw row *****/
    HTM_TR_Begin (NULL);
 
-   /* Write score */
-   HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
-   if (NumRow == 0)
-     {
-      HTM_DoubleFewDigits (MaxScore);
-      HTM_NBSP ();
-     }
-   else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
-     {
-      HTM_DoubleFewDigits (MinScore);
-      HTM_NBSP ();
-     }
-   HTM_TD_End ();
+      /* Write score */
+      HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
+	 if (NumRow == 0)
+	   {
+	    HTM_DoubleFewDigits (MaxScore);
+	    HTM_NBSP ();
+	   }
+	 else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
+	   {
+	    HTM_DoubleFewDigits (MinScore);
+	    HTM_NBSP ();
+	   }
+      HTM_TD_End ();
 
-   /* Empty column with bar and number of users */
-   HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
-   HTM_TD_End ();
+      /* Empty column with bar and number of users */
+      HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3673,25 +3684,25 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    /***** Draw row *****/
    HTM_TR_Begin (NULL);
 
-   /* Write score */
-   HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
-   HTM_DoubleFewDigits (Score);
-   HTM_NBSP ();
-   HTM_TD_End ();
+      /* Write score */
+      HTM_TD_Begin ("class=\"MCH_SCO_SCO\"");
+	 HTM_DoubleFewDigits (Score);
+	 HTM_NBSP ();
+      HTM_TD_End ();
 
-   /* Draw bar and write number of users for this score */
-   HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
-   if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
-      Err_NotEnoughMemoryExit ();
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,
-	    Str_BuildStringLongStr ((long) NumUsrs,
-				    NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
-						   Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
-	    "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
-   Str_FreeString ();
-   free (Icon);
-   HTM_TxtF ("&nbsp;%u",NumUsrs);
-   HTM_TD_End ();
+      /* Draw bar and write number of users for this score */
+      HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
+	 if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
+	    Err_NotEnoughMemoryExit ();
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,
+		  Str_BuildStringLongStr ((long) NumUsrs,
+					  NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
+							 Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
+		  "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
+	 Str_FreeString ();
+	 free (Icon);
+	 HTM_TxtF ("&nbsp;%u",NumUsrs);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3742,12 +3753,12 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
    Frm_BeginFormId (NextAction,Id);
    Mch_PutParamMchCod (MchCod);
 
-   /***** Put icon with link *****/
-   HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_SUBMIT_Begin (Txt,"BT_LINK MCH_BUTTON_ON ICO_BLACK",NULL);
-   HTM_TxtF ("<i class=\"%s\"></i>",Icon);
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
+      /***** Put icon with link *****/
+      HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
+	 HTM_BUTTON_SUBMIT_Begin (Txt,"BT_LINK MCH_BUTTON_ON ICO_BLACK",NULL);
+	    HTM_TxtF ("<i class=\"%s\"></i>",Icon);
+	 HTM_BUTTON_End ();
+      HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -3761,9 +3772,10 @@ static void Mch_PutBigButtonHidden (const char *Icon)
   {
    /***** Put inactive icon *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_BUTTON_Begin (NULL,"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK",NULL);
-   HTM_TxtF ("<i class=\"%s\"></i>",Icon);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_BUTTON_Begin (NULL,"BT_LINK_OFF MCH_BUTTON_HIDDEN ICO_BLACK",
+                               NULL);
+	 HTM_TxtF ("<i class=\"%s\"></i>",Icon);
+      HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 /*****************************************************************************/
@@ -3776,9 +3788,10 @@ static void Mch_PutBigButtonClose (void)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
-   HTM_BUTTON_BUTTON_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_DARKRED","window.close();");
-   HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_BUTTON_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_DARKRED",
+                               "window.close();");
+	 HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
+      HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
@@ -3789,7 +3802,7 @@ static void Mch_PutBigButtonClose (void)
 static void Mch_ShowWaitImage (const char *Txt)
   {
    HTM_DIV_Begin ("class=\"MCH_WAIT_CONT\"");
-   Ico_PutIcon ("Spin-1s-200px.gif",Txt,"MCH_WAIT_IMG");
+      Ico_PutIcon ("Spin-1s-200px.gif",Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
   }
 
@@ -3941,7 +3954,7 @@ void Mch_JoinMatchAsStd (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
+      Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }
 
@@ -3969,7 +3982,7 @@ void Mch_RemMyQstAnsAndShowMchStatus (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
+      Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }
 
@@ -4182,7 +4195,7 @@ void Mch_ReceiveQuestionAnswer (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
+      Mch_ShowMatchStatusForStd (&Match,Mch_CHANGE_STATUS_BY_STUDENT);
    HTM_DIV_End ();
   }
 
@@ -4436,35 +4449,35 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,boo
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"MCH_RESULT\"");
 
-   /***** Draw bar with a with proportional to the number of clicks *****/
-   if (NumRespondersAns && NumRespondersQst)
-      BarWidth = (unsigned) ((((double) NumRespondersAns * (double) Mch_MAX_BAR_WIDTH) /
-	                       (double) NumRespondersQst) + 0.5);
+      /***** Draw bar with a with proportional to the number of clicks *****/
+      if (NumRespondersAns && NumRespondersQst)
+	 BarWidth = (unsigned) ((((double) NumRespondersAns * (double) Mch_MAX_BAR_WIDTH) /
+				  (double) NumRespondersQst) + 0.5);
 
-   /***** Bar proportional to number of users *****/
-   HTM_TABLE_BeginWide ();
-   HTM_TR_Begin ("class=\"MCH_RES_TR\"");
-   for (i = 0;
-	i < 100;
-	i++)
-     {
-      HTM_TD_Begin ("class=\"%s\"",
-		    (i < BarWidth) ? (Correct ? "MCH_RES_CORRECT" :
-					        "MCH_RES_WRONG") :
-				     "MCH_RES_VOID");
-      HTM_TD_End ();
-     }
-   HTM_TR_End ();
-   HTM_TABLE_End ();
+      /***** Bar proportional to number of users *****/
+      HTM_TABLE_BeginWide ();
+	 HTM_TR_Begin ("class=\"MCH_RES_TR\"");
+	    for (i = 0;
+		 i < 100;
+		 i++)
+	      {
+	       HTM_TD_Begin ("class=\"%s\"",
+			     (i < BarWidth) ? (Correct ? "MCH_RES_CORRECT" :
+							 "MCH_RES_WRONG") :
+					      "MCH_RES_VOID");
+	       HTM_TD_End ();
+	      }
+	 HTM_TR_End ();
+      HTM_TABLE_End ();
 
-   /***** Write the number of users *****/
-   if (NumRespondersAns && NumRespondersQst)
-      HTM_TxtF ("%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-		NumRespondersAns,
-		(unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
-		Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
-   else
-      HTM_NBSP ();
+      /***** Write the number of users *****/
+      if (NumRespondersAns && NumRespondersQst)
+	 HTM_TxtF ("%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
+		   NumRespondersAns,
+		   (unsigned) ((((double) NumRespondersAns * 100.0) / (double) NumRespondersQst) + 0.5),
+		   Txt_of_PART_OF_A_TOTAL,NumRespondersQst);
+      else
+	 HTM_NBSP ();
 
    /***** End container *****/
    HTM_DIV_End ();

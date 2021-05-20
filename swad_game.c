@@ -133,11 +133,11 @@ static void Gam_PutParamsOneQst (void *Games);
 static void Gam_PutHiddenParamOrder (Gam_Order_t SelectedOrder);
 static Gam_Order_t Gam_GetParamOrder (void);
 
-static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Gam_RemoveGameFromAllTables (long GamCod);
 
-static bool Gam_CheckIfSimilarGameExists (const struct Gam_Game *Game);
+static bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game);
 
 static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 				     struct Gam_Game *Game,
@@ -150,11 +150,11 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
 static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt);
 
-static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
+static void Gam_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
-static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod);
+static unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
 
-static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod);
+static unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);
 static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  long GamCod,unsigned NumQsts,
@@ -269,73 +269,78 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
                  Gam_PutIconsListGames,Games,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
-   /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
-				  Games,-1L);
+      /***** Write links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
+				     Games,-1L);
 
-   if (Games->Num)
-     {
-      /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
-      HTM_TR_Begin (NULL);
-      if (Gam_CheckIfICanEditGames () ||
-	  Gam_CheckIfICanListGameQuestions ())
-         HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-
-      for (Order  = (Gam_Order_t) 0;
-	   Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
-	   Order++)
+      if (Games->Num)
 	{
-	 HTM_TH_Begin (1,1,"LM");
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (5);
 
-	 /* Form to change order */
-	 Frm_BeginForm (ActSeeAllGam);
-	 Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Games->SelectedOrder)
-	    HTM_U_Begin ();
-	 HTM_Txt (Txt_GAMES_ORDER[Order]);
-	 if (Order == Games->SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
+	    /***** Table head *****/
+	    HTM_TR_Begin (NULL);
 
-	 HTM_TH_End ();
+	       if (Gam_CheckIfICanEditGames () ||
+		   Gam_CheckIfICanListGameQuestions ())
+		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+
+	       for (Order  = (Gam_Order_t) 0;
+		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
+		    Order++)
+		 {
+		  HTM_TH_Begin (1,1,"LM");
+
+		     /* Form to change order */
+		     Frm_BeginForm (ActSeeAllGam);
+		     Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
+		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+
+			HTM_BUTTON_SUBMIT_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			   if (Order == Games->SelectedOrder)
+			      HTM_U_Begin ();
+			   HTM_Txt (Txt_GAMES_ORDER[Order]);
+			   if (Order == Games->SelectedOrder)
+			      HTM_U_End ();
+			HTM_BUTTON_End ();
+
+		     Frm_EndForm ();
+
+		  HTM_TH_End ();
+		 }
+
+	       HTM_TH (1,1,"RM",Txt_Matches);
+
+	    HTM_TR_End ();
+
+	    /***** Write all games *****/
+	    for (NumGame  = Pagination.FirstItemVisible;
+		 NumGame <= Pagination.LastItemVisible;
+		 NumGame++)
+	      {
+	       /* Get data of this game */
+	       Game.GamCod = Games->Lst[NumGame - 1].GamCod;
+	       Gam_GetDataOfGameByCod (&Game);
+
+	       /* Show game */
+	       Gam_ShowOneGame (Games,
+				&Game,
+				false);	// Do not show only this game
+	      }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 	}
+      else	// No games created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
-      HTM_TH (1,1,"RM",Txt_Matches);
+      /***** Write again links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
+				     Games,-1L);
 
-      HTM_TR_End ();
-
-      /***** Write all games *****/
-      for (NumGame  = Pagination.FirstItemVisible;
-	   NumGame <= Pagination.LastItemVisible;
-	   NumGame++)
-	{
-	 /* Get data of this game */
-	 Game.GamCod = Games->Lst[NumGame - 1].GamCod;
-	 Gam_GetDataOfGameByCod (&Game);
-
-	 /* Show game */
-	 Gam_ShowOneGame (Games,
-	                  &Game,
-	                  false);	// Do not show only this game
-	}
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No games created
-      Ale_ShowAlert (Ale_INFO,Txt_No_games);
-
-   /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_GAMES,&Pagination,
-				  Games,-1L);
-
-   /***** Button to create a new game *****/
-   if (Gam_CheckIfICanEditGames ())
-      Gam_PutButtonToCreateNewGame (Games);
+      /***** Button to create a new game *****/
+      if (Gam_CheckIfICanEditGames ())
+	 Gam_PutButtonToCreateNewGame (Games);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -436,7 +441,9 @@ static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games)
 
    Frm_BeginForm (ActFrmNewGam);
    Gam_PutParamsToCreateNewGame (Games);
-   Btn_PutConfirmButton (Txt_New_game);
+
+      Btn_PutConfirmButton (Txt_New_game);
+
    Frm_EndForm ();
   }
 
@@ -506,17 +513,17 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
                  Gam_PutIconToShowResultsOfGame,Games,
 		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
-   /***** Show game *****/
-   Gam_ShowOneGame (Games,
-                    Game,
-		    true);	// Show only this game
+      /***** Show game *****/
+      Gam_ShowOneGame (Games,
+		       Game,
+		       true);	// Show only this game
 
-   if (ListGameQuestions)
-       /***** Write questions of this game *****/
-      Gam_ListGameQuestions (Games,Game);
-   else
-      /***** List matches *****/
-      Mch_ListMatches (Games,Game,PutFormNewMatch);
+      if (ListGameQuestions)
+	  /***** Write questions of this game *****/
+	 Gam_ListGameQuestions (Games,Game);
+      else
+	 /***** List matches *****/
+	 Mch_ListMatches (Games,Game,PutFormNewMatch);
   }
 
 void Gam_ShowOnlyOneGameEnd (void)
@@ -552,107 +559,107 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    /***** Start first row of this game *****/
    HTM_TR_Begin (NULL);
 
-   /***** Icons related to this game *****/
-   if (ICanEditGames ||
-       ICanListQuestions)
-     {
+      /***** Icons related to this game *****/
+      if (ICanEditGames ||
+	  ICanListQuestions)
+	{
+	 Games->GamCod = Game->GamCod;
+
+	 if (ShowOnlyThisGame)
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+	 else
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+
+	 if (ICanEditGames)
+	    /* Icons to remove/edit this game */
+	    Gam_PutFormsToRemEditOneGame (Games,Game,Anchor);
+	 else
+	    /* Put icon to view game listing its questions */
+	    Ico_PutContextualIconToView (ActLstOneGam,
+					 Gam_PutParams,Games);
+
+	 HTM_TD_End ();
+	}
+
+      /***** Start/end date/time *****/
+      UniqueId++;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Color = Game->NumUnfinishedMchs ? (Game->Hidden ? "DATE_GREEN_LIGHT":
+							   "DATE_GREEN") :
+					   (Game->Hidden ? "DATE_RED_LIGHT":
+							   "DATE_RED");
+	 if (ShowOnlyThisGame)
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+			  Id,Color);
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+			  Id,Color,Gbl.RowEvenOdd);
+	 if (Game->TimeUTC[Dat_START_TIME])
+	    Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,true,0x7);
+	 HTM_TD_End ();
+	 free (Id);
+	}
+
+      /***** Game title and main data *****/
+      if (ShowOnlyThisGame)
+	 HTM_TD_Begin ("class=\"LT\"");
+      else
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+      /* Game title */
       Games->GamCod = Game->GamCod;
+      HTM_ARTICLE_Begin (Anchor);
+	 Frm_BeginForm (ActSeeGam);
+	 Gam_PutParams (Games);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
+				     Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+						    "BT_LINK LT ASG_TITLE",
+				     NULL);
+	       HTM_Txt (Game->Title);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_ARTICLE_End ();
 
+      /* Number of questions, maximum grade, visibility of results */
+      HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
+						   "ASG_GRP");
+	 HTM_TxtColonNBSP (Txt_Number_of_questions);
+	 HTM_Unsigned (Game->NumQsts);
+	 HTM_BR ();
+	 HTM_TxtColonNBSP (Txt_Maximum_grade);
+	 HTM_Double (Game->MaxGrade);
+	 HTM_BR ();
+	 HTM_TxtColonNBSP (Txt_Result_visibility);
+	 TstVis_ShowVisibilityIcons (Game->Visibility,Game->Hidden);
+      HTM_DIV_End ();
+
+      /***** Number of matches in game *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+	 HTM_TD_Begin ("class=\"RT\"");
       else
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
-      if (ICanEditGames)
-         /* Icons to remove/edit this game */
-         Gam_PutFormsToRemEditOneGame (Games,Game,Anchor);
-      else
-         /* Put icon to view game listing its questions */
-         Ico_PutContextualIconToView (ActLstOneGam,
-				      Gam_PutParams,Games);
+      Games->GamCod = Game->GamCod;
+      Frm_BeginForm (ActSeeGam);
+      Gam_PutParams (Games);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
+				  Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+						 "BT_LINK LT ASG_TITLE",
+				  NULL);
+	    if (ShowOnlyThisGame)
+	       HTM_TxtColonNBSP (Txt_Matches);
+	    HTM_Unsigned (Game->NumMchs);
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
 
       HTM_TD_End ();
-     }
-
-   /***** Start/end date/time *****/
-   UniqueId++;
-   for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	StartEndTime++)
-     {
-      if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Color = Game->NumUnfinishedMchs ? (Game->Hidden ? "DATE_GREEN_LIGHT":
-							"DATE_GREEN") :
-					(Game->Hidden ? "DATE_RED_LIGHT":
-							"DATE_RED");
-      if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,Color);
-      else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		       Id,Color,Gbl.RowEvenOdd);
-      if (Game->TimeUTC[Dat_START_TIME])
-	 Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x7);
-      HTM_TD_End ();
-      free (Id);
-     }
-
-   /***** Game title and main data *****/
-   if (ShowOnlyThisGame)
-      HTM_TD_Begin ("class=\"LT\"");
-   else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-
-   /* Game title */
-   Games->GamCod = Game->GamCod;
-   HTM_ARTICLE_Begin (Anchor);
-   Frm_BeginForm (ActSeeGam);
-   Gam_PutParams (Games);
-   HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
-			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-					   "BT_LINK LT ASG_TITLE",
-			    NULL);
-   HTM_Txt (Game->Title);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_ARTICLE_End ();
-
-   /* Number of questions, maximum grade, visibility of results */
-   HTM_DIV_Begin ("class=\"%s\"",Game->Hidden ? "ASG_GRP_LIGHT" :
-        	                                "ASG_GRP");
-   HTM_TxtColonNBSP (Txt_Number_of_questions);
-   HTM_Unsigned (Game->NumQsts);
-   HTM_BR ();
-   HTM_TxtColonNBSP (Txt_Maximum_grade);
-   HTM_Double (Game->MaxGrade);
-   HTM_BR ();
-   HTM_TxtColonNBSP (Txt_Result_visibility);
-   TstVis_ShowVisibilityIcons (Game->Visibility,Game->Hidden);
-   HTM_DIV_End ();
-
-   /***** Number of matches in game *****/
-   if (ShowOnlyThisGame)
-      HTM_TD_Begin ("class=\"RT\"");
-   else
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-
-   Games->GamCod = Game->GamCod;
-   Frm_BeginForm (ActSeeGam);
-   Gam_PutParams (Games);
-   HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
-			    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-				           "BT_LINK LT ASG_TITLE",
-			    NULL);
-   if (ShowOnlyThisGame)
-      HTM_TxtColonNBSP (Txt_Matches);
-   HTM_Unsigned (Game->NumMchs);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-
-   HTM_TD_End ();
 
    /***** End 1st row of this game *****/
    HTM_TR_End ();
@@ -660,28 +667,28 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    /***** Start 2nd row of this game *****/
    HTM_TR_Begin (NULL);
 
-   /***** Author of the game *****/
-   if (ShowOnlyThisGame)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Gam_WriteAuthor (Game);
-   HTM_TD_End ();
+      /***** Author of the game *****/
+      if (ShowOnlyThisGame)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Gam_WriteAuthor (Game);
+      HTM_TD_End ();
 
-   /***** Text of the game *****/
-   if (ShowOnlyThisGame)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Gam_GetGameTxtFromDB (Game->GamCod,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? "DAT_LIGHT" :
-        	                                    "DAT");
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /***** Text of the game *****/
+      if (ShowOnlyThisGame)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Gam_DB_GetGameTxt (Game->GamCod,Txt);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? "DAT_LIGHT" :
+						       "DAT");
+	 HTM_Txt (Txt);
+      HTM_DIV_End ();
+      HTM_TD_End ();
 
    /***** End 2nd row of this game *****/
    HTM_TR_End ();
@@ -1061,7 +1068,7 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
       Str_Copy (Game->Title,row[6],sizeof (Game->Title) - 1);
 
       /* Get number of questions */
-      Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
+      Game->NumQsts = Gam_DB_GetNumQstsGame (Game->GamCod);
 
       /* Get number of matches */
       Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
@@ -1126,7 +1133,7 @@ void Gam_FreeListGames (struct Gam_Games *Games)
 /********************** Get game text from database ************************/
 /*****************************************************************************/
 
-static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+static void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    /***** Get text of game from database *****/
    DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get game text",
@@ -1331,7 +1338,7 @@ void Gam_UnhideGame (void)
 /******************* Check if the title of a game exists *******************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfSimilarGameExists (const struct Gam_Game *Game)
+static bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
   {
    /***** Get number of games with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar games",
@@ -1371,7 +1378,7 @@ void Gam_ListGame (void)
 
    /***** Get game data *****/
    Gam_GetDataOfGameByCod (&Game);
-   Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+   Gam_DB_GetGameTxt (Game.GamCod,Txt);
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -1414,7 +1421,7 @@ void Gam_RequestCreatOrEditGame (void)
      {
       /* Get game data from database */
       Gam_GetDataOfGameByCod (&Game);
-      Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+      Gam_DB_GetGameTxt (Game.GamCod,Txt);
      }
 
    /***** Put forms to create/edit a game *****/
@@ -1456,82 +1463,82 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 				ActChgGam);
    Gam_PutParams (Games);
 
-   /***** Begin box and table *****/
-   if (ItsANewGame)
-      Box_BoxTableBegin (NULL,Txt_New_game,
-                         NULL,NULL,
-			 Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,
-			 Game->Title[0] ? Game->Title :
-					  Txt_Edit_game,
-			 NULL,NULL,
-			 Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      if (ItsANewGame)
+	 Box_BoxTableBegin (NULL,Txt_New_game,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
+      else
+	 Box_BoxTableBegin (NULL,
+			    Game->Title[0] ? Game->Title :
+					     Txt_Edit_game,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
-   /***** Game title *****/
-   HTM_TR_Begin (NULL);
+      /***** Game title *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Maximum grade *****/
-   HTM_TR_Begin (NULL);
+      /***** Maximum grade *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Maximum_grade);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Maximum_grade);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
-		    "required=\"required\"");
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
+			     "required=\"required\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Visibility of results *****/
-   HTM_TR_Begin (NULL);
+      /***** Visibility of results *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Result_visibility);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Result_visibility);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LB\"");
-   TstVis_PutVisibilityCheckboxes (Game->Visibility);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LB\"");
+	    TstVis_PutVisibilityCheckboxes (Game->Visibility);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Game text *****/
-   HTM_TR_Begin (NULL);
+      /***** Game text *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Description);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_Txt (Txt);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+	       HTM_Txt (Txt);
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   if (ItsANewGame)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_game);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewGame)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_game);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1630,7 +1637,7 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game)
    if (Game->Title[0])	// If there's a game title
      {
       /* If title of game was in database... */
-      if (Gam_CheckIfSimilarGameExists (Game))
+      if (Gam_DB_CheckIfSimilarGameExists (Game))
 	{
 	 NewGameIsCorrect = false;
 	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
@@ -1711,7 +1718,7 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt)
 /******************* Get number of questions of a game *********************/
 /*****************************************************************************/
 
-unsigned Gam_GetNumQstsGame (long GamCod)
+unsigned Gam_DB_GetNumQstsGame (long GamCod)
   {
    /***** Get nuumber of questions in a game from database *****/
    return (unsigned)
@@ -1812,7 +1819,7 @@ unsigned Gam_GetParamQstInd (void)
 /********************** Remove answers of a game question ********************/
 /*****************************************************************************/
 
-static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
+static void Gam_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
   {
    /***** Remove answers from all matches of this game *****/
    DB_QueryDELETE ("can not remove the answers of a question",
@@ -1822,7 +1829,8 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
 		   " WHERE mch_matches.GamCod=%ld"	// From all matches of this game...
 		     " AND mch_matches.MchCod=mch_answers.MchCod"
 		     " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
-		   GamCod,QstInd);
+		   GamCod,
+		   QstInd);
   }
 
 /*****************************************************************************/
@@ -1830,7 +1838,7 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
 /*****************************************************************************/
 // Return 0 is question is not present in game
 
-static unsigned Gam_GetQstIndFromQstCod (long GamCod,long QstCod)
+static unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod)
   {
    /***** Get question index in a game given the question code *****/
    return DB_QuerySELECTUnsigned ("can not get question index",
@@ -1870,7 +1878,7 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
 // Question index can be 1, 2, 3...
 // Return 0 if no questions
 
-static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
+static unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod)
   {
    /***** Get maximum question index in a game from database *****/
    return DB_QuerySELECTUnsigned ("can not get last question index",
@@ -1886,7 +1894,7 @@ static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
 // Input question index can be 1, 2, 3... n-1
 // Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
 
-unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
+unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    /***** Get previous question index in a game from database *****/
    // Although indexes are always continuous...
@@ -1906,7 +1914,7 @@ unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 // Input question index can be 0, 1, 2, 3... n-1
 // Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
 
-unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
+unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
@@ -2002,111 +2010,111 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       return;
 
    /***** Get maximum question index *****/
-   MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
+   MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (GamCod);	// 0 is no questions in game
 
    /***** Write the heading *****/
    HTM_TABLE_BeginWideMarginPadding (5);
-   HTM_TR_Begin (NULL);
-
-   HTM_TH_Empty (1);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Code);
-   HTM_TH (1,1,"CT",Txt_Tags);
-   HTM_TH (1,1,"CT",Txt_Question);
-
-   HTM_TR_End ();
-
-   /***** Write rows *****/
-   for (NumQst = 0;
-	NumQst < NumQsts;
-	NumQst++)
-     {
-      Gbl.RowEvenOdd = NumQst % 2;
-
-      /***** Create test question *****/
-      Tst_QstConstructor (&Question);
-
-      /***** Get question data *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] QstInd
-      row[1] QstCod
-      */
-
-      /* Get question index (row[0]) */
-      QstInd = Str_ConvertStrToUnsigned (row[0]);
-      snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
-
-      /* Get question code (row[1]) */
-      Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Initialize context */
-      Games->GamCod = GamCod;
-      Games->QstInd = QstInd;
-
-      /***** Build anchor string *****/
-      Frm_SetAnchorStr (Question.QstCod,&Anchor);
-
-      /***** Begin row *****/
       HTM_TR_Begin (NULL);
 
-      /***** Icons *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 HTM_TH_Empty (1);
 
-      /* Put icon to remove the question */
-      if (ICanEditQuestions)
-	 Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
-					Gam_PutParamsOneQst,Games);
-      else
-         Ico_PutIconRemovalNotAllowed ();
+	 HTM_TH (1,1,"CT",Txt_No_INDEX);
+	 HTM_TH (1,1,"CT",Txt_Code);
+	 HTM_TH (1,1,"CT",Txt_Tags);
+	 HTM_TH (1,1,"CT",Txt_Question);
 
-      /* Put icon to move up the question */
-      if (ICanEditQuestions && QstInd > 1)
-	{
-	 Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
-	                                Gam_PutParamsOneQst,Games,
-				        "arrow-up.svg",
-					Str_BuildStringStr (Txt_Move_up_X,
-							    StrQstInd));
-	 Str_FreeString ();
-	}
-      else
-         Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
-
-      /* Put icon to move down the question */
-      if (ICanEditQuestions && QstInd < MaxQstInd)
-	{
-	 Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
-	                                Gam_PutParamsOneQst,Games,
-				        "arrow-down.svg",
-					Str_BuildStringStr (Txt_Move_down_X,
-							    StrQstInd));
-	 Str_FreeString ();
-	}
-      else
-         Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
-
-      /* Put icon to edit the question */
-      if (ICanEditQuestions)
-	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-	                              Tst_PutParamQstCod,&Question.QstCod);
-
-      HTM_TD_End ();
-
-      /***** Question *****/
-      QuestionExists = Tst_GetQstDataFromDB (&Question);
-      Tst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
-
-      /***** End row *****/
       HTM_TR_End ();
 
-      /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      /***** Write rows *****/
+      for (NumQst = 0;
+	   NumQst < NumQsts;
+	   NumQst++)
+	{
+	 Gbl.RowEvenOdd = NumQst % 2;
 
-      /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
-     }
+	 /***** Create test question *****/
+	 Tst_QstConstructor (&Question);
+
+	 /***** Get question data *****/
+	 row = mysql_fetch_row (mysql_res);
+	 /*
+	 row[0] QstInd
+	 row[1] QstCod
+	 */
+
+	 /* Get question index (row[0]) */
+	 QstInd = Str_ConvertStrToUnsigned (row[0]);
+	 snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
+
+	 /* Get question code (row[1]) */
+	 Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
+
+	 /* Initialize context */
+	 Games->GamCod = GamCod;
+	 Games->QstInd = QstInd;
+
+	 /***** Build anchor string *****/
+	 Frm_SetAnchorStr (Question.QstCod,&Anchor);
+
+	 /***** Begin row *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Icons *****/
+	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+	       /* Put icon to remove the question */
+	       if (ICanEditQuestions)
+		  Ico_PutContextualIconToRemove (ActReqRemGamQst,NULL,
+						 Gam_PutParamsOneQst,Games);
+	       else
+		  Ico_PutIconRemovalNotAllowed ();
+
+	       /* Put icon to move up the question */
+	       if (ICanEditQuestions && QstInd > 1)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
+						 Gam_PutParamsOneQst,Games,
+						 "arrow-up.svg",
+						 Str_BuildStringStr (Txt_Move_up_X,
+								     StrQstInd));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+
+	       /* Put icon to move down the question */
+	       if (ICanEditQuestions && QstInd < MaxQstInd)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
+						 Gam_PutParamsOneQst,Games,
+						 "arrow-down.svg",
+						 Str_BuildStringStr (Txt_Move_down_X,
+								     StrQstInd));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+
+	       /* Put icon to edit the question */
+	       if (ICanEditQuestions)
+		  Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
+					       Tst_PutParamQstCod,&Question.QstCod);
+
+	    HTM_TD_End ();
+
+	    /***** Question *****/
+	    QuestionExists = Tst_GetQstDataFromDB (&Question);
+	    Tst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
+
+	 /***** End row *****/
+	 HTM_TR_End ();
+
+	 /***** Free anchor string *****/
+	 Frm_FreeAnchorStr (Anchor);
+
+	 /***** Destroy test question *****/
+	 Tst_QstDestructor (&Question);
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -2136,7 +2144,9 @@ static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games)
 
    Frm_BeginForm (ActAddOneGamQst);
    Gam_PutParams (Games);
-   Btn_PutConfirmButton (Txt_Add_questions);
+
+      Btn_PutConfirmButton (Txt_Add_questions);
+
    Frm_EndForm ();
   }
 
@@ -2194,10 +2204,10 @@ void Gam_AddQstsToGame (void)
 	    Err_WrongQuestionExit ();
 
 	 /* Check if question is already present in game */
-	 if (Gam_GetQstIndFromQstCod (Game.GamCod,QstCod) == 0)	// This question is not yet in this game
+	 if (Gam_DB_GetQstIndFromQstCod (Game.GamCod,QstCod) == 0)	// This question is not yet in this game
 	   {
 	    /* Get current maximum index */
-	    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
+	    MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
 
 	    /* Insert question in the table of questions */
 	    DB_QueryINSERT ("can not add question to game",
@@ -2334,7 +2344,7 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Gam_RemAnswersOfAQuestion (Game.GamCod,QstInd);
+   Gam_DB_RemAnswersOfAQuestion (Game.GamCod,QstInd);
 
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
@@ -2407,7 +2417,7 @@ void Gam_MoveUpQst (void)
    if (QstIndBottom > 1)	// 2, 3, 4...
      {
       /* Indexes of questions to be exchanged */
-      QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
+      QstIndTop = Gam_DB_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
       if (QstIndTop == 0)
 	 Err_WrongQuestionIndexExit ();
 
@@ -2455,13 +2465,13 @@ void Gam_MoveDownQst (void)
    QstIndTop = Gam_GetParamQstInd ();
 
    /***** Get maximum question index *****/
-   MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
+   MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
 
    /***** Move down question *****/
    if (QstIndTop < MaxQstInd)
      {
       /* Indexes of questions to be exchanged */
-      QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
+      QstIndBottom = Gam_DB_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
       if (QstIndBottom == Gam_AFTER_LAST_QUESTION)
 	 Err_WrongQuestionIndexExit ();
 
@@ -2570,10 +2580,12 @@ void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod)
   {
    extern const char *Txt_New_match;
 
-   Games->GamCod = GamCod;
    Frm_StartFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
+   Games->GamCod = GamCod;
    Gam_PutParams (Games);
-   Btn_PutConfirmButton (Txt_New_match);
+
+      Btn_PutConfirmButton (Txt_New_match);
+
    Frm_EndForm ();
   }
 
@@ -2608,7 +2620,7 @@ void Gam_RequestNewMatch (void)
 /*****************************************************************************/
 // Returns the number of courses with games in this location
 
-unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
+unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
   {
    /***** Get number of courses with games from database *****/
    switch (Scope)
@@ -2683,7 +2695,7 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of games in this location
 
-unsigned Gam_GetNumGames (Hie_Lvl_Level_t Scope)
+unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
   {
    /***** Get number of games from database *****/
    switch (Scope)
@@ -2754,10 +2766,10 @@ unsigned Gam_GetNumGames (Hie_Lvl_Level_t Scope)
   }
 
 /*****************************************************************************/
-/************* Get average number of questions per course game ***************/
+/***************** Get average number of questions per game ******************/
 /*****************************************************************************/
 
-double Gam_GetNumQstsPerCrsGame (Hie_Lvl_Level_t Scope)
+double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
   {
    /***** Get number of questions per game from database *****/
    switch (Scope)
@@ -2887,13 +2899,13 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 
    /***** Get maximum score of a game from database *****/
    NumQsts = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			     "SELECT COUNT(tst_answers.AnsInd) AS N"	// row[0]
-			      " FROM tst_answers,gam_questions"
-			     " WHERE gam_questions.GamCod=%ld"
-			       " AND gam_questions.QstCod=tst_answers.QstCod"
-			     " GROUP BY tst_answers.QstCod",
-			     GamCod);
+   DB_QuerySELECT (&mysql_res,"can not get data of a question",
+		   "SELECT COUNT(tst_answers.AnsInd) AS N"	// row[0]
+		    " FROM tst_answers,gam_questions"
+		   " WHERE gam_questions.GamCod=%ld"
+		     " AND gam_questions.QstCod=tst_answers.QstCod"
+		   " GROUP BY tst_answers.QstCod",
+		   GamCod);
    for (NumQst = 0, *MinScore = *MaxScore = 0.0;
 	NumQst < NumQsts;
 	NumQst++)
