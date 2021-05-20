@@ -27,6 +27,7 @@
 
 #include "swad_box.h"
 #include "swad_cookie.h"
+#include "swad_cookie_database.h"
 #include "swad_database.h"
 #include "swad_figure.h"
 #include "swad_form.h"
@@ -68,32 +69,36 @@ void Coo_EditMyPrefsOnCookies (void)
    /***** Begin section with preferences about cookies *****/
    HTM_SECTION_Begin (Coo_COOKIES_ID);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Cookies,
-                      Coo_PutIconsCookies,NULL,
-                      Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_Cookies,
+			 Coo_PutIconsCookies,NULL,
+			 Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 
-   /***** Edit my preference about cookies *****/
-   /* Begin form */
-   Frm_StartFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
+	 /***** Edit my preference about cookies *****/
+	 /* Begin form */
+	 Frm_StartFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
-   /* Begin container */
-   HTM_DIV_Begin ("class=\"%s\"",
-	          (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
-								       "DAT");
-   /* Check box */
-   HTM_LABEL_Begin (NULL);
-   HTM_INPUT_CHECKBOX ("cookies",HTM_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s",
-		       Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? " checked=\"checked\"" : "");
-   HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
-   HTM_LABEL_End ();
+	    /* Begin container */
+	    HTM_DIV_Begin ("class=\"%s\"",
+			   (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
+										"DAT");
+	       /* Check box */
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_CHECKBOX ("cookies",HTM_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s",
+				      Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? " checked=\"checked\"" :
+					                                                 "");
+		  HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
+	       HTM_LABEL_End ();
 
-   /* End container */
-   HTM_DIV_End ();
+	    /* End container */
+	    HTM_DIV_End ();
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+	 /* End form */
+         Frm_EndForm ();
+
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
 
    /***** End section with preferences about cookies *****/
    HTM_SECTION_End ();
@@ -120,13 +125,7 @@ void Coo_ChangeMyPrefsCookies (void)
 
    /***** Store preference in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your preference about cookies",
-		      "UPDATE usr_data"
-		        " SET ThirdPartyCookies='%c'"
-		      " WHERE UsrCod=%ld",
-                      Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? 'Y' :
-                	                                                 'N',
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Coo_DB_UpdateMyPrefsCookies ();
 
    /***** Show forms again *****/
    Set_EditSettings ();
