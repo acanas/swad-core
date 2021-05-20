@@ -1,7 +1,7 @@
-// swad_connected.h: connected users
+// swad_connected_database.h: connected users operations with database
 
-#ifndef _SWAD_CON
-#define _SWAD_CON
+#ifndef _SWAD_CON_DB
+#define _SWAD_CON_DB
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -27,34 +27,27 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include "swad_user.h"
+#include "swad_role.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Con_MIN_TIME_TO_REFRESH_CONNECTED_IN_MS	(Cfg_MIN_TIME_TO_REFRESH_CONNECTED * 1000L)	// Refresh period of connected users in miliseconds
-#define Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS	(Cfg_MAX_TIME_TO_REFRESH_CONNECTED * 1000L)	// Refresh period of connected users in miliseconds
-
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
-
-struct ConnectedUsrs
-  {
-   unsigned NumUsrs;
-   Usr_Sex_t Sex;
-  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Con_ShowConnectedUsrs (void);
-void Con_ShowGlobalConnectedUsrs (void);
-void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void);
-void Con_ShowConnectedUsrsBelongingToCurrentCrs (void);
+unsigned Con_DB_GetConnectedUsrsTotal (Rol_Role_t Role);
+unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_t Role);
+unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_t Role);
 
-void Con_WriteScriptClockConnected (void);
+void Con_DB_UpdateMeInConnectedList (void);
+
+void Con_DB_RemoveOldConnected (void);
+void Con_DB_RemoveUsrFromConnected (long UsrCod);
 
 #endif

@@ -34,6 +34,7 @@
 #include "swad_attendance_database.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
+#include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"

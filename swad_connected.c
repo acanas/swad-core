@@ -34,6 +34,8 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_connected.h"
+#include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
@@ -72,7 +74,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role);
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role);
 
-static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,struct ConnectedUsrs *Usrs);
+static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role,
+                                                                 struct ConnectedUsrs *Usrs);
 static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role);
@@ -103,23 +106,26 @@ void Con_ShowConnectedUsrs (void)
    /***** Begin box *****/
    /* Current time */
    if (asprintf (&Title,"%s"
-	                "<div id=\"connected_current_time\"></div>",
+	                "<div id=\"connected_current_time\">"
+	                "</div>",
 	         Txt_Connected_users) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (NULL,Title,
                  Con_PutIconToUpdateConnected,NULL,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
    free (Title);
-   Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,
-                                 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				 false,false,true,0x7);
 
-   /***** Number of connected users in the whole platform *****/
-   Con_ShowGlobalConnectedUsrs ();
+      /***** Current time *****/
+      Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				    false,false,true,0x7);
 
-   /***** Show connected users in the current location *****/
-   if (Gbl.Scope.Current != Hie_Lvl_UNK)
-      Con_ShowConnectedUsrsBelongingToLocation ();
+      /***** Number of connected users in the whole platform *****/
+      Con_ShowGlobalConnectedUsrs ();
+
+      /***** Show connected users in the current location *****/
+      if (Gbl.Scope.Current != Hie_Lvl_UNK)
+	 Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -133,11 +139,16 @@ static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Update;
 
+   /***** Begin form *****/
    Frm_BeginForm (ActLstCon);
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-   HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
-   Ico_PutCalculateIcon (Txt_Update);
-   HTM_BUTTON_End ();
+
+      /* Button */
+      HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
+	 Ico_PutCalculateIcon (Txt_Update);
+      HTM_BUTTON_End ();
+
+   /***** End form *****/
    Frm_EndForm ();
   }
 
@@ -168,38 +179,38 @@ void Con_ShowGlobalConnectedUsrs (void)
    /***** Container start *****/
    HTM_DIV_Begin ("class=\"CONNECTED\"");
 
-   /***** Number of sessions *****/
-   /* Link to view more details about connected users */
-   Frm_BeginFormUnique (ActLstCon);	// Must be unique because
+      /***** Number of sessions *****/
+      /* Link to view more details about connected users */
+      Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
 
-   /* Write total number of sessions */
-   HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
-                          Gbl.Session.NumSessions == 1 ? Txt_session :
-        	                                         Txt_sessions);
-   /* End link to view more details about connected users */
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+	    /* Write total number of sessions */
+	    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
+				   Gbl.Session.NumSessions == 1 ? Txt_session :
+								  Txt_sessions);
 
-   if (NumUsrsTotal)
-     {
-      HTM_DIV_Begin ("class=\"CONNECTED_LIST\"");
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
 
-      /***** Write total number of users *****/
-      HTM_TxtF ("%u&nbsp;%s:",NumUsrsTotal,
-			      NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-						  Txt_users[Usr_SEX_UNKNOWN]);
+      if (NumUsrsTotal)
+	{
+	 HTM_DIV_Begin ("class=\"CONNECTED_LIST\"");
 
-      /***** Write total number of users with each role *****/
-      for (Role  = Rol_GST, NumUsrsTotal = 0;
-	   Role <= Rol_SYS_ADM;
-	   Role++)
-	 Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
+	    /***** Write total number of users *****/
+	    HTM_TxtF ("%u&nbsp;%s:",NumUsrsTotal,
+				    NumUsrsTotal == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+							Txt_users[Usr_SEX_UNKNOWN]);
 
-      HTM_DIV_End ();
-     }
+	    /***** Write total number of users with each role *****/
+	    for (Role  = Rol_GST, NumUsrsTotal = 0;
+		 Role <= Rol_SYS_ADM;
+		 Role++)
+	       Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
+
+	 HTM_DIV_End ();
+	}
 
    /***** Container end *****/
    HTM_DIV_End ();
@@ -252,7 +263,7 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
 static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role)
   {
    /***** Get number of connected users who belong to current course *****/
-   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Gbl.Usrs.Connected.Usrs[Role]);
+   Con_GetNumConnectedWithARoleBelongingToCurrentScope (Role,&Gbl.Usrs.Connected.Usrs[Role]);
 
    /***** Get list connected users belonging to this course *****/
    Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role);
@@ -270,29 +281,31 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CONNECTED\"");
 
-   /***** Number of connected users who belong to scope *****/
-   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
-   HTM_DIV_Begin ("class=\"CONNECTED_TXT\"");
-   HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
+      /***** Number of connected users who belong to scope *****/
+      Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
+      HTM_DIV_Begin ("class=\"CONNECTED_TXT\"");
 
-   /* Put form to change scope */
-   Frm_BeginForm (ActLstCon);
-   Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
-   Frm_EndForm ();
+         /* Write number of connected users */
+	 HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
 
-   HTM_DIV_End ();
+	 /* Put form to change scope */
+	 Frm_BeginForm (ActLstCon);
+	    Sco_PutSelectorScope ("ScopeCon",HTM_SUBMIT_ON_CHANGE);
+	 Frm_EndForm ();
 
-   /***** Number of teachers and students *****/
-   HTM_TABLE_Begin ("CONNECTED_LIST");
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
-   HTM_TABLE_End ();
+      HTM_DIV_End ();
 
-   /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+      /***** Number of teachers and students *****/
+      HTM_TABLE_Begin ("CONNECTED_LIST");
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
+      HTM_TABLE_End ();
+
+      /***** Put link to register students *****/
+      Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -316,27 +329,27 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CONNECTED\"");
 
-   /***** Number of connected users who belong to course *****/
-   /* Link to view more details about connected users */
-   Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-					// the list of connected users
-					// is dynamically updated via AJAX
-   HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
-   Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
-   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
-   HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+      /***** Number of connected users who belong to course *****/
+      /* Link to view more details about connected users */
+      Frm_BeginFormUnique (ActLstCon);	// Must be unique because
+					   // the list of connected users
+					   // is dynamically updated via AJAX
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
+	    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
+	    HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
 
-   /***** Number of teachers and students *****/
-   HTM_TABLE_Begin ("CONNECTED_LIST");
-   Gbl.Usrs.Connected.NumUsr        = 0;
-   Gbl.Usrs.Connected.NumUsrs       = 0;
-   Gbl.Usrs.Connected.NumUsrsToList = 0;
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
-   HTM_TABLE_End ();
+      /***** Number of teachers and students *****/
+      HTM_TABLE_Begin ("CONNECTED_LIST");
+	 Gbl.Usrs.Connected.NumUsr        = 0;
+	 Gbl.Usrs.Connected.NumUsrs       = 0;
+	 Gbl.Usrs.Connected.NumUsrsToList = 0;
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
+	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
+      HTM_TABLE_End ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -353,15 +366,15 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    struct ConnectedUsrs Usrs;
 
    /***** Write number of connected users who belong to current course *****/
-   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Usrs);
+   Con_GetNumConnectedWithARoleBelongingToCurrentScope (Role,&Usrs);
    if (Usrs.NumUsrs)
      {
       HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
-      HTM_TxtF ("%u&nbsp;%s",Usrs.NumUsrs,
-			     Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
-					         Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
+	    HTM_TxtF ("%u&nbsp;%s",Usrs.NumUsrs,
+				   Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
+						       Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
+	 HTM_TD_End ();
       HTM_TR_End ();
 
       /***** I can see connected users *****/
@@ -390,13 +403,11 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
-      HTM_TxtF ("%u&nbsp;%s",NumUsrsThisRole,
-			     NumUsrsThisRole == 1 ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
-						    Txt_ROLES_PLURAL_abc[Role][UsrSex]);
-      HTM_TD_End ();
-
+	 HTM_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
+	    HTM_TxtF ("%u&nbsp;%s",NumUsrsThisRole,
+				   NumUsrsThisRole == 1 ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
+							  Txt_ROLES_PLURAL_abc[Role][UsrSex]);
+	 HTM_TD_End ();
       HTM_TR_End ();
 
       /***** I can see connected users *****/
@@ -406,63 +417,18 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
 	{
 	 HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
-	 Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-						// the list of connected users
-						// is dynamically updated via AJAX
-	 Sco_PutParamScope ("ScopeCon",Hie_Lvl_CRS);
-	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
-			  Txt_Connected_users,"ICO16x16");
-	 Frm_EndForm ();
-	 HTM_TD_End ();
-
+	    HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
+	       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
+						      // the list of connected users
+						      // is dynamically updated via AJAX
+	       Sco_PutParamScope ("ScopeCon",Hie_Lvl_CRS);
+		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
+				   Txt_Connected_users,"ICO16x16");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 	 HTM_TR_End ();
 	}
      }
-  }
-
-/*****************************************************************************/
-/********************* Modify my entry in connected list *********************/
-/*****************************************************************************/
-
-void Con_UpdateMeInConnectedList (void)
-  {
-   /***** Update my entry in connected list.
-          The role which is stored is the role of the last click *****/
-   DB_QueryREPLACE ("can not update list of connected users",
-		    "REPLACE INTO usr_connected"
-		    " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
-		    " VALUES"
-		    " (%ld,%u,%ld,NOW())",
-                    Gbl.Usrs.Me.UsrDat.UsrCod,
-                    (unsigned) Gbl.Usrs.Me.Role.Logged,
-                    Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/************************** Remove old connected uses ************************/
-/*****************************************************************************/
-
-void Con_DB_RemoveOldConnected (void)
-  {
-   DB_QueryDELETE ("can not remove old users from list of connected users",
-		   "DELETE FROM usr_connected"
-		   " WHERE UsrCod NOT IN"
-		         " (SELECT DISTINCT(UsrCod)"
-		            " FROM ses_sessions)");
-  }
-
-/*****************************************************************************/
-/************* Remove a given user from list of connected users **************/
-/*****************************************************************************/
-
-void Con_DB_RemoveUsrFromConnected (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove a user from table of connected users",
-		   "DELETE FROM usr_connected"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -475,20 +441,16 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
       return 0;
 
    /***** Get number of connected users with a role from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of connected users",
-		  "SELECT COUNT(*)"
-		   " FROM usr_connected"
-		  " WHERE RoleInLastCrs=%u",
-		  (unsigned) Role);
+   return Con_DB_GetConnectedUsrsTotal (Role);
   }
 
 /*****************************************************************************/
-/************** Get connected users belonging to current course **************/
+/************** Get connected users belonging to current scope ***************/
 /*****************************************************************************/
 // Return user's sex in UsrSex
 
-static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,struct ConnectedUsrs *Usrs)
+static void Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_Role_t Role,
+                                                                 struct ConnectedUsrs *Usrs)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
@@ -496,293 +458,34 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
    unsigned NumSexs;
    Usr_Sex_t Sex;
 
-   /***** Get number of connected users who belong to current course from database *****/
-   switch (Role)
-     {
-      case Rol_UNK:	// Here Rol_UNK means "any role"
-	 switch (Gbl.Scope.Current)
-	   {
-	    case Hie_Lvl_SYS:		// Show connected users in the whole platform
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-			                  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM usr_connected,"
-			              "usr_data"
-			       " WHERE usr_connected.UsrCod=usr_data.UsrCod");
-	       break;
-	    case Hie_Lvl_CTY:		// Show connected users in the current country
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ins_instits,"
-			              "ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ins_instits.CtyCod=%ld"
-			         " AND ins_instits.InsCod=ctr_centers.InsCod"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Cty.CtyCod);
-	       break;
-	    case Hie_Lvl_INS:		// Show connected users in the current institution
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ctr_centers.InsCod=%ld"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Ins.InsCod);
-	       break;
-	    case Hie_Lvl_CTR:		// Show connected users in the current center
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE deg_degrees.CtrCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Ctr.CtrCod);
-	       break;
-	    case Hie_Lvl_DEG:		// Show connected users in the current degree
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Deg.DegCod);
-	       break;
-	    case Hie_Lvl_CRS:		// Show connected users in the current course
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_users.CrsCod=%ld"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Crs.CrsCod);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       break;
-	   }
-	 break;
-      case Rol_GST:
-	 DB_QuerySELECT (&mysql_res,"can not get number"
-				    " of connected users"
-				    " who belong to this location",
-			 "SELECT COUNT(DISTINCT usr_connected.UsrCod),"		// row[0]
-			        "COUNT(DISTINCT usr_data.Sex),"			// row[1]
-			        "MIN(usr_data.Sex)"				// row[2]
-			  " FROM usr_connected,"
-			        "usr_data"
-			 " WHERE usr_connected.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM crs_users)"
-			   " AND usr_connected.UsrCod=usr_data.UsrCod");
-	 break;
-      case Rol_STD:
-      case Rol_NET:
-      case Rol_TCH:
-	 switch (Gbl.Scope.Current)
-	   {
-	    case Hie_Lvl_SYS:		// Show connected users in the whole platform
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM usr_connected,"
-			              "crs_users,"
-			              "usr_data"
-			       " WHERE usr_connected.UsrCod=crs_users.UsrCod"
-			         " AND crs_users.Role=%u"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_CTY:		// Show connected users in the current country
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ins_instits,"
-			              "ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ins_instits.CtyCod=%ld"
-			         " AND ins_instits.InsCod=ctr_centers.InsCod"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Cty.CtyCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_INS:		// Show connected users in the current institution
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE ctr_centers.InsCod=%ld"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Ins.InsCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_CTR:		// Show connected users in the current center
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE deg_degrees.CtrCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Ctr.CtrCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_DEG:		// Show connected users in the current degree
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_courses,"
-			              "crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Deg.DegCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_CRS:		// Show connected users in the current course
-	       DB_QuerySELECT (&mysql_res,"can not get number"
-					  " of connected users"
-					  " who belong to this location",
-			       "SELECT COUNT(DISTINCT usr_connected.UsrCod),"	// row[0]
-			              "COUNT(DISTINCT usr_data.Sex),"		// row[1]
-			              "MIN(usr_data.Sex)"			// row[2]
-			        " FROM crs_users,"
-			              "usr_connected,"
-			              "usr_data"
-			       " WHERE crs_users.CrsCod=%ld"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			         " AND usr_connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Crs.CrsCod,
-			       (unsigned) Role);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       break;
-	   }
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-	 break;
-     }
-
-   row = mysql_fetch_row (mysql_res);
-
-   /***** Get number of users (row[0]) *****/
-   if (sscanf (row[0],"%u",&(Usrs->NumUsrs)) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of connected users who belong to this location.");
-
-   /***** Get number of distinct sexs (row[1]) *****/
-   if (sscanf (row[1],"%u",&NumSexs) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of sexs in connected users who belong to this location.");
-
-   /***** Get users' sex (row[2]) *****/
+   /***** Default values *****/
+   Usrs->NumUsrs = 0;
    Usrs->Sex = Usr_SEX_UNKNOWN;
-   if (NumSexs == 1)
-      for (Sex  = (Usr_Sex_t) 0;
-	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
-	   Sex++)
-         if (!strcasecmp (row[2],Usr_StringsSexDB[Sex]))
-           {
-            Usrs->Sex = Sex;
-            break;
-           }
+
+   /***** Get number of connected users who belong to current course from database *****/
+   if (Con_DB_GetNumConnectedFromCurrentLocation (&mysql_res,Role))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Get number of users (row[0]) *****/
+      if (sscanf (row[0],"%u",&(Usrs->NumUsrs)) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of connected users who belong to this location.");
+
+      /***** Get number of distinct sexs (row[1]) *****/
+      if (sscanf (row[1],"%u",&NumSexs) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of sexs in connected users who belong to this location.");
+
+      /***** Get users' sex (row[2]) *****/
+      if (NumSexs == 1)
+	 for (Sex  = (Usr_Sex_t) 0;
+	      Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
+	      Sex++)
+	    if (!strcasecmp (row[2],Usr_StringsSexDB[Sex]))
+	      {
+	       Usrs->Sex = Sex;
+	       break;
+	      }
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -800,20 +503,8 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
    unsigned NumUsr = Gbl.Usrs.Connected.NumUsrs;	// Save current number of users
 
    /***** Get connected users who belong to current course from database *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-			      " who belong to this course",
-		   "SELECT usr_connected.UsrCod,"						// row[0]
-			  "usr_connected.LastCrsCod,"						// row[1]
-			  "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-		    " FROM crs_users,"
-			  "usr_connected"
-		   " WHERE crs_users.CrsCod=%ld"
-		     " AND crs_users.Role=%u"
-		     " AND crs_users.UsrCod=usr_connected.UsrCod"
-		   " ORDER BY Dif",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   (unsigned) Role);
+   NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role);
+
    Gbl.Usrs.Connected.NumUsrs       += NumUsrs;
    Gbl.Usrs.Connected.NumUsrsToList += NumUsrs;
    if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
@@ -892,58 +583,58 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    HTM_TR_Begin (NULL);
 
-   /***** Show photo *****/
-   HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-   Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,true);
-   HTM_TD_End ();
+      /***** Show photo *****/
+      HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,true);
+      HTM_TD_End ();
 
-   /***** Write full name and link *****/
-   if (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs)
-     {
-      ClassTxt = "CON_NAME_NARROW CON_CRS";
-      ClassLink = "BT_LINK CON_NAME_NARROW CON_CRS";
-     }
-   else
-     {
-      ClassTxt = "CON_NAME_NARROW CON_NO_CRS";
-      ClassLink = "BT_LINK CON_NAME_NARROW CON_NO_CRS";
-     }
-   HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
-   // The form must be unique because
-   // the list of connected users
-   // is dynamically updated via AJAX
-   switch (Role)
-     {
-      case Rol_STD:
-	 Frm_BeginFormUnique (ActSeeRecOneStd);
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 Frm_BeginFormUnique (ActSeeRecOneTch);
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-	 break;
-     }
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      /***** Write full name and link *****/
+      if (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs)
+	{
+	 ClassTxt = "CON_NAME_NARROW CON_CRS";
+	 ClassLink = "BT_LINK CON_NAME_NARROW CON_CRS";
+	}
+      else
+	{
+	 ClassTxt = "CON_NAME_NARROW CON_NO_CRS";
+	 ClassLink = "BT_LINK CON_NAME_NARROW CON_NO_CRS";
+	}
+      HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+	 // The form must be unique because
+	 // the list of connected users
+	 // is dynamically updated via AJAX
+	 switch (Role)
+	   {
+	    case Rol_STD:
+	       Frm_BeginFormUnique (ActSeeRecOneStd);
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       Frm_BeginFormUnique (ActSeeRecOneTch);
+	       break;
+	    default:
+	       Err_WrongRoleExit ();
+	       break;
+	   }
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
-   HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-   HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
-   Usr_WriteFirstNameBRSurnames (UsrDat);
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();
+	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
+	       HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
+		  Usr_WriteFirstNameBRSurnames (UsrDat);
+	       HTM_BUTTON_End ();
+	    HTM_DIV_End ();
 
-   Frm_EndForm ();
-   HTM_TD_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
-   /***** Write time from last access *****/
-   ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
-	                                                                   "CON_SINCE CON_NO_CRS");
-   HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
-   HTM_DIV_Begin ("id=\"hm%u\"",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
-   Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
-   HTM_DIV_End ();						// Used for automatic update, only when displayed on right column
-   HTM_TD_End ();
+      /***** Write time from last access *****/
+      ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
+									      "CON_SINCE CON_NO_CRS");
+      HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+	 HTM_DIV_Begin ("id=\"hm%u\"",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
+	    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
+	 HTM_DIV_End ();						// Used for automatic update, only when displayed on right column
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -976,161 +667,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	                    Role == Rol_TCH));				// ...or teacher
 
    /***** Get connected users who belong to current location from database *****/
-   switch (Role)
-     {
-      case Rol_GST:
-	 NumUsrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-				    " who belong to this location",
-			 "SELECT UsrCod,"						// row[0]
-			        "LastCrsCod,"						// row[1]
-			        "UNIX_TIMESTAMP()-"
-			        "UNIX_TIMESTAMP(LastTime) AS Dif"			// row[2]
-			  " FROM usr_connected"
-			 " WHERE UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM crs_users)"
-			 " ORDER BY Dif");
-	 break;
-      case Rol_STD:
-      case Rol_NET:
-      case Rol_TCH:
-	 switch (Gbl.Scope.Current)
-	   {
-	    case Hie_Lvl_SYS:		// Show connected users in the whole platform
-	       NumUsrs = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					  " who belong to this location",
-			       "SELECT DISTINCTROW "
-			              "usr_connected.UsrCod,"				// row[0]
-			              "usr_connected.LastCrsCod,"			// row[1]
-			              "UNIX_TIMESTAMP()-"
-			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM usr_connected,"
-			              "crs_users"
-			       " WHERE usr_connected.UsrCod=crs_users.UsrCod"
-			         " AND crs_users.Role=%u"
-			       " ORDER BY Dif",
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_CTY:		// Show connected users in the current country
-	       NumUsrs = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					  " who belong to this location",
-			       "SELECT DISTINCTROW "
-			              "usr_connected.UsrCod,"				// row[0]
-			              "usr_connected.LastCrsCod,"			// row[1]
-			              "UNIX_TIMESTAMP()-"
-			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM ins_instits,"
-			              "ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected"
-			       " WHERE ins_instits.CtyCod=%ld"
-			         " AND ins_instits.InsCod=ctr_centers.InsCod"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Cty.CtyCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_INS:		// Show connected users in the current institution
-	       NumUsrs = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					  " who belong to this location",
-			       "SELECT DISTINCTROW "
-			              "usr_connected.UsrCod,"				// row[0]
-			              "usr_connected.LastCrsCod,"			// row[1]
-				      "UNIX_TIMESTAMP()-"
-				      "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM ctr_centers,"
-			              "deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected"
-			       " WHERE ctr_centers.InsCod=%ld"
-			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Ins.InsCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_CTR:		// Show connected users in the current center
-	       NumUsrs = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					  " who belong to this location",
-			       "SELECT DISTINCTROW "
-			              "usr_connected.UsrCod,"				// row[0]
-			              "usr_connected.LastCrsCod,"			// row[1]
-			              "UNIX_TIMESTAMP()-"
-			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_connected"
-			       " WHERE deg_degrees.CtrCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Ctr.CtrCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_DEG:		// Show connected users in the current degree
-	       NumUsrs = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					  " who belong to this location",
-			       "SELECT DISTINCTROW "
-			              "usr_connected.UsrCod,"				// row[0]
-			              "usr_connected.LastCrsCod,"			// row[1]
-			              "UNIX_TIMESTAMP()-"
-			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM crs_courses,"
-			              "crs_users,"
-			              "usr_connected"
-			       " WHERE crs_courses.DegCod=%ld"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Deg.DegCod,
-			       (unsigned) Role);
-	       break;
-	    case Hie_Lvl_CRS:		// Show connected users in the current course
-	       NumUsrs = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get list of connected users"
-					  " who belong to this location",
-			       "SELECT usr_connected.UsrCod,"				// row[0]
-			              "usr_connected.LastCrsCod,"			// row[1]
-			              "UNIX_TIMESTAMP()-"
-			              "UNIX_TIMESTAMP(usr_connected.LastTime) AS Dif"	// row[2]
-			        " FROM crs_users,"
-			              "usr_connected"
-			       " WHERE crs_users.CrsCod=%ld"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_connected.UsrCod"
-			       " ORDER BY Dif",
-			       Gbl.Hierarchy.Crs.CrsCod,
-			       (unsigned) Role);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       break;
-	   }
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-	 break;
-     }
+   NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role);
    if (NumUsrs)
      {
       /***** Initialize structure with user's data *****/
@@ -1158,58 +695,58 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 	    HTM_TR_Begin (NULL);
 
-	    /***** Show photo *****/
-	    HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
-	    HTM_TD_End ();
+	       /***** Show photo *****/
+	       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	       HTM_TD_End ();
 
-	    /***** Write full name and link *****/
-	    if (ThisCrs)
-	      {
-	       ClassTxt = "CON_NAME_WIDE CON_CRS";
-	       ClassLink = "BT_LINK CON_NAME_WIDE CON_CRS";
-	      }
-	    else
-	      {
-	       ClassTxt = "CON_NAME_WIDE CON_NO_CRS";
-	       ClassLink = "BT_LINK CON_NAME_WIDE CON_NO_CRS";
-	      }
-	    HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
-	    if (PutLinkToRecord)
-	      {
-	       switch (Role)
+	       /***** Write full name and link *****/
+	       if (ThisCrs)
 		 {
-		  case Rol_STD:
-		     Frm_BeginForm (ActSeeRecOneStd);
-		     break;
-		  case Rol_NET:
-		  case Rol_TCH:
-		     Frm_BeginForm (ActSeeRecOneTch);
-		     break;
-		  default:
-		     Err_WrongRoleExit ();
+		  ClassTxt = "CON_NAME_WIDE CON_CRS";
+		  ClassLink = "BT_LINK CON_NAME_WIDE CON_CRS";
 		 }
-	       Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
-	      }
+	       else
+		 {
+		  ClassTxt = "CON_NAME_WIDE CON_NO_CRS";
+		  ClassLink = "BT_LINK CON_NAME_WIDE CON_NO_CRS";
+		 }
+	       HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+		  if (PutLinkToRecord)
+		    {
+		     switch (Role)
+		       {
+			case Rol_STD:
+			   Frm_BeginForm (ActSeeRecOneStd);
+			   break;
+			case Rol_NET:
+			case Rol_TCH:
+			   Frm_BeginForm (ActSeeRecOneTch);
+			   break;
+			default:
+			   Err_WrongRoleExit ();
+		       }
+		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+		    }
 
-            HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
-	    if (PutLinkToRecord)
-	       HTM_BUTTON_SUBMIT_Begin (UsrDat.FullName,ClassLink,NULL);
-            Usr_WriteFirstNameBRSurnames (&UsrDat);
-	    if (PutLinkToRecord)
-	       HTM_BUTTON_End ();
-	    HTM_DIV_End ();
+		  HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
+		     if (PutLinkToRecord)
+			HTM_BUTTON_SUBMIT_Begin (UsrDat.FullName,ClassLink,NULL);
+		     Usr_WriteFirstNameBRSurnames (&UsrDat);
+		     if (PutLinkToRecord)
+			HTM_BUTTON_End ();
+		  HTM_DIV_End ();
 
-	    if (PutLinkToRecord)
-	       Frm_EndForm ();
-	    HTM_TD_End ();
+		  if (PutLinkToRecord)
+		     Frm_EndForm ();
+	       HTM_TD_End ();
 
-	    /***** Write time from last access *****/
-	    ClassTxt = ThisCrs ? "CON_SINCE CON_CRS" :
-			         "CON_SINCE CON_NO_CRS";
-	    HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
-	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-	    HTM_TD_End ();
+	       /***** Write time from last access *****/
+	       ClassTxt = ThisCrs ? "CON_SINCE CON_CRS" :
+				    "CON_SINCE CON_NO_CRS";
+	       HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+		  Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 

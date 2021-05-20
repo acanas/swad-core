@@ -25,6 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -555,7 +556,7 @@ void Rol_ChangeMyRole (void)
 	 Ses_UpdateSessionDataInDB ();
 
 	 /* ...and update logged role in list of connected */
-	 Con_UpdateMeInConnectedList ();
+	 Con_DB_UpdateMeInConnectedList ();
 	}
      }
   }

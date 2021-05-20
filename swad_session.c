@@ -30,7 +30,7 @@
 #include <stdio.h>		// For sprintf
 #include <string.h>		// For string functions
 
-#include "swad_connected.h"
+#include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
@@ -91,7 +91,7 @@ void Ses_CreateSession (void)
    Ses_InsertSessionInDB ();
 
    /***** Update time and course in connected list *****/
-   Con_UpdateMeInConnectedList ();
+   Con_DB_UpdateMeInConnectedList ();
 
    /***** Update number of open sessions in order to show them properly *****/
    Ses_GetNumSessions ();

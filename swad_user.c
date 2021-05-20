@@ -42,7 +42,7 @@
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"
-#include "swad_connected.h"
+#include "swad_connected_database.h"
 #include "swad_course.h"
 #include "swad_database.h"
 #include "swad_department.h"
@@ -3093,7 +3093,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 		 {
 		  Act_AdjustCurrentAction ();
 		  Ses_UpdateSessionDataInDB ();
-		  Con_UpdateMeInConnectedList ();
+		  Con_DB_UpdateMeInConnectedList ();
 		 }
 	      }
 	    else

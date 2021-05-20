@@ -33,7 +33,7 @@
 #include "swad_action.h"
 #include "swad_announcement.h"
 #include "swad_config.h"
-#include "swad_connected.h"
+#include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_firewall.h"
