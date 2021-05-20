@@ -2879,23 +2879,38 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
 
 void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
   {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumQsts;
+   unsigned NumQst;
    unsigned NumAnswers;
 
-   /***** Get number of answers of a game from database *****/
-   NumAnswers = (unsigned)
-   DB_QueryCOUNT ("can not number of answers of a question",
-		  "SELECT COUNT(tst_answers.AnsInd)"
-		   " FROM tst_answers,"
-		         "gam_questions"
-		  " WHERE gam_questions.GamCod=%ld"
-		    " AND gam_questions.QstCod=tst_answers.QstCod"
-		  " GROUP BY tst_answers.QstCod",
-		  GamCod);
-   if (NumAnswers < 2)
-      Err_WrongAnswerExit ();
+   /***** Get maximum score of a game from database *****/
+   NumQsts = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			     "SELECT COUNT(tst_answers.AnsInd) AS N"	// row[0]
+			      " FROM tst_answers,gam_questions"
+			     " WHERE gam_questions.GamCod=%ld"
+			       " AND gam_questions.QstCod=tst_answers.QstCod"
+			     " GROUP BY tst_answers.QstCod",
+			     GamCod);
+   for (NumQst = 0, *MinScore = *MaxScore = 0.0;
+	NumQst < NumQsts;
+	NumQst++)
+     {
+      row = mysql_fetch_row (mysql_res);
 
-   /***** Set minimum and maximum scores *****/
-   *MinScore = *MaxScore = 0.0;
-   *MinScore += -1.0 / (double) (NumAnswers - 1);
-   *MaxScore +=  1.0;
+      /* Get number of answers (row[0]) for this question */
+      if (sscanf (row[0],"%u",&NumAnswers) != 1)
+         NumAnswers = 0;
+
+      /* Accumulate minimum and maximum score */
+      if (NumAnswers < 2)
+	 Err_ShowErrorAndExit ("Wrong number of answers.");
+      *MinScore += -1.0 / (double) (NumAnswers - 1);
+      *MaxScore +=  1.0;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }

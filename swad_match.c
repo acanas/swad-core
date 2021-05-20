@@ -1733,7 +1733,7 @@ void Mch_ResumeMatch (void)
 
    /***** Show current match status *****/
    HTM_DIV_Begin ("id=\"match\" class=\"MCH_CONT\"");
-   Mch_ShowMatchStatusForTch (&Match);
+      Mch_ShowMatchStatusForTch (&Match);
    HTM_DIV_End ();
   }
 
@@ -2852,14 +2852,14 @@ static void Mch_ShowRightColumnTch (const struct Mch_Match *Match)
    /***** Start right container *****/
    HTM_DIV_Begin ("class=\"MCH_RIGHT_TCH\"");
 
-   /***** Top row: match title *****/
-   Mch_ShowMatchTitleTch (Match);
+      /***** Top row: match title *****/
+      Mch_ShowMatchTitleTch (Match);
 
-   /***** Bottom row: current question and possible answers *****/
-   if (Match->Status.Showing == Mch_END)	// Match over
-      Mch_ShowMatchScore (Match);
-   else						// Match not over
-      Mch_ShowQuestionAndAnswersTch (Match);
+      /***** Bottom row: current question and possible answers *****/
+      if (Match->Status.Showing == Mch_END)	// Match over
+	 Mch_ShowMatchScore (Match);
+      else					// Match not over
+	 Mch_ShowQuestionAndAnswersTch (Match);
 
    /***** End right container *****/
    HTM_DIV_End ();
@@ -3516,6 +3516,7 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    Range = MaxScore - MinScore;
    if (Range == 0.0)
       return;
+
    NumRowsPerScorePoint = (double) Mch_NUM_ROWS_SCORE / Range;
 
    /***** Get maximum number of users *****/
@@ -3531,7 +3532,7 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    /***** Get scores from database *****/
    NumScores = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get scores",
-		   "SELECT Score,"			// row[0]
+		   "SELECT Score,"		// row[0]
 			  "COUNT(*) AS NumUsrs"	// row[1]
 		    " FROM mch_results"
 		   " WHERE MchCod=%ld"
@@ -3542,43 +3543,44 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    /***** Begin table ****/
    HTM_TABLE_BeginWide ();
 
-   /***** Get and draw scores *****/
-   for (NumScore = 0, NumRow = 0;
-	NumScore < NumScores;
-	NumScore++)
-     {
-      /***** Get score and number of users from database *****/
-      row = mysql_fetch_row (mysql_res);
+      /***** Get and draw scores *****/
+      for (NumScore = 0, NumRow = 0;
+	   NumScore < NumScores;
+	   NumScore++)
+	{
+	 /***** Get score and number of users from database *****/
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get score (row[0]) */
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[0],"%lf",&Score) != 1)
-	 Score = 0.0;
-      Str_SetDecimalPointToLocal ();	// Return to local system
+	 /* Get score (row[0]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[0],"%lf",&Score) != 1)
+	    Score = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
 
-      /* Get number of users (row[1]) *****/
-      if (sscanf (row[1],"%u",&NumUsrs) != 1)
-	 NumUsrs = 0;
+	 /* Get number of users (row[1]) *****/
+	 if (sscanf (row[1],"%u",&NumUsrs) != 1)
+	    NumUsrs = 0;
 
-      /***** Draw empty rows until reaching the adequate row *****/
-      NumRowForThisScore = (unsigned) ((MaxScore - Score) * NumRowsPerScorePoint);
-      if (NumRowForThisScore == Mch_NUM_ROWS_SCORE)
-	 NumRowForThisScore = Mch_NUM_ROWS_SCORE - 1;
+	 /***** Draw empty rows until reaching the adequate row *****/
+	 NumRowForThisScore = (unsigned) ((MaxScore - Score) * NumRowsPerScorePoint);
+	 if (NumRowForThisScore == Mch_NUM_ROWS_SCORE)
+	    NumRowForThisScore = Mch_NUM_ROWS_SCORE - 1;
+	 for (;
+	      NumRow < NumRowForThisScore;
+	      NumRow++)
+	    Mch_DrawEmptyScoreRow (NumRow,MinScore,MaxScore);
+
+	 /***** Draw row for this score *****/
+	 Mch_DrawScoreRow (Score,MinScore,MaxScore,NumRow,NumUsrs,MaxUsrs);
+
+	 NumRow++;
+	}
+
+      /***** Draw final empty rows *****/
       for (;
-	   NumRow < NumRowForThisScore;
+	   NumRow < Mch_NUM_ROWS_SCORE;
 	   NumRow++)
-         Mch_DrawEmptyScoreRow (NumRow,MinScore,MaxScore);
-
-      /***** Draw row for this score *****/
-      Mch_DrawScoreRow (Score,MinScore,MaxScore,NumRow,NumUsrs,MaxUsrs);
-      NumRow++;
-     }
-
-   /***** Draw final empty rows *****/
-   for (;
-	NumRow < Mch_NUM_ROWS_SCORE;
-	NumRow++)
-      Mch_DrawEmptyScoreRow (NumRow,MinScore,MaxScore);
+	 Mch_DrawEmptyScoreRow (NumRow,MinScore,MaxScore);
 
    /***** End table *****/
    HTM_TABLE_End ();

@@ -95,6 +95,4 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope);
 unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope);
 double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope);
 
-void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore);
-
 #endif

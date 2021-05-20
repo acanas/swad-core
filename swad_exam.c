@@ -1975,30 +1975,3 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 	 return 0.0;	// Not reached
      }
   }
-
-/*****************************************************************************/
-/*************** Get maximum score of an exam from database *******************/
-/*****************************************************************************/
-
-void Exa_GetScoreRange (long ExaCod,double *MinScore,double *MaxScore)
-  {
-   unsigned NumAnswers;
-
-   /***** Get number of answers of exam from database *****/
-   NumAnswers = (unsigned)
-   DB_QueryCOUNT ("can not get data of a question",
-		  "SELECT COUNT(tst_answers.AnsInd)"
-		   " FROM tst_answers,"
-		         "exa_set_questions"
-		  " WHERE exa_set_questions.ExaCod=%ld"
-		    " AND exa_set_questions.QstCod=tst_answers.QstCod"
-		  " GROUP BY tst_answers.QstCod",
-		  ExaCod);
-   if (NumAnswers < 2)
-      Err_ShowErrorAndExit ("Wrong number of answers.");
-
-   /***** Set minimum and maximum scores *****/
-   *MinScore = *MaxScore = 0.0;
-   *MinScore += -1.0 / (double) (NumAnswers - 1);
-   *MaxScore +=  1.0;
-  }

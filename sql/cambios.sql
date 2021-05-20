@@ -13503,5 +13503,9 @@ RENAME TABLE pho_clicks_without_photo TO usr_clicks_without_photo;
 
 
 SELECT gam_questions.QstCod,gam_questions.QstInd,tst_questions.AnsType,tst_questions.Shuffle FROM gam_questions,tst_questions WHERE gam_questions.GamCod=7 AND gam_questions.QstCod=tst_questions.QstCod ORDER BY gam_questions.QstInd;
-		   
+
+---------------------------
+
+SELECT COUNT(tst_answers.AnsInd) AS N FROM tst_answers,gam_questions WHERE gam_questions.GamCod=8 AND gam_questions.QstCod=tst_answers.QstCod GROUP BY tst_answers.QstCod;
+
 		   
