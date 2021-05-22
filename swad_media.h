@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_cryptography.h"
+#include "swad_string.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/

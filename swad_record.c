@@ -3278,41 +3278,42 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
    unsigned NumCty;
 
    /***** If list of countries is empty, try to get it *****/
-   if (!Gbl.Hierarchy.Ctys.Num)
-      Cty_GetBasicListOfCountries ();
+   Cty_GetBasicListOfCountries ();
 
    /***** Selector of country *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   if (PutForm)
-     {
-      Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",
-		       Str_BuildStringStr ("%s*",Txt_Country));
-      Str_FreeString ();
-     }
-   else
-      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
+      /* Label */
+      if (PutForm)
+	{
+	 Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",
+			  Str_BuildStringStr ("%s*",Txt_Country));
+	 Str_FreeString ();
+	}
+      else
+	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
 
-   /* Data */
-   HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "id=\"OthCtyCod\" name=\"OthCtyCod\""
-	             " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
-   HTM_OPTION (HTM_Type_STRING,"",false,false,
-	       "%s",Txt_Country);
-   HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
-	       "%s",Txt_Another_country);
-   for (NumCty = 0;
-	NumCty < Gbl.Hierarchy.Ctys.Num;
-	NumCty++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
-		  Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod,false,
-		  "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   "id=\"OthCtyCod\" name=\"OthCtyCod\""
+			   " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
+	    HTM_OPTION (HTM_Type_STRING,"",false,false,
+			"%s",Txt_Country);
+	    HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
+			"%s",Txt_Another_country);
+	    for (NumCty = 0;
+		 NumCty < Gbl.Hierarchy.Ctys.Num;
+		 NumCty++)
+	       HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
+			   Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == UsrDat->CtyCod,false,
+			   "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
+
+   // Do not free here list of countries, because it can be reused
   }
 
 /*****************************************************************************/
@@ -3476,22 +3477,22 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Institution);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Institution);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
-   if (ShowData)
-      if (Ins->InsCod > 0)
-	{
-	 if (Ins->WWW[0])
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		         Ins->WWW);
-	 HTM_Txt (Ins->FullName);
-	 if (Ins->WWW[0])
-	    HTM_A_End ();
-	}
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+	 if (ShowData)
+	    if (Ins->InsCod > 0)
+	      {
+	       if (Ins->WWW[0])
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+			       Ins->WWW);
+	       HTM_Txt (Ins->FullName);
+	       if (Ins->WWW[0])
+		  HTM_A_End ();
+	      }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3815,26 +3816,28 @@ void Rec_ShowMySharedRecordAndMore (void)
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
-   /***** Left part *****/
-   HTM_DIV_Begin ("class=\"REC_LEFT\"");
+      /***** Left part *****/
+      /* Begin container for left part */
+      HTM_DIV_Begin ("class=\"REC_LEFT\"");
 
-   /* My shared record card */
-   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
+	 /* My shared record card */
+	 Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
 
-   HTM_DIV_End ();
+      /* End container for left part */
+      HTM_DIV_End ();
 
-   /***** Right part *****/
-   /* Begin container for right part */
-   HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+      /***** Right part *****/
+      /* Begin container for right part */
+      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 
-   /* My institution, center and department */
-   Rec_ShowFormMyInsCtrDpt (IAmATeacher);
+	 /* My institution, center and department */
+	 Rec_ShowFormMyInsCtrDpt (IAmATeacher);
 
-   /* My webs / social networks */
-   Net_ShowFormMyWebsAndSocialNets ();
+	 /* My webs / social networks */
+	 Net_ShowFormMyWebsAndSocialNets ();
 
-   /* End container for right part */
-   HTM_DIV_End ();
+      /* End container for right part */
+      HTM_DIV_End ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -3865,194 +3868,196 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    unsigned NumCtr;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
+   /***** Get list of countries *****/
+   Cty_GetBasicListOfCountries ();
+
    /***** Begin section *****/
    HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
 
-   /***** Begin box and table *****/
-   sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
-   Box_BoxTableBegin (StrRecordWidth,
-                      IAmATeacher ? Txt_Institution_center_and_department :
-	                            Txt_Institution,
-	              NULL,NULL,
-	              Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
+      Box_BoxTableBegin (StrRecordWidth,
+			 IAmATeacher ? Txt_Institution_center_and_department :
+				       Txt_Institution,
+			 NULL,NULL,
+			 Hlp_PROFILE_Institution,Box_NOT_CLOSABLE,2);
 
-   /***** Country *****/
-   HTM_TR_Begin (NULL);
+	 /***** Country *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",
-		    Str_BuildStringStr ("%s*",Txt_Country));
-   Str_FreeString ();
+	    /* Label */
+	    Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",
+			     Str_BuildStringStr ("%s*",Txt_Country));
+	    Str_FreeString ();
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    /* Data */
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
-   /* If list of countries is empty, try to get it */
-   if (!Gbl.Hierarchy.Ctys.Num)
-      Cty_GetBasicListOfCountries ();
+	       /* Begin form to select the country of my institution */
+	       Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
+				    " class=\"REC_C2_BOT_INPUT\"");
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
+				 NULL);
+		     for (NumCty = 0;
+			  NumCty < Gbl.Hierarchy.Ctys.Num;
+			  NumCty++)
+			HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
+				    Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,false,
+				    "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
 
-   /* Begin form to select the country of my institution */
-   Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "id=\"InsCtyCod\" name=\"OthCtyCod\""
-		     " class=\"REC_C2_BOT_INPUT\"");
-   HTM_OPTION (HTM_Type_STRING,"-1",
-	       Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
-	       NULL);
-   for (NumCty = 0;
-	NumCty < Gbl.Hierarchy.Ctys.Num;
-	NumCty++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
-		  Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Usrs.Me.UsrDat.InsCtyCod,false,
-		  "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-   HTM_SELECT_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Institution *****/
-   HTM_TR_Begin (NULL);
+	 /***** Institution *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",
-		    Str_BuildStringStr ("%s*",Txt_Institution));
-   Str_FreeString ();
+	    /* Label */
+	    Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",
+			     Str_BuildStringStr ("%s*",Txt_Institution));
+	    Str_FreeString ();
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    /* Data */
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
-   /* Get list of institutions in this country */
-   Ins_FreeListInstitutions ();
-   if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
-      Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
+	       /* Get list of institutions in this country */
+	       Ins_FreeListInstitutions ();
+	       if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
+		  Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
 
-   /* Begin form to select institution */
-   Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "id=\"OthInsCod\" name=\"OthInsCod\""
-		     " class=\"REC_C2_BOT_INPUT\"");
-   HTM_OPTION (HTM_Type_STRING,"-1",
-	       Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
-	       NULL);
-   HTM_OPTION (HTM_Type_STRING,"0",
-	       Gbl.Usrs.Me.UsrDat.InsCod == 0,false,
-	       "%s",Txt_Another_institution);
-   for (NumIns = 0;
-	NumIns < Gbl.Hierarchy.Inss.Num;
-	NumIns++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-		  Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod,false,
-		  "%s",Gbl.Hierarchy.Inss.Lst[NumIns].FullName);
-   HTM_SELECT_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+	       /* Begin form to select institution */
+	       Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				    "id=\"OthInsCod\" name=\"OthInsCod\""
+				    " class=\"REC_C2_BOT_INPUT\"");
+		     HTM_OPTION (HTM_Type_STRING,"-1",
+				 Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
+				 NULL);
+		     HTM_OPTION (HTM_Type_STRING,"0",
+				 Gbl.Usrs.Me.UsrDat.InsCod == 0,false,
+				 "%s",Txt_Another_institution);
+		     for (NumIns = 0;
+			  NumIns < Gbl.Hierarchy.Inss.Num;
+			  NumIns++)
+			HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+				    Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Usrs.Me.UsrDat.InsCod,false,
+				    "%s",Gbl.Hierarchy.Inss.Lst[NumIns].FullName);
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   if (IAmATeacher)
-     {
-      /***** Center *****/
-      HTM_TR_Begin (NULL);
+	 if (IAmATeacher)
+	   {
+	    /***** Center *****/
+	    HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",
-		       Str_BuildStringStr ("%s*",Txt_Center));
-      Str_FreeString ();
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",
+				Str_BuildStringStr ("%s*",Txt_Center));
+	       Str_FreeString ();
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
-      /* Get list of centers in this institution */
-      Ctr_FreeListCenters ();
-      if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
-	 Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
+		  /* Get list of centers in this institution */
+		  Ctr_FreeListCenters ();
+		  if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
+		     Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
 
-      /* Begin form to select center */
-      Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"OthCtrCod\" name=\"OthCtrCod\""
-		        " class=\"REC_C2_BOT_INPUT\"");
-      HTM_OPTION (HTM_Type_STRING,"-1",
-		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
-		  NULL);
-      HTM_OPTION (HTM_Type_STRING,"0",
-		  Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,false,
-		  Txt_Another_center);
-      for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
-	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,false,
-		     Gbl.Hierarchy.Ctrs.Lst[NumCtr].FullName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
+		  /* Begin form to select center */
+		  Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
+				       " class=\"REC_C2_BOT_INPUT\"");
+			HTM_OPTION (HTM_Type_STRING,"-1",
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
+				    NULL);
+			HTM_OPTION (HTM_Type_STRING,"0",
+				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod == 0,false,
+				    Txt_Another_center);
+			for (NumCtr = 0;
+			     NumCtr < Gbl.Hierarchy.Ctrs.Num;
+			     NumCtr++)
+			   HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
+				       Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Usrs.Me.UsrDat.Tch.CtrCod,false,
+				       Gbl.Hierarchy.Ctrs.Lst[NumCtr].FullName);
+		     HTM_SELECT_End ();
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Department *****/
-      HTM_TR_Begin (NULL);
+	    /***** Department *****/
+	    HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,
-		       Str_BuildStringStr ("%s*",Txt_Department));
-      Str_FreeString ();
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,
+				Str_BuildStringStr ("%s*",Txt_Department));
+	       Str_FreeString ();
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      Frm_StartFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
-      Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
-				   Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-	                           "REC_C2_BOT_INPUT",			// Selector class
-				   -1L,					// First option
-				   "",					// Text when no department selected
-				   true);				// Submit on change
-      Frm_EndForm ();
-      HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		  Frm_StartFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
+		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
+						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
+						  "REC_C2_BOT_INPUT",			// Selector class
+						  -1L,					// First option
+						  "",					// Text when no department selected
+						  true);				// Submit on change
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Office *****/
-      HTM_TR_Begin (NULL);
+	    /***** Office *****/
+	    HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","Office",Txt_Office);
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","Office",Txt_Office);
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
-      HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "id=\"Office\" class=\"REC_C2_BOT_INPUT\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		  Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
+		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
+				     HTM_SUBMIT_ON_CHANGE,
+				     "id=\"Office\" class=\"REC_C2_BOT_INPUT\"");
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** Office phone *****/
-      HTM_TR_Begin (NULL);
+	    /***** Office phone *****/
+	    HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","OfficePhone",Txt_Phone);
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RM","OfficePhone",Txt_Phone);
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
-      HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-                     HTM_SUBMIT_ON_CHANGE,
-		     "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		  Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
+		     HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
+				    HTM_SUBMIT_ON_CHANGE,
+				    "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT\"");
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    HTM_TR_End ();
+	   }
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
+
+   // Do not free list of countries here, because it can be reused
   }
 
 /*****************************************************************************/

@@ -89,7 +89,7 @@ void Map_LeafletScript (void)
 /*****************************************************************************/
 
 void Map_CreateMap (const char *ContainerId,
-		    const struct Coordinates *Coord,unsigned Zoom)
+		    const struct Map_Coordinates *Coord,unsigned Zoom)
   {
    /* Let's create a map with pretty Mapbox Streets tiles */
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
@@ -136,7 +136,7 @@ void Map_AddTileLayer (void)
 /************************** Add a marker to our map **************************/
 /*****************************************************************************/
 
-void Map_AddMarker (const struct Coordinates *Coord)
+void Map_AddMarker (const struct Map_Coordinates *Coord)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    HTM_TxtF ("\t"
@@ -167,7 +167,7 @@ void Map_AddPopup (const char *Title,const char *Subtitle,bool Open)
 /********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
-void Map_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom,
+void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
 			  const char *Query)
   {
    MYSQL_RES *mysql_res;

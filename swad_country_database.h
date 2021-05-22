@@ -1,9 +1,9 @@
-// swad_map.h: OpenStreetMap maps
+// swad_country_database.h: countries operations with database
 
-#ifndef _SWAD_MAP
-#define _SWAD_MAP
+#ifndef _SWAD_CTY_DB
+#define _SWAD_CTY_DB
 /*
-    SWAD (Shared Workspace At a Distance),
+    SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -27,34 +27,26 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
+#include <mysql/mysql.h>	// To access MySQL databases
+
+#include "swad_map.h"
+#include "swad_media.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-struct Map_Coordinates
-  {
-   double Latitude;
-   double Longitude;
-   double Altitude;
-  };
-
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Map_LeafletCSS (void);
-void Map_LeafletScript (void);
-void Map_CreateMap (const char *ContainerId,
-		    const struct Map_Coordinates *Coord,unsigned Zoom);
-void Map_AddTileLayer (void);
-void Map_AddMarker (const struct Map_Coordinates *Coord);
-void Map_AddPopup (const char *Title,const char *Subtitle,bool Open);
-void Map_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom,
-			  const char *Query);
-double Map_GetLatitudeFromStr (char *Str);
-double Map_GetLongitudeFromStr (char *Str);
-double Map_GetAltitudeFromStr (char *Str);
+unsigned Cty_DB_GetBasicListOfCountries (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetListOfCountriesWithPendingInss (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetFullListOfCountries (MYSQL_RES **mysql_res);
+
+void Cty_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
+unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod);
+void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 
 #endif

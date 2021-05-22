@@ -68,7 +68,7 @@
 
 static void SysCfg_Configuration (bool PrintView);
 static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
+static void SysCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
 static void SysCfg_Shortcut (bool PrintView);
@@ -197,7 +197,7 @@ static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 /********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
-static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
+static void SysCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
@@ -225,7 +225,7 @@ static void SysCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 static void SysCfg_Map (void)
   {
    MYSQL_RES *mysql_res;
-   struct Coordinates CtyAvgCoord;
+   struct Map_Coordinates CtyAvgCoord;
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;

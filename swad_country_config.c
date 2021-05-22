@@ -32,6 +32,8 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_country_config.h"
+#include "swad_country_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure_cache.h"
@@ -67,7 +69,6 @@ extern struct Globals Gbl;
 static void CtyCfg_Configuration (bool PrintView);
 static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args);
 static void CtyCfg_Title (bool PutLink);
-static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
 static void CtyCfg_Map (void);
 static void CtyCfg_MapImage (bool PrintView,bool PutLink);
 static void CtyCfg_Platform (bool PrintView);
@@ -138,68 +139,70 @@ static void CtyCfg_Configuration (bool PrintView)
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+      /* Begin table */
+      HTM_TABLE_BeginWidePadding (2);
 
-   /***** Platform *****/
-   CtyCfg_Platform (PrintView);
+	 /* Platform */
+	 CtyCfg_Platform (PrintView);
 
-   /***** Country name (an link to WWW if exists) *****/
-   CtyCfg_Name (PutLink);
+	 /* Country name (an link to WWW if exists) */
+	 CtyCfg_Name (PutLink);
 
-   /***** Shortcut to the country *****/
-   CtyCfg_Shortcut (PrintView);
+	 /* Shortcut to the country */
+	 CtyCfg_Shortcut (PrintView);
 
-   NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Cty.CtyCod);
-   if (PrintView)
-      /***** QR code with link to the country *****/
-      CtyCfg_QR ();
-   else
-     {
-      NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 if (PrintView)
+	    /* QR code with link to the country */
+	    CtyCfg_QR ();
+	 else
+	   {
+	    NumCtrs = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
 
-      /***** Number of users who claim to belong to this country,
-             number of institutions,
-             number of centers,
-             number of degrees,
-             number of courses *****/
-      CtyCfg_NumUsrs ();
-      CtyCfg_NumInss ();
-      HieCfg_NumCtrs (NumCtrs,
-		      false);	// Don't put form
-      HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
-      CtyCfg_NumDegs ();
-      CtyCfg_NumCrss ();
+	    /* Number of users who claim to belong to this country,
+	       number of institutions,
+	       number of centers,
+	       number of degrees,
+	       number of courses */
+	    CtyCfg_NumUsrs ();
+	    CtyCfg_NumInss ();
+	    HieCfg_NumCtrs (NumCtrs,
+			    false);	// Don't put form
+	    HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+	    CtyCfg_NumDegs ();
+	    CtyCfg_NumCrss ();
 
-      /***** Number of users in courses of this country *****/
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_UNK);
-     }
+	    /* Number of users in courses of this country */
+	    HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod,Rol_UNK);
+	   }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /* End table */
+      HTM_TABLE_End ();
 
-   /***** End of left part *****/
+   /* End of left part */
    HTM_DIV_End ();
 
    /**************************** Right part **********************************/
-   /***** Check country map *****/
+   /* Check country map */
    MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Cty);
 
    if (NumCtrsWithMap || MapImageExists)
      {
+      /* Begin container */
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
-      /***** Country map *****/
-      if (NumCtrsWithMap)
-	 CtyCfg_Map ();
+	 /* Country map */
+	 if (NumCtrsWithMap)
+	    CtyCfg_Map ();
 
-      /***** Country map image *****/
-      if (MapImageExists)
-         CtyCfg_MapImage (PrintView,PutLink);
+	 /* Country map image */
+	 if (MapImageExists)
+	    CtyCfg_MapImage (PrintView,PutLink);
 
+      /* End container */
       HTM_DIV_End ();
      }
 
@@ -223,44 +226,25 @@ static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 
 static void CtyCfg_Title (bool PutLink)
   {
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
-	           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   if (PutLink)
-      HTM_A_End ();
+
+      /* Begin link */
+      if (PutLink)
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+		      " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
+		      Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+
+      /* Country name */
+      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+
+      /* End link */
+      if (PutLink)
+	 HTM_A_End ();
+
+   /***** End container *****/
    HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********* Get average coordinates of centers in current institution *********/
-/*****************************************************************************/
-
-static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
-  {
-   char *Query;
-
-   /***** Get average coordinates of centers of current country
-          with both coordinates set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (asprintf (&Query,
-		 "SELECT AVG(ctr_centers.Latitude),"						// row[0]
-			"AVG(ctr_centers.Longitude),"						// row[1]
-			"GREATEST(MAX(ctr_centers.Latitude)-MIN(ctr_centers.Latitude),"
-				 "MAX(ctr_centers.Longitude)-MIN(ctr_centers.Longitude))"	// row[2]
-		  " FROM ins_instits,"
-		        "ctr_centers"
-		 " WHERE ins_instits.CtyCod=%ld"
-		   " AND ins_instits.InsCod=ctr_centers.InsCod"
-		   " AND ctr_centers.Latitude<>0"
-		   " AND ctr_centers.Longitude<>0",
-		 Gbl.Hierarchy.Cty.CtyCod) < 0)
-      Err_NotEnoughMemoryExit ();
-   Map_GetCoordAndZoom (Coord,Zoom,Query);
-   free (Query);
   }
 
 /*****************************************************************************/
@@ -272,7 +256,7 @@ static void CtyCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 static void CtyCfg_Map (void)
   {
    MYSQL_RES *mysql_res;
-   struct Coordinates CtyAvgCoord;
+   struct Map_Coordinates CtyAvgCoord;
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
@@ -292,50 +276,41 @@ static void CtyCfg_Map (void)
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
 
-   /* Let's create a map with pretty Mapbox Streets tiles */
-   CtyCfg_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
-   Map_CreateMap (CtyCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
+      /* Let's create a map with pretty Mapbox Streets tiles */
+      Cty_DB_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
+      Map_CreateMap (CtyCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
 
-   /* Add Mapbox Streets tile layer to our map */
-   Map_AddTileLayer ();
+      /* Add Mapbox Streets tile layer to our map */
+      Map_AddTileLayer ();
 
-   /* Get centers with coordinates */
-   NumCtrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
-		   "SELECT ctr_centers.CtrCod"	// row[0]
-		    " FROM ins_instits,"
-			  "ctr_centers"
-		   " WHERE ins_instits.CtyCod=%ld"
-		     " AND ins_instits.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.Latitude<>0"
-		     " AND ctr_centers.Longitude<>0",
-		   Gbl.Hierarchy.Cty.CtyCod);
+      /* Get centers which have coordinates in the current country */
+      NumCtrs = Cty_DB_GetCtrsWithCoordsInCurrentCty (&mysql_res);
 
-   /* Add a marker and a popup for each center */
-   for (NumCtr = 0;
-	NumCtr < NumCtrs;
-	NumCtr++)
-     {
-      /* Get next center */
-      Ctr.CtrCod = DB_GetNextCode (mysql_res);
+      /* Add a marker and a popup for each center */
+      for (NumCtr = 0;
+	   NumCtr < NumCtrs;
+	   NumCtr++)
+	{
+	 /* Get next center */
+	 Ctr.CtrCod = DB_GetNextCode (mysql_res);
 
-      /* Get data of center */
-      Ctr_GetDataOfCenterByCod (&Ctr);
+	 /* Get data of center */
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 
-      /* Get data of institution */
-      Ins.InsCod = Ctr.InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins);
+	 /* Get data of institution */
+	 Ins.InsCod = Ctr.InsCod;
+	 Ins_GetDataOfInstitutionByCod (&Ins);
 
-      /* Add marker */
-      Map_AddMarker (&Ctr.Coord);
+	 /* Add marker */
+	 Map_AddMarker (&Ctr.Coord);
 
-      /* Add popup */
-      Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,
-		    false);	// Closed
-     }
+	 /* Add popup */
+	 Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,
+		       false);	// Closed
+	}
 
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
 
    HTM_SCRIPT_End ();
   }
@@ -353,33 +328,33 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
 
    /***** Map image *****/
    HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-		   Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
-   Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
-						      "COUNTRY_MAP_SHOW");
-   if (PutLink)
-      HTM_A_End ();
+      if (PutLink)
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
+		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+      Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
+							 "COUNTRY_MAP_SHOW");
+      if (PutLink)
+	 HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Map attribution *****/
    if (!PrintView && Cty_CheckIfICanEditCountries ())
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgCtyMapAtt);
-      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
-			  " onchange=\"document.getElementById('%s').submit();return false;\"",
-			  Gbl.Form.Id);
-      if (MapAttribution)
-	 HTM_Txt (MapAttribution);
-      HTM_TEXTAREA_End ();
-      Frm_EndForm ();
+	 Frm_BeginForm (ActChgCtyMapAtt);
+	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
+				" onchange=\"document.getElementById('%s').submit();return false;\"",
+				Gbl.Form.Id);
+	       if (MapAttribution)
+		  HTM_Txt (MapAttribution);
+	    HTM_TEXTAREA_End ();
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    else if (MapAttribution)
      {
       HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-      HTM_Txt (MapAttribution);
+	 HTM_Txt (MapAttribution);
       HTM_DIV_End ();
      }
 
@@ -398,27 +373,27 @@ static void CtyCfg_Platform (bool PrintView)
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Platform);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Platform);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!PrintView)
-     {
-      Frm_BeginFormGoTo (ActSeeSysInf);
-      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
-			       "BT_LINK LT DAT",NULL);
-      Hie_FreeGoToMsg ();
-     }
-   Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO20x20");
-   HTM_NBSP ();
-   HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-   if (!PrintView)
-     {
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (!PrintView)
+	   {
+	    Frm_BeginFormGoTo (ActSeeSysInf);
+	    HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
+				     "BT_LINK LT DAT",NULL);
+	    Hie_FreeGoToMsg ();
+	   }
+	 Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO20x20");
+	 HTM_NBSP ();
+	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+	 if (!PrintView)
+	   {
+	    HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -434,18 +409,18 @@ static void CtyCfg_Name (bool PutLink)
    /***** Country name *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Country);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Country);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LB\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
-   HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT_N LB\"");
+	 if (PutLink)
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+			 Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+	 HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	 if (PutLink)
+	    HTM_A_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -479,13 +454,13 @@ static void CtyCfg_NumUsrs (void)
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_country);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_country);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -502,21 +477,21 @@ static void CtyCfg_NumInss (void)
    /***** Number of institutions ******/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Institutions);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Institutions);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginFormGoTo (ActSeeIns);
-   Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
-					        Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-			    "BT_LINK DAT",NULL);
-   Str_FreeString ();
-   HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginFormGoTo (ActSeeIns);
+	 Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
+							 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+				     "BT_LINK DAT",NULL);
+	    Str_FreeString ();
+	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -532,13 +507,13 @@ static void CtyCfg_NumDegs (void)
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -554,13 +529,13 @@ static void CtyCfg_NumCrss (void)
    /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -578,12 +553,8 @@ static void CtyCfg_GetMapAttr (long CtyCod,char **MapAttribution)
    /***** Free possible former map attribution *****/
    CtyCfg_FreeMapAttr (MapAttribution);
 
-   /***** Get photo attribution from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT MapAttribution"	// row[0]
-		        " FROM cty_countrs"
-		       " WHERE CtyCod=%ld",
-	               CtyCod))
+   /***** Get map attribution from database *****/
+   if (Cty_DB_GetMapAttr (&mysql_res,CtyCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -628,13 +599,8 @@ void CtyCfg_ChangeCtyMapAttr (void)
    /* Get the new map attribution for the country */
    Par_GetParToText ("Attribution",NewMapAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
-   /***** Update the table changing old attribution by new attribution *****/
-   DB_QueryUPDATE ("can not update the map attribution of a country",
-		   "UPDATE cty_countrs"
-		     " SET MapAttribution='%s'"
-		   " WHERE CtyCod='%03ld'",
-	           NewMapAttribution,
-	           Gbl.Hierarchy.Cty.CtyCod);
+   /***** Change old attribution by new attribution in database *****/
+   Cty_DB_UpdateCtyMapAttr (NewMapAttribution);
 
    /***** Show the country information again *****/
    CtyCfg_ShowConfiguration ();

@@ -70,7 +70,7 @@ extern struct Globals Gbl;
 static void InsCfg_Configuration (bool PrintView);
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void InsCfg_Title (bool PutLink);
-static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom);
+static void InsCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 static void InsCfg_Map (void);
 static void InsCfg_Country (bool PrintView,bool PutForm);
 static void InsCfg_FullName (bool PutForm);
@@ -248,7 +248,7 @@ static void InsCfg_Title (bool PutLink)
 /********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
-static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
+static void InsCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
   {
    char *Query;
 
@@ -279,7 +279,7 @@ static void InsCfg_GetCoordAndZoom (struct Coordinates *Coord,unsigned *Zoom)
 static void InsCfg_Map (void)
   {
    MYSQL_RES *mysql_res;
-   struct Coordinates InsAvgCoord;
+   struct Map_Coordinates InsAvgCoord;
    unsigned Zoom;
    unsigned NumCtrs;
    unsigned NumCtr;
@@ -349,60 +349,59 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
    extern const char *Txt_Country;
    unsigned NumCty;
 
+   /***** Get list of countries *****/
+   Cty_GetBasicListOfCountries ();
+
    /***** Country *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "OthCtyCod" :
-	                           NULL,
-		    Txt_Country);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "OthCtyCod" :
+				      NULL,
+		       Txt_Country);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Get list of countries */
-      Cty_GetBasicListOfCountries ();
-
-      /* Put form to select country */
-      Frm_BeginForm (ActChgInsCtyCfg);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"OthCtyCod\" name=\"OthCtyCod\""
-		        " class=\"INPUT_SHORT_NAME\"");
-      for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.Ctys.Num;
-	   NumCty++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
-		     Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
-		     "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-
-      /* Free list of countries */
-      Cty_FreeListCountries ();
-     }
-   else	// I can not move institution to another country
-     {
-      if (!PrintView)
-	{
-         Frm_BeginFormGoTo (ActSeeCtyInf);
-         Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-				  "BT_LINK LT DAT",NULL);
-         Hie_FreeGoToMsg ();
-	}
-      Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
-      HTM_NBSP ();
-      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-      if (!PrintView)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (PutForm)
+	   {
+	    /* Put form to select country */
+	    Frm_BeginForm (ActChgInsCtyCfg);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "id=\"OthCtyCod\" name=\"OthCtyCod\""
+				 " class=\"INPUT_SHORT_NAME\"");
+		  for (NumCty = 0;
+		       NumCty < Gbl.Hierarchy.Ctys.Num;
+		       NumCty++)
+		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod,
+				 Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
+				 "%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+	       HTM_SELECT_End ();
+	    Frm_EndForm ();
+	   }
+	 else	// I can not move institution to another country
+	   {
+	    if (!PrintView)
+	      {
+	       Frm_BeginFormGoTo (ActSeeCtyInf);
+	       Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+					"BT_LINK LT DAT",NULL);
+	       Hie_FreeGoToMsg ();
+	      }
+	    Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
+	    HTM_NBSP ();
+	    HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	    if (!PrintView)
+	      {
+	       HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
+
+   // Do not free list of countries here, because it can be reused
   }
 
 /*****************************************************************************/

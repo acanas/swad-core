@@ -93,87 +93,87 @@ void Hie_WriteMenuHierarchy (void)
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
 
-   /***** Write a 1st selector
-          with all the countries *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT","cty",Txt_Country);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Cty_WriteSelectorOfCountry ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   if (Gbl.Hierarchy.Cty.CtyCod > 0)
-     {
-      /***** Write a 2nd selector
-             with the institutions of selected country *****/
+      /***** Write a 1st selector
+	     with all the countries *****/
       HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("RT","ins",Txt_Institution);
+	 /* Label */
+	 Frm_LabelColumn ("RT","cty",Txt_Country);
 
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-      Ins_WriteSelectorOfInstitution ();
-      HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    Cty_WriteSelectorOfCountry ();
+	 HTM_TD_End ();
 
       HTM_TR_End ();
 
-      if (Gbl.Hierarchy.Ins.InsCod > 0)
-        {
-         /***** Write a 3rd selector
-                with all the centers of selected institution *****/
-         HTM_TR_Begin (NULL);
+      if (Gbl.Hierarchy.Cty.CtyCod > 0)
+	{
+	 /***** Write a 2nd selector
+		with the institutions of selected country *****/
+	 HTM_TR_Begin (NULL);
 
-         /* Label */
-         Frm_LabelColumn ("RT","ctr",Txt_Center);
+	    /* Label */
+	    Frm_LabelColumn ("RT","ins",Txt_Institution);
 
-         /* Data */
-         HTM_TD_Begin ("class=\"LT\"");
-         Ctr_WriteSelectorOfCenter ();
-         HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Ins_WriteSelectorOfInstitution ();
+	    HTM_TD_End ();
 
-         HTM_TR_End ();
+	 HTM_TR_End ();
 
-         if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-           {
-            /***** Write a 4th selector
-                   with all the degrees of selected center *****/
-            HTM_TR_Begin (NULL);
-
-            /* Label */
-            Frm_LabelColumn ("RT","deg",Txt_Degree);
-
-            /* Data */
-            HTM_TD_Begin ("class=\"LT\"");
-            Deg_WriteSelectorOfDegree ();
-            HTM_TD_End ();
-
-            HTM_TR_End ();
-
-	    if (Gbl.Hierarchy.Deg.DegCod > 0)
-	      {
-	       /***** Write a 5th selector
-		      with all the courses of selected degree *****/
-	       HTM_TR_Begin (NULL);
+	 if (Gbl.Hierarchy.Ins.InsCod > 0)
+	   {
+	    /***** Write a 3rd selector
+		   with all the centers of selected institution *****/
+	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-               Frm_LabelColumn ("RT","crs",Txt_Course);
+	       Frm_LabelColumn ("RT","ctr",Txt_Center);
 
-               /* Data */
+	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
-	       Crs_WriteSelectorOfCourse ();
+		  Ctr_WriteSelectorOfCenter ();
 	       HTM_TD_End ();
 
+	    HTM_TR_End ();
+
+	    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+	      {
+	       /***** Write a 4th selector
+		      with all the degrees of selected center *****/
+	       HTM_TR_Begin (NULL);
+
+		  /* Label */
+		  Frm_LabelColumn ("RT","deg",Txt_Degree);
+
+		  /* Data */
+		  HTM_TD_Begin ("class=\"LT\"");
+		     Deg_WriteSelectorOfDegree ();
+		  HTM_TD_End ();
+
 	       HTM_TR_End ();
+
+	       if (Gbl.Hierarchy.Deg.DegCod > 0)
+		 {
+		  /***** Write a 5th selector
+			 with all the courses of selected degree *****/
+		  HTM_TR_Begin (NULL);
+
+		     /* Label */
+		     Frm_LabelColumn ("RT","crs",Txt_Course);
+
+		     /* Data */
+		     HTM_TD_Begin ("class=\"LT\"");
+			Crs_WriteSelectorOfCourse ();
+		     HTM_TD_End ();
+
+		  HTM_TR_End ();
+		 }
 	      }
-           }
-        }
-     }
+	   }
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();

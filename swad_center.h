@@ -67,7 +67,7 @@ struct Ctr_Center
    long PlcCod;			// Place code
    Ctr_Status_t Status;		// Center status
    long RequesterUsrCod;	// User code of the person who requested the creation of this center
-   struct Coordinates Coord;	// Geographical coordinates
+   struct Map_Coordinates Coord;	// Geographical coordinates
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
