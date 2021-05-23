@@ -26,11 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-// #include <stdbool.h>		// For boolean type
-// #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For free
-// #include <string.h>		// For string functions
 
 #include "swad_country_database.h"
 #include "swad_database.h"
@@ -47,6 +43,10 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define Cty_MAX_BYTES_SUBQUERY_CTYS		((1 + Lan_NUM_LANGUAGES) * 32)
+#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
+#define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -58,6 +58,56 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/**************************** Create a new country ***************************/
+/*****************************************************************************/
+
+void Cty_DB_CreateCountry (const struct Cty_Countr *Cty)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   Lan_Language_t Lan;
+   char StrField[32];
+   char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS_NAME + 1];
+   char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS_WWW + 1];
+
+   /***** Create a new country *****/
+   SubQueryNam1[0] = '\0';
+   SubQueryNam2[0] = '\0';
+   SubQueryWWW1[0] = '\0';
+   SubQueryWWW2[0] = '\0';
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	Lan++)
+     {
+      snprintf (StrField,sizeof (StrField),",Name_%s",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
+
+      Str_Concat (SubQueryNam2,",'",sizeof (SubQueryNam2) - 1);
+      Str_Concat (SubQueryNam2,Cty->Name[Lan],sizeof (SubQueryNam2) - 1);
+      Str_Concat (SubQueryNam2,"'",sizeof (SubQueryNam2) - 1);
+
+      snprintf (StrField,sizeof (StrField),",WWW_%s",Lan_STR_LANG_ID[Lan]);
+      Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
+
+      Str_Concat (SubQueryWWW2,",'",sizeof (SubQueryWWW2) - 1);
+      Str_Concat (SubQueryWWW2,Cty->WWW[Lan],sizeof (SubQueryWWW2) - 1);
+      Str_Concat (SubQueryWWW2,"'",sizeof (SubQueryWWW2) - 1);
+     }
+   DB_QueryINSERT ("can not create country",
+		   "INSERT INTO cty_countrs"
+		   " (CtyCod,Alpha2,MapAttribution%s%s)"
+		   " VALUES"
+		   " ('%03ld','%s',''%s%s)",
+                   SubQueryNam1,
+                   SubQueryWWW1,
+                   Cty->CtyCod,
+                   Cty->Alpha2,
+		   SubQueryNam2,
+		   SubQueryWWW2);
+  }
 
 /*****************************************************************************/
 /********** Get basic list of countries ordered by name of country ***********/
@@ -104,8 +154,6 @@ unsigned Cty_DB_GetListOfCountriesWithPendingInss (MYSQL_RES **mysql_res)
 /********** Get full list of countries with names in all languages ***********/
 /********** and number of users who claim to belong to them        ***********/
 /*****************************************************************************/
-
-#define Cty_MAX_BYTES_SUBQUERY_CTYS	((1 + Lan_NUM_LANGUAGES) * 32)
 
 unsigned Cty_DB_GetFullListOfCountries (MYSQL_RES **mysql_res)
   {
@@ -182,6 +230,186 @@ unsigned Cty_DB_GetFullListOfCountries (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/***************** Get basic data of country given its code ******************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetDataOfCountryByCod (MYSQL_RES **mysql_res,long CtyCod)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a country",
+		   "SELECT Alpha2,"	// row[0]
+			  "Name_%s,"	// row[1]
+			  "WWW_%s"	// row[2]
+		    " FROM cty_countrs"
+		   " WHERE CtyCod='%03ld'",
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   CtyCod);
+  }
+
+/*****************************************************************************/
+/******************* Get name of a country in a language *********************/
+/*****************************************************************************/
+
+void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
+			    char CtyName[Cty_MAX_BYTES_NAME + 1])
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   DB_QuerySELECTString (CtyName,Cty_MAX_BYTES_NAME,
+                         "can not get the name of a country",
+		         "SELECT Name_%s"
+		          " FROM cty_countrs"
+		         " WHERE CtyCod='%03ld'",
+	                 Lan_STR_LANG_ID[Language],
+	                 CtyCod);
+  }
+
+/*****************************************************************************/
+/***************** Get number of countries with institutions *****************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumCtysWithInss (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of countries with institutions",
+		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		   " FROM cty_countrs,"
+			 "ins_instits"
+		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod");
+  }
+
+/*****************************************************************************/
+/******************* Get number of countries with centers ********************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumCtysWithCtrs (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of countries with centers",
+		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		   " FROM cty_countrs,"
+			 "ins_instits,"
+			 "ctr_centers"
+		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod");
+  }
+
+/*****************************************************************************/
+/******************* Get number of countries with degrees ********************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumCtysWithDegs (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of countries with degrees",
+		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		   " FROM cty_countrs,"
+			 "ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees"
+		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod");
+  }
+
+/*****************************************************************************/
+/******************* Get number of countries with courses ********************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumCtysWithCrss (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of countries with courses",
+		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		   " FROM cty_countrs,"
+			 "ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses"
+		  " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod");
+  }
+
+/*****************************************************************************/
+/******************* Get number of countries with users **********************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of countries with users",
+		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
+		   " FROM cty_countrs,"
+			 "ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses,"
+			 "crs_users"
+		  " WHERE %s"
+			 "cty_countrs.CtyCod=ins_instits.CtyCod"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod"
+		    " AND crs_courses.CrsCod=crs_users.CrsCod"
+		    " AND crs_users.Role=%u",
+		  SubQuery,(unsigned) Role);
+  }
+
+/*****************************************************************************/
+/******************* Check if a numeric country code exists ******************/
+/*****************************************************************************/
+
+bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
+  {
+   /***** Get number of countries with a name from database *****/
+   return (DB_QueryCOUNT ("can not check if the numeric code"
+	                  " of a country already existed",
+			  "SELECT COUNT(*)"
+			   " FROM cty_countrs"
+			  " WHERE CtyCod='%03ld'",
+			  CtyCod) != 0);
+  }
+
+/*****************************************************************************/
+/*************** Check if an alphabetic country code exists ******************/
+/*****************************************************************************/
+
+bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
+  {
+   /***** Get number of countries with a name from database *****/
+   return (DB_QueryCOUNT ("can not check if the alphabetic code"
+	                  " of a country already existed",
+			  "SELECT COUNT(*)"
+			   " FROM cty_countrs"
+			  " WHERE Alpha2='%s'",
+			  Alpha2) != 0);
+  }
+
+/*****************************************************************************/
+/******************** Check if the name of country exists ********************/
+/*****************************************************************************/
+
+bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   /***** Get number of countries with a name from database *****/
+   return (DB_QueryCOUNT ("can not check if the name"
+	                  " of a country already existed",
+			  "SELECT COUNT(*)"
+			   " FROM cty_countrs"
+			  " WHERE Name_%s='%s'"
+			    " AND CtyCod<>'%03ld'",
+			  Lan_STR_LANG_ID[Language],Name,
+			  CtyCod) != 0);
+  }
+
+/*****************************************************************************/
 /*********** Get average coordinates of centers in current country ***********/
 /*****************************************************************************/
 
@@ -242,6 +470,54 @@ unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod)
   }
 
 /*****************************************************************************/
+/************ Check if any of the centers in a country has map ***************/
+/*****************************************************************************/
+
+bool Cty_DB_GetIfMapIsAvailable (long CtyCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool MapIsAvailable = false;
+
+   /***** Get if any center in current country has a coordinate set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
+		       "SELECT EXISTS"
+		       "(SELECT *"
+		        " FROM ins_instits,"
+		              "ctr_centers"
+		       " WHERE ins_instits.CtyCod=%ld"
+		         " AND ins_instits.InsCod=ctr_centers.InsCod"
+		         " AND (ctr_centers.Latitude<>0"
+		           " OR ctr_centers.Longitude<>0))",
+		       CtyCod))
+     {
+      /* Get if map is available */
+      row = mysql_fetch_row (mysql_res);
+      MapIsAvailable = (row[0][0] == '1');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MapIsAvailable;
+  }
+
+/*****************************************************************************/
+/******** Update country changing old field value by new field value *********/
+/*****************************************************************************/
+
+void Cty_DB_UpdateCtyField (long CtyCod,const char *FieldName,const char *FieldValue)
+  {
+   DB_QueryUPDATE ("can not update a field value of a country",
+		   "UPDATE cty_countrs"
+		     " SET %s='%s'"
+		   " WHERE CtyCod='%03ld'",
+	           FieldName,FieldValue,
+	           CtyCod);
+  }
+
+/*****************************************************************************/
 /*********** Update the attribution of the map of current country ************/
 /*****************************************************************************/
 
@@ -255,3 +531,14 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
 	           Gbl.Hierarchy.Cty.CtyCod);
   }
 
+/*****************************************************************************/
+/********************************* Remove country ****************************/
+/*****************************************************************************/
+
+void Cty_DB_RemoveCty (long CtyCod)
+  {
+   DB_QueryDELETE ("can not remove a country",
+		   "DELETE FROM cty_countrs"
+		   " WHERE CtyCod='%03ld'",
+		   CtyCod);
+  }

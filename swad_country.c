@@ -85,17 +85,13 @@ static void Cty_ListCountriesForEdition (void);
 static void Cty_PutParamOtherCtyCod (void *CtyCod);
 static long Cty_GetParamOtherCtyCod (void);
 
-static bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
-static bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
-static bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
-static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName);
+static void Cty_UpdateCtyName (long CtyCod,const char *FieldName,const char *NewCtyName);
 
 static void Cty_ShowAlertAndButtonToGoToCty (void);
 static void Cty_PutParamGoToCty (void *CtyCod);
 
 static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountriesForEdition (void);
-static void Cty_CreateCountry (void);
 
 static void Cty_EditingCountryConstructor (void);
 static void Cty_EditingCountryDestructor (void);
@@ -800,8 +796,6 @@ void Cty_GetBasicListOfCountries (void)
 /********** and number of users who claim to belong to them        ***********/
 /*****************************************************************************/
 
-#define Cty_MAX_BYTES_SUBQUERY_CTYS	((1 + Lan_NUM_LANGUAGES) * 32)
-
 void Cty_GetFullListOfCountries (void)
   {
    MYSQL_RES *mysql_res;
@@ -939,7 +933,6 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
 bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
   {
    extern const char *Txt_Another_country;
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Lan_Language_t Lan;
@@ -975,18 +968,9 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
    // Here Cty->CtyCod > 0
 
    /***** Get data of a country from database *****/
-   if(DB_QuerySELECT (&mysql_res,"can not get data of a country",
-			     "SELECT Alpha2,"	// row[0]
-			            "Name_%s,"	// row[1]
-			            "WWW_%s"	// row[2]
-			      " FROM cty_countrs"
-			     " WHERE CtyCod='%03ld'",
-			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-			     Lan_STR_LANG_ID[Gbl.Prefs.Language],
-			     Cty->CtyCod)) // Country found...
+   CtyFound = (Cty_DB_GetDataOfCountryByCod (&mysql_res,Cty->CtyCod) != 0);
+   if (CtyFound) // Country found...
      {
-      CtyFound = true;
-
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
@@ -999,8 +983,6 @@ bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty)
       Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],
 		sizeof (Cty->WWW[Gbl.Prefs.Language]) - 1);
      }
-   else
-      CtyFound = false;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1022,8 +1004,6 @@ void Cty_FlushCacheCountryName (void)
 void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
 			 char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
    /***** 1. Fast check: Trivial case *****/
    if (CtyCod <= 0)
      {
@@ -1040,17 +1020,10 @@ void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,
      }
 
    /***** 3. Slow: get country name from database *****/
+   Cty_DB_GetCountryName (CtyCod,Language,CtyName);
    Gbl.Cache.CountryName.CtyCod   = CtyCod;
    Gbl.Cache.CountryName.Language = Language;
-   DB_QuerySELECTString (Gbl.Cache.CountryName.CtyName,
-                         sizeof (Gbl.Cache.CountryName.CtyName) - 1,
-                         "can not get the name of a country",
-		         "SELECT Name_%s"
-		          " FROM cty_countrs"
-		         " WHERE CtyCod='%03ld'",
-	                 Lan_STR_LANG_ID[Language],
-	                 CtyCod);
-   Str_Copy (CtyName,Gbl.Cache.CountryName.CtyName,Cty_MAX_BYTES_NAME);
+   Str_Copy (Gbl.Cache.CountryName.CtyName,CtyName,Cty_MAX_BYTES_NAME);
   }
 
 /*****************************************************************************/
@@ -1081,98 +1054,100 @@ static void Cty_ListCountriesForEdition (void)
    unsigned NumUsrsCty;
    Lan_Language_t Lan;
 
-   /***** Write heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Cty_PutHeadCountriesForEdition ();
 
-   /***** Write all countries *****/
-   for (NumCty = 0;
-	NumCty < Gbl.Hierarchy.Ctys.Num;
-	NumCty++)
-     {
-      Cty = &Gbl.Hierarchy.Ctys.Lst[NumCty];
-      NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
-      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
+      /***** Write heading *****/
+      Cty_PutHeadCountriesForEdition ();
 
-      HTM_TR_Begin (NULL);
+      /***** Write all countries *****/
+      for (NumCty = 0;
+	   NumCty < Gbl.Hierarchy.Ctys.Num;
+	   NumCty++)
+	{
+	 Cty = &Gbl.Hierarchy.Ctys.Lst[NumCty];
+	 NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+	 NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
 
-	 /* Put icon to remove country */
-	 HTM_TD_Begin ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
-	    if (NumInss ||					// Country has institutions
-		NumUsrsCty)					// Country has users
-	       // Deletion forbidden
-	       Ico_PutIconRemovalNotAllowed ();
-	    else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTY,Cty->CtyCod,
-					   1 << Rol_STD |
-					   1 << Rol_NET |
-					   1 << Rol_TCH))	// Country has users
-	       // Deletion forbidden
-	       Ico_PutIconRemovalNotAllowed ();
-	    else
-	       Ico_PutContextualIconToRemove (ActRemCty,NULL,
-					      Cty_PutParamOtherCtyCod,&Cty->CtyCod);
-	 HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-	 /* Numerical country code (ISO 3166-1) */
-	 HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-	    HTM_TxtF ("%03ld",Cty->CtyCod);
-	 HTM_TD_End ();
-
-	 /* Alphabetic country code with 2 letters (ISO 3166-1) */
-	 HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-	    HTM_Txt (Cty->Alpha2);
-	 HTM_TD_End ();
-
-	 HTM_TD_Empty (3);
-
-	 /* Number of users */
-	 HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-	    HTM_Unsigned (NumUsrsCty);
-	 HTM_TD_End ();
-
-	 /* Number of institutions */
-	 HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
-	    HTM_Unsigned (NumInss);
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /* Country name in several languages */
-      for (Lan  = (Lan_Language_t) 1;
-	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	   Lan++)
-        {
-         HTM_TR_Begin (NULL);
-
-	    /* Language */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
-	       HTM_TxtColon (Txt_STR_LANG_NAME[Lan]);
+	    /* Put icon to remove country */
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
+	       if (NumInss ||					// Country has institutions
+		   NumUsrsCty)					// Country has users
+		  // Deletion forbidden
+		  Ico_PutIconRemovalNotAllowed ();
+	       else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTY,Cty->CtyCod,
+					      1 << Rol_STD |
+					      1 << Rol_NET |
+					      1 << Rol_TCH))	// Country has users
+		  // Deletion forbidden
+		  Ico_PutIconRemovalNotAllowed ();
+	       else
+		  Ico_PutContextualIconToRemove (ActRemCty,NULL,
+						 Cty_PutParamOtherCtyCod,&Cty->CtyCod);
 	    HTM_TD_End ();
 
-	    /* Name */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       Frm_BeginForm (ActRenCty);
-	       Cty_PutParamOtherCtyCod (&Cty->CtyCod);
-	       Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
-		  HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
-				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"15\"");
-	       Frm_EndForm ();
+	    /* Numerical country code (ISO 3166-1) */
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	       HTM_TxtF ("%03ld",Cty->CtyCod);
 	    HTM_TD_End ();
 
-	    /* WWW */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       Frm_BeginForm (ActChgCtyWWW);
-	       Cty_PutParamOtherCtyCod (&Cty->CtyCod);
-	       Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
-		  HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-	       Frm_EndForm ();
+	    /* Alphabetic country code with 2 letters (ISO 3166-1) */
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	       HTM_Txt (Cty->Alpha2);
 	    HTM_TD_End ();
 
-         HTM_TR_End ();
-        }
-     }
+	    HTM_TD_Empty (3);
+
+	    /* Number of users */
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	       HTM_Unsigned (NumUsrsCty);
+	    HTM_TD_End ();
+
+	    /* Number of institutions */
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	       HTM_Unsigned (NumInss);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /* Country name in several languages */
+	 for (Lan  = (Lan_Language_t) 1;
+	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	      Lan++)
+	   {
+	    HTM_TR_Begin (NULL);
+
+	       /* Language */
+	       HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_TxtColon (Txt_STR_LANG_NAME[Lan]);
+	       HTM_TD_End ();
+
+	       /* Name */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Frm_BeginForm (ActRenCty);
+		  Cty_PutParamOtherCtyCod (&Cty->CtyCod);
+		  Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
+		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "size=\"15\"");
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+
+	       /* WWW */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Frm_BeginForm (ActChgCtyWWW);
+		  Cty_PutParamOtherCtyCod (&Cty->CtyCod);
+		  Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
+		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
+				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+		  Frm_EndForm ();
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+	   }
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1255,10 +1230,7 @@ void Cty_RemoveCountry (void)
       Svy_RemoveSurveys (Hie_Lvl_CTY,Cty_EditingCty->CtyCod);
 
       /***** Remove country *****/
-      DB_QueryDELETE ("can not remove a country",
-		      "DELETE FROM cty_countrs"
-		      " WHERE CtyCod='%03ld'",
-		      Cty_EditingCty->CtyCod);
+      Cty_DB_RemoveCty (Cty_EditingCty->CtyCod);
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
@@ -1325,7 +1297,7 @@ void Cty_RenameCountry (void)
 	    /* Update the table changing old name by new name */
 	    snprintf (FieldName,sizeof (FieldName),"Name_%s",
 		      Lan_STR_LANG_ID[Language]);
-	    Cty_UpdateCtyNameDB (Cty_EditingCty->CtyCod,FieldName,NewCtyName);
+	    Cty_UpdateCtyName (Cty_EditingCty->CtyCod,FieldName,NewCtyName);
 
 	    /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1347,67 +1319,13 @@ void Cty_RenameCountry (void)
   }
 
 /*****************************************************************************/
-/******************* Check if a numeric country code exists ******************/
-/*****************************************************************************/
-
-static bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
-  {
-   /***** Get number of countries with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the numeric code"
-	                  " of a country already existed",
-			  "SELECT COUNT(*)"
-			   " FROM cty_countrs"
-			  " WHERE CtyCod='%03ld'",
-			  CtyCod) != 0);
-  }
-
-/*****************************************************************************/
-/*************** Check if an alphabetic country code exists ******************/
-/*****************************************************************************/
-
-static bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
-  {
-   /***** Get number of countries with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the alphabetic code"
-	                  " of a country already existed",
-			  "SELECT COUNT(*)"
-			   " FROM cty_countrs"
-			  " WHERE Alpha2='%s'",
-			  Alpha2) != 0);
-  }
-
-/*****************************************************************************/
-/******************** Check if the name of country exists ********************/
-/*****************************************************************************/
-
-static bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod)
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
-   /***** Get number of countries with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name"
-	                  " of a country already existed",
-			  "SELECT COUNT(*)"
-			   " FROM cty_countrs"
-			  " WHERE Name_%s='%s'"
-			    " AND CtyCod<>'%03ld'",
-			  Lan_STR_LANG_ID[Language],Name,
-			  CtyCod) != 0);
-  }
-
-/*****************************************************************************/
 /************ Update institution name in table of institutions ***************/
 /*****************************************************************************/
 
-static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName)
+static void Cty_UpdateCtyName (long CtyCod,const char *FieldName,const char *NewCtyName)
   {
    /***** Update country changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of a country",
-		   "UPDATE cty_countrs"
-		     " SET %s='%s'"
-		   " WHERE CtyCod='%03ld'",
-	           FieldName,NewCtyName,
-	           CtyCod);
+   Cty_DB_UpdateCtyField (CtyCod,FieldName,NewCtyName);
 
    /***** Flush cache *****/
    Cty_FlushCacheCountryName ();
@@ -1423,6 +1341,7 @@ void Cty_ChangeCtyWWW (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
+   char FieldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
 
    /***** Country constructor *****/
    Cty_EditingCountryConstructor ();
@@ -1440,12 +1359,9 @@ void Cty_ChangeCtyWWW (void)
    Cty_GetDataOfCountryByCod (Cty_EditingCty);
 
    /***** Update the table changing old WWW by new WWW *****/
-   DB_QueryUPDATE ("can not update the web of a country",
-		   "UPDATE cty_countrs"
-		     " SET WWW_%s='%s'"
-		   " WHERE CtyCod='%03ld'",
-	           Lan_STR_LANG_ID[Language],NewWWW,
-	           Cty_EditingCty->CtyCod);
+   snprintf (FieldName,sizeof (FieldName),"Name_%s",
+	     Lan_STR_LANG_ID[Language]);
+   Cty_DB_UpdateCtyField (Cty_EditingCty->CtyCod,FieldName,NewWWW);
    Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
 	     sizeof (Cty_EditingCty->WWW[Language]) - 1);
 
@@ -1727,63 +1643,10 @@ void Cty_ReceiveFormNewCountry (void)
 
    if (CreateCountry)
      {
-      Cty_CreateCountry ();	// Add new country to database
+      Cty_DB_CreateCountry (Cty_EditingCty);	// Add new country to database
       Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_country_X,
 		     Cty_EditingCty->Name);
      }
-  }
-
-/*****************************************************************************/
-/**************************** Create a new country ***************************/
-/*****************************************************************************/
-
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
-
-static void Cty_CreateCountry (void)
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   Lan_Language_t Lan;
-   char StrField[32];
-   char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS_NAME + 1];
-   char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS_WWW + 1];
-
-   /***** Create a new country *****/
-   SubQueryNam1[0] = '\0';
-   SubQueryNam2[0] = '\0';
-   SubQueryWWW1[0] = '\0';
-   SubQueryWWW2[0] = '\0';
-   for (Lan  = (Lan_Language_t) 1;
-	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	Lan++)
-     {
-      snprintf (StrField,sizeof (StrField),",Name_%s",Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryNam1,StrField,sizeof (SubQueryNam1) - 1);
-
-      Str_Concat (SubQueryNam2,",'",sizeof (SubQueryNam2) - 1);
-      Str_Concat (SubQueryNam2,Cty_EditingCty->Name[Lan],sizeof (SubQueryNam2) - 1);
-      Str_Concat (SubQueryNam2,"'",sizeof (SubQueryNam2) - 1);
-
-      snprintf (StrField,sizeof (StrField),",WWW_%s",Lan_STR_LANG_ID[Lan]);
-      Str_Concat (SubQueryWWW1,StrField,sizeof (SubQueryWWW1) - 1);
-
-      Str_Concat (SubQueryWWW2,",'",sizeof (SubQueryWWW2) - 1);
-      Str_Concat (SubQueryWWW2,Cty_EditingCty->WWW[Lan],sizeof (SubQueryWWW2) - 1);
-      Str_Concat (SubQueryWWW2,"'",sizeof (SubQueryWWW2) - 1);
-     }
-   DB_QueryINSERT ("can not create country",
-		   "INSERT INTO cty_countrs"
-		   " (CtyCod,Alpha2,MapAttribution%s%s)"
-		   " VALUES"
-		   " ('%03ld','%s',''%s%s)",
-                   SubQueryNam1,
-                   SubQueryWWW1,
-                   Cty_EditingCty->CtyCod,
-                   Cty_EditingCty->Alpha2,
-		   SubQueryNam2,
-		   SubQueryWWW2);
   }
 
 /*****************************************************************************/
@@ -1820,12 +1683,7 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
 				   FigCch_UNSIGNED,&NumCtysWithInss))
      {
       /***** Get current number of countries with institutions from cache *****/
-      NumCtysWithInss = (unsigned)
-      DB_QueryCOUNT ("can not get number of countries with institutions",
-		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
-		      " FROM cty_countrs,"
-			    "ins_instits"
-		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod");
+      NumCtysWithInss = Cty_DB_GetNumCtysWithInss ();
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithInss);
      }
@@ -1846,14 +1704,7 @@ unsigned Cty_GetCachedNumCtysWithCtrs (void)
 				   FigCch_UNSIGNED,&NumCtysWithCtrs))
      {
       /***** Get current number of countries with centers from database and update cache *****/
-      NumCtysWithCtrs = (unsigned)
-      DB_QueryCOUNT ("can not get number of countries with centers",
-		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
-		      " FROM cty_countrs,"
-		            "ins_instits,"
-		            "ctr_centers"
-		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
-		       " AND ins_instits.InsCod=ctr_centers.InsCod");
+      NumCtysWithCtrs = Cty_DB_GetNumCtysWithCtrs ();
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCtrs);
      }
@@ -1869,19 +1720,12 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
   {
    unsigned NumCtysWithDegs;
 
+   /***** Get number of countries with degrees from cache *****/
    if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithDegs))
      {
-      NumCtysWithDegs = (unsigned)
-      DB_QueryCOUNT ("can not get number of countries with degrees",
-		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
-		      " FROM cty_countrs,"
-		            "ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees"
-		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
-		       " AND ins_instits.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod");
+      /***** Get current number of countries with degrees from database and update cache *****/
+      NumCtysWithDegs = Cty_DB_GetNumCtysWithDegs ();
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithDegs);
      }
@@ -1902,18 +1746,7 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
 				   FigCch_UNSIGNED,&NumCtysWithCrss))
      {
       /***** Get current number of countries with courses from database and update cache *****/
-      NumCtysWithCrss = (unsigned)
-      DB_QueryCOUNT ("can not get number of countries with courses",
-		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
-		      " FROM cty_countrs,"
-		            "ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees,"
-		            "crs_courses"
-		     " WHERE cty_countrs.CtyCod=ins_instits.CtyCod"
-		       " AND ins_instits.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		       " AND deg_degrees.DegCod=crs_courses.DegCod");
+      NumCtysWithCrss = Cty_DB_GetNumCtysWithCrss ();
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
      }
@@ -1941,23 +1774,7 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
 				   FigCch_UNSIGNED,&NumCtysWithUsrs))
      {
       /***** Get current number of countries with users from database and update cache *****/
-      NumCtysWithUsrs = (unsigned)
-      DB_QueryCOUNT ("can not get number of countries with users",
-		     "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"
-		      " FROM cty_countrs,"
-		            "ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees,"
-		            "crs_courses,"
-		            "crs_users"
-		     " WHERE %s"
-		            "cty_countrs.CtyCod=ins_instits.CtyCod"
-		       " AND ins_instits.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		       " AND deg_degrees.DegCod=crs_courses.DegCod"
-		       " AND crs_courses.CrsCod=crs_users.CrsCod"
-		       " AND crs_users.Role=%u",
-		     SubQuery,(unsigned) Role);
+      NumCtysWithUsrs = Cty_DB_GetNumCtysWithUsrs (Role,SubQuery);
       FigCch_UpdateFigureIntoCache (FigureCtys[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtysWithUsrs);
      }
@@ -2061,7 +1878,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
   {
    extern const char *Txt_Map;
 
-   if (Cty_GetIfMapIsAvailable (Cty->CtyCod))
+   if (Cty_DB_GetIfMapIsAvailable (Cty->CtyCod))
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,
@@ -2069,38 +1886,4 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }
-  }
-
-/*****************************************************************************/
-/************ Check if any of the centers in a country has map ***************/
-/*****************************************************************************/
-
-bool Cty_GetIfMapIsAvailable (long CtyCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool MapIsAvailable = false;
-
-   /***** Get if any center in current country has a coordinate set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
-		       "SELECT EXISTS"
-		       "(SELECT *"
-		        " FROM ins_instits,"
-		              "ctr_centers"
-		       " WHERE ins_instits.CtyCod=%ld"
-		         " AND ins_instits.InsCod=ctr_centers.InsCod"
-		         " AND (ctr_centers.Latitude<>0"
-		           " OR ctr_centers.Longitude<>0))",
-		       CtyCod))
-     {
-      /* Get if map is available */
-      row = mysql_fetch_row (mysql_res);
-      MapIsAvailable = (row[0][0] == '1');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MapIsAvailable;
   }

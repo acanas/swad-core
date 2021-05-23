@@ -29,6 +29,7 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_country.h"
 #include "swad_map.h"
 #include "swad_media.h"
 
@@ -40,13 +41,33 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Cty_DB_CreateCountry (const struct Cty_Countr *Cty);
+
 unsigned Cty_DB_GetBasicListOfCountries (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetListOfCountriesWithPendingInss (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetFullListOfCountries (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetDataOfCountryByCod (MYSQL_RES **mysql_res,long CtyCod);
+void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
+			    char CtyName[Cty_MAX_BYTES_NAME + 1]);
+
+unsigned Cty_DB_GetNumCtysWithInss (void);
+unsigned Cty_DB_GetNumCtysWithCtrs (void);
+unsigned Cty_DB_GetNumCtysWithDegs (void);
+unsigned Cty_DB_GetNumCtysWithCrss (void);
+unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery);
+
+bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
+bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
+bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
 
 void Cty_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod);
+bool Cty_DB_GetIfMapIsAvailable (long CtyCod);
+
+void Cty_DB_UpdateCtyField (long CtyCod,const char *FieldName,const char *FieldValue);
 void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
+
+void Cty_DB_RemoveCty (long CtyCod);
 
 #endif
