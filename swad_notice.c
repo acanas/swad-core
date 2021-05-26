@@ -1087,3 +1087,30 @@ static long Not_GetParamNotCod (void)
    /***** Get notice code *****/
    return Par_GetParToLong ("NotCod");
   }
+
+/*****************************************************************************/
+/************************* Remove notices in a course ************************/
+/*****************************************************************************/
+
+void Not_DB_RemoveCrsNotices (long CrsCod)
+  {
+   /***** Copy all notices from the course to table of deleted notices *****/
+   DB_QueryINSERT ("can not remove notices in a course",
+		   "INSERT INTO not_deleted"
+		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+		   " SELECT NotCod,"
+			   "CrsCod,"
+			   "UsrCod,"
+			   "CreatTime,"
+			   "Content,"
+			   "NumNotif"
+		    " FROM not_notices"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+
+   /***** Remove all notices from the course *****/
+   DB_QueryDELETE ("can not remove notices in a course",
+		   "DELETE FROM not_notices"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }

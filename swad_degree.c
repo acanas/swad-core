@@ -1529,7 +1529,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Svy_RemoveSurveys (Hie_Lvl_DEG,DegCod);
 
    /***** Remove information related to files in degree *****/
-   Brw_RemoveDegFilesFromDB (DegCod);
+   Brw_DB_RemoveDegFiles (DegCod);
 
    /***** Remove directories of the degree *****/
    snprintf (PathDeg,sizeof (PathDeg),"%s/%02u/%u",

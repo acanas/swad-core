@@ -113,7 +113,7 @@ void Cty_DB_CreateCountry (const struct Cty_Countr *Cty)
 /********** Get basic list of countries ordered by name of country ***********/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetBasicListOfCountries (MYSQL_RES **mysql_res)
+unsigned Cty_DB_GetCtysBasic (MYSQL_RES **mysql_res)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -131,7 +131,7 @@ unsigned Cty_DB_GetBasicListOfCountries (MYSQL_RES **mysql_res)
 /******************* Get countries with pending institutions *****************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetListOfCountriesWithPendingInss (MYSQL_RES **mysql_res)
+unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
@@ -155,7 +155,7 @@ unsigned Cty_DB_GetListOfCountriesWithPendingInss (MYSQL_RES **mysql_res)
 /********** and number of users who claim to belong to them        ***********/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetFullListOfCountries (MYSQL_RES **mysql_res)
+unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char StrField[32];

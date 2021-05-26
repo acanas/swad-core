@@ -126,7 +126,7 @@ void Cty_SeeCtyWithPendingInss (void)
      }
 
    /***** Get countries with pending institutions *****/
-   if ((NumCtys = Cty_DB_GetListOfCountriesWithPendingInss (&mysql_res)))
+   if ((NumCtys = Cty_DB_GetCtysWithPendingInss (&mysql_res)))
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Countries_with_pending_institutions,
@@ -748,7 +748,7 @@ void Cty_GetBasicListOfCountries (void)
       return;
 
    /***** Get countries from database *****/
-   if ((Gbl.Hierarchy.Ctys.Num = Cty_DB_GetBasicListOfCountries (&mysql_res))) // Countries found...
+   if ((Gbl.Hierarchy.Ctys.Num = Cty_DB_GetCtysBasic (&mysql_res))) // Countries found...
      {
       /***** Create list with countries *****/
       if ((Gbl.Hierarchy.Ctys.Lst = calloc ((size_t) Gbl.Hierarchy.Ctys.Num,
@@ -809,7 +809,7 @@ void Cty_GetFullListOfCountries (void)
       return;
 
    /***** Get countries from database *****/
-   if ((Gbl.Hierarchy.Ctys.Num = Cty_DB_GetFullListOfCountries (&mysql_res))) // Countries found...
+   if ((Gbl.Hierarchy.Ctys.Num = Cty_DB_GetCtysFull (&mysql_res))) // Countries found...
      {
       /***** Create list with countries *****/
       if ((Gbl.Hierarchy.Ctys.Lst = calloc ((size_t) Gbl.Hierarchy.Ctys.Num,
@@ -871,15 +871,15 @@ void Cty_WriteSelectorOfCountry (void)
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeIns);
 
-      /* Begin selector of country */
+      /***** Begin selector of country *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"id=\"cty\" name=\"cty\" class=\"HIE_SEL\"");
 
-         /* Initial disabled option */
+         /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Cty.CtyCod < 0,true,
 		     "[%s]",Txt_Country);
 
-	 /* List countries */
+	 /***** List countries *****/
 	 for (NumCty = 0;
 	      NumCty < Gbl.Hierarchy.Ctys.Num;
 	      NumCty++)
@@ -887,7 +887,7 @@ void Cty_WriteSelectorOfCountry (void)
 			Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod,false,
 			"%s",Gbl.Hierarchy.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
 
-      /* End selector of country */
+      /***** End selector of country *****/
       HTM_SELECT_End ();
 
    /***** End form *****/

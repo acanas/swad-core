@@ -4173,7 +4173,7 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
 /******** Remove files related to an institution from the database ***********/
 /*****************************************************************************/
 
-void Brw_RemoveInsFilesFromDB (long InsCod)
+void Brw_DB_RemoveInsFiles (long InsCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of an institution",
@@ -4241,7 +4241,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 /************ Remove files related to a center from the database *************/
 /*****************************************************************************/
 
-void Brw_RemoveCtrFilesFromDB (long CtrCod)
+void Brw_DB_RemoveCtrFiles (long CtrCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a center",
@@ -4305,7 +4305,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 /************ Remove files related to a degree from the database *************/
 /*****************************************************************************/
 
-void Brw_RemoveDegFilesFromDB (long DegCod)
+void Brw_DB_RemoveDegFiles (long DegCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views to files of a degree",
@@ -4373,7 +4373,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
    so this function must be called
    before removing groups and projects */
 
-void Brw_RemoveCrsFilesFromDB (long CrsCod)
+void Brw_DB_RemoveCrsFiles (long CrsCod)
   {
    char SubqueryGrp[256];
    char SubqueryPrj[128];

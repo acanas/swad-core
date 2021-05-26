@@ -1372,7 +1372,7 @@ void Ins_RemoveInstitution (void)
       Svy_RemoveSurveys (Hie_Lvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove information related to files in institution *****/
-      Brw_RemoveInsFilesFromDB (Ins_EditingIns->InsCod);
+      Brw_DB_RemoveInsFiles (Ins_EditingIns->InsCod);
 
       /***** Remove directories of the institution *****/
       snprintf (PathIns,sizeof (PathIns),"%s/%02u/%u",

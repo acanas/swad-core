@@ -1174,470 +1174,470 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
          Cfe_PutHiddenParamExaCod (ExaCod);
      }
 
-   /***** Begin table *****/
-   HTM_TABLE_Begin ("%s CELLS_PAD_2",
-                    ClassCallForExam[TypeViewCallForExam][CallsForExams->CallForExam.Status]);
+      /***** Begin table *****/
+      HTM_TABLE_Begin ("%s CELLS_PAD_2",
+		       ClassCallForExam[TypeViewCallForExam][CallsForExams->CallForExam.Status]);
 
-   /***** Institution logo *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-   if (TypeViewCallForExam == Cfe_PRINT_VIEW)
-      HTM_SPAN_Begin ("class=\"EXAM_TIT\"");
-   else
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
-                   Ins.WWW);
-   Lgo_DrawLogo (Hie_Lvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (Ins.FullName);
-   if (TypeViewCallForExam == Cfe_PRINT_VIEW)
-      HTM_SPAN_End ();
-   else
-      HTM_A_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 /***** Institution logo *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
+	       if (TypeViewCallForExam == Cfe_PRINT_VIEW)
+		  HTM_SPAN_Begin ("class=\"EXAM_TIT\"");
+	       else
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
+			       Ins.WWW);
+	       Lgo_DrawLogo (Hie_Lvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
+	       HTM_BR ();
+	       HTM_Txt (Ins.FullName);
+	       if (TypeViewCallForExam == Cfe_PRINT_VIEW)
+		  HTM_SPAN_End ();
+	       else
+		  HTM_A_End ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /***** Degree *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM_TIT CM\"");
-   if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
-                   Gbl.Hierarchy.Deg.WWW);
-   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
-      HTM_A_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 /***** Degree *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"EXAM_TIT CM\"");
+	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
+			       Gbl.Hierarchy.Deg.WWW);
+	       HTM_Txt (Gbl.Hierarchy.Deg.FullName);
+	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
+		  HTM_A_End ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /***** Title *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM CM\"");
-   HTM_NBSP ();
-   HTM_BR ();
-   HTM_STRONG_Begin ();
-   HTM_Txt (Txt_CALL_FOR_EXAM);
-   HTM_STRONG_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 /***** Title *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"EXAM CM\"");
+	       HTM_NBSP ();
+	       HTM_BR ();
+	       HTM_STRONG_Begin ();
+		  HTM_Txt (Txt_CALL_FOR_EXAM);
+	       HTM_STRONG_End ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"EXAM LM\"");
-   HTM_NBSP ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"EXAM LM\"");
+	       HTM_NBSP ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /***** Name of the course *****/
-   HTM_TR_Begin (NULL);
+	 /***** Name of the course *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "CrsName" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Course);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "CrsName" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Course);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-      HTM_INPUT_TEXT ("CrsName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
-                      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"CrsName\" size=\"30\"");
-   else
-     {
-      HTM_STRONG_Begin ();
-      HTM_Txt (CallsForExams->CallForExam.CrsFullName);
-      HTM_STRONG_End ();
-     }
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		  HTM_INPUT_TEXT ("CrsName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"CrsName\" size=\"30\"");
+	       else
+		 {
+		  HTM_STRONG_Begin ();
+		     HTM_Txt (CallsForExams->CallForExam.CrsFullName);
+		  HTM_STRONG_End ();
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
-   HTM_TR_Begin (NULL);
+	 /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "Year" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Year_or_semester);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "Year" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Year_or_semester);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"Year\" name=\"Year\"");
-      for (Year = 0;
-	   Year <= Deg_MAX_YEARS_PER_DEGREE;
-	   Year++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-		     CallsForExams->CallForExam.Year == Year,false,
-		     "%s",Txt_YEAR_OF_DEGREE[Year]);
-      HTM_SELECT_End ();
-     }
-   else
-      HTM_Txt (Txt_YEAR_OF_DEGREE[CallsForExams->CallForExam.Year]);
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "id=\"Year\" name=\"Year\"");
+		     for (Year = 0;
+			  Year <= Deg_MAX_YEARS_PER_DEGREE;
+			  Year++)
+			HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+				    CallsForExams->CallForExam.Year == Year,false,
+				    "%s",Txt_YEAR_OF_DEGREE[Year]);
+		  HTM_SELECT_End ();
+		 }
+	       else
+		  HTM_Txt (Txt_YEAR_OF_DEGREE[CallsForExams->CallForExam.Year]);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Exam session *****/
-   HTM_TR_Begin (NULL);
+	 /***** Exam session *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamSession" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Session);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamSession" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Session);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-      HTM_INPUT_TEXT ("ExamSession",Cfe_MAX_CHARS_SESSION,CallsForExams->CallForExam.Session,
-                      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"ExamSession\" size=\"30\"");
-   else
-      HTM_Txt (CallsForExams->CallForExam.Session);
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		  HTM_INPUT_TEXT ("ExamSession",Cfe_MAX_CHARS_SESSION,CallsForExams->CallForExam.Session,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"ExamSession\" size=\"30\"");
+	       else
+		  HTM_Txt (CallsForExams->CallForExam.Session);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Date of the exam *****/
-   HTM_TR_Begin (NULL);
+	 /***** Date of the exam *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-                    TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamYear" :
-	                                                   NULL,
-	            Txt_CALL_FOR_EXAM_Exam_date);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamYear" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Exam_date);
 
-   /* Data */
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TD_Begin ("class=\"LB\"");
-      Dat_WriteFormDate (CallsForExams->CallForExam.ExamDate.Year < Gbl.Now.Date.Year ? CallsForExams->CallForExam.ExamDate.Year :
-                                                                                        Gbl.Now.Date.Year,
-                         Gbl.Now.Date.Year + 1,"Exam",
-                         &(CallsForExams->CallForExam.ExamDate),
-                         false,false);
-      HTM_TD_End ();
-     }
-   else
-     {
-      Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,
-                             StrExamDate);
-      HTM_TD_Begin ("class=\"EXAM LB\"");
-      HTM_Txt (StrExamDate);
-      HTM_TD_End ();
-     }
-   HTM_TR_End ();
+	    /* Data */
+	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
+	      {
+	       HTM_TD_Begin ("class=\"LB\"");
+		  Dat_WriteFormDate (CallsForExams->CallForExam.ExamDate.Year < Gbl.Now.Date.Year ? CallsForExams->CallForExam.ExamDate.Year :
+												    Gbl.Now.Date.Year,
+				     Gbl.Now.Date.Year + 1,"Exam",
+				     &(CallsForExams->CallForExam.ExamDate),
+				     false,false);
+	       HTM_TD_End ();
+	      }
+	    else
+	      {
+	       Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,
+				      StrExamDate);
+	       HTM_TD_Begin ("class=\"EXAM LB\"");
+		  HTM_Txt (StrExamDate);
+	       HTM_TD_End ();
+	      }
+	 HTM_TR_End ();
 
-   /***** Start time *****/
-   HTM_TR_Begin (NULL);
+	 /***** Start time *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-                    TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamHour" :
-	                                                   NULL,
-	            Txt_CALL_FOR_EXAM_Start_time);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamHour" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Start_time);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"ExamHour\" name=\"ExamHour\"");
-      HTM_OPTION (HTM_Type_STRING,"0",
-		  CallsForExams->CallForExam.StartTime.Hour == 0,false,
-		  "-");
-      for (Hour = 7;
-	   Hour <= 22;
-	   Hour++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-		     CallsForExams->CallForExam.StartTime.Hour == Hour,false,
-		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
-      HTM_SELECT_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "id=\"ExamHour\" name=\"ExamHour\"");
+		     HTM_OPTION (HTM_Type_STRING,"0",
+				 CallsForExams->CallForExam.StartTime.Hour == 0,false,
+				 "-");
+		     for (Hour = 7;
+			  Hour <= 22;
+			  Hour++)
+			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
+				    CallsForExams->CallForExam.StartTime.Hour == Hour,false,
+				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
+		  HTM_SELECT_End ();
 
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"name=\"ExamMinute\"");
-      for (Minute = 0;
-	   Minute <= 59;
-	   Minute++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-		     CallsForExams->CallForExam.StartTime.Minute == Minute,false,
-		     "%02u &prime;",Minute);
-      HTM_SELECT_End ();
-     }
-   else if (CallsForExams->CallForExam.StartTime.Hour)
-      HTM_TxtF ("%2u:%02u",CallsForExams->CallForExam.StartTime.Hour,
-                           CallsForExams->CallForExam.StartTime.Minute);
-   HTM_TD_End ();
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "name=\"ExamMinute\"");
+		     for (Minute = 0;
+			  Minute <= 59;
+			  Minute++)
+			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
+				    CallsForExams->CallForExam.StartTime.Minute == Minute,false,
+				    "%02u &prime;",Minute);
+		  HTM_SELECT_End ();
+		 }
+	       else if (CallsForExams->CallForExam.StartTime.Hour)
+		  HTM_TxtF ("%2u:%02u",CallsForExams->CallForExam.StartTime.Hour,
+				       CallsForExams->CallForExam.StartTime.Minute);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Approximate duration of the exam *****/
-   HTM_TR_Begin (NULL);
+	 /***** Approximate duration of the exam *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-                    TypeViewCallForExam == Cfe_FORM_VIEW ? "DurationHour" :
-	                                                   NULL,
-	            Txt_CALL_FOR_EXAM_Approximate_duration);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "DurationHour" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Approximate_duration);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"DurationHour\" name=\"DurationHour\"");
-      for (Hour = 0;
-	   Hour <= 8;
-	   Hour++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
-		     CallsForExams->CallForExam.Duration.Hour == Hour,false,
-		     "%02u %s",Hour,Txt_hours_ABBREVIATION);
-      HTM_SELECT_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "id=\"DurationHour\" name=\"DurationHour\"");
+		     for (Hour = 0;
+			  Hour <= 8;
+			  Hour++)
+			HTM_OPTION (HTM_Type_UNSIGNED,&Hour,
+				    CallsForExams->CallForExam.Duration.Hour == Hour,false,
+				    "%02u %s",Hour,Txt_hours_ABBREVIATION);
+		  HTM_SELECT_End ();
 
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"name=\"DurationMinute\"");
-      for (Minute = 0;
-	   Minute <= 59;
-	   Minute++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
-		     CallsForExams->CallForExam.Duration.Minute == Minute,false,
-		     "%02u &prime;",Minute);
-      HTM_SELECT_End ();
-     }
-   else if (CallsForExams->CallForExam.Duration.Hour ||
-            CallsForExams->CallForExam.Duration.Minute)
-     {
-      if (CallsForExams->CallForExam.Duration.Hour)
-        {
-         if (CallsForExams->CallForExam.Duration.Minute)
-            HTM_TxtF ("%u%s %u&prime;",CallsForExams->CallForExam.Duration.Hour,
-                                       Txt_hours_ABBREVIATION,
-                                       CallsForExams->CallForExam.Duration.Minute);
-         else
-            HTM_TxtF ("%u&nbsp;%s",CallsForExams->CallForExam.Duration.Hour,
-				   CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
-					                                           Txt_hours);
-        }
-      else if (CallsForExams->CallForExam.Duration.Minute)
-        {
-         HTM_TxtF ("%u&nbsp;%s",CallsForExams->CallForExam.Duration.Minute,
-			        CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
-				                                                  Txt_minutes);
-        }
-     }
-   HTM_TD_End ();
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "name=\"DurationMinute\"");
+		     for (Minute = 0;
+			  Minute <= 59;
+			  Minute++)
+			HTM_OPTION (HTM_Type_UNSIGNED,&Minute,
+				    CallsForExams->CallForExam.Duration.Minute == Minute,false,
+				    "%02u &prime;",Minute);
+		  HTM_SELECT_End ();
+		 }
+	       else if (CallsForExams->CallForExam.Duration.Hour ||
+			CallsForExams->CallForExam.Duration.Minute)
+		 {
+		  if (CallsForExams->CallForExam.Duration.Hour)
+		    {
+		     if (CallsForExams->CallForExam.Duration.Minute)
+			HTM_TxtF ("%u%s %u&prime;",CallsForExams->CallForExam.Duration.Hour,
+						   Txt_hours_ABBREVIATION,
+						   CallsForExams->CallForExam.Duration.Minute);
+		     else
+			HTM_TxtF ("%u&nbsp;%s",CallsForExams->CallForExam.Duration.Hour,
+					       CallsForExams->CallForExam.Duration.Hour == 1 ? Txt_hour :
+											       Txt_hours);
+		    }
+		  else if (CallsForExams->CallForExam.Duration.Minute)
+		    {
+		     HTM_TxtF ("%u&nbsp;%s",CallsForExams->CallForExam.Duration.Minute,
+					    CallsForExams->CallForExam.Duration.Minute == 1 ? Txt_minute :
+											      Txt_minutes);
+		    }
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Place where the exam will be made *****/
-   HTM_TR_Begin (NULL);
+	 /***** Place where the exam will be made *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "Place" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Place_of_exam);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "Place" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Place_of_exam);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
-      HTM_Txt (CallsForExams->CallForExam.Place);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.Place,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.Place);
-     }
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
+		     HTM_Txt (CallsForExams->CallForExam.Place);
+		  HTM_TEXTAREA_End ();
+		 }
+	       else
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CallsForExams->CallForExam.Place,
+				    Cns_MAX_BYTES_TEXT,false);
+		  HTM_Txt (CallsForExams->CallForExam.Place);
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Exam mode *****/
-   HTM_TR_Begin (NULL);
+	 /***** Exam mode *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamMode" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Mode);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "ExamMode" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Mode);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
-      HTM_Txt (CallsForExams->CallForExam.Mode);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.Mode,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.Mode);
-     }
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
+	      {
+	       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
+		  HTM_Txt (CallsForExams->CallForExam.Mode);
+	       HTM_TEXTAREA_End ();
+	      }
+	    else
+	      {
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 CallsForExams->CallForExam.Mode,
+				 Cns_MAX_BYTES_TEXT,false);
+	       HTM_Txt (CallsForExams->CallForExam.Mode);
+	      }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Structure of the exam *****/
-   HTM_TR_Begin (NULL);
+	 /***** Structure of the exam *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "Structure" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Structure_of_the_exam);
+	 /* Label */
+	 Frm_LabelColumn ("RT",
+			  TypeViewCallForExam == Cfe_FORM_VIEW ? "Structure" :
+								 NULL,
+			  Txt_CALL_FOR_EXAM_Structure_of_the_exam);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
-      HTM_Txt (CallsForExams->CallForExam.Structure);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.Structure,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.Structure);
-     }
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"EXAM LB\"");
+	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
+	      {
+	       HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
+		  HTM_Txt (CallsForExams->CallForExam.Structure);
+	       HTM_TEXTAREA_End ();
+	      }
+	    else
+	      {
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 CallsForExams->CallForExam.Structure,
+				 Cns_MAX_BYTES_TEXT,false);
+	       HTM_Txt (CallsForExams->CallForExam.Structure);
+	      }
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Documentation required *****/
-   HTM_TR_Begin (NULL);
+	 /***** Documentation required *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "DocRequired" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Documentation_required);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "DocRequired" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Documentation_required);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
-      HTM_Txt (CallsForExams->CallForExam.DocRequired);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.DocRequired,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.DocRequired);
-     }
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
+		     HTM_Txt (CallsForExams->CallForExam.DocRequired);
+		  HTM_TEXTAREA_End ();
+		 }
+	       else
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CallsForExams->CallForExam.DocRequired,
+				    Cns_MAX_BYTES_TEXT,false);
+		  HTM_Txt (CallsForExams->CallForExam.DocRequired);
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Material required *****/
-   HTM_TR_Begin (NULL);
+	 /***** Material required *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "MatRequired" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Material_required);
+	 /* Label */
+	 Frm_LabelColumn ("RT",
+			  TypeViewCallForExam == Cfe_FORM_VIEW ? "MatRequired" :
+								 NULL,
+			  Txt_CALL_FOR_EXAM_Material_required);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
-      HTM_Txt (CallsForExams->CallForExam.MatRequired);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.MatRequired,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.MatRequired);
-     }
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"EXAM LB\"");
+	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
+	      {
+	       HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
+		  HTM_Txt (CallsForExams->CallForExam.MatRequired);
+	       HTM_TEXTAREA_End ();
+	      }
+	    else
+	      {
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 CallsForExams->CallForExam.MatRequired,
+				 Cns_MAX_BYTES_TEXT,false);
+	       HTM_Txt (CallsForExams->CallForExam.MatRequired);
+	      }
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Material allowed *****/
-   HTM_TR_Begin (NULL);
+	 /***** Material allowed *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "MatAllowed" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Material_allowed);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "MatAllowed" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Material_allowed);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
-      HTM_Txt (CallsForExams->CallForExam.MatAllowed);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.MatAllowed,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.MatAllowed);
-     }
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
+		     HTM_Txt (CallsForExams->CallForExam.MatAllowed);
+		  HTM_TEXTAREA_End ();
+		 }
+	       else
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CallsForExams->CallForExam.MatAllowed,
+				    Cns_MAX_BYTES_TEXT,false);
+		  HTM_Txt (CallsForExams->CallForExam.MatAllowed);
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Other information to students *****/
-   HTM_TR_Begin (NULL);
+	 /***** Other information to students *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",
-		    TypeViewCallForExam == Cfe_FORM_VIEW ? "OtherInfo" :
-			                                   NULL,
-		    Txt_CALL_FOR_EXAM_Other_information);
+	    /* Label */
+	    Frm_LabelColumn ("RT",
+			     TypeViewCallForExam == Cfe_FORM_VIEW ? "OtherInfo" :
+								    NULL,
+			     Txt_CALL_FOR_EXAM_Other_information);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"EXAM LB\"");
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-     {
-      HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");
-      HTM_Txt (CallsForExams->CallForExam.OtherInfo);
-      HTM_TEXTAREA_End ();
-     }
-   else
-     {
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        CallsForExams->CallForExam.OtherInfo,
-                        Cns_MAX_BYTES_TEXT,false);
-      HTM_Txt (CallsForExams->CallForExam.OtherInfo);
-     }
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
+		 {
+		  HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");
+		     HTM_Txt (CallsForExams->CallForExam.OtherInfo);
+		  HTM_TEXTAREA_End ();
+		 }
+	       else
+		 {
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    CallsForExams->CallForExam.OtherInfo,
+				    Cns_MAX_BYTES_TEXT,false);
+		  HTM_Txt (CallsForExams->CallForExam.OtherInfo);
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   if (TypeViewCallForExam == Cfe_FORM_VIEW)
-      Box_BoxTableWithButtonEnd ((ExaCod > 0) ? Btn_CONFIRM_BUTTON :
-	                                        Btn_CREATE_BUTTON,
-	                         Txt_Publish_call_FOR_EXAM);
-   else
-      Box_BoxTableEnd ();
+      /***** End table, send button and end box *****/
+      if (TypeViewCallForExam == Cfe_FORM_VIEW)
+	 Box_BoxTableWithButtonEnd ((ExaCod > 0) ? Btn_CONFIRM_BUTTON :
+						   Btn_CREATE_BUTTON,
+				    Txt_Publish_call_FOR_EXAM);
+      else
+	 Box_BoxTableEnd ();
 
-   /***** Show QR code *****/
-   if (TypeViewCallForExam == Cfe_PRINT_VIEW)
-      QR_ExamAnnnouncement ();
+      /***** Show QR code *****/
+      if (TypeViewCallForExam == Cfe_PRINT_VIEW)
+	 QR_ExamAnnnouncement ();
 
    /***** End article *****/
    if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
@@ -1839,4 +1839,18 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                  Txt_CALL_FOR_EXAM_Material_allowed,CallsForExams->CallForExam.MatAllowed,
                  Txt_CALL_FOR_EXAM_Other_information,CallsForExams->CallForExam.OtherInfo) < 0)
       Err_NotEnoughMemoryExit ();
+  }
+
+/*****************************************************************************/
+/*********** Mark all exam announcements in the course as deleted ************/
+/*****************************************************************************/
+
+void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long CrsCod)
+  {
+   DB_QueryUPDATE ("can not remove calls for exams of a course",
+		   "UPDATE cfe_exams"
+		     " SET Status=%u"
+		   " WHERE CrsCod=%ld",
+		   (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
+		   CrsCod);
   }

@@ -4309,7 +4309,19 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/************************ Remove a user from a course ************************/
+/*********** Remove all users' requests for inscription in a course **********/
+/*****************************************************************************/
+
+void Enr_DB_RemCrsRequests (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove requests for inscription to a course",
+		   "DELETE FROM crs_requests"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************ Remove user's requests for inscription from a course ***********/
 /*****************************************************************************/
 
 void Enr_DB_RemUsrRequests (long UsrCod)
@@ -4318,6 +4330,30 @@ void Enr_DB_RemUsrRequests (long UsrCod)
 		   "DELETE FROM crs_requests"
 		   " WHERE UsrCod=%ld",
 	           UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove all users from settings in a course ******************/
+/*****************************************************************************/
+
+void Enr_DB_RemAllUsrsFromCrsSettings (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove users from a course settings",
+		   "DELETE FROM crs_user_settings"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove all users from settings in a course ******************/
+/*****************************************************************************/
+
+void Enr_DB_RemAllUsrsFromCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove users from a course",
+		   "DELETE FROM crs_users"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
   }
 
 /*****************************************************************************/

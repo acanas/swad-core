@@ -1,7 +1,7 @@
-// swad_notice.h: notices (yellow notes)
+// swad_course_database.c: edition of courses operations with database
 
-#ifndef _SWAD_NOT
-#define _SWAD_NOT
+#ifndef _SWAD_CRS_DB
+#define _SWAD_CRS_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,7 +27,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_statistic.h"
+#include "swad_constant.h"
+#include "swad_course.h"
+#include "swad_role.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -37,46 +39,40 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Not_NUM_TYPES_LISTING 2
-typedef enum
-  {
-   Not_LIST_BRIEF_NOTICES = 0,
-   Not_LIST_FULL_NOTICES  = 1,
-  } Not_Listing_t;
-
-#define Not_NUM_STATUS 2
-typedef enum
-  {
-   Not_ACTIVE_NOTICE   = 0,
-   Not_OBSOLETE_NOTICE = 1,
-  } Not_Status_t;	// Don't change these numbers because they are used in database
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Not_ShowFormNotice (void);
-void Not_ReceiveNotice (void);
-void Not_ListNoticesAfterRemoval (void);
-void Not_ListFullNotices (void);
-void Not_GetHighLightedNotCod (void);
+void Crs_DB_CreateCourse (struct Crs_Course *Crs,unsigned Status);
 
-void Not_HideActiveNotice (void);
-void Not_RevealHiddenNotice (void);
+unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
+unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);
+unsigned Crs_DB_GetDataOfCourseByCod (MYSQL_RES **mysql_res,long CrsCod);
+void Crs_DB_GetShortNamesByCod (long CrsCod,
+                                char CrsShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+                                char DegShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+                                             long DegCod,unsigned Year);
+unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role);
+unsigned Crs_DB_GetOldCrss (MYSQL_RES **mysql_res,unsigned long SecondsWithoutAccess);
 
-void Not_RequestRemNotice (void);
-void Not_RemoveNotice (void);
+unsigned Crs_DB_GetNumCrssInCty (long CtyCod);
+unsigned Crs_DB_GetNumCrssInIns (long InsCod);
+unsigned Crs_DB_GetNumCrssInCtr (long CtrCod);
+unsigned Crs_DB_GetNumCrssInDeg (long DegCod);
+unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
-void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod);
+void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
+void Crs_DB_UpdateCrsStatus (long CrsCod,Crs_Status_t Status);
+void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear);
+void Crs_DB_UpdateCrsName (long CrsCod,const char *FieldName,const char *NewCrsName);
+void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod);
 
-void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                     char **ContentStr,
-                                     long NotCod,bool GetContent);
-unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *NumNotif);
-unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif);
+void Crs_DB_UpdateCrsLastClick (void);
 
-void Not_PutHiddenParamNotCod (long NotCod);
-
-void Not_DB_RemoveCrsNotices (long CrsCod);
+void Crs_DB_RemoveCrsInfo (long CrsCod);
+void Crs_DB_RemoveCrsTimetable (long CrsCod);
+void Crs_DB_RemoveCrsLast (long CrsCod);
+void Crs_DB_RemoveCrs (long CrsCod);
 
 #endif

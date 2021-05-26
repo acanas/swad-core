@@ -43,9 +43,9 @@
 
 void Cty_DB_CreateCountry (const struct Cty_Countr *Cty);
 
-unsigned Cty_DB_GetBasicListOfCountries (MYSQL_RES **mysql_res);
-unsigned Cty_DB_GetListOfCountriesWithPendingInss (MYSQL_RES **mysql_res);
-unsigned Cty_DB_GetFullListOfCountries (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetCtysBasic (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetDataOfCountryByCod (MYSQL_RES **mysql_res,long CtyCod);
 void Cty_DB_GetCountryName (long CtyCod,Lan_Language_t Language,
 			    char CtyName[Cty_MAX_BYTES_NAME + 1]);

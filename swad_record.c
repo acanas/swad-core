@@ -4236,3 +4236,30 @@ void Rec_UpdateMyOfficePhone (void)
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
   }
+
+/*****************************************************************************/
+/******************** Remove content of course record cards ******************/
+/*****************************************************************************/
+
+void Rec_DB_RemoveCrsRecordContents (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove content of cards in a course",
+		   "DELETE FROM crs_records"
+		   " USING crs_record_fields,"
+			  "crs_records"
+		   " WHERE crs_record_fields.CrsCod=%ld"
+		     " AND crs_record_fields.FieldCod=crs_records.FieldCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************ Remove definition of fields in course record cards *************/
+/*****************************************************************************/
+
+void Rec_DB_RemoveCrsRecordFields (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove fields of cards in a course",
+		   "DELETE FROM crs_record_fields"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }

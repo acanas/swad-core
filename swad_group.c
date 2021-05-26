@@ -5147,3 +5147,36 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
 
    return Gbl.Crs.Grps.WhichGrps;
   }
+
+/*****************************************************************************/
+/************************** Remove groups in a course ************************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveCrsGrps (long CrsCod)
+  {
+   /***** Remove all the users in groups in the course *****/
+   DB_QueryDELETE ("can not remove users from groups of a course",
+		   "DELETE FROM grp_users"
+		   " USING grp_types,"
+			  "grp_groups,"
+			  "grp_users"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod",
+		   CrsCod);
+
+   /***** Remove all the groups in the course *****/
+   DB_QueryDELETE ("can not remove groups of a course",
+		   "DELETE FROM grp_groups"
+		   " USING grp_types,"
+			  "grp_groups"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
+		   CrsCod);
+
+   /***** Remove all the group types in the course *****/
+   DB_QueryDELETE ("can not remove types of group of a course",
+		   "DELETE FROM grp_types"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }

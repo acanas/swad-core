@@ -1232,7 +1232,7 @@ void Ctr_RemoveCenter (void)
       Svy_RemoveSurveys (Hie_Lvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove information related to files in center *****/
-      Brw_RemoveCtrFilesFromDB (Ctr_EditingCtr->CtrCod);
+      Brw_DB_RemoveCtrFiles (Ctr_EditingCtr->CtrCod);
 
       /***** Remove all rooms in center *****/
       Roo_RemoveAllRoomsInCtr (Ctr_EditingCtr->CtrCod);

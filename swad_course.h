@@ -71,12 +71,6 @@ typedef enum
    Crs_STATUS_REMOVED = 3,	// 1- (Status & Crs_STATUS_BIT_REMOVED)
   } Crs_StatusTxt_t;
 
-typedef enum
-  {
-   Crs_ACTIVE_COURSES = 0,			// Courses with all Status bits == 0
-   Crs_ALL_COURSES_EXCEPT_REMOVED = 1,	// Courses with Status bit Crs_STATUS_BIT_REMOVED == 0
-  } Crs_WhatCourses_t;
-
 struct Crs_Course
   {
    long CrsCod;
@@ -137,13 +131,15 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);
+
+void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,
+                                    const char *NewInstitutionalCrsCod);
 void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear);
-void Crs_UpdateInstitutionalCrsCod (struct Crs_Course *Crs,const char *NewInstitutionalCrsCod);
+
 void Crs_RenameCourseShort (void);
 void Crs_RenameCourseFull (void);
 void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
-bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
-                                          long DegCod,unsigned Year);
+
 void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);
 

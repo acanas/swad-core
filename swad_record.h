@@ -180,4 +180,7 @@ void Rec_UpdateMyDepartment (void);
 void Rec_UpdateMyOffice (void);
 void Rec_UpdateMyOfficePhone (void);
 
+void Rec_DB_RemoveCrsRecordContents (long CrsCod);
+void Rec_DB_RemoveCrsRecordFields (long CrsCod);
+
 #endif

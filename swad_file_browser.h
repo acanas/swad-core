@@ -185,10 +185,10 @@ void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 
-void Brw_RemoveInsFilesFromDB (long InsCod);
-void Brw_RemoveCtrFilesFromDB (long CtrCod);
-void Brw_RemoveDegFilesFromDB (long DegCod);
-void Brw_RemoveCrsFilesFromDB (long CrsCod);
+void Brw_DB_RemoveInsFiles (long InsCod);
+void Brw_DB_RemoveCtrFiles (long CtrCod);
+void Brw_DB_RemoveDegFiles (long DegCod);
+void Brw_DB_RemoveCrsFiles (long CrsCod);
 void Brw_RemoveGrpFilesFromDB (long GrpCod);
 void Brw_RemovePrjFilesFromDB (long PrjCod);
 void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod);
