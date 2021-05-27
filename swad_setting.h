@@ -48,6 +48,8 @@ void Set_RemoveOldSettingsFromIP (void);
 void Set_ChangeSideCols (void);
 unsigned Set_GetParamSideCols (void);
 
+void Set_DB_UpdateMySettingsAboutDateFormat (void);
+
 void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);
 void Set_BeginOneSettingSelector (void);

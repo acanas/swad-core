@@ -340,6 +340,20 @@ unsigned Set_GetParamSideCols (void)
   }
 
 /*****************************************************************************/
+/******************** Update my settings about date format *******************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutDateFormat (void)
+  {
+   DB_QueryUPDATE ("can not update your setting about date format",
+		   "UPDATE usr_data"
+		     " SET DateFormat=%u"
+		   " WHERE UsrCod=%ld",
+		   (unsigned) Gbl.Prefs.DateFormat,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /*********** Head to select one or several settings using icons **************/
 /*****************************************************************************/
 /*

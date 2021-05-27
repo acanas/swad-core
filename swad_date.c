@@ -133,32 +133,35 @@ void Dat_PutBoxToSelectDateFormat (void)
                  Dat_PutIconsDateFormat,NULL,
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
-   /***** Form with list of options *****/
-   Frm_BeginForm (ActChgDatFmt);
+      /***** Form with list of options *****/
+      Frm_BeginForm (ActChgDatFmt);
 
-   HTM_UL_Begin ("class=\"LIST_LEFT\"");
-   for (Format  = (Dat_Format_t) 0;
-	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
-	Format++)
-     {
-      HTM_LI_Begin ("class=\"%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
-						                     "DAT");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("DateFormat",true,
-		       " value=\"%u\"%s",
-	               (unsigned) Format,
-                       Format == Gbl.Prefs.DateFormat ? " checked=\"checked\"" : "");
-      Dat_PutSpanDateFormat (Format);
-      Dat_PutScriptDateFormat (Format);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
-     }
+         /***** Begin list *****/
+	 HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   /***** End list *****/
-   HTM_UL_End ();
+	    for (Format  = (Dat_Format_t) 0;
+		 Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
+		 Format++)
+	      {
+	       HTM_LI_Begin ("class=\"%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
+									       "DAT");
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("DateFormat",true,
+				      " value=\"%u\"%s",
+				      (unsigned) Format,
+				      Format == Gbl.Prefs.DateFormat ? " checked=\"checked\"" :
+					                               "");
+		     Dat_PutSpanDateFormat (Format);
+		     Dat_PutScriptDateFormat (Format);
+		  HTM_LABEL_End ();
+	       HTM_LI_End ();
+	      }
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End list *****/
+	 HTM_UL_End ();
+
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -205,12 +208,7 @@ void Dat_ChangeDateFormat (void)
 
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your setting about date format",
-		      "UPDATE usr_data"
-		        " SET DateFormat=%u"
-		      " WHERE UsrCod=%ld",
-                      (unsigned) Gbl.Prefs.DateFormat,
-                      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Set_DB_UpdateMySettingsAboutDateFormat ();
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();
@@ -333,46 +331,46 @@ void Dat_ShowClientLocalTime (void)
    /* Begin container */
    HTM_DIV_Begin ("id=\"current_date\"");
 
-   /* Month with link to calendar */
-   HTM_DIV_Begin ("id=\"current_month\"");
-   Frm_BeginForm (ActSeeCal);
-   HTM_BUTTON_SUBMIT_Begin (Txt_Show_calendar,"BT_LINK CURRENT_MONTH",NULL);
-   HTM_SPAN_Begin ("id=\"current_month_txt\"");
-   // JavaScript will write HTML here
-   HTM_SPAN_End ();
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_DIV_End ();
+      /* Month with link to calendar */
+      HTM_DIV_Begin ("id=\"current_month\"");
+	 Frm_BeginForm (ActSeeCal);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Show_calendar,"BT_LINK CURRENT_MONTH",NULL);
+	       HTM_SPAN_Begin ("id=\"current_month_txt\"");
+	       // JavaScript will write HTML here
+	       HTM_SPAN_End ();
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_DIV_End ();
 
-   /* Day with link to agenda (if I am logged) */
-   HTM_DIV_Begin ("id=\"current_day\"");
-   if (Gbl.Usrs.Me.Logged)
-     {
-      Frm_BeginForm (ActSeeMyAgd);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Show_agenda,"BT_LINK CURRENT_DAY",NULL);
-     }
-   HTM_SPAN_Begin ("id=\"current_day_txt\"");
-   // JavaScript will write HTML here
-   HTM_SPAN_End ();
-   if (Gbl.Usrs.Me.Logged)
-     {
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   HTM_DIV_End ();
+      /* Day with link to agenda (if I am logged) */
+      HTM_DIV_Begin ("id=\"current_day\"");
+	 if (Gbl.Usrs.Me.Logged)
+	   {
+	    Frm_BeginForm (ActSeeMyAgd);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Show_agenda,"BT_LINK CURRENT_DAY",NULL);
+	   }
+	 HTM_SPAN_Begin ("id=\"current_day_txt\"");
+	 // JavaScript will write HTML here
+	 HTM_SPAN_End ();
+	 if (Gbl.Usrs.Me.Logged)
+	   {
+	    HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+      HTM_DIV_End ();
 
-   /* Time */
-   HTM_DIV_Begin ("id=\"current_time\"");	// JavaScript will write HTML here
-   HTM_DIV_End ();
+      /* Time */
+      HTM_DIV_Begin ("id=\"current_time\"");	// JavaScript will write HTML here
+      HTM_DIV_End ();
 
    /* End container */
    HTM_DIV_End ();
 
    /* Write script to draw the month */
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("secondsSince1970UTC = %ld;\n"
-             "writeLocalClock();\n",
-             (long) Gbl.StartExecutionTimeUTC);
+      HTM_TxtF ("secondsSince1970UTC = %ld;\n"
+		"writeLocalClock();\n",
+		(long) Gbl.StartExecutionTimeUTC);
    HTM_SCRIPT_End ();
   }
 
@@ -449,47 +447,47 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS
    /***** Start date-time *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_START_TIME]);
+      /* Label */
+      Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_START_TIME]);
 
-   /* Data (date-time) */
-   HTM_TD_Begin ("class=\"LM\"");
-   Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
-                                                "Start",
-                                                Gbl.DateRange.TimeUTC[Dat_START_TIME],
-                                                Cfg_LOG_START_YEAR,
-				                Gbl.Now.Date.Year,
-				                Dat_FORM_SECONDS_ON,
-				                SetHMS[Dat_START_TIME],
-				                false);	// Don't submit on change
+      /* Data (date-time) */
+      HTM_TD_Begin ("class=\"LM\"");
+	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
+						      "Start",
+						      Gbl.DateRange.TimeUTC[Dat_START_TIME],
+						      Cfg_LOG_START_YEAR,
+						      Gbl.Now.Date.Year,
+						      Dat_FORM_SECONDS_ON,
+						      SetHMS[Dat_START_TIME],
+						      false);	// Don't submit on change
 
-   /* "Yesterday" and "Today" buttons */
-   HTM_NBSP ();
-   HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
-		     "onclick=\"setDateToYesterday('Start','End');\"");
-   HTM_INPUT_BUTTON ("Today",Txt_Today,
-		     "onclick=\"setDateToToday('Start','End');\"");
-   HTM_TD_End ();
+	 /* "Yesterday" and "Today" buttons */
+	 HTM_NBSP ();
+	 HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
+			   "onclick=\"setDateToYesterday('Start','End');\"");
+	 HTM_INPUT_BUTTON ("Today",Txt_Today,
+			   "onclick=\"setDateToToday('Start','End');\"");
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** End date-time *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_END_TIME]);
+      /* Label */
+      Frm_LabelColumn ("RM","",Txt_START_END_TIME[Dat_END_TIME]);
 
-   /* Data (date-time) */
-   HTM_TD_Begin ("class=\"LM\"");
-   Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
-                                                "End",
-                                                Gbl.DateRange.TimeUTC[Dat_END_TIME],
-                                                Cfg_LOG_START_YEAR,
-				                Gbl.Now.Date.Year,
-				                Dat_FORM_SECONDS_ON,
-				                SetHMS[Dat_END_TIME],
-				                false);	// Don't submit on change
-   HTM_TD_End ();
+      /* Data (date-time) */
+      HTM_TD_Begin ("class=\"LM\"");
+	 Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
+						      "End",
+						      Gbl.DateRange.TimeUTC[Dat_END_TIME],
+						      Cfg_LOG_START_YEAR,
+						      Gbl.Now.Date.Year,
+						      Dat_FORM_SECONDS_ON,
+						      SetHMS[Dat_END_TIME],
+						      false);	// Don't submit on change
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -517,20 +515,20 @@ void Dat_PutFormStartEndClientLocalDateTimes (const time_t TimeUTC[Dat_NUM_START
       /***** Date-time *****/
       HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("RM","",Txt_START_END_TIME[StartEndTime]);
+	 /* Label */
+	 Frm_LabelColumn ("RM","",Txt_START_END_TIME[StartEndTime]);
 
-      /* Data */
-      HTM_TD_Begin ("class=\"LM\"");
-      Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
-                                                   Id[StartEndTime],
-	                                           TimeUTC[StartEndTime],
-	                                           Cfg_LOG_START_YEAR,
-	                                           Gbl.Now.Date.Year + 1,
-				                   FormSeconds,
-				                   SetHMS[StartEndTime],	// Set hour, minute and second?
-				                   false);			// Don't submit on change
-      HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LM\"");
+	    Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
+							 Id[StartEndTime],
+							 TimeUTC[StartEndTime],
+							 Cfg_LOG_START_YEAR,
+							 Gbl.Now.Date.Year + 1,
+							 FormSeconds,
+							 SetHMS[StartEndTime],	// Set hour, minute and second?
+							 false);			// Don't submit on change
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -566,153 +564,153 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("DATE_RANGE");
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Year *****/
-   HTM_TD_Begin ("class=\"RM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sYear\" name=\"%sYear\""
-			" onchange=\""
-			"adjustDateForm('%s');"
-			"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-			Id,ParamName,Id,Id,
-                        Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sYear\" name=\"%sYear\""
-			" onchange=\""
-			"adjustDateForm('%s');"
-			"setUTCFromLocalDateTimeForm('%s');\"",
-			Id,ParamName,Id,Id);
-   for (Year = FirstYear;
-	Year <= LastYear;
-	Year++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Year,false,false,
-		  "%u",Year);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Year *****/
+	 HTM_TD_Begin ("class=\"RM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sYear\" name=\"%sYear\""
+				 " onchange=\""
+				 "adjustDateForm('%s');"
+				 "setUTCFromLocalDateTimeForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,ParamName,Id,Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sYear\" name=\"%sYear\""
+				 " onchange=\""
+				 "adjustDateForm('%s');"
+				 "setUTCFromLocalDateTimeForm('%s');\"",
+				 Id,ParamName,Id,Id);
+	    for (Year = FirstYear;
+		 Year <= LastYear;
+		 Year++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Year,false,false,
+			   "%u",Year);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Month *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sMonth\" name=\"%sMonth\""
-                        " onchange=\""
-                        "adjustDateForm('%s');"
-                        "setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-	                Id,ParamName,Id,Id,
-                        Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sMonth\" name=\"%sMonth\""
-                        " onchange=\""
-                        "adjustDateForm('%s');"
-                        "setUTCFromLocalDateTimeForm('%s');\"",
-	                Id,ParamName,Id,Id);
-   for (Month = 1;
-	Month <= 12;
-	Month++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Month,false,false,
-		  "%s",Txt_MONTHS_SMALL[Month - 1]);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Month *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sMonth\" name=\"%sMonth\""
+				 " onchange=\""
+				 "adjustDateForm('%s');"
+				 "setUTCFromLocalDateTimeForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,ParamName,Id,Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sMonth\" name=\"%sMonth\""
+				 " onchange=\""
+				 "adjustDateForm('%s');"
+				 "setUTCFromLocalDateTimeForm('%s');\"",
+				 Id,ParamName,Id,Id);
+	    for (Month = 1;
+		 Month <= 12;
+		 Month++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Month,false,false,
+			   "%s",Txt_MONTHS_SMALL[Month - 1]);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Day *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sDay\" name=\"%sDay\""
-	                " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-                        Id,ParamName,Id,
-			Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sDay\" name=\"%sDay\""
-	                " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-                        Id,ParamName,Id);
-   for (Day = 1;
-	Day <= 31;
-	Day++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Day,false,false,
-		  "%u",Day);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Day *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sDay\" name=\"%sDay\""
+				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,ParamName,Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sDay\" name=\"%sDay\""
+				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
+				 Id,ParamName,Id);
+	    for (Day = 1;
+		 Day <= 31;
+		 Day++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Day,false,false,
+			   "%u",Day);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Hour *****/
-   HTM_TD_Begin ("class=\"RM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sHour\" name=\"%sHour\""
-                        " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-                        Id,ParamName,Id,
-                        Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sHour\" name=\"%sHour\""
-                        " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-                        Id,ParamName,Id);
-   for (Hour = 0;
-	Hour <= 23;
-	Hour++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Hour,false,false,
-		  "%02u h",Hour);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Hour *****/
+	 HTM_TD_Begin ("class=\"RM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sHour\" name=\"%sHour\""
+				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,ParamName,Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sHour\" name=\"%sHour\""
+				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
+				 Id,ParamName,Id);
+	    for (Hour = 0;
+		 Hour <= 23;
+		 Hour++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Hour,false,false,
+			   "%02u h",Hour);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Minute *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sMinute\" name=\"%sMinute\""
-                        " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-	                Id,ParamName,Id,
-			Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sMinute\" name=\"%sMinute\""
-                        " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-	                Id,ParamName,Id);
-   for (Minute = 0;
-	Minute < 60;
-	Minute += MinutesIInterval[FormSeconds])
-      HTM_OPTION (HTM_Type_UNSIGNED,&Minute,false,false,
-		  "%02u &prime;",Minute);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Minute *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sMinute\" name=\"%sMinute\""
+				 " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,ParamName,Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sMinute\" name=\"%sMinute\""
+				 " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
+				 Id,ParamName,Id);
+	    for (Minute = 0;
+		 Minute < 60;
+		 Minute += MinutesIInterval[FormSeconds])
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Minute,false,false,
+			   "%02u &prime;",Minute);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Second *****/
-   if (FormSeconds == Dat_FORM_SECONDS_ON)
-     {
-      HTM_TD_Begin ("class=\"LM\"");
-      if (SubmitFormOnChange)
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "id=\"%sSecond\" name=\"%sSecond\""
-			   " onchange=\"setUTCFromLocalDateTimeForm('%s');"
-	                   "document.getElementById('%s').submit();return false;\"",
-	                   Id,ParamName,Id,
-			   Gbl.Form.Id);
-      else
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "id=\"%sSecond\" name=\"%sSecond\""
-			   " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
-	                   Id,ParamName,Id);
-      for (Second = 0;
-	   Second <= 59;
-	   Second++)
-	 HTM_OPTION (HTM_Type_UNSIGNED,&Second,false,false,
-		     "%02u &Prime;",Second);
-      HTM_SELECT_End ();
-      HTM_TD_End ();
-     }
+	 /***** Second *****/
+	 if (FormSeconds == Dat_FORM_SECONDS_ON)
+	   {
+	    HTM_TD_Begin ("class=\"LM\"");
+	       if (SubmitFormOnChange)
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "id=\"%sSecond\" name=\"%sSecond\""
+				    " onchange=\"setUTCFromLocalDateTimeForm('%s');"
+				    "document.getElementById('%s').submit();return false;\"",
+				    Id,ParamName,Id,
+				    Gbl.Form.Id);
+	       else
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "id=\"%sSecond\" name=\"%sSecond\""
+				    " onchange=\"setUTCFromLocalDateTimeForm('%s');\"",
+				    Id,ParamName,Id);
+	       for (Second = 0;
+		    Second <= 59;
+		    Second++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Second,false,false,
+			      "%02u &Prime;",Second);
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
+	   }
 
-   /***** End table *****/
-   HTM_TR_End ();
+      /***** End table *****/
+      HTM_TR_End ();
    HTM_TABLE_End ();
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
@@ -726,25 +724,25 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("setLocalDateTimeFormFromUTC('%s',%ld);\n"	// Set date-time form from UTC time
-	     "adjustDateForm('%s');\n"			// Adjust date-time form
-	     "setUTCFromLocalDateTimeForm('%s');\n",	// Adjust UTC time from date-time form
-	     Id,(long) TimeUTC,
-	     Id,
-	     Id);
-   switch (SetHMS)
-     {
-      case Dat_HMS_TO_000000:
-	 // Set HH:MM:SS form selectors to 00:00:00
-	 HTM_TxtF ("setHMSTo000000('%s');",Id);	// Hidden TimeUTC is also adjusted
-	 break;
-      case Dat_HMS_TO_235959:
-	 // Set HH:MM:SS form selectors to 23:59:59
-	 HTM_TxtF ("setHMSTo235959('%s');",Id);	// Hidden TimeUTC is also adjusted
-	 break;
-      default:
-	 break;
-     }
+      HTM_TxtF ("setLocalDateTimeFormFromUTC('%s',%ld);\n"	// Set date-time form from UTC time
+		"adjustDateForm('%s');\n"			// Adjust date-time form
+		"setUTCFromLocalDateTimeForm('%s');\n",	// Adjust UTC time from date-time form
+		Id,(long) TimeUTC,
+		Id,
+		Id);
+      switch (SetHMS)
+	{
+	 case Dat_HMS_TO_000000:
+	    // Set HH:MM:SS form selectors to 00:00:00
+	    HTM_TxtF ("setHMSTo000000('%s');",Id);	// Hidden TimeUTC is also adjusted
+	    break;
+	 case Dat_HMS_TO_235959:
+	    // Set HH:MM:SS form selectors to 23:59:59
+	    HTM_TxtF ("setHMSTo235959('%s');",Id);	// Hidden TimeUTC is also adjusted
+	    break;
+	 default:
+	    break;
+	}
    HTM_SCRIPT_End ();
   }
 
@@ -769,8 +767,8 @@ void Dat_PutHiddenParBrowserTZDiff (void)
    Par_PutHiddenParamString ("BrowserTZName","BrowserTZName","");
    Par_PutHiddenParamLong ("BrowserTZDiff","BrowserTZDiff",0);
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("setTZname('BrowserTZName');"
-	     "setTZ('BrowserTZDiff');");
+      HTM_TxtF ("setTZname('BrowserTZName');"
+		"setTZ('BrowserTZDiff');");
    HTM_SCRIPT_End ();
   }
 
@@ -866,88 +864,88 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Begin table *****/
    HTM_TABLE_Begin (NULL);
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Year *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sYear\" name=\"%sYear\"%s"
-                        " onchange=\"adjustDateForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-	                Id,Id,
-			Disabled ? " disabled=\"disabled\"" : "",
-			Id,
-			Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sYear\" name=\"%sYear\"%s"
-                        " onchange=\"adjustDateForm('%s');\"",
-	                Id,Id,
-			Disabled ? " disabled=\"disabled\"" : "",
-			Id);
-   HTM_OPTION (HTM_Type_STRING,"0",false,false,
-	       "-");
-   for (Year = FirstYear;
-	Year <= LastYear;
-	Year++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Year,
-		  Year == DateSelected->Year,false,
-		  "%u",Year);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Year *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sYear\" name=\"%sYear\"%s"
+				 " onchange=\"adjustDateForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,Id,
+				 Disabled ? " disabled=\"disabled\"" : "",
+				 Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sYear\" name=\"%sYear\"%s"
+				 " onchange=\"adjustDateForm('%s');\"",
+				 Id,Id,
+				 Disabled ? " disabled=\"disabled\"" : "",
+				 Id);
+	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			"-");
+	    for (Year = FirstYear;
+		 Year <= LastYear;
+		 Year++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Year,
+			   Year == DateSelected->Year,false,
+			   "%u",Year);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Month *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   if (SubmitFormOnChange)
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sMonth\" name=\"%sMonth\"%s"
-                        " onchange=\"adjustDateForm('%s');"
-                        "document.getElementById('%s').submit();return false;\"",
-	                Id,Id,
-			Disabled ? " disabled=\"disabled\"" : "",
-			Id,
-			Gbl.Form.Id);
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"%sMonth\" name=\"%sMonth\"%s"
-                        " onchange=\"adjustDateForm('%s');\"",
-	                Id,Id,
-			Disabled ? " disabled=\"disabled\"" : "",
-			Id);
-   HTM_OPTION (HTM_Type_STRING,"0",false,false,
-	       "-");
-   for (Month  =  1;
-	Month <= 12;
-	Month++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Month,
-		  Month == DateSelected->Month,false,
-		  "%s",Txt_MONTHS_SMALL[Month - 1]);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Month *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    if (SubmitFormOnChange)
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sMonth\" name=\"%sMonth\"%s"
+				 " onchange=\"adjustDateForm('%s');"
+				 "document.getElementById('%s').submit();return false;\"",
+				 Id,Id,
+				 Disabled ? " disabled=\"disabled\"" : "",
+				 Id,
+				 Gbl.Form.Id);
+	    else
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"%sMonth\" name=\"%sMonth\"%s"
+				 " onchange=\"adjustDateForm('%s');\"",
+				 Id,Id,
+				 Disabled ? " disabled=\"disabled\"" : "",
+				 Id);
+	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			"-");
+	    for (Month  =  1;
+		 Month <= 12;
+		 Month++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Month,
+			   Month == DateSelected->Month,false,
+			   "%s",Txt_MONTHS_SMALL[Month - 1]);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** Day *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (SubmitFormOnChange,
-		     "id=\"%sDay\" name=\"%sDay\"%s",
-		     Id,Id,
-		     Disabled ? " disabled=\"disabled\"" : "");
-   HTM_OPTION (HTM_Type_STRING,"0",false,false,
-	       "-");
-   NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
-	                                               ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
-	                                        	                             Dat_NumDaysMonth[DateSelected->Month]);
-   for (Day  = 1;
-	Day <= NumDaysSelectedMonth;
-	Day++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-		  Day == DateSelected->Day,false,
-		  "%u",Day);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	 /***** Day *****/
+	 HTM_TD_Begin ("class=\"CM\"");
+	    HTM_SELECT_Begin (SubmitFormOnChange,
+			      "id=\"%sDay\" name=\"%sDay\"%s",
+			      Id,Id,
+			      Disabled ? " disabled=\"disabled\"" : "");
+	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			"-");
+	    NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
+								((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+											      Dat_NumDaysMonth[DateSelected->Month]);
+	    for (Day  = 1;
+		 Day <= NumDaysSelectedMonth;
+		 Day++)
+	       HTM_OPTION (HTM_Type_UNSIGNED,&Day,
+			   Day == DateSelected->Day,false,
+			   "%u",Day);
+	    HTM_SELECT_End ();
+	 HTM_TD_End ();
 
-   /***** End table *****/
-   HTM_TR_End ();
+      /***** End table *****/
+      HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -1657,16 +1655,16 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
      };
 
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s',%u,%s,%s,%s,0x%x);",
-	     Id,(long) TimeUTC,(unsigned) DateFormat,SeparatorStr[Separator],
-	     (unsigned) Gbl.Prefs.Language,
-	     WriteToday         ? "true" :
-		                  "false",
-	     WriteDateOnSameDay ? "true" :
-		                  "false",
-	     WriteWeekDay       ? "true" :
-		                  "false",
-	     WriteHMS);
+      HTM_TxtF ("writeLocalDateHMSFromUTC('%s',%ld,%u,'%s',%u,%s,%s,%s,0x%x);",
+		Id,(long) TimeUTC,(unsigned) DateFormat,SeparatorStr[Separator],
+		(unsigned) Gbl.Prefs.Language,
+		WriteToday         ? "true" :
+				     "false",
+		WriteDateOnSameDay ? "true" :
+				     "false",
+		WriteWeekDay       ? "true" :
+				     "false",
+		WriteHMS);
    HTM_SCRIPT_End ();
   }
 
