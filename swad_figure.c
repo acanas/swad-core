@@ -104,7 +104,7 @@ struct Fig_FiguresForum
 static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType);
 
 static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType);
-static void Fig_PutHiddenParamScopeFig (Hie_Lvl_Level_t ScopeFig);
+static void Fig_PutHiddenParamScopeFig (HieLvl_Level_t ScopeFig);
 
 static void Fig_GetAndShowHierarchyStats (void);
 static void Fig_WriteHeadHierarchy (void);
@@ -142,7 +142,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
 static void Fig_GetAndShowUsersRanking (void);
 
 static void Fig_GetAndShowFileBrowsersStats (void);
-static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
+static void Fig_GetSizeOfFileZoneFromDB (HieLvl_Level_t Scope,
                                          Brw_FileBrowser_t FileBrowser,
                                          struct Fig_SizeOfFileZones *SizeOfFileZones);
 static void Fig_WriteStatsExpTreesTableHead1 (void);
@@ -159,7 +159,7 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones);
 
 static void Fig_GetAndShowOERsStats (void);
-static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
+static void Fig_GetNumberOfOERsFromDB (HieLvl_Level_t Scope,
                                        Brw_License_t License,
                                        unsigned long NumFiles[2]);
 
@@ -237,13 +237,13 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    /***** Compute stats for anywhere, degree or course? *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    HTM_TxtColonNBSP (Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
-	               1 << Hie_Lvl_CTY |
-	               1 << Hie_Lvl_INS |
-		       1 << Hie_Lvl_CTR |
-		       1 << Hie_Lvl_DEG |
-		       1 << Hie_Lvl_CRS;
-   Gbl.Scope.Default = Hie_Lvl_SYS;
+   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+	               1 << HieLvl_CTY |
+	               1 << HieLvl_INS |
+		       1 << HieLvl_CTR |
+		       1 << HieLvl_DEG |
+		       1 << HieLvl_CRS;
+   Gbl.Scope.Default = HieLvl_SYS;
    Sco_GetScope ("ScopeFig");
    Sco_PutSelectorScope ("ScopeFig",HTM_DONT_SUBMIT_ON_CHANGE);
    HTM_LABEL_End ();
@@ -283,7 +283,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    struct Fig_Figures Figures;
 
    /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
-   Gbl.Scope.Default = Hie_Lvl_CRS;
+   Gbl.Scope.Default = HieLvl_CRS;
    Sco_AdjustScope ();
 
    /***** Put icon to show figure *****/
@@ -321,7 +321,7 @@ static void Fig_PutHiddenParamFigureType (Fig_FigureType_t FigureType)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-static void Fig_PutHiddenParamScopeFig (Hie_Lvl_Level_t ScopeFig)
+static void Fig_PutHiddenParamScopeFig (HieLvl_Level_t ScopeFig)
   {
    Sco_PutParamScope ("ScopeFig",ScopeFig);
   }
@@ -434,11 +434,11 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   long Cod = (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-	      (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-	      (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-	      (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-	      (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+   long Cod = (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+	      (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
+	      (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+	      (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
+	      (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
 					          -1L)))));
    char *Class = (Role == Rol_UNK) ? "DAT_N LINE_TOP RB" :
 	                             "DAT RB";
@@ -666,14 +666,14 @@ static void Fig_GetAndShowHierarchyWithInss (void)
    /***** Get number of elements with institutions *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumCtysWithInss = Cty_GetCachedNumCtysWithInss ();
          break;
-      case Hie_Lvl_CTY:
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_CTY:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 break;
       default:
 	 Err_WrongScopeExit ();
@@ -705,18 +705,18 @@ static void Fig_GetAndShowHierarchyWithCtrs (void)
    /***** Get number of elements with centers *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumCtysWithCtrs = Cty_GetCachedNumCtysWithCtrs ();
-	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs ("",Hie_Lvl_SYS,-1L);
+	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs ("",HieLvl_SYS,-1L);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 sprintf (SubQuery,"ins_instits.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
-	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs (SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs (SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 break;
       default:
 	 Err_WrongScopeExit ();
@@ -749,23 +749,23 @@ static void Fig_GetAndShowHierarchyWithDegs (void)
    /***** Get number of elements with degrees *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumCtysWithDegs = Cty_GetCachedNumCtysWithDegs ();
-	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs ("",Hie_Lvl_SYS,-1L);
-	 NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs ("",Hie_Lvl_SYS,-1L);
+	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs ("",HieLvl_SYS,-1L);
+	 NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs ("",HieLvl_SYS,-1L);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 sprintf (SubQuery,"ins_instits.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
-	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs (SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-	 NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs (SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs (SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs (SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 sprintf (SubQuery,"ctr_centers.InsCod=%ld AND ",Gbl.Hierarchy.Ins.InsCod);
-         NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs (SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs (SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 break;
       default:
 	 Err_WrongScopeExit ();
@@ -799,30 +799,30 @@ static void Fig_GetAndShowHierarchyWithCrss (void)
    /***** Get number of elements with courses *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumCtysWithCrss = Cty_GetCachedNumCtysWithCrss ();
-	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss ("",Hie_Lvl_SYS,-1L);
-         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss ("",Hie_Lvl_SYS,-1L);
-         NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss ("",Hie_Lvl_SYS,-1L);
+	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss ("",HieLvl_SYS,-1L);
+         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss ("",HieLvl_SYS,-1L);
+         NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss ("",HieLvl_SYS,-1L);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 sprintf (SubQuery,"ins_instits.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
-	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss (SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-	 NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss (SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-         NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss (SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss (SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 sprintf (SubQuery,"ctr_centers.InsCod=%ld AND ",Gbl.Hierarchy.Ins.InsCod);
-         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss (SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
-	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss (SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
+	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 sprintf (SubQuery,"deg_degrees.CtrCod=%ld AND ",
 	          Gbl.Hierarchy.Ctr.CtrCod);
-	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss (SubQuery,HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 break;
       default:
 	 Err_WrongScopeExit ();
@@ -857,53 +857,53 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
    /***** Get number of elements with students *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
-         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,"",Hie_Lvl_SYS,-1L);
-         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,"",Hie_Lvl_SYS,-1L);
-         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,"",Hie_Lvl_SYS,-1L);
-         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,"",Hie_Lvl_SYS,-1L);
-         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,"",Hie_Lvl_SYS,-1L);
+      case HieLvl_SYS:
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,"",HieLvl_SYS,-1L);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,"",HieLvl_SYS,-1L);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,"",HieLvl_SYS,-1L);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,"",HieLvl_SYS,-1L);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,"",HieLvl_SYS,-1L);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 sprintf (SubQuery,"ins_instits.CtyCod=%ld AND ",Gbl.Hierarchy.Cty.CtyCod);
-         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
-         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,HieLvl_CTY,Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          sprintf (SubQuery,"ctr_centers.InsCod=%ld AND ",Gbl.Hierarchy.Ins.InsCod);
-         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
-         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
-         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
-         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
-         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,HieLvl_INS,Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          sprintf (SubQuery,"deg_degrees.CtrCod=%ld AND ",
                   Gbl.Hierarchy.Ctr.CtrCod);
-         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
-         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
-         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
-         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
-         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          sprintf (SubQuery,"crs_courses.DegCod=%ld AND ",Gbl.Hierarchy.Deg.DegCod);
-         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod);
-         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod);
-         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod);
-         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod);
-         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod);
 	 break;
-     case Hie_Lvl_CRS:
+     case HieLvl_CRS:
          sprintf (SubQuery,"crs_users.CrsCod=%ld AND ",Gbl.Hierarchy.Crs.CrsCod);
-         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
-         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
-         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
-         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
-         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role,SubQuery,HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role,SubQuery,HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role,SubQuery,HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role,SubQuery,HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
+         NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role,SubQuery,HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
 	 Err_WrongScopeExit ();
@@ -936,32 +936,32 @@ static void Fig_GetAndShowHierarchyTotal (void)
    /***** Get total number of elements *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumCtysTotal = Cty_GetCachedNumCtysInSys ();
 	 NumInssTotal = Ins_GetCachedNumInssInSys ();
 	 NumCtrsTotal = Ctr_GetCachedNumCtrsInSys ();
 	 NumDegsTotal = Deg_GetCachedNumDegsInSys ();
 	 NumCrssTotal = Crs_GetCachedNumCrssInSys ();
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumInssTotal = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod);
 	 NumCtrsTotal = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
 	 NumDegsTotal = Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod);
 	 NumCrssTotal = Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 NumCtrsTotal = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
 	 NumDegsTotal = Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod);
 	 NumCrssTotal = Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 NumDegsTotal = Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod);
 	 NumCrssTotal = Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 NumCrssTotal = Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod);
 	 break;
-     case Hie_Lvl_CRS:
+     case HieLvl_CRS:
 	 break;
       default:
 	 Err_WrongScopeExit ();
@@ -1080,7 +1080,7 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
    /***** Get institutions ordered by number of centers *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -1089,7 +1089,7 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1102,10 +1102,10 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -1150,7 +1150,7 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
    /***** Get institutions ordered by number of degrees *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1161,7 +1161,7 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1176,10 +1176,10 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1226,7 +1226,7 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
    /***** Get institutions ordered by number of courses *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1239,7 +1239,7 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1256,10 +1256,10 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"	// row[0]
@@ -1308,7 +1308,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
    /***** Get institutions ordered by number of users in courses *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"			// row[0]
@@ -1323,7 +1323,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"			// row[0]
@@ -1342,10 +1342,10 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT ctr_centers.InsCod,"			// row[0]
@@ -1397,7 +1397,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    /***** Get institutions ordered by number of users who claim to belong to them *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -1407,7 +1407,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 			 " GROUP BY InsCod"
 			 " ORDER BY N DESC");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT usr_data.InsCod,"	// row[0]
@@ -1419,10 +1419,10 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 			 " ORDER BY N DESC",
 			 Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
 	 NumInss = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get institutions",
 			 "SELECT InsCod,"		// row[0]
@@ -1539,7 +1539,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		 {
-		  Lgo_DrawLogo (Hie_Lvl_INS,Ins.InsCod,Ins.ShrtName,
+		  Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,
 				40,NULL,true);
 	          HTM_NBSP ();
 		 }
@@ -1595,7 +1595,7 @@ static unsigned Fig_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
 static void Fig_GetAndShowDegreeTypesStats (void)
   {
    /***** Show statistic about number of degrees in each type of degree *****/
-   DT_SeeDegreeTypesInStaTab ();
+   DegTyp_SeeDegreeTypesInStaTab ();
   }
 
 /*****************************************************************************/
@@ -1680,7 +1680,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
+static void Fig_GetSizeOfFileZoneFromDB (HieLvl_Level_t Scope,
                                          Brw_FileBrowser_t FileBrowser,
                                          struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
@@ -1691,7 +1691,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
    switch (Scope)
      {
       /* Scope = the whole platform */
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -1807,7 +1807,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 	   }
          break;
       /* Scope = the current country */
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -1985,7 +1985,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 	   }
          break;
       /* Scope = the current institution */
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -2151,7 +2151,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 	   }
          break;
       /* Scope = the current center */
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -2305,7 +2305,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 	   }
          break;
       /* Scope = the current degree */
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -2447,7 +2447,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Lvl_Level_t Scope,
 	   }
          break;
       /* Scope = the current course */
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
 	 switch (FileBrowser)
 	   {
 	    case Brw_UNKNOWN:
@@ -2962,7 +2962,7 @@ static void Fig_GetAndShowOERsStats (void)
 /**************** Get the size of a file zone from database ******************/
 /*****************************************************************************/
 
-static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
+static void Fig_GetNumberOfOERsFromDB (HieLvl_Level_t Scope,
                                        Brw_License_t License,
                                        unsigned long NumFiles[2])
   {
@@ -2975,7 +2975,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
    /***** Get the size of a file browser *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 			 "SELECT Public,"		// row[0]
@@ -2985,7 +2985,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 			 " GROUP BY Public",
 			 (unsigned) License);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 			 "SELECT brw_files.Public,"	// row[0]
@@ -3008,7 +3008,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 			 "SELECT brw_files.Public,"	// row[0]
@@ -3029,7 +3029,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 			 "SELECT brw_files.Public,"	// row[0]
@@ -3048,7 +3048,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 			 "SELECT brw_files.Public,"	// row[0]
@@ -3065,7 +3065,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Lvl_Level_t Scope,
 			 (unsigned) Brw_ADMI_SHR_CRS,
 			 (unsigned) License);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of OERs",
 			 "SELECT Public,"		// row[0]
@@ -3589,7 +3589,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
      {
       switch (Gbl.Scope.Current)
 	{
-	 case Hie_Lvl_SYS:
+	 case HieLvl_SYS:
 	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(*),"				// row[0]
@@ -3597,7 +3597,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    " FROM tml_notes WHERE NoteType=%u",
 			    NoteType);
 	    break;
-	 case Hie_Lvl_CTY:
+	 case HieLvl_CTY:
 	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3618,7 +3618,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    (unsigned) NoteType);
 	    break;
-	 case Hie_Lvl_INS:
+	 case HieLvl_INS:
 	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3637,7 +3637,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    Gbl.Hierarchy.Ins.InsCod,
 			    (unsigned) NoteType);
 	    break;
-	 case Hie_Lvl_CTR:
+	 case HieLvl_CTR:
 	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3654,7 +3654,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    (unsigned) NoteType);
 	    break;
-	 case Hie_Lvl_DEG:
+	 case HieLvl_DEG:
 	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3669,7 +3669,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    Gbl.Hierarchy.Deg.DegCod,
 			    (unsigned) NoteType);
 	    break;
-	 case Hie_Lvl_CRS:
+	 case HieLvl_CRS:
 	    NumRows = (unsigned)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3741,14 +3741,14 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    /***** Get and write totals *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(*),"				// row[0]
 			        "COUNT(DISTINCT UsrCod)"		// row[1]
 		         " FROM tml_notes");
 	 break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3767,7 +3767,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
 	 break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3784,7 +3784,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Ins.InsCod);
 	 break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3799,7 +3799,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3812,7 +3812,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 		           " AND crs_users.UsrCod=tml_notes.UsrCod",
 		         Gbl.Hierarchy.Deg.DegCod);
 	 break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
 	 NumRows = (unsigned)
 	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
@@ -3930,14 +3930,14 @@ static void Fig_GetAndShowFollowStats (void)
      {
       switch (Gbl.Scope.Current)
 	{
-	 case Hie_Lvl_SYS:
+	 case HieLvl_SYS:
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT %s)"
 			    " FROM usr_follow",
 			   FieldDB[Fol]);
 	    break;
-	 case Hie_Lvl_CTY:
+	 case HieLvl_CTY:
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -3957,7 +3957,7 @@ static void Fig_GetAndShowFollowStats (void)
 			   Gbl.Hierarchy.Cty.CtyCod,
 			   FieldDB[Fol]);
 	    break;
-	 case Hie_Lvl_INS:
+	 case HieLvl_INS:
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -3975,7 +3975,7 @@ static void Fig_GetAndShowFollowStats (void)
 			   Gbl.Hierarchy.Ins.InsCod,
 			   FieldDB[Fol]);
 	    break;
-	 case Hie_Lvl_CTR:
+	 case HieLvl_CTR:
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -3991,7 +3991,7 @@ static void Fig_GetAndShowFollowStats (void)
 			   Gbl.Hierarchy.Ctr.CtrCod,
 			   FieldDB[Fol]);
 	    break;
-	 case Hie_Lvl_DEG:
+	 case HieLvl_DEG:
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -4005,7 +4005,7 @@ static void Fig_GetAndShowFollowStats (void)
 			   Gbl.Hierarchy.Deg.DegCod,
 			   FieldDB[Fol]);
 	    break;
-	 case Hie_Lvl_CRS:
+	 case HieLvl_CRS:
 	    NumUsrs = (unsigned)
 	    DB_QueryCOUNT ("can not get the total number of following/followers",
 			   "SELECT COUNT(DISTINCT usr_follow.%s)"
@@ -4051,7 +4051,7 @@ static void Fig_GetAndShowFollowStats (void)
      {
       switch (Gbl.Scope.Current)
 	{
-	 case Hie_Lvl_SYS:
+	 case HieLvl_SYS:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
 					    "SELECT AVG(N)"
@@ -4061,7 +4061,7 @@ static void Fig_GetAndShowFollowStats (void)
 					    FieldDB[Fol],
 					    FieldDB[1 - Fol]);
 	    break;
-	 case Hie_Lvl_CTY:
+	 case HieLvl_CTY:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
 					    "SELECT AVG(N)"
@@ -4084,7 +4084,7 @@ static void Fig_GetAndShowFollowStats (void)
 					    FieldDB[Fol],
 					    FieldDB[1 - Fol]);
 	    break;
-	 case Hie_Lvl_INS:
+	 case HieLvl_INS:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 					    " per survey",
 					    "SELECT AVG(N)"
@@ -4105,7 +4105,7 @@ static void Fig_GetAndShowFollowStats (void)
 					    FieldDB[Fol],
 					    FieldDB[1 - Fol]);
 	    break;
-	 case Hie_Lvl_CTR:
+	 case HieLvl_CTR:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
 					    "SELECT AVG(N)"
@@ -4124,7 +4124,7 @@ static void Fig_GetAndShowFollowStats (void)
 					    FieldDB[Fol],
 					    FieldDB[1 - Fol]);
 	    break;
-	 case Hie_Lvl_DEG:
+	 case HieLvl_DEG:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
 					    "SELECT AVG(N)"
@@ -4141,7 +4141,7 @@ static void Fig_GetAndShowFollowStats (void)
 					    FieldDB[Fol],
 					    FieldDB[1 - Fol]);
 	    break;
-	 case Hie_Lvl_CRS:
+	 case HieLvl_CRS:
 	    Average = DB_QuerySELECTDouble ("can not get number of questions"
 				            " per survey",
 					    "SELECT AVG(N)"
@@ -4232,7 +4232,7 @@ static void Fig_GetAndShowForumStats (void)
    /***** Write a row for each type of forum *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM__SWAD__USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
@@ -4246,7 +4246,7 @@ static void Fig_GetAndShowForumStats (void)
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
@@ -4256,7 +4256,7 @@ static void Fig_GetAndShowForumStats (void)
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
@@ -4266,7 +4266,7 @@ static void Fig_GetAndShowForumStats (void)
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
@@ -4274,13 +4274,13 @@ static void Fig_GetAndShowForumStats (void)
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
          break;
@@ -4590,7 +4590,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       /* Get number of notifications by email from database */
       switch (Gbl.Scope.Current)
         {
-         case Hie_Lvl_SYS:
+         case HieLvl_SYS:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(NumEvents),"			// row[0]
@@ -4599,7 +4599,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                             " WHERE NotifyEvent=%u",
 			    (unsigned) NotifyEvent);
             break;
-	 case Hie_Lvl_CTY:
+	 case HieLvl_CTY:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
@@ -4616,7 +4616,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    (unsigned) NotifyEvent);
             break;
-	 case Hie_Lvl_INS:
+	 case HieLvl_INS:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
@@ -4631,7 +4631,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 			    Gbl.Hierarchy.Ins.InsCod,
 			    (unsigned) NotifyEvent);
             break;
-         case Hie_Lvl_CTR:
+         case HieLvl_CTR:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
@@ -4644,7 +4644,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    (unsigned) NotifyEvent);
             break;
-         case Hie_Lvl_DEG:
+         case HieLvl_DEG:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(NumEvents),"			// row[0]
@@ -4655,7 +4655,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 			    Gbl.Hierarchy.Deg.DegCod,
 			    (unsigned) NotifyEvent);
             break;
-         case Hie_Lvl_CRS:
+         case HieLvl_CRS:
             DB_QuerySELECT (&mysql_res,"can not get the number"
         			       " of notifications by email",
         		    "SELECT SUM(NumEvents),"			// row[0]
@@ -5844,14 +5844,14 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
           this privacy option from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(*)"
 		         " FROM usr_data WHERE %s",
 		        SubQuery);
 	 break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -5870,7 +5870,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND %s",
 		        Gbl.Hierarchy.Cty.CtyCod,SubQuery);
 	 break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -5887,7 +5887,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND %s",
 		        Gbl.Hierarchy.Ins.InsCod,SubQuery);
 	 break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -5902,7 +5902,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND %s",
 		        Gbl.Hierarchy.Ctr.CtrCod,SubQuery);
 	 break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -5915,7 +5915,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 		          " AND %s",
 		        Gbl.Hierarchy.Deg.DegCod,SubQuery);
 	 break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
 	 NumUsrs = (unsigned)
 	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
 		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"

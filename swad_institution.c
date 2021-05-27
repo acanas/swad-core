@@ -39,6 +39,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
@@ -238,7 +239,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
       Ins_PutParamInsCod (Ins->InsCod);
       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
-   Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->FullName,
+   Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
    if (PutLink)
      {
@@ -263,7 +264,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
    Hie_FreeGoToMsg ();
 
    /***** Institution logo and name *****/
-   Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+   Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
    HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
    /***** End link *****/
@@ -450,7 +451,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    /* Number of users in courses of this institution */
    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_INS,Ins->InsCod,
+   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
 				             1 << Rol_STD |
 				             1 << Rol_NET |
 				             1 << Rol_TCH));	// Any user);
@@ -1084,7 +1085,7 @@ static void Ins_ListInstitutionsForEdition (void)
       ICanEdit = Ins_CheckIfICanEdit (Ins);
       NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
       NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
-      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (Hie_Lvl_INS,Ins->InsCod,
+      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
 						 1 << Rol_STD |
 						 1 << Rol_NET |
 						 1 << Rol_TCH);	// Any user
@@ -1111,7 +1112,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	 /* Institution logo */
 	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	 Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
 	 HTM_TD_End ();
 
 	 /* Institution short name */
@@ -1356,7 +1357,7 @@ void Ins_RemoveInstitution (void)
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsInCrss (Hie_Lvl_INS,Ins_EditingIns->InsCod,
+   else if (Usr_GetNumUsrsInCrss (HieLvl_INS,Ins_EditingIns->InsCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))	// Any user
@@ -1366,10 +1367,10 @@ void Ins_RemoveInstitution (void)
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
-      For_RemoveForums (Hie_Lvl_INS,Ins_EditingIns->InsCod);
+      For_RemoveForums (HieLvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove surveys of the institution *****/
-      Svy_RemoveSurveys (Hie_Lvl_INS,Ins_EditingIns->InsCod);
+      Svy_RemoveSurveys (HieLvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove information related to files in institution *****/
       Brw_DB_RemoveInsFiles (Ins_EditingIns->InsCod);
@@ -1725,7 +1726,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-   Lgo_DrawLogo (Hie_Lvl_INS,-1L,"",20,NULL,true);
+   Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL,true);
    HTM_TD_End ();
 
    /***** Institution short name *****/
@@ -1932,12 +1933,12 @@ unsigned Ins_GetCachedNumInssInSys (void)
    unsigned NumInss;
 
    /***** Get number of institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,HieLvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumInss))
      {
       /***** Get current number of institutions from database and update cache *****/
       NumInss = (unsigned) DB_GetNumRowsTable ("ins_instits");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumInss);
      }
 
@@ -1969,7 +1970,7 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
 		  " WHERE CtyCod=%ld",
 		  CtyCod);
    Gbl.Cache.NumInssInCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,Hie_Lvl_CTY,Gbl.Cache.NumInssInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Cache.NumInssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);
    return Gbl.Cache.NumInssInCty.NumInss;
   }
@@ -1979,7 +1980,7 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
    unsigned NumInss;
 
    /***** Get number of institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,Hie_Lvl_CTY,CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS,HieLvl_CTY,CtyCod,
                                    FigCch_UNSIGNED,&NumInss))
       /***** Get current number of institutions from database and update cache *****/
       NumInss = Ins_GetNumInssInCty (CtyCod);
@@ -1992,7 +1993,7 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod)
+                                       HieLvl_Level_t Scope,long Cod)
   {
    unsigned NumInssWithCtrs;
 
@@ -2020,7 +2021,7 @@ unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod)
+                                       HieLvl_Level_t Scope,long Cod)
   {
    unsigned NumInssWithDegs;
 
@@ -2050,7 +2051,7 @@ unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod)
+                                       HieLvl_Level_t Scope,long Cod)
   {
    unsigned NumInssWithCrss;
 
@@ -2082,7 +2083,7 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
 /*****************************************************************************/
 
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod)
+                                       HieLvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureInss[Rol_NUM_ROLES] =
      {

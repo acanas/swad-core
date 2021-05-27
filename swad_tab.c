@@ -27,6 +27,7 @@
 
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_tab.h"
@@ -165,9 +166,9 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 	 return (Gbl.Hierarchy.Deg.DegCod > 0 &&	// Degree selected
 	         Gbl.Hierarchy.Crs.CrsCod <= 0);	// No course selected
       case TabCrs:
-	 return (Gbl.Hierarchy.Level == Hie_Lvl_CRS);	// Course selected
+	 return (Gbl.Hierarchy.Level == HieLvl_CRS);	// Course selected
       case TabAss:
-	 return (Gbl.Hierarchy.Level == Hie_Lvl_CRS ||	// Course selected
+	 return (Gbl.Hierarchy.Level == HieLvl_CRS ||	// Course selected
 	         Gbl.Usrs.Me.Role.Logged >= Rol_STD);	// I belong to course or I am an admin
       case TabFil:
       	 return (Gbl.Hierarchy.Ins.InsCod > 0 ||	// Institution selected

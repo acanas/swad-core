@@ -49,6 +49,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -12054,7 +12055,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (InsShortName),
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (Hie_Lvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
+         Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 	 HTM_TxtF ("&nbsp;%s",InsShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -12070,7 +12071,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CtrShortName),
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (Hie_Lvl_CTR,CtrCod,CtrShortName,20,"LT",true);
+         Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",CtrShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -12086,7 +12087,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
          HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (DegShortName),
 				  "BT_LINK LT DAT",NULL);
          Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (Hie_Lvl_DEG,DegCod,DegShortName,20,"LT",true);
+         Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
 	 HTM_TxtF ("&nbsp;%s",DegShortName);
 	 HTM_BUTTON_End ();
 	 Frm_EndForm ();

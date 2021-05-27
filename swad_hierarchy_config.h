@@ -40,7 +40,7 @@
 /*****************************************************************************/
 
 void HieCfg_Title (bool PutLink,
-		   Hie_Lvl_Level_t LogoScope,
+		   HieLvl_Level_t LogoScope,
 		   long LogoCod,
                    char LogoShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
 		   char LogoFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1],
@@ -56,6 +56,6 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod);
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm);
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap);
 void HieCfg_QR (const char *ParamName,long HieCod);
-void HieCfg_NumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
+void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 #endif

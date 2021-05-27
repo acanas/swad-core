@@ -34,6 +34,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -365,18 +366,18 @@ unsigned Agd_DB_GetNumEventsFromUsr (long UsrCod)
 /*****************************************************************************/
 // Returns the number of users with events in a given scope
 
-unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
+unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Scope)
   {
    /***** Get number of users with events from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT UsrCod)"
 			 " FROM agd_agendas"
 		        " WHERE UsrCod>0");
-       case Hie_Lvl_CTY:
+       case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -393,7 +394,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
 		        Gbl.Hierarchy.Cty.CtyCod);
-       case Hie_Lvl_INS:
+       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -408,7 +409,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -421,7 +422,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -432,7 +433,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"
@@ -452,18 +453,18 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of events in a given scope
 
-unsigned Agd_DB_GetNumEvents (Hie_Lvl_Level_t Scope)
+unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
   {
    /***** Get number of events from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
 			 " FROM agd_agendas"
 			" WHERE UsrCod>0");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -481,7 +482,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Lvl_Level_t Scope)
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -497,7 +498,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Lvl_Level_t Scope)
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -511,7 +512,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Lvl_Level_t Scope)
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
@@ -523,7 +524,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Lvl_Level_t Scope)
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
                         Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"

@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_indicator.h"
 #include "swad_message.h"
@@ -149,7 +150,7 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LT\"");
-   DT_WriteSelectorDegreeTypes (Indicators.DegTypCod);
+   DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
    HTM_Txt (" (");
    HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
    HTM_Txt (")");
@@ -239,18 +240,18 @@ void Ind_ReqIndicatorsCourses (void)
 static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators)
   {
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
-	               1 << Hie_Lvl_CTY |
-		       1 << Hie_Lvl_INS |
-		       1 << Hie_Lvl_CTR |
-		       1 << Hie_Lvl_DEG |
-		       1 << Hie_Lvl_CRS;
-   Gbl.Scope.Default = Hie_Lvl_CRS;
+   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+	               1 << HieLvl_CTY |
+		       1 << HieLvl_INS |
+		       1 << HieLvl_CTR |
+		       1 << HieLvl_DEG |
+		       1 << HieLvl_CRS;
+   Gbl.Scope.Default = HieLvl_CRS;
    Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
-   Indicators->DegTypCod = (Gbl.Scope.Current == Hie_Lvl_SYS) ?
-	                   DT_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
+   Indicators->DegTypCod = (Gbl.Scope.Current == HieLvl_SYS) ?
+	                   DegTyp_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
                            -1L;
 
    /***** Get department code *****/
@@ -350,7 +351,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          if (Indicators->DptCod >= 0)	// 0 means another department
            {
             if (Indicators->DegTypCod > 0)
@@ -428,7 +429,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 					 "crs_courses.FullName");
            }
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
@@ -475,7 +476,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
@@ -518,7 +519,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
@@ -557,7 +558,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
@@ -596,7 +597,7 @@ static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
 				      "crs_courses.FullName",
 			    Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          if (Indicators->DptCod >= 0)	// 0 means another department
             NumCrss = (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
@@ -1117,10 +1118,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		  break;
 	       case Ind_INDICATORS_FULL:
 		  /* Get number of users */
-		  NumTchs = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,
+		  NumTchs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
 				                  1 << Rol_NET |	// Non-editing teachers
 						  1 << Rol_TCH);	// Teachers
-		  NumStds = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,
+		  NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
 				                  1 << Rol_STD);	// Students
 
 		  HTM_TR_Begin (NULL);

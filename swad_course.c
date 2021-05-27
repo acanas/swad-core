@@ -46,6 +46,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_info.h"
 #include "swad_logo.h"
@@ -264,7 +265,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 					      Highlight ? ClassHighlight :
 							  ClassNormal,
 					      NULL);
-			Lgo_DrawLogo (Hie_Lvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL,true);
+			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL,true);
 			HTM_TxtF ("&nbsp;%s",Hie.Ins.ShrtName);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
@@ -286,7 +287,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Err_WrongCenterExit ();
 
 		  /***** Write link to center *****/
-		  Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CTR &&
+		  Highlight = (Gbl.Hierarchy.Level == HieLvl_CTR &&
 			       Gbl.Hierarchy.Ctr.CtrCod == Hie.Ctr.CtrCod);
 		  HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
 							   ClassNormal);
@@ -298,7 +299,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 						 Highlight ? ClassHighlight :
 							     ClassNormal,
 						 NULL);
-			   Lgo_DrawLogo (Hie_Lvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL,true);
+			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL,true);
 			   HTM_TxtF ("&nbsp;%s",Hie.Ctr.ShrtName);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
@@ -320,7 +321,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			Err_WrongDegreeExit ();
 
 		     /***** Write link to degree *****/
-		     Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_DEG &&
+		     Highlight = (Gbl.Hierarchy.Level == HieLvl_DEG &&
 				  Gbl.Hierarchy.Deg.DegCod == Hie.Deg.DegCod);
 		     HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
 							      ClassNormal);
@@ -332,7 +333,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 						    Highlight ? ClassHighlight :
 								ClassNormal,
 						    NULL);
-			      Lgo_DrawLogo (Hie_Lvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL,true);
+			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL,true);
 			      HTM_TxtF ("&nbsp;%s",Hie.Deg.ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -354,7 +355,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   Err_WrongCourseExit ();
 
 			/***** Write link to course *****/
-			Highlight = (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&
+			Highlight = (Gbl.Hierarchy.Level == HieLvl_CRS &&
 				     Gbl.Hierarchy.Crs.CrsCod == Hie.Crs.CrsCod);
 			HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
 								 ClassNormal);
@@ -413,12 +414,12 @@ unsigned Crs_GetCachedNumCrssInSys (void)
    unsigned NumCrss;
 
    /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumCrss))
      {
       /***** Get current number of courses from database and update cache *****/
       NumCrss = (unsigned) DB_GetNumRowsTable ("crs_courses");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCrss);
      }
 
@@ -448,7 +449,7 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
    /***** 3. Slow: number of courses in a country from database *****/
    Gbl.Cache.NumCrssInCty.CtyCod  = CtyCod;
    Gbl.Cache.NumCrssInCty.NumCrss = Crs_DB_GetNumCrssInCty (CtyCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_CTY,Gbl.Cache.NumCrssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInCty.NumCrss);
    return Gbl.Cache.NumCrssInCty.NumCrss;
   }
@@ -458,7 +459,7 @@ unsigned Crs_GetCachedNumCrssInCty (long CtyCod)
    unsigned NumCrss;
 
    /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_Lvl_CTY,CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_CTY,CtyCod,
 				   FigCch_UNSIGNED,&NumCrss))
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInCty (CtyCod);
@@ -489,7 +490,7 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
    /***** 3. Slow: number of courses in an institution from database *****/
    Gbl.Cache.NumCrssInIns.InsCod  = InsCod;
    Gbl.Cache.NumCrssInIns.NumCrss = Crs_DB_GetNumCrssInIns (InsCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_INS,Gbl.Cache.NumCrssInIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_INS,Gbl.Cache.NumCrssInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInIns.NumCrss);
    return Gbl.Cache.NumCrssInIns.NumCrss;
   }
@@ -499,7 +500,7 @@ unsigned Crs_GetCachedNumCrssInIns (long InsCod)
    unsigned NumCrss;
 
    /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_Lvl_INS,InsCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_INS,InsCod,
 				   FigCch_UNSIGNED,&NumCrss))
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInIns (InsCod);
@@ -538,12 +539,12 @@ unsigned Crs_GetCachedNumCrssInCtr (long CtrCod)
    unsigned NumCrss;
 
    /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_Lvl_CTR,CtrCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_CTR,CtrCod,
 				   FigCch_UNSIGNED,&NumCrss))
      {
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInCtr (CtrCod);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_CTR,CtrCod,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_CTR,CtrCod,
 				    FigCch_UNSIGNED,&NumCrss);
      }
 
@@ -573,7 +574,7 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
    /***** 3. Slow: number of courses in a degree from database *****/
    Gbl.Cache.NumCrssInDeg.DegCod  = DegCod;
    Gbl.Cache.NumCrssInDeg.NumCrss = Crs_DB_GetNumCrssInDeg (DegCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,Hie_Lvl_DEG,Gbl.Cache.NumCrssInDeg.DegCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_CRSS,HieLvl_DEG,Gbl.Cache.NumCrssInDeg.DegCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCrssInDeg.NumCrss);
    return Gbl.Cache.NumCrssInDeg.NumCrss;
   }
@@ -583,7 +584,7 @@ unsigned Crs_GetCachedNumCrssInDeg (long DegCod)
    unsigned NumCrss;
 
    /***** Get number of courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,Hie_Lvl_DEG,DegCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CRSS,HieLvl_DEG,DegCod,
 				   FigCch_UNSIGNED,&NumCrss))
       /***** Get current number of courses from database and update cache *****/
       NumCrss = Crs_GetNumCrssInDeg (DegCod);
@@ -596,7 +597,7 @@ unsigned Crs_GetCachedNumCrssInDeg (long DegCod)
 /*****************************************************************************/
 
 unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod)
+                                       HieLvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureCrss[Rol_NUM_ROLES] =
      {
@@ -665,7 +666,7 @@ void Crs_WriteSelectorOfCourse (void)
 
 	    /* Write option */
 	    HTM_OPTION (HTM_Type_LONG,&CrsCod,
-			Gbl.Hierarchy.Level == Hie_Lvl_CRS &&	// Course selected
+			Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 			CrsCod == Gbl.Hierarchy.Crs.CrsCod,false,
 			"%s",row[1]);	// Short name (row[1])
 	   }
@@ -819,7 +820,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	 /***** Write an option with the current course
 		when I don't belong to it *****/
-	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&	// Course selected
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 	     !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
 	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Crs.CrsCod,true,true,
 			"%s",Gbl.Hierarchy.Crs.ShrtName);
@@ -966,9 +967,9 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 HTM_TR_Begin (NULL);
 
 	    /* Get number of users */
-	    NumUsrs[Rol_STD] = Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs->CrsCod,1 << Rol_STD);
-	    NumUsrs[Rol_NET] = Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs->CrsCod,1 << Rol_NET);
-	    NumUsrs[Rol_TCH] = Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs->CrsCod,1 << Rol_TCH);
+	    NumUsrs[Rol_STD] = Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
+	    NumUsrs[Rol_NET] = Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
+	    NumUsrs[Rol_TCH] = Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
 	    NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 			       NumUsrs[Rol_NET] +
 			       NumUsrs[Rol_TCH];
@@ -1166,9 +1167,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
 	 /* Get number of users */
-	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Crs->CrsCod,1 << Rol_STD);
-	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Crs->CrsCod,1 << Rol_NET);
-	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Crs->CrsCod,1 << Rol_TCH);
+	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
+	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
+	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
 	 NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 	                    NumUsrs[Rol_NET] +
 			    NumUsrs[Rol_TCH];
@@ -1647,7 +1648,7 @@ void Crs_RemoveCourse (void)
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
       /***** Check if this course has users *****/
-      if (Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Crs_EditingCrs->CrsCod,
+      if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->CrsCod,
 				1 << Rol_STD |
 				1 << Rol_NET |
 				1 << Rol_TCH))	// Course has users ==> don't remove
@@ -1819,10 +1820,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Not_DB_RemoveCrsNotices (CrsCod);
 
       /***** Remove all the threads and posts in forums of the course *****/
-      For_RemoveForums (Hie_Lvl_CRS,CrsCod);
+      For_RemoveForums (HieLvl_CRS,CrsCod);
 
       /***** Remove all surveys in the course *****/
-      Svy_RemoveSurveys (Hie_Lvl_CRS,CrsCod);
+      Svy_RemoveSurveys (HieLvl_CRS,CrsCod);
 
       /***** Remove all games in the course *****/
       Gam_RemoveCrsGames (CrsCod);
@@ -2520,9 +2521,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Err_WrongCourseExit ();
 
    /***** Get number of teachers and students in this course *****/
-   NumStds = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,1 << Rol_STD);
-   NumNETs = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,1 << Rol_NET);
-   NumTchs = Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,CrsCod,1 << Rol_TCH);
+   NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_STD);
+   NumNETs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_NET);
+   NumTchs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_TCH);
    NumUsrs = NumStds + NumNETs + NumTchs;
    if (NumUsrs)
      {
@@ -2565,7 +2566,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	 Deg_PutParamDegCod (Deg.DegCod);
 	    HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (row[2]),ClassLink,NULL);
 	    Hie_FreeGoToMsg ();
-	       Lgo_DrawLogo (Hie_Lvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
+	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -2613,7 +2614,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
 void Crs_UpdateCrsLast (void)
   {
-   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&	// Course selected
+   if (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
       /***** Update last access to current course *****/
       Crs_DB_UpdateCrsLastClick ();

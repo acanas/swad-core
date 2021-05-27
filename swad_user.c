@@ -57,6 +57,7 @@
 #include "swad_group.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_language.h"
@@ -191,9 +192,9 @@ static void Usr_WriteUsrData (const char *BgColor,
 
 static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
 
-static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope);
-static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope);
-static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_t Scope);
+static void Usr_GetAdmsLst (HieLvl_Level_t Scope);
+static void Usr_GetGstsLst (HieLvl_Level_t Scope);
+static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
@@ -272,8 +273,8 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr);
 
 static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles);
-static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
-static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
+static double Usr_GetNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+static double Usr_GetNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -377,7 +378,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
 void Usr_ResetMyLastData (void)
   {
    Gbl.Usrs.Me.UsrLast.WhatToSearch  = Sch_WHAT_TO_SEARCH_DEFAULT;
-   Gbl.Usrs.Me.UsrLast.LastHie.Scope = Hie_Lvl_UNK;
+   Gbl.Usrs.Me.UsrLast.LastHie.Scope = HieLvl_UNK;
    Gbl.Usrs.Me.UsrLast.LastHie.Cod   = -1L;
    Gbl.Usrs.Me.UsrLast.LastAct       = ActUnk;
    Gbl.Usrs.Me.UsrLast.LastRole      = Rol_UNK;
@@ -796,23 +797,23 @@ static void Usr_GetMyLastData (void)
       Gbl.Usrs.Me.UsrLast.LastHie.Scope = Sco_GetScopeFromDBStr (row[1]);
       switch (Gbl.Usrs.Me.UsrLast.LastHie.Scope)
         {
-         case Hie_Lvl_SYS:	// System
+         case HieLvl_SYS:	// System
             Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
             break;
-         case Hie_Lvl_CTY:	// Country
-         case Hie_Lvl_INS:	// Institution
-         case Hie_Lvl_CTR:	// Center
-         case Hie_Lvl_DEG:	// Degree
-         case Hie_Lvl_CRS:	// Course
+         case HieLvl_CTY:	// Country
+         case HieLvl_INS:	// Institution
+         case HieLvl_CTR:	// Center
+         case HieLvl_DEG:	// Degree
+         case HieLvl_CRS:	// Course
             Gbl.Usrs.Me.UsrLast.LastHie.Cod = Str_ConvertStrCodToLongCod (row[2]);
             if (Gbl.Usrs.Me.UsrLast.LastHie.Cod <= 0)
               {
-               Gbl.Usrs.Me.UsrLast.LastHie.Scope = Hie_Lvl_UNK;
+               Gbl.Usrs.Me.UsrLast.LastHie.Scope = HieLvl_UNK;
                Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
               }
             break;
          default:
-            Gbl.Usrs.Me.UsrLast.LastHie.Scope = Hie_Lvl_UNK;
+            Gbl.Usrs.Me.UsrLast.LastHie.Scope = HieLvl_UNK;
             Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
             break;
         }
@@ -917,7 +918,7 @@ void Usr_FlushCachesUsr (void)
 /***** Check if a user is an administrator of a degree/center/institution ****/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Lvl_Level_t Scope,long Cod)
+bool Usr_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
   {
    /***** Get if a user is administrator of a degree from database *****/
    return (DB_QueryCOUNT ("can not check if a user is administrator",
@@ -960,7 +961,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
 		      " WHERE UsrCod=%ld"
 		        " AND Scope='%s'",
 		      UsrCod,
-		      Sco_GetDBStrFromScope (Hie_Lvl_SYS)) != 0);
+		      Sco_GetDBStrFromScope (HieLvl_SYS)) != 0);
    return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 
@@ -3433,13 +3434,13 @@ static void Usr_SetMyPrefsAndRoles (void)
 
       /***** Location in hierarchy and role are stored in session,
              but in login the are got from user's last data *****/
-      if (Gbl.Hierarchy.Level == Hie_Lvl_SYS)	// No country selected
+      if (Gbl.Hierarchy.Level == HieLvl_SYS)	// No country selected
         {
 	 /***** Copy last hierarchy to current hierarchy *****/
 	 Hie_SetHierarchyFromUsrLastHierarchy ();
 
 	 /* Course may have changed ==> get my role in current course again */
-	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
 
 	 // role and action will be got from last data
@@ -3877,7 +3878,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
                 	                      "&nbsp;",
 	             NULL,true,UsrDat->Accepted);
 
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
      {
       /***** Write the groups a the que pertenece the student *****/
       for (NumGrpTyp = 0;
@@ -4217,7 +4218,7 @@ unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
 		   " FROM usr_data"
 		  " WHERE CtyCod<0");
    Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,-1L,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs);
    return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
   }
@@ -4227,7 +4228,7 @@ unsigned Usr_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
    unsigned NumUsrs;
 
    /***** Get number of user who don't claim to belong to any country from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
 				   FigCch_UNSIGNED,&NumUsrs))
       /***** Get current number of user who don't claim to belong to any country from database and update cache *****/
       NumUsrs = Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
@@ -4258,7 +4259,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
 		   " FROM usr_data"
 		  " WHERE CtyCod=0");
    Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,0,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs);
    return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
   }
@@ -4268,7 +4269,7 @@ unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
    unsigned NumUsrsCty;
 
    /***** Get number of users who claim to belong to another country form cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,0,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
                                    FigCch_UNSIGNED,&NumUsrsCty))
       /***** Get current number of users who claim to belong to another country from database and update cache *****/
       NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToAnotherCty ();
@@ -4315,7 +4316,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
 		  " WHERE CtyCod=%ld",
 		  Cty->CtyCod);
    Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs);
    return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
   }
@@ -4325,7 +4326,7 @@ unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
    unsigned NumUsrsCty;
 
    /***** Get number of users who claim to belong to country from cache ******/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,Hie_Lvl_CTY,Cty->CtyCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Cty->CtyCod,
                                    FigCch_UNSIGNED,&NumUsrsCty))
       /***** Get current number of users who claim to belong to country from database and update cache ******/
       NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
@@ -4372,7 +4373,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
 		  " WHERE InsCod=%ld",
 		  Ins->InsCod);
    Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,Hie_Lvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs);
    return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
   }
@@ -4382,7 +4383,7 @@ unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
    unsigned NumUsrsIns;
 
    /***** Get number of users who claim to belong to institution from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,Hie_Lvl_INS,Ins->InsCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Ins->InsCod,
                                    FigCch_UNSIGNED,&NumUsrsIns))
       /***** Get current number of users who claim to belong to institution from database and update cache *****/
       NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
@@ -4428,7 +4429,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
 		   " FROM usr_data"
 		  " WHERE CtrCod=%ld",
 		  Ctr->CtrCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,Hie_Lvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs);
    return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
   }
@@ -4438,7 +4439,7 @@ unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
    unsigned NumUsrsCtr;
 
    /***** Get number of users who claim to belong to center from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTR,Hie_Lvl_CTR,Ctr->CtrCod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Ctr->CtrCod,
                                    FigCch_UNSIGNED,&NumUsrsCtr))
       /***** Get current number of users who claim to belong to center from database and update cache *****/
       NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
@@ -4485,8 +4486,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
    row[ 8]: usr_data.PhotoVisibility
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
-   row[11]: crs_users.Role	(only if Scope == Hie_Lvl_CRS)
-   row[12]: crs_users.Accepted	(only if Scope == Hie_Lvl_CRS)
+   row[11]: crs_users.Role	(only if Scope == HieLvl_CRS)
+   row[12]: crs_users.Accepted	(only if Scope == HieLvl_CRS)
    */
 
    /***** If there are no groups selected, don't do anything *****/
@@ -4644,7 +4645,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
+void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role)
   {
    char *Query = NULL;
    const char *QueryFields =
@@ -4671,14 +4672,14 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
    row[ 8]: usr_data.PhotoVisibility
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
-   row[11]: crs_users.Role	(only if Scope == Hie_Lvl_CRS)
-   row[12]: crs_users.Accepted	(only if Scope == Hie_Lvl_CRS)
+   row[11]: crs_users.Role	(only if Scope == HieLvl_CRS)
+   row[12]: crs_users.Accepted	(only if Scope == HieLvl_CRS)
    */
 
    /***** Build query *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 /* Get users in courses from the whole platform */
 	 DB_BuildQuery (&Query,
 		        "SELECT %s"
@@ -4693,7 +4694,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 		        QueryFields,
 		        (unsigned) Role);
 	 break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 /* Get users in courses from the current country */
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
@@ -4718,7 +4719,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			(unsigned) Role,
 			Gbl.Hierarchy.Cty.CtyCod);
 	 break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 /* Get users in courses from the current institution */
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
@@ -4741,7 +4742,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			(unsigned) Role,
 			Gbl.Hierarchy.Ins.InsCod);
 	 break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 /* Get users in courses from the current center */
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
@@ -4762,7 +4763,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			(unsigned) Role,
 			Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 /* Get users in courses from the current degree */
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
@@ -4781,7 +4782,7 @@ void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role)
 			(unsigned) Role,
 			Gbl.Hierarchy.Deg.DegCod);
 	 break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
 	 /* Get users from the current course */
 	 Usr_BuildQueryToGetUsrsLstCrs (&Query,Role);
 	 break;
@@ -4829,8 +4830,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    row[ 8]: usr_data.PhotoVisibility
    row[ 9]: usr_data.CtyCod
    row[10]: usr_data.InsCod
-   row[11]: crs_users.Role	(only if Scope == Hie_Lvl_CRS)
-   row[12]: crs_users.Accepted	(only if Scope == Hie_Lvl_CRS)
+   row[11]: crs_users.Role	(only if Scope == HieLvl_CRS)
+   row[12]: crs_users.Accepted	(only if Scope == HieLvl_CRS)
    */
    const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
 			    " ORDER BY usr_data.Surname1,"
@@ -4847,7 +4848,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
       case Rol_UNK:	// Here Rol_UNK means any rol (role does not matter)
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Hie_Lvl_SYS:
+	    case HieLvl_SYS:
 	       /* Search users from the whole platform */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -4855,7 +4856,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " WHERE %s",
 			      QueryFields,OrderQuery);
 	       break;
-	    case Hie_Lvl_CTY:
+	    case HieLvl_CTY:
 	       /* Search users in courses from the current country */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -4877,7 +4878,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Cty.CtyCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_INS:
+	    case HieLvl_INS:
 	       /* Search users in courses from the current institution */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -4897,7 +4898,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Ins.InsCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_CTR:
+	    case HieLvl_CTR:
 	       /* Search users in courses from the current center */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -4915,7 +4916,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Ctr.CtrCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_DEG:
+	    case HieLvl_DEG:
 	       /* Search users in courses from the current degree */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -4931,7 +4932,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Deg.DegCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_CRS:
+	    case HieLvl_CRS:
 	       /* Search users in courses from the current course */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s,"
@@ -4991,7 +4992,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   }
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Hie_Lvl_SYS:
+	    case HieLvl_SYS:
 	       /* Search users in courses from the whole platform */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -5005,7 +5006,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      SubQueryRole,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_CTY:
+	    case HieLvl_CTY:
 	       /* Search users in courses from the current country */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -5029,7 +5030,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Cty.CtyCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_INS:
+	    case HieLvl_INS:
 	       /* Search users in courses from the current institution */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -5051,7 +5052,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Ins.InsCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_CTR:
+	    case HieLvl_CTR:
 	       /* Search users in courses from the current center */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -5071,7 +5072,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Ctr.CtrCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_DEG:
+	    case HieLvl_DEG:
 	       /* Search users in courses from the current degree */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s"
@@ -5089,7 +5090,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      Gbl.Hierarchy.Deg.DegCod,
 			      OrderQuery);
 	       break;
-	    case Hie_Lvl_CRS:
+	    case HieLvl_CRS:
 	       /* Search users in courses from the current course */
 	       DB_BuildQuery (&Query,
 			      "SELECT %s,"
@@ -5165,7 +5166,7 @@ void Usr_DropTmpTableWithCandidateUsrs (void)
 /******************** Get list with data of administrators *******************/
 /*****************************************************************************/
 
-static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
+static void Usr_GetAdmsLst (HieLvl_Level_t Scope)
   {
    const char *QueryFields =
       "UsrCod,"
@@ -5201,7 +5202,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
    // SELECT... WHERE (...) OR (...) <-- very slow
    switch (Scope)
      {
-      case Hie_Lvl_SYS:	// All admins
+      case HieLvl_SYS:	// All admins
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -5214,7 +5215,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			          "UsrCod",
 			QueryFields);
          break;
-      case Hie_Lvl_CTY:	// System admins
+      case HieLvl_CTY:	// System admins
 				// and admins of the institutions, centers and degrees in the current country
          DB_BuildQuery (&Query,
                         "SELECT %s"
@@ -5255,12 +5256,12 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			          "FirstName,"
 			          "UsrCod",
 			QueryFields,
-			Sco_GetDBStrFromScope (Hie_Lvl_SYS),
-			Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Cty.CtyCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Cty.CtyCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Cty.CtyCod);
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Cty.CtyCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Cty.CtyCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:	// System admins,
+      case HieLvl_INS:	// System admins,
 				// admins of the current institution,
 				// and admins of the centers and degrees in the current institution
          DB_BuildQuery (&Query,
@@ -5296,12 +5297,12 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			          "FirstName,"
 			          "UsrCod",
 			QueryFields,
-			Sco_GetDBStrFromScope (Hie_Lvl_SYS),
-			Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Ins.InsCod);
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:	// System admins,
+      case HieLvl_CTR:	// System admins,
 				// admins of the current institution,
 				// admins and the current center,
 				// and admins of the degrees in the current center
@@ -5334,12 +5335,12 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			          "FirstName,"
 			          "UsrCod",
 			QueryFields,
-			Sco_GetDBStrFromScope (Hie_Lvl_SYS),
-			Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Ctr.CtrCod);
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_Lvl_DEG:	// System admins
+      case HieLvl_DEG:	// System admins
 				// and admins of the current institution, center or degree
          DB_BuildQuery (&Query,
 			"SELECT %s"
@@ -5368,10 +5369,10 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 			          "FirstName,"
 			          "UsrCod",
 			QueryFields,
-			Sco_GetDBStrFromScope (Hie_Lvl_SYS),
-			Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-			Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Deg.DegCod);
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod);
          break;
       default:        // not aplicable
 	 Err_WrongScopeExit ();
@@ -5386,7 +5387,7 @@ static void Usr_GetAdmsLst (Hie_Lvl_Level_t Scope)
 /************************ Get list with data of guests ***********************/
 /*****************************************************************************/
 
-static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope)
+static void Usr_GetGstsLst (HieLvl_Level_t Scope)
   {
    const char *QueryFields =
       "UsrCod,"
@@ -5418,7 +5419,7 @@ static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope)
    /***** Build query *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 DB_BuildQuery (&Query,
          		"SELECT %s"
          	 	 " FROM usr_data"
@@ -5431,7 +5432,7 @@ static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope)
 			          "UsrCod",
 			QueryFields);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -5449,7 +5450,7 @@ static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope)
 			Gbl.Hierarchy.Cty.CtyCod,
 			Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -5464,7 +5465,7 @@ static void Usr_GetGstsLst (Hie_Lvl_Level_t Scope)
 			QueryFields,
 			Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 DB_BuildQuery (&Query,
 			"SELECT %s"
 			 " FROM usr_data"
@@ -5519,7 +5520,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 		  (unsigned) Rol_STD);
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Query,Rol_STD,Hie_Lvl_DEG);
+   Usr_GetListUsrsFromQuery (Query,Rol_STD,HieLvl_DEG);
 
    /***** Free query string *****/
    free (Query);
@@ -5529,7 +5530,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 /********************** Get list of users from database **********************/
 /*****************************************************************************/
 
-static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_t Scope)
+static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    MYSQL_RES *mysql_res;
@@ -5586,8 +5587,8 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
             row[ 8]: usr_data.PhotoVisibility
 	    row[ 9]: usr_data.CtyCod
 	    row[10]: usr_data.InsCod
-	    row[11]: crs_users.Role	(only if Scope == Hie_Lvl_CRS)
-	    row[12]: crs_users.Accepted	(only if Scope == Hie_Lvl_CRS)
+	    row[11]: crs_users.Role	(only if Scope == HieLvl_CRS)
+	    row[12]: crs_users.Accepted	(only if Scope == HieLvl_CRS)
 	    */
             UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
@@ -5618,16 +5619,16 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[10]);
 
             /* Get user's role and acceptance of enrolment in course(s)
-               (row[11], row[12] if Scope == Hie_Lvl_CRS) */
+               (row[11], row[12] if Scope == HieLvl_CRS) */
             switch (Role)
               {
                case Rol_UNK:	// Here Rol_UNK means any user
 		  switch (Scope)
 		    {
-		     case Hie_Lvl_UNK:	// Unknown
+		     case HieLvl_UNK:	// Unknown
 			Err_WrongScopeExit ();
 			break;
-		     case Hie_Lvl_SYS:	// System
+		     case HieLvl_SYS:	// System
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			if (Usr_GetNumCrssOfUsr (UsrInList->UsrCod))
@@ -5635,15 +5636,15 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
 			else
 			   UsrInList->Accepted = false;
 			break;
-		     case Hie_Lvl_CTY:	// Country
-		     case Hie_Lvl_INS:	// Institution
-		     case Hie_Lvl_CTR:	// Center
-		     case Hie_Lvl_DEG:	// Degree
+		     case HieLvl_CTY:	// Country
+		     case HieLvl_INS:	// Institution
+		     case HieLvl_CTR:	// Center
+		     case HieLvl_DEG:	// Degree
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			UsrInList->Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			break;
-		     case Hie_Lvl_CRS:	// Course
+		     case HieLvl_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
 			UsrInList->Accepted = (row[12][0] == 'Y');
@@ -5662,19 +5663,19 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Lvl_Level_
                case Rol_TCH:
 		  switch (Scope)
 		    {
-		     case Hie_Lvl_UNK:	// Unknown
+		     case HieLvl_UNK:	// Unknown
 			Err_WrongScopeExit ();
 			break;
-		     case Hie_Lvl_SYS:	// System
-		     case Hie_Lvl_CTY:	// Country
-		     case Hie_Lvl_INS:	// Institution
-		     case Hie_Lvl_CTR:	// Center
-		     case Hie_Lvl_DEG:	// Degree
+		     case HieLvl_SYS:	// System
+		     case HieLvl_CTY:	// Country
+		     case HieLvl_INS:	// Institution
+		     case HieLvl_CTR:	// Center
+		     case HieLvl_DEG:	// Degree
 			// Query result has not a column with the acceptation
 	                UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			UsrInList->Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,Role) == 0);
 			break;
-		     case Hie_Lvl_CRS:	// Course
+		     case HieLvl_CRS:	// Course
 			// Query result has a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
 			UsrInList->Accepted = (row[12][0] == 'Y');
@@ -6473,9 +6474,9 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_STD);
-   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_NET);
-   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_TCH);
+   Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
+   Usr_GetListUsrs (HieLvl_CRS,Rol_NET);
+   Usr_GetListUsrs (HieLvl_CRS,Rol_TCH);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
@@ -7149,7 +7150,7 @@ void Usr_ListAllDataStds (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** If the scope is the current course... *****/
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
      {
       /* Get list of groups types and groups in current course
          This is necessary to show columns with group selection */
@@ -7164,13 +7165,13 @@ void Usr_ListAllDataStds (void)
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      if (Gbl.Scope.Current == Hie_Lvl_CRS)
+      if (Gbl.Scope.Current == HieLvl_CRS)
          /***** Get list of record fields in current course *****/
          Rec_GetListRecordFieldsInCurrentCrs ();
 
       /***** Set number of columns *****/
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_STD;
-      if (Gbl.Scope.Current == Hie_Lvl_CRS)
+      if (Gbl.Scope.Current == HieLvl_CRS)
         {
          NumColumnsCardAndGroups = NumColumnsCommonCard + Gbl.Crs.Grps.GrpTypes.Num;
          NumColumnsTotal = NumColumnsCardAndGroups + Gbl.Crs.Records.LstFields.Num;
@@ -7179,7 +7180,7 @@ void Usr_ListAllDataStds (void)
          NumColumnsTotal = NumColumnsCardAndGroups = NumColumnsCommonCard;
 
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if (Gbl.Scope.Current == Hie_Lvl_CRS)
+      if (Gbl.Scope.Current == HieLvl_CRS)
 	{
 	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = malloc (Length + 1)) == NULL)
@@ -7209,7 +7210,7 @@ void Usr_ListAllDataStds (void)
          HTM_TH (1,1,"LM LIGHT_BLUE",FieldNames[NumCol]);
 
       /* 2. Columns for the groups */
-      if (Gbl.Scope.Current == Hie_Lvl_CRS)
+      if (Gbl.Scope.Current == HieLvl_CRS)
         {
          if (Gbl.Crs.Grps.GrpTypes.Num)
             for (NumGrpTyp = 0;
@@ -7284,7 +7285,7 @@ void Usr_ListAllDataStds (void)
       HTM_TABLE_End ();
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
-      if (Gbl.Scope.Current == Hie_Lvl_CRS)
+      if (Gbl.Scope.Current == HieLvl_CRS)
          free (GroupNames);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -7386,28 +7387,28 @@ void Usr_ListAllDataTchs (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
-	               1 << Hie_Lvl_CTY |
-                       1 << Hie_Lvl_INS |
-                       1 << Hie_Lvl_CTR |
-                       1 << Hie_Lvl_DEG |
-                       1 << Hie_Lvl_CRS;
-   Gbl.Scope.Default = Hie_Lvl_CRS;
+   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+	               1 << HieLvl_CTY |
+                       1 << HieLvl_INS |
+                       1 << HieLvl_CTR |
+                       1 << HieLvl_DEG |
+                       1 << HieLvl_CRS;
+   Gbl.Scope.Default = HieLvl_CRS;
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-				     (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-				     (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-				     (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-				     (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
 								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -7656,12 +7657,12 @@ void Usr_ListDataAdms (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
-	               1 << Hie_Lvl_CTY |
-                       1 << Hie_Lvl_INS |
-                       1 << Hie_Lvl_CTR |
-                       1 << Hie_Lvl_DEG;
-   Gbl.Scope.Default = Hie_Lvl_DEG;
+   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+	               1 << HieLvl_CTY |
+                       1 << HieLvl_INS |
+                       1 << HieLvl_CTR |
+                       1 << HieLvl_DEG;
+   Gbl.Scope.Default = HieLvl_DEG;
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of administrators *****/
@@ -7932,7 +7933,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
 
    /***** If user logged and course selected... *****/
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
      {
       /***** Get number of columns in class photo from database *****/
       NumRows = (unsigned)
@@ -7970,7 +7971,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
 static void Usr_UpdateMyColsClassPhotoInDB (void)
   {
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update number of columns in class photo",
 		      "UPDATE crs_user_settings"
@@ -8077,7 +8078,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
 static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
   {
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update your preference about photos in listing",
 		      "UPDATE crs_user_settings"
@@ -8188,8 +8189,8 @@ void Usr_SeeGuests (void)
          /***** Draw a class photo with guests *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (false,true,
-				       (Gbl.Scope.Current == Hie_Lvl_CTR ||
-					Gbl.Scope.Current == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
+				       (Gbl.Scope.Current == HieLvl_CTR ||
+					Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
 									      -1L,
 				       -1L,
 				       -1L);
@@ -8269,7 +8270,7 @@ void Usr_SeeStudents (void)
 	 /***** Contextual menu *****/
          Mnu_ContextMenuBegin ();
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);	// Admin one student
-	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&		// Course selected
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&		// Course selected
 	     Gbl.Usrs.Me.Role.Logged != Rol_STD)	// Teacher or admin
 	   {
 	    Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
@@ -8291,7 +8292,7 @@ void Usr_SeeStudents (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get groups to show ******/
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
@@ -8324,7 +8325,7 @@ void Usr_SeeStudents (void)
      }
 
    /***** Form to select groups *****/
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
                                          Grp_MY_GROUPS);
 
@@ -8343,15 +8344,15 @@ void Usr_SeeStudents (void)
          /***** Draw a class photo with students of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (false,true,
-				       (Gbl.Scope.Current == Hie_Lvl_CRS ||
-					Gbl.Scope.Current == Hie_Lvl_DEG ||
-					Gbl.Scope.Current == Hie_Lvl_CTR ||
-					Gbl.Scope.Current == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
+				       (Gbl.Scope.Current == HieLvl_CRS ||
+					Gbl.Scope.Current == HieLvl_DEG ||
+					Gbl.Scope.Current == HieLvl_CTR ||
+					Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
 								        -1L,
-				       (Gbl.Scope.Current == Hie_Lvl_CRS ||
-					Gbl.Scope.Current == Hie_Lvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
+				       (Gbl.Scope.Current == HieLvl_CRS ||
+					Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 									-1L,
-					Gbl.Scope.Current == Hie_Lvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
+					Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 									-1L);
 
          /* Set options allowed */
@@ -8436,7 +8437,7 @@ void Usr_SeeTeachers (void)
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);	// Admin one teacher
-	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&		// Course selected
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&		// Course selected
 	     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
 	   {
 	    Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers
@@ -8454,32 +8455,32 @@ void Usr_SeeTeachers (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
-	               1 << Hie_Lvl_CTY |
-                       1 << Hie_Lvl_INS |
-                       1 << Hie_Lvl_CTR |
-                       1 << Hie_Lvl_DEG |
-                       1 << Hie_Lvl_CRS;
-   Gbl.Scope.Default = Hie_Lvl_CRS;
+   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+	               1 << HieLvl_CTY |
+                       1 << HieLvl_INS |
+                       1 << HieLvl_CTR |
+                       1 << HieLvl_DEG |
+                       1 << HieLvl_CRS;
+   Gbl.Scope.Default = HieLvl_CRS;
    Sco_GetScope ("ScopeUsr");
 
    /***** Get groups to show ******/
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get lists of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-				     (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-				     (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-				     (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-				     (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
 								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -8501,7 +8502,7 @@ void Usr_SeeTeachers (void)
    HTM_DIV_End ();
 
    /***** Form to select groups *****/
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       Grp_ShowFormToSelectSeveralGroups (Sco_PutParamCurrentScope,&Gbl.Scope.Current,
                                          Grp_MY_GROUPS);
 
@@ -8520,15 +8521,15 @@ void Usr_SeeTeachers (void)
          /***** Draw a class photo with teachers of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
 	    Lay_WriteHeaderClassPhoto (false,true,
-				       (Gbl.Scope.Current == Hie_Lvl_CRS ||
-					Gbl.Scope.Current == Hie_Lvl_DEG ||
-					Gbl.Scope.Current == Hie_Lvl_CTR ||
-					Gbl.Scope.Current == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
+				       (Gbl.Scope.Current == HieLvl_CRS ||
+					Gbl.Scope.Current == HieLvl_DEG ||
+					Gbl.Scope.Current == HieLvl_CTR ||
+					Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
 									-1L,
-				       (Gbl.Scope.Current == Hie_Lvl_CRS ||
-					Gbl.Scope.Current == Hie_Lvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
+				       (Gbl.Scope.Current == HieLvl_CRS ||
+					Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 									-1L,
-					Gbl.Scope.Current == Hie_Lvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
+					Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 									-1L);
 
          /* Set options allowed */
@@ -8627,7 +8628,7 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
 	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
 	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Hie_Lvl_CRS &&
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == HieLvl_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -8635,7 +8636,7 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 
          ICanChooseOption[Usr_OPTION_HOMEWORK]   =
          ICanChooseOption[Usr_OPTION_ATTENDANCE] =
-         ICanChooseOption[Usr_OPTION_EMAIL]      = (Gbl.Scope.Current == Hie_Lvl_CRS &&
+         ICanChooseOption[Usr_OPTION_EMAIL]      = (Gbl.Scope.Current == HieLvl_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
@@ -8645,12 +8646,12 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
 	 ICanChooseOption[Usr_OPTION_EMAIL]      =
 	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Hie_Lvl_CRS &&
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == HieLvl_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
-         ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Scope.Current == Hie_Lvl_CRS &&
+         ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Scope.Current == HieLvl_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
@@ -9069,8 +9070,8 @@ void Usr_SeeGstClassPhotoPrn (void)
      {
       /***** Draw the guests' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
-				 (Gbl.Scope.Current == Hie_Lvl_CTR ||
-				  Gbl.Scope.Current == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
+				 (Gbl.Scope.Current == HieLvl_CTR ||
+				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
                                                                         -1L,
 				 -1L,-1L);
       HTM_TABLE_BeginWide ();
@@ -9111,15 +9112,15 @@ void Usr_SeeStdClassPhotoPrn (void)
      {
       /***** Draw the students' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
-				 (Gbl.Scope.Current == Hie_Lvl_CRS ||
-				  Gbl.Scope.Current == Hie_Lvl_DEG ||
-				  Gbl.Scope.Current == Hie_Lvl_CTR ||
-				  Gbl.Scope.Current == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
+				 (Gbl.Scope.Current == HieLvl_CRS ||
+				  Gbl.Scope.Current == HieLvl_DEG ||
+				  Gbl.Scope.Current == HieLvl_CTR ||
+				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
 					                                -1L,
-				 (Gbl.Scope.Current == Hie_Lvl_CRS ||
-				  Gbl.Scope.Current == Hie_Lvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
+				 (Gbl.Scope.Current == HieLvl_CRS ||
+				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 					                                -1L,
-				  Gbl.Scope.Current == Hie_Lvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
+				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 					                                -1L);
       HTM_TABLE_BeginWide ();
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
@@ -9151,13 +9152,13 @@ void Usr_SeeTchClassPhotoPrn (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Hie_Lvl_SYS |
-	               1 << Hie_Lvl_CTY |
-                       1 << Hie_Lvl_INS |
-                       1 << Hie_Lvl_CTR |
-                       1 << Hie_Lvl_DEG |
-                       1 << Hie_Lvl_CRS;
-   Gbl.Scope.Default = Hie_Lvl_CRS;
+   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+	               1 << HieLvl_CTY |
+                       1 << HieLvl_INS |
+                       1 << HieLvl_CTR |
+                       1 << HieLvl_DEG |
+                       1 << HieLvl_CRS;
+   Gbl.Scope.Default = HieLvl_CRS;
    Sco_GetScope ("ScopeUsr");
 
    /****** Get groups to show ******/
@@ -9166,16 +9167,16 @@ void Usr_SeeTchClassPhotoPrn (void)
    /***** Get list of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   if (Gbl.Scope.Current == Hie_Lvl_CRS)
+   if (Gbl.Scope.Current == HieLvl_CRS)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
-				     (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-				     (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-				     (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-				     (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-				     (Gbl.Scope.Current == Hie_Lvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
+				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
+				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
+				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
 								     -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
@@ -9184,15 +9185,15 @@ void Usr_SeeTchClassPhotoPrn (void)
      {
       /***** Draw the teachers' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
-				 (Gbl.Scope.Current == Hie_Lvl_CRS ||
-				  Gbl.Scope.Current == Hie_Lvl_DEG ||
-				  Gbl.Scope.Current == Hie_Lvl_CTR ||
-				  Gbl.Scope.Current == Hie_Lvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
+				 (Gbl.Scope.Current == HieLvl_CRS ||
+				  Gbl.Scope.Current == HieLvl_DEG ||
+				  Gbl.Scope.Current == HieLvl_CTR ||
+				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
 					                                -1L,
-				 (Gbl.Scope.Current == Hie_Lvl_CRS ||
-				  Gbl.Scope.Current == Hie_Lvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
+				 (Gbl.Scope.Current == HieLvl_CRS ||
+				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 					                                -1L,
-				  Gbl.Scope.Current == Hie_Lvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
+				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 					                                -1L);
       HTM_TABLE_BeginWide ();
 
@@ -9419,7 +9420,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 
    else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
             Role == Rol_TCH &&				// No teachers found
-            Gbl.Hierarchy.Level == Hie_Lvl_CRS &&		// Course selected
+            Gbl.Hierarchy.Level == HieLvl_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,
@@ -9443,17 +9444,17 @@ unsigned Usr_GetTotalNumberOfUsers (void)
    /***** Get number of users with events from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 return (unsigned) DB_GetNumRowsTable ("usr_data");			// All users in platform
-      case Hie_Lvl_CTY:
-      case Hie_Lvl_INS:
-      case Hie_Lvl_CTR:
-      case Hie_Lvl_DEG:
-      case Hie_Lvl_CRS:
-         Cod = (Gbl.Scope.Current == Hie_Lvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
-	       (Gbl.Scope.Current == Hie_Lvl_INS ? Gbl.Hierarchy.Ins.InsCod :
-	       (Gbl.Scope.Current == Hie_Lvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
-	       (Gbl.Scope.Current == Hie_Lvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
+      case HieLvl_CTY:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+         Cod = (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
+	       (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
+	       (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
+	       (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
 	                                           Gbl.Hierarchy.Crs.CrsCod))));
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
@@ -9471,7 +9472,7 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 
 #define Usr_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
 
-unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
+unsigned Usr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
   {
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char SubQueryRoles[Usr_MAX_BYTES_SUBQUERY_ROLES + 1];
@@ -9548,7 +9549,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
    /***** Get number of users from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          if (AnyUserInCourses)	// Any user
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -9563,7 +9564,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
 			     "%s",
 			   SubQueryRoles);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          if (AnyUserInCourses)	// Any user
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -9598,7 +9599,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
 			   Cod,
 			   SubQueryRoles);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          if (AnyUserInCourses)	// Any user
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -9629,7 +9630,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
 			   Cod,
 			   SubQueryRoles);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          if (AnyUserInCourses)	// Any user
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -9656,7 +9657,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
 			   Cod,
 			   SubQueryRoles);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          if (AnyUserInCourses)	// Any user
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -9677,7 +9678,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
 			     " AND crs_users.Role%s",
 			  Cod,SubQueryRoles);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          if (AnyUserInCourses)	// Any user
             NumUsrs = (unsigned)
             DB_QueryCOUNT ("can not get number of users",
@@ -9707,7 +9708,7 @@ unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
    return NumUsrs;
   }
 
-unsigned Usr_GetCachedNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles)
+unsigned Usr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
   {
    unsigned NumUsrsInCrss;
 
@@ -9752,7 +9753,7 @@ unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
    unsigned NumGsts;
 
    /***** Get number of guests from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,HieLvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumGsts))
      {
       /***** Get current number of guests from database and update cache *****/
@@ -9764,7 +9765,7 @@ unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
 		     " WHERE UsrCod NOT IN"
 			   " (SELECT DISTINCT(UsrCod)"
 			      " FROM crs_users)");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,HieLvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumGsts);
      }
 
@@ -9775,12 +9776,12 @@ unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role)
+static double Usr_GetNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    /***** Get number of courses per user from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -9795,7 +9796,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " WHERE Role=%u"
 						 " GROUP BY UsrCod) AS NumCrssTable",
 					 (unsigned) Role);
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -9830,7 +9831,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -9861,7 +9862,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						  " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -9888,7 +9889,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of courses per user",
 					 "SELECT AVG(NumCrss)"
@@ -9911,7 +9912,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return 1.0;
       default:
          Err_WrongScopeExit ();
@@ -9919,7 +9920,7 @@ static double Usr_GetNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
      }
   }
 
-double Usr_GetCachedNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role)
+double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
      {
@@ -9947,12 +9948,12 @@ double Usr_GetCachedNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Rol
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role)
+static double Usr_GetNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    /***** Get number of users per course from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -9966,7 +9967,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						  " FROM crs_users"
 						 " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
 					 (unsigned) Role);
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -10001,7 +10002,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -10032,7 +10033,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -10059,7 +10060,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
 	 if (Role == Rol_UNK)	// Any user
 	    return DB_QuerySELECTDouble ("can not get number of users per course",
 					 "SELECT AVG(NumUsrs)"
@@ -10082,8 +10083,8 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
 						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
 					 Cod,
 					 (unsigned) Role);
-      case Hie_Lvl_CRS:
-	 return (double) Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Cod,
+      case HieLvl_CRS:
+	 return (double) Usr_GetNumUsrsInCrss (HieLvl_CRS,Cod,
 				               Role == Rol_UNK ? 1 << Rol_STD |
 							         1 << Rol_NET |
 							         1 << Rol_TCH :	// Any user
@@ -10095,7 +10096,7 @@ static double Usr_GetNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Ro
      }
   }
 
-double Usr_GetCachedNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role)
+double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
      {

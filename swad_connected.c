@@ -124,7 +124,7 @@ void Con_ShowConnectedUsrs (void)
       Con_ShowGlobalConnectedUsrs ();
 
       /***** Show connected users in the current location *****/
-      if (Gbl.Scope.Current != Hie_Lvl_UNK)
+      if (Gbl.Scope.Current != HieLvl_UNK)
 	 Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End box *****/
@@ -237,13 +237,13 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&	// Right column visible
-       Gbl.Hierarchy.Level == Hie_Lvl_CRS &&		// Course selected
+       Gbl.Hierarchy.Level == HieLvl_CRS &&		// Course selected
        (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
       Gbl.Usrs.Connected.NumUsrs       = 0;
       Gbl.Usrs.Connected.NumUsrsToList = 0;
-      Gbl.Scope.Current = Hie_Lvl_CRS;
+      Gbl.Scope.Current = HieLvl_CRS;
 
       /***** Number of teachers *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
@@ -421,7 +421,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 						      // the list of connected users
 						      // is dynamically updated via AJAX
-	       Sco_PutParamScope ("ScopeCon",Hie_Lvl_CRS);
+	       Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
 				   Txt_Connected_users,"ICO16x16");
 	       Frm_EndForm ();
@@ -660,8 +660,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    const char *ClassTxt;
    const char *ClassLink;
    struct UsrData UsrDat;
-   bool PutLinkToRecord = (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&	// Course selected
-	                   Gbl.Scope.Current   == Hie_Lvl_CRS &&	// Scope is current course
+   bool PutLinkToRecord = (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
+	                   Gbl.Scope.Current   == HieLvl_CRS &&	// Scope is current course
 	                   (Role == Rol_STD ||				// Role is student,...
 	                    Role == Rol_NET ||				// ...non-editing teacher...
 	                    Role == Rol_TCH));				// ...or teacher

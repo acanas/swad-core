@@ -36,17 +36,17 @@
 /*****************************************************************************/
 
 // Levels in the hierarchy
-#define Hie_Lvl_NUM_LEVELS	7
+#define HieLvl_NUM_LEVELS	7
 typedef enum
   {
-   Hie_Lvl_UNK = 0,	// Unknown
-   Hie_Lvl_SYS = 1,	// System
-   Hie_Lvl_CTY = 2,	// Country
-   Hie_Lvl_INS = 3,	// Institution
-   Hie_Lvl_CTR = 4,	// Center
-   Hie_Lvl_DEG = 5,	// Degree
-   Hie_Lvl_CRS = 6,	// Course
-  } Hie_Lvl_Level_t;
+   HieLvl_UNK = 0,	// Unknown
+   HieLvl_SYS = 1,	// System
+   HieLvl_CTY = 2,	// Country
+   HieLvl_INS = 3,	// Institution
+   HieLvl_CTR = 4,	// Center
+   HieLvl_DEG = 5,	// Degree
+   HieLvl_CRS = 6,	// Course
+  } HieLvl_Level_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

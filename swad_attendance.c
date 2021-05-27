@@ -41,6 +41,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_pagination.h"
@@ -1416,7 +1417,7 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 // Returns the number of attendance events
 // in this location (all the platform, current degree or current course)
 
-unsigned Att_GetNumAttEvents (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
+unsigned Att_GetNumAttEvents (HieLvl_Level_t Scope,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1588,7 +1589,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_STD);
+   Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Attendance,
@@ -1982,7 +1983,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STD] *****/
    /* Get list of students in the groups selected */
-   Usr_GetListUsrs (Hie_Lvl_CRS,Rol_STD);
+   Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)	// If there are students in the groups selected...
      {

@@ -74,7 +74,7 @@ typedef enum
 
 struct Fig_Figures
   {
-   Hie_Lvl_Level_t Scope;
+   HieLvl_Level_t Scope;
    Fig_FigureType_t FigureType;
   };
 

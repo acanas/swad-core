@@ -31,6 +31,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_user.h"
 
@@ -132,7 +133,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
-      if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+      if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	{
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
 	   {
@@ -162,9 +163,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
-	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS &&				// Course selected
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&				// Course selected
 	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
-	    if (!Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+	    if (!Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				             1 << Rol_STD))		// Current course probably has no students
 	      {
 	       /* Request students enrolment */
@@ -185,7 +186,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
 	{
 	 /* Select a course */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Level == Hie_Lvl_CRS ? Txt_Select_create_course_in_X :
+	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
 												   Txt_Select_or_create_one_course_in_X,
 							          Gbl.Hierarchy.Deg.ShrtName),
 				              ActSeeCrs,

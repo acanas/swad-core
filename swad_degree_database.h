@@ -1,7 +1,7 @@
-// swad_logo.h: logo of institution, center or degree
+// swad_degree_database.h: degrees operations with database
 
-#ifndef _SWAD_LGO
-#define _SWAD_LGO
+#ifndef _SWAD_DEG_DB
+#define _SWAD_DEG_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,6 +27,15 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
+// #include "swad_action.h"
+// #include "swad_constant.h"
+#include "swad_degree_type.h"
+// #include "swad_hierarchy_level.h"
+// #include "swad_role_type.h"
+// #include "swad_string.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -39,11 +48,24 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
-                   unsigned Size,const char *Class,bool PutIconIfNotExists);
-void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope);
-void Lgo_RequestLogo (HieLvl_Level_t Scope);
-void Lgo_ReceiveLogo (HieLvl_Level_t Scope);
-void Lgo_RemoveLogo (HieLvl_Level_t Scope);
+void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
+void Deg_DB_CreateDegree (struct Deg_Degree *Deg,unsigned Status);
+
+unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
+                                HieLvl_Level_t Scope,DegTyp_Order_t Order);
+void Deg_DB_GetDegTypeNameByCod (struct DegreeType *DegTyp);
+unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod);
+long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);
+void Deg_DB_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg);
+bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
+unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
+unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);
+unsigned Deg_DB_GetDegsOfCurrentCtr (MYSQL_RES **mysql_res);
+unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
+
+void Deg_DB_UpdateDegTypName (long DegTypCod,const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
+void Deg_DB_UpdateDegCtr (long DegCod,long CtrCod);
+
+void Deg_DB_RemoveDegTyp (long DegTypCod);
 
 #endif

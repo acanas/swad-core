@@ -61,8 +61,8 @@ void Agd_DB_RemoveUsrEvents (long UsrCod);
 
 unsigned Agd_DB_GetNumEventsFromUsr (long UsrCod);
 
-unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Lvl_Level_t Scope);
+unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Scope);
 
-unsigned Agd_DB_GetNumEvents (Hie_Lvl_Level_t Scope);
+unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope);
 
 #endif

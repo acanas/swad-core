@@ -34,6 +34,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_holiday.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
@@ -308,7 +309,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
 				 NULL,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hierarchy.Level == Hie_Lvl_INS)		// Institution selected
+   if (Gbl.Hierarchy.Level == HieLvl_INS)		// Institution selected
       Hld_PutIconToSeeHlds ();
   }
 

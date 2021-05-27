@@ -1,7 +1,7 @@
 // swad_degree_type.h: degree types
 
-#ifndef _SWAD_DT
-#define _SWAD_DT
+#ifndef _SWAD_DEG_TYP
+#define _SWAD_DEG_TYP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -33,8 +33,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Deg_MAX_CHARS_DEGREE_TYPE_NAME	(32 - 1)	// 31
-#define Deg_MAX_BYTES_DEGREE_TYPE_NAME	((Deg_MAX_CHARS_DEGREE_TYPE_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
+#define DegTyp_MAX_CHARS_DEGREE_TYPE_NAME	(32 - 1)	// 31
+#define DegTyp_MAX_BYTES_DEGREE_TYPE_NAME	((DegTyp_MAX_CHARS_DEGREE_TYPE_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -42,44 +42,44 @@
 
 struct DegreeType
   {
-   long DegTypCod;					// Degree type code
-   char DegTypName[Deg_MAX_BYTES_DEGREE_TYPE_NAME + 1];	// Degree type name
-   unsigned NumDegs;					// Number of degrees of this type
+   long DegTypCod;						// Degree type code
+   char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1];	// Degree type name
+   unsigned NumDegs;						// Number of degrees of this type
   };
 
-#define DT_NUM_ORDERS 2
+#define DegTyp_NUM_ORDERS 2
 typedef enum
   {
-   DT_ORDER_BY_DEGREE_TYPE = 0,
-   DT_ORDER_BY_NUM_DEGREES = 1,
-  } DT_Order_t;
+   DegTyp_ORDER_BY_DEGREE_TYPE = 0,
+   DegTyp_ORDER_BY_NUM_DEGREES = 1,
+  } DegTyp_Order_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void DT_WriteSelectorDegreeTypes (long SelectedDegTypCod);
+void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod);
 
-void DT_SeeDegreeTypesInDegTab (void);
-void DT_SeeDegreeTypesInStaTab (void);
-void DT_EditDegreeTypes (void);
+void DegTyp_SeeDegreeTypesInDegTab (void);
+void DegTyp_SeeDegreeTypesInStaTab (void);
+void DegTyp_EditDegreeTypes (void);
 
-void DT_PutIconToViewDegreeTypes (void);
+void DegTyp_PutIconToViewDegreeTypes (void);
 
-bool DT_CheckIfICanCreateDegreeTypes (void);
+bool DegTyp_CheckIfICanCreateDegreeTypes (void);
 
-void DT_GetListDegreeTypes (Hie_Lvl_Level_t Scope,DT_Order_t Order);
-void DT_FreeListDegreeTypes (void);
+void DegTyp_GetListDegreeTypes (HieLvl_Level_t Scope,DegTyp_Order_t Order);
+void DegTyp_FreeListDegreeTypes (void);
 
-void DT_ReceiveFormNewDegreeType (void);
+void DegTyp_ReceiveFormNewDegreeType (void);
 
-void DT_RemoveDegreeType (void);
+void DegTyp_RemoveDegreeType (void);
 
-long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed);
+long DegTyp_GetAndCheckParamOtherDegTypCod (long MinCodAllowed);
 
-bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
-void DT_RenameDegreeType (void);
+bool DegTyp_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
+void DegTyp_RenameDegreeType (void);
 
-void DT_ContEditAfterChgDegTyp (void);
+void DegTyp_ContEditAfterChgDegTyp (void);
 
 #endif

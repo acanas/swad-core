@@ -32,6 +32,7 @@
 #include "swad_banner.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_degree_database.h"
 #include "swad_exam_log.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -341,7 +342,7 @@ void Log_GetAndShowLastClicks (void)
 
       /* Get degree code (row[7]) */
       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
-      Deg_GetShortNameOfDegreeByCod (&Hie.Deg);
+      Deg_DB_GetShortNameOfDegreeByCod (&Hie.Deg);
 
       /* Print table row */
       HTM_TR_Begin (NULL);

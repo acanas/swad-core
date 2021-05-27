@@ -110,6 +110,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_ID.h"
 #include "swad_match.h"
 #include "swad_notice.h"
@@ -1754,7 +1755,7 @@ int swad__getUsers (struct soap *soap,
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get list of users *****/
-   Usr_GetListUsrs (Hie_Lvl_CRS,Role);
+   Usr_GetListUsrs (HieLvl_CRS,Role);
    API_CopyListUsers (soap,
 		      Role,getUsersOut);
    Usr_FreeUsrsList (Role);
@@ -1794,7 +1795,7 @@ int swad__findUsers (struct soap *soap,
 	                          "Bad web service key",
 	                          "Web service key does not exist in database");
 
-   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+   if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
       /***** Check course *****/
       if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
 						      Gbl.Hierarchy.Crs.CrsCod,
@@ -1809,7 +1810,7 @@ int swad__findUsers (struct soap *soap,
    Gbl.Usrs.Me.Logged = true;
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
-   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+   if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
       /***** Check if I am a student, non-editing teacher or teacher in the course *****/
       if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
           Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
@@ -1818,7 +1819,7 @@ int swad__findUsers (struct soap *soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
 
-   if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
+   if (Gbl.Hierarchy.Level == HieLvl_CRS)
      {
       /***** Get degree of current course *****/
       if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)	// TODO: Is this necessary?
@@ -1838,8 +1839,8 @@ int swad__findUsers (struct soap *soap,
 
    if (Gbl.Search.Str[0])	// Search some users
      {
-      Gbl.Scope.Current = (Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? Hie_Lvl_CRS :
-							     Hie_Lvl_SYS;
+      Gbl.Scope.Current = (Gbl.Hierarchy.Level == HieLvl_CRS) ? HieLvl_CRS :
+							     HieLvl_SYS;
       if (Sch_BuildSearchQuery (SearchQuery,
 				"CONCAT_WS(' ',FirstName,Surname1,Surname2)",
 				NULL,NULL))

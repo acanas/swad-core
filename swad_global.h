@@ -186,7 +186,7 @@ struct Globals
      } HTMLOutput;
    struct
      {
-      Hie_Lvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
+      HieLvl_Level_t Level;	// Current level in the hierarchy: system, country, institution, center, degree or course
       long Cod;			// Code of the current country, institution, center, degree or course
       struct ListCountries Ctys;// List of countries
       struct Cty_Countr Cty;	// Current country
@@ -360,8 +360,8 @@ struct Globals
      } Record;
    struct
      {
-      Hie_Lvl_Level_t Current;
-      Hie_Lvl_Level_t Default;
+      HieLvl_Level_t Current;
+      HieLvl_Level_t Default;
       unsigned Allowed;
      } Scope;
    struct

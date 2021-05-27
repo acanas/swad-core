@@ -56,7 +56,7 @@ void Prg_MoveRightItem (void);
 
 void Prg_RemoveCrsItems (long CrsCod);
 
-unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope);
-unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope);
+unsigned Prg_GetNumCoursesWithItems (HieLvl_Level_t Scope);
+unsigned Prg_GetNumItems (HieLvl_Level_t Scope);
 
 #endif

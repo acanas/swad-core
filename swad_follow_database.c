@@ -30,6 +30,7 @@
 #include "swad_follow.h"
 #include "swad_follow_database.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -358,7 +359,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 return (unsigned)
 	 DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT FollowedCod,"					// row[0]
@@ -368,7 +369,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			 " ORDER BY N DESC,"
 			           "FollowedCod"
 			 " LIMIT 100");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -390,7 +391,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			           "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -410,7 +411,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			           "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -428,7 +429,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			           "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]
@@ -444,7 +445,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res)
 			           "usr_follow.FollowedCod"
 			 " LIMIT 100",
 			 Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
 			 "SELECT usr_follow.FollowedCod,"			// row[0]

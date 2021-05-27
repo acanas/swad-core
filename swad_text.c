@@ -8206,9 +8206,9 @@ const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
 #endif
 	};
 
-const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
+const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS] =
 	{
-	[DT_ORDER_BY_DEGREE_TYPE] =
+	[DegTyp_ORDER_BY_DEGREE_TYPE] =
 #if   L==1	// ca
 	"Ordenar por tipus de titulaci&oacute;"
 #elif L==2	// de
@@ -8229,7 +8229,7 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
 	"Classificar por tipo de grau"
 #endif
 	,
-	[DT_ORDER_BY_NUM_DEGREES] =
+	[DegTyp_ORDER_BY_NUM_DEGREES] =
 #if   L==1	// ca
 	"Ordenar per nombre de titulacions"
 #elif L==2	// de
@@ -8251,9 +8251,9 @@ const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS] =
+const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS] =
 	{
-	[DT_ORDER_BY_DEGREE_TYPE] =
+	[DegTyp_ORDER_BY_DEGREE_TYPE] =
 #if   L==1	// ca
 	"Tipus de titulaci&oacute;"
 #elif L==2	// de
@@ -8274,7 +8274,7 @@ const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS] =
 	"Tipos de grau"
 #endif
 	,
-	[DT_ORDER_BY_NUM_DEGREES] =
+	[DegTyp_ORDER_BY_NUM_DEGREES] =
 #if   L==1	// ca
 	"Titulacions"
 #elif L==2	// de

@@ -115,18 +115,16 @@ void Deg_PutParamDegCod (long DegCod);
 long Deg_GetAndCheckParamOtherDegCod (long MinCodAllowed);
 
 bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg);
-void Deg_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg);
-long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
 void Deg_RenameDegree (struct Deg_Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
-bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
-                                    long DegCod,long CtrCod);
+bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+                                       long DegCod,long CtrCod);
 void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
-void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
@@ -149,9 +147,9 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetCachedNumDegsInCtr (long CtrCod);
 
 unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 

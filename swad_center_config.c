@@ -42,6 +42,7 @@
 #include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_config.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_place.h"
@@ -212,10 +213,10 @@ static void CtrCfg_Configuration (bool PrintView)
       CtrCfg_NumCrss ();
 
       /***** Number of users in courses of this center *****/
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_UNK);
+      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_TCH);
+      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_NET);
+      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_STD);
+      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_UNK);
      }
 
    /***** End table *****/
@@ -273,7 +274,7 @@ static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
       // have permission to upload logo and photo of the center
      {
       /***** Put icon to upload logo of center *****/
-      Lgo_PutIconToChangeLogo (Hie_Lvl_CTR);
+      Lgo_PutIconToChangeLogo (HieLvl_CTR);
 
       /***** Put icon to upload photo of center *****/
       CtrCfg_PutIconToChangePhoto ();
@@ -312,7 +313,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
 static void CtrCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    Hie_Lvl_CTR,				// Logo scope
+		    HieLvl_CTR,				// Logo scope
 		    Gbl.Hierarchy.Ctr.CtrCod,		// Logo code
                     Gbl.Hierarchy.Ctr.ShrtName,		// Logo short name
 		    Gbl.Hierarchy.Ctr.FullName,		// Logo full name
@@ -605,7 +606,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 				  "BT_LINK LT DAT",NULL);
 	 Hie_FreeGoToMsg ();
 	}
-      Lgo_DrawLogo (Hie_Lvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
+      Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
 		    20,"LM",true);
       HTM_NBSP ();
       HTM_Txt (Gbl.Hierarchy.Ins.FullName);
@@ -810,7 +811,7 @@ static void CtrCfg_NumCrss (void)
 
 void CtrCfg_RequestLogo (void)
   {
-   Lgo_RequestLogo (Hie_Lvl_CTR);
+   Lgo_RequestLogo (HieLvl_CTR);
   }
 
 /*****************************************************************************/
@@ -819,7 +820,7 @@ void CtrCfg_RequestLogo (void)
 
 void CtrCfg_ReceiveLogo (void)
   {
-   Lgo_ReceiveLogo (Hie_Lvl_CTR);
+   Lgo_ReceiveLogo (HieLvl_CTR);
   }
 
 /*****************************************************************************/
@@ -828,7 +829,7 @@ void CtrCfg_ReceiveLogo (void)
 
 void CtrCfg_RemoveLogo (void)
   {
-   Lgo_RemoveLogo (Hie_Lvl_CTR);
+   Lgo_RemoveLogo (HieLvl_CTR);
   }
 
 /*****************************************************************************/

@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 
 /*****************************************************************************/
 /*************************** Private constants *******************************/
@@ -72,7 +73,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
       case Rol_UNK:	// Here Rol_UNK means "any role"
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Hie_Lvl_SYS:		// Get connected users in the whole platform
+	    case HieLvl_SYS:		// Get connected users in the whole platform
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 			                  " of connected users"
@@ -83,7 +84,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			        " FROM usr_connected,"
 			              "usr_data"
 			       " WHERE usr_connected.UsrCod=usr_data.UsrCod");
-	    case Hie_Lvl_CTY:		// Get connected users in the current country
+	    case HieLvl_CTY:		// Get connected users in the current country
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -106,7 +107,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Cty.CtyCod);
-	    case Hie_Lvl_INS:		// Get connected users in the current institution
+	    case HieLvl_INS:		// Get connected users in the current institution
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -127,7 +128,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ins.InsCod);
-	    case Hie_Lvl_CTR:		// Get connected users in the current center
+	    case HieLvl_CTR:		// Get connected users in the current center
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -146,7 +147,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ctr.CtrCod);
-	    case Hie_Lvl_DEG:		// Get connected users in the current degree
+	    case HieLvl_DEG:		// Get connected users in the current degree
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -163,7 +164,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND crs_users.UsrCod=usr_connected.UsrCod"
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Deg.DegCod);
-	    case Hie_Lvl_CRS:		// Get connected users in the current course
+	    case HieLvl_CRS:		// Get connected users in the current course
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -201,7 +202,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Hie_Lvl_SYS:		// Get connected users in the whole platform
+	    case HieLvl_SYS:		// Get connected users in the whole platform
 	       	return (unsigned)
 	        DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -216,7 +217,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			          " AND crs_users.Role=%u"
 			          " AND usr_connected.UsrCod=usr_data.UsrCod",
 			        (unsigned) Role);
-	    case Hie_Lvl_CTY:		// Get connected users in the current country
+	    case HieLvl_CTY:		// Get connected users in the current country
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -241,7 +242,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_INS:		// Get connected users in the current institution
+	    case HieLvl_INS:		// Get connected users in the current institution
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -264,7 +265,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_CTR:		// Get connected users in the current center
+	    case HieLvl_CTR:		// Get connected users in the current center
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -285,7 +286,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_DEG:		// Get connected users in the current degree
+	    case HieLvl_DEG:		// Get connected users in the current degree
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -304,7 +305,7 @@ unsigned Con_DB_GetNumConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Ro
 			         " AND usr_connected.UsrCod=usr_data.UsrCod",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_CRS:		// Get connected users in the current course
+	    case HieLvl_CRS:		// Get connected users in the current course
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get number"
 					  " of connected users"
@@ -357,7 +358,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Hie_Lvl_SYS:		// Show connected users in the whole platform
+	    case HieLvl_SYS:		// Show connected users in the whole platform
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
@@ -372,7 +373,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			         " AND crs_users.Role=%u"
 			       " ORDER BY Dif",
 			       (unsigned) Role);
-	    case Hie_Lvl_CTY:		// Show connected users in the current country
+	    case HieLvl_CTY:		// Show connected users in the current country
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
@@ -397,7 +398,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_INS:		// Show connected users in the current institution
+	    case HieLvl_INS:		// Show connected users in the current institution
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
@@ -420,7 +421,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_CTR:		// Show connected users in the current center
+	    case HieLvl_CTR:		// Show connected users in the current center
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
@@ -441,7 +442,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_DEG:		// Show connected users in the current degree
+	    case HieLvl_DEG:		// Show connected users in the current degree
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
@@ -460,7 +461,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 			       " ORDER BY Dif",
 			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) Role);
-	    case Hie_Lvl_CRS:		// Show connected users in the current course
+	    case HieLvl_CRS:		// Show connected users in the current course
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",

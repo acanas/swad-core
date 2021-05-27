@@ -231,7 +231,7 @@ struct UsrLast
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    struct
      {
-      Hie_Lvl_Level_t Scope;	// Course, degree, center, etc.
+      HieLvl_Level_t Scope;	// Course, degree, center, etc.
       long Cod;			// Course code, degree code, center code, etc.
      } LastHie;
    Act_Action_t LastAct;
@@ -305,7 +305,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
 void Usr_FlushCachesUsr (void);
 
-bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Lvl_Level_t Scope,long Cod);
+bool Usr_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
@@ -440,7 +440,7 @@ void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
 unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
 
-void Usr_GetListUsrs (Hie_Lvl_Level_t Scope,Rol_Role_t Role);
+void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
 void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
@@ -530,13 +530,13 @@ bool Usr_ChkIfUsrCodExists (long UsrCod);
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsers (void);
-unsigned Usr_GetNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles);
-unsigned Usr_GetCachedNumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,unsigned Roles);
+unsigned Usr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
+unsigned Usr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
 
 unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
 
-double Usr_GetCachedNumCrssPerUsr (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
-double Usr_GetCachedNumUsrsPerCrs (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role);
+double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 bool Usr_DB_CheckIfUsrBanned (long UsrCod);
 void Usr_DB_RemoveUsrFromBanned (long UsrCod);

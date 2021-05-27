@@ -76,9 +76,9 @@ void Asg_DB_RemoveCrsAssignments (long CrsCod);
 void Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail);
 
-unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope);
+unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope);
 
-unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope);
+unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,HieLvl_Level_t Scope);
 
 unsigned Asg_DB_GetNumAssignmentsInCrs (long CrsCod);
 

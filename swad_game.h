@@ -165,9 +165,9 @@ void Gam_MoveDownQst (void);
 void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod);
 void Gam_RequestNewMatch (void);
 
-unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope);
-unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope);
-double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope);
+unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope);
+unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope);
+double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
 

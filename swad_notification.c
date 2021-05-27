@@ -45,6 +45,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_mark.h"
 #include "swad_message.h"
@@ -1318,7 +1319,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Usr_GetNumUsrsInCrss (Hie_Lvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+	 if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				   1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
 	    NumUsrs = (unsigned)
@@ -1345,10 +1346,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   " OR (Scope='%s' AND Cod=%ld)"
 				   " OR (Scope='%s' AND Cod=%ld))"
 			      " AND UsrCod<>%ld",
-			    Sco_GetDBStrFromScope (Hie_Lvl_SYS),
-			    Sco_GetDBStrFromScope (Hie_Lvl_INS),Gbl.Hierarchy.Ins.InsCod,
-			    Sco_GetDBStrFromScope (Hie_Lvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
-			    Sco_GetDBStrFromScope (Hie_Lvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+			    Sco_GetDBStrFromScope (HieLvl_SYS),
+			    Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			    Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			    Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TL_COMMENT:	// New comment to one of my social notes or comments
@@ -1450,11 +1451,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 			    " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)",
 		         Cod,
 		         Cod,
-		         Sco_GetDBStrFromScope (Hie_Lvl_CRS),
+		         Sco_GetDBStrFromScope (HieLvl_CRS),
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
 		         Cod,
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         Sco_GetDBStrFromScope (Hie_Lvl_CRS));
+		         Sco_GetDBStrFromScope (HieLvl_CRS));
          break;
      }
 

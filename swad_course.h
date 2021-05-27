@@ -114,7 +114,7 @@ unsigned Crs_GetNumCrssInDeg (long DegCod);
 unsigned Crs_GetCachedNumCrssInDeg (long DegCod);
 
 unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 
 void Crs_WriteSelectorOfCourse (void);
 void Crs_ShowCrssOfCurrentDeg (void);

@@ -2141,15 +2141,15 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         Lgo_DrawLogo (Hie_Lvl_INS,Forum->Location,ForumName,16,NULL,true);
+         Lgo_DrawLogo (HieLvl_INS,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_CENTER_USRS:
       case For_FORUM_CENTER_TCHS:
-         Lgo_DrawLogo (Hie_Lvl_CTR,Forum->Location,ForumName,16,NULL,true);
+         Lgo_DrawLogo (HieLvl_CTR,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Lgo_DrawLogo (Hie_Lvl_DEG,Forum->Location,ForumName,16,NULL,true);
+         Lgo_DrawLogo (HieLvl_DEG,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -4690,21 +4690,21 @@ void For_DB_RemoveUsrFromThrClipboard (long UsrCod)
 /********** Remove all the threads and posts in forums of a degree ***********/
 /*****************************************************************************/
 
-void For_RemoveForums (Hie_Lvl_Level_t Scope,long ForumLocation)
+void For_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
   {
    static const struct
      {
       For_ForumType_t Usrs;
       For_ForumType_t Tchs;
-     } ForumType[Hie_Lvl_NUM_LEVELS] =
+     } ForumType[HieLvl_NUM_LEVELS] =
      {
-      [Hie_Lvl_UNK] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
-      [Hie_Lvl_SYS] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Not removable
-      [Hie_Lvl_CTY] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
-      [Hie_Lvl_INS] = {For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},
-      [Hie_Lvl_CTR] = {For_FORUM_CENTER_USRS,For_FORUM_CENTER_TCHS},
-      [Hie_Lvl_DEG] = {For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},
-      [Hie_Lvl_CRS] = {For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},
+      [HieLvl_UNK] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
+      [HieLvl_SYS] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Not removable
+      [HieLvl_CTY] = {For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// No forums for this scope
+      [HieLvl_INS] = {For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},
+      [HieLvl_CTR] = {For_FORUM_CENTER_USRS,For_FORUM_CENTER_TCHS},
+      [HieLvl_DEG] = {For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},
+      [HieLvl_CRS] = {For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},
      };
 
    /***** Remove disabled posts *****/

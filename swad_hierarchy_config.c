@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 void HieCfg_Title (bool PutLink,
-		   Hie_Lvl_Level_t LogoScope,
+		   HieLvl_Level_t LogoScope,
 		   long LogoCod,
                    char LogoShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
 		   char LogoFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1],
@@ -320,7 +320,7 @@ void HieCfg_QR (const char *ParamName,long HieCod)
 /************************ Number of users in courses *************************/
 /*****************************************************************************/
 
-void HieCfg_NumUsrsInCrss (Hie_Lvl_Level_t Scope,long Cod,Rol_Role_t Role)
+void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];

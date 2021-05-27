@@ -57,7 +57,7 @@
 /*****************************************************************************/
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
-                                   Hie_Lvl_Level_t Scope,long Cod,
+                                   HieLvl_Level_t Scope,long Cod,
                                    FigCch_Type_t Type,const void *ValuePtr)
   {
    /***** Trivial check *****/
@@ -100,19 +100,19 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
 // Return true is figure is found (if figure is cached and recently updated)
 
 bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
-                                Hie_Lvl_Level_t Scope,long Cod,
+                                HieLvl_Level_t Scope,long Cod,
                                 FigCch_Type_t Type,void *ValuePtr)
   {
    /* The higher the level, the longer a value remains cached */
-   time_t TimeCached[Hie_Lvl_NUM_LEVELS] =	// Time in seconds
+   time_t TimeCached[HieLvl_NUM_LEVELS] =	// Time in seconds
      {
-      [Hie_Lvl_UNK] = (time_t) (                 0),	// Unknown
-      [Hie_Lvl_SYS] = (time_t) (24UL * 60UL * 60UL),	// System
-      [Hie_Lvl_CTY] = (time_t) (12UL * 60UL * 60UL),	// Country
-      [Hie_Lvl_INS] = (time_t) ( 6UL * 60UL * 60UL),	// Institution
-      [Hie_Lvl_CTR] = (time_t) ( 3UL * 60UL * 60UL),	// Center
-      [Hie_Lvl_DEG] = (time_t) ( 1UL * 60UL * 60UL),	// Degree
-      [Hie_Lvl_CRS] = (time_t) (              60UL),	// Course
+      [HieLvl_UNK] = (time_t) (                 0),	// Unknown
+      [HieLvl_SYS] = (time_t) (24UL * 60UL * 60UL),	// System
+      [HieLvl_CTY] = (time_t) (12UL * 60UL * 60UL),	// Country
+      [HieLvl_INS] = (time_t) ( 6UL * 60UL * 60UL),	// Institution
+      [HieLvl_CTR] = (time_t) ( 3UL * 60UL * 60UL),	// Center
+      [HieLvl_DEG] = (time_t) ( 1UL * 60UL * 60UL),	// Degree
+      [HieLvl_CRS] = (time_t) (              60UL),	// Course
      };
    static const char *Field[FigCch_NUM_TYPES] =
      {
@@ -136,7 +136,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
 
    /***** Trivial check *****/
    if (Figure == FigCch_UNKNOWN ||	// Unknown figure
-       Scope == Hie_Lvl_UNK)		// Unknown scope
+       Scope == HieLvl_UNK)		// Unknown scope
       return false;
 
    /***** Get figure's value if cached and recent *****/

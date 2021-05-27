@@ -36,6 +36,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
@@ -1044,7 +1045,7 @@ void ID_ConfirmOtherUsrID (void)
         {
 	 /* If user is a student in current course,
 	    check if he/she has accepted */
-	 if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS)
 	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
 	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 

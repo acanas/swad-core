@@ -31,6 +31,7 @@
 #include "swad_date.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -475,18 +476,18 @@ void Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,
 // Returns the number of courses with assignments
 // in this location (all the platform, current degree or current course)
 
-unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
+unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with assignments from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM asg_assignments"
 			" WHERE CrsCod>0");
-       case Hie_Lvl_CTY:
+       case HieLvl_CTY:
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
@@ -501,7 +502,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Cty.CtyCod);
-       case Hie_Lvl_INS:
+       case HieLvl_INS:
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
@@ -514,7 +515,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
@@ -525,7 +526,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"
@@ -534,7 +535,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                         Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT CrsCod)"
@@ -553,19 +554,19 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Lvl_Level_t Scope)
 // Returns the number of assignments
 // in this location (all the platform, current degree or current course)
 
-unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
+unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
   {
    /***** Get number of assignments from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
                                 "SUM(NumNotif)"			// row[1]
 			  " FROM asg_assignments"
 			 " WHERE CrsCod>0");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
@@ -581,7 +582,7 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
@@ -595,7 +596,7 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
@@ -607,7 +608,7 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]
@@ -617,7 +618,7 @@ unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=asg_assignments.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of assignments",
                          "SELECT COUNT(*),"			// row[0]

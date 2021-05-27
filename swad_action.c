@@ -347,11 +347,11 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRecCtrPho	] = {1161,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,CtrCfg_ReceivePhoto		,NULL},
    [ActChgCtrPhoAtt	] = {1159,-1,TabUnk,ActSeeCtrInf	,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,CtrCfg_ChangeCtrPhotoAttr	,NULL},
 
-   [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
-   [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_EditDegreeTypes		,NULL},
-   [ActNewDegTyp	] = { 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_ReceiveFormNewDegreeType	,DT_ContEditAfterChgDegTyp	,NULL},
-   [ActRemDegTyp	] = { 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RemoveDegreeType		,DT_ContEditAfterChgDegTyp	,NULL},
-   [ActRenDegTyp	] = { 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RenameDegreeType		,DT_ContEditAfterChgDegTyp	,NULL},
+   [ActSeeDegTyp	] = {1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_SeeDegreeTypesInDegTab	,NULL},
+   [ActEdiDegTyp	] = { 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DegTyp_EditDegreeTypes		,NULL},
+   [ActNewDegTyp	] = { 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_ReceiveFormNewDegreeType	,DegTyp_ContEditAfterChgDegTyp	,NULL},
+   [ActRemDegTyp	] = { 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_RemoveDegreeType		,DegTyp_ContEditAfterChgDegTyp	,NULL},
+   [ActRenDegTyp	] = { 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DegTyp_RenameDegreeType		,DegTyp_ContEditAfterChgDegTyp	,NULL},
 
    [ActEdiDeg		] = { 536,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_EditDegrees		,NULL},
    [ActReqDeg		] = {1206,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ReceiveFormReqDeg		,Deg_ContEditAfterChgDeg	,NULL},
@@ -3810,22 +3810,22 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 
    switch (Gbl.Hierarchy.Level)
      {
-      case Hie_Lvl_SYS:	// System
+      case HieLvl_SYS:	// System
          Permission = Act_Actions[Action].PermissionSys;
 	 break;
-      case Hie_Lvl_CTY:	// Country selected
+      case HieLvl_CTY:	// Country selected
          Permission = Act_Actions[Action].PermissionCty;
 	 break;
-      case Hie_Lvl_INS:	// Institution selected
+      case HieLvl_INS:	// Institution selected
          Permission = Act_Actions[Action].PermissionIns;
 	 break;
-      case Hie_Lvl_CTR:	// Center selected
+      case HieLvl_CTR:	// Center selected
          Permission = Act_Actions[Action].PermissionCtr;
 	 break;
-      case Hie_Lvl_DEG:	// Degree selected
+      case HieLvl_DEG:	// Degree selected
          Permission = Act_Actions[Action].PermissionDeg;
 	 break;
-      case Hie_Lvl_CRS:	// Course selected
+      case HieLvl_CRS:	// Course selected
 	 Permission = Gbl.Usrs.Me.IBelongToCurrentCrs ? Act_Actions[Action].PermissionCrsIfIBelong :
 							Act_Actions[Action].PermissionCrsIfIDontBelong;
 	 break;
@@ -3946,18 +3946,18 @@ const char *Act_GetActionText (Act_Action_t Action)
 
 void Act_AdjustActionWhenNoUsrLogged (void)
   {
-   static const Act_Action_t Actions[Hie_Lvl_NUM_LEVELS] =
+   static const Act_Action_t Actions[HieLvl_NUM_LEVELS] =
      {
-      [Hie_Lvl_UNK] = ActUnk, 		// Unknown
-      [Hie_Lvl_SYS] = ActFrmLogIn,	// System
-      [Hie_Lvl_CTY] = ActSeeCtyInf,	// Country
-      [Hie_Lvl_INS] = ActSeeInsInf,	// Institution
-      [Hie_Lvl_CTR] = ActSeeCtrInf,	// Center
-      [Hie_Lvl_DEG] = ActSeeDegInf,	// Degree
-      [Hie_Lvl_CRS] = ActSeeCrsInf,	// Course
+      [HieLvl_UNK] = ActUnk, 		// Unknown
+      [HieLvl_SYS] = ActFrmLogIn,	// System
+      [HieLvl_CTY] = ActSeeCtyInf,	// Country
+      [HieLvl_INS] = ActSeeInsInf,	// Institution
+      [HieLvl_CTR] = ActSeeCtrInf,	// Center
+      [HieLvl_DEG] = ActSeeDegInf,	// Degree
+      [HieLvl_CRS] = ActSeeCrsInf,	// Course
      };
 
-   if (Gbl.Hierarchy.Level >= Hie_Lvl_NUM_LEVELS)
+   if (Gbl.Hierarchy.Level >= HieLvl_NUM_LEVELS)
       Gbl.Hierarchy.Level = ActUnk;
 
    Gbl.Action.Act = Actions[Gbl.Hierarchy.Level];

@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -642,16 +643,16 @@ unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod)
 // Returns the number of courses with attendance events
 // in this location (all the platform, current degree or current course)
 
-unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
+unsigned Att_DB_GetNumCoursesWithAttEvents (HieLvl_Level_t Scope)
   {
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT CrsCod)"
 				" FROM att_events"
 			       " WHERE CrsCod>0");
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
 				" FROM ctr_centers,"
@@ -663,7 +664,7 @@ unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
 			       Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
 				" FROM deg_degrees,"
@@ -673,7 +674,7 @@ unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
 			       Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
 				" FROM crs_courses,"
@@ -681,7 +682,7 @@ unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
 			       Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT CrsCod)"
 				" FROM att_events"
@@ -697,18 +698,18 @@ unsigned Att_DB_GetNumCoursesWithAttEvents (Hie_Lvl_Level_t Scope)
 /********************* Get number of attendance events ***********************/
 /*****************************************************************************/
 
-unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
+unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
   {
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM att_events"
 			 " WHERE CrsCod>0");
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
@@ -722,7 +723,7 @@ unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
@@ -734,7 +735,7 @@ unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]
@@ -744,7 +745,7 @@ unsigned Att_DB_GetNumAttEvents (MYSQL_RES **mysql_res,Hie_Lvl_Level_t Scope)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=att_events.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of attendance events",
 			 "SELECT COUNT(*),"			// row[0]

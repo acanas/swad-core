@@ -39,6 +39,7 @@
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
@@ -2620,17 +2621,17 @@ void Gam_RequestNewMatch (void)
 /*****************************************************************************/
 // Returns the number of courses with games in this location
 
-unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
+unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with games from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			  " FROM gam_games");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
@@ -2645,7 +2646,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
@@ -2658,7 +2659,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
@@ -2669,7 +2670,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
@@ -2678,7 +2679,7 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT CrsCod)"
@@ -2695,17 +2696,17 @@ unsigned Gam_DB_GetNumCoursesWithGames (Hie_Lvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of games in this location
 
-unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
+unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope)
   {
    /***** Get number of games from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
 			  " FROM gam_games");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
@@ -2720,7 +2721,7 @@ unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
@@ -2733,7 +2734,7 @@ unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
@@ -2744,7 +2745,7 @@ unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
@@ -2753,7 +2754,7 @@ unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=gam_games.CrsCod",
 		         Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of games",
                          "SELECT COUNT(*)"
@@ -2769,12 +2770,12 @@ unsigned Gam_DB_GetNumGames (Hie_Lvl_Level_t Scope)
 /***************** Get average number of questions per game ******************/
 /*****************************************************************************/
 
-double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
+double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
   {
    /***** Get number of questions per game from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return DB_QuerySELECTDouble ("can not get number of questions per game",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -2782,7 +2783,7 @@ double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
 						     "gam_questions"
 					      " WHERE gam_games.GamCod=gam_questions.GamCod"
 					      " GROUP BY gam_questions.GamCod) AS NumQstsTable");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return DB_QuerySELECTDouble ("can not get number of questions per game",
 				      "SELECT AVG(NumQsts)"
 				      " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -2800,7 +2801,7 @@ double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
 					       " AND gam_games.GamCod=gam_questions.GamCod"
 					     " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return DB_QuerySELECTDouble ("can not get number of questions per game",
 				      "SELECT AVG(NumQsts)"
 				      " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -2816,7 +2817,7 @@ double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
 					       " AND gam_games.GamCod=gam_questions.GamCod"
 					    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return DB_QuerySELECTDouble ("can not get number of questions per game",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -2830,7 +2831,7 @@ double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
 					        " AND gam_games.GamCod=gam_questions.GamCod"
 					      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return DB_QuerySELECTDouble ("can not get number of questions per game",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -2842,7 +2843,7 @@ double Gam_DB_GetNumQstsPerGame (Hie_Lvl_Level_t Scope)
 					        " AND gam_games.GamCod=gam_questions.GamCod"
 					      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return DB_QuerySELECTDouble ("can not get number of questions per game",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"

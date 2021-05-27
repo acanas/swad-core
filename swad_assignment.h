@@ -98,6 +98,6 @@ void Asg_UnhideAssignment (void);
 void Asg_ReceiveFormAssignment (void);
 void Asg_RemoveCrsAssignments (long CrsCod);
 
-unsigned Asg_GetNumAssignments (Hie_Lvl_Level_t Scope,unsigned *NumNotif);
+unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif);
 
 #endif

@@ -39,6 +39,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -1186,7 +1187,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	       else
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
 			       Ins.WWW);
-	       Lgo_DrawLogo (Hie_Lvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
+	       Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
 	       HTM_BR ();
 	       HTM_Txt (Ins.FullName);
 	       if (TypeViewCallForExam == Cfe_PRINT_VIEW)

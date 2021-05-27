@@ -120,7 +120,7 @@ unsigned Cty_GetCachedNumCtysWithDegs (void);
 unsigned Cty_GetCachedNumCtysWithCrss (void);
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 
 void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys);
 

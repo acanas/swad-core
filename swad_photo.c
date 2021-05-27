@@ -47,6 +47,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -2252,7 +2253,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 					       "BT_LINK DAT","CT");
 	 else	// Pho_DEGREES_PRINT
 	   {
-	    Lgo_DrawLogo (Hie_Lvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
+	    Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	    HTM_TxtF ("&nbsp;%s",Deg.FullName);
 	   }
 	 HTM_TD_End ();

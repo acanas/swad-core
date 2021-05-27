@@ -41,6 +41,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_survey.h"
 
@@ -277,7 +278,7 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of users in courses of other countries */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CTY,0,
+	    HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTY,0,
 						      1 << Rol_STD |
 						      1 << Rol_NET |
 						      1 << Rol_TCH));	// Any user
@@ -449,7 +450,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 
       /***** Number of users in courses *****/
       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CTY,Cty->CtyCod,
+	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user
@@ -1077,7 +1078,7 @@ static void Cty_ListCountriesForEdition (void)
 		   NumUsrsCty)					// Country has users
 		  // Deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
-	       else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTY,Cty->CtyCod,
+	       else if (Usr_GetNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
 					      1 << Rol_STD |
 					      1 << Rol_NET |
 					      1 << Rol_TCH))	// Country has users
@@ -1218,7 +1219,7 @@ void Cty_RemoveCountry (void)
    else if (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Usr_GetNumUsrsInCrss (Hie_Lvl_CTY,Cty_EditingCty->CtyCod,
+   else if (Usr_GetNumUsrsInCrss (HieLvl_CTY,Cty_EditingCty->CtyCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Country has users
@@ -1227,7 +1228,7 @@ void Cty_RemoveCountry (void)
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (Hie_Lvl_CTY,Cty_EditingCty->CtyCod);
+      Svy_RemoveSurveys (HieLvl_CTY,Cty_EditingCty->CtyCod);
 
       /***** Remove country *****/
       Cty_DB_RemoveCty (Cty_EditingCty->CtyCod);
@@ -1658,12 +1659,12 @@ unsigned Cty_GetCachedNumCtysInSys (void)
    unsigned NumCtys;
 
    /***** Get number of countries from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS,HieLvl_SYS,-1L,
                                    FigCch_UNSIGNED,&NumCtys))
      {
       /***** Get current number of countries from database and update cache *****/
       NumCtys = (unsigned) DB_GetNumRowsTable ("cty_countrs");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS,HieLvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtys);
      }
 
@@ -1679,12 +1680,12 @@ unsigned Cty_GetCachedNumCtysWithInss (void)
    unsigned NumCtysWithInss;
 
    /***** Get number of countries with institutions from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_INSS,HieLvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithInss))
      {
       /***** Get current number of countries with institutions from cache *****/
       NumCtysWithInss = Cty_DB_GetNumCtysWithInss ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_INSS,HieLvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithInss);
      }
 
@@ -1700,12 +1701,12 @@ unsigned Cty_GetCachedNumCtysWithCtrs (void)
    unsigned NumCtysWithCtrs;
 
    /***** Get number of countries with centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CTRS,HieLvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCtrs))
      {
       /***** Get current number of countries with centers from database and update cache *****/
       NumCtysWithCtrs = Cty_DB_GetNumCtysWithCtrs ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CTRS,HieLvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCtrs);
      }
 
@@ -1721,12 +1722,12 @@ unsigned Cty_GetCachedNumCtysWithDegs (void)
    unsigned NumCtysWithDegs;
 
    /***** Get number of countries with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_DEGS,HieLvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithDegs))
      {
       /***** Get current number of countries with degrees from database and update cache *****/
       NumCtysWithDegs = Cty_DB_GetNumCtysWithDegs ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_DEGS,HieLvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithDegs);
      }
 
@@ -1742,12 +1743,12 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
    unsigned NumCtysWithCrss;
 
    /***** Get number of countries with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTYS_WITH_CRSS,HieLvl_SYS,-1L,
 				   FigCch_UNSIGNED,&NumCtysWithCrss))
      {
       /***** Get current number of countries with courses from database and update cache *****/
       NumCtysWithCrss = Cty_DB_GetNumCtysWithCrss ();
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,Hie_Lvl_SYS,-1L,
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTYS_WITH_CRSS,HieLvl_SYS,-1L,
 				    FigCch_UNSIGNED,&NumCtysWithCrss);
      }
 
@@ -1759,7 +1760,7 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
 /*****************************************************************************/
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod)
+                                       HieLvl_Level_t Scope,long Cod)
   {
    static const FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
      {

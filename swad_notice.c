@@ -38,6 +38,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
@@ -391,7 +392,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    char RSSLink[Cns_MAX_BYTES_WWW + 1];
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Level != Hie_Lvl_CRS)	// No course selected
+   if (Gbl.Hierarchy.Level != HieLvl_CRS)	// No course selected
       return;
 
    /***** Get notices from database *****/
@@ -841,7 +842,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *NumNotif)
+unsigned Not_GetNumNotices (HieLvl_Level_t Scope,Not_Status_t Status,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -850,7 +851,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
    /***** Get number of notices from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
@@ -858,7 +859,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
 			 " WHERE Status=%u",
                          Status);
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_notices.NumNotif)"	// row[1]
@@ -876,7 +877,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
                          Gbl.Hierarchy.Cty.CtyCod,
                          Status);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_notices.NumNotif)"	// row[1]
@@ -892,7 +893,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
                          Gbl.Hierarchy.Ins.InsCod,
                          Status);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_notices.NumNotif)"	// row[1]
@@ -906,7 +907,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
                          Gbl.Hierarchy.Ctr.CtrCod,
                          Status);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_notices.NumNotif)"	// row[1]
@@ -918,7 +919,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
                          Gbl.Hierarchy.Deg.DegCod,
                          Status);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
@@ -959,7 +960,7 @@ unsigned Not_GetNumNotices (Hie_Lvl_Level_t Scope,Not_Status_t Status,unsigned *
 // Returns the number of deleted notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
+unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -968,13 +969,13 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
    /***** Get number of notices from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_deleted");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_deleted.NumNotif)"	// row[1]
@@ -990,7 +991,7 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_deleted.NumNotif)"	// row[1]
@@ -1004,7 +1005,7 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_deleted.NumNotif)"	// row[1]
@@ -1016,7 +1017,7 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 			 " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(not_deleted.NumNotif)"	// row[1]
@@ -1026,7 +1027,7 @@ unsigned Not_GetNumNoticesDeleted (Hie_Lvl_Level_t Scope,unsigned *NumNotif)
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),"			// row[0]
 			        "SUM(NumNotif)"			// row[1]

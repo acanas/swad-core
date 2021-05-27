@@ -37,6 +37,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_logo.h"
@@ -189,7 +190,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
 		      Txt_Degree,Deg.ShrtName);
 	    Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
-	       Lgo_DrawLogo (Hie_Lvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
+	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
 	    /* Get my courses in this degree from database */

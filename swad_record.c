@@ -43,6 +43,7 @@
 #include "swad_follow_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
@@ -1745,7 +1746,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Rec_DEGREE_LOGO_SIZE);
-   Lgo_DrawLogo (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,
+   Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,
                  Gbl.Hierarchy.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL,true);
    HTM_TD_End ();
 
@@ -2071,7 +2072,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
    /* In this case UsrDat->Roles.InCurrentCrsDB
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.Level == Hie_Lvl_CRS) ? DefaultRole :	// Course selected
+   UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.Level == HieLvl_CRS) ? DefaultRole :	// Course selected
 	                                                               Rol_UNK;		// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
@@ -2536,7 +2537,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 					Txt_Administer_user);
 	}
 
-      if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+      if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	{
 	 if (Gbl.Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
 	   {
@@ -2710,7 +2711,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 Ins_PutParamInsCod (Ins->InsCod);
 	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
 	}
-      Lgo_DrawLogo (Hie_Lvl_INS,Ins->InsCod,Ins->ShrtName,
+      Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       if (PutFormLinks)
 	{
@@ -2957,7 +2958,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    HTM_SELECT_End ();
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
-            if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+            if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	      {
                /***** Set default role *****/
 	       switch (UsrDat->Roles.InCurrentCrs)
@@ -3054,7 +3055,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	      }
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
-	    if (Gbl.Hierarchy.Level == Hie_Lvl_CRS)	// Course selected
+	    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	       switch (Gbl.Usrs.Me.Role.Logged)
 		 {
 		  case Rol_TCH:

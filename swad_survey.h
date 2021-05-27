@@ -58,7 +58,7 @@ struct Svy_Surveys
 struct Svy_Survey
   {
    long SvyCod;
-   Hie_Lvl_Level_t Scope;
+   HieLvl_Level_t Scope;
    long Cod;		// Country, institution, center, degree or course code
    unsigned Roles;	// Example: if survey can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
@@ -110,7 +110,7 @@ void Svy_UnhideSurvey (void);
 void Svy_ReceiveFormSurvey (void);
 void Svy_RemoveGroup (long GrpCod);
 void Svy_RemoveGroupsOfType (long GrpTypCod);
-void Svy_RemoveSurveys (Hie_Lvl_Level_t Scope,long Cod);
+void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod);
 
 void Svy_RequestEditQuestion (void);
 void Svy_ReceiveQst (void);
@@ -120,8 +120,8 @@ void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);
 
-unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Lvl_Level_t Scope);
-unsigned Svy_GetNumCrsSurveys (Hie_Lvl_Level_t Scope,unsigned *NumNotif);
-double Svy_GetNumQstsPerCrsSurvey (Hie_Lvl_Level_t Scope);
+unsigned Svy_GetNumCoursesWithCrsSurveys (HieLvl_Level_t Scope);
+unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
+double Svy_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
 
 #endif

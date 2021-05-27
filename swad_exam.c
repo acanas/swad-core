@@ -45,6 +45,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
@@ -1748,16 +1749,16 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
 /*****************************************************************************/
 // Returns the number of courses with exams in this location
 
-unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
+unsigned Exa_GetNumCoursesWithExams (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with exams from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT CrsCod)"
 				" FROM exa_exams");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 				" FROM ins_instits,"
@@ -1771,7 +1772,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 				" FROM ctr_centers,"
@@ -1783,7 +1784,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 				" FROM deg_degrees,"
@@ -1793,7 +1794,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
 				" FROM crs_courses,"
@@ -1801,7 +1802,7 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT CrsCod)"
 				" FROM exa_exams"
@@ -1818,16 +1819,16 @@ unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of exams in this location
 
-unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
+unsigned Exa_GetNumExams (HieLvl_Level_t Scope)
   {
    /***** Get number of exams from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM exa_exams");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM ins_instits,"
@@ -1841,7 +1842,7 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM ctr_centers,"
@@ -1853,7 +1854,7 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM deg_degrees,"
@@ -1863,7 +1864,7 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM crs_courses,"
@@ -1871,7 +1872,7 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
 			       Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM exa_exams"
@@ -1887,12 +1888,12 @@ unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope)
 /************* Get average number of questions per course exam ***************/
 /*****************************************************************************/
 
-double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
+double Exa_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
   {
    /***** Get number of questions per exam from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -1900,7 +1901,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 						     "exa_set_questions"
 					      " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
 					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -1918,7 +1919,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 						 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					       " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Cty.CtyCod);
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -1934,7 +1935,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -1948,7 +1949,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
@@ -1960,7 +1961,7 @@ double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope)
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
 				      Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
 				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"

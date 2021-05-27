@@ -148,11 +148,11 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);
 unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
 
 unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 
 void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 

@@ -136,13 +136,13 @@ unsigned Ins_GetNumInssInCty (long CtyCod);
 unsigned Ins_GetCachedNumInssInCty (long CtyCod);
 
 unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       Hie_Lvl_Level_t Scope,long Cod);
+                                       HieLvl_Level_t Scope,long Cod);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 

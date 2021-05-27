@@ -32,6 +32,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 
 /*****************************************************************************/
@@ -200,27 +201,27 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	    it is necessary to send a parameter with course code */
 	 switch (Gbl.Hierarchy.Level)
 	   {
-	    case Hie_Lvl_CTY:	// Country
+	    case HieLvl_CTY:	// Country
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Cty.CtyCod);
 	       break;
-	    case Hie_Lvl_INS:	// Institution
+	    case HieLvl_INS:	// Institution
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Ins.InsCod);
 	       break;
-	    case Hie_Lvl_CTR:	// Center
+	    case HieLvl_CTR:	// Center
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Ctr.CtrCod);
 	       break;
-	    case Hie_Lvl_DEG:	// Degree
+	    case HieLvl_DEG:	// Degree
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Deg.DegCod);
 	       break;
-	    case Hie_Lvl_CRS:	// Course
+	    case HieLvl_CRS:	// Course
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
 			 Gbl.Hierarchy.Crs.CrsCod);

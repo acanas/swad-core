@@ -38,6 +38,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -2190,18 +2191,18 @@ void Prg_RemoveCrsItems (long CrsCod)
 // Returns the number of courses with program items
 // in this location (all the platform, current degree or current course)
 
-unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
+unsigned Prg_GetNumCoursesWithItems (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with program items from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                         "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM prg_items"
 			" WHERE CrsCod>0");
-       case Hie_Lvl_CTY:
+       case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
@@ -2216,7 +2217,7 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
-       case Hie_Lvl_INS:
+       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
@@ -2229,7 +2230,7 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
@@ -2240,7 +2241,7 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT prg_items.CrsCod)"
@@ -2249,7 +2250,7 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with program items",
                          "SELECT COUNT(DISTINCT CrsCod)"
@@ -2266,19 +2267,19 @@ unsigned Prg_GetNumCoursesWithItems (Hie_Lvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of program items in a hierarchy scope
 
-unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
+unsigned Prg_GetNumItems (HieLvl_Level_t Scope)
   {
    /***** Get number of program items from database *****/
    switch (Scope)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
 			  " FROM prg_items"
 			 " WHERE CrsCod>0");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
@@ -2294,7 +2295,7 @@ unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
@@ -2308,7 +2309,7 @@ unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
@@ -2320,7 +2321,7 @@ unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"
@@ -2330,7 +2331,7 @@ unsigned Prg_GetNumItems (Hie_Lvl_Level_t Scope)
 			   " AND crs_courses.CrsCod=prg_items.CrsCod",
                          Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of program items",
                          "SELECT COUNT(*)"

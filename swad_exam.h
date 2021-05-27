@@ -91,8 +91,8 @@ void Exa_ReceiveFormExam (void);
 
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
-unsigned Exa_GetNumCoursesWithExams (Hie_Lvl_Level_t Scope);
-unsigned Exa_GetNumExams (Hie_Lvl_Level_t Scope);
-double Exa_GetNumQstsPerCrsExam (Hie_Lvl_Level_t Scope);
+unsigned Exa_GetNumCoursesWithExams (HieLvl_Level_t Scope);
+unsigned Exa_GetNumExams (HieLvl_Level_t Scope);
+double Exa_GetNumQstsPerCrsExam (HieLvl_Level_t Scope);
 
 #endif

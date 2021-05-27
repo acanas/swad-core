@@ -29,11 +29,13 @@
 
 #include "swad_database.h"
 #include "swad_degree_config.h"
+#include "swad_degree_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_config.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
 
@@ -69,8 +71,6 @@ static void DegCfg_WWW (bool PrintView,bool PutForm);
 static void DegCfg_Shortcut (bool PrintView);
 static void DegCfg_QR (void);
 static void DegCfg_NumCrss (void);
-
-static void DegCfg_UpdateDegCtrDB (long DegCod,long CtrCod);
 
 /*****************************************************************************/
 /****************** Show information of the current degree *******************/
@@ -128,45 +128,45 @@ static void DegCfg_Configuration (bool PrintView)
    /***** Title *****/
    DegCfg_Title (PutLink);
 
-   /**************************** Left part ***********************************/
-   HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
+      /**************************** Left part ***********************************/
+      HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-   /***** Center *****/
-   DegCfg_Center (PrintView,PutFormCtr);
+	    /***** Center *****/
+	    DegCfg_Center (PrintView,PutFormCtr);
 
-   /***** Degree name *****/
-   DegCfg_FullName (PutFormName);
-   DegCfg_ShrtName (PutFormName);
+	    /***** Degree name *****/
+	    DegCfg_FullName (PutFormName);
+	    DegCfg_ShrtName (PutFormName);
 
-   /***** Degree WWW *****/
-   DegCfg_WWW (PrintView,PutFormWWW);
+	    /***** Degree WWW *****/
+	    DegCfg_WWW (PrintView,PutFormWWW);
 
-   /***** Shortcut to the degree *****/
-   DegCfg_Shortcut (PrintView);
+	    /***** Shortcut to the degree *****/
+	    DegCfg_Shortcut (PrintView);
 
-   if (PrintView)
-      /***** QR code with link to the degree *****/
-      DegCfg_QR ();
-   else
-     {
-      /***** Number of courses *****/
-      DegCfg_NumCrss ();
+	    if (PrintView)
+	       /***** QR code with link to the degree *****/
+	       DegCfg_QR ();
+	    else
+	      {
+	       /***** Number of courses *****/
+	       DegCfg_NumCrss ();
 
-      /***** Number of users *****/
-      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (Hie_Lvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_UNK);
-     }
+	       /***** Number of users *****/
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_TCH);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_NET);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_STD);
+	       HieCfg_NumUsrsInCrss (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Rol_UNK);
+	      }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** End of left part *****/
-   HTM_DIV_End ();
+      /***** End of left part *****/
+      HTM_DIV_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -186,7 +186,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
       // Only degree admins, center admins, institution admins and system admins
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
-      Lgo_PutIconToChangeLogo (Hie_Lvl_DEG);
+      Lgo_PutIconToChangeLogo (HieLvl_DEG);
   }
 
 /*****************************************************************************/
@@ -196,7 +196,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 static void DegCfg_Title (bool PutLink)
   {
    HieCfg_Title (PutLink,
-		    Hie_Lvl_DEG,				// Logo scope
+		    HieLvl_DEG,				// Logo scope
 		    Gbl.Hierarchy.Deg.DegCod,		// Logo code
                     Gbl.Hierarchy.Deg.ShrtName,		// Logo short name
 		    Gbl.Hierarchy.Deg.FullName,		// Logo full name
@@ -216,56 +216,56 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
    /***** Center *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "OthCtrCod" :
-	                           NULL,
-		    Txt_Center);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "OthCtrCod" :
+				      NULL,
+		       Txt_Center);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Get list of centers of the current institution */
-      Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Ins.InsCod);
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (PutForm)
+	   {
+	    /* Get list of centers of the current institution */
+	    Ctr_GetBasicListOfCenters (Gbl.Hierarchy.Ins.InsCod);
 
-      /* Put form to select center */
-      Frm_BeginForm (ActChgDegCtrCfg);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"OthCtrCod\" name=\"OthCtrCod\""
-			" class=\"INPUT_SHORT_NAME\"");
-      for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
-	   NumCtr++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
-		     "%s",Gbl.Hierarchy.Ctrs.Lst[NumCtr].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
+	    /* Put form to select center */
+	    Frm_BeginForm (ActChgDegCtrCfg);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "id=\"OthCtrCod\" name=\"OthCtrCod\""
+				 " class=\"INPUT_SHORT_NAME\"");
+		  for (NumCtr = 0;
+		       NumCtr < Gbl.Hierarchy.Ctrs.Num;
+		       NumCtr++)
+		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod,
+				 Gbl.Hierarchy.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+				 "%s",Gbl.Hierarchy.Ctrs.Lst[NumCtr].ShrtName);
+	       HTM_SELECT_End ();
+	    Frm_EndForm ();
 
-      /* Free list of centers */
-      Ctr_FreeListCenters ();
-     }
-   else	// I can not move degree to another center
-     {
-      if (!PrintView)
-	{
-         Frm_BeginFormGoTo (ActSeeCtrInf);
-         Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
-				  "BT_LINK LT DAT",NULL);
-         Hie_FreeGoToMsg ();
-	}
-      Lgo_DrawLogo (Hie_Lvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
-		    20,"LM",true);
-      HTM_NBSP ();
-      HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
-      if (!PrintView)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
-   HTM_TD_End ();
+	    /* Free list of centers */
+	    Ctr_FreeListCenters ();
+	   }
+	 else	// I can not move degree to another center
+	   {
+	    if (!PrintView)
+	      {
+	       Frm_BeginFormGoTo (ActSeeCtrInf);
+	       Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
+					   "BT_LINK LT DAT",NULL);
+		  Hie_FreeGoToMsg ();
+	      }
+	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
+			  20,"LM",true);
+	    HTM_NBSP ();
+	    HTM_Txt (Gbl.Hierarchy.Ctr.FullName);
+	    if (!PrintView)
+	      {
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -279,7 +279,7 @@ static void DegCfg_FullName (bool PutForm)
    extern const char *Txt_Degree;
 
    HieCfg_FullName (PutForm,Txt_Degree,ActRenDegFulCfg,
-		       Gbl.Hierarchy.Deg.FullName);
+		    Gbl.Hierarchy.Deg.FullName);
   }
 
 /*****************************************************************************/
@@ -328,24 +328,26 @@ static void DegCfg_NumCrss (void)
    extern const char *Txt_Courses_of_DEGREE_X;
 
    /***** Number of courses *****/
+   /* Begin table row */
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginFormGoTo (ActSeeCrs);
-   Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
-					        Gbl.Hierarchy.Deg.ShrtName),
-			    "BT_LINK DAT",NULL);
-   Str_FreeString ();
-   HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginFormGoTo (ActSeeCrs);
+	 Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
+							 Gbl.Hierarchy.Deg.ShrtName),
+				     "BT_LINK DAT",NULL);
+	    Str_FreeString ();
+	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
+   /* End table row */
    HTM_TR_End ();
   }
 
@@ -369,18 +371,18 @@ void DegCfg_ChangeDegCtr (void)
       Ctr_GetDataOfCenterByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new center *****/
-      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
+      if (Deg_DB_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
 		          Gbl.Hierarchy.Deg.ShrtName);
-      else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
+      else if (Deg_DB_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
 		          Gbl.Hierarchy.Deg.FullName);
       else
 	{
 	 /***** Update center in table of degrees *****/
-	 DegCfg_UpdateDegCtrDB (Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod);
+	 Deg_DB_UpdateDegCtr (Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod);
 	 Gbl.Hierarchy.Deg.CtrCod =
 	 Gbl.Hierarchy.Ctr.CtrCod = NewCtr.CtrCod;
 
@@ -394,21 +396,6 @@ void DegCfg_ChangeDegCtr (void)
 		          Gbl.Hierarchy.Ctr.FullName);
 	}
      }
-  }
-
-/*****************************************************************************/
-/********************** Update center in table of degrees ********************/
-/*****************************************************************************/
-
-static void DegCfg_UpdateDegCtrDB (long DegCod,long CtrCod)
-  {
-   /***** Update center in table of degrees *****/
-   DB_QueryUPDATE ("can not update the center of a degree",
-		   "UPDATE deg_degrees"
-		     " SET CtrCod=%ld"
-		   " WHERE DegCod=%ld",
-                   CtrCod,
-                   DegCod);
   }
 
 /*****************************************************************************/
@@ -442,7 +429,7 @@ void DegCfg_ChangeDegWWW (void)
    if (NewWWW[0])
      {
       /***** Update the table changing old WWW by new WWW *****/
-      Deg_UpdateDegWWWDB (Gbl.Hierarchy.Deg.DegCod,NewWWW);
+      Deg_DB_UpdateDegWWW (Gbl.Hierarchy.Deg.DegCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Deg.WWW,NewWWW,sizeof (Gbl.Hierarchy.Deg.WWW) - 1);
 
       /***** Write message to show the change made *****/

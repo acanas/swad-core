@@ -33,6 +33,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
@@ -428,7 +429,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)
      {
-      case Hie_Lvl_SYS:
+      case HieLvl_SYS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -439,7 +440,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			 " ORDER BY N DESC,"
 			           "Web");
          break;
-      case Hie_Lvl_CTY:
+      case HieLvl_CTY:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -462,7 +463,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			           "usr_webs.Web",
 			 Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Hie_Lvl_INS:
+      case HieLvl_INS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -483,7 +484,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			           "usr_webs.Web",
 			 Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Hie_Lvl_CTR:
+      case HieLvl_CTR:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -502,7 +503,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			           "usr_webs.Web",
 			 Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Hie_Lvl_DEG:
+      case HieLvl_DEG:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of users"
 				    " with webs / social networks",
@@ -519,7 +520,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			           "usr_webs.Web",
 			 Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Hie_Lvl_CRS:
+      case HieLvl_CRS:
          NumRows = (unsigned)
          DB_QuerySELECT (&mysql_res,"can not get number of users"
 				    " with webs / social networks",

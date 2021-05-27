@@ -111,8 +111,8 @@ void Msg_ShowRecMsgs (void);
 
 unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod);
 unsigned Msg_GetNumMsgsSentByUsr (long UsrCod);
-unsigned Msg_GetNumMsgsSent (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus);
-unsigned Msg_GetNumMsgsReceived (Hie_Lvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_GetNumMsgsSent (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_GetNumMsgsReceived (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
 
 void Msg_PutHiddenParamsMsgsFilters (void *Messages);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

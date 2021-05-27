@@ -34,6 +34,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_profile.h"
@@ -1194,11 +1195,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Gbl.F.Rep," (%u %s / %u %s)",
-		     Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs.CrsCod,
+		     Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
 				                 1 << Rol_NET |
 					         1 << Rol_TCH),
 		     Txt_teachers_ABBREVIATION,
-		     Usr_GetCachedNumUsrsInCrss (Hie_Lvl_CRS,Crs.CrsCod,
+		     Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
 				                 1 << Rol_STD),
 		     Txt_students_ABBREVIATION);
 	}
