@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_database.h"
+#include "swad_degree_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -535,7 +536,7 @@ void Hie_InitHierarchy (void)
       if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg))	// Degree found
 	{
 	 Gbl.Hierarchy.Ctr.CtrCod = Gbl.Hierarchy.Deg.CtrCod;
-         Gbl.Hierarchy.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.DegCod);
+         Gbl.Hierarchy.Ins.InsCod = Deg_DB_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.DegCod);
 	}
       else
          Hie_ResetHierarchy ();

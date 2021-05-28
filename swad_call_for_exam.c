@@ -35,6 +35,7 @@
 #include "swad_call_for_exam.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_degree_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -1798,7 +1799,7 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
    /***** Get data of institution *****/
-   Hie.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Hie.Deg.DegCod);
+   Hie.Ins.InsCod = Deg_DB_GetInsCodOfDegreeByCod (Hie.Deg.DegCod);
    Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
    /***** Convert struct date to a date string *****/

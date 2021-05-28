@@ -1382,6 +1382,9 @@ void Ins_RemoveInstitution (void)
 	        (unsigned)  Ins_EditingIns->InsCod);
       Fil_RemoveTree (PathIns);
 
+      /***** Remove administrators of this institution *****/
+      Enr_DB_RemAdmins (HieLvl_INS,Ins_EditingIns->InsCod);
+
       /***** Remove institution *****/
       DB_QueryDELETE ("can not remove an institution",
 		      "DELETE FROM ins_instits"

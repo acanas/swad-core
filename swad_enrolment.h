@@ -151,5 +151,6 @@ void Enr_DB_RemAllUsrsFromCrsSettings (long CrsCod);
 void Enr_DB_RemAllUsrsFromCrs (long CrsCod);
 void Enr_DB_RemUsrFromAllCrss (long UsrCod);
 void Enr_DB_RemUsrAsAdmin (long UsrCod);
+void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod);
 
 #endif

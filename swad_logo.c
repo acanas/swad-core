@@ -141,7 +141,7 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 	   {
 	    Folder = Cfg_FOLDER_INS;
 	    if (Scope == HieLvl_DEG)		// && !LogoFound
-	       InsCod = Deg_GetInsCodOfDegreeByCod (Cod);
+	       InsCod = Deg_DB_GetInsCodOfDegreeByCod (Cod);
 	    else if (Scope == HieLvl_CTR)	// && !LogoFound
 	       InsCod = Ctr_GetInsCodOfCenterByCod (Cod);
 	    else

@@ -1245,6 +1245,9 @@ void Ctr_RemoveCenter (void)
 	        (unsigned)  Ctr_EditingCtr->CtrCod);
       Fil_RemoveTree (PathCtr);
 
+      /***** Remove administrators of this center *****/
+      Enr_DB_RemAdmins (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
+
       /***** Remove center *****/
       DB_QueryDELETE ("can not remove a center",
 		      "DELETE FROM ctr_centers"

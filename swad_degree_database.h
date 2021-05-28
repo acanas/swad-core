@@ -31,6 +31,7 @@
 
 // #include "swad_action.h"
 // #include "swad_constant.h"
+#include "swad_degree.h"
 #include "swad_degree_type.h"
 // #include "swad_hierarchy_level.h"
 // #include "swad_role_type.h"
@@ -55,17 +56,35 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
                                 HieLvl_Level_t Scope,DegTyp_Order_t Order);
 void Deg_DB_GetDegTypeNameByCod (struct DegreeType *DegTyp);
 unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod);
+long Deg_DB_GetInsCodOfDegreeByCod (long DegCod);
 long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);
 void Deg_DB_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg);
 bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
 unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);
-unsigned Deg_DB_GetDegsOfCurrentCtr (MYSQL_RES **mysql_res);
+unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res);
+unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
+unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
+bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+                                       long DegCod,long CtrCod);
 
-void Deg_DB_UpdateDegTypName (long DegTypCod,const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
-void Deg_DB_UpdateDegCtr (long DegCod,long CtrCod);
+unsigned Deg_DB_GetNumDegsWithCrss (const char *SubQuery);
+unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Deg_DB_GetNumDegsInCty (long CtyCod);
+unsigned Deg_DB_GetNumDegsInIns (long InsCod);
+unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);
+
+void Deg_DB_UpdateDegTypName (long DegTypCod,
+                              const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
+void Deg_DB_UpdateDegNameDB (long DegCod,const char *FieldName,
+                             const char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
+void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
+void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
+void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Deg_DB_UpdateDegStatus (long DegCod,Deg_Status_t NewStatus);
 
 void Deg_DB_RemoveDegTyp (long DegTypCod);
+void Deg_DB_RemoveDeg (long DegCod);
 
 #endif

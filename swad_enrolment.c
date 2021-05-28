@@ -4453,3 +4453,17 @@ void Enr_DB_RemUsrAsAdmin (long UsrCod)
 		   " WHERE UsrCod=%ld",
                    UsrCod);
   }
+
+/*****************************************************************************/
+/********* Remove administrators of an institution, center or degree *********/
+/*****************************************************************************/
+
+void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove administrators",
+		   "DELETE FROM usr_admins"
+		   " WHERE Scope='%s'"
+		     " AND Cod=%ld",
+                   Sco_GetDBStrFromScope (Scope),
+                   Cod);
+  }

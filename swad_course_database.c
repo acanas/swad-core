@@ -81,6 +81,20 @@ void Crs_DB_CreateCourse (struct Crs_Course *Crs,unsigned Status)
   }
 
 /*****************************************************************************/
+/******************* Get courses of a degree from database *******************/
+/*****************************************************************************/
+
+unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get courses of a degree",
+		   "SELECT CrsCod"
+		    " FROM crs_courses"
+		   " WHERE DegCod=%ld",
+		   DegCod);
+  }
+
+/*****************************************************************************/
 /******************** Get courses in current degree *********************/
 /*****************************************************************************/
 

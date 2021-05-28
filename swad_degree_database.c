@@ -255,6 +255,26 @@ unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod)
   }
 
 /*****************************************************************************/
+/********** Get the institution code of a degree from its code ***************/
+/*****************************************************************************/
+
+long Deg_DB_GetInsCodOfDegreeByCod (long DegCod)
+  {
+   /***** Trivial check: degree code should be > 0 *****/
+   if (DegCod <= 0)
+      return -1L;
+
+   /***** Get the institution code of a degree from database *****/
+   return DB_QuerySELECTCode ("can not get the institution of a degree",
+			     "SELECT ctr_centers.InsCod"
+			      " FROM deg_degrees,"
+				    "ctr_centers"
+			     " WHERE deg_degrees.DegCod=%ld"
+			       " AND deg_degrees.CtrCod=ctr_centers.CtrCod",
+			     DegCod);
+  }
+
+/*****************************************************************************/
 /************* Get the center code of a degree from its code *****************/
 /*****************************************************************************/
 
@@ -342,7 +362,7 @@ unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod)
 /********* Get degrees belonging to the current center from database *********/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetDegsOfCurrentCtr (MYSQL_RES **mysql_res)
+unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get degrees of a center",
@@ -351,6 +371,28 @@ unsigned Deg_DB_GetDegsOfCurrentCtr (MYSQL_RES **mysql_res)
 		    " FROM deg_degrees"
 		   " WHERE CtrCod=%ld"
 		   " ORDER BY ShortName",
+		   Gbl.Hierarchy.Ctr.CtrCod);
+  }
+
+/*****************************************************************************/
+/********* Get degrees belonging to the current center from database *********/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get degrees of a center",
+		   "SELECT DegCod,"		// row[0]
+			  "CtrCod,"		// row[1]
+			  "DegTypCod,"		// row[2]
+			  "Status,"		// row[3]
+			  "RequesterUsrCod,"	// row[4]
+			  "ShortName,"		// row[5]
+			  "FullName,"		// row[6]
+			  "WWW"			// row[7]
+		    " FROM deg_degrees"
+		   " WHERE CtrCod=%ld"
+		   " ORDER BY FullName",
 		   Gbl.Hierarchy.Ctr.CtrCod);
   }
 
@@ -400,10 +442,147 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/*********************** Get degrees that have students **********************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get degrees with students",
+		   "SELECT DISTINCTROW "
+			  "deg_degrees.DegCod,"			// row[0]
+			  "deg_degrees.CtrCod,"			// row[1]
+			  "deg_degrees.DegTypCod,"		// row[2]
+			  "deg_degrees.Status,"			// row[3]
+			  "deg_degrees.RequesterUsrCod,"	// row[4]
+			  "deg_degrees.ShortName,"		// row[5]
+			  "deg_degrees.FullName,"		// row[6]
+			  "deg_degrees.WWW"			// row[7]
+		    " FROM deg_degrees,"
+		          "crs_courses,"
+		          "crs_users"
+		   " WHERE deg_degrees.DegCod=crs_courses.DegCod"
+		     " AND crs_courses.CrsCod=crs_users.CrsCod"
+		     " AND crs_users.Role=%u"
+		   " ORDER BY deg_degrees.ShortName",
+		   (unsigned) Rol_STD);
+  }
+
+/*****************************************************************************/
+/********************* Check if the name of degree exists ********************/
+/*****************************************************************************/
+
+bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
+                                       long DegCod,long CtrCod)
+  {
+   /***** Get number of degrees with a type and a name from database *****/
+   return (DB_QueryCOUNT ("can not check if the name of a degree"
+			  " already existed",
+			  "SELECT COUNT(*)"
+			   " FROM deg_degrees"
+			  " WHERE CtrCod=%ld"
+			    " AND %s='%s'"
+			    " AND DegCod<>%ld",
+			  CtrCod,
+			  FieldName,Name,
+			  DegCod) != 0);
+  }
+
+/*****************************************************************************/
+/***************** Get current number of degrees with courses ****************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetNumDegsWithCrss (const char *SubQuery)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of degrees with courses",
+		  "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  SubQuery);
+  }
+
+/*****************************************************************************/
+/**************** Get current number of degrees with users *******************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of degrees with users",
+		  "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses,"
+			 "crs_users"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod"
+		    " AND crs_courses.CrsCod=crs_users.CrsCod"
+		    " AND crs_users.Role=%u",
+		  SubQuery,(unsigned) Role);
+  }
+
+/*****************************************************************************/
+/******************** Get number of degrees in a country *********************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetNumDegsInCty (long CtyCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of degrees in a country",
+		  "SELECT COUNT(*)"
+		   " FROM ins_instits,"
+		         "ctr_centers,"
+		         "deg_degrees"
+		  " WHERE ins_instits.CtyCod=%ld"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  CtyCod);
+  }
+
+/*****************************************************************************/
+/***************** Get number of degrees in an institution *******************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetNumDegsInIns (long InsCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of degrees in an institution",
+		  "SELECT COUNT(*)"
+		   " FROM ctr_centers,"
+		         "deg_degrees"
+		  " WHERE ctr_centers.InsCod=%ld"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  InsCod);
+  }
+
+/*****************************************************************************/
+/******************** Get number of degrees in a center **********************/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetNumDegsInCtr (long CtrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of degrees in a center",
+		  "SELECT COUNT(*)"
+		   " FROM deg_degrees"
+		  " WHERE CtrCod=%ld",
+		  CtrCod);
+  }
+
+/*****************************************************************************/
 /************************* Update degree type name ***************************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegTypName (long DegTypCod,const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1])
+void Deg_DB_UpdateDegTypName (long DegTypCod,
+                              const char NewNameDegTyp[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1])
   {
    DB_QueryUPDATE ("can not update the type of a degree",
 		   "UPDATE deg_types"
@@ -414,16 +593,74 @@ void Deg_DB_UpdateDegTypName (long DegTypCod,const char NewNameDegTyp[DegTyp_MAX
   }
 
 /*****************************************************************************/
-/**************** Update degree center in table of degrees *******************/
+/***************** Update degree name in table of degrees ********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegCtr (long DegCod,long CtrCod)
+void Deg_DB_UpdateDegNameDB (long DegCod,const char *FieldName,
+                             const char NewDegName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
+  {
+   DB_QueryUPDATE ("can not update the name of a degree",
+		   "UPDATE deg_degrees"
+		     " SET %s='%s'"
+		   " WHERE DegCod=%ld",
+	           FieldName,
+	           NewDegName,
+	           DegCod);
+  }
+
+/*****************************************************************************/
+/*********************** Update the center of a degree ***********************/
+/*****************************************************************************/
+
+void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod)
   {
    DB_QueryUPDATE ("can not update the center of a degree",
 		   "UPDATE deg_degrees"
 		     " SET CtrCod=%ld"
 		   " WHERE DegCod=%ld",
-                   CtrCod,
+                   NewCtrCod,
+                   DegCod);
+  }
+
+/*****************************************************************************/
+/*********************** Update the type of a degree *************************/
+/*****************************************************************************/
+
+void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod)
+  {
+   DB_QueryUPDATE ("can not update the type of a degree",
+		   "UPDATE deg_degrees"
+		     " SET DegTypCod=%ld"
+		   " WHERE DegCod=%ld",
+	           NewDegTypCod,
+	           DegCod);
+  }
+
+/*****************************************************************************/
+/************************ Update the WWW of a degree *************************/
+/*****************************************************************************/
+
+void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+  {
+   DB_QueryUPDATE ("can not update the web of a degree",
+		   "UPDATE deg_degrees"
+		     " SET WWW='%s'"
+		   " WHERE DegCod=%ld",
+	           NewWWW,
+	           DegCod);
+  }
+
+/*****************************************************************************/
+/*********************** Update the status of a degree ***********************/
+/*****************************************************************************/
+
+void Deg_DB_UpdateDegStatus (long DegCod,Deg_Status_t NewStatus)
+  {
+   DB_QueryUPDATE ("can not update the status of a degree",
+		   "UPDATE deg_degrees"
+		     " SET Status=%u"
+		   " WHERE DegCod=%ld",
+                   (unsigned) NewStatus,
                    DegCod);
   }
 
@@ -437,4 +674,16 @@ void Deg_DB_RemoveDegTyp (long DegTypCod)
 		   "DELETE FROM deg_types"
 		   " WHERE DegTypCod=%ld",
 		   DegTypCod);
+  }
+
+/*****************************************************************************/
+/***************************** Remove the degree *****************************/
+/*****************************************************************************/
+
+void Deg_DB_RemoveDeg (long DegCod)
+  {
+   DB_QueryDELETE ("can not remove a degree",
+		   "DELETE FROM deg_degrees"
+		   " WHERE DegCod=%ld",
+		   DegCod);
   }
