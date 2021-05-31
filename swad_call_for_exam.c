@@ -634,7 +634,6 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Hlp_ASSESSMENT_Calls_for_exams;
    extern const char *Txt_Calls_for_exams;
    extern const char *Txt_No_calls_for_exams_of_X;
-   char SubQueryStatus[64];
    MYSQL_RES *mysql_res;
    unsigned NumExaAnns;
    unsigned NumExaAnn;
@@ -643,26 +642,9 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
-   /***** Build subquery about status depending on my role *****/
-   if (ICanEdit)
-      sprintf (SubQueryStatus,"Status<>%u",
-	       (unsigned) Cfe_DELETED_CALL_FOR_EXAM);
-   else
-      sprintf (SubQueryStatus,"Status=%u",
-	       (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
-
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
-   NumExaAnns = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get calls for exams"
-			      " in this course for listing",
-		   "SELECT ExaCod"	// row[0]
-		    " FROM cfe_exams"
-		   " WHERE CrsCod=%ld"
-		     " AND %s"
-		   " ORDER BY ExamDate DESC",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   SubQueryStatus);
+   NumExaAnns = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res,ICanEdit);
 
    /***** Begin box *****/
    if (ICanEdit)
@@ -674,42 +656,41 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Calls_for_exams,Box_NOT_CLOSABLE);
 
-   /***** The result of the query may be empty *****/
-   if (!NumExaAnns)
+   if (NumExaAnns)
+      /***** List the existing calls for exams *****/
+      for (NumExaAnn = 0;
+	   NumExaAnn < NumExaAnns;
+	   NumExaAnn++)
+	{
+	 /***** Get the code of the call for exam (row[0]) *****/
+	 if ((ExaCod = DB_GetNextCode (mysql_res)) <= 0)
+	    Err_WrongCallForExamExit ();
+
+	 /***** Allocate memory for the call for exam *****/
+	 Cfe_AllocMemCallForExam (CallsForExams);
+
+	 /***** Read the data of the call for exam *****/
+	 Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
+
+	 /***** Show call for exam *****/
+	 HighLight = false;
+	 if (ExaCod == CallsForExams->HighlightExaCod)
+	    HighLight = true;
+	 else if (CallsForExams->HighlightDate[0])
+	   {
+	    if (!strcmp (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
+			 CallsForExams->HighlightDate))
+	       HighLight = true;
+	   }
+	 Cfe_ShowCallForExam (CallsForExams,ExaCod,TypeViewCallForExam,
+				   HighLight);
+
+	 /***** Free memory of the call for exam *****/
+	 Cfe_FreeMemCallForExam (CallsForExams);
+	}
+   else
       Ale_ShowAlert (Ale_INFO,Txt_No_calls_for_exams_of_X,
                      Gbl.Hierarchy.Crs.FullName);
-
-   /***** List the existing calls for exams *****/
-   for (NumExaAnn = 0;
-	NumExaAnn < NumExaAnns;
-	NumExaAnn++)
-     {
-      /***** Get the code of the call for exam (row[0]) *****/
-      if ((ExaCod = DB_GetNextCode (mysql_res)) <= 0)
-         Err_WrongCallForExamExit ();
-
-      /***** Allocate memory for the call for exam *****/
-      Cfe_AllocMemCallForExam (CallsForExams);
-
-      /***** Read the data of the call for exam *****/
-      Cfe_GetDataCallForExamFromDB (CallsForExams,ExaCod);
-
-      /***** Show call for exam *****/
-      HighLight = false;
-      if (ExaCod == CallsForExams->HighlightExaCod)
-	 HighLight = true;
-      else if (CallsForExams->HighlightDate[0])
-        {
-	 if (!strcmp (CallsForExams->CallForExam.ExamDate.YYYYMMDD,
-	              CallsForExams->HighlightDate))
-	    HighLight = true;
-        }
-      Cfe_ShowCallForExam (CallsForExams,ExaCod,TypeViewCallForExam,
-	                        HighLight);
-
-      /***** Free memory of the call for exam *****/
-      Cfe_FreeMemCallForExam (CallsForExams);
-     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -764,16 +745,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
       /***** Get exam dates (ordered from more recent to older)
              of visible calls for exams
              in current course from database *****/
-      NumExaAnns = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get calls for exams in this course",
-		      "SELECT ExaCod,"		// row[0]
-			     "DATE(ExamDate)"	// row[1]
-		       " FROM cfe_exams"
-		      " WHERE CrsCod=%ld"
-		        " AND Status=%u"
-		      " ORDER BY ExamDate DESC",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+      NumExaAnns = Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (&mysql_res);
 
       /***** The result of the query may be empty *****/
       CallsForExams->Lst = NULL;
@@ -841,25 +813,7 @@ static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExam
    unsigned Second;
 
    /***** Get data of a call for exam from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a call for exam",
-		       "SELECT CrsCod,"		// row[ 0]
-			      "Status,"		// row[ 1]
-			      "CrsFullName,"	// row[ 2]
-			      "Year,"		// row[ 3]
-			      "ExamSession,"	// row[ 4]
-			      "CallDate,"	// row[ 5]
-			      "ExamDate,"	// row[ 6]
-			      "Duration,"	// row[ 7]
-			      "Place,"		// row[ 8]
-			      "ExamMode,"	// row[ 9]
-			      "Structure,"	// row[10]
-			      "DocRequired,"	// row[11]
-			      "MatRequired,"	// row[12]
-			      "MatAllowed,"	// row[13]
-			      "OtherInfo"	// row[14]
-			" FROM cfe_exams"
-		       " WHERE ExaCod=%ld",
-		       ExaCod) != 1)
+   if (Cfe_DB_GetDataCallForExam (&mysql_res,ExaCod) != 1)
       Err_WrongCallForExamExit ();
 
    /***** Get the data of the call for exam *****/

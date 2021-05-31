@@ -32,7 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_attendance.h"
-#include "swad_call_for_exam.h"
+#include "swad_call_for_exam_database.h"
 #include "swad_course.h"
 #include "swad_course_config.h"
 #include "swad_course_database.h"

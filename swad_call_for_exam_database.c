@@ -25,32 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For sscanf, asprintf, etc.
-// #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc.
-// #include <string.h>		// For string functions
-
-// #include "swad_box.h"
 #include "swad_call_for_exam.h"
 #include "swad_call_for_exam_database.h"
-// #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_degree_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_logo.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_QR.h"
-// #include "swad_RSS.h"
-// #include "swad_string.h"
-// #include "swad_timeline.h"
-// #include "swad_timeline_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -112,6 +90,85 @@ long Cfe_DB_CreateCallForExam (const struct Cfe_CallForExam *CallForExam)
 				CallForExam->MatRequired,
 				CallForExam->MatAllowed,
 				CallForExam->OtherInfo);
+  }
+
+/*****************************************************************************/
+/**************** Get all calls for exams in current course ******************/
+/*****************************************************************************/
+
+unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res,bool ICanEdit)
+  {
+   char SubQueryStatus[64];
+
+   /***** Build subquery about status depending on my role *****/
+   if (ICanEdit)
+      sprintf (SubQueryStatus,"Status<>%u",
+	       (unsigned) Cfe_DELETED_CALL_FOR_EXAM);
+   else
+      sprintf (SubQueryStatus,"Status=%u",
+	       (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+
+   /***** Get calls for exams (the most recent first)
+          in current course from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get calls for exams"
+			     " in this course for listing",
+		   "SELECT ExaCod"	// row[0]
+		    " FROM cfe_exams"
+		   " WHERE CrsCod=%ld"
+		     " AND %s"
+		   " ORDER BY ExamDate DESC",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   SubQueryStatus);
+  }
+
+/*****************************************************************************/
+/**************** Get all calls for exams in current course ******************/
+/*****************************************************************************/
+
+unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
+  {
+   /***** Get exam dates (ordered from more recent to older)
+	  of visible calls for exams
+	  in current course from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get calls for exams in this course",
+		   "SELECT ExaCod,"		// row[0]
+			  "DATE(ExamDate)"	// row[1]
+		    " FROM cfe_exams"
+		   " WHERE CrsCod=%ld"
+		     " AND Status=%u"
+		   " ORDER BY ExamDate DESC",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+  }
+
+/*****************************************************************************/
+/***************** Get data of a call for exam from database *****************/
+/*****************************************************************************/
+
+unsigned Cfe_DB_GetDataCallForExam (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a call for exam",
+		   "SELECT CrsCod,"		// row[ 0]
+			  "Status,"		// row[ 1]
+			  "CrsFullName,"	// row[ 2]
+			  "Year,"		// row[ 3]
+			  "ExamSession,"	// row[ 4]
+			  "CallDate,"		// row[ 5]
+			  "ExamDate,"		// row[ 6]
+			  "Duration,"		// row[ 7]
+			  "Place,"		// row[ 8]
+			  "ExamMode,"		// row[ 9]
+			  "Structure,"		// row[10]
+			  "DocRequired,"	// row[11]
+			  "MatRequired,"	// row[12]
+			  "MatAllowed,"		// row[13]
+			  "OtherInfo"		// row[14]
+		    " FROM cfe_exams"
+		   " WHERE ExaCod=%ld",
+		   ExaCod);
   }
 
 /*****************************************************************************/

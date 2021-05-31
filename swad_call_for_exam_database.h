@@ -27,13 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stdbool.h>		// For boolean type
-
 #include "swad_call_for_exam.h"
-// #include "swad_constant.h"
-// #include "swad_course.h"
-// #include "swad_date.h"
-// #include "swad_notification.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -44,6 +38,10 @@
 /*****************************************************************************/
 
 long Cfe_DB_CreateCallForExam (const struct Cfe_CallForExam *CallForExam);
+
+unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res,bool ICanEdit);
+unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Cfe_DB_GetDataCallForExam (MYSQL_RES **mysql_res,long ExaCod);
 
 void Cfe_DB_ModifyCallForExam (const struct Cfe_CallForExam *CallForExam,
                                long ExaCod);
