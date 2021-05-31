@@ -126,6 +126,4 @@ void Cfe_GetSummaryAndContentCallForExam (char SummaryStr[Ntf_MAX_BYTES_SUMMARY 
                                           char **ContentStr,
                                           long ExaCod,bool GetContent);
 
-void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long CrsCod);
-
 #endif

@@ -33,6 +33,7 @@
 
 #include "swad_box.h"
 #include "swad_call_for_exam.h"
+#include "swad_call_for_exam_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_degree_database.h"
@@ -80,9 +81,6 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 static void Cfe_AllocMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
 static void Cfe_FreeMemCallForExam (struct Cfe_CallsForExams *CallsForExams);
 
-static void Cfe_UpdateNumUsrsNotifiedByEMailAboutCallForExam (long ExaCod,
-                                                              unsigned NumUsrsToBeNotifiedByEMail);
-
 static void Cfe_GetExaCodToHighlight (struct Cfe_CallsForExams *CallsForExams);
 static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams);
 
@@ -91,9 +89,6 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 static void Cfe_PutIconToCreateNewCallForExam (__attribute__((unused)) void *Args);
 static void Cfe_PutButtonToCreateNewCallForExam (void);
 
-static long Cfe_AddCallForExamToDB (const struct Cfe_CallsForExams *CallsForExams);
-static void Cfe_ModifyCallForExamInDB (const struct Cfe_CallsForExams *CallsForExams,
-                                       long ExaCod);
 static void Cfe_GetDataCallForExamFromDB (struct Cfe_CallsForExams *CallsForExams,
                                           long ExaCod);
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
@@ -124,7 +119,7 @@ static struct Cfe_CallsForExams *Cfe_GetGlobalCallsForExams (void)
 
 void Cfe_ResetCallsForExams (struct Cfe_CallsForExams *CallsForExams)
   {
-   CallsForExams->NumCallsForExams       = 0;
+   CallsForExams->NumCallsForExams = 0;
    CallsForExams->Lst              = NULL;
    CallsForExams->NewExaCod        = -1L;
    CallsForExams->HighlightExaCod  = -1L;
@@ -200,10 +195,10 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 
    /***** Get the year *****/
    CallsForExams->CallForExam.Year = (unsigned)
-			    Par_GetParToUnsignedLong ("Year",
-						      0,	// N.A.
-						      Deg_MAX_YEARS_PER_DEGREE,
-						      (unsigned long) Gbl.Hierarchy.Crs.Year);
+   Par_GetParToUnsignedLong ("Year",
+			     0,	// N.A.
+			     Deg_MAX_YEARS_PER_DEGREE,
+			     (unsigned long) Gbl.Hierarchy.Crs.Year);
 
    /***** Get the type of call for exam *****/
    Par_GetParToText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
@@ -234,26 +229,16 @@ static long Cfe_GetParamsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    CallsForExams->CallForExam.Duration.Minute  = (unsigned) Par_GetParToUnsignedLong ("DurationMinute",
                                                                                       0,59,0);
 
-   /***** Get the place where the exam will happen *****/
-   Par_GetParToHTML ("Place",CallsForExams->CallForExam.Place,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the modality of exam *****/
-   Par_GetParToHTML ("ExamMode",CallsForExams->CallForExam.Mode,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the structure of exam *****/
-   Par_GetParToHTML ("Structure",CallsForExams->CallForExam.Structure,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the mandatory documentation *****/
+   /***** Get the place where the exam will happen, the modality of exam,
+          the structure of exam, the mandatory documentation, the mandatory material,
+          the allowed material and other information *****/
+   Par_GetParToHTML ("Place"      ,CallsForExams->CallForExam.Place      ,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("ExamMode"   ,CallsForExams->CallForExam.Mode       ,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("Structure"  ,CallsForExams->CallForExam.Structure  ,Cns_MAX_BYTES_TEXT);
    Par_GetParToHTML ("DocRequired",CallsForExams->CallForExam.DocRequired,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the mandatory material *****/
    Par_GetParToHTML ("MatRequired",CallsForExams->CallForExam.MatRequired,Cns_MAX_BYTES_TEXT);
-
-   /***** Get the allowed material *****/
-   Par_GetParToHTML ("MatAllowed",CallsForExams->CallForExam.MatAllowed,Cns_MAX_BYTES_TEXT);
-
-   /***** Get other information *****/
-   Par_GetParToHTML ("OtherInfo",CallsForExams->CallForExam.OtherInfo,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("MatAllowed" ,CallsForExams->CallForExam.MatAllowed ,Cns_MAX_BYTES_TEXT);
+   Par_GetParToHTML ("OtherInfo"  ,CallsForExams->CallForExam.OtherInfo  ,Cns_MAX_BYTES_TEXT);
 
    return ExaCod;
   }
@@ -356,9 +341,9 @@ void Cfe_ReceiveCallForExam1 (void)
 
    /***** Add the call for exam to the database and read it again from the database *****/
    if (NewCallForExam)
-      CallsForExams->NewExaCod = ExaCod = Cfe_AddCallForExamToDB (CallsForExams);
+      CallsForExams->NewExaCod = ExaCod = Cfe_DB_CreateCallForExam (&CallsForExams->CallForExam);
    else
-      Cfe_ModifyCallForExamInDB (CallsForExams,ExaCod);
+      Cfe_DB_ModifyCallForExam (&CallsForExams->CallForExam,ExaCod);
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (CallsForExams);
@@ -381,7 +366,7 @@ void Cfe_ReceiveCallForExam2 (void)
 
    /***** Notify by email about the new call for exam *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_CALL_FOR_EXAM,CallsForExams->HighlightExaCod)))
-      Cfe_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
+      Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new call for exam *****/
    Tml_Not_StoreAndPublishNote (TL_NOTE_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
@@ -391,23 +376,6 @@ void Cfe_ReceiveCallForExam2 (void)
 
    /***** Show calls for exams *****/
    Cfe_ListCallsForExamsEdit ();
-  }
-
-/*****************************************************************************/
-/******* Update number of users notified in table of calls for exams *********/
-/*****************************************************************************/
-
-static void Cfe_UpdateNumUsrsNotifiedByEMailAboutCallForExam (long ExaCod,
-                                                              unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   /***** Update number of users notified *****/
-   DB_QueryUPDATE ("can not update the number of notifications"
-		   " of a call for exam",
-		   "UPDATE cfe_exams"
-		     " SET NumNotif=NumNotif+%u"
-		   " WHERE ExaCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,
-                   ExaCod);
   }
 
 /*****************************************************************************/
@@ -462,15 +430,14 @@ void Cfe_ReqRemoveCallForExam (void)
    /* Begin alert */
    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_call_for_exam);
 
-   /* Show call for exam */
-   Cfe_AllocMemCallForExam (&CallsForExams);
-   Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
-   Cfe_ShowCallForExam (&CallsForExams,ExaCod,Cfe_NORMAL_VIEW,
-			     false);	// Don't highlight
-   Cfe_FreeMemCallForExam (&CallsForExams);
+      /* Show call for exam */
+      Cfe_AllocMemCallForExam (&CallsForExams);
+      Cfe_GetDataCallForExamFromDB (&CallsForExams,ExaCod);
+      Cfe_ShowCallForExam (&CallsForExams,ExaCod,Cfe_NORMAL_VIEW,
+			   false);	// Don't highlight
+      Cfe_FreeMemCallForExam (&CallsForExams);
 
    /* End alert */
-
    Ale_ShowAlertAndButton2 (ActRemCfe,NULL,NULL,
                             Cfe_PutParamExaCodToEdit,&CallsForExams.ExaCod,
 			    Btn_REMOVE_BUTTON,Txt_Remove);
@@ -495,14 +462,7 @@ void Cfe_RemoveCallForExam1 (void)
       Err_WrongCallForExamExit ();
 
    /***** Mark the call for exam as deleted in the database *****/
-   DB_QueryUPDATE ("can not remove call for exam",
-		   "UPDATE cfe_exams"
-		     " SET Status=%u"
-		   " WHERE ExaCod=%ld"
-		     " AND CrsCod=%ld",
-                   (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
-                   ExaCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Cfe_DB_MarkACallForExamAsDeleted (ExaCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_CALL_FOR_EXAM,ExaCod);
@@ -544,14 +504,7 @@ void Cfe_HideCallForExam (void)
       Err_WrongCallForExamExit ();
 
    /***** Mark the call for exam as hidden in the database *****/
-   DB_QueryUPDATE ("can not hide call for exam",
-		   "UPDATE cfe_exams"
-		     " SET Status=%u"
-		   " WHERE ExaCod=%ld"
-		     " AND CrsCod=%ld",
-                   (unsigned) Cfe_HIDDEN_CALL_FOR_EXAM,
-                   ExaCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Cfe_DB_HideCallForExam (ExaCod);
 
    /***** Set exam to be highlighted *****/
    CallsForExams->HighlightExaCod = ExaCod;
@@ -576,14 +529,7 @@ void Cfe_UnhideCallForExam (void)
       Err_WrongCallForExamExit ();
 
    /***** Mark the call for exam as visible in the database *****/
-   DB_QueryUPDATE ("can not unhide call for exam",
-		   "UPDATE cfe_exams"
-		     " SET Status=%u"
-		   " WHERE ExaCod=%ld"
-		     " AND CrsCod=%ld",
-                   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM,
-                   ExaCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Cfe_DB_UnhideCallForExam (ExaCod);
 
    /***** Set exam to be highlighted *****/
    CallsForExams->HighlightExaCod = ExaCod;
@@ -710,7 +656,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
    NumExaAnns = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get calls for exams"
 			      " in this course for listing",
-		   "SELECT ExaCod"			// row[0]
+		   "SELECT ExaCod"	// row[0]
 		    " FROM cfe_exams"
 		   " WHERE CrsCod=%ld"
 		     " AND %s"
@@ -798,96 +744,8 @@ static void Cfe_PutButtonToCreateNewCallForExam (void)
    extern const char *Txt_New_call_FOR_EXAM;
 
    Frm_BeginForm (ActEdiCfe);
-   Btn_PutConfirmButton (Txt_New_call_FOR_EXAM);
+      Btn_PutConfirmButton (Txt_New_call_FOR_EXAM);
    Frm_EndForm ();
-  }
-
-/*****************************************************************************/
-/******************** Add a call for exam to the database ********************/
-/*****************************************************************************/
-// Return the code of the call for exam just added
-
-static long Cfe_AddCallForExamToDB (const struct Cfe_CallsForExams *CallsForExams)
-  {
-   long ExaCod;
-
-   /***** Add call for exam *****/
-   ExaCod =
-   DB_QueryINSERTandReturnCode ("can not create a new call for exam",
-				"INSERT INTO cfe_exams "
-				"(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
-				  "CallDate,ExamDate,Duration,"
-				  "Place,ExamMode,Structure,"
-				  "DocRequired,MatRequired,MatAllowed,OtherInfo)"
-				" VALUES "
-				"(%ld,%u,0,'%s',%u,'%s',"
-				  "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00',"
-				  "'%s','%s','%s',"
-				  "'%s','%s','%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
-				(unsigned) Cfe_VISIBLE_CALL_FOR_EXAM,
-				CallsForExams->CallForExam.CrsFullName,
-				CallsForExams->CallForExam.Year,
-				CallsForExams->CallForExam.Session,
-				CallsForExams->CallForExam.ExamDate.Year,
-				CallsForExams->CallForExam.ExamDate.Month,
-				CallsForExams->CallForExam.ExamDate.Day,
-				CallsForExams->CallForExam.StartTime.Hour,
-				CallsForExams->CallForExam.StartTime.Minute,
-				CallsForExams->CallForExam.Duration.Hour,
-				CallsForExams->CallForExam.Duration.Minute,
-				CallsForExams->CallForExam.Place,
-				CallsForExams->CallForExam.Mode,
-				CallsForExams->CallForExam.Structure,
-				CallsForExams->CallForExam.DocRequired,
-				CallsForExams->CallForExam.MatRequired,
-				CallsForExams->CallForExam.MatAllowed,
-				CallsForExams->CallForExam.OtherInfo);
-
-   return ExaCod;
-  }
-
-/*****************************************************************************/
-/***************** Modify a call for exam in the database ********************/
-/*****************************************************************************/
-
-static void Cfe_ModifyCallForExamInDB (const struct Cfe_CallsForExams *CallsForExams,
-                                       long ExaCod)
-  {
-   /***** Modify call for exam *****/
-   DB_QueryUPDATE ("can not update a call for exam",
-		   "UPDATE cfe_exams"
-		     " SET CrsFullName='%s',"
-		          "Year=%u,"
-		          "ExamSession='%s',"
-		          "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
-		          "Duration='%02u:%02u:00',"
-		          "Place='%s',"
-		          "ExamMode='%s',"
-		          "Structure='%s',"
-		          "DocRequired='%s',"
-		          "MatRequired='%s',"
-		          "MatAllowed='%s',"
-		          "OtherInfo='%s'"
-		   " WHERE ExaCod=%ld",
-	           CallsForExams->CallForExam.CrsFullName,
-	           CallsForExams->CallForExam.Year,
-	           CallsForExams->CallForExam.Session,
-	           CallsForExams->CallForExam.ExamDate.Year,
-	           CallsForExams->CallForExam.ExamDate.Month,
-	           CallsForExams->CallForExam.ExamDate.Day,
-	           CallsForExams->CallForExam.StartTime.Hour,
-	           CallsForExams->CallForExam.StartTime.Minute,
-	           CallsForExams->CallForExam.Duration.Hour,
-	           CallsForExams->CallForExam.Duration.Minute,
-	           CallsForExams->CallForExam.Place,
-	           CallsForExams->CallForExam.Mode,
-	           CallsForExams->CallForExam.Structure,
-	           CallsForExams->CallForExam.DocRequired,
-	           CallsForExams->CallForExam.MatRequired,
-	           CallsForExams->CallForExam.MatAllowed,
-	           CallsForExams->CallForExam.OtherInfo,
-	           ExaCod);
   }
 
 /*****************************************************************************/
@@ -1841,18 +1699,4 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                  Txt_CALL_FOR_EXAM_Material_allowed,CallsForExams->CallForExam.MatAllowed,
                  Txt_CALL_FOR_EXAM_Other_information,CallsForExams->CallForExam.OtherInfo) < 0)
       Err_NotEnoughMemoryExit ();
-  }
-
-/*****************************************************************************/
-/*********** Mark all exam announcements in the course as deleted ************/
-/*****************************************************************************/
-
-void Cfe_DB_MarkCallForExamsInCrsAsDeleted (long CrsCod)
-  {
-   DB_QueryUPDATE ("can not remove calls for exams of a course",
-		   "UPDATE cfe_exams"
-		     " SET Status=%u"
-		   " WHERE CrsCod=%ld",
-		   (unsigned) Cfe_DELETED_CALL_FOR_EXAM,
-		   CrsCod);
   }

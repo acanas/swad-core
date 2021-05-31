@@ -25,26 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stdbool.h>		// For boolean type
-// #include <stddef.h>		// For NULL
-// #include <stdlib.h>		// For free
-// #include <string.h>		// For string functions
-
 #include "swad_database.h"
-// #include "swad_degree.h"
-// #include "swad_degree_config.h"
 #include "swad_degree_database.h"
 #include "swad_error.h"
-// #include "swad_figure.h"
-// #include "swad_figure_cache.h"
-// #include "swad_form.h"
-// #include "swad_forum.h"
 #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_HTML.h"
-// #include "swad_logo.h"
-// #include "swad_message.h"
-// #include "swad_survey.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

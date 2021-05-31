@@ -32,9 +32,9 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_agenda.o \
        swad_assignment_database.o swad_attendance.o swad_attendance_database.o \
        swad_banner.o swad_banner_database.o swad_box.o swad_building.o \
        swad_button.o \
-       swad_calendar.o swad_call_for_exam.o swad_center.o \
-       swad_center_config.o swad_chat.o swad_chat_database.o swad_config.o \
-       swad_connected.o swad_connected_database.o swad_cookie.o \
+       swad_calendar.o swad_call_for_exam.o swad_call_for_exam_database.o \
+       swad_center.o swad_center_config.o swad_chat.o swad_chat_database.o \
+       swad_config.o swad_connected.o swad_connected_database.o swad_cookie.o \
        swad_cookie_database.o swad_country.o swad_country_config.o \
        swad_country_database.o swad_course.o swad_course_config.o \
        swad_course_database.o swad_cryptography.o \

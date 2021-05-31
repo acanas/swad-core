@@ -29,13 +29,8 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-// #include "swad_action.h"
-// #include "swad_constant.h"
 #include "swad_degree.h"
 #include "swad_degree_type.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_role_type.h"
-// #include "swad_string.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
