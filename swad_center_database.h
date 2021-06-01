@@ -1,9 +1,9 @@
-// swad_building_database.h: buildings in a center operations with database
+// swad_center_database.h: centers operations with database
 
-#ifndef _SWAD_BLD_DB
-#define _SWAD_BLD_DB
+#ifndef _SWAD_CTR_DB
+#define _SWAD_CTR_DB
 /*
-    SWAD (Shared Workspace At a Distance in Spanish),
+    SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
 
@@ -24,32 +24,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
+// #include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_building.h"
+// #include "swad_action.h"
+// #include "swad_constant.h"
+// #include "swad_degree.h"
+// #include "swad_map.h"
+// #include "swad_role_type.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/****************************** Public prototypes ****************************/
 /*****************************************************************************/
-
-void Bld_DB_CreateBuilding (const struct Bld_Building *Building);
-
-unsigned Bld_DB_GetListBuildings (MYSQL_RES **mysql_res,
-                                  Bld_WhichData_t WhichData,
-                                  Bld_Order_t SelectedOrder);
-unsigned Bld_DB_GetDataOfBuildingByCod (MYSQL_RES **mysql_res,long BldCod);
-bool Bld_DB_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod);
-
-void Bld_DB_UpdateBuildingName (long BldCod,const char *FieldName,const char *NewBuildingName);
-
-void Bld_DB_RemoveBuilding (long BldCod);
-void Bld_DB_RemoveAllBuildingsInCtr (long CtrCod);
 
 #endif

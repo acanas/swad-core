@@ -181,7 +181,7 @@ void Plc_SeePlaces (void)
       HTM_TR_End ();
 
       /***** Write centers (of the current institution) with other place *****/
-      NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
+      NumCtrsInOtherPlcs = Ctr_DB_GetNumCtrsInPlc (0);
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\"");

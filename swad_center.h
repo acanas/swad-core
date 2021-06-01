@@ -118,14 +118,14 @@ void Ctr_PutParamCtrCod (long CtrCod);
 long Ctr_GetAndCheckParamOtherCtrCod (long MinCodAllowed);
 void Ctr_RemoveCenter (void);
 void Ctr_ChangeCtrPlc (void);
-void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod);
+void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);
 void Ctr_RenameCenterShort (void);
 void Ctr_RenameCenterFull (void);
 void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
-bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
-				    long CtrCod,long InsCod);
+bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
+				       long CtrCod,long InsCod);
 void Ctr_ChangeCtrWWW (void);
-void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);
 
@@ -145,7 +145,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void);
 unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod);
 unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod);
 
-unsigned Ctr_GetNumCtrsInPlc (long PlcCod);
+unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod);
 
 unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
                                        HieLvl_Level_t Scope,long Cod);

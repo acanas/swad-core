@@ -101,7 +101,7 @@ static void CtrCfg_NumUsrs (void);
 static void CtrCfg_NumDegs (void);
 static void CtrCfg_NumCrss (void);
 
-static void CtrCfg_UpdateCtrInsDB (long CtrCod,long InsCod);
+static void Ctr_DB_UpdateCtrIns (long CtrCod,long InsCod);
 static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
 					  const char *CoordField,double NewCoord);
 
@@ -173,54 +173,54 @@ static void CtrCfg_Configuration (bool PrintView)
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-   /***** Institution *****/
-   CtrCfg_Institution (PrintView,PutFormIns);
+	 /***** Institution *****/
+	 CtrCfg_Institution (PrintView,PutFormIns);
 
-   /***** Center name *****/
-   CtrCfg_FullName (PutFormName);
-   CtrCfg_ShrtName (PutFormName);
+	 /***** Center name *****/
+	 CtrCfg_FullName (PutFormName);
+	 CtrCfg_ShrtName (PutFormName);
 
-   /***** Place *****/
-   CtrCfg_Place (PutFormPlc);
+	 /***** Place *****/
+	 CtrCfg_Place (PutFormPlc);
 
-   /***** Coordinates *****/
-   if (PutFormCoor)
-     {
-      CtrCfg_Latitude ();
-      CtrCfg_Longitude ();
-      CtrCfg_Altitude ();
-     }
+	 /***** Coordinates *****/
+	 if (PutFormCoor)
+	   {
+	    CtrCfg_Latitude ();
+	    CtrCfg_Longitude ();
+	    CtrCfg_Altitude ();
+	   }
 
-   /***** Center WWW *****/
-   CtrCfg_WWW (PrintView,PutFormWWW);
+	 /***** Center WWW *****/
+	 CtrCfg_WWW (PrintView,PutFormWWW);
 
-   /***** Shortcut to the center *****/
-   CtrCfg_Shortcut (PrintView);
+	 /***** Shortcut to the center *****/
+	 CtrCfg_Shortcut (PrintView);
 
-   if (PrintView)
-      /***** QR code with link to the center *****/
-      CtrCfg_QR ();
-   else
-     {
-      /***** Number of users who claim to belong to this center,
-             number of degrees,
-             number of courses *****/
-      CtrCfg_NumUsrs ();
-      CtrCfg_NumDegs ();
-      CtrCfg_NumCrss ();
+	 if (PrintView)
+	    /***** QR code with link to the center *****/
+	    CtrCfg_QR ();
+	 else
+	   {
+	    /***** Number of users who claim to belong to this center,
+		   number of degrees,
+		   number of courses *****/
+	    CtrCfg_NumUsrs ();
+	    CtrCfg_NumDegs ();
+	    CtrCfg_NumCrss ();
 
-      /***** Number of users in courses of this center *****/
-      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_UNK);
-     }
+	    /***** Number of users in courses of this center *****/
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Rol_UNK);
+	   }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
    /***** End of left part *****/
    HTM_DIV_End ();
@@ -241,13 +241,13 @@ static void CtrCfg_Configuration (bool PrintView)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
-      /***** Center map *****/
-      if (MapIsAvailable)
-	 CtrCfg_Map ();
+	 /***** Center map *****/
+	 if (MapIsAvailable)
+	    CtrCfg_Map ();
 
-      /***** Center photo *****/
-      if (PhotoExists)
-	 CtrCfg_Photo (PrintView,PutFormPhoto,PutLink,PathPhoto);
+	 /***** Center photo *****/
+	 if (PhotoExists)
+	    CtrCfg_Photo (PrintView,PutFormPhoto,PutLink,PathPhoto);
 
       HTM_DIV_End ();
      }
@@ -342,18 +342,18 @@ static void CtrCfg_Map (void)
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
 
-   /* Let's create a map with pretty Mapbox Streets tiles */
-   Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord,16);
+      /* Let's create a map with pretty Mapbox Streets tiles */
+      Map_CreateMap (CtrCfg_MAP_CONTAINER_ID,&Gbl.Hierarchy.Ctr.Coord,16);
 
-   /* Add Mapbox Streets tile layer to our map */
-   Map_AddTileLayer ();
+      /* Add Mapbox Streets tile layer to our map */
+      Map_AddTileLayer ();
 
-   /* Add marker */
-   Map_AddMarker (&Gbl.Hierarchy.Ctr.Coord);
+      /* Add marker */
+      Map_AddMarker (&Gbl.Hierarchy.Ctr.Coord);
 
-   /* Add popup */
-   Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,
-		 true);	// Open
+      /* Add popup */
+      Map_AddPopup (Gbl.Hierarchy.Ctr.ShrtName,Gbl.Hierarchy.Ins.ShrtName,
+		    true);	// Open
 
    HTM_SCRIPT_End ();
   }
@@ -369,20 +369,20 @@ static void CtrCfg_Latitude (void)
    /***** Latitude *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Latitude",Txt_Latitude);
+      /* Label */
+      Frm_LabelColumn ("RT","Latitude",Txt_Latitude);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginForm (ActChgCtrLatCfg);
-   HTM_INPUT_FLOAT ("Latitude",
-		    -90.0,	// South Pole
-		    90.0,	// North Pole
-		    0.0,	// step="any"
-		    Gbl.Hierarchy.Ctr.Coord.Latitude,false,
-		    "class=\"INPUT_COORD\" required=\"required\"");
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginForm (ActChgCtrLatCfg);
+	    HTM_INPUT_FLOAT ("Latitude",
+			     -90.0,	// South Pole
+			     90.0,	// North Pole
+			     0.0,	// step="any"
+			     Gbl.Hierarchy.Ctr.Coord.Latitude,false,
+			     "class=\"INPUT_COORD\" required=\"required\"");
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -394,20 +394,20 @@ static void CtrCfg_Longitude (void)
    /***** Longitude *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Longitude",Txt_Longitude);
+      /* Label */
+      Frm_LabelColumn ("RT","Longitude",Txt_Longitude);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginForm (ActChgCtrLgtCfg);
-   HTM_INPUT_FLOAT ("Longitude",
-		    -180.0,	// West
-		    180.0,	// East
-		    0.0,	// step="any"
-		    Gbl.Hierarchy.Ctr.Coord.Longitude,false,
-		    "class=\"INPUT_COORD\" required=\"required\"");
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginForm (ActChgCtrLgtCfg);
+	    HTM_INPUT_FLOAT ("Longitude",
+			     -180.0,	// West
+			     180.0,	// East
+			     0.0,	// step="any"
+			     Gbl.Hierarchy.Ctr.Coord.Longitude,false,
+			     "class=\"INPUT_COORD\" required=\"required\"");
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -419,20 +419,20 @@ static void CtrCfg_Altitude (void)
    /***** Altitude *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Altitude",Txt_Altitude);
+      /* Label */
+      Frm_LabelColumn ("RT","Altitude",Txt_Altitude);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginForm (ActChgCtrAltCfg);
-   HTM_INPUT_FLOAT ("Altitude",
-		    -413.0,	// Dead Sea shore
-		    8848.0,	// Mount Everest
-		    0.0,	// step="any"
-		    Gbl.Hierarchy.Ctr.Coord.Altitude,false,
-		    "class=\"INPUT_COORD\" required=\"required\"");
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginForm (ActChgCtrAltCfg);
+	    HTM_INPUT_FLOAT ("Altitude",
+			     -413.0,	// Dead Sea shore
+			     8848.0,	// Mount Everest
+			     0.0,	// step="any"
+			     Gbl.Hierarchy.Ctr.Coord.Altitude,false,
+			     "class=\"INPUT_COORD\" required=\"required\"");
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -459,44 +459,44 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		   Gbl.Hierarchy.Ctr.WWW);
-   if (asprintf (&URL,"%s/%02u/%u",
-		 Cfg_URL_CTR_PUBLIC,
-		 (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-      Err_NotEnoughMemoryExit ();
-   if (asprintf (&Icon,"%u.jpg",
-		 (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
-	    "class=\"%s\"",PrintView ? "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH" :
-				       "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH");
-   free (Icon);
-   free (URL);
-   if (PutLink)
-      HTM_A_End ();
+      if (PutLink)
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+		      Gbl.Hierarchy.Ctr.WWW);
+      if (asprintf (&URL,"%s/%02u/%u",
+		    Cfg_URL_CTR_PUBLIC,
+		    (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+		    (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+      if (asprintf (&Icon,"%u.jpg",
+		    (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
+	       "class=\"%s\"",PrintView ? "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH" :
+					  "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH");
+      free (Icon);
+      free (URL);
+      if (PutLink)
+	 HTM_A_End ();
    HTM_DIV_End ();
 
    /****** Photo attribution ******/
    if (PutForm)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgCtrPhoAtt);
-      HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
-			  " onchange=\"document.getElementById('%s').submit();return false;\"",
-			  Gbl.Form.Id);
-      if (PhotoAttribution)
-	 HTM_Txt (PhotoAttribution);
-      HTM_TEXTAREA_End ();
-      Frm_EndForm ();
+	 Frm_BeginForm (ActChgCtrPhoAtt);
+	    HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"3\""
+				" onchange=\"document.getElementById('%s').submit();return false;\"",
+				Gbl.Form.Id);
+	       if (PhotoAttribution)
+		  HTM_Txt (PhotoAttribution);
+	    HTM_TEXTAREA_End ();
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    else if (PhotoAttribution)
      {
       HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
-      HTM_Txt (PhotoAttribution);
+	 HTM_Txt (PhotoAttribution);
       HTM_DIV_End ();
      }
 
@@ -567,56 +567,58 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
    /***** Institution *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "OthInsCod" :
-	                           NULL,
-		    Txt_Institution);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "OthInsCod" :
+				      NULL,
+		       Txt_Institution);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Get list of institutions of the current country */
-      Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (PutForm)
+	   {
+	    /* Get list of institutions of the current country */
+	    Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
 
-      /* Put form to select institution */
-      Frm_BeginForm (ActChgCtrInsCfg);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"OthInsCod\" name=\"OthInsCod\""
-			" class=\"INPUT_SHORT_NAME\"");
-      for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Inss.Num;
-	   NumIns++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-		     Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
-	             "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
+	    /* Put form to select institution */
+	    Frm_BeginForm (ActChgCtrInsCfg);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "id=\"OthInsCod\" name=\"OthInsCod\""
+				 " class=\"INPUT_SHORT_NAME\"");
+		  for (NumIns = 0;
+		       NumIns < Gbl.Hierarchy.Inss.Num;
+		       NumIns++)
+		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+				 Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+				 "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
+	       HTM_SELECT_End ();
+	    Frm_EndForm ();
 
-      /* Free list of institutions */
-      Ins_FreeListInstitutions ();
-     }
-   else	// I can not move center to another institution
-     {
-      if (!PrintView)
-	{
-         Frm_BeginFormGoTo (ActSeeInsInf);
-         Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
-				  "BT_LINK LT DAT",NULL);
-	 Hie_FreeGoToMsg ();
-	}
-      Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
-		    20,"LM",true);
-      HTM_NBSP ();
-      HTM_Txt (Gbl.Hierarchy.Ins.FullName);
-      if (!PrintView)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
-   HTM_TD_End ();
+	    /* Free list of institutions */
+	    Ins_FreeListInstitutions ();
+	   }
+	 else	// I can not move center to another institution
+	   {
+	    if (!PrintView)
+	      {
+	       Frm_BeginFormGoTo (ActSeeInsInf);
+	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
+					   "BT_LINK LT DAT",NULL);
+		  Hie_FreeGoToMsg ();
+	      }
+
+	    Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
+			  20,"LM",true);
+	    HTM_NBSP ();
+	    HTM_Txt (Gbl.Hierarchy.Ins.FullName);
+
+	    if (!PrintView)
+	      {
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -664,41 +666,41 @@ static void CtrCfg_Place (bool PutForm)
    /***** Place *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "PlcCod" :
-	                           NULL,
-		    Txt_Place);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "PlcCod" :
+				      NULL,
+		       Txt_Place);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Get list of places of the current institution */
-      Places.SelectedOrder = Plc_ORDER_BY_PLACE;
-      Plc_GetListPlaces (&Places);
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (PutForm)
+	   {
+	    /* Get list of places of the current institution */
+	    Places.SelectedOrder = Plc_ORDER_BY_PLACE;
+	    Plc_GetListPlaces (&Places);
 
-      /* Put form to select place */
-      Frm_BeginForm (ActChgCtrPlcCfg);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
-      HTM_OPTION (HTM_Type_STRING,"0",
-		  Gbl.Hierarchy.Ctr.PlcCod == 0,false,
-		  "%s",Txt_Another_place);
-      for (NumPlc = 0;
-	   NumPlc < Places.Num;
-	   NumPlc++)
-	 HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
-		     Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
-		     "%s",Places.Lst[NumPlc].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
+	    /* Put form to select place */
+	    Frm_BeginForm (ActChgCtrPlcCfg);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
+		  HTM_OPTION (HTM_Type_STRING,"0",
+			      Gbl.Hierarchy.Ctr.PlcCod == 0,false,
+			      "%s",Txt_Another_place);
+		  for (NumPlc = 0;
+		       NumPlc < Places.Num;
+		       NumPlc++)
+		     HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
+				 Places.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod,false,
+				 "%s",Places.Lst[NumPlc].ShrtName);
+	       HTM_SELECT_End ();
+	    Frm_EndForm ();
 
-      /* Free list of places */
-      Plc_FreeListPlaces (&Places);
-     }
-   else	// I can not change center place
-      HTM_Txt (Plc.FullName);
-   HTM_TD_End ();
+	    /* Free list of places */
+	    Plc_FreeListPlaces (&Places);
+	   }
+	 else	// I can not change center place
+	    HTM_Txt (Plc.FullName);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -741,13 +743,13 @@ static void CtrCfg_NumUsrs (void)
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -764,21 +766,21 @@ static void CtrCfg_NumDegs (void)
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginFormGoTo (ActSeeDeg);
-   Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-   HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
-	                                        Gbl.Hierarchy.Ctr.ShrtName),
-			    "BT_LINK DAT",NULL);
-   Str_FreeString ();
-   HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginFormGoTo (ActSeeDeg);
+	 Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
+							 Gbl.Hierarchy.Ctr.ShrtName),
+				     "BT_LINK DAT",NULL);
+	    Str_FreeString ();
+	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -794,13 +796,13 @@ static void CtrCfg_NumCrss (void)
    /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -848,31 +850,31 @@ void CtrCfg_RequestPhoto (void)
    /***** Begin form to upload photo *****/
    Frm_BeginForm (ActRecCtrPho);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Photo,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Photo,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Write help message *****/
-   Ale_ShowAlert (Ale_INFO,"%s: %s<br />"
-		           "%s: %u&times;%u %s",
-		  Txt_Recommended_aspect_ratio,
-		  Ctr_RECOMMENDED_ASPECT_RATIO,
-		  Txt_Recommended_resolution,
-		  Ctr_PHOTO_SAVED_MAX_WIDTH,
-		  Ctr_PHOTO_SAVED_MAX_HEIGHT,
-		  Txt_XxY_pixels_or_higher);
+	 /***** Write help message *****/
+	 Ale_ShowAlert (Ale_INFO,"%s: %s<br />"
+				 "%s: %u&times;%u %s",
+			Txt_Recommended_aspect_ratio,
+			Ctr_RECOMMENDED_ASPECT_RATIO,
+			Txt_Recommended_resolution,
+			Ctr_PHOTO_SAVED_MAX_WIDTH,
+			Ctr_PHOTO_SAVED_MAX_HEIGHT,
+			Txt_XxY_pixels_or_higher);
 
-   /***** Upload photo *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_File_with_the_photo);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
-                   HTM_SUBMIT_ON_CHANGE,
-                   NULL);
-   HTM_LABEL_End ();
+	 /***** Upload photo *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
+	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
+			    HTM_SUBMIT_ON_CHANGE,
+			    NULL);
+	 HTM_LABEL_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1037,7 +1039,7 @@ void CtrCfg_ChangeCtrIns (void)
       Ins_GetDataOfInstitutionByCod (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
-      if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",
+      if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",
                                          Gbl.Hierarchy.Ctr.ShrtName,
                                          Gbl.Hierarchy.Ctr.CtrCod,
                                          NewIns.InsCod))
@@ -1045,7 +1047,7 @@ void CtrCfg_ChangeCtrIns (void)
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_center_X_already_exists,
 		          Gbl.Hierarchy.Ctr.ShrtName);
-      else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",
+      else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",
                                               Gbl.Hierarchy.Ctr.FullName,
                                               Gbl.Hierarchy.Ctr.CtrCod,
                                               NewIns.InsCod))
@@ -1056,7 +1058,7 @@ void CtrCfg_ChangeCtrIns (void)
       else
 	{
 	 /***** Update institution in table of centers *****/
-	 CtrCfg_UpdateCtrInsDB (Gbl.Hierarchy.Ctr.CtrCod,NewIns.InsCod);
+	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Ctr.CtrCod,NewIns.InsCod);
 	 Gbl.Hierarchy.Ctr.InsCod =
 	 Gbl.Hierarchy.Ins.InsCod = NewIns.InsCod;
 
@@ -1075,7 +1077,7 @@ void CtrCfg_ChangeCtrIns (void)
 /******************* Update institution in table of centers ******************/
 /*****************************************************************************/
 
-static void CtrCfg_UpdateCtrInsDB (long CtrCod,long InsCod)
+static void Ctr_DB_UpdateCtrIns (long CtrCod,long InsCod)
   {
    /***** Update institution in table of centers *****/
    DB_QueryUPDATE ("can not update the institution of a center",
@@ -1099,7 +1101,7 @@ void CtrCfg_ChangeCtrPlc (void)
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Update place in table of centers *****/
-   Ctr_UpdateCtrPlcDB (Gbl.Hierarchy.Ctr.CtrCod,NewPlcCod);
+   Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Ctr.CtrCod,NewPlcCod);
    Gbl.Hierarchy.Ctr.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made *****/
@@ -1222,7 +1224,7 @@ void CtrCfg_ChangeCtrWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_UpdateCtrWWWDB (Gbl.Hierarchy.Ctr.CtrCod,NewWWW);
+      Ctr_DB_UpdateCtrWWW (Gbl.Hierarchy.Ctr.CtrCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Ctr.WWW,NewWWW,sizeof (Gbl.Hierarchy.Ctr.WWW) - 1);
 
       /***** Write message to show the change made *****/

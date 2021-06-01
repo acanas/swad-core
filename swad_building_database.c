@@ -25,17 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-// #include <malloc.h>		// For calloc, free
-// #include <stddef.h>		// For NULL
-// #include <string.h>		// For string functions
-
-// #include "swad_box.h"
 #include "swad_building.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_HTML.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

@@ -90,7 +90,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 
 static void Ctr_PutParamOtherCtrCod (void *CtrCod);
 
-static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName);
+static void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 static void Ctr_PutParamGoToCtr (void *CtrCod);
@@ -99,7 +99,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
 static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status);
-static void Ctr_CreateCenter (unsigned Status);
+static void Ctr_DB_CreateCenter (unsigned Status);
 
 static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 
@@ -169,46 +169,45 @@ void Ctr_SeeCtrWithPendingDegs (void)
                          NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
-      /***** Wrtie heading *****/
-      HTM_TR_Begin (NULL);
+	 /***** Wrtie heading *****/
+	 HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"LM",Txt_Center);
-      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+	    HTM_TH (1,1,"LM",Txt_Center);
+	    HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** List the centers *****/
-      for (NumCtr = 0;
-	   NumCtr < NumCtrs;
-	   NumCtr++)
-        {
-         /* Get next center */
-         row = mysql_fetch_row (mysql_res);
+	 /***** List the centers *****/
+	 for (NumCtr = 0;
+	      NumCtr < NumCtrs;
+	      NumCtr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	   {
+	    /* Get next center */
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Get center code (row[0]) */
-         Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
-                                                              Gbl.ColorRows[Gbl.RowEvenOdd];
+	    /* Get center code (row[0]) */
+	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
+								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
-         /* Get data of center */
-         Ctr_GetDataOfCenterByCod (&Ctr);
+	    /* Get data of center */
+	    Ctr_GetDataOfCenterByCod (&Ctr);
 
-         /* Center logo and full name */
-         HTM_TR_Begin (NULL);
+	    /* Center logo and full name */
+	    HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-         Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,
-                                            "BT_LINK DAT_NOBR","CM");
-         HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,
+						     "BT_LINK DAT_NOBR","CM");
+	       HTM_TD_End ();
 
-         /* Number of pending degrees (row[1]) */
-         HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 HTM_Txt (row[1]);
-         HTM_TD_End ();
+	       /* Number of pending degrees (row[1]) */
+	       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+		  HTM_Txt (row[1]);
+	       HTM_TD_End ();
 
-         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-         HTM_TR_End ();
-        }
+	    HTM_TR_End ();
+	   }
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -231,16 +230,16 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
    Frm_BeginFormGoTo (Action);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
 
-   /***** Link to action *****/
-   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
-   Hie_FreeGoToMsg ();
+      /***** Link to action *****/
+      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
+      Hie_FreeGoToMsg ();
 
-   /***** Center logo and name *****/
-   Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
-   HTM_TxtF ("&nbsp;%s",Ctr->FullName);
+	 /***** Center logo and name *****/
+	 Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
+	 HTM_TxtF ("&nbsp;%s",Ctr->FullName);
 
-   /***** End link *****/
-   HTM_BUTTON_End ();
+      /***** End link *****/
+      HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -295,32 +294,34 @@ static void Ctr_ListCenters (void)
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   if (Gbl.Hierarchy.Ctrs.Num)	// There are centers in the current institution
-     {
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-      Ctr_PutHeadCentersForSeeing (true);	// Order selectable
+      if (Gbl.Hierarchy.Ctrs.Num)	// There are centers in the current institution
+	{
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (2);
 
-      /***** Write all the centers and their nuber of teachers *****/
-      for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
-	   NumCtr++)
-	 Ctr_ListOneCenterForSeeing (&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),NumCtr + 1);
+	    /***** Write heading *****/
+	    Ctr_PutHeadCentersForSeeing (true);	// Order selectable
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No centers created in the current institution
-      Ale_ShowAlert (Ale_INFO,Txt_No_centers);
+	    /***** Write all the centers and their nuber of teachers *****/
+	    for (NumCtr = 0;
+		 NumCtr < Gbl.Hierarchy.Ctrs.Num;
+		 NumCtr++)
+	       Ctr_ListOneCenterForSeeing (&(Gbl.Hierarchy.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
-   /***** Button to create center *****/
-   if (Ctr_CheckIfICanCreateCenters ())
-     {
-      Frm_BeginForm (ActEdiCtr);
-      Btn_PutConfirmButton (Gbl.Hierarchy.Ctrs.Num ? Txt_Create_another_center :
-	                                                 Txt_Create_center);
-      Frm_EndForm ();
-     }
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+	}
+      else	// No centers created in the current institution
+	 Ale_ShowAlert (Ale_INFO,Txt_No_centers);
+
+      /***** Button to create center *****/
+      if (Ctr_CheckIfICanCreateCenters ())
+	{
+	 Frm_BeginForm (ActEdiCtr);
+	    Btn_PutConfirmButton (Gbl.Hierarchy.Ctrs.Num ? Txt_Create_another_center :
+							   Txt_Create_center);
+	 Frm_EndForm ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -394,51 +395,51 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
    HTM_TR_Begin (NULL);
 
-   /***** Number of center in this list *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (NumCtr);
-   HTM_TD_End ();
+      /***** Number of center in this list *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (NumCtr);
+      HTM_TD_End ();
 
-   /***** Center logo and name *****/
-   HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-   Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,
-                                      TxtClassStrong,"CM");
-   HTM_TD_End ();
+      /***** Center logo and name *****/
+      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,
+					    TxtClassStrong,"CM");
+      HTM_TD_End ();
 
-   /***** Number of users who claim to belong to this center *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (Ctr));
-   HTM_TD_End ();
+      /***** Number of users who claim to belong to this center *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (Ctr));
+      HTM_TD_End ();
 
-   /***** Place *****/
-   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-   HTM_Txt (Plc.ShrtName);
-   HTM_TD_End ();
+      /***** Place *****/
+      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+	 HTM_Txt (Plc.ShrtName);
+      HTM_TD_End ();
 
-   /***** Number of degrees *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Ctr->CtrCod));
-   HTM_TD_End ();
+      /***** Number of degrees *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Ctr->CtrCod));
+      HTM_TD_End ();
 
-   /***** Number of courses *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Ctr->CtrCod));
-   HTM_TD_End ();
+      /***** Number of courses *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Ctr->CtrCod));
+      HTM_TD_End ();
 
-   /***** Number of users in courses of this center *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
-					     1 << Rol_STD |
-					     1 << Rol_NET |
-					     1 << Rol_TCH));	// Any user
-   HTM_TD_End ();
+      /***** Number of users in courses of this center *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
+						   1 << Rol_STD |
+						   1 << Rol_NET |
+						   1 << Rol_TCH));	// Any user
+      HTM_TD_End ();
 
-   /***** Center status *****/
-   StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-   if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
-      HTM_Txt (Txt_CENTER_STATUS[StatusTxt]);
-   HTM_TD_End ();
+      /***** Center status *****/
+      StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
+      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+	 if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
+	    HTM_Txt (Txt_CENTER_STATUS[StatusTxt]);
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -452,10 +453,10 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 static void Ctr_GetParamCtrOrder (void)
   {
    Gbl.Hierarchy.Ctrs.SelectedOrder = (Ctr_Order_t)
-					  Par_GetParToUnsignedLong ("Order",
-								    0,
-								    Ctr_NUM_ORDERS - 1,
-								    (unsigned long) Ctr_ORDER_DEFAULT);
+				      Par_GetParToUnsignedLong ("Order",
+							        0,
+							        Ctr_NUM_ORDERS - 1,
+							        (unsigned long) Ctr_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -501,12 +502,12 @@ static void Ctr_EditCentersInternal (void)
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   /***** Put a form to create a new center *****/
-   Ctr_PutFormToCreateCenter (&Places);
+      /***** Put a form to create a new center *****/
+      Ctr_PutFormToCreateCenter (&Places);
 
-   /***** List current centers *****/
-   if (Gbl.Hierarchy.Ctrs.Num)
-      Ctr_ListCentersForEdition (&Places);
+      /***** List current centers *****/
+      if (Gbl.Hierarchy.Ctrs.Num)
+	 Ctr_ListCentersForEdition (&Places);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -850,54 +851,57 @@ void Ctr_WriteSelectorOfCenter (void)
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeDeg);
 
-   if (Gbl.Hierarchy.Ins.InsCod > 0)
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
-			" disabled=\"disabled\"");
-   HTM_OPTION (HTM_Type_STRING,"",
-	       Gbl.Hierarchy.Ctr.CtrCod < 0,true,
-	       "[%s]",Txt_Center);
+      /***** Begin selector *****/
+      if (Gbl.Hierarchy.Ins.InsCod > 0)
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
+      else
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
+			   " disabled=\"disabled\"");
+      HTM_OPTION (HTM_Type_STRING,"",
+		  Gbl.Hierarchy.Ctr.CtrCod < 0,true,
+		  "[%s]",Txt_Center);
 
-   if (Gbl.Hierarchy.Ins.InsCod > 0)
-     {
-      /***** Get centers from database *****/
-      NumCtrs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get centers",
-		      "SELECT DISTINCT CtrCod,"		// row[0]
-		                      "ShortName"	// row[1]
-		       " FROM ctr_centers"
-		      " WHERE InsCod=%ld"
-		      " ORDER BY ShortName",
-		      Gbl.Hierarchy.Ins.InsCod);
+      if (Gbl.Hierarchy.Ins.InsCod > 0)
+	{
+	 /***** Get centers from database *****/
+	 NumCtrs = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get centers",
+			 "SELECT DISTINCT CtrCod,"		// row[0]
+					 "ShortName"	// row[1]
+			  " FROM ctr_centers"
+			 " WHERE InsCod=%ld"
+			 " ORDER BY ShortName",
+			 Gbl.Hierarchy.Ins.InsCod);
 
-      /***** Get centers *****/
-      for (NumCtr = 0;
-	   NumCtr < NumCtrs;
-	   NumCtr++)
-        {
-         /* Get next center */
-         row = mysql_fetch_row (mysql_res);
+	 /***** Get centers *****/
+	 for (NumCtr = 0;
+	      NumCtr < NumCtrs;
+	      NumCtr++)
+	   {
+	    /* Get next center */
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Get center code (row[0]) */
-         if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Err_WrongCenterExit ();
+	    /* Get center code (row[0]) */
+	    if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	       Err_WrongCenterExit ();
 
-         /* Write option */
-	 HTM_OPTION (HTM_Type_LONG,&CtrCod,
-		     Gbl.Hierarchy.Ctr.CtrCod > 0 &&
-                     CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
-		     "%s",row[1]);
-        }
+	    /* Write option */
+	    HTM_OPTION (HTM_Type_LONG,&CtrCod,
+			Gbl.Hierarchy.Ctr.CtrCod > 0 &&
+			CtrCod == Gbl.Hierarchy.Ctr.CtrCod,false,
+			"%s",row[1]);
+	   }
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
+
+      /***** End selector *****/
+      HTM_SELECT_End ();
 
    /***** End form *****/
-   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -924,179 +928,183 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Write heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Ctr_PutHeadCentersForEdition ();
 
-   /***** Write all the centers *****/
-   for (NumCtr = 0;
-	NumCtr < Gbl.Hierarchy.Ctrs.Num;
-	NumCtr++)
-     {
-      Ctr = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
+      /***** Write heading *****/
+      Ctr_PutHeadCentersForEdition ();
 
-      ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
-      NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
-      NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
-      NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
-						 1 << Rol_STD |
-						 1 << Rol_NET |
-						 1 << Rol_TCH);	// Any user
-
-      /* Put icon to remove center */
-      HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("class=\"BM\"");
-      if (!ICanEdit ||				// I cannot edit
-	  NumDegs ||				// Center has degrees
-	  NumUsrsCtr ||				// Center has users who claim to belong to it
-	  NumUsrsInCrssOfCtr)			// Center has users
-	 Ico_PutIconRemovalNotAllowed ();
-      else	// I can remove center
-	 Ico_PutContextualIconToRemove (ActRemCtr,NULL,
-					Ctr_PutParamOtherCtrCod,&Ctr->CtrCod);
-      HTM_TD_End ();
-
-      /* Center code */
-      HTM_TD_Begin ("class=\"DAT CODE\"");
-      HTM_Long (Ctr->CtrCod);
-      HTM_TD_End ();
-
-      /* Center logo */
-      HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
-      Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
-      HTM_TD_End ();
-
-      /* Place */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
+      /***** Write all the centers *****/
+      for (NumCtr = 0;
+	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
+	   NumCtr++)
 	{
-	 Frm_BeginForm (ActChgCtrPlc);
-	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "name=\"PlcCod\" class=\"PLC_SEL\"");
-	 HTM_OPTION (HTM_Type_STRING,"0",
-		     Ctr->PlcCod == 0,false,
-		     "%s",Txt_Another_place);
-	 for (NumPlc = 0;
-	      NumPlc < Places->Num;
-	      NumPlc++)
-	    HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
-			Places->Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
-			"%s",Places->Lst[NumPlc].ShrtName);
-	 HTM_SELECT_End ();
-	 Frm_EndForm ();
+	 Ctr = &Gbl.Hierarchy.Ctrs.Lst[NumCtr];
+
+	 ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
+	 NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
+	 NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
+	 NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
+						    1 << Rol_STD |
+						    1 << Rol_NET |
+						    1 << Rol_TCH);	// Any user
+
+	 HTM_TR_Begin (NULL);
+
+	    /* Put icon to remove center */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       if (!ICanEdit ||				// I cannot edit
+		   NumDegs ||				// Center has degrees
+		   NumUsrsCtr ||				// Center has users who claim to belong to it
+		   NumUsrsInCrssOfCtr)			// Center has users
+		  Ico_PutIconRemovalNotAllowed ();
+	       else	// I can remove center
+		  Ico_PutContextualIconToRemove (ActRemCtr,NULL,
+						 Ctr_PutParamOtherCtrCod,&Ctr->CtrCod);
+	    HTM_TD_End ();
+
+	    /* Center code */
+	    HTM_TD_Begin ("class=\"DAT CODE\"");
+	       HTM_Long (Ctr->CtrCod);
+	    HTM_TD_End ();
+
+	    /* Center logo */
+	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
+	       Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
+	    HTM_TD_End ();
+
+	    /* Place */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActChgCtrPlc);
+		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				       "name=\"PlcCod\" class=\"PLC_SEL\"");
+			HTM_OPTION (HTM_Type_STRING,"0",
+				    Ctr->PlcCod == 0,false,
+				    "%s",Txt_Another_place);
+			for (NumPlc = 0;
+			     NumPlc < Places->Num;
+			     NumPlc++)
+			   HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
+				       Places->Lst[NumPlc].PlcCod == Ctr->PlcCod,false,
+				       "%s",Places->Lst[NumPlc].ShrtName);
+		     HTM_SELECT_End ();
+		  Frm_EndForm ();
+		 }
+	       else
+		  for (NumPlc = 0;
+		       NumPlc < Places->Num;
+		       NumPlc++)
+		     if (Places->Lst[NumPlc].PlcCod == Ctr->PlcCod)
+			HTM_Txt (Places->Lst[NumPlc].ShrtName);
+	    HTM_TD_End ();
+
+	    /* Center short name */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActRenCtrSho);
+		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"INPUT_SHORT_NAME\"");
+		  Frm_EndForm ();
+		 }
+	       else
+		  HTM_Txt (Ctr->ShrtName);
+	    HTM_TD_End ();
+
+	    /* Center full name */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActRenCtrFul);
+		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"INPUT_FULL_NAME\"");
+		  Frm_EndForm ();
+		 }
+	       else
+		  HTM_Txt (Ctr->FullName);
+	    HTM_TD_End ();
+
+	    /* Center WWW */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActChgCtrWWW);
+		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
+				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+		  Frm_EndForm ();
+		 }
+	       else
+		 {
+		  Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
+		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
+		     HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+				  " class=\"DAT\" title=\"%s\"",Ctr->WWW,Ctr->WWW);
+			HTM_Txt (WWW);
+		     HTM_A_End ();
+		  HTM_DIV_End ();
+		 }
+	    HTM_TD_End ();
+
+	    /* Number of users who claim to belong to this center */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrsCtr);
+	    HTM_TD_End ();
+
+	    /* Number of degrees */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumDegs);
+	    HTM_TD_End ();
+
+	    /* Number of users in courses of this center */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrsInCrssOfCtr);
+	    HTM_TD_End ();
+
+	    /* Center requester */
+	    UsrDat.UsrCod = Ctr->RequesterUsrCod;
+	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+						     Usr_DONT_GET_PREFS,
+						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+	    HTM_TD_End ();
+
+	    /* Center status */
+	    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
+		   StatusTxt == Ctr_STATUS_PENDING)
+		 {
+		  Frm_BeginForm (ActChgCtrSta);
+		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				       "name=\"Status\" class=\"INPUT_STATUS\"");
+
+			StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
+			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+				    "%s",Txt_CENTER_STATUS[Ctr_STATUS_PENDING]);
+
+			StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
+			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
+				    "%s",Txt_CENTER_STATUS[Ctr_STATUS_ACTIVE]);
+
+		     HTM_SELECT_End ();
+		  Frm_EndForm ();
+		 }
+	       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
+		  HTM_Txt (Txt_CENTER_STATUS[StatusTxt]);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
 	}
-      else
-	 for (NumPlc = 0;
-	      NumPlc < Places->Num;
-	      NumPlc++)
-	    if (Places->Lst[NumPlc].PlcCod == Ctr->PlcCod)
-	       HTM_Txt (Places->Lst[NumPlc].ShrtName);
-      HTM_TD_End ();
-
-      /* Center short name */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActRenCtrSho);
-	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "class=\"INPUT_SHORT_NAME\"");
-	 Frm_EndForm ();
-	}
-      else
-	 HTM_Txt (Ctr->ShrtName);
-      HTM_TD_End ();
-
-      /* Center full name */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActRenCtrFul);
-	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "class=\"INPUT_FULL_NAME\"");
-	 Frm_EndForm ();
-	}
-      else
-	 HTM_Txt (Ctr->FullName);
-      HTM_TD_End ();
-
-      /* Center WWW */
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (ICanEdit)
-	{
-	 Frm_BeginForm (ActChgCtrWWW);
-	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
-			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
-	 Frm_EndForm ();
-	}
-      else
-	{
-         Str_Copy (WWW,Ctr->WWW,sizeof (WWW) - 1);
-         HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-                      " class=\"DAT\" title=\"%s\"",Ctr->WWW,Ctr->WWW);
-         HTM_Txt (WWW);
-         HTM_A_End ();
-         HTM_DIV_End ();
-	}
-      HTM_TD_End ();
-
-      /* Number of users who claim to belong to this center */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrsCtr);
-      HTM_TD_End ();
-
-      /* Number of degrees */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumDegs);
-      HTM_TD_End ();
-
-      /* Number of users in courses of this center */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrsInCrssOfCtr);
-      HTM_TD_End ();
-
-      /* Center requester */
-      UsrDat.UsrCod = Ctr->RequesterUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                               Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-      HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
-      Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-      HTM_TD_End ();
-
-      /* Center status */
-      StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
-	  StatusTxt == Ctr_STATUS_PENDING)
-	{
-	 Frm_BeginForm (ActChgCtrSta);
-	 Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "name=\"Status\" class=\"INPUT_STATUS\"");
-
-	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
-	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-		     "%s",Txt_CENTER_STATUS[Ctr_STATUS_PENDING]);
-
-	 StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
-	 HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-		     "%s",Txt_CENTER_STATUS[Ctr_STATUS_ACTIVE]);
-
-	 HTM_SELECT_End ();
-	 Frm_EndForm ();
-	}
-      else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
-	 HTM_Txt (Txt_CENTER_STATUS[StatusTxt]);
-      HTM_TD_End ();
-      HTM_TR_End ();
-     }
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1290,7 +1298,7 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
 
    /***** Update place in table of centers *****/
-   Ctr_UpdateCtrPlcDB (Ctr_EditingCtr->CtrCod,NewPlcCod);
+   Ctr_DB_UpdateCtrPlc (Ctr_EditingCtr->CtrCod,NewPlcCod);
    Ctr_EditingCtr->PlcCod = NewPlcCod;
 
    /***** Create alert to show the change made
@@ -1303,7 +1311,7 @@ void Ctr_ChangeCtrPlc (void)
 /************** Update database changing old place by new place **************/
 /*****************************************************************************/
 
-void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
+void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod)
   {
    DB_QueryUPDATE ("can not update the place of a center",
 		   "UPDATE ctr_centers"
@@ -1385,14 +1393,14 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
       if (strcmp (CurrentCtrName,NewCtrName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.Hierarchy.Ins.InsCod))
+         if (Ctr_DB_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.Hierarchy.Ins.InsCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_center_X_already_exists,
 			     NewCtrName);
          else
            {
             /* Update the table changing old name by new name */
-            Ctr_UpdateInsNameDB (Ctr->CtrCod,FieldName,NewCtrName);
+            Ctr_DB_UpdateCtrName (Ctr->CtrCod,FieldName,NewCtrName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1414,8 +1422,8 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
 /********************* Check if the name of center exists ********************/
 /*****************************************************************************/
 
-bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
-				    long CtrCod,long InsCod)
+bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
+				       long CtrCod,long InsCod)
   {
    /***** Get number of centers with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a center"
@@ -1435,7 +1443,7 @@ bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 /****************** Update center name in table of centers *******************/
 /*****************************************************************************/
 
-static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName)
+static void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName)
   {
    /***** Update center changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a center",
@@ -1472,7 +1480,7 @@ void Ctr_ChangeCtrWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_UpdateCtrWWWDB (Ctr_EditingCtr->CtrCod,NewWWW);
+      Ctr_DB_UpdateCtrWWW (Ctr_EditingCtr->CtrCod,NewWWW);
       Str_Copy (Ctr_EditingCtr->WWW,NewWWW,sizeof (Ctr_EditingCtr->WWW) - 1);
 
       /***** Write message to show the change made
@@ -1489,7 +1497,7 @@ void Ctr_ChangeCtrWWW (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a center",
@@ -1620,78 +1628,78 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
    HTM_TR_Begin (NULL);
 
-   /***** Column to remove center, disabled here *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+      /***** Column to remove center, disabled here *****/
+      HTM_TD_Begin ("class=\"BM\"");
+      HTM_TD_End ();
 
-   /***** Center code *****/
-   HTM_TD_Begin ("class=\"CODE\"");
-   HTM_TD_End ();
+      /***** Center code *****/
+      HTM_TD_Begin ("class=\"CODE\"");
+      HTM_TD_End ();
 
-   /***** Center logo *****/
-   HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
-   Lgo_DrawLogo (HieLvl_CTR,-1L,"",20,NULL,true);
-   HTM_TD_End ();
+      /***** Center logo *****/
+      HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
+	 Lgo_DrawLogo (HieLvl_CTR,-1L,"",20,NULL,true);
+      HTM_TD_End ();
 
-   /***** Place *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"PlcCod\" class=\"PLC_SEL\"");
-   HTM_OPTION (HTM_Type_STRING,"0",
-	       Ctr_EditingCtr->PlcCod == 0,false,
-	       "%s",Txt_Another_place);
-   for (NumPlc = 0;
-	NumPlc < Places->Num;
-	NumPlc++)
-      HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
-		  Places->Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
-		  "%s",Places->Lst[NumPlc].ShrtName);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+      /***** Place *****/
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   "name=\"PlcCod\" class=\"PLC_SEL\"");
+	    HTM_OPTION (HTM_Type_STRING,"0",
+			Ctr_EditingCtr->PlcCod == 0,false,
+			"%s",Txt_Another_place);
+	    for (NumPlc = 0;
+		 NumPlc < Places->Num;
+		 NumPlc++)
+	       HTM_OPTION (HTM_Type_LONG,&Places->Lst[NumPlc].PlcCod,
+			   Places->Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod,false,
+			   "%s",Places->Lst[NumPlc].ShrtName);
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
 
-   /***** Center short name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+      /***** Center short name *****/
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
+			 "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+      HTM_TD_End ();
 
-   /***** Center full name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+      /***** Center full name *****/
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
+			 "class=\"INPUT_FULL_NAME\" required=\"required\"");
+      HTM_TD_End ();
 
-   /***** Center WWW *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-   HTM_TD_End ();
+      /***** Center WWW *****/
+      HTM_TD_Begin ("class=\"LM\"");
+	 HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
+      HTM_TD_End ();
 
-   /***** Number of users who claim to belong to this center *****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+      /***** Number of users who claim to belong to this center *****/
+      HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_Unsigned (0);
+      HTM_TD_End ();
 
-   /***** Number of degrees *****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+      /***** Number of degrees *****/
+      HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_Unsigned (0);
+      HTM_TD_End ();
 
-   /***** Number of users in courses of this center *****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+      /***** Number of users in courses of this center *****/
+      HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_Unsigned (0);
+      HTM_TD_End ();
 
-   /***** Center requester *****/
-   HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
-   HTM_TD_End ();
+      /***** Center requester *****/
+      HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	 Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
+      HTM_TD_End ();
 
-   /***** Center status *****/
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_TD_End ();
+      /***** Center status *****/
+      HTM_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -1718,45 +1726,45 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
+      HTM_TH_Empty (1);
 
-   for (Order  = (Ctr_Order_t) 0;
-	Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
-	Order++)
-     {
-      HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTER ? "LM" :
-				                       "RM");
-      if (OrderSelectable)
+      for (Order  = (Ctr_Order_t) 0;
+	   Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
+	   Order++)
 	{
-	 Frm_BeginForm (ActSeeCtr);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_CENTERS_HELP_ORDER[Order],
-				  Order == Ctr_ORDER_BY_CENTER ? "BT_LINK LM TIT_TBL" :
-					                         "BT_LINK RM TIT_TBL",
-				  NULL);
-	 if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
-	    HTM_U_Begin ();
+	 HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTER ? "LM" :
+							  "RM");
+	    if (OrderSelectable)
+	      {
+	       Frm_BeginForm (ActSeeCtr);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_SUBMIT_Begin (Txt_CENTERS_HELP_ORDER[Order],
+					   Order == Ctr_ORDER_BY_CENTER ? "BT_LINK LM TIT_TBL" :
+									  "BT_LINK RM TIT_TBL",
+					   NULL);
+		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
+			HTM_U_Begin ();
+	      }
+	    HTM_Txt (Txt_CENTERS_ORDER[Order]);
+	    if (OrderSelectable)
+	      {
+		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
+			HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TH_End ();
 	}
-      HTM_Txt (Txt_CENTERS_ORDER[Order]);
-      if (OrderSelectable)
-	{
-	 if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
+
+      HTM_TH (1,1,"LM",Txt_Place);
+      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_BR ();
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
-     }
-
-   HTM_TH (1,1,"LM",Txt_Place);
-   HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-   HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   HTM_BR ();
-   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   HTM_TH_End ();
-   HTM_TH_Empty (1);
+      HTM_TH_Empty (1);
 
    HTM_TR_End ();
   }
@@ -1779,22 +1787,22 @@ static void Ctr_PutHeadCentersForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"LM",Txt_Place);
-   HTM_TH (1,1,"LM",Txt_Short_name_of_the_center);
-   HTM_TH (1,1,"LM",Txt_Full_name_of_the_center);
-   HTM_TH (1,1,"LM",Txt_WWW);
-   HTM_TH (1,1,"RM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   HTM_BR ();
-   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   HTM_TH_End ();
-   HTM_TH (1,1,"LM",Txt_Requester);
-   HTM_TH_Empty (1);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"LM",Txt_Place);
+      HTM_TH (1,1,"LM",Txt_Short_name_of_the_center);
+      HTM_TH (1,1,"LM",Txt_Full_name_of_the_center);
+      HTM_TH (1,1,"LM",Txt_WWW);
+      HTM_TH (1,1,"RM",Txt_Users);
+      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_BR ();
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      HTM_TH_End ();
+      HTM_TH (1,1,"LM",Txt_Requester);
+      HTM_TH_Empty (1);
 
    HTM_TR_End ();
   }
@@ -1859,17 +1867,17 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
       if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of center was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr_EditingCtr->ShrtName,-1L,Gbl.Hierarchy.Ins.InsCod))
+         if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",Ctr_EditingCtr->ShrtName,-1L,Gbl.Hierarchy.Ins.InsCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_center_X_already_exists,
                              Ctr_EditingCtr->ShrtName);
-         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Ctr_EditingCtr->FullName,-1L,Gbl.Hierarchy.Ins.InsCod))
+         else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",Ctr_EditingCtr->FullName,-1L,Gbl.Hierarchy.Ins.InsCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         		     Txt_The_center_X_already_exists,
                              Ctr_EditingCtr->FullName);
          else	// Add new center to database
            {
-            Ctr_CreateCenter (Status);
+            Ctr_DB_CreateCenter (Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 			     Txt_Created_new_center_X,
 			     Ctr_EditingCtr->FullName);
@@ -1888,7 +1896,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
 /***************************** Create a new center ***************************/
 /*****************************************************************************/
 
-static void Ctr_CreateCenter (unsigned Status)
+static void Ctr_DB_CreateCenter (unsigned Status)
   {
    /***** Create a new center *****/
    Ctr_EditingCtr->CtrCod =
@@ -2114,7 +2122,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 /******* Get number of centers (of the current institution) in a place *******/
 /*****************************************************************************/
 
-unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
+unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
   {
    /***** Get number of centers (of the current institution) in a place *****/
    return (unsigned)
@@ -2254,23 +2262,23 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeString ();
 
-      /***** Write heading *****/
-      Ctr_PutHeadCentersForSeeing (false);	// Order not selectable
+	 /***** Write heading *****/
+	 Ctr_PutHeadCentersForSeeing (false);	// Order not selectable
 
-      /***** List the centers (one row per center) *****/
-      for (NumCtr = 1;
-	   NumCtr <= NumCtrs;
-	   NumCtr++)
-	{
-	 /* Get next center */
-	 Ctr.CtrCod = DB_GetNextCode (*mysql_res);
+	 /***** List the centers (one row per center) *****/
+	 for (NumCtr = 1;
+	      NumCtr <= NumCtrs;
+	      NumCtr++)
+	   {
+	    /* Get next center */
+	    Ctr.CtrCod = DB_GetNextCode (*mysql_res);
 
-	 /* Get data of center */
-	 Ctr_GetDataOfCenterByCod (&Ctr);
+	    /* Get data of center */
+	    Ctr_GetDataOfCenterByCod (&Ctr);
 
-	 /* Write data of this center */
-	 Ctr_ListOneCenterForSeeing (&Ctr,NumCtr);
-	}
+	    /* Write data of this center */
+	    Ctr_ListOneCenterForSeeing (&Ctr,NumCtr);
+	   }
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
