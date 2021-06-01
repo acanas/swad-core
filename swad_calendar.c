@@ -87,10 +87,10 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Box_BoxBegin (NULL,Txt_Calendar,
                  Cal_PutIconsFirstDayOfWeek,NULL,
                  Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
-   Set_BeginSettingsHead ();
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
-                                    NULL,NULL);
-   Set_EndSettingsHead ();
+      Set_BeginSettingsHead ();
+	 Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,
+					  NULL,NULL);
+      Set_EndSettingsHead ();
    Box_BoxEnd ();
   }
 
@@ -117,26 +117,26 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
    char Icon[32 + 1];
 
    Set_BeginOneSettingSelector ();
-   for (FirstDayOfWeek = 0;	// Monday
-	FirstDayOfWeek <= 6;	// Sunday
-	FirstDayOfWeek++)
-      if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
-	{
-         HTM_DIV_Begin ("class=\"%s\"",
-		        FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
-							             "PREF_OFF");
-	 Frm_BeginForm (Action);
-	 Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
-	 if (FuncParams)	// Extra parameters depending on the action
-	    FuncParams (Args);
-	 snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
-	 Ico_PutSettingIconLink (Icon,
-				 Str_BuildStringStr (Txt_First_day_of_the_week_X,
-						     Txt_DAYS_SMALL[FirstDayOfWeek]));
-	 Str_FreeString ();
-	 Frm_EndForm ();
-	 HTM_DIV_End ();
-        }
+      for (FirstDayOfWeek = 0;	// Monday
+	   FirstDayOfWeek <= 6;	// Sunday
+	   FirstDayOfWeek++)
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	   {
+	    HTM_DIV_Begin ("class=\"%s\"",
+			   FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
+									"PREF_OFF");
+	       Frm_BeginForm (Action);
+	       Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
+	       if (FuncParams)	// Extra parameters depending on the action
+		  FuncParams (Args);
+	       snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
+	       Ico_PutSettingIconLink (Icon,
+				       Str_BuildStringStr (Txt_First_day_of_the_week_X,
+							   Txt_DAYS_SMALL[FirstDayOfWeek]));
+	       Str_FreeString ();
+	       Frm_EndForm ();
+	    HTM_DIV_End ();
+	   }
    Set_EndOneSettingSelector ();
   }
 
@@ -151,12 +151,7 @@ void Cal_ChangeFirstDayOfWeek (void)
 
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your setting about first day of week",
-		      "UPDATE usr_data"
-		        " SET FirstDayOfWeek=%u"
-		      " WHERE UsrCod=%ld",
-                      Gbl.Prefs.FirstDayOfWeek,
-                      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Set_DB_ChangeFirstDayOfWeek (Gbl.Prefs.FirstDayOfWeek);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();
@@ -212,17 +207,17 @@ void Cal_DrawCurrentMonth (void)
 
    /* Write script to draw the month */
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_Txt ("\tGbl_HTMLContent = '';");
-   HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
-	     Gbl.Prefs.FirstDayOfWeek,
-	     (long) Gbl.StartExecutionTimeUTC,
-	     Gbl.Hierarchy.Ctr.PlcCod,
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-   Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
-   HTM_TxtF ("'%s',",ParamsStr);
-   Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
-   HTM_TxtF ("'%s');",ParamsStr);
+      HTM_Txt ("\tGbl_HTMLContent = '';");
+      HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
+		Gbl.Prefs.FirstDayOfWeek,
+		(long) Gbl.StartExecutionTimeUTC,
+		Gbl.Hierarchy.Ctr.PlcCod,
+		Cfg_URL_SWAD_CGI,
+		Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+      Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
+      HTM_TxtF ("'%s',",ParamsStr);
+      Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
+      HTM_TxtF ("'%s');",ParamsStr);
    HTM_SCRIPT_End ();
   }
 
@@ -258,41 +253,43 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                  FunctionToDrawContextualIcons,Args,
 	         PrintView ? NULL :
 	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);
-   Lay_WriteHeaderClassPhoto (PrintView,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Preference selector to change first day of week *****/
-   if (!PrintView)
-     {
-      Set_BeginSettingsHead ();
-      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,
-                                       NULL,NULL);
-      Set_EndSettingsHead ();
-     }
+      /***** Write header *****/
+      Lay_WriteHeaderClassPhoto (PrintView,false,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Draw several months *****/
-   /* JavaScript will write HTML here */
-   HTM_DIV_Begin ("id=\"calendar\"");
-   HTM_DIV_End ();
+      /***** Preference selector to change first day of week *****/
+      if (!PrintView)
+	{
+	 Set_BeginSettingsHead ();
+	    Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,
+					     NULL,NULL);
+	 Set_EndSettingsHead ();
+	}
 
-   /* Write script to draw the month */
-   HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_Txt ("\tGbl_HTMLContent = '';");
-   HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
-	     Gbl.Prefs.FirstDayOfWeek,
-	     (long) Gbl.StartExecutionTimeUTC,
-	     Gbl.Hierarchy.Ctr.PlcCod,
-	     PrintView ? "true" :
-		         "false",
-	     Cfg_URL_SWAD_CGI,
-	     Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-   Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
-   HTM_TxtF ("'%s',",ParamsStr);
-   Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
-   HTM_TxtF ("'%s');",ParamsStr);
-   HTM_SCRIPT_End ();
+      /***** Draw several months *****/
+      /* JavaScript will write HTML here */
+      HTM_DIV_Begin ("id=\"calendar\"");
+      HTM_DIV_End ();
+
+      /* Write script to draw the month */
+      HTM_SCRIPT_Begin (NULL,NULL);
+	 HTM_Txt ("\tGbl_HTMLContent = '';");
+	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
+		   Gbl.Prefs.FirstDayOfWeek,
+		   (long) Gbl.StartExecutionTimeUTC,
+		   Gbl.Hierarchy.Ctr.PlcCod,
+		   PrintView ? "true" :
+			       "false",
+		   Cfg_URL_SWAD_CGI,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+	 Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
+	 HTM_TxtF ("'%s',",ParamsStr);
+	 Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
+	 HTM_TxtF ("'%s');",ParamsStr);
+      HTM_SCRIPT_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

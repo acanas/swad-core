@@ -208,7 +208,7 @@ void Dat_ChangeDateFormat (void)
 
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
-      Set_DB_UpdateMySettingsAboutDateFormat ();
+      Set_DB_UpdateMySettingsAboutDateFormat (Gbl.Prefs.DateFormat);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

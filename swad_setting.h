@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_date.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -48,7 +50,8 @@ void Set_RemoveOldSettingsFromIP (void);
 void Set_ChangeSideCols (void);
 unsigned Set_GetParamSideCols (void);
 
-void Set_DB_UpdateMySettingsAboutDateFormat (void);
+void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
+void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek);
 
 void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);

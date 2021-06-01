@@ -343,13 +343,27 @@ unsigned Set_GetParamSideCols (void)
 /******************** Update my settings about date format *******************/
 /*****************************************************************************/
 
-void Set_DB_UpdateMySettingsAboutDateFormat (void)
+void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat)
   {
    DB_QueryUPDATE ("can not update your setting about date format",
 		   "UPDATE usr_data"
 		     " SET DateFormat=%u"
 		   " WHERE UsrCod=%ld",
-		   (unsigned) Gbl.Prefs.DateFormat,
+		   (unsigned) DateFormat,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/***************** Update my settings about first day of week ****************/
+/*****************************************************************************/
+
+void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek)
+  {
+   DB_QueryUPDATE ("can not update your setting about first day of week",
+		   "UPDATE usr_data"
+		     " SET FirstDayOfWeek=%u"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Prefs.FirstDayOfWeek,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
