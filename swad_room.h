@@ -145,4 +145,6 @@ void Roo_ContEditAfterChgRoom (void);
 
 void Roo_ReceiveFormNewRoom (void);
 
+void Roo_DB_RemoveBuildingFromRooms (long BldCod);
+
 #endif

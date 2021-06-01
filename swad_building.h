@@ -93,7 +93,6 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Roo);
 long Bld_GetParamBldCod (void);
 
 void Bld_RemoveBuilding (void);
-void Bld_RemoveAllBuildingsInCtr (long CtrCod);
 void Bld_RenameBuildingShort (void);
 void Bld_RenameBuildingFull (void);
 void Bld_ChangeBuildingLocation (void);

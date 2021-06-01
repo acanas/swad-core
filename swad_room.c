@@ -1684,3 +1684,17 @@ static void Roo_EditingRoomDestructor (void)
       Roo_EditingRoom = NULL;
      }
   }
+
+/*****************************************************************************/
+/********************* Update rooms assigned to a building *******************/
+/*****************************************************************************/
+
+void Roo_DB_RemoveBuildingFromRooms (long BldCod)
+  {
+   DB_QueryUPDATE ("can not update building of rooms",
+		   "UPDATE roo_rooms"
+		     " SET BldCod=0"	// 0 means another building
+		   " WHERE BldCod=%ld",
+		   BldCod);
+  }
+

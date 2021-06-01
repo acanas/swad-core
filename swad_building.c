@@ -31,6 +31,7 @@
 
 #include "swad_box.h"
 #include "swad_building.h"
+#include "swad_building_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
@@ -73,12 +74,9 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings);
 static void Bld_PutParamBldCod (void *BldCod);
 
 static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Bld_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod);
-static void Bld_UpdateBuildingNameDB (long BldCod,const char *FieldName,const char *NewBuildingName);
 
 static void Bld_PutFormToCreateBuilding (void);
 static void Bld_PutHeadBuildings (void);
-static void Bld_CreateBuilding (struct Bld_Building *Building);
 
 static void Bld_EditingBuildingConstructor (void);
 static void Bld_EditingBuildingDestructor (void);
@@ -127,62 +125,63 @@ void Bld_SeeBuildings (void)
    Box_BoxBegin (NULL,Txt_Buildings,
                  Bld_PutIconsListingBuildings,NULL,
 		 Hlp_CENTER_Buildings,Box_NOT_CLOSABLE);
-   HTM_TABLE_BeginWideMarginPadding (2);
-   HTM_TR_Begin (NULL);
-   for (Order  = (Bld_Order_t) 0;
-	Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
-      Frm_BeginForm (ActSeeBld);
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-      HTM_BUTTON_SUBMIT_Begin (Txt_BUILDINGS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Buildings.SelectedOrder)
-	 HTM_U_Begin ();
-      HTM_Txt (Txt_BUILDINGS_ORDER[Order]);
-      if (Order == Buildings.SelectedOrder)
-	 HTM_U_End ();
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-      HTM_TH_End ();
-     }
-   HTM_TR_End ();
 
-   /***** Write list of buildings *****/
-   for (NumBuilding = 0, RowEvenOdd = 1;
-	NumBuilding < Buildings.Num;
-	NumBuilding++, RowEvenOdd = 1 - RowEvenOdd)
-     {
-      HTM_TR_Begin (NULL);
+      HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TR_Begin (NULL);
+	    for (Order  = (Bld_Order_t) 0;
+		 Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
+		 Order++)
+	      {
+	       HTM_TH_Begin (1,1,"LM");
+		  Frm_BeginForm (ActSeeBld);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		     HTM_BUTTON_SUBMIT_Begin (Txt_BUILDINGS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+			if (Order == Buildings.SelectedOrder)
+			   HTM_U_Begin ();
+			HTM_Txt (Txt_BUILDINGS_ORDER[Order]);
+			if (Order == Buildings.SelectedOrder)
+			   HTM_U_End ();
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+	       HTM_TH_End ();
+	      }
+	 HTM_TR_End ();
 
-      /* Short name */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
-      HTM_TD_End ();
+	 /***** Write list of buildings *****/
+	 for (NumBuilding = 0, RowEvenOdd = 1;
+	      NumBuilding < Buildings.Num;
+	      NumBuilding++, RowEvenOdd = 1 - RowEvenOdd)
+	   {
+	    HTM_TR_Begin (NULL);
 
-      /* Full name */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Buildings.Lst[NumBuilding].FullName);
-      HTM_TD_End ();
+	       /* Short name */
+	       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
+	       HTM_TD_End ();
 
-      /* Location */
-      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Buildings.Lst[NumBuilding].Location);
-      HTM_TD_End ();
+	       /* Full name */
+	       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Txt (Buildings.Lst[NumBuilding].FullName);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	       /* Location */
+	       HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Txt (Buildings.Lst[NumBuilding].Location);
+	       HTM_TD_End ();
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	    HTM_TR_End ();
+	   }
 
-   /***** Button to create building *****/
-   if (Bld_CheckIfICanCreateBuildings ())
-     {
-      Frm_BeginForm (ActEdiBld);
-      Btn_PutConfirmButton (Txt_New_building);
-      Frm_EndForm ();
-     }
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Button to create building *****/
+      if (Bld_CheckIfICanCreateBuildings ())
+	{
+	 Frm_BeginForm (ActEdiBld);
+	    Btn_PutConfirmButton (Txt_New_building);
+	 Frm_EndForm ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -266,12 +265,12 @@ static void Bld_EditBuildingsInternal (void)
                  Bld_PutIconsEditingBuildings,NULL,
                  Hlp_CENTER_Buildings_edit,Box_NOT_CLOSABLE);
 
-   /***** Put a form to create a new building *****/
-   Bld_PutFormToCreateBuilding ();
+      /***** Put a form to create a new building *****/
+      Bld_PutFormToCreateBuilding ();
 
-   /***** Forms to edit current buildings *****/
-   if (Buildings.Num)
-      Bld_ListBuildingsForEdition (&Buildings);
+      /***** Forms to edit current buildings *****/
+      if (Buildings.Num)
+	 Bld_ListBuildingsForEdition (&Buildings);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -311,45 +310,13 @@ void Bld_PutIconToViewBuildings (void)
 void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
                            Bld_WhichData_t WhichData)
   {
-   static const char *OrderBySubQuery[Bld_NUM_ORDERS] =
-     {
-      [Bld_ORDER_BY_SHRT_NAME] = "ShortName",
-      [Bld_ORDER_BY_FULL_NAME] = "FullName",
-      [Bld_ORDER_BY_LOCATION ] = "Location,ShortName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumBuilding;
    struct Bld_Building *Building;
 
    /***** Get buildings from database *****/
-   switch (WhichData)
-     {
-      case Bld_ALL_DATA:
-	 Buildings->Num = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get buildings",
-		         "SELECT BldCod,"		// row[0]
-			        "ShortName,"		// row[1]
-			        "FullName,"		// row[2]
-			        "Location"		// row[3]
-			  " FROM bld_buildings"
-		         " WHERE CtrCod=%ld"
-		         " ORDER BY %s",
-		         Gbl.Hierarchy.Ctr.CtrCod,
-		         OrderBySubQuery[Buildings->SelectedOrder]);
-	 break;
-      case Bld_ONLY_SHRT_NAME:
-      default:
-	 Buildings->Num = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get buildings",
-		         "SELECT BldCod,"		// row[0]
-			        "ShortName"		// row[1]
-			  " FROM bld_buildings"
-		         " WHERE CtrCod=%ld"
-		         " ORDER BY ShortName",
-		         Gbl.Hierarchy.Ctr.CtrCod);
-	 break;
-     }
+   Buildings->Num = Bld_DB_GetListBuildings (&mysql_res,WhichData,Buildings->SelectedOrder);
 
    /***** Count number of rows in result *****/
    if (Buildings->Num) // Buildings found...
@@ -406,13 +373,7 @@ void Bld_GetDataOfBuildingByCod (struct Bld_Building *Building)
    if (Building->BldCod > 0)
      {
       /***** Get data of a building from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a building",
-			  "SELECT ShortName,"	// row[0]
-				 "FullName,"	// row[1]
-				 "Location"	// row[2]
-			   " FROM bld_buildings"
-			  " WHERE BldCod=%ld",
-			  Building->BldCod)) // Building found...
+      if (Bld_DB_GetDataOfBuildingByCod (&mysql_res,Building->BldCod)) // Building found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -454,67 +415,69 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
    struct Bld_Building *Building;
    char *Anchor = NULL;
 
-   /***** Write heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Bld_PutHeadBuildings ();
 
-   /***** Write all the buildings *****/
-   for (NumBld = 0;
-	NumBld < Buildings->Num;
-	NumBld++)
-     {
-      Building = &Buildings->Lst[NumBld];
+      /***** Write heading *****/
+      Bld_PutHeadBuildings ();
 
-      /* Build anchor string */
-      Frm_SetAnchorStr (Building->BldCod,&Anchor);
+      /***** Write all the buildings *****/
+      for (NumBld = 0;
+	   NumBld < Buildings->Num;
+	   NumBld++)
+	{
+	 Building = &Buildings->Lst[NumBld];
 
-      HTM_TR_Begin (NULL);
+	 /* Build anchor string */
+	 Frm_SetAnchorStr (Building->BldCod,&Anchor);
 
-      /* Put icon to remove building */
-      HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActRemBld,NULL,
-				     Bld_PutParamBldCod,&Building->BldCod);
-      HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-      /* Building code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_ARTICLE_Begin (Anchor);
-      HTM_Long (Building->BldCod);
-      HTM_ARTICLE_End ();
-      HTM_TD_End ();
+	    /* Put icon to remove building */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToRemove (ActRemBld,NULL,
+					      Bld_PutParamBldCod,&Building->BldCod);
+	    HTM_TD_End ();
 
-      /* Building short name */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartFormAnchor (ActRenBldSho,Anchor);
-      Bld_PutParamBldCod (&Building->BldCod);
-      HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Building code */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_ARTICLE_Begin (Anchor);
+		  HTM_Long (Building->BldCod);
+	       HTM_ARTICLE_End ();
+	    HTM_TD_End ();
 
-      /* Building full name */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartFormAnchor (ActRenBldFul,Anchor);
-      Bld_PutParamBldCod (&Building->BldCod);
-      HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"20\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Building short name */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Frm_StartFormAnchor (ActRenBldSho,Anchor);
+	       Bld_PutParamBldCod (&Building->BldCod);
+		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"10\" class=\"INPUT_SHORT_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Building location */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_StartFormAnchor (ActRenBldLoc,Anchor);
-      Bld_PutParamBldCod (&Building->BldCod);
-      HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"15\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Building full name */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Frm_StartFormAnchor (ActRenBldFul,Anchor);
+	       Bld_PutParamBldCod (&Building->BldCod);
+		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"20\" class=\"INPUT_FULL_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    /* Building location */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Frm_StartFormAnchor (ActRenBldLoc,Anchor);
+	       Bld_PutParamBldCod (&Building->BldCod);
+		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"15\" class=\"INPUT_FULL_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -559,35 +522,15 @@ void Bld_RemoveBuilding (void)
    Bld_GetDataOfBuildingByCod (Bld_EditingBuilding);
 
    /***** Update rooms assigned to this building *****/
-   DB_QueryUPDATE ("can not update building in groups",
-		   "UPDATE roo_rooms"
-		     " SET BldCod=0"	// 0 means another building
-		   " WHERE BldCod=%ld",
-		   Bld_EditingBuilding->BldCod);
+   Roo_DB_RemoveBuildingFromRooms (Bld_EditingBuilding->BldCod);
 
    /***** Remove building *****/
-   DB_QueryDELETE ("can not remove a building",
-		   "DELETE FROM bld_buildings"
-		   " WHERE BldCod=%ld",
-		   Bld_EditingBuilding->BldCod);
+   Bld_DB_RemoveBuilding (Bld_EditingBuilding->BldCod);
 
    /***** Create message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Building_X_removed,
 	            Bld_EditingBuilding->FullName);
-  }
-
-/*****************************************************************************/
-/******************** Remove all buildings in a center ***********************/
-/*****************************************************************************/
-
-void Bld_RemoveAllBuildingsInCtr (long CtrCod)
-  {
-   /***** Remove all buildings in center *****/
-   DB_QueryDELETE ("can not remove buildings",
-		   "DELETE FROM buildings"
-                   " WHERE CtrCod=%ld",
-		   CtrCod);
   }
 
 /*****************************************************************************/
@@ -666,14 +609,14 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If building was in database... *****/
-         if (Bld_CheckIfBuildingNameExists (ParamName,NewClaName,Bld_EditingBuilding->BldCod))
+         if (Bld_DB_CheckIfBuildingNameExists (ParamName,NewClaName,Bld_EditingBuilding->BldCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_building_X_already_exists,
                              NewClaName);
          else
            {
             /* Update the table changing old name by new name */
-            Bld_UpdateBuildingNameDB (Bld_EditingBuilding->BldCod,FieldName,NewClaName);
+            Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,FieldName,NewClaName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -691,40 +634,6 @@ static void Bld_RenameBuilding (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update building name *****/
    Str_Copy (CurrentClaName,NewClaName,MaxBytes);
-  }
-
-/*****************************************************************************/
-/******************** Check if the name of building exists *******************/
-/*****************************************************************************/
-
-static bool Bld_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod)
-  {
-   /***** Get number of buildings with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a building"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM bld_buildings"
-			  " WHERE CtrCod=%ld"
-			    " AND %s='%s'"
-			    " AND BldCod<>%ld",
-			  Gbl.Hierarchy.Ctr.CtrCod,
-			  FieldName,Name,BldCod) != 0);
-  }
-
-/*****************************************************************************/
-/****************** Update building name in table of buildings *******************/
-/*****************************************************************************/
-
-static void Bld_UpdateBuildingNameDB (long BldCod,const char *FieldName,const char *NewBuildingName)
-  {
-   /***** Update building changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of a building",
-		   "UPDATE bld_buildings"
-		     " SET %s='%s'"
-		   " WHERE BldCod=%ld",
-		   FieldName,
-		   NewBuildingName,
-		   BldCod);
   }
 
 /*****************************************************************************/
@@ -756,7 +665,7 @@ void Bld_ChangeBuildingLocation (void)
    if (strcmp (Bld_EditingBuilding->Location,NewLocation))	// Different locations
      {
       /* Update the table changing old name by new name */
-      Bld_UpdateBuildingNameDB (Bld_EditingBuilding->BldCod,"Location",NewLocation);
+      Bld_DB_UpdateBuildingName (Bld_EditingBuilding->BldCod,"Location",NewLocation);
       Str_Copy (Bld_EditingBuilding->Location,NewLocation,
 		sizeof (Bld_EditingBuilding->Location) - 1);
 
@@ -799,49 +708,49 @@ static void Bld_PutFormToCreateBuilding (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewBld);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_building,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_building,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Bld_PutHeadBuildings ();
+	 /***** Write heading *****/
+	 Bld_PutHeadBuildings ();
 
-   HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-   /***** Column to remove building, disabled here *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    /***** Column to remove building, disabled here *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   /***** Building code *****/
-   HTM_TD_Begin ("class=\"CODE\"");
-   HTM_TD_End ();
+	    /***** Building code *****/
+	    HTM_TD_Begin ("class=\"CODE\"");
+	    HTM_TD_End ();
 
-   /***** Building short name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Building short name *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Bld_EditingBuilding->ShrtName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Building full name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Building full name *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Bld_EditingBuilding->FullName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Building location *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"15\" class=\"INPUT_FULL_NAME\"");
-   HTM_TD_End ();
+	    /***** Building location *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Bld_EditingBuilding->Location,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"15\" class=\"INPUT_FULL_NAME\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_building);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_building);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -860,11 +769,11 @@ static void Bld_PutHeadBuildings (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"LM",Txt_Location);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_Short_name);
+      HTM_TH (1,1,"LM",Txt_Full_name);
+      HTM_TH (1,1,"LM",Txt_Location);
 
    HTM_TR_End ();
   }
@@ -896,17 +805,17 @@ void Bld_ReceiveFormNewBuilding (void)
        Bld_EditingBuilding->FullName[0])	// If there's a building name
      {
       /***** If name of building was in database... *****/
-      if (Bld_CheckIfBuildingNameExists ("ShortName",Bld_EditingBuilding->ShrtName,-1L))
+      if (Bld_DB_CheckIfBuildingNameExists ("ShortName",Bld_EditingBuilding->ShrtName,-1L))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_building_X_already_exists,
                           Bld_EditingBuilding->ShrtName);
-      else if (Bld_CheckIfBuildingNameExists ("FullName",Bld_EditingBuilding->FullName,-1L))
+      else if (Bld_DB_CheckIfBuildingNameExists ("FullName",Bld_EditingBuilding->FullName,-1L))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_building_X_already_exists,
                           Bld_EditingBuilding->FullName);
       else	// Add new building to database
         {
-         Bld_CreateBuilding (Bld_EditingBuilding);
+         Bld_DB_CreateBuilding (Bld_EditingBuilding);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,
 	                  Txt_Created_new_building_X,
 			  Bld_EditingBuilding->FullName);
@@ -915,24 +824,6 @@ void Bld_ReceiveFormNewBuilding (void)
    else	// If there is not a building name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_building);
-  }
-
-/*****************************************************************************/
-/************************** Create a new building ****************************/
-/*****************************************************************************/
-
-static void Bld_CreateBuilding (struct Bld_Building *Building)
-  {
-   /***** Create a new building *****/
-   DB_QueryINSERT ("can not create building",
-		   "INSERT INTO buildings"
-		   " (CtrCod,ShortName,FullName,Location)"
-		   " VALUES"
-		   " (%ld,'%s','%s','%s')",
-                   Gbl.Hierarchy.Ctr.CtrCod,
-		   Building->ShrtName,
-		   Building->FullName,
-		   Building->Location);
   }
 
 /*****************************************************************************/

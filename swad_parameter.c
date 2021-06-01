@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_config.h"
+#include "swad_database.h"	// TODO: REMOVE!!!
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -323,7 +324,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 
       for (CurPos = 0;
 	   CurPos < Gbl.Params.ContentLength;
-	   )
+	  )
 	{
 	 /***** Skip \r\n after delimiter string *****/
 	 if (fgetc (Gbl.F.Tmp) != 0x0D) break;	// '\r'
