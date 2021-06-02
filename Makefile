@@ -41,7 +41,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_agenda.o \
        swad_cryptography.o \
        swad_database.o swad_date.o swad_degree.o swad_degree_config.o \
        swad_degree_database.o swad_degree_type.o swad_department.o \
-       swad_duplicate.o \
+       swad_department_database.o swad_duplicate.o \
        swad_enrolment.o swad_error.o swad_exam.o swad_exam_log.o \
        swad_exam_print.o swad_exam_result.o swad_exam_session.o \
        swad_exam_set.o \

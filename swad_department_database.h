@@ -1,7 +1,7 @@
-// swad_department.h: departments
+// swad_department_database.h: departments operations with database
 
-#ifndef _SWAD_DPT
-#define _SWAD_DPT
+#ifndef _SWAD_DPT_DB
+#define _SWAD_DPT_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,64 +27,22 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_constant.h"
+// #include "swad_constant.h"
+#include "swad_department.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-struct Dpt_Department
-  {
-   long DptCod;
-   long InsCod;
-   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-   char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   char WWW[Cns_MAX_BYTES_WWW + 1];
-   unsigned NumTchs;	// Non-editing teachers and teachers
-  };
-
-#define Dpt_NUM_ORDERS 2
-typedef enum
-  {
-   Dpt_ORDER_BY_DEPARTMENT = 0,
-   Dpt_ORDER_BY_NUM_TCHS   = 1,
-  } Dpt_Order_t;
-#define Dpt_ORDER_DEFAULT Dpt_ORDER_BY_DEPARTMENT
-
-#define Dpt_PARAM_DPT_COD_NAME	"DptCod"
-
-struct Dpt_Departments
-  {
-   unsigned Num;		// Number of departments
-   struct Dpt_Department *Lst;	// List of departments
-   Dpt_Order_t SelectedOrder;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dpt_SeeDepts (void);
-void Dpt_EditDepartments (void);
-void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
-void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt);
-long Dpt_GetAndCheckParamDptCod (long MinCodAllowed);
-void Dpt_RemoveDepartment (void);
-void Dpt_ChangeDepartIns (void);
-void Dpt_RenameDepartShort (void);
-void Dpt_RenameDepartFull (void);
-void Dpt_ChangeDptWWW (void);
-void Dpt_ContEditAfterChgDpt (void);
+void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt);
 
-void Dpt_ReceiveFormNewDpt (void);
-unsigned Dpt_GetTotalNumberOfDepartments (void);
-void Dpt_FlushCacheNumDptsInIns (void);
-unsigned Dpt_GetNumDptsInIns (long InsCod);
+bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
+unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod);
 
-void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
-		                  const char *SelectClass,
-                                  long FirstOption,
-                                  const char *TextWhenNoDptSelected,
-                                  bool SubmitFormOnChange);
+void Dpt_DB_UpdateDegName (long DptCod,const char *FieldName,const char *NewDptName);
 
 #endif

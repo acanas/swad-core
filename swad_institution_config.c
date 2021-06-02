@@ -32,7 +32,7 @@
 #include <stdlib.h>		// For free
 
 #include "swad_database.h"
-#include "swad_department.h"
+#include "swad_department_database.h"
 #include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
@@ -535,7 +535,7 @@ static void InsCfg_NumDpts (void)
 
    /* Data */
    HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+   HTM_Unsigned (Dpt_DB_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
    HTM_TD_End ();
 
    HTM_TR_End ();

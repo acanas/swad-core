@@ -34,6 +34,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_department_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -79,12 +80,9 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 static void Dpt_PutParamDptCod (void *DptCod);
 
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
-static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *NewDptName);
 
 static void Dpt_PutFormToCreateDepartment (void);
 static void Dpt_PutHeadDepartments (void);
-static void Dpt_CreateDepartment (struct Dpt_Department *Dpt);
 
 static void Dpt_EditingDepartmentConstructor (void);
 static void Dpt_EditingDepartmentDestructor (void);
@@ -144,88 +142,88 @@ void Dpt_SeeDepts (void)
 			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    Str_FreeString ();
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
-   for (Order  = Dpt_ORDER_BY_DEPARTMENT;
-	Order <= Dpt_ORDER_BY_NUM_TCHS;
-	Order++)
-     {
-      HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "RM" :
-	                                                 "LM");
+      /***** Write heading *****/
+      HTM_TR_Begin (NULL);
+	 for (Order  = Dpt_ORDER_BY_DEPARTMENT;
+	      Order <= Dpt_ORDER_BY_NUM_TCHS;
+	      Order++)
+	   {
+	    HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "RM" :
+							       "LM");
 
-      Frm_BeginForm (ActSeeDpt);
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-      HTM_BUTTON_SUBMIT_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Departments.SelectedOrder)
-	 HTM_U_Begin ();
-      HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
-      if (Order == Departments.SelectedOrder)
-	 HTM_U_End ();
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	       Frm_BeginForm (ActSeeDpt);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_SUBMIT_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+		  if (Order == Departments.SelectedOrder)
+		     HTM_U_Begin ();
+		  HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
+		  if (Order == Departments.SelectedOrder)
+		     HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
 
-      HTM_TH_End ();
-     }
-   HTM_TR_End ();
+	    HTM_TH_End ();
+	   }
+      HTM_TR_End ();
 
-   /***** Write all the Dpt_GetListDepartmentsdepartments and their nuber of teachers *****/
-   for (NumDpt = 0;
-	NumDpt < Departments.Num;
-	NumDpt++)
-     {
-      /* Write data of this department */
+      /***** Write all the Dpt_GetListDepartmentsdepartments and their nuber of teachers *****/
+      for (NumDpt = 0;
+	   NumDpt < Departments.Num;
+	   NumDpt++)
+	{
+	 /* Write data of this department */
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
+			    Departments.Lst[NumDpt].WWW);
+		  HTM_Txt (Departments.Lst[NumDpt].FullName);
+	       HTM_A_End ();
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (Departments.Lst[NumDpt].NumTchs);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Separation row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"3\" class=\"DAT\"");
+	    HTM_NBSP ();
+	 HTM_TD_End ();
+      HTM_TR_End ();
+
+      /***** Write teachers of this institution with other department *****/
+      NumTchsInsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
+
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
-	           Departments.Lst[NumDpt].WWW);
-      HTM_Txt (Departments.Lst[NumDpt].FullName);
-      HTM_A_End ();
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_Txt (Txt_Other_departments);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Departments.Lst[NumDpt].NumTchs);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumTchsInsInOtherDpts);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
-     }
 
-   /***** Separation row *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"3\" class=\"DAT\"");
-   HTM_NBSP ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+      /***** Write teachers with no department *****/
+      NumTchsInsWithNoDpt = Usr_GetNumTchsCurrentInsInDepartment (-1L);
 
-   /***** Write teachers of this institution with other department *****/
-   NumTchsInsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_Txt (Txt_Department_unspecified);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_Txt (Txt_Other_departments);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumTchsInsWithNoDpt);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumTchsInsInOtherDpts);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Write teachers with no department *****/
-   NumTchsInsWithNoDpt = Usr_GetNumTchsCurrentInsInDepartment (-1L);
-
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_Txt (Txt_Department_unspecified);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumTchsInsWithNoDpt);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -298,12 +296,12 @@ static void Dpt_EditDepartmentsInternal (void)
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   /***** Put a form to create a new department *****/
-   Dpt_PutFormToCreateDepartment ();
+      /***** Put a form to create a new department *****/
+      Dpt_PutFormToCreateDepartment ();
 
-   /***** Forms to edit current departments *****/
-   if (Departments.Num)
-      Dpt_ListDepartmentsForEdition (&Departments);
+      /***** Forms to edit current departments *****/
+      if (Departments.Num)
+	 Dpt_ListDepartmentsForEdition (&Departments);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -507,21 +505,6 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
   }
 
 /*****************************************************************************/
-/************** Get number of departments in an institution ******************/
-/*****************************************************************************/
-
-unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
-  {
-   /***** Get number of departments in an institution from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of departments in an institution",
-		  "SELECT COUNT(*)"
-		   " FROM dpt_departments"
-		  " WHERE InsCod=%ld",
-		  InsCod);
-  }
-
-/*****************************************************************************/
 /************************** List all the departments *************************/
 /*****************************************************************************/
 
@@ -536,90 +519,90 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
 
-   /***** Write heading *****/
-   Dpt_PutHeadDepartments ();
+      /***** Write heading *****/
+      Dpt_PutHeadDepartments ();
 
-   /***** Write all the departments *****/
-   for (NumDpt = 0;
-	NumDpt < Departments->Num;
-	NumDpt++)
-     {
-      Dpt = &Departments->Lst[NumDpt];
+      /***** Write all the departments *****/
+      for (NumDpt = 0;
+	   NumDpt < Departments->Num;
+	   NumDpt++)
+	{
+	 Dpt = &Departments->Lst[NumDpt];
 
-      /* Get data of institution of this department */
-      Ins.InsCod = Dpt->InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins);
+	 /* Get data of institution of this department */
+	 Ins.InsCod = Dpt->InsCod;
+	 Ins_GetDataOfInstitutionByCod (&Ins);
 
-      HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-      /* Put icon to remove department */
-      HTM_TD_Begin ("class=\"BM\"");
-      if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
-         Ico_PutIconRemovalNotAllowed ();
-      else
-	 Ico_PutContextualIconToRemove (ActRemDpt,NULL,
-					Dpt_PutParamDptCod,&Dpt->DptCod);
-      HTM_TD_End ();
+	    /* Put icon to remove department */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
+		  Ico_PutIconRemovalNotAllowed ();
+	       else
+		  Ico_PutContextualIconToRemove (ActRemDpt,NULL,
+						 Dpt_PutParamDptCod,&Dpt->DptCod);
+	    HTM_TD_End ();
 
-      /* Department code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
-      HTM_TD_End ();
+	    /* Department code */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TxtF ("%ld&nbsp;",Dpt->DptCod);
+	    HTM_TD_End ();
 
-      /* Institution */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgDptIns);
-      Dpt_PutParamDptCod (&Dpt->DptCod);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
-      HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
-		  "%s",Txt_Another_institution);
-      for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Inss.Num;
-	   NumIns++)
-	 HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-		     Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt->InsCod,false,
-		     "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Institution */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgDptIns);
+	       Dpt_PutParamDptCod (&Dpt->DptCod);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				    "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
+		     HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
+				 "%s",Txt_Another_institution);
+		     for (NumIns = 0;
+			  NumIns < Gbl.Hierarchy.Inss.Num;
+			  NumIns++)
+			HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+				    Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt->InsCod,false,
+				    "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
+		  HTM_SELECT_End ();
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Department short name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenDptSho);
-      Dpt_PutParamDptCod (&Dpt->DptCod);
-      HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Department short name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenDptSho);
+	       Dpt_PutParamDptCod (&Dpt->DptCod);
+		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Department full name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenDptFul);
-      Dpt_PutParamDptCod (&Dpt->DptCod);
-      HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Department full name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenDptFul);
+	       Dpt_PutParamDptCod (&Dpt->DptCod);
+		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Department WWW */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgDptWWW);
-      Dpt_PutParamDptCod (&Dpt->DptCod);
-      HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
-		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Department WWW */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgDptWWW);
+	       Dpt_PutParamDptCod (&Dpt->DptCod);
+		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Number of teachers */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Dpt->NumTchs);
-      HTM_TD_End ();
+	    /* Number of teachers */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (Dpt->NumTchs);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -797,14 +780,14 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentDptName,NewDptName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Dpt_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt_EditingDpt->DptCod))
+         if (Dpt_DB_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt_EditingDpt->DptCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_department_X_already_exists,
                              NewDptName);
          else
            {
             /* Update the table changing old name by new name */
-            Dpt_UpdateDegNameDB (Dpt_EditingDpt->DptCod,FieldName,NewDptName);
+            Dpt_DB_UpdateDegName (Dpt_EditingDpt->DptCod,FieldName,NewDptName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -822,37 +805,6 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update name *****/
    Str_Copy (CurrentDptName,NewDptName,MaxBytes);
-  }
-
-/*****************************************************************************/
-/******************* Check if the name of department exists ******************/
-/*****************************************************************************/
-
-static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
-  {
-   /***** Get number of departments with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the department name already existed",
-			  "SELECT COUNT(*)"
-			   " FROM dpt_departments"
-			  " WHERE %s='%s'"
-			    " AND DptCod<>%ld",
-			  FieldName,Name,
-			  DptCod) != 0);
-  }
-
-/*****************************************************************************/
-/************* Update department name in table of departments ****************/
-/*****************************************************************************/
-
-static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *NewDptName)
-  {
-   /***** Update department changing old name by new name *****/
-   DB_QueryUPDATE ("can not update the name of a department",
-		   "UPDATE dpt_departments"
-		     " SET %s='%s'"
-		   " WHERE DptCod=%ld",
-	           FieldName,NewDptName,
-	           DptCod);
   }
 
 /******************************************************************************/
@@ -934,62 +886,62 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewDpt);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_department,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_department,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
+	 /***** Write heading *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"LM",Txt_Institution);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"LM",Txt_WWW);
+	    HTM_TH (1,1,"LM",Txt_Institution);
+	    HTM_TH (1,1,"LM",Txt_Short_name);
+	    HTM_TH (1,1,"LM",Txt_Full_name);
+	    HTM_TH (1,1,"LM",Txt_WWW);
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-   /***** Institution *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
-   HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
-	       "%s",Txt_Another_institution);
-   for (NumIns = 0;
-	NumIns < Gbl.Hierarchy.Inss.Num;
-	NumIns++)
-      HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
-		  Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod,false,
-		  "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	    /***** Institution *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
+		  HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
+			      "%s",Txt_Another_institution);
+		  for (NumIns = 0;
+		       NumIns < Gbl.Hierarchy.Inss.Num;
+		       NumIns++)
+		     HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Inss.Lst[NumIns].InsCod,
+				 Gbl.Hierarchy.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod,false,
+				 "%s",Gbl.Hierarchy.Inss.Lst[NumIns].ShrtName);
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-   /***** Department short name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Department short name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Department full name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Department full name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_FULL_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Department WWW *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Department WWW *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			      "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_department);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_department);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1010,13 +962,13 @@ static void Dpt_PutHeadDepartments (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_Institution);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"LM",Txt_WWW);
-   HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_Institution);
+      HTM_TH (1,1,"LM",Txt_Short_name);
+      HTM_TH (1,1,"LM",Txt_Full_name);
+      HTM_TH (1,1,"LM",Txt_WWW);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 
    HTM_TR_End ();
   }
@@ -1054,17 +1006,17 @@ void Dpt_ReceiveFormNewDpt (void)
       if (Dpt_EditingDpt->WWW[0])
         {
          /***** If name of department was in database... *****/
-         if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt_EditingDpt->ShrtName,-1L))
+         if (Dpt_DB_CheckIfDepartmentNameExists ("ShortName",Dpt_EditingDpt->ShrtName,-1L))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_department_X_already_exists,
                              Dpt_EditingDpt->ShrtName);
-         else if (Dpt_CheckIfDepartmentNameExists ("FullName",Dpt_EditingDpt->FullName,-1L))
+         else if (Dpt_DB_CheckIfDepartmentNameExists ("FullName",Dpt_EditingDpt->FullName,-1L))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_department_X_already_exists,
                              Dpt_EditingDpt->FullName);
          else	// Add new department to database
            {
-            Dpt_CreateDepartment (Dpt_EditingDpt);
+            Dpt_DB_CreateDepartment (Dpt_EditingDpt);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 		             Txt_Created_new_department_X,
 			     Dpt_EditingDpt->FullName);
@@ -1077,24 +1029,6 @@ void Dpt_ReceiveFormNewDpt (void)
    else	// If there is not a department name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
-  }
-
-/*****************************************************************************/
-/************************** Create a new department **************************/
-/*****************************************************************************/
-
-static void Dpt_CreateDepartment (struct Dpt_Department *Dpt)
-  {
-   /***** Create a new department *****/
-   DB_QueryINSERT ("can not create a new department",
-		   "INSERT INTO dpt_departments"
-		   " (InsCod,ShortName,FullName,WWW)"
-		   " VALUES"
-		   " (%ld,'%s','%s','%s')",
-                   Dpt->InsCod,
-                   Dpt->ShrtName,
-                   Dpt->FullName,
-                   Dpt->WWW);
   }
 
 /*****************************************************************************/
@@ -1165,32 +1099,32 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
 		     Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,SelectClass);
 
-   if (FirstOption <= 0)
-     {
-      /* Option when no department selected */
-      if (FirstOption < 0)
+      if (FirstOption <= 0)
 	{
-	 NoDptSelectable = false;
-	 if (TextWhenNoDptSelected)
-	    if (TextWhenNoDptSelected[0])
-	       NoDptSelectable = true;
+	 /* Option when no department selected */
+	 if (FirstOption < 0)
+	   {
+	    NoDptSelectable = false;
+	    if (TextWhenNoDptSelected)
+	       if (TextWhenNoDptSelected[0])
+		  NoDptSelectable = true;
 
-	 HTM_OPTION (HTM_Type_STRING,"-1",DptCod < 0,!NoDptSelectable,
-		     "%s",TextWhenNoDptSelected);
+	    HTM_OPTION (HTM_Type_STRING,"-1",DptCod < 0,!NoDptSelectable,
+			"%s",TextWhenNoDptSelected);
+	   }
+
+	 /* Another department selected (different to all departments listed) */
+	 HTM_OPTION (HTM_Type_STRING,"0",DptCod == 0,false,
+		     "%s",Txt_Another_department);
 	}
 
-      /* Another department selected (different to all departments listed) */
-      HTM_OPTION (HTM_Type_STRING,"0",DptCod == 0,false,
-		  "%s",Txt_Another_department);
-     }
-
-   /* List all departments */
-   for (NumDpt = 0;
-	NumDpt < Departments.Num;
-	NumDpt++)
-      HTM_OPTION (HTM_Type_LONG,&Departments.Lst[NumDpt].DptCod,
-		  Departments.Lst[NumDpt].DptCod == DptCod,false,
-		  "%s",Departments.Lst[NumDpt].FullName);
+      /* List all departments */
+      for (NumDpt = 0;
+	   NumDpt < Departments.Num;
+	   NumDpt++)
+	 HTM_OPTION (HTM_Type_LONG,&Departments.Lst[NumDpt].DptCod,
+		     Departments.Lst[NumDpt].DptCod == DptCod,false,
+		     "%s",Departments.Lst[NumDpt].FullName);
 
    /* End selector */
    HTM_SELECT_End ();
