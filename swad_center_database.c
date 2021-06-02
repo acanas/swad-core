@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 /***************************** Create a new center ***************************/
 /*****************************************************************************/
 
-long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,unsigned Status)
+long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Ctr_Status_t Status)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create a new center",
@@ -85,7 +85,7 @@ long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,unsigned Status)
 				  "'%s','%s','%s','')",
 				Ctr->InsCod,
 				Ctr->PlcCod,
-				Status,
+				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Ctr->ShrtName,
 				Ctr->FullName,
@@ -318,12 +318,41 @@ bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
   }
 
 /*****************************************************************************/
+/******************** Get number of centers in a country *********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers in a country",
+		  "SELECT COUNT(*)"
+		   " FROM ins_instits,"
+		         "ctr_centers"
+		  " WHERE ins_instits.CtyCod=%ld"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod",
+		  CtyCod);
+  }
+
+/*****************************************************************************/
+/****************** Get number of centers in an institution ******************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsInIns (long InsCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers in an institution",
+		  "SELECT COUNT(*)"
+		   " FROM ctr_centers"
+		  " WHERE InsCod=%ld",
+		  InsCod);
+  }
+
+/*****************************************************************************/
 /******* Get number of centers (of the current institution) in a place *******/
 /*****************************************************************************/
 
 unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
   {
-   /***** Get number of centers (of the current institution) in a place *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of centers in a place",
 		  "SELECT COUNT(*)"
@@ -332,6 +361,111 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
 		    " AND PlcCod=%ld",
 		  Gbl.Hierarchy.Ins.InsCod,
 		  PlcCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get number of centers with map **********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsWithMap (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers with map",
+		  "SELECT COUNT(*)"
+		   " FROM ctr_centers"
+		  " WHERE Latitude<>0"
+		     " OR Longitude<>0");
+  }
+
+/*****************************************************************************/
+/**************** Get number of centers with map in a country ****************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsWithMapInCty (long CtyCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers with map",
+		  "SELECT COUNT(*)"
+		   " FROM ins_instits,"
+			 "ctr_centers"
+		  " WHERE ins_instits.CtyCod=%ld"
+		    " AND ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND (ctr_centers.Latitude<>0"
+		      " OR ctr_centers.Longitude<>0)",
+		  CtyCod);
+  }
+
+/*****************************************************************************/
+/************* Get number of centers with map in an institution **************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers with map",
+		  "SELECT COUNT(*)"
+		   " FROM ctr_centers"
+		  " WHERE InsCod=%ld"
+		    " AND (Latitude<>0"
+		      " OR Longitude<>0)",
+		  InsCod);
+  }
+
+/*****************************************************************************/
+/********************* Get number of centers with degrees ********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers with degrees",
+		  "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  SubQuery);
+  }
+/*****************************************************************************/
+/********************* Get number of centers with courses ********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers with courses",
+		  "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  SubQuery);
+  }
+/*****************************************************************************/
+/********************* Get number of centers with users **********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of centers with users",
+		  "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses,"
+			 "crs_users"
+		  " WHERE %s"
+			 "institutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod"
+		    " AND crs_courses.CrsCod=crs_users.CrsCod"
+		    " AND crs_users.Role=%u",
+		  SubQuery,(unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -376,6 +510,20 @@ void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
 		     " SET WWW='%s'"
 		   " WHERE CtrCod=%ld",
 	           NewWWW,
+	           CtrCod);
+  }
+
+/*****************************************************************************/
+/******************** Update status in table of centers **********************/
+/*****************************************************************************/
+
+void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t Status)
+  {
+   DB_QueryUPDATE ("can not update the status of a center",
+		   "UPDATE ctr_centers"
+		     " SET Status=%u"
+		   " WHERE CtrCod=%ld",
+	           (unsigned) Status,
 	           CtrCod);
   }
 

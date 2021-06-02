@@ -609,6 +609,8 @@ TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta q
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 20.88.2:  Jun 02, 2021  Queries moved to module swad_center_database.
+					Fixed bug in visibility of exam results. Reported by Mancia Anguita López. (312738 lines)
 	Version 20.88.1:  Jun 02, 2021  Queries moved to module swad_center_database. (312668 lines)
 	Version 20.88:    Jun 02, 2021  New module swad_center_database for database queries related to centers. (312638 lines)
 	Version 20.87.1:  Jun 01, 2021  Database function moved from swad_calendar to swad_setting. (312549 lines)

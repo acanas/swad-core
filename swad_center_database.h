@@ -44,7 +44,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,unsigned Status);
+long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Ctr_Status_t Status);
 
 unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod);
@@ -56,11 +56,20 @@ long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
 void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 				       long CtrCod,long InsCod);
+unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod);
+unsigned Ctr_DB_GetNumCtrsInIns (long InsCod);
 unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod);
+unsigned Ctr_DB_GetNumCtrsWithMap (void);
+unsigned Ctr_DB_GetNumCtrsWithMapInCty (long CtyCod);
+unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod);
+unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery);
+unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery);
+unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
 void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);
 void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName);
 void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t Status);
 
 void Ctr_DB_RemoveCenter (long CtrCod);
 

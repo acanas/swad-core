@@ -97,7 +97,7 @@ static void Ctr_PutParamGoToCtr (void *CtrCod);
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
-static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status);
+static void Ctr_ReceiveFormRequestOrCreateCtr (Ctr_Status_t Status);
 
 static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 
@@ -1312,12 +1312,7 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
 
    /***** Update status in table of centers *****/
-   DB_QueryUPDATE ("can not update the status of a center",
-		   "UPDATE ctr_centers"
-		     " SET Status=%u"
-		   " WHERE CtrCod=%ld",
-	           (unsigned) Status,
-	           Ctr_EditingCtr->CtrCod);
+   Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->CtrCod,Status);
    Ctr_EditingCtr->Status = Status;
 
    /***** Write message to show the change made
@@ -1590,7 +1585,7 @@ void Ctr_ReceiveFormReqCtr (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Receive form to request a new center *****/
-   Ctr_ReceiveFormRequestOrCreateCtr ((unsigned) Ctr_STATUS_BIT_PENDING);
+   Ctr_ReceiveFormRequestOrCreateCtr ((Ctr_Status_t) Ctr_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
@@ -1603,14 +1598,14 @@ void Ctr_ReceiveFormNewCtr (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Receive form to create a new center *****/
-   Ctr_ReceiveFormRequestOrCreateCtr (0);
+   Ctr_ReceiveFormRequestOrCreateCtr ((Ctr_Status_t) 0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new center ****************/
 /*****************************************************************************/
 
-static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
+static void Ctr_ReceiveFormRequestOrCreateCtr (Ctr_Status_t Status)
   {
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_Created_new_center_X;
@@ -1625,11 +1620,9 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
    if ((Ctr_EditingCtr->PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
       Ale_ShowAlert (Ale_ERROR,"Wrong place.");
 
-   /* Get center short name */
+   /* Get center short name and full name */
    Par_GetParToText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-
-   /* Get center full name */
-   Par_GetParToText ("FullName",Ctr_EditingCtr->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName" ,Ctr_EditingCtr->FullName,Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
    /* Get center WWW */
    Par_GetParToText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
@@ -1708,14 +1701,7 @@ static unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 
    /***** 3. Slow: number of centers in a country from database *****/
    Gbl.Cache.NumCtrsInCty.CtyCod  = CtyCod;
-   Gbl.Cache.NumCtrsInCty.NumCtrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of centers in a country",
-		  "SELECT COUNT(*)"
-		   " FROM ins_instits,"
-		         "ctr_centers"
-		  " WHERE ins_instits.CtyCod=%ld"
-		    " AND ins_instits.InsCod=ctr_centers.InsCod",
-		  CtyCod);
+   Gbl.Cache.NumCtrsInCty.NumCtrs = Ctr_DB_GetNumCtrsInCty (CtyCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_CTY,Gbl.Cache.NumCtrsInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInCty.NumCtrs);
    return Gbl.Cache.NumCtrsInCty.NumCtrs;
@@ -1756,12 +1742,7 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 
    /***** 3. Slow: number of centers in an institution from database *****/
    Gbl.Cache.NumCtrsInIns.InsCod  = InsCod;
-   Gbl.Cache.NumCtrsInIns.NumCtrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of centers in an institution",
-		  "SELECT COUNT(*)"
-		   " FROM ctr_centers"
-		  " WHERE InsCod=%ld",
-		  InsCod);
+   Gbl.Cache.NumCtrsInIns.NumCtrs = Ctr_DB_GetNumCtrsInIns (InsCod);
    FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS,HieLvl_INS,Gbl.Cache.NumCtrsInIns.InsCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumCtrsInIns.NumCtrs);
    return Gbl.Cache.NumCtrsInIns.NumCtrs;
@@ -1794,12 +1775,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInSys (void)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
-      NumCtrsWithMap = (unsigned)
-      DB_QueryCOUNT ("can not get number of centers with map",
-		     "SELECT COUNT(*)"
-		      " FROM ctr_centers"
-		     " WHERE Latitude<>0"
-		        " OR Longitude<>0");
+      NumCtrsWithMap = (unsigned) Ctr_DB_GetNumCtrsWithMap ();
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,HieLvl_SYS,-1L,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -1821,16 +1797,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInCty (long CtyCod)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
-      NumCtrsWithMap = (unsigned)
-      DB_QueryCOUNT ("can not get number of centers with map",
-		     "SELECT COUNT(*)"
-		      " FROM ins_instits,"
-		            "ctr_centers"
-		     " WHERE ins_instits.CtyCod=%ld"
-		       " AND ins_instits.InsCod=ctr_centers.InsCod"
-		       " AND (ctr_centers.Latitude<>0"
-		         " OR ctr_centers.Longitude<>0)",
-		     CtyCod);
+      NumCtrsWithMap = Ctr_DB_GetNumCtrsWithMapInCty (CtyCod);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,HieLvl_CTY,CtyCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -1852,14 +1819,7 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
      {
       /***** Get current number of centers with map from database and update cache *****/
       /* Ccoordinates 0, 0 means not set ==> don't show map */
-      NumCtrsWithMap = (unsigned)
-      DB_QueryCOUNT ("can not get number of centers with map",
-		     "SELECT COUNT(*)"
-		      " FROM ctr_centers"
-		     " WHERE InsCod=%ld"
-		       " AND (Latitude<>0"
-		         " OR Longitude<>0)",
-		     InsCod);
+      NumCtrsWithMap = Ctr_DB_GetNumCtrsWithMapInIns (InsCod);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_MAP,HieLvl_INS,InsCod,
                                     FigCch_UNSIGNED,&NumCtrsWithMap);
      }
@@ -1881,15 +1841,7 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
 				   FigCch_UNSIGNED,&NumCtrsWithDegs))
      {
       /***** Get current number of centers with degrees from database and update cache *****/
-      NumCtrsWithDegs = (unsigned)
-      DB_QueryCOUNT ("can not get number of centers with degrees",
-		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		      " FROM ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
-		     SubQuery);
+      NumCtrsWithDegs = Ctr_DB_GetNumCtrsWithDegs (SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithDegs);
      }
@@ -1911,17 +1863,7 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
 				   FigCch_UNSIGNED,&NumCtrsWithCrss))
      {
       /***** Get number of centers with courses *****/
-      NumCtrsWithCrss = (unsigned)
-      DB_QueryCOUNT ("can not get number of centers with courses",
-		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		      " FROM ins_instits,"
-			    "ctr_centers,"
-			    "deg_degrees,"
-			    "crs_courses"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		       " AND deg_degrees.DegCod=crs_courses.DegCod",
-		     SubQuery);
+      NumCtrsWithCrss = Ctr_DB_GetNumCtrsWithCrss (SubQuery);
       FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithCrss);
      }
@@ -1949,21 +1891,7 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
 				   FigCch_UNSIGNED,&NumCtrsWithUsrs))
      {
       /***** Get current number of centers with users from database and update cache *****/
-      NumCtrsWithUsrs = (unsigned)
-      DB_QueryCOUNT ("can not get number of centers with users",
-		     "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
-		      " FROM ins_instits,"
-			    "ctr_centers,"
-			    "deg_degrees,"
-			    "crs_courses,"
-			    "crs_users"
-		     " WHERE %s"
-		            "institutions.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		       " AND deg_degrees.DegCod=crs_courses.DegCod"
-		       " AND crs_courses.CrsCod=crs_users.CrsCod"
-		       " AND crs_users.Role=%u",
-		     SubQuery,(unsigned) Role);
+      NumCtrsWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (Role,SubQuery);
       FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Scope,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithUsrs);
      }

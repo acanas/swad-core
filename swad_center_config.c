@@ -34,6 +34,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_center.h"
+#include "swad_center_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure_cache.h"

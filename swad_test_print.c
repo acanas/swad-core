@@ -1430,8 +1430,7 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] &&
-       ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+   if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
       HTM_Long (Question->Answer.Integer);
    else
       Ico_PutIconNotVisible ();
@@ -1486,8 +1485,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] &&
-       ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+   if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
      {
       HTM_Txt ("[");
       HTM_Double (Question->Answer.FloatingPoint[0]);
@@ -1542,8 +1540,7 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 
    /***** Write the correct answer *****/
    HTM_TD_Begin ("class=\"ANS_0 CM\"");
-   if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] &&
-       ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+   if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
       Tst_WriteAnsTF (Question->Answer.TF);
    else
       Ico_PutIconNotVisible ();
@@ -1760,8 +1757,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
    HTM_TD_End ();
 
    /***** Write the correct answers *****/
-   if (ICanView[TstVis_VISIBLE_QST_ANS_TXT] &&
-       ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
+   if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
      {
       HTM_TD_Begin ("class=\"CT\"");
       HTM_TABLE_BeginPadding (2);
