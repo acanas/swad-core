@@ -33,6 +33,7 @@
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_degree_database.h"
+#include "swad_center_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -143,7 +144,7 @@ void Lgo_DrawLogo (HieLvl_Level_t Scope,long Cod,const char *AltText,
 	    if (Scope == HieLvl_DEG)		// && !LogoFound
 	       InsCod = Deg_DB_GetInsCodOfDegreeByCod (Cod);
 	    else if (Scope == HieLvl_CTR)	// && !LogoFound
-	       InsCod = Ctr_GetInsCodOfCenterByCod (Cod);
+	       InsCod = Ctr_DB_GetInsCodOfCenterByCod (Cod);
 	    else
 	       InsCod = Cod;
 	    snprintf (PathLogo,sizeof (PathLogo),"%s/%02u/%u/logo/%u.png",

@@ -453,11 +453,6 @@ struct Globals
 	{
 	 long InsCod;
 	 char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-	} InstitutionShrtName;
-      struct
-	{
-	 long InsCod;
-	 char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
 	 char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
 	} InstitutionShrtNameAndCty;
       struct

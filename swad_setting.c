@@ -363,7 +363,7 @@ void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek)
 		   "UPDATE usr_data"
 		     " SET FirstDayOfWeek=%u"
 		   " WHERE UsrCod=%ld",
-		   Gbl.Prefs.FirstDayOfWeek,
+		   FirstDayOfWeek,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

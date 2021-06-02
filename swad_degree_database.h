@@ -53,7 +53,7 @@ void Deg_DB_GetDegTypeNameByCod (struct DegreeType *DegTyp);
 unsigned Deg_DB_GetDataOfDegreeByCod (MYSQL_RES **mysql_res,long DegCod);
 long Deg_DB_GetInsCodOfDegreeByCod (long DegCod);
 long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod);
-void Deg_DB_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg);
+void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
 unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);

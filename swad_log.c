@@ -30,6 +30,7 @@
 
 #include "swad_action.h"
 #include "swad_banner.h"
+#include "swad_center_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_degree_database.h"
@@ -292,96 +293,95 @@ void Log_GetAndShowLastClicks (void)
 
    /***** Write list of connected users *****/
    HTM_TABLE_BeginCenterPadding (1);
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LC_CLK",Txt_Click);		// Click
-   HTM_TH (1,1,"LC_TIM",Txt_ELAPSED_TIME);	// Elapsed time
-   HTM_TH (1,1,"LC_ROL",Txt_Role);		// Role
-   HTM_TH (1,1,"LC_CTY",Txt_Country);		// Country
-   HTM_TH (1,1,"LC_INS",Txt_Institution);	// Institution
-   HTM_TH (1,1,"LC_CTR",Txt_Center);		// Center
-   HTM_TH (1,1,"LC_DEG",Txt_Degree);		// Degree
-   HTM_TH (1,1,"LC_ACT",Txt_Action);		// Action
-
-   HTM_TR_End ();
-
-   for (NumClick = 0;
-	NumClick < NumClicks;
-	NumClick++)
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get action code (row[1]) */
-      ActCod = Str_ConvertStrCodToLongCod (row[1]);
-      Action = Act_GetActionFromActCod (ActCod);
-
-      /* Use a special color for this row depending on the action */
-      ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
-	         (ActCod == Act_GetActCod (ActLogIn   ) ||
-	          ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
-                 (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
-                 (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
-                                                           "DAT_SMALL_GREY";
-
-      /* Compute elapsed time from last access */
-      if (sscanf (row[2],"%ld",&TimeDiff) != 1)
-         TimeDiff = (time_t) 0;
-
-      /* Get country code (row[4]) */
-      Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
-      Cty_GetCountryName (Hie.Cty.CtyCod,Gbl.Prefs.Language,
-			  Hie.Cty.Name[Gbl.Prefs.Language]);
-
-      /* Get institution code (row[5]) */
-      Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
-      Ins_GetShortNameOfInstitution (&Hie.Ins);
-
-      /* Get center code (row[6]) */
-      Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
-      Ctr_GetShortNameOfCenterByCod (&Hie.Ctr);
-
-      /* Get degree code (row[7]) */
-      Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
-      Deg_DB_GetShortNameOfDegreeByCod (&Hie.Deg);
-
-      /* Print table row */
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"LC_CLK %s\"",ClassRow);
-      HTM_Txt (row[0]);						// Click
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);		// Elapsed time
-      Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_ROL %s\"",ClassRow);
-      HTM_Txt (							// Role
-	       Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_CTY %s\"",ClassRow);
-      HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);		// Country
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_INS %s\"",ClassRow);
-      HTM_Txt (Hie.Ins.ShrtName);				// Institution
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
-      HTM_Txt (Hie.Ctr.ShrtName);				// Center
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
-      HTM_Txt (Hie.Deg.ShrtName);				// Degree
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
-      HTM_Txt (Act_GetActionText (Action));			// Action
-      HTM_TD_End ();
+	 HTM_TH (1,1,"LC_CLK",Txt_Click);		// Click
+	 HTM_TH (1,1,"LC_TIM",Txt_ELAPSED_TIME);	// Elapsed time
+	 HTM_TH (1,1,"LC_ROL",Txt_Role);		// Role
+	 HTM_TH (1,1,"LC_CTY",Txt_Country);		// Country
+	 HTM_TH (1,1,"LC_INS",Txt_Institution);	// Institution
+	 HTM_TH (1,1,"LC_CTR",Txt_Center);		// Center
+	 HTM_TH (1,1,"LC_DEG",Txt_Degree);		// Degree
+	 HTM_TH (1,1,"LC_ACT",Txt_Action);		// Action
 
       HTM_TR_End ();
-     }
+
+      for (NumClick = 0;
+	   NumClick < NumClicks;
+	   NumClick++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get action code (row[1]) */
+	 ActCod = Str_ConvertStrCodToLongCod (row[1]);
+	 Action = Act_GetActionFromActCod (ActCod);
+
+	 /* Use a special color for this row depending on the action */
+	 ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
+		    (ActCod == Act_GetActCod (ActLogIn   ) ||
+		     ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
+		    (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
+		    (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
+							      "DAT_SMALL_GREY";
+
+	 /* Compute elapsed time from last access */
+	 if (sscanf (row[2],"%ld",&TimeDiff) != 1)
+	    TimeDiff = (time_t) 0;
+
+	 /* Get country code (row[4]) */
+	 Hie.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[4]);
+	 Cty_GetCountryName (Hie.Cty.CtyCod,Gbl.Prefs.Language,
+			     Hie.Cty.Name[Gbl.Prefs.Language]);
+
+	 /* Get institution code (row[5]) */
+	 Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
+	 Ins_DB_GetShortNameOfInstitution (Hie.Ins.InsCod,Hie.Ins.ShrtName);
+
+	 /* Get center code (row[6]) */
+	 Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
+	 Ctr_DB_GetShortNameOfCenterByCod (Hie.Ctr.CtrCod,Hie.Ctr.ShrtName);
+
+	 /* Get degree code (row[7]) */
+	 Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
+	 Deg_DB_GetShortNameOfDegreeByCod (Hie.Deg.DegCod,Hie.Deg.ShrtName);
+
+	 /* Print table row */
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"LC_CLK %s\"",ClassRow);
+	       HTM_Txt (row[0]);				// Click
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);	// Elapsed time
+	       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_ROL %s\"",ClassRow);
+	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);	// Role
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_CTY %s\"",ClassRow);
+	       HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);	// Country
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_INS %s\"",ClassRow);
+	       HTM_Txt (Hie.Ins.ShrtName);			// Institution
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
+	       HTM_Txt (Hie.Ctr.ShrtName);			// Center
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
+	       HTM_Txt (Hie.Deg.ShrtName);				// Degree
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
+	       HTM_Txt (Act_GetActionText (Action));		// Action
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
    HTM_TABLE_End ();
 
    /***** Free structure that stores the query result *****/

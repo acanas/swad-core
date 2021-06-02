@@ -1115,7 +1115,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       else
 	 Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
+
+	 HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -1124,71 +1125,71 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Frm_SetUniqueId (IdCaption);
       HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
 
-      /* First name and surnames */
-      HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N_BOLD\"");	// Limited width
-      Usr_WriteFirstNameBRSurnames (UsrDat);
-      HTM_DIV_End ();
-
-      /* Nickname */
-      if (UsrDat->Nickname[0])
-	{
-	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL_N\"");
-	 HTM_TxtF ("@%s",UsrDat->Nickname);
+	 /* First name and surnames */
+	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N_BOLD\"");	// Limited width
+	    Usr_WriteFirstNameBRSurnames (UsrDat);
 	 HTM_DIV_End ();
-	}
 
-      /* Institution full name and institution country */
-      if (UsrDat->InsCod > 0)
-	{
-	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
-	 Ins_WriteInstitutionNameAndCty (UsrDat->InsCod);
-	 HTM_DIV_End ();
-	}
-      /* User's country */
-      else if (UsrDat->CtyCod > 0)
-	{
-	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
-	 Cty_WriteCountryName (UsrDat->CtyCod,
-			       NULL);	// Don't put link to country
-	 HTM_DIV_End ();
-	}
+	 /* Nickname */
+	 if (UsrDat->Nickname[0])
+	   {
+	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL_N\"");
+	       HTM_TxtF ("@%s",UsrDat->Nickname);
+	    HTM_DIV_End ();
+	   }
 
-      /* Main degree (in which the user has more courses) short name */
-      Usr_GetMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
-      if (MainDegreeShrtName[0])
-	{
-	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
-	 HTM_DIV_Begin ("class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\"",
-		        Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole]);
-	 HTM_Txt (MainDegreeShrtName);
-	 HTM_DIV_End ();
-	 HTM_DIV_End ();
-	}
+	 /* Institution full name and institution country */
+	 if (UsrDat->InsCod > 0)
+	   {
+	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
+	       Ins_WriteInstitutionNameAndCty (UsrDat->InsCod);
+	    HTM_DIV_End ();
+	   }
+	 /* User's country */
+	 else if (UsrDat->CtyCod > 0)
+	   {
+	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
+	       Cty_WriteCountryName (UsrDat->CtyCod,
+				     NULL);	// Don't put link to country
+	    HTM_DIV_End ();
+	   }
 
-      /* Following and followers */
-      if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
-        {
-	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE\"");
+	 /* Main degree (in which the user has more courses) short name */
+	 Usr_GetMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
+	 if (MainDegreeShrtName[0])
+	   {
+	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
+	       HTM_DIV_Begin ("class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\"",
+			      Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole]);
+		  HTM_Txt (MainDegreeShrtName);
+	       HTM_DIV_End ();
+	    HTM_DIV_End ();
+	   }
 
-	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-	 HTM_Unsigned (NumFollowing);
-	 HTM_SPAN_End ();
+	 /* Following and followers */
+	 if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
+	   {
+	    Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE\"");
 
-	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-	 HTM_TxtF ("&nbsp;%s&nbsp;",Txt_Following);
-	 HTM_SPAN_End ();
+	       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+		  HTM_Unsigned (NumFollowing);
+	       HTM_SPAN_End ();
 
-	 HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-	 HTM_Unsigned (NumFollowers);
-	 HTM_SPAN_End ();
+	       HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+		  HTM_TxtF ("&nbsp;%s&nbsp;",Txt_Following);
+	       HTM_SPAN_End ();
 
-	 HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-	 HTM_TxtF ("&nbsp;%s",Txt_Followers);
-	 HTM_SPAN_End ();
+	       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
+		  HTM_Unsigned (NumFollowers);
+	       HTM_SPAN_End ();
 
-	 HTM_DIV_End ();
-        }
+	       HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+		  HTM_TxtF ("&nbsp;%s",Txt_Followers);
+	       HTM_SPAN_End ();
+
+	    HTM_DIV_End ();
+	   }
 
       HTM_DIV_End ();
      }
@@ -1226,7 +1227,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    /***** End form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
-      HTM_BUTTON_End ();
+	 HTM_BUTTON_End ();
+
       Frm_EndForm ();
      }
   }

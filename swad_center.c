@@ -32,6 +32,7 @@
 
 #include "swad_center.h"
 #include "swad_center_config.h"
+#include "swad_center_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
@@ -90,8 +91,6 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 
 static void Ctr_PutParamOtherCtrCod (void *CtrCod);
 
-static void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName);
-
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 static void Ctr_PutParamGoToCtr (void *CtrCod);
 
@@ -99,7 +98,6 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
 static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status);
-static void Ctr_DB_CreateCenter (unsigned Status);
 
 static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 
@@ -127,42 +125,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
    const char *BgColor;
 
    /***** Get centers with pending degrees *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_CTR_ADM:
-         NumCtrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get centers with pending degrees",
-			 "SELECT deg_degrees.CtrCod,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM deg_degrees,"
-			        "ctr_admin,"
-			        "ctr_centers"
-			 " WHERE (deg_degrees.Status & %u)<>0"
-			   " AND deg_degrees.CtrCod=ctr_admin.CtrCod"
-			   " AND ctr_admin.UsrCod=%ld"
-			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			 " GROUP BY deg_degrees.CtrCod"
-			 " ORDER BY ctr_centers.ShortName",
-			 (unsigned) Deg_STATUS_BIT_PENDING,
-			 Gbl.Usrs.Me.UsrDat.UsrCod);
-         break;
-      case Rol_SYS_ADM:
-         NumCtrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get centers with pending degrees",
-			 "SELECT deg_degrees.CtrCod,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM deg_degrees,"
-			        "ctr_centers"
-			 " WHERE (deg_degrees.Status & %u)<>0"
-			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			 " GROUP BY deg_degrees.CtrCod"
-			 " ORDER BY ctr_centers.ShortName",
-			 (unsigned) Deg_STATUS_BIT_PENDING);
-         break;
-      default:	// Forbidden for other users
-	 return;
-     }
-   if (NumCtrs)
+   if ((NumCtrs = Ctr_DB_GetCtrsWithPendingDegs (&mysql_res)))
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Centers_with_pending_degrees,
@@ -262,7 +225,8 @@ void Ctr_ShowCtrsOfCurrentIns (void)
    Ctr_GetParamCtrOrder ();
 
    /***** Get list of centers *****/
-   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.InsCod);
+   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.InsCod,
+                             Gbl.Hierarchy.Ctrs.SelectedOrder);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -490,7 +454,8 @@ static void Ctr_EditCentersInternal (void)
 
    /***** Get list of centers *****/
    Gbl.Hierarchy.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTER;
-   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.InsCod);
+   Ctr_GetFullListOfCenters (Gbl.Hierarchy.Ins.InsCod,
+                             Gbl.Hierarchy.Ctrs.SelectedOrder);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -557,27 +522,11 @@ void Ctr_GetBasicListOfCenters (long InsCod)
    struct Ctr_Center *Ctr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.Ctrs.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get centers",
-		   "SELECT CtrCod,"		// row[ 0]
-			  "InsCod,"		// row[ 1]
-			  "PlcCod,"		// row[ 2]
-			  "Status,"		// row[ 3]
-			  "RequesterUsrCod,"	// row[ 4]
-			  "Latitude,"		// row[ 5]
-			  "Longitude,"		// row[ 6]
-			  "Altitude,"		// row[ 7]
-			  "ShortName,"		// row[ 8]
-			  "FullName,"		// row[ 9]
-			  "WWW"			// row[10]
-		    " FROM ctr_centers"
-		   " WHERE InsCod=%ld"
-		   " ORDER BY FullName",
-		   InsCod);
+   Gbl.Hierarchy.Ctrs.Num = Ctr_DB_GetListOfCtrsFull (&mysql_res,InsCod);
 
    if (Gbl.Hierarchy.Ctrs.Num) // Centers found...
      {
-      /***** Create list with courses in degree *****/
+      /***** Create list with centers in institution *****/
       if ((Gbl.Hierarchy.Ctrs.Lst = calloc ((size_t) Gbl.Hierarchy.Ctrs.Num,
                                             sizeof (*Gbl.Hierarchy.Ctrs.Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
@@ -607,59 +556,15 @@ void Ctr_GetBasicListOfCenters (long InsCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-void Ctr_GetFullListOfCenters (long InsCod)
+void Ctr_GetFullListOfCenters (long InsCod,Ctr_Order_t SelectedOrder)
   {
-   static const char *OrderBySubQuery[Ctr_NUM_ORDERS] =
-     {
-      [Ctr_ORDER_BY_CENTER  ] = "FullName",
-      [Ctr_ORDER_BY_NUM_USRS] = "NumUsrs DESC,FullName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCtr;
    struct Ctr_Center *Ctr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.Ctrs.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get centers",
-		   "(SELECT ctr_centers.CtrCod,"		// row[ 0]
-			   "ctr_centers.InsCod,"		// row[ 1]
-			   "ctr_centers.PlcCod,"		// row[ 2]
-			   "ctr_centers.Status,"		// row[ 3]
-			   "ctr_centers.RequesterUsrCod,"	// row[ 4]
-			   "ctr_centers.Latitude,"		// row[ 5]
-			   "ctr_centers.Longitude,"		// row[ 6]
-			   "ctr_centers.Altitude,"		// row[ 7]
-			   "ctr_centers.ShortName,"		// row[ 8]
-			   "ctr_centers.FullName,"		// row[ 9]
-			   "ctr_centers.WWW,"			// row[10]
-			   "COUNT(*) AS NumUsrs"		// row[11]
-		    " FROM ctr_centers,usr_data"
-		   " WHERE ctr_centers.InsCod=%ld"
-		     " AND ctr_centers.CtrCod=usr_data.CtrCod"
-		   " GROUP BY ctr_centers.CtrCod)"
-		   " UNION "
-		   "(SELECT CtrCod,"				// row[ 0]
-			   "InsCod,"				// row[ 1]
-			   "PlcCod,"				// row[ 2]
-			   "Status,"				// row[ 3]
-			   "RequesterUsrCod,"			// row[ 4]
-			   "Latitude,"				// row[ 5]
-			   "Longitude,"				// row[ 6]
-			   "Altitude,"				// row[ 7]
-			   "ShortName,"				// row[ 8]
-			   "FullName,"				// row[ 9]
-			   "WWW,"				// row[10]
-			   "0 AS NumUsrs"			// row[11]
-		    " FROM ctr_centers"
-		   " WHERE InsCod=%ld"
-		     " AND CtrCod NOT IN"
-		         " (SELECT DISTINCT CtrCod"
-			    " FROM usr_data))"
-		   " ORDER BY %s",
-		   InsCod,
-		   InsCod,
-		   OrderBySubQuery[Gbl.Hierarchy.Ctrs.SelectedOrder]);
+   Gbl.Hierarchy.Ctrs.Num = Ctr_DB_GetListOfCtrsFullWithNumUsrs (&mysql_res,InsCod,SelectedOrder);
 
    if (Gbl.Hierarchy.Ctrs.Num) // Centers found...
      {
@@ -714,21 +619,7 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
    if (Ctr->CtrCod > 0)
      {
       /***** Get data of a center from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a center",
-			  "SELECT CtrCod,"		// row[ 0]
-				 "InsCod,"		// row[ 1]
-				 "PlcCod,"		// row[ 2]
-				 "Status,"		// row[ 3]
-				 "RequesterUsrCod,"	// row[ 4]
-				 "Latitude,"		// row[ 5]
-				 "Longitude,"		// row[ 6]
-				 "Altitude,"		// row[ 7]
-				 "ShortName,"		// row[ 8]
-				 "FullName,"		// row[ 9]
-				 "WWW"			// row[10]
-			   " FROM ctr_centers"
-			  " WHERE CtrCod=%ld",
-			  Ctr->CtrCod)) // Center found...
+      if (Ctr_DB_GetDataOfCenterByCod (&mysql_res,Ctr->CtrCod)) // Center found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -781,46 +672,6 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row)
   }
 
 /*****************************************************************************/
-/*********** Get the institution code of a center from its code **************/
-/*****************************************************************************/
-
-long Ctr_GetInsCodOfCenterByCod (long CtrCod)
-  {
-   /***** Trivial check: center code should be > 0 *****/
-   if (CtrCod <= 0)
-      return -1L;
-
-   /***** Get the institution code of a center from database *****/
-   return DB_QuerySELECTCode ("can not get the institution of a center",
-			      "SELECT InsCod"
-			       " FROM ctr_centers"
-			      " WHERE CtrCod=%ld",
-			      CtrCod);
-  }
-
-/*****************************************************************************/
-/*************** Get the short name of a center from its code ****************/
-/*****************************************************************************/
-
-void Ctr_GetShortNameOfCenterByCod (struct Ctr_Center *Ctr)
-  {
-   /***** Trivial check: center code should be > 0 *****/
-   if (Ctr->CtrCod <= 0)
-     {
-      Ctr->ShrtName[0] = '\0';
-      return;
-     }
-
-   /***** Get the short name of a center from database *****/
-   DB_QuerySELECTString (Ctr->ShrtName,sizeof (Ctr->ShrtName) - 1,
-			 "can not get the short name of a center",
-		         "SELECT ShortName"
-			  " FROM ctr_centers"
-		         " WHERE CtrCod=%ld",
-		         Ctr->CtrCod);
-  }
-
-/*****************************************************************************/
 /**************************** Free list of centers ***************************/
 /*****************************************************************************/
 
@@ -865,17 +716,8 @@ void Ctr_WriteSelectorOfCenter (void)
 
       if (Gbl.Hierarchy.Ins.InsCod > 0)
 	{
-	 /***** Get centers from database *****/
-	 NumCtrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get centers",
-			 "SELECT DISTINCT CtrCod,"		// row[0]
-					 "ShortName"	// row[1]
-			  " FROM ctr_centers"
-			 " WHERE InsCod=%ld"
-			 " ORDER BY ShortName",
-			 Gbl.Hierarchy.Ins.InsCod);
-
-	 /***** Get centers *****/
+	 /***** Get centers in current institution from database *****/
+	 NumCtrs = Ctr_DB_GetListOfCtrsInCurrentIns (&mysql_res);
 	 for (NumCtr = 0;
 	      NumCtr < NumCtrs;
 	      NumCtr++)
@@ -1257,10 +1099,7 @@ void Ctr_RemoveCenter (void)
       Enr_DB_RemAdmins (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove center *****/
-      DB_QueryDELETE ("can not remove a center",
-		      "DELETE FROM ctr_centers"
-		      " WHERE CtrCod=%ld",
-		      Ctr_EditingCtr->CtrCod);
+      Ctr_DB_RemoveCenter (Ctr_EditingCtr->CtrCod);
 
       /***** Flush caches *****/
       Deg_FlushCacheNumDegsInCtr ();
@@ -1305,20 +1144,6 @@ void Ctr_ChangeCtrPlc (void)
 	  and put button to go to center changed *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_place_of_the_center_has_changed);
-  }
-
-/*****************************************************************************/
-/************** Update database changing old place by new place **************/
-/*****************************************************************************/
-
-void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod)
-  {
-   DB_QueryUPDATE ("can not update the place of a center",
-		   "UPDATE ctr_centers"
-		     " SET PlcCod=%ld"
-		   " WHERE CtrCod=%ld",
-	           NewPlcCod,
-	           CtrCod);
   }
 
 /*****************************************************************************/
@@ -1419,43 +1244,6 @@ void Ctr_RenameCenter (struct Ctr_Center *Ctr,Cns_ShrtOrFullName_t ShrtOrFullNam
   }
 
 /*****************************************************************************/
-/********************* Check if the name of center exists ********************/
-/*****************************************************************************/
-
-bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
-				       long CtrCod,long InsCod)
-  {
-   /***** Get number of centers with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a center"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ctr_centers"
-			  " WHERE InsCod=%ld"
-			    " AND %s='%s'"
-			    " AND CtrCod<>%ld",
-			  InsCod,
-			  FieldName,
-			  Name,
-			  CtrCod) != 0);
-  }
-
-/*****************************************************************************/
-/****************** Update center name in table of centers *******************/
-/*****************************************************************************/
-
-static void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName)
-  {
-   /***** Update center changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of a center",
-		   "UPDATE ctr_centers"
-		     " SET %s='%s'"
-		   " WHERE CtrCod=%ld",
-	           FieldName,
-	           NewCtrName,
-	           CtrCod);
-  }
-
-/*****************************************************************************/
 /************************* Change the URL of a center ************************/
 /*****************************************************************************/
 
@@ -1491,21 +1279,6 @@ void Ctr_ChangeCtrWWW (void)
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
-  }
-
-/*****************************************************************************/
-/**************** Update database changing old WWW by new WWW ****************/
-/*****************************************************************************/
-
-void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
-  {
-   /***** Update database changing old WWW by new WWW *****/
-   DB_QueryUPDATE ("can not update the web of a center",
-		   "UPDATE ctr_centers"
-		     " SET WWW='%s'"
-		   " WHERE CtrCod=%ld",
-	           NewWWW,
-	           CtrCod);
   }
 
 /*****************************************************************************/
@@ -1877,7 +1650,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
                              Ctr_EditingCtr->FullName);
          else	// Add new center to database
            {
-            Ctr_DB_CreateCenter (Status);
+            Ctr_EditingCtr->CtrCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 			     Txt_Created_new_center_X,
 			     Ctr_EditingCtr->FullName);
@@ -1890,30 +1663,6 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (unsigned Status)
    else	// If there is not a center name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_center);
-  }
-
-/*****************************************************************************/
-/***************************** Create a new center ***************************/
-/*****************************************************************************/
-
-static void Ctr_DB_CreateCenter (unsigned Status)
-  {
-   /***** Create a new center *****/
-   Ctr_EditingCtr->CtrCod =
-   DB_QueryINSERTandReturnCode ("can not create a new center",
-				"INSERT INTO ctr_centers"
-				" (InsCod,PlcCod,Status,RequesterUsrCod,"
-				  "ShortName,FullName,WWW,PhotoAttribution)"
-				" VALUES"
-				" (%ld,%ld,%u,%ld,"
-				  "'%s','%s','%s','')",
-				Ctr_EditingCtr->InsCod,
-				Ctr_EditingCtr->PlcCod,
-				Status,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Ctr_EditingCtr->ShrtName,
-				Ctr_EditingCtr->FullName,
-				Ctr_EditingCtr->WWW);
   }
 
 /*****************************************************************************/
@@ -2116,23 +1865,6 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
      }
 
    return NumCtrsWithMap;
-  }
-
-/*****************************************************************************/
-/******* Get number of centers (of the current institution) in a place *******/
-/*****************************************************************************/
-
-unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
-  {
-   /***** Get number of centers (of the current institution) in a place *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of centers in a place",
-		  "SELECT COUNT(*)"
-		   " FROM ctr_centers"
-		  " WHERE InsCod=%ld"
-		    " AND PlcCod=%ld",
-		  Gbl.Hierarchy.Ins.InsCod,
-		  PlcCod);
   }
 
 /*****************************************************************************/

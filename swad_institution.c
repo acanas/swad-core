@@ -860,40 +860,22 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_FlushCacheShortNameOfInstitution (void)
+void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
-   Gbl.Cache.InstitutionShrtName.InsCod = -1L;
-   Gbl.Cache.InstitutionShrtName.ShrtName[0] = '\0';
-  }
-
-void Ins_GetShortNameOfInstitution (struct Ins_Instit *Ins)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (Ins->InsCod <= 0)
+   /***** Trivial check: institution code should be > 0 *****/
+   if (InsCod <= 0)
      {
-      Ins->ShrtName[0] = '\0';	// Empty name
+      ShrtName[0] = '\0';	// Empty name
       return;
      }
 
-   /***** 2. Fast check: If cached... *****/
-   if (Ins->InsCod == Gbl.Cache.InstitutionShrtName.InsCod)
-     {
-      Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
-		sizeof (Ins->ShrtName) - 1);
-      return;
-     }
-
-   /***** 3. Slow: get short name of institution from database *****/
-   Gbl.Cache.InstitutionShrtName.InsCod = Ins->InsCod;
-   DB_QuerySELECTString (Gbl.Cache.InstitutionShrtName.ShrtName,
-			 sizeof (Gbl.Cache.InstitutionShrtName.ShrtName) - 1,
+   /***** Get short name of institution from database *****/
+   DB_QuerySELECTString (ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of an institution",
 			 "SELECT ShortName"
 			  " FROM ins_instits"
 			 " WHERE InsCod=%ld",
-			 Ins->InsCod);
-   Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtName.ShrtName,
-	     sizeof (Ins->ShrtName) - 1);
+			 InsCod);
   }
 
 /*****************************************************************************/
@@ -1392,7 +1374,6 @@ void Ins_RemoveInstitution (void)
 		      Ins_EditingIns->InsCod);
 
       /***** Flush caches *****/
-      Ins_FlushCacheShortNameOfInstitution ();
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
       Dpt_FlushCacheNumDptsInIns ();
       Ctr_FlushCacheNumCtrsInIns ();
@@ -1541,7 +1522,6 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *N
 	           InsCod);
 
    /***** Flush caches *****/
-   Ins_FlushCacheShortNameOfInstitution ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
   }
 

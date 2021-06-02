@@ -308,7 +308,6 @@ void Gbl_InitializeGlobals (void)
 
    /* Flush caches */
    Cty_FlushCacheCountryName ();
-   Ins_FlushCacheShortNameOfInstitution ();
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
    Ins_FlushCacheNumInssInCty ();

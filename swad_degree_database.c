@@ -280,22 +280,22 @@ long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod)
 /************* Get the short name of a degree from its code ******************/
 /*****************************************************************************/
 
-void Deg_DB_GetShortNameOfDegreeByCod (struct Deg_Degree *Deg)
+void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: degree code should be > 0 *****/
-   if (Deg->DegCod > 0)
+   if (DegCod > 0)
      {
-      Deg->ShrtName[0] = '\0';
+      ShrtName[0] = '\0';
       return;
      }
 
    /***** Get the short name of a degree from database *****/
-   DB_QuerySELECTString (Deg->ShrtName,sizeof (Deg->ShrtName) - 1,
+   DB_QuerySELECTString (ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME,
 			 "can not get the short name of a degree",
 			 "SELECT ShortName"
 			  " FROM deg_degrees"
 			 " WHERE DegCod=%ld",
-			 Deg->DegCod);
+			 DegCod);
   }
 
 /*****************************************************************************/
@@ -661,7 +661,7 @@ void Deg_DB_RemoveDegTyp (long DegTypCod)
   }
 
 /*****************************************************************************/
-/***************************** Remove the degree *****************************/
+/****************************** Remove a degree ******************************/
 /*****************************************************************************/
 
 void Deg_DB_RemoveDeg (long DegCod)
