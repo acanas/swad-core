@@ -102,10 +102,6 @@ static void CtrCfg_NumUsrs (void);
 static void CtrCfg_NumDegs (void);
 static void CtrCfg_NumCrss (void);
 
-static void Ctr_DB_UpdateCtrIns (long CtrCod,long InsCod);
-static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
-					  const char *CoordField,double NewCoord);
-
 /*****************************************************************************/
 /****************** Show information of the current center *******************/
 /*****************************************************************************/
@@ -519,11 +515,7 @@ static void CtrCfg_GetPhotoAttr (long CtrCod,char **PhotoAttribution)
    CtrCfg_FreePhotoAttr (PhotoAttribution);
 
    /***** Get photo attribution from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get photo attribution",
-		       "SELECT PhotoAttribution"	// row[0]
-		        " FROM ctr_centers"
-		       " WHERE CtrCod=%ld",
-		       CtrCod))
+   if (Ctr_DB_GetPhotoAttribution (&mysql_res,CtrCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -633,7 +625,7 @@ static void CtrCfg_FullName (bool PutForm)
    extern const char *Txt_Center;
 
    HieCfg_FullName (PutForm,Txt_Center,ActRenCtrFulCfg,
-		       Gbl.Hierarchy.Ctr.FullName);
+		    Gbl.Hierarchy.Ctr.FullName);
   }
 
 /*****************************************************************************/
@@ -1008,13 +1000,7 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
    Par_GetParToText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   DB_QueryUPDATE ("can not update the photo attribution"
-		   " of the current center",
-		   "UPDATE ctr_centers"
-		     " SET PhotoAttribution='%s'"
-		   " WHERE CtrCod=%ld",
-	           NewPhotoAttribution,
-	           Gbl.Hierarchy.Ctr.CtrCod);
+   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,NewPhotoAttribution);
 
    /***** Show the center information again *****/
    CtrCfg_ShowConfiguration ();
@@ -1041,17 +1027,17 @@ void CtrCfg_ChangeCtrIns (void)
 
       /***** Check if it already exists a center with the same name in the new institution *****/
       if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",
-                                         Gbl.Hierarchy.Ctr.ShrtName,
-                                         Gbl.Hierarchy.Ctr.CtrCod,
-                                         NewIns.InsCod))
+                                            Gbl.Hierarchy.Ctr.ShrtName,
+                                            Gbl.Hierarchy.Ctr.CtrCod,
+                                            NewIns.InsCod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_center_X_already_exists,
 		          Gbl.Hierarchy.Ctr.ShrtName);
       else if (Ctr_DB_CheckIfCtrNameExistsInIns ("FullName",
-                                              Gbl.Hierarchy.Ctr.FullName,
-                                              Gbl.Hierarchy.Ctr.CtrCod,
-                                              NewIns.InsCod))
+                                                 Gbl.Hierarchy.Ctr.FullName,
+                                                 Gbl.Hierarchy.Ctr.CtrCod,
+                                                 NewIns.InsCod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_center_X_already_exists,
@@ -1072,21 +1058,6 @@ void CtrCfg_ChangeCtrIns (void)
 		          Gbl.Hierarchy.Ctr.FullName,NewIns.FullName);
 	}
      }
-  }
-
-/*****************************************************************************/
-/******************* Update institution in table of centers ******************/
-/*****************************************************************************/
-
-static void Ctr_DB_UpdateCtrIns (long CtrCod,long InsCod)
-  {
-   /***** Update institution in table of centers *****/
-   DB_QueryUPDATE ("can not update the institution of a center",
-		   "UPDATE ctr_centers"
-		     " SET InsCod=%ld"
-		   " WHERE CtrCod=%ld",
-                   InsCod,
-                   CtrCod);
   }
 
 /*****************************************************************************/
@@ -1140,7 +1111,7 @@ void CtrCfg_ChangeCtrLatitude (void)
    NewLatitude = Map_GetLatitudeFromStr (LatitudeStr);
 
    /***** Update database changing old latitude by new latitude *****/
-   CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Latitude",NewLatitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.CtrCod,"Latitude",NewLatitude);
    Gbl.Hierarchy.Ctr.Coord.Latitude = NewLatitude;
 
    /***** Show the form again *****/
@@ -1161,7 +1132,7 @@ void CtrCfg_ChangeCtrLongitude (void)
    NewLongitude = Map_GetLongitudeFromStr (LongitudeStr);
 
    /***** Update database changing old longitude by new longitude *****/
-   CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Longitude",NewLongitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.CtrCod,"Longitude",NewLongitude);
    Gbl.Hierarchy.Ctr.Coord.Longitude = NewLongitude;
 
    /***** Show the form again *****/
@@ -1182,30 +1153,11 @@ void CtrCfg_ChangeCtrAltitude (void)
    NewAltitude = Map_GetAltitudeFromStr (AltitudeStr);
 
    /***** Update database changing old altitude by new altitude *****/
-   CtrCfg_UpdateCtrCoordinateDB (Gbl.Hierarchy.Ctr.CtrCod,"Altitude",NewAltitude);
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Ctr.CtrCod,"Altitude",NewAltitude);
    Gbl.Hierarchy.Ctr.Coord.Altitude = NewAltitude;
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
-  }
-
-/*****************************************************************************/
-/******** Update database changing old coordinate by new coordinate **********/
-/*****************************************************************************/
-
-static void CtrCfg_UpdateCtrCoordinateDB (long CtrCod,
-					  const char *CoordField,double NewCoord)
-  {
-   /***** Update database changing old coordinate by new coordinate *****/
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-   DB_QueryUPDATE ("can not update a coordinate of a center",
-		   "UPDATE ctr_centers"
-		     " SET %s='%.15lg'"
-		   " WHERE CtrCod=%ld",
-	           CoordField,
-	           NewCoord,
-	           CtrCod);
-   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/

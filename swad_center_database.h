@@ -34,6 +34,7 @@
 #include "swad_constant.h"
 // #include "swad_degree.h"
 // #include "swad_map.h"
+#include "swad_media.h"
 // #include "swad_role_type.h"
 
 /*****************************************************************************/
@@ -54,6 +55,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetDataOfCenterByCod (MYSQL_RES **mysql_res,long CtrCod);
 long Ctr_DB_GetInsCodOfCenterByCod (long CtrCod);
 void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 				       long CtrCod,long InsCod);
 unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod);
@@ -66,10 +68,14 @@ unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery);
 unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery);
 unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
+void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);
 void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName);
 void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
-void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t Status);
+void Ctr_DB_UpdateCtrPhotoAttribution (long CtrCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
+void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
+				 const char *CoordField,double NewCoord);
+void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus);
 
 void Ctr_DB_RemoveCenter (long CtrCod);
 

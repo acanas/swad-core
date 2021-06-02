@@ -297,6 +297,20 @@ void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_M
   }
 
 /*****************************************************************************/
+/******************** Get photo attribution from database ********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get photo attribution",
+		   "SELECT PhotoAttribution"	// row[0]
+		    " FROM ctr_centers"
+		   " WHERE CtrCod=%ld",
+		   CtrCod);
+  }
+
+/*****************************************************************************/
 /********************* Check if the name of center exists ********************/
 /*****************************************************************************/
 
@@ -427,6 +441,7 @@ unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery)
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		  SubQuery);
   }
+
 /*****************************************************************************/
 /********************* Get number of centers with courses ********************/
 /*****************************************************************************/
@@ -445,6 +460,7 @@ unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery)
 		    " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  SubQuery);
   }
+
 /*****************************************************************************/
 /********************* Get number of centers with users **********************/
 /*****************************************************************************/
@@ -466,6 +482,20 @@ unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 		    " AND crs_courses.CrsCod=crs_users.CrsCod"
 		    " AND crs_users.Role=%u",
 		  SubQuery,(unsigned) Role);
+  }
+
+/*****************************************************************************/
+/******************* Update institution in table of centers ******************/
+/*****************************************************************************/
+
+void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod)
+  {
+   DB_QueryUPDATE ("can not update the institution of a center",
+		   "UPDATE ctr_centers"
+		     " SET InsCod=%ld"
+		   " WHERE CtrCod=%ld",
+                   NewInsCod,
+                   CtrCod);
   }
 
 /*****************************************************************************/
@@ -504,7 +534,6 @@ void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrN
 
 void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a center",
 		   "UPDATE ctr_centers"
 		     " SET WWW='%s'"
@@ -514,16 +543,48 @@ void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   }
 
 /*****************************************************************************/
+/******* Update the table changing old attribution by new attribution ********/
+/*****************************************************************************/
+
+void Ctr_DB_UpdateCtrPhotoAttribution (long CtrCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1])
+  {
+   DB_QueryUPDATE ("can not update the photo attribution of a center",
+		   "UPDATE ctr_centers"
+		     " SET PhotoAttribution='%s'"
+		   " WHERE CtrCod=%ld",
+	           NewPhotoAttribution,
+	           CtrCod);
+  }
+
+/*****************************************************************************/
+/******** Update database changing old coordinate by new coordinate **********/
+/*****************************************************************************/
+
+void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
+				 const char *CoordField,double NewCoord)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update a coordinate of a center",
+		   "UPDATE ctr_centers"
+		     " SET %s='%.15lg'"
+		   " WHERE CtrCod=%ld",
+	           CoordField,
+	           NewCoord,
+	           CtrCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
 /******************** Update status in table of centers **********************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t Status)
+void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus)
   {
    DB_QueryUPDATE ("can not update the status of a center",
 		   "UPDATE ctr_centers"
 		     " SET Status=%u"
 		   " WHERE CtrCod=%ld",
-	           (unsigned) Status,
+	           (unsigned) NewStatus,
 	           CtrCod);
   }
 

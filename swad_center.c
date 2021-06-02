@@ -1288,8 +1288,8 @@ void Ctr_ChangeCtrWWW (void)
 void Ctr_ChangeCtrStatus (void)
   {
    extern const char *Txt_The_status_of_the_center_X_has_changed;
-   Ctr_Status_t Status;
-   Ctr_StatusTxt_t StatusTxt;
+   Ctr_Status_t NewStatus;
+   Ctr_StatusTxt_t NewStatusTxt;
 
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
@@ -1298,22 +1298,22 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get parameter with status *****/
-   Status = (Ctr_Status_t)
-	    Par_GetParToUnsignedLong ("Status",
-				      0,
-				      (unsigned long) Ctr_MAX_STATUS,
-				      (unsigned long) Ctr_WRONG_STATUS);
-   if (Status == Ctr_WRONG_STATUS)
+   NewStatus = (Ctr_Status_t)
+	       Par_GetParToUnsignedLong ("Status",
+					 0,
+					 (unsigned long) Ctr_MAX_STATUS,
+					 (unsigned long) Ctr_WRONG_STATUS);
+   if (NewStatus == Ctr_WRONG_STATUS)
       Err_WrongStatusExit ();
-   StatusTxt = Ctr_GetStatusTxtFromStatusBits (Status);
-   Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
+   NewStatusTxt = Ctr_GetStatusTxtFromStatusBits (NewStatus);
+   NewStatus = Ctr_GetStatusBitsFromStatusTxt (NewStatusTxt);	// New status
 
    /***** Get data of center *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
 
    /***** Update status in table of centers *****/
-   Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->CtrCod,Status);
-   Ctr_EditingCtr->Status = Status;
+   Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->CtrCod,NewStatus);
+   Ctr_EditingCtr->Status = NewStatus;
 
    /***** Write message to show the change made
 	  and put button to go to center changed *****/

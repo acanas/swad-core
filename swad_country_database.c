@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_country_database.h"
 #include "swad_database.h"
