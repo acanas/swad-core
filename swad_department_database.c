@@ -85,6 +85,94 @@ void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt)
   }
 
 /*****************************************************************************/
+/************************** Get list of departments **************************/
+/*****************************************************************************/
+
+unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
+                                    long InsCod,Dpt_Order_t SelectedOrder)
+  {
+   static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
+     {
+      [Dpt_ORDER_BY_DEPARTMENT] = "FullName",
+      [Dpt_ORDER_BY_NUM_TCHS  ] = "NumTchs DESC,FullName",
+     };
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get departments",
+		   "(SELECT dpt_departments.DptCod,"			// row[0]
+			   "dpt_departments.InsCod,"			// row[1]
+			   "dpt_departments.ShortName,"			// row[2]
+			   "dpt_departments.FullName,"			// row[3]
+			   "dpt_departments.WWW,"			// row[4]
+			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
+		     " FROM dpt_departments,"
+			   "usr_data,"
+			   "crs_users"
+		    " WHERE dpt_departments.InsCod=%ld"
+		      " AND dpt_departments.DptCod=usr_data.DptCod"
+		      " AND usr_data.UsrCod=crs_users.UsrCod"
+		      " AND crs_users.Role IN (%u,%u)"
+		    " GROUP BY dpt_departments.DptCod)"
+		   " UNION "
+		   "(SELECT DptCod,"					// row[0]
+			   "InsCod,"					// row[1]
+			   "ShortName,"					// row[2]
+			   "FullName,"					// row[3]
+			   "WWW,"					// row[4]
+			   "0 AS NumTchs"				// row[5]
+		     " FROM dpt_departments"
+		    " WHERE InsCod=%ld"
+		    " AND DptCod NOT IN"
+			" (SELECT DISTINCT usr_data.DptCod"
+			 " FROM usr_data,crs_users"
+			" WHERE crs_users.Role IN (%u,%u)"
+			  " AND crs_users.UsrCod=usr_data.UsrCod))"
+		   " ORDER BY %s",
+		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+		   OrderBySubQuery[SelectedOrder]);
+  }
+
+/*****************************************************************************/
+/****************** Get data of department using its code ********************/
+/*****************************************************************************/
+
+unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a department",
+		   "(SELECT dpt_departments.InsCod,"			// row[0]
+			   "dpt_departments.ShortName,"			// row[1]
+			   "dpt_departments.FullName,"			// row[2]
+			   "dpt_departments.WWW,"			// row[3]
+			   "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
+		     " FROM dpt_departments,"
+			   "usr_data,"
+			   "crs_users"
+		    " WHERE dpt_departments.DptCod=%ld"
+		      " AND dpt_departments.DptCod=usr_data.DptCod"
+		      " AND usr_data.UsrCod=crs_users.UsrCod"
+		      " AND crs_users.Role=%u"
+		    " GROUP BY dpt_departments.DptCod)"
+		   " UNION "
+		   "(SELECT InsCod,"					// row[0]
+			   "ShortName,"					// row[1]
+			   "FullName,"					// row[2]
+			   "WWW,"					// row[3]
+			   "0"						// row[4]
+		     " FROM dpt_departments"
+		    " WHERE DptCod=%ld"
+		      " AND DptCod NOT IN"
+			  " (SELECT DISTINCT usr_data.DptCod"
+			     " FROM usr_data,"
+				   "crs_users"
+			    " WHERE crs_users.Role=%u"
+			      " AND crs_users.UsrCod=usr_data.UsrCod))",
+		   DptCod,(unsigned) Rol_TCH,
+		   DptCod,(unsigned) Rol_TCH);
+  }
+
+/*****************************************************************************/
 /******************* Check if the name of department exists ******************/
 /*****************************************************************************/
 
@@ -116,16 +204,55 @@ unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod)
   }
 
 /*****************************************************************************/
+/****************** Update institution in table of departments ***************/
+/*****************************************************************************/
+
+void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod)
+  {
+   DB_QueryUPDATE ("can not update the institution of a department",
+		   "UPDATE dpt_departments"
+		     " SET InsCod=%ld"
+		   " WHERE DptCod=%ld",
+                   NewInsCod,
+                   DptCod);
+  }
+
+/*****************************************************************************/
 /************* Update department name in table of departments ****************/
 /*****************************************************************************/
 
-void Dpt_DB_UpdateDegName (long DptCod,const char *FieldName,const char *NewDptName)
+void Dpt_DB_UpdateDptName (long DptCod,const char *FieldName,const char *NewDptName)
   {
-   /***** Update department changing old name by new name *****/
    DB_QueryUPDATE ("can not update the name of a department",
 		   "UPDATE dpt_departments"
 		     " SET %s='%s'"
 		   " WHERE DptCod=%ld",
 	           FieldName,NewDptName,
 	           DptCod);
+  }
+
+/*****************************************************************************/
+/**************** Update the table changing old WWW by new WWW ***************/
+/*****************************************************************************/
+
+void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[Cns_MAX_BYTES_WWW + 1])
+  {
+   DB_QueryUPDATE ("can not update the web of a department",
+		   "UPDATE dpt_departments"
+		     " SET WWW='%s'"
+		   " WHERE DptCod=%ld",
+		   NewWWW,
+		   DptCod);
+  }
+
+/*****************************************************************************/
+/***************************** Remove a department ***************************/
+/*****************************************************************************/
+
+void Dpt_DB_RemoveDepartment (long DptCod)
+  {
+   DB_QueryDELETE ("can not remove a department",
+		   "DELETE FROM dpt_departments"
+		   " WHERE DptCod=%ld",
+		   DptCod);
   }

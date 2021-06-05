@@ -321,11 +321,6 @@ static void Dpt_EditDepartmentsInternal (void)
 
 static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long InsCod)
   {
-   static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
-     {
-      [Dpt_ORDER_BY_DEPARTMENT] = "FullName",
-      [Dpt_ORDER_BY_NUM_TCHS  ] = "NumTchs DESC,FullName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDpt;
@@ -337,40 +332,8 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
    if (InsCod > 0)	// Institution specified
      {
       /***** Get departments from database *****/
-      Departments->Num = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get departments",
-		      "(SELECT dpt_departments.DptCod,"				// row[0]
-			      "dpt_departments.InsCod,"				// row[1]
-			      "dpt_departments.ShortName,"			// row[2]
-			      "dpt_departments.FullName,"			// row[3]
-			      "dpt_departments.WWW,"				// row[4]
-			      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[5]
-		        " FROM dpt_departments,"
-		              "usr_data,"
-		              "crs_users"
-		       " WHERE dpt_departments.InsCod=%ld"
-		         " AND dpt_departments.DptCod=usr_data.DptCod"
-		         " AND usr_data.UsrCod=crs_users.UsrCod"
-		         " AND crs_users.Role IN (%u,%u)"
-		       " GROUP BY dpt_departments.DptCod)"
-		      " UNION "
-		      "(SELECT DptCod,"						// row[0]
-			      "InsCod,"						// row[1]
-			      "ShortName,"					// row[2]
-			      "FullName,"					// row[3]
-			      "WWW,"						// row[4]
-			      "0 AS NumTchs"					// row[5]
-		        " FROM dpt_departments"
-		       " WHERE InsCod=%ld"
-		       " AND DptCod NOT IN"
-			   " (SELECT DISTINCT usr_data.DptCod"
-			    " FROM usr_data,crs_users"
-			   " WHERE crs_users.Role IN (%u,%u)"
-			     " AND crs_users.UsrCod=usr_data.UsrCod))"
-		      " ORDER BY %s",
-		      InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-		      InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
-		      OrderBySubQuery[Departments->SelectedOrder]);
+      Departments->Num = Dpt_DB_GetListDepartments (&mysql_res,InsCod,
+                                                    Departments->SelectedOrder);
       if (Departments->Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
@@ -414,7 +377,7 @@ static void Dpt_GetListDepartments (struct Dpt_Departments *Departments,long Ins
   }
 
 /*****************************************************************************/
-/************************** Get department full name *************************/
+/****************** Get data of department using its code ********************/
 /*****************************************************************************/
 
 void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
@@ -437,36 +400,7 @@ void Dpt_GetDataOfDepartmentByCod (struct Dpt_Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a department",
-			  "(SELECT dpt_departments.InsCod,"				// row[0]
-				  "dpt_departments.ShortName,"			// row[1]
-				  "dpt_departments.FullName,"			// row[2]
-				  "dpt_departments.WWW,"				// row[3]
-				  "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"	// row[4]
-			    " FROM dpt_departments,"
-				  "usr_data,"
-				  "crs_users"
-			   " WHERE dpt_departments.DptCod=%ld"
-			     " AND dpt_departments.DptCod=usr_data.DptCod"
-			     " AND usr_data.UsrCod=crs_users.UsrCod"
-			     " AND crs_users.Role=%u"
-			   " GROUP BY dpt_departments.DptCod)"
-			  " UNION "
-			  "(SELECT InsCod,"						// row[0]
-				  "ShortName,"					// row[1]
-				  "FullName,"					// row[2]
-				  "WWW,"						// row[3]
-				  "0"						// row[4]
-			    " FROM dpt_departments"
-			   " WHERE DptCod=%ld"
-			     " AND DptCod NOT IN"
-				 " (SELECT DISTINCT usr_data.DptCod"
-				    " FROM usr_data,"
-					  "crs_users"
-				   " WHERE crs_users.Role=%u"
-				     " AND crs_users.UsrCod=usr_data.UsrCod))",
-			  Dpt->DptCod,(unsigned) Rol_TCH,
-			  Dpt->DptCod,(unsigned) Rol_TCH)) // Department found...
+      if (Dpt_DB_GetDataOfDepartmentByCod (&mysql_res,Dpt->DptCod)) // Department found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -658,10 +592,7 @@ void Dpt_RemoveDepartment (void)
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
-      DB_QueryDELETE ("can not remove a department",
-		      "DELETE FROM dpt_departments"
-		      " WHERE DptCod=%ld",
-		      Dpt_EditingDpt->DptCod);
+      Dpt_DB_RemoveDepartment (Dpt_EditingDpt->DptCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -693,12 +624,7 @@ void Dpt_ChangeDepartIns (void)
    Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
 
    /***** Update institution in table of departments *****/
-   DB_QueryUPDATE ("can not update the institution of a department",
-		   "UPDATE dpt_departments"
-		     " SET InsCod=%ld"
-		   " WHERE DptCod=%ld",
-                   NewInsCod,
-                   Dpt_EditingDpt->DptCod);
+   Dpt_DB_UpdateDptIns (Dpt_EditingDpt->DptCod,NewInsCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -787,7 +713,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
          else
            {
             /* Update the table changing old name by new name */
-            Dpt_DB_UpdateDegName (Dpt_EditingDpt->DptCod,FieldName,NewDptName);
+            Dpt_DB_UpdateDptName (Dpt_EditingDpt->DptCod,FieldName,NewDptName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -833,12 +759,7 @@ void Dpt_ChangeDptWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_QueryUPDATE ("can not update the web of a department",
-		      "UPDATE dpt_departments"
-		        " SET WWW='%s'"
-		      " WHERE DptCod=%ld",
-                      NewWWW,
-                      Dpt_EditingDpt->DptCod);
+      Dpt_DB_UpdateDptWWW (Dpt_EditingDpt->DptCod,NewWWW);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,

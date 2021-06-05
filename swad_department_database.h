@@ -27,7 +27,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include "swad_constant.h"
+#include <mysql/mysql.h>	// To access MySQL databases
+
+#include "swad_constant.h"
 #include "swad_department.h"
 
 /*****************************************************************************/
@@ -40,9 +42,16 @@
 
 void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt);
 
+unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
+                                    long InsCod,Dpt_Order_t SelectedOrder);
+unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod);
 bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
 unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod);
 
-void Dpt_DB_UpdateDegName (long DptCod,const char *FieldName,const char *NewDptName);
+void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod);
+void Dpt_DB_UpdateDptName (long DptCod,const char *FieldName,const char *NewDptName);
+void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+
+void Dpt_DB_RemoveDepartment (long DptCod);
 
 #endif
