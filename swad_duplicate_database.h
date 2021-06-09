@@ -1,7 +1,7 @@
-// swad_duplicate.h: duplicate users
+// swad_duplicate_database.h: duplicate users operations with database
 
-#ifndef _SWAD_DUP
-#define _SWAD_DUP
+#ifndef _SWAD_DUP_DB
+#define _SWAD_DUP_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_user.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -39,13 +41,12 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Dup_ReportUsrAsPossibleDuplicate (void);
+unsigned Dup_DB_GetListDuplicateUsrs (MYSQL_RES **mysql_res);
+unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct UsrData *UsrDat);
+bool Dup_DB_CheckIfUsrIsDup (long UsrCod);
 
-void Dup_PutLinkToListDupUsrs (void);
-void Dup_ListDuplicateUsrs (void);
+void Dup_DB_AddUsrToDuplicated (long UsrCod);
 
-void Dup_GetUsrCodAndListSimilarUsrs (void);
-
-void Dup_RemoveUsrFromListDupUsrs (void);
+void Dup_DB_RemoveUsrFromDuplicated (long UsrCod);
 
 #endif

@@ -36,7 +36,7 @@
 #include "swad_calendar.h"
 #include "swad_connected_database.h"
 #include "swad_database.h"
-#include "swad_duplicate.h"
+#include "swad_duplicate_database.h"
 #include "swad_enrolment.h"
 #include "swad_error.h"
 #include "swad_exam_print.h"
