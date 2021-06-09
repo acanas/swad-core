@@ -34,6 +34,7 @@
 #include "swad_center_config.h"
 #include "swad_center_database.h"
 #include "swad_database.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"

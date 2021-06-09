@@ -87,7 +87,6 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
 void Enr_FilterUsrDat (struct UsrData *UsrDat);
-void Enr_UpdateInstitutionCenterDepartment (void);
 
 void Enr_ReqAdminStds (void);
 void Enr_ReqAdminNonEditingTchs (void);
@@ -142,15 +141,5 @@ void Enr_CreateNewUsr1 (void);
 void Enr_CreateNewUsr2 (void);
 void Enr_ModifyUsr1 (void);
 void Enr_ModifyUsr2 (void);
-
-void Enr_AcceptUsrInCrs (long UsrCod);
-
-void Enr_DB_RemCrsRequests (long CrsCod);
-void Enr_DB_RemUsrRequests (long UsrCod);
-void Enr_DB_RemAllUsrsFromCrsSettings (long CrsCod);
-void Enr_DB_RemAllUsrsFromCrs (long CrsCod);
-void Enr_DB_RemUsrFromAllCrss (long UsrCod);
-void Enr_DB_RemUsrAsAdmin (long UsrCod);
-void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod);
 
 #endif

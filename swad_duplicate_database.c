@@ -25,19 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include "swad_account.h"
-// #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_duplicate.h"
-// #include "swad_enrolment.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_HTML.h"
-// #include "swad_layout.h"
-// #include "swad_profile.h"
-// #include "swad_role_type.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

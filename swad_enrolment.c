@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_exam_print.h"
 #include "swad_form.h"
@@ -139,9 +140,9 @@ static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe);
 static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe);
 static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe);
 static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe);
-static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
+static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
                                          bool *OptionChecked);
-static void Enr_EndRegRemOneUsrAction (void);
+static void Enr_RegRemOneUsrActionEnd (void);
 
 static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
@@ -403,17 +404,21 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
    Frm_BeginForm (NextAction);
    if (FuncParams)
       FuncParams ();
+
+   /***** Label *****/
    HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
-                    The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
+		    The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TxtColonNBSP (Txt_nick_email_or_ID);
    HTM_LABEL_End ();
 
+   /***** Input box to enter user *****/
    HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
-                   HTM_DONT_SUBMIT_ON_CHANGE,
+		   HTM_DONT_SUBMIT_ON_CHANGE,
 		   "id=\"OtherUsrIDNickOrEMail\" size=\"18\" required=\"required\"");
 
    /***** Send button*****/
    Btn_PutConfirmButton (Txt_Continue);
+
    Frm_EndForm ();
   }
 
@@ -436,46 +441,46 @@ void Enr_ReqAcceptRegisterInCrs (void)
                  NULL,NULL,
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
-   /***** Show message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
-                  Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
-                  Gbl.Hierarchy.Crs.FullName);
+      /***** Show message *****/
+      Ale_ShowAlert (Ale_INFO,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
+		     Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Me.UsrDat.Sex],
+		     Gbl.Hierarchy.Crs.FullName);
 
-   /***** Send button to accept register in the current course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
-     {
-      case Rol_STD:
-	 Frm_BeginForm (ActAccEnrStd);
-	 break;
-      case Rol_NET:
-	 Frm_BeginForm (ActAccEnrNET);
-	 break;
-      case Rol_TCH:
-	 Frm_BeginForm (ActAccEnrTch);
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-     }
-   Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
-   Frm_EndForm ();
+      /***** Send button to accept register in the current course *****/
+      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
+	{
+	 case Rol_STD:
+	    Frm_BeginForm (ActAccEnrStd);
+	    break;
+	 case Rol_NET:
+	    Frm_BeginForm (ActAccEnrNET);
+	    break;
+	 case Rol_TCH:
+	    Frm_BeginForm (ActAccEnrTch);
+	    break;
+	 default:
+	    Err_WrongRoleExit ();
+	}
+      Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
+      Frm_EndForm ();
 
-   /***** Send button to refuse register in the current course *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
-     {
-      case Rol_STD:
-	 Frm_BeginForm (ActRemMe_Std);
-	 break;
-      case Rol_NET:
-	 Frm_BeginForm (ActRemMe_NET);
-	 break;
-      case Rol_TCH:
-	 Frm_BeginForm (ActRemMe_Tch);
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-     }
-   Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
-   Frm_EndForm ();
+      /***** Send button to refuse register in the current course *****/
+      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
+	{
+	 case Rol_STD:
+	    Frm_BeginForm (ActRemMe_Std);
+	    break;
+	 case Rol_NET:
+	    Frm_BeginForm (ActRemMe_NET);
+	    break;
+	 case Rol_TCH:
+	    Frm_BeginForm (ActRemMe_Tch);
+	    break;
+	 default:
+	    Err_WrongRoleExit ();
+	}
+      Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -610,26 +615,6 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**************** Update institution, center and department ******************/
-/*****************************************************************************/
-
-void Enr_UpdateInstitutionCenterDepartment (void)
-  {
-   DB_QueryUPDATE ("can not update institution, center and department",
-		   "UPDATE usr_data"
-		     " SET InsCtyCod=%ld,"
-		          "InsCod=%ld,"
-		          "CtrCod=%ld,"
-		          "DptCod=%ld"
-		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	           Gbl.Usrs.Me.UsrDat.InsCod,
-	           Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
-	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /************** Form to request the user's ID of another user ****************/
 /*****************************************************************************/
 
@@ -757,50 +742,50 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
    Frm_BeginForm (NextAction);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Title,
-                 NULL,NULL,
-	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Title,
+		    NULL,NULL,
+		    Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
-   /***** Step 1: List of students to be enroled / removed *****/
-   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
-   HTM_DIV_End ();
+	 /***** Step 1: List of students to be enroled / removed *****/
+	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
+	 HTM_DIV_End ();
 
-   Ale_ShowAlert (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
-   Enr_PutAreaToEnterUsrsIDs ();
+	 Ale_ShowAlert (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
+	 Enr_PutAreaToEnterUsrsIDs ();
 
-   /***** Step 2: Put different actions to register/remove users to/from current course *****/
-   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   HTM_Txt (Txt_Step_2_Select_the_desired_action);
-   HTM_DIV_End ();
-   Enr_PutActionsRegRemSeveralUsrs ();
+	 /***** Step 2: Put different actions to register/remove users to/from current course *****/
+	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Step_2_Select_the_desired_action);
+	 HTM_DIV_End ();
+	 Enr_PutActionsRegRemSeveralUsrs ();
 
-   /***** Step 3: Select groups in which register / remove users *****/
-   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   HTM_Txt (Txt_Step_3_Optionally_select_groups);
-   HTM_DIV_End ();
-   if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-     {
-      if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-	{
-	 Ale_ShowAlert (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_);
-	 Grp_ShowLstGrpsToChgOtherUsrsGrps (-1L);
-	}
-      else
-	 /* Write help message */
-	 Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
-		        Gbl.Hierarchy.Crs.FullName);
-     }
+	 /***** Step 3: Select groups in which register / remove users *****/
+	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Step_3_Optionally_select_groups);
+	 HTM_DIV_End ();
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+	   {
+	    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
+	      {
+	       Ale_ShowAlert (Ale_INFO,Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_);
+	       Grp_ShowLstGrpsToChgOtherUsrsGrps (-1L);
+	      }
+	    else
+	       /* Write help message */
+	       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X_Therefore_,
+			      Gbl.Hierarchy.Crs.FullName);
+	   }
 
-   /***** Step 4: Confirm register / remove students *****/
-   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
-   HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
-   HTM_DIV_End ();
-   Pwd_AskForConfirmationOnDangerousAction ();
+	 /***** Step 4: Confirm register / remove students *****/
+	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
+	 HTM_DIV_End ();
+	 Pwd_AskForConfirmationOnDangerousAction ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Confirm);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Confirm);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -837,30 +822,30 @@ void Enr_AskRemoveOldUsrs (void)
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldUsr);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Eliminate_old_users,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Eliminate_old_users,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Form to request number of months without clicks *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Months\"");
-   for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
-        Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
-        Months++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-		  Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,false,
-		  "%u",Months);
-   HTM_SELECT_End ();
-   HTM_NBSP ();
-   HTM_TxtF (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
-             Cfg_PLATFORM_SHORT_NAME);
-   HTM_LABEL_End ();
+	 /***** Form to request number of months without clicks *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      "name=\"Months\"");
+	       for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
+		    Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
+		    Months++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
+			      Months == Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,false,
+			      "%u",Months);
+	    HTM_SELECT_End ();
+	    HTM_NBSP ();
+	    HTM_TxtF (Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
+		      Cfg_PLATFORM_SHORT_NAME);
+	 HTM_LABEL_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Eliminate);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Eliminate);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -962,18 +947,18 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
    /***** Text area for users' IDs *****/
    HTM_TABLE_BeginCenterPadding (2);
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
+	 /* Label */
+	 Frm_LabelColumn ("RT","UsrsIDs",Txt_List_of_nicks_emails_or_IDs);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\" cols=\"60\" rows=\"10\"");
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\" cols=\"60\" rows=\"10\"");
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -993,58 +978,58 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    /***** Start list of options *****/
    HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 
-   /***** Register / remove users listed or not listed *****/
-   if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-     {
-      HTM_LI_Begin (NULL);
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("RegRemAction",false,
-		       " value=\"%u\" checked=\"checked\"",
-		       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
-      HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
+      /***** Register / remove users listed or not listed *****/
+      if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+	{
+	 HTM_LI_Begin (NULL);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("RegRemAction",false,
+				" value=\"%u\" checked=\"checked\"",
+				(unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS);
+	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1);
+	    HTM_LABEL_End ();
+	 HTM_LI_End ();
 
-      HTM_LI_Begin (NULL);
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("RegRemAction",false,
-		       " value=\"%u\"",
-		       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
-      HTM_Txt (Txt_Remove_the_users_indicated_in_step_1);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
+	 HTM_LI_Begin (NULL);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("RegRemAction",false,
+				" value=\"%u\"",
+				(unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS);
+	       HTM_Txt (Txt_Remove_the_users_indicated_in_step_1);
+	    HTM_LABEL_End ();
+	 HTM_LI_End ();
 
-      HTM_LI_Begin (NULL);
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("RegRemAction",false,
-		       " value=\"%u\"",
-		       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
-      HTM_Txt (Txt_Remove_the_users_not_indicated_in_step_1);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
+	 HTM_LI_Begin (NULL);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("RegRemAction",false,
+				" value=\"%u\"",
+				(unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS);
+	       HTM_Txt (Txt_Remove_the_users_not_indicated_in_step_1);
+	    HTM_LABEL_End ();
+	 HTM_LI_End ();
 
-      HTM_LI_Begin (NULL);
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("RegRemAction",false,
-		       " value=\"%u\"",
-		       (unsigned) Enr_UPDATE_USRS_IN_CRS);
-      HTM_Txt (Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
-     }
+	 HTM_LI_Begin (NULL);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("RegRemAction",false,
+				" value=\"%u\"",
+				(unsigned) Enr_UPDATE_USRS_IN_CRS);
+	       HTM_Txt (Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
+	    HTM_LABEL_End ();
+	 HTM_LI_End ();
+	}
 
-   /***** Only for superusers *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-     {
-      HTM_LI_Begin (NULL);
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("RegRemAction",false,
-		       " value=\"%u\"",
-		       (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
-      HTM_Txt (Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
-     }
+      /***** Only for superusers *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	{
+	 HTM_LI_Begin (NULL);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("RegRemAction",false,
+				" value=\"%u\"",
+				(unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM);
+	       HTM_Txt (Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
+	    HTM_LABEL_End ();
+	 HTM_LI_End ();
+	}
 
    /***** End list of options *****/
    HTM_UL_End ();
@@ -1634,13 +1619,13 @@ static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
    extern const char *Txt_Register_me_in_X;
    extern const char *Txt_Register_USER_in_the_course_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
-   HTM_TxtF (UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
-				        Txt_Modify_user_in_the_course_X) :
-			       (ItsMe ? Txt_Register_me_in_X :
-				        Txt_Register_USER_in_the_course_X),
-	     Gbl.Hierarchy.Crs.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
+      HTM_TxtF (UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
+					   Txt_Modify_user_in_the_course_X) :
+				  (ItsMe ? Txt_Register_me_in_X :
+					   Txt_Register_USER_in_the_course_X),
+		Gbl.Hierarchy.Crs.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1651,10 +1636,10 @@ static void Enr_PutActionRegOneDegAdm (bool *OptionChecked)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_DEGREE_ADMIN,OptionChecked);
-   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_degree_X,
-	     Gbl.Hierarchy.Deg.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_DEGREE_ADMIN,OptionChecked);
+      HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_degree_X,
+		Gbl.Hierarchy.Deg.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1665,10 +1650,10 @@ static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_center_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_CENTER_ADMIN,OptionChecked);
-   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_center_X,
-	     Gbl.Hierarchy.Ctr.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_CENTER_ADMIN,OptionChecked);
+      HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_center_X,
+		Gbl.Hierarchy.Ctr.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1679,10 +1664,10 @@ static void Enr_PutActionRegOneInsAdm (bool *OptionChecked)
   {
    extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_INSTITUTION_ADMIN,OptionChecked);
-   HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_institution_X,
-	     Gbl.Hierarchy.Ins.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REGISTER_ONE_INSTITUTION_ADMIN,OptionChecked);
+      HTM_TxtF (Txt_Register_USER_as_an_administrator_of_the_institution_X,
+		Gbl.Hierarchy.Ins.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1693,9 +1678,9 @@ static void Enr_PutActionRepUsrAsDup (bool *OptionChecked)
   {
    extern const char *Txt_Report_possible_duplicate_user;
 
-   Enr_StartRegRemOneUsrAction (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,OptionChecked);
-   HTM_Txt (Txt_Report_possible_duplicate_user);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,OptionChecked);
+      HTM_Txt (Txt_Report_possible_duplicate_user);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1707,11 +1692,11 @@ static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_me_from_THE_COURSE_X;
    extern const char *Txt_Remove_USER_from_THE_COURSE_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_USR_FROM_CRS,OptionChecked);
-   HTM_TxtF (ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
-		     Txt_Remove_USER_from_THE_COURSE_X,
-	     Gbl.Hierarchy.Crs.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_USR_FROM_CRS,OptionChecked);
+      HTM_TxtF (ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
+			Txt_Remove_USER_from_THE_COURSE_X,
+		Gbl.Hierarchy.Crs.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1723,11 +1708,11 @@ static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_DEGREE_ADMIN,OptionChecked);
-   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-		     Txt_Remove_USER_as_an_administrator_of_the_degree_X,
-	     Gbl.Hierarchy.Deg.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_DEGREE_ADMIN,OptionChecked);
+      HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
+			Txt_Remove_USER_as_an_administrator_of_the_degree_X,
+		Gbl.Hierarchy.Deg.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1739,11 +1724,11 @@ static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_me_as_an_administrator_of_the_center_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_center_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_CENTER_ADMIN,OptionChecked);
-   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_center_X :
-		     Txt_Remove_USER_as_an_administrator_of_the_center_X,
-	     Gbl.Hierarchy.Ctr.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_CENTER_ADMIN,OptionChecked);
+      HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_center_X :
+			Txt_Remove_USER_as_an_administrator_of_the_center_X,
+		Gbl.Hierarchy.Ctr.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1755,11 +1740,11 @@ static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
    extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
 
-   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_INSTITUTION_ADMIN,OptionChecked);
-   HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
-		     Txt_Remove_USER_as_an_administrator_of_the_institution_X,
-	     Gbl.Hierarchy.Ins.ShrtName);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_REMOVE_ONE_INSTITUTION_ADMIN,OptionChecked);
+      HTM_TxtF (ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
+			Txt_Remove_USER_as_an_administrator_of_the_institution_X,
+		Gbl.Hierarchy.Ins.ShrtName);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
@@ -1771,32 +1756,33 @@ static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe)
    extern const char *Txt_Eliminate_my_user_account;
    extern const char *Txt_Eliminate_user_account;
 
-   Enr_StartRegRemOneUsrAction (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,OptionChecked);
-   HTM_Txt (ItsMe ? Txt_Eliminate_my_user_account :
-		    Txt_Eliminate_user_account);
-   Enr_EndRegRemOneUsrAction ();
+   Enr_RegRemOneUsrActionBegin (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,OptionChecked);
+      HTM_Txt (ItsMe ? Txt_Eliminate_my_user_account :
+		       Txt_Eliminate_user_account);
+   Enr_RegRemOneUsrActionEnd ();
   }
 
 /*****************************************************************************/
 /************ Put start/end of action to register/remove one user ************/
 /*****************************************************************************/
 
-static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
+static void Enr_RegRemOneUsrActionBegin (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
                                          bool *OptionChecked)
   {
    HTM_LI_Begin (NULL);
-   HTM_LABEL_Begin (NULL);
-   HTM_INPUT_RADIO ("RegRemAction",false,
-		    "value=\"%u\"%s",
-	            (unsigned) RegRemOneUsrAction,
-		    *OptionChecked ? "" : " checked=\"checked\"");
-   if (!*OptionChecked)
-      *OptionChecked = true;
+      HTM_LABEL_Begin (NULL);
+	 HTM_INPUT_RADIO ("RegRemAction",false,
+			  "value=\"%u\"%s",
+			  (unsigned) RegRemOneUsrAction,
+			  *OptionChecked ? "" : " checked=\"checked\"");
+
+	    if (!*OptionChecked)
+	       *OptionChecked = true;
   }
 
-static void Enr_EndRegRemOneUsrAction (void)
+static void Enr_RegRemOneUsrActionEnd (void)
   {
-   HTM_LABEL_End ();
+      HTM_LABEL_End ();
    HTM_LI_End ();
   }
 
@@ -1884,29 +1870,29 @@ void Enr_AskRemAllStdsThisCrs (void)
                  NULL,NULL,
                  Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
-   if (NumStds)
-     {
-      /***** Show question and button to remove students *****/
-      /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
-                               NumStds,
-                               Gbl.Hierarchy.Crs.FullName);
+      if (NumStds)
+	{
+	 /***** Show question and button to remove students *****/
+	 /* Begin alert */
+	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
+				  NumStds,
+				  Gbl.Hierarchy.Crs.FullName);
 
-      /* Show form to request confirmation */
-      Frm_BeginForm (ActRemAllStdCrs);
-      Grp_PutParamAllGroups ();
-      Pwd_AskForConfirmationOnDangerousAction ();
-      Btn_PutRemoveButton (Txt_Remove_all_students);
-      Frm_EndForm ();
+	 /* Show form to request confirmation */
+	 Frm_BeginForm (ActRemAllStdCrs);
+	 Grp_PutParamAllGroups ();
+	    Pwd_AskForConfirmationOnDangerousAction ();
+	    Btn_PutRemoveButton (Txt_Remove_all_students);
+	 Frm_EndForm ();
 
-      /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
-                               NULL,NULL,
-                               Btn_NO_BUTTON,NULL);
-     }
-   else	// Gbl.Hierarchy.Crs.NumUsrs[Rol_STD] == 0
-      /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STD);
+	 /* End alert */
+	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
+				  NULL,NULL,
+				  Btn_NO_BUTTON,NULL);
+	}
+      else	// Gbl.Hierarchy.Crs.NumUsrs[Rol_STD] == 0
+	 /***** Show warning indicating no students found *****/
+	 Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2322,38 +2308,38 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /***** Selection of scope and roles *****/
    /* Begin form and table */
    Frm_BeginForm (ActUpdSignUpReq);
-   HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (2);
 
-   /* Scope (whole platform, current center, current degree or current course) */
-   HTM_TR_Begin (NULL);
+	 /* Scope (whole platform, current center, current degree or current course) */
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","ScopeEnr",Txt_Scope);
+	    /* Label */
+	    Frm_LabelColumn ("RT","ScopeEnr",Txt_Scope);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
-   Sco_PutSelectorScope ("ScopeEnr",HTM_SUBMIT_ON_CHANGE);
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Sco_PutSelectorScope ("ScopeEnr",HTM_SUBMIT_ON_CHANGE);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Users' roles in listing */
-   HTM_TR_Begin (NULL);
+	 /* Users' roles in listing */
+	 HTM_TR_Begin (NULL);
 
-   Frm_LabelColumn ("RT","Role",Txt_Users);
+	    Frm_LabelColumn ("RT","Role",Txt_Users);
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Rol_WriteSelectorRoles (1 << Rol_STD |
-                           1 << Rol_NET |
-                           1 << Rol_TCH,
-                           RolesSelected,
-                           false,true);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"DAT LT\"");
+	       Rol_WriteSelectorRoles (1 << Rol_STD |
+				       1 << Rol_NET |
+				       1 << Rol_TCH,
+				       RolesSelected,
+				       false,true);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* End table and form */
-   HTM_TABLE_End ();
+      /* End table and form */
+      HTM_TABLE_End ();
    Frm_EndForm ();
 
    /***** Build query *****/
@@ -3792,7 +3778,7 @@ void Enr_AcceptRegisterMeInCrs (void)
    extern const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X;
 
    /***** Confirm my enrolment *****/
-   Enr_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Enr_DB_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Mark all notifications about enrolment (as student or as teacher)
           in current course as removed *****/
@@ -4132,22 +4118,6 @@ void Enr_ModifyUsr2 (void)
   }
 
 /*****************************************************************************/
-/********* Set a user's acceptation to true in the current course ************/
-/*****************************************************************************/
-
-void Enr_AcceptUsrInCrs (long UsrCod)
-  {
-   /***** Set enrolment of a user to "accepted" in the current course *****/
-   DB_QueryUPDATE ("can not confirm user's enrolment",
-		   "UPDATE crs_users"
-		     " SET Accepted='Y'"
-		   " WHERE CrsCod=%ld"
-		     " AND UsrCod=%ld",
-                   Gbl.Hierarchy.Crs.CrsCod,
-                   UsrCod);
-  }
-
-/*****************************************************************************/
 /******************* Ask if really wanted to remove a user *******************/
 /*****************************************************************************/
 
@@ -4192,9 +4162,9 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
         }
       Frm_BeginForm (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      Pwd_AskForConfirmationOnDangerousAction ();
-      Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
-                                   Txt_Remove_user_from_this_course);
+	 Pwd_AskForConfirmationOnDangerousAction ();
+	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
+				      Txt_Remove_user_from_this_course);
       Frm_EndForm ();
 
       /* End alert */
@@ -4309,66 +4279,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/*********** Remove all users' requests for inscription in a course **********/
-/*****************************************************************************/
-
-void Enr_DB_RemCrsRequests (long CrsCod)
-  {
-   DB_QueryDELETE ("can not remove requests for inscription to a course",
-		   "DELETE FROM crs_requests"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/************ Remove user's requests for inscription from a course ***********/
-/*****************************************************************************/
-
-void Enr_DB_RemUsrRequests (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's requests for inscription",
-		   "DELETE FROM crs_requests"
-		   " WHERE UsrCod=%ld",
-	           UsrCod);
-  }
-
-/*****************************************************************************/
-/*************** Remove all users from settings in a course ******************/
-/*****************************************************************************/
-
-void Enr_DB_RemAllUsrsFromCrsSettings (long CrsCod)
-  {
-   DB_QueryDELETE ("can not remove users from a course settings",
-		   "DELETE FROM crs_user_settings"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/*************** Remove all users from settings in a course ******************/
-/*****************************************************************************/
-
-void Enr_DB_RemAllUsrsFromCrs (long CrsCod)
-  {
-   DB_QueryDELETE ("can not remove users from a course",
-		   "DELETE FROM crs_users"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/************************ Remove a user from a course ************************/
-/*****************************************************************************/
-
-void Enr_DB_RemUsrFromAllCrss (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove a user from all courses",
-		   "DELETE FROM crs_users"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
 /** Ask if really wanted to remove an administrator from current institution */
 /*****************************************************************************/
 
@@ -4440,30 +4350,4 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,HieLvl_Level_t Scope,
    else        // User is not an administrator of the current institution/center/degree
       Ale_ShowAlert (Ale_ERROR,Txt_THE_USER_X_is_not_an_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
-  }
-
-/*****************************************************************************/
-/******* Remove user as administrator of any degree/center/institution *******/
-/*****************************************************************************/
-
-void Enr_DB_RemUsrAsAdmin (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove a user as administrator",
-		   "DELETE FROM usr_admins"
-		   " WHERE UsrCod=%ld",
-                   UsrCod);
-  }
-
-/*****************************************************************************/
-/********* Remove administrators of an institution, center or degree *********/
-/*****************************************************************************/
-
-void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod)
-  {
-   DB_QueryDELETE ("can not remove administrators",
-		   "DELETE FROM usr_admins"
-		   " WHERE Scope='%s'"
-		     " AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Scope),
-                   Cod);
   }

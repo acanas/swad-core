@@ -32,6 +32,7 @@
 
 #include "swad_database.h"
 #include "swad_department.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"

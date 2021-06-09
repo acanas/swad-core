@@ -38,7 +38,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_department.h"
-#include "swad_enrolment.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_follow_database.h"
 #include "swad_form.h"
@@ -4088,7 +4088,7 @@ void Rec_ChgCountryOfMyInstitution (void)
     }
 
    /***** Update institution, center and department *****/
-   Enr_UpdateInstitutionCenterDepartment ();
+   Enr_DB_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4126,7 +4126,7 @@ void Rec_UpdateMyInstitution (void)
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = (NumDpts ? -1L : 0);
 
    /***** Update institution, center and department *****/
-   Enr_UpdateInstitutionCenterDepartment ();
+   Enr_DB_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4159,7 +4159,7 @@ void Rec_UpdateMyCenter (void)
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.CtrCod;
 
    /***** Update institution, center and department *****/
-   Enr_UpdateInstitutionCenterDepartment ();
+   Enr_DB_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4190,7 +4190,7 @@ void Rec_UpdateMyDepartment (void)
 
    /***** Update institution, center and department *****/
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = Dpt.DptCod;
-   Enr_UpdateInstitutionCenterDepartment ();
+   Enr_DB_UpdateInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
