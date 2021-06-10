@@ -52,17 +52,21 @@ void Enr_DB_UpdateInstitutionCenterDepartment (void);
 
 void Enr_DB_AcceptUsrInCrs (long UsrCod);
 
+unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelected);
 unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
-long Enr_DB_GetMyLastEnrolmentRequestInCurrentCrs (void);
+long Enr_DB_GetUsrEnrolmentRequestInCrs (long CrsCod,long UsrCod);
 long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
 void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
-
+void Enr_DB_RemRequest (long ReqCod);
 void Enr_DB_RemCrsRequests (long CrsCod);
 void Enr_DB_RemUsrRequests (long UsrCod);
+
 void Enr_DB_RemAllUsrsFromCrsSettings (long CrsCod);
 void Enr_DB_RemAllUsrsFromCrs (long CrsCod);
 void Enr_DB_RemUsrFromAllCrss (long UsrCod);
+
 void Enr_DB_RemUsrAsAdmin (long UsrCod);
 void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod);
+void Enr_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod);
 
 #endif
