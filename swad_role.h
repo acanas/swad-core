@@ -64,4 +64,7 @@ unsigned Rol_GetSelectedRoles (void);
 
 Rol_Role_t Rol_GetRequestedRole (long UsrCod);
 
+unsigned Rol_DB_GetUsrRoleInCrs (MYSQL_RES **mysql_res,long CrsCod,long UsrCod);
+void Rol_DB_UpdateUsrRoleInCurrentCrs (long UsrCod,Rol_Role_t NewRole);
+
 #endif

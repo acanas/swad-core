@@ -86,7 +86,6 @@ void Enr_ReqAcceptRegisterInCrs (void);
 void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
-void Enr_FilterUsrDat (struct UsrData *UsrDat);
 
 void Enr_ReqAdminStds (void);
 void Enr_ReqAdminNonEditingTchs (void);

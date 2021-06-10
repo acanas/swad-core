@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_ID.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -49,9 +50,7 @@ unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
 bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1]);
 bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
-void Acc_DB_CreateNewUsr (struct UsrData *UsrDat);
-void Acc_DB_CreateNewUsrID (long UsrCod,
-		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            bool Confirmed);
+long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat);
+void Acc_DB_UpdateUsrData (const struct UsrData *UsrDat);
 
 #endif

@@ -384,6 +384,7 @@ void Usr_WelcomeUsr (void);
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1]);
+void Usr_FilterUsrBirthday (struct Date *Birthday);
 
 void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);
@@ -550,5 +551,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
 void Usr_PutWhoIcon (Usr_Who_t Who);
 void Usr_PutHiddenParamWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetHiddenParamWho (void);
+
+unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
 
 #endif

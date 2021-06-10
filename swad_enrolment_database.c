@@ -81,6 +81,25 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/*************** Register user in current course in database *****************/
+/*****************************************************************************/
+
+void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
+                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
+  {
+   DB_QueryINSERT ("can not register user in course",
+		   "INSERT INTO crs_users"
+		   " (CrsCod,UsrCod,Role,Accepted)"
+		   " VALUES"
+		   " (%ld,%ld,%u,'%c')",
+	           Gbl.Hierarchy.Crs.CrsCod,
+	           UsrCod,
+	           (unsigned) NewRole,
+	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
+							           'N');
+  }
+
+/*****************************************************************************/
 /**************** Update institution, center and department ******************/
 /*****************************************************************************/
 
@@ -114,6 +133,73 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod)
 		     " AND UsrCod=%ld",
                    Gbl.Hierarchy.Crs.CrsCod,
                    UsrCod);
+  }
+
+/*****************************************************************************/
+/****** Get enrolment request (user and requested role) given its code *******/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get enrolment request",
+		   "SELECT UsrCod,"		// row[0]
+			  "Role"		// row[1]
+		    " FROM crs_requests"
+		   " WHERE ReqCod=%ld",
+		   ReqCod);
+  }
+
+/*****************************************************************************/
+/*** Try to get and old request of me in the current course from database ****/
+/*****************************************************************************/
+
+long Enr_DB_GetMyLastEnrolmentRequestInCurrentCrs (void)
+  {
+   return
+   DB_QuerySELECTCode ("can not get enrolment request",
+		       "SELECT ReqCod"
+			" FROM crs_requests"
+		       " WHERE CrsCod=%ld"
+			 " AND UsrCod=%ld",
+		       Gbl.Hierarchy.Crs.CrsCod,
+		       Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************ Create my enrolment request in the current course **************/
+/*****************************************************************************/
+
+long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not save enrolment request",
+				"INSERT INTO crs_requests"
+				" (CrsCod,UsrCod,Role,RequestTime)"
+				" VALUES"
+				" (%ld,%ld,%u,NOW())",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				(unsigned) NewRole);
+  }
+
+/*****************************************************************************/
+/************* Update my enrolment request in the current course *************/
+/*****************************************************************************/
+
+void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole)
+  {
+   DB_QueryUPDATE ("can not update enrolment request",
+		   "UPDATE crs_requests"
+		     " SET Role=%u,"
+			  "RequestTime=NOW()"
+		   " WHERE ReqCod=%ld"
+		     " AND CrsCod=%ld"
+		     " AND UsrCod=%ld",
+		   (unsigned) NewRole,
+		   ReqCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

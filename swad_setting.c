@@ -401,7 +401,35 @@ void Set_EndOneSettingSelector (void)
   }
 
 /*****************************************************************************/
-/************************ Remove a user from a course ************************/
+/************ Register last prefs in current course in database **************/
+/*****************************************************************************/
+
+void Set_DB_InsertUsrInCurrentCrsSettings (long UsrCod)
+  {
+   extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
+
+   DB_QueryINSERT ("can not register user in course",
+		   "INSERT INTO crs_user_settings"
+		   " (UsrCod,CrsCod,"
+		     "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
+		     "NumAccTst,LastAccTst,NumQstsLastTst,"
+		     "UsrListType,ColsClassPhoto,ListWithPhotos)"
+		   " VALUES"
+		   " (%ld,%ld,"
+		     "-1,-1,-1,"
+		     "0,FROM_UNIXTIME(%ld),0,"
+		     "'%s',%u,'%c')",
+	           UsrCod,
+	           Gbl.Hierarchy.Crs.CrsCod,
+	           (long) (time_t) 0,	// The user never accessed to tests in this course
+	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
+	           Usr_CLASS_PHOTO_COLS_DEF,
+	           Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
+					      'N');
+  }
+
+/*****************************************************************************/
+/******************** Remove a user from course settings *********************/
 /*****************************************************************************/
 
 void Set_DB_RemCrsUsrSettings (long UsrCod)

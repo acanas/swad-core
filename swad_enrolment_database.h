@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 // #include "swad_course.h"
+#include "swad_enrolment.h"
 #include "swad_hierarchy.h"
 // #include "swad_notification.h"
 // #include "swad_user.h"
@@ -44,9 +45,17 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
+                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
+
 void Enr_DB_UpdateInstitutionCenterDepartment (void);
 
 void Enr_DB_AcceptUsrInCrs (long UsrCod);
+
+unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
+long Enr_DB_GetMyLastEnrolmentRequestInCurrentCrs (void);
+long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
+void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
 
 void Enr_DB_RemCrsRequests (long CrsCod);
 void Enr_DB_RemUsrRequests (long UsrCod);

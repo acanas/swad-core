@@ -108,8 +108,9 @@ bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_A
 /*****************************************************************************/
 /****************************** Create new user ******************************/
 /*****************************************************************************/
+// Return new user's code
 
-void Acc_DB_CreateNewUsr (struct UsrData *UsrDat)
+long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
@@ -120,7 +121,7 @@ void Acc_DB_CreateNewUsr (struct UsrData *UsrDat)
 
    /***** Create new user *****/
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-   UsrDat->UsrCod =
+   return
    DB_QueryINSERTandReturnCode ("can not create user",
  	                        "INSERT INTO usr_data"
 				" (EncryptedUsrCod,Password,"
@@ -164,22 +165,41 @@ void Acc_DB_CreateNewUsr (struct UsrData *UsrDat)
 				(unsigned) Cfg_DEFAULT_COLUMNS);
   }
 
-
 /*****************************************************************************/
-/*************************** Create new user's ID ****************************/
+/***************************** Update user's data ****************************/
 /*****************************************************************************/
+// UsrDat->UsrCod must be > 0
 
-void Acc_DB_CreateNewUsrID (long UsrCod,
-		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            bool Confirmed)
+void Acc_DB_UpdateUsrData (const struct UsrData *UsrDat)
   {
-   DB_QueryINSERT ("can not store user's ID when creating user",
-		   "INSERT INTO usr_ids"
-		   " (UsrCod,UsrID,CreatTime,Confirmed)"
-		   " VALUES"
-		   " (%ld,'%s',NOW(),'%c')",
-		   UsrCod,
-		   ID,
-		   Confirmed ? 'Y' :
-			       'N');
+   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
+
+   /***** Update user's common data *****/
+   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
+   DB_QueryUPDATE ("can not update user's data",
+		   "UPDATE usr_data"
+		     " SET Password='%s',"
+		          "Surname1='%s',"
+		          "Surname2='%s',"
+		          "FirstName='%s',"
+		          "Sex='%s',"
+		          "CtyCod=%ld,"
+		          "LocalPhone='%s',"
+		          "FamilyPhone='%s',"
+		          "Birthday=%s,"
+		          "Comments='%s'"
+		   " WHERE UsrCod=%ld",
+	           UsrDat->Password,
+	           UsrDat->Surname1,
+	           UsrDat->Surname2,
+	           UsrDat->FrstName,
+	           Usr_StringsSexDB[UsrDat->Sex],
+	           UsrDat->CtyCod,
+	           UsrDat->Phone[0],
+	           UsrDat->Phone[1],
+	           BirthdayStrDB,
+	           UsrDat->Comments ? UsrDat->Comments :
+				      "",
+	           UsrDat->UsrCod);
   }

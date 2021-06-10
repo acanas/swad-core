@@ -648,3 +648,35 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      UsrCod);
   }
+
+/*****************************************************************************/
+/******************* Get user's role in course from database *****************/
+/*****************************************************************************/
+
+unsigned Rol_DB_GetUsrRoleInCrs (MYSQL_RES **mysql_res,long CrsCod,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's role in course",
+		   "SELECT Role"		// row[0]
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld",
+		   CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************* Update the role of a user in the current course ***************/
+/*****************************************************************************/
+
+void Rol_DB_UpdateUsrRoleInCurrentCrs (long UsrCod,Rol_Role_t NewRole)
+  {
+   DB_QueryUPDATE ("can not modify user's role in course",
+		   "UPDATE crs_users"
+		     " SET Role=%u"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld",
+	           (unsigned) NewRole,
+	           Gbl.Hierarchy.Crs.CrsCod,
+	           UsrCod);
+  }

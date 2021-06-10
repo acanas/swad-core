@@ -733,11 +733,11 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    Acc_CreateNewEncryptedUsrCod (UsrDat);
 
    /***** Filter some user's data before inserting */
-   Enr_FilterUsrDat (UsrDat);
+   Usr_FilterUsrBirthday (&UsrDat->Birthday);
 
    /***** Insert new user in database *****/
    /* Insert user's data */
-   Acc_DB_CreateNewUsr (UsrDat);
+   UsrDat->UsrCod = Acc_DB_CreateNewUsr (UsrDat);
 
    /* Insert user's IDs as confirmed */
    for (NumID = 0;
@@ -745,7 +745,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      Acc_DB_CreateNewUsrID (UsrDat->UsrCod,
+      ID_DB_InsertANewUsrID (UsrDat->UsrCod,
 		             UsrDat->IDs.List[NumID].ID,
 		             UsrDat->IDs.List[NumID].Confirmed);
      }

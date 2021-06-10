@@ -133,7 +133,7 @@ void Err_WrongDepartmentExit (void)
 
 void Err_WrongPlaceExit (void)
   {
-   Err_ShowErrorAndExit ("Wrong department.");
+   Err_ShowErrorAndExit ("Wrong place.");
   }
 
 /*****************************************************************************/

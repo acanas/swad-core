@@ -2780,6 +2780,20 @@ static void Usr_InsertMyBirthday (void)
   }
 
 /*****************************************************************************/
+/************************* Filter some user's data ***************************/
+/*****************************************************************************/
+
+void Usr_FilterUsrBirthday (struct Date *Birthday)
+  {
+   /***** Fix birthday *****/
+   if (Birthday->Year < Gbl.Now.Date.Year-99 ||
+       Birthday->Year > Gbl.Now.Date.Year-16)
+      Birthday->Year  =
+      Birthday->Month =
+      Birthday->Day   = 0;
+  }
+
+/*****************************************************************************/
 /************************ Write form for user log in *************************/
 /*****************************************************************************/
 
@@ -10346,4 +10360,29 @@ Usr_Who_t Usr_GetHiddenParamWho (void)
                                                 1,
                                                 Usr_NUM_WHO - 1,
                                                 Usr_WHO_UNKNOWN);
+  }
+
+/*****************************************************************************/
+/************************* Get old users from database ***********************/
+/*****************************************************************************/
+
+unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get old users",
+		   "SELECT UsrCod"
+		    " FROM (SELECT UsrCod"
+			    " FROM usr_last"
+			   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%llu)"
+			   " UNION "
+			   "SELECT UsrCod"
+			    " FROM usr_data"
+			   " WHERE UsrCod NOT IN"
+			         " (SELECT UsrCod"
+				    " FROM usr_last)"
+			  ") AS candidate_usrs"
+		   " WHERE UsrCod NOT IN"
+		         " (SELECT DISTINCT UsrCod"
+			    " FROM crs_users)",
+		   (unsigned long long) SecondsWithoutAccess);
   }

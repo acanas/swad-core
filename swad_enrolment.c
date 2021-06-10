@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
+#include "swad_account_database.h"
 #include "swad_announcement.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"
@@ -51,6 +52,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_test_print.h"
 #include "swad_user.h"
 
@@ -211,7 +213,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
 	{
 	 Frm_BeginForm (ActReqEnrSevStd);
 	 Crs_PutParamCrsCod (CrsCod);
-	 Btn_PutCreateButtonInline (Txt_Register_students);
+	    Btn_PutCreateButtonInline (Txt_Register_students);
 	 Frm_EndForm ();
 	}
   }
@@ -237,7 +239,11 @@ void Enr_PutLinkToRequestSignUp (void)
 
 void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
   {
-   /***** Check if user's role is allowed *****/
+   /***** Trivial check 1: current course code should be > 0 *****/
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      Err_WrongCourseExit ();
+
+   /***** Trivial check 2: check if user's role is allowed *****/
    switch (NewRole)
      {
       case Rol_STD:
@@ -249,14 +255,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   DB_QueryUPDATE ("can not modify user's role in course",
-		   "UPDATE crs_users"
-		     " SET Role=%u"
-		   " WHERE CrsCod=%ld"
-		     " AND UsrCod=%ld",
-	           (unsigned) NewRole,
-	           Gbl.Hierarchy.Crs.CrsCod,
-	           UsrDat->UsrCod);
+   Rol_DB_UpdateUsrRoleInCurrentCrs (UsrDat->UsrCod,NewRole);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -281,9 +280,11 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
 void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
-   extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
+   /***** Trivial check 1: current course code should be > 0 *****/
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      Err_WrongCourseExit ();
 
-   /***** Check if user's role is allowed *****/
+   /***** Trivial check 2: check if user's role is allowed *****/
    switch (NewRole)
      {
       case Rol_STD:
@@ -295,36 +296,10 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Register user in current course in database *****/
-   DB_QueryINSERT ("can not register user in course",
-		   "INSERT INTO crs_users"
-		   " (CrsCod,UsrCod,Role,Accepted)"
-		   " VALUES"
-		   " (%ld,%ld,%u,'%c')",
-	           Gbl.Hierarchy.Crs.CrsCod,
-	           UsrDat->UsrCod,
-	           (unsigned) NewRole,
-	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
-							           'N');
+   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,NewRole,KeepOrSetAccepted);
 
    /***** Register last prefs in current course in database *****/
-   DB_QueryINSERT ("can not register user in course",
-		   "INSERT INTO crs_user_settings"
-		   " (UsrCod,CrsCod,"
-		     "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
-		     "NumAccTst,LastAccTst,NumQstsLastTst,"
-		     "UsrListType,ColsClassPhoto,ListWithPhotos)"
-		   " VALUES"
-		   " (%ld,%ld,"
-		     "-1,-1,-1,"
-		     "0,FROM_UNIXTIME(%ld),0,"
-		     "'%s',%u,'%c')",
-	           UsrDat->UsrCod,
-	           Gbl.Hierarchy.Crs.CrsCod,
-	           (long) (time_t) 0,	// The user never accessed to tests in this course
-	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
-	           Usr_CLASS_PHOTO_COLS_DEF,
-	           Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
-					      'N');
+   Set_DB_InsertUsrInCurrentCrsSettings (UsrDat->UsrCod);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -522,12 +497,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';        // Return nothing on error
 
    /***** Get user's role in course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's role in course",
-		       "SELECT Role"		// row[0]
-		        " FROM crs_users"
-		       " WHERE CrsCod=%ld"
-		         " AND UsrCod=%ld",
-		       CrsCod,UsrCod) == 1)	// Result should have a unique row
+   if (Rol_DB_GetUsrRoleInCrs (&mysql_res,CrsCod,UsrCod) == 1)	// Result should have a unique row
      {
       /***** Get user's role in course *****/
       row = mysql_fetch_row (mysql_res);
@@ -561,57 +531,15 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Enr_UpdateUsrData (struct UsrData *UsrDat)
   {
-   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
-
    /***** Check if user's code is initialized *****/
    if (UsrDat->UsrCod <= 0)
       Err_WrongUserExit ();
 
    /***** Filter some user's data before updating */
-   Enr_FilterUsrDat (UsrDat);
+   Usr_FilterUsrBirthday (&UsrDat->Birthday);
 
    /***** Update user's common data *****/
-   Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);	// It can include start and ending apostrophes
-   DB_QueryUPDATE ("can not update user's data",
-		   "UPDATE usr_data"
-		     " SET Password='%s',"
-		          "Surname1='%s',"
-		          "Surname2='%s',"
-		          "FirstName='%s',"
-		          "Sex='%s',"
-		          "CtyCod=%ld,"
-		          "LocalPhone='%s',"
-		          "FamilyPhone='%s',"
-		          "Birthday=%s,"
-		          "Comments='%s'"
-		   " WHERE UsrCod=%ld",
-	           UsrDat->Password,
-	           UsrDat->Surname1,
-	           UsrDat->Surname2,
-	           UsrDat->FrstName,
-	           Usr_StringsSexDB[UsrDat->Sex],
-	           UsrDat->CtyCod,
-	           UsrDat->Phone[0],
-	           UsrDat->Phone[1],
-	           BirthdayStrDB,
-	           UsrDat->Comments ? UsrDat->Comments :
-				      "",
-	           UsrDat->UsrCod);
-  }
-
-/*****************************************************************************/
-/************************* Filter some user's data ***************************/
-/*****************************************************************************/
-
-void Enr_FilterUsrDat (struct UsrData *UsrDat)
-  {
-   /***** Fix birthday *****/
-   if (UsrDat->Birthday.Year < Gbl.Now.Date.Year-99 ||
-       UsrDat->Birthday.Year > Gbl.Now.Date.Year-16)
-      UsrDat->Birthday.Year  =
-      UsrDat->Birthday.Month =
-      UsrDat->Birthday.Day   = 0;
+   Acc_DB_UpdateUsrData (UsrDat);
   }
 
 /*****************************************************************************/
@@ -878,24 +806,7 @@ void Enr_RemoveOldUsrs (void)
    SecondsWithoutAccess = (time_t) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 
    /***** Get old users from database *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get old users",
-		   "SELECT UsrCod"
-		    " FROM (SELECT UsrCod"
-			    " FROM usr_last"
-			   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-			   " UNION "
-			   "SELECT UsrCod"
-			    " FROM usr_data"
-			   " WHERE UsrCod NOT IN"
-			         " (SELECT UsrCod"
-				    " FROM usr_last)"
-			  ") AS candidate_usrs"
-		   " WHERE UsrCod NOT IN"
-		         " (SELECT DISTINCT UsrCod"
-			    " FROM crs_users)",
-		   (unsigned long) SecondsWithoutAccess);
-   if (NumUsrs)
+   if ((NumUsrs = Usr_DB_GetOldUsrs (&mysql_res,SecondsWithoutAccess)))
      {
       Ale_ShowAlert (Ale_INFO,Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
                      NumUsrs,
@@ -2005,38 +1916,14 @@ void Enr_SignUpInCrs (void)
             RoleFromForm == Rol_TCH))
          Err_WrongRoleExit ();
 
-      /***** Try to get and old request of the same user in the same course from database *****/
-      ReqCod = DB_QuerySELECTCode ("can not get enrolment request",
-				   "SELECT ReqCod"
-				    " FROM crs_requests"
-				   " WHERE CrsCod=%ld"
-				     " AND UsrCod=%ld",
-				   Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+      /***** Try to get and old request of the same user (me) in the current course *****/
+      ReqCod = Enr_DB_GetMyLastEnrolmentRequestInCurrentCrs ();
 
       /***** Request user in current course in database *****/
-      if (ReqCod > 0)        // Old request exists in database
-         DB_QueryUPDATE ("can not update enrolment request",
-			 "UPDATE crs_requests"
-			   " SET Role=%u,"
-			        "RequestTime=NOW()"
-			 " WHERE ReqCod=%ld"
-			   " AND CrsCod=%ld"
-			   " AND UsrCod=%ld",
-		         (unsigned) RoleFromForm,
-		         ReqCod,
-		         Gbl.Hierarchy.Crs.CrsCod,
-		         Gbl.Usrs.Me.UsrDat.UsrCod);
-      else                // No request in database for this user in this course
-         ReqCod =
-         DB_QueryINSERTandReturnCode ("can not save enrolment request",
-				      "INSERT INTO crs_requests"
-				      " (CrsCod,UsrCod,Role,RequestTime)"
-				      " VALUES"
-				      " (%ld,%ld,%u,NOW())",
-				      Gbl.Hierarchy.Crs.CrsCod,
-				      Gbl.Usrs.Me.UsrDat.UsrCod,
-				      (unsigned) RoleFromForm);
+      if (ReqCod > 0)	// Old request exists in database
+	 Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (ReqCod,RoleFromForm);
+      else		// No request in database for this user in this course
+         ReqCod = Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (RoleFromForm);
 
       /***** Show confirmation message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing,
@@ -2073,12 +1960,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';        // Return nothing on error
 
    /***** Get user and requested role from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get enrolment request",
-		       "SELECT UsrCod,"		// row[0]
-		              "Role"		// row[1]
-		        " FROM crs_requests"
-		       " WHERE ReqCod=%ld",
-		       ReqCod) == 1)	// Result should have a unique row
+   if (Enr_DB_GetEnrolmentRequestByCod (&mysql_res,ReqCod) == 1)	// Result should have a unique row
      {
       /***** Get user and requested role *****/
       row = mysql_fetch_row (mysql_res);

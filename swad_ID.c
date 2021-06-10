@@ -83,7 +83,25 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID);
 static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe);
-static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed);
+
+/*****************************************************************************/
+/*************************** Create new user's ID ****************************/
+/*****************************************************************************/
+
+void ID_DB_InsertANewUsrID (long UsrCod,
+		            const char ID[ID_MAX_BYTES_USR_ID + 1],
+		            bool Confirmed)
+  {
+   DB_QueryINSERT ("can not create user's ID",
+		   "INSERT INTO usr_ids"
+		   " (UsrCod,UsrID,CreatTime,Confirmed)"
+		   " VALUES"
+		   " (%ld,'%s',NOW(),'%c')",
+		   UsrCod,
+		   ID,
+		   Confirmed ? 'Y' :
+			       'N');
+  }
 
 /*****************************************************************************/
 /********************** Get list of IDs of a user ****************************/
@@ -982,7 +1000,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    /***** Save this new ID *****/
 	    // It's me ==> ID not confirmed
 	    // Not me  ==> ID confirmed
-	    ID_InsertANewUsrIDInDB (UsrDat->UsrCod,NewID,!ItsMe);
+	    ID_DB_InsertANewUsrID (UsrDat->UsrCod,NewID,!ItsMe);
 
 	    Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
 		             Txt_The_ID_X_has_been_registered_successfully,
@@ -996,24 +1014,6 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
    else
       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-  }
-
-/*****************************************************************************/
-/******************* Insert a new ID for me in database **********************/
-/*****************************************************************************/
-
-static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed)
-  {
-   /***** Update my nickname in database *****/
-   DB_QueryINSERT ("can not insert a new ID",
-		   "INSERT INTO usr_ids"
-		   " (UsrCod,UsrID,CreatTime,Confirmed)"
-		   " VALUES"
-		   " (%ld,'%s',NOW(),'%c')",
-	           UsrCod,
-	           NewID,
-	           Confirmed ? 'Y' :
-			       'N');
   }
 
 /*****************************************************************************/

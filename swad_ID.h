@@ -55,6 +55,10 @@ struct ListIDs
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void ID_DB_InsertANewUsrID (long UsrCod,
+		            const char ID[ID_MAX_BYTES_USR_ID + 1],
+		            bool Confirmed);
+
 void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat);
 void ID_ReallocateListIDs (struct UsrData *UsrDat,unsigned NumIDs);
 void ID_FreeListIDs (struct UsrData *UsrDat);
