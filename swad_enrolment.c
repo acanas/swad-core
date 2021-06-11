@@ -32,6 +32,7 @@
 
 #include "swad_account.h"
 #include "swad_account_database.h"
+#include "swad_admin.h"
 #include "swad_announcement.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"
@@ -64,22 +65,6 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const bool Enr_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
-  {
-   /* Users who can not admin */
-   [Rol_UNK    ] = false,
-   [Rol_GST    ] = false,
-   [Rol_USR    ] = false,
-   [Rol_STD    ] = false,
-   [Rol_NET    ] = false,
-   /* Users who can admin */
-   [Rol_TCH    ] = true,
-   [Rol_DEG_ADM] = true,
-   [Rol_CTR_ADM] = true,
-   [Rol_INS_ADM] = true,
-   [Rol_SYS_ADM] = true,
-  };
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -94,12 +79,6 @@ typedef enum
    Enr_UPDATE_USRS_IN_CRS                 = 4,
    Enr_ELIMINATE_USRS_FROM_PLATFORM       = 5,
   } Enr_RegRemUsrsAction_t;
-
-typedef enum
-  {
-   Enr_REQUEST_REMOVE_USR,
-   Enr_REMOVE_USR,
-  } Enr_ReqDelOrDelUsr_t;
 
 /* Remove important user production (works and match results)? */
 typedef enum
@@ -163,27 +142,13 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 
 static void Enr_ShowFormToEditOtherUsr (void);
 
-static void Enr_AddAdm (HieLvl_Level_t Scope,long Cod,const char *InsCtrDegName);
-static void Enr_RegisterAdmin (struct UsrData *UsrDat,HieLvl_Level_t Scope,
-                               long Cod,const char *InsCtrDegName);
-
 static bool Enr_CheckIfICanRemUsrFromCrs (void);
 
-static void Enr_ReqRemAdmOfDeg (void);
-static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,HieLvl_Level_t Scope,
-                                long Cod,const char *InsCtrDegName);
-
-static void Enr_ReqAddAdm (HieLvl_Level_t Scope,long Cod,const char *InsCtrDegName);
 static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat);
 static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 					  struct Crs_Course *Crs,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose);
-
-static void Enr_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
-			     const char *InsCtrDegName);
-static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,HieLvl_Level_t Scope,
-                                   long Cod,const char *InsCtrDegName);
 
 /*****************************************************************************/
 /** Check if current course has students and show warning no students found **/
@@ -2419,9 +2384,10 @@ static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
+   extern const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES];
    extern const char *Txt_Administer_me;
    extern const char *Txt_Administer_one_user;
-   const char *TitleText = Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged] ? Txt_Administer_one_user :
+   const char *TitleText = Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged] ? Txt_Administer_one_user :
                         	                                             Txt_Administer_me;
 
    Lay_PutContextualLinkIconText (NextAction,NULL,
@@ -2479,11 +2445,13 @@ void Enr_ReqRegRemOth (void)
 
 void Enr_ReqRegRemStd (void)
   {
+   extern const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES];
+
    /***** Contextual menu *****/
-   if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
+   if (Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
      {
       Mnu_ContextMenuBegin ();
-      Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
+	 Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
       Mnu_ContextMenuEnd ();
      }
 
@@ -2499,7 +2467,9 @@ void Enr_ReqRegRemTch (void)
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
-   if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
+   extern const bool Adm_ICanAdminOtherUsrs[Rol_NUM_ROLES];
+
+   if (Adm_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
       /***** Form to request the user's ID of another user *****/
       Enr_ReqAnotherUsrIDToRegisterRemove (Role);
    else
@@ -2721,90 +2691,6 @@ static void Enr_ShowFormToEditOtherUsr (void)
   }
 
 /*****************************************************************************/
-/*************** Add an administrator to current institution *****************/
-/*****************************************************************************/
-
-void Enr_AddAdmToIns (void)
-  {
-   Enr_AddAdm (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.FullName);
-  }
-
-/*****************************************************************************/
-/******************* Add an administrator to current center ******************/
-/*****************************************************************************/
-
-void Enr_AddAdmToCtr (void)
-  {
-   Enr_AddAdm (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.FullName);
-  }
-
-/*****************************************************************************/
-/******************* Add an administrator to current degree ******************/
-/*****************************************************************************/
-
-void Enr_AddAdmToDeg (void)
-  {
-   Enr_AddAdm (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.FullName);
-  }
-
-/*****************************************************************************/
-/******************* Add an administrator to current degree ******************/
-/*****************************************************************************/
-
-static void Enr_AddAdm (HieLvl_Level_t Scope,long Cod,const char *InsCtrDegName)
-  {
-   bool ICanRegister;
-
-   if (Cod > 0)
-     {
-      /***** Get plain user's ID of the user to add/modify *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if I am allowed to register user as administrator in institution/center/degree */
-	 ICanRegister = ((Scope == HieLvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                         (Scope == HieLvl_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                         (Scope == HieLvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
-         if (ICanRegister)
-           {
-            /***** Register administrator in current institution/center/degree in database *****/
-            Enr_RegisterAdmin (&Gbl.Usrs.Other.UsrDat,Scope,
-                               Cod,InsCtrDegName);
-
-            /***** Show user's record *****/
-            Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-           }
-         else
-            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-        }
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
-  }
-
-/*****************************************************************************/
-/**************** Register administrator in current institution **************/
-/*****************************************************************************/
-
-static void Enr_RegisterAdmin (struct UsrData *UsrDat,HieLvl_Level_t Scope,long Cod,const char *InsCtrDegName)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
-   extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
-
-   /***** Check if user was and administrator of current institution/center/degree *****/
-   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
-      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_is_already_an_administrator_of_Y,
-                     UsrDat->FullName,InsCtrDegName);
-   else        // User was not administrator of current institution/center/degree
-     {
-      /***** Insert or replace administrator in current institution/center/degree *****/
-      Enr_DB_InsertAdmin (UsrDat->UsrCod,Scope,Cod);
-
-      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
-                     UsrDat->FullName,InsCtrDegName);
-     }
-  }
-
-/*****************************************************************************/
 /****************** Ask for remove me from current course ********************/
 /*****************************************************************************/
 
@@ -2888,178 +2774,6 @@ static bool Enr_CheckIfICanRemUsrFromCrs (void)
 	 return false;
      }
    return false;
-  }
-
-/*****************************************************************************/
-/******* Ask for remove of an administrator from current institution *********/
-/*****************************************************************************/
-
-static void Enr_ReqRemAdmOfIns (void)
-  {
-   Enr_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR,HieLvl_INS,
-                       Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.FullName);
-  }
-
-/*****************************************************************************/
-/********* Ask for remove of an administrator from current center ************/
-/*****************************************************************************/
-
-static void Enr_ReqRemAdmOfCtr (void)
-  {
-   Enr_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR,HieLvl_CTR,
-                       Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.FullName);
-  }
-
-/*****************************************************************************/
-/********* Ask for remove of an administrator from current degree ************/
-/*****************************************************************************/
-
-static void Enr_ReqRemAdmOfDeg (void)
-  {
-   Enr_ReqRemOrRemAdm (Enr_REQUEST_REMOVE_USR,HieLvl_DEG,
-                       Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.FullName);
-  }
-
-/*****************************************************************************/
-/************ Remove an administrator from current institution ***************/
-/*****************************************************************************/
-
-void Enr_RemAdmIns (void)
-  {
-   Enr_ReqRemOrRemAdm (Enr_REMOVE_USR,HieLvl_INS,
-                       Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.FullName);
-  }
-
-/*****************************************************************************/
-/*************** Remove an administrator from current center *****************/
-/*****************************************************************************/
-
-void Enr_RemAdmCtr (void)
-  {
-   Enr_ReqRemOrRemAdm (Enr_REMOVE_USR,HieLvl_CTR,
-                       Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.FullName);
-  }
-
-/*****************************************************************************/
-/*************** Remove an administrator from current degree *****************/
-/*****************************************************************************/
-
-void Enr_RemAdmDeg (void)
-  {
-   Enr_ReqRemOrRemAdm (Enr_REMOVE_USR,HieLvl_DEG,
-                       Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.FullName);
-  }
-
-/*****************************************************************************/
-/***************** Remove an admin from current institution ******************/
-/*****************************************************************************/
-
-static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,HieLvl_Level_t Scope,
-                                long Cod,const char *InsCtrDegName)
-  {
-   extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
-   bool ItsMe;
-   bool ICanRemove;
-
-   if (Cod > 0)
-     {
-      /***** Get user to be removed *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if it's forbidden to remove an administrator */
-         ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-         ICanRemove = (ItsMe ||
-                       (Scope == HieLvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                       (Scope == HieLvl_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                       (Scope == HieLvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
-         if (ICanRemove)
-           {
-            /* Check if the other user is an admin of the current institution/center/degree */
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))
-              {                // The other user is an administrator of current institution/center/degree ==> ask for removing or remove her/him
-               switch (ReqDelOrDelUsr)
-                 {
-                  case Enr_REQUEST_REMOVE_USR:     // Ask if remove administrator from current institution
-                     Enr_AskIfRemAdm (ItsMe,Scope,InsCtrDegName);
-                     break;
-                  case Enr_REMOVE_USR:             // Remove administrator from current institution
-                     Enr_EffectivelyRemAdm (&Gbl.Usrs.Other.UsrDat,Scope,
-                                            Cod,InsCtrDegName);
-                     break;
-                 }
-              }
-            else        // The other user is not an administrator of current institution
-               Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_not_an_administrator_of_Y,
-                              Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
-           }
-         else
-            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-        }
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
-  }
-
-/*****************************************************************************/
-/**** Ask if really wanted to add an administrator to current institution ****/
-/*****************************************************************************/
-
-static void Enr_ReqAddAdm (HieLvl_Level_t Scope,long Cod,const char *InsCtrDegName)
-  {
-   extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
-   extern const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X;
-   extern const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE;
-   static const Act_Action_t Enr_ActNewAdm[HieLvl_NUM_LEVELS] =
-     {
-      [HieLvl_UNK] = ActUnk,
-      [HieLvl_SYS] = ActUnk,
-      [HieLvl_CTY] = ActUnk,
-      [HieLvl_INS] = ActNewAdmIns,
-      [HieLvl_CTR] = ActNewAdmCtr,
-      [HieLvl_DEG] = ActNewAdmDeg,
-      [HieLvl_CRS] = ActUnk,
-     };
-   bool ICanRegister;
-
-   if (Cod > 0)
-     {
-      /***** Get user's identificator of the user to register as admin *****/
-      if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-        {
-         /* Check if I am allowed to register user as administrator in institution/center/degree */
-	 ICanRegister = ((Scope == HieLvl_DEG && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM) ||
-                         (Scope == HieLvl_CTR && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM) ||
-                         (Scope == HieLvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
-         if (ICanRegister)
-           {
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/center/degree
-              {
-               Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
-                              Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
-               Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-              }
-            else
-              {
-	       /***** Show question and button to register user as administrator *****/
-	       /* Begin alert */
-	       Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
-                                        InsCtrDegName);
-
-	       /* Show user's record */
-               Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-
-	       /* End alert */
-	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
-	                                Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-	                                Btn_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
-              }
-           }
-         else
-            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-        }
-      else
-         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-     }
   }
 
 /*****************************************************************************/
@@ -3376,16 +3090,13 @@ void Enr_ModifyUsr2 (void)
 	    Enr_ShowFormToEditOtherUsr ();
 	    break;
 	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
-	    Enr_ReqAddAdm (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,
-			   Gbl.Hierarchy.Deg.FullName);
+	    Adm_ReqAddAdmOfDeg ();
 	    break;
 	 case Enr_REGISTER_ONE_CENTER_ADMIN:
-	    Enr_ReqAddAdm (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,
-			   Gbl.Hierarchy.Ctr.FullName);
+	    Adm_ReqAddAdmOfCtr ();
 	    break;
 	 case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
-	    Enr_ReqAddAdm (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,
-			   Gbl.Hierarchy.Ins.FullName);
+	    Adm_ReqAddAdmOfIns ();
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    Dup_ReportUsrAsPossibleDuplicate ();
@@ -3394,13 +3105,13 @@ void Enr_ModifyUsr2 (void)
             Enr_ReqRemUsrFromCrs ();
 	    break;
 	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
-            Enr_ReqRemAdmOfDeg ();
+            Adm_ReqRemAdmOfDeg ();
 	    break;
 	 case Enr_REMOVE_ONE_CENTER_ADMIN:
-            Enr_ReqRemAdmOfCtr ();
+            Adm_ReqRemAdmOfCtr ();
 	    break;
 	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
-            Enr_ReqRemAdmOfIns ();
+            Adm_ReqRemAdmOfIns ();
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
 	    Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
@@ -3559,71 +3270,4 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
    else        // User does not belong to course
       if (QuietOrVerbose == Cns_VERBOSE)
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-  }
-
-/*****************************************************************************/
-/** Ask if really wanted to remove an administrator from current institution */
-/*****************************************************************************/
-
-static void Enr_AskIfRemAdm (bool ItsMe,HieLvl_Level_t Scope,
-			     const char *InsCtrDegName)
-  {
-   extern const char *Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X;
-   extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X;
-   extern const char *Txt_Remove_me_as_an_administrator;
-   extern const char *Txt_Remove_USER_as_an_administrator;
-   static const Act_Action_t Enr_ActRemAdm[HieLvl_NUM_LEVELS] =
-     {
-      [HieLvl_UNK] = ActUnk,
-      [HieLvl_SYS] = ActUnk,
-      [HieLvl_CTY] = ActUnk,
-      [HieLvl_INS] = ActRemAdmIns,
-      [HieLvl_CTR] = ActRemAdmCtr,
-      [HieLvl_DEG] = ActRemAdmDeg,
-      [HieLvl_CRS] = ActUnk,
-     };
-
-   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
-     {
-      /***** Show question and button to remove user as administrator *****/
-      /* Begin alert */
-      Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
-                                                    Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
-                               InsCtrDegName);
-
-      /* Show user's record */
-      Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-
-      /* End alert */
-      Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
-                               Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-                               Btn_REMOVE_BUTTON,
-                               ItsMe ? Txt_Remove_me_as_an_administrator :
-                                       Txt_Remove_USER_as_an_administrator);
-     }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
-  }
-
-/*****************************************************************************/
-/**** Remove an administrator from current institution, center or degree *****/
-/*****************************************************************************/
-
-static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,HieLvl_Level_t Scope,
-                                   long Cod,const char *InsCtrDegName)
-  {
-   extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
-   extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
-
-   if (Usr_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/center/degree
-     {
-      /***** Remove user as administrator of institution, center or degree *****/
-      Enr_DB_RemAdmin (UsrDat->UsrCod,Scope,Cod);
-
-      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
-                     UsrDat->FullName,InsCtrDegName);
-     }
-   else        // User is not an administrator of the current institution/center/degree
-      Ale_ShowAlert (Ale_ERROR,Txt_THE_USER_X_is_not_an_administrator_of_Y,
-                     UsrDat->FullName,InsCtrDegName);
   }

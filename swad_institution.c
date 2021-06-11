@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_admin_database.h"
 #include "swad_database.h"
 #include "swad_department.h"
 #include "swad_enrolment_database.h"
@@ -1366,7 +1367,7 @@ void Ins_RemoveInstitution (void)
       Fil_RemoveTree (PathIns);
 
       /***** Remove administrators of this institution *****/
-      Enr_DB_RemAdmins (HieLvl_INS,Ins_EditingIns->InsCod);
+      Adm_DB_RemAdmins (HieLvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove institution *****/
       DB_QueryDELETE ("can not remove an institution",

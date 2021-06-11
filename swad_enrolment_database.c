@@ -25,34 +25,11 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
-// #include <string.h>		// For string functions
-
-// #include "swad_account.h"
-// #include "swad_announcement.h"
-// #include "swad_attendance_database.h"
-// #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_duplicate.h"
 #include "swad_enrolment.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
-// #include "swad_exam_print.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_match.h"
-// #include "swad_message.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
-// #include "swad_role.h"
-// #include "swad_test_print.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -814,62 +791,4 @@ void Enr_DB_RemoveExpiredEnrolmentRequests (void)
 		   "DELETE LOW_PRIORITY FROM crs_requests"
 		   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
                    Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
-  }
-
-/*****************************************************************************/
-/** Insert/replace user as administrator of an institution, center or degree */
-/*****************************************************************************/
-
-void Enr_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
-  {
-   DB_QueryREPLACE ("can not create administrator",
-		    "REPLACE INTO usr_admins"
-		    " (UsrCod,Scope,Cod)"
-		    " VALUES"
-		    " (%ld,'%s',%ld)",
-		    UsrCod,
-		    Sco_GetDBStrFromScope (Scope),
-		    Cod);
-  }
-
-/*****************************************************************************/
-/***** Remove user as administrator of an institution, center or degree ******/
-/*****************************************************************************/
-
-void Enr_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
-  {
-   DB_QueryDELETE ("can not remove an administrator",
-		   "DELETE FROM usr_admins"
-		   " WHERE UsrCod=%ld"
-		     " AND Scope='%s'"
-		     " AND Cod=%ld",
-		   UsrCod,
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
-  }
-
-/*****************************************************************************/
-/******* Remove user as administrator of any degree/center/institution *******/
-/*****************************************************************************/
-
-void Enr_DB_RemUsrAsAdmin (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove a user as administrator",
-		   "DELETE FROM usr_admins"
-		   " WHERE UsrCod=%ld",
-                   UsrCod);
-  }
-
-/*****************************************************************************/
-/********* Remove administrators of an institution, center or degree *********/
-/*****************************************************************************/
-
-void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod)
-  {
-   DB_QueryDELETE ("can not remove administrators",
-		   "DELETE FROM usr_admins"
-		   " WHERE Scope='%s'"
-		     " AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Scope),
-                   Cod);
   }

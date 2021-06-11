@@ -26,6 +26,7 @@
 
 #include "swad_account.h"
 #include "swad_action.h"
+#include "swad_admin.h"
 #include "swad_agenda.h"
 #include "swad_announcement.h"
 #include "swad_attendance.h"
@@ -1449,14 +1450,14 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActRemMe_NET	] = {1641,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqRemMeFromCrs		,NULL},
    [ActRemMe_Tch	] = {1461,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReqRemMeFromCrs		,NULL},
 
-   [ActNewAdmIns	] = {1337,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_AddAdmToIns		,NULL},
-   [ActRemAdmIns	] = {1338,-1,TabUnk,ActLstOth		,0x300,0x300,0x300,0x300,0x300,0x300,0x300,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_RemAdmIns			,NULL},
+   [ActNewAdmIns	] = {1337,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Adm_AddAdmToIns		,NULL},
+   [ActRemAdmIns	] = {1338,-1,TabUnk,ActLstOth		,0x300,0x300,0x300,0x300,0x300,0x300,0x300,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Adm_RemAdmIns			,NULL},
 
-   [ActNewAdmCtr	] = {1339,-1,TabUnk,ActLstOth		,0x300,0x300,0x300,0x300,0x300,0x300,0x300,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_AddAdmToCtr		,NULL},
-   [ActRemAdmCtr	] = {1340,-1,TabUnk,ActLstOth		,0x380,0x380,0x380,0x380,0x380,0x380,0x380,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_RemAdmCtr			,NULL},
+   [ActNewAdmCtr	] = {1339,-1,TabUnk,ActLstOth		,0x300,0x300,0x300,0x300,0x300,0x300,0x300,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Adm_AddAdmToCtr		,NULL},
+   [ActRemAdmCtr	] = {1340,-1,TabUnk,ActLstOth		,0x380,0x380,0x380,0x380,0x380,0x380,0x380,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Adm_RemAdmCtr			,NULL},
 
-   [ActNewAdmDeg	] = { 586,-1,TabUnk,ActLstOth		,0x380,0x380,0x380,0x380,0x380,0x380,0x380,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_AddAdmToDeg		,NULL},
-   [ActRemAdmDeg	] = { 584,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_RemAdmDeg			,NULL},
+   [ActNewAdmDeg	] = { 586,-1,TabUnk,ActLstOth		,0x380,0x380,0x380,0x380,0x380,0x380,0x380,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Adm_AddAdmToDeg		,NULL},
+   [ActRemAdmDeg	] = { 584,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Adm_RemAdmDeg			,NULL},
 
    [ActRcvFrmEnrSevStd	] = {1428,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReceiveFormAdminStds	,NULL},
    [ActRcvFrmEnrSevNET	] = {1643,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Enr_ReceiveFormAdminNonEditTchs,NULL},

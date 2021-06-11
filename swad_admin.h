@@ -1,7 +1,7 @@
-// swad_enrolment_database.h: enrolment (registration) or removing of users, operations with database
+// swad_admin.h: administrators
 
-#ifndef _SWAD_ENR_DB
-#define _SWAD_ENR_DB
+#ifndef _SWAD_ADM
+#define _SWAD_ADM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,8 +27,12 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_admin.h"
+// #include "swad_course.h"
 #include "swad_enrolment.h"
 #include "swad_hierarchy.h"
+// #include "swad_notification.h"
+// #include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -42,21 +46,20 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
-                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
-void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
-void Enr_DB_RemUsrFromCrs (long UsrCod,long CrsCod);
-void Enr_DB_RemUsrFromAllCrss (long UsrCod);
-void Enr_DB_RemAllUsrsFromCrs (long CrsCod);
+void Adm_ReqAddAdmOfIns (void);
+void Adm_ReqAddAdmOfCtr (void);
+void Adm_ReqAddAdmOfDeg (void);
 
-unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelected);
-unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
-long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod);
-long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
-void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
-void Enr_DB_RemRequest (long ReqCod);
-void Enr_DB_RemCrsRequests (long CrsCod);
-void Enr_DB_RemUsrRequests (long UsrCod);
-void Enr_DB_RemoveExpiredEnrolmentRequests (void);
+void Adm_AddAdmToIns (void);
+void Adm_AddAdmToCtr (void);
+void Adm_AddAdmToDeg (void);
+
+void Adm_ReqRemAdmOfIns (void);
+void Adm_ReqRemAdmOfCtr (void);
+void Adm_ReqRemAdmOfDeg (void);
+
+void Adm_RemAdmIns (void);
+void Adm_RemAdmCtr (void);
+void Adm_RemAdmDeg (void);
 
 #endif

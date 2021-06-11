@@ -67,6 +67,12 @@ typedef enum
    Enr_ELIMINATE_ONE_USR_FROM_PLATFORM  = 10,
   } Enr_RegRemOneUsrAction_t;
 
+typedef enum
+  {
+   Enr_REQUEST_REMOVE_USR,
+   Enr_REMOVE_USR,
+  } Enr_ReqDelOrDelUsr_t;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -123,17 +129,11 @@ void Enr_ReqRegRemTch (void);
 void Enr_AskIfRegRemAnotherOth (void);
 void Enr_AskIfRegRemAnotherStd (void);
 void Enr_AskIfRegRemAnotherTch (void);
-void Enr_AddAdmToIns (void);
-void Enr_AddAdmToCtr (void);
-void Enr_AddAdmToDeg (void);
 
 void Enr_ReqRemMeFromCrs (void);
 void Enr_ReqRemUsrFromCrs (void);
 void Enr_RemUsrFromCrs1 (void);
 void Enr_RemUsrFromCrs2 (void);
-void Enr_RemAdmIns (void);
-void Enr_RemAdmCtr (void);
-void Enr_RemAdmDeg (void);
 
 void Enr_AcceptRegisterMeInCrs (void);
 void Enr_CreateNewUsr1 (void);

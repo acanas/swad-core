@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_admin_database.h"
 #include "swad_center.h"
 #include "swad_center_config.h"
 #include "swad_center_database.h"
@@ -1097,7 +1098,7 @@ void Ctr_RemoveCenter (void)
       Fil_RemoveTree (PathCtr);
 
       /***** Remove administrators of this center *****/
-      Enr_DB_RemAdmins (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
+      Adm_DB_RemAdmins (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove center *****/
       Ctr_DB_RemoveCenter (Ctr_EditingCtr->CtrCod);

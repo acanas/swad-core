@@ -30,6 +30,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_admin_database.h"
 #include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_degree.h"
@@ -1364,7 +1365,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   Enr_DB_RemAdmins (HieLvl_DEG,DegCod);
+   Adm_DB_RemAdmins (HieLvl_DEG,DegCod);
 
    /***** Remove the degree *****/
    Deg_DB_RemoveDeg (DegCod);

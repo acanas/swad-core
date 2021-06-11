@@ -29,6 +29,7 @@
 
 #include "swad_account.h"
 #include "swad_account_database.h"
+#include "swad_admin_database.h"
 #include "swad_agenda_database.h"
 #include "swad_announcement_database.h"
 #include "swad_attendance_database.h"
@@ -996,7 +997,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove user as administrator of any degree/center/institution *****/
-   Enr_DB_RemUsrAsAdmin (UsrDat->UsrCod);
+   Adm_DB_RemUsrAsAdmin (UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator,
