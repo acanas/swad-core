@@ -84,7 +84,7 @@ extern struct Globals Gbl;
 /*************** Register user in current course in database *****************/
 /*****************************************************************************/
 
-void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
+void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
                                    Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    DB_QueryINSERT ("can not register user in course",
@@ -92,7 +92,7 @@ void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
 		   " (CrsCod,UsrCod,Role,Accepted)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%c')",
-	           Gbl.Hierarchy.Crs.CrsCod,
+	           CrsCod,
 	           UsrCod,
 	           (unsigned) NewRole,
 	           KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
@@ -100,30 +100,10 @@ void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole,
   }
 
 /*****************************************************************************/
-/**************** Update institution, center and department ******************/
-/*****************************************************************************/
-
-void Enr_DB_UpdateInstitutionCenterDepartment (void)
-  {
-   DB_QueryUPDATE ("can not update institution, center and department",
-		   "UPDATE usr_data"
-		     " SET InsCtyCod=%ld,"
-		          "InsCod=%ld,"
-		          "CtrCod=%ld,"
-		          "DptCod=%ld"
-		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
-	           Gbl.Usrs.Me.UsrDat.InsCod,
-	           Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
-	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /********* Set a user's acceptation to true in the current course ************/
 /*****************************************************************************/
 
-void Enr_DB_AcceptUsrInCrs (long UsrCod)
+void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
   {
    /***** Set enrolment of a user to "accepted" in the current course *****/
    DB_QueryUPDATE ("can not confirm user's enrolment",
@@ -131,8 +111,46 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod)
 		     " SET Accepted='Y'"
 		   " WHERE CrsCod=%ld"
 		     " AND UsrCod=%ld",
-                   Gbl.Hierarchy.Crs.CrsCod,
+                   CrsCod,
                    UsrCod);
+  }
+
+/*****************************************************************************/
+/************************** Remove user from course **************************/
+/*****************************************************************************/
+
+void Enr_DB_RemUsrFromCrs (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove a user from a course",
+		   "DELETE FROM crs_users"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld",
+		   CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************************ Remove a user from a course ************************/
+/*****************************************************************************/
+
+void Enr_DB_RemUsrFromAllCrss (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a user from all courses",
+		   "DELETE FROM crs_users"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove all users from settings in a course ******************/
+/*****************************************************************************/
+
+void Enr_DB_RemAllUsrsFromCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove users from a course",
+		   "DELETE FROM crs_users"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -688,7 +706,7 @@ unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod)
 /********** Try to get an enrolment request from a user in a course **********/
 /*****************************************************************************/
 
-long Enr_DB_GetUsrEnrolmentRequestInCrs (long CrsCod,long UsrCod)
+long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
   {
    return
    DB_QuerySELECTCode ("can not get enrolment request",
@@ -773,39 +791,61 @@ void Enr_DB_RemUsrRequests (long UsrCod)
   }
 
 /*****************************************************************************/
-/*************** Remove all users from settings in a course ******************/
+/******************* Remove expired requests for enrolment ******************/
 /*****************************************************************************/
 
-void Enr_DB_RemAllUsrsFromCrsSettings (long CrsCod)
+void Enr_DB_RemoveExpiredEnrolmentRequests (void)
   {
-   DB_QueryDELETE ("can not remove users from a course settings",
-		   "DELETE FROM crs_user_settings"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   /***** Mark possible notifications as removed
+          Important: do this before removing the request *****/
+   DB_QueryUPDATE ("can not set notification(s) as removed",
+		   "UPDATE ntf_notifications,"
+		          "crs_requests"
+		     " SET ntf_notifications.Status=(ntf_notifications.Status | %u)"
+		   " WHERE ntf_notifications.NotifyEvent=%u"
+		     " AND ntf_notifications.Cod=crs_requests.ReqCod"
+		     " AND crs_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+	           (unsigned) Ntf_STATUS_BIT_REMOVED,
+	           (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
+	           Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
+
+   /***** Remove expired requests for enrolment *****/
+   DB_QueryDELETE ("can not remove expired requests for enrolment",
+		   "DELETE LOW_PRIORITY FROM crs_requests"
+		   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+                   Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
   }
 
 /*****************************************************************************/
-/*************** Remove all users from settings in a course ******************/
+/** Insert/replace user as administrator of an institution, center or degree */
 /*****************************************************************************/
 
-void Enr_DB_RemAllUsrsFromCrs (long CrsCod)
+void Enr_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
   {
-   DB_QueryDELETE ("can not remove users from a course",
-		   "DELETE FROM crs_users"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   DB_QueryREPLACE ("can not create administrator",
+		    "REPLACE INTO usr_admins"
+		    " (UsrCod,Scope,Cod)"
+		    " VALUES"
+		    " (%ld,'%s',%ld)",
+		    UsrCod,
+		    Sco_GetDBStrFromScope (Scope),
+		    Cod);
   }
 
 /*****************************************************************************/
-/************************ Remove a user from a course ************************/
+/***** Remove user as administrator of an institution, center or degree ******/
 /*****************************************************************************/
 
-void Enr_DB_RemUsrFromAllCrss (long UsrCod)
+void Enr_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
   {
-   DB_QueryDELETE ("can not remove a user from all courses",
-		   "DELETE FROM crs_users"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   DB_QueryDELETE ("can not remove an administrator",
+		   "DELETE FROM usr_admins"
+		   " WHERE UsrCod=%ld"
+		     " AND Scope='%s'"
+		     " AND Cod=%ld",
+		   UsrCod,
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
   }
 
 /*****************************************************************************/
@@ -832,20 +872,4 @@ void Enr_DB_RemAdmins (HieLvl_Level_t Scope,long Cod)
 		     " AND Cod=%ld",
                    Sco_GetDBStrFromScope (Scope),
                    Cod);
-  }
-
-/*****************************************************************************/
-/***** Remove user as administrator of an institution, center or degree ******/
-/*****************************************************************************/
-
-void Enr_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
-  {
-   DB_QueryDELETE ("can not remove an administrator",
-		   "DELETE FROM usr_admins"
-		   " WHERE UsrCod=%ld"
-		     " AND Scope='%s'"
-		     " AND Cod=%ld",
-		   UsrCod,
-		   Sco_GetDBStrFromScope (Scope),
-		   Cod);
   }

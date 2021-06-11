@@ -153,8 +153,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
 static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected);
 
-static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod);
-static void Enr_RemoveExpiredEnrolmentRequests (void);
+static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
@@ -296,10 +295,11 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Register user in current course in database *****/
-   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,NewRole,KeepOrSetAccepted);
+   Enr_DB_InsertUsrInCurrentCrs (UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod,
+                                 NewRole,KeepOrSetAccepted);
 
    /***** Register last prefs in current course in database *****/
-   Set_DB_InsertUsrInCurrentCrsSettings (UsrDat->UsrCod);
+   Set_DB_InsertUsrInCrsSettings (UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -344,7 +344,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Remove possible enrolment request ******/
-   Enr_RemoveEnrolmentRequest (Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod);
+   Enr_RemUsrEnrolmentRequestInCrs (UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Remove old enrolment notifications before inserting the new one ******/
    Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1,UsrDat->UsrCod);
@@ -1917,8 +1917,8 @@ void Enr_SignUpInCrs (void)
          Err_WrongRoleExit ();
 
       /***** Try to get and old request of the same user (me) in the current course *****/
-      ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (Gbl.Hierarchy.Crs.CrsCod,
-                                                   Gbl.Usrs.Me.UsrDat.UsrCod);
+      ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                   Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Request user in current course in database *****/
       if (ReqCod > 0)	// Old request exists in database
@@ -2024,7 +2024,8 @@ void Enr_AskIfRejectSignUp (void)
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
          /* Remove inscription request because it has not sense */
-         Enr_RemoveEnrolmentRequest (Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+         Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                     Gbl.Hierarchy.Crs.CrsCod);
         }
       else        // User does not belong to this course
         {
@@ -2082,7 +2083,8 @@ void Enr_RejectSignUp (void)
         }
 
       /* Remove inscription request */
-      Enr_RemoveEnrolmentRequest (Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Enr_RemUsrEnrolmentRequestInCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+                                  Gbl.Hierarchy.Crs.CrsCod);
 
       /* Confirmation message */
       Ale_ShowAlert (Ale_SUCCESS,Txt_Enrolment_of_X_rejected,
@@ -2171,7 +2173,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Act_Action_t NextAction;
 
    /***** Remove expired enrolment requests *****/
-   Enr_RemoveExpiredEnrolmentRequests ();
+   Enr_DB_RemoveExpiredEnrolmentRequests ();
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
@@ -2373,7 +2375,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 				      Gbl.Usrs.Me.UsrDat.UsrCod);
 		 }
 	       else        // User does not exists or user already belongs to course ==> remove pair from crs_requests table
-		  Enr_RemoveEnrolmentRequest (Crs.CrsCod,UsrDat.UsrCod);
+		  Enr_RemUsrEnrolmentRequestInCrs (UsrDat.UsrCod,Crs.CrsCod);
 	      }
 
 	 /* End table */
@@ -2393,12 +2395,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 /********************* Remove a request for enrolment ***********************/
 /*****************************************************************************/
 
-static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
+static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
   {
    long ReqCod;
 
    /***** Get request code *****/
-   ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (CrsCod,UsrCod);
+   ReqCod = Enr_DB_GetUsrEnrolmentRequestInCrs (UsrCod,CrsCod);
 
    if (ReqCod > 0)
      {
@@ -2409,32 +2411,6 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
       /***** Remove enrolment request *****/
       Enr_DB_RemRequest (ReqCod);
      }
-  }
-
-/*****************************************************************************/
-/******************* Remove expired requests for enrolment ******************/
-/*****************************************************************************/
-
-static void Enr_RemoveExpiredEnrolmentRequests (void)
-  {
-   /***** Mark possible notifications as removed
-          Important: do this before removing the request *****/
-   DB_QueryUPDATE ("can not set notification(s) as removed",
-		   "UPDATE ntf_notifications,"
-		          "crs_requests"
-		     " SET ntf_notifications.Status=(ntf_notifications.Status | %u)"
-		   " WHERE ntf_notifications.NotifyEvent=%u"
-		     " AND ntf_notifications.Cod=crs_requests.ReqCod"
-		     " AND crs_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-	           (unsigned) Ntf_STATUS_BIT_REMOVED,
-	           (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
-	           Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
-
-   /***** Remove expired requests for enrolment *****/
-   DB_QueryDELETE ("can not remove expired requests for enrolment",
-		   "DELETE LOW_PRIORITY FROM crs_requests"
-		   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
   }
 
 /*****************************************************************************/
@@ -2821,14 +2797,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,HieLvl_Level_t Scope,long 
    else        // User was not administrator of current institution/center/degree
      {
       /***** Insert or replace administrator in current institution/center/degree *****/
-      DB_QueryREPLACE ("can not create administrator",
-		       "REPLACE INTO usr_admins"
-		       " (UsrCod,Scope,Cod)"
-		       " VALUES"
-		       " (%ld,'%s',%ld)",
-                       UsrDat->UsrCod,
-                       Sco_GetDBStrFromScope (Scope),
-                       Cod);
+      Enr_DB_InsertAdmin (UsrDat->UsrCod,Scope,Cod);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
@@ -3102,7 +3071,7 @@ void Enr_AcceptRegisterMeInCrs (void)
    extern const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X;
 
    /***** Confirm my enrolment *****/
-   Enr_DB_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Enr_DB_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark all notifications about enrolment (as student or as teacher)
           in current course as removed *****/
@@ -3546,18 +3515,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from the tables of courses-users *****/
-      DB_QueryDELETE ("can not remove a user from a course",
-		      "DELETE FROM crs_user_settings"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld",
-                      UsrDat->UsrCod,
-                      Crs->CrsCod);
-      DB_QueryDELETE ("can not remove a user from a course",
-		      "DELETE FROM crs_users"
-		      " WHERE CrsCod=%ld"
-		        " AND UsrCod=%ld",
-                      Crs->CrsCod,
-                      UsrDat->UsrCod);
+      Set_DB_RemUsrFromCrsSettings (UsrDat->UsrCod,Crs->CrsCod);
+      Enr_DB_RemUsrFromCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Flush caches *****/
       Usr_FlushCachesUsr ();

@@ -203,3 +203,23 @@ void Acc_DB_UpdateUsrData (const struct UsrData *UsrDat)
 				      "",
 	           UsrDat->UsrCod);
   }
+
+/*****************************************************************************/
+/**************** Update institution, center and department ******************/
+/*****************************************************************************/
+
+void Acc_DB_UpdateMyInstitutionCenterDepartment (void)
+  {
+   DB_QueryUPDATE ("can not update institution, center and department",
+		   "UPDATE usr_data"
+		     " SET InsCtyCod=%ld,"
+		          "InsCod=%ld,"
+		          "CtrCod=%ld,"
+		          "DptCod=%ld"
+		   " WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.InsCtyCod,
+	           Gbl.Usrs.Me.UsrDat.InsCod,
+	           Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
+	           Gbl.Usrs.Me.UsrDat.Tch.DptCod,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
+  }

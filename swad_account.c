@@ -988,7 +988,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Dup_DB_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the tables of courses and users *****/
-   Set_DB_RemCrsUsrSettings (UsrDat->UsrCod);
+   Set_DB_RemUsrFromAllCrssSettings (UsrDat->UsrCod);
    Enr_DB_RemUsrFromAllCrss (UsrDat->UsrCod);
 
    if (QuietOrVerbose == Cns_VERBOSE)

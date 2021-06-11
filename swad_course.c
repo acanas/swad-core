@@ -55,6 +55,7 @@
 #include "swad_notice.h"
 #include "swad_project.h"
 #include "swad_search.h"
+#include "swad_setting.h"
 #include "swad_survey.h"
 #include "swad_test.h"
 
@@ -1842,7 +1843,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Enr_DB_RemCrsRequests (CrsCod);
 
       /***** Remove possible users remaining in the course (teachers) *****/
-      Enr_DB_RemAllUsrsFromCrsSettings (CrsCod);
+      Set_DB_RemAllUsrsFromCrsSettings (CrsCod);
       Enr_DB_RemAllUsrsFromCrs (CrsCod);
 
       /***** Remove directories of the course *****/

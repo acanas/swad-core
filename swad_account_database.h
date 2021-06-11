@@ -52,5 +52,6 @@ bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_A
 
 long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat);
 void Acc_DB_UpdateUsrData (const struct UsrData *UsrDat);
+void Acc_DB_UpdateMyInstitutionCenterDepartment (void);
 
 #endif

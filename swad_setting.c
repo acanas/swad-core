@@ -404,7 +404,7 @@ void Set_EndOneSettingSelector (void)
 /************ Register last prefs in current course in database **************/
 /*****************************************************************************/
 
-void Set_DB_InsertUsrInCurrentCrsSettings (long UsrCod)
+void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
   {
    extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
 
@@ -420,7 +420,7 @@ void Set_DB_InsertUsrInCurrentCrsSettings (long UsrCod)
 		     "0,FROM_UNIXTIME(%ld),0,"
 		     "'%s',%u,'%c')",
 	           UsrCod,
-	           Gbl.Hierarchy.Crs.CrsCod,
+	           CrsCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
 	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
@@ -429,13 +429,40 @@ void Set_DB_InsertUsrInCurrentCrsSettings (long UsrCod)
   }
 
 /*****************************************************************************/
-/******************** Remove a user from course settings *********************/
+/****************** Remove a user from a courses setting *********************/
 /*****************************************************************************/
 
-void Set_DB_RemCrsUsrSettings (long UsrCod)
+void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove a user from a course",
+		   "DELETE FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   UsrCod,
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/***************** Remove a user from all courses settings *******************/
+/*****************************************************************************/
+
+void Set_DB_RemUsrFromAllCrssSettings (long UsrCod)
   {
    DB_QueryDELETE ("can not remove a user from all courses",
 		   "DELETE FROM crs_user_settings"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
+
+/*****************************************************************************/
+/*************** Remove all users from settings in a course ******************/
+/*****************************************************************************/
+
+void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove users from a course settings",
+		   "DELETE FROM crs_user_settings"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+

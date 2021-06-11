@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include "swad_account.h"
+#include "swad_account_database.h"
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_config.h"
@@ -4088,7 +4089,7 @@ void Rec_ChgCountryOfMyInstitution (void)
     }
 
    /***** Update institution, center and department *****/
-   Enr_DB_UpdateInstitutionCenterDepartment ();
+   Acc_DB_UpdateMyInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4126,7 +4127,7 @@ void Rec_UpdateMyInstitution (void)
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = (NumDpts ? -1L : 0);
 
    /***** Update institution, center and department *****/
-   Enr_DB_UpdateInstitutionCenterDepartment ();
+   Acc_DB_UpdateMyInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4159,7 +4160,7 @@ void Rec_UpdateMyCenter (void)
    Gbl.Usrs.Me.UsrDat.Tch.CtrCod = Ctr.CtrCod;
 
    /***** Update institution, center and department *****/
-   Enr_DB_UpdateInstitutionCenterDepartment ();
+   Acc_DB_UpdateMyInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4190,7 +4191,7 @@ void Rec_UpdateMyDepartment (void)
 
    /***** Update institution, center and department *****/
    Gbl.Usrs.Me.UsrDat.Tch.DptCod = Dpt.DptCod;
-   Enr_DB_UpdateInstitutionCenterDepartment ();
+   Acc_DB_UpdateMyInstitutionCenterDepartment ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();

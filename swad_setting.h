@@ -58,7 +58,9 @@ void Set_EndSettingsHead (void);
 void Set_BeginOneSettingSelector (void);
 void Set_EndOneSettingSelector (void);
 
-void Set_DB_InsertUsrInCurrentCrsSettings (long UsrCod);
-void Set_DB_RemCrsUsrSettings (long UsrCod);
+void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
+void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
+void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
+void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
 
 #endif
