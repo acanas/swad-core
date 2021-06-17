@@ -41,6 +41,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"

@@ -42,6 +42,7 @@
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
 #include "swad_notification.h"
@@ -107,9 +108,6 @@ static void Grp_PutIconToCreateNewGroup (void);
 
 static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
 
-static void Grp_DB_LockTables (void);
-static void Grp_DB_UnlockTables (void);
-
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
@@ -123,8 +121,7 @@ static void Grp_WriteHeadingGroupTypes (void);
 
 static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms);
 static void Grp_WriteHeadingGroups (void);
-static bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
-                                           long Cod,long GrpCod);
+
 static void Grp_PutIconToEditGroups (__attribute__((unused)) void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
@@ -137,7 +134,6 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight);
 static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
-static unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static long Grp_DB_GetTypeOfGroupOfAGroup (long GrpCod);
@@ -973,35 +969,6 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
   }
 
 /*****************************************************************************/
-/*********** Lock tables to make the registration in groups atomic ***********/
-/*****************************************************************************/
-
-static void Grp_DB_LockTables (void)
-  {
-   DB_Query ("can not lock tables to change user's groups",
-	     "LOCK TABLES "
-	          "grp_types WRITE,"
-	          "grp_groups WRITE,"
-	          "grp_users WRITE,"
-	          "crs_users READ,"
-	          "crs_user_settings READ,"
-	          "roo_rooms READ");
-   Gbl.DB.LockedTables = true;
-  }
-
-/*****************************************************************************/
-/*********** Unlock tables after changes in registration in groups ***********/
-/*****************************************************************************/
-
-static void Grp_DB_UnlockTables (void)
-  {
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after changing user's groups",
-	     "UNLOCK TABLES");
-  }
-
-/*****************************************************************************/
 /******* Check if not selected more than a group of single enrolment *********/
 /*****************************************************************************/
 
@@ -1765,47 +1732,6 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
 
    /***** Free memory with the list of groups which I belongs to *****/
    Grp_FreeListCodGrp (&LstGrpsIBelong);
-  }
-
-/*****************************************************************************/
-/************ Check if an assignment is associated to a group ****************/
-/*****************************************************************************/
-
-static bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
-                                           long Cod,long GrpCod)
-  {
-   /***** Get if an assignment, attendance event, survey, exam event or match
-          is associated to a given group from database *****/
-   return (DB_QueryCOUNT ("can not check if associated to a group",
-			  "SELECT COUNT(*)"
-			   " FROM %s"
-			  " WHERE %s=%ld"
-			    " AND GrpCod=%ld",
-		  	  Table,
-		  	  Field,Cod,
-		  	  GrpCod) != 0);
-  }
-
-
-/*****************************************************************************/
-/*** Check if an assignment, attendance event, survey, exam event or match ***/
-/*** is associated to any group                                            ***/
-/*****************************************************************************/
-
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
-  {
-   /***** Trivial check *****/
-   if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
-      return false;
-
-   /***** Get if an assignment, attendance event, survey, exam event or match
-          is associated to any group from database *****/
-   return (DB_QueryCOUNT ("can not check if associated to groups",
-			  "SELECT COUNT(*)"
-			   " FROM %s"
-			  " WHERE %s=%ld",
-			  Table,
-			  Field,Cod) != 0);
   }
 
 /*****************************************************************************/
@@ -2955,7 +2881,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
       if (GrpTyp->NumGrps)	 // If there are groups of this type...
         {
          /***** Query database *****/
-	 GrpTyp->NumGrps = Grp_DB_GetGrpsOfType (GrpTyp->GrpTypCod,&mysql_res);
+	 GrpTyp->NumGrps = Grp_DB_GetGrpsOfType (&mysql_res,GrpTyp->GrpTypCod);
          if (GrpTyp->NumGrps > 0) // Groups found...
            {
             /***** Create list with groups of this type *****/
@@ -3045,63 +2971,6 @@ void Grp_FreeListGrpTypesAndGrps (void)
             Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
             Gbl.Crs.Grps.GrpTypes.Num = 0;
            }
-  }
-
-/*****************************************************************************/
-/*********** Query the number of groups that hay in this course **************/
-/*****************************************************************************/
-
-unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
-  {
-   /***** Get number of group in current course from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of groups in this course",
-		  "SELECT COUNT(*)"
-		   " FROM grp_types,"
-			 "grp_groups"
-		  " WHERE grp_types.CrsCod=%ld"
-		    " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
-		  Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/****************** Count number of groups in a group type *******************/
-/*****************************************************************************/
-
-static unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod)
-  {
-   /***** Get number of groups of a type from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of groups of a type",
-		  "SELECT COUNT(*)"
-		   " FROM grp_groups"
-		  " WHERE GrpTypCod=%ld",
-		  GrpTypCod);
-  }
-
-/*****************************************************************************/
-/******************** Get groups of a type in this course ********************/
-/*****************************************************************************/
-
-unsigned Grp_DB_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get groups of a type from database *****/
-   // Don't use INNER JOIN because there are groups without assigned room
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get groups of a type",
-		   "SELECT grp_groups.GrpCod,"		// row[0]
-			  "grp_groups.GrpName,"		// row[1]
-			  "grp_groups.RooCod,"		// row[2]
-			  "roo_rooms.ShortName,"	// row[3]
-			  "grp_groups.MaxStudents,"	// row[4]
-			  "grp_groups.Open,"		// row[5]
-			  "grp_groups.FileZones"	// row[6]
-		    " FROM grp_groups"
-		    " LEFT JOIN roo_rooms"
-		      " ON grp_groups.RooCod=roo_rooms.RooCod"
-		   " WHERE grp_groups.GrpTypCod=%ld"
-		   " ORDER BY grp_groups.GrpName",
-		   GrpTypCod);
   }
 
 /*****************************************************************************/

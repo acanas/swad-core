@@ -43,6 +43,7 @@
 #include "swad_exam_type.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_role.h"
 #include "swad_setting.h"

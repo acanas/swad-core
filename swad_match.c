@@ -38,6 +38,7 @@
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
 #include "swad_match_result.h"

@@ -109,6 +109,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_file_browser.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
 #include "swad_ID.h"

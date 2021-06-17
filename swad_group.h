@@ -1,4 +1,4 @@
-// swad_group.h: groups
+// swad_group.h: types of groups and groups
 
 #ifndef _SWAD_GRP
 #define _SWAD_GRP
@@ -184,7 +184,6 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
                                         Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod);
 
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 void Grp_ReqRegisterInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
@@ -193,8 +192,6 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
 void Grp_FreeListGrpTypesAndGrps (void);
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
-unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
-unsigned Grp_DB_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res);
 void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
 bool Grp_DB_CheckIfGroupExists (long GrpCod);
 bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod);

@@ -48,6 +48,7 @@
 #include "swad_file_MIME.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
@@ -11724,7 +11725,7 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
    long GrpCod;
 
    /***** Query database *****/
-   NumGrps = Grp_DB_GetGrpsOfType (GrpTypCod,&mysql_res);
+   NumGrps = Grp_DB_GetGrpsOfType (&mysql_res,GrpTypCod);
    for (NumGrp = 0;
 	NumGrp < NumGrps;
 	NumGrp++)
