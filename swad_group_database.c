@@ -36,7 +36,7 @@
 // #include "swad_attendance_database.h"
 // #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_error.h"
+#include "swad_error.h"
 // #include "swad_exam_session.h"
 // #include "swad_form.h"
 // #include "swad_game.h"
@@ -103,43 +103,181 @@ void Grp_DB_UnlockTables (void)
   }
 
 /*****************************************************************************/
-/************ Check if an assignment is associated to a group ****************/
+/************************** Create a new group type **************************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
-                                    long Cod,long GrpCod)
+long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
   {
-   /***** Get if an assignment, attendance event, survey, exam event or match
-          is associated to a given group from database *****/
-   return (DB_QueryCOUNT ("can not check if associated to a group",
-			  "SELECT COUNT(*)"
-			   " FROM %s"
-			  " WHERE %s=%ld"
-			    " AND GrpCod=%ld",
-		  	  Table,
-		  	  Field,Cod,
-		  	  GrpCod) != 0);
+   /***** Create a new group type *****/
+   return
+   DB_QueryINSERTandReturnCode ("can not create type of group",
+				"INSERT INTO grp_types"
+				" (CrsCod,GrpTypName,"
+				  "Mandatory,Multiple,MustBeOpened,OpenTime)"
+				" VALUES"
+				" (%ld,'%s',"
+				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
+				Gbl.Hierarchy.Crs.CrsCod,
+				GrpTyp->GrpTypName,
+				GrpTyp->MandatoryEnrolment ? 'Y' :
+							     'N',
+				GrpTyp->MultipleEnrolment ? 'Y' :
+							    'N',
+				GrpTyp->MustBeOpened ? 'Y' :
+						       'N',
+				(long) GrpTyp->OpenTimeUTC);
   }
 
 /*****************************************************************************/
-/*** Check if an assignment, attendance event, survey, exam event or match ***/
-/*** is associated to any group                                            ***/
+/***************************** Create a new group ****************************/
 /*****************************************************************************/
 
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
+void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
   {
-   /***** Trivial check *****/
-   if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
-      return false;
+   /***** Create a new group *****/
+   DB_QueryINSERT ("can not create group",
+		   "INSERT INTO grp_groups"
+		   " (GrpTypCod,GrpName,RooCod,MaxStudents,Open,FileZones)"
+		   " VALUES"
+		   " (%ld,'%s',%ld,%u,'N','N')",
+	           Grps->GrpTyp.GrpTypCod,
+	           Grps->GrpName,
+	           Grps->RooCod,
+	           Grps->MaxStudents);
+  }
 
-   /***** Get if an assignment, attendance event, survey, exam event or match
-          is associated to any group from database *****/
-   return (DB_QueryCOUNT ("can not check if associated to groups",
+/*****************************************************************************/
+/******************** Check if a group exists in database ********************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfGrpExists (long GrpCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a group exists",
 			  "SELECT COUNT(*)"
-			   " FROM %s"
-			  " WHERE %s=%ld",
-			  Table,
-			  Field,Cod) != 0);
+			   " FROM grp_groups"
+			  " WHERE GrpCod=%ld",
+			  GrpCod) != 0);
+  }
+
+/*****************************************************************************/
+/******************* Check if a group belongs to a course ********************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod)
+  {
+   /***** Get if a group exists from database *****/
+   return (DB_QueryCOUNT ("can not check if a group belongs to a course",
+			  "SELECT COUNT(*)"
+			   " FROM grp_groups,"
+			         "grp_types"
+			  " WHERE grp_groups.GrpCod=%ld"
+			    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			    " AND grp_types.CrsCod=%ld",
+			  GrpCod,CrsCod) != 0);
+  }
+
+/*****************************************************************************/
+/******************* Check if name of group type exists **********************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod)
+  {
+   /***** Get number of group types with a name from database *****/
+   return (DB_QueryCOUNT ("can not check if the name of type of group"
+			  " already existed",
+			  "SELECT COUNT(*)"
+			   " FROM grp_types"
+			  " WHERE CrsCod=%ld"
+			    " AND GrpTypName='%s'"
+			    " AND GrpTypCod<>%ld",
+			  Gbl.Hierarchy.Crs.CrsCod,
+			  GrpTypName,
+			  GrpTypCod) != 0);
+  }
+
+/*****************************************************************************/
+/************************ Check if name of group exists **********************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod)
+  {
+   /***** Get number of groups with a type and a name from database *****/
+   return (DB_QueryCOUNT ("can not check if the name of group already existed",
+			  "SELECT COUNT(*)"
+			   " FROM grp_groups"
+			  " WHERE GrpTypCod=%ld"
+			    " AND GrpName='%s'"
+			    " AND GrpCod<>%ld",
+			  GrpTypCod,
+			  GrpName,
+			  GrpCod) != 0);
+  }
+
+/*****************************************************************************/
+/********************* Count number of users in a group **********************/
+/*****************************************************************************/
+
+unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
+  {
+   /***** Get number of students in a group from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users in a group",
+		  "SELECT COUNT(*)"
+		   " FROM grp_users,"
+			 "grp_groups,"
+			 "grp_types,"
+			 "crs_users"
+		  " WHERE grp_users.GrpCod=%ld"
+		    " AND grp_users.GrpCod=grp_groups.GrpCod"
+		    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		    " AND grp_types.CrsCod=crs_users.CrsCod"
+		    " AND grp_users.UsrCod=crs_users.UsrCod"
+		    " AND crs_users.Role=%u",
+		  GrpCod,
+		  (unsigned) Role);
+  }
+
+/*****************************************************************************/
+/*** Count # of users of current course not belonging to groups of a type ****/
+/*****************************************************************************/
+
+unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
+  {
+   /***** Get number of users not belonging to groups of a type ******/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of users"
+		  " not belonging to groups of a type",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM crs_users"
+		  " WHERE CrsCod=%ld"
+		    " AND Role=%u"
+		    " AND UsrCod NOT IN"
+		        " (SELECT DISTINCT grp_users.UsrCod"
+			   " FROM grp_groups,"
+			         "grp_users"
+			  " WHERE grp_groups.GrpTypCod=%ld"
+			    " AND grp_groups.GrpCod=grp_users.GrpCod)",
+		  Gbl.Hierarchy.Crs.CrsCod,
+		  (unsigned) Role,
+		  GrpTypCod);
+  }
+
+/*****************************************************************************/
+/********* Check if I belong to any groups of a given type I belong **********/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
+  {
+   /***** Get a group which I belong to from database *****/
+   return (DB_QueryCOUNT ("can not check if you belong to a group type",
+			  "SELECT COUNT(grp_groups.GrpCod)"
+			   " FROM grp_groups,"
+				 "grp_users"
+			  " WHERE grp_groups.GrpTypCod=%ld"
+			    " AND grp_groups.GrpCod=grp_users.GrpCod"
+			    " AND grp_users.UsrCod=%ld",	// I belong
+			  GrpTypCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -197,4 +335,109 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
 		   " WHERE grp_groups.GrpTypCod=%ld"
 		   " ORDER BY grp_groups.GrpName",
 		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/********************** Get the type of group of a group *********************/
+/*****************************************************************************/
+
+long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
+  {
+   long GrpTypCod;
+
+   /***** Get group type of a group from database *****/
+   GrpTypCod = DB_QuerySELECTCode ("can not get the type of a group",
+				   "SELECT GrpTypCod"
+				    " FROM grp_groups"
+				   " WHERE GrpCod=%ld",
+				   GrpCod);
+   if (GrpTypCod <= 0)
+      Err_WrongGrpTypExit ();
+
+   return GrpTypCod;
+  }
+
+/*****************************************************************************/
+/*********** Check if an assignment, attendance event, survey,    ************/
+/*********** exam session or match is associated to a given group ************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+                                    long Cod,long GrpCod)
+  {
+   return (DB_QueryCOUNT ("can not check if associated to a group",
+			  "SELECT COUNT(*)"
+			   " FROM %s"
+			  " WHERE %s=%ld"
+			    " AND GrpCod=%ld",
+		  	  Table,
+		  	  Field,Cod,
+		  	  GrpCod) != 0);
+  }
+
+/*****************************************************************************/
+/************ Check if an assignment, attendance event, survey, **************/
+/************ exam session or match is associated to any group  **************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod)
+  {
+   /***** Trivial check *****/
+   if (Cod <= 0)	// Assignment, attendance event, survey, exam event or match code
+      return false;
+
+   /***** Check if an assignment, attendance event, survey,
+          exam session or match is associated to any group *****/
+   return (DB_QueryCOUNT ("can not check if associated to groups",
+			  "SELECT COUNT(*)"
+			   " FROM %s"
+			  " WHERE %s=%ld",
+			  Table,
+			  Field,Cod) != 0);
+  }
+
+/*****************************************************************************/
+/*********************** Register a user in a group **************************/
+/*****************************************************************************/
+
+void Grp_DB_AddUsrToGrp (long UsrCod,long GrpCod)
+  {
+   DB_QueryINSERT ("can not add a user to a group",
+		   "INSERT INTO grp_users"
+		   " (GrpCod,UsrCod)"
+		   " VALUES"
+		   " (%ld,%ld)",
+                   GrpCod,
+                   UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove a user of all the groups of a course *****************/
+/*****************************************************************************/
+
+void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove a user from all groups of a course",
+		   "DELETE FROM grp_users"
+		   " WHERE UsrCod=%ld"
+		     " AND GrpCod IN"
+		         " (SELECT grp_groups.GrpCod"
+		            " FROM grp_types,"
+		                  "grp_groups"
+		           " WHERE grp_types.CrsCod=%ld"
+		             " AND grp_types.GrpTypCod=grp_groups.GrpTypCod)",
+                   UsrCod,
+                   CrsCod);
+  }
+
+/*****************************************************************************/
+/*********************** Remove a user from all groups ***********************/
+/*****************************************************************************/
+
+void Grp_DB_RemUsrFromAllGrps (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a user from the groups he/she belongs to",
+		   "DELETE FROM grp_users"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
   }

@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_group.h"
 // #include "swad_info.h"
 // #include "swad_room.h"
 // #include "swad_user.h"
@@ -46,12 +47,33 @@
 void Grp_DB_LockTables (void);
 void Grp_DB_UnlockTables (void);
 
-bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
-                                    long Cod,long GrpCod);
-bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
+long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
+void Grp_DB_CreateGroup (const struct Grp_Groups *Grps);
+
+bool Grp_DB_CheckIfGrpExists (long GrpCod);
+bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod);
+
+bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod);
+bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod);
+
+unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
+unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
+
+bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 
 unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
 unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
+
+long Grp_DB_GetGrpTypeFromGrp (long GrpCod);
+
+bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
+                                    long Cod,long GrpCod);
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
+
+void Grp_DB_AddUsrToGrp (long UsrCod,long GrpCod);
+
+void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
+void Grp_DB_RemUsrFromAllGrps (long UsrCod);
 
 #endif

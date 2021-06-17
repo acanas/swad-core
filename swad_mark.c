@@ -37,6 +37,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"

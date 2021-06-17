@@ -111,7 +111,6 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
-static void Grp_DB_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod);
 
 static void Grp_ListGroupTypesForEdition (void);
 static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args);
@@ -136,17 +135,10 @@ static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
-static long Grp_DB_GetTypeOfGroupOfAGroup (long GrpCod);
-static unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
-static bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
                                          struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
-static bool Grp_DB_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCod);
-static bool Grp_DB_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long GrpCod);
-static long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
-static void Grp_DB_CreateGroup (void);
 
 static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps);
 static void Grp_AskConfirmRemGrp (void);
@@ -888,7 +880,8 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	    if (LstGrpsIWant->GrpCods[NumGrpIWant] == LstGrpsIBelong.GrpCods[NumGrpIBelong])
 	       RegisterMeInThisGrp = false;
 	 if (RegisterMeInThisGrp)
-	    Grp_DB_AddUsrToGroup (&Gbl.Usrs.Me.UsrDat,LstGrpsIWant->GrpCods[NumGrpIWant]);
+	    Grp_DB_AddUsrToGrp (Gbl.Usrs.Me.UsrDat.UsrCod,
+	                          LstGrpsIWant->GrpCods[NumGrpIWant]);
 	}
 
       ChangesMade = true;
@@ -954,7 +947,8 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
 	 if (LstGrpsUsrWants->GrpCods[NumGrpUsrWants] == LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs])
 	    RegisterUsrInThisGrp = false;
       if (RegisterUsrInThisGrp)
-	 Grp_DB_AddUsrToGroup (&Gbl.Usrs.Other.UsrDat,LstGrpsUsrWants->GrpCods[NumGrpUsrWants]);
+	 Grp_DB_AddUsrToGrp (Gbl.Usrs.Other.UsrDat.UsrCod,
+	                       LstGrpsUsrWants->GrpCods[NumGrpUsrWants]);
      }
 
    /***** Free memory with the list of groups which user belonged to *****/
@@ -997,7 +991,7 @@ bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct List
 	      SelectionValid && NumCodGrp < LstGrps->NumGrps;
 	      NumCodGrp++)
 	   {
-	    GrpTypCod = Grp_DB_GetTypeOfGroupOfAGroup (LstGrps->GrpCods[NumCodGrp]);
+	    GrpTypCod = Grp_DB_GetGrpTypeFromGrp (LstGrps->GrpCods[NumCodGrp]);
 	    MultipleEnrolment = Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod);
 
 	    if (!MultipleEnrolment)
@@ -1118,7 +1112,8 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
-                  Grp_DB_AddUsrToGroup (UsrDat,LstGrps->GrpCods[NumGrpSel]);
+                  Grp_DB_AddUsrToGrp (UsrDat->UsrCod,
+                                        LstGrps->GrpCods[NumGrpSel]);
                   Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
 		                 UsrDat->FullName,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                                  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
@@ -1190,23 +1185,12 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
   {
-   bool ItsMe = Usr_ItsMe (UsrCod);
-
-   /***** Remove user from all the groups of the course *****/
-   DB_QueryDELETE ("can not remove a user from all groups of a course",
-		   "DELETE FROM grp_users"
-		   " WHERE UsrCod=%ld"
-		     " AND GrpCod IN"
-		         " (SELECT grp_groups.GrpCod"
-		            " FROM grp_types,"
-		                  "grp_groups"
-		           " WHERE grp_types.CrsCod=%ld"
-		             " AND grp_types.GrpTypCod=grp_groups.GrpTypCod)",
-                   UsrCod,CrsCod);
+   /***** Remove user from all groups in the given course *****/
+   Grp_DB_RemUsrFromAllGrpsInCrs (UsrCod,CrsCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
-   if (ItsMe)
+   if (Usr_ItsMe (UsrCod))
       Grp_FlushCacheIBelongToGrp ();
   }
 
@@ -1216,17 +1200,12 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
 
 void Grp_RemUsrFromAllGrps (long UsrCod)
   {
-   bool ItsMe = Usr_ItsMe (UsrCod);
-
    /***** Remove user from all groups *****/
-   DB_QueryDELETE ("can not remove a user from the groups he/she belongs to",
-		   "DELETE FROM grp_users"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   Grp_DB_RemUsrFromAllGrps (UsrCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
-   if (ItsMe)
+   if (Usr_ItsMe (UsrCod))
       Grp_FlushCacheIBelongToGrp ();
   }
 
@@ -1250,22 +1229,6 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
    if (ItsMe)
       Grp_FlushCacheIBelongToGrp ();
-  }
-
-/*****************************************************************************/
-/*********************** Register a user in a group **************************/
-/*****************************************************************************/
-
-static void Grp_DB_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
-  {
-   /***** Register in group *****/
-   DB_QueryINSERT ("can not add a user to a group",
-		   "INSERT INTO grp_users"
-		   " (GrpCod,UsrCod)"
-		   " VALUES"
-		   " (%ld,%ld)",
-                   GrpCod,
-                   UsrDat->UsrCod);
   }
 
 /*****************************************************************************/
@@ -3126,124 +3089,6 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
   }
 
 /*****************************************************************************/
-/********************** Get the type of group of a group *********************/
-/*****************************************************************************/
-
-static long Grp_DB_GetTypeOfGroupOfAGroup (long GrpCod)
-  {
-   long GrpTypCod;
-
-   /***** Get group type of a group from database *****/
-   GrpTypCod = DB_QuerySELECTCode ("can not get the type of a group",
-				   "SELECT GrpTypCod"
-				    " FROM grp_groups"
-				   " WHERE GrpCod=%ld",
-				   GrpCod);
-   if (GrpTypCod <= 0)
-      Err_WrongGrpTypExit ();
-
-   return GrpTypCod;
-  }
-
-/*****************************************************************************/
-/******************** Check if a group exists in database ********************/
-/*****************************************************************************/
-
-bool Grp_DB_CheckIfGroupExists (long GrpCod)
-  {
-   /***** Get if a group exists from database *****/
-   return (DB_QueryCOUNT ("can not check if a group exists",
-			  "SELECT COUNT(*)"
-			   " FROM grp_groups"
-			  " WHERE GrpCod=%ld",
-			  GrpCod) != 0);
-  }
-
-/*****************************************************************************/
-/******************* Check if a group belongs to a course ********************/
-/*****************************************************************************/
-
-bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod)
-  {
-   /***** Get if a group exists from database *****/
-   return (DB_QueryCOUNT ("can not check if a group belongs to a course",
-			  "SELECT COUNT(*)"
-			   " FROM grp_groups,"
-			         "grp_types"
-			  " WHERE grp_groups.GrpCod=%ld"
-			    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			    " AND grp_types.CrsCod=%ld",
-			  GrpCod,CrsCod) != 0);
-  }
-
-/*****************************************************************************/
-/********************* Count number of users in a group **********************/
-/*****************************************************************************/
-
-unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
-  {
-   /***** Get number of students in a group from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users in a group",
-		  "SELECT COUNT(*)"
-		   " FROM grp_users,"
-			 "grp_groups,"
-			 "grp_types,"
-			 "crs_users"
-		  " WHERE grp_users.GrpCod=%ld"
-		    " AND grp_users.GrpCod=grp_groups.GrpCod"
-		    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		    " AND grp_types.CrsCod=crs_users.CrsCod"
-		    " AND grp_users.UsrCod=crs_users.UsrCod"
-		    " AND crs_users.Role=%u",
-		  GrpCod,
-		  (unsigned) Role);
-  }
-
-/*****************************************************************************/
-/*** Count # of users of current course not belonging to groups of a type ****/
-/*****************************************************************************/
-
-static unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
-  {
-   /***** Get number of users not belonging to groups of a type ******/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of users"
-		  " not belonging to groups of a type",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM crs_users"
-		  " WHERE CrsCod=%ld"
-		    " AND Role=%u"
-		    " AND UsrCod NOT IN"
-		        " (SELECT DISTINCT grp_users.UsrCod"
-			   " FROM grp_groups,"
-			         "grp_users"
-			  " WHERE grp_groups.GrpTypCod=%ld"
-			    " AND grp_groups.GrpCod=grp_users.GrpCod)",
-		  Gbl.Hierarchy.Crs.CrsCod,
-		  (unsigned) Role,
-		  GrpTypCod);
-  }
-
-/*****************************************************************************/
-/********* Check if I belong to any groups of a given type I belong **********/
-/*****************************************************************************/
-
-static bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
-  {
-   /***** Get a group which I belong to from database *****/
-   return (DB_QueryCOUNT ("can not check if you belong to a group type",
-			  "SELECT COUNT(grp_groups.GrpCod)"
-			   " FROM grp_groups,"
-				 "grp_users"
-			  " WHERE grp_groups.GrpTypCod=%ld"
-			    " AND grp_groups.GrpCod=grp_users.GrpCod"
-			    " AND grp_users.UsrCod=%ld",	// I belong
-			  GrpTypCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
-  }
-
-/*****************************************************************************/
 /************************ Check if I belong to a group ***********************/
 /*****************************************************************************/
 // Return true if I belong to group with code GrpCod
@@ -3663,7 +3508,7 @@ void Grp_ReceiveFormNewGrpTyp (void)
    if (Gbl.Crs.Grps.GrpTyp.GrpTypName[0])	// If there's a group type name
      {
       /***** If name of group type was in database... *****/
-      if (Grp_DB_CheckIfGroupTypeNameExists (Gbl.Crs.Grps.GrpTyp.GrpTypName,-1L))
+      if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (Gbl.Crs.Grps.GrpTyp.GrpTypName,-1L))
         {
          AlertType = Ale_WARNING;
          snprintf (AlertTxt,sizeof (AlertTxt),
@@ -3738,7 +3583,7 @@ void Grp_ReceiveFormNewGrp (void)
       if (Gbl.Crs.Grps.GrpName[0])	// If there's a group name
         {
          /***** If name of group was in database... *****/
-         if (Grp_DB_CheckIfGroupNameExists (Gbl.Crs.Grps.GrpTyp.GrpTypCod,Gbl.Crs.Grps.GrpName,-1L))
+         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,Gbl.Crs.Grps.GrpName,-1L))
            {
             AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
@@ -3747,7 +3592,7 @@ void Grp_ReceiveFormNewGrp (void)
            }
          else	// Add new group to database
            {
-            Grp_DB_CreateGroup ();
+            Grp_DB_CreateGroup (&Gbl.Crs.Grps);
 
 	    /* Write success message */
             AlertType = Ale_SUCCESS;
@@ -3773,83 +3618,6 @@ void Grp_ReceiveFormNewGrp (void)
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
-  }
-
-/*****************************************************************************/
-/******************* Check if name of group type exists **********************/
-/*****************************************************************************/
-
-static bool Grp_DB_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCod)
-  {
-   /***** Get number of group types with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of type of group"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM grp_types"
-			  " WHERE CrsCod=%ld"
-			    " AND GrpTypName='%s'"
-			    " AND GrpTypCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,GrpTypName,GrpTypCod) != 0);
-  }
-
-/*****************************************************************************/
-/************************ Check if name of group exists **********************/
-/*****************************************************************************/
-
-static bool Grp_DB_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long GrpCod)
-  {
-   /***** Get number of groups with a type and a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of group already existed",
-			  "SELECT COUNT(*)"
-			   " FROM grp_groups"
-			  " WHERE GrpTypCod=%ld"
-			    " AND GrpName='%s'"
-			    " AND GrpCod<>%ld",
-			  GrpTypCod,GrpName,GrpCod) != 0);
-  }
-
-/*****************************************************************************/
-/************************** Create a new group type **************************/
-/*****************************************************************************/
-
-static long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
-  {
-   /***** Create a new group type *****/
-   return
-   DB_QueryINSERTandReturnCode ("can not create type of group",
-				"INSERT INTO grp_types"
-				" (CrsCod,GrpTypName,"
-				  "Mandatory,Multiple,MustBeOpened,OpenTime)"
-				" VALUES"
-				" (%ld,'%s',"
-				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
-				Gbl.Hierarchy.Crs.CrsCod,
-				GrpTyp->GrpTypName,
-				GrpTyp->MandatoryEnrolment ? 'Y' :
-							     'N',
-				GrpTyp->MultipleEnrolment ? 'Y' :
-							    'N',
-				GrpTyp->MustBeOpened ? 'Y' :
-						       'N',
-				(long) GrpTyp->OpenTimeUTC);
-  }
-
-/*****************************************************************************/
-/***************************** Create a new group ****************************/
-/*****************************************************************************/
-
-static void Grp_DB_CreateGroup (void)
-  {
-   /***** Create a new group *****/
-   DB_QueryINSERT ("can not create group",
-		   "INSERT INTO grp_groups"
-		   " (GrpTypCod,GrpName,RooCod,MaxStudents,Open,FileZones)"
-		   " VALUES"
-		   " (%ld,'%s',%ld,%u,'N','N')",
-	           Gbl.Crs.Grps.GrpTyp.GrpTypCod,
-	           Gbl.Crs.Grps.GrpName,
-	           Gbl.Crs.Grps.RooCod,
-	           Gbl.Crs.Grps.MaxStudents);
   }
 
 /*****************************************************************************/
@@ -4288,7 +4056,7 @@ void Grp_ChangeGroupType (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** If group was in database... *****/
-   if (Grp_DB_CheckIfGroupNameExists (NewGrpTypCod,GrpDat.GrpName,-1L))
+   if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (NewGrpTypCod,GrpDat.GrpName,-1L))
      {
       /* Create warning message */
       AlertType = Ale_WARNING;
@@ -4644,7 +4412,7 @@ void Grp_RenameGroupType (void)
       if (strcmp (Gbl.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp))	// Different names
         {
          /***** If group type was in database... *****/
-         if (Grp_DB_CheckIfGroupTypeNameExists (NewNameGrpTyp,Gbl.Crs.Grps.GrpTyp.GrpTypCod))
+         if (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewNameGrpTyp,Gbl.Crs.Grps.GrpTyp.GrpTypCod))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4730,7 +4498,7 @@ void Grp_RenameGroup (void)
       if (strcmp (GrpDat.GrpName,NewNameGrp))	// Different names
         {
          /***** If group was in database... *****/
-         if (Grp_DB_CheckIfGroupNameExists (GrpDat.GrpTypCod,NewNameGrp,Gbl.Crs.Grps.GrpCod))
+         if (Grp_DB_CheckIfGrpNameExistsForGrpTyp (GrpDat.GrpTypCod,NewNameGrp,Gbl.Crs.Grps.GrpCod))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),

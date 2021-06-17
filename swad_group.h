@@ -193,9 +193,6 @@ void Grp_FreeListGrpTypesAndGrps (void);
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
 void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
-bool Grp_DB_CheckIfGroupExists (long GrpCod);
-bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod);
-unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 
 void Grp_FlushCacheIBelongToGrp (void);
 bool Grp_GetIfIBelongToGrp (long GrpCod);

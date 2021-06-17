@@ -5289,7 +5289,7 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 
    /***** Check if group exists (it's possible that this group has been removed after my last access to it) *****/
    if (GrpCod >= 0)
-      if (Grp_DB_CheckIfGroupExists (GrpCod))
+      if (Grp_DB_CheckIfGrpExists (GrpCod))
          /* Check if I belong to this group (it's possible that I have been removed from this group after my last access to it) */
          if (Grp_GetIfIBelongToGrp (GrpCod))
             return GrpCod;
