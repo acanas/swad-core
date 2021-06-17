@@ -614,7 +614,7 @@ void Mrk_ShowMyMarks (void)
       /* Select a random student from the course */
       if (Gbl.Crs.Grps.GrpCod > 0)	// Group zone
         {
-         if (Grp_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod))	// If there are students in this group
+         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod))	// If there are students in this group
            {
             Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;

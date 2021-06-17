@@ -578,8 +578,8 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
    unsigned NumPublicFiles;
 
    /***** Number of files currently published *****/
-   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
+   if ((NumFiles = Brw_DB_GetNumFilesUsr (UsrDat->UsrCod)))
+      NumPublicFiles = Brw_DB_GetNumPublicFilesUsr (UsrDat->UsrCod);
    else
       NumPublicFiles = 0;
 
@@ -1177,7 +1177,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of file views from database *****/
-      UsrFigures.NumFileViews = (long) Brw_GetNumFileViewsUsr (UsrCod);
+      UsrFigures.NumFileViews = (long) Brw_DB_GetNumFileViewsUsr (UsrCod);
 
       /***** Update number of file views in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))
@@ -1206,7 +1206,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumForPst = For_GetNumPostsUsr (UsrCod);
+      UsrFigures.NumForPst = For_DB_GetNumPostsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))

@@ -217,7 +217,7 @@ void Brw_RecLinkFileBrowser (void);
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
 bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path);
-bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata);
+bool Brw_DB_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata);
 void Brw_ShowFileMetadata (void);
 void Brw_DownloadFile (void);
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);
@@ -228,9 +228,9 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
-unsigned Brw_GetNumFileViewsUsr (long UsrCod);
-unsigned Brw_GetNumFilesUsr (long UsrCod);
-unsigned Brw_GetNumPublicFilesUsr (long UsrCod);
+unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
+unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
+unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 
 long Brw_GetCodForFiles (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
@@ -246,7 +246,7 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
 
 bool Brw_CheckIfICanViewProjectFiles (long PrjCod);
 
-void Brw_RemoveExpiredExpandedFolders (void);
+void Brw_DB_RemoveExpiredExpandedFolders (void);
 
 void Brw_CalcSizeOfDir (char *Path);
 

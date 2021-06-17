@@ -68,7 +68,7 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam);
 void Exa_GetDataOfExamByFolder (struct Exa_Exam *Exam);
 void Exa_FreeListExams (struct Exa_Exams *Exams);
 
-void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 void Exa_AskRemExam (void);
 void Exa_RemoveExam (void);
@@ -91,8 +91,8 @@ void Exa_ReceiveFormExam (void);
 
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
-unsigned Exa_GetNumCoursesWithExams (HieLvl_Level_t Scope);
-unsigned Exa_GetNumExams (HieLvl_Level_t Scope);
-double Exa_GetNumQstsPerCrsExam (HieLvl_Level_t Scope);
+unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope);
+unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope);
+double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope);
 
 #endif

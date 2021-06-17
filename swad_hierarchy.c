@@ -617,7 +617,7 @@ void Hie_InitHierarchy (void)
 
       /***** Count number of groups in current course
              (used in some actions) *****/
-      Gbl.Crs.Grps.NumGrps = Grp_CountNumGrpsInCurrentCrs ();
+      Gbl.Crs.Grps.NumGrps = Grp_DB_CountNumGrpsInCurrentCrs ();
      }
   }
 

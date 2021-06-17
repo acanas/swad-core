@@ -122,7 +122,7 @@ void For_DisablePost (void);
 
 void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum);
 
-unsigned For_GetNumPostsUsr (long UsrCod);
+unsigned For_DB_GetNumPostsUsr (long UsrCod);
 void For_DB_RemoveUsrFromReadThrs (long UsrCod);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
@@ -142,12 +142,24 @@ void For_SetForumName (const struct For_Forum *Forum,
                        Lan_Language_t Language,bool UseHTMLEntities);
 
 void For_ShowForumTheads (void);
-unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
-                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod);
-unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
-                                            long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod);
+unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
+                                         long CtyCod,
+                                         long InsCod,
+                                         long CtrCod,
+                                         long DegCod,
+                                         long CrsCod);
+unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
+                                               long CtyCod,
+                                               long InsCod,
+                                               long CtrCod,
+                                               long DegCod,
+                                               long CrsCod);
 unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
-                                            long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                            long CtyCod,
+                                            long InsCod,
+                                            long CtrCod,
+                                            long DegCod,
+                                            long CrsCod,
                                             unsigned *NumUsrsToBeNotifiedByEMail);
 
 void For_ShowThreadPosts (void);

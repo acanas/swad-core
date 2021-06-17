@@ -2155,7 +2155,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_LABEL_Begin (NULL);
       HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("svy_groups","SvyCod",SvyCod) ? "" :
+			  Grp_DB_CheckIfAssociatedToGrps ("svy_groups","SvyCod",SvyCod) ? "" :
 				                                                       " checked=\"checked\"");
       HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();

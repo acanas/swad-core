@@ -655,8 +655,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    fprintf (Gbl.F.Rep,"</li>");
 
    /***** Number of files currently published *****/
-   if ((NumFiles = Brw_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   if ((NumFiles = Brw_DB_GetNumFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod)))
+      NumPublicFiles = Brw_DB_GetNumPublicFilesUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
    else
       NumPublicFiles = 0;
    fprintf (Gbl.F.Rep,"<li>"

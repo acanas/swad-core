@@ -10386,3 +10386,95 @@ unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess)
 			    " FROM crs_users)",
 		   (unsigned long long) SecondsWithoutAccess);
   }
+
+/*****************************************************************************/
+/************** Get number of users who have chosen an option ****************/
+/*****************************************************************************/
+
+unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
+		        "SELECT COUNT(*)"
+		         " FROM usr_data WHERE %s",
+		        SubQuery);
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
+		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+		         " FROM ins_instits,"
+			       "ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_users,"
+			       "usr_data"
+		        " WHERE ins_instits.CtyCod=%ld"
+		          " AND ins_instits.InsCod=ctr_centers.InsCod"
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
+		        Gbl.Hierarchy.Cty.CtyCod,SubQuery);
+      case HieLvl_INS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
+		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+		         " FROM ctr_centers,"
+		               "deg_degrees,"
+		               "crs_courses,"
+		               "crs_users,"
+		               "usr_data"
+		        " WHERE ctr_centers.InsCod=%ld"
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
+		        Gbl.Hierarchy.Ins.InsCod,SubQuery);
+      case HieLvl_CTR:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
+		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+		         " FROM deg_degrees,"
+		               "crs_courses,"
+		               "crs_users,"
+		               "usr_data"
+		        " WHERE deg_degrees.CtrCod=%ld"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
+		        Gbl.Hierarchy.Ctr.CtrCod,SubQuery);
+      case HieLvl_DEG:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
+		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+		         " FROM crs_courses,"
+		               "crs_users,"
+		               "usr_data"
+		        " WHERE crs_courses.DegCod=%ld"
+		          " AND crs_courses.CrsCod=crs_users.CrsCod"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
+		        Gbl.Hierarchy.Deg.DegCod,SubQuery);
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
+		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+		         " FROM crs_users,"
+		               "usr_data"
+		        " WHERE crs_users.CrsCod=%ld"
+		          " AND crs_users.UsrCod=usr_data.UsrCod"
+		          " AND %s",
+		        Gbl.Hierarchy.Crs.CrsCod,SubQuery);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+
+   return 0;	// Not reached
+  }

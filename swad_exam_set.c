@@ -81,9 +81,9 @@ extern struct Globals Gbl;
 
 static void ExaSet_PutParamsOneQst (void *Exams);
 
-static unsigned ExaSet_GetNumQstsInSet (long SetCod);
+static unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 
-static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+static bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
                                             const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
 
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
@@ -96,20 +96,20 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
 
 static void ExaSet_CreateSet (struct ExaSet_Set *Set);
 static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
-static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
-                                     const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
-static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
-                                          unsigned NumQstsToPrint);
+static void Exa_DB_UpdateSetTitle (const struct ExaSet_Set *Set,
+                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
+static void Exa_DB_UpdateNumQstsToExam (const struct ExaSet_Set *Set,
+                                        unsigned NumQstsToPrint);
 
 static void ExaSet_PutParamSetCod (long SetCod);
 
 static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod);
 static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
 
-static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod);
+static unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod);
 
-static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
-static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
+static unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
+static unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
 
 static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
                                      const struct Exa_Exam *Exam,
@@ -189,7 +189,7 @@ long ExaSet_GetParamSetCod (void)
 /********************* Get number of questions in a set **********************/
 /*****************************************************************************/
 
-static unsigned ExaSet_GetNumQstsInSet (long SetCod)
+static unsigned Exa_DB_GetNumQstsInSet (long SetCod)
   {
    /***** Get number of questions in set from database *****/
    return (unsigned)
@@ -266,7 +266,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 /************** Check if the title of a set of questions exists **************/
 /*****************************************************************************/
 
-static bool ExaSet_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+static bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
                                             const char Title[ExaSet_MAX_BYTES_TITLE + 1])
   {
    /***** Get number of set of questions with a field value from database *****/
@@ -301,51 +301,51 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
    Frm_BeginForm (ActNewExaSet);
    Exa_PutParams (Exams);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_set_of_questions,
-		      NULL,NULL,
-		      NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_set_of_questions,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Table heading *****/
-   ExaSet_PutTableHeadingForSets ();
+	 /***** Table heading *****/
+	 ExaSet_PutTableHeadingForSets ();
 
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+	 /***** Begin row *****/
+	 HTM_TR_Begin (NULL);
 
-   /***** Empty column for buttons *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    /***** Empty column for buttons *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   /***** Index *****/
-   HTM_TD_Begin ("class=\"RM\"");
-   Tst_WriteNumQst (MaxSetInd + 1,"BIG_INDEX");
-   HTM_TD_End ();
+	    /***** Index *****/
+	    HTM_TD_Begin ("class=\"RM\"");
+	       Tst_WriteNumQst (MaxSetInd + 1,"BIG_INDEX");
+	    HTM_TD_End ();
 
-   /***** Title *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	    /***** Title *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" required=\"required\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	    HTM_TD_End ();
 
-   /***** Current number of questions in set *****/
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_Unsigned (0);	// New set ==> no questions yet
-   HTM_TD_End ();
+	    /***** Current number of questions in set *****/
+	    HTM_TD_Begin ("class=\"RM\"");
+	       HTM_Unsigned (0);	// New set ==> no questions yet
+	    HTM_TD_End ();
 
-   /***** Number of questions to appear in the exam *****/
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
-                   HTM_DONT_SUBMIT_ON_CHANGE,false,
-		    "class=\"INPUT_LONG\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Number of questions to appear in the exam *****/
+	    HTM_TD_Begin ("class=\"RM\"");
+	       HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
+			       HTM_DONT_SUBMIT_ON_CHANGE,false,
+				"class=\"INPUT_LONG\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** End row *****/
-   HTM_TR_End ();
+	 /***** End row *****/
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_set_of_questions);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_set_of_questions);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -427,7 +427,7 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
       if (strcmp (Set->Title,NewTitle))	// Different titles
 	{
 	 /* If title of set was in database... */
-	 if (ExaSet_CheckIfSimilarSetExists (Set,NewTitle))
+	 if (Exa_DB_CheckIfSimilarSetExists (Set,NewTitle))
 	   {
 	    NewTitleIsCorrect = false;
 	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_set_of_questions_in_this_exam_with_the_title_X,
@@ -478,7 +478,7 @@ void ExaSet_ChangeSetTitle (void)
    if (ExaSet_CheckSetTitleReceivedFromForm (&Set,NewTitle))
      {
       /* Update the table changing old title by new title */
-      ExaSet_UpdateSetTitleDB (&Set,NewTitle);
+      Exa_DB_UpdateSetTitle (&Set,NewTitle);
 
       /* Update title */
       Str_Copy (Set.Title,NewTitle,sizeof (Set.Title) - 1);
@@ -525,7 +525,7 @@ void ExaSet_ChangeNumQstsToExam (void)
    if (NumQstsToPrint != Set.NumQstsToPrint)
      {
       /* Update the table changing old number by new number */
-      ExaSet_UpdateNumQstsToExamDB (&Set,NumQstsToPrint);
+      Exa_DB_UpdateNumQstsToExam (&Set,NumQstsToPrint);
 
       /* Update title */
       Set.NumQstsToPrint = NumQstsToPrint;
@@ -546,7 +546,7 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
    unsigned MaxSetInd;
 
    /***** Get maximum set index *****/
-   MaxSetInd = ExaSet_GetMaxSetIndexInExam (Set->ExaCod);
+   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Set->ExaCod);
 
    /***** Create a new exam *****/
    Set->SetCod =
@@ -595,8 +595,8 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
 /************************ Update set title in database ***********************/
 /*****************************************************************************/
 
-static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
-                                     const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
+static void Exa_DB_UpdateSetTitle (const struct ExaSet_Set *Set,
+                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
   {
    /***** Update set of questions changing old title by new title *****/
    DB_QueryUPDATE ("can not update the title of a set of questions",
@@ -613,8 +613,8 @@ static void ExaSet_UpdateSetTitleDB (const struct ExaSet_Set *Set,
 /****** Update number of questions to appear in exam print in database *******/
 /*****************************************************************************/
 
-static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
-                                          unsigned NumQstsToPrint)
+static void Exa_DB_UpdateNumQstsToExam (const struct ExaSet_Set *Set,
+                                        unsigned NumQstsToPrint)
   {
    /***** Update set of questions changing old number by new number *****/
    DB_QueryUPDATE ("can not update the number of questions to appear in exam print",
@@ -631,7 +631,7 @@ static void ExaSet_UpdateNumQstsToExamDB (const struct ExaSet_Set *Set,
 /******************* Get number of questions of an exam *********************/
 /*****************************************************************************/
 
-unsigned ExaSet_GetNumSetsExam (long ExaCod)
+unsigned Exa_DB_GetNumSetsExam (long ExaCod)
   {
    /***** Get number of sets in an exam from database *****/
    return (unsigned)
@@ -646,7 +646,7 @@ unsigned ExaSet_GetNumSetsExam (long ExaCod)
 /******************* Get number of questions of an exam *********************/
 /*****************************************************************************/
 
-unsigned ExaSet_GetNumQstsExam (long ExaCod)
+unsigned Exa_DB_GetNumQstsExam (long ExaCod)
   {
    /***** Get total number of questions to appear in exam print *****/
    return DB_QuerySELECTUnsigned ("can not get number of questions in an exam print",
@@ -688,7 +688,7 @@ void ExaSet_RequestCreatOrEditSet (void)
    /***** Get exam data from database *****/
    Exa_GetDataOfExamByCod (&Exam);
    Exams.ExaCod = Exam.ExaCod;
-   Exa_GetExamTxtFromDB (Exam.ExaCod,Txt);
+   Exa_DB_GetExamTxt (Exam.ExaCod,Txt);
 
    /***** Get set data *****/
    if (ItsANewSet)
@@ -828,7 +828,7 @@ static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
 // Question index can be 1, 2, 3...
 // Return 0 if no questions
 
-static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
+static unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod)
   {
    /***** Get maximum set index in an exam from database *****/
    return DB_QuerySELECTUnsigned ("can not get max set index",
@@ -844,7 +844,7 @@ static unsigned ExaSet_GetMaxSetIndexInExam (long ExaCod)
 // Input set index can be 1, 2, 3... n-1
 // Return set index will be 1, 2, 3... n if previous set exists, or 0 if no previous set
 
-static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
+static unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
   {
    /***** Get previous set index in an exam from database *****/
    // Although indexes are always continuous...
@@ -864,7 +864,7 @@ static unsigned ExaSet_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
 // Input set index can be 0, 1, 2, 3... n-1
 // Return set index will be 1, 2, 3... n if next set exists, or big number if no next set
 
-static unsigned ExaSet_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
+static unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
   {
    /***** Get next set index in an exam from database *****/
    // Although indexes are always continuous...
@@ -895,7 +895,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
    bool ICanEditSets = Exa_CheckIfEditable (Exam);
 
    /***** Get maximum set index *****/
-   MaxSetInd = ExaSet_GetMaxSetIndexInExam (Exam->ExaCod);
+   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exam->ExaCod);
 
    /***** Get data of set of questions from database *****/
    NumSets = (unsigned)
@@ -1007,162 +1007,164 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    if (!NumSets)
       return;
 
-   /***** Write the heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (5);
-   ExaSet_PutTableHeadingForSets ();
 
-   /***** Write rows *****/
-   for (NumSet = 0;
-	NumSet < NumSets;
-	NumSet++)
-     {
-      Gbl.RowEvenOdd = NumSet % 2;
+      /***** Write the heading *****/
+      ExaSet_PutTableHeadingForSets ();
 
-      /***** Create set of questions *****/
-      ExaSet_ResetSet (&Set);
-
-      /***** Get set data *****/
-      row = mysql_fetch_row (mysql_res);
-      /*
-      row[0] SetCod
-      row[1] SetInd
-      row[2] NumQstsToPrint
-      row[3] Title
-      */
-      /* Get set code (row[0]) */
-      Set.SetCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get set index (row[1]) */
-      Set.SetInd = Str_ConvertStrToUnsigned (row[1]);
-      snprintf (StrSetInd,sizeof (Set.SetInd),"%u",Set.SetInd);
-
-      /* Get number of questions to exam (row[2]) */
-      Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
-
-      /* Get the title of the set (row[3]) */
-      Str_Copy (Set.Title,row[3],sizeof (Set.Title) - 1);
-
-      /* Initialize context */
-      Exams->SetCod = Set.SetCod;
-      Exams->SetInd = Set.SetInd;
-
-      /***** Build anchor string *****/
-      Frm_SetAnchorStr (Set.SetCod,&Anchor);
-
-      /***** Begin first row *****/
-      HTM_TR_Begin (NULL);
-
-      /***** Icons *****/
-      HTM_TD_Begin ("rowspan=\"2\" class=\"BT%u\"",Gbl.RowEvenOdd);
-
-      /* Put icon to remove the set */
-      if (ICanEditSets)
-	 Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
-					ExaSet_PutParamsOneSet,Exams);
-      else
-         Ico_PutIconRemovalNotAllowed ();
-
-      /* Put icon to move up the question */
-      if (ICanEditSets && Set.SetInd > 1)
+      /***** Write rows *****/
+      for (NumSet = 0;
+	   NumSet < NumSets;
+	   NumSet++)
 	{
-	 Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
-	                                ExaSet_PutParamsOneSet,Exams,
-				        "arrow-up.svg",
-					Str_BuildStringStr (Txt_Move_up_X,
-							    StrSetInd));
-	 Str_FreeString ();
+	 Gbl.RowEvenOdd = NumSet % 2;
+
+	 /***** Create set of questions *****/
+	 ExaSet_ResetSet (&Set);
+
+	 /***** Get set data *****/
+	 row = mysql_fetch_row (mysql_res);
+	 /*
+	 row[0] SetCod
+	 row[1] SetInd
+	 row[2] NumQstsToPrint
+	 row[3] Title
+	 */
+	 /* Get set code (row[0]) */
+	 Set.SetCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get set index (row[1]) */
+	 Set.SetInd = Str_ConvertStrToUnsigned (row[1]);
+	 snprintf (StrSetInd,sizeof (Set.SetInd),"%u",Set.SetInd);
+
+	 /* Get number of questions to exam (row[2]) */
+	 Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
+
+	 /* Get the title of the set (row[3]) */
+	 Str_Copy (Set.Title,row[3],sizeof (Set.Title) - 1);
+
+	 /* Initialize context */
+	 Exams->SetCod = Set.SetCod;
+	 Exams->SetInd = Set.SetInd;
+
+	 /***** Build anchor string *****/
+	 Frm_SetAnchorStr (Set.SetCod,&Anchor);
+
+	 /***** Begin first row *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Icons *****/
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT%u\"",Gbl.RowEvenOdd);
+
+	       /* Put icon to remove the set */
+	       if (ICanEditSets)
+		  Ico_PutContextualIconToRemove (ActReqRemExaSet,NULL,
+						 ExaSet_PutParamsOneSet,Exams);
+	       else
+		  Ico_PutIconRemovalNotAllowed ();
+
+	       /* Put icon to move up the question */
+	       if (ICanEditSets && Set.SetInd > 1)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
+						 ExaSet_PutParamsOneSet,Exams,
+						 "arrow-up.svg",
+						 Str_BuildStringStr (Txt_Move_up_X,
+								     StrSetInd));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+
+	       /* Put icon to move down the set */
+	       if (ICanEditSets && Set.SetInd < MaxSetInd)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
+						 ExaSet_PutParamsOneSet,Exams,
+						 "arrow-down.svg",
+						 Str_BuildStringStr (Txt_Move_down_X,
+								     StrSetInd));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+
+	    HTM_TD_End ();
+
+	    /***** Index *****/
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	       Tst_WriteNumQst (Set.SetInd,"BIG_INDEX");
+	    HTM_TD_End ();
+
+	    /***** Title *****/
+	    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_ARTICLE_Begin (Anchor);
+		  if (ICanEditSets)
+		    {
+		     Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
+		     ExaSet_PutParamsOneSet (Exams);
+			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
+					HTM_SUBMIT_ON_CHANGE,
+					"id=\"Title\" required=\"required\""
+					" class=\"TITLE_DESCRIPTION_WIDTH\"");
+		     Frm_EndForm ();
+		    }
+		  else
+		    {
+		     HTM_SPAN_Begin ("class=\"EXA_SET_TITLE\"");
+			HTM_Txt (Set.Title);
+		     HTM_SPAN_End ();
+		    }
+	       HTM_ARTICLE_End ();
+	    HTM_TD_End ();
+
+	    /***** Current number of questions in set *****/
+	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+		  HTM_Unsigned (Exa_DB_GetNumQstsInSet (Set.SetCod));
+	       HTM_SPAN_End ();
+	    HTM_TD_End ();
+
+	    /***** Number of questions to appear in exam print *****/
+	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	       if (ICanEditSets)
+		 {
+		  Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
+		  ExaSet_PutParamsOneSet (Exams);
+		     HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
+				     HTM_SUBMIT_ON_CHANGE,false,
+				      "class=\"INPUT_LONG\" required=\"required\"");
+		  Frm_EndForm ();
+		 }
+	       else
+		 {
+		  HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+		     HTM_Unsigned (Set.NumQstsToPrint);
+		  HTM_SPAN_End ();
+		 }
+	    HTM_TD_End ();
+
+	 /***** End first row *****/
+	 HTM_TR_End ();
+
+	 /***** Begin second row *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Questions *****/
+	    HTM_TD_Begin ("colspan=\"3\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+	       /* List questions */
+	       ExaSet_ListSetQuestions (Exams,Exam,&Set);
+
+	    HTM_TD_End ();
+
+	 /***** End second row *****/
+	 HTM_TR_End ();
+
+	 /***** Free anchor string *****/
+	 Frm_FreeAnchorStr (Anchor);
 	}
-      else
-         Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
-
-      /* Put icon to move down the set */
-      if (ICanEditSets && Set.SetInd < MaxSetInd)
-	{
-	 Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
-	                                ExaSet_PutParamsOneSet,Exams,
-				        "arrow-down.svg",
-					Str_BuildStringStr (Txt_Move_down_X,
-							    StrSetInd));
-	 Str_FreeString ();
-	}
-      else
-         Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
-
-      HTM_TD_End ();
-
-      /***** Index *****/
-      HTM_TD_Begin ("rowspan=\"2\" class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteNumQst (Set.SetInd,"BIG_INDEX");
-      HTM_TD_End ();
-
-      /***** Title *****/
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_ARTICLE_Begin (Anchor);
-      if (ICanEditSets)
-	{
-	 Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
-	 ExaSet_PutParamsOneSet (Exams);
-	 HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
-			 HTM_SUBMIT_ON_CHANGE,
-			 "id=\"Title\" required=\"required\""
-			 " class=\"TITLE_DESCRIPTION_WIDTH\"");
-	 Frm_EndForm ();
-	}
-      else
-	{
-	 HTM_SPAN_Begin ("class=\"EXA_SET_TITLE\"");
-         HTM_Txt (Set.Title);
-         HTM_SPAN_End ();
-	}
-      HTM_ARTICLE_End ();
-      HTM_TD_End ();
-
-      /***** Current number of questions in set *****/
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
-      HTM_Unsigned (ExaSet_GetNumQstsInSet (Set.SetCod));
-      HTM_SPAN_End ();
-      HTM_TD_End ();
-
-      /***** Number of questions to appear in exam print *****/
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      if (ICanEditSets)
-	{
-	 Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
-	 ExaSet_PutParamsOneSet (Exams);
-	 HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
-			 HTM_SUBMIT_ON_CHANGE,false,
-			  "class=\"INPUT_LONG\" required=\"required\"");
-	 Frm_EndForm ();
-	}
-      else
-	{
-	 HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
-         HTM_Unsigned (Set.NumQstsToPrint);
-         HTM_SPAN_End ();
-	}
-      HTM_TD_End ();
-
-      /***** End first row *****/
-      HTM_TR_End ();
-
-      /***** Begin second row *****/
-      HTM_TR_Begin (NULL);
-
-      /***** Questions *****/
-      HTM_TD_Begin ("colspan=\"3\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-
-      /* List questions */
-      ExaSet_ListSetQuestions (Exams,Exam,&Set);
-
-      HTM_TD_End ();
-
-      /***** End second row *****/
-      HTM_TR_End ();
-
-      /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
-     }
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1182,12 +1184,12 @@ static void ExaSet_PutTableHeadingForSets (void)
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Header cells *****/
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"RB",Txt_No_INDEX);
-   HTM_TH (1,1,"LB",Txt_Set_of_questions);
-   HTM_TH (1,1,"RB",Txt_Number_of_questions);
-   HTM_TH (1,1,"RB",Txt_Number_of_questions_to_show);
+      /***** Header cells *****/
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"RB",Txt_No_INDEX);
+      HTM_TH (1,1,"LB",Txt_Set_of_questions);
+      HTM_TH (1,1,"RB",Txt_Number_of_questions);
+      HTM_TH (1,1,"RB",Txt_Number_of_questions_to_show);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -1239,67 +1241,70 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       [Tst_VALID_QUESTION  ] = Txt_Valid_question,
      };
 
-   /***** Write the heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (5);
-   HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Question);
-
-   HTM_TR_End ();
-
-   /***** Write rows *****/
-   for (QstInd = 0;
-	QstInd < NumQsts;
-	QstInd++)
-     {
-      Gbl.RowEvenOdd = QstInd % 2;
-
-      /***** Create test question *****/
-      Tst_QstConstructor (&Question);
-
-      /***** Get question data *****/
-      /* Get question code */
-      Exams->QstCod = Question.QstCod = DB_GetNextCode (mysql_res);
-      ExaSet_GetQstDataFromDB (&Question);
-
-      /***** Build anchor string *****/
-      Frm_SetAnchorStr (Exams->QstCod,&Anchor);
-
-      /***** Begin row *****/
+      /***** Write the heading *****/
       HTM_TR_Begin (NULL);
 
-      /***** Icons *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 HTM_TH_Empty (1);
 
-      /* Put icon to remove the question */
-      if (ICanEditQuestions)
-	 Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
-					ExaSet_PutParamsOneQst,Exams);
-      else
-         Ico_PutIconRemovalNotAllowed ();
+	 HTM_TH (1,1,"CT",Txt_No_INDEX);
+	 HTM_TH (1,1,"CT",Txt_Question);
 
-      /* Put icon to cancel the question */
-      Lay_PutContextualLinkOnlyIcon (NextAction[Question.Validity],Anchor,
-				     ExaSet_PutParamsOneQst,Exams,
-				     Icon[Question.Validity],
-				     Title[Question.Validity]);
-      HTM_TD_End ();
-
-      /***** List question *****/
-      ExaSet_ListQuestionForEdition (&Question,QstInd + 1,Anchor);
-
-      /***** End row *****/
       HTM_TR_End ();
 
-      /***** Free anchor string *****/
-      Frm_FreeAnchorStr (Anchor);
+      /***** Write rows *****/
+      for (QstInd = 0;
+	   QstInd < NumQsts;
+	   QstInd++)
+	{
+	 Gbl.RowEvenOdd = QstInd % 2;
 
-      /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
-     }
+	 /***** Create test question *****/
+	 Tst_QstConstructor (&Question);
+
+	 /***** Get question data *****/
+	 /* Get question code */
+	 Exams->QstCod = Question.QstCod = DB_GetNextCode (mysql_res);
+	 ExaSet_GetQstDataFromDB (&Question);
+
+	 /***** Build anchor string *****/
+	 Frm_SetAnchorStr (Exams->QstCod,&Anchor);
+
+	 /***** Begin row *****/
+	 HTM_TR_Begin (NULL);
+
+	    /***** Icons *****/
+	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+	       /* Put icon to remove the question */
+	       if (ICanEditQuestions)
+		  Ico_PutContextualIconToRemove (ActReqRemSetQst,NULL,
+						 ExaSet_PutParamsOneQst,Exams);
+	       else
+		  Ico_PutIconRemovalNotAllowed ();
+
+	       /* Put icon to cancel the question */
+	       Lay_PutContextualLinkOnlyIcon (NextAction[Question.Validity],Anchor,
+					      ExaSet_PutParamsOneQst,Exams,
+					      Icon[Question.Validity],
+					      Title[Question.Validity]);
+
+	    HTM_TD_End ();
+
+	    /***** List question *****/
+	    ExaSet_ListQuestionForEdition (&Question,QstInd + 1,Anchor);
+
+	 /***** End row *****/
+	 HTM_TR_End ();
+
+	 /***** Free anchor string *****/
+	 Frm_FreeAnchorStr (Anchor);
+
+	 /***** Destroy test question *****/
+	 Tst_QstDestructor (&Question);
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1521,32 +1526,32 @@ static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd,ClassNumQst[Question->Validity]);
-   Tst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
+      Tst_WriteNumQst (QstInd,ClassNumQst[Question->Validity]);
+      Tst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
+      HTM_ARTICLE_Begin (Anchor);
 
-   /* Write stem */
-   Tst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
-		     true);	// Visible
+	 /* Write stem */
+	 Tst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
+			   true);	// Visible
 
-   /* Show media */
-   Med_ShowMedia (&Question->Media,
-		  "TEST_MED_EDIT_LIST_CONT",
-		  "TEST_MED_EDIT_LIST");
+	 /* Show media */
+	 Med_ShowMedia (&Question->Media,
+			"TEST_MED_EDIT_LIST_CONT",
+			"TEST_MED_EDIT_LIST");
 
-   /* Show feedback */
-   Tst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
+	 /* Show feedback */
+	 Tst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
 
-   /* Show answers */
-   Tst_WriteAnswersBank (Question,
-                         ClassTxt[Question->Validity],
-                         ClassFeedback[Question->Validity]);
+	 /* Show answers */
+	 Tst_WriteAnswersBank (Question,
+			       ClassTxt[Question->Validity],
+			       ClassFeedback[Question->Validity]);
 
-   HTM_ARTICLE_End ();
+      HTM_ARTICLE_End ();
    HTM_TD_End ();
   }
 
@@ -1862,7 +1867,7 @@ void ExaSet_MoveUpSet (void)
    if (SetIndBottom > 1)
      {
       /* Indexes of sets to be exchanged */
-      SetIndTop = ExaSet_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
+      SetIndTop = Exa_DB_GetPrevSetIndexInExam (Exam.ExaCod,SetIndBottom);
       if (SetIndTop == 0)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
@@ -1907,13 +1912,13 @@ void ExaSet_MoveDownSet (void)
    SetIndTop = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
 
    /***** Get maximum set index *****/
-   MaxSetInd = ExaSet_GetMaxSetIndexInExam (Exam.ExaCod);
+   MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exam.ExaCod);
 
    /***** Move down set *****/
    if (SetIndTop < MaxSetInd)
      {
       /* Indexes of sets to be exchanged */
-      SetIndBottom = ExaSet_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
+      SetIndBottom = Exa_DB_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
       if (SetIndBottom == ExaSet_AFTER_LAST_SET)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
@@ -2290,18 +2295,18 @@ void ExaSet_WriteSetTitle (const struct ExaSet_Set *Set)
    /***** Begin table *****/
    HTM_TABLE_BeginWide ();
 
-   /***** Title *****/
-   HTM_TD_Begin ("class=\"EXA_SET_TITLE\"");
-   HTM_Txt (Set->Title);
-   HTM_TD_End ();
+      /***** Title *****/
+      HTM_TD_Begin ("class=\"EXA_SET_TITLE\"");
+	 HTM_Txt (Set->Title);
+      HTM_TD_End ();
 
-   /***** Number of questions to appear in exam print *****/
-   HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS\"");
-   HTM_Unsigned (Set->NumQstsToPrint);
-   HTM_NBSP ();
-   HTM_Txt (Set->NumQstsToPrint == 1 ? Txt_question :
-			               Txt_questions);
-   HTM_TD_End ();
+      /***** Number of questions to appear in exam print *****/
+      HTM_TD_Begin ("class=\"EXA_SET_NUM_QSTS\"");
+	 HTM_Unsigned (Set->NumQstsToPrint);
+	 HTM_NBSP ();
+	 HTM_Txt (Set->NumQstsToPrint == 1 ? Txt_question :
+					     Txt_questions);
+      HTM_TD_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();

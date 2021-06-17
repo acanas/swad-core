@@ -2169,7 +2169,7 @@ int swad__getGroups (struct soap *soap,
                                                                                                              (int) MaxStudents;
 
          /* Get number of current students */
-         getGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_CountNumUsrsInGrp (Rol_STD,GrpCod);
+         getGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5]) */
          getGroupsOut->groupsArray.__ptr[NumRow].open = (row[5][0] == 'Y') ? 1 :
@@ -2343,7 +2343,7 @@ int swad__sendMyGroups (struct soap *soap,
                                                                                                                 (int) MaxStudents;
 
          /* Get number of current students */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_CountNumUsrsInGrp (Rol_STD,GrpCod);
+         SendMyGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5]) */
          SendMyGroupsOut->groupsArray.__ptr[NumRow].open = (row[5][0] == 'Y') ? 1 :
@@ -2846,7 +2846,7 @@ static void API_GetLstGrpsSel (const char *Groups)
 	{
 	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
 	 Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
-	 if (Grp_CheckIfGroupBelongsToCourse (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Crs.CrsCod))
+	 if (Grp_DB_CheckIfGrpBelongsToCrs (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.Hierarchy.Crs.CrsCod))
 	    NumGrp++;
 	}
       Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;	// Update number of groups
@@ -2902,7 +2902,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   if (Grp_CheckIfAssociatedToGrps ("att_groups","AttCod",Event.AttCod))
+   if (Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",Event.AttCod))
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users

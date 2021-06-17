@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Fir_BanIP (void);
+static void Fir_DB_BanIP (void);
 
 static void Fir_WriteHTML (const char *Title,const char *H1);
 
@@ -67,7 +67,7 @@ static void Fir_WriteHTML (const char *Title,const char *H1);
 /************************** Log access into firewall *************************/
 /*****************************************************************************/
 
-void Fir_LogAccess (void)
+void Fir_DB_LogAccess (void)
   {
    /***** Log access in firewall recent log *****/
    DB_QueryINSERT ("can not log access into firewall_log",
@@ -82,7 +82,7 @@ void Fir_LogAccess (void)
 /********************** Remove old clicks from firewall **********************/
 /*****************************************************************************/
 
-void Fir_PurgeFirewall (void)
+void Fir_DB_PurgeFirewall (void)
   {
    /***** Remove old clicks *****/
    DB_QueryDELETE ("can not purge firewall log",
@@ -150,7 +150,7 @@ void Fir_CheckFirewallAndExitIfTooManyRequests (void)
    if (NumClicks > Fw_MAX_CLICKS_IN_INTERVAL)
      {
       /* Ban this IP */
-      Fir_BanIP ();
+      Fir_DB_BanIP ();
 
       /* Return status 429 Too Many Requests */
       fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
@@ -169,7 +169,7 @@ void Fir_CheckFirewallAndExitIfTooManyRequests (void)
 /********************************* Ban an IP *********************************/
 /*****************************************************************************/
 
-static void Fir_BanIP (void)
+static void Fir_DB_BanIP (void)
   {
    /***** Insert IP into table of banned IPs *****/
    DB_QueryINSERT ("can not ban IP",

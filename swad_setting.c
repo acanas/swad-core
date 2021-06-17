@@ -429,6 +429,22 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
+/******** Update the group of my last access to a file browser zone **********/
+/*****************************************************************************/
+
+void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
+  {
+   DB_QueryUPDATE ("can not update the group of the last access to a file browser",
+		   "UPDATE crs_user_settings"
+		     " SET %s=%ld"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+                   FieldNameDB,GrpCod,
+                   Gbl.Usrs.Me.UsrDat.UsrCod,
+                   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /****************** Remove a user from a courses setting *********************/
 /*****************************************************************************/
 

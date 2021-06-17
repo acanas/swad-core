@@ -576,29 +576,37 @@ static void ExaRes_ShowResultsBegin (struct Exa_Exams *Exams,
   {
    extern const char *Hlp_ASSESSMENT_Exams_results;
 
-   /***** Begin box *****/
+   /***** Begin section *****/
    HTM_SECTION_Begin (ExaRes_RESULTS_BOX_ID);
-   Box_BoxBegin ("100%",Title,
-                 NULL,NULL,
-		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
-   /***** List exams to select *****/
-   if (ListExamsToSelect)
-      ExaRes_ListExamsToSelect (Exams);
+      /***** Begin box *****/
+      Box_BoxBegin ("100%",Title,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
 
-   /***** Begin session results table *****/
-   HTM_SECTION_Begin (ExaRes_RESULTS_TABLE_ID);
-   HTM_TABLE_BeginWidePadding (5);
+	 /***** List exams to select *****/
+	 if (ListExamsToSelect)
+	    ExaRes_ListExamsToSelect (Exams);
+
+	 /***** Begin session results section *****/
+	 HTM_SECTION_Begin (ExaRes_RESULTS_TABLE_ID);
+
+	    /* Begin session results table */
+	    HTM_TABLE_BeginWidePadding (5);
   }
 
 static void ExaRes_ShowResultsEnd (void)
   {
-   /***** End session results table *****/
-   HTM_TABLE_End ();
-   HTM_SECTION_End ();
+	    /* End session results table */
+	    HTM_TABLE_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	 /***** End session results section *****/
+	 HTM_SECTION_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
+   /***** End section *****/
    HTM_SECTION_End ();
   }
 
@@ -621,78 +629,76 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Exams,
-                 NULL,NULL,
-                 NULL,Box_CLOSABLE);
+		 NULL,NULL,
+		 NULL,Box_CLOSABLE);
 
-   /***** Begin form to update the results
-	  depending on the exams selected *****/
-   Frm_StartFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
-   Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      /***** Begin form to update the results
+	     depending on the exams selected *****/
+      Frm_StartFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
+      Grp_PutParamsCodGrps ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+	    /***** Heading row *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TH (1,2,NULL,NULL);
+	       HTM_TH (1,1,"LM",Txt_Exam);
+	    HTM_TR_End ();
 
-   HTM_TH (1,2,NULL,NULL);
-   HTM_TH (1,1,"LM",Txt_Exam);
+	    /***** List the sessions *****/
+	    for (NumExam = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
+		 NumExam < Exams->Num;
+		 NumExam++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      {
+	       /* Get data of this exam */
+	       Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
+	       Exa_GetDataOfExamByCod (&Exam);
+	       Exams->ExaCod = Exam.ExaCod;
 
-   HTM_TR_End ();
+	       /* Write a row for this session */
+	       HTM_TR_Begin (NULL);
 
-   /***** List the sessions *****/
-   for (NumExam = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
-	NumExam < Exams->Num;
-	NumExam++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-     {
-      /* Get data of this exam */
-      Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
-      Exa_GetDataOfExamByCod (&Exam);
-      Exams->ExaCod = Exam.ExaCod;
+		  HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+		     HTM_INPUT_CHECKBOX ("ExaCod",HTM_DONT_SUBMIT_ON_CHANGE,
+					 "id=\"Gam%u\" value=\"%ld\"%s",
+					 NumExam,Exams->Lst[NumExam].ExaCod,
+					 Exams->Lst[NumExam].Selected ? " checked=\"checked\"" :
+									"");
+		  HTM_TD_End ();
 
-      /* Write a row for this session */
-      HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumExam);
+			HTM_TxtF ("%u:",NumExam + 1);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("ExaCod",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "id=\"Gam%u\" value=\"%ld\"%s",
-			  NumExam,Exams->Lst[NumExam].ExaCod,
-			  Exams->Lst[NumExam].Selected ? " checked=\"checked\"" :
-				                         "");
-      HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+		     HTM_Txt (Exam.Title);
+		  HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_LABEL_Begin ("for=\"Gam%u\"",NumExam);
-      HTM_TxtF ("%u:",NumExam + 1);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	       HTM_TR_End ();
+	      }
 
-      HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Txt (Exam.Title);
-      HTM_TD_End ();
+	    /***** Put button to refresh *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TR_End ();
-     }
+	       HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
+		  HTM_BUTTON_Animated_Begin (Txt_Update_results,
+					     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+					     NULL);
+		     Ico_PutCalculateIconWithText (Txt_Update_results);
+		  HTM_BUTTON_End ();
+	       HTM_TD_End ();
 
-   /***** Put button to refresh *****/
-   HTM_TR_Begin (NULL);
+	    HTM_TR_End ();
 
-   HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
-   HTM_BUTTON_Animated_Begin (Txt_Update_results,
-			      The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-			      NULL);
-   Ico_PutCalculateIconWithText (Txt_Update_results);
-   HTM_BUTTON_End ();
-   HTM_TD_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   HTM_TR_End ();
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -721,45 +727,39 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
 
    /***** First row *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
-		                                   Usr_SEX_UNKNOWN]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_Session);
-   HTM_TH (1,3,"CT LINE_LEFT",Txt_Questions);
-   HTM_TH (1,5,"CT LINE_LEFT",Txt_Valid_answers);
-   HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
-   HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Grade);
-   HTM_TH (3,1,"LINE_BOTTOM LINE_LEFT",NULL);
-
+      HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
+						      Usr_SEX_UNKNOWN]);
+      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
+      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_Session);
+      HTM_TH (1,3,"CT LINE_LEFT",Txt_Questions);
+      HTM_TH (1,5,"CT LINE_LEFT",Txt_Valid_answers);
+      HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
+      HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Grade);
+      HTM_TH (3,1,"LINE_BOTTOM LINE_LEFT",NULL);
    HTM_TR_End ();
 
    /***** Second row *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (2,1,"RT LINE_BOTTOM LINE_LEFT",Txt_total);
-   HTM_TH (2,1,"RT LINE_BOTTOM",Txt_QUESTIONS_valid);
-   HTM_TH (2,1,"RT LINE_BOTTOM",Txt_QUESTIONS_invalid);
-   HTM_TH (1,1,"RT LINE_LEFT",Txt_ANSWERS_correct);
-   HTM_TH (1,3,"CT",Txt_ANSWERS_wrong);
-   HTM_TH (1,1,"RT",Txt_ANSWERS_blank);
-   HTM_TH (1,1,"RT LINE_LEFT",Txt_total);
-   HTM_TH (1,1,"RT",Txt_average);
-
+      HTM_TH (2,1,"RT LINE_BOTTOM LINE_LEFT",Txt_total);
+      HTM_TH (2,1,"RT LINE_BOTTOM",Txt_QUESTIONS_valid);
+      HTM_TH (2,1,"RT LINE_BOTTOM",Txt_QUESTIONS_invalid);
+      HTM_TH (1,1,"RT LINE_LEFT",Txt_ANSWERS_correct);
+      HTM_TH (1,3,"CT",Txt_ANSWERS_wrong);
+      HTM_TH (1,1,"RT",Txt_ANSWERS_blank);
+      HTM_TH (1,1,"RT LINE_LEFT",Txt_total);
+      HTM_TH (1,1,"RT",Txt_average);
    HTM_TR_End ();
 
    /***** Third row *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","{<em>p<sub>i</sub></em>=1}");
-   HTM_TH (1,1,"RT LINE_BOTTOM","{-1&le;<em>p<sub>i</sub></em>&lt;0}");
-   HTM_TH (1,1,"RT LINE_BOTTOM","{<em>p<sub>i</sub></em>=0}");
-   HTM_TH (1,1,"RT LINE_BOTTOM","{0&lt;<em>p<sub>i</sub></em>&lt;1}");
-   HTM_TH (1,1,"RT LINE_BOTTOM","{<em>p<sub>i</sub></em>=0}");
-   HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
-   HTM_TH (1,1,"RT LINE_BOTTOM","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
-
+      HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","{<em>p<sub>i</sub></em>=1}");
+      HTM_TH (1,1,"RT LINE_BOTTOM","{-1&le;<em>p<sub>i</sub></em>&lt;0}");
+      HTM_TH (1,1,"RT LINE_BOTTOM","{<em>p<sub>i</sub></em>=0}");
+      HTM_TH (1,1,"RT LINE_BOTTOM","{0&lt;<em>p<sub>i</sub></em>&lt;1}");
+      HTM_TH (1,1,"RT LINE_BOTTOM","{<em>p<sub>i</sub></em>=0}");
+      HTM_TH (1,1,"RT LINE_BOTTOM LINE_LEFT","<em>&Sigma;p<sub>i</sub></em>");
+      HTM_TH (1,1,"RT LINE_BOTTOM","-1&le;<em style=\"text-decoration:overline;\">p</em>&le;1");
    HTM_TR_End ();
   }
 
@@ -979,16 +979,16 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       Err_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
-	    Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  true,true,false,0x7);
+	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					     true,true,false,0x7);
 	    HTM_TD_End ();
 	    free (Id);
 	   }
 
 	 /* Write session title */
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Txt (Session.Title);
+	    HTM_Txt (Session.Title);
 	 HTM_TD_End ();
 
 	 /* Get and accumulate questions and score */
@@ -1011,159 +1011,159 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 
 	 /* Write total number of questions */
 	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-            HTM_Unsigned (Print.NumQsts.All);
-	 else
-            Ico_PutIconNotVisible ();
+	    if (ICanView.Score)
+	       HTM_Unsigned (Print.NumQsts.All);
+	    else
+	       Ico_PutIconNotVisible ();
          HTM_TD_End ();
 
 	 /* Valid questions */
 	 HTM_TD_Begin ("class=\"DAT_GREEN RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    if (Print.NumQsts.Valid.Total)
-	       HTM_Unsigned (Print.NumQsts.Valid.Total);
+	    if (ICanView.Score)
+	      {
+	       if (Print.NumQsts.Valid.Total)
+		  HTM_Unsigned (Print.NumQsts.Valid.Total);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Invalid questions */
 	 HTM_TD_Begin ("class=\"DAT_RED RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    NumQstsInvalid = Print.NumQsts.All - Print.NumQsts.Valid.Total;
-	    if (NumQstsInvalid)
-	       HTM_Unsigned (NumQstsInvalid);
+	    if (ICanView.Score)
+	      {
+	       NumQstsInvalid = Print.NumQsts.All - Print.NumQsts.Valid.Total;
+	       if (NumQstsInvalid)
+		  HTM_Unsigned (NumQstsInvalid);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
          HTM_TD_End ();
 
 	 /* Write number of correct questions */
 	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    if (Print.NumQsts.Valid.Correct)
-	       HTM_Unsigned (Print.NumQsts.Valid.Correct);
+	    if (ICanView.Score)
+	      {
+	       if (Print.NumQsts.Valid.Correct)
+		  HTM_Unsigned (Print.NumQsts.Valid.Correct);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write number of wrong questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    if (Print.NumQsts.Valid.Wrong.Negative)
-	       HTM_Unsigned (Print.NumQsts.Valid.Wrong.Negative);
+	    if (ICanView.Score)
+	      {
+	       if (Print.NumQsts.Valid.Wrong.Negative)
+		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Negative);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    if (Print.NumQsts.Valid.Wrong.Zero)
-	       HTM_Unsigned (Print.NumQsts.Valid.Wrong.Zero);
+	    if (ICanView.Score)
+	      {
+	       if (Print.NumQsts.Valid.Wrong.Zero)
+		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Zero);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    if (Print.NumQsts.Valid.Wrong.Positive)
-	       HTM_Unsigned (Print.NumQsts.Valid.Wrong.Positive);
+	    if (ICanView.Score)
+	      {
+	       if (Print.NumQsts.Valid.Wrong.Positive)
+		  HTM_Unsigned (Print.NumQsts.Valid.Wrong.Positive);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write number of blank questions */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    if (Print.NumQsts.Valid.Blank)
-	       HTM_Unsigned (Print.NumQsts.Valid.Blank);
+	    if (ICanView.Score)
+	      {
+	       if (Print.NumQsts.Valid.Blank)
+		  HTM_Unsigned (Print.NumQsts.Valid.Blank);
+	       else
+		  HTM_Light0 ();
+	      }
 	    else
-	       HTM_Light0 ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write score valid (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-	    HTM_Double2Decimals (Print.Score.Valid);
-	    HTM_Txt ("/");
-	    HTM_Unsigned (Print.NumQsts.Valid.Total);
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	    if (ICanView.Score)
+	      {
+	       HTM_Double2Decimals (Print.Score.Valid);
+	       HTM_Txt ("/");
+	       HTM_Unsigned (Print.NumQsts.Valid.Total);
+	      }
+	    else
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write average score per question (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	    HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
-					                     (double) Print.NumQsts.Valid.Total :
-					                     0.0);
-	 else
-            Ico_PutIconNotVisible ();
+	    if (ICanView.Score)
+	       HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
+								(double) Print.NumQsts.Valid.Total :
+								0.0);
+	    else
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade (taking into account only valid questions) */
 	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Score)
-	   {
-            Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,Print.Score.Valid,Exam.MaxGrade);
-	    TstPrn_ShowGrade (Grade,Exam.MaxGrade);
-	    TotalGrade += Grade;
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	    if (ICanView.Score)
+	      {
+	       Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,Print.Score.Valid,Exam.MaxGrade);
+	       TstPrn_ShowGrade (Grade,Exam.MaxGrade);
+	       TotalGrade += Grade;
+	      }
+	    else
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
 	 HTM_TD_Begin ("class=\"RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-	 if (ICanView.Result)
-	   {
-	    Exams->ExaCod = Session.ExaCod;
-	    Exams->SesCod = Session.SesCod;
-	    switch (MeOrOther)
+	    if (ICanView.Result)
 	      {
-	       case Usr_ME:
-		  Frm_BeginForm (ActSeeOneExaResMe);
-		  ExaSes_PutParamsEdit (Exams);
-		  break;
-	       case Usr_OTHER:
-		  Frm_BeginForm (ActSeeOneExaResOth);
-		  ExaSes_PutParamsEdit (Exams);
-		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		  break;
+	       Exams->ExaCod = Session.ExaCod;
+	       Exams->SesCod = Session.SesCod;
+	       switch (MeOrOther)
+		 {
+		  case Usr_ME:
+		     Frm_BeginForm (ActSeeOneExaResMe);
+		     ExaSes_PutParamsEdit (Exams);
+		     break;
+		  case Usr_OTHER:
+		     Frm_BeginForm (ActSeeOneExaResOth);
+		     ExaSes_PutParamsEdit (Exams);
+		     Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		     break;
+		 }
+	       Ico_PutIconLink ("tasks.svg",Txt_Result);
+	       Frm_EndForm ();
 	      }
-	    Ico_PutIconLink ("tasks.svg",Txt_Result);
-	    Frm_EndForm ();
-	   }
-	 else
-            Ico_PutIconNotVisible ();
+	    else
+	       Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1222,95 +1222,95 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Sessions);
-   HTM_Unsigned (NumResults);
-   HTM_TD_End ();
+      /***** Row title *****/
+      HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TxtColonNBSP (Txt_Sessions);
+	 HTM_Unsigned (NumResults);
+      HTM_TD_End ();
 
-   /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Unsigned (NumTotalQsts->All);
-   HTM_TD_End ();
+      /***** Write total number of questions *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Unsigned (NumTotalQsts->All);
+      HTM_TD_End ();
 
-   /***** Write total number of valid questions *****/
-   HTM_TD_Begin ("class=\"DAT_GREEN RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumTotalQsts->Valid.Total)
-      HTM_Unsigned (NumTotalQsts->Valid.Total);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      /***** Write total number of valid questions *****/
+      HTM_TD_Begin ("class=\"DAT_GREEN RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumTotalQsts->Valid.Total)
+	    HTM_Unsigned (NumTotalQsts->Valid.Total);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   /***** Write total number of invalid questions *****/
-   HTM_TD_Begin ("class=\"DAT_RED RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
-   if (NumTotalQstsInvalid)
-      HTM_Unsigned (NumTotalQstsInvalid);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      /***** Write total number of invalid questions *****/
+      HTM_TD_Begin ("class=\"DAT_RED RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 NumTotalQstsInvalid = NumTotalQsts->All - NumTotalQsts->Valid.Total;
+	 if (NumTotalQstsInvalid)
+	    HTM_Unsigned (NumTotalQstsInvalid);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   /***** Write number of correct questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumTotalQsts->Valid.Correct)
-      HTM_Unsigned (NumTotalQsts->Valid.Correct);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      /***** Write number of correct questions *****/
+      HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumTotalQsts->Valid.Correct)
+	    HTM_Unsigned (NumTotalQsts->Valid.Correct);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   /***** Write number of wrong questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumTotalQsts->Valid.Wrong.Negative)
-      HTM_Unsigned (NumTotalQsts->Valid.Wrong.Negative);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      /***** Write number of wrong questions *****/
+      HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumTotalQsts->Valid.Wrong.Negative)
+	    HTM_Unsigned (NumTotalQsts->Valid.Wrong.Negative);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumTotalQsts->Valid.Wrong.Zero)
-      HTM_Unsigned (NumTotalQsts->Valid.Wrong.Zero);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumTotalQsts->Valid.Wrong.Zero)
+	    HTM_Unsigned (NumTotalQsts->Valid.Wrong.Zero);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumTotalQsts->Valid.Wrong.Positive)
-      HTM_Unsigned (NumTotalQsts->Valid.Wrong.Positive);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumTotalQsts->Valid.Wrong.Positive)
+	    HTM_Unsigned (NumTotalQsts->Valid.Wrong.Positive);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   /***** Write number of blank questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumTotalQsts->Valid.Blank)
-      HTM_Unsigned (NumTotalQsts->Valid.Blank);
-   else
-      HTM_Light0 ();
-   HTM_TD_End ();
+      /***** Write number of blank questions *****/
+      HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumTotalQsts->Valid.Blank)
+	    HTM_Unsigned (NumTotalQsts->Valid.Blank);
+	 else
+	    HTM_Light0 ();
+      HTM_TD_End ();
 
-   /***** Write total valid score *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (TotalScore->Valid);
-   HTM_Txt ("/");
-   HTM_Unsigned (NumTotalQsts->Valid.Total);
-   HTM_TD_End ();
+      /***** Write total valid score *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Double2Decimals (TotalScore->Valid);
+	 HTM_Txt ("/");
+	 HTM_Unsigned (NumTotalQsts->Valid.Total);
+      HTM_TD_End ();
 
-   /***** Write average valid score per valid question *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
-	                                            (double) NumTotalQsts->Valid.Total :
-			                            0.0);
-   HTM_TD_End ();
+      /***** Write average valid score per valid question *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
+							  (double) NumTotalQsts->Valid.Total :
+							  0.0);
+      HTM_TD_End ();
 
 
-   /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (TotalGrade);
-   HTM_TD_End ();
+      /***** Write total grade *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Double2Decimals (TotalGrade);
+      HTM_TD_End ();
 
-   /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TD_End ();
+      /***** Last cell *****/
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -1448,47 +1448,49 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
    Box_BoxBegin (NULL,Session->Title,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_results,Box_NOT_CLOSABLE);
-   Lay_WriteHeaderClassPhoto (false,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Check user data *****/
-   /* Get data of the user who answered the exam print */
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
-                                                 Usr_DONT_GET_PREFS,
-                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Err_WrongUserExit ();
-   if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
-      Err_NoPermissionExit ();
+      /***** Header *****/
+      Lay_WriteHeaderClassPhoto (false,false,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWideMarginPadding (10);
+      /***** Check user data *****/
+      /* Get data of the user who answered the exam print */
+      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
+						    Usr_DONT_GET_PREFS,
+						    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	 Err_WrongUserExit ();
+      if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
+	 Err_NoPermissionExit ();
 
-   /***** User *****/
-   ExaRes_ShowExamResultUser (UsrDat);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (10);
 
-   /***** Start/end time (for user in this exam print) *****/
-   ExaRes_ShowExamResultTime (Print);
+	 /* User */
+	 ExaRes_ShowExamResultUser (UsrDat);
 
-   /***** Number of questions *****/
-   ExaRes_ShowExamResultNumQsts (Print,ICanView);
+	 /* Start/end time (for user in this exam print) */
+	 ExaRes_ShowExamResultTime (Print);
 
-   /***** Number of answers *****/
-   ExaRes_ShowExamResultNumAnss (Print,ICanView);
+	 /* Number of questions */
+	 ExaRes_ShowExamResultNumQsts (Print,ICanView);
 
-   /***** Score *****/
-   ExaRes_ShowExamResultScore (Print,ICanView);
+	 /* Number of answers */
+	 ExaRes_ShowExamResultNumAnss (Print,ICanView);
 
-   /***** Grade *****/
-   ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
+	 /* Score */
+	 ExaRes_ShowExamResultScore (Print,ICanView);
 
-   /***** Write answers and solutions *****/
-   if (ICanView->Result)
-      ExaRes_ShowExamAnswers (UsrDat,Print,Visibility);
+	 /* Grade */
+	 ExaRes_ShowExamResultGrade (Exam,Print,ICanView);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /* Answers and solutions */
+	 if (ICanView->Result)
+	    ExaRes_ShowExamAnswers (UsrDat,Print,Visibility);
+
+      /***** End table *****/
+      HTM_TABLE_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1668,20 +1670,20 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
       /***** Row begin *****/
       HTM_TR_Begin (NULL);
 
-      /***** Label *****/
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
-      HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
-      HTM_TD_End ();
+	 /***** Label *****/
+	 HTM_TD_Begin ("class=\"DAT_N RT\"");
+	    HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
+	 HTM_TD_End ();
 
-      /***** Time *****/
-      if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
-      Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,true,0x7);
-      HTM_TD_End ();
-      free (Id);
+	 /***** Time *****/
+	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,true,true,0x7);
+	 HTM_TD_End ();
+	 free (Id);
 
       /***** Row end *****/
       HTM_TR_End ();
@@ -1702,40 +1704,40 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
    /***** Row begin *****/
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Questions);
-   HTM_TD_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TxtColon (Txt_Questions);
+      HTM_TD_End ();
 
-   /***** Number of questions *****/
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView->Result)
-     {
-      HTM_TxtF ("%u",Print->NumQsts.All);
-      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
-	{
-	 HTM_Txt (" (");
+      /***** Number of questions *****/
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (ICanView->Result)
+	   {
+	    HTM_TxtF ("%u",Print->NumQsts.All);
+	    if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
+	      {
+	       HTM_Txt (" (");
 
-	 /* Valid questions */
-	 HTM_SPAN_Begin ("class=\"DAT_GREEN\"");
-	 HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
-	 HTM_Unsigned (Print->NumQsts.Valid.Total);
-	 HTM_SPAN_End ();
+	       /* Valid questions */
+	       HTM_SPAN_Begin ("class=\"DAT_GREEN\"");
+		  HTM_TxtColonNBSP (Txt_QUESTIONS_valid);
+		  HTM_Unsigned (Print->NumQsts.Valid.Total);
+	       HTM_SPAN_End ();
 
-	 HTM_TxtF ("; ");
+	       HTM_TxtF ("; ");
 
-	 /* Invalid questions */
-	 HTM_SPAN_Begin ("class=\"DAT_RED\"");
-	 HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
-	 HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
-	 HTM_SPAN_End ();
+	       /* Invalid questions */
+	       HTM_SPAN_Begin ("class=\"DAT_RED\"");
+		  HTM_TxtColonNBSP (Txt_QUESTIONS_invalid);
+		  HTM_Unsigned (Print->NumQsts.All - Print->NumQsts.Valid.Total);
+	       HTM_SPAN_End ();
 
-	 HTM_Txt (")");
-	}
-     }
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
+	       HTM_Txt (")");
+	      }
+	   }
+	 else
+	    Ico_PutIconNotVisible ();
+      HTM_TD_End ();
 
    /***** Row end *****/
    HTM_TR_End ();
@@ -1756,27 +1758,27 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
    /***** Row begin *****/
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Valid_answers);
-   HTM_TD_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TxtColon (Txt_Valid_answers);
+      HTM_TD_End ();
 
-   /***** Number of answers *****/
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView->Score)
-      HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
-	        "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
-	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
-	        "%s(0&lt;<em>p<sub>i</sub></em>&lt;1):&nbsp;%u; "
-	        "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u",
-                Txt_ANSWERS_correct,Print->NumQsts.Valid.Correct,
-                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Negative,
-                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Zero,
-                Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Positive,
-                Txt_ANSWERS_blank  ,Print->NumQsts.Valid.Blank);
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
+      /***** Number of answers *****/
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (ICanView->Score)
+	    HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
+		      "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
+		      "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u; "
+		      "%s(0&lt;<em>p<sub>i</sub></em>&lt;1):&nbsp;%u; "
+		      "%s(<em>p<sub>i</sub></em>=0):&nbsp;%u",
+		      Txt_ANSWERS_correct,Print->NumQsts.Valid.Correct,
+		      Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Negative,
+		      Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Zero,
+		      Txt_ANSWERS_wrong  ,Print->NumQsts.Valid.Wrong.Positive,
+		      Txt_ANSWERS_blank  ,Print->NumQsts.Valid.Blank);
+	 else
+	    Ico_PutIconNotVisible ();
+      HTM_TD_End ();
 
    /***** Row end *****/
    HTM_TR_End ();
@@ -1795,39 +1797,39 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
    /***** Row begin *****/
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Score);
-   HTM_TD_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TxtColon (Txt_Score);
+      HTM_TD_End ();
 
-   /***** Score *****/
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView->Score)
-     {
-      /* Score counting all questions */
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_Begin ();
-      HTM_Double2Decimals (Print->Score.All);
-      HTM_Txt ("/");
-      HTM_Unsigned (Print->NumQsts.All);
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_End ();
+      /***** Score *****/
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (ICanView->Score)
+	   {
+	    /* Score counting all questions */
+	    if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+	       HTM_STRONG_Begin ();
+	    HTM_Double2Decimals (Print->Score.All);
+	    HTM_Txt ("/");
+	    HTM_Unsigned (Print->NumQsts.All);
+	    if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+	       HTM_STRONG_End ();
 
-      /* Scoure counting only valid questions */
-      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
-	{
-         HTM_Txt ("; ");
-         HTM_TxtColonNBSP (Txt_valid_score);
-         HTM_STRONG_Begin ();
-         HTM_Double2Decimals (Print->Score.Valid);
-	 HTM_Txt ("/");
-	 HTM_Unsigned (Print->NumQsts.Valid.Total);
-         HTM_STRONG_End ();
-	}
-     }
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
+	    /* Scoure counting only valid questions */
+	    if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
+	      {
+	       HTM_Txt ("; ");
+	       HTM_TxtColonNBSP (Txt_valid_score);
+	       HTM_STRONG_Begin ();
+		  HTM_Double2Decimals (Print->Score.Valid);
+		  HTM_Txt ("/");
+		  HTM_Unsigned (Print->NumQsts.Valid.Total);
+	       HTM_STRONG_End ();
+	      }
+	   }
+	 else
+	    Ico_PutIconNotVisible ();
+      HTM_TD_End ();
 
    /***** Row end *****/
    HTM_TR_End ();
@@ -1847,35 +1849,35 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
    /***** Row begin *****/
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"DAT_N RT\"");
-   HTM_TxtColon (Txt_Grade);
-   HTM_TD_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TxtColon (Txt_Grade);
+      HTM_TD_End ();
 
-   /***** Grade *****/
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (ICanView->Score)
-     {
-      /* Grade counting all questions */
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_Begin ();
-      TstPrn_ComputeAndShowGrade (Print->NumQsts.All,Print->Score.All,Exam->MaxGrade);
-      if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
-         HTM_STRONG_End ();
+      /***** Grade *****/
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (ICanView->Score)
+	   {
+	    /* Grade counting all questions */
+	    if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+	       HTM_STRONG_Begin ();
+	    TstPrn_ComputeAndShowGrade (Print->NumQsts.All,Print->Score.All,Exam->MaxGrade);
+	    if (Print->NumQsts.All == Print->NumQsts.Valid.Total)
+	       HTM_STRONG_End ();
 
-      /* Grade counting only valid questions */
-      if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
-	{
-         HTM_Txt ("; ");
-         HTM_TxtColonNBSP (Txt_valid_grade);
-         HTM_STRONG_Begin ();
-	 TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,Print->Score.Valid,Exam->MaxGrade);
-         HTM_STRONG_End ();
-	}
-     }
-   else
-      Ico_PutIconNotVisible ();
-   HTM_TD_End ();
+	    /* Grade counting only valid questions */
+	    if (Print->NumQsts.All != Print->NumQsts.Valid.Total)
+	      {
+	       HTM_Txt ("; ");
+	       HTM_TxtColonNBSP (Txt_valid_grade);
+	       HTM_STRONG_Begin ();
+		  TstPrn_ComputeAndShowGrade (Print->NumQsts.Valid.Total,Print->Score.Valid,Exam->MaxGrade);
+	       HTM_STRONG_End ();
+	      }
+	   }
+	 else
+	    Ico_PutIconNotVisible ();
+      HTM_TD_End ();
 
    /***** Row end *****/
    HTM_TR_End ();
@@ -1978,54 +1980,54 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Number of question and answer type *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd + 1,ClassNumQst[Question->Validity]);
-   Tst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
-   HTM_TD_End ();
+      /***** Number of question and answer type *****/
+      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 Tst_WriteNumQst (QstInd + 1,ClassNumQst[Question->Validity]);
+	 Tst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
+      HTM_TD_End ();
 
-   /***** Stem, media and answers *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      /***** Stem, media and answers *****/
+      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /* Stem */
-   Tst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
-                     ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
+	 /* Stem */
+	 Tst_WriteQstStem (Question->Stem,ClassTxt[Question->Validity],
+			   ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
 
-   /* Media */
-   if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
-      Med_ShowMedia (&Question->Media,
-		     "TEST_MED_SHOW_CONT",
-		     "TEST_MED_SHOW");
+	 /* Media */
+	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
+	    Med_ShowMedia (&Question->Media,
+			   "TEST_MED_SHOW_CONT",
+			   "TEST_MED_SHOW");
 
-   /* Answers */
-   ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],Question);
-   TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[QstInd],Question,
-                            ICanView,
-                            ClassTxt[Question->Validity],
-                            ClassFeedback[Question->Validity]);
+	 /* Answers */
+	 ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],Question);
+	 TstPrn_WriteAnswersExam (UsrDat,&Print->PrintedQuestions[QstInd],Question,
+				  ICanView,
+				  ClassTxt[Question->Validity],
+				  ClassFeedback[Question->Validity]);
 
-   /* Write score retrieved from database */
-   if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
-     {
-      HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
-      HTM_TxtColonNBSP (Txt_Score);
-      HTM_SPAN_Begin ("class=\"%s\"",
-		      Print->PrintedQuestions[QstInd].StrAnswers[0] ?
-		      (Print->PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
-								   "ANS_BAD") :	// Wrong
-								   "ANS_0");	// Blank answer
-      HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
-      if (Question->Validity == Tst_INVALID_QUESTION)
-	 HTM_TxtF (" (%s)",Txt_Invalid_question);
-      HTM_SPAN_End ();
-      HTM_DIV_End ();
-     }
+	 /* Write score retrieved from database */
+	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
+	   {
+	    HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
+	       HTM_TxtColonNBSP (Txt_Score);
+	       HTM_SPAN_Begin ("class=\"%s\"",
+			       Print->PrintedQuestions[QstInd].StrAnswers[0] ?
+			       (Print->PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+									    "ANS_BAD") :	// Wrong
+									    "ANS_0");	// Blank answer
+		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
+		  if (Question->Validity == Tst_INVALID_QUESTION)
+		     HTM_TxtF (" (%s)",Txt_Invalid_question);
+	       HTM_SPAN_End ();
+	    HTM_DIV_End ();
+	   }
 
-   /* Question feedback */
-   if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
-      Tst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
+	 /* Question feedback */
+	 if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
+	    Tst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
 
-   HTM_TD_End ();
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();

@@ -35,8 +35,8 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Fir_LogAccess (void);
-void Fir_PurgeFirewall (void);
+void Fir_DB_LogAccess (void);
+void Fir_DB_PurgeFirewall (void);
 
 void Fir_CheckFirewallAndExitIfBanned (void);
 void Fir_CheckFirewallAndExitIfTooManyRequests (void);

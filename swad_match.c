@@ -1594,7 +1594,7 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_CheckIfAssociatedToGrps ("mch_groups","MchCod",MchCod) ? "" :
+					    Grp_DB_CheckIfAssociatedToGrps ("mch_groups","MchCod",MchCod) ? "" :
 													 " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 		     HTM_LABEL_End ();

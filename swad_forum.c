@@ -298,11 +298,11 @@ static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
 /***************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static bool For_GetIfForumPstExists (long PstCod);
+static bool For_DB_GetIfForumPstExists (long PstCod);
 
-static bool For_GetIfPstIsEnabled (long PstCod);
-static void For_DeletePstFromDisabledPstTable (long PstCod);
-static void For_InsertPstIntoBannedPstTable (long PstCod);
+static bool For_DB_GetIfPstIsEnabled (long PstCod);
+static void For_DB_RemovePstFromDisabledPstTable (long PstCod);
+static void For_DB_InsertPstIntoBannedPstTable (long PstCod);
 
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
@@ -310,24 +310,24 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 static bool For_RemoveForumPst (long PstCod,long MedCod);
 static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 
-static long For_InsertForumThread (const struct For_Forums *Forums,
-                                   long FirstPstCod);
+static long For_DB_InsertForumThread (const struct For_Forums *Forums,
+                                      long FirstPstCod);
 static void For_RemoveThreadOnly (long ThrCod);
 static void For_RemoveThreadAndItsPsts (long ThrCod);
 static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 
-static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
-static void For_UpdateThrLastPst (long ThrCod,long LastPstCod);
+static void For_DB_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
+static void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod);
 static long For_GetLastPstCod (long ThrCod);
 
-static void For_UpdateThrReadTime (long ThrCod,
-                                   time_t CreatTimeUTCOfTheMostRecentPostRead);
-static unsigned For_GetNumOfReadersOfThr (long ThrCod);
-static unsigned For_GetNumOfWritersInThr (long ThrCod);
-static unsigned For_GetNumPstsInThr (long ThrCod);
-static unsigned For_GetNumMyPstInThr (long ThrCod);
+static void For_DB_UpdateThrReadTime (long ThrCod,
+                                      time_t CreatTimeUTCOfTheMostRecentPostRead);
+static unsigned For_DB_GetNumOfReadersOfThr (long ThrCod);
+static unsigned For_DB_GetNumOfWritersInThr (long ThrCod);
+static unsigned For_DB_GetNumPstsInThr (long ThrCod);
+static unsigned For_DB_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
-static void For_DeleteThrFromReadThrs (long ThrCod);
+static void For_DB_RemoveThrFromReadThrs (long ThrCod);
 static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 				    Ale_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewPost (void *Forums);
@@ -381,7 +381,7 @@ static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
 static unsigned For_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
                                                      const char *Time);
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
-static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
+static unsigned For_DB_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
 static void For_WriteNumberOfThrs (unsigned NumThrs);
 static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
@@ -452,7 +452,7 @@ void For_EnablePost (void)
    For_GetParamsForums (&Forums);
 
    /***** Delete post from table of disabled posts *****/
-   For_DeletePstFromDisabledPstTable (Forums.PstCod);
+   For_DB_RemovePstFromDisabledPstTable (Forums.PstCod);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -477,10 +477,10 @@ void For_DisablePost (void)
    For_GetParamsForums (&Forums);
 
    /***** Check if post really exists, if it has not been removed *****/
-   if (For_GetIfForumPstExists (Forums.PstCod))
+   if (For_DB_GetIfForumPstExists (Forums.PstCod))
      {
       /***** Insert post into table of banned posts *****/
-      For_InsertPstIntoBannedPstTable (Forums.PstCod);
+      For_DB_InsertPstIntoBannedPstTable (Forums.PstCod);
 
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -499,7 +499,7 @@ void For_DisablePost (void)
 /******************** Get if a forum post exists in database *****************/
 /*****************************************************************************/
 
-static bool For_GetIfForumPstExists (long PstCod)
+static bool For_DB_GetIfForumPstExists (long PstCod)
   {
    /***** Get if a forum post exists from database *****/
    return (DB_QueryCOUNT ("can not check if a post of a forum already existed",
@@ -513,24 +513,25 @@ static bool For_GetIfForumPstExists (long PstCod)
 /*********************** Get if a forum post is enabled **********************/
 /*****************************************************************************/
 
-static bool For_GetIfPstIsEnabled (long PstCod)
+static bool For_DB_GetIfPstIsEnabled (long PstCod)
   {
-   if (PstCod > 0)
-      /***** Get if post is disabled from database *****/
-      return (DB_QueryCOUNT ("can not check if a post of a forum is disabled",
-			     "SELECT COUNT(*)"
-			      " FROM for_disabled"
-			     " WHERE PstCod=%ld",
-			     PstCod) == 0);	// Post is enabled if it does not appear in table of disabled posts
-   else
+   /***** Trivial check: post code should be > 0 *****/
+   if (PstCod <= 0)
       return false;
+
+   /***** Get if post is disabled from database *****/
+   return (DB_QueryCOUNT ("can not check if a post of a forum is disabled",
+			  "SELECT COUNT(*)"
+			   " FROM for_disabled"
+			  " WHERE PstCod=%ld",
+			  PstCod) == 0);	// Post is enabled if it does not appear in table of disabled posts
   }
 
 /*****************************************************************************/
-/****************** Delete post from table of disabled posts *****************/
+/****************** Remove post from table of disabled posts *****************/
 /*****************************************************************************/
 
-static void For_DeletePstFromDisabledPstTable (long PstCod)
+static void For_DB_RemovePstFromDisabledPstTable (long PstCod)
   {
    /***** Remove post from disabled posts table *****/
    DB_QueryDELETE ("can not unban a post of a forum",
@@ -543,7 +544,7 @@ static void For_DeletePstFromDisabledPstTable (long PstCod)
 /****************** Insert post into table of banned posts *******************/
 /*****************************************************************************/
 
-static void For_InsertPstIntoBannedPstTable (long PstCod)
+static void For_DB_InsertPstIntoBannedPstTable (long PstCod)
   {
    /***** Remove post from banned posts table *****/
    DB_QueryREPLACE ("can not ban a post of a forum",
@@ -612,11 +613,11 @@ static bool For_RemoveForumPst (long PstCod,long MedCod)
 		   PstCod);
 
    /***** Delete the post from the table of disabled forum posts *****/
-   For_DeletePstFromDisabledPstTable (PstCod);
+   For_DB_RemovePstFromDisabledPstTable (PstCod);
 
    /***** Update the last post of the thread *****/
    if (!ThreadDeleted)
-      For_UpdateThrLastPst (ThrCod,For_GetLastPstCod (ThrCod));
+      For_DB_UpdateThrLastPst (ThrCod,For_GetLastPstCod (ThrCod));
 
    return ThreadDeleted;
   }
@@ -667,8 +668,8 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
 /*****************************************************************************/
 // Returns the code of the new inserted thread
 
-static long For_InsertForumThread (const struct For_Forums *Forums,
-                                   long FirstPstCod)
+static long For_DB_InsertForumThread (const struct For_Forums *Forums,
+                                      long FirstPstCod)
   {
    /***** Insert new thread in the database *****/
    return
@@ -690,7 +691,7 @@ static long For_InsertForumThread (const struct For_Forums *Forums,
 static void For_RemoveThreadOnly (long ThrCod)
   {
    /***** Indicate that this thread has not been read by anyone *****/
-   For_DeleteThrFromReadThrs (ThrCod);
+   For_DB_RemoveThrFromReadThrs (ThrCod);
 
    /***** Remove thread code from thread clipboard *****/
    For_DB_RemoveThrCodFromThrClipboard (ThrCod);
@@ -798,7 +799,7 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum)
 /********* Modify the codes of the first and last posts of a thread **********/
 /*****************************************************************************/
 
-static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
+static void For_DB_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
   {
    /***** Update the code of the first and last posts of a thread *****/
    DB_QueryUPDATE ("can not update a thread of a forum",
@@ -815,7 +816,7 @@ static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long Last
 /************** Modify the code of the last post of a thread *****************/
 /*****************************************************************************/
 
-static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
+static void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod)
   {
    /***** Update the code of the last post of a thread *****/
    DB_QueryUPDATE ("can not update a thread of a forum",
@@ -858,8 +859,8 @@ static long For_GetLastPstCod (long ThrCod)
 // Note that database is not updated with the current time,
 // but with the creation time of the most recent post in this thread read by me.
 
-static void For_UpdateThrReadTime (long ThrCod,
-                                   time_t CreatTimeUTCOfTheMostRecentPostRead)
+static void For_DB_UpdateThrReadTime (long ThrCod,
+                                      time_t CreatTimeUTCOfTheMostRecentPostRead)
   {
    /***** Insert or replace pair ThrCod-UsrCod in for_read *****/
    DB_QueryREPLACE ("can not update the status of reading"
@@ -877,7 +878,7 @@ static void For_UpdateThrReadTime (long ThrCod,
 /**************** Get number of users that have read a thread ****************/
 /*****************************************************************************/
 
-static unsigned For_GetNumOfReadersOfThr (long ThrCod)
+static unsigned For_DB_GetNumOfReadersOfThr (long ThrCod)
   {
    /***** Get number of distinct readers of a thread from database *****/
    return (unsigned)
@@ -892,7 +893,7 @@ static unsigned For_GetNumOfReadersOfThr (long ThrCod)
 /********** Get number of users that have write posts in a thread ************/
 /*****************************************************************************/
 
-static unsigned For_GetNumOfWritersInThr (long ThrCod)
+static unsigned For_DB_GetNumOfWritersInThr (long ThrCod)
   {
    /***** Get number of distinct writers in a thread from database *****/
    return DB_QueryCOUNT ("can not get the number of writers in a thread of a forum",
@@ -906,7 +907,7 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod)
 /********************** Get number of posts in a thread **********************/
 /*****************************************************************************/
 
-static unsigned For_GetNumPstsInThr (long ThrCod)
+static unsigned For_DB_GetNumPstsInThr (long ThrCod)
   {
    /***** Get number of posts in a thread from database *****/
    return (unsigned)
@@ -921,7 +922,7 @@ static unsigned For_GetNumPstsInThr (long ThrCod)
 /************** Get whether there are posts of mine in a thread **************/
 /*****************************************************************************/
 
-static unsigned For_GetNumMyPstInThr (long ThrCod)
+static unsigned For_DB_GetNumMyPstInThr (long ThrCod)
   {
    /***** Get if I have write posts in a thread from database *****/
    return (unsigned)
@@ -938,7 +939,7 @@ static unsigned For_GetNumMyPstInThr (long ThrCod)
 /*********************** Get number of posts from a user *********************/
 /*****************************************************************************/
 
-unsigned For_GetNumPostsUsr (long UsrCod)
+unsigned For_DB_GetNumPostsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
    return DB_QueryCOUNT ("can not get number of forum posts from a user",
@@ -982,12 +983,12 @@ static time_t For_GetThrReadTime (long ThrCod)
   }
 
 /*****************************************************************************/
-/********************* Delete thread read status for a thread ****************/
+/********************* Remove thread read status for a thread ****************/
 /*****************************************************************************/
 
-static void For_DeleteThrFromReadThrs (long ThrCod)
+static void For_DB_RemoveThrFromReadThrs (long ThrCod)
   {
-   /***** Delete pairs ThrCod-UsrCod in for_read for a thread *****/
+   /***** Remove pairs ThrCod-UsrCod in for_read for a thread *****/
    DB_QueryDELETE ("can not remove the status of reading"
 		   " of a thread of a forum",
 		   "DELETE FROM for_read"
@@ -1046,142 +1047,143 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
    /***** Show alert after action *****/
    HTM_SECTION_Begin (For_FORUM_POSTS_SECTION_ID);
-   Ale_ShowAlerts (For_FORUM_POSTS_SECTION_ID);	// Possible pending alerts
-   if (Message)
-      if (Message[0])
-         Ale_ShowAlert (AlertType,Message);
 
-   /***** Begin box *****/
-   snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",
-	     Txt_Thread,Thread.Subject);
-   Box_BoxBegin (NULL,FrameTitle,
-                 For_PutIconNewPost,Forums,
-                 Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
+      Ale_ShowAlerts (For_FORUM_POSTS_SECTION_ID);	// Possible pending alerts
+      if (Message)
+	 if (Message[0])
+	    Ale_ShowAlert (AlertType,Message);
 
-   /***** Get posts of a thread from database *****/
-   NumPsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
-		   "SELECT PstCod,"			// row[0]
-			  "UNIX_TIMESTAMP(CreatTime)"	// row[1]
-		    " FROM for_posts"
-		   " WHERE ThrCod=%ld"
-		   " ORDER BY PstCod",
-		   Thread.ThrCod);
+      /***** Begin box *****/
+      snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",
+		Txt_Thread,Thread.Subject);
+      Box_BoxBegin (NULL,FrameTitle,
+		    For_PutIconNewPost,Forums,
+		    Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
 
-   LastSubject[0] = '\0';
-   if (NumPsts)		// If there are posts...
-     {
-      /***** Check if I can moderate posts in forum *****/
-      switch (Forums->Forum.Type)
-        {
-         case For_FORUM_GLOBAL_USRS:
-         case For_FORUM_GLOBAL_TCHS:
-         case For_FORUM__SWAD__USRS:
-         case For_FORUM__SWAD__TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-            break;
-         case For_FORUM_INSTIT_USRS:
-         case For_FORUM_INSTIT_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
-            break;
-         case For_FORUM_CENTER_USRS:
-         case For_FORUM_CENTER_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
-            break;
-         case For_FORUM_DEGREE_USRS:
-         case For_FORUM_DEGREE_TCHS:
-         case For_FORUM_COURSE_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM);
-            break;
-         case For_FORUM_COURSE_USRS:
-            ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
-            break;
-         default:
-            ICanModerateForum = false;
-            break;
-        }
+	 /***** Get posts of a thread from database *****/
+	 NumPsts = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
+			 "SELECT PstCod,"			// row[0]
+				"UNIX_TIMESTAMP(CreatTime)"	// row[1]
+			  " FROM for_posts"
+			 " WHERE ThrCod=%ld"
+			 " ORDER BY PstCod",
+			 Thread.ThrCod);
 
-      /***** Compute variables related to pagination *****/
-      PaginationPsts.NumItems = NumPsts;
-      PaginationPsts.CurrentPage = (int) Forums->CurrentPagePsts;
-      Pag_CalculatePagination (&PaginationPsts);
-      PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
-      Forums->CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
+	 LastSubject[0] = '\0';
+	 if (NumPsts)		// If there are posts...
+	   {
+	    /***** Check if I can moderate posts in forum *****/
+	    switch (Forums->Forum.Type)
+	      {
+	       case For_FORUM_GLOBAL_USRS:
+	       case For_FORUM_GLOBAL_TCHS:
+	       case For_FORUM__SWAD__USRS:
+	       case For_FORUM__SWAD__TCHS:
+		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+		  break;
+	       case For_FORUM_INSTIT_USRS:
+	       case For_FORUM_INSTIT_TCHS:
+		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
+		  break;
+	       case For_FORUM_CENTER_USRS:
+	       case For_FORUM_CENTER_TCHS:
+		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
+		  break;
+	       case For_FORUM_DEGREE_USRS:
+	       case For_FORUM_DEGREE_TCHS:
+	       case For_FORUM_COURSE_TCHS:
+		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM);
+		  break;
+	       case For_FORUM_COURSE_USRS:
+		  ICanModerateForum = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
+		  break;
+	       default:
+		  ICanModerateForum = false;
+		  break;
+	      }
 
-      /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
-				     Forums,Thread.ThrCod);
+	    /***** Compute variables related to pagination *****/
+	    PaginationPsts.NumItems = NumPsts;
+	    PaginationPsts.CurrentPage = (int) Forums->CurrentPagePsts;
+	    Pag_CalculatePagination (&PaginationPsts);
+	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
+	    Forums->CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginWidePadding (2);
+	    /***** Write links to pages *****/
+	    Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
+					   Forums,Thread.ThrCod);
 
-      /***** Show posts from this page, the author and the date of last reply *****/
-      mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
-      for (NumRow  = PaginationPsts.FirstItemVisible;
-           NumRow <= PaginationPsts.LastItemVisible;
-           NumRow++)
-        {
-         row = mysql_fetch_row (mysql_res);
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-         if (sscanf (row[0],"%ld",&Forums->PstCod) != 1)
-            Err_WrongPostExit ();
+	       /***** Show posts from this page, the author and the date of last reply *****/
+	       mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
+	       for (NumRow  = PaginationPsts.FirstItemVisible;
+		    NumRow <= PaginationPsts.LastItemVisible;
+		    NumRow++)
+		 {
+		  row = mysql_fetch_row (mysql_res);
 
-         CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+		  if (sscanf (row[0],"%ld",&Forums->PstCod) != 1)
+		     Err_WrongPostExit ();
 
-         NumPst = NumRow;
-         NewPst = (CreatTimeUTC > ReadTimeUTC);
+		  CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
-         if (NewPst && NumRow == PaginationPsts.LastItemVisible)
-            /* Update for_read table indicating that this thread page and previous ones
-               have been read and have no new posts for the current user
-               (even if any previous pages have been no read actually).
-               Note that database is not updated with the current time,
-               but with the creation time of the most recent post
-               in this page of threads. */
-            For_UpdateThrReadTime (Thread.ThrCod,
-                                   CreatTimeUTC);
+		  NumPst = NumRow;
+		  NewPst = (CreatTimeUTC > ReadTimeUTC);
 
-         /* Show post */
-         For_ShowAForumPost (Forums,NumPst,
-                             (NumRow == NumPsts),LastSubject,
-                             NewPst,ICanModerateForum);
+		  if (NewPst && NumRow == PaginationPsts.LastItemVisible)
+		     /* Update for_read table indicating that this thread page and previous ones
+			have been read and have no new posts for the current user
+			(even if any previous pages have been no read actually).
+			Note that database is not updated with the current time,
+			but with the creation time of the most recent post
+			in this page of threads. */
+		     For_DB_UpdateThrReadTime (Thread.ThrCod,CreatTimeUTC);
 
-         /* Mark possible notification as seen */
-         switch (Forums->Forum.Type)
-           {
-            case For_FORUM_COURSE_TCHS:
-            case For_FORUM_COURSE_USRS:
-               Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
-           	                    Forums->PstCod,Gbl.Hierarchy.Crs.CrsCod,
-           	                    Gbl.Usrs.Me.UsrDat.UsrCod);
-               break;
-            default:
-               break;
-           }
-         if (Thread.NumMyPosts)
-            Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
-        	                 Forums->PstCod,-1L,
-        	                 Gbl.Usrs.Me.UsrDat.UsrCod);
-        }
+		  /* Show post */
+		  For_ShowAForumPost (Forums,NumPst,
+				      (NumRow == NumPsts),LastSubject,
+				      NewPst,ICanModerateForum);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+		  /* Mark possible notification as seen */
+		  switch (Forums->Forum.Type)
+		    {
+		     case For_FORUM_COURSE_TCHS:
+		     case For_FORUM_COURSE_USRS:
+			Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
+					     Forums->PstCod,Gbl.Hierarchy.Crs.CrsCod,
+					     Gbl.Usrs.Me.UsrDat.UsrCod);
+			break;
+		     default:
+			break;
+		    }
+		  if (Thread.NumMyPosts)
+		     Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
+					  Forums->PstCod,-1L,
+					  Gbl.Usrs.Me.UsrDat.UsrCod);
+		 }
 
-      /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
-				     Forums,Thread.ThrCod);
-     }
+	    /***** End table *****/
+	    HTM_TABLE_End ();
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+	    /***** Write again links to pages *****/
+	    Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
+					   Forums,Thread.ThrCod);
+	   }
 
-   /***** Form to write a new post in the thread *****/
-   HTM_SECTION_Begin (For_NEW_POST_SECTION_ID);
-   For_WriteFormForumPst (Forums,true,LastSubject);
-   HTM_SECTION_End ();
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	 /***** Form to write a new post in the thread *****/
+	 HTM_SECTION_Begin (For_NEW_POST_SECTION_ID);
+	    For_WriteFormForumPst (Forums,true,LastSubject);
+	 HTM_SECTION_End ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
    HTM_SECTION_End ();
   }
 
@@ -1245,7 +1247,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
-   Enabled = For_GetIfPstIsEnabled (Forums->PstCod);
+   Enabled = For_DB_GetIfPstIsEnabled (Forums->PstCod);
 
    /***** Get data of post *****/
    For_GetPstData (Forums->PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
@@ -1257,37 +1259,37 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
    HTM_TR_Begin (NULL);
 
-   /***** Put an icon with post status *****/
-   HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
-	         NewPst ? "MSG_TIT_BG_NEW" :
-			  "MSG_TIT_BG");
-   Ico_PutIcon (NewPst ? "envelope.svg" :
-        	         "envelope-open-text.svg",
-		NewPst ? Txt_MSG_New :
-        	         Txt_MSG_Open,
-	        "ICO16x16");
-   HTM_TD_End ();
+      /***** Put an icon with post status *****/
+      HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
+		    NewPst ? "MSG_TIT_BG_NEW" :
+			     "MSG_TIT_BG");
+	 Ico_PutIcon (NewPst ? "envelope.svg" :
+			       "envelope-open-text.svg",
+		      NewPst ? Txt_MSG_New :
+			       Txt_MSG_Open,
+		      "ICO16x16");
+      HTM_TD_End ();
 
-   /***** Write post number *****/
-   Msg_WriteMsgNumber ((unsigned long) PstNum,NewPst);
+      /***** Write post number *****/
+      Msg_WriteMsgNumber ((unsigned long) PstNum,NewPst);
 
-   /***** Write date *****/
-   Msg_WriteMsgDate (CreatTimeUTC,NewPst ? "MSG_TIT_BG_NEW" :
-	                                   "MSG_TIT_BG");
+      /***** Write date *****/
+      Msg_WriteMsgDate (CreatTimeUTC,NewPst ? "MSG_TIT_BG_NEW" :
+					      "MSG_TIT_BG");
 
-   /***** Write subject *****/
-   HTM_TD_Begin ("class=\"%s LT\"",NewPst ? "MSG_TIT_BG_NEW" :
-        					  "MSG_TIT_BG");
-   if (Enabled)
-     {
-      if (Subject[0])
-         HTM_Txt (Subject);
-      else
-         HTM_TxtF ("[%s]",Txt_no_subject);
-     }
-   else
-      HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
-   HTM_TD_End ();
+      /***** Write subject *****/
+      HTM_TD_Begin ("class=\"%s LT\"",NewPst ? "MSG_TIT_BG_NEW" :
+						     "MSG_TIT_BG");
+	 if (Enabled)
+	   {
+	    if (Subject[0])
+	       HTM_Txt (Subject);
+	    else
+	       HTM_TxtF ("[%s]",Txt_no_subject);
+	   }
+	 else
+	    HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+      HTM_TD_End ();
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
@@ -1301,12 +1303,12 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	    For_PutParamsForum (Forums);
-	    Ico_PutIconLink (Enabled ? "eye-green.svg" :
-				       "eye-slash-red.svg",
-			     Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-							    Txt_FORUM_Post_X_banned_Click_to_unban_it,
-						  (long) PstNum));
-	    Str_FreeString ();
+	       Ico_PutIconLink (Enabled ? "eye-green.svg" :
+					  "eye-slash-red.svg",
+				Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+							       Txt_FORUM_Post_X_banned_Click_to_unban_it,
+						     (long) PstNum));
+	       Str_FreeString ();
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1612,160 +1614,160 @@ static void For_ShowForumList (struct For_Forums *Forums)
                  For_PutIconsForums,NULL,
                  Hlp_COMMUNICATION_Forums,Box_NOT_CLOSABLE);
 
-   /***** Put a form to select which forums *****/
-   For_PutFormWhichForums (Forums);
+      /***** Put a form to select which forums *****/
+      For_PutFormWhichForums (Forums);
 
-   /***** Start list *****/
-   HTM_UL_Begin ("class=\"LIST_TREE\"");
+      /***** Start list *****/
+      HTM_UL_Begin ("class=\"LIST_TREE\"");
 
-   /***** Links to global forums *****/
-   For_WriteLinksToGblForums (Forums,IsLastItemInLevel);
-   switch (Forums->ForumSet)
-     {
-      case For_ONLY_CURRENT_FORUMS:
-	 if (Gbl.Hierarchy.Ins.InsCod > 0)
+	 /***** Links to global forums *****/
+	 For_WriteLinksToGblForums (Forums,IsLastItemInLevel);
+	 switch (Forums->ForumSet)
 	   {
-	    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-	       ICanSeeInsForum = true;
-	    else
-	       ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
-	   }
-	 else
-	    ICanSeeInsForum = false;
-
-         /***** Links to forums about the platform *****/
-         For_WriteLinksToPlatformForums (Forums,!ICanSeeInsForum,IsLastItemInLevel);
-
-         if (ICanSeeInsForum)
-           {
-            if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-	       ICanSeeCtrForum = true;
-	    else
-	       ICanSeeCtrForum = Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
-
-	    /***** Links to forums of current institution *****/
-	    if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Ins.InsCod,
-	                                   true,
-	                                   IsLastItemInLevel) > 0)
-               if (ICanSeeCtrForum)
-        	 {
-        	  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-		     ICanSeeDegForum = true;
-		  else
-		     ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
-
-		  /***** Links to forums of current center *****/
-		  if (For_WriteLinksToCtrForums (Forums,
-			                         Gbl.Hierarchy.Ctr.CtrCod,
-		                                 true,
-		                                 IsLastItemInLevel) > 0)
-		     if (ICanSeeDegForum)
-			/***** Links to forums of current degree *****/
-			if (For_WriteLinksToDegForums (Forums,
-			                               Gbl.Hierarchy.Deg.DegCod,
-			                               true,
-			                               IsLastItemInLevel) > 0)
-			   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-			       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-			      /***** Links to forums of current degree *****/
-			      For_WriteLinksToCrsForums (Forums,
-			                                 Gbl.Hierarchy.Crs.CrsCod,
-			                                 true,
-			                                 IsLastItemInLevel);
-        	 }
-           }
-         break;
-      case For_ALL_MY_FORUMS:
-         /***** Links to forums about the platform *****/
-         For_WriteLinksToPlatformForums (Forums,(Gbl.Usrs.Me.MyInss.Num == 0),IsLastItemInLevel);
-
-         /***** Links to forums of users from my institutions, the degrees in each institution and the courses in each degree *****/
-         for (NumMyIns = 0;
-              NumMyIns < Gbl.Usrs.Me.MyInss.Num;
-              NumMyIns++)
-           {
-            InsCod = Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod;
-
-            /* Links to forums of this institution */
-            For_WriteLinksToInsForums (Forums,
-                                       InsCod,
-                                       (NumMyIns == Gbl.Usrs.Me.MyInss.Num - 1),
-                                       IsLastItemInLevel);
-
-            /* Get my centers in this institution from database */
-            NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                          InsCod,&mysql_resCtr);
-	    for (NumCtr = 0;
-		 NumCtr < NumCtrs;
-		 NumCtr++)
-	      {
-	       /* Get next center */
-	       row = mysql_fetch_row (mysql_resCtr);
-	       CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	       /* Links to forums of this center */
-	       if (For_WriteLinksToCtrForums (Forums,
-					      CtrCod,
-					      (NumCtr == NumCtrs - 1),
-					      IsLastItemInLevel) > 0)
+	    case For_ONLY_CURRENT_FORUMS:
+	       if (Gbl.Hierarchy.Ins.InsCod > 0)
 		 {
-		  /* Get my degrees in this institution from database */
-		  if ((NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-						     CtrCod,
-						     &mysql_resDeg)) > 0) // Degrees found in this center
-		     for (NumDeg = 0;
-			  NumDeg < NumDegs;
-			  NumDeg++)
+		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+		     ICanSeeInsForum = true;
+		  else
+		     ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
+		 }
+	       else
+		  ICanSeeInsForum = false;
+
+	       /***** Links to forums about the platform *****/
+	       For_WriteLinksToPlatformForums (Forums,!ICanSeeInsForum,IsLastItemInLevel);
+
+	       if (ICanSeeInsForum)
+		 {
+		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+		     ICanSeeCtrForum = true;
+		  else
+		     ICanSeeCtrForum = Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
+
+		  /***** Links to forums of current institution *****/
+		  if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Ins.InsCod,
+						 true,
+						 IsLastItemInLevel) > 0)
+		     if (ICanSeeCtrForum)
 		       {
-			/* Get next degree */
-			row = mysql_fetch_row (mysql_resDeg);
-			DegCod = Str_ConvertStrCodToLongCod (row[0]);
+			if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+			   ICanSeeDegForum = true;
+			else
+			   ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
 
-			/* Links to forums of this degree */
-			if (For_WriteLinksToDegForums (Forums,
-						       DegCod,
-						       (NumDeg == NumDegs - 1),
+			/***** Links to forums of current center *****/
+			if (For_WriteLinksToCtrForums (Forums,
+						       Gbl.Hierarchy.Ctr.CtrCod,
+						       true,
 						       IsLastItemInLevel) > 0)
-			  {
-			   /* Get my courses in this degree from database */
-			   NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-							 DegCod,
-							 &mysql_resCrs);
-			   for (NumCrs = 0;
-				NumCrs < NumCrss;
-				NumCrs++)
-			     {
-			      /* Get next course */
-			      row = mysql_fetch_row (mysql_resCrs);
-			      CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+			   if (ICanSeeDegForum)
+			      /***** Links to forums of current degree *****/
+			      if (For_WriteLinksToDegForums (Forums,
+							     Gbl.Hierarchy.Deg.DegCod,
+							     true,
+							     IsLastItemInLevel) > 0)
+				 if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+				     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+				    /***** Links to forums of current degree *****/
+				    For_WriteLinksToCrsForums (Forums,
+							       Gbl.Hierarchy.Crs.CrsCod,
+							       true,
+							       IsLastItemInLevel);
+		       }
+		 }
+	       break;
+	    case For_ALL_MY_FORUMS:
+	       /***** Links to forums about the platform *****/
+	       For_WriteLinksToPlatformForums (Forums,(Gbl.Usrs.Me.MyInss.Num == 0),IsLastItemInLevel);
 
-			      /* Links to forums of this course */
-			      For_WriteLinksToCrsForums (Forums,
-							 CrsCod,
-							 (NumCrs == NumCrss - 1),
-							 IsLastItemInLevel);
+	       /***** Links to forums of users from my institutions, the degrees in each institution and the courses in each degree *****/
+	       for (NumMyIns = 0;
+		    NumMyIns < Gbl.Usrs.Me.MyInss.Num;
+		    NumMyIns++)
+		 {
+		  InsCod = Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod;
+
+		  /* Links to forums of this institution */
+		  For_WriteLinksToInsForums (Forums,
+					     InsCod,
+					     (NumMyIns == Gbl.Usrs.Me.MyInss.Num - 1),
+					     IsLastItemInLevel);
+
+		  /* Get my centers in this institution from database */
+		  NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+						InsCod,&mysql_resCtr);
+		  for (NumCtr = 0;
+		       NumCtr < NumCtrs;
+		       NumCtr++)
+		    {
+		     /* Get next center */
+		     row = mysql_fetch_row (mysql_resCtr);
+		     CtrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+		     /* Links to forums of this center */
+		     if (For_WriteLinksToCtrForums (Forums,
+						    CtrCod,
+						    (NumCtr == NumCtrs - 1),
+						    IsLastItemInLevel) > 0)
+		       {
+			/* Get my degrees in this institution from database */
+			if ((NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+							   CtrCod,
+							   &mysql_resDeg)) > 0) // Degrees found in this center
+			   for (NumDeg = 0;
+				NumDeg < NumDegs;
+				NumDeg++)
+			     {
+			      /* Get next degree */
+			      row = mysql_fetch_row (mysql_resDeg);
+			      DegCod = Str_ConvertStrCodToLongCod (row[0]);
+
+			      /* Links to forums of this degree */
+			      if (For_WriteLinksToDegForums (Forums,
+							     DegCod,
+							     (NumDeg == NumDegs - 1),
+							     IsLastItemInLevel) > 0)
+				{
+				 /* Get my courses in this degree from database */
+				 NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
+							       DegCod,
+							       &mysql_resCrs);
+				 for (NumCrs = 0;
+				      NumCrs < NumCrss;
+				      NumCrs++)
+				   {
+				    /* Get next course */
+				    row = mysql_fetch_row (mysql_resCrs);
+				    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+
+				    /* Links to forums of this course */
+				    For_WriteLinksToCrsForums (Forums,
+							       CrsCod,
+							       (NumCrs == NumCrss - 1),
+							       IsLastItemInLevel);
+				   }
+
+				 /* Free structure that stores the query result */
+				 DB_FreeMySQLResult (&mysql_resCrs);
+				}
 			     }
 
-			   /* Free structure that stores the query result */
-			   DB_FreeMySQLResult (&mysql_resCrs);
-			  }
+			/* Free structure that stores the query result */
+			DB_FreeMySQLResult (&mysql_resDeg);
 		       }
+		    }
 
 		  /* Free structure that stores the query result */
-		  DB_FreeMySQLResult (&mysql_resDeg);
+		  DB_FreeMySQLResult (&mysql_resCtr);
 		 }
-	      }
+	       break;
+	    default:
+	       break;
+	   }
 
-            /* Free structure that stores the query result */
-            DB_FreeMySQLResult (&mysql_resCtr);
-           }
-         break;
-      default:
-         break;
-     }
-
-   /***** End list *****/
-   HTM_UL_End ();
+      /***** End list *****/
+      HTM_UL_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1795,26 +1797,27 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
           - only the forums of current institution/degree/course *****/
    Frm_BeginForm (ActSeeFor);
    Dat_PutHiddenParamOrder (Forums->ThreadsOrder);
-   HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
-   HTM_UL_Begin (NULL);
+      HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
+	 HTM_UL_Begin (NULL);
 
-   for (ForumSet  = (For_ForumSet_t) 0;
-	ForumSet <= (For_ForumSet_t) (For_NUM_FORUM_SETS - 1);
-	ForumSet++)
-     {
-      HTM_LI_Begin (NULL);
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("ForumSet",true,
-		       "value=\"%u\"%s",
-		       (unsigned) ForumSet,
-		       (ForumSet == Forums->ForumSet) ? " checked=\"checked\"" :
-			                                "");
-      HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
-     }
-   HTM_UL_End ();
-   HTM_DIV_End ();
+	    for (ForumSet  = (For_ForumSet_t) 0;
+		 ForumSet <= (For_ForumSet_t) (For_NUM_FORUM_SETS - 1);
+		 ForumSet++)
+	      {
+	       HTM_LI_Begin (NULL);
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("ForumSet",true,
+				      "value=\"%u\"%s",
+				      (unsigned) ForumSet,
+				      (ForumSet == Forums->ForumSet) ? " checked=\"checked\"" :
+								       "");
+		     HTM_Txt (Txt_FORUM_WHICH_FORUM[ForumSet]);
+		  HTM_LABEL_End ();
+	       HTM_LI_End ();
+	      }
+
+	 HTM_UL_End ();
+      HTM_DIV_End ();
    Frm_EndForm ();
   }
 
@@ -2090,87 +2093,89 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
    HTM_LI_Begin (Highlight ? "class=\"LIGHT_BLUE\"" :
 			     NULL);
 
-   /***** Indent forum title *****/
-   Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
+      /***** Indent forum title *****/
+      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
 
-   /***** Write paste button used to move a thread in clipboard to this forum *****/
-   if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
-     {
-      /* Check if thread to move is yet in current forum */
-      if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
-         Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
-      else
-        {
-         Frm_StartFormAnchor (For_ActionsPasThrFor[Forum->Type],
-                              For_FORUM_THREADS_SECTION_ID);
-	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                      1,	// Page of posts   = first
-                                      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forum->Location,
-				      Forums->Thread.ToMove,
-				      -1L);
-         Ico_PutIconPaste ();
-         Frm_EndForm ();
-        }
-     }
+      /***** Write paste button used to move a thread in clipboard to this forum *****/
+      if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
+	{
+	 /* Check if thread to move is yet in current forum */
+	 if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
+	    Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
+	 else
+	   {
+	    Frm_StartFormAnchor (For_ActionsPasThrFor[Forum->Type],
+				 For_FORUM_THREADS_SECTION_ID);
+	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					 1,	// Page of posts   = first
+					 Forums->ForumSet,
+					 Forums->ThreadsOrder,
+					 Forum->Location,
+					 Forums->Thread.ToMove,
+					 -1L);
+	    Ico_PutIconPaste ();
+	    Frm_EndForm ();
+	   }
+	}
 
-   /***** Write link to forum *****/
-   Frm_StartFormAnchor (For_ActionsSeeFor[Forum->Type],
-                        For_FORUM_THREADS_SECTION_ID);
-   For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                1,	// Page of posts   = first
-                                Forums->ForumSet,
-                                Forums->ThreadsOrder,
-                                Forum->Location,
-                                -1L,
-                                -1L);
+      /***** Write link to forum *****/
+      Frm_StartFormAnchor (For_ActionsSeeFor[Forum->Type],
+			   For_FORUM_THREADS_SECTION_ID);
+      For_PutAllHiddenParamsForum (1,	// Page of threads = first
+				   1,	// Page of posts   = first
+				   Forums->ForumSet,
+				   Forums->ThreadsOrder,
+				   Forum->Location,
+				   -1L,
+				   -1L);
 
-   HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
-			    Class,NULL);
-   For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
-   switch (Forum->Type)
-     {
-      case For_FORUM_GLOBAL_USRS:
-      case For_FORUM_GLOBAL_TCHS:
-         Ico_PutIcon ("comments.svg",ForumName,"ICO16x16");
-         break;
-      case For_FORUM__SWAD__USRS:
-      case For_FORUM__SWAD__TCHS:
-         Ico_PutIcon ("swad64x64.png",ForumName,"ICO16x16");
-         break;
-      case For_FORUM_INSTIT_USRS:
-      case For_FORUM_INSTIT_TCHS:
-         Lgo_DrawLogo (HieLvl_INS,Forum->Location,ForumName,16,NULL,true);
-         break;
-      case For_FORUM_CENTER_USRS:
-      case For_FORUM_CENTER_TCHS:
-         Lgo_DrawLogo (HieLvl_CTR,Forum->Location,ForumName,16,NULL,true);
-         break;
-      case For_FORUM_DEGREE_USRS:
-      case For_FORUM_DEGREE_TCHS:
-         Lgo_DrawLogo (HieLvl_DEG,Forum->Location,ForumName,16,NULL,true);
-         break;
-      case For_FORUM_COURSE_USRS:
-      case For_FORUM_COURSE_TCHS:
-         Ico_PutIcon ("chalkboard-teacher.svg",ForumName,"ICO16x16");
-         break;
-      default:
-         break;
-     }
-   HTM_TxtF ("&nbsp;%s",ForumName);
+	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
+				  Class,NULL);
 
-   /***** Write total number of threads and posts in this forum *****/
-   if (NumThrs)
-      For_WriteNumberOfThrs (NumThrs);
+	    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
+	    switch (Forum->Type)
+	      {
+	       case For_FORUM_GLOBAL_USRS:
+	       case For_FORUM_GLOBAL_TCHS:
+		  Ico_PutIcon ("comments.svg",ForumName,"ICO16x16");
+		  break;
+	       case For_FORUM__SWAD__USRS:
+	       case For_FORUM__SWAD__TCHS:
+		  Ico_PutIcon ("swad64x64.png",ForumName,"ICO16x16");
+		  break;
+	       case For_FORUM_INSTIT_USRS:
+	       case For_FORUM_INSTIT_TCHS:
+		  Lgo_DrawLogo (HieLvl_INS,Forum->Location,ForumName,16,NULL,true);
+		  break;
+	       case For_FORUM_CENTER_USRS:
+	       case For_FORUM_CENTER_TCHS:
+		  Lgo_DrawLogo (HieLvl_CTR,Forum->Location,ForumName,16,NULL,true);
+		  break;
+	       case For_FORUM_DEGREE_USRS:
+	       case For_FORUM_DEGREE_TCHS:
+		  Lgo_DrawLogo (HieLvl_DEG,Forum->Location,ForumName,16,NULL,true);
+		  break;
+	       case For_FORUM_COURSE_USRS:
+	       case For_FORUM_COURSE_TCHS:
+		  Ico_PutIcon ("chalkboard-teacher.svg",ForumName,"ICO16x16");
+		  break;
+	       default:
+		  break;
+	      }
+	    HTM_TxtF ("&nbsp;%s",ForumName);
 
-   /***** End row *****/
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+	    /***** Write total number of threads and posts in this forum *****/
+	    if (NumThrs)
+	       For_WriteNumberOfThrs (NumThrs);
 
-   /***** Put link to register students *****/
-   if (Forum->Type == For_FORUM_COURSE_USRS)
-      Enr_PutButtonInlineToRegisterStds (Forum->Location);
+	 /***** End row *****/
+	 HTM_BUTTON_End ();
+
+      Frm_EndForm ();
+
+      /***** Put link to register students *****/
+      if (Forum->Type == For_FORUM_COURSE_USRS)
+	 Enr_PutButtonInlineToRegisterStds (Forum->Location);
 
    HTM_LI_End ();
   }
@@ -2369,7 +2374,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
      {
       /***** Get the number of posts in thread with a modify time > newest read time for me (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
-      NumUnreadPosts = For_GetNumOfPostsInThrNewerThan (ThrCod,row[0]);
+      NumUnreadPosts = For_DB_GetNumOfPostsInThrNewerThan (ThrCod,row[0]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -2382,7 +2387,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 /**** Get number of posts in thread with a modify time > a specified time ****/
 /*****************************************************************************/
 
-static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
+static unsigned For_DB_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
   {
    /***** Get the number of posts in thread with a modify time > a specified time from database *****/
    return (unsigned)
@@ -2520,83 +2525,85 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 
    /***** Show alert after action *****/
    HTM_SECTION_Begin (For_FORUM_THREADS_SECTION_ID);
-   if (Message)
-      if (Message[0])
-         Ale_ShowAlert (AlertType,Message);
 
-   /***** Begin box for threads of this forum *****/
-   snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",Txt_Forum,ForumName);
-   Box_BoxBegin (NULL,FrameTitle,
-                 For_PutIconNewThread,Forums,
-		 Hlp_COMMUNICATION_Forums_threads,Box_NOT_CLOSABLE);
+      if (Message)
+	 if (Message[0])
+	    Ale_ShowAlert (AlertType,Message);
 
-   /***** List the threads *****/
-   if (NumThrs)
-     {
-      /***** Write links to all the pages in the listing of threads *****/
-      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
-				     Forums,-1L);
+      /***** Begin box for threads of this forum *****/
+      snprintf (FrameTitle,sizeof (FrameTitle),"%s: %s",Txt_Forum,ForumName);
+      Box_BoxBegin (NULL,FrameTitle,
+		    For_PutIconNewThread,Forums,
+		    Hlp_COMMUNICATION_Forums_threads,Box_NOT_CLOSABLE);
 
-      /***** Heading row *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-      HTM_TR_Begin (NULL);
+	 /***** List the threads *****/
+	 if (NumThrs)
+	   {
+	    /***** Write links to all the pages in the listing of threads *****/
+	    Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
+					   Forums,-1L);
 
-      HTM_TH (1,1,"BT",NULL);
-      HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-      HTM_TH (1,1,"LM",Txt_MSG_Subject);
+	    /***** Heading row *****/
+	    HTM_TABLE_BeginWideMarginPadding (2);
+	       HTM_TR_Begin (NULL);
 
-      for (Order  = Dat_START_TIME;
-	   Order <= Dat_END_TIME;
-	   Order++)
-	{
-	 HTM_TH_Begin (1,2,"CM");
+		  HTM_TH (1,1,"BT",NULL);
+		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+		  HTM_TH (1,1,"LM",Txt_MSG_Subject);
 
-         Frm_StartFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
-                              For_FORUM_THREADS_SECTION_ID);
-	 For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-                                      1,				// Page of posts   = first
-                                      Forums->ForumSet,
-				      Order,
-				      Forums->Forum.Location,
-				      -1L,
-				      -1L);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-         if (Order == Forums->ThreadsOrder)
-            HTM_U_Begin ();
-	 HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
-         if (Order == Forums->ThreadsOrder)
-            HTM_U_End ();
-         HTM_BUTTON_End ();
-         Frm_EndForm ();
+		  for (Order  = Dat_START_TIME;
+		       Order <= Dat_END_TIME;
+		       Order++)
+		    {
+		     HTM_TH_Begin (1,2,"CM");
 
-         HTM_TH_End ();
-	}
+			Frm_StartFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
+					     For_FORUM_THREADS_SECTION_ID);
+			For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
+						     1,				// Page of posts   = first
+						     Forums->ForumSet,
+						     Order,
+						     Forums->Forum.Location,
+						     -1L,
+						     -1L);
+			   HTM_BUTTON_SUBMIT_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+			      if (Order == Forums->ThreadsOrder)
+				 HTM_U_Begin ();
+			      HTM_Txt (Txt_FORUM_THREAD_ORDER[Order]);
+			      if (Order == Forums->ThreadsOrder)
+				 HTM_U_End ();
+			   HTM_BUTTON_End ();
+			Frm_EndForm ();
 
-      HTM_TH (1,1,"RM",Txt_Number_BR_msgs);
-      HTM_TH (1,1,"RM",Txt_Unread_BR_msgs);
-      HTM_TH (1,1,"RM",Txt_WriBRters);
-      HTM_TH (1,1,"RM",Txt_ReaBRders);
+		     HTM_TH_End ();
+		    }
 
-      HTM_TR_End ();
+		  HTM_TH (1,1,"RM",Txt_Number_BR_msgs);
+		  HTM_TH (1,1,"RM",Txt_Unread_BR_msgs);
+		  HTM_TH (1,1,"RM",Txt_WriBRters);
+		  HTM_TH (1,1,"RM",Txt_ReaBRders);
 
-      /***** List the threads *****/
-      For_ListForumThrs (Forums,ThrCods,Forums->Thread.Current,&PaginationThrs);
+	       HTM_TR_End ();
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	       /***** List the threads *****/
+	       For_ListForumThrs (Forums,ThrCods,Forums->Thread.Current,&PaginationThrs);
 
-      /***** Write links to all the pages in the listing of threads *****/
-      Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
-				     Forums,-1L);
-     }
+	    /***** End table *****/
+	    HTM_TABLE_End ();
 
-   /***** Put a form to write the first post of a new thread *****/
-   HTM_SECTION_Begin (For_NEW_THREAD_SECTION_ID);
-   For_WriteFormForumPst (Forums,false,NULL);
-   HTM_SECTION_End ();
+	    /***** Write links to all the pages in the listing of threads *****/
+	    Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
+					   Forums,-1L);
+	   }
 
-   /***** End box with threads of this forum ****/
-   Box_BoxEnd ();
+	 /***** Put a form to write the first post of a new thread *****/
+	 HTM_SECTION_Begin (For_NEW_THREAD_SECTION_ID);
+	 For_WriteFormForumPst (Forums,false,NULL);
+	 HTM_SECTION_End ();
+
+      /***** End box with threads of this forum ****/
+      Box_BoxEnd ();
+
    HTM_SECTION_End ();
   }
 
@@ -2631,8 +2638,12 @@ static void For_PutAllHiddenParamsNewThread (void *Forums)
 /********************** Get number of forums of a type ***********************/
 /*****************************************************************************/
 
-unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
-                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod)
+unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
+                                         long CtyCod,
+                                         long InsCod,
+                                         long CtrCod,
+                                         long DegCod,
+                                         long CrsCod)
   {
    /***** Get number of forums of a type from database *****/
    switch (ForumType)
@@ -2881,8 +2892,12 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 /*********** Get total number of threads in forums of this type **************/
 /*****************************************************************************/
 
-unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
-                                            long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod)
+unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
+                                               long CtyCod,
+                                               long InsCod,
+                                               long CtrCod,
+                                               long DegCod,
+                                               long CrsCod)
   {
    /***** Get total number of threads in forums of this type from database *****/
    switch (ForumType)
@@ -3160,7 +3175,11 @@ static unsigned For_GetNumThrsInForum (const struct For_Forum *Forum)
 /*****************************************************************************/
 
 unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
-                                            long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                            long CtyCod,
+                                            long InsCod,
+                                            long CtrCod,
+                                            long DegCod,
+                                            long CrsCod,
                                             unsigned *NumUsrsToBeNotifiedByEMail)
   {
    MYSQL_RES *mysql_res;
@@ -3718,23 +3737,23 @@ static void For_GetThreadData (struct For_Thread *Thr)
    for (Order = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
-      Thr->Enabled[Order] = For_GetIfPstIsEnabled (Thr->PstCod[Order]);
+      Thr->Enabled[Order] = For_DB_GetIfPstIsEnabled (Thr->PstCod[Order]);
       // Thr->Enabled[Order] = true;
 
    /***** Get number of posts in this thread *****/
-   Thr->NumPosts = For_GetNumPstsInThr (Thr->ThrCod);
+   Thr->NumPosts = For_DB_GetNumPstsInThr (Thr->ThrCod);
 
    /***** Get number of unread (by me) posts in this thread *****/
    Thr->NumUnreadPosts = For_GetNumOfUnreadPostsInThr (Thr->ThrCod,Thr->NumPosts);
 
    /***** Get number of posts that I have written in this thread *****/
-   Thr->NumMyPosts = For_GetNumMyPstInThr (Thr->ThrCod);
+   Thr->NumMyPosts = For_DB_GetNumMyPstInThr (Thr->ThrCod);
 
    /***** Get number of users who have write posts in this thread *****/
-   Thr->NumWriters = For_GetNumOfWritersInThr (Thr->ThrCod);
+   Thr->NumWriters = For_DB_GetNumOfWritersInThr (Thr->ThrCod);
 
    /***** Get number of users who have read this thread *****/
-   Thr->NumReaders = For_GetNumOfReadersOfThr (Thr->ThrCod);
+   Thr->NumReaders = For_DB_GetNumOfReadersOfThr (Thr->ThrCod);
   }
 
 /*****************************************************************************/
@@ -4052,37 +4071,37 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    /***** Subject and content *****/
    HTM_TABLE_BeginCenterPadding (2);
 
-   // If writing a reply to a message of an existing thread ==> write subject
-   /* Subject */
-   HTM_TR_Begin (NULL);
+      // If writing a reply to a message of an existing thread ==> write subject
+      /* Subject */
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
-		   IsReply ? Subject :
-		             "",
-		   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
+			    IsReply ? Subject :
+				      "",
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /* Content */
-   HTM_TR_Begin (NULL);
+      /* Content */
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    HTM_TABLE_End ();
 
@@ -4159,20 +4178,20 @@ void For_ReceiveForumPost (void)
                                    Subject,Content,&Media);
 
       /***** Modify last message of the thread *****/
-      For_UpdateThrLastPst (Forums.Thread.Current,PstCod);
+      For_DB_UpdateThrLastPst (Forums.Thread.Current,PstCod);
      }
    else			// This post is the first of a new thread
      {
       /***** Create new thread with unknown first and last message codes *****/
       Forums.Thread.Current  =
-      Forums.Thread.Selected = For_InsertForumThread (&Forums,-1L);
+      Forums.Thread.Selected = For_DB_InsertForumThread (&Forums,-1L);
 
       /***** Create first (and last) message of the thread *****/
       PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
                                    Subject,Content,&Media);
 
       /***** Update first and last posts of new thread *****/
-      For_UpdateThrFirstAndLastPst (Forums.Thread.Current,PstCod,PstCod);
+      For_DB_UpdateThrFirstAndLastPst (Forums.Thread.Current,PstCod,PstCod);
      }
 
    /***** Free media *****/
@@ -4266,7 +4285,7 @@ void For_RemovePost (void)
 
    /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
-   if (!For_GetIfForumPstExists (Forums.PstCod))
+   if (!For_DB_GetIfForumPstExists (Forums.PstCod))
       Err_WrongPostExit ();
 
    /* Check if I am the author of the message */
@@ -4340,19 +4359,19 @@ void For_RequestRemoveThread (void)
 
    /***** Show question and button to remove the thread *****/
    HTM_SECTION_Begin (For_REMOVE_THREAD_SECTION_ID);
-   if (Subject[0])
-      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
-			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,&Forums,
-			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
-                              Subject);
-   else
-      Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
-			      For_FORUM_THREADS_SECTION_ID,NULL,
-			      For_PutAllHiddenParamsRemThread,&Forums,
-			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
-			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
+      if (Subject[0])
+	 Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
+				 For_FORUM_THREADS_SECTION_ID,NULL,
+				 For_PutAllHiddenParamsRemThread,&Forums,
+				 Btn_REMOVE_BUTTON,Txt_Remove_thread,
+				 Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
+				 Subject);
+      else
+	 Ale_ShowAlertAndButton (For_ActionsDelThrFor[Forums.Forum.Type],
+				 For_FORUM_THREADS_SECTION_ID,NULL,
+				 For_PutAllHiddenParamsRemThread,&Forums,
+				 Btn_REMOVE_BUTTON,Txt_Remove_thread,
+				 Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
    HTM_SECTION_End ();
 
    /***** Show the threads again *****/
@@ -4549,6 +4568,7 @@ static bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum 
       sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
    else
       SubQuery[0] = '\0';
+
    return (DB_QueryCOUNT ("can not get if a thread belong to current forum",
 			  "SELECT COUNT(*)"
 			   " FROM for_threads"

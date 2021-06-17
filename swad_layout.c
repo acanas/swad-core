@@ -1436,11 +1436,11 @@ void Lay_RefreshNotifsAndConnected (void)
    if      (!(Gbl.PID %  11))
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
    else if (!(Gbl.PID %  19))
-      Fir_PurgeFirewall ();			// Remove old clicks from firewall
+      Fir_DB_PurgeFirewall ();			// Remove old clicks from firewall
    else if (!(Gbl.PID %  23))
       Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES	,false);	// Remove the oldest temporary public directories used for downloading
    else if (!(Gbl.PID % 101))
-      Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
+      Brw_DB_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 103))
       Set_RemoveOldSettingsFromIP ();		// Remove old settings from IP
    else if (!(Gbl.PID % 107))

@@ -203,7 +203,6 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void);
 static void Fig_GetAndShowNumUsrsPerMenu (void);
 static void Fig_GetAndShowNumUsrsPerTheme (void);
 static void Fig_GetAndShowNumUsrsPerSideColumns (void);
-unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -229,45 +228,46 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    /***** Form to show statistic *****/
    Frm_BeginForm (ActSeeUseGbl);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Figures,
-                 NULL,NULL,
-                 Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Figures,
+		    NULL,NULL,
+		    Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
-   /***** Compute stats for anywhere, degree or course? *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Scope);
-   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-	               1 << HieLvl_CTY |
-	               1 << HieLvl_INS |
-		       1 << HieLvl_CTR |
-		       1 << HieLvl_DEG |
-		       1 << HieLvl_CRS;
-   Gbl.Scope.Default = HieLvl_SYS;
-   Sco_GetScope ("ScopeFig");
-   Sco_PutSelectorScope ("ScopeFig",HTM_DONT_SUBMIT_ON_CHANGE);
-   HTM_LABEL_End ();
-   HTM_BR ();
+	 /***** Compute stats for anywhere, degree or course? *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_Scope);
+	    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+				1 << HieLvl_CTY |
+				1 << HieLvl_INS |
+				1 << HieLvl_CTR |
+				1 << HieLvl_DEG |
+				1 << HieLvl_CRS;
+	    Gbl.Scope.Default = HieLvl_SYS;
+	    Sco_GetScope ("ScopeFig");
+	    Sco_PutSelectorScope ("ScopeFig",HTM_DONT_SUBMIT_ON_CHANGE);
+	 HTM_LABEL_End ();
 
-   /***** Type of statistic *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Statistic);
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"FigureType\"");
-   for (FigType  = (Fig_FigureType_t) 0;
-	FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
-	FigType++)
-     {
-      FigureTypeUnsigned = (unsigned) FigType;
-      HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-		  FigType == SelectedFigureType,false,
-		  "%s",Txt_FIGURE_TYPES[FigType]);
-     }
-   HTM_SELECT_End ();
-   HTM_LABEL_End ();
+	 HTM_BR ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_statistic);
+	 /***** Type of statistic *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_Statistic);
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      "name=\"FigureType\"");
+	       for (FigType  = (Fig_FigureType_t) 0;
+		    FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
+		    FigType++)
+		 {
+		  FigureTypeUnsigned = (unsigned) FigType;
+		  HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
+			      FigType == SelectedFigureType,false,
+			      "%s",Txt_FIGURE_TYPES[FigType]);
+		 }
+	    HTM_SELECT_End ();
+	 HTM_LABEL_End ();
+
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_statistic);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -400,26 +400,26 @@ static void Fig_GetAndShowUsersStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Users);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_Average_number_of_courses_to_which_a_user_belongs);
+	 HTM_TH (1,1,"RM",Txt_Average_number_of_users_belonging_to_a_course);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_Average_number_of_courses_to_which_a_user_belongs);
-   HTM_TH (1,1,"RM",Txt_Average_number_of_users_belonging_to_a_course);
+      /***** Figures *****/
+      Fig_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
+      Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
+      Fig_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
+      Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
 
-   HTM_TR_End ();
+      /***** Separator *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,4,"SEPAR_ROW",NULL);
+      HTM_TR_End ();
 
-   Fig_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
-   Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
-   Fig_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
-   Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
-
-   HTM_TR_Begin (NULL);
-   HTM_TH (1,4,"SEPAR_ROW",NULL);
-   HTM_TR_End ();
-
-   Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
+      Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -450,23 +450,23 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    /***** Write the total number of users *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
-        	                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
+				      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+      HTM_TD_End ();
 
-   /* Number of users in courses */
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
-   HTM_TD_End ();
+      /* Number of users in courses */
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double2Decimals (Usr_GetCachedNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (Usr_GetCachedNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double2Decimals (Usr_GetCachedNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (Usr_GetCachedNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -483,21 +483,21 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    /***** Write the total number of users not belonging to any course *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Unsigned (Usr_GetCachedNumUsrsNotBelongingToAnyCrs ());
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Unsigned (Usr_GetCachedNumUsrsNotBelongingToAnyCrs ());
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double2Decimals (0.0);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (0.0);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s\"",Class);
-   HTM_Double2Decimals (0.0);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (0.0);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -523,51 +523,49 @@ static void Fig_GetAndShowUsersRanking (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"CM",Txt_Clicks);
+	 HTM_TH (1,1,"CM",Txt_Clicks_per_day);
+	 HTM_TH (1,1,"CM",Txt_Timeline);
+	 HTM_TH (1,1,"CM",Txt_Followers);
+	 HTM_TH (1,1,"CM",Txt_Downloads);
+	 HTM_TH (1,1,"CM",Txt_Forums);
+	 HTM_TH (1,1,"CM",Txt_Messages);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"CM",Txt_Clicks);
-   HTM_TH (1,1,"CM",Txt_Clicks_per_day);
-   HTM_TH (1,1,"CM",Txt_Timeline);
-   HTM_TH (1,1,"CM",Txt_Followers);
-   HTM_TH (1,1,"CM",Txt_Downloads);
-   HTM_TH (1,1,"CM",Txt_Forums);
-   HTM_TH (1,1,"CM",Txt_Messages);
+      /***** Rankings *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Prf_GetAndShowRankingClicks ();
+	 HTM_TD_End ();
 
-   /***** Rankings *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Prf_GetAndShowRankingClicksPerDay ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Prf_GetAndShowRankingClicks ();
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Prf_GetAndShowRankingSocPub ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Prf_GetAndShowRankingClicksPerDay ();
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Fol_GetAndShowRankingFollowers ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Prf_GetAndShowRankingSocPub ();
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Prf_GetAndShowRankingFileViews ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Fol_GetAndShowRankingFollowers ();
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Prf_GetAndShowRankingForPst ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Prf_GetAndShowRankingFileViews ();
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    Prf_GetAndShowRankingMsgSnt ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Prf_GetAndShowRankingForPst ();
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   Prf_GetAndShowRankingMsgSnt ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -589,16 +587,16 @@ static void Fig_GetAndShowHierarchyStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
-   Fig_WriteHeadHierarchy ();
-   Fig_GetAndShowHierarchyWithInss ();
-   Fig_GetAndShowHierarchyWithCtrs ();
-   Fig_GetAndShowHierarchyWithDegs ();
-   Fig_GetAndShowHierarchyWithCrss ();
-   for (Role =  Rol_TCH;
-	Role >= Rol_STD;
-	Role--)
-      Fig_GetAndShowHierarchyWithUsrs (Role);
-   Fig_GetAndShowHierarchyTotal ();
+      Fig_WriteHeadHierarchy ();
+      Fig_GetAndShowHierarchyWithInss ();
+      Fig_GetAndShowHierarchyWithCtrs ();
+      Fig_GetAndShowHierarchyWithDegs ();
+      Fig_GetAndShowHierarchyWithCrss ();
+      for (Role =  Rol_TCH;
+	   Role >= Rol_STD;
+	   Role--)
+	 Fig_GetAndShowHierarchyWithUsrs (Role);
+      Fig_GetAndShowHierarchyTotal ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -618,37 +616,37 @@ static void Fig_WriteHeadHierarchy (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
+      HTM_TH_Empty (1);
 
-   HTM_TH_Begin (1,1,"RM");
-   Ico_PutIcon ("globe.svg",Txt_Countries,"CONTEXT_ICO_x16");
-   HTM_BR ();
-   HTM_Txt (Txt_Countries);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 Ico_PutIcon ("globe.svg",Txt_Countries,"CONTEXT_ICO_x16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Countries);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   Ico_PutIcon ("university.svg",Txt_Institutions,"CONTEXT_ICO_x16");
-   HTM_BR ();
-   HTM_Txt (Txt_Institutions);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 Ico_PutIcon ("university.svg",Txt_Institutions,"CONTEXT_ICO_x16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Institutions);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   Ico_PutIcon ("building.svg",Txt_Centers,"CONTEXT_ICO_x16");
-   HTM_BR ();
-   HTM_Txt (Txt_Centers);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 Ico_PutIcon ("building.svg",Txt_Centers,"CONTEXT_ICO_x16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Centers);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   Ico_PutIcon ("graduation-cap.svg",Txt_Degrees,"CONTEXT_ICO_x16");
-   HTM_BR ();
-   HTM_Txt (Txt_Degrees);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 Ico_PutIcon ("graduation-cap.svg",Txt_Degrees,"CONTEXT_ICO_x16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Degrees);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   Ico_PutIcon ("chalkboard-teacher.svg",Txt_Courses,"CONTEXT_ICO_x16");
-   HTM_BR ();
-   HTM_Txt (Txt_Courses);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 Ico_PutIcon ("chalkboard-teacher.svg",Txt_Courses,"CONTEXT_ICO_x16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Courses);
+      HTM_TH_End ();
 
    HTM_TR_End ();
   }
@@ -993,18 +991,18 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Write text *****/
-   HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
-   HTM_Txt (Text1);
-   HTM_Txt (Text2);
-   HTM_TD_End ();
+      /***** Write text *****/
+      HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
+	 HTM_Txt (Text1);
+	 HTM_Txt (Text2);
+      HTM_TD_End ();
 
-   /***** Write number of countries *****/
-   Fig_ShowHierarchyCell (ClassTxt,NumCtys);
-   Fig_ShowHierarchyCell (ClassTxt,NumInss);
-   Fig_ShowHierarchyCell (ClassTxt,NumCtrs);
-   Fig_ShowHierarchyCell (ClassTxt,NumDegs);
-   Fig_ShowHierarchyCell (ClassTxt,NumCrss);
+      /***** Write number of countries *****/
+      Fig_ShowHierarchyCell (ClassTxt,NumCtys);
+      Fig_ShowHierarchyCell (ClassTxt,NumInss);
+      Fig_ShowHierarchyCell (ClassTxt,NumCtrs);
+      Fig_ShowHierarchyCell (ClassTxt,NumDegs);
+      Fig_ShowHierarchyCell (ClassTxt,NumCrss);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -1014,10 +1012,10 @@ static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
   {
    /***** Write number *****/
    HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
-   if (Num >= 0)
-      HTM_Unsigned ((unsigned) Num);
-   else		// < 0 ==> do not show number
-      HTM_Hyphen ();
+      if (Num >= 0)
+	 HTM_Unsigned ((unsigned) Num);
+      else		// < 0 ==> do not show number
+	 HTM_Hyphen ();
    HTM_TD_End ();
   }
 
@@ -1036,26 +1034,26 @@ static void Fig_GetAndShowInstitutionsStats (void)
                  NULL,NULL,
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
-   /***** Form to select type of list used to display degree photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
-   Figures.Scope      = Gbl.Scope.Current;
-   Figures.FigureType = Fig_INSTITS;
-   Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Figures);
+      /***** Form to select type of list used to display degree photos *****/
+      Usr_GetAndUpdatePrefsAboutUsrList ();
+      Figures.Scope      = Gbl.Scope.Current;
+      Figures.FigureType = Fig_INSTITS;
+      Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Figures);
 
-   /***** Institutions ordered by number of centers *****/
-   Fig_GetAndShowInssOrderedByNumCtrs ();
+      /***** Institutions ordered by number of centers *****/
+      Fig_GetAndShowInssOrderedByNumCtrs ();
 
-   /***** Institutions ordered by number of degrees *****/
-   Fig_GetAndShowInssOrderedByNumDegs ();
+      /***** Institutions ordered by number of degrees *****/
+      Fig_GetAndShowInssOrderedByNumDegs ();
 
-   /***** Institutions ordered by number of courses *****/
-   Fig_GetAndShowInssOrderedByNumCrss ();
+      /***** Institutions ordered by number of courses *****/
+      Fig_GetAndShowInssOrderedByNumCrss ();
 
-   /***** Institutions ordered by number of users in courses *****/
-   Fig_GetAndShowInssOrderedByNumUsrsInCrss ();
+      /***** Institutions ordered by number of users in courses *****/
+      Fig_GetAndShowInssOrderedByNumUsrsInCrss ();
 
-   /***** Institutions ordered by number of users who claim to belong to them *****/
-   Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
+      /***** Institutions ordered by number of users who claim to belong to them *****/
+      Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1077,55 +1075,55 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Get institutions ordered by number of centers *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT InsCod,"		// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ctr_centers"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
-         break;
-      case HieLvl_CTY:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT InsCod,"		// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ctr_centers"
-			 " WHERE InsCod=%ld"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get institutions ordered by number of centers *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT InsCod,"		// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ctr_centers"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC");
+	    break;
+	 case HieLvl_CTY:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ins_instits,"
+				   "ctr_centers"
+			    " WHERE ins_instits.CtyCod=%ld"
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Cty.CtyCod);
+	    break;
+	 case HieLvl_INS:
+	 case HieLvl_CTR:
+	 case HieLvl_DEG:
+	 case HieLvl_CRS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT InsCod,"		// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ctr_centers"
+			    " WHERE InsCod=%ld"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Ins.InsCod);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    break;
+	}
 
-   /***** Show institutions *****/
-   Fig_ShowInss (&mysql_res,NumInss,Txt_Centers);
+      /***** Show institutions *****/
+      Fig_ShowInss (&mysql_res,NumInss,Txt_Centers);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1147,61 +1145,61 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Get institutions ordered by number of degrees *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees"
-			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
-         break;
-      case HieLvl_CTY:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get institutions ordered by number of degrees *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ctr_centers,"
+				   "deg_degrees"
+			    " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC");
+	    break;
+	 case HieLvl_CTY:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ins_instits,"
+				   "ctr_centers,"
+				   "deg_degrees"
+			    " WHERE ins_instits.CtyCod=%ld"
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Cty.CtyCod);
+	    break;
+	 case HieLvl_INS:
+	 case HieLvl_CTR:
+	 case HieLvl_DEG:
+	 case HieLvl_CRS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ctr_centers,"
+				   "deg_degrees"
+			    " WHERE ctr_centers.InsCod=%ld"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Ins.InsCod);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    break;
+	}
 
-   /***** Show institutions *****/
-   Fig_ShowInss (&mysql_res,NumInss,Txt_Degrees);
+      /***** Show institutions *****/
+      Fig_ShowInss (&mysql_res,NumInss,Txt_Degrees);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1223,67 +1221,67 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Get institutions ordered by number of courses *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses"
-			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
-         break;
-      case HieLvl_CTY:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get institutions ordered by number of courses *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses"
+			    " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC");
+	    break;
+	 case HieLvl_CTY:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ins_instits,"
+				   "ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses"
+			    " WHERE ins_instits.CtyCod=%ld"
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Cty.CtyCod);
+	    break;
+	 case HieLvl_INS:
+	 case HieLvl_CTR:
+	 case HieLvl_DEG:
+	 case HieLvl_CRS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses"
+			    " WHERE ctr_centers.InsCod=%ld"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Ins.InsCod);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    break;
+	}
 
-   /***** Show institutions *****/
-   Fig_ShowInss (&mysql_res,NumInss,Txt_Courses);
+      /***** Show institutions *****/
+      Fig_ShowInss (&mysql_res,NumInss,Txt_Courses);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1305,73 +1303,73 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Get institutions ordered by number of users in courses *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"			// row[0]
-			        "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users"
-			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
-         break;
-      case HieLvl_CTY:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"			// row[0]
-			        "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT ctr_centers.InsCod,"			// row[0]
-			        "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get institutions ordered by number of users in courses *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"			// row[0]
+				   "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
+			     " FROM ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses,"
+				   "crs_users"
+			    " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC");
+	    break;
+	 case HieLvl_CTY:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"			// row[0]
+				   "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
+			     " FROM ins_instits,"
+				   "ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses,"
+				   "crs_users"
+			    " WHERE ins_instits.CtyCod=%ld"
+			      " AND ins_instits.InsCod=ctr_centers.InsCod"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Cty.CtyCod);
+	    break;
+	 case HieLvl_INS:
+	 case HieLvl_CTR:
+	 case HieLvl_DEG:
+	 case HieLvl_CRS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT ctr_centers.InsCod,"			// row[0]
+				   "COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
+			     " FROM ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses,"
+				   "crs_users"
+			    " WHERE ctr_centers.InsCod=%ld"
+			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			      " AND deg_degrees.DegCod=crs_courses.DegCod"
+			      " AND crs_courses.CrsCod=crs_users.CrsCod"
+			    " GROUP BY ctr_centers.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Ins.InsCod);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    break;
+	}
 
-   /***** Show institutions *****/
-   Fig_ShowInss (&mysql_res,NumInss,Txt_Users);
+      /***** Show institutions *****/
+      Fig_ShowInss (&mysql_res,NumInss,Txt_Users);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1394,56 +1392,56 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Get institutions ordered by number of users who claim to belong to them *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT InsCod,"		// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM usr_data"
-			 " WHERE InsCod>0"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC");
-         break;
-      case HieLvl_CTY:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT usr_data.InsCod,"	// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM ins_instits,usr_data"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=usr_data.InsCod"
-			 " GROUP BY usr_data.InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-      case HieLvl_CTR:
-      case HieLvl_DEG:
-      case HieLvl_CRS:
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT InsCod,"		// row[0]
-			        "COUNT(*) AS N"		// row[1]
-			  " FROM usr_data"
-			 " WHERE InsCod=%ld"
-			 " GROUP BY InsCod"
-			 " ORDER BY N DESC",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 NumInss = 0;	// Not reached. Initialized to avoid warning.
-	 break;
-     }
+      /***** Get institutions ordered by number of users who claim to belong to them *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT InsCod,"		// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM usr_data"
+			    " WHERE InsCod>0"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC");
+	    break;
+	 case HieLvl_CTY:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT usr_data.InsCod,"	// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM ins_instits,usr_data"
+			    " WHERE ins_instits.CtyCod=%ld"
+			      " AND ins_instits.InsCod=usr_data.InsCod"
+			    " GROUP BY usr_data.InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Cty.CtyCod);
+	    break;
+	 case HieLvl_INS:
+	 case HieLvl_CTR:
+	 case HieLvl_DEG:
+	 case HieLvl_CRS:
+	    NumInss = (unsigned)
+	    DB_QuerySELECT (&mysql_res,"can not get institutions",
+			    "SELECT InsCod,"		// row[0]
+				   "COUNT(*) AS N"		// row[1]
+			     " FROM usr_data"
+			    " WHERE InsCod=%ld"
+			    " GROUP BY InsCod"
+			    " ORDER BY N DESC",
+			    Gbl.Hierarchy.Ins.InsCod);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    NumInss = 0;	// Not reached. Initialized to avoid warning.
+	    break;
+	}
 
-   /***** Show institutions *****/
-   Fig_ShowInss (&mysql_res,NumInss,Txt_Users);
+      /***** Show institutions *****/
+      Fig_ShowInss (&mysql_res,NumInss,Txt_Users);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1488,9 +1486,9 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       /***** Write link to institution *****/
 	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
-	       HTM_BR ();
-               HTM_Unsigned (NumberThisRow);
+		  Ins_DrawInstitutionLogoWithLink (&Ins,40);
+		  HTM_BR ();
+		  HTM_Unsigned (NumberThisRow);
                HTM_TD_End ();
 
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
@@ -1506,12 +1504,9 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
 	    HTM_TR_Begin (NULL);
-
-	    HTM_TH_Empty (1);
-
-	    HTM_TH (1,1,"LM",Txt_Institution);
-	    HTM_TH (1,1,"RM",TxtFigure);
-
+	       HTM_TH_Empty (1);
+	       HTM_TH (1,1,"LM",Txt_Institution);
+	       HTM_TH (1,1,"RM",TxtFigure);
 	    HTM_TR_End ();
 
 	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
@@ -1523,35 +1518,35 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       HTM_TR_Begin (NULL);
 
-	       /***** Number of order *****/
-	       if (NumberThisRow != NumberLastRow)
-		  NumOrder = NumIns;
-	       HTM_TD_Begin ("class=\"DAT RM\"");
-	       HTM_Unsigned (NumOrder);
-	       HTM_TD_End ();
+		  /***** Number of order *****/
+		  if (NumberThisRow != NumberLastRow)
+		     NumOrder = NumIns;
+		  HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Unsigned (NumOrder);
+		  HTM_TD_End ();
 
-	       /***** Write link to institution *****/
-	       HTM_TD_Begin ("class=\"%s LM\"",
-		             The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       /* Icon and name of this institution */
-	       Frm_BeginForm (ActSeeInsInf);
-	       Ins_PutParamInsCod (Ins.InsCod);
-	       HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-	       if (Gbl.Usrs.Listing.WithPhotos)
-		 {
-		  Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,
-				40,NULL,true);
-	          HTM_NBSP ();
-		 }
-	       HTM_Txt (Ins.FullName);
-	       HTM_BUTTON_End ();
-	       Frm_EndForm ();
-	       HTM_TD_End ();
+		  /***** Write link to institution *****/
+		  HTM_TD_Begin ("class=\"%s LM\"",
+				The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  /* Icon and name of this institution */
+		  Frm_BeginForm (ActSeeInsInf);
+		  Ins_PutParamInsCod (Ins.InsCod);
+		  HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+		  if (Gbl.Usrs.Listing.WithPhotos)
+		    {
+		     Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,
+				   40,NULL,true);
+		     HTM_NBSP ();
+		    }
+		  HTM_Txt (Ins.FullName);
+		  HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		  HTM_TD_End ();
 
-	       /***** Write statistic *****/
-	       HTM_TD_Begin ("class=\"DAT RM\"");
-	       HTM_Unsigned (NumberThisRow);
-	       HTM_TD_End ();
+		  /***** Write statistic *****/
+		  HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Unsigned (NumberThisRow);
+		  HTM_TD_End ();
 
 	       HTM_TR_End ();
 
@@ -1639,38 +1634,38 @@ static void Fig_GetAndShowFileBrowsersStats (void)
                  NULL,NULL,
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
-   /***** Write sizes of all file zones *****/
-   HTM_TABLE_BeginCenterPadding (2);
-   Fig_WriteStatsExpTreesTableHead1 ();
-   for (NumStat = 0;
-	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
-	NumStat++)
-      Fig_WriteRowStatsFileBrowsers1 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
-	                              StatCrsFileZones[NumStat],
-				      &SizeOfFileZones[NumStat]);
-   HTM_TABLE_End ();
+      /***** Write sizes of all file zones *****/
+      HTM_TABLE_BeginCenterPadding (2);
+	 Fig_WriteStatsExpTreesTableHead1 ();
+	 for (NumStat = 0;
+	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	      NumStat++)
+	    Fig_WriteRowStatsFileBrowsers1 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
+					    StatCrsFileZones[NumStat],
+					    &SizeOfFileZones[NumStat]);
+      HTM_TABLE_End ();
 
-   /***** Write sizes of all file zones per course *****/
-   HTM_TABLE_BeginCenterPadding (2);
-   Fig_WriteStatsExpTreesTableHead2 ();
-   for (NumStat = 0;
-	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
-	NumStat++)
-      Fig_WriteRowStatsFileBrowsers2 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
-	                              StatCrsFileZones[NumStat],
-				      &SizeOfFileZones[NumStat]);
-   HTM_TABLE_End ();
+      /***** Write sizes of all file zones per course *****/
+      HTM_TABLE_BeginCenterPadding (2);
+	 Fig_WriteStatsExpTreesTableHead2 ();
+	 for (NumStat = 0;
+	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	      NumStat++)
+	    Fig_WriteRowStatsFileBrowsers2 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
+					    StatCrsFileZones[NumStat],
+					    &SizeOfFileZones[NumStat]);
+      HTM_TABLE_End ();
 
-   /***** Write sizes of all file zones per user *****/
-   HTM_TABLE_BeginCenterPadding (2);
-   Fig_WriteStatsExpTreesTableHead3 ();
-   for (NumStat = 0;
-	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
-	NumStat++)
-      Fig_WriteRowStatsFileBrowsers3 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
-	                              StatCrsFileZones[NumStat],
-				      &SizeOfFileZones[NumStat]);
-   HTM_TABLE_End ();
+      /***** Write sizes of all file zones per user *****/
+      HTM_TABLE_BeginCenterPadding (2);
+	 Fig_WriteStatsExpTreesTableHead3 ();
+	 for (NumStat = 0;
+	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	      NumStat++)
+	    Fig_WriteRowStatsFileBrowsers3 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
+					    StatCrsFileZones[NumStat],
+					    &SizeOfFileZones[NumStat]);
+      HTM_TABLE_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2645,16 +2640,14 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Size;
 
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_File_zones);
-   HTM_TH (1,1,"RM",Txt_Courses);
-   HTM_TH (1,1,"RM",Txt_Groups);
-   HTM_TH (1,1,"RM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_Max_levels);
-   HTM_TH (1,1,"RM",Txt_Folders);
-   HTM_TH (1,1,"RM",Txt_Files);
-   HTM_TH (1,1,"RM",Txt_Size);
-
+      HTM_TH (1,1,"LM",Txt_File_zones);
+      HTM_TH (1,1,"RM",Txt_Courses);
+      HTM_TH (1,1,"RM",Txt_Groups);
+      HTM_TH (1,1,"RM",Txt_Users);
+      HTM_TH (1,1,"RM",Txt_Max_levels);
+      HTM_TH (1,1,"RM",Txt_Folders);
+      HTM_TH (1,1,"RM",Txt_Files);
+      HTM_TH (1,1,"RM",Txt_Size);
    HTM_TR_End ();
   }
 
@@ -2668,25 +2661,25 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"LM",Txt_File_zones);
+      HTM_TH (1,1,"LM",Txt_File_zones);
 
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s/",Txt_Folders);
-   HTM_BR ();
-   HTM_Txt (Txt_course);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s/",Txt_Folders);
+	 HTM_BR ();
+	 HTM_Txt (Txt_course);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s/",Txt_Files);
-   HTM_BR ();
-   HTM_Txt (Txt_course);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s/",Txt_Files);
+	 HTM_BR ();
+	 HTM_Txt (Txt_course);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s/",Txt_Size);
-   HTM_BR ();
-   HTM_Txt (Txt_course);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s/",Txt_Size);
+	 HTM_BR ();
+	 HTM_Txt (Txt_course);
+      HTM_TH_End ();
 
    HTM_TR_End ();
   }
@@ -2701,25 +2694,25 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"LM",Txt_File_zones);
+      HTM_TH (1,1,"LM",Txt_File_zones);
 
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s/",Txt_Folders);
-   HTM_BR ();
-   HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s/",Txt_Folders);
+	 HTM_BR ();
+	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s/",Txt_Files);
-   HTM_BR ();
-   HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s/",Txt_Files);
+	 HTM_BR ();
+	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
+      HTM_TH_End ();
 
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s/",Txt_Size);
-   HTM_BR ();
-   HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
-   HTM_TH_End ();
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s/",Txt_Size);
+	 HTM_BR ();
+	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
+      HTM_TH_End ();
 
    HTM_TR_End ();
   }
@@ -2761,37 +2754,37 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s LM\"",Class);
-   HTM_Txt (NameOfFileZones);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s LM\"",Class);
+	 HTM_Txt (NameOfFileZones);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumCrss);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumCrss);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumGrps);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumGrps);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumUsrs);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumUsrs);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Unsigned (SizeOfFileZones->MaxLevels);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Unsigned (SizeOfFileZones->MaxLevels);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_UnsignedLong (SizeOfFileZones->NumFolders);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_UnsignedLong (SizeOfFileZones->NumFolders);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_UnsignedLong (SizeOfFileZones->NumFiles);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_UnsignedLong (SizeOfFileZones->NumFiles);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (FileSizeStr);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (FileSizeStr);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -2830,21 +2823,21 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s LM\"",Class);
-   HTM_Txt (NameOfFileZones);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s LM\"",Class);
+	 HTM_Txt (NameOfFileZones);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumFoldersPerCrs);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFoldersPerCrs);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumFilesPerCrs);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFilesPerCrs);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (FileSizePerCrsStr);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (FileSizePerCrsStr);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -2883,21 +2876,21 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s LM\"",Class);
-   HTM_Txt (NameOfFileZones);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s LM\"",Class);
+	 HTM_Txt (NameOfFileZones);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumFoldersPerUsr);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFoldersPerUsr);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (StrNumFilesPerUsr);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFilesPerUsr);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s RM\"",Class);
-   HTM_Txt (FileSizePerUsrStr);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (FileSizePerUsrStr);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -2922,37 +2915,35 @@ static void Fig_GetAndShowOERsStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_License);
-   HTM_TH (1,1,"RM",Txt_Number_of_private_files);
-   HTM_TH (1,1,"RM",Txt_Number_of_public_files);
-
-   HTM_TR_End ();
-
-   for (License  = (Brw_License_t) 0;
-	License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
-	License++)
-     {
-      Fig_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
-
+      /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_LICENSES[License]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_UnsignedLong (NumFiles[0]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_UnsignedLong (NumFiles[1]);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_License);
+	 HTM_TH (1,1,"RM",Txt_Number_of_private_files);
+	 HTM_TH (1,1,"RM",Txt_Number_of_public_files);
       HTM_TR_End ();
-     }
+
+      for (License  = (Brw_License_t) 0;
+	   License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
+	   License++)
+	{
+	 Fig_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
+
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_LICENSES[License]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_UnsignedLong (NumFiles[0]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_UnsignedLong (NumFiles[1]);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3134,31 +3125,29 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_course_programs,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_program_items);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_program_items);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_items_BR_per_course);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_program_items);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_program_items);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_items_BR_per_course);
+      /***** Write number of assignments *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumItems);
+	 HTM_TD_End ();
 
-   /***** Write number of assignments *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCoursesWithItems);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumItems);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumItemsPerCourse);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithItems);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumItemsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3192,36 +3181,34 @@ static void Fig_GetAndShowAssignmentsStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_assignments);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_assignments);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      /***** Write number of assignments *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumAssignments);
+	 HTM_TD_End ();
 
-   /***** Write number of assignments *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCoursesWithAssignments);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumAssignments);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumAssignmentsPerCourse);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithAssignments);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumNotif);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumAssignmentsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumNotif);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3253,31 +3240,29 @@ static void Fig_GetAndShowProjectsStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_projects);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_projects);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_projects_BR_per_course);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_projects);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_projects);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_projects_BR_per_course);
+      /***** Write number of projects *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumProjects);
+	 HTM_TD_End ();
 
-   /***** Write number of projects *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCoursesWithProjects);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumProjects);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumProjectsPerCourse);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithProjects);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumProjectsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3310,121 +3295,119 @@ static void Fig_GetAndShowTestsStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"LM",Txt_Type_of_BR_answers);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
+	 HTM_TH (1,1,"RM",Txt_Number_BR_of_test_BR_questions);
+	 HTM_TH (1,1,"RM",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
+	 HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
+	 HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
+	 HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Type_of_BR_answers);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
-   HTM_TH (1,1,"RM",Txt_Number_BR_of_test_BR_questions);
-   HTM_TH (1,1,"RM",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
-   HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
-   HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
-   HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question);
+      for (AnsType  = (Tst_AnswerType_t) 0;
+	   AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
+	   AnsType++)
+	{
+	 /***** Get the stats about test questions from this location *****/
+	 Tst_GetTestStats (AnsType,&Stats);
 
-   HTM_TR_End ();
+	 /***** Write number of assignments *****/
+	 HTM_TR_Begin (NULL);
 
-   for (AnsType  = (Tst_AnswerType_t) 0;
-	AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
-	AnsType++)
-     {
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (Stats.NumCoursesWithQuestions);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TxtF ("%u (%.1lf%%)",
+			 Stats.NumCoursesWithPluggableQuestions,
+			 Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+							 (double) Stats.NumCoursesWithQuestions :
+							 0.0);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (Stats.NumQsts);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Double2Decimals (Stats.AvgQstsPerCourse);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_UnsignedLong (Stats.NumHits);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Double2Decimals (Stats.AvgHitsPerCourse);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Double2Decimals (Stats.AvgScorePerQuestion);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
       /***** Get the stats about test questions from this location *****/
-      Tst_GetTestStats (AnsType,&Stats);
+      Tst_GetTestStats (Tst_ANS_UNKNOWN,&Stats);
 
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Stats.NumCoursesWithQuestions);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (Stats.NumCoursesWithQuestions);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_TxtF ("%u (%.1lf%%)",
-                Stats.NumCoursesWithPluggableQuestions,
-                Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
-        	                                (double) Stats.NumCoursesWithQuestions :
-        	                                0.0);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_TxtF ("%u (%.1f%%)",
+		      Stats.NumCoursesWithPluggableQuestions,
+		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+						      (double) Stats.NumCoursesWithQuestions :
+						      0.0);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Stats.NumQsts);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (Stats.NumQsts);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double2Decimals (Stats.AvgQstsPerCourse);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_UnsignedLong (Stats.NumHits);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_UnsignedLong (Stats.NumHits);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double2Decimals (Stats.AvgHitsPerCourse);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double2Decimals (Stats.AvgScorePerQuestion);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
-     }
-
-   /***** Get the stats about test questions from this location *****/
-   Tst_GetTestStats (Tst_ANS_UNKNOWN,&Stats);
-
-   /***** Write number of assignments *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
-   HTM_Txt (Txt_Total);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (Stats.NumCoursesWithQuestions);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_TxtF ("%u (%.1f%%)",
-             Stats.NumCoursesWithPluggableQuestions,
-             Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
-        	                             (double) Stats.NumCoursesWithQuestions :
-        	                             0.0);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (Stats.NumQsts);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (Stats.AvgQstsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_UnsignedLong (Stats.NumHits);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (Stats.AvgHitsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (Stats.AvgScorePerQuestion);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3446,8 +3429,8 @@ static void Fig_GetAndShowExamsStats (void)
    double NumExamsPerCourse = 0.0;
 
    /***** Get the number of exams from this location *****/
-   if ((NumExams = Exa_GetNumExams (Gbl.Scope.Current)))
-      if ((NumCoursesWithExams = Exa_GetNumCoursesWithExams (Gbl.Scope.Current)) != 0)
+   if ((NumExams = Exa_DB_GetNumExams (Gbl.Scope.Current)))
+      if ((NumCoursesWithExams = Exa_DB_GetNumCoursesWithExams (Gbl.Scope.Current)) != 0)
          NumExamsPerCourse = (double) NumExams / (double) NumCoursesWithExams;
 
    /***** Begin box and table *****/
@@ -3455,31 +3438,29 @@ static void Fig_GetAndShowExamsStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_exams,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_exams);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exams);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_exams_BR_per_course);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_exams);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exams);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_exams_BR_per_course);
+      /***** Write number of exams *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumExams);
+	 HTM_TD_End ();
 
-   /***** Write number of exams *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCoursesWithExams);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumExams);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumExamsPerCourse);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithExams);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumExamsPerCourse);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3510,31 +3491,29 @@ static void Fig_GetAndShowGamesStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_games);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_games);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
+      /***** Write number of games *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumGames);
+	 HTM_TD_End ();
 
-   /***** Write number of games *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCoursesWithGames);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumGames);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumGamesPerCourse);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithGames);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumGamesPerCourse);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3568,25 +3547,175 @@ static void Fig_GetAndShowTimelineActivityStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"LM",Txt_Type);
+	 HTM_TH (1,1,"RM",Txt_Number_of_posts);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,"RM",Txt_Number_of_posts_BR_per_user);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Type);
-   HTM_TH (1,1,"RM",Txt_Number_of_posts);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-   HTM_TH (1,1,"RM",Txt_Number_of_posts_BR_per_user);
+      /***** Get total number of users *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
-   HTM_TR_End ();
+      /***** Get total number of following/followers from database *****/
+      for (NoteType  = (Tml_Not_NoteType_t) 0;
+	   NoteType <= (Tml_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
+	   NoteType++)
+	{
+	 switch (Gbl.Scope.Current)
+	   {
+	    case HieLvl_SYS:
+	       NumRows = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+			       "SELECT COUNT(*),"				// row[0]
+				      "COUNT(DISTINCT UsrCod)"		// row[1]
+			       " FROM tml_notes WHERE NoteType=%u",
+			       NoteType);
+	       break;
+	    case HieLvl_CTY:
+	       NumRows = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+				" FROM ins_instits,"
+				      "ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "crs_users,"
+				      "tml_notes"
+			       " WHERE ins_instits.CtyCod=%ld"
+				 " AND ins_instits.InsCod=ctr_centers.InsCod"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=crs_users.CrsCod"
+				 " AND crs_users.UsrCod=tml_notes.UsrCod"
+				 " AND tml_notes.NoteType=%u",
+			       Gbl.Hierarchy.Cty.CtyCod,
+			       (unsigned) NoteType);
+	       break;
+	    case HieLvl_INS:
+	       NumRows = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+				" FROM ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "crs_users,"
+				      "tml_notes"
+			       " WHERE ctr_centers.InsCod=%ld"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=crs_users.CrsCod"
+				 " AND crs_users.UsrCod=tml_notes.UsrCod"
+				 " AND tml_notes.NoteType=%u",
+			       Gbl.Hierarchy.Ins.InsCod,
+			       (unsigned) NoteType);
+	       break;
+	    case HieLvl_CTR:
+	       NumRows = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+				" FROM deg_degrees,"
+				      "crs_courses,"
+				      "crs_users,"
+				      "tml_notes"
+			       " WHERE deg_degrees.CtrCod=%ld"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=crs_users.CrsCod"
+				 " AND crs_users.UsrCod=tml_notes.UsrCod"
+				 " AND tml_notes.NoteType=%u",
+			       Gbl.Hierarchy.Ctr.CtrCod,
+			       (unsigned) NoteType);
+	       break;
+	    case HieLvl_DEG:
+	       NumRows = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+				" FROM crs_courses,"
+				      "crs_users,"
+				      "tml_notes"
+			       " WHERE crs_courses.DegCod=%ld"
+				 " AND crs_courses.CrsCod=crs_users.CrsCod"
+				 " AND crs_users.UsrCod=tml_notes.UsrCod"
+				 " AND tml_notes.NoteType=%u",
+			       Gbl.Hierarchy.Deg.DegCod,
+			       (unsigned) NoteType);
+	       break;
+	    case HieLvl_CRS:
+	       NumRows = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
+			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+				" FROM crs_users,"
+				      "tml_notes"
+			       " WHERE crs_users.CrsCod=%ld"
+				 " AND crs_users.UsrCod=tml_notes.UsrCod"
+				 " AND tml_notes.NoteType=%u",
+			       Gbl.Hierarchy.Crs.CrsCod,
+			       (unsigned) NoteType);
+	       break;
+	    default:
+	       Err_WrongScopeExit ();
+	       NumRows = 0;	// Initialized to avoid warning
+	       break;
+	   }
+	 NumNotes = 0;
+	 NumUsrs = 0;
 
-   /***** Get total number of users *****/
-   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+	 if (NumRows)
+	   {
+	    /***** Get number of social notes and number of users *****/
+	    row = mysql_fetch_row (mysql_res);
 
-   /***** Get total number of following/followers from database *****/
-   for (NoteType  = (Tml_Not_NoteType_t) 0;
-	NoteType <= (Tml_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
-	NoteType++)
-     {
+	    /* Get number of social notes */
+	    if (row[0])
+	       if (sscanf (row[0],"%u",&NumNotes) != 1)
+		  NumNotes = 0;
+
+	    /* Get number of users */
+	    if (row[1])
+	       if (sscanf (row[1],"%u",&NumUsrs) != 1)
+		  NumUsrs = 0;
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+
+	 /***** Write number of social notes and number of users *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumNotes);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
+				    0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Get and write totals *****/
       switch (Gbl.Scope.Current)
 	{
 	 case HieLvl_SYS:
@@ -3594,8 +3723,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
 			    "SELECT COUNT(*),"				// row[0]
 				   "COUNT(DISTINCT UsrCod)"		// row[1]
-			    " FROM tml_notes WHERE NoteType=%u",
-			    NoteType);
+			    " FROM tml_notes");
 	    break;
 	 case HieLvl_CTY:
 	    NumRows = (unsigned)
@@ -3603,20 +3731,18 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
 			     " FROM ins_instits,"
-			           "ctr_centers,"
-			           "deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "tml_notes"
+				   "ctr_centers,"
+				   "deg_degrees,"
+				   "crs_courses,"
+				   "crs_users,"
+				   "tml_notes"
 			    " WHERE ins_instits.CtyCod=%ld"
 			      " AND ins_instits.InsCod=ctr_centers.InsCod"
 			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod"
-			      " AND tml_notes.NoteType=%u",
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    (unsigned) NoteType);
+			      " AND crs_users.UsrCod=tml_notes.UsrCod",
+			    Gbl.Hierarchy.Cty.CtyCod);
 	    break;
 	 case HieLvl_INS:
 	    NumRows = (unsigned)
@@ -3624,18 +3750,16 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
 			     " FROM ctr_centers,"
-			           "deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "tml_notes"
+				   "deg_degrees,"
+				   "crs_courses,"
+				   "crs_users,"
+				   "tml_notes"
 			    " WHERE ctr_centers.InsCod=%ld"
 			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod"
-			      " AND tml_notes.NoteType=%u",
-			    Gbl.Hierarchy.Ins.InsCod,
-			    (unsigned) NoteType);
+			      " AND crs_users.UsrCod=tml_notes.UsrCod",
+			    Gbl.Hierarchy.Ins.InsCod);
 	    break;
 	 case HieLvl_CTR:
 	    NumRows = (unsigned)
@@ -3643,16 +3767,14 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
 			     " FROM deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "tml_notes"
+				   "crs_courses,"
+				   "crs_users,"
+				   "tml_notes"
 			    " WHERE deg_degrees.CtrCod=%ld"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod"
-			      " AND tml_notes.NoteType=%u",
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    (unsigned) NoteType);
+			      " AND crs_users.UsrCod=tml_notes.UsrCod",
+			    Gbl.Hierarchy.Ctr.CtrCod);
 	    break;
 	 case HieLvl_DEG:
 	    NumRows = (unsigned)
@@ -3660,14 +3782,12 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
 			     " FROM crs_courses,"
-			           "crs_users,"
-			           "tml_notes"
+				   "crs_users,"
+				   "tml_notes"
 			    " WHERE crs_courses.DegCod=%ld"
 			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod"
-			      " AND tml_notes.NoteType=%u",
-			    Gbl.Hierarchy.Deg.DegCod,
-			    (unsigned) NoteType);
+			      " AND crs_users.UsrCod=tml_notes.UsrCod",
+			    Gbl.Hierarchy.Deg.DegCod);
 	    break;
 	 case HieLvl_CRS:
 	    NumRows = (unsigned)
@@ -3675,12 +3795,10 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
 				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
 			     " FROM crs_users,"
-			           "tml_notes"
+				   "tml_notes"
 			    " WHERE crs_users.CrsCod=%ld"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod"
-			      " AND tml_notes.NoteType=%u",
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    (unsigned) NoteType);
+			      " AND crs_users.UsrCod=tml_notes.UsrCod",
+			    Gbl.Hierarchy.Crs.CrsCod);
 	    break;
 	 default:
 	    Err_WrongScopeExit ();
@@ -3692,7 +3810,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
       if (NumRows)
 	{
-	 /***** Get number of social notes and number of users *****/
+	 /* Get number of social notes and number of users */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get number of social notes */
@@ -3706,177 +3824,36 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	       NumUsrs = 0;
 	}
 
-      /***** Free structure that stores the query result *****/
+      /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
 
-      /***** Write number of social notes and number of users *****/
+      /* Write totals */
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumNotes);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (NumNotes);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (NumUsrs);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-	                             (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					   (double) NumUsrsTotal :
+					   0.0);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
-        	           0.0);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
+				 0.0);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
-     }
-
-   /***** Get and write totals *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumRows = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(*),"				// row[0]
-			        "COUNT(DISTINCT UsrCod)"		// row[1]
-		         " FROM tml_notes");
-	 break;
-      case HieLvl_CTY:
-	 NumRows = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-		          " FROM ins_instits,"
-		                "ctr_centers,"
-		                "deg_degrees,"
-		                "crs_courses,"
-		                "crs_users,"
-		                "tml_notes"
-		         " WHERE ins_instits.CtyCod=%ld"
-		           " AND ins_instits.InsCod=ctr_centers.InsCod"
-		           " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		           " AND deg_degrees.DegCod=crs_courses.DegCod"
-		           " AND crs_courses.CrsCod=crs_users.CrsCod"
-		           " AND crs_users.UsrCod=tml_notes.UsrCod",
-		         Gbl.Hierarchy.Cty.CtyCod);
-	 break;
-      case HieLvl_INS:
-	 NumRows = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-		          " FROM ctr_centers,"
-		                "deg_degrees,"
-		                "crs_courses,"
-		                "crs_users,"
-		                "tml_notes"
-		         " WHERE ctr_centers.InsCod=%ld"
-		           " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		           " AND deg_degrees.DegCod=crs_courses.DegCod"
-		           " AND crs_courses.CrsCod=crs_users.CrsCod"
-		           " AND crs_users.UsrCod=tml_notes.UsrCod",
-		         Gbl.Hierarchy.Ins.InsCod);
-	 break;
-      case HieLvl_CTR:
-	 NumRows = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-		          " FROM deg_degrees,"
-		                "crs_courses,"
-		                "crs_users,"
-		                "tml_notes"
-		         " WHERE deg_degrees.CtrCod=%ld"
-		           " AND deg_degrees.DegCod=crs_courses.DegCod"
-		           " AND crs_courses.CrsCod=crs_users.CrsCod"
-		           " AND crs_users.UsrCod=tml_notes.UsrCod",
-		         Gbl.Hierarchy.Ctr.CtrCod);
-	 break;
-      case HieLvl_DEG:
-	 NumRows = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-		          " FROM crs_courses,"
-		                "crs_users,"
-		                "tml_notes"
-		         " WHERE crs_courses.DegCod=%ld"
-		           " AND crs_courses.CrsCod=crs_users.CrsCod"
-		           " AND crs_users.UsrCod=tml_notes.UsrCod",
-		         Gbl.Hierarchy.Deg.DegCod);
-	 break;
-      case HieLvl_CRS:
-	 NumRows = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-		         "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-			        "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-		          " FROM crs_users,"
-		                "tml_notes"
-		         " WHERE crs_users.CrsCod=%ld"
-		           " AND crs_users.UsrCod=tml_notes.UsrCod",
-		         Gbl.Hierarchy.Crs.CrsCod);
-	 break;
-      default:
-	 Err_WrongScopeExit ();
-	 NumRows = 0;	// Initialized to avoid warning
-	 break;
-     }
-   NumNotes = 0;
-   NumUsrs = 0;
-
-   if (NumRows)
-     {
-      /* Get number of social notes and number of users */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get number of social notes */
-      if (row[0])
-	 if (sscanf (row[0],"%u",&NumNotes) != 1)
-	    NumNotes = 0;
-
-      /* Get number of users */
-      if (row[1])
-	 if (sscanf (row[1],"%u",&NumUsrs) != 1)
-	    NumUsrs = 0;
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   /* Write totals */
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
-   HTM_Txt (Txt_Total);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (NumNotes);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (NumUsrs);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-	                          (double) NumUsrsTotal :
-			          0.0);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
-		        0.0);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3911,272 +3888,270 @@ static void Fig_GetAndShowFollowStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"LM",Txt_Users);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+      /***** Get total number of users *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
-   HTM_TR_End ();
-
-   /***** Get total number of users *****/
-   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
-
-   /***** Get total number of following/followers from database *****/
-   for (Fol = 0;
-	Fol < 2;
-	Fol++)
-     {
-      switch (Gbl.Scope.Current)
+      /***** Get total number of following/followers from database *****/
+      for (Fol = 0;
+	   Fol < 2;
+	   Fol++)
 	{
-	 case HieLvl_SYS:
-	    NumUsrs = (unsigned)
-	    DB_QueryCOUNT ("can not get the total number of following/followers",
-			   "SELECT COUNT(DISTINCT %s)"
-			    " FROM usr_follow",
-			   FieldDB[Fol]);
-	    break;
-	 case HieLvl_CTY:
-	    NumUsrs = (unsigned)
-	    DB_QueryCOUNT ("can not get the total number of following/followers",
-			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			    " FROM ins_instits,"
-			          "ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_users,"
-			          "usr_follow"
-			   " WHERE ins_instits.CtyCod=%ld"
-			     " AND ins_instits.InsCod=ctr_centers.InsCod"
-			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.Hierarchy.Cty.CtyCod,
-			   FieldDB[Fol]);
-	    break;
-	 case HieLvl_INS:
-	    NumUsrs = (unsigned)
-	    DB_QueryCOUNT ("can not get the total number of following/followers",
-			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			    " FROM ctr_centers,"
-			          "deg_degrees,"
-			          "crs_courses,"
-			          "crs_users,"
-			          "usr_follow"
-			   " WHERE ctr_centers.InsCod=%ld"
-			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.Hierarchy.Ins.InsCod,
-			   FieldDB[Fol]);
-	    break;
-	 case HieLvl_CTR:
-	    NumUsrs = (unsigned)
-	    DB_QueryCOUNT ("can not get the total number of following/followers",
-			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			   " FROM deg_degrees,"
-			         "crs_courses,"
-			         "crs_users,"
-			         "usr_follow"
-			   " WHERE deg_degrees.CtrCod=%ld"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.Hierarchy.Ctr.CtrCod,
-			   FieldDB[Fol]);
-	    break;
-	 case HieLvl_DEG:
-	    NumUsrs = (unsigned)
-	    DB_QueryCOUNT ("can not get the total number of following/followers",
-			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			    " FROM crs_courses,"
-			          "crs_users,"
-			          "usr_follow"
-			   " WHERE crs_courses.DegCod=%ld"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.Hierarchy.Deg.DegCod,
-			   FieldDB[Fol]);
-	    break;
-	 case HieLvl_CRS:
-	    NumUsrs = (unsigned)
-	    DB_QueryCOUNT ("can not get the total number of following/followers",
-			   "SELECT COUNT(DISTINCT usr_follow.%s)"
-			    " FROM crs_users,"
-			          "usr_follow"
-			   " WHERE crs_users.CrsCod=%ld"
-			     " AND crs_users.UsrCod=usr_follow.%s",
-			   FieldDB[Fol],
-			   Gbl.Hierarchy.Crs.CrsCod,
-			   FieldDB[Fol]);
-	    break;
-	 default:
-	    Err_WrongScopeExit ();
-	    NumUsrs = 0;	// Not reached. Initialized to av oid warning
-	    break;
+	 switch (Gbl.Scope.Current)
+	   {
+	    case HieLvl_SYS:
+	       NumUsrs = (unsigned)
+	       DB_QueryCOUNT ("can not get the total number of following/followers",
+			      "SELECT COUNT(DISTINCT %s)"
+			       " FROM usr_follow",
+			      FieldDB[Fol]);
+	       break;
+	    case HieLvl_CTY:
+	       NumUsrs = (unsigned)
+	       DB_QueryCOUNT ("can not get the total number of following/followers",
+			      "SELECT COUNT(DISTINCT usr_follow.%s)"
+			       " FROM ins_instits,"
+				     "ctr_centers,"
+				     "deg_degrees,"
+				     "crs_courses,"
+				     "crs_users,"
+				     "usr_follow"
+			      " WHERE ins_instits.CtyCod=%ld"
+				" AND ins_instits.InsCod=ctr_centers.InsCod"
+				" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				" AND deg_degrees.DegCod=crs_courses.DegCod"
+				" AND crs_courses.CrsCod=crs_users.CrsCod"
+				" AND crs_users.UsrCod=usr_follow.%s",
+			      FieldDB[Fol],
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      FieldDB[Fol]);
+	       break;
+	    case HieLvl_INS:
+	       NumUsrs = (unsigned)
+	       DB_QueryCOUNT ("can not get the total number of following/followers",
+			      "SELECT COUNT(DISTINCT usr_follow.%s)"
+			       " FROM ctr_centers,"
+				     "deg_degrees,"
+				     "crs_courses,"
+				     "crs_users,"
+				     "usr_follow"
+			      " WHERE ctr_centers.InsCod=%ld"
+				" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				" AND deg_degrees.DegCod=crs_courses.DegCod"
+				" AND crs_courses.CrsCod=crs_users.CrsCod"
+				" AND crs_users.UsrCod=usr_follow.%s",
+			      FieldDB[Fol],
+			      Gbl.Hierarchy.Ins.InsCod,
+			      FieldDB[Fol]);
+	       break;
+	    case HieLvl_CTR:
+	       NumUsrs = (unsigned)
+	       DB_QueryCOUNT ("can not get the total number of following/followers",
+			      "SELECT COUNT(DISTINCT usr_follow.%s)"
+			      " FROM deg_degrees,"
+				    "crs_courses,"
+				    "crs_users,"
+				    "usr_follow"
+			      " WHERE deg_degrees.CtrCod=%ld"
+				" AND deg_degrees.DegCod=crs_courses.DegCod"
+				" AND crs_courses.CrsCod=crs_users.CrsCod"
+				" AND crs_users.UsrCod=usr_follow.%s",
+			      FieldDB[Fol],
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      FieldDB[Fol]);
+	       break;
+	    case HieLvl_DEG:
+	       NumUsrs = (unsigned)
+	       DB_QueryCOUNT ("can not get the total number of following/followers",
+			      "SELECT COUNT(DISTINCT usr_follow.%s)"
+			       " FROM crs_courses,"
+				     "crs_users,"
+				     "usr_follow"
+			      " WHERE crs_courses.DegCod=%ld"
+				" AND crs_courses.CrsCod=crs_users.CrsCod"
+				" AND crs_users.UsrCod=usr_follow.%s",
+			      FieldDB[Fol],
+			      Gbl.Hierarchy.Deg.DegCod,
+			      FieldDB[Fol]);
+	       break;
+	    case HieLvl_CRS:
+	       NumUsrs = (unsigned)
+	       DB_QueryCOUNT ("can not get the total number of following/followers",
+			      "SELECT COUNT(DISTINCT usr_follow.%s)"
+			       " FROM crs_users,"
+				     "usr_follow"
+			      " WHERE crs_users.CrsCod=%ld"
+				" AND crs_users.UsrCod=usr_follow.%s",
+			      FieldDB[Fol],
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      FieldDB[Fol]);
+	       break;
+	    default:
+	       Err_WrongScopeExit ();
+	       NumUsrs = 0;	// Not reached. Initialized to av oid warning
+	       break;
+	   }
+
+	 /***** Write number of followed / followers *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Fol == 0 ? Txt_Followed :
+				   Txt_Followers);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
 	}
 
-      /***** Write number of followed / followers *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Fol == 0 ? Txt_Followed :
-        	          Txt_Followers);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-     }
-
-   /***** Write number of followed/followers per follower/followed *****/
-   for (Fol = 0;
-	Fol < 2;
-	Fol++)
-     {
-      switch (Gbl.Scope.Current)
+      /***** Write number of followed/followers per follower/followed *****/
+      for (Fol = 0;
+	   Fol < 2;
+	   Fol++)
 	{
-	 case HieLvl_SYS:
-	    Average = DB_QuerySELECTDouble ("can not get number of questions"
-				            " per survey",
-					    "SELECT AVG(N)"
-					     " FROM (SELECT COUNT(%s) AS N"
-						     " FROM usr_follow"
-						    " GROUP BY %s) AS F",
-					    FieldDB[Fol],
-					    FieldDB[1 - Fol]);
-	    break;
-	 case HieLvl_CTY:
-	    Average = DB_QuerySELECTDouble ("can not get number of questions"
-				            " per survey",
-					    "SELECT AVG(N)"
-					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-						     " FROM ins_instits,"
-							   "ctr_centers,"
-							   "deg_degrees,"
-							   "crs_courses,"
-							   "crs_users,"
-							   "usr_follow"
-						    " WHERE ins_instits.CtyCod=%ld"
-						      " AND ins_instits.InsCod=ctr_centers.InsCod"
-						      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						      " AND deg_degrees.DegCod=crs_courses.DegCod"
-						      " AND crs_courses.CrsCod=crs_users.CrsCod"
-						      " AND crs_users.UsrCod=usr_follow.%s"
-						    " GROUP BY %s) AS F",
-					    FieldDB[Fol],
-					    Gbl.Hierarchy.Cty.CtyCod,
-					    FieldDB[Fol],
-					    FieldDB[1 - Fol]);
-	    break;
-	 case HieLvl_INS:
-	    Average = DB_QuerySELECTDouble ("can not get number of questions"
-					    " per survey",
-					    "SELECT AVG(N)"
-					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-						     " FROM ctr_centers,"
-							   "deg_degrees,"
-							   "crs_courses,"
-							   "crs_users,"
-							   "usr_follow"
-						    " WHERE ctr_centers.InsCod=%ld"
-						      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						      " AND deg_degrees.DegCod=crs_courses.DegCod"
-						      " AND crs_courses.CrsCod=crs_users.CrsCod"
-						      " AND crs_users.UsrCod=usr_follow.%s"
-						    " GROUP BY %s) AS F",
-					    FieldDB[Fol],
-					    Gbl.Hierarchy.Ins.InsCod,
-					    FieldDB[Fol],
-					    FieldDB[1 - Fol]);
-	    break;
-	 case HieLvl_CTR:
-	    Average = DB_QuerySELECTDouble ("can not get number of questions"
-				            " per survey",
-					    "SELECT AVG(N)"
-					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-						     " FROM deg_degrees,"
-							   "crs_courses,"
-							   "crs_users,"
-							   "usr_follow"
-						    " WHERE deg_degrees.CtrCod=%ld"
-						      " AND deg_degrees.DegCod=crs_courses.DegCod"
-						      " AND crs_courses.CrsCod=crs_users.CrsCod"
-						      " AND crs_users.UsrCod=usr_follow.%s"
-						    " GROUP BY %s) AS F",
-					    FieldDB[Fol],
-					    Gbl.Hierarchy.Ctr.CtrCod,
-					    FieldDB[Fol],
-					    FieldDB[1 - Fol]);
-	    break;
-	 case HieLvl_DEG:
-	    Average = DB_QuerySELECTDouble ("can not get number of questions"
-				            " per survey",
-					    "SELECT AVG(N)"
-					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-						     " FROM crs_courses,"
-							   "crs_users,"
-							   "usr_follow"
-						    " WHERE crs_courses.DegCod=%ld"
-						      " AND crs_courses.CrsCod=crs_users.CrsCod"
-						      " AND crs_users.UsrCod=usr_follow.%s"
-						    " GROUP BY %s) AS F",
-					    FieldDB[Fol],
-					    Gbl.Hierarchy.Deg.DegCod,
-					    FieldDB[Fol],
-					    FieldDB[1 - Fol]);
-	    break;
-	 case HieLvl_CRS:
-	    Average = DB_QuerySELECTDouble ("can not get number of questions"
-				            " per survey",
-					    "SELECT AVG(N)"
-					     " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-						     " FROM crs_users,"
-							   "usr_follow"
-						    " WHERE crs_users.CrsCod=%ld"
-						      " AND crs_users.UsrCod=usr_follow.%s"
-						    " GROUP BY %s) AS F",
-					    FieldDB[Fol],
-					    Gbl.Hierarchy.Crs.CrsCod,
-					    FieldDB[Fol],
-					    FieldDB[1 - Fol]);
-	    break;
-	 default:
-	    Err_WrongScopeExit ();
-	    Average = 0.0;	// Not reached
-	    break;
+	 switch (Gbl.Scope.Current)
+	   {
+	    case HieLvl_SYS:
+	       Average = DB_QuerySELECTDouble ("can not get number of questions"
+					       " per survey",
+					       "SELECT AVG(N)"
+						" FROM (SELECT COUNT(%s) AS N"
+							" FROM usr_follow"
+						       " GROUP BY %s) AS F",
+					       FieldDB[Fol],
+					       FieldDB[1 - Fol]);
+	       break;
+	    case HieLvl_CTY:
+	       Average = DB_QuerySELECTDouble ("can not get number of questions"
+					       " per survey",
+					       "SELECT AVG(N)"
+						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+							" FROM ins_instits,"
+							      "ctr_centers,"
+							      "deg_degrees,"
+							      "crs_courses,"
+							      "crs_users,"
+							      "usr_follow"
+						       " WHERE ins_instits.CtyCod=%ld"
+							 " AND ins_instits.InsCod=ctr_centers.InsCod"
+							 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+							 " AND deg_degrees.DegCod=crs_courses.DegCod"
+							 " AND crs_courses.CrsCod=crs_users.CrsCod"
+							 " AND crs_users.UsrCod=usr_follow.%s"
+						       " GROUP BY %s) AS F",
+					       FieldDB[Fol],
+					       Gbl.Hierarchy.Cty.CtyCod,
+					       FieldDB[Fol],
+					       FieldDB[1 - Fol]);
+	       break;
+	    case HieLvl_INS:
+	       Average = DB_QuerySELECTDouble ("can not get number of questions"
+					       " per survey",
+					       "SELECT AVG(N)"
+						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+							" FROM ctr_centers,"
+							      "deg_degrees,"
+							      "crs_courses,"
+							      "crs_users,"
+							      "usr_follow"
+						       " WHERE ctr_centers.InsCod=%ld"
+							 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+							 " AND deg_degrees.DegCod=crs_courses.DegCod"
+							 " AND crs_courses.CrsCod=crs_users.CrsCod"
+							 " AND crs_users.UsrCod=usr_follow.%s"
+						       " GROUP BY %s) AS F",
+					       FieldDB[Fol],
+					       Gbl.Hierarchy.Ins.InsCod,
+					       FieldDB[Fol],
+					       FieldDB[1 - Fol]);
+	       break;
+	    case HieLvl_CTR:
+	       Average = DB_QuerySELECTDouble ("can not get number of questions"
+					       " per survey",
+					       "SELECT AVG(N)"
+						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+							" FROM deg_degrees,"
+							      "crs_courses,"
+							      "crs_users,"
+							      "usr_follow"
+						       " WHERE deg_degrees.CtrCod=%ld"
+							 " AND deg_degrees.DegCod=crs_courses.DegCod"
+							 " AND crs_courses.CrsCod=crs_users.CrsCod"
+							 " AND crs_users.UsrCod=usr_follow.%s"
+						       " GROUP BY %s) AS F",
+					       FieldDB[Fol],
+					       Gbl.Hierarchy.Ctr.CtrCod,
+					       FieldDB[Fol],
+					       FieldDB[1 - Fol]);
+	       break;
+	    case HieLvl_DEG:
+	       Average = DB_QuerySELECTDouble ("can not get number of questions"
+					       " per survey",
+					       "SELECT AVG(N)"
+						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+							" FROM crs_courses,"
+							      "crs_users,"
+							      "usr_follow"
+						       " WHERE crs_courses.DegCod=%ld"
+							 " AND crs_courses.CrsCod=crs_users.CrsCod"
+							 " AND crs_users.UsrCod=usr_follow.%s"
+						       " GROUP BY %s) AS F",
+					       FieldDB[Fol],
+					       Gbl.Hierarchy.Deg.DegCod,
+					       FieldDB[Fol],
+					       FieldDB[1 - Fol]);
+	       break;
+	    case HieLvl_CRS:
+	       Average = DB_QuerySELECTDouble ("can not get number of questions"
+					       " per survey",
+					       "SELECT AVG(N)"
+						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+							" FROM crs_users,"
+							      "usr_follow"
+						       " WHERE crs_users.CrsCod=%ld"
+							 " AND crs_users.UsrCod=usr_follow.%s"
+						       " GROUP BY %s) AS F",
+					       FieldDB[Fol],
+					       Gbl.Hierarchy.Crs.CrsCod,
+					       FieldDB[Fol],
+					       FieldDB[1 - Fol]);
+	       break;
+	    default:
+	       Err_WrongScopeExit ();
+	       Average = 0.0;	// Not reached
+	       break;
+	   }
+
+	 /***** Write number of followed per follower *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_FollowPerFollow[Fol]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Double2Decimals (Average);
+	    HTM_TD_End ();
+
+	    HTM_TD_Empty (1);
+
+	 HTM_TR_End ();
 	}
-
-      /***** Write number of followed per follower *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_FollowPerFollow[Fol]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Double2Decimals (Average);
-      HTM_TD_End ();
-
-      HTM_TD_Empty (1);
-
-      HTM_TR_End ();
-     }
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -4212,84 +4187,82 @@ static void Fig_GetAndShowForumStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH_Begin (1,1,"BT");
+	    Ico_PutIcon ("comments.svg",Txt_Scope,"ICO16x16");
+	 HTM_TH_End ();
+	 HTM_TH (1,1,"LT",Txt_Forums);
+	 HTM_TH (1,1,"RT",Txt_Number_of_forums);
+	 HTM_TH (1,1,"RT",Txt_Number_of_threads);
+	 HTM_TH (1,1,"RT",Txt_Number_of_posts);
+	 HTM_TH (1,1,"RT",Txt_Number_of_BR_notifications);
+	 HTM_TH (1,1,"RT",Txt_Number_of_threads_BR_per_forum);
+	 HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_thread);
+	 HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_forum);
+      HTM_TR_End ();
 
-   HTM_TH_Begin (1,1,"BT");
-   Ico_PutIcon ("comments.svg",Txt_Scope,"ICO16x16");
-   HTM_TH_End ();
-   HTM_TH (1,1,"LT",Txt_Forums);
-   HTM_TH (1,1,"RT",Txt_Number_of_forums);
-   HTM_TH (1,1,"RT",Txt_Number_of_threads);
-   HTM_TH (1,1,"RT",Txt_Number_of_posts);
-   HTM_TH (1,1,"RT",Txt_Number_of_BR_notifications);
-   HTM_TH (1,1,"RT",Txt_Number_of_threads_BR_per_forum);
-   HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_thread);
-   HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_forum);
+      /***** Write a row for each type of forum *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM__SWAD__USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM__SWAD__TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_CTY:
+	    Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_INS:
+	    Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_CTR:
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_DEG:
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_CRS:
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
+	    Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    break;
+	}
 
-   HTM_TR_End ();
-
-   /***** Write a row for each type of forum *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-         Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM__SWAD__USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM__SWAD__TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         break;
-      case HieLvl_CTY:
-         Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         break;
-      case HieLvl_INS:
-         Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         break;
-      case HieLvl_CTR:
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
-         break;
-      case HieLvl_DEG:
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
-         break;
-      case HieLvl_CRS:
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
-
-   Fig_WriteForumTotalStats (&FiguresForum);
+      Fig_WriteForumTotalStats (&FiguresForum);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -4396,8 +4369,8 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    char *ForumName;
 
    /***** Compute number of forums, number of threads and number of posts *****/
-   NumForums  = For_GetNumTotalForumsOfType       (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
-   NumThreads = For_GetNumTotalThrsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
+   NumForums  = For_DB_GetNumTotalForumsOfType       (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
+   NumThreads = For_DB_GetNumTotalThrsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
    NumPosts   = For_GetNumTotalPstsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
@@ -4417,46 +4390,46 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"BT\"");
-   if (asprintf (&ForumName,"%s%s",
-		 ForumName1,ForumName2) < 0)
-      Err_NotEnoughMemoryExit ();
-   Ico_PutIcon (Icon,ForumName,"ICO16x16");
-   free (ForumName);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"BT\"");
+	 if (asprintf (&ForumName,"%s%s",
+		       ForumName1,ForumName2) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Ico_PutIcon (Icon,ForumName,"ICO16x16");
+	 free (ForumName);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   HTM_Txt (ForumName1);
-   HTM_Txt (ForumName2);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_Txt (ForumName1);
+	 HTM_Txt (ForumName2);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Unsigned (NumForums);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_Unsigned (NumForums);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Unsigned (NumThreads);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_Unsigned (NumThreads);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Unsigned (NumPosts);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_Unsigned (NumPosts);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Double2Decimals (NumThrsPerForum);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_Double2Decimals (NumThrsPerForum);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Double2Decimals (NumPostsPerThread);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_Double2Decimals (NumPostsPerThread);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RT\"");
-   HTM_Double2Decimals (NumPostsPerForum);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_Double2Decimals (NumPostsPerForum);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -4486,40 +4459,40 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP\" style=\"width:20px;\"");
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP\" style=\"width:20px;\"");
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
-   HTM_Txt (Txt_Total);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	 HTM_Txt (Txt_Total);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (FiguresForum->NumForums);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Unsigned (FiguresForum->NumForums);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (FiguresForum->NumThreads);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Unsigned (FiguresForum->NumThreads);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (FiguresForum->NumPosts);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Unsigned (FiguresForum->NumPosts);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (NumThrsPerForum);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Double2Decimals (NumThrsPerForum);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (NumPostsPerThread);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Double2Decimals (NumPostsPerThread);
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Double2Decimals (NumPostsPerForum);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_Double2Decimals (NumPostsPerForum);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -4556,207 +4529,205 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"LM",Txt_Event);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,"RM",Txt_Number_of_events);
+	 HTM_TH (1,1,"RM",Txt_Number_of_emails);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Event);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-   HTM_TH (1,1,"RM",Txt_Number_of_events);
-   HTM_TH (1,1,"RM",Txt_Number_of_emails);
+      /***** Get total number of users *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
-   HTM_TR_End ();
+      /***** Get total number of users who want to be
+	     notified by email on some event, from database *****/
+      NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+      Usr_DB_GetNumUsrsWhoChoseAnOption ("usr_data.EmailNtfEvents<>0");
 
-   /***** Get total number of users *****/
-   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+      /***** For each notify event... *****/
+      for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	   NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
+	   NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+	{
+	 /* Get the number of users who want to be notified by email on this event, from database */
+	 if (asprintf (&SubQuery,"((usr_data.EmailNtfEvents & %u)<>0)",
+		       (1 << NotifyEvent)) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[NotifyEvent] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
 
-   /***** Get total number of users who want to be
-          notified by email on some event, from database *****/
-   NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
-   Fig_GetNumUsrsWhoChoseAnOption ("usr_data.EmailNtfEvents<>0");
+	 /* Get number of notifications by email from database */
+	 switch (Gbl.Scope.Current)
+	   {
+	    case HieLvl_SYS:
+	       DB_QuerySELECT (&mysql_res,"can not get the number"
+					  " of notifications by email",
+			       "SELECT SUM(NumEvents),"			// row[0]
+				      "SUM(NumMails)"			// row[1]
+				" FROM sta_notifications"
+			       " WHERE NotifyEvent=%u",
+			       (unsigned) NotifyEvent);
+	       break;
+	    case HieLvl_CTY:
+	       DB_QuerySELECT (&mysql_res,"can not get the number"
+					  " of notifications by email",
+			       "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				      "SUM(sta_notifications.NumMails)"	// row[1]
+				" FROM ins_instits,"
+				      "ctr_centers,"
+				      "deg_degrees,"
+				      "sta_notifications"
+			       " WHERE ins_instits.CtyCod=%ld"
+				 " AND ins_instits.InsCod=ctr_centers.InsCod"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=sta_notifications.DegCod"
+				 " AND sta_notifications.NotifyEvent=%u",
+			       Gbl.Hierarchy.Cty.CtyCod,
+			       (unsigned) NotifyEvent);
+	       break;
+	    case HieLvl_INS:
+	       DB_QuerySELECT (&mysql_res,"can not get the number"
+					  " of notifications by email",
+			       "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				      "SUM(sta_notifications.NumMails)"	// row[1]
+				" FROM ctr_centers,"
+				      "deg_degrees,"
+				      "sta_notifications"
+			       " WHERE ctr_centers.InsCod=%ld"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=sta_notifications.DegCod"
+				 " AND sta_notifications.NotifyEvent=%u",
+			       Gbl.Hierarchy.Ins.InsCod,
+			       (unsigned) NotifyEvent);
+	       break;
+	    case HieLvl_CTR:
+	       DB_QuerySELECT (&mysql_res,"can not get the number"
+					  " of notifications by email",
+			       "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				      "SUM(sta_notifications.NumMails)"	// row[1]
+				" FROM deg_degrees,"
+				      "sta_notifications"
+			       " WHERE deg_degrees.CtrCod=%ld"
+				 " AND deg_degrees.DegCod=sta_notifications.DegCod"
+				 " AND sta_notifications.NotifyEvent=%u",
+			       Gbl.Hierarchy.Ctr.CtrCod,
+			       (unsigned) NotifyEvent);
+	       break;
+	    case HieLvl_DEG:
+	       DB_QuerySELECT (&mysql_res,"can not get the number"
+					  " of notifications by email",
+			       "SELECT SUM(NumEvents),"			// row[0]
+				      "SUM(NumMails)"			// row[1]
+				" FROM sta_notifications"
+			       " WHERE DegCod=%ld"
+				 " AND NotifyEvent=%u",
+			       Gbl.Hierarchy.Deg.DegCod,
+			       (unsigned) NotifyEvent);
+	       break;
+	    case HieLvl_CRS:
+	       DB_QuerySELECT (&mysql_res,"can not get the number"
+					  " of notifications by email",
+			       "SELECT SUM(NumEvents),"			// row[0]
+				      "SUM(NumMails)"			// row[1]
+				" FROM sta_notifications"
+			       " WHERE CrsCod=%ld"
+				 " AND NotifyEvent=%u",
+			       Gbl.Hierarchy.Crs.CrsCod,
+			       (unsigned) NotifyEvent);
+	       break;
+	    default:
+	       Err_WrongScopeExit ();
+	       break;
+	   }
 
-   /***** For each notify event... *****/
-   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
-	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
-     {
-      /* Get the number of users who want to be notified by email on this event, from database */
-      if (asprintf (&SubQuery,"((usr_data.EmailNtfEvents & %u)<>0)",
-	            (1 << NotifyEvent)) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[NotifyEvent] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get number of notifications by email from database */
-      switch (Gbl.Scope.Current)
-        {
-         case HieLvl_SYS:
-            DB_QuerySELECT (&mysql_res,"can not get the number"
-        			       " of notifications by email",
-        		    "SELECT SUM(NumEvents),"			// row[0]
-        		           "SUM(NumMails)"			// row[1]
-                             " FROM sta_notifications"
-                            " WHERE NotifyEvent=%u",
-			    (unsigned) NotifyEvent);
-            break;
-	 case HieLvl_CTY:
-            DB_QuerySELECT (&mysql_res,"can not get the number"
-        			       " of notifications by email",
-        		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
-        		           "SUM(sta_notifications.NumMails)"	// row[1]
-                             " FROM ins_instits,"
-                                   "ctr_centers,"
-                                   "deg_degrees,"
-                                   "sta_notifications"
-                            " WHERE ins_instits.CtyCod=%ld"
-                              " AND ins_instits.InsCod=ctr_centers.InsCod"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=sta_notifications.DegCod"
-                              " AND sta_notifications.NotifyEvent=%u",
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    (unsigned) NotifyEvent);
-            break;
-	 case HieLvl_INS:
-            DB_QuerySELECT (&mysql_res,"can not get the number"
-        			       " of notifications by email",
-        		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
-        		           "SUM(sta_notifications.NumMails)"	// row[1]
-                             " FROM ctr_centers,"
-                                   "deg_degrees,"
-                                   "sta_notifications"
-                            " WHERE ctr_centers.InsCod=%ld"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=sta_notifications.DegCod"
-                              " AND sta_notifications.NotifyEvent=%u",
-			    Gbl.Hierarchy.Ins.InsCod,
-			    (unsigned) NotifyEvent);
-            break;
-         case HieLvl_CTR:
-            DB_QuerySELECT (&mysql_res,"can not get the number"
-        			       " of notifications by email",
-        		    "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
-        		           "SUM(sta_notifications.NumMails)"	// row[1]
-                             " FROM deg_degrees,"
-                                   "sta_notifications"
-                            " WHERE deg_degrees.CtrCod=%ld"
-                              " AND deg_degrees.DegCod=sta_notifications.DegCod"
-                              " AND sta_notifications.NotifyEvent=%u",
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    (unsigned) NotifyEvent);
-            break;
-         case HieLvl_DEG:
-            DB_QuerySELECT (&mysql_res,"can not get the number"
-        			       " of notifications by email",
-        		    "SELECT SUM(NumEvents),"			// row[0]
-        		           "SUM(NumMails)"			// row[1]
-                             " FROM sta_notifications"
-                            " WHERE DegCod=%ld"
-                              " AND NotifyEvent=%u",
-			    Gbl.Hierarchy.Deg.DegCod,
-			    (unsigned) NotifyEvent);
-            break;
-         case HieLvl_CRS:
-            DB_QuerySELECT (&mysql_res,"can not get the number"
-        			       " of notifications by email",
-        		    "SELECT SUM(NumEvents),"			// row[0]
-        		           "SUM(NumMails)"			// row[1]
-                             " FROM sta_notifications"
-                            " WHERE CrsCod=%ld"
-                              " AND NotifyEvent=%u",
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    (unsigned) NotifyEvent);
-            break;
-	 default:
-	    Err_WrongScopeExit ();
-	    break;
-        }
+	 /* Get number of events notified */
+	 if (row[0])
+	   {
+	    if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
+	       Err_ShowErrorAndExit ("Error when getting the number of notifications by email.");
+	   }
+	 else
+	    NumEvents[NotifyEvent] = 0;
 
-      row = mysql_fetch_row (mysql_res);
+	 /* Get number of mails sent */
+	 if (row[1])
+	   {
+	    if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
+	       Err_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
+	   }
+	 else
+	    NumMails[NotifyEvent] = 0;
 
-      /* Get number of events notified */
-      if (row[0])
-        {
-         if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
-            Err_ShowErrorAndExit ("Error when getting the number of notifications by email.");
-        }
-      else
-         NumEvents[NotifyEvent] = 0;
+	 /* Free structure that stores the query result */
+	 DB_FreeMySQLResult (&mysql_res);
 
-      /* Get number of mails sent */
-      if (row[1])
-        {
-         if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
-            Err_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
-        }
-      else
-         NumMails[NotifyEvent] = 0;
+	 /* Update total number of events and mails */
+	 NumEventsTotal += NumEvents[NotifyEvent];
+	 NumMailsTotal  += NumMails [NotifyEvent];
+	}
 
-      /* Free structure that stores the query result */
-      DB_FreeMySQLResult (&mysql_res);
+      /***** Write number of users who want to be notified by email on each event *****/
+      for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	   NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
+	   NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+	{
+	 HTM_TR_Begin (NULL);
 
-      /* Update total number of events and mails */
-      NumEventsTotal += NumEvents[NotifyEvent];
-      NumMailsTotal  += NumMails [NotifyEvent];
-     }
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+	    HTM_TD_End ();
 
-   /***** Write number of users who want to be notified by email on each event *****/
-   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
-	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
-     {
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[NotifyEvent]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumEvents[NotifyEvent]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumMails[NotifyEvent]);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Write total number of users who want to be notified by email on some event *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[NotifyEvent]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
+					   (double) NumUsrsTotal :
+					   0.0);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumEvents[NotifyEvent]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (NumEventsTotal);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumMails[NotifyEvent]);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (NumMailsTotal);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
-     }
-
-   /***** Write total number of users who want to be notified by email on some event *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
-   HTM_Txt (Txt_Total);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
-        	                  (double) NumUsrsTotal :
-        	                  0.0);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (NumEventsTotal);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (NumMailsTotal);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -4800,41 +4771,39 @@ static void Fig_GetAndShowNoticesStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_NOTICE_Active_BR_notices);
+	 HTM_TH (1,1,"RM",Txt_NOTICE_Obsolete_BR_notices);
+	 HTM_TH (1,1,"RM",Txt_NOTICE_Deleted_BR_notices);
+	 HTM_TH (1,1,"RM",Txt_Total);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_NOTICE_Active_BR_notices);
-   HTM_TH (1,1,"RM",Txt_NOTICE_Obsolete_BR_notices);
-   HTM_TH (1,1,"RM",Txt_NOTICE_Deleted_BR_notices);
-   HTM_TH (1,1,"RM",Txt_Total);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      /***** Write number of notices *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
+	 HTM_TD_End ();
 
-   /***** Write number of notices *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumNoticesDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N RM\"");
+	    HTM_Unsigned ( NumTotalNotices);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumNoticesDeleted);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumTotalNotifications);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RM\"");
-   HTM_Unsigned ( NumTotalNotices);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumTotalNotifications);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -4872,65 +4841,63 @@ static void Fig_GetAndShowMsgsStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"LM",Txt_Messages);
+	 HTM_TH (1,1,"RM",Txt_MSGS_Not_deleted);
+	 HTM_TH (1,1,"RM",Txt_MSGS_Deleted);
+	 HTM_TH (1,1,"RM",Txt_Total);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Messages);
-   HTM_TH (1,1,"RM",Txt_MSGS_Not_deleted);
-   HTM_TH (1,1,"RM",Txt_MSGS_Deleted);
-   HTM_TH (1,1,"RM",Txt_Total);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      /***** Write number of messages *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_Txt (Txt_MSGS_Sent);
+	 HTM_TD_End ();
 
-   /***** Write number of messages *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumMsgsSentNotDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_Txt (Txt_MSGS_Sent);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumMsgsSentDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumMsgsSentNotDeleted);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N RM\"");
+	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumMsgsSentDeleted);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Hyphen ();
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RM\"");
-   HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
-   HTM_TD_End ();
+      HTM_TR_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Hyphen ();
-   HTM_TD_End ();
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_Txt (Txt_MSGS_Received);
+	 HTM_TD_End ();
 
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumMsgsReceivedNotDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_Txt (Txt_MSGS_Received);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumMsgsReceivedNotDeleted);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT_N RM\"");
+	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumMsgsReceivedAndDeleted);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumMsgsReceivedAndNotified);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RM\"");
-   HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumMsgsReceivedAndNotified);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -4958,49 +4925,47 @@ static void Fig_GetAndShowAgendasStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_agendas,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_events);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,"RM",Txt_Number_of_events_per_user);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_events);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-   HTM_TH (1,1,"RM",Txt_Number_of_events_per_user);
+      /***** Number of agenda events *****/
+      NumEvents = Agd_DB_GetNumEvents (Gbl.Scope.Current);
 
-   HTM_TR_End ();
+      /***** Number of users with agenda events *****/
+      NumUsrs = Agd_DB_GetNumUsrsWithEvents (Gbl.Scope.Current);
 
-   /***** Number of agenda events *****/
-   NumEvents = Agd_DB_GetNumEvents (Gbl.Scope.Current);
+      /***** Get total number of users in current scope *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
-   /***** Number of users with agenda events *****/
-   NumUsrs = Agd_DB_GetNumUsrsWithEvents (Gbl.Scope.Current);
+      /***** Write number of users who have chosen each language *****/
+      HTM_TR_Begin (NULL);
 
-   /***** Get total number of users in current scope *****/
-   NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumEvents);
+	 HTM_TD_End ();
 
-   /***** Write number of users who have chosen each language *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumUsrs);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumEvents);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					   (double) NumUsrsTotal :
+					   0);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumUsrs);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
+					   (double) NumUsrs :
+					   0);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
-				  (double) NumUsrsTotal :
-				  0);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
-			          (double) NumUsrs :
-			          0);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5039,41 +5004,39 @@ static void Fig_GetAndShowSurveysStats (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_surveys);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_surveys);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_surveys_BR_per_course);
+	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_questions_BR_per_survey);
+	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_surveys);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_surveys);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_surveys_BR_per_course);
-   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_questions_BR_per_survey);
-   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+      /***** Write number of surveys *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumSurveys);
+	 HTM_TD_End ();
 
-   /***** Write number of surveys *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumCoursesWithSurveys);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumSurveys);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumSurveysPerCourse);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumCoursesWithSurveys);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Double2Decimals (NumQstsPerSurvey);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumSurveysPerCourse);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (NumNotif);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Double2Decimals (NumQstsPerSurvey);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (NumNotif);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5096,18 +5059,18 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
-   /***** Privacy for photo *****/
-   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,
-	                                       "PhotoVisibility",
-					       Pri_PHOTO_ALLOWED_VIS);
+      /***** Privacy for photo *****/
+      Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,
+						  "PhotoVisibility",
+						  Pri_PHOTO_ALLOWED_VIS);
 
-   /***** Privacy for public profile *****/
-   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Basic_public_profile,
-	                                       "BaPrfVisibility",
-					       Pri_BASIC_PROFILE_ALLOWED_VIS);
-   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Extended_public_profile,
-	                                       "ExPrfVisibility",
-					       Pri_EXTENDED_PROFILE_ALLOWED_VIS);
+      /***** Privacy for public profile *****/
+      Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Basic_public_profile,
+						  "BaPrfVisibility",
+						  Pri_BASIC_PROFILE_ALLOWED_VIS);
+      Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Extended_public_profile,
+						  "ExPrfVisibility",
+						  Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5132,11 +5095,9 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 
    /***** Heading row *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",TxtObject);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
+      HTM_TH (1,1,"LM",TxtObject);
+      HTM_TH (1,1,"RM",Txt_Number_of_users);
+      HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
    HTM_TR_End ();
 
    /***** For each privacy option... *****/
@@ -5149,7 +5110,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	 if (asprintf (&SubQuery,"usr_data.%s='%s'",
 		       FieldName,Pri_VisibilityDB[Visibility]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[Visibility] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Visibility] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */
@@ -5164,19 +5125,19 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	{
 	 HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"DAT LM\"");
-         HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
-         HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
+	    HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Unsigned (NumUsrs[Visibility]);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[Visibility]);
+	    HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
-				        (double) NumUsrsTotal :
-				        0.0);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
 
          HTM_TR_End ();
 	}
@@ -5219,54 +5180,52 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_Cookies);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each option... *****/
-   for (i = 0;
-	i < 2;
-	i++)
-     {
-      /* Get number of users who have chosen this menu from database */
-      if (asprintf (&SubQuery,"usr_data.ThirdPartyCookies='%c'",
-	            AcceptedInDB[i]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[i] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[i];
-     }
-
-   /***** Write number of users who have chosen each option *****/
-   for (i = 0;
-	i < 2;
-	i++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"%s CM\"",AcceptedClass[i]);
-      HTM_Txt (AcceptedSymbol[i]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[i]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[i] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_Cookies);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each option... *****/
+      for (i = 0;
+	   i < 2;
+	   i++)
+	{
+	 /* Get number of users who have chosen this menu from database */
+	 if (asprintf (&SubQuery,"usr_data.ThirdPartyCookies='%c'",
+		       AcceptedInDB[i]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[i] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[i];
+	}
+
+      /***** Write number of users who have chosen each option *****/
+      for (i = 0;
+	   i < 2;
+	   i++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s CM\"",AcceptedClass[i]);
+	       HTM_Txt (AcceptedSymbol[i]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[i]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[i] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5295,54 +5254,52 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_Language);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each language... *****/
-   for (Lan  = (Lan_Language_t) 1;
-	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	Lan++)
-     {
-      /* Get the number of users who have chosen this language from database */
-      if (asprintf (&SubQuery,"usr_data.Language='%s'",
-		    Lan_STR_LANG_ID[Lan]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[Lan] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[Lan];
-     }
-
-   /***** Write number of users who have chosen each language *****/
-   for (Lan  = (Lan_Language_t) 1;
-	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	Lan++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_STR_LANG_NAME[Lan]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[Lan]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_Language);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each language... *****/
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	   Lan++)
+	{
+	 /* Get the number of users who have chosen this language from database */
+	 if (asprintf (&SubQuery,"usr_data.Language='%s'",
+		       Lan_STR_LANG_ID[Lan]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Lan] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Lan];
+	}
+
+      /***** Write number of users who have chosen each language *****/
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	   Lan++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_Txt (Txt_STR_LANG_NAME[Lan]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[Lan]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5373,64 +5330,62 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"LM",Txt_Calendar);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+      HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Calendar);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+      /***** For each day... *****/
+      for (FirstDayOfWeek = 0;	// Monday
+	   FirstDayOfWeek <= 6;	// Sunday
+	   FirstDayOfWeek++)
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	   {
+	    /* Get number of users who have chosen this first day of week from database */
+	    if (asprintf (&SubQuery,"usr_data.FirstDayOfWeek=%u",
+			  (unsigned) FirstDayOfWeek) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    NumUsrs[FirstDayOfWeek] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	    free (SubQuery);
 
-   HTM_TR_End ();
+	    /* Update total number of users */
+	    NumUsrsTotal += NumUsrs[FirstDayOfWeek];
+	   }
 
-   /***** For each day... *****/
-   for (FirstDayOfWeek = 0;	// Monday
-	FirstDayOfWeek <= 6;	// Sunday
-	FirstDayOfWeek++)
-      if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
-	{
-	 /* Get number of users who have chosen this first day of week from database */
-	 if (asprintf (&SubQuery,"usr_data.FirstDayOfWeek=%u",
-		       (unsigned) FirstDayOfWeek) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[FirstDayOfWeek] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-	 free (SubQuery);
+      /***** Write number of users who have chosen each first day of week *****/
+      for (FirstDayOfWeek = 0;	// Monday
+	   FirstDayOfWeek <= 6;	// Sunday
+	   FirstDayOfWeek++)
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	   {
+	    HTM_TR_Begin (NULL);
 
-	 /* Update total number of users */
-	 NumUsrsTotal += NumUsrs[FirstDayOfWeek];
-        }
+	       HTM_TD_Begin ("class=\"CM\"");
+		  if (asprintf (&Icon,"first-day-of-week-%u.png",
+				FirstDayOfWeek) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Ico_PutIcon (Icon,
+			       Str_BuildStringStr (Txt_First_day_of_the_week_X,
+						   Txt_DAYS_SMALL[FirstDayOfWeek]),
+			       "ICO40x40");
+		  Str_FreeString ();
+		  free (Icon);
+	       HTM_TD_End ();
 
-   /***** Write number of users who have chosen each first day of week *****/
-   for (FirstDayOfWeek = 0;	// Monday
-	FirstDayOfWeek <= 6;	// Sunday
-	FirstDayOfWeek++)
-      if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
-	{
-	 HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
+	       HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"CM\"");
-	 if (asprintf (&Icon,"first-day-of-week-%u.png",
-		       FirstDayOfWeek) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 Ico_PutIcon (Icon,
-		      Str_BuildStringStr (Txt_First_day_of_the_week_X,
-				          Txt_DAYS_SMALL[FirstDayOfWeek]),
-		      "ICO40x40");
-	 Str_FreeString ();
-	 free (Icon);
-	 HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
+						 (double) NumUsrsTotal :
+						  0.0);
+	       HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
-				        (double) NumUsrsTotal :
-				         0.0);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-	}
+	    HTM_TR_End ();
+	   }
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5457,55 +5412,53 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_Format);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each format... *****/
-   for (Format  = (Dat_Format_t) 0;
-	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
-	Format++)
-     {
-      /* Get number of users who have chosen this date format from database */
-      if (asprintf (&SubQuery,"usr_data.DateFormat=%u",
-	            (unsigned) Format) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[Format] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[Format];
-     }
-
-   /***** Write number of users who have chosen each date format *****/
-   for (Format  = (Dat_Format_t) 0;
-	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
-	Format++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"DAT_N LM\"");
-      Dat_PutSpanDateFormat (Format);
-      Dat_PutScriptDateFormat (Format);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[Format]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
-			             (double) NumUsrsTotal :
-			             0.0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_Format);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each format... *****/
+      for (Format  = (Dat_Format_t) 0;
+	   Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
+	   Format++)
+	{
+	 /* Get number of users who have chosen this date format from database */
+	 if (asprintf (&SubQuery,"usr_data.DateFormat=%u",
+		       (unsigned) Format) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Format] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Format];
+	}
+
+      /***** Write number of users who have chosen each date format *****/
+      for (Format  = (Dat_Format_t) 0;
+	   Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
+	   Format++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"DAT_N LM\"");
+	       Dat_PutSpanDateFormat (Format);
+	       Dat_PutScriptDateFormat (Format);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[Format]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5535,59 +5488,57 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_Icons);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each icon set... *****/
-   for (IconSet  = (Ico_IconSet_t) 0;
-	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
-	IconSet++)
-     {
-      /* Get the number of users who have chosen this icon set from database */
-      if (asprintf (&SubQuery,"usr_data.IconSet='%s'",
-	            Ico_IconSetId[IconSet]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[IconSet] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[IconSet];
-     }
-
-   /***** Write number of users who have chosen each icon set *****/
-   for (IconSet  = (Ico_IconSet_t) 0;
-	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
-	IconSet++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"LM\"");
-      if (asprintf (&URL,"%s/%s",
-		    Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
-	       "class=\"ICO40x40\"");
-      free (URL);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[IconSet]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[IconSet] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_Icons);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each icon set... *****/
+      for (IconSet  = (Ico_IconSet_t) 0;
+	   IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
+	   IconSet++)
+	{
+	 /* Get the number of users who have chosen this icon set from database */
+	 if (asprintf (&SubQuery,"usr_data.IconSet='%s'",
+		       Ico_IconSetId[IconSet]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[IconSet] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[IconSet];
+	}
+
+      /***** Write number of users who have chosen each icon set *****/
+      for (IconSet  = (Ico_IconSet_t) 0;
+	   IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
+	   IconSet++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"LM\"");
+	       if (asprintf (&URL,"%s/%s",
+			     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
+			"class=\"ICO40x40\"");
+	       free (URL);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[IconSet]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[IconSet] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5616,54 +5567,52 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_Menu);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each menu... *****/
-   for (Menu  = (Mnu_Menu_t) 0;
-	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
-	Menu++)
-     {
-      /* Get number of users who have chosen this menu from database */
-      if (asprintf (&SubQuery,"usr_data.Menu=%u",
-	            (unsigned) Menu) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[Menu] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[Menu];
-     }
-
-   /***** Write number of users who have chosen each menu *****/
-   for (Menu  = (Mnu_Menu_t) 0;
-	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
-	Menu++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"CM\"");
-      Ico_PutIcon (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],"ICO40x40");
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[Menu]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_Menu);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each menu... *****/
+      for (Menu  = (Mnu_Menu_t) 0;
+	   Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
+	   Menu++)
+	{
+	 /* Get number of users who have chosen this menu from database */
+	 if (asprintf (&SubQuery,"usr_data.Menu=%u",
+		       (unsigned) Menu) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Menu] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Menu];
+	}
+
+      /***** Write number of users who have chosen each menu *****/
+      for (Menu  = (Mnu_Menu_t) 0;
+	   Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
+	   Menu++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Ico_PutIcon (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],"ICO40x40");
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[Menu]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5693,59 +5642,57 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LM",Txt_Theme_SKIN);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each theme... *****/
-   for (Theme  = (The_Theme_t) 0;
-	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
-	Theme++)
-     {
-      /* Get number of users who have chosen this theme from database */
-      if (asprintf (&SubQuery,"usr_data.Theme='%s'",
-		    The_ThemeId[Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[Theme] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[Theme];
-     }
-
-   /***** Write number of users who have chosen each theme *****/
-   for (Theme  = (The_Theme_t) 0;
-	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
-	Theme++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"CM\"");
-      if (asprintf (&URL,"%s/%s",
-		    Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
-	       "style=\"width:40px;height:25px;\"");
-      free (URL);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[Theme]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"LM",Txt_Theme_SKIN);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each theme... *****/
+      for (Theme  = (The_Theme_t) 0;
+	   Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
+	   Theme++)
+	{
+	 /* Get number of users who have chosen this theme from database */
+	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",
+		       The_ThemeId[Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Theme] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Theme];
+	}
+
+      /***** Write number of users who have chosen each theme *****/
+      for (Theme  = (The_Theme_t) 0;
+	   Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
+	   Theme++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"CM\"");
+	       if (asprintf (&URL,"%s/%s",
+			     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
+			"style=\"width:40px;height:25px;\"");
+	       free (URL);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[Theme]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -5774,163 +5721,58 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
-   /***** Heading row *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CM",Txt_Columns);
-   HTM_TH (1,1,"RM",Txt_Number_of_users);
-   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-
-   HTM_TR_End ();
-
-   /***** For each language... *****/
-   for (SideCols = 0;
-	SideCols <= Lay_SHOW_BOTH_COLUMNS;
-	SideCols++)
-     {
-      /* Get the number of users who have chosen this layout of columns from database */
-      if (asprintf (&SubQuery,"usr_data.SideCols=%u",
-	            SideCols) < 0)
-	 Err_NotEnoughMemoryExit ();
-      NumUsrs[SideCols] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free (SubQuery);
-
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[SideCols];
-     }
-
-   /***** Write number of users who have chosen this layout of columns *****/
-   for (SideCols = 0;
-	SideCols <= Lay_SHOW_BOTH_COLUMNS;
-	SideCols++)
-     {
+      /***** Heading row *****/
       HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"CM\"");
-      if (asprintf (&Icon,"layout%u%u_32x20.gif",
-		    SideCols >> 1,SideCols & 1) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
-	       "style=\"width:40px;height:25px;\"");
-      free (Icon);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumUsrs[SideCols]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
-        	                     (double) NumUsrsTotal :
-        	                     0.0);
-      HTM_TD_End ();
-
+	 HTM_TH (1,1,"CM",Txt_Columns);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
-     }
+
+      /***** For each language... *****/
+      for (SideCols = 0;
+	   SideCols <= Lay_SHOW_BOTH_COLUMNS;
+	   SideCols++)
+	{
+	 /* Get the number of users who have chosen this layout of columns from database */
+	 if (asprintf (&SubQuery,"usr_data.SideCols=%u",
+		       SideCols) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[SideCols] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[SideCols];
+	}
+
+      /***** Write number of users who have chosen this layout of columns *****/
+      for (SideCols = 0;
+	   SideCols <= Lay_SHOW_BOTH_COLUMNS;
+	   SideCols++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"CM\"");
+	       if (asprintf (&Icon,"layout%u%u_32x20.gif",
+			     SideCols >> 1,SideCols & 1) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
+			"style=\"width:40px;height:25px;\"");
+	       free (Icon);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[SideCols]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
-  }
-
-/*****************************************************************************/
-/************** Get number of users who have chosen an option ****************/
-/*****************************************************************************/
-
-unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
-  {
-   unsigned NumUsrs;
-
-   /***** Get the number of users who have chosen
-          this privacy option from database *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumUsrs = (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(*)"
-		         " FROM usr_data WHERE %s",
-		        SubQuery);
-	 break;
-      case HieLvl_CTY:
-	 NumUsrs = (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_users,"
-			       "usr_data"
-		        " WHERE ins_instits.CtyCod=%ld"
-		          " AND ins_instits.InsCod=ctr_centers.InsCod"
-		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		          " AND deg_degrees.DegCod=crs_courses.DegCod"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Cty.CtyCod,SubQuery);
-	 break;
-      case HieLvl_INS:
-	 NumUsrs = (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM ctr_centers,"
-		               "deg_degrees,"
-		               "crs_courses,"
-		               "crs_users,"
-		               "usr_data"
-		        " WHERE ctr_centers.InsCod=%ld"
-		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		          " AND deg_degrees.DegCod=crs_courses.DegCod"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Ins.InsCod,SubQuery);
-	 break;
-      case HieLvl_CTR:
-	 NumUsrs = (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM deg_degrees,"
-		               "crs_courses,"
-		               "crs_users,"
-		               "usr_data"
-		        " WHERE deg_degrees.CtrCod=%ld"
-		          " AND deg_degrees.DegCod=crs_courses.DegCod"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Ctr.CtrCod,SubQuery);
-	 break;
-      case HieLvl_DEG:
-	 NumUsrs = (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM crs_courses,"
-		               "crs_users,"
-		               "usr_data"
-		        " WHERE crs_courses.DegCod=%ld"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Deg.DegCod,SubQuery);
-	 break;
-      case HieLvl_CRS:
-	 NumUsrs = (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM crs_users,"
-		               "usr_data"
-		        " WHERE crs_users.CrsCod=%ld"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Crs.CrsCod,SubQuery);
-	 break;
-      default:
-	 Err_WrongScopeExit ();
-	 NumUsrs = 0;	// Not reached. Initialized to avoid warning.
-	 break;
-     }
-
-   return NumUsrs;
   }

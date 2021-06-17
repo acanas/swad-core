@@ -554,4 +554,6 @@ Usr_Who_t Usr_GetHiddenParamWho (void);
 
 unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
 
+unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
+
 #endif

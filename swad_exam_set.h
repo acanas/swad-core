@@ -48,8 +48,8 @@ void ExaSet_ReceiveFormSet (void);
 void ExaSet_ChangeSetTitle (void);
 void ExaSet_ChangeNumQstsToExam (void);
 
-unsigned ExaSet_GetNumSetsExam (long ExaCod);
-unsigned ExaSet_GetNumQstsExam (long ExaCod);
+unsigned Exa_DB_GetNumSetsExam (long ExaCod);
+unsigned Exa_DB_GetNumQstsExam (long ExaCod);
 
 void ExaSet_RequestCreatOrEditSet (void);
 void ExaSet_ReqSelectQstsToAddToSet (void);

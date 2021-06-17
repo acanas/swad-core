@@ -146,9 +146,9 @@ static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
 static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
                                            unsigned QstInd);
 
-static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print);
-static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print);
-static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print);
+static unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod);
+static double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod);
+static void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -679,34 +679,29 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
 
-   /***** Heading *****/
-   /* Institution, degree and course */
-   Lay_WriteHeaderClassPhoto (false,false,
-			      Gbl.Hierarchy.Ins.InsCod,
-			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.CrsCod);
+      /***** Heading *****/
+      /* Institution, degree and course */
+      Lay_WriteHeaderClassPhoto (false,false,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.CrsCod);
 
 
-   /***** Show user and time *****/
-   /* Begin table */
-   HTM_TABLE_BeginWideMarginPadding (10);
+      /***** Show user and time *****/
+      HTM_TABLE_BeginWideMarginPadding (10);
+   	 ExaRes_ShowExamResultUser (&Gbl.Usrs.Me.UsrDat);
+      HTM_TABLE_End ();
 
-   /* User */
-   ExaRes_ShowExamResultUser (&Gbl.Usrs.Me.UsrDat);
+      /***** Exam description *****/
+      ExaPrn_GetAndWriteDescription (Exam->ExaCod);
 
-   /* End table */
-   HTM_TABLE_End ();
-
-   /* Exam description */
-   ExaPrn_GetAndWriteDescription (Exam->ExaCod);
-
-   if (Print->NumQsts.All)
-     {
-      /***** Show table with questions to answer *****/
-      HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
-      ExaPrn_ShowTableWithQstsToFill (Exams,Print);
-      HTM_DIV_End ();				// Used for AJAX based refresh
-     }
+      if (Print->NumQsts.All)
+	{
+	 /***** Show table with questions to answer *****/
+	 HTM_DIV_Begin ("id=\"examprint\"");	// Used for AJAX based refresh
+	    ExaPrn_ShowTableWithQstsToFill (Exams,Print);
+	 HTM_DIV_End ();			// Used for AJAX based refresh
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -721,14 +716,14 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get description from database *****/
-   Exa_GetExamTxtFromDB (ExaCod,Txt);
+   Exa_DB_GetExamTxt (ExaCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,	// Convert from HTML to rigorous HTML
                      Txt,Cns_MAX_BYTES_TEXT,false);
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
 
    /***** Write description *****/
    HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL\"");
-   HTM_Txt (Txt);
+      HTM_Txt (Txt);
    HTM_DIV_End ();
   }
 
@@ -746,24 +741,24 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
 
-   /***** Write one row for each question *****/
-   for (QstInd = 0;
-	QstInd < Print->NumQsts.All;
-	QstInd++)
-     {
-      /* Create test question */
-      Tst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+      /***** Write one row for each question *****/
+      for (QstInd = 0;
+	   QstInd < Print->NumQsts.All;
+	   QstInd++)
+	{
+	 /* Create test question */
+	 Tst_QstConstructor (&Question);
+	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
-      /* Get question from database */
-      ExaSet_GetQstDataFromDB (&Question);
+	 /* Get question from database */
+	 ExaSet_GetQstDataFromDB (&Question);
 
-      /* Write question and answers */
-      ExaPrn_WriteQstAndAnsToFill (Print,QstInd,&Question);
+	 /* Write question and answers */
+	 ExaPrn_WriteQstAndAnsToFill (Print,QstInd,&Question);
 
-      /* Destroy test question */
-      Tst_QstDestructor (&Question);
-     }
+	 /* Destroy test question */
+	 Tst_QstDestructor (&Question);
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -771,7 +766,7 @@ static void ExaPrn_ShowTableWithQstsToFill (struct Exa_Exams *Exams,
    /***** Form to end/close this exam print *****/
    Frm_BeginFormId (ActEndExaPrn,"finished");
    ExaSes_PutParamsEdit (Exams);
-   Btn_PutCreateButton (Txt_I_have_finished);
+      Btn_PutCreateButton (Txt_I_have_finished);
    Frm_EndForm ();
   }
 
@@ -800,38 +795,38 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
       /***** Title for this set *****/
       HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"2\" class=\"COLOR0\"");
-      ExaSet_WriteSetTitle (&CurrentSet);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"2\" class=\"COLOR0\"");
+	    ExaSet_WriteSetTitle (&CurrentSet);
+	 HTM_TD_End ();
       HTM_TR_End ();
      }
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Number of question and answer type *****/
-   HTM_TD_Begin ("class=\"RT\"");
-   Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-   Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
-   HTM_TD_End ();
+      /***** Number of question and answer type *****/
+      HTM_TD_Begin ("class=\"RT\"");
+	 Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	 Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+      HTM_TD_End ();
 
-   /***** Stem, media and answers *****/
-   HTM_TD_Begin ("class=\"LT\"");
+      /***** Stem, media and answers *****/
+      HTM_TD_Begin ("class=\"LT\"");
 
-   /* Stem */
-   Tst_WriteQstStem (Question->Stem,"TEST_TXT",true);
+	 /* Stem */
+	 Tst_WriteQstStem (Question->Stem,"TEST_TXT",true);
 
-   /* Media */
-   Med_ShowMedia (&Question->Media,
-		  "TEST_MED_SHOW_CONT",
-		  "TEST_MED_SHOW");
+	 /* Media */
+	 Med_ShowMedia (&Question->Media,
+			"TEST_MED_SHOW_CONT",
+			"TEST_MED_SHOW");
 
-   /* Answers */
-   Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
-   ExaPrn_WriteAnswersToFill (Print,QstInd,Question);
-   Frm_EndForm ();
+	 /* Answers */
+	 Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
+	    ExaPrn_WriteAnswersToFill (Print,QstInd,Question);
+	 Frm_EndForm ();
 
-   HTM_TD_End ();
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();
@@ -950,48 +945,48 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
    /***** Begin table *****/
    HTM_TABLE_BeginPadding (2);
 
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      /***** Indexes are 0 1 2 3... if no shuffle
-             or 3 1 0 2... (example) if shuffle *****/
-      HTM_TR_Begin (NULL);
+      for (NumOpt = 0;
+	   NumOpt < Question->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 /***** Indexes are 0 1 2 3... if no shuffle
+		or 3 1 0 2... (example) if shuffle *****/
+	 HTM_TR_Begin (NULL);
 
-      /***** Write selectors and letter of this option *****/
-      /* Initially user has not answered the question ==> initially all the answers will be blank.
-	 If the user does not confirm the submission of their exam ==>
-	 ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      HTM_TD_Begin ("class=\"LT\"");
-      snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-      HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
-		Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
-								 "checkbox",
-		Id,NumOpt,Indexes[NumOpt],
-		UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-					      "");
-      ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
-      HTM_Txt (" />");
-      HTM_TD_End ();
+	 /***** Write selectors and letter of this option *****/
+	 /* Initially user has not answered the question ==> initially all the answers will be blank.
+	    If the user does not confirm the submission of their exam ==>
+	    ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+	 HTM_TD_Begin ("class=\"LT\"");
+	 snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+	 HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
+		   Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
+								    "checkbox",
+		   Id,NumOpt,Indexes[NumOpt],
+		   UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+						 "");
+	 ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
+	 HTM_Txt (" />");
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
-      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+	 HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+	 HTM_LABEL_End ();
+	 HTM_TD_End ();
 
-      /***** Write the option text *****/
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
-      HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-      HTM_LABEL_End ();
-      Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_MED_SHOW_CONT",
-                     "TEST_MED_SHOW");
-      HTM_TD_End ();
+	 /***** Write the option text *****/
+	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+	 HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+	 HTM_LABEL_End ();
+	 Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
+			"TEST_MED_SHOW_CONT",
+			"TEST_MED_SHOW");
+	 HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1110,9 +1105,9 @@ void ExaPrn_ReceivePrintAnswer (void)
       ExaPrn_ComputeScoreAndStoreQuestionOfPrint (&Print,QstInd);
 
       /* Update exam print in database */
-      ExaPrn_GetNumQstsNotBlank (&Print);
-      ExaPrn_ComputeTotalScoreOfPrint (&Print);
-      ExaPrn_UpdatePrintInDB (&Print);
+      Print.NumQsts.NotBlank = Exa_DB_GetNumQstsNotBlankInPrint (Print.PrnCod);
+      Print.Score.All = Exa_DB_ComputeTotalScoreOfPrint (Print.PrnCod);
+      Exa_DB_UpdatePrint (&Print);
 
       /***** Show table with questions to answer *****/
       ExaPrn_ShowTableWithQstsToFill (&Exams,&Print);
@@ -1128,7 +1123,7 @@ void ExaPrn_ReceivePrintAnswer (void)
       /***** Form to end/close this exam print *****/
       Frm_BeginForm (ActEndExaPrn);
       ExaSes_PutParamsEdit (&Exams);
-      Btn_PutCreateButton (Txt_Continue);
+	 Btn_PutCreateButton (Txt_Continue);
       Frm_EndForm ();
      }
   }
@@ -1485,37 +1480,35 @@ static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
 /************ Get number of questions not blank in an exam print *************/
 /*****************************************************************************/
 
-static void ExaPrn_GetNumQstsNotBlank (struct ExaPrn_Print *Print)
+static unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod)
   {
-   /***** Count number of questions not blank in exam print in database *****/
-   Print->NumQsts.NotBlank = (unsigned)
+   return (unsigned)
    DB_QueryCOUNT ("can not get number of questions not blank",
 		  "SELECT COUNT(*)"
 		   " FROM exa_print_questions"
 		  " WHERE PrnCod=%ld"
 		    " AND Answers<>''",
-		  Print->PrnCod);
+		  PrnCod);
   }
 
 /*****************************************************************************/
-/***************** Compute score of questions of an exam print ***************/
+/************* Compute total score of questions of an exam print *************/
 /*****************************************************************************/
 
-static void ExaPrn_ComputeTotalScoreOfPrint (struct ExaPrn_Print *Print)
+static double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod)
   {
-   /***** Compute total score of exam print *****/
-   Print->Score.All = DB_QuerySELECTDouble ("can not get score of exam print",
-					    "SELECT SUM(Score)"
-					     " FROM exa_print_questions"
-					    " WHERE PrnCod=%ld",
-					    Print->PrnCod);
+   return DB_QuerySELECTDouble ("can not get score of exam print",
+				"SELECT SUM(Score)"
+				 " FROM exa_print_questions"
+				" WHERE PrnCod=%ld",
+				PrnCod);
   }
 
 /*****************************************************************************/
 /********************** Update exam print in database ************************/
 /*****************************************************************************/
 
-static void ExaPrn_UpdatePrintInDB (const struct ExaPrn_Print *Print)
+static void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
   {
    /***** Update exam print in database *****/
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot

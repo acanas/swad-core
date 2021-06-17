@@ -1264,7 +1264,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_CheckIfAssociatedToGrps ("asg_groups","AsgCod",AsgCod) ? "" :
+					    Grp_DB_CheckIfAssociatedToGrps ("asg_groups","AsgCod",AsgCod) ? "" :
 													 " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 		     HTM_LABEL_End ();

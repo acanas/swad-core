@@ -1157,7 +1157,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
 					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
-					    Grp_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod) ? "" :
+					    Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",AttCod) ? "" :
 													 " checked=\"checked\"");
 			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 		     HTM_LABEL_End ();

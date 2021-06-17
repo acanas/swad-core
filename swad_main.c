@@ -117,7 +117,7 @@ int main (void)
 
       /***** Mitigate DoS attacks *****/
       Fir_CheckFirewallAndExitIfBanned ();
-      Fir_LogAccess ();
+      Fir_DB_LogAccess ();
       Fir_CheckFirewallAndExitIfTooManyRequests ();
 
       Hie_InitHierarchy ();

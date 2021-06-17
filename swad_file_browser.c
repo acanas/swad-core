@@ -60,6 +60,7 @@
 #include "swad_profile.h"
 #include "swad_project.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_timeline.h"
 #include "swad_timeline_note.h"
@@ -1291,7 +1292,6 @@ static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 static void Brw_PutButtonToShowEdit (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
-static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
 static void Brw_WriteSubtitleOfFileBrowser (void);
 static void Brw_InitHiddenLevels (void);
 static void Brw_ShowAndStoreSizeOfFileTree (void);
@@ -1386,9 +1386,9 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1]);
 static long Brw_GetCodForExpandedFolders (void);
 static long Brw_GetWorksUsrCodForExpandedFolders (void);
 
-static void Brw_RemoveExpiredClipboards (void);
-static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
-                                          long MyUsrCod,long WorksUsrCod);
+static void Brw_DB_RemoveExpiredClipboards (void);
+static void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
+                                             long MyUsrCod,long WorksUsrCod);
 static void Brw_PasteClipboard (void);
 static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
 static bool Brw_PasteTreeIntoFolder (unsigned Level,
@@ -1415,7 +1415,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 static bool Brw_GetParamPublicFile (void);
 static Brw_License_t Brw_GetParLicense (void);
 static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata);
-static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata);
+static unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod);
 static unsigned Brw_GetFileViewsFromMe (long FilCod);
 static void Brw_UpdateFileViews (unsigned NumViews,long FilCod);
 static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
@@ -2863,8 +2863,8 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
             else					// Success
               {
                /* Remove affected clipboards */
-               Brw_RemoveAffectedClipboards (Brw_ADMI_ASG_USR,UsrCod,-1L);
-               Brw_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
+               Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_USR,UsrCod,-1L);
+               Brw_DB_RemoveAffectedClipboards (Brw_ADMI_ASG_CRS,-1L,UsrCod);
 
                /* Rename affected expanded folders */
                snprintf (OldPath,sizeof (OldPath),"%s/%s",
@@ -3145,32 +3145,32 @@ static void Brw_ShowFileBrowserProject (void)
                  NULL,NULL,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-   /***** Show the project *****/
-   Prj_ShowOneUniqueProject (&Prj);
+      /***** Show the project *****/
+      Prj_ShowOneUniqueProject (&Prj);
 
-   /***** Show project file browsers *****/
-   if (Brw_CheckIfICanViewProjectFiles (Prj.PrjCod))
-     {
-      Brw_WriteTopBeforeShowingFileBrowser ();
-
-      if (Brw_CheckIfICanViewProjectDocuments (Prj.PrjCod))
+      /***** Show project file browsers *****/
+      if (Brw_CheckIfICanViewProjectFiles (Prj.PrjCod))
 	{
-	 /***** Show the tree with the project documents *****/
-	 Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
-	 Brw_InitializeFileBrowser ();
-	 Brw_ShowFileBrowser ();
-	}
+	 Brw_WriteTopBeforeShowingFileBrowser ();
 
-      if (Brw_CheckIfICanViewProjectAssessment (Prj.PrjCod))
-	{
-	 /***** Show the tree with the project assessment *****/
-	 Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
-	 Brw_InitializeFileBrowser ();
-	 Brw_ShowFileBrowser ();
+	 if (Brw_CheckIfICanViewProjectDocuments (Prj.PrjCod))
+	   {
+	    /***** Show the tree with the project documents *****/
+	    Gbl.FileBrowser.Type = Brw_ADMI_DOC_PRJ;
+	    Brw_InitializeFileBrowser ();
+	    Brw_ShowFileBrowser ();
+	   }
+
+	 if (Brw_CheckIfICanViewProjectAssessment (Prj.PrjCod))
+	   {
+	    /***** Show the tree with the project assessment *****/
+	    Gbl.FileBrowser.Type = Brw_ADMI_ASS_PRJ;
+	    Brw_InitializeFileBrowser ();
+	    Brw_ShowFileBrowser ();
+	   }
 	}
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,"You have no access to project files.");
+      else
+	 Ale_ShowAlert (Ale_WARNING,"You have no access to project files.");
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3201,41 +3201,43 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 		      Brw_PutIconShowFigure,NULL,
 		      Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
 
-   /***** List the assignments and works of the selected users *****/
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                   Usr_DONT_GET_PREFS,
-                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
-	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
-	   {
-	    Gbl.Usrs.Other.UsrDat.Accepted =
-	    Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+      /***** List the assignments and works of the selected users *****/
+      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+      while (*Ptr)
+	{
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EnUsrCod,
+					    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						      Usr_DONT_GET_PREFS,
+						      Usr_GET_ROLE_IN_CURRENT_CRS))
+	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
+	      {
+	       Gbl.Usrs.Other.UsrDat.Accepted =
+	       Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show a row with the data of the owner of the works *****/
-	    HTM_TR_Begin (NULL);
-	    Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
+	       /***** Show a row with the data of the owner of the works *****/
+	       HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LT\"");
+		  Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Show the tree with the assignments *****/
-	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
-	    Brw_InitializeFileBrowser ();
-	    Brw_ShowFileBrowser ();
+		  HTM_TD_Begin ("class=\"LT\"");
 
-	    /***** Show the tree with the works *****/
-	    Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
-	    Brw_InitializeFileBrowser ();
-	    Brw_ShowFileBrowser ();
+		     /* Show the tree with the assignments */
+		     Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
+		     Brw_InitializeFileBrowser ();
+		     Brw_ShowFileBrowser ();
 
-	    HTM_TD_End ();
-	    HTM_TR_End ();
-	   }
-     }
+		     /* Show the tree with the works */
+		     Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
+		     Brw_InitializeFileBrowser ();
+		     Brw_ShowFileBrowser ();
+
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	      }
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -3292,58 +3294,59 @@ static void Brw_FormToChangeCrsGrpZone (void)
    Frm_BeginForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 
-   /***** List start *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT\"");
+      /***** List start *****/
+      HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   /***** Select the complete course, not a group *****/
-   HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
-                                               "BROWSER_TITLE_LIGHT");
-   HTM_LABEL_Begin (NULL);
-   HTM_INPUT_RADIO ("GrpCod",true,
-		    "value=\"-1\"%s",
-		    IsCourseZone ? " checked=\"checked\"" : "");
-   HTM_Txt (Gbl.Hierarchy.Crs.FullName);
-   HTM_LABEL_End ();
-   HTM_LI_End ();
-
-   /***** List my groups for unique selection *****/
-   if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
-     {
-      for (NumGrp = 0;
-	   NumGrp < LstMyGrps.NumGrps;
-	   NumGrp++)
-        {
-         /* Get next group */
-         GrpDat.GrpCod = LstMyGrps.GrpCods[NumGrp];
-         Grp_GetDataOfGroupByCod (&GrpDat);
-
-         /* Select this group */
-         HTM_LI_Begin ("class=\"%s\"",
-		       (IsGroupZone &&
-                        GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
-                                                                "BROWSER_TITLE_LIGHT");
-         HTM_IMG (Cfg_URL_ICON_PUBLIC,
-		  NumGrp < LstMyGrps.NumGrps - 1 ? "submid20x20.gif" :
-                	                           "subend20x20.gif",
-		  NULL,
-	          "class=\"ICO25x25\" style=\"margin-left:6px;\"");
-         HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("GrpCod",true,
-			  "value=\"%ld\"%s",
-			  GrpDat.GrpCod,
-			  (IsGroupZone &&
-			   GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? " checked=\"checked\"" : "");
-	 HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
-	 HTM_LABEL_End ();
+	 /***** Select the complete course, not a group *****/
+	 HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
+						     "BROWSER_TITLE_LIGHT");
+	    HTM_LABEL_Begin (NULL);
+	       HTM_INPUT_RADIO ("GrpCod",true,
+				"value=\"-1\"%s",
+				IsCourseZone ? " checked=\"checked\"" : "");
+	       HTM_Txt (Gbl.Hierarchy.Crs.FullName);
+	    HTM_LABEL_End ();
 	 HTM_LI_End ();
-        }
 
-      /***** Free memory with the list of groups I belong to *****/
-      Grp_FreeListCodGrp (&LstMyGrps);
-     }
+	 /***** List my groups for unique selection *****/
+	 if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
+	   {
+	    for (NumGrp = 0;
+		 NumGrp < LstMyGrps.NumGrps;
+		 NumGrp++)
+	      {
+	       /* Get next group */
+	       GrpDat.GrpCod = LstMyGrps.GrpCods[NumGrp];
+	       Grp_GetDataOfGroupByCod (&GrpDat);
 
-   /***** End list and form *****/
-   HTM_UL_End ();
+	       /* Select this group */
+	       HTM_LI_Begin ("class=\"%s\"",
+			     (IsGroupZone &&
+			      GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
+								      "BROWSER_TITLE_LIGHT");
+		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
+			   NumGrp < LstMyGrps.NumGrps - 1 ? "submid20x20.gif" :
+							    "subend20x20.gif",
+			   NULL,
+			   "class=\"ICO25x25\" style=\"margin-left:6px;\"");
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("GrpCod",true,
+				      "value=\"%ld\"%s",
+				      GrpDat.GrpCod,
+				      (IsGroupZone &&
+				       GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? " checked=\"checked\"" :
+					                                       "");
+		     HTM_TxtF ("%s&nbsp;%s",GrpDat.GrpTypName,GrpDat.GrpName);
+		  HTM_LABEL_End ();
+	       HTM_LI_End ();
+	      }
+
+	    /***** Free memory with the list of groups I belong to *****/
+	    Grp_FreeListCodGrp (&LstMyGrps);
+	   }
+
+      /***** End list and form *****/
+      HTM_UL_End ();
    Frm_EndForm ();
   }
 
@@ -3677,39 +3680,41 @@ static void Brw_ShowFileBrowser (void)
    snprintf (FileBrowserSectionId,sizeof (FileBrowserSectionId),
              "file_browser_%u",Gbl.FileBrowser.Id);
    HTM_SECTION_Begin (FileBrowserSectionId);
-   Box_BoxBegin ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
-                 Brw_PutIconsFileBrowser,NULL,
-                 Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
-   /***** Subtitle *****/
-   Brw_WriteSubtitleOfFileBrowser ();
+      Box_BoxBegin ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+		    Brw_PutIconsFileBrowser,NULL,
+		    Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
-   /***** List recursively the directory *****/
-   HTM_TABLE_Begin ("BROWSER_TABLE");
-   Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,
-             Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
-	     sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
-   Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
-	     sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
-   Brw_SetFullPathInTree ();
-   Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-   if (Brw_WriteRowFileBrowser (0,"1",
-                                false,	// Tree not contracted
-                                Brw_ICON_TREE_NOTHING))
-      Brw_ListDir (1,"1",
-                   false,	// Tree not contracted
-                   Gbl.FileBrowser.Priv.PathRootFolder,
-                   Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-   HTM_TABLE_End ();
+	 /***** Subtitle *****/
+	 Brw_WriteSubtitleOfFileBrowser ();
 
-   /***** Show and store number of documents found *****/
-   Brw_ShowAndStoreSizeOfFileTree ();
+	 /***** List recursively the directory *****/
+	 HTM_TABLE_Begin ("BROWSER_TABLE");
+	    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,
+		      Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
+		      sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
+	    Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
+		      sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
+	    Brw_SetFullPathInTree ();
+	    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
+	    if (Brw_WriteRowFileBrowser (0,"1",
+					 false,	// Tree not contracted
+					 Brw_ICON_TREE_NOTHING))
+	       Brw_ListDir (1,"1",
+			    false,	// Tree not contracted
+			    Gbl.FileBrowser.Priv.PathRootFolder,
+			    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
+	 HTM_TABLE_End ();
 
-   /***** Put button to show / edit *****/
-   Brw_PutButtonToShowEdit ();
+	 /***** Show and store number of documents found *****/
+	 Brw_ShowAndStoreSizeOfFileTree ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	 /***** Put button to show / edit *****/
+	 Brw_PutButtonToShowEdit ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
    HTM_SECTION_End ();
   }
 
@@ -3772,7 +3777,7 @@ static void Brw_PutButtonToShowEdit (void)
            {
 	    Frm_BeginForm (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type]);
 	    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-	    Btn_PutConfirmButton (Txt_View);
+	       Btn_PutConfirmButton (Txt_View);
             Frm_EndForm ();
            }
 	 break;
@@ -3781,7 +3786,7 @@ static void Brw_PutButtonToShowEdit (void)
            {
 	    Frm_BeginForm (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type]);
 	    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-	    Btn_PutConfirmButton (Txt_Edit);
+	       Btn_PutConfirmButton (Txt_Edit);
             Frm_EndForm ();
            }
 	 break;
@@ -3799,18 +3804,18 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Brw_PutCheckboxFullTree ();	// Checkbox to show the full tree
-   if (Brw_GetIfBriefcaseFileBrowser ())
-     {
-      if (Gbl.Action.Act != ActReqRemOldBrf)
-	 Brw_PutLinkToAskRemOldFiles ();	// Remove old files
-     }
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      if (!Gbl.FileBrowser.ZIP.CreateZIP)
-	 ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the
-						// works of the selected users
-     }
+      Brw_PutCheckboxFullTree ();	// Checkbox to show the full tree
+      if (Brw_GetIfBriefcaseFileBrowser ())
+	{
+	 if (Gbl.Action.Act != ActReqRemOldBrf)
+	    Brw_PutLinkToAskRemOldFiles ();	// Remove old files
+	}
+      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	{
+	 if (!Gbl.FileBrowser.ZIP.CreateZIP)
+	    ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the
+						   // works of the selected users
+	}
    Mnu_ContextMenuEnd ();
 
    /***** Initialize hidden levels *****/
@@ -3858,7 +3863,7 @@ static void Brw_UpdateLastAccess (void)
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastDowGrpCod",-1L);
+            Set_DB_UpdateGrpLastAccZone ("LastDowGrpCod",-1L);
 	 break;
       case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
@@ -3866,48 +3871,31 @@ static void Brw_UpdateLastAccess (void)
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.Crs.Grps.GrpCod);
+            Set_DB_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.Crs.Grps.GrpCod);
          break;
       case Brw_ADMI_SHR_CRS:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastComGrpCod",-1L);
+            Set_DB_UpdateGrpLastAccZone ("LastComGrpCod",-1L);
 	 break;
       case Brw_ADMI_SHR_GRP:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.Crs.Grps.GrpCod);
+            Set_DB_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.Crs.Grps.GrpCod);
 	 break;
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastAssGrpCod",-1L);
+            Set_DB_UpdateGrpLastAccZone ("LastAssGrpCod",-1L);
 	 break;
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastAssGrpCod",Gbl.Crs.Grps.GrpCod);
+            Set_DB_UpdateGrpLastAccZone ("LastAssGrpCod",Gbl.Crs.Grps.GrpCod);
 	 break;
       default:
 	 break;
      }
-  }
-
-/*****************************************************************************/
-/*********** Update the group of my last access to a common zone *************/
-/*****************************************************************************/
-
-static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
-  {
-   /***** Update the group of my last access to a common zone *****/
-   DB_QueryUPDATE ("can not update the group of the last access to a file browser",
-		   "UPDATE crs_user_settings"
-		     " SET %s=%ld"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-                   FieldNameDB,GrpCod,
-                   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -4076,7 +4064,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    if (Subtitle[0])
      {
       HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
-      HTM_Txt (Subtitle);
+	 HTM_Txt (Subtitle);
       HTM_DIV_End ();
      }
   }
@@ -4112,35 +4100,35 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
 
    HTM_DIV_Begin ("class=\"DAT CM\"");
 
-   if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
-     {
-      Fil_WriteFileSizeFull ((double) Gbl.FileBrowser.Size.TotalSiz,FileSizeStr);
-      HTM_TxtF ("%u %s; %lu %s; %lu %s; %s",
-	        Gbl.FileBrowser.Size.NumLevls,
-	        Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
-						     Txt_levels ,
-	        Gbl.FileBrowser.Size.NumFolds,
-	        Gbl.FileBrowser.Size.NumFolds == 1 ? Txt_folder :
-						     Txt_folders,
-	        Gbl.FileBrowser.Size.NumFiles,
-	        Gbl.FileBrowser.Size.NumFiles == 1 ? Txt_file :
-						     Txt_files,
-	        FileSizeStr);
-
-      if (Gbl.FileBrowser.Size.MaxQuota)
+      if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
 	{
-	 Fil_WriteFileSizeBrief ((double) Gbl.FileBrowser.Size.MaxQuota,FileSizeStr);
-	 HTM_TxtF (" (%.1f%% %s %s)",
-		   100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz /
-			    (double) Gbl.FileBrowser.Size.MaxQuota),
-		   Txt_of_PART_OF_A_TOTAL,
+	 Fil_WriteFileSizeFull ((double) Gbl.FileBrowser.Size.TotalSiz,FileSizeStr);
+	 HTM_TxtF ("%u %s; %lu %s; %lu %s; %s",
+		   Gbl.FileBrowser.Size.NumLevls,
+		   Gbl.FileBrowser.Size.NumLevls == 1 ? Txt_level :
+							Txt_levels ,
+		   Gbl.FileBrowser.Size.NumFolds,
+		   Gbl.FileBrowser.Size.NumFolds == 1 ? Txt_folder :
+							Txt_folders,
+		   Gbl.FileBrowser.Size.NumFiles,
+		   Gbl.FileBrowser.Size.NumFiles == 1 ? Txt_file :
+							Txt_files,
 		   FileSizeStr);
-	}
 
-      Brw_StoreSizeOfFileTreeInDB ();
-     }
-   else
-      HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
+	 if (Gbl.FileBrowser.Size.MaxQuota)
+	   {
+	    Fil_WriteFileSizeBrief ((double) Gbl.FileBrowser.Size.MaxQuota,FileSizeStr);
+	    HTM_TxtF (" (%.1f%% %s %s)",
+		      100.0 * ((double) Gbl.FileBrowser.Size.TotalSiz /
+			       (double) Gbl.FileBrowser.Size.MaxQuota),
+		      Txt_of_PART_OF_A_TOTAL,
+		      FileSizeStr);
+	   }
+
+	 Brw_StoreSizeOfFileTreeInDB ();
+	}
+      else
+	 HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
   }
@@ -5300,7 +5288,7 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 
    /***** Check if group exists (it's possible that this group has been removed after my last access to it) *****/
    if (GrpCod >= 0)
-      if (Grp_CheckIfGroupExists (GrpCod))
+      if (Grp_DB_CheckIfGroupExists (GrpCod))
          /* Check if I belong to this group (it's possible that I have been removed from this group after my last access to it) */
          if (Grp_GetIfIBelongToGrp (GrpCod))
             return GrpCod;
@@ -5653,44 +5641,45 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      }
 
    /***** Indentation depending on level, icon, and file/folder name *****/
-   /* Start column */
+   /* Begin column */
    HTM_TD_Begin ("class=\"NO_BR LM COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
 
-   HTM_TABLE_Begin (NULL);
-   HTM_TR_Begin (NULL);
+      HTM_TABLE_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-   /* Indent depending on level */
-   if (Level)
-      Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow);
+	    /* Indent depending on level */
+	    if (Level)
+	       Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow);
 
-   /* Put icon to show/hide file or folder */
-   if (AdminDocsZone || AdminMarks)
-     {
-      if (RowSetAsHidden)	// this row is marked as hidden
-         Brw_PutIconShow (Anchor);
-      else			// this row is not marked as hidden
-         Brw_PutIconHide (Anchor);
-     }
+	    /* Put icon to show/hide file or folder */
+	    if (AdminDocsZone || AdminMarks)
+	      {
+	       if (RowSetAsHidden)	// this row is marked as hidden
+		  Brw_PutIconShow (Anchor);
+	       else			// this row is not marked as hidden
+		  Brw_PutIconHide (Anchor);
+	      }
 
-   /***** File or folder icon *****/
-   if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-      /* Icon with folder */
-      Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow);
-   else	// File or link
-      /* Icon with file type or link */
-      Brw_PutIconFileWithLinkToViewMetadata (&FileMetadata);
+	    /***** File or folder icon *****/
+	    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
+	       /* Icon with folder */
+	       Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow);
+	    else	// File or link
+	       /* Icon with file type or link */
+	       Brw_PutIconFileWithLinkToViewMetadata (&FileMetadata);
 
-   /* Check if is a new file or folder */
-   // If our last access was before the last modify ==> indicate the file is new by putting a blinking star
-   if (Gbl.Usrs.Me.TimeLastAccToThisFileBrowser < FileMetadata.Time)
-      Brw_PutIconNewFileOrFolder ();
+	    /* Check if is a new file or folder */
+	    // If our last access was before the last modify ==> indicate the file is new by putting a blinking star
+	    if (Gbl.Usrs.Me.TimeLastAccToThisFileBrowser < FileMetadata.Time)
+	       Brw_PutIconNewFileOrFolder ();
 
-   /* File or folder name */
-   Brw_WriteFileName (Level,FileMetadata.IsPublic);
+	    /* File or folder name */
+	    Brw_WriteFileName (Level,FileMetadata.IsPublic);
+
+	 HTM_TR_End ();
+      HTM_TABLE_End ();
 
    /* End column */
-   HTM_TR_End ();
-   HTM_TABLE_End ();
    HTM_TD_End ();
 
    if (AdminMarks)
@@ -5708,10 +5697,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      {
       /***** Put icon to download ZIP of folder *****/
       HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-      if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
-	  !SeeMarks &&				// Do not ZIP folders when seeing marks
-	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
-	 Brw_PutButtonToDownloadZIPOfAFolder ();
+	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
+	     !SeeMarks &&				// Do not ZIP folders when seeing marks
+	     !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	    Brw_PutButtonToDownloadZIPOfAFolder ();
       HTM_TD_End ();
      }
    else	// File or link
@@ -5804,25 +5793,25 @@ static void Brw_PutIconRemove (void)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
-   if (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
-      switch (Gbl.FileBrowser.FilFolLnk.Type)
-	{
-	 case Brw_IS_FILE:
-	 case Brw_IS_LINK:
-	    /***** Form to remove a file or link *****/
-	    Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],NULL,
-					   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
-	    break;
-	 case Brw_IS_FOLDER:
-	    /***** Form to remove a folder *****/
-	    Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],NULL,
-					   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
-	    break;
-	 default:
-	    break;
-	}
-   else
-      Ico_PutIconRemovalNotAllowed ();
+      if (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
+	 switch (Gbl.FileBrowser.FilFolLnk.Type)
+	   {
+	    case Brw_IS_FILE:
+	    case Brw_IS_LINK:
+	       /***** Form to remove a file or link *****/
+	       Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],NULL,
+					      Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+	       break;
+	    case Brw_IS_FOLDER:
+	       /***** Form to remove a folder *****/
+	       Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],NULL,
+					      Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+	       break;
+	    default:
+	       break;
+	   }
+      else
+	 Ico_PutIconRemovalNotAllowed ();
 
    HTM_TD_End ();
   }
@@ -5835,9 +5824,9 @@ static void Brw_PutIconCopy (void)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
-   /***** Form to copy into the clipboard *****/
-   Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
-				Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+      /***** Form to copy into the clipboard *****/
+      Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
+				   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
 
    HTM_TD_End ();
   }
@@ -5852,19 +5841,19 @@ static void Brw_PutIconPaste (unsigned Level)
 
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)	// Can't paste in a file or link
-     {
-      /* Icon to paste */
-      if (Brw_CheckIfCanPasteIn (Level))
+      if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)	// Can't paste in a file or link
 	{
-	 /***** Form to paste the content of the clipboard *****/
-	 Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
-				       Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+	 /* Icon to paste */
+	 if (Brw_CheckIfCanPasteIn (Level))
+	   {
+	    /***** Form to paste the content of the clipboard *****/
+	    Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
+					  Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+	   }
+	 else
+	    /* Icon to paste inactive */
+	    Ico_PutIconOff ("paste.svg",Txt_Copy_not_allowed);
 	}
-      else
-	 /* Icon to paste inactive */
-	 Ico_PutIconOff ("paste.svg",Txt_Copy_not_allowed);
-     }
 
    HTM_TD_End ();
   }
@@ -5878,40 +5867,40 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   Brw_IconTree_t IconThisRow)
   {
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_TABLE_Begin (NULL);
-   HTM_TR_Begin (NULL);
-   Brw_IndentDependingOnLevel (Level);
+      HTM_TABLE_Begin (NULL);
+	 HTM_TR_Begin (NULL);
+	    Brw_IndentDependingOnLevel (Level);
 
-   /***** Icon to expand/contract *****/
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-   switch (IconThisRow)
-     {
-      case Brw_ICON_TREE_NOTHING:
-	 Ico_PutIcon ("tr16x16.gif","","ICO20x20");
-	 break;
-      case Brw_ICON_TREE_EXPAND:
-	 /***** Visible icon to expand folder *****/
-         Brw_PutIconToExpandFolder (FileBrowserId,RowId,
-                                    false);	// Visible
+	    /***** Icon to expand/contract *****/
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       switch (IconThisRow)
+		 {
+		  case Brw_ICON_TREE_NOTHING:
+		     Ico_PutIcon ("tr16x16.gif","","ICO20x20");
+		     break;
+		  case Brw_ICON_TREE_EXPAND:
+		     /***** Visible icon to expand folder *****/
+		     Brw_PutIconToExpandFolder (FileBrowserId,RowId,
+						false);	// Visible
 
-	 /***** Hidden icon to contract folder *****/
-         Brw_PutIconToContractFolder (FileBrowserId,RowId,
-                                      true);	// Hidden
-	 break;
-      case Brw_ICON_TREE_CONTRACT:
-	 /***** Hidden icon to expand folder *****/
-         Brw_PutIconToExpandFolder (FileBrowserId,RowId,
-                                    true);	// Hidden
+		     /***** Hidden icon to contract folder *****/
+		     Brw_PutIconToContractFolder (FileBrowserId,RowId,
+						  true);	// Hidden
+		     break;
+		  case Brw_ICON_TREE_CONTRACT:
+		     /***** Hidden icon to expand folder *****/
+		     Brw_PutIconToExpandFolder (FileBrowserId,RowId,
+						true);	// Hidden
 
-	 /***** Visible icon to contract folder *****/
-         Brw_PutIconToContractFolder (FileBrowserId,RowId,
-                                      false);	// Visible
-	 break;
-     }
-   HTM_TD_End ();
+		     /***** Visible icon to contract folder *****/
+		     Brw_PutIconToContractFolder (FileBrowserId,RowId,
+						  false);	// Visible
+		     break;
+		 }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
-   HTM_TABLE_End ();
+	 HTM_TR_End ();
+      HTM_TABLE_End ();
    HTM_TD_End ();
   }
 
@@ -5928,7 +5917,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i++)
      {
       HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-      Ico_PutIcon ("tr16x16.gif","","ICO20x20");
+	 Ico_PutIcon ("tr16x16.gif","","ICO20x20");
       HTM_TD_End ();
      }
   }
@@ -5957,7 +5946,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-   Ico_PutIconLink ("caret-right.svg",Txt_Expand);
+      Ico_PutIconLink ("caret-right.svg",Txt_Expand);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -5988,7 +5977,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-   Ico_PutIconLink ("caret-down.svg",Txt_Contract);
+      Ico_PutIconLink ("caret-down.svg",Txt_Contract);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -6002,8 +5991,8 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 static void Brw_PutIconShow (const char *Anchor)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-   Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
-	                          Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+      Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
+				     Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
    HTM_TD_End ();
   }
 
@@ -6014,8 +6003,8 @@ static void Brw_PutIconShow (const char *Anchor)
 static void Brw_PutIconHide (const char *Anchor)
   {
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-   Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
-	                        Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
+      Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
+				   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
    HTM_TD_End ();
   }
 
@@ -6046,64 +6035,64 @@ static void Brw_PutIconFolder (unsigned Level,
   {
    bool ICanCreate;
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
-   /***** Put icon to create a new file or folder *****/
-   if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
-     {
-      if (IconSubtree == Brw_ICON_TREE_EXPAND)
+      /***** Put icon to create a new file or folder *****/
+      if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
 	{
-	 /***** Visible icon with folder closed *****/
-	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				    false,	// Closed
-				    false);	// Visible
+	 if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	   {
+	    /***** Visible icon with folder closed *****/
+	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				       false,	// Closed
+				       false);	// Visible
 
-	 /***** Hidden icon with folder open *****/
-	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				    true,	// Open
-				    true);	// Hidden
+	    /***** Hidden icon with folder open *****/
+	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				       true,	// Open
+				       true);	// Hidden
+	   }
+	 else
+	   {
+	    /***** Hidden icon with folder closed *****/
+	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				       false,	// Closed
+				       true);	// Hidden
+
+	    /***** Visible icon with folder open *****/
+	    Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
+				       true,	// Open
+				       false);	// Visible
+	   }
 	}
-      else
+      else	// I can't create a new file or folder
 	{
-	 /***** Hidden icon with folder closed *****/
-	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				    false,	// Closed
-				    true);	// Hidden
+	 if (IconSubtree == Brw_ICON_TREE_EXPAND)
+	   {
+	    /***** Visible icon with folder closed *****/
+	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					  false,	// Closed
+					  false);	// Visible
 
-	 /***** Visible icon with folder open *****/
-	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
-				    true,	// Open
-				    false);	// Visible
-	}
-     }
-   else	// I can't create a new file or folder
-     {
-      if (IconSubtree == Brw_ICON_TREE_EXPAND)
-	{
-	 /***** Visible icon with folder closed *****/
-	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-			               false,	// Closed
-			               false);	// Visible
+	    /***** Hidden icon with folder open *****/
+	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					  true,	// Open
+					  true);	// Hidden
+	   }
+	 else
+	   {
+	    /***** Hidden icon with folder closed *****/
+	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					  false,	// Closed
+					  true);	// Hidden
 
-	 /***** Hidden icon with folder open *****/
-	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-			               true,	// Open
-			               true);	// Hidden
+	    /***** Visible icon with folder open *****/
+	    Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
+					  true,	// Open
+					  false);	// Visible
+	   }
 	}
-      else
-	{
-	 /***** Hidden icon with folder closed *****/
-	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-			               false,	// Closed
-			               true);	// Hidden
-
-	 /***** Visible icon with folder open *****/
-	 Brw_PutIconFolderWithoutPlus (FileBrowserId,RowId,
-			               true,	// Open
-			               false);	// Visible
-	}
-     }
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -6119,21 +6108,16 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
    extern const char *Txt_Folder;
 
    /***** Begin container *****/
-   if (Hidden)
-      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" style=\"display:none;\"",
-		     Open ? "open" :
-			    "closed",
-		     FileBrowserId,RowId);
-   else
-      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\"",
-		     Open ? "open" :
-			    "closed",
-		     FileBrowserId,RowId);
+   HTM_DIV_Begin (Hidden ? "id=\"folder_%s_%s_%s\" style=\"display:none;\"" :
+			   "id=\"folder_%s_%s_%s\"",
+		  Open ? "open" :
+			 "closed",
+		  FileBrowserId,RowId);
 
-   /***** Icon *****/
-   Ico_PutIcon (Open ? "folder-open-yellow.png" :
-	               "folder-yellow.png",
-		Txt_Folder,"CONTEXT_OPT CONTEXT_ICO_16x16");
+      /***** Icon *****/
+      Ico_PutIcon (Open ? "folder-open-yellow.png" :
+			  "folder-yellow.png",
+		   Txt_Folder,"CONTEXT_OPT CONTEXT_ICO_16x16");
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -6147,21 +6131,16 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       bool Open,bool Hidden)
   {
    /***** Begin container *****/
-   if (Hidden)
-      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" style=\"display:none;\"",
-		     Open ? "open" :
-			    "closed",
-		     FileBrowserId,RowId);
-   else
-      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\"",
-		     Open ? "open" :
-			    "closed",
-		     FileBrowserId,RowId);
+   HTM_DIV_Begin (Hidden ? "id=\"folder_%s_%s_%s\" style=\"display:none;\"" :
+			   "id=\"folder_%s_%s_%s\"",
+		  Open ? "open" :
+			 "closed",
+		  FileBrowserId,RowId);
 
-   /***** Form and icon *****/
-   Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
-					  Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
-					  Open);
+      /***** Form and icon *****/
+      Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
+					     Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk,
+					     Open);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -6177,7 +6156,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 
    /***** Icon that indicates new file *****/
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-   Ico_PutIcon ("star16x16.gif",Txt_New_FILE_OR_FOLDER,"ICO20x20");
+      Ico_PutIcon ("star16x16.gif",Txt_New_FILE_OR_FOLDER,"ICO20x20");
    HTM_TD_End ();
   }
 
@@ -6191,19 +6170,19 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMeta
    /***** Start cell *****/
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
-   /***** Begin form *****/
-   Frm_BeginForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (NULL,		// Not used
-			     NULL,		// Not used
-			     Brw_IS_UNKNOWN,	// Not used
-                             FileMetadata->FilCod);
+      /***** Begin form *****/
+      Frm_BeginForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
+      Brw_PutParamsFileBrowser (NULL,		// Not used
+				NULL,		// Not used
+				Brw_IS_UNKNOWN,	// Not used
+				FileMetadata->FilCod);
 
-   /***** Icon depending on the file extension *****/
-   Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-		    "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",true);
+	 /***** Icon depending on the file extension *****/
+	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
+			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",true);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -6308,85 +6287,82 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       ICanEditFileOrFolder = Brw_GetIfICanEditFileOrFolder ();
 
       /***** Start cell *****/
-      if (Gbl.FileBrowser.Clipboard.IsThisFile)
-	 HTM_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
-		       Gbl.FileBrowser.TxtStyle);
-      else
-	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
-		       Gbl.FileBrowser.TxtStyle);
+      HTM_TD_Begin (Gbl.FileBrowser.Clipboard.IsThisFile ? "class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"" :
+							   "class=\"%s LM\" style=\"width:99%%;\"",
+		    Gbl.FileBrowser.TxtStyle);
 
-      HTM_DIV_Begin ("class=\"FILENAME\"");
+	 HTM_DIV_Begin ("class=\"FILENAME\"");
 
-      /***** Form to rename folder *****/
-      if (ICanEditFileOrFolder)	// Can I rename this folder?
-	{
-         Frm_BeginForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
-         Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-	}
+	    /***** Form to rename folder *****/
+	    if (ICanEditFileOrFolder)	// Can I rename this folder?
+	      {
+	       Frm_BeginForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
+	       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	      }
 
-      /***** Write name of the folder *****/
-      HTM_NBSP ();
-      if (ICanEditFileOrFolder)	// Can I rename this folder?
-	{
-	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "class=\"%s %s\"",
-			 Gbl.FileBrowser.InputStyle,
-			 Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
-							        Gbl.ColorRows[Gbl.RowEvenOdd]);
-         Frm_EndForm ();
-        }
-      else
-        {
-         if ((Level == 1) &&
-             (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
-              Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
-            HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
-         HTM_STRONG_Begin ();
-         HTM_Txt (FileNameToShow);
-         HTM_STRONG_End ();
-         HTM_NBSP ();
-         if ((Level == 1) &&
-             (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
-              Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
-            HTM_SPAN_End ();
-        }
+	    /***** Write name of the folder *****/
+	    HTM_NBSP ();
+	    if (ICanEditFileOrFolder)	// Can I rename this folder?
+	      {
+		  HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"%s %s\"",
+				  Gbl.FileBrowser.InputStyle,
+				  Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
+									 Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       Frm_EndForm ();
+	      }
+	    else
+	      {
+	       if ((Level == 1) &&
+		   (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
+		    Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
+		  HTM_SPAN_Begin ("title=\"%s\"",Gbl.FileBrowser.Asg.Title);
 
-      /***** End cell *****/
-      HTM_DIV_End ();
+	       HTM_STRONG_Begin ();
+		  HTM_Txt (FileNameToShow);
+	       HTM_STRONG_End ();
+	       HTM_NBSP ();
+
+	       if ((Level == 1) &&
+		   (Gbl.FileBrowser.Type == Brw_ADMI_ASG_USR ||
+		    Gbl.FileBrowser.Type == Brw_ADMI_ASG_CRS))
+		  HTM_SPAN_End ();
+	      }
+
+	 /***** End cell *****/
+	 HTM_DIV_End ();
 
       HTM_TD_End ();
      }
    else	// File or link
      {
-      if (Gbl.FileBrowser.Clipboard.IsThisFile)
-	 HTM_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
-		       Gbl.FileBrowser.TxtStyle);
-      else
-	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
-		       Gbl.FileBrowser.TxtStyle);
+      HTM_TD_Begin (Gbl.FileBrowser.Clipboard.IsThisFile ? "class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"" :
+							   "class=\"%s LM\" style=\"width:99%%;\"",
+		    Gbl.FileBrowser.TxtStyle);
 
-      HTM_NBSP ();
+	 HTM_NBSP ();
 
-      Frm_BeginForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
-      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	 Frm_BeginForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-      /* Link to the form and to the file */
-      if (asprintf (&Class,"BT_LINK FILENAME %s",Gbl.FileBrowser.TxtStyle) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_BUTTON_SUBMIT_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-			        Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
-									    Txt_Download,
-			       Class,NULL);
-      HTM_Txt (FileNameToShow);
-      HTM_BUTTON_End ();
-      free (Class);
-      Frm_EndForm ();
+	    /* Link to the form and to the file */
+	    if (asprintf (&Class,"BT_LINK FILENAME %s",Gbl.FileBrowser.TxtStyle) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_SUBMIT_Begin ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
+				      Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
+										  Txt_Download,
+				     Class,NULL);
+	       HTM_Txt (FileNameToShow);
+	    HTM_BUTTON_End ();
+	    free (Class);
 
-      /* Put icon to make public/private file */
-      if (IsPublic)
-         Ico_PutIconOff ("unlock.svg",
-                         Txt_Public_open_educational_resource_OER_for_everyone);
+	 Frm_EndForm ();
+
+	 /* Put icon to make public/private file */
+	 if (IsPublic)
+	    Ico_PutIconOff ("unlock.svg",
+			    Txt_Public_open_educational_resource_OER_for_everyone);
 
       HTM_TD_End ();
      }
@@ -6457,35 +6433,35 @@ static void Brw_WriteDatesAssignment (void)
 					    "ASG_LST_DATE_RED",
 		 Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.Asg.AsgCod > 0)
-     {
-      UniqueId++;
+      if (Gbl.FileBrowser.Asg.AsgCod > 0)
+	{
+	 UniqueId++;
 
-      /***** Write start date *****/
-      if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_SPAN_Begin ("id=\"%s\"",Id);
-      Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,false,0x7);
-      HTM_SPAN_End ();
-      free (Id);
+	 /***** Write start date *****/
+	 if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,true,false,0x7);
+	 HTM_SPAN_End ();
+	 free (Id);
 
-      /***** Arrow *****/
-      HTM_Txt ("&rarr;");
+	 /***** Arrow *****/
+	 HTM_Txt ("&rarr;");
 
-      /***** Write end date *****/
-      if (asprintf (&Id,"asg_end_date_%u",UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_SPAN_Begin ("id=\"%s\"",Id);
-      Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,false,false,0x7);
-      HTM_SPAN_End ();
-      free (Id);
-     }
-   else
-      HTM_TxtF ("&nbsp;(%s)",Txt_unknown_assignment);
+	 /***** Write end date *****/
+	 if (asprintf (&Id,"asg_end_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,false,false,0x7);
+	 HTM_SPAN_End ();
+	 free (Id);
+	}
+      else
+	 HTM_TxtF ("&nbsp;(%s)",Txt_unknown_assignment);
 
    /***** End table cell *****/
    HTM_TD_End ();
@@ -6508,26 +6484,26 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       FileSizeStr[0] = '\0';
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   HTM_TxtF ("&nbsp;%s",FileSizeStr);
+      HTM_TxtF ("&nbsp;%s",FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
    HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
-   HTM_NBSP ();
-   if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
-       Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
-     {
-      UniqueId++;
-      if (asprintf (&Id,"filedate%u",UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_SPAN_Begin ("id=\"%s\"",Id);
-      HTM_SPAN_End ();
-      Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,false,0x6);
-      free (Id);
-     }
+      HTM_NBSP ();
+      if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
+	  Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
+	{
+	 UniqueId++;
+	 if (asprintf (&Id,"filedate%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	 HTM_SPAN_End ();
+	 Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				       true,true,false,0x6);
+	 free (Id);
+	}
    HTM_TD_End ();
   }
 
@@ -6554,11 +6530,12 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
      }
 
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-   if (ShowUsr)
-      /***** Show photo *****/
-      Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20B",Pho_ZOOM,false);
-   else
-      Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO15x20B");
+
+      if (ShowUsr)
+	 /***** Show photo *****/
+	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20B",Pho_ZOOM,false);
+      else
+	 Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO15x20B");
 
    HTM_TD_End ();
 
@@ -6642,9 +6619,9 @@ void Brw_RemFileFromTree (void)
 	                              Gbl.FileBrowser.FilFolLnk.Full);
 
 	 /* Remove affected clipboards */
-	 Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				          Gbl.Usrs.Me.UsrDat.UsrCod,
+				          Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Message of confirmation of removing */
          Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,
@@ -6695,9 +6672,9 @@ void Brw_RemFolderFromTree (void)
          else
            {
             /* Remove affected clipboards */
-            Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-                                          Gbl.Usrs.Me.UsrDat.UsrCod,
-                                          Gbl.Usrs.Other.UsrDat.UsrCod);
+            Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+                                             Gbl.Usrs.Me.UsrDat.UsrCod,
+                                             Gbl.Usrs.Other.UsrDat.UsrCod);
 
             /* Message of confirmation of successfull removing */
             Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,
@@ -6757,8 +6734,9 @@ void Brw_RemSubtreeInFileBrowser (void)
       Brw_RemoveChildrenOfFolderFromDB (Gbl.FileBrowser.FilFolLnk.Full);
 
       /* Remove affected clipboards */
-      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				    Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Remove affected expanded folders */
       Brw_RemoveAffectedExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
@@ -6810,7 +6788,7 @@ void Brw_CopyFromFileBrowser (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Remove old clipboards (from all users) *****/
-   Brw_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
+   Brw_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
 
    /***** Put the path in the clipboard *****/
    if (Brw_GetMyClipboard ())
@@ -7733,7 +7711,7 @@ static long Brw_GetWorksUsrCodForExpandedFolders (void)
 /************* Remove expired expanded folders (from all users) **************/
 /*****************************************************************************/
 
-void Brw_RemoveExpiredExpandedFolders (void)
+void Brw_DB_RemoveExpiredExpandedFolders (void)
   {
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old expanded folders",
@@ -7746,7 +7724,7 @@ void Brw_RemoveExpiredExpandedFolders (void)
 /****************** Remove expired clipboards (from all users) ***************/
 /*****************************************************************************/
 
-static void Brw_RemoveExpiredClipboards (void)
+static void Brw_DB_RemoveExpiredClipboards (void)
   {
    /***** Remove all expired clipboards *****/
    DB_QueryDELETE ("can not remove old paths from clipboard",
@@ -7759,8 +7737,8 @@ static void Brw_RemoveExpiredClipboards (void)
 /********* Remove clipboards with paths from a course or from a user *********/
 /*****************************************************************************/
 
-static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
-                                          long MyUsrCod,long WorksUsrCod)
+static void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
+                                             long MyUsrCod,long WorksUsrCod)
   {
    /***** Remove clipboards associated to a file browser
           from a course or from a user *****/
@@ -7887,8 +7865,9 @@ void Brw_PasteIntoFileBrowser (void)
       Brw_PasteClipboard ();
 
       /***** Remove the affected clipboards *****/
-      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				    Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.UsrCod);
      }
    else
       /***** Write message ******/
@@ -8092,7 +8071,7 @@ static void Brw_PasteClipboard (void)
             Brw_GetFileMetadataByCod (&FileMetadata);
 
 	    /* Notify only is destination folder is visible */
-	    if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
+	    if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
 	       switch (Gbl.FileBrowser.Type)
 		 {
 		  case Brw_ADMI_DOC_CRS:
@@ -8441,23 +8420,25 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    Frm_BeginForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Create_folder,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
-   Ale_ShowAlert (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
-	          FileNameToShow);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Create_folder,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Folder *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Folder);
-   HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"30\" required=\"required\"");
-   HTM_LABEL_End ();
+         /* Alert */
+	 Ale_ShowAlert (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
+			FileNameToShow);
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_folder);
+	 /* Folder */
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_Folder);
+	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"30\" required=\"required\"");
+	 HTM_LABEL_End ();
+
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_folder);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -8477,53 +8458,53 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
-   Box_BoxBegin ("95%",Txt_Upload_files,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin ("95%",Txt_Upload_files,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
-	          FileNameToShow);
+	 /***** Help message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
+			FileNameToShow);
 
-   /***** Form to upload files using the library Dropzone.js *****/
-   // Use min-height:125px; or other number to stablish the height?
-   Gbl.Form.Num++;
-   HTM_TxtF ("<form method=\"post\" action=\"%s/%s\""
-             " class=\"dropzone\""
-             " enctype=\"multipart/form-data\""
-             " id=\"my-awesome-dropzone\""
-             " style=\"display:inline-block; width:100%%;"
-             " background:url('%s/upload320x320.gif') no-repeat center;\">",
-             Cfg_URL_SWAD_CGI,
-             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-             Cfg_URL_ICON_PUBLIC);
-   Par_PutHiddenParamLong (NULL,"act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
-   Par_PutHiddenParamString (NULL,"ses",Gbl.Session.Id);
-   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	 /***** Form to upload files using the library Dropzone.js *****/
+	 // Use min-height:125px; or other number to stablish the height?
+	 Gbl.Form.Num++;
+	 HTM_TxtF ("<form method=\"post\" action=\"%s/%s\""
+		   " class=\"dropzone\""
+		   " enctype=\"multipart/form-data\""
+		   " id=\"my-awesome-dropzone\""
+		   " style=\"display:inline-block; width:100%%;"
+		   " background:url('%s/upload320x320.gif') no-repeat center;\">",
+		   Cfg_URL_SWAD_CGI,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		   Cfg_URL_ICON_PUBLIC);
+	 Par_PutHiddenParamLong (NULL,"act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
+	 Par_PutHiddenParamString (NULL,"ses",Gbl.Session.Id);
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-   HTM_DIV_Begin ("class=\"dz-message\"");
-   HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-   HTM_Txt (Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
-   HTM_SPAN_End ();
-   HTM_DIV_End ();
+	 HTM_DIV_Begin ("class=\"dz-message\"");
+	    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+	       HTM_Txt (Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
+	    HTM_SPAN_End ();
+	 HTM_DIV_End ();
 
-   HTM_Txt ("</form>");
+	 HTM_Txt ("</form>");
 
-   /***** Put button to refresh file browser after upload *****/
-   Frm_BeginForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (NULL,		// Not used
-			     NULL,		// Not used
-			     Brw_IS_UNKNOWN,	// Not used
-			     -1L);		// Not used
+	 /***** Put button to refresh file browser after upload *****/
+	 Frm_BeginForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
+	 Brw_PutParamsFileBrowser (NULL,		// Not used
+				   NULL,		// Not used
+				   Brw_IS_UNKNOWN,	// Not used
+				   -1L);		// Not used
 
-   /***** Button to send *****/
-   Btn_PutConfirmButton (Txt_Done);
+	    /***** Button to send *****/
+	    Btn_PutConfirmButton (Txt_Done);
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** End form *****/
+	 Frm_EndForm ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
    HTM_DIV_End ();
   }
 
@@ -8538,27 +8519,30 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
-   Box_BoxBegin (NULL,Txt_Upload_file,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,Txt_Upload_file,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
-	          FileNameToShow);
+	 /***** Help message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
+			FileNameToShow);
 
-   /***** Form to upload one files using the classic way *****/
-   Frm_BeginForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
-   Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-                   NULL);
+	 /***** Form to upload one files using the classic way *****/
+	 Frm_BeginForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-   /* Button to send */
-   Btn_PutCreateButton (Txt_Upload_file);
-   Frm_EndForm ();
+	    /* File */
+	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"*",
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    NULL);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	    /* Button to send */
+	    Btn_PutCreateButton (Txt_Upload_file);
+
+	 Frm_EndForm ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
    HTM_DIV_End ();
   }
 
@@ -8575,17 +8559,17 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Frm_BeginForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Paste,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Paste,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
-	          FileNameToShow);
+	 /***** Help message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_make_a_file_copy_to_the_folder_X,
+			FileNameToShow);
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Paste);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Paste);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -8609,51 +8593,53 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Frm_BeginForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Create_link,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Create_link,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
-	          FileNameToShow);
+      /***** Help message *****/
+      Ale_ShowAlert (Ale_INFO,Txt_or_you_can_create_a_new_link_inside_the_folder_X,
+		     FileNameToShow);
 
-   /***** URL *****/
-   HTM_TABLE_Begin (NULL);
-   HTM_TR_Begin (NULL);
+      /***** URL *****/
+      HTM_TABLE_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","NewLinkURL",Txt_URL);
+	 HTM_TR_Begin (NULL);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_URL ("NewLinkURL","",HTM_DONT_SUBMIT_ON_CHANGE,
-		  "size=\"30\" required=\"required\"");
-   HTM_TD_End ();
+	    /* Label */
+	    Frm_LabelColumn ("RT","NewLinkURL",Txt_URL);
 
-   HTM_TR_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_URL ("NewLinkURL","",HTM_DONT_SUBMIT_ON_CHANGE,
+			      "size=\"30\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Link name *****/
-   HTM_TR_Begin (NULL);
+	 HTM_TR_End ();
 
-   /* Label */
-   if (asprintf (&Label,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional) < 0)
-      Err_NotEnoughMemoryExit ();
-   Frm_LabelColumn ("RT","NewLinkName",Label);
-   free (Label);
+	 /***** Link name *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"NewLinkName\" size=\"30\"");
-   HTM_TD_End ();
+	    /* Label */
+	    if (asprintf (&Label,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("RT","NewLinkName",Label);
+	    free (Label);
 
-   HTM_TR_End ();
-   HTM_TABLE_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"NewLinkName\" size=\"30\"");
+	    HTM_TD_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
+	 HTM_TR_End ();
+
+      HTM_TABLE_End ();
+
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -8706,9 +8692,9 @@ void Brw_RecFolderFileBrowser (void)
 	    else
               {
                /* Remove affected clipboards */
-               Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-        				     Gbl.Usrs.Me.UsrDat.UsrCod,
-					     Gbl.Usrs.Other.UsrDat.UsrCod);
+               Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+        				        Gbl.Usrs.Me.UsrDat.UsrCod,
+					        Gbl.Usrs.Other.UsrDat.UsrCod);
 
                /* Add path where new file is created to table of expanded folders */
                Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
@@ -8834,9 +8820,9 @@ void Brw_RenFolderFileBrowser (void)
         	                                     NewPathInTree);
 
                /* Remove affected clipboards */
-               Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-        	                             Gbl.Usrs.Me.UsrDat.UsrCod,
-        	                             Gbl.Usrs.Other.UsrDat.UsrCod);
+               Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+        	                                Gbl.Usrs.Me.UsrDat.UsrCod,
+        	                                Gbl.Usrs.Other.UsrDat.UsrCod);
 
                /* Remove affected expanded folders */
                Brw_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
@@ -9016,9 +9002,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 	                else
                           {
                            /* Remove affected clipboards */
-                           Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-                        				 Gbl.Usrs.Me.UsrDat.UsrCod,
-							 Gbl.Usrs.Other.UsrDat.UsrCod);
+                           Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+                        			            Gbl.Usrs.Me.UsrDat.UsrCod,
+							    Gbl.Usrs.Other.UsrDat.UsrCod);
 
                            /* Add path where new file is created to table of expanded folders */
                            Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
@@ -9055,7 +9041,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                               Mrk_AddMarksToDB (FileMetadata.FilCod,&Marks);
 
                            /* Notify new file */
-			   if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
+			   if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
 			      switch (Gbl.FileBrowser.Type)
 				{
 				 case Brw_ADMI_DOC_CRS:
@@ -9199,9 +9185,9 @@ void Brw_RecLinkFileBrowser (void)
 		  else
 		    {
 		     /* Remove affected clipboards */
-		     Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-						   Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Gbl.Usrs.Other.UsrDat.UsrCod);
+		     Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+						      Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Gbl.Usrs.Other.UsrDat.UsrCod);
 
 		     /* Add path where new file is created to table of expanded folders */
 		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
@@ -9227,7 +9213,7 @@ void Brw_RecLinkFileBrowser (void)
 		     Brw_GetFileMetadataByCod (&FileMetadata);
 
 		     /* Notify new file */
-		     if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
+		     if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
 			switch (Gbl.FileBrowser.Type)
 			  {
 			   case Brw_ADMI_DOC_CRS:
@@ -9344,9 +9330,9 @@ void Brw_SetDocumentAsVisible (void)
       Brw_ChangeFileOrFolderHiddenInDB (Gbl.FileBrowser.FilFolLnk.Full,false);
 
    /***** Remove the affected clipboards *****/
-   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				 Gbl.Usrs.Me.UsrDat.UsrCod,
-				 Gbl.Usrs.Other.UsrDat.UsrCod);
+   Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				    Gbl.Usrs.Me.UsrDat.UsrCod,
+				    Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -9368,9 +9354,9 @@ void Brw_SetDocumentAsHidden (void)
       Brw_ChangeFileOrFolderHiddenInDB (Gbl.FileBrowser.FilFolLnk.Full,true);
 
    /***** Remove the affected clipboards *****/
-   Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				 Gbl.Usrs.Me.UsrDat.UsrCod,
-				 Gbl.Usrs.Other.UsrDat.UsrCod);
+   Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				    Gbl.Usrs.Me.UsrDat.UsrCod,
+				    Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -9420,7 +9406,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 /******** Check if a file / folder from the documents zone is hidden *********/
 /*****************************************************************************/
 
-bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
+bool Brw_DB_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
   {
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*
@@ -9507,20 +9493,20 @@ void Brw_ShowFileMetadata (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+               ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
 	    break;
@@ -9600,192 +9586,192 @@ void Brw_ShowFileMetadata (void)
 	                          NULL,NULL,
 	                          NULL,2);
 
-	 /***** Link to download the file *****/
-	 HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
-	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Filename *****/
-	 HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Filename);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT LB\"");
-	 Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Publisher's data *****/
-	 HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Uploaded_by);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT LB\"");
-	 if (FileHasPublisher)
-	   {
-	    /* Show photo */
-	    Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,"PHOTO15x20",Pho_ZOOM,false);
-
-	    /* Write name */
-	    HTM_NBSP ();
-	    HTM_Txt (PublisherUsrDat.FullName);
-	   }
-	 else
-	    /* Unknown publisher */
-	    HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Free memory used for publisher's data *****/
-	 if (FileMetadata.PublisherUsrCod > 0)
-	    Usr_UsrDataDestructor (&PublisherUsrDat);
-
-	 /***** Write the file size *****/
-	 Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
-	 HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_File_size);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"DAT LB\"");
-	 HTM_Txt (FileSizeStr);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Write the date *****/
-	 HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Date_of_creation);
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LB\"");
-	 Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				       true,true,true,0x7);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Private or public? *****/
-	 HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("RT","PublicFile",Txt_Availability);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"DAT LT\"");
-	 if (ICanChangePublic)	// I can change file to public
-	   {
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
-	    HTM_OPTION (HTM_Type_STRING,"N",
-			!FileMetadata.IsPublic,false,
-			"%s",Txt_Private_available_to_certain_users_identified);
-	    HTM_OPTION (HTM_Type_STRING,"Y",
-			FileMetadata.IsPublic,false,
-			"%s",Txt_Public_open_educational_resource_OER_for_everyone);
-	    HTM_SELECT_End ();
-	   }
-	 else		// I can not edit file properties
-	    HTM_Txt (FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
-					     Txt_Private_available_to_certain_users_identified);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** License *****/
-	 HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("RT","License",Txt_License);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"DAT LT\"");
-	 if (ICanEdit)	// I can edit file properties
-	   {
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"License\" name=\"License\" class=\"LICENSE\"");
-	    for (License  = (Brw_License_t) 0;
-		 License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
-		 License++)
-	      {
-	       LicenseUnsigned = (unsigned) License;
-	       HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
-			   License == FileMetadata.License,false,
-			   "%s",Txt_LICENSES[License]);
-	      }
-	    HTM_SELECT_End ();
-	   }
-	 else		// I can not edit file properties
-	    HTM_Txt (Txt_LICENSES[FileMetadata.License]);
-	 HTM_TD_End ();
-
-	 HTM_TR_End ();
-
-	 /***** Write my number of views *****/
-	 if (Gbl.Usrs.Me.Logged)
-	   {
+	    /***** Link to download the file *****/
 	    HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtColon (Txt_My_views);
-	    HTM_TD_End ();
-
-	    HTM_TD_Begin ("class=\"DAT LB\"");
-	    HTM_Unsigned (FileMetadata.NumMyViews);
-	    HTM_TD_End ();
+	       HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
+		  Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
+	       HTM_TD_End ();
 
 	    HTM_TR_End ();
-	   }
 
-	 /***** Write number of identificated views *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Filename *****/
+	    HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Identified_views);
-	 HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Filename);
+	       HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LB\"");
-	 HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
-	 HTM_TxtF ("(%u %s)",
-		   FileMetadata.NumLoggedUsrs,
-		   FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
-			                             Txt_users[Usr_SEX_UNKNOWN]);
-	 HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /***** Write number of public views *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Publisher's data *****/
+	    HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColon (Txt_Public_views);
-	 HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Uploaded_by);
+	       HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LB\"");
-	 HTM_Unsigned (FileMetadata.NumPublicViews);
-	 HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  if (FileHasPublisher)
+		    {
+		     /* Show photo */
+		     Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,"PHOTO15x20",Pho_ZOOM,false);
 
-	 HTM_TR_End ();
+		     /* Write name */
+		     HTM_NBSP ();
+		     HTM_Txt (PublisherUsrDat.FullName);
+		    }
+		  else
+		     /* Unknown publisher */
+		     HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Free memory used for publisher's data *****/
+	    if (FileMetadata.PublisherUsrCod > 0)
+	       Usr_UsrDataDestructor (&PublisherUsrDat);
+
+	    /***** Write the file size *****/
+	    Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_File_size);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  HTM_Txt (FileSizeStr);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Write the date *****/
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Date_of_creation);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("id=\"filedate\" class=\"DAT LB\"");
+		  Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
+						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						true,true,true,0x7);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Private or public? *****/
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("RT","PublicFile",Txt_Availability);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"DAT LT\"");
+		  if (ICanChangePublic)	// I can change file to public
+		    {
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				       "id=\"PublicFile\" name=\"PublicFile\" class=\"PUBLIC_FILE\"");
+			HTM_OPTION (HTM_Type_STRING,"N",
+				    !FileMetadata.IsPublic,false,
+				    "%s",Txt_Private_available_to_certain_users_identified);
+			HTM_OPTION (HTM_Type_STRING,"Y",
+				    FileMetadata.IsPublic,false,
+				    "%s",Txt_Public_open_educational_resource_OER_for_everyone);
+		     HTM_SELECT_End ();
+		    }
+		  else		// I can not edit file properties
+		     HTM_Txt (FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
+						      Txt_Private_available_to_certain_users_identified);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** License *****/
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("RT","License",Txt_License);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"DAT LT\"");
+		  if (ICanEdit)	// I can edit file properties
+		    {
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				       "id=\"License\" name=\"License\" class=\"LICENSE\"");
+			for (License  = (Brw_License_t) 0;
+			     License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
+			     License++)
+			  {
+			   LicenseUnsigned = (unsigned) License;
+			   HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
+				       License == FileMetadata.License,false,
+				       "%s",Txt_LICENSES[License]);
+			  }
+		     HTM_SELECT_End ();
+		    }
+		  else		// I can not edit file properties
+		     HTM_Txt (Txt_LICENSES[FileMetadata.License]);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Write my number of views *****/
+	    if (Gbl.Usrs.Me.Logged)
+	      {
+	       HTM_TR_Begin (NULL);
+
+		  HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		     HTM_TxtColon (Txt_My_views);
+		  HTM_TD_End ();
+
+		  HTM_TD_Begin ("class=\"DAT LB\"");
+		     HTM_Unsigned (FileMetadata.NumMyViews);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+	      }
+
+	    /***** Write number of identificated views *****/
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Identified_views);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
+		  HTM_TxtF ("(%u %s)",
+			    FileMetadata.NumLoggedUsrs,
+			    FileMetadata.NumLoggedUsrs == 1 ? Txt_user[Usr_SEX_UNKNOWN] :
+							      Txt_users[Usr_SEX_UNKNOWN]);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Write number of public views *****/
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Public_views);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"DAT LB\"");
+		  HTM_Unsigned (FileMetadata.NumPublicViews);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
 
 	 /***** End box *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
-            /* End table, send button and end box */
-	    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
+	       /* End table, send button and end box */
+	       Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_file_properties);
 
 	    /* End form */
 	    Frm_EndForm ();
@@ -9907,20 +9893,20 @@ void Brw_DownloadFile (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
+               ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
 	    break;
@@ -10113,22 +10099,27 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       /* Form to see marks */
       Frm_BeginForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								ActSeeMyMrkGrp);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->FilFolLnk.Path,
-   	        sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
-   	        sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
-      Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
-      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-      /* Link begin */
-      HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK FILENAME_TXT",NULL);
-      Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-		       "ICO40x40",false);
+	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->FilFolLnk.Path,
+		   sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
+	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
+		   sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
+	 Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-      /* Name of the file of marks, link end and form end */
-      HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
-      Ico_PutIcon ("grades32x32.gif",Txt_Check_marks_in_the_file,"ICO40x40");
-      HTM_BUTTON_End ();
+	 /* Begin link */
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK FILENAME_TXT",NULL);
+
+	    Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
+			     "ICO40x40",false);
+
+	    /* Name of the file of marks, link end and form end */
+	    HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
+	    Ico_PutIcon ("grades32x32.gif",Txt_Check_marks_in_the_file,"ICO40x40");
+
+	 /* End link */
+	 HTM_BUTTON_End ();
+
       Frm_EndForm ();
      }
    else
@@ -10139,10 +10130,10 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       /* Put anchor and filename */
       HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
 	           URL,Title);
-      Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-		       "ICO40x40",false);
-      HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
-      Ico_PutIcon ("download.svg",Title,"ICO40x40");
+	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
+			  "ICO40x40",false);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
+	 Ico_PutIcon ("download.svg",Title,"ICO40x40");
       HTM_A_End ();
      }
   }
@@ -10171,14 +10162,16 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
-      /* Link begin */
-      HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK DAT",NULL);
+	 /* Begin link */
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK DAT",NULL);
 
-      /* Name of the file of marks */
-      HTM_Txt (FileNameToShow);
+	    /* Name of the file of marks */
+	    HTM_Txt (FileNameToShow);
 
-      /* Link end and form end */
-      HTM_BUTTON_End ();
+	 /* End link */
+	 HTM_BUTTON_End ();
+
+      /* End form */
       Frm_EndForm ();
      }
    else
@@ -10186,7 +10179,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       /* Put anchor and filename */
       HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
 	           URL,FileNameToShow);
-      HTM_Txt (FileNameToShow);
+	 HTM_Txt (FileNameToShow);
       HTM_A_End ();
      }
   }
@@ -10304,9 +10297,9 @@ void Brw_ChgFileMetadata (void)
 	 Brw_ChangeFilePublicInDB (&FileMetadata,PublicFileAfterEdition,License);
 
 	 /***** Remove the affected clipboards *****/
-	 Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				          Gbl.Usrs.Me.UsrDat.UsrCod,
+				          Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Insert file into public social activity *****/
 	 if (!PublicFileBeforeEdition &&
@@ -10738,7 +10731,7 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
       Brw_GetFileViewsFromLoggedUsrs (FileMetadata);
 
       /***** Get file views from non logged users *****/
-      Brw_GetFileViewsFromNonLoggedUsrs (FileMetadata);
+      FileMetadata->NumPublicViews = Brw_DB_GetFileViewsFromNonLoggedUsrs (FileMetadata->FilCod);
 
       /***** Get number of my views *****/
       if (Gbl.Usrs.Me.Logged)
@@ -10779,7 +10772,7 @@ void Brw_UpdateMyFileViews (long FilCod)
 /******************** Get number of file views from a user *******************/
 /*****************************************************************************/
 
-unsigned Brw_GetNumFileViewsUsr (long UsrCod)
+unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
   {
    /***** Get number of filw views *****/
    return DB_QuerySELECTUnsigned ("can not get number of file views",
@@ -10835,22 +10828,18 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
   }
 
 /*****************************************************************************/
-/****************** Get file views from non logged users *********************/
+/******************** Get number of public views of a file *******************/
 /*****************************************************************************/
-/*
-   Input:  FileMetadata->FilCod
-   Output: FileMetadata->NumPublicViews
-*/
-static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata)
+
+static unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod)
   {
-   /***** Get number of public views *****/
-   FileMetadata->NumPublicViews =
+   return
    DB_QuerySELECTUnsigned ("can not get number of public views of a file",
 			   "SELECT SUM(NumViews)"
 			    " FROM brw_views"
 			   " WHERE FilCod=%ld"
 			     " AND UsrCod<=0",
-			   FileMetadata->FilCod);
+			   FilCod);
   }
 
 /*****************************************************************************/
@@ -10937,7 +10926,7 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 /*********************** Get number of files from a user *********************/
 /*****************************************************************************/
 
-unsigned Brw_GetNumFilesUsr (long UsrCod)
+unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
   {
    /***** Get current number of files published by a user from database *****/
    return (unsigned)
@@ -10955,7 +10944,7 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
 /******************* Get number of public files from a user ******************/
 /*****************************************************************************/
 
-unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
+unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod)
   {
    /***** Get current number of public files published by a user from database *****/
    return (unsigned)
@@ -11735,7 +11724,7 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
    long GrpCod;
 
    /***** Query database *****/
-   NumGrps = Grp_GetGrpsOfType (GrpTypCod,&mysql_res);
+   NumGrps = Grp_DB_GetGrpsOfType (GrpTypCod,&mysql_res);
    for (NumGrp = 0;
 	NumGrp < NumGrps;
 	NumGrp++)
@@ -11918,45 +11907,43 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeString ();
 
-      /***** Write heading *****/
-      HTM_TR_Begin (NULL);
+	 /***** Write heading *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TH (1,1,"BM",NULL);
+	    HTM_TH (1,1,"LM",Txt_Institution);
+	    HTM_TH (1,1,"LM",Txt_Center);
+	    HTM_TH (1,1,"LM",Txt_Degree);
+	    HTM_TH (1,1,"LM",Txt_Course);
+	    HTM_TH (1,1,"LM",Txt_File_zone);
+	    HTM_TH (1,1,"LM",Txt_Document);
+	 HTM_TR_End ();
 
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"LM",Txt_Institution);
-      HTM_TH (1,1,"LM",Txt_Center);
-      HTM_TH (1,1,"LM",Txt_Degree);
-      HTM_TH (1,1,"LM",Txt_Course);
-      HTM_TH (1,1,"LM",Txt_File_zone);
-      HTM_TH (1,1,"LM",Txt_Document);
+	 /***** List documents found *****/
+	 for (NumDoc = 1;
+	      NumDoc <= NumDocs;
+	      NumDoc++)
+	   {
+	    /* Get next course */
+	    row = mysql_fetch_row (*mysql_res);
 
-      HTM_TR_End ();
+	    /* Write data of this course */
+	    Brw_WriteRowDocData (&NumDocsNotHidden,row);
+	   }
 
-      /***** List documents found *****/
-      for (NumDoc = 1;
-	   NumDoc <= NumDocs;
-	   NumDoc++)
-	{
-	 /* Get next course */
-	 row = mysql_fetch_row (*mysql_res);
+	 /***** Write footer *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Write data of this course */
-	 Brw_WriteRowDocData (&NumDocsNotHidden,row);
-	}
+	    /* Number of documents not hidden found */
+	    HTM_TH_Begin (1,7,"CM");
+	       HTM_Txt ("(");
+	       NumDocsHidden = NumDocs - NumDocsNotHidden;
+	       HTM_TxtF ("%u %s",
+			 NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
+							    Txt_hidden_documents);
+	       HTM_Txt (")");
+	    HTM_TH_End ();
 
-      /***** Write footer *****/
-      HTM_TR_Begin (NULL);
-
-      /* Number of documents not hidden found */
-      HTM_TH_Begin (1,7,"CM");
-      HTM_Txt ("(");
-      NumDocsHidden = NumDocs - NumDocsNotHidden;
-      HTM_TxtF ("%u %s",
-                NumDocsHidden,NumDocsHidden == 1 ? Txt_hidden_document :
-	                                           Txt_hidden_documents);
-      HTM_Txt (")");
-      HTM_TH_End ();
-
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -12013,7 +12000,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    FileMetadata.FilCod = Str_ConvertStrCodToLongCod (row[0]);
    Brw_GetFileMetadataByCod (&FileMetadata);
 
-   if (!Brw_CheckIfFileOrFolderIsHidden (&FileMetadata))
+   if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
      {
       /***** Get institution code (row[2]) *****/
       InsCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -12041,183 +12028,183 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
       HTM_TR_Begin (NULL);
 
-      /***** Write number of document in this search *****/
-      HTM_TD_Begin ("class=\"RT DAT %s\"",BgColor);
-      HTM_Unsigned (++(*NumDocsNotHidden));
-      HTM_TD_End ();
+	 /***** Write number of document in this search *****/
+	 HTM_TD_Begin ("class=\"RT DAT %s\"",BgColor);
+	    HTM_Unsigned (++(*NumDocsNotHidden));
+	 HTM_TD_End ();
 
-      /***** Write institution logo, institution short name *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      if (InsCod > 0)
-	{
-         Frm_BeginFormGoTo (ActSeeInsInf);
-         Deg_PutParamDegCod (InsCod);
-         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (InsShortName),
-				  "BT_LINK LT DAT",NULL);
-         Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
-	 HTM_TxtF ("&nbsp;%s",InsShortName);
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-      HTM_TD_End ();
+	 /***** Write institution logo, institution short name *****/
+	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	    if (InsCod > 0)
+	      {
+	       Frm_BeginFormGoTo (ActSeeInsInf);
+	       Deg_PutParamDegCod (InsCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (InsShortName),
+					   "BT_LINK LT DAT",NULL);
+		  Hie_FreeGoToMsg ();
+		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
+		     HTM_TxtF ("&nbsp;%s",InsShortName);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TD_End ();
 
-      /***** Write center logo, center short name *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      if (CtrCod > 0)
-	{
-         Frm_BeginFormGoTo (ActSeeCtrInf);
-         Deg_PutParamDegCod (CtrCod);
-         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CtrShortName),
-				  "BT_LINK LT DAT",NULL);
-         Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
-	 HTM_TxtF ("&nbsp;%s",CtrShortName);
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-      HTM_TD_End ();
+	 /***** Write center logo, center short name *****/
+	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	    if (CtrCod > 0)
+	      {
+	       Frm_BeginFormGoTo (ActSeeCtrInf);
+	       Deg_PutParamDegCod (CtrCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CtrShortName),
+					   "BT_LINK LT DAT",NULL);
+		  Hie_FreeGoToMsg ();
+		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
+		     HTM_TxtF ("&nbsp;%s",CtrShortName);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TD_End ();
 
-      /***** Write degree logo, degree short name *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      if (DegCod > 0)
-	{
-         Frm_BeginFormGoTo (ActSeeDegInf);
-         Deg_PutParamDegCod (DegCod);
-         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (DegShortName),
-				  "BT_LINK LT DAT",NULL);
-         Hie_FreeGoToMsg ();
-         Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
-	 HTM_TxtF ("&nbsp;%s",DegShortName);
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-      HTM_TD_End ();
+	 /***** Write degree logo, degree short name *****/
+	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	    if (DegCod > 0)
+	      {
+	       Frm_BeginFormGoTo (ActSeeDegInf);
+	       Deg_PutParamDegCod (DegCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (DegShortName),
+					   "BT_LINK LT DAT",NULL);
+		  Hie_FreeGoToMsg ();
+		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
+		     HTM_TxtF ("&nbsp;%s",DegShortName);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TD_End ();
 
-      /***** Write course short name *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
-      if (CrsCod > 0)
-	{
-	 Frm_BeginFormGoTo (ActSeeCrsInf);
-	 Crs_PutParamCrsCod (CrsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CrsShortName),"BT_LINK DAT",NULL);
-         Hie_FreeGoToMsg ();
-	 HTM_Txt (CrsShortName);
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-      HTM_TD_End ();
+	 /***** Write course short name *****/
+	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	    if (CrsCod > 0)
+	      {
+	       Frm_BeginFormGoTo (ActSeeCrsInf);
+	       Crs_PutParamCrsCod (CrsCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CrsShortName),"BT_LINK DAT",NULL);
+		  Hie_FreeGoToMsg ();
+		     HTM_Txt (CrsShortName);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TD_End ();
 
-      /***** Write file zone *****/
-      switch (FileMetadata.FileBrowser)
-	{
-	 case Brw_ADMI_DOC_INS:
-	 case Brw_ADMI_DOC_CTR:
-	 case Brw_ADMI_DOC_DEG:
-	 case Brw_ADMI_DOC_CRS:
-	 case Brw_ADMI_DOC_GRP:
-	    Title = Txt_Documents_area;
-	    break;
-	 case Brw_ADMI_TCH_CRS:
-	 case Brw_ADMI_TCH_GRP:
-	    Title = Txt_Teachers_files_area;
-	    break;
-         case Brw_ADMI_SHR_INS:
-         case Brw_ADMI_SHR_CTR:
-         case Brw_ADMI_SHR_DEG:
-	 case Brw_ADMI_SHR_CRS:
-	 case Brw_ADMI_SHR_GRP:
-	    Title = Txt_Shared_files_area;
-	    break;
-	 case Brw_ADMI_ASG_USR:
-	    Title = Txt_Assignments_area;
-	    break;
-	 case Brw_ADMI_WRK_USR:
-	    Title = Txt_Works_area;
-	    break;
-	 case Brw_ADMI_DOC_PRJ:
-	    Title = Txt_Project_documents;
-	    break;
-	 case Brw_ADMI_ASS_PRJ:
-	    Title = Txt_Project_assessment;
-	    break;
-	 case Brw_ADMI_MRK_CRS:
-	 case Brw_ADMI_MRK_GRP:
-	    Title = Txt_Marks_area;
-	    break;
-	 case Brw_ADMI_BRF_USR:
-	    Title = Txt_Temporary_private_storage_area;
-	    break;
-	 default:
-	    Title = "";
-	    break;
-	}
+	 /***** Write file zone *****/
+	 switch (FileMetadata.FileBrowser)
+	   {
+	    case Brw_ADMI_DOC_INS:
+	    case Brw_ADMI_DOC_CTR:
+	    case Brw_ADMI_DOC_DEG:
+	    case Brw_ADMI_DOC_CRS:
+	    case Brw_ADMI_DOC_GRP:
+	       Title = Txt_Documents_area;
+	       break;
+	    case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_TCH_GRP:
+	       Title = Txt_Teachers_files_area;
+	       break;
+	    case Brw_ADMI_SHR_INS:
+	    case Brw_ADMI_SHR_CTR:
+	    case Brw_ADMI_SHR_DEG:
+	    case Brw_ADMI_SHR_CRS:
+	    case Brw_ADMI_SHR_GRP:
+	       Title = Txt_Shared_files_area;
+	       break;
+	    case Brw_ADMI_ASG_USR:
+	       Title = Txt_Assignments_area;
+	       break;
+	    case Brw_ADMI_WRK_USR:
+	       Title = Txt_Works_area;
+	       break;
+	    case Brw_ADMI_DOC_PRJ:
+	       Title = Txt_Project_documents;
+	       break;
+	    case Brw_ADMI_ASS_PRJ:
+	       Title = Txt_Project_assessment;
+	       break;
+	    case Brw_ADMI_MRK_CRS:
+	    case Brw_ADMI_MRK_GRP:
+	       Title = Txt_Marks_area;
+	       break;
+	    case Brw_ADMI_BRF_USR:
+	       Title = Txt_Temporary_private_storage_area;
+	       break;
+	    default:
+	       Title = "";
+	       break;
+	   }
 
-      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
-      HTM_Txt (Title);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+	    HTM_Txt (Title);
+	 HTM_TD_End ();
 
-      /***** Get the name of the file to show *****/
-      Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
-                             FileMetadata.FilFolLnk.Name,
-                             FileNameToShow);
+	 /***** Get the name of the file to show *****/
+	 Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
+				FileMetadata.FilFolLnk.Name,
+				FileNameToShow);
 
-      /***** Write file name using path (row[1]) *****/
-      HTM_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
+	 /***** Write file name using path (row[1]) *****/
+	 HTM_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
 
-      /* Begin form */
-      Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
+	    /* Begin form */
+	    Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
 
-      if (CrsCod > 0)
-        {
-	 Frm_BeginFormGoTo (Action);
-	 Crs_PutParamCrsCod (CrsCod);	// Go to course
-	 if (GrpCod > 0)
-	    Grp_PutParamGrpCod (&GrpCod);
-        }
-      else if (DegCod > 0)
-	{
-	 Frm_BeginFormGoTo (Action);
-	 Deg_PutParamDegCod (DegCod);	// Go to degree
-	}
-      else if (CtrCod > 0)
-	{
-	 Frm_BeginFormGoTo (Action);
-	 Ctr_PutParamCtrCod (CtrCod);	// Go to center
-	}
-      else if (InsCod > 0)
-	{
-	 Frm_BeginFormGoTo (Action);
-	 Ins_PutParamInsCod (InsCod);	// Go to institution
-	}
-      else
-         Frm_BeginForm (Action);
+	    if (CrsCod > 0)
+	      {
+	       Frm_BeginFormGoTo (Action);
+	       Crs_PutParamCrsCod (CrsCod);	// Go to course
+	       if (GrpCod > 0)
+		  Grp_PutParamGrpCod (&GrpCod);
+	      }
+	    else if (DegCod > 0)
+	      {
+	       Frm_BeginFormGoTo (Action);
+	       Deg_PutParamDegCod (DegCod);	// Go to degree
+	      }
+	    else if (CtrCod > 0)
+	      {
+	       Frm_BeginFormGoTo (Action);
+	       Ctr_PutParamCtrCod (CtrCod);	// Go to center
+	      }
+	    else if (InsCod > 0)
+	      {
+	       Frm_BeginFormGoTo (Action);
+	       Ins_PutParamInsCod (InsCod);	// Go to institution
+	      }
+	    else
+	       Frm_BeginForm (Action);
 
-      /* Parameters to go to file / folder */
-      if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
-	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      else
-	 Brw_PutParamsFileBrowser (NULL,		// Not used
-				   NULL,		// Not used
-				   Brw_IS_UNKNOWN,	// Not used
-				   FileMetadata.FilCod);
+	    /* Parameters to go to file / folder */
+	    if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
+	       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	    else
+	       Brw_PutParamsFileBrowser (NULL,		// Not used
+					 NULL,		// Not used
+					 Brw_IS_UNKNOWN,	// Not used
+					 FileMetadata.FilCod);
 
-      /* File or folder icon */
-      HTM_BUTTON_SUBMIT_Begin (FileNameToShow,"BT_LINK LT DAT_N",NULL);
-      if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
-	 /* Icon with folder */
-         Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");
-      else
-	 /* Icon with file type or link */
-	 Brw_PutIconFile (FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name,
-			  "CONTEXT_ICO_16x16",false);
-      HTM_TxtF ("&nbsp;%s",FileNameToShow);
-      HTM_BUTTON_End ();
+	    /* File or folder icon */
+	    HTM_BUTTON_SUBMIT_Begin (FileNameToShow,"BT_LINK LT DAT_N",NULL);
+	       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
+		  /* Icon with folder */
+		  Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");
+	       else
+		  /* Icon with file type or link */
+		  Brw_PutIconFile (FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name,
+				   "CONTEXT_ICO_16x16",false);
+	       HTM_TxtF ("&nbsp;%s",FileNameToShow);
+	    HTM_BUTTON_End ();
 
-      /* End form */
-      Frm_EndForm ();
+	    /* End form */
+	    Frm_EndForm ();
 
-      HTM_TD_End ();
+	 HTM_TD_End ();
       HTM_TR_End ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -12258,30 +12245,30 @@ void Brw_AskRemoveOldFiles (void)
    Frm_BeginForm (ActRemOldBrf);
    Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Remove_old_files,
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Remove_old_files,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Form to request number of months (to remove files older) *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Months\"");
-   for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
-        Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
-        Months++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Months,
-		  Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,false,
-		  "%u",Months);
-   HTM_SELECT_End ();
-   HTM_NBSP ();
-   HTM_TxtF (Txt_Remove_files_older_than_PART_2_OF_2,
-             Cfg_PLATFORM_SHORT_NAME);
-   HTM_LABEL_End ();
+	 /***** Form to request number of months (to remove files older) *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      "name=\"Months\"");
+	       for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
+		    Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
+		    Months++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
+			      Months == Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES,false,
+			      "%u",Months);
+	    HTM_SELECT_End ();
+	    HTM_NBSP ();
+	    HTM_TxtF (Txt_Remove_files_older_than_PART_2_OF_2,
+		      Cfg_PLATFORM_SHORT_NAME);
+	 HTM_LABEL_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Remove);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -12355,9 +12342,9 @@ static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *
    if (Removed->NumFiles ||
        Removed->NumLinks ||
        Removed->NumFolds)	// If anything has been changed
-      Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
-				    Gbl.Usrs.Me.UsrDat.UsrCod,
-				    Gbl.Usrs.Other.UsrDat.UsrCod);
+      Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
+				       Gbl.Usrs.Me.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

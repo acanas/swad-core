@@ -139,7 +139,7 @@ static void Exa_RemoveExamFromAllTables (long ExaCod);
 static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 static void Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
-static bool Exa_CheckIfSimilarExamExists (const struct Exa_Exam *Exam);
+static bool Exa_DB_CheckIfSimilarExamExists (const struct Exa_Exam *Exam);
 
 static void Exa_ReceiveExamFieldsFromForm (struct Exa_Exam *Exam,
 				           char Txt[Cns_MAX_BYTES_TEXT + 1]);
@@ -243,73 +243,73 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
                  Exa_PutIconsListExams,Exams,
                  Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
-   /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
-				  Exams,-1L);
+      /***** Write links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
+				     Exams,-1L);
 
-   if (Exams->Num)
-     {
-      /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
-      HTM_TR_Begin (NULL);
+      if (Exams->Num)
+	{
+	 /***** Table head *****/
+	 HTM_TABLE_BeginWideMarginPadding (5);
+	    HTM_TR_Begin (NULL);
+	       if (Exa_CheckIfICanEditExams ())
+		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+
+	       for (Order  = (Exa_Order_t) 0;
+		    Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
+		    Order++)
+		 {
+		  HTM_TH_Begin (1,1,"LM");
+
+		     /* Form to change order */
+		     Frm_BeginForm (ActSeeAllExa);
+		     Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
+		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+			HTM_BUTTON_SUBMIT_Begin (Txt_EXAMS_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			   if (Order == Exams->SelectedOrder)
+			      HTM_U_Begin ();
+			   HTM_Txt (Txt_EXAMS_ORDER[Order]);
+			   if (Order == Exams->SelectedOrder)
+			      HTM_U_End ();
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
+
+		  HTM_TH_End ();
+		 }
+
+	       HTM_TH (1,1,"RM",Txt_Sessions);
+
+	    HTM_TR_End ();
+
+	    /***** Write all exams *****/
+	    for (NumExam  = Pagination.FirstItemVisible;
+		 NumExam <= Pagination.LastItemVisible;
+		 NumExam++)
+	      {
+	       /* Get data of this exam */
+	       Exam.ExaCod = Exams->Lst[NumExam - 1].ExaCod;
+	       Exa_GetDataOfExamByCod (&Exam);
+	       Exams->ExaCod = Exam.ExaCod;
+
+	       /* Show exam */
+	       Exa_ShowOneExam (Exams,
+				&Exam,
+				false);	// Do not show only this exam
+	      }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+	}
+      else	// No exams created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_exams);
+
+      /***** Write again links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
+				     Exams,-1L);
+
+      /***** Button to create a new exam *****/
       if (Exa_CheckIfICanEditExams ())
-         HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-
-      for (Order  = (Exa_Order_t) 0;
-	   Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
-	   Order++)
-	{
-	 HTM_TH_Begin (1,1,"LM");
-
-	 /* Form to change order */
-	 Frm_BeginForm (ActSeeAllExa);
-	 Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_EXAMS_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Exams->SelectedOrder)
-	    HTM_U_Begin ();
-	 HTM_Txt (Txt_EXAMS_ORDER[Order]);
-	 if (Order == Exams->SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-
-	 HTM_TH_End ();
-	}
-
-      HTM_TH (1,1,"RM",Txt_Sessions);
-
-      HTM_TR_End ();
-
-      /***** Write all exams *****/
-      for (NumExam  = Pagination.FirstItemVisible;
-	   NumExam <= Pagination.LastItemVisible;
-	   NumExam++)
-	{
-	 /* Get data of this exam */
-	 Exam.ExaCod = Exams->Lst[NumExam - 1].ExaCod;
-	 Exa_GetDataOfExamByCod (&Exam);
-         Exams->ExaCod = Exam.ExaCod;
-
-	 /* Show exam */
-	 Exa_ShowOneExam (Exams,
-	                  &Exam,
-	                  false);	// Do not show only this exam
-	}
-
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No exams created
-      Ale_ShowAlert (Ale_INFO,Txt_No_exams);
-
-   /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_EXAMS,&Pagination,
-				  Exams,-1L);
-
-   /***** Button to create a new exam *****/
-   if (Exa_CheckIfICanEditExams ())
-      Exa_PutButtonToCreateNewExam (Exams);
+	 Exa_PutButtonToCreateNewExam (Exams);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -392,7 +392,7 @@ static void Exa_PutButtonToCreateNewExam (struct Exa_Exams *Exams)
 
    Frm_BeginForm (ActFrmNewExa);
    Exa_PutParamsToCreateNewExam (Exams);
-   Btn_PutConfirmButton (Txt_New_exam);
+      Btn_PutConfirmButton (Txt_New_exam);
    Frm_EndForm ();
   }
 
@@ -506,99 +506,99 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    /***** Start first row of this exam *****/
    HTM_TR_Begin (NULL);
 
-   /***** Icons related to this exam *****/
-   if (Exa_CheckIfICanEditExams ())
-     {
-      if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-      else
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+      /***** Icons related to this exam *****/
+      if (Exa_CheckIfICanEditExams ())
+	{
+	 if (ShowOnlyThisExam)
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+	 else
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
-      /* Icons to remove/edit this exam */
-      Exa_PutIconsToRemEditOneExam (Exams,Exam,Anchor);
+	 /* Icons to remove/edit this exam */
+	 Exa_PutIconsToRemEditOneExam (Exams,Exam,Anchor);
+
+	 HTM_TD_End ();
+	}
+
+      /***** Start/end date/time *****/
+      UniqueId++;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Color = Exam->NumOpenSess ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
+						     "DATE_GREEN") :
+				     (Exam->Hidden ? "DATE_RED_LIGHT":
+						     "DATE_RED");
+	 if (ShowOnlyThisExam)
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+			  Id,Color);
+	 else
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+			  Id,Color,Gbl.RowEvenOdd);
+	 if (Exam->TimeUTC[Dat_START_TIME])
+	    Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,true,0x6);
+	 HTM_TD_End ();
+	 free (Id);
+	}
+
+      /***** Exam title and main data *****/
+      if (ShowOnlyThisExam)
+	 HTM_TD_Begin ("class=\"LT\"");
+      else
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+
+      /* Exam title */
+      Exams->ExaCod = Exam->ExaCod;
+      HTM_ARTICLE_Begin (Anchor);
+	 Frm_BeginForm (ActSeeExa);
+	 Exa_PutParams (Exams);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_View_exam,
+				     Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+						    "BT_LINK LT ASG_TITLE",
+				     NULL);
+	       HTM_Txt (Exam->Title);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_ARTICLE_End ();
+
+      /* Number of questions, maximum grade, visibility of results */
+      HTM_DIV_Begin ("class=\"%s\"",Exam->Hidden ? "ASG_GRP_LIGHT" :
+						   "ASG_GRP");
+	 HTM_TxtColonNBSP (Txt_Sets_of_questions);
+	 HTM_Unsigned (Exam->NumSets);
+	 HTM_BR ();
+	 HTM_TxtColonNBSP (Txt_Maximum_grade);
+	 HTM_Double (Exam->MaxGrade);
+	 HTM_BR ();
+	 HTM_TxtColonNBSP (Txt_Result_visibility);
+	 TstVis_ShowVisibilityIcons (Exam->Visibility,Exam->Hidden);
+      HTM_DIV_End ();
+
+      /***** Number of sessions in exam *****/
+      if (ShowOnlyThisExam)
+	 HTM_TD_Begin ("class=\"RT\"");
+      else
+	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+
+      Exams->ExaCod = Exam->ExaCod;
+      Frm_BeginForm (ActSeeExa);
+      Exa_PutParams (Exams);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Sessions,
+				  Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+						 "BT_LINK LT ASG_TITLE",
+				  NULL);
+	    if (ShowOnlyThisExam)
+	       HTM_TxtColonNBSP (Txt_Sessions);
+	    HTM_Unsigned (Exam->NumSess);
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
 
       HTM_TD_End ();
-     }
-
-   /***** Start/end date/time *****/
-   UniqueId++;
-   for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	StartEndTime++)
-     {
-      if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Color = Exam->NumOpenSess ? (Exam->Hidden ? "DATE_GREEN_LIGHT":
-						  "DATE_GREEN") :
-				  (Exam->Hidden ? "DATE_RED_LIGHT":
-						  "DATE_RED");
-      if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,Color);
-      else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		       Id,Color,Gbl.RowEvenOdd);
-      if (Exam->TimeUTC[Dat_START_TIME])
-	 Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       true,true,true,0x6);
-      HTM_TD_End ();
-      free (Id);
-     }
-
-   /***** Exam title and main data *****/
-   if (ShowOnlyThisExam)
-      HTM_TD_Begin ("class=\"LT\"");
-   else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-
-   /* Exam title */
-   Exams->ExaCod = Exam->ExaCod;
-   HTM_ARTICLE_Begin (Anchor);
-   Frm_BeginForm (ActSeeExa);
-   Exa_PutParams (Exams);
-   HTM_BUTTON_SUBMIT_Begin (Txt_View_exam,
-			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-					   "BT_LINK LT ASG_TITLE",
-			    NULL);
-   HTM_Txt (Exam->Title);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_ARTICLE_End ();
-
-   /* Number of questions, maximum grade, visibility of results */
-   HTM_DIV_Begin ("class=\"%s\"",Exam->Hidden ? "ASG_GRP_LIGHT" :
-        	                                "ASG_GRP");
-   HTM_TxtColonNBSP (Txt_Sets_of_questions);
-   HTM_Unsigned (Exam->NumSets);
-   HTM_BR ();
-   HTM_TxtColonNBSP (Txt_Maximum_grade);
-   HTM_Double (Exam->MaxGrade);
-   HTM_BR ();
-   HTM_TxtColonNBSP (Txt_Result_visibility);
-   TstVis_ShowVisibilityIcons (Exam->Visibility,Exam->Hidden);
-   HTM_DIV_End ();
-
-   /***** Number of sessions in exam *****/
-   if (ShowOnlyThisExam)
-      HTM_TD_Begin ("class=\"RT\"");
-   else
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-
-   Exams->ExaCod = Exam->ExaCod;
-   Frm_BeginForm (ActSeeExa);
-   Exa_PutParams (Exams);
-   HTM_BUTTON_SUBMIT_Begin (Txt_Sessions,
-			    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-				           "BT_LINK LT ASG_TITLE",
-			    NULL);
-   if (ShowOnlyThisExam)
-      HTM_TxtColonNBSP (Txt_Sessions);
-   HTM_Unsigned (Exam->NumSess);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-
-   HTM_TD_End ();
 
    /***** End 1st row of this exam *****/
    HTM_TR_End ();
@@ -606,28 +606,28 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    /***** Start 2nd row of this exam *****/
    HTM_TR_Begin (NULL);
 
-   /***** Author of the exam *****/
-   if (ShowOnlyThisExam)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Exa_WriteAuthor (Exam);
-   HTM_TD_End ();
+      /***** Author of the exam *****/
+      if (ShowOnlyThisExam)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Exa_WriteAuthor (Exam);
+      HTM_TD_End ();
 
-   /***** Text of the exam *****/
-   if (ShowOnlyThisExam)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Exa_GetExamTxtFromDB (Exam->ExaCod,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   HTM_DIV_Begin ("class=\"PAR %s\"",Exam->Hidden ? "DAT_LIGHT" :
-        	                                    "DAT");
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /***** Text of the exam *****/
+      if (ShowOnlyThisExam)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Exa_DB_GetExamTxt (Exam->ExaCod,Txt);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      HTM_DIV_Begin ("class=\"PAR %s\"",Exam->Hidden ? "DAT_LIGHT" :
+						       "DAT");
+	 HTM_Txt (Txt);
+      HTM_DIV_End ();
+      HTM_TD_End ();
 
    /***** End 2nd row of this exam *****/
    HTM_TR_End ();
@@ -994,10 +994,10 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       Str_Copy (Exam->Title,row[6],sizeof (Exam->Title) - 1);
 
       /* Get number of sets */
-      Exam->NumSets = ExaSet_GetNumSetsExam (Exam->ExaCod);
+      Exam->NumSets = Exa_DB_GetNumSetsExam (Exam->ExaCod);
 
       /* Get number of questions */
-      Exam->NumQsts = ExaSet_GetNumQstsExam (Exam->ExaCod);
+      Exam->NumQsts = Exa_DB_GetNumQstsExam (Exam->ExaCod);
 
       /* Get number of sessions */
       Exam->NumSess = ExaSes_GetNumSessionsInExam (Exam->ExaCod);
@@ -1062,7 +1062,7 @@ void Exa_FreeListExams (struct Exa_Exams *Exams)
 /********************** Get exam text from database **************************/
 /*****************************************************************************/
 
-void Exa_GetExamTxtFromDB (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    /***** Get text of exam from database *****/
    DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get exam text",
@@ -1157,7 +1157,7 @@ void Exa_RemoveExam (void)
 static void Exa_RemoveExamFromAllTables (long ExaCod)
   {
    /***** Remove all sessions in this exam *****/
-   ExaSes_RemoveSessionsInExamFromAllTables (ExaCod);
+   Exa_DB_RemoveSessionsInExamFromAllTables (ExaCod);
 
    /***** Remove exam questions *****/
    DB_QueryDELETE ("can not remove exam questions",
@@ -1191,7 +1191,7 @@ void Exa_RemoveCrsExams (long CrsCod)
    ExaPrn_RemoveCrsPrints (CrsCod);
 
    /***** Remove all sessions in the course *****/
-   ExaSes_RemoveSessionInCourseFromAllTables (CrsCod);
+   Exa_DB_RemoveSessionInCourseFromAllTables (CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
    Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
@@ -1375,7 +1375,7 @@ void Exa_UnhideExam (void)
 /******************* Check if the title of an exam exists *******************/
 /*****************************************************************************/
 
-static bool Exa_CheckIfSimilarExamExists (const struct Exa_Exam *Exam)
+static bool Exa_DB_CheckIfSimilarExamExists (const struct Exa_Exam *Exam)
   {
    /***** Get number of exams with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar exams",
@@ -1444,7 +1444,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,
    if (ItsANewExam)
       Txt[0] = '\0';
    else
-      Exa_GetExamTxtFromDB (Exam->ExaCod,Txt);
+      Exa_DB_GetExamTxt (Exam->ExaCod,Txt);
 
    /***** Put form to create/edit an exam *****/
    Exa_PutFormEditionExam (Exams,Exam,Txt,ItsANewExam);
@@ -1485,82 +1485,82 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 				ActChgExa);
    Exa_PutParams (Exams);
 
-   /***** Begin box and table *****/
-   if (ItsANewExam)
-      Box_BoxTableBegin (NULL,Txt_New_exam,
-                         NULL,NULL,
-			 Hlp_ASSESSMENT_Exams_new_exam,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,
-			 Exam->Title[0] ? Exam->Title :
-					  Txt_Edit_exam,
-			 NULL,NULL,
-			 Hlp_ASSESSMENT_Exams_edit_exam,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      if (ItsANewExam)
+	 Box_BoxTableBegin (NULL,Txt_New_exam,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Exams_new_exam,Box_NOT_CLOSABLE,2);
+      else
+	 Box_BoxTableBegin (NULL,
+			    Exam->Title[0] ? Exam->Title :
+					     Txt_Edit_exam,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Exams_edit_exam,Box_NOT_CLOSABLE,2);
 
-   /***** Exam title *****/
-   HTM_TR_Begin (NULL);
+      /***** Exam title *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Maximum grade *****/
-   HTM_TR_Begin (NULL);
+      /***** Maximum grade *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Maximum_grade);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Maximum_grade);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exam->MaxGrade,false,
-		    "required=\"required\"");
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Exam->MaxGrade,false,
+			     "required=\"required\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Visibility of results *****/
-   HTM_TR_Begin (NULL);
+      /***** Visibility of results *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Result_visibility);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Result_visibility);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LB\"");
-   TstVis_PutVisibilityCheckboxes (Exam->Visibility);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LB\"");
+	    TstVis_PutVisibilityCheckboxes (Exam->Visibility);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Exam text *****/
-   HTM_TR_Begin (NULL);
+      /***** Exam text *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Description);
+      /* Label */
+      Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_Txt (Txt);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+			     " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	    HTM_Txt (Txt);
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   if (ItsANewExam)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_exam);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewExam)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_exam);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1653,7 +1653,7 @@ static bool Exa_CheckExamFieldsReceivedFromForm (const struct Exa_Exam *Exam)
    if (Exam->Title[0])	// If there's an exam title
      {
       /* If title of exam was in database... */
-      if (Exa_CheckIfSimilarExamExists (Exam))
+      if (Exa_DB_CheckIfSimilarExamExists (Exam))
 	{
 	 NewExamIsCorrect = false;
 	 Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_an_exam_with_the_title_X,
@@ -1749,7 +1749,7 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
 /*****************************************************************************/
 // Returns the number of courses with exams in this location
 
-unsigned Exa_GetNumCoursesWithExams (HieLvl_Level_t Scope)
+unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with exams from database *****/
    switch (Scope)
@@ -1819,7 +1819,7 @@ unsigned Exa_GetNumCoursesWithExams (HieLvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of exams in this location
 
-unsigned Exa_GetNumExams (HieLvl_Level_t Scope)
+unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope)
   {
    /***** Get number of exams from database *****/
    switch (Scope)
@@ -1888,7 +1888,7 @@ unsigned Exa_GetNumExams (HieLvl_Level_t Scope)
 /************* Get average number of questions per course exam ***************/
 /*****************************************************************************/
 
-double Exa_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
+double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
   {
    /***** Get number of questions per exam from database *****/
    switch (Scope)

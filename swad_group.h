@@ -184,7 +184,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
                                         Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod);
 
-bool Grp_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
+bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 void Grp_ReqRegisterInGrps (void);
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
@@ -193,12 +193,12 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
 void Grp_FreeListGrpTypesAndGrps (void);
 void Grp_OpenGroupsAutomatically (void);
 void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);
-unsigned Grp_CountNumGrpsInCurrentCrs (void);
-unsigned Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res);
+unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
+unsigned Grp_DB_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res);
 void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
-bool Grp_CheckIfGroupExists (long GrpCod);
-bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod);
-unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
+bool Grp_DB_CheckIfGroupExists (long GrpCod);
+bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod);
+unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 
 void Grp_FlushCacheIBelongToGrp (void);
 bool Grp_GetIfIBelongToGrp (long GrpCod);

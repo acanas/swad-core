@@ -107,8 +107,8 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 static void ExaSes_GetSessionDataFromRow (MYSQL_RES *mysql_res,
 				          struct ExaSes_Session *Session);
 
-static void ExaSes_RemoveSessionFromAllTables (long SesCod);
-static void ExaSes_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
+static void Exa_DB_RemoveSessionFromAllTables (long SesCod);
+static void Exa_DB_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
 static void ExaSes_PutFormSession (const struct ExaSes_Session *Session);
 static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
@@ -116,8 +116,8 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod);
 static void ExaSes_CreateSession (struct ExaSes_Session *Session);
 static void ExaSes_UpdateSession (struct ExaSes_Session *Session);
 
-static void ExaSes_CreateGrps (long SesCod);
-static void ExaSes_RemoveGroups (long SesCod);
+static void Exa_DB_CreateGrpsAssociatedToExamSession (long SesCod,const struct ListCodGrps *LstGrpsSel);
+static void Exa_DB_RemoveGrpsAssociatedToExamSession (long SesCod);
 
 /*****************************************************************************/
 /***************************** Reset exam session ****************************/
@@ -385,65 +385,67 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    /***** Reset session *****/
    ExaSes_ResetSession (&Session);
 
-   /***** Write the heading *****/
+   /***** Begin table with sessions *****/
    HTM_TABLE_BeginWidePadding (2);
-   ExaSes_ListOneOrMoreSessionsHeading (ICanEditSessions);
 
-   /***** Write rows *****/
-   for (NumSession = 0, UniqueId = 1;
-	NumSession < NumSessions;
-	NumSession++, UniqueId++)
-     {
-      Gbl.RowEvenOdd = NumSession % 2;
+      /***** Write the heading *****/
+      ExaSes_ListOneOrMoreSessionsHeading (ICanEditSessions);
 
-      /***** Get exam session data from row *****/
-      ExaSes_GetSessionDataFromRow (mysql_res,&Session);
-
-      if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod))
+      /***** Write rows *****/
+      for (NumSession = 0, UniqueId = 1;
+	   NumSession < NumSessions;
+	   NumSession++, UniqueId++)
 	{
-	 /***** Build anchor string *****/
-	 if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Session.SesCod) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 Gbl.RowEvenOdd = NumSession % 2;
 
-	 /***** Begin row for this exam session ****/
-	 HTM_TR_Begin (NULL);
+	 /***** Get exam session data from row *****/
+	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
 
-	 /* Icons */
-	 if (ICanEditSessions)
-	    if (ExaSes_CheckIfICanEditThisSession (&Session))
-	       ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
-
-	 /* Session participant */
-	 ExaSes_ListOneOrMoreSessionsAuthor (&Session);
-
-	 /* Start/end date/time */
-	 ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
-
-	 /* Title and groups */
-	 ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,Exam,&Session,Anchor);
-
-	 /* Session result visible? */
-	 ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
-
-	 /***** End row for this session ****/
-	 HTM_TR_End ();
-
-	 /***** For to edit this session ****/
-	 if (Session.SesCod == EvtCodToBeEdited)
+	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod))
 	   {
+	    /***** Build anchor string *****/
+	    if (asprintf (&Anchor,"evt_%ld_%ld",Exam->ExaCod,Session.SesCod) < 0)
+	       Err_NotEnoughMemoryExit ();
+
+	    /***** Begin row for this exam session ****/
 	    HTM_TR_Begin (NULL);
-            HTM_TD_Begin ("colspan=\"6\" class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-	    ExaSes_PutFormSession (&Session);	// Form to edit existing session
-            HTM_TD_End ();
+
+	       /* Icons */
+	       if (ICanEditSessions)
+		  if (ExaSes_CheckIfICanEditThisSession (&Session))
+		     ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
+
+	       /* Session participant */
+	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
+
+	       /* Start/end date/time */
+	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
+
+	       /* Title and groups */
+	       ExaSes_ListOneOrMoreSessionsTitleGrps (Exams,Exam,&Session,Anchor);
+
+	       /* Session result visible? */
+	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
+
+	    /***** End row for this session ****/
 	    HTM_TR_End ();
+
+	    /***** For to edit this session ****/
+	    if (Session.SesCod == EvtCodToBeEdited)
+	      {
+	       HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("colspan=\"6\" class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+		     ExaSes_PutFormSession (&Session);	// Form to edit existing session
+		  HTM_TD_End ();
+	       HTM_TR_End ();
+	      }
+
+	    /***** Free anchor string *****/
+	    free (Anchor);
 	   }
-
-	 /***** Free anchor string *****/
-	 free (Anchor);
 	}
-     }
 
-   /***** End table *****/
+   /***** End table with sessions *****/
    HTM_TABLE_End ();
   }
 
@@ -461,16 +463,16 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Column for icons *****/
-   if (ICanEditSessions)
-      HTM_TH_Empty (1);
+      /***** Column for icons *****/
+      if (ICanEditSessions)
+	 HTM_TH_Empty (1);
 
-   /***** The rest of columns *****/
-   HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]);
-   HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]);
-   HTM_TH (1,1,"LT",Txt_Session);
-   HTM_TH (1,1,"CT",Txt_Results);
+      /***** The rest of columns *****/
+      HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
+      HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]);
+      HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]);
+      HTM_TH (1,1,"LT",Txt_Session);
+      HTM_TH (1,1,"CT",Txt_Results);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -533,27 +535,27 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
 					       const char *Anchor)
   {
-   /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-
    Exams->ExaCod = Session->ExaCod;
    Exams->SesCod = Session->SesCod;
 
-   /***** Icon to remove the exam session *****/
-   Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
-                                  ExaSes_PutParamsEdit,Exams);
+   /***** Begin cell *****/
+   HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-   /***** Icon to hide/unhide the exam session *****/
-   if (Session->Hidden)
-      Ico_PutContextualIconToUnhide (ActUnhExaSes,Anchor,
+      /***** Icon to remove the exam session *****/
+      Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
 				     ExaSes_PutParamsEdit,Exams);
-   else
-      Ico_PutContextualIconToHide (ActHidExaSes,Anchor,
-				   ExaSes_PutParamsEdit,Exams);
 
-   /***** Icon to edit the exam session *****/
-   Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
-                                ExaSes_PutParamsEdit,Exams);
+      /***** Icon to hide/unhide the exam session *****/
+      if (Session->Hidden)
+	 Ico_PutContextualIconToUnhide (ActUnhExaSes,Anchor,
+					ExaSes_PutParamsEdit,Exams);
+      else
+	 Ico_PutContextualIconToHide (ActHidExaSes,Anchor,
+				      ExaSes_PutParamsEdit,Exams);
+
+      /***** Icon to edit the exam session *****/
+      Ico_PutContextualIconToEdit (ActEdiOneExaSes,Anchor,
+				   ExaSes_PutParamsEdit,Exams);
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -567,7 +569,7 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
   {
    /***** Session author (teacher) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
+      Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
    HTM_TD_End ();
   }
 
@@ -587,17 +589,17 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 	StartEndTime++)
      {
       Color = Session->Open ? (Session->Hidden ? "DATE_GREEN_LIGHT":
-					     "DATE_GREEN") :
-			    (Session->Hidden ? "DATE_RED_LIGHT":
-					     "DATE_RED");
+					         "DATE_GREEN") :
+			      (Session->Hidden ? "DATE_RED_LIGHT":
+					         "DATE_RED");
 
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 		    Id,Color,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,true,0x6);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x6);
       HTM_TD_End ();
       free (Id);
      }
@@ -617,34 +619,34 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /***** Session title *****/
-   HTM_ARTICLE_Begin (Anchor);
-   if (ExaSes_CheckIfICanAnswerThisSession (Exam,Session))
-     {
-      Frm_BeginForm (ActSeeExaPrn);
-      Exa_PutParams (Exams);
-      ExaSes_PutParamSesCod (Session->SesCod);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-								    Txt_Resume,
-			       Session->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-					         "BT_LINK LT ASG_TITLE",
-			       NULL);
-      HTM_Txt (Session->Title);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   else
-     {
-      HTM_SPAN_Begin ("class=\"%s\"",Session->Hidden ? "LT ASG_TITLE_LIGHT":
-					               "LT ASG_TITLE");
-      HTM_Txt (Session->Title);
-      HTM_SPAN_End ();
-     }
-   HTM_ARTICLE_End ();
+      /***** Session title *****/
+      HTM_ARTICLE_Begin (Anchor);
+	 if (ExaSes_CheckIfICanAnswerThisSession (Exam,Session))
+	   {
+	    Frm_BeginForm (ActSeeExaPrn);
+	    Exa_PutParams (Exams);
+	    ExaSes_PutParamSesCod (Session->SesCod);
+	       HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+									     Txt_Resume,
+					Session->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+							  "BT_LINK LT ASG_TITLE",
+					NULL);
+		  HTM_Txt (Session->Title);
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+	 else
+	   {
+	    HTM_SPAN_Begin ("class=\"%s\"",Session->Hidden ? "LT ASG_TITLE_LIGHT":
+							     "LT ASG_TITLE");
+	       HTM_Txt (Session->Title);
+	    HTM_SPAN_End ();
+	   }
+      HTM_ARTICLE_End ();
 
-   /***** Groups whose students can answer this exam session *****/
-   if (Gbl.Crs.Grps.NumGrps)
-      ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (Session);
+      /***** Groups whose students can answer this exam session *****/
+      if (Gbl.Crs.Grps.NumGrps)
+	 ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (Session);
 
    HTM_TD_End ();
   }
@@ -682,35 +684,35 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Session->Hidden ? "ASG_GRP_LIGHT":
 					           "ASG_GRP");
-   HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
-                                    Txt_Groups);
+      HTM_TxtColonNBSP (NumGrps == 1 ? Txt_Group  :
+				       Txt_Groups);
 
-   /***** Write groups *****/
-   if (NumGrps) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumGrp = 0;
-	   NumGrp < NumGrps;
-	   NumGrp++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
+      /***** Write groups *****/
+      if (NumGrps) // Groups found...
+	{
+	 /* Get and write the group types and names */
+	 for (NumGrp = 0;
+	      NumGrp < NumGrps;
+	      NumGrp++)
+	   {
+	    /* Get next group */
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Write group type name and group name */
-         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    /* Write group type name and group name */
+	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-         if (NumGrps >= 2)
-           {
-            if (NumGrp == NumGrps - 2)
-               HTM_TxtF (" %s ",Txt_and);
-            if (NumGrps >= 3)
-              if (NumGrp < NumGrps - 2)
-                  HTM_Txt (", ");
-           }
-        }
-     }
-   else
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	    if (NumGrps >= 2)
+	      {
+	       if (NumGrp == NumGrps - 2)
+		  HTM_TxtF (" %s ",Txt_and);
+	       if (NumGrps >= 3)
+		 if (NumGrp < NumGrps - 2)
+		     HTM_Txt (", ");
+	      }
+	   }
+	}
+      else
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -727,20 +729,20 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
   {
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 ExaSes_ListOneOrMoreSessionsResultStd (Exams,Session);
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 ExaSes_ListOneOrMoreSessionsResultTch (Exams,Session);
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-	 break;
-     }
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    ExaSes_ListOneOrMoreSessionsResultStd (Exams,Session);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    ExaSes_ListOneOrMoreSessionsResultTch (Exams,Session);
+	    break;
+	 default:
+	    Err_WrongRoleExit ();
+	    break;
+	}
 
    HTM_TD_End ();
   }
@@ -833,7 +835,7 @@ void ExaSes_ToggleVisResultsSesUsr (void)
 		   " WHERE exa_sessions.SesCod=%ld"
 		     " AND exa_sessions.ExaCod=%ld"	// Extra check
 		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		     " AND exa_exams.CrsCod=%ld",		// Extra check
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
 		   Session.ShowUsrResults ? 'Y' :
 			                    'N',
 		   Session.SesCod,
@@ -960,7 +962,7 @@ void ExaSes_RemoveSession (void)
       Err_NoPermissionExit ();
 
    /***** Remove the exam session from all database tables *****/
-   ExaSes_RemoveSessionFromAllTables (Session.SesCod);
+   Exa_DB_RemoveSessionFromAllTables (Session.SesCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Session_X_removed,
@@ -978,7 +980,7 @@ void ExaSes_RemoveSession (void)
 /******************* Remove exam session from all tables *********************/
 /*****************************************************************************/
 
-static void ExaSes_RemoveSessionFromAllTables (long SesCod)
+static void Exa_DB_RemoveSessionFromAllTables (long SesCod)
   {
    /* To delete orphan exam prints:
    // DELETE FROM exa_print_questions WHERE PrnCod IN (SELECT PrnCod FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions));
@@ -1017,7 +1019,7 @@ static void ExaSes_RemoveSessionFromAllTables (long SesCod)
 /**************** Remove exam session in exam from all tables ****************/
 /*****************************************************************************/
 
-void ExaSes_RemoveSessionsInExamFromAllTables (long ExaCod)
+void Exa_DB_RemoveSessionsInExamFromAllTables (long ExaCod)
   {
    /***** Remove exam prints in this session *****/
    /*
@@ -1060,7 +1062,7 @@ void ExaSes_RemoveSessionsInExamFromAllTables (long ExaCod)
 /*************** Remove exam session in course from all tables ***************/
 /*****************************************************************************/
 
-void ExaSes_RemoveSessionInCourseFromAllTables (long CrsCod)
+void Exa_DB_RemoveSessionInCourseFromAllTables (long CrsCod)
   {
    /***** Remove exam prints in this course *****/
    /*
@@ -1112,13 +1114,13 @@ void ExaSes_RemoveSessionInCourseFromAllTables (long CrsCod)
 /************* Remove user from secondary exam session tables ****************/
 /*****************************************************************************/
 
-void ExaSes_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod)
+void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod)
   {
    /***** Remove student from secondary tables *****/
-   ExaSes_RemoveUsrSesResultsInCrs (UsrCod,CrsCod,"exa_prints");
+   Exa_DB_RemoveUsrSesResultsInCrs (UsrCod,CrsCod,"exa_prints");
   }
 
-static void ExaSes_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName)
+static void Exa_DB_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName)
   {
    /***** Remove sessions in course from secondary table *****/
    DB_QueryDELETE ("can not remove sessions of a user from table",
@@ -1301,50 +1303,50 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
    /***** Begin section for a new exam session *****/
    HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
-	                           ActChgExaSes);	// Existing session
-   Exa_PutParamExamCod (Session->ExaCod);
-   if (!ItsANewSession)	// Existing session
-      ExaSes_PutParamSesCod (Session->SesCod);
+      /***** Begin form *****/
+      Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
+				      ActChgExaSes);	// Existing session
+      Exa_PutParamExamCod (Session->ExaCod);
+      if (!ItsANewSession)	// Existing session
+	 ExaSes_PutParamSesCod (Session->SesCod);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
-					    Session->Title,
-                      NULL,NULL,
-		      Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
+					       Session->Title,
+			 NULL,NULL,
+			 Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
 
-   /***** Session title *****/
-   HTM_TR_Begin (NULL);
+	 /***** Session title *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" size=\"45\" required=\"required\"");
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" size=\"45\" required=\"required\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
-                                            Dat_FORM_SECONDS_OFF,
-					    SetHMS);
+	 /***** Start and end dates *****/
+	 Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
+						  Dat_FORM_SECONDS_OFF,
+						  SetHMS);
 
-   /***** Groups *****/
-   ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
+	 /***** Groups *****/
+	 ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
 
-   /***** End table, send button and end box *****/
-   if (ItsANewSession)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_session);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewSession)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_session);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End section for a new exam session *****/
    HTM_SECTION_End ();
@@ -1369,42 +1371,42 @@ static void ExaSes_ShowLstGrpsToCreateSession (long SesCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Groups);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("95%",NULL,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,0);
+	 HTM_TD_Begin ("class=\"LT\"");
+	    Box_BoxTableBegin ("95%",NULL,
+			       NULL,NULL,
+			       NULL,Box_NOT_CLOSABLE,0);
 
-      /***** First row: checkbox to select the whole course *****/
-      HTM_TR_Begin (NULL);
+	       /***** First row: checkbox to select the whole course *****/
+	       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-		          "id=\"WholeCrs\" value=\"Y\"%s"
-		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_CheckIfAssociatedToGrps ("exa_groups","SesCod",SesCod) ? "" :
-				                                                       " checked=\"checked\"");
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+		  HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		     HTM_LABEL_Begin (NULL);
+			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
+					    "id=\"WholeCrs\" value=\"Y\"%s"
+					    " onclick=\"uncheckChildren(this,'GrpCods')\"",
+					    Grp_DB_CheckIfAssociatedToGrps ("exa_groups","SesCod",SesCod) ? "" :
+													 " checked=\"checked\"");
+			HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+		     HTM_LABEL_End ();
+		  HTM_TD_End ();
 
-      HTM_TR_End ();
+	       HTM_TR_End ();
 
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               Grp_EXA_EVENT,SesCod);
+	       /***** List the groups for each group type *****/
+	       for (NumGrpTyp = 0;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp++)
+		  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+							Grp_EXA_EVENT,SesCod);
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-      HTM_TD_End ();
+	    /***** End table and box *****/
+	    Box_BoxTableEnd ();
+	 HTM_TD_End ();
       HTM_TR_End ();
      }
 
@@ -1423,7 +1425,7 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
    Exams->ExaCod = ExaCod;
    Frm_StartFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
    Exa_PutParams (Exams);
-   Btn_PutConfirmButton (Txt_New_session);
+      Btn_PutConfirmButton (Txt_New_session);
    Frm_EndForm ();
   }
 
@@ -1599,7 +1601,7 @@ static void ExaSes_CreateSession (struct ExaSes_Session *Session)
 
    /***** Create groups associated to the exam session *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      ExaSes_CreateGrps (Session->SesCod);
+      Exa_DB_CreateGrpsAssociatedToExamSession (Session->SesCod,&Gbl.Crs.Grps.LstGrpsSel);
   }
 
 /*****************************************************************************/
@@ -1633,22 +1635,22 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session)
 		   Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups associated to the exam session *****/
-   ExaSes_RemoveGroups (Session->SesCod);	// Remove all groups associated to this session
+   Exa_DB_RemoveGrpsAssociatedToExamSession (Session->SesCod);	// Remove all groups associated to this session
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      ExaSes_CreateGrps (Session->SesCod);	// Associate new groups
+      Exa_DB_CreateGrpsAssociatedToExamSession (Session->SesCod,&Gbl.Crs.Grps.LstGrpsSel);	// Associate new groups
   }
 
 /*****************************************************************************/
 /*************** Create groups associated to an exam session *****************/
 /*****************************************************************************/
 
-static void ExaSes_CreateGrps (long SesCod)
+static void Exa_DB_CreateGrpsAssociatedToExamSession (long SesCod,const struct ListCodGrps *LstGrpsSel)
   {
    unsigned NumGrpSel;
 
    /***** Create groups associated to the exam session *****/
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < LstGrpsSel->NumGrps;
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to an exam session",
@@ -1657,14 +1659,14 @@ static void ExaSes_CreateGrps (long SesCod)
 		      " VALUES"
 		      " (%ld,%ld)",
                       SesCod,
-                      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+                      LstGrpsSel->GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
 /******************** Remove all groups from one session *********************/
 /*****************************************************************************/
 
-static void ExaSes_RemoveGroups (long SesCod)
+static void Exa_DB_RemoveGrpsAssociatedToExamSession (long SesCod)
   {
    /***** Remove all groups from one session *****/
    DB_QueryDELETE ("can not remove groups associated to a session",
@@ -1677,7 +1679,7 @@ static void ExaSes_RemoveGroups (long SesCod)
 /******************** Remove one group from all sessions *********************/
 /*****************************************************************************/
 
-void ExaSes_RemoveGroup (long GrpCod)
+void Exa_DB_RemoveGrpAssociatedToExamSessions (long GrpCod)
   {
    /***** Remove group from all the sessions *****/
    DB_QueryDELETE ("can not remove group"
@@ -1691,7 +1693,7 @@ void ExaSes_RemoveGroup (long GrpCod)
 /**************** Remove groups of one type from all sessions ****************/
 /*****************************************************************************/
 
-void ExaSes_RemoveGroupsOfType (long GrpTypCod)
+void Exa_DB_RemoveGroupsOfTypeAssociatedToExamSessions (long GrpTypCod)
   {
    /***** Remove group from all the sessions *****/
    DB_QueryDELETE ("can not remove groups of a type"
