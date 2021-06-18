@@ -4350,13 +4350,8 @@ void Grp_RenameGroupType (void)
            }
          else
            {
-            /* Update the table changing old name by new name */
-            DB_QueryUPDATE ("can not update the type of a group",
-        		    "UPDATE grp_types"
-        		      " SET GrpTypName='%s'"
-			    " WHERE GrpTypCod=%ld",
-                            NewNameGrpTyp,
-                            Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+            /***** Update the table changing old name by new name *****/
+            Grp_DB_RenameGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,NewNameGrpTyp);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
@@ -4436,13 +4431,8 @@ void Grp_RenameGroup (void)
            }
          else
            {
-            /* Update the table changing old name by new name */
-            DB_QueryUPDATE ("can not update the name of a group",
-        		    "UPDATE grp_groups"
-        		      " SET GrpName='%s'"
-        		    " WHERE GrpCod=%ld",
-                            NewNameGrp,
-                            Gbl.Crs.Grps.GrpCod);
+            /***** Update the table changing old name by new name *****/
+            Grp_DB_RenameGrp (Gbl.Crs.Grps.GrpCod,NewNameGrp);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
@@ -4645,14 +4635,14 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
       HTM_DIV_Begin ("class=\"%s\"",
 		      WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
 							    "PREF_OFF");
-      Frm_BeginForm (Action);
-      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-      if (FuncParams)	// Extra parameters depending on the action
-	 FuncParams (Args);
-      Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-							   "sitemap.svg",
-			      Txt_GROUP_WHICH_GROUPS[WhichGrps]);
-      Frm_EndForm ();
+	 Frm_BeginForm (Action);
+	 Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	 if (FuncParams)	// Extra parameters depending on the action
+	    FuncParams (Args);
+	 Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
+							      "sitemap.svg",
+				 Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
 
@@ -4720,29 +4710,12 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
 
 void Grp_DB_RemoveCrsGrps (long CrsCod)
   {
-   /***** Remove all the users in groups in the course *****/
-   DB_QueryDELETE ("can not remove users from groups of a course",
-		   "DELETE FROM grp_users"
-		   " USING grp_types,"
-			  "grp_groups,"
-			  "grp_users"
-		   " WHERE grp_types.CrsCod=%ld"
-		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		     " AND grp_groups.GrpCod=grp_users.GrpCod",
-		   CrsCod);
+   /***** Remove all users in groups in the course *****/
+   Grp_DB_RemoveUsrsInGrpsOfCrs (CrsCod);
 
-   /***** Remove all the groups in the course *****/
-   DB_QueryDELETE ("can not remove groups of a course",
-		   "DELETE FROM grp_groups"
-		   " USING grp_types,"
-			  "grp_groups"
-		   " WHERE grp_types.CrsCod=%ld"
-		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
-		   CrsCod);
+   /***** Remove all groups in the course *****/
+   Grp_DB_RemoveGrpsInCrs (CrsCod);
 
-   /***** Remove all the group types in the course *****/
-   DB_QueryDELETE ("can not remove types of group of a course",
-		   "DELETE FROM grp_types"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   /***** Remove all group types in the course *****/
+   Grp_DB_RemoveGrpTypesInCrs (CrsCod);
   }

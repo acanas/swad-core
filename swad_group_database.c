@@ -503,6 +503,36 @@ void Grp_DB_ClearMustBeOpened (long GrpTypCod)
   }
 
 /*****************************************************************************/
+/*************************** Rename a group type *****************************/
+/*****************************************************************************/
+
+void Grp_DB_RenameGrpTyp (long GrpTypCod,
+                          const char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1])
+  {
+   DB_QueryUPDATE ("can not update the type of a group",
+		   "UPDATE grp_types"
+		     " SET GrpTypName='%s'"
+		   " WHERE GrpTypCod=%ld",
+		   NewNameGrpTyp,
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/****************************** Rename a group *******************************/
+/*****************************************************************************/
+
+void Grp_DB_RenameGrp (long GrpCod,
+                       const char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1])
+  {
+   DB_QueryUPDATE ("can not update the name of a group",
+		   "UPDATE grp_groups"
+		     " SET GrpName='%s'"
+		   " WHERE GrpCod=%ld",
+		   NewNameGrp,
+		   GrpCod);
+  }
+
+/*****************************************************************************/
 /*********************** Register a user in a group **************************/
 /*****************************************************************************/
 
@@ -560,4 +590,48 @@ void Grp_DB_RemUsrFromAllGrps (long UsrCod)
 		   "DELETE FROM grp_users"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove all users in groups in a course *****************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveUsrsInGrpsOfCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove users from groups of a course",
+		   "DELETE FROM grp_users"
+		   " USING grp_types,"
+			  "grp_groups,"
+			  "grp_users"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/*********************** Remove all groups in a course ***********************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveGrpsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove groups of a course",
+		   "DELETE FROM grp_groups"
+		   " USING grp_types,"
+			  "grp_groups"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove all group types in a course *********************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveGrpTypesInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove types of group of a course",
+		   "DELETE FROM grp_types"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
   }

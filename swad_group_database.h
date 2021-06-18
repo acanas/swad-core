@@ -79,10 +79,19 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 void Grp_DB_OpenGrpsOfType (long GrpTypCod);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
 
+void Grp_DB_RenameGrpTyp (long GrpTypCod,
+                          const char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1]);
+void Grp_DB_RenameGrp (long GrpCod,
+                       const char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1]);
+
 void Grp_DB_AddUsrToGrp (long UsrCod,long GrpCod);
 
 void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod);
 void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_DB_RemUsrFromAllGrps (long UsrCod);
+
+void Grp_DB_RemoveUsrsInGrpsOfCrs (long CrsCod);
+void Grp_DB_RemoveGrpsInCrs (long CrsCod);
+void Grp_DB_RemoveGrpTypesInCrs (long CrsCod);
 
 #endif
