@@ -49,6 +49,7 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Grp_NUM_WHICH_GROUP_TYPES 2
 typedef enum
   {
    Grp_ONLY_GROUP_TYPES_WITH_GROUPS,

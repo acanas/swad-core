@@ -61,6 +61,11 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 
 bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 
+unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res);
+
+unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res);
+
 unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
 unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
@@ -71,8 +76,12 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod);
 bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 
+void Grp_DB_OpenGrpsOfType (long GrpTypCod);
+void Grp_DB_ClearMustBeOpened (long GrpTypCod);
+
 void Grp_DB_AddUsrToGrp (long UsrCod,long GrpCod);
 
+void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod);
 void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_DB_RemUsrFromAllGrps (long UsrCod);
 

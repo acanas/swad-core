@@ -281,6 +281,85 @@ bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
+/************** Get group types with groups in current course ****************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get types of group of a course",
+		   "SELECT grp_types.GrpTypCod,"			// row[0]
+			  "grp_types.GrpTypName,"			// row[1]
+			  "grp_types.Mandatory,"			// row[2]
+			  "grp_types.Multiple,"				// row[3]
+			  "grp_types.MustBeOpened,"			// row[4]
+			  "UNIX_TIMESTAMP(grp_types.OpenTime),"		// row[5]
+			  "COUNT(grp_groups.GrpCod)"			// row[6]
+		    " FROM grp_types,"
+			  "grp_groups"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		   " GROUP BY grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName",
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********** Get group types with or without groups in current course *********/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res)
+  {
+   // The tables in the second part of the UNION requires ALIAS in order to LOCK TABLES when registering in groups
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get types of group of a course",
+		   "(SELECT grp_types.GrpTypCod,"			// row[0]
+			   "grp_types.GrpTypName AS GrpTypName,"	// row[1]
+			   "grp_types.Mandatory,"			// row[2]
+			   "grp_types.Multiple,"			// row[3]
+			   "grp_types.MustBeOpened,"			// row[4]
+			   "UNIX_TIMESTAMP(grp_types.OpenTime),"	// row[5]
+			   "COUNT(grp_groups.GrpCod)"			// row[6]
+		     " FROM grp_types,"
+			   "grp_groups"
+		    " WHERE grp_types.CrsCod=%ld"
+		      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		    " GROUP BY grp_types.GrpTypCod)"
+		   " UNION "
+		   "(SELECT GrpTypCod,"					// row[0]
+			   "GrpTypName,"				// row[1]
+			   "Mandatory,"					// row[2]
+			   "Multiple,"					// row[3]
+			   "MustBeOpened,"				// row[4]
+			   "UNIX_TIMESTAMP(OpenTime),"			// row[5]
+			   "0"
+		     " FROM grp_types"
+		    " WHERE CrsCod=%ld"
+		      " AND GrpTypCod NOT IN"
+			  " (SELECT GrpTypCod"
+			     " FROM grp_groups))"
+		   " ORDER BY GrpTypName",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*********** Get group types in current course that must be opened ***********/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the types of group to be opened",
+		   "SELECT GrpTypCod"
+		    " FROM grp_types"
+		   " WHERE CrsCod=%ld"
+		     " AND MustBeOpened='Y'"
+		     " AND OpenTime<=NOW()",
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /*********** Query the number of groups that hay in this course **************/
 /*****************************************************************************/
 
@@ -397,6 +476,33 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
   }
 
 /*****************************************************************************/
+/******************** Open all the closed groups of a tyoe *******************/
+/*****************************************************************************/
+
+void Grp_DB_OpenGrpsOfType (long GrpTypCod)
+  {
+   DB_QueryUPDATE ("can not open groups",
+		   "UPDATE grp_groups"
+		     " SET Open='Y'"
+		   " WHERE GrpTypCod=%ld"
+		     " AND Open='N'",
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/******************** Set type of group to not be opened *********************/
+/*****************************************************************************/
+
+void Grp_DB_ClearMustBeOpened (long GrpTypCod)
+  {
+   DB_QueryUPDATE ("can not update the opening of a type of group",
+		   "UPDATE grp_types"
+		     " SET MustBeOpened='N'"
+		   " WHERE GrpTypCod=%ld",
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
 /*********************** Register a user in a group **************************/
 /*****************************************************************************/
 
@@ -407,6 +513,20 @@ void Grp_DB_AddUsrToGrp (long UsrCod,long GrpCod)
 		   " (GrpCod,UsrCod)"
 		   " VALUES"
 		   " (%ld,%ld)",
+                   GrpCod,
+                   UsrCod);
+  }
+
+/*****************************************************************************/
+/************************* Remove a user from a group ************************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod)
+  {
+   DB_QueryDELETE ("can not remove a user from a group",
+		   "DELETE FROM grp_users"
+		   " WHERE GrpCod=%ld"
+		     " AND UsrCod=%ld",
                    GrpCod,
                    UsrCod);
   }
