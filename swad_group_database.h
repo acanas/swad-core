@@ -50,6 +50,10 @@ void Grp_DB_UnlockTables (void);
 long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp);
 void Grp_DB_CreateGroup (const struct Grp_Groups *Grps);
 
+unsigned Grp_DB_GetDataOfGroupTypeByCod (MYSQL_RES **mysql_res,long GrpTypCod);
+unsigned Grp_DB_GetMultipleEnrolmentOfAGroupType (MYSQL_RES **mysql_res,long GrpTypCod);
+unsigned Grp_DB_GetDataOfGroupByCod (MYSQL_RES **mysql_res,long GrpCod);
+
 bool Grp_DB_CheckIfGrpExists (long GrpCod);
 bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod);
 
@@ -60,6 +64,7 @@ unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 
 bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
+bool Grp_DB_CheckIfIBelongToGrp (long GrpCod);
 
 unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res);

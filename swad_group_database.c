@@ -147,6 +147,67 @@ void Grp_DB_CreateGroup (const struct Grp_Groups *Grps)
   }
 
 /*****************************************************************************/
+/******************* Get data of a group type from its code ******************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetDataOfGroupTypeByCod (MYSQL_RES **mysql_res,long GrpTypCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get type of group",
+		       "SELECT GrpTypName,"			// row[0]
+			      "Mandatory,"			// row[1]
+			      "Multiple,"			// row[2]
+			      "MustBeOpened,"			// row[3]
+			      "UNIX_TIMESTAMP(OpenTime)"	// row[4]
+			" FROM grp_types"
+		       " WHERE GrpTypCod=%ld"
+		         " AND CrsCod=%ld",	// Extra check
+		       GrpTypCod,
+		       Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/************* Check if a group type has multiple enrolment *****************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetMultipleEnrolmentOfAGroupType (MYSQL_RES **mysql_res,long GrpTypCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get if type of group has multiple enrolment",
+		   "SELECT Multiple"	// row[0]
+		    " FROM grp_types"
+		   " WHERE GrpTypCod=%ld",
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/********************** Get data of a group from its code ********************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetDataOfGroupByCod (MYSQL_RES **mysql_res,long GrpCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a group",
+		   "SELECT grp_groups.GrpTypCod,"	// row[0]
+			  "grp_types.CrsCod,"		// row[1]
+			  "grp_types.GrpTypName,"	// row[2]
+			  "grp_types.Multiple,"		// row[3]
+			  "grp_groups.GrpName,"		// row[4]
+			  "grp_groups.RooCod,"		// row[5]
+			  "roo_rooms.ShortName,"	// row[6]
+			  "grp_groups.MaxStudents,"	// row[7]
+			  "grp_groups.Open,"		// row[8]
+			  "grp_groups.FileZones"	// row[9]
+		    " FROM (grp_groups,"
+			   "grp_types)"
+		    " LEFT JOIN roo_rooms"
+		      " ON grp_groups.RooCod=roo_rooms.RooCod"
+		   " WHERE grp_groups.GrpCod=%ld"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
+		   GrpCod);
+  }
+
+/*****************************************************************************/
 /******************** Check if a group exists in database ********************/
 /*****************************************************************************/
 
@@ -268,7 +329,6 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
 
 bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
   {
-   /***** Get a group which I belong to from database *****/
    return (DB_QueryCOUNT ("can not check if you belong to a group type",
 			  "SELECT COUNT(grp_groups.GrpCod)"
 			   " FROM grp_groups,"
@@ -277,6 +337,21 @@ bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
 			    " AND grp_groups.GrpCod=grp_users.GrpCod"
 			    " AND grp_users.UsrCod=%ld",	// I belong
 			  GrpTypCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+  }
+
+/*****************************************************************************/
+/*********************** Check if I belong to a group ************************/
+/*****************************************************************************/
+
+bool Grp_DB_CheckIfIBelongToGrp (long GrpCod)
+  {
+   return (DB_QueryCOUNT ("can not check if you belong to a group",
+			  "SELECT COUNT(*)"
+			   " FROM grp_users"
+			  " WHERE GrpCod=%ld"
+			    " AND UsrCod=%ld",			// I belong
+			  GrpCod,
 			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 

@@ -1232,7 +1232,6 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 
 static void Grp_ListGroupTypesForEdition (void)
   {
-
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -1668,19 +1667,18 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
 
-	 if (IBelongToThisGroup)
-	    HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
-	 else
-	    HTM_TD_Begin ("class=\"LM\"");
-	 HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Grp%ld\" value=\"%ld\"%s%s"
-			     " onclick=\"uncheckParent(this,'WholeCrs')\"",
-			     Grp->GrpCod,Grp->GrpCod,
-			     AssociatedToGrp ? " checked=\"checked\"" :
-					       "",
-			     (IBelongToThisGroup ||
-			      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
-									" disabled=\"disabled\"");
+         HTM_TD_Begin ("class=\"%s\"",
+                       IBelongToThisGroup ? "LM LIGHT_BLUE" :
+		                            "LM");
+	    HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"Grp%ld\" value=\"%ld\"%s%s"
+				" onclick=\"uncheckParent(this,'WholeCrs')\"",
+				Grp->GrpCod,Grp->GrpCod,
+				AssociatedToGrp ? " checked=\"checked\"" :
+						  "",
+				(IBelongToThisGroup ||
+				 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
+									   " disabled=\"disabled\"");
 	 HTM_TD_End ();
 
 	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -1962,45 +1960,44 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       /* Put radio item or checkbox to select the group */
       HTM_TR_Begin (NULL);
 
-	 if (IBelongToThisGroup)
-	    HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
-	 else
-	    HTM_TD_Begin ("class=\"LM\"");
+         HTM_TD_Begin ("class=\"%s\"",
+                       IBelongToThisGroup ? "LM LIGHT_BLUE" :
+		                            "LM");
 
-	 snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
-	     !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
-	     GrpTyp->NumGrps > 1)			// ...and there are more than one group
-	   {
-	    /* Put a radio item */
-	    if (GrpTyp->MandatoryEnrolment)
-	       HTM_INPUT_RADIO (StrGrpCod,false,
-				"id=\"Grp%ld\" value=\"%ld\"%s%s",
-				Grp->GrpCod,Grp->GrpCod,
-				IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
-				ICanChangeMySelectionForThisGrp ? "" :
-								  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-										       " disabled=\"disabled\"");	// I can not register
-	    else	// If the enrolment is not mandatory, I can select no groups
-	       HTM_INPUT_RADIO (StrGrpCod,false,
-				"id=\"Grp%ld\" value=\"%ld\"%s%s"
-				" onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
-				Grp->GrpCod,Grp->GrpCod,
-				IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
-				ICanChangeMySelectionForThisGrp ? "" :
-								  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-										       " disabled=\"disabled\"",	// I can not register
-				GrpTyp->GrpTypCod,GrpTyp->NumGrps);
-	   }
-	 else
-	    /* Put a checkbox item */
-	    HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"Grp%ld\" value=\"%ld\"%s%s",
-				Grp->GrpCod,Grp->GrpCod,
-				IBelongToThisGroup ? " checked=\"checked\"" : "",
-				ICanChangeMySelectionForThisGrp ? "" :
-								  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-										       " disabled=\"disabled\"");	// I can not register
+	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
+	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
+		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
+		GrpTyp->NumGrps > 1)			// ...and there are more than one group
+	      {
+	       /* Put a radio item */
+	       if (GrpTyp->MandatoryEnrolment)
+		  HTM_INPUT_RADIO (StrGrpCod,false,
+				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
+				   Grp->GrpCod,Grp->GrpCod,
+				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+				   ICanChangeMySelectionForThisGrp ? "" :
+								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+											  " disabled=\"disabled\"");	// I can not register
+	       else	// If the enrolment is not mandatory, I can select no groups
+		  HTM_INPUT_RADIO (StrGrpCod,false,
+				   "id=\"Grp%ld\" value=\"%ld\"%s%s"
+				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
+				   Grp->GrpCod,Grp->GrpCod,
+				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+				   ICanChangeMySelectionForThisGrp ? "" :
+								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+											  " disabled=\"disabled\"",	// I can not register
+				   GrpTyp->GrpTypCod,GrpTyp->NumGrps);
+	      }
+	    else
+	       /* Put a checkbox item */
+	       HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
+				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
+				   Grp->GrpCod,Grp->GrpCod,
+				   IBelongToThisGroup ? " checked=\"checked\"" : "",
+				   ICanChangeMySelectionForThisGrp ? "" :
+								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+											  " disabled=\"disabled\"");	// I can not register
 
 	 HTM_TD_End ();
 
@@ -2084,19 +2081,19 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       HTM_TR_Begin (NULL);
 
 	 /* Start cell for checkbox */
-	 if (UsrBelongsToThisGroup)
-	    HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
-	 else
-	    HTM_TD_Begin ("class=\"LM\"");
+         HTM_TD_Begin ("class=\"%s\"",
+                       UsrBelongsToThisGroup ? "LM LIGHT_BLUE" :
+		                               "LM");
 
-	 /* Put checkbox to select the group */
-	 // Always checkbox, not radio, because the role in the form may be teacher,
-	 // so if he/she is registered as teacher, he/she can belong to several groups
-	 snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	 HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Grp%ld\" value=\"%ld\"%s",
-			     Grp->GrpCod,Grp->GrpCod,
-			     UsrBelongsToThisGroup ? " checked=\"checked\"" : "");	// I can not register
+	    /* Put checkbox to select the group */
+	    // Always checkbox, not radio, because the role in the form may be teacher,
+	    // so if he/she is registered as teacher, he/she can belong to several groups
+	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
+	    HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"Grp%ld\" value=\"%ld\"%s",
+				Grp->GrpCod,Grp->GrpCod,
+				UsrBelongsToThisGroup ? " checked=\"checked\"" :
+							"");	// I can not register
 
 	 /* End cell for checkbox */
 	 HTM_TD_End ();
@@ -2187,16 +2184,16 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
 
-	 if (IBelongToThisGroup)
-	    HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
-	 else
-	    HTM_TD_Begin ("class=\"LM\"");
-	 HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
-			     "id=\"Grp%ld\" value=\"%ld\"%s%s",
-			     Grp->GrpCod,Grp->GrpCod,
-			     Checked ? " checked=\"checked\"" : "",
-			     ICanSelUnselGroup ? " onclick=\"checkParent(this,'AllGroups')\"" :
-						 " disabled=\"disabled\"");
+         HTM_TD_Begin ("class=\"%s\"",
+                       IBelongToThisGroup ? "LIGHT_BLUE" :
+		                            "LM");
+	    HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"Grp%ld\" value=\"%ld\"%s%s",
+				Grp->GrpCod,Grp->GrpCod,
+				Checked ? " checked=\"checked\"" :
+					  "",
+				ICanSelUnselGroup ? " onclick=\"checkParent(this,'AllGroups')\"" :
+						    " disabled=\"disabled\"");
 	 HTM_TD_End ();
 
 	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -2235,8 +2232,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 			     "id=\"Grp%ld\" value=\"%ld\"%s"
 			     " onclick=\"checkParent(this,'AllGroups')\"",
 			     -GrpTyp->GrpTypCod,-GrpTyp->GrpTypCod,
-			     ICanSelUnselGroup ? (Checked ? " checked=\"checked\"" : "") :
-							    " disabled=\"disabled\"");
+			     ICanSelUnselGroup ? (Checked ? " checked=\"checked\"" :
+				                            "") :
+				                 " disabled=\"disabled\"");
       HTM_TD_End ();
 
       /* Column closed/open */
@@ -2337,6 +2335,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Write icon to show if group is open or closed *****/
+
    if (Highlight)
       HTM_TD_Begin ("class=\"BM LIGHT_BLUE\"");
    else
@@ -2350,16 +2349,18 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    HTM_TD_End ();
 
    /***** Group name *****/
-   HTM_TD_Begin (Highlight ? "class=\"LM LIGHT_BLUE\"" :
-			     "class=\"LM\"");
+   HTM_TD_Begin ("class=\"%s\"",
+                 Highlight ? "LM LIGHT_BLUE" :
+		             "LM");
       HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"DAT\"",Grp->GrpCod);
 	 HTM_Txt (Grp->GrpName);
       HTM_LABEL_End ();
    HTM_TD_End ();
 
    /***** Room *****/
-   HTM_TD_Begin (Highlight ? "class=\"DAT LM LIGHT_BLUE\"" :
-			     "class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"%s\"",
+                 Highlight ? "DAT LM LIGHT_BLUE" :
+		             "DAT LM");
       HTM_Txt (Grp->Room.ShrtName);
    HTM_TD_End ();
 
@@ -2877,16 +2878,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    MYSQL_ROW row;
 
    /***** Get data of a type of group from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get type of group",
-		       "SELECT GrpTypName,"			// row[0]
-			      "Mandatory,"			// row[1]
-			      "Multiple,"			// row[2]
-			      "MustBeOpened,"			// row[3]
-			      "UNIX_TIMESTAMP(OpenTime)"	// row[4]
-			" FROM grp_types"
-		       " WHERE CrsCod=%ld"
-			 " AND GrpTypCod=%ld",
-		       Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod) != 1)
+   if (Grp_DB_GetDataOfGroupTypeByCod (&mysql_res,GrpTyp->GrpTypCod) != 1)
       Err_WrongGrpTypExit ();
 
    /***** Get some data of group type *****/
@@ -2912,12 +2904,7 @@ static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod)
    bool MultipleEnrolment;
 
    /***** Get data of a type of group from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if type of group"
-				  " has multiple enrolment",
-		       "SELECT Multiple"	// row[0]
-		        " FROM grp_types"
-		       " WHERE GrpTypCod=%ld",
-                       GrpTypCod) != 1)
+   if (Grp_DB_GetMultipleEnrolmentOfAGroupType (&mysql_res,GrpTypCod) != 1)
       Err_ShowErrorAndExit ("Error when getting type of enrolment.");
 
    /***** Get multiple enrolment *****/
@@ -2955,24 +2942,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    if (GrpDat->GrpCod > 0)
      {
       /***** Get data of a group from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a group",
-			  "SELECT grp_groups.GrpTypCod,"	// row[0]
-				 "grp_types.CrsCod,"		// row[1]
-				 "grp_types.GrpTypName,"	// row[2]
-				 "grp_types.Multiple,"		// row[3]
-				 "grp_groups.GrpName,"		// row[4]
-				 "grp_groups.RooCod,"		// row[5]
-				 "roo_rooms.ShortName,"		// row[6]
-				 "grp_groups.MaxStudents,"	// row[7]
-				 "grp_groups.Open,"		// row[8]
-				 "grp_groups.FileZones"		// row[9]
-			   " FROM (grp_groups,"
-				  "grp_types)"
-			   " LEFT JOIN roo_rooms"
-			     " ON grp_groups.RooCod=roo_rooms.RooCod"
-			  " WHERE grp_groups.GrpCod=%ld"
-			    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod",
-			  GrpDat->GrpCod) == 1)
+      if (Grp_DB_GetDataOfGroupByCod (&mysql_res,GrpDat->GrpCod) == 1)
 	{
 	 /***** Get data of group *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -3041,14 +3011,7 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
 
    /***** 3. Slow check: Get if I belong to a group from database *****/
    Gbl.Cache.IBelongToGrp.GrpCod = GrpCod;
-   Gbl.Cache.IBelongToGrp.IBelong =
-   (DB_QueryCOUNT ("can not check if you belong to a group",
-		   "SELECT COUNT(*)"
-		    " FROM grp_users"
-		   " WHERE GrpCod=%ld"
-		     " AND UsrCod=%ld",
-		   GrpCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   Gbl.Cache.IBelongToGrp.IBelong = Grp_DB_CheckIfIBelongToGrp (GrpCod);
    return Gbl.Cache.IBelongToGrp.IBelong;
   }
 
