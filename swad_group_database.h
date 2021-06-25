@@ -65,6 +65,7 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 
 bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 bool Grp_DB_CheckIfIBelongToGrp (long GrpCod);
+unsigned Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
 
 unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res);
@@ -75,6 +76,13 @@ unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
 unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 
+unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod,long GrpTypCod);
+unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
+                                          long UsrCod,long GrpTypCod);
+
 long Grp_DB_GetGrpTypeFromGrp (long GrpCod);
 
 bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
@@ -83,6 +91,8 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 
 void Grp_DB_OpenGrpsOfType (long GrpTypCod);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
+
+bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod);
 
 void Grp_DB_RenameGrpTyp (long GrpTypCod,
                           const char NewNameGrpTyp[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1]);

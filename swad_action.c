@@ -59,6 +59,7 @@
 #include "swad_forum.h"
 #include "swad_game.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_hierarchy.h"
 #include "swad_holiday.h"
 #include "swad_ID.h"
@@ -4113,7 +4114,7 @@ void Act_AdjustCurrentAction (void)
 		   the only action possible
 		   is show a form to register in groups *****/
             if (JustAfterLogin)				// Only after login because the following query may be slow
-	       if (Grp_GetIfAvailableGrpTyp (-1L))	// This query may be slow
+	       if (Grp_DB_CheckIfAvailableGrpTyp (-1L))	// This query may be slow
 		 {
 		  Gbl.Action.Act = ActReqSelGrp;
 		  Tab_SetCurrentTab ();

@@ -51,6 +51,7 @@
 #include "swad_project.h"
 #include "swad_setting.h"
 #include "swad_survey.h"
+#include "swad_timetable.h"
 
 /*****************************************************************************/
 /*************************** Private constants *******************************/
@@ -135,7 +136,7 @@ static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
-static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
+static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
                                          struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps);
 static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC);
@@ -536,8 +537,8 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
      {
       /***** I I haven't selected any group, show by default the groups I belong to *****/
       /* Get list of groups of all types in current course I belong to */
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
-				   Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
+                                   &LstGrpsIBelong);
 
       if (LstGrpsIBelong.NumGrps)
 	{
@@ -778,8 +779,8 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Query in the database the group codes which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
-				Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
+				&LstGrpsIBelong);
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
      {
@@ -919,8 +920,8 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Query in the database the group codes which user belongs to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
-				Gbl.Usrs.Other.UsrDat.UsrCod,&LstGrpsUsrBelongs);
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
+				&LstGrpsUsrBelongs);
 
    /***** Go across the list of groups user belongs to, removing those groups that are not present in the list of groups user wants to belong to *****/
    for (NumGrpUsrBelongs = 0;
@@ -1079,8 +1080,8 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
       LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
       LstGrpsHeBelongs.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
-	                           UsrDat->UsrCod,&LstGrpsHeBelongs);
+      Grp_GetLstCodGrpsUsrBelongs (UsrDat->UsrCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
+	                           &LstGrpsHeBelongs);
 
       /***** For each group selected by me... *****/
       for (NumGrpSel = 0;
@@ -1144,8 +1145,8 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
    unsigned NumGrpsHeIsRemoved = 0;
 
    /***** Query in the database the group codes of any group the user belongs to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
-	                        UsrDat->UsrCod,&LstGrpsHeBelongs);
+   Grp_GetLstCodGrpsUsrBelongs (UsrDat->UsrCod,-1L,
+	                        &LstGrpsHeBelongs);
 
    /***** For each group selected by me... *****/
    for (NumGrpSel = 0;
@@ -1646,8 +1647,8 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
    Grp_WriteGrpHead (GrpTyp);
 
    /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
-	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+	                        &LstGrpsIBelong);
 
    /***** List the groups *****/
    for (NumGrpThisType = 0;
@@ -1823,9 +1824,9 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
       // If there are groups of this type...
       if (GrpTyp->NumGrps)
 	 // If I don't belong to any group
-	 if (!Grp_DB_CheckIfIBelongToGrpsOfType (GrpTyp->GrpTypCod))		// Fast check (not necesary, but avoid slow check)
+	 if (!Grp_DB_CheckIfIBelongToGrpsOfType (GrpTyp->GrpTypCod))	// Fast check (not necesary, but avoid slow check)
 	    // If there is any group of this type available
-	    if (Grp_GetIfAvailableGrpTyp (GrpTyp->GrpTypCod))	// Slow check
+	    if (Grp_DB_CheckIfAvailableGrpTyp (GrpTyp->GrpTypCod))	// Slow check
 	      {
 	       if (GrpTyp->MandatoryEnrolment)
 		  Ale_ShowAlert (Ale_WARNING,GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
@@ -1860,8 +1861,8 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    Grp_WriteGrpHead (GrpTyp);
 
    /***** Query in the database the group of this type that I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
-	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+	                        &LstGrpsIBelong);
    *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
 
    /***** Check if I can change my selection *****/
@@ -2065,8 +2066,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
    /***** Query the groups of this type which the user belongs to *****/
    if (UsrCod > 0)
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
-				   Gbl.Usrs.Other.UsrDat.UsrCod,&LstGrpsUsrBelongs);
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Other.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+				   &LstGrpsUsrBelongs);
 
    /***** List the groups *****/
    for (NumGrpThisType = 0;
@@ -2131,8 +2132,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    Grp_WriteGrpHead (GrpTyp);
 
    /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
-	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,GrpTyp->GrpTypCod,
+	                        &LstGrpsIBelong);
 
    /***** List the groups of this type *****/
    for (NumGrpThisType = 0;
@@ -3016,7 +3017,7 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
   }
 
 /*****************************************************************************/
-/*************** Check if a user belongs to any of my courses ****************/
+/***** Check if a user belongs to any of my groups in the current course *****/
 /*****************************************************************************/
 
 void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
@@ -3076,175 +3077,26 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
    /***** 9. Slow check: Get if user shares any group in this course with me from database *****/
    /* Check if user shares any group with me */
    Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares =
-   (DB_QueryCOUNT ("can not check if a user shares any group"
-		   " in the current course with you",
-		   "SELECT COUNT(*)"
-		    " FROM grp_users"
-		   " WHERE UsrCod=%ld"
-		     " AND GrpCod IN"
-			 " (SELECT grp_users.GrpCod"
-			    " FROM grp_users,"
-				  "grp_groups,"
-				  "grp_types"
-			   " WHERE grp_users.UsrCod=%ld"
-			     " AND grp_users.GrpCod=grp_groups.GrpCod"
-			     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			     " AND grp_types.CrsCod=%ld)",
-		   UsrDat->UsrCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod) != 0);
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat->UsrCod);
    return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
-  }
-
-/*****************************************************************************/
-/**** Get if any group in group-type/this-course is open and has vacants *****/
-/*****************************************************************************/
-// If GrpTypCod >  0 ==> restrict to the given group type, mandatory or not
-// If GrpTypCod <= 0 ==> all mandatory group types in the current course
-
-bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
-  {
-   unsigned NumGrpTypes;
-   char *SubQueryGrpTypes;
-
-   if (GrpTypCod > 0)	// restrict to the given group type, mandatory or not
-     {
-      if (asprintf (&SubQueryGrpTypes,"grp_types.GrpTypCod=%ld",
-	            GrpTypCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else			// all mandatory group types in the current course
-     {
-      if (asprintf (&SubQueryGrpTypes,"grp_types.CrsCod=%ld"
-	                              " AND grp_types.Mandatory='Y'",
-	            Gbl.Hierarchy.Crs.CrsCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-
-   /***** Get the number of types of group in this course
-          with one or more open groups with vacants, from database *****/
-   NumGrpTypes = (unsigned)
-   DB_QueryCOUNT ("can not check if there has available mandatory group types",
-		  "SELECT COUNT(GrpTypCod)"
-		   " FROM ("
-			   // Available mandatory groups with students
-			   "SELECT GrpTypCod"
-			    " FROM (SELECT grp_types.GrpTypCod AS GrpTypCod,"
-					  "COUNT(*) AS NumStudents,"
-					  "grp_groups.MaxStudents as MaxStudents"
-				    " FROM grp_types,"
-					  "grp_groups,"
-					  "grp_users,"
-					  "crs_users"
-				   " WHERE %s"					// Which group types?
-				     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-				     " AND grp_groups.Open='Y'"			// Open
-				     " AND grp_groups.MaxStudents>0"		// Admits students
-				     " AND grp_types.CrsCod=crs_users.CrsCod"
-				     " AND grp_groups.GrpCod=grp_users.GrpCod"
-				     " AND grp_users.UsrCod=crs_users.UsrCod"
-				     " AND crs_users.Role=%u"			// Student
-				   " GROUP BY grp_groups.GrpCod"
-				   " HAVING NumStudents<MaxStudents"		// Not full
-				  ") AS available_grp_types_with_stds"
-
-			   " UNION "
-
-			   // Available mandatory groups...
-			   "SELECT grp_types.GrpTypCod AS GrpTypCod"
-			    " FROM grp_types,"
-				  "grp_groups"
-			   " WHERE %s"						// Which group types?
-			     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-			     " AND grp_groups.Open='Y'"				// Open
-			     " AND grp_groups.MaxStudents>0"			// Admits students
-			   // ...without students
-			     " AND grp_groups.GrpCod NOT IN"
-				 " (SELECT grp_users.GrpCod"
-				    " FROM crs_users,"
-					  "grp_users"
-				   " WHERE crs_users.CrsCod=%ld"
-				     " AND crs_users.Role=%u"			// Student
-				     " AND crs_users.UsrCod=grp_users.UsrCod)"
-
-			   ") AS available_grp_types"
-
-		  // ...to which I don't belong
-		  " WHERE GrpTypCod NOT IN"
-		        " (SELECT grp_types.GrpTypCod"
-			   " FROM grp_types,"
-				 "grp_groups,"
-				 "grp_users"
-			  " WHERE %s"					// Which group types?
-			    " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-			    " AND grp_groups.Open='Y'"			// Open
-			    " AND grp_groups.MaxStudents>0"		// Admits students
-			    " AND grp_groups.GrpCod=grp_users.GrpCod"
-			    " AND grp_users.UsrCod=%ld)",		// I belong
-
-		  SubQueryGrpTypes,(unsigned) Rol_STD,
-		  SubQueryGrpTypes,
-		  Gbl.Hierarchy.Crs.CrsCod,(unsigned) Rol_STD,
-		  SubQueryGrpTypes,Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Free allocated memory for subquery *****/
-   free (SubQueryGrpTypes);
-
-   return (NumGrpTypes != 0);
   }
 
 /*****************************************************************************/
 /****** Query list of group codes of a type to which a user belongs to *******/
 /*****************************************************************************/
-// If CrsCod    < 0 ==> get the groups from all the user's courses
 // If GrpTypCod < 0 ==> get the groups of any type
 
-static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
-                                         long UsrCod,struct ListCodGrps *LstGrps)
+static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
+                                         struct ListCodGrps *LstGrps)
   {
    MYSQL_RES *mysql_res;
    unsigned NumGrp;
 
    /***** Get groups which a user belong to from database *****/
-   if (CrsCod < 0)		// Query the groups from all the user's courses
-      LstGrps->NumGrps = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get the groups which a user belongs to",
-		      "SELECT GrpCod"		// row[0]
-		       " FROM grp_users"
-		      " WHERE UsrCod=%ld",	// Groups will be unordered
-		      UsrCod);
-   else if (GrpTypCod < 0)	// Query the groups of any type in the course
-      LstGrps->NumGrps = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get the groups which a user belongs to",
-		      "SELECT grp_groups.GrpCod"	// row[0]
-		       " FROM grp_types,"
-			     "grp_groups,"
-			     "grp_users"
-		      " WHERE grp_types.CrsCod=%ld"
-		        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		        " AND grp_groups.GrpCod=grp_users.GrpCod"
-		        " AND grp_users.UsrCod=%ld"
-		      " ORDER BY grp_types.GrpTypName,"
-			        "grp_groups.GrpName",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      UsrCod);
-   else				// Query only the groups of specified type in the course
-      LstGrps->NumGrps = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get the groups which a user belongs to",
-		      "SELECT grp_groups.GrpCod"	// row[0]
-		       " FROM grp_types,"
-			     "grp_groups,"
-			     "grp_users"
-		      " WHERE grp_types.CrsCod=%ld"
-		        " AND grp_types.GrpTypCod=%ld"
-		        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		        " AND grp_groups.GrpCod=grp_users.GrpCod"
-		        " AND grp_users.UsrCod=%ld"
-		      " ORDER BY grp_groups.GrpName",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      GrpTypCod,
-		      UsrCod);
+   if (GrpTypCod < 0)	// Query the groups of any type in the current course
+      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod);
+   else				// Query only the groups of specified type in the current course
+      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod,GrpTypCod);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3274,22 +3126,8 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
    MYSQL_RES *mysql_res;
    unsigned NumGrp;
 
-   /***** Get groups which I belong to from database *****/
-   LstGrps->NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get the groups which you belong to",
-		   "SELECT grp_groups.GrpCod"	// row[0]
-		    " FROM grp_types,"
-			  "grp_groups,"
-			  "grp_users"
-		   " WHERE grp_types.CrsCod=%ld"
-		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		     " AND grp_groups.FileZones='Y'"
-		     " AND grp_groups.GrpCod=grp_users.GrpCod"
-		     " AND grp_users.UsrCod=%ld"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   /***** Get groups with file zones which I belong to from database *****/
+   LstGrps->NumGrps = Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (&mysql_res);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3323,6 +3161,7 @@ static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps)
 	NumGrp++)
       if (GrpCod == LstGrps->GrpCods[NumGrp])
          return true;
+
    return false;
   }
 
@@ -3330,7 +3169,7 @@ static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps)
 /********** Query names of groups of a type which user belongs to ************/
 /*****************************************************************************/
 
-void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
+void Grp_GetNamesGrpsUsrBelongsTo (long UsrCod,long GrpTypCod,char *GroupNames)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3340,17 +3179,7 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
 		      Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
 
    /***** Get the names of groups which a user belongs to, from database *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get names of groups a user belongs to",
-		   "SELECT grp_groups.GrpName"	// row[0]
-		    " FROM grp_groups,"
-			  "grp_users"
-		   " WHERE grp_groups.GrpTypCod=%ld"
-		     " AND grp_groups.GrpCod=grp_users.GrpCod"
-		     " AND grp_users.UsrCod=%ld"
-		   " ORDER BY grp_groups.GrpName",
-		   GrpTypCod,
-		   UsrCod);
+   NumGrps = Grp_DB_GetNamesGrpsUsrBelongsTo (&mysql_res,UsrCod,GrpTypCod);
 
    /***** Get the groups *****/
    GroupNames[0] = '\0';
@@ -3684,15 +3513,8 @@ static void Grp_RemoveGroupTypeCompletely (void)
    /***** Remove the associations of surveys to groups of this type *****/
    Svy_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
-   /***** Change all groups of this type in course timetable *****/
-   DB_QueryUPDATE ("can not update all groups of a type in course timetable",
-		   "UPDATE tmt_courses"
-		     " SET GrpCod=-1"
-		   " WHERE GrpCod IN"
-			 " (SELECT GrpCod"
-			   " FROM grp_groups"
-			  " WHERE GrpTypCod=%ld)",
-                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   /***** Orphan all groups of this type in course timetable *****/
+   Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the students in groups of this type *****/
    DB_QueryDELETE ("can not remove users from all groups of a type",

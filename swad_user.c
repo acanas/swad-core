@@ -3849,84 +3849,85 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    /***** Start row *****/
    HTM_TR_Begin (NULL);
 
-   if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      /***** Show student's photo *****/
-      HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
+      if (Gbl.Usrs.Listing.WithPhotos)
+	{
+	 /***** Show student's photo *****/
+	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
+	 HTM_TD_End ();
+	}
+
+      /****** Write user's ID ******/
+      HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+		    UsrDat->Accepted ? "DAT_SMALL_N" :
+				       "DAT_SMALL",
+		    Gbl.RowEvenOdd);
+	 ID_WriteUsrIDs (UsrDat,NULL);
+	 HTM_NBSP ();
       HTM_TD_End ();
-     }
 
-   /****** Write user's ID ******/
-   HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-		 UsrDat->Accepted ? "DAT_SMALL_N" :
-				    "DAT_SMALL",
-		 Gbl.RowEvenOdd);
-      ID_WriteUsrIDs (UsrDat,NULL);
-      HTM_NBSP ();
-   HTM_TD_End ();
+      /***** Write rest of main student's data *****/
+      Ins.InsCod = UsrDat->InsCod;
+      Ins_GetDataOfInstitutionByCod (&Ins);
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			Ins.FullName,
+			NULL,true,UsrDat->Accepted);
 
-   /***** Write rest of main student's data *****/
-   Ins.InsCod = UsrDat->InsCod;
-   Ins_GetDataOfInstitutionByCod (&Ins);
-   Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-   Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     Ins.FullName,
-	             NULL,true,UsrDat->Accepted);
+      /***** Write the rest of the data of the student *****/
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
+							  "********") :
+					      "&nbsp;",
+			NULL,true,UsrDat->Accepted);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
+							  "********") :
+					      "&nbsp;",
+			NULL,true,UsrDat->Accepted);
+      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+			UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
+							     "********") :
+						 "&nbsp;",
+			NULL,true,UsrDat->Accepted);
 
-   /***** Write the rest of the data of the student *****/
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
-                	                               "********") :
-                	                   "&nbsp;",
-	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
-                	                               "********") :
-                	                   "&nbsp;",
-	             NULL,true,UsrDat->Accepted);
-   Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
-                     UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
-                	                                  "********") :
-                	                      "&nbsp;",
-	             NULL,true,UsrDat->Accepted);
+      if (Gbl.Scope.Current == HieLvl_CRS)
+	{
+	 /***** Write the groups a the que pertenece the student *****/
+	 for (NumGrpTyp = 0;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	      NumGrpTyp++)
+	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
+	      {
+	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,
+					     Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
+					     GroupNames);
+	       Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],GroupNames,NULL,true,UsrDat->Accepted);
+	      }
 
-   if (Gbl.Scope.Current == HieLvl_CRS)
-     {
-      /***** Write the groups a the que pertenece the student *****/
-      for (NumGrpTyp = 0;
-           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-           NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
-           {
-            Grp_GetNamesGrpsStdBelongsTo (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
-                                          UsrDat->UsrCod,GroupNames);
-            Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],GroupNames,NULL,true,UsrDat->Accepted);
-           }
+	 /***** Fields of the record dependientes of the course *****/
+	 for (NumField = 0;
+	      NumField < Gbl.Crs.Records.LstFields.Num;
+	      NumField++)
+	   {
+	    /* Get the text of the field */
+	    if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
+					      Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
+	      {
+	       row = mysql_fetch_row (mysql_res);
+	       Str_Copy (Text,row[0],sizeof (Text) - 1);
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				 Text,Cns_MAX_BYTES_TEXT,false);        // Se convierte of HTML a HTML respetuoso
+	      }
+	    else
+	       Text[0] = '\0';
+	    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],Text,NULL,false,UsrDat->Accepted);
 
-      /***** Fields of the record dependientes of the course *****/
-      for (NumField = 0;
-           NumField < Gbl.Crs.Records.LstFields.Num;
-           NumField++)
-        {
-         /* Get the text of the field */
-         if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
-                                           Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
-           {
-            row = mysql_fetch_row (mysql_res);
-            Str_Copy (Text,row[0],sizeof (Text) - 1);
-            Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                              Text,Cns_MAX_BYTES_TEXT,false);        // Se convierte of HTML a HTML respetuoso
-           }
-         else
-            Text[0] = '\0';
-         Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],Text,NULL,false,UsrDat->Accepted);
-
-         /* Free structure that stores the query result */
-         DB_FreeMySQLResult (&mysql_res);
-        }
-     }
+	    /* Free structure that stores the query result */
+	    DB_FreeMySQLResult (&mysql_res);
+	   }
+	}
 
    /***** End row *****/
    HTM_TR_End ();

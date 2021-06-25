@@ -25,9 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
+#define _GNU_SOURCE 		// For asprintf
 // #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
+#include <stdio.h>		// For asprintf
 // #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 // #include <string.h>		// For string functions
 
@@ -356,6 +356,32 @@ bool Grp_DB_CheckIfIBelongToGrp (long GrpCod)
   }
 
 /*****************************************************************************/
+/***** Check if a user belongs to any of my groups in the current course *****/
+/*****************************************************************************/
+
+unsigned Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
+  {
+   return (unsigned)
+   (DB_QueryCOUNT ("can not check if a user shares any group"
+		   " in the current course with you",
+		   "SELECT COUNT(*)"
+		    " FROM grp_users"
+		   " WHERE UsrCod=%ld"
+		     " AND GrpCod IN"
+			 " (SELECT grp_users.GrpCod"
+			    " FROM grp_users,"
+				  "grp_groups,"
+				  "grp_types"
+			   " WHERE grp_users.UsrCod=%ld"
+			     " AND grp_users.GrpCod=grp_groups.GrpCod"
+			     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			     " AND grp_types.CrsCod=%ld)",
+		   UsrCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod) != 0);
+  }
+
+/*****************************************************************************/
 /************** Get group types with groups in current course ****************/
 /*****************************************************************************/
 
@@ -492,6 +518,96 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
   }
 
 /*****************************************************************************/
+/*********** Get the list of group codes of any type            **************/
+/*********** to which a user belongs to (in the current course) **************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the groups which a user belongs to",
+		   "SELECT grp_groups.GrpCod"	// row[0]
+		    " FROM grp_types,"
+			  "grp_groups,"
+			  "grp_users"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod"
+		     " AND grp_users.UsrCod=%ld"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************ Get the list of group codes of a type              *************/
+/************ to which a user belongs to (in the current course) *************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,long UsrCod,long GrpTypCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the groups which a user belongs to",
+		   "SELECT grp_groups.GrpCod"	// row[0]
+		    " FROM grp_types,"
+			  "grp_groups,"
+			  "grp_users"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod"
+		     " AND grp_users.UsrCod=%ld"
+		   " ORDER BY grp_groups.GrpName",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   GrpTypCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Get groups with file zones which I belong ******************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the groups which you belong to",
+		   "SELECT grp_groups.GrpCod"	// row[0]
+		    " FROM grp_types,"
+			  "grp_groups,"
+			  "grp_users"
+		   " WHERE grp_types.CrsCod=%ld"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		     " AND grp_groups.FileZones='Y'"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod"
+		     " AND grp_users.UsrCod=%ld"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********** Query names of groups of a type which user belongs to ************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
+                                          long UsrCod,long GrpTypCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get names of groups a user belongs to",
+		   "SELECT grp_groups.GrpName"	// row[0]
+		    " FROM grp_groups,"
+			  "grp_users"
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=grp_users.GrpCod"
+		     " AND grp_users.UsrCod=%ld"
+		   " ORDER BY grp_groups.GrpName",
+		   GrpTypCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /********************** Get the type of group of a group *********************/
 /*****************************************************************************/
 
@@ -575,6 +691,103 @@ void Grp_DB_ClearMustBeOpened (long GrpTypCod)
 		     " SET MustBeOpened='N'"
 		   " WHERE GrpTypCod=%ld",
 		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/**** Get if any group in group-type/this-course is open and has vacants *****/
+/*****************************************************************************/
+// If GrpTypCod >  0 ==> restrict to the given group type, mandatory or not
+// If GrpTypCod <= 0 ==> all mandatory group types in the current course
+
+bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
+  {
+   unsigned NumGrpTypes;
+   char *SubQueryGrpTypes;
+
+   if (GrpTypCod > 0)	// restrict to the given group type, mandatory or not
+     {
+      if (asprintf (&SubQueryGrpTypes,"grp_types.GrpTypCod=%ld",
+	            GrpTypCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else			// all mandatory group types in the current course
+     {
+      if (asprintf (&SubQueryGrpTypes,"grp_types.CrsCod=%ld"
+	                              " AND grp_types.Mandatory='Y'",
+	            Gbl.Hierarchy.Crs.CrsCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+
+   /***** Get the number of types of group in this course
+          with one or more open groups with vacants, from database *****/
+   NumGrpTypes = (unsigned)
+   DB_QueryCOUNT ("can not check if there has available mandatory group types",
+		  "SELECT COUNT(GrpTypCod)"
+		   " FROM ("
+			   // Available mandatory groups with students
+			   "SELECT GrpTypCod"
+			    " FROM (SELECT grp_types.GrpTypCod AS GrpTypCod,"
+					  "COUNT(*) AS NumStudents,"
+					  "grp_groups.MaxStudents as MaxStudents"
+				    " FROM grp_types,"
+					  "grp_groups,"
+					  "grp_users,"
+					  "crs_users"
+				   " WHERE %s"					// Which group types?
+				     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+				     " AND grp_groups.Open='Y'"			// Open
+				     " AND grp_groups.MaxStudents>0"		// Admits students
+				     " AND grp_types.CrsCod=crs_users.CrsCod"
+				     " AND grp_groups.GrpCod=grp_users.GrpCod"
+				     " AND grp_users.UsrCod=crs_users.UsrCod"
+				     " AND crs_users.Role=%u"			// Student
+				   " GROUP BY grp_groups.GrpCod"
+				   " HAVING NumStudents<MaxStudents"		// Not full
+				  ") AS available_grp_types_with_stds"
+
+			   " UNION "
+
+			   // Available mandatory groups...
+			   "SELECT grp_types.GrpTypCod AS GrpTypCod"
+			    " FROM grp_types,"
+				  "grp_groups"
+			   " WHERE %s"						// Which group types?
+			     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			     " AND grp_groups.Open='Y'"				// Open
+			     " AND grp_groups.MaxStudents>0"			// Admits students
+			   // ...without students
+			     " AND grp_groups.GrpCod NOT IN"
+				 " (SELECT grp_users.GrpCod"
+				    " FROM crs_users,"
+					  "grp_users"
+				   " WHERE crs_users.CrsCod=%ld"
+				     " AND crs_users.Role=%u"			// Student
+				     " AND crs_users.UsrCod=grp_users.UsrCod)"
+
+			   ") AS available_grp_types"
+
+		  // ...to which I don't belong
+		  " WHERE GrpTypCod NOT IN"
+		        " (SELECT grp_types.GrpTypCod"
+			   " FROM grp_types,"
+				 "grp_groups,"
+				 "grp_users"
+			  " WHERE %s"						// Which group types?
+			    " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+			    " AND grp_groups.Open='Y'"				// Open
+			    " AND grp_groups.MaxStudents>0"			// Admits students
+			    " AND grp_groups.GrpCod=grp_users.GrpCod"
+			    " AND grp_users.UsrCod=%ld)",			// I belong
+
+		  SubQueryGrpTypes,(unsigned) Rol_STD,
+		  SubQueryGrpTypes,
+		  Gbl.Hierarchy.Crs.CrsCod,(unsigned) Rol_STD,
+		  SubQueryGrpTypes,Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Free allocated memory for subquery *****/
+   free (SubQueryGrpTypes);
+
+   return (NumGrpTypes != 0);
   }
 
 /*****************************************************************************/
