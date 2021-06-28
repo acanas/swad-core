@@ -116,5 +116,6 @@ void Tmt_EditMyTutTimeTable (void);
 void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod);
 
 void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod);
+void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod);
 
 #endif

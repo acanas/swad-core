@@ -3515,26 +3515,14 @@ static void Grp_RemoveGroupTypeCompletely (void)
    /***** Orphan all groups of this type in course timetable *****/
    Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
-   /***** Remove all the students in groups of this type *****/
-   DB_QueryDELETE ("can not remove users from all groups of a type",
-		   "DELETE FROM grp_users"
-		   " WHERE GrpCod IN"
-		         " (SELECT GrpCod"
-		            " FROM grp_groups"
-		           " WHERE GrpTypCod=%ld)",
-                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   /***** Remove all users from groups of this type *****/
+   Grp_DB_RemoveUsrsFromGrpsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the groups of this type *****/
-   DB_QueryDELETE ("can not remove groups of a type",
-		   "DELETE FROM grp_groups"
-		   " WHERE GrpTypCod=%ld",
-                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   Grp_DB_RemoveGrpsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the group type *****/
-   DB_QueryDELETE ("can not remove a type of group",
-		   "DELETE FROM grp_types"
-		   " WHERE GrpTypCod=%ld",
-                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   Grp_DB_RemoveGrpType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),Txt_Type_of_group_X_removed,
@@ -3574,24 +3562,14 @@ static void Grp_RemoveGroupCompletely (void)
    /***** Remove this group from all surveys *****/
    Svy_RemoveGroup (GrpDat.GrpCod);
 
-   /***** Change this group in course timetable *****/
-   DB_QueryUPDATE ("can not update a group in course timetable",
-		   "UPDATE tmt_courses"
-		     " SET GrpCod=-1"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   /***** Orphan this group in course timetable *****/
+   Tmt_DB_OrphanGrpInCrsTimeTable (GrpDat.GrpCod);
 
-   /***** Remove all the students in this group *****/
-   DB_QueryDELETE ("can not remove users from a group",
-		   "DELETE FROM grp_users"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   /***** Remove all users in this group *****/
+   Grp_DB_RemoveUsrsFromGrp (GrpDat.GrpCod);
 
    /***** Remove the group *****/
-   DB_QueryDELETE ("can not remove a group",
-		   "DELETE FROM grp_groups"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   Grp_DB_RemoveGrp (GrpDat.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),Txt_Group_X_removed,
@@ -3621,11 +3599,7 @@ void Grp_OpenGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   DB_QueryUPDATE ("can not open a group",
-		   "UPDATE grp_groups"
-		     " SET Open='Y'"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   Grp_DB_OpenGrp (GrpDat.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_is_now_open,
@@ -3656,11 +3630,7 @@ void Grp_CloseGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   DB_QueryUPDATE ("can not close a group",
-		   "UPDATE grp_groups"
-		     " SET Open='N'"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   Grp_DB_CloseGrp (Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),Txt_The_group_X_is_now_closed,
@@ -3691,11 +3661,7 @@ void Grp_EnableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   DB_QueryUPDATE ("can not enable file zones of a group",
-		   "UPDATE grp_groups"
-		     " SET FileZones='Y'"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   Grp_DB_EnableFileZonesGrp (Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -3727,11 +3693,7 @@ void Grp_DisableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   DB_QueryUPDATE ("can not disable file zones of a group",
-		   "UPDATE grp_groups"
-		     " SET FileZones='N'"
-		   " WHERE GrpCod=%ld",
-                   Gbl.Crs.Grps.GrpCod);
+   Grp_DB_DisableFileZonesGrp (GrpDat.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -3780,11 +3742,7 @@ void Grp_ChangeGroupType (void)
    else	// Group is not in database
      {
       /* Update the table of groups changing old type by new type */
-      DB_QueryUPDATE ("can not update the type of a group",
-		      "UPDATE grp_groups"
-		        " SET GrpTypCod=%ld"
-		      " WHERE GrpCod=%ld",
-                      NewGrpTypCod,Gbl.Crs.Grps.GrpCod);
+      Grp_DB_ChangeGrpTypOfGrp (GrpDat.GrpCod,NewGrpTypCod);
 
       /* Create message to show the change made */
       AlertType = Ale_SUCCESS;
@@ -4495,7 +4453,7 @@ Grp_WhichGroups_t Grp_GetParamWhichGroups (void)
 void Grp_DB_RemoveCrsGrps (long CrsCod)
   {
    /***** Remove all users in groups in the course *****/
-   Grp_DB_RemoveUsrsInGrpsOfCrs (CrsCod);
+   Grp_DB_RemoveUsrsFromGrpsOfCrs (CrsCod);
 
    /***** Remove all groups in the course *****/
    Grp_DB_RemoveGrpsInCrs (CrsCod);

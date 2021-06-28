@@ -28,7 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 // #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
+#include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 // #include <string.h>		// For string functions
 
 // #include "swad_action.h"
@@ -667,20 +667,6 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
   }
 
 /*****************************************************************************/
-/******************** Open all the closed groups of a tyoe *******************/
-/*****************************************************************************/
-
-void Grp_DB_OpenGrpsOfType (long GrpTypCod)
-  {
-   DB_QueryUPDATE ("can not open groups",
-		   "UPDATE grp_groups"
-		     " SET Open='Y'"
-		   " WHERE GrpTypCod=%ld"
-		     " AND Open='N'",
-		   GrpTypCod);
-  }
-
-/*****************************************************************************/
 /******************** Set type of group to not be opened *********************/
 /*****************************************************************************/
 
@@ -691,6 +677,90 @@ void Grp_DB_ClearMustBeOpened (long GrpTypCod)
 		     " SET MustBeOpened='N'"
 		   " WHERE GrpTypCod=%ld",
 		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/******************** Open all the closed groups of a tyoe *******************/
+/*****************************************************************************/
+
+void Grp_DB_OpenGrpsOfType (long GrpTypCod)
+  {
+   DB_QueryUPDATE ("can not open groups of a type",
+		   "UPDATE grp_groups"
+		     " SET Open='Y'"
+		   " WHERE GrpTypCod=%ld"
+		     " AND Open='N'",
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/**************************** Open a closed group ****************************/
+/*****************************************************************************/
+
+void Grp_DB_OpenGrp (long GrpCod)
+  {
+   DB_QueryUPDATE ("can not open a group",
+		   "UPDATE grp_groups"
+		     " SET Open='Y'"
+		   " WHERE GrpCod=%ld"
+		     " AND Open='N'",
+                   GrpCod);
+  }
+
+/*****************************************************************************/
+/**************************** Close an open group ****************************/
+/*****************************************************************************/
+
+void Grp_DB_CloseGrp (long GrpCod)
+  {
+   DB_QueryUPDATE ("can not close a group",
+		   "UPDATE grp_groups"
+		     " SET Open='N'"
+		   " WHERE GrpCod=%ld"
+		     " AND Open='Y'",
+                   GrpCod);
+  }
+
+/*****************************************************************************/
+/************************ Enable file zones of a group ***********************/
+/*****************************************************************************/
+
+void Grp_DB_EnableFileZonesGrp (long GrpCod)
+  {
+   DB_QueryUPDATE ("can not enable file zones of a group",
+		   "UPDATE grp_groups"
+		     " SET FileZones='Y'"
+		   " WHERE GrpCod=%ld"
+		     " AND FileZones='N'",
+                   GrpCod);
+  }
+
+/*****************************************************************************/
+/************************ Disable file zones of a group **********************/
+/*****************************************************************************/
+
+void Grp_DB_DisableFileZonesGrp (long GrpCod)
+  {
+   DB_QueryUPDATE ("can not disable file zones of a group",
+		   "UPDATE grp_groups"
+		     " SET FileZones='N'"
+		   " WHERE GrpCod=%ld"
+		     " AND FileZones='Y'",
+                   GrpCod);
+  }
+
+/*****************************************************************************/
+/************************ Change group type of a group ***********************/
+/*****************************************************************************/
+
+void Grp_DB_ChangeGrpTypOfGrp (long GrpCod,long NewGrpTypCod)
+  {
+   DB_QueryUPDATE ("can not update the type of a group",
+		   "UPDATE grp_groups"
+		     " SET GrpTypCod=%ld"
+		   " WHERE GrpCod=%ld",
+		   NewGrpTypCod,
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -881,10 +951,10 @@ void Grp_DB_RemUsrFromAllGrps (long UsrCod)
   }
 
 /*****************************************************************************/
-/******************** Remove all users in groups in a course *****************/
+/******************* Remove all users from groups in a course ****************/
 /*****************************************************************************/
 
-void Grp_DB_RemoveUsrsInGrpsOfCrs (long CrsCod)
+void Grp_DB_RemoveUsrsFromGrpsOfCrs (long CrsCod)
   {
    DB_QueryDELETE ("can not remove users from groups of a course",
 		   "DELETE FROM grp_users"
@@ -895,6 +965,57 @@ void Grp_DB_RemoveUsrsInGrpsOfCrs (long CrsCod)
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		     " AND grp_groups.GrpCod=grp_users.GrpCod",
 		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************** Remove all users from groups of a given type *****************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveUsrsFromGrpsOfType (long GrpTypCod)
+  {
+   DB_QueryDELETE ("can not remove users from all groups of a type",
+		   "DELETE FROM grp_users"
+		   " WHERE GrpCod IN"
+		         " (SELECT GrpCod"
+		            " FROM grp_groups"
+		           " WHERE GrpTypCod=%ld)",
+                   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove all users from a given group *********************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveUsrsFromGrp (long GrpCod)
+  {
+   DB_QueryDELETE ("can not remove users from a group",
+		   "DELETE FROM grp_users"
+		   " WHERE GrpCod=%ld",
+                   GrpCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove all group types in a course *********************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveGrpTypesInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove types of group of a course",
+		   "DELETE FROM grp_types"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/*************************** Remove a group type *****************************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveGrpType (long GrpTypCod)
+  {
+   DB_QueryDELETE ("can not remove a type of group",
+		   "DELETE FROM grp_types"
+		   " WHERE GrpTypCod=%ld",
+                   GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -913,13 +1034,25 @@ void Grp_DB_RemoveGrpsInCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/******************** Remove all group types in a course *********************/
+/******************** Remove all groups of a given type **********************/
 /*****************************************************************************/
 
-void Grp_DB_RemoveGrpTypesInCrs (long CrsCod)
+void Grp_DB_RemoveGrpsOfType (long GrpTypCod)
   {
-   DB_QueryDELETE ("can not remove types of group of a course",
-		   "DELETE FROM grp_types"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   DB_QueryDELETE ("can not remove groups of a type",
+		   "DELETE FROM grp_groups"
+		   " WHERE GrpTypCod=%ld",
+                   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/****************************** Remove a group *******************************/
+/*****************************************************************************/
+
+void Grp_DB_RemoveGrp (long GrpCod)
+  {
+   DB_QueryDELETE ("can not remove a group",
+		   "DELETE FROM grp_groups"
+		   " WHERE GrpCod=%ld",
+                   GrpCod);
   }

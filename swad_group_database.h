@@ -89,8 +89,13 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod);
 bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 
-void Grp_DB_OpenGrpsOfType (long GrpTypCod);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
+void Grp_DB_OpenGrpsOfType (long GrpTypCod);
+void Grp_DB_OpenGrp (long GrpCod);
+void Grp_DB_CloseGrp (long GrpCod);
+void Grp_DB_EnableFileZonesGrp (long GrpCod);
+void Grp_DB_DisableFileZonesGrp (long GrpCod);
+void Grp_DB_ChangeGrpTypOfGrp (long GrpCod,long NewGrpTypCod);
 
 bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod);
 
@@ -105,8 +110,15 @@ void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod);
 void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod);
 void Grp_DB_RemUsrFromAllGrps (long UsrCod);
 
-void Grp_DB_RemoveUsrsInGrpsOfCrs (long CrsCod);
-void Grp_DB_RemoveGrpsInCrs (long CrsCod);
+void Grp_DB_RemoveUsrsFromGrpsOfCrs (long CrsCod);
+void Grp_DB_RemoveUsrsFromGrpsOfType (long GrpTypCod);
+void Grp_DB_RemoveUsrsFromGrp (long GrpCod);
+
 void Grp_DB_RemoveGrpTypesInCrs (long CrsCod);
+void Grp_DB_RemoveGrpType (long GrpTypCod);
+
+void Grp_DB_RemoveGrpsInCrs (long CrsCod);
+void Grp_DB_RemoveGrpsOfType (long GrpTypCod);
+void Grp_DB_RemoveGrp (long GrpCod);
 
 #endif

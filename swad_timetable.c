@@ -1825,7 +1825,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
   }
 
 /*****************************************************************************/
-/************ Orphan all groups of this type in course timetable *************/
+/********** Orphan all groups of a given type in course timetable ************/
 /*****************************************************************************/
 
 void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod)
@@ -1838,4 +1838,17 @@ void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod)
 			   " FROM grp_groups"
 			  " WHERE GrpTypCod=%ld)",
                    GrpTypCod);
+  }
+
+/*****************************************************************************/
+/********************* Orphan a group in course timetable ********************/
+/*****************************************************************************/
+
+void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod)
+  {
+   DB_QueryUPDATE ("can not update a group in course timetable",
+		   "UPDATE tmt_courses"
+		     " SET GrpCod=-1"
+		   " WHERE GrpCod=%ld",
+                   GrpCod);
   }
