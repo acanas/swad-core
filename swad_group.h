@@ -107,7 +107,7 @@ struct GroupType
 struct GroupTypes
   {
    struct GroupType *LstGrpTypes;		// List of types of group
-   unsigned Num;				// Number of types of group
+   unsigned NumGrpTypes;			// Number of types of group
    unsigned NumGrpsTotal;			// Number of groups of any type
    int NestedCalls;				// Number of nested calls to the function that allocates memory for this list
   };

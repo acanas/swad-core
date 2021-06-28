@@ -3407,9 +3407,9 @@ void Prj_RemoveProject (void)
 		      "DELETE FROM prj_users"
 		      " USING prj_projects,"
 		             "prj_users"
-		      " WHERE projects.PrjCod=%ld"
-		        " AND projects.CrsCod=%ld"
-		        " AND projects.PrjCod=prj_users.PrjCod",
+		      " WHERE prj_projects.PrjCod=%ld"
+		        " AND prj_projects.CrsCod=%ld"
+		        " AND prj_projects.PrjCod=prj_users.PrjCod",
 	              Prj.PrjCod,
 	              Gbl.Hierarchy.Crs.CrsCod);
 

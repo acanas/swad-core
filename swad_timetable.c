@@ -1755,7 +1755,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
 			   "%s",Txt_All_groups);
                for (NumGrpTyp = 0;
-        	    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+        	    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
         	    NumGrpTyp++)
                  {
                   GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
@@ -1837,5 +1837,5 @@ void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod)
 			 " (SELECT GrpCod"
 			   " FROM grp_groups"
 			  " WHERE GrpTypCod=%ld)",
-                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+                   GrpTypCod);
   }

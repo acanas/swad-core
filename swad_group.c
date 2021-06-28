@@ -261,7 +261,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
       Roo_GetListRooms (&Rooms,Roo_ONLY_SHRT_NAME);
 
       /***** Put form to edit groups *****/
-      if (Gbl.Crs.Grps.GrpTypes.Num) // If there are group types...
+      if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes) // If there are group types...
 	 Grp_EditGroups (&Rooms);
 
    /***** End groups section *****/
@@ -293,7 +293,7 @@ static void Grp_EditGroupTypes (void)
       Grp_PutFormToCreateGroupType ();
 
       /***** Forms to edit current group types *****/
-      if (Gbl.Crs.Grps.GrpTypes.Num)	// Group types found...
+      if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)	// Group types found...
 	 Grp_ListGroupTypesForEdition ();
       else	// No group types found in this course
 	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_types_of_group_in_the_course_X,
@@ -403,7 +403,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
    /***** List the groups for each group type *****/
    HTM_TABLE_BeginWidePadding (2);
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++)
 	 if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
 	    Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
@@ -797,7 +797,8 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	 if (RemoveMeFromThisGrp)
 	    /* Check if the group is closed */
 	    for (NumGrpTyp = 0;
-		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num && !ITryToLeaveAClosedGroup;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes &&
+		 !ITryToLeaveAClosedGroup;
 		 NumGrpTyp++)
 	      {
 	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
@@ -827,7 +828,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	    if (RegisterMeInThisGrp)
 	       /* Check if the group is closed or full */
 	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num &&
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes &&
 				!ITryToRegisterInAClosedGroup &&
 				!ITryToRegisterInFullGroup;
 		    NumGrpTyp++)
@@ -997,7 +998,7 @@ bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct List
 
 	    if (!MultipleEnrolment)
 	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		    NumGrpTyp++)
 		  if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
 		    {
@@ -1030,13 +1031,13 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
    unsigned NumGrpTyp;
 
    /***** Allocate memory to a list of booleanos that indica if already se ha selected a group of cada type *****/
-   if ((*AlreadyExistsGroupOfType = calloc (Gbl.Crs.Grps.GrpTypes.Num,
+   if ((*AlreadyExistsGroupOfType = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                             sizeof (**AlreadyExistsGroupOfType))) == NULL)
       Err_NotEnoughMemoryExit ();
 
    /***** Initialize the list *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	NumGrpTyp++)
      {
       (*AlreadyExistsGroupOfType)[NumGrpTyp].GrpTypCod = Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod;
@@ -1072,7 +1073,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 
    /***** For each existing type of group in the course... *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	NumGrpTyp++)
      {
       MultipleEnrolment = Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment;
@@ -1251,7 +1252,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /***** List group types with forms for edition *****/
       for (NumGrpTyp = 0, UniqueId=1;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++, UniqueId++)
 	{
 	 HTM_TR_Begin (NULL);
@@ -1439,7 +1440,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
       /***** List the groups *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++)
 	{
 	 GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
@@ -1497,7 +1498,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 			/* Options for group types */
 			for (NumTipGrpAux = 0;
-			     NumTipGrpAux < Gbl.Crs.Grps.GrpTypes.Num;
+			     NumTipGrpAux < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 			     NumTipGrpAux++)
 			  {
 			   GrpTypAux = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumTipGrpAux];
@@ -1752,7 +1753,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       /***** List the groups the user belongs to for change *****/
       HTM_TABLE_BeginWidePadding (2);
 	 for (NumGrpTyp = 0;
-	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	      NumGrpTyp++)
 	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
 	      {
@@ -1817,7 +1818,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
    struct GroupType *GrpTyp;
 
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	NumGrpTyp++)
      {
       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
@@ -2035,7 +2036,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
       /***** List to select the groups the user belongs to *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++)
 	 if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
 	    Grp_ListGrpsToAddOrRemUsrs (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
@@ -2563,7 +2564,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 
 		     /* Options for group types */
 		     for (NumGrpTyp = 0;
-			  NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+			  NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 			  NumGrpTyp++)
 			HTM_OPTION (HTM_Type_LONG,&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
 				    Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
@@ -2660,21 +2661,21 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    Grp_OpenGroupsAutomatically ();
 
    /***** Get group types from database *****/
-   Gbl.Crs.Grps.GrpTypes.Num = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res);
+   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
 
-   if (Gbl.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {
       /***** Create a list of group types *****/
-      if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes = calloc (Gbl.Crs.Grps.GrpTypes.Num,
+      if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                                        sizeof (*Gbl.Crs.Grps.GrpTypes.LstGrpTypes))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get group types *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++)
         {
          /* Get next group type */
@@ -2769,7 +2770,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
    /***** Then we get the list of groups for each group type *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	NumGrpTyp++)
      {
       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
@@ -2820,10 +2821,9 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                /* Get maximum number of students in group (row[4]) */
                Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
 
-               /* Get whether group is open ('Y') or closed ('N') (row[5]) */
-               Grp->Open = (row[5][0] == 'Y');
-
-               /* Get whether group have file zones ('Y') or not ('N') (row[6]) */
+               /* Get whether group is open ('Y') or closed ('N') (row[5]),
+                  and whether group have file zones ('Y') or not ('N') (row[6]) */
+               Grp->Open      = (row[5][0] == 'Y');
                Grp->FileZones = (row[6][0] == 'Y');
               }
            }
@@ -2849,7 +2849,7 @@ void Grp_FreeListGrpTypesAndGrps (void)
            {
 	    /***** Free memory used for each list of groups (one list for each group type) *****/
 	    for (NumGrpTyp = 0;
-		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		 NumGrpTyp++)
               {
                GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
@@ -2864,7 +2864,7 @@ void Grp_FreeListGrpTypesAndGrps (void)
 	    /***** Free memory used by the list of group types *****/
             free (Gbl.Crs.Grps.GrpTypes.LstGrpTypes);
             Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
-            Gbl.Crs.Grps.GrpTypes.Num = 0;
+            Gbl.Crs.Grps.GrpTypes.NumGrpTypes = 0;
            }
   }
 
@@ -2928,17 +2928,17 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    MYSQL_ROW row;
 
    /***** Reset values *****/
-   GrpDat->GrpTypCod             = -1L;
-   GrpDat->CrsCod                = -1L;
-   GrpDat->GrpTypName[0]         = '\0';
-   GrpDat->GrpName[0]            = '\0';
-   GrpDat->Room.RooCod      = -1L;
-   GrpDat->Room.ShrtName[0] = '\0';
-   GrpDat->MaxStudents           = 0;
-   GrpDat->Vacant                = 0;
-   GrpDat->Open                  = false;
-   GrpDat->FileZones             = false;
-   GrpDat->MultipleEnrolment     = false;
+   GrpDat->GrpTypCod         = -1L;
+   GrpDat->CrsCod            = -1L;
+   GrpDat->GrpTypName[0]     = '\0';
+   GrpDat->GrpName[0]        = '\0';
+   GrpDat->Room.RooCod       = -1L;
+   GrpDat->Room.ShrtName[0]  = '\0';
+   GrpDat->MaxStudents       = 0;
+   GrpDat->Vacant            = 0;
+   GrpDat->Open              = false;
+   GrpDat->FileZones         = false;
+   GrpDat->MultipleEnrolment = false;
 
    if (GrpDat->GrpCod > 0)
      {
@@ -3217,11 +3217,10 @@ void Grp_ReceiveFormNewGrpTyp (void)
    Par_GetParToText ("GrpTypName",Gbl.Crs.Grps.GrpTyp.GrpTypName,
                      Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
-   /* Get whether it is mandatory to regisrer in any group of this type */
+   /* Get whether it is mandatory to regisrer in any group of this type
+      and whether it is possible to register in multiple groups of this type */
    Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
-
-   /* Get whether it is possible to register in multiple groups of this type */
-   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
+   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment  = Par_GetParToBool ("MultipleEnrolment");
 
    /* Get open time */
    Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
@@ -4294,14 +4293,14 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
    unsigned NumGrpWanted;
 
    /***** Allocate memory for the strings with group codes in each type *****/
-   if ((LstStrCodGrps = calloc (Gbl.Crs.Grps.GrpTypes.Num,
+   if ((LstStrCodGrps = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                 sizeof (*LstStrCodGrps))) == NULL)
       Err_NotEnoughMemoryExit ();
 
    /***** Get lists with the groups that I want in each type
           in order to count the total number of groups selected *****/
    for (NumGrpTyp = 0, LstGrpsWanted->NumGrps = 0;
-	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	NumGrpTyp++)
      {
       /***** Allocate memory for the list of group codes of this type *****/
@@ -4337,7 +4336,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 
       /***** Get the groups *****/
       for (NumGrpTyp = 0, NumGrpWanted = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	   NumGrpTyp++)
         {
          /* Add the groups selected of this type to the complete list of groups selected */

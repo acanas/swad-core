@@ -1136,7 +1136,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   if (Gbl.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
      {
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
@@ -1168,7 +1168,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 
 	       /***** List the groups for each group type *****/
 	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 		    NumGrpTyp++)
 		  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
 		     Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],

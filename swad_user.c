@@ -3896,7 +3896,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	{
 	 /***** Write the groups a the que pertenece the student *****/
 	 for (NumGrpTyp = 0;
-	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
 	      NumGrpTyp++)
 	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
 	      {
@@ -4553,14 +4553,14 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
-      if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.Num,
+      if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
                                            sizeof (*AddStdsWithoutGroupOf))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Initialize vector of booleans that indicates whether it's necessary add to the list
              the students who don't belong to any group of each type *****/
       for (NumGrpTyp = 0;
-           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
            NumGrpTyp++)
          AddStdsWithoutGroupOf[NumGrpTyp] = false;
 
@@ -4575,7 +4575,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                NumPositiveCods++;
             else
                for (NumGrpTyp = 0;
-                    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+                    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
                     NumGrpTyp++)
                   if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod == -GrpCod)
                     {
@@ -4610,7 +4610,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 
       /***** Create a query with the students who don't belong to any group *****/
       for (NumGrpTyp = 0;
-           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
            NumGrpTyp++)
          if (AddStdsWithoutGroupOf[NumGrpTyp])
            {
@@ -7188,7 +7188,7 @@ void Usr_ListAllDataStds (void)
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_STD;
       if (Gbl.Scope.Current == HieLvl_CRS)
         {
-         NumColumnsCardAndGroups = NumColumnsCommonCard + Gbl.Crs.Grps.GrpTypes.Num;
+         NumColumnsCardAndGroups = NumColumnsCommonCard + Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
          NumColumnsTotal = NumColumnsCardAndGroups + Gbl.Crs.Records.LstFields.Num;
         }
       else
@@ -7227,9 +7227,9 @@ void Usr_ListAllDataStds (void)
       /* 2. Columns for the groups */
       if (Gbl.Scope.Current == HieLvl_CRS)
         {
-         if (Gbl.Crs.Grps.GrpTypes.Num)
+         if (Gbl.Crs.Grps.GrpTypes.NumGrpTypes)
             for (NumGrpTyp = 0;
-                 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+                 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
                  NumGrpTyp++)
                if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
         	 {

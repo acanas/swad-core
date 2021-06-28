@@ -245,7 +245,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.NumGrps = 0;
    Gbl.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
-   Gbl.Crs.Grps.GrpTypes.Num = 0;
+   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = 0;
    Gbl.Crs.Grps.GrpTypes.NestedCalls = 0;
    Gbl.Crs.Grps.GrpTyp.GrpTypName[0] = '\0';
    Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = true;
