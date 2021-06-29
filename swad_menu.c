@@ -215,54 +215,63 @@ void Mnu_WriteMenuThisTab (void)
    const char *Title;
    bool IsTheSelectedAction;
 
-   /***** Menu start *****/
+   /***** Begin container *****/
    HTM_Txt ("<nav class=\"MENU_LIST_CONT\">");
-   HTM_UL_Begin ("class=\"MENU_LIST\"");
 
-   /***** Loop to write all options in menu. Each row holds an option *****/
-   for (NumOptInMenu = 0;
-        NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
-        NumOptInMenu++)
-     {
-      NumAct = Mnu_MenuActions[Gbl.Action.Tab][NumOptInMenu];
-      if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
-         break;
-      if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
-        {
-         IsTheSelectedAction = (NumAct == Act_GetSuperAction (Gbl.Action.Act));
+      /***** Begin option list *****/
+      HTM_UL_Begin ("class=\"MENU_LIST\"");
 
-         Title = Act_GetSubtitleAction (NumAct);
+	 /***** Loop to write all options in menu. Each row holds an option *****/
+	 for (NumOptInMenu = 0;
+	      NumOptInMenu < Act_MAX_OPTIONS_IN_MENU_PER_TAB;
+	      NumOptInMenu++)
+	   {
+	    NumAct = Mnu_MenuActions[Gbl.Action.Tab][NumOptInMenu];
+	    if (NumAct == 0)  // At the end of each tab, actions are initialized to 0, so 0 marks the end of the menu
+	       break;
+	    if (Act_CheckIfIHavePermissionToExecuteAction (NumAct))
+	      {
+	       IsTheSelectedAction = (NumAct == Act_GetSuperAction (Gbl.Action.Act));
 
-         /***** Start element *****/
-	 HTM_LI_Begin ("class=\"MENU_LIST_ITEM\"");
+	       Title = Act_GetSubtitleAction (NumAct);
 
-         /***** Begin form and link *****/
-         Frm_BeginForm (NumAct);
-         HTM_BUTTON_SUBMIT_Begin (Title,
-			          IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
-					                "BT_LINK MENU_OPT_OFF",
-				  NULL);
+	       /***** Begin option *****/
+	       HTM_LI_Begin ("class=\"MENU_LIST_ITEM\"");
 
-         /***** Icon and text *****/
-	 HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
-			Gbl.Prefs.URLIconSet,
-			Act_GetIcon (NumAct));
-	 HTM_DIV_Begin ("class=\"MENU_TEXT %s\"",The_ClassTxtMenu[Gbl.Prefs.Theme]);
-	 HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
-	 HTM_DIV_End ();
-	 HTM_DIV_End ();
+		  /***** Begin form *****/
+		  Frm_BeginForm (NumAct);
 
-         /***** End link and form *****/
-         HTM_BUTTON_End ();
-	 Frm_EndForm ();
+		     /***** Begin link *****/
+		     HTM_BUTTON_SUBMIT_Begin (Title,
+					      IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
+								    "BT_LINK MENU_OPT_OFF",
+					      NULL);
 
-         /***** End element *****/
-         HTM_LI_End ();
-        }
-     }
+			/***** Icon and text *****/
+			HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
+				       Gbl.Prefs.URLIconSet,
+				       Act_GetIcon (NumAct));
+			   HTM_DIV_Begin ("class=\"MENU_TEXT %s\"",
+			                  The_ClassTxtMenu[Gbl.Prefs.Theme]);
+			      HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
+			   HTM_DIV_End ();
+			HTM_DIV_End ();
 
-   /***** Menu end *****/
-   HTM_UL_End ();
+		     /***** End link *****/
+		     HTM_BUTTON_End ();
+
+		  /***** End form *****/
+		  Frm_EndForm ();
+
+	       /***** End option *****/
+	       HTM_LI_End ();
+	      }
+	   }
+
+      /***** End option list *****/
+      HTM_UL_End ();
+
+   /***** End container *****/
    HTM_Txt ("</nav>");
   }
 
@@ -280,22 +289,22 @@ void Mnu_PutIconsToSelectMenu (void)
    Box_BoxBegin (NULL,Txt_Menu,
                  Mnu_PutIconsMenu,NULL,
                  Hlp_PROFILE_Settings_menu,Box_NOT_CLOSABLE);
-   Set_BeginSettingsHead ();
-   Set_BeginOneSettingSelector ();
-   for (Menu  = (Mnu_Menu_t) 0;
-	Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
-	Menu++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :
-        	                                             "PREF_OFF");
-      Frm_BeginForm (ActChgMnu);
-      Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
-      Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
-   Set_EndOneSettingSelector ();
-   Set_EndSettingsHead ();
+      Set_BeginSettingsHead ();
+	 Set_BeginOneSettingSelector ();
+	    for (Menu  = (Mnu_Menu_t) 0;
+		 Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
+		 Menu++)
+	      {
+	       HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :
+								      "PREF_OFF");
+		  Frm_BeginForm (ActChgMnu);
+		  Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
+		     Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
+		  Frm_EndForm ();
+	       HTM_DIV_End ();
+	      }
+	 Set_EndOneSettingSelector ();
+      Set_EndSettingsHead ();
    Box_BoxEnd ();
   }
 
@@ -320,12 +329,7 @@ void Mnu_ChangeMenu (void)
 
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your setting about menu",
-		      "UPDATE usr_data"
-		        " SET Menu=%u"
-		      " WHERE UsrCod=%ld",
-                      (unsigned) Gbl.Prefs.Menu,
-                      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Set_DB_ChangeMenu (Gbl.Prefs.Menu);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

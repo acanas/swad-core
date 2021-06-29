@@ -368,6 +368,20 @@ void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek)
   }
 
 /*****************************************************************************/
+/***************** Update my settings about first day of week ****************/
+/*****************************************************************************/
+
+void Set_DB_ChangeMenu (Mnu_Menu_t Menu)
+  {
+   DB_QueryUPDATE ("can not update your setting about menu",
+		   "UPDATE usr_data"
+		     " SET Menu=%u"
+		   " WHERE UsrCod=%ld",
+		   (unsigned) Menu,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /*********** Head to select one or several settings using icons **************/
 /*****************************************************************************/
 /*
