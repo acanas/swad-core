@@ -3782,12 +3782,7 @@ void Grp_ChangeGroupRoom (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing old room by new room *****/
-   DB_QueryUPDATE ("can not update the room of a group",
-		   "UPDATE grp_groups"
-		     " SET RooCod=%ld"
-		   " WHERE GrpCod=%ld",
-		   NewRooCod,
-		   Gbl.Crs.Grps.GrpCod);
+   Grp_DB_ChangeRoomOfGrp (Gbl.Crs.Grps.GrpCod,NewRooCod);
 
    /* Create message to show the change made */
    AlertType = Ale_SUCCESS;
@@ -3836,14 +3831,10 @@ void Grp_ChangeMandatGrpTyp (void)
      }
    else
      {
-      /***** Update of the table of types of group changing the old type of enrolment by the new *****/
-      DB_QueryUPDATE ("can not update enrolment type of a type of group",
-		      "UPDATE grp_types"
-		        " SET Mandatory='%c'"
-		      " WHERE GrpTypCod=%ld",
-                      NewMandatoryEnrolment ? 'Y' :
-        	                              'N',
-                      Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+      /***** Update of the table of types of group
+             changing the old type of enrolment by the new *****/
+      Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+                                                NewMandatoryEnrolment);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -3895,13 +3886,8 @@ void Grp_ChangeMultiGrpTyp (void)
    else
      {
       /***** Update of the table of types of group changing the old type of enrolment by the new *****/
-      DB_QueryUPDATE ("can not update enrolment type of a type of group",
-		      "UPDATE grp_types"
-		        " SET Multiple='%c'"
-		      " WHERE GrpTypCod=%ld",
-                      NewMultipleEnrolment ? 'Y' :
-        	                             'N',
-                      Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+      Grp_DB_ChangeMultipleEnrolmentOfAGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+                                               NewMultipleEnrolment);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -3937,16 +3923,10 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    Gbl.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
 
    /***** Update the table of types of group
-          changing the old open time of enrolment by the new *****/
-   DB_QueryUPDATE ("can not update enrolment type of a type of group",
-		   "UPDATE grp_types"
-		     " SET MustBeOpened='%c',"
-		          "OpenTime=FROM_UNIXTIME(%ld)"
-		   " WHERE GrpTypCod=%ld",
-                   Gbl.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
-        	                                      'N',
-                   (long) Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
-                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+          changing the old opening time of enrolment by the new *****/
+   Grp_DB_ChangeOpeningTimeOfAGrpTyp (Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+                                      Gbl.Crs.Grps.GrpTyp.MustBeOpened,
+                                      Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
@@ -3998,13 +3978,7 @@ void Grp_ChangeMaxStdsGrp (void)
    else
      {
       /***** Update the table of groups changing the old maximum of students to the new *****/
-      DB_QueryUPDATE ("can not update the maximum number of students"
-		      " in a group",
-		      "UPDATE grp_groups"
-		        " SET MaxStudents=%u"
-		      " WHERE GrpCod=%ld",
-                      NewMaxStds,
-                      Gbl.Crs.Grps.GrpCod);
+      Grp_DB_ChangeMaxStdsOfGrp (Gbl.Crs.Grps.GrpCod,NewMaxStds);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;

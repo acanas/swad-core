@@ -89,13 +89,22 @@ bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod);
 bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Cod);
 
+void Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (long GrpTypCod,
+                                               bool NewMandatoryEnrolment);
+void Grp_DB_ChangeMultipleEnrolmentOfAGrpTyp (long GrpTypCod,
+                                              bool NewMultipleEnrolment);
+void Grp_DB_ChangeOpeningTimeOfAGrpTyp (long GrpTypCod,
+                                        bool MustBeOpened,time_t OpenTimeUTC);
 void Grp_DB_ClearMustBeOpened (long GrpTypCod);
 void Grp_DB_OpenGrpsOfType (long GrpTypCod);
+
 void Grp_DB_OpenGrp (long GrpCod);
 void Grp_DB_CloseGrp (long GrpCod);
 void Grp_DB_EnableFileZonesGrp (long GrpCod);
 void Grp_DB_DisableFileZonesGrp (long GrpCod);
 void Grp_DB_ChangeGrpTypOfGrp (long GrpCod,long NewGrpTypCod);
+void Grp_DB_ChangeRoomOfGrp (long GrpCod,long NewRooCod);
+void Grp_DB_ChangeMaxStdsOfGrp (long GrpCod,unsigned NewMaxStds);
 
 bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod);
 

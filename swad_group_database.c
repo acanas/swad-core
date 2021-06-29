@@ -667,6 +667,56 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
   }
 
 /*****************************************************************************/
+/************ Change the mandatory enrolment of a type of group **************/
+/*****************************************************************************/
+
+void Grp_DB_ChangeMandatoryEnrolmentOfAGrpTyp (long GrpTypCod,
+                                               bool NewMandatoryEnrolment)
+  {
+   DB_QueryUPDATE ("can not update enrolment type of a type of group",
+		   "UPDATE grp_types"
+		     " SET Mandatory='%c'"
+		   " WHERE GrpTypCod=%ld",
+		   NewMandatoryEnrolment ? 'Y' :
+					   'N',
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/************* Change the multiple enrolment of a type of group **************/
+/*****************************************************************************/
+
+void Grp_DB_ChangeMultipleEnrolmentOfAGrpTyp (long GrpTypCod,
+                                              bool NewMultipleEnrolment)
+  {
+   DB_QueryUPDATE ("can not update enrolment type of a type of group",
+		   "UPDATE grp_types"
+		     " SET Multiple='%c'"
+		   " WHERE GrpTypCod=%ld",
+		   NewMultipleEnrolment ? 'Y' :
+					  'N',
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/*************** Change the opening time of a type of group ******************/
+/*****************************************************************************/
+
+void Grp_DB_ChangeOpeningTimeOfAGrpTyp (long GrpTypCod,
+                                        bool MustBeOpened,time_t OpenTimeUTC)
+  {
+   DB_QueryUPDATE ("can not update enrolment type of a type of group",
+		   "UPDATE grp_types"
+		     " SET MustBeOpened='%c',"
+		          "OpenTime=FROM_UNIXTIME(%ld)"
+		   " WHERE GrpTypCod=%ld",
+                   MustBeOpened ? 'Y' :
+        	                  'N',
+                   (long) OpenTimeUTC,
+                   GrpTypCod);
+  }
+
+/*****************************************************************************/
 /******************** Set type of group to not be opened *********************/
 /*****************************************************************************/
 
@@ -760,6 +810,35 @@ void Grp_DB_ChangeGrpTypOfGrp (long GrpCod,long NewGrpTypCod)
 		     " SET GrpTypCod=%ld"
 		   " WHERE GrpCod=%ld",
 		   NewGrpTypCod,
+		   GrpCod);
+  }
+
+/*****************************************************************************/
+/*************************** Change room of a group **************************/
+/*****************************************************************************/
+
+void Grp_DB_ChangeRoomOfGrp (long GrpCod,long NewRooCod)
+  {
+   DB_QueryUPDATE ("can not update the room of a group",
+		   "UPDATE grp_groups"
+		     " SET RooCod=%ld"
+		   " WHERE GrpCod=%ld",
+		   NewRooCod,
+		   GrpCod);
+  }
+
+/*****************************************************************************/
+/******************* Change maximum of students in a group *******************/
+/*****************************************************************************/
+
+void Grp_DB_ChangeMaxStdsOfGrp (long GrpCod,unsigned NewMaxStds)
+  {
+   DB_QueryUPDATE ("can not update the maximum number of students"
+		   " in a group",
+		   "UPDATE grp_groups"
+		     " SET MaxStudents=%u"
+		   " WHERE GrpCod=%ld",
+		   NewMaxStds,
 		   GrpCod);
   }
 
