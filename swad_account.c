@@ -471,7 +471,7 @@ void Acc_ShowFormChgMyAccount (void)
 
    /***** Get current user's nickname and email address
           It's necessary because current nickname or email could be just updated *****/
-   Nck_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
+   Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check nickname, email and ID *****/
@@ -529,7 +529,7 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	{
 	 /***** Get user's nickname and email address
 		It's necessary because nickname or email could be just updated *****/
-	 Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
+	 Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.Nickname);
 	 Mai_GetEmailFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Show user's record *****/
@@ -610,7 +610,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
                         true);	// I am creating my own account
 
       /***** Save nickname *****/
-      Nck_UpdateNickInDB (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
+      Nck_DB_UpdateNick (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
       Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNickWithoutArr,
                 sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
 

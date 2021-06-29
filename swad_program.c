@@ -399,7 +399,7 @@ static void Prg_PutButtonToCreateNewItem (void)
    extern const char *Txt_New_item;
    long ItmCod = -1L;
 
-   Frm_StartFormAnchor (ActFrmNewPrgItm,"item_form");
+   Frm_BeginFormAnchor (ActFrmNewPrgItm,"item_form");
    Prg_PutParams (&ItmCod);
    Btn_PutConfirmButton (Txt_New_item);
    Frm_EndForm ();
@@ -1828,7 +1828,7 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    Ale_ShowAlerts (NULL);
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (ActNewPrgItm,"prg_highlighted");
+   Frm_BeginFormAnchor (ActNewPrgItm,"prg_highlighted");
    Prg_PutParamItmCod (ParentItem.Hierarchy.ItmCod);
 
    /***** Begin box and table *****/
@@ -1872,7 +1872,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    Ale_ShowAlerts (NULL);
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (ActChgPrgItm,"prg_highlighted");
+   Frm_BeginFormAnchor (ActChgPrgItm,"prg_highlighted");
    Prg_PutParamItmCod (Item.Hierarchy.ItmCod);
 
    /***** Begin box and table *****/

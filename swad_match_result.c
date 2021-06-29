@@ -594,7 +594,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 
    /***** Begin form to update the results
 	  depending on the games selected *****/
-   Frm_StartFormAnchor (Gbl.Action.Act,MchRes_RESULTS_TABLE_ID);
+   Frm_BeginFormAnchor (Gbl.Action.Act,MchRes_RESULTS_TABLE_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 

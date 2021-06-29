@@ -76,7 +76,7 @@ void Coo_EditMyPrefsOnCookies (void)
 
 	 /***** Edit my preference about cookies *****/
 	 /* Begin form */
-	 Frm_StartFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
+	 Frm_BeginFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
 	    /* Begin container */
 	    HTM_DIV_Begin ("class=\"%s\"",

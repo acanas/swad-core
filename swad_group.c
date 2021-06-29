@@ -388,7 +388,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 
    /***** Begin form to update the students listed
 	  depending on the groups selected *****/
-   Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
+   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
    Usr_PutParamsPrefsAboutUsrList ();
    if (FuncParams)
@@ -1265,7 +1265,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
 	    /* Name of group type */
 	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+	       Frm_BeginFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
@@ -1276,7 +1276,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
 	    /* Is it mandatory to register in any group? */
 	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
@@ -1293,7 +1293,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
 	    /* Is it possible to register in multiple groups? */
 	    HTM_TD_Begin ("class=\"CM\"");
-	       Frm_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
@@ -1310,7 +1310,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
 	    /* Open time */
 	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+	       Frm_BeginFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_TABLE_BeginCenterPadding (2);
 		     HTM_TR_Begin (NULL);
@@ -1460,7 +1460,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 	       /***** Icon to open/close group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Frm_StartFormAnchor (Grp->Open ? ActCloGrp :
+		  Frm_BeginFormAnchor (Grp->Open ? ActCloGrp :
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
@@ -1475,7 +1475,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 	       /***** Icon to activate file zones for this group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Frm_StartFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
+		  Frm_BeginFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
@@ -1491,7 +1491,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Group type *****/
 	       /* Start selector */
 	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
+		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"GrpTypCod\" style=\"width:100px;\"");
@@ -1514,7 +1514,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 	       /***** Group name *****/
 	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
+		  Frm_BeginFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1525,7 +1525,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Room *****/
 	       /* Start selector */
 	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_StartFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
+		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"RooCod\" style=\"width:100px;\"");
@@ -1565,7 +1565,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 
 	       /***** Maximum number of students of the group (row[3]) *****/
 	       HTM_TD_Begin ("class=\"CM\"");
-		  Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
+		  Frm_BeginFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
@@ -2415,7 +2415,7 @@ static void Grp_PutFormToCreateGroupType (void)
    HTM_SECTION_Begin (Grp_NEW_GROUP_TYPE_SECTION_ID);
 
       /***** Begin form *****/
-      Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
+      Frm_BeginFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
 	 /***** Begin box *****/
 	 Box_BoxTableBegin (NULL,Txt_New_type_of_group,
@@ -2530,7 +2530,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
 
       /***** Begin form *****/
-      Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
+      Frm_BeginFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,Txt_New_group,

@@ -48,8 +48,8 @@
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
-void Nck_GetNicknameFromUsrCod (long UsrCod,
-                                char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
+void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
+                                   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 long Nck_GetUsrCodFromNickname (const char *Nickname);
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
@@ -62,6 +62,6 @@ void Nck_DB_RemoveUsrNicknames (long UsrCod);
 void Nck_UpdateMyNick (void);
 void Nck_UpdateOtherUsrNick (void);
 
-void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname);
+void Nck_DB_UpdateNick (long UsrCod,const char *NewNickname);
 
 #endif

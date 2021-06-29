@@ -1453,7 +1453,7 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    /***** Indicator #3: information about online tutoring *****/
    IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod);
    IndicatorsCrs->NumPosts   = For_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
-   IndicatorsCrs->NumMsgsSentByTchs = Msg_GetNumMsgsSentByTchsCrs (CrsCod);
+   IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (CrsCod);
    IndicatorsCrs->ThereIsOnlineTutoring = (IndicatorsCrs->NumThreads        != 0) ||
 	                                  (IndicatorsCrs->NumPosts          != 0) ||
 	                                  (IndicatorsCrs->NumMsgsSentByTchs != 0);

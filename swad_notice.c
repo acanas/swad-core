@@ -86,8 +86,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              const char *Content,
                              long UsrCod,
                              Not_Status_t Status);
-static long Not_InsertNoticeInDB (const char *Content);
-static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail);
+static long Not_DB_InsertNotice (const char *Content);
+static void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
+                                                            unsigned NumUsrsToBeNotifiedByEMail);
 static void Not_PutParams (void *NotCod);
 static long Not_GetParamNotCod (void);
 
@@ -109,18 +110,18 @@ void Not_ShowFormNotice (void)
    /***** Begin form *****/
    Frm_BeginForm (ActRcvNot);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_New_notice,
-                 NULL,NULL,
-                 Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_New_notice,
+		    NULL,NULL,
+		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
 
-   /***** Message body *****/
-   HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
-	               " autofocus=\"autofocus\" required=\"required\"");
-   HTM_TEXTAREA_End ();
+	 /***** Message body *****/
+	 HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
+			     " autofocus=\"autofocus\" required=\"required\"");
+	 HTM_TEXTAREA_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_notice);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -146,7 +147,7 @@ void Not_ReceiveNotice (void)
                               Str_TO_RIGOROUS_HTML,true);
 
    /***** Create a new notice in database *****/
-   NotCod = Not_InsertNoticeInDB (Content);
+   NotCod = Not_DB_InsertNotice (Content);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -156,7 +157,7 @@ void Not_ReceiveNotice (void)
 
    /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
-      Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
+      Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
    Tml_Not_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod);
@@ -170,7 +171,7 @@ void Not_ReceiveNotice (void)
 /*****************************************************************************/
 // Return the code of the new inserted notice
 
-static long Not_InsertNoticeInDB (const char *Content)
+static long Not_DB_InsertNotice (const char *Content)
   {
    /***** Insert notice in the database *****/
    return
@@ -189,7 +190,8 @@ static long Not_InsertNoticeInDB (const char *Content)
 /*********** Update number of users notified in table of notices *************/
 /*****************************************************************************/
 
-static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail)
+static void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
+                                                            unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications of a notice",
@@ -359,7 +361,7 @@ void Not_RemoveNotice (void)
                    Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
    /***** Mark possible social note as unavailable *****/
    Tml_DB_MarkNoteAsUnavailable (TL_NOTE_NOTICE,NotCod);
@@ -570,7 +572,7 @@ static void Not_PutButtonToAddNewNotice (void)
    extern const char *Txt_New_notice;
 
    Frm_BeginForm (ActWriNot);
-   Btn_PutConfirmButton (Txt_New_notice);
+      Btn_PutConfirmButton (Txt_New_notice);
    Frm_EndForm ();
   }
 
@@ -687,88 +689,88 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    HTM_DIV_Begin ("class=\"%s %s\"",
 	          ContainerClass[Status],ContainerWidthClass[TypeNoticesListing]);
 
-   /***** Write the date in the top part of the yellow note *****/
-   /* Write symbol to indicate if notice is obsolete or active */
-   if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
-      if (Not_CheckIfICanEditNotices ())
+      /***** Write the date in the top part of the yellow note *****/
+      /* Write symbol to indicate if notice is obsolete or active */
+      if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
+	 if (Not_CheckIfICanEditNotices ())
+	   {
+	    /***** Put form to remove announcement *****/
+	    Ico_PutContextualIconToRemove (ActReqRemNot,NULL,
+					   Not_PutParams,&NotCod);
+
+	    /***** Put form to change the status of the notice *****/
+	    switch (Status)
+	      {
+	       case Not_ACTIVE_NOTICE:
+		  Ico_PutContextualIconToHide (ActHidNot,NULL,
+					       Not_PutParams,&NotCod);
+		  break;
+	       case Not_OBSOLETE_NOTICE:
+		  Ico_PutContextualIconToUnhide (ActRevNot,NULL,
+						 Not_PutParams,&NotCod);
+		  break;
+	      }
+	    Frm_EndForm ();
+	   }
+
+      /* Write the date */
+      UniqueId++;
+      HTM_DIV_Begin ("class=\"%s\"",DateClass[Status]);
+	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
+	   {
+	    /* Form to view full notice */
+	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
+	    Not_PutHiddenParamNotCod (NotCod);
+	       HTM_BUTTON_SUBMIT_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
+	   }
+	 if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_SPAN_Begin ("id=\"%s\"",Id);
+	 HTM_SPAN_End ();
+	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
+	   {
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,false,0x6);
+	 free (Id);
+      HTM_DIV_End ();
+
+      /***** Write the content of the notice *****/
+      if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	{
-	 /***** Put form to remove announcement *****/
-         Ico_PutContextualIconToRemove (ActReqRemNot,NULL,
-                                        Not_PutParams,&NotCod);
+	 HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF\"");
+	    HTM_Txt (Content);
+	 HTM_DIV_End ();
 
-	 /***** Put form to change the status of the notice *****/
-         switch (Status)
-           {
-            case Not_ACTIVE_NOTICE:
-	       Ico_PutContextualIconToHide (ActHidNot,NULL,
-	                                    Not_PutParams,&NotCod);
-               break;
-            case Not_OBSOLETE_NOTICE:
-	       Ico_PutContextualIconToUnhide (ActRevNot,NULL,
-	                                      Not_PutParams,&NotCod);
-               break;
-           }
-         Frm_EndForm ();
-   	}
+	 /* Put form to view full notice */
+	 HTM_DIV_Begin ("class=\"CM\"");
+	    Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
+					   Not_PutParams,&NotCod,
+					   "ellipsis-h.svg",
+					   Txt_See_full_notice);
+	 HTM_DIV_End ();
+	}
+      else
+	{
+	 HTM_DIV_Begin ("class=\"%s\"",TextClass[Status]);
+	    HTM_Txt (Content);
+	 HTM_DIV_End ();
+	}
 
-   /* Write the date */
-   UniqueId++;
-   HTM_DIV_Begin ("class=\"%s\"",DateClass[Status]);
-   if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-     {
-      /* Form to view full notice */
-      Frm_StartFormAnchor (ActSeeOneNot,Anchor);
-      Not_PutHiddenParamNotCod (NotCod);
-      HTM_BUTTON_SUBMIT_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
-     }
-   if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_SPAN_Begin ("id=\"%s\"",Id);
-   HTM_SPAN_End ();
-   if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-     {
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,false,0x6);
-   free (Id);
-   HTM_DIV_End ();
-
-   /***** Write the content of the notice *****/
-   if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-     {
-      HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF\"");
-      HTM_Txt (Content);
+      /***** Write the author *****/
+      HTM_DIV_Begin ("class=\"NOTICE_AUTHOR %s\"",	// Limited width
+		     AuthorClass[Status]);
+	 Usr_UsrDataConstructor (&UsrDat);
+	 UsrDat.UsrCod = UsrCod;
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
+						      Usr_DONT_GET_PREFS,
+						      Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	    Usr_WriteFirstNameBRSurnames (&UsrDat);
+	 Usr_UsrDataDestructor (&UsrDat);
       HTM_DIV_End ();
-
-      /* Put form to view full notice */
-      HTM_DIV_Begin ("class=\"CM\"");
-      Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
-                                     Not_PutParams,&NotCod,
-				     "ellipsis-h.svg",
-				     Txt_See_full_notice);
-      HTM_DIV_End ();
-     }
-   else
-     {
-      HTM_DIV_Begin ("class=\"%s\"",TextClass[Status]);
-      HTM_Txt (Content);
-      HTM_DIV_End ();
-     }
-
-   /***** Write the author *****/
-   HTM_DIV_Begin ("class=\"NOTICE_AUTHOR %s\"",	// Limited width
-                  AuthorClass[Status]);
-   Usr_UsrDataConstructor (&UsrDat);
-   UsrDat.UsrCod = UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
-                                                Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-      Usr_WriteFirstNameBRSurnames (&UsrDat);
-   Usr_UsrDataDestructor (&UsrDat);
-   HTM_DIV_End ();
 
    /***** End yellow note *****/
    HTM_DIV_End ();

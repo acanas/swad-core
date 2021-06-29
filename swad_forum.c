@@ -1299,7 +1299,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
 	 if (ICanModerateForum)
 	   {
-	    Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
+	    Frm_BeginFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	    For_PutParamsForum (Forums);
@@ -2104,7 +2104,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	    Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
 	 else
 	   {
-	    Frm_StartFormAnchor (For_ActionsPasThrFor[Forum->Type],
+	    Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
 				 For_FORUM_THREADS_SECTION_ID);
 	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
 					 1,	// Page of posts   = first
@@ -2119,7 +2119,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	}
 
       /***** Write link to forum *****/
-      Frm_StartFormAnchor (For_ActionsSeeFor[Forum->Type],
+      Frm_BeginFormAnchor (For_ActionsSeeFor[Forum->Type],
 			   For_FORUM_THREADS_SECTION_ID);
       For_PutAllHiddenParamsForum (1,	// Page of threads = first
 				   1,	// Page of posts   = first
@@ -2557,7 +2557,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		    {
 		     HTM_TH_Begin (1,2,"CM");
 
-			Frm_StartFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
+			Frm_BeginFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
 					     For_FORUM_THREADS_SECTION_ID);
 			For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
 						     1,				// Page of posts   = first
@@ -3574,7 +3574,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	    if (ICanMoveThreads)
 	      {
 	       HTM_BR ();
-	       Frm_StartFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
+	       Frm_BeginFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
 				    For_FORUM_THREADS_SECTION_ID);
 	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
 					    1,			// Page of posts   = first
@@ -4057,13 +4057,13 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    /***** Begin form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread
      {
-      Frm_StartFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
+      Frm_BeginFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewPost (Forums);
      }
    else		// Form to write the first post of a new thread
      {
-      Frm_StartFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
+      Frm_BeginFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewThread (Forums);
      }
@@ -4304,8 +4304,8 @@ void For_RemovePost (void)
    Med_MediaDestructor (&Media);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,Forums.PstCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_REPLY      ,Forums.PstCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,Forums.PstCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_FORUM_REPLY      ,Forums.PstCod);
 
    /***** Mark possible social note as unavailable *****/
    switch (Forums.Forum.Type)	// Only if forum is public for any logged user

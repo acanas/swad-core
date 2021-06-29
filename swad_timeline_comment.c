@@ -1007,9 +1007,9 @@ void Tml_Com_RemoveCommMediaAndDBEntries (long PubCod)
    Med_RemoveMedia (Tml_DB_GetMedCodFromComm (PubCod));
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_COMMENT,PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_COMMENT,PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
 
    /***** Remove favs for this comment *****/
    Tml_DB_RemoveCommFavs (PubCod);

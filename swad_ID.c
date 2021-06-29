@@ -497,7 +497,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	 NextAction = ActCnfID_Oth;
 	 break;
      }
-   Frm_StartFormAnchor (NextAction,Anchor);
+   Frm_BeginFormAnchor (NextAction,Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
       Par_PutHiddenParamLong (NULL,"OriginalActCod",
@@ -705,7 +705,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
       if (ItsMe)
-	 Frm_StartFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
+	 Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
       else
 	{
 	 switch (UsrDat->Roles.InCurrentCrs)
@@ -721,7 +721,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	       NextAction = ActNewID_Oth;
 	       break;
 	   }
-	 Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
+	 Frm_BeginFormAnchor (NextAction,ID_ID_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
       HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,

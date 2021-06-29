@@ -1424,7 +1424,7 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
    extern const char *Txt_New_session;
 
    Exams->ExaCod = ExaCod;
-   Frm_StartFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
+   Frm_BeginFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
    Exa_PutParams (Exams);
       Btn_PutConfirmButton (Txt_New_session);
    Frm_EndForm ();

@@ -669,7 +669,7 @@ void Pwd_ShowFormChgMyPwd (void)
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
+   Frm_BeginFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
@@ -833,7 +833,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 NextAction = ActChgPwdOth;
 	 break;
      }
-   Frm_StartFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
+   Frm_BeginFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
    /* New password */

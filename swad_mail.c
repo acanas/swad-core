@@ -1323,7 +1323,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	{
          HTM_BR ();
 	 if (ItsMe)
-	    Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
+	    Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else
 	   {
 	    switch (UsrDat->Roles.InCurrentCrs)
@@ -1339,7 +1339,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 		  NextAction = ActNewMaiOth;
 		  break;
 	      }
-	    Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+	    Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
 	 Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
@@ -1369,7 +1369,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
    /* Data */
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)
-      Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
+      Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
    else
      {
       switch (UsrDat->Roles.InCurrentCrs)
@@ -1385,7 +1385,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    NextAction = ActNewMaiOth;
 	    break;
 	}
-      Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+      Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
      }
    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,

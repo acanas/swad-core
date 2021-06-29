@@ -637,7 +637,7 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    ID_GetListIDsFromUsrCod (UsrDat);
 
    /***** Get user's nickname *****/
-   Nck_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
+   Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
 
    /***** Get user's role *****/
    if (CrsCod > 0)
@@ -722,7 +722,7 @@ int swad__createAccount (struct soap *soap,
                      true);	// I am creating my own account
 
    /***** Save nickname *****/
-   Nck_UpdateNickInDB (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
+   Nck_DB_UpdateNick (Gbl.Usrs.Me.UsrDat.UsrCod,NewNickWithoutArr);
    Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNickWithoutArr,
              sizeof (Gbl.Usrs.Me.UsrDat.Nickname) - 1);
 
@@ -1919,7 +1919,7 @@ static void API_CopyListUsers (struct soap *soap,
          ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (&UsrDat);
 
 	 /* Get nickname */
-         Nck_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);
+         Nck_DB_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);
 
 	 /* Copy user's data into output structure */
 	 API_CopyUsrData (soap,

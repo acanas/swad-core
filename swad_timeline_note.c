@@ -1287,9 +1287,9 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
    PubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (PubCod > 0)
      {
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE  ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE  ,PubCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
      }
 
    /***** Remove favs for this note *****/

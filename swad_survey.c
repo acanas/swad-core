@@ -1653,7 +1653,7 @@ void Svy_RemoveSurvey (void)
 		   Svy.SvyCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_removed,

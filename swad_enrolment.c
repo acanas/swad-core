@@ -321,7 +321,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    NotifyByEmail = CreateNotif && !ItsMe &&
 		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent));
    if (CreateNotif)
-      Ntf_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
+      Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
 				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 					                             0),
 				     Gbl.Hierarchy.Ins.InsCod,
@@ -2371,7 +2371,7 @@ static void Enr_RemUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
      {
       /***** Mark possible notifications as removed
 	     Important: do this before removing the request *****/
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
 
       /***** Remove enrolment request *****/
       Enr_DB_RemRequest (ReqCod);

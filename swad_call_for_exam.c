@@ -465,7 +465,7 @@ void Cfe_RemoveCallForExam1 (void)
    Cfe_DB_MarkACallForExamAsDeleted (ExaCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_CALL_FOR_EXAM,ExaCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_CALL_FOR_EXAM,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
    Tml_DB_MarkNoteAsUnavailable (TL_NOTE_CALL_FOR_EXAM,ExaCod);
@@ -983,7 +983,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    if (TypeViewCallForExam == Cfe_FORM_VIEW)
      {
       /***** Begin form *****/
-      Frm_StartFormAnchor (ActRcvCfe,Anchor);
+      Frm_BeginFormAnchor (ActRcvCfe,Anchor);
       if (ExaCod > 0)	// Existing call for exam
          Cfe_PutHiddenParamExaCod (ExaCod);
      }

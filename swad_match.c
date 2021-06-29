@@ -1460,7 +1460,7 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
    extern const char *Txt_Save_changes;
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (ActChgMch,Anchor);
+   Frm_BeginFormAnchor (ActChgMch,Anchor);
    Mch_PutParamsEdit (Games);
 
       /***** Begin box and table *****/

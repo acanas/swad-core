@@ -97,7 +97,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages);
-static unsigned Msg_GetNumUsrsBannedByMe (void);
+static unsigned Msg_DB_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
 static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 					   long UsrCod,
@@ -118,7 +118,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 static bool Msg_GetParamOnlyUnreadMsgs (void);
 static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
                                             long MsgNum,long MsgCod);
-static bool Msg_GetStatusOfSentMsg (long MsgCod);
+static bool Msg_DB_GetStatusOfSentMsg (long MsgCod);
 static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded);
 static long Msg_GetParamMsgCod (void);
 static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages *Messages);
@@ -144,8 +144,8 @@ static void Msg_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
 
 static void Msg_ExpandSentMsg (long MsgCod);
 static void Msg_ExpandReceivedMsg (long MsgCod);
-static void Msg_ContractSentMsg (long MsgCod);
-static void Msg_ContractReceivedMsg (long MsgCod);
+static void Msg_DB_ContractSentMsg (long MsgCod);
+static void Msg_DB_ContractReceivedMsg (long MsgCod);
 
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
                               struct Med_Media *Media);
@@ -153,14 +153,13 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
                                                  long UsrCod,
                                                  const char *FilterFromToSubquery);
-static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,
-                                         bool NotifyByEmail);
-static void Msg_SetReceivedMsgAsReplied (long MsgCod);
+static void Msg_DB_InsertReceivedMsg (long MsgCod,long UsrCod,bool NotifyByEmail);
+static void Msg_DB_SetReceivedMsgAsReplied (long MsgCod);
 static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod);
 static void Msg_MoveSentMsgToDeleted (long MsgCod);
 static void Msg_MoveMsgContentToDeleted (long MsgCod);
-static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod);
-static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod);
+static bool Msg_DB_CheckIfSentMsgIsDeleted (long MsgCod);
+static bool Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod);
 static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
                                       const char *FilterFromToSubquery);
 
@@ -168,7 +167,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted);
-static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
+static void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                                struct Med_Media *Media);
 
@@ -298,109 +297,109 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                  Msg_PutIconsListMsgs,Messages,
 		 Hlp_COMMUNICATION_Messages_write,Box_NOT_CLOSABLE);
 
-   if (Messages->ShowOnlyOneRecipient)
-      /***** Form to show several potential recipients *****/
-      Msg_PutLinkToShowMorePotentialRecipients (Messages);
-   else
-     {
-      /***** Get list of users belonging to the current course *****/
-      if (GetUsrsInCrs)
+      if (Messages->ShowOnlyOneRecipient)
+	 /***** Form to show several potential recipients *****/
+	 Msg_PutLinkToShowMorePotentialRecipients (Messages);
+      else
 	{
-	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,Messages,
-	                                    Grp_MY_GROUPS);
-
-	 /***** Begin section with user list *****/
-         HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
-
-	 if (NumUsrsInCrs)
+	 /***** Get list of users belonging to the current course *****/
+	 if (GetUsrsInCrs)
 	   {
-	    /***** Form to select type of list used for select several users *****/
-	    Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg,Messages);
+	    /***** Form to select groups *****/
+	    Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,Messages,
+					       Grp_MY_GROUPS);
 
-	    /***** Put link to register students *****/
-	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+	    /***** Begin section with user list *****/
+	    HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
-	    /***** Check if it's a big list *****/
-	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
-	                                          Msg_PutParamsWriteMsg,Messages,
-		                                  "CopyMessageToHiddenFields();");
+	       if (NumUsrsInCrs)
+		 {
+		  /***** Form to select type of list used for select several users *****/
+		  Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg,Messages);
 
-	    if (ShowUsrsInCrs)
-	       /***** Get lists of selected users *****/
-	       Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+		  /***** Put link to register students *****/
+		  Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+
+		  /***** Check if it's a big list *****/
+		  ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
+							Msg_PutParamsWriteMsg,Messages,
+							"CopyMessageToHiddenFields();");
+
+		  if (ShowUsrsInCrs)
+		     /***** Get lists of selected users *****/
+		     Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+		 }
+
+	    /***** End section with user list *****/
+	    HTM_SECTION_End ();
 	   }
 
-	 /***** End section with user list *****/
-         HTM_SECTION_End ();
-        }
-
-      /***** Get list of users' IDs or nicknames written explicitely *****/
-      Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
-     }
-
-   /***** Begin form to select recipients and write the message *****/
-   Frm_BeginForm (ActRcvMsgUsr);
-   if (Messages->Reply.IsReply)
-     {
-      Par_PutHiddenParamChar ("IsReply",'Y');
-      Msg_PutHiddenParamMsgCod (Messages->Reply.OriginalMsgCod);
-     }
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      if (Messages->ShowOnlyOneRecipient)
-	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-     }
-
-   /***** Begin table *****/
-   HTM_TABLE_BeginCenterPadding (2);
-
-   /***** "To:" section (recipients) *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_MSG_To);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"LT\"");
-   if (Messages->ShowOnlyOneRecipient)
-      /***** Show only one user as recipient *****/
-      Msg_ShowOneUniqueRecipient ();
-   else
-     {
-      /***** Show potential recipients *****/
-      HTM_TABLE_BeginWide ();
-      if (ShowUsrsInCrs)
-	{
-	 Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
-	 Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);	// All non-editing teachers in course
-	 Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);	// All students in selected groups
+	 /***** Get list of users' IDs or nicknames written explicitely *****/
+	 Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
 	}
-      Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
+
+      /***** Begin form to select recipients and write the message *****/
+      Frm_BeginForm (ActRcvMsgUsr);
+      if (Messages->Reply.IsReply)
+	{
+	 Par_PutHiddenParamChar ("IsReply",'Y');
+	 Msg_PutHiddenParamMsgCod (Messages->Reply.OriginalMsgCod);
+	}
+      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	{
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 if (Messages->ShowOnlyOneRecipient)
+	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+	}
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginCenterPadding (2);
+
+	 /***** "To:" section (recipients) *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_MSG_To);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"LT\"");
+	       if (Messages->ShowOnlyOneRecipient)
+		  /***** Show only one user as recipient *****/
+		  Msg_ShowOneUniqueRecipient ();
+	       else
+		 {
+		  /***** Show potential recipients *****/
+		  HTM_TABLE_BeginWide ();
+		     if (ShowUsrsInCrs)
+		       {
+			Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
+			Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);	// All non-editing teachers in course
+			Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);	// All students in selected groups
+		       }
+		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
+		  HTM_TABLE_End ();
+		 }
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Subject and content sections *****/
+	 Msg_WriteFormSubjectAndContentMsgToUsrs (Messages,Content);
+
+      /***** End table *****/
       HTM_TABLE_End ();
-     }
-   HTM_TD_End ();
 
-   HTM_TR_End ();
+      /***** Help for text editor and send button *****/
+      Lay_HelpPlainEditor ();
 
-   /***** Subject and content sections *****/
-   Msg_WriteFormSubjectAndContentMsgToUsrs (Messages,Content);
+      /***** Attached image (optional) *****/
+      Med_PutMediaUploader (-1,"MSG_MED_INPUT");
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** Send button *****/
+      Btn_PutCreateButton (Txt_Send_message);
 
-   /***** Help for text editor and send button *****/
-   Lay_HelpPlainEditor ();
-
-   /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,"MSG_MED_INPUT");
-
-   /***** Send button *****/
-   Btn_PutCreateButton (Txt_Send_message);
-
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -547,36 +546,32 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    /***** Title *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
-   HTM_LABEL_Begin ("for=\"OtherRecipients\"");
-   HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
-				      Txt_Recipients);
-   HTM_LABEL_End ();
-   HTM_TH_End ();
-
+      HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
+	 HTM_LABEL_Begin ("for=\"OtherRecipients\"");
+	    HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
+					       Txt_Recipients);
+	 HTM_LABEL_End ();
+      HTM_TH_End ();
    HTM_TR_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
-   HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
-	               " class=\"MSG_RECIPIENTS\" rows=\"2\" placeholder=\"%s\"",
-                       Txt_nicks_emails_or_IDs_separated_by_commas);
-   if (Gbl.Usrs.ListOtherRecipients[0])
-      HTM_Txt (Gbl.Usrs.ListOtherRecipients);
-   else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
-						// and there's no list of explicit recipients,
-						// write @nickname of original sender
-     {
-      Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
-      if (Nickname[0])
-         HTM_TxtF ("@%s",Nickname);
-     }
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
-
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
+	 HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
+			     " class=\"MSG_RECIPIENTS\" rows=\"2\" placeholder=\"%s\"",
+			     Txt_nicks_emails_or_IDs_separated_by_commas);
+	    if (Gbl.Usrs.ListOtherRecipients[0])
+	       HTM_Txt (Gbl.Usrs.ListOtherRecipients);
+	    else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
+							 // and there's no list of explicit recipients,
+							 // write @nickname of original sender
+	      {
+	       Nck_DB_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname);
+	       if (Nickname[0])
+		  HTM_TxtF ("@%s",Nickname);
+	      }
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
   }
 
@@ -602,100 +597,100 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
    /***** Message subject *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","MsgSubject",Txt_MSG_Subject);
+      /* Label */
+      Frm_LabelColumn ("RT","MsgSubject",Txt_MSG_Subject);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
-	               " class=\"MSG_SUBJECT\" rows=\"2\"");
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+      HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
+			  " class=\"MSG_SUBJECT\" rows=\"2\"");
 
-   /* If message is a reply ==> get original message */
-   if (MsgCod > 0)	// It's a reply
-     {
-      if (!SubjectAndContentComeFromForm)
+      /* If message is a reply ==> get original message */
+      if (MsgCod > 0)	// It's a reply
 	{
-	 /* Get subject and content of message from database */
-	 if (DB_QuerySELECT (&mysql_res,"can not get message content",
-			     "SELECT Subject,"	// row[0]
-				    "Content"	// row[1]
-			      " FROM msg_content"
-			     " WHERE MsgCod=%ld",
-			     MsgCod) != 1)
-	    Err_WrongMessageExit ();
+		  if (!SubjectAndContentComeFromForm)
+		    {
+		     /* Get subject and content of message from database */
+		     if (DB_QuerySELECT (&mysql_res,"can not get message content",
+					 "SELECT Subject,"	// row[0]
+						"Content"	// row[1]
+					  " FROM msg_content"
+					 " WHERE MsgCod=%ld",
+					 MsgCod) != 1)
+			Err_WrongMessageExit ();
 
-	 row = mysql_fetch_row (mysql_res);
+		     row = mysql_fetch_row (mysql_res);
 
-	 /* Get subject (row[0]) and content (row[1]) */
-	 Str_Copy (Messages->Subject,row[0],sizeof (Messages->Subject) - 1);
-	 Str_Copy (Content          ,row[1],Cns_MAX_BYTES_LONG_TEXT);
+		     /* Get subject (row[0]) and content (row[1]) */
+		     Str_Copy (Messages->Subject,row[0],sizeof (Messages->Subject) - 1);
+		     Str_Copy (Content          ,row[1],Cns_MAX_BYTES_LONG_TEXT);
 
-	 /* Free structure that stores the query result */
-	 DB_FreeMySQLResult (&mysql_res);
+		     /* Free structure that stores the query result */
+		     DB_FreeMySQLResult (&mysql_res);
+		    }
+
+		  /* Write subject */
+		  if (!SubjectAndContentComeFromForm)
+		     HTM_Txt ("Re: ");
+		  HTM_Txt (Messages->Subject);
+
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+
+	 /***** Message content *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
+				   " class=\"MSG_CONTENT\" rows=\"20\"");
+
+		  /* Begin textarea with a '\n', that will be not visible in textarea.
+		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
+		     if we don't put the initial '\n' ==> the form will be sent starting
+		     by "Lorem", without the white line */
+		  HTM_Txt ("\n");
+
+		  if (!SubjectAndContentComeFromForm)
+		     HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
+
+		  Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,false,true);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
+      	}
+      else	// It's not a reply
+	{
+		  /* End message subject */
+		  HTM_Txt (Messages->Subject);
+
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Message content *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
+				   " class=\"MSG_CONTENT\" rows=\"20\"");
+
+		  /* Begin textarea with a '\n', that will be not visible in textarea.
+		     When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
+		     if we don't put the initial '\n' ==> the form will be sent starting
+		     by "Lorem", without the white line */
+		  HTM_TxtF ("\n%s",Content);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 	}
-
-      /* Write subject */
-      if (!SubjectAndContentComeFromForm)
-	 HTM_Txt ("Re: ");
-      HTM_Txt (Messages->Subject);
-
-      HTM_TEXTAREA_End ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Message content *****/
-      HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-                          " class=\"MSG_CONTENT\" rows=\"20\"");
-
-      /* Start textarea with a '\n', that will be not visible in textarea.
-         When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
-         if we don't put the initial '\n' ==> the form will be sent starting
-         by "Lorem", without the white line */
-      HTM_Txt ("\n");
-
-      if (!SubjectAndContentComeFromForm)
-	 HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
-
-      Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,false,true);
-     }
-   else	// It's not a reply
-     {
-      /* End message subject */
-      HTM_Txt (Messages->Subject);
-
-      HTM_TEXTAREA_End ();
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Message content *****/
-      HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("RT","MsgContent",Txt_MSG_Content);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"LT\"");
-      HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
-                          " class=\"MSG_CONTENT\" rows=\"20\"");
-
-      /* Start textarea with a '\n', that will be not visible in textarea.
-         When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
-         if we don't put the initial '\n' ==> the form will be sent starting
-         by "Lorem", without the white line */
-      HTM_TxtF ("\n%s",Content);
-     }
-
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -840,7 +835,7 @@ void Msg_RecMsgFromUsr (void)
                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
         {
          /***** Check if recipient has banned me *****/
-         RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod);
+         RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod);
 
          if (RecipientHasBannedMe)
             /***** Show an alert indicating that the message has not been sent successfully *****/
@@ -868,13 +863,13 @@ void Msg_RecMsgFromUsr (void)
 
             /***** Create the received message for this recipient
                    and increment number of new messages received by this recipient *****/
-            Msg_InsertReceivedMsgIntoDB (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
+            Msg_DB_InsertReceivedMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
 
             /***** Create notification for this recipient.
                    If this recipient wants to receive notifications by -mail,
                    activate the sending of a notification *****/
             if (CreateNotif)
-               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_MESSAGE,&UsrDstData,NewMsgCod,
+               Ntf_DB_StoreNotifyEventToOneUser (Ntf_EVENT_MESSAGE,&UsrDstData,NewMsgCod,
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0),
                                               Gbl.Hierarchy.Ins.InsCod,
@@ -913,7 +908,7 @@ void Msg_RecMsgFromUsr (void)
 
    /***** Update received message setting Replied field to true *****/
    if (Replied)
-      Msg_SetReceivedMsgAsReplied (OriginalMsgCod);
+      Msg_DB_SetReceivedMsgAsReplied (OriginalMsgCod);
 
    /***** Write final message *****/
    if (NumRecipients)
@@ -1294,7 +1289,7 @@ void Msg_ConSntMsg (void)
       Err_WrongMessageExit ();
 
    /***** Contract the message *****/
-   Msg_ContractSentMsg (MsgCod);
+   Msg_DB_ContractSentMsg (MsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowSntMsgs ();
@@ -1313,7 +1308,7 @@ void Msg_ConRecMsg (void)
       Err_WrongMessageExit ();
 
    /***** Contract the message *****/
-   Msg_ContractReceivedMsg (MsgCod);
+   Msg_DB_ContractReceivedMsg (MsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowRecMsgs ();
@@ -1374,7 +1369,7 @@ static void Msg_ExpandReceivedMsg (long MsgCod)
 /************************** Contract a sent message **************************/
 /*****************************************************************************/
 
-static void Msg_ContractSentMsg (long MsgCod)
+static void Msg_DB_ContractSentMsg (long MsgCod)
   {
    /***** Contract message in sent message table *****/
    DB_QueryUPDATE ("can not contract a sent message",
@@ -1390,7 +1385,7 @@ static void Msg_ContractSentMsg (long MsgCod)
 /************************ Contract a received message ************************/
 /*****************************************************************************/
 
-static void Msg_ContractReceivedMsg (long MsgCod)
+static void Msg_DB_ContractReceivedMsg (long MsgCod)
   {
    /***** Contract message in received message table *****/
    DB_QueryUPDATE ("can not contract a received message",
@@ -1406,7 +1401,7 @@ static void Msg_ContractReceivedMsg (long MsgCod)
 /********************** Mark a received message as open **********************/
 /*****************************************************************************/
 
-void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
+void Msg_DB_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
   {
    /***** Mark message as read by user *****/
    DB_QueryUPDATE ("can not mark a received message as open",
@@ -1554,8 +1549,7 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 /**** Insert a message y su destinatario in the table of messages received ***/
 /*****************************************************************************/
 
-static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,
-                                         bool NotifyByEmail)
+static void Msg_DB_InsertReceivedMsg (long MsgCod,long UsrCod,bool NotifyByEmail)
   {
    /***** Insert message received in the database *****/
    DB_QueryINSERT ("can not create received message",
@@ -1573,7 +1567,7 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,
 /******** Update received message by setting Replied field to true ***********/
 /*****************************************************************************/
 
-static void Msg_SetReceivedMsgAsReplied (long MsgCod)
+static void Msg_DB_SetReceivedMsgAsReplied (long MsgCod)
   {
    /***** Update received message by setting Replied field to true *****/
    DB_QueryUPDATE ("can not update a received message",
@@ -1616,8 +1610,8 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
                    UsrCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
-   if (Msg_CheckIfSentMsgIsDeleted (MsgCod))
-      if (Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
+   if (Msg_DB_CheckIfSentMsgIsDeleted (MsgCod))
+      if (Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
          Msg_MoveMsgContentToDeleted (MsgCod);
 
    /***** Mark possible notifications as removed *****/
@@ -1650,7 +1644,7 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
 		   MsgCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
-   if (Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
+   if (Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
       Msg_MoveMsgContentToDeleted (MsgCod);
   }
 
@@ -1723,7 +1717,7 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
 /******************** Check if a sent message is deleted *********************/
 /*****************************************************************************/
 
-static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
+static bool Msg_DB_CheckIfSentMsgIsDeleted (long MsgCod)
   {
    /***** Get if the message code is in table of sent messages not deleted *****/
    return (DB_QueryCOUNT ("can not check if a sent message is deleted",
@@ -1739,7 +1733,7 @@ static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
 /***** Check if a received message has been deleted by all its recipients ****/
 /*****************************************************************************/
 
-static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
+static bool Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
   {
    /***** Get if the message code is in table of received messages not deleted *****/
    return (DB_QueryCOUNT ("can not check if a received message"
@@ -1868,11 +1862,11 @@ void Msg_ShowRecMsgs (void)
    /***** Reset messages context *****/
    Msg_ResetMessages (&Messages);
 
-   if (Msg_GetNumUsrsBannedByMe ())
+   if (Msg_DB_GetNumUsrsBannedByMe ())
      {
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
-      Msg_PutLinkToViewBannedUsers ();	// View banned users
+	 Msg_PutLinkToViewBannedUsers ();	// View banned users
       Mnu_ContextMenuEnd ();
      }
 
@@ -1969,95 +1963,95 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
                  Help[Messages->TypeOfMessages],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
 
-   /***** Filter messages *****/
-   /* Begin box with filter */
-   Box_BoxBegin (NULL,Txt_Filter,
-                 NULL,NULL,
-                 HelpFilter[Messages->TypeOfMessages],Box_CLOSABLE);
+      /***** Filter messages *****/
+      /* Begin box with filter */
+      Box_BoxBegin (NULL,Txt_Filter,
+		    NULL,NULL,
+		    HelpFilter[Messages->TypeOfMessages],Box_CLOSABLE);
 
-   /* Form to see messages again */
-   Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
+	 /* Form to see messages again */
+	 Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
 
-   HTM_DIV_Begin ("class=\"CM\"");
-   Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
-   if (Messages->TypeOfMessages == Msg_RECEIVED)
-      Msg_ShowFormToShowOnlyUnreadMessages (Messages);
-   HTM_DIV_End ();
-   Msg_ShowFormToFilterMsgs (Messages);
+	    HTM_DIV_Begin ("class=\"CM\"");
+	       Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
+	       if (Messages->TypeOfMessages == Msg_RECEIVED)
+		  Msg_ShowFormToShowOnlyUnreadMessages (Messages);
+	    HTM_DIV_End ();
 
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-   HTM_BUTTON_Animated_Begin (Txt_Update_messages,
-	                      The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-			      NULL);
-   Ico_PutCalculateIconWithText (Txt_Update_messages);	// Animated icon to update messages
-   HTM_BUTTON_End ();
-   Mnu_ContextMenuEnd ();
+	    Msg_ShowFormToFilterMsgs (Messages);
 
-   Frm_EndForm ();
+	    /***** Contextual menu *****/
+	    Mnu_ContextMenuBegin ();
+	       HTM_BUTTON_Animated_Begin (Txt_Update_messages,
+					  The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+					  NULL);
+		  Ico_PutCalculateIconWithText (Txt_Update_messages);	// Animated icon to update messages
+	       HTM_BUTTON_End ();
+	    Mnu_ContextMenuEnd ();
 
-   /* End box */
-   Box_BoxEnd ();
+	 Frm_EndForm ();
 
+      /* End box */
+      Box_BoxEnd ();
 
-   if (Messages->NumMsgs)		// If there are messages...
-     {
-      if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
-						// from a notification of received message, so show the page where the message is inside
-        {
-         /***** Get the page where the expanded message is inside *****/
-         for (NumRow = 0;
-              NumRow < NumRows;
-              NumRow++)
-           {
-            row = mysql_fetch_row (mysql_res);
-            if (sscanf (row[0],"%ld",&MsgCod) != 1)
-               Err_WrongMessageExit ();
+      if (Messages->NumMsgs)		// If there are messages...
+	{
+	 if (Gbl.Action.Act == ActExpRcvMsg)	// Expanding a message, perhaps it is the result of following a link
+						   // from a notification of received message, so show the page where the message is inside
+	   {
+	    /***** Get the page where the expanded message is inside *****/
+	    for (NumRow = 0;
+		 NumRow < NumRows;
+		 NumRow++)
+	      {
+	       row = mysql_fetch_row (mysql_res);
+	       if (sscanf (row[0],"%ld",&MsgCod) != 1)
+		  Err_WrongMessageExit ();
 
-            if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
-              {
-               Messages->CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
-               break;
-              }
-           }
-        }
+	       if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
+		 {
+		  Messages->CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
+		  break;
+		 }
+	      }
+	   }
 
-      /***** Compute variables related to pagination *****/
-      Pagination.NumItems = Messages->NumMsgs;
-      Pagination.CurrentPage = (int) Messages->CurrentPage;
-      Pag_CalculatePagination (&Pagination);
-      Messages->CurrentPage = (unsigned) Pagination.CurrentPage;
+	 /***** Compute variables related to pagination *****/
+	 Pagination.NumItems = Messages->NumMsgs;
+	 Pagination.CurrentPage = (int) Messages->CurrentPage;
+	 Pag_CalculatePagination (&Pagination);
+	 Messages->CurrentPage = (unsigned) Pagination.CurrentPage;
 
-      /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
-      Pag_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
-	                              Messages->CurrentPage);
+	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
+	 Pag_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
+					 Messages->CurrentPage);
 
-      /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
-				     Messages,-1L);
+	 /***** Write links to pages *****/
+	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
+					Messages,-1L);
 
-      /***** Show received / sent messages in this page *****/
-      HTM_TABLE_BeginWidePadding (2);
+	 /***** Show received / sent messages in this page *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-      mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
-      for (NumRow  = Pagination.FirstItemVisible;
-           NumRow <= Pagination.LastItemVisible;
-           NumRow++)
-        {
-         row = mysql_fetch_row (mysql_res);
+	    mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
+	    for (NumRow  = Pagination.FirstItemVisible;
+		 NumRow <= Pagination.LastItemVisible;
+		 NumRow++)
+	      {
+	       row = mysql_fetch_row (mysql_res);
 
-         if (sscanf (row[0],"%ld",&MsgCod) != 1)
-            Err_WrongMessageExit ();
-         NumMsg = NumRows - NumRow + 1;
-         Msg_ShowASentOrReceivedMessage (Messages,NumMsg,MsgCod);
-        }
+	       if (sscanf (row[0],"%ld",&MsgCod) != 1)
+		  Err_WrongMessageExit ();
+	       NumMsg = NumRows - NumRow + 1;
+	       Msg_ShowASentOrReceivedMessage (Messages,NumMsg,MsgCod);
+	      }
 
-      HTM_TABLE_End ();
+	 HTM_TABLE_End ();
 
-      /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
-				     Messages,-1L);
-     }
+	 /***** Write again links to pages *****/
+	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
+					Messages,-1L);
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2070,7 +2064,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 /********************* Get number of user I have banned **********************/
 /*****************************************************************************/
 
-static unsigned Msg_GetNumUsrsBannedByMe (void)
+static unsigned Msg_DB_GetNumUsrsBannedByMe (void)
   {
    /***** Get number of users I have banned *****/
    return (unsigned)
@@ -2306,7 +2300,7 @@ static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
 /**** Get the number of unique messages sent by any teacher from a course ****/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
+unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
   {
    /***** Get the number of unique messages sent by any teacher from this course *****/
    return (unsigned)
@@ -2327,7 +2321,7 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
 /************** Get the number of unique messages sent by a user *************/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsSentByUsr (long UsrCod)
+unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod)
   {
    /***** Get the number of unique messages sent by any teacher from this course *****/
    return (unsigned)
@@ -2971,21 +2965,21 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;",TxtSelector[Messages->TypeOfMessages]);
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"FilterCrsCod\"");
-   HTM_OPTION (HTM_Type_STRING,"",
-	       Messages->FilterCrsCod < 0,false,
-	       "%s",Txt_any_course);
+      HTM_TxtF ("%s&nbsp;",TxtSelector[Messages->TypeOfMessages]);
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			"name=\"FilterCrsCod\"");
+	 HTM_OPTION (HTM_Type_STRING,"",
+		     Messages->FilterCrsCod < 0,false,
+		     "%s",Txt_any_course);
 
-   /***** Write an option for each origin course *****/
-   for (NumOriginCrs = 0;
-	NumOriginCrs < Messages->NumCourses;
-	NumOriginCrs++)
-      HTM_OPTION (HTM_Type_LONG,&Messages->Courses[NumOriginCrs].CrsCod,
-		  Messages->Courses[NumOriginCrs].CrsCod == Messages->FilterCrsCod,false,
-		  "%s",Messages->Courses[NumOriginCrs].ShrtName);
-   HTM_SELECT_End ();
+	 /***** Write an option for each origin course *****/
+	 for (NumOriginCrs = 0;
+	      NumOriginCrs < Messages->NumCourses;
+	      NumOriginCrs++)
+	    HTM_OPTION (HTM_Type_LONG,&Messages->Courses[NumOriginCrs].CrsCod,
+			Messages->Courses[NumOriginCrs].CrsCod == Messages->FilterCrsCod,false,
+			"%s",Messages->Courses[NumOriginCrs].ShrtName);
+      HTM_SELECT_End ();
    HTM_LABEL_End ();
   }
 
@@ -3009,29 +3003,29 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
 
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Filter authors/recipients *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (TxtFromTo[Messages->TypeOfMessages]);
-   HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
-		     Messages->FilterFromTo,
-	             "size=\"20\"");
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+	 /***** Filter authors/recipients *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColonNBSP (TxtFromTo[Messages->TypeOfMessages]);
+	       HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
+				 Messages->FilterFromTo,
+				 "size=\"20\"");
+	    HTM_LABEL_End ();
+	 HTM_TD_End ();
 
-   /***** Filter message content *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_MSG_Content);
-   HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
-		     Messages->FilterContent,
-	             "size=\"20\"");
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+	 /***** Filter message content *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColonNBSP (Txt_MSG_Content);
+	       HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
+				 Messages->FilterContent,
+				 "size=\"20\"");
+	    HTM_LABEL_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -3048,11 +3042,11 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s",
-		       Messages->ShowOnlyUnreadMsgs ? " checked=\"checked\"" :
-			                              "");
-   HTM_Txt (Txt_only_unread_messages);
+      HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"Y\"%s",
+			  Messages->ShowOnlyUnreadMsgs ? " checked=\"checked\"" :
+							 "");
+      HTM_Txt (Txt_only_unread_messages);
    HTM_LABEL_End ();
   }
 
@@ -3125,14 +3119,14 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get subject of message from database *****/
-   Msg_GetMsgSubject (MsgCod,Subject);
+   Msg_DB_GetMsgSubject (MsgCod,Subject);
   }
 
 /*****************************************************************************/
 /************************ Get the subject of a message ***********************/
 /*****************************************************************************/
 
-static void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
+static void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
   {
    /***** Get subject of message from database *****/
    DB_QuerySELECTString (Subject,Cns_MAX_BYTES_SUBJECT,
@@ -3180,7 +3174,7 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
 /********************** Get if a sent message is expanded ********************/
 /*****************************************************************************/
 
-static bool Msg_GetStatusOfSentMsg (long MsgCod)
+static bool Msg_DB_GetStatusOfSentMsg (long MsgCod)
   {
    char StrExpanded[1 + 1];
 
@@ -3223,13 +3217,11 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
 
-   /***** Get if message has been read by me *****/
+   /***** Get if message has been read by me (row[0]),
+              if message has been replied (row[1]), and
+              if message is expanded (row[2]) *****/
    *Open     = (row[0][0] == 'Y');
-
-   /***** Get if message has been replied *****/
    *Replied  = (row[1][0] == 'Y');
-
-   /***** Get if message is expanded *****/
    *Expanded = (row[2][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
@@ -3280,7 +3272,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
          Msg_GetStatusOfReceivedMsg (MsgCod,&Open,&Replied,&Expanded);
          break;
       case Msg_SENT:
-         Expanded = Msg_GetStatusOfSentMsg (MsgCod);
+         Expanded = Msg_DB_GetStatusOfSentMsg (MsgCod);
          break;
       default:
 	 break;
@@ -3481,7 +3473,7 @@ void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
    HTM_TD_Begin ("class=\"%s CT\" style=\"width:45px;\"",
 		 NewMsg ? "MSG_TIT_BG_NEW" :
 			  "MSG_TIT_BG");
-   HTM_TxtF ("%lu:",MsgNum);
+      HTM_TxtF ("%lu:",MsgNum);
    HTM_TD_End ();
   }
 
@@ -3501,28 +3493,30 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
         	                                "MSG_TIT_BG_NEW");
 
-   /***** Begin form to expand/contract the message *****/
-   Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
-	                                                                          ActExpRcvMsg) :
-                                                                      (Expanded ? ActConSntMsg :
-                                                        	                  ActExpSntMsg));
-   Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
-   Msg_PutHiddenParamsOneMsg (Messages);
-   HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
-				       Txt_See_message,
-			    Open ? "BT_LINK LT MSG_TIT" :
-				   "BT_LINK LT MSG_TIT_NEW",
-			    NULL);
+      /***** Begin form to expand/contract the message *****/
+      Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
+										     ActExpRcvMsg) :
+									 (Expanded ? ActConSntMsg :
+										     ActExpSntMsg));
+      Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
+      Msg_PutHiddenParamsOneMsg (Messages);
 
-   /***** Write subject *****/
-   if (Subject[0])
-      HTM_Txt (Subject);
-   else
-      HTM_TxtF ("[%s]",Txt_no_subject);
+	 HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
+					     Txt_See_message,
+				  Open ? "BT_LINK LT MSG_TIT" :
+					 "BT_LINK LT MSG_TIT_NEW",
+				  NULL);
 
-   /***** End form to expand the message *****/
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+	    /***** Write subject *****/
+	    if (Subject[0])
+	       HTM_Txt (Subject);
+	    else
+	       HTM_TxtF ("[%s]",Txt_no_subject);
+
+	 /***** End form to expand the message *****/
+	 HTM_BUTTON_End ();
+
+      Frm_EndForm ();
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -3623,15 +3617,15 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
             /* Write course, including link */
             Frm_BeginFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
-            HTM_Txt ("(");
-            HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
-				     "BT_LINK AUTHOR_TXT",NULL);
-            Hie_FreeGoToMsg ();
-            HTM_Txt (Crs.ShrtName);
-            HTM_BUTTON_End ();
-            HTM_Txt (")");
-            HTM_DIV_End ();
+	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
+		  HTM_Txt ("(");
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
+					   "BT_LINK AUTHOR_TXT",NULL);
+		  Hie_FreeGoToMsg ();
+		     HTM_Txt (Crs.ShrtName);
+		  HTM_BUTTON_End ();
+		  HTM_Txt (")");
+	       HTM_DIV_End ();
             Frm_EndForm ();
            }
 	}
@@ -3639,7 +3633,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
      {
       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
-      HTM_TxtF ("(%s)",Txt_no_course_of_origin);
+	 HTM_TxtF ("(%s)",Txt_no_course_of_origin);
       HTM_DIV_End ();
      }
 
@@ -3659,7 +3653,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
    extern const char *Txt_Go_to_course_and_reply;
    extern const char *Txt_Go_to_course_and_reply_again;
 
-   /***** Form start and parameters *****/
+   /***** Begin form and parameters *****/
    if (FromThisCrs)
       Frm_BeginForm (ActReqMsgUsr);
    else	// Not the current course ==> go to another course
@@ -3673,12 +3667,14 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
-   /****** Link and form end *****/
-   Ico_PutIconLink ("reply.svg",
-                    FromThisCrs ? (Replied ? Txt_Reply_again :
-				             Txt_Reply) :
-				  (Replied ? Txt_Go_to_course_and_reply_again :
-				             Txt_Go_to_course_and_reply));
+      /****** Link *****/
+      Ico_PutIconLink ("reply.svg",
+		       FromThisCrs ? (Replied ? Txt_Reply_again :
+						Txt_Reply) :
+				     (Replied ? Txt_Go_to_course_and_reply_again :
+						Txt_Go_to_course_and_reply));
+
+   /****** End form *****/
    Frm_EndForm ();
   }
 
@@ -3718,7 +3714,7 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 	       if (Act_GetSuperAction (Gbl.Action.Act) == ActSeeRcvMsg)
 		 {
 		  HTM_NBSP ();
-		  if (Msg_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+		  if (Msg_DB_CheckIfUsrIsBanned (UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
 		     // Sender is banned
 		     Msg_PutFormToUnbanSender (Messages,UsrDat);
 		  else
@@ -3824,112 +3820,112 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
       /***** Begin table *****/
       HTM_TABLE_Begin (NULL);
 
-      /***** How many recipients will be shown? *****/
-      if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
-         NumRecipientsToShow = NumRecipientsKnown;
-      else	// A lot of recipients
-         /***** Get parameter that indicates if I want to see all recipients *****/
-         NumRecipientsToShow = Par_GetParToBool ("SeeAllRcpts") ? NumRecipientsKnown :
-                                                                  Msg_DEF_RECIPIENTS_TO_SHOW;
+	 /***** How many recipients will be shown? *****/
+	 if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
+	    NumRecipientsToShow = NumRecipientsKnown;
+	 else	// A lot of recipients
+	    /***** Get parameter that indicates if I want to see all recipients *****/
+	    NumRecipientsToShow = Par_GetParToBool ("SeeAllRcpts") ? NumRecipientsKnown :
+								     Msg_DEF_RECIPIENTS_TO_SHOW;
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Write known recipients *****/
-      for (NumRcp = 0;
-	   NumRcp < NumRecipientsToShow;
-	   NumRcp++)
-        {
-         /* Get user's code */
-         row = mysql_fetch_row (mysql_res);
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /***** Write known recipients *****/
+	 for (NumRcp = 0;
+	      NumRcp < NumRecipientsToShow;
+	      NumRcp++)
+	   {
+	    /* Get user's code */
+	    row = mysql_fetch_row (mysql_res);
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-         /* Get if message has been deleted by recipient */
-         Deleted   = (row[1][0] == 'Y');
+	    /* Get if message has been deleted by recipient */
+	    Deleted   = (row[1][0] == 'Y');
 
-         /* Get if message has been read by recipient */
-         OpenByDst = (row[2][0] == 'Y');
+	    /* Get if message has been read by recipient */
+	    OpenByDst = (row[2][0] == 'Y');
 
-         /* Get user's data */
-	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-	                                                     Usr_DONT_GET_PREFS,
-	                                                     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    /* Get user's data */
+	    UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+								Usr_DONT_GET_PREFS,
+								Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-         /* Put an icon to show if user has read the message */
-	 Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
-                                        Txt_MSG_Open) :
-                             (Deleted ? Txt_MSG_Deleted_without_opening :
-                                        Txt_MSG_Unopened);
-         HTM_TR_Begin (NULL);
+	    /* Put an icon to show if user has read the message */
+	    Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
+					   Txt_MSG_Open) :
+				(Deleted ? Txt_MSG_Deleted_without_opening :
+					   Txt_MSG_Unopened);
+	    HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-         Ico_PutIcon (OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
-                	                     "envelope-open-text.svg") :
-                                  (Deleted ? "envelope-red.svg" :
-                        	             "envelope.svg"),
-                      Title,"ICO16x16");
-         HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
+		  Ico_PutIcon (OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
+						      "envelope-open-text.svg") :
+					   (Deleted ? "envelope-red.svg" :
+						      "envelope.svg"),
+			       Title,"ICO16x16");
+	       HTM_TD_End ();
 
-         /* Put user's photo */
-         HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
-         ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
-                                 false);
-         Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                        	               NULL,
-                           "PHOTO21x28",Pho_ZOOM,false);
-         HTM_TD_End ();
+	       /* Put user's photo */
+	       HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
+		  ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+					  false);
+		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+							NULL,
+				    "PHOTO21x28",Pho_ZOOM,false);
+	       HTM_TD_End ();
 
-         /* Write user's name */
-         HTM_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
-                	                                      "AUTHOR_TXT_NEW");
-         if (UsrValid)
-            HTM_Txt (UsrDat.FullName);
-         else
-            HTM_TxtF ("[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
-         HTM_TD_End ();
+	       /* Write user's name */
+	       HTM_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
+								    "AUTHOR_TXT_NEW");
+		  if (UsrValid)
+		     HTM_Txt (UsrDat.FullName);
+		  else
+		     HTM_TxtF ("[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
+	       HTM_TD_End ();
 
-         HTM_TR_End ();
-        }
+	    HTM_TR_End ();
+	   }
 
-      /***** If any recipients are unknown *****/
-      if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
-	{
-         /***** Begin form to show all the users *****/
-         HTM_TR_Begin (NULL);
+	 /***** If any recipients are unknown *****/
+	 if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
+	   {
+	    /***** Begin form to show all the users *****/
+	    HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
-	 HTM_TxtF ("[%u %s]",
-                   NumRecipientsUnknown,
-                   (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
-                                                 Txt_unknown_recipients);
-	 HTM_TD_End ();
+	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
+		  HTM_TxtF ("[%u %s]",
+			    NumRecipientsUnknown,
+			    (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
+							  Txt_unknown_recipients);
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
-	}
+	    HTM_TR_End ();
+	   }
 
-      /***** If any known recipient is not listed *****/
-      if (NumRecipientsToShow < NumRecipientsKnown)
-        {
-         /***** Begin form to show all the users *****/
-         HTM_TR_Begin (NULL);
+	 /***** If any known recipient is not listed *****/
+	 if (NumRecipientsToShow < NumRecipientsKnown)
+	   {
+	    /***** Begin form to show all the users *****/
+	    HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
-         Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
-         Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
-         Msg_PutHiddenParamsOneMsg (Messages);
-         Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-         HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
-         HTM_TxtF (Txt_and_X_other_recipients,
-                   NumRecipientsKnown - NumRecipientsToShow);
-         HTM_BUTTON_End ();
-         Frm_EndForm ();
-         HTM_TD_End ();
+	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
+		  Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
+		  Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
+		  Msg_PutHiddenParamsOneMsg (Messages);
+		  Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
+		     HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
+			HTM_TxtF (Txt_and_X_other_recipients,
+				  NumRecipientsKnown - NumRecipientsToShow);
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-         HTM_TR_End ();
-        }
+	    HTM_TR_End ();
+	   }
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -3953,14 +3949,14 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
    if (asprintf (&Id,"msg_date_%u",UniqueId) < 0)
       Err_NotEnoughMemoryExit ();
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    HTM_TD_Begin ("id=\"%s\" class=\"%s RT\" style=\"width:106px;\"",
                  Id,ClassBackground);
 
-   /***** Write date and time *****/
-   Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				 true,true,false,0x6);
+      /***** Write date and time *****/
+      Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+				    true,true,false,0x6);
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -4018,7 +4014,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
 	                     Messages->CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Msg_PutHiddenParamsMsgsFilters (Messages);
-   Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
+      Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
 
@@ -4036,7 +4032,7 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
 	                     Messages->CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Msg_PutHiddenParamsMsgsFilters (Messages);
-   Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
+      Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
   }
 
@@ -4134,7 +4130,7 @@ static void Msg_UnbanSender (void)
 /**************** Chech if a user is banned by another user ******************/
 /*****************************************************************************/
 
-bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
+bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   {
    /***** Get if FromUsrCod is banned by ToUsrCod *****/
    return (DB_QueryCOUNT ("can not check if a user is banned",

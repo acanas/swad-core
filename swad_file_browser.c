@@ -9829,24 +9829,24 @@ void Brw_ShowFileMetadata (void)
 	 case Brw_SHOW_DOC_GRP:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_DOC_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_TCH_CRS:
 	 case Brw_ADMI_TCH_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_SHR_CRS:
 	 case Brw_ADMI_SHR_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 case Brw_SHOW_MRK_CRS:
 	 case Brw_SHOW_MRK_GRP:
 	 case Brw_ADMI_MRK_CRS:
 	 case Brw_ADMI_MRK_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod);
 	    break;
 	 default:
@@ -9988,24 +9988,24 @@ void Brw_DownloadFile (void)
 	 case Brw_SHOW_DOC_GRP:
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_DOC_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
 				    FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_TCH_CRS:
 	 case Brw_ADMI_TCH_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
 				    FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_SHR_CRS:
 	 case Brw_ADMI_SHR_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
 				    FileMetadata.FilCod);
 	    break;
 	 case Brw_SHOW_MRK_CRS:
 	 case Brw_SHOW_MRK_GRP:
 	 case Brw_ADMI_MRK_CRS:
 	 case Brw_ADMI_MRK_GRP:
-	    Ntf_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
+	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
 				    FileMetadata.FilCod);
 	    break;
 	 default:
@@ -11750,7 +11750,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
    char PathGrpFileZones[PATH_MAX + 1];
 
    /***** Set notifications about files in this group zone as removed *****/
-   Ntf_MarkNotifFilesInGroupAsRemoved (GrpCod);
+   Ntf_DB_MarkNotifFilesInGroupAsRemoved (GrpCod);
 
    /***** Remove files in the group from database *****/
    Brw_RemoveGrpFilesFromDB (GrpCod);

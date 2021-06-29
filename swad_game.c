@@ -2581,7 +2581,7 @@ void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod)
   {
    extern const char *Txt_New_match;
 
-   Frm_StartFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
+   Frm_BeginFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
    Games->GamCod = GamCod;
    Gam_PutParams (Games);
 

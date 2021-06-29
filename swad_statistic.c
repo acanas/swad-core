@@ -309,7 +309,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
          Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	 /***** Begin form *****/
-         Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+         Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamLong (NULL,"FirstRow",0);
@@ -499,7 +499,7 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    Mnu_ContextMenuEnd ();
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
+   Frm_BeginFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,
@@ -1628,7 +1628,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    /* Put link to jump to previous page (older clicks) */
    if (FirstRow > 1)
      {
-      Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+      Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Dat_WriteParamsIniEndDates ();
       Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
@@ -1666,7 +1666,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    /* Put link to jump to next page (more recent clicks) */
    if (LastRow < NumHits)
      {
-      Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+      Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Dat_WriteParamsIniEndDates ();
       Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
@@ -2092,7 +2092,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    HTM_TD_Begin ("colspan=\"26\" class=\"CM\"");
 
-   Frm_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
+   Frm_BeginFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Dat_WriteParamsIniEndDates ();
    Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
    Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);

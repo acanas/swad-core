@@ -223,39 +223,47 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    Box_BoxBegin (NULL,Txt_My_frequent_actions,
                  NULL,NULL,
                  Hlp_ANALYTICS_Frequent,Box_NOT_CLOSABLE);
-   HTM_DIV_Begin ("id=\"MFU_actions_big\"");
 
-   /***** Write list of frequently used actions *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT\"");
-   for (NumAct = 0;
-	NumAct < ListMFUActions->NumActions;
-	NumAct++)
-     {
-      Action = ListMFUActions->Actions[NumAct];
+      /***** Begin container *****/
+      HTM_DIV_Begin ("id=\"MFU_actions_big\"");
 
-      if ((Title = Act_GetTitleAction (Action)) != NULL)
-        {
-	 /* Action string */
-	 Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
-	           sizeof (TabStr) - 1);
-	 Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
-         snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
+	 /***** Begin list of frequently used actions *****/
+	 HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-         /* Icon and text */
-         HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
-         Frm_BeginForm (Action);
-         HTM_BUTTON_SUBMIT_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
-         HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-	          NULL);
-         HTM_TxtF ("&nbsp;%s",TabMenuStr);
-         HTM_BUTTON_End ();
-         Frm_EndForm ();
-         HTM_LI_End ();
-        }
-     }
+	    for (NumAct = 0;
+		 NumAct < ListMFUActions->NumActions;
+		 NumAct++)
+	      {
+	       Action = ListMFUActions->Actions[NumAct];
+
+	       if ((Title = Act_GetTitleAction (Action)) != NULL)
+		 {
+		  /* Action string */
+		  Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
+			    sizeof (TabStr) - 1);
+		  Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
+		  snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
+
+		  /* Icon and text */
+		  HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
+		     Frm_BeginForm (Action);
+			HTM_BUTTON_SUBMIT_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
+			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
+				    NULL);
+			   HTM_TxtF ("&nbsp;%s",TabMenuStr);
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
+		  HTM_LI_End ();
+		 }
+	      }
+
+	 /***** End list of frequently used actions *****/
+	 HTM_UL_End ();
+
+      /***** End container *****/
+      HTM_DIV_End ();
 
    /***** End box *****/
-   HTM_DIV_End ();
    Box_BoxEnd ();
   }
 
@@ -277,41 +285,45 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** Start div and link *****/
    HTM_DIV_Begin ("id=\"MFU_actions\"");
-   Frm_BeginForm (ActMFUAct);
-   HTM_BUTTON_SUBMIT_Begin (Txt_My_frequent_actions,"BT_LINK MFU_TITLE",NULL);
-   HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
 
-   /***** Write list of frequently used actions *****/
-   HTM_UL_Begin (NULL);
-   for (NumAct = 0;
-	NumAct < ListMFUActions->NumActions;
-	NumAct++)
-     {
-      Action = ListMFUActions->Actions[NumAct];
-
-      if ((Title = Act_GetTitleAction (Action)) != NULL)
-        {
-	 /* Action string */
-	 Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
-	           sizeof (TabStr) - 1);
-	 Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
-         snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
-
-         /* Icon and text */
-         HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
-         Frm_BeginForm (Action);
-         HTM_BUTTON_SUBMIT_Begin (TabMenuStr,"BT_LINK",NULL);
-         HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-	          NULL);
-	 HTM_TxtF ("&nbsp;%s",MenuStr);
+      Frm_BeginForm (ActMFUAct);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_My_frequent_actions,"BT_LINK MFU_TITLE",NULL);
+	    HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
 	 HTM_BUTTON_End ();
-         Frm_EndForm ();
-         HTM_LI_End ();
-        }
-     }
-   HTM_UL_End ();
+      Frm_EndForm ();
+
+      /***** Begin list of frequently used actions *****/
+      HTM_UL_Begin (NULL);
+
+	 for (NumAct = 0;
+	      NumAct < ListMFUActions->NumActions;
+	      NumAct++)
+	   {
+	    Action = ListMFUActions->Actions[NumAct];
+
+	    if ((Title = Act_GetTitleAction (Action)) != NULL)
+	      {
+	       /* Action string */
+	       Str_Copy (TabStr,Txt_TABS_TXT[Act_GetTab (Act_GetSuperAction (Action))],
+			 sizeof (TabStr) - 1);
+	       Str_Copy (MenuStr,Title,sizeof (MenuStr) - 1);
+	       snprintf (TabMenuStr,sizeof (TabMenuStr),"%s &gt; %s",TabStr,MenuStr);
+
+	       /* Icon and text */
+	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
+		  Frm_BeginForm (Action);
+		     HTM_BUTTON_SUBMIT_Begin (TabMenuStr,"BT_LINK",NULL);
+			HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
+				 NULL);
+			HTM_TxtF ("&nbsp;%s",MenuStr);
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+	       HTM_LI_End ();
+	      }
+	   }
+
+      /***** End list of frequently used actions *****/
+      HTM_UL_End ();
 
    /***** End div *****/
    HTM_DIV_End ();

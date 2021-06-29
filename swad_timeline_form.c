@@ -188,7 +188,7 @@ void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** Begin form in user timeline *****/
-      Frm_StartFormAnchor (Tml_Frm_ActionUsr[Action],"timeline");
+      Frm_BeginFormAnchor (Tml_Frm_ActionUsr[Action],"timeline");
       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else

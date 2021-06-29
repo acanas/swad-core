@@ -280,7 +280,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                      const struct For_Forums *Forums);
 static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent);
 
-static void Ntf_UpdateMyLastAccessToNotifications (void);
+static void Ntf_DB_UpdateMyLastAccessToNotifications (void);
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails);
 static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
                                  Ntf_NotifyEvent_t NotifyEvent,
@@ -388,237 +388,237 @@ void Ntf_ShowMyNotifications (void)
                  Ntf_PutIconsNotif,NULL,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
-   /***** List my notifications *****/
-   if (NumNotifications)	// Notifications found
-     {
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-      HTM_TR_Begin (NULL);
-
-      HTM_TH (1,2,"LM",Txt_Event);
-      HTM_TH (1,1,"LM",Txt_MSG_From);
-      HTM_TH (1,1,"LM",Txt_Location);
-      HTM_TH (1,1,"CM",Txt_Date);
-      HTM_TH (1,1,"LM",Txt_Email);
-
-      HTM_TR_End ();
-
-      /***** List notifications one by one *****/
-      for (NumNotif = 0;
-	   NumNotif < NumNotifications;
-	   NumNotif++)
+      /***** List my notifications *****/
+      if (NumNotifications)	// Notifications found
 	{
-         /***** Get next notification *****/
-         row = mysql_fetch_row (mysql_res);
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
 
-         /* Get event type (row[0]) */
-         NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (2);
 
-         /* Get (from) user code (row[1]) */
-         UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
-                                                  Usr_DONT_GET_PREFS,
-                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    /***** Heading *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TH (1,2,"LM",Txt_Event);
+	       HTM_TH (1,1,"LM",Txt_MSG_From);
+	       HTM_TH (1,1,"LM",Txt_Location);
+	       HTM_TH (1,1,"CM",Txt_Date);
+	       HTM_TH (1,1,"LM",Txt_Email);
+	    HTM_TR_End ();
 
-         /* Get institution code (row[2]) */
-         Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-         Ins_GetDataOfInstitutionByCod (&Hie.Ins);
+	    /***** List notifications one by one *****/
+	    for (NumNotif = 0;
+		 NumNotif < NumNotifications;
+		 NumNotif++)
+	      {
+	       /***** Get next notification *****/
+	       row = mysql_fetch_row (mysql_res);
 
-          /* Get center code (row[3]) */
-         Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-         Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+	       /* Get event type (row[0]) */
+	       NotifyEvent = Ntf_GetNotifyEventFromStr (row[0]);
 
-         /* Get degree code (row[4]) */
-         Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-         Deg_GetDataOfDegreeByCod (&Hie.Deg);
+	       /* Get (from) user code (row[1]) */
+	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-         /* Get course code (row[5]) */
-         Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
-         Crs_GetDataOfCourseByCod (&Hie.Crs);
+	       /* Get institution code (row[2]) */
+	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
+	       Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
-         /* Get message/post/... code (row[6]) */
-         Cod = Str_ConvertStrCodToLongCod (row[6]);
+		/* Get center code (row[3]) */
+	       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
+	       Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
-         /* Get forum type of the post */
-         if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
-             NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-           {
-            For_ResetForums (&Forums);
-            For_GetForumTypeAndLocationOfAPost (Cod,&Forums.Forum);
-            For_SetForumName (&Forums.Forum,
-                              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-           }
+	       /* Get degree code (row[4]) */
+	       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
+	       Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
-         /* Get time of the event (row[7]) */
-         DateTimeUTC = Dat_GetUNIXTimeFromStr (row[7]);
+	       /* Get course code (row[5]) */
+	       Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
+	       Crs_GetDataOfCourseByCod (&Hie.Crs);
 
-         /* Get status (row[8]) */
-         if (sscanf (row[8],"%u",&Status) != 1)
-            Err_WrongStatusExit ();
-         StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
+	       /* Get message/post/... code (row[6]) */
+	       Cod = Str_ConvertStrCodToLongCod (row[6]);
 
-         if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
-           {
-            ClassBackground   = "MSG_TIT_BG_REM";
-            ClassText         = "MSG_TIT_REM";
-            ClassLink         = "BT_LINK MSG_TIT_REM";
-            ClassAuthorBg     = "MSG_AUT_BG_REM";
-            PutLink = false;
-           }
-         else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
-           {
-            ClassBackground   = "MSG_TIT_BG";
-            ClassText         = "MSG_TIT";
-            ClassLink         = "BT_LINK LT MSG_TIT";
-            ClassAuthorBg     = "MSG_AUT_BG";
-            PutLink = true;
-           }
-         else					// I have not seen the source of the notification
-           {
-            ClassBackground   = "MSG_TIT_BG_NEW";
-            ClassText         = "MSG_TIT_NEW";
-            ClassLink         = "BT_LINK LT MSG_TIT_NEW";
-            ClassAuthorBg     = "MSG_AUT_BG_NEW";
-            PutLink = true;
-           }
+	       /* Get forum type of the post */
+	       if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
+		   NotifyEvent == Ntf_EVENT_FORUM_REPLY)
+		 {
+		  For_ResetForums (&Forums);
+		  For_GetForumTypeAndLocationOfAPost (Cod,&Forums.Forum);
+		  For_SetForumName (&Forums.Forum,
+				    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+		 }
 
-         /***** Write row for this notification *****/
-	 /* Write event icon */
-         HTM_TR_Begin (NULL);
+	       /* Get time of the event (row[7]) */
+	       DateTimeUTC = Dat_GetUNIXTimeFromStr (row[7]);
 
-         HTM_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
-         if (PutLink)
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
+	       /* Get status (row[8]) */
+	       if (sscanf (row[8],"%u",&Status) != 1)
+		  Err_WrongStatusExit ();
+	       StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
 
-         if (PutLink)
-           {
-            Ico_PutIconLink (Ntf_Icons[NotifyEvent],
-        	             Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-	    Frm_EndForm ();
-           }
-         else
-            Ico_PutIconOff (Ntf_Icons[NotifyEvent],
-        	            Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-         HTM_TD_End ();
+	       if (Status & Ntf_STATUS_BIT_REMOVED)	// The source of the notification was removed
+		 {
+		  ClassBackground   = "MSG_TIT_BG_REM";
+		  ClassText         = "MSG_TIT_REM";
+		  ClassLink         = "BT_LINK MSG_TIT_REM";
+		  ClassAuthorBg     = "MSG_AUT_BG_REM";
+		  PutLink = false;
+		 }
+	       else if (Status & Ntf_STATUS_BIT_READ)	// I have already seen the source of the notification
+		 {
+		  ClassBackground   = "MSG_TIT_BG";
+		  ClassText         = "MSG_TIT";
+		  ClassLink         = "BT_LINK LT MSG_TIT";
+		  ClassAuthorBg     = "MSG_AUT_BG";
+		  PutLink = true;
+		 }
+	       else					// I have not seen the source of the notification
+		 {
+		  ClassBackground   = "MSG_TIT_BG_NEW";
+		  ClassText         = "MSG_TIT_NEW";
+		  ClassLink         = "BT_LINK LT MSG_TIT_NEW";
+		  ClassAuthorBg     = "MSG_AUT_BG_NEW";
+		  PutLink = true;
+		 }
 
-         /* Write event type */
-         HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
-         if (PutLink)
-           {
-            PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
-            HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
-            HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-            HTM_BUTTON_End ();
-            Frm_EndForm ();
-           }
-         else
-           {
-            HTM_SPAN_Begin ("class=\"%s\"",ClassText);
-            HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-            HTM_SPAN_End ();
-           }
-         HTM_TD_End ();
+	       /***** Write row for this notification *****/
+	       /* Write event icon */
+	       HTM_TR_Begin (NULL);
 
-         /* Write user (from) */
-	 HTM_TD_Begin ("class=\"%s LT\"",ClassAuthorBg);
-	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-	 HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
+		     if (PutLink)
+			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
-         /* Write location */
-         HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
-         if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
-             NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-           {
-            if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
+		     if (PutLink)
+		       {
+			Ico_PutIconLink (Ntf_Icons[NotifyEvent],
+					 Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+			Frm_EndForm ();
+		       }
+		     else
+			Ico_PutIconOff (Ntf_Icons[NotifyEvent],
+					Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+		  HTM_TD_End ();
 
-            if (PutLink)
-               HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
-            else
-               HTM_SPAN_Begin ("class=\"%s\"",ClassText);
-            HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
-            if (PutLink)
-              {
-               HTM_BUTTON_End ();
-               Frm_EndForm ();
-              }
-            else
-               HTM_SPAN_End ();
-           }
-         else
-           {
-            if (PutLink)
-               PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
+		  /* Write event type */
+		  HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
+		     if (PutLink)
+		       {
+			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
+			   HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
+			      HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+			   HTM_BUTTON_End ();
+			Frm_EndForm ();
+		       }
+		     else
+		       {
+			HTM_SPAN_Begin ("class=\"%s\"",ClassText);
+			   HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+			HTM_SPAN_End ();
+		       }
+		  HTM_TD_End ();
 
-            if (PutLink)
-               HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
-            else
-               HTM_SPAN_Begin ("class=\"%s\"",ClassText);
+		  /* Write user (from) */
+		  HTM_TD_Begin ("class=\"%s LT\"",ClassAuthorBg);
+		     Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+		  HTM_TD_End ();
 
-            if (Hie.Crs.CrsCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie.Crs.ShrtName);
-            else if (Hie.Deg.DegCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie.Deg.ShrtName);
-            else if (Hie.Ctr.CtrCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie.Ctr.ShrtName);
-            else if (Hie.Ins.InsCod > 0)
-               HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie.Ins.ShrtName);
-            else
-               HTM_Hyphen ();
+		  /* Write location */
+		  HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
+		     if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
+			 NotifyEvent == Ntf_EVENT_FORUM_REPLY)
+		       {
+			if (PutLink)
+			   PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
-            if (PutLink)
-              {
-               HTM_BUTTON_End ();
-               Frm_EndForm ();
-              }
-            else
-               HTM_SPAN_End ();
-           }
-         HTM_TD_End ();
+			if (PutLink)
+			   HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
+			else
+			   HTM_SPAN_Begin ("class=\"%s\"",ClassText);
+			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
+			if (PutLink)
+			  {
+			   HTM_BUTTON_End ();
+			   Frm_EndForm ();
+			  }
+			else
+			   HTM_SPAN_End ();
+		       }
+		     else
+		       {
+			if (PutLink)
+			   PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
-         /* Write date and time */
-         Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
+			if (PutLink)
+			   HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
+			else
+			   HTM_SPAN_Begin ("class=\"%s\"",ClassText);
 
-         /* Write status (sent by email / pending to be sent by email) */
-         HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
-         HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
-         HTM_TD_End ();
+			if (Hie.Crs.CrsCod > 0)
+			   HTM_TxtF ("%s:&nbsp;%s",Txt_Course,Hie.Crs.ShrtName);
+			else if (Hie.Deg.DegCod > 0)
+			   HTM_TxtF ("%s:&nbsp;%s",Txt_Degree,Hie.Deg.ShrtName);
+			else if (Hie.Ctr.CtrCod > 0)
+			   HTM_TxtF ("%s:&nbsp;%s",Txt_Center,Hie.Ctr.ShrtName);
+			else if (Hie.Ins.InsCod > 0)
+			   HTM_TxtF ("%s:&nbsp;%s",Txt_Institution,Hie.Ins.ShrtName);
+			else
+			   HTM_Hyphen ();
 
-         HTM_TR_End ();
+			if (PutLink)
+			  {
+			   HTM_BUTTON_End ();
+			   Frm_EndForm ();
+			  }
+			else
+			   HTM_SPAN_End ();
+		       }
+		  HTM_TD_End ();
 
-         /***** Write content of the event *****/
-         if (PutLink)
-           {
-            ContentStr = NULL;
+		  /* Write date and time */
+		  Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
 
-            Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
-                                           Cod,Hie.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                           false);
-            HTM_TR_Begin (NULL);
+		  /* Write status (sent by email / pending to be sent by email) */
+		  HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
+		     HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
+		  HTM_TD_End ();
 
-            HTM_TD_Begin ("colspan=\"2\"");
-            HTM_TD_End ();
+	       HTM_TR_End ();
 
-            HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
-            HTM_Txt (SummaryStr);
-            HTM_TD_End ();
+	       /***** Write content of the event *****/
+	       if (PutLink)
+		 {
+		  ContentStr = NULL;
 
-            HTM_TR_End ();
-           }
-        }
+		  Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
+						 Cod,Hie.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+						 false);
+		  HTM_TR_Begin (NULL);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+		  HTM_TD_Begin ("colspan=\"2\"");
+		  HTM_TD_End ();
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-     }
-   else
-      Ale_ShowAlert (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
-	                                         Txt_You_have_no_unread_notifications);
+		  HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
+		  HTM_Txt (SummaryStr);
+		  HTM_TD_End ();
+
+		  HTM_TR_End ();
+		 }
+	      }
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
+	}
+      else
+	 Ale_ShowAlert (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
+						    Txt_You_have_no_unread_notifications);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -627,7 +627,7 @@ void Ntf_ShowMyNotifications (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Reset to 0 the number of new notifications *****/
-   Ntf_UpdateMyLastAccessToNotifications ();
+   Ntf_DB_UpdateMyLastAccessToNotifications ();
   }
 
 /*****************************************************************************/
@@ -905,7 +905,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
          Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,GetContent);
          if (Gbl.WebService.IsWebService)
             /* Set the message as open by me, because I can read it in an extern application */
-            Msg_SetReceivedMsgAsOpen (Cod,UsrCod);
+            Msg_DB_SetReceivedMsgAsOpen (Cod,UsrCod);
          break;
       case Ntf_EVENT_SURVEY:
          Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,GetContent);
@@ -963,7 +963,7 @@ void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,lon
 /******************* Set possible notifications as removed *******************/
 /*****************************************************************************/
 
-void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
+void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
    /***** Set notification as removed *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
@@ -1089,7 +1089,7 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 	       default:
 		  return;
 	      }
-            Ntf_MarkNotifAsRemoved (NotifyEvent,FilCod);
+            Ntf_DB_MarkNotifAsRemoved (NotifyEvent,FilCod);
 	   }
          break;
       default:
@@ -1164,7 +1164,7 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 /******* Set all possible notifications of files in a group as removed *******/
 /*****************************************************************************/
 
-void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
+void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod)
   {
    /***** Set notifications as removed *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
@@ -1513,14 +1513,14 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
               {
 	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
 		 {
-		  Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,
+		  Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,
 						 (Ntf_Status_t) Ntf_STATUS_BIT_EMAIL,
 						 InsCod,CtrCod,DegCod,CrsCod);
 		  NumUsrsToBeNotifiedByEMail++;
 		 }
 	       else							// Don't send notification by email
-		  Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,(Ntf_Status_t) 0,
-						 InsCod,CtrCod,DegCod,CrsCod);
+		  Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,(Ntf_Status_t) 0,
+						    InsCod,CtrCod,DegCod,CrsCod);
               }
         }
 
@@ -1538,10 +1538,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 /************** Store a notify event to one user into database ***************/
 /*****************************************************************************/
 
-void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
-                                    struct UsrData *UsrDat,
-                                    long Cod,Ntf_Status_t Status,
-                                    long InsCod,long CtrCod,long DegCod,long CrsCod)
+void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
+                                       struct UsrData *UsrDat,
+                                       long Cod,Ntf_Status_t Status,
+                                       long InsCod,long CtrCod,long DegCod,long CrsCod)
   {
    /***** Store notify event *****/
    DB_QueryINSERT ("can not create new notification event",
@@ -1566,7 +1566,7 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
 /*************** Reset my number of new notifications to 0 *******************/
 /*****************************************************************************/
 
-static void Ntf_UpdateMyLastAccessToNotifications (void)
+static void Ntf_DB_UpdateMyLastAccessToNotifications (void)
   {
    /***** Reset to 0 my number of new notifications *****/
    DB_QueryUPDATE ("can not update last access to notifications",
@@ -2004,70 +2004,68 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** Begin section with settings on privacy *****/
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Notifications,
-                 Ntf_PutIconsNotif,NULL,
-                 Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Notifications,
+		    Ntf_PutIconsNotif,NULL,
+		    Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActChgNtfPrf);
+	 /***** Begin form *****/
+	 Frm_BeginForm (ActChgNtfPrf);
 
-   /***** Warning if I can not receive email notifications *****/
-   if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
-      Mai_WriteWarningEmailNotifications ();
+	    /***** Warning if I can not receive email notifications *****/
+	    if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
+	       Mai_WriteWarningEmailNotifications ();
 
-   /***** List of notifications *****/
-   HTM_TABLE_BeginCenterPadding (2);
-   HTM_TR_Begin (NULL);
+	    /***** List of notifications *****/
+	    HTM_TABLE_BeginCenterPadding (2);
 
-   HTM_TH_Empty (1);
+	       HTM_TR_Begin (NULL);
+		  HTM_TH_Empty (1);
+		  HTM_TH (1,1,"CM",Txt_Create_BR_notification);
+		  HTM_TH (1,1,"CM",Txt_Notify_me_BR_by_email);
+	       HTM_TR_End ();
 
-   HTM_TH (1,1,"CM",Txt_Create_BR_notification);
-   HTM_TH (1,1,"CM",Txt_Notify_me_BR_by_email);
+	       /***** Checkbox to activate internal notifications and email notifications
+		      about events *****/
+	       for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+		    NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
+		    NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
+		 {
+		  HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+		     HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+		     HTM_TD_End ();
 
-   /***** Checkbox to activate internal notifications and email notifications
-          about events *****/
-   for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
-	NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
-	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
-     {
-      HTM_TR_Begin (NULL);
+		     HTM_TD_Begin ("class=\"CM\"");
+			HTM_INPUT_CHECKBOX (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
+					    "value=\"Y\"%s",
+					    (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
+					     (1 << NotifyEvent)) ? " checked=\"checked\"" :
+								   "");
+		     HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
-      HTM_TD_End ();
+		     HTM_TD_Begin ("class=\"CM\"");
+			HTM_INPUT_CHECKBOX (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
+					    "value=\"Y\"%s",
+					    (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
+					     (1 << NotifyEvent)) ? " checked=\"checked\"" :
+								   "");
+		     HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"CM\"");
-      HTM_INPUT_CHECKBOX (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"%s",
-			  (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
-			   (1 << NotifyEvent)) ? " checked=\"checked\"" :
-				                 "");
-      HTM_TD_End ();
+		  HTM_TR_End ();
+		 }
 
-      HTM_TD_Begin ("class=\"CM\"");
-      HTM_INPUT_CHECKBOX (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"%s",
-			  (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
-			   (1 << NotifyEvent)) ? " checked=\"checked\"" :
-				                 "");
-      HTM_TD_End ();
+	    HTM_TABLE_End ();
 
-      HTM_TR_End ();
-     }
+	    /***** Button to save changes *****/
+	    Btn_PutConfirmButton (Txt_Save_changes);
 
-   HTM_TABLE_End ();
+	 /***** End form *****/
+	 Frm_EndForm ();
 
-   /***** Button to save changes *****/
-   Btn_PutConfirmButton (Txt_Save_changes);
-
-   /***** End form *****/
-   Frm_EndForm ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section with settings about notifications *****/
    HTM_SECTION_End ();
@@ -2147,30 +2145,34 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** Begin form *****/
    Frm_BeginFormId (ActSeeNewNtf,"form_ntf");
-   HTM_BUTTON_SUBMIT_Begin (Txt_See_notifications,The_ClassNotif[Gbl.Prefs.Theme],NULL);
 
-   /***** Number of unseen notifications *****/
-   HTM_SPAN_Begin ("id=\"notif_all\"");
-      HTM_TxtF ("%u&nbsp;%s",NumUnseenNtfs,
-                NumUnseenNtfs == 1 ? Txt_notification :
-				     Txt_notifications);
-   HTM_SPAN_End ();
+      /***** Begin link *****/
+      HTM_BUTTON_SUBMIT_Begin (Txt_See_notifications,The_ClassNotif[Gbl.Prefs.Theme],NULL);
 
-   /***** Icon and number of new notifications *****/
-   if (NumNewNtfs)
-     {
-      HTM_BR ();
-      HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
-	       "class=\"ICO16x16\"");
-      HTM_TxtF ("&nbsp;%u",NumNewNtfs);
-      HTM_SPAN_Begin ("id=\"notif_new\"");
-	 HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
-						Txt_NOTIF_new_PLURAL);
-      HTM_SPAN_End ();
-     }
+	 /***** Number of unseen notifications *****/
+	 HTM_SPAN_Begin ("id=\"notif_all\"");
+	    HTM_TxtF ("%u&nbsp;%s",NumUnseenNtfs,
+		      NumUnseenNtfs == 1 ? Txt_notification :
+					   Txt_notifications);
+	 HTM_SPAN_End ();
+
+	 /***** Icon and number of new notifications *****/
+	 if (NumNewNtfs)
+	   {
+	    HTM_BR ();
+	    HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
+		     "class=\"ICO16x16\"");
+	    HTM_TxtF ("&nbsp;%u",NumNewNtfs);
+	    HTM_SPAN_Begin ("id=\"notif_new\"");
+	       HTM_TxtF ("&nbsp;%s",NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :
+						      Txt_NOTIF_new_PLURAL);
+	    HTM_SPAN_End ();
+	   }
+
+      /***** End link *****/
+      HTM_BUTTON_End ();
 
    /***** End form *****/
-   HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 

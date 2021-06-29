@@ -1233,7 +1233,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    const char *Title)
   {
    /***** Begin form *****/
-   Frm_StartFormAnchor (NextAction,Anchor);
+   Frm_BeginFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams (Args);
 
@@ -1260,7 +1260,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (NextAction,Anchor);
+   Frm_BeginFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams (Args);
 
@@ -1294,7 +1294,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
 			// jumping to the next line on narrow screens
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (NextAction,Anchor);
+   Frm_BeginFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams (Args);
 

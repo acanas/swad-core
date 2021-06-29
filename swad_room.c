@@ -814,7 +814,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
       /* Building */
       HTM_TD_Begin ("class=\"CT\"");
-      Frm_StartFormAnchor (ActChgRooBld,Anchor);
+      Frm_BeginFormAnchor (ActChgRooBld,Anchor);
       Roo_PutParamRooCod (&Room->RooCod);
       Roo_PutSelectorBuilding (Room->BldCod,Buildings,
                                HTM_SUBMIT_ON_CHANGE);
@@ -823,7 +823,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
       /* Floor */
       HTM_TD_Begin ("class=\"LT\"");
-      Frm_StartFormAnchor (ActChgRooFlo,Anchor);
+      Frm_BeginFormAnchor (ActChgRooFlo,Anchor);
       Roo_PutParamRooCod (&Room->RooCod);
       HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
                       HTM_SUBMIT_ON_CHANGE,false,
@@ -833,7 +833,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
       /* Room type */
       HTM_TD_Begin ("class=\"CT\"");
-      Frm_StartFormAnchor (ActChgRooTyp,Anchor);
+      Frm_BeginFormAnchor (ActChgRooTyp,Anchor);
       Roo_PutParamRooCod (&Room->RooCod);
       Roo_PutSelectorType (Room->Type,
                            HTM_SUBMIT_ON_CHANGE);
@@ -842,7 +842,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
       /* Room short name */
       HTM_TD_Begin ("class=\"LT\"");
-      Frm_StartFormAnchor (ActRenRooSho,Anchor);
+      Frm_BeginFormAnchor (ActRenRooSho,Anchor);
       Roo_PutParamRooCod (&Room->RooCod);
       HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -852,7 +852,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
       /* Room full name */
       HTM_TD_Begin ("class=\"LT\"");
-      Frm_StartFormAnchor (ActRenRooFul,Anchor);
+      Frm_BeginFormAnchor (ActRenRooFul,Anchor);
       Roo_PutParamRooCod (&Room->RooCod);
       HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
                       HTM_SUBMIT_ON_CHANGE,
@@ -862,7 +862,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 
       /* Seating capacity */
       HTM_TD_Begin ("class=\"LT\"");
-      Frm_StartFormAnchor (ActChgRooMaxUsr,Anchor);
+      Frm_BeginFormAnchor (ActChgRooMaxUsr,Anchor);
       Roo_PutParamRooCod (&Room->RooCod);
       Roo_WriteCapacity (StrCapacity,Room->Capacity);
       HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,

@@ -634,7 +634,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 
       /***** Begin form to update the results
 	     depending on the exams selected *****/
-      Frm_StartFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
+      Frm_BeginFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
       Grp_PutParamsCodGrps ();
       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 

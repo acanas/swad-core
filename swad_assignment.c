@@ -993,7 +993,7 @@ void Asg_RemoveAssignment (void)
    Asg_DB_RemoveAssignment (Asg.AsgCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,

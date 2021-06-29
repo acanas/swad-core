@@ -2626,7 +2626,7 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
 
    /***** Button to show more details *****/
    /* Begin form */
-   Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
+   Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
@@ -2684,7 +2684,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	     depending on the events selected *****/
       if (NormalView)
 	{
-	 Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
+	 Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
 	 Grp_PutParamsCodGrps ();
 	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	}

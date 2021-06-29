@@ -194,7 +194,7 @@ static void Tml_Fav_UnfNote (struct Tml_Not_Note *Not)
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,OriginalPubCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,OriginalPubCod);
   }
 
 /*****************************************************************************/
@@ -345,7 +345,7 @@ static void Tml_Fav_UnfComm (struct Tml_Com_Comment *Com)
 				       Com->PubCod,Com->UsrCod);
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,Com->PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,Com->PubCod);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);

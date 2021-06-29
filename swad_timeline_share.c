@@ -192,5 +192,5 @@ static void Tml_Sha_UnsNote (struct Tml_Not_Note *Not)
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE,OriginalPubCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE,OriginalPubCod);
   }

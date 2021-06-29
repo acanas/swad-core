@@ -1102,7 +1102,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       HTM_ARTICLE_Begin (Anchor);
 		  if (ICanEditSets)
 		    {
-		     Frm_StartFormAnchor (ActChgTitExaSet,Anchor);
+		     Frm_BeginFormAnchor (ActChgTitExaSet,Anchor);
 		     ExaSet_PutParamsOneSet (Exams);
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_SUBMIT_ON_CHANGE,
@@ -1130,7 +1130,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	       if (ICanEditSets)
 		 {
-		  Frm_StartFormAnchor (ActChgNumQstExaSet,Anchor);
+		  Frm_BeginFormAnchor (ActChgNumQstExaSet,Anchor);
 		  ExaSet_PutParamsOneSet (Exams);
 		     HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
 				     HTM_SUBMIT_ON_CHANGE,false,

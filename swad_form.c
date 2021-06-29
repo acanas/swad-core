@@ -68,7 +68,7 @@ void Frm_BeginForm (Act_Action_t NextAction)
    Frm_BeginFormAnchorOnSubmit (NextAction,NULL,NULL);
   }
 
-void Frm_StartFormAnchor (Act_Action_t NextAction,const char *Anchor)
+void Frm_BeginFormAnchor (Act_Action_t NextAction,const char *Anchor)
   {
    Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,NULL);
   }

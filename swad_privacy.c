@@ -166,7 +166,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    /***** Form with list of options *****/
    HTM_TD_Begin ("class=\"LT\"");
    if (Action != ActUnk)
-      Frm_StartFormAnchor (Action,Pri_PRIVACY_ID);
+      Frm_BeginFormAnchor (Action,Pri_PRIVACY_ID);
    HTM_UL_Begin ("class=\"PRI_LIST LIST_LEFT\"");
    for (Visibility = Pri_VISIBILITY_USER;
 	Visibility <= Pri_VISIBILITY_WORLD;

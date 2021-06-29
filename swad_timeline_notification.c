@@ -86,7 +86,7 @@ void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 	     If this author wants to receive notifications by email,
 	     activate the sending of a notification *****/
       if (CreateNotif)
-	 Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
+	 Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
 					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 									0),
 					Gbl.Hierarchy.Ins.InsCod,

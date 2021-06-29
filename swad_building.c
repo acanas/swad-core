@@ -448,7 +448,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 
 	    /* Building short name */
 	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_StartFormAnchor (ActRenBldSho,Anchor);
+	       Frm_BeginFormAnchor (ActRenBldSho,Anchor);
 	       Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -458,7 +458,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 
 	    /* Building full name */
 	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_StartFormAnchor (ActRenBldFul,Anchor);
+	       Frm_BeginFormAnchor (ActRenBldFul,Anchor);
 	       Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -468,7 +468,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");
-	       Frm_StartFormAnchor (ActRenBldLoc,Anchor);
+	       Frm_BeginFormAnchor (ActRenBldLoc,Anchor);
 	       Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
 				  HTM_SUBMIT_ON_CHANGE,

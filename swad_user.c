@@ -731,7 +731,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get nickname and email *****/
-   Nck_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
+   Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
    Mai_GetEmailFromUsrCod (UsrDat);
   }
 
@@ -6388,7 +6388,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
                                 Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
-   Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
+   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
@@ -6407,7 +6407,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
                                 Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
-   Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
+   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
@@ -6432,7 +6432,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
    /***** Begin form *****/
-   Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
+   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 	                Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (ListType);

@@ -1721,7 +1721,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	     TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 	   {
 	    ICanEdit = true;
-	    Frm_StartFormAnchor (ActRcvRecOthUsr,Anchor);
+	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
 	    Par_PutHiddenParamLong (NULL,"OriginalActCod",
 				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -2620,7 +2620,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 			       Rec_PutParamUsrCodEncrypted,NULL);
 
       /***** Button to send a message *****/
-      RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
+      RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
 						     Gbl.Record.UsrDat->UsrCod);	// To:
       if (!RecipientHasBannedMe)
 	 Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
@@ -3896,7 +3896,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 
 	       /* Begin form to select the country of my institution */
-	       Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
+	       Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
 				    " class=\"REC_C2_BOT_INPUT\"");
@@ -3933,7 +3933,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Ins_GetBasicListOfInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod);
 
 	       /* Begin form to select institution */
-	       Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
+	       Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
 				    " class=\"REC_C2_BOT_INPUT\"");
@@ -3974,7 +3974,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		     Ctr_GetBasicListOfCenters (Gbl.Usrs.Me.UsrDat.InsCod);
 
 		  /* Begin form to select center */
-		  Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
+		  Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
 				       " class=\"REC_C2_BOT_INPUT\"");
@@ -4006,7 +4006,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		  Frm_StartFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
+		  Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
 						  "REC_C2_BOT_INPUT",			// Selector class
@@ -4026,7 +4026,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		  Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
+		  Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "id=\"Office\" class=\"REC_C2_BOT_INPUT\"");
@@ -4043,7 +4043,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-		  Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
+		  Frm_BeginFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 				    HTM_SUBMIT_ON_CHANGE,
 				    "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT\"");

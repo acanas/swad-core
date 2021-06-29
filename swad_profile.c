@@ -1235,7 +1235,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of messages sent from database *****/
-      UsrFigures.NumMsgSnt = (int) Msg_GetNumMsgsSentByUsr (UsrCod);
+      UsrFigures.NumMsgSnt = (int) Msg_DB_GetNumMsgsSentByUsr (UsrCod);
 
       /***** Update number of messages sent in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))

@@ -66,7 +66,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 static void Nck_PutParamsRemoveMyNick (void *Nick);
 static void Nck_PutParamsRemoveOtherNick (void *Nick);
 
-static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname);
+static void Nck_DB_RemoveNickname (long UsrCod,const char *Nickname);
 
 static void Nck_UpdateUsrNick (struct UsrData *UsrDat);
 
@@ -112,8 +112,8 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
 /************* Get nickname of a user from his/her user's code ***************/
 /*****************************************************************************/
 
-void Nck_GetNicknameFromUsrCod (long UsrCod,
-                                char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
+void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
+                                   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
    /***** Get current (last updated) user's nickname from database *****/
    DB_QuerySELECTString (Nickname,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA,
@@ -207,181 +207,181 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    /***** Begin section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
-   /***** Get my nicknames *****/
-   NumNicks = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
-		   "SELECT Nickname"	// row[0]
-		    " FROM usr_nicknames"
-		   " WHERE UsrCod=%ld"
-		   " ORDER BY CreatTime DESC",
-		   UsrDat->UsrCod);
+      /***** Get my nicknames *****/
+      NumNicks = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
+		      "SELECT Nickname"	// row[0]
+		       " FROM usr_nicknames"
+		      " WHERE UsrCod=%ld"
+		      " ORDER BY CreatTime DESC",
+		      UsrDat->UsrCod);
 
-   /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Nickname,
-                 Acc_PutLinkToRemoveMyAccount,NULL,
-                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
+      Box_BoxBegin (StrRecordWidth,Txt_Nickname,
+		    Acc_PutLinkToRemoveMyAccount,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-   /***** Show possible alerts *****/
-   Ale_ShowAlerts (Nck_NICKNAME_SECTION_ID);
+	 /***** Show possible alerts *****/
+	 Ale_ShowAlerts (Nck_NICKNAME_SECTION_ID);
 
-   /***** Help message *****/
-   if (IMustFillNickname)
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+	 /***** Help message *****/
+	 if (IMustFillNickname)
+	    Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWidePadding (2);
 
-   /***** List nicknames *****/
-   for (NumNick  = 1;
-	NumNick <= NumNicks;
-	NumNick++)
-     {
-      /* Get nickname */
-      row = mysql_fetch_row (mysql_res);
-
-      if (NumNick == 1)
-	{
-	 /* The first nickname is the current one */
-         HTM_TR_Begin (NULL);
-
-         /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
-	}
-      else	// NumNick >= 2
-	{
-	 if (NumNick == 2)
-	   {
-            HTM_TR_Begin (NULL);
-
-            /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
-
-	    /* Data */
-	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
-	   }
-
-	 /* Form to remove old nickname */
-	 if (ItsMe)
-	    Ico_PutContextualIconToRemove (ActRemMyNck,Nck_NICKNAME_SECTION_ID,
-					   Nck_PutParamsRemoveMyNick,row[0]);
-	 else
-	   {
-	    switch (UsrDat->Roles.InCurrentCrs)
+	    /***** List nicknames *****/
+	    for (NumNick  = 1;
+		 NumNick <= NumNicks;
+		 NumNick++)
 	      {
-	       case Rol_STD:
-		  NextAction = ActRemOldNicStd;
-		  break;
-	       case Rol_NET:
-	       case Rol_TCH:
-		  NextAction = ActRemOldNicTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActRemOldNicOth;
-		  break;
+	       /* Get nickname */
+	       row = mysql_fetch_row (mysql_res);
+
+	       if (NumNick == 1)
+		 {
+		  /* The first nickname is the current one */
+		  HTM_TR_Begin (NULL);
+
+		  /* Label */
+		  Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
+
+		  /* Data */
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
+		 }
+	       else	// NumNick >= 2
+		 {
+		  if (NumNick == 2)
+		    {
+		     HTM_TR_Begin (NULL);
+
+		     /* Label */
+		     Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
+
+		     /* Data */
+		     HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+		    }
+
+		  /* Form to remove old nickname */
+		  if (ItsMe)
+		     Ico_PutContextualIconToRemove (ActRemMyNck,Nck_NICKNAME_SECTION_ID,
+						    Nck_PutParamsRemoveMyNick,row[0]);
+		  else
+		    {
+		     switch (UsrDat->Roles.InCurrentCrs)
+		       {
+			case Rol_STD:
+			   NextAction = ActRemOldNicStd;
+			   break;
+			case Rol_NET:
+			case Rol_TCH:
+			   NextAction = ActRemOldNicTch;
+			   break;
+			default:	// Guest, user or admin
+			   NextAction = ActRemOldNicOth;
+			   break;
+		       }
+		     Ico_PutContextualIconToRemove (NextAction,Nck_NICKNAME_SECTION_ID,
+						    Nck_PutParamsRemoveOtherNick,row[0]);
+		    }
+		 }
+
+	       /* Nickname */
+	       HTM_TxtF ("@%s",row[0]);
+
+	       /* Link to QR code */
+	       if (NumNick == 1 && UsrDat->Nickname[0])
+		  QR_PutLinkToPrintQRCode (ActPrnUsrQR,
+					   Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+
+	       /* Form to change the nickname */
+	       if (NumNick > 1)
+		 {
+		  HTM_BR ();
+		  if (ItsMe)
+		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
+		  else
+		    {
+		     switch (UsrDat->Roles.InCurrentCrs)
+		       {
+			case Rol_STD:
+			   NextAction = ActChgNicStd;
+			   break;
+			case Rol_NET:
+			case Rol_TCH:
+			   NextAction = ActChgNicTch;
+			   break;
+			default:	// Guest, user or admin
+			   NextAction = ActChgNicOth;
+			   break;
+		       }
+		     Frm_BeginFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		    }
+
+		  snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
+		  Par_PutHiddenParamString (NULL,"NewNick",NickWithArr);	// Nickname
+		  Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
+		  Frm_EndForm ();
+		 }
+
+	       if (NumNick == 1 ||
+		   NumNick == NumNicks)
+		 {
+		  HTM_TD_End ();
+		  HTM_TR_End ();
+		 }
+	       else
+		  HTM_BR ();
 	      }
-	    Ico_PutContextualIconToRemove (NextAction,Nck_NICKNAME_SECTION_ID,
-					   Nck_PutParamsRemoveOtherNick,row[0]);
-	   }
-	}
 
-      /* Nickname */
-      HTM_TxtF ("@%s",row[0]);
+	    /***** Form to enter new nickname *****/
+	    HTM_TR_Begin (NULL);
 
-      /* Link to QR code */
-      if (NumNick == 1 && UsrDat->Nickname[0])
-	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-	                          Usr_PutParamMyUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod);
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
+				NumNicks ? Txt_New_nickname :	// A new nickname
+					   Txt_Nickname);		// The first nickname
 
-      /* Form to change the nickname */
-      if (NumNick > 1)
-	{
-         HTM_BR ();
-	 if (ItsMe)
-	    Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
-	 else
-	   {
-	    switch (UsrDat->Roles.InCurrentCrs)
-	      {
-	       case Rol_STD:
-		  NextAction = ActChgNicStd;
-		  break;
-	       case Rol_NET:
-	       case Rol_TCH:
-		  NextAction = ActChgNicTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActChgNicOth;
-		  break;
-	      }
-	    Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	   }
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+		  if (ItsMe)
+		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
+		  else
+		    {
+		     switch (UsrDat->Roles.InCurrentCrs)
+		       {
+			case Rol_STD:
+			   NextAction = ActChgNicStd;
+			   break;
+			case Rol_NET:
+			case Rol_TCH:
+			   NextAction = ActChgNicTch;
+			   break;
+			default:	// Guest, user or admin
+			   NextAction = ActChgNicOth;
+			   break;
+		       }
+		     Frm_BeginFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		    }
+		  snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
+			    Gbl.Usrs.Me.UsrDat.Nickname);
+		  HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
+				  NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"NewNick\" size=\"18\"");
+		  HTM_BR ();
+		  Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
+							Txt_Save_changes);	// I have no nickname yet);
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-	 snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
-	 Par_PutHiddenParamString (NULL,"NewNick",NickWithArr);	// Nickname
-	 Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
-	 Frm_EndForm ();
-	}
+	    HTM_TR_End ();
 
-      if (NumNick == 1 ||
-	  NumNick == NumNicks)
-	{
-         HTM_TD_End ();
-         HTM_TR_End ();
-	}
-      else
-	 HTM_BR ();
-     }
-
-   /***** Form to enter new nickname *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
-		    NumNicks ? Txt_New_nickname :	// A new nickname
-        	               Txt_Nickname);		// The first nickname
-
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
-   if (ItsMe)
-      Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
-   else
-     {
-      switch (UsrDat->Roles.InCurrentCrs)
-	{
-	 case Rol_STD:
-	    NextAction = ActChgNicStd;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActChgNicTch;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActChgNicOth;
-	    break;
-	}
-      Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-     }
-   snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
-	     Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-		   NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"NewNick\" size=\"18\"");
-   HTM_BR ();
-   Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
-        	                         Txt_Save_changes);	// I have no nickname yet);
-   Frm_EndForm ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -419,7 +419,7 @@ void Nck_RemoveMyNick (void)
    if (strcasecmp (NickWithoutArr,Gbl.Usrs.Me.UsrDat.Nickname))	// Only if not my current nickname
      {
       /***** Remove one of my old nicknames *****/
-      Nck_RemoveNicknameFromDB (Gbl.Usrs.Me.UsrDat.UsrCod,NickWithoutArr);
+      Nck_DB_RemoveNickname (Gbl.Usrs.Me.UsrDat.UsrCod,NickWithoutArr);
 
       /***** Show message *****/
       Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
@@ -453,7 +453,7 @@ void Nck_RemoveOtherUsrNick (void)
 			   Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
 
 	 /***** Remove one of the old nicknames *****/
-	 Nck_RemoveNicknameFromDB (Gbl.Usrs.Other.UsrDat.UsrCod,NickWithoutArr);
+	 Nck_DB_RemoveNickname (Gbl.Usrs.Other.UsrDat.UsrCod,NickWithoutArr);
 
 	 /***** Show message *****/
 	 Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
@@ -474,7 +474,7 @@ void Nck_RemoveOtherUsrNick (void)
 /********************** Remove a nickname from database **********************/
 /*****************************************************************************/
 
-static void Nck_RemoveNicknameFromDB (long UsrCod,const char *Nickname)
+static void Nck_DB_RemoveNickname (long UsrCod,const char *Nickname)
   {
    /***** Remove a nickname *****/
    DB_QueryREPLACE ("can not remove a nickname",
@@ -587,7 +587,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
         {
          // Now we know the new nickname is not already in database
 	 // and is diffent to the current one
-         Nck_UpdateNickInDB (UsrDat->UsrCod,NewNickWithoutArr);
+         Nck_DB_UpdateNick (UsrDat->UsrCod,NewNickWithoutArr);
          Str_Copy (UsrDat->Nickname,NewNickWithoutArr,sizeof (UsrDat->Nickname) - 1);
 
          Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
@@ -607,7 +607,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 /******************* Update user's nickname in database **********************/
 /*****************************************************************************/
 
-void Nck_UpdateNickInDB (long UsrCod,const char *NewNickname)
+void Nck_DB_UpdateNick (long UsrCod,const char *NewNickname)
   {
    /***** Update user's nickname in database *****/
    DB_QueryREPLACE ("can not update nickname",

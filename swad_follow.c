@@ -410,7 +410,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       /* Form to list users */
-      Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
+      Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Title,
 			       (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
@@ -436,7 +436,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       /* Form to list users */
-      Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
+      Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       HTM_BUTTON_SUBMIT_Begin (Title,
 			       (Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
@@ -1123,7 +1123,7 @@ static void Fol_FollowUsr (struct UsrData *UsrDat)
 	  If this followed wants to receive notifications by email,
 	  activate the sending of a notification *****/
    if (CreateNotif)
-      Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
+      Ntf_DB_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
 				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 								     0),
 				     Gbl.Hierarchy.Ins.InsCod,
