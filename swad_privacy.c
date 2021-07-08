@@ -91,43 +91,43 @@ void Pri_EditMyPrivacy (void)
    /***** Begin section with settings on privacy *****/
    HTM_SECTION_Begin (Pri_PRIVACY_ID);
 
-   /***** If any of my settings about privacy is unknown *****/
-   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
-       Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
-       Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_check_your_privacy_settings);
+      /***** If any of my settings about privacy is unknown *****/
+      if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
+	  Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
+	  Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
+	 Ale_ShowAlert (Ale_WARNING,Txt_Please_check_your_privacy_settings);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Privacy,
-                      Pri_PutIconsPrivacy,NULL,
-                      Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_Privacy,
+			 Pri_PutIconsPrivacy,NULL,
+			 Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
-   /***** Edit photo visibility *****/
-   Pri_PutFormVisibility (Txt_Photo,
-                          ActChgPriPho,"VisPho",
-                          Gbl.Usrs.Me.UsrDat.PhotoVisibility,
-			  Pri_PHOTO_ALLOWED_VIS);
+	 /***** Edit photo visibility *****/
+	 Pri_PutFormVisibility (Txt_Photo,
+				ActChgPriPho,"VisPho",
+				Gbl.Usrs.Me.UsrDat.PhotoVisibility,
+				Pri_PHOTO_ALLOWED_VIS);
 
-   /***** Edit basic public profile visibility *****/
-   Pri_PutFormVisibility (Txt_Basic_public_profile,
-                          ActChgBasPriPrf,"VisBasPrf",
-                          Gbl.Usrs.Me.UsrDat.BaPrfVisibility,
-                          Pri_BASIC_PROFILE_ALLOWED_VIS);
+	 /***** Edit basic public profile visibility *****/
+	 Pri_PutFormVisibility (Txt_Basic_public_profile,
+				ActChgBasPriPrf,"VisBasPrf",
+				Gbl.Usrs.Me.UsrDat.BaPrfVisibility,
+				Pri_BASIC_PROFILE_ALLOWED_VIS);
 
-   /***** Edit extended public profile visibility *****/
-   Pri_PutFormVisibility (Txt_Extended_public_profile,
-                          ActChgExtPriPrf,"VisExtPrf",
-                          Gbl.Usrs.Me.UsrDat.ExPrfVisibility,
-                          Pri_EXTENDED_PROFILE_ALLOWED_VIS);
+	 /***** Edit extended public profile visibility *****/
+	 Pri_PutFormVisibility (Txt_Extended_public_profile,
+				ActChgExtPriPrf,"VisExtPrf",
+				Gbl.Usrs.Me.UsrDat.ExPrfVisibility,
+				Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
-   /***** Edit public activity (timeline) visibility *****/
-   Pri_PutFormVisibility (Txt_Timeline,
-                          ActUnk,"VisTml",
-                          Pri_VISIBILITY_SYSTEM,
-                          Pri_TIMELINE_ALLOWED_VIS);
+	 /***** Edit public activity (timeline) visibility *****/
+	 Pri_PutFormVisibility (Txt_Timeline,
+				ActUnk,"VisTml",
+				Pri_VISIBILITY_SYSTEM,
+				Pri_TIMELINE_ALLOWED_VIS);
 
-   /***** End table and box *****/
-   Box_BoxTableEnd ();
+      /***** End table and box *****/
+      Box_BoxTableEnd ();
 
    /***** End section with settings on privacy *****/
    HTM_SECTION_End ();
@@ -158,40 +158,44 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
    HTM_TR_Begin (NULL);
 
-   /***** Select visibility *****/
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (TxtLabel);
-   HTM_TD_End ();
+      /***** Select visibility *****/
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TxtColon (TxtLabel);
+      HTM_TD_End ();
 
-   /***** Form with list of options *****/
-   HTM_TD_Begin ("class=\"LT\"");
-   if (Action != ActUnk)
-      Frm_BeginFormAnchor (Action,Pri_PRIVACY_ID);
-   HTM_UL_Begin ("class=\"PRI_LIST LIST_LEFT\"");
-   for (Visibility = Pri_VISIBILITY_USER;
-	Visibility <= Pri_VISIBILITY_WORLD;
-	Visibility++)
-      if (MaskAllowedVisibility & (1 << Visibility))
-	{
-	 HTM_LI_Begin ("class=\"%s\"",
-		       (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
-							       "DAT");
-	 HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO (ParamName,Action != ActUnk,
-			  "value=\"%u\"%s%s",
-			  (unsigned) Visibility,
-			  Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" : "",
-			  Action == ActUnk ? " disabled=\"disabled\"" : "");
-	 HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
-	 HTM_LABEL_End ();
-	 HTM_LI_End ();
-	}
+      /***** Form with list of options *****/
+      HTM_TD_Begin ("class=\"LT\"");
+	 if (Action != ActUnk)
+	    Frm_BeginFormAnchor (Action,Pri_PRIVACY_ID);
+	 HTM_UL_Begin ("class=\"PRI_LIST LIST_LEFT\"");
 
-   /***** End list and form *****/
-   HTM_UL_End ();
-   if (Action != ActUnk)
-      Frm_EndForm ();
-   HTM_TD_End ();
+	    for (Visibility = Pri_VISIBILITY_USER;
+		 Visibility <= Pri_VISIBILITY_WORLD;
+		 Visibility++)
+	       if (MaskAllowedVisibility & (1 << Visibility))
+		 {
+		  HTM_LI_Begin ("class=\"%s\"",
+				(Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
+									"DAT");
+		     HTM_LABEL_Begin (NULL);
+			HTM_INPUT_RADIO (ParamName,Action != ActUnk,
+					 "value=\"%u\"%s%s",
+					 (unsigned) Visibility,
+					 Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" :
+						                               "",
+					 Action == ActUnk ? " disabled=\"disabled\"" :
+						            "");
+			HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
+		     HTM_LABEL_End ();
+		  HTM_LI_End ();
+		 }
+
+	 /***** End list and form *****/
+	 HTM_UL_End ();
+	 if (Action != ActUnk)
+	    Frm_EndForm ();
+      HTM_TD_End ();
+
    HTM_TR_End ();
   }
 

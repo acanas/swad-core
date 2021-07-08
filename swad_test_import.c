@@ -205,7 +205,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    if ((FileXML = fopen (PathPubFile,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open target file.");
 
-   /***** Start XML file *****/
+   /***** Begin XML file *****/
    XML_WriteStartFile (FileXML,"test",false);
    fprintf (FileXML,"%s",Txt_NEW_LINE);
 
@@ -359,7 +359,7 @@ static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
               NumOpt < Question->Answer.NumOptions;
               NumOpt++)
            {
-            /* Start answer */
+            /* Begin answer */
             fprintf (FileXML,"<option");
 
             /* Write whether the answer is correct or not */

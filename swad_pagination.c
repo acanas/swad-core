@@ -145,8 +145,8 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
    if (Pagination->MoreThanOnePage)
      {
       HTM_DIV_Begin ("class=\"CM\"");
-      Pag_WriteLinksToPages (WhatPaginate,Pagination,Context,Cod,
-			     true,NULL,"PAG_TXT",false);
+	 Pag_WriteLinksToPages (WhatPaginate,Pagination,Context,Cod,
+				true,NULL,"PAG_TXT",false);
       HTM_DIV_End ();
      }
   }
@@ -923,7 +923,7 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 /********* Save last page of received/sent messages into session *************/
 /*****************************************************************************/
 
-void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
+void Pag_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
    /***** Save last page of received/sent messages *****/
    DB_QueryUPDATE ("can not update last page of messages",

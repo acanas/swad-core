@@ -81,63 +81,63 @@ void Tab_DrawTabs (void)
       [The_THEME_PINK  ] = "HEAD_ROW_3_PINK",
       };
 
-   /***** Start tabs container *****/
+   /***** Begin tabs container *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassHeadRow3[Gbl.Prefs.Theme]);
-   HTM_Txt ("<nav id=\"tabs\">");
-   HTM_UL_Begin ("class=\"TAB_LIST\"");
+      HTM_Txt ("<nav id=\"tabs\">");
+      HTM_UL_Begin ("class=\"TAB_LIST\"");
 
-   /***** Draw the tabs *****/
-   for (NumTab  = (Tab_Tab_t) 1;
-        NumTab <= (Tab_Tab_t) (Tab_NUM_TABS - 1);
-        NumTab++)
-     {
-      ICanViewTab = Tab_CheckIfICanViewTab (NumTab);
+	 /***** Draw the tabs *****/
+	 for (NumTab  = (Tab_Tab_t) 1;
+	      NumTab <= (Tab_Tab_t) (Tab_NUM_TABS - 1);
+	      NumTab++)
+	   {
+	    ICanViewTab = Tab_CheckIfICanViewTab (NumTab);
 
-      /* If current tab is unknown, then activate the first one with access allowed */
-      if (Gbl.Action.Tab == TabUnk)
-	{
-	 Gbl.Action.Tab = NumTab;
-	 Tab_DisableIncompatibleTabs ();
-	}
+	    /* If current tab is unknown, then activate the first one with access allowed */
+	    if (Gbl.Action.Tab == TabUnk)
+	      {
+	       Gbl.Action.Tab = NumTab;
+	       Tab_DisableIncompatibleTabs ();
+	      }
 
-      if (ICanViewTab)	// Don't show the first hidden tabs
-	{
-	 /* Form, icon (at top) and text (at bottom) of the tab */
-	 HTM_LI_Begin ("class=\"%s %s\"",
-		       NumTab == Gbl.Action.Tab ? "TAB_ON" :
-						  "TAB_OFF",
-		       NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
-						  The_TabOffBgColors[Gbl.Prefs.Theme]);
+	    if (ICanViewTab)	// Don't show the first hidden tabs
+	      {
+	       /* Form, icon (at top) and text (at bottom) of the tab */
+	       HTM_LI_Begin ("class=\"%s %s\"",
+			     NumTab == Gbl.Action.Tab ? "TAB_ON" :
+							"TAB_OFF",
+			     NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
+							The_TabOffBgColors[Gbl.Prefs.Theme]);
 
-	 if (NumTab == Gbl.Action.Tab)
-	    HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
-	 else
-	    HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\"");
+		  if (NumTab == Gbl.Action.Tab)
+		     HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
+		  else
+		     HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\"");
 
-	 Frm_BeginForm (ActMnu);
-	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_TABS_TXT[NumTab],
-				  NumTab == Gbl.Action.Tab ? "BT_LINK" :
-							     "BT_LINK",
-				  NULL);
-	 HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
-	          "class=\"TAB_ICO\"");
-	 HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
-			NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
-	 HTM_Txt (Txt_TABS_TXT[NumTab]);
-	 HTM_DIV_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
+		  Frm_BeginForm (ActMnu);
+		  Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
+		     HTM_BUTTON_SUBMIT_Begin (Txt_TABS_TXT[NumTab],
+					      NumTab == Gbl.Action.Tab ? "BT_LINK" :
+									 "BT_LINK",
+					      NULL);
+			HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
+				 "class=\"TAB_ICO\"");
+			HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
+				       NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+								  The_ClassTxtTabOff[Gbl.Prefs.Theme]);
+			   HTM_Txt (Txt_TABS_TXT[NumTab]);
+			HTM_DIV_End ();
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
 
-	 HTM_DIV_End ();
-	 HTM_LI_End ();
-	}
-     }
+		  HTM_DIV_End ();
+	       HTM_LI_End ();
+	      }
+	   }
 
-   /***** End tabs container *****/
-   HTM_UL_End ();
-   HTM_Txt ("</nav>");
+      /***** End tabs container *****/
+      HTM_UL_End ();
+      HTM_Txt ("</nav>");
    HTM_DIV_End ();
   }
 

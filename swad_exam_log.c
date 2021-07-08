@@ -33,6 +33,7 @@
 #include "swad_action.h"
 #include "swad_database.h"
 #include "swad_error.h"
+#include "swad_exam_database.h"
 #include "swad_exam_log.h"
 #include "swad_global.h"
 
@@ -150,19 +151,7 @@ void ExaLog_LogAccess (long LogCod)
 	 /***** Insert access into database *****/
 	 /* Log access in exam log.
 	    Redundant data (also present in log table) are stored for speed */
-	 DB_QueryINSERT ("can not log exam access",
-			 "INSERT INTO exa_log "
-			 "(LogCod,PrnCod,ActCod,QstInd,CanAnswer,ClickTime,IP)"
-			 " VALUES "
-			 "(%ld,%ld,%ld,%d,'%c',NOW(),'%s')",
-			 LogCod,
-			 PrnCod,
-			 (unsigned) Action,
-			 ExaLog_GetQstInd (),
-			 ExaLog_GetIfCanAnswer () ? 'Y' :
-				                    'N',
-			 // NOW()   	   Redundant, for speed
-			 Gbl.IP);	// Redundant, for speed
+	 ExaLog_DB_LogAccess (LogCod,PrnCod,Action);
 
 	 /***** Log session and user agent *****/
 	 ExaLog_LogSession (LogCod,PrnCod);
@@ -177,33 +166,10 @@ void ExaLog_LogAccess (long LogCod)
 
 static void ExaLog_LogSession (long LogCod,long PrnCod)
   {
-   bool TheSameAsTheLast;
-
-   /***** Get if the current session id
-          is the same as the last stored in database *****/
-   TheSameAsTheLast = (DB_QueryCOUNT ("can not check session",
-				      "SELECT COUNT(*)"
-				       " FROM exa_log_sessions"
-				      " WHERE LogCod="
-					     "(SELECT MAX(LogCod)"
-					       " FROM exa_log_sessions"
-					      " WHERE PrnCod=%ld)"
-				        " AND SessionId='%s'",
-				      PrnCod,
-				      Gbl.Session.Id) != 0);
-
-
    /***** Insert session id into database
           only if it's not the same as the last one stored *****/
-   if (!TheSameAsTheLast)
-      DB_QueryINSERT ("can not log session",
-		      "INSERT INTO exa_log_sessions "
-		      "(LogCod,PrnCod,SessionId)"
-		      " VALUES "
-		      "(%ld,%ld,'%s')",
-		      LogCod,
-		      PrnCod,
-		      Gbl.Session.Id);
+   if (!ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (PrnCod))
+      ExaLog_DB_LogSession (LogCod,PrnCod);
   }
 
 /*****************************************************************************/
@@ -220,7 +186,6 @@ Googlebot/2.1 (+http://www.google.com/bot.html)
 
 static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
   {
-   bool TheSameAsTheLast;
    const char *UserAgent;
    char *UserAgentDB;
    size_t MaxBytes;
@@ -242,31 +207,10 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
    else
       UserAgentDB[0] = '\0';
 
-   /***** Get if the current user agent
-          is the same as the last stored in database *****/
-   TheSameAsTheLast = (DB_QueryCOUNT ("can not check user agent",
-				      "SELECT COUNT(*)"
-				       " FROM exa_log_user_agents"
-				      " WHERE LogCod="
-					     "(SELECT MAX(LogCod)"
-					       " FROM exa_log_user_agents"
-					      " WHERE PrnCod=%ld)"
-				        " AND UserAgent='%s'",
-				      PrnCod,
-				      UserAgentDB) != 0);
-
-
    /***** Insert user agent into database
           only if it's not the same as the last one stored *****/
-   if (!TheSameAsTheLast)
-      DB_QueryINSERT ("can not log user agent",
-		      "INSERT INTO exa_log_user_agents "
-		      "(LogCod,PrnCod,UserAgent)"
-		      " VALUES "
-		      "(%ld,%ld,'%s')",
-		      LogCod,
-		      PrnCod,
-		      UserAgentDB);
+   if (!ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (PrnCod,UserAgentDB))
+      ExaLog_DB_LogUserAgent (LogCod,PrnCod,UserAgentDB);
 
    /***** Free user agent *****/
    free (UserAgentDB);

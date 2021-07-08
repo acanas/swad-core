@@ -219,7 +219,7 @@ static void Grp_ReqEditGroupsInternal (Ale_AlertType_t AlertTypeGroupTypes,
 
 static void Grp_ReqEditGroupsInternal0 (void)
   {
-   /***** Start groups types section *****/
+   /***** Begin groups types section *****/
    HTM_SECTION_Begin (Grp_GROUP_TYPES_SECTION_ID);
   }
 
@@ -240,7 +240,7 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,
    /***** End groups types section *****/
    HTM_SECTION_End ();
 
-   /***** Start groups section *****/
+   /***** Begin groups section *****/
    HTM_SECTION_Begin (Grp_GROUPS_SECTION_ID);
   }
 
@@ -1489,7 +1489,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       HTM_TD_End ();
 
 	       /***** Group type *****/
-	       /* Start selector */
+	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
@@ -1523,7 +1523,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       HTM_TD_End ();
 
 	       /***** Room *****/
-	       /* Start selector */
+	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
 		  Grp_PutParamGrpCod (&Grp->GrpCod);
@@ -2079,10 +2079,10 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       UsrBelongsToThisGroup = (UsrCod > 0) ? Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsUsrBelongs) :
 	                                     false;
 
-      /* Start row */
+      /* Begin row */
       HTM_TR_Begin (NULL);
 
-	 /* Start cell for checkbox */
+	 /* Begin cell for checkbox */
          HTM_TD_Begin ("class=\"%s\"",
                        UsrBelongsToThisGroup ? "LM LIGHT_BLUE" :
 		                               "LM");
@@ -2557,7 +2557,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       HTM_TD_End ();
 
 	       /***** Group type *****/
-	       /* Start selector */
+	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"GrpTypCod\" style=\"width:100px;\"");
@@ -2583,7 +2583,7 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       HTM_TD_End ();
 
 	       /***** Room *****/
-	       /* Start selector */
+	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 				    "name=\"RooCod\" style=\"width:100px;\"");
@@ -4340,27 +4340,27 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
-   /***** Start setting selector *****/
+   /***** Begin setting selector *****/
    Set_BeginOneSettingSelector ();
 
-   /***** Put icons to select which groups *****/
-   for (WhichGrps  = Grp_MY_GROUPS;
-	WhichGrps <= Grp_ALL_GROUPS;
-	WhichGrps++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",
-		      WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
-							    "PREF_OFF");
-	 Frm_BeginForm (Action);
-	 Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-	 if (FuncParams)	// Extra parameters depending on the action
-	    FuncParams (Args);
-	 Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-							      "sitemap.svg",
-				 Txt_GROUP_WHICH_GROUPS[WhichGrps]);
-	 Frm_EndForm ();
-      HTM_DIV_End ();
-     }
+      /***** Put icons to select which groups *****/
+      for (WhichGrps  = Grp_MY_GROUPS;
+	   WhichGrps <= Grp_ALL_GROUPS;
+	   WhichGrps++)
+	{
+	 HTM_DIV_Begin ("class=\"%s\"",
+			 WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
+							       "PREF_OFF");
+	    Frm_BeginForm (Action);
+	    Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	    if (FuncParams)	// Extra parameters depending on the action
+	       FuncParams (Args);
+	    Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
+								 "sitemap.svg",
+				    Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+	    Frm_EndForm ();
+	 HTM_DIV_End ();
+	}
 
    /***** End setting selector *****/
    Set_EndOneSettingSelector ();

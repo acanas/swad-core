@@ -77,18 +77,19 @@ static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_GetMailDomain (const char *Email,
                                char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+static bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (void *MaiCod);
 
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
-static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const char *NewMaiName);
+static bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
+static void Mai_DB_UpdateMailDomainName (long MaiCod,
+                                         const char *FieldName,const char *NewMaiName);
 
 static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
-static void Mai_CreateMailDomain (struct Mail *Mai);
+static void Mai_DB_CreateMailDomain (struct Mail *Mai);
 
 static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args);
 static void Mai_ListEmails (__attribute__((unused)) void *Args);
@@ -100,7 +101,8 @@ static void Mai_PutParamsRemoveMyEmail (void *Email);
 static void Mai_PutParamsRemoveOtherEmail (void *Email);
 
 static void Mai_RemoveEmail (struct UsrData *UsrDat);
-static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+static void Mai_DB_RemoveEmail (long UsrCod,
+                                const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
@@ -139,25 +141,25 @@ void Mai_SeeMailDomains (void)
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-   for (Order = Mai_ORDER_BY_DOMAIN;
-	Order <= Mai_ORDER_BY_USERS;
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
+      for (Order = Mai_ORDER_BY_DOMAIN;
+	   Order <= Mai_ORDER_BY_USERS;
+	   Order++)
+	{
+	 HTM_TH_Begin (1,1,"LM");
 
-      Frm_BeginForm (ActSeeMai);
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-      HTM_BUTTON_SUBMIT_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Gbl.Mails.SelectedOrder)
-         HTM_U_Begin ();
-      HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
-      if (Order == Gbl.Mails.SelectedOrder)
-         HTM_U_End ();
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	    Frm_BeginForm (ActSeeMai);
+	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	       HTM_BUTTON_SUBMIT_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+		  if (Order == Gbl.Mails.SelectedOrder)
+		     HTM_U_Begin ();
+		  HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);
+		  if (Order == Gbl.Mails.SelectedOrder)
+		     HTM_U_End ();
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
 
-      HTM_TH_End ();
-     }
+	 HTM_TH_End ();
+	}
    HTM_TR_End ();
 
    /***** Write all the mail domains *****/
@@ -168,17 +170,17 @@ void Mai_SeeMailDomains (void)
       /* Write data of this mail domain */
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_Txt (Gbl.Mails.Lst[NumMai].Domain);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    HTM_Txt (Gbl.Mails.Lst[NumMai].Domain);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
-      HTM_Txt (Gbl.Mails.Lst[NumMai].Info);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LT\"");
+	    HTM_Txt (Gbl.Mails.Lst[NumMai].Info);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
-      HTM_Unsigned (Gbl.Mails.Lst[NumMai].NumUsrs);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT RT\"");
+	    HTM_Unsigned (Gbl.Mails.Lst[NumMai].NumUsrs);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -362,7 +364,7 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
 
    /***** Check #2: if my mail domain allowed? *****/
    Mai_GetMailDomain (UsrDat->Email,MailDomain);
-   return Mai_CheckIfMailDomainIsAllowedForNotif (MailDomain);
+   return Mai_DB_CheckIfMailDomainIsAllowedForNotif (MailDomain);
   }
 
 /*****************************************************************************/
@@ -389,7 +391,7 @@ static void Mai_GetMailDomain (const char *Email,
 /************ Check if a mail domain is allowed for notifications ************/
 /*****************************************************************************/
 
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+static bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Get number of mail_domains with a name from database *****/
    return (DB_QueryCOUNT ("can not check if a mail domain"
@@ -488,56 +490,56 @@ static void Mai_ListMailDomainsForEdition (void)
                       NULL,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Mai_PutHeadMailDomains ();
+      /***** Write heading *****/
+      Mai_PutHeadMailDomains ();
 
-   /***** Write all the mail domains *****/
-   for (NumMai = 0;
-	NumMai < Gbl.Mails.Num;
-	NumMai++)
-     {
-      Mai = &Gbl.Mails.Lst[NumMai];
+      /***** Write all the mail domains *****/
+      for (NumMai = 0;
+	   NumMai < Gbl.Mails.Num;
+	   NumMai++)
+	{
+	 Mai = &Gbl.Mails.Lst[NumMai];
 
-      HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-      /* Put icon to remove mail */
-      HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActRemMai,NULL,
-				     Mai_PutParamMaiCod,&Mai->MaiCod);
-      HTM_TD_End ();
+	    /* Put icon to remove mail */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToRemove (ActRemMai,NULL,
+					      Mai_PutParamMaiCod,&Mai->MaiCod);
+	    HTM_TD_End ();
 
-      /* Mail code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Long (Mai->MaiCod);
-      HTM_TD_End ();
+	    /* Mail code */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Long (Mai->MaiCod);
+	    HTM_TD_End ();
 
-      /* Mail domain */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenMaiSho);
-      Mai_PutParamMaiCod (&Mai->MaiCod);
-      HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"15\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Mail domain */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenMaiSho);
+	       Mai_PutParamMaiCod (&Mai->MaiCod);
+		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"15\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Mail domain info */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenMaiFul);
-      Mai_PutParamMaiCod (&Mai->MaiCod);
-      HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"40\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Mail domain info */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenMaiFul);
+	       Mai_PutParamMaiCod (&Mai->MaiCod);
+		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"40\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Number of users */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Mai->NumUsrs);
-      HTM_TD_End ();
+	    /* Number of users */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (Mai->NumUsrs);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -669,14 +671,14 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentMaiName,NewMaiName))	// Different names
         {
          /***** If mail was in database... *****/
-         if (Mai_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai_EditingMai->MaiCod))
+         if (Mai_DB_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai_EditingMai->MaiCod))
 	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_already_exists,
                              NewMaiName);
          else
            {
             /* Update the table changing old name by new name */
-            Mai_UpdateMailDomainNameDB (Mai_EditingMai->MaiCod,FieldName,NewMaiName);
+            Mai_DB_UpdateMailDomainName (Mai_EditingMai->MaiCod,FieldName,NewMaiName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
@@ -700,7 +702,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 /********************** Check if the name of mail exists *********************/
 /*****************************************************************************/
 
-static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
+static bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
   {
    /***** Get number of mail_domains with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name"
@@ -716,7 +718,8 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
 /****************** Update name in table of mail domains *********************/
 /*****************************************************************************/
 
-static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const char *NewMaiName)
+static void Mai_DB_UpdateMailDomainName (long MaiCod,
+                                         const char *FieldName,const char *NewMaiName)
   {
    /***** Update mail domain changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a mail domain",
@@ -757,41 +760,40 @@ static void Mai_PutFormToCreateMailDomain (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewMai);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_email_domain,
-                      NULL,NULL,
-                      Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_email_domain,
+			 NULL,NULL,
+			 Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
+	 /***** Write heading *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+	    HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
+	 HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
+	 /***** Second row *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	    /* Mail domain */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"15\" required=\"required\"");
+	    HTM_TD_End ();
 
-   HTM_TR_Begin (NULL);
+	    /* Mail domain info */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"40\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Mail domain *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"15\" required=\"required\"");
-   HTM_TD_End ();
+	    HTM_TD_Empty (1);
 
-   /***** Mail domain info *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"40\" required=\"required\"");
-   HTM_TD_End ();
+	 HTM_TR_End ();
 
-   HTM_TD_Empty (1);
-
-   HTM_TR_End ();
-
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_email_domain);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_email_domain);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -807,13 +809,11 @@ static void Mai_PutHeadMailDomains (void)
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
 
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
-   HTM_TH (1,1,"RM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
-
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+      HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+      HTM_TH (1,1,"RM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
    HTM_TR_End ();
   }
 
@@ -841,17 +841,17 @@ void Mai_ReceiveFormNewMailDomain (void)
        Mai_EditingMai->Info[0])	// If there's a mail name
      {
       /***** If name of mail was in database... *****/
-      if (Mai_CheckIfMailDomainNameExists ("Domain",Mai_EditingMai->Domain,-1L))
+      if (Mai_DB_CheckIfMailDomainNameExists ("Domain",Mai_EditingMai->Domain,-1L))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_email_domain_X_already_exists,
                           Mai_EditingMai->Domain);
-      else if (Mai_CheckIfMailDomainNameExists ("Info",Mai_EditingMai->Info,-1L))
+      else if (Mai_DB_CheckIfMailDomainNameExists ("Info",Mai_EditingMai->Info,-1L))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_email_domain_X_already_exists,
                           Mai_EditingMai->Info);
       else	// Add new mail to database
         {
-         Mai_CreateMailDomain (Mai_EditingMai);
+         Mai_DB_CreateMailDomain (Mai_EditingMai);
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_email_domain_X,
 			Mai_EditingMai->Domain);
         }
@@ -865,7 +865,7 @@ void Mai_ReceiveFormNewMailDomain (void)
 /************************** Create a new mail domain *************************/
 /*****************************************************************************/
 
-static void Mai_CreateMailDomain (struct Mail *Mai)
+static void Mai_DB_CreateMailDomain (struct Mail *Mai)
   {
    /***** Create a new mail *****/
    DB_QueryINSERT ("can not create mail domain",
@@ -934,95 +934,95 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
    struct UsrData UsrDat;
    const char *Ptr;
 
-   /***** Start the box used to list the emails *****/
+   /***** Begin the box used to list the emails *****/
    Box_BoxBegin (NULL,Txt_Email_addresses,
                  NULL,NULL,
 		 Hlp_COMMUNICATION_Email,Box_NOT_CLOSABLE);
 
-   /***** Start list with users' email addresses *****/
-   HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
+      /***** Begin list with users' email addresses *****/
+      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
 
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Get email addresses of the selected users *****/
-   StrAddresses[0] = '\0';
-   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
-   while (*Ptr)
-     {
-      /* Get next user */
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
-					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-
-      /* Get user's email */
-      Mai_GetEmailFromUsrCod (&UsrDat);
-
-      if (UsrDat.Email[0])
-	{
-	 NumUsrsWithEmail++;
-
-	 /* Check if users has accepted inscription in current course */
-	 UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
-
-	 if (UsrDat.Accepted) // If student has email and has accepted
+	 /***** Get email addresses of the selected users *****/
+	 StrAddresses[0] = '\0';
+	 Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+	 while (*Ptr)
 	   {
-	    if (NumAcceptedUsrsWithEmail > 0)
+	    /* Get next user */
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EnUsrCod,
+					       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+
+	    /* Get user's email */
+	    Mai_GetEmailFromUsrCod (&UsrDat);
+
+	    if (UsrDat.Email[0])
 	      {
-	       HTM_Txt (", ");
-	       LengthStrAddr ++;
-	       if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
-		  Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-	       Str_Concat (StrAddresses,",",sizeof (StrAddresses) - 1);
+	       NumUsrsWithEmail++;
+
+	       /* Check if users has accepted inscription in current course */
+	       UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+
+	       if (UsrDat.Accepted) // If student has email and has accepted
+		 {
+		  if (NumAcceptedUsrsWithEmail > 0)
+		    {
+		     HTM_Txt (", ");
+		     LengthStrAddr ++;
+		     if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
+			Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+		     Str_Concat (StrAddresses,",",sizeof (StrAddresses) - 1);
+		    }
+		  LengthStrAddr += strlen (UsrDat.Email);
+		  if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
+		     Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+		  Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
+		  HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
+			       UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
+		     HTM_Txt (UsrDat.Email);
+		  HTM_A_End ();
+
+		  NumAcceptedUsrsWithEmail++;
+		 }
 	      }
-	    LengthStrAddr += strlen (UsrDat.Email);
-	    if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
-	       Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-	    Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
-	    HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
-		         UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
-	    HTM_Txt (UsrDat.Email);
-	    HTM_A_End ();
-
-	    NumAcceptedUsrsWithEmail++;
 	   }
-	}
-     }
 
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
 
-   /***** End list with users' email addresses *****/
-   HTM_DIV_End ();
+      /***** End list with users' email addresses *****/
+      HTM_DIV_End ();
 
-   /***** Show a message with the number of users with email ****/
-   HTM_DIV_Begin ("class=\"DAT CM\"");
-   HTM_TxtF (Txt_X_users_who_have_email,NumUsrsWithEmail);
-   HTM_DIV_End ();
+      /***** Show a message with the number of users with email ****/
+      HTM_DIV_Begin ("class=\"DAT CM\"");
+	 HTM_TxtF (Txt_X_users_who_have_email,NumUsrsWithEmail);
+      HTM_DIV_End ();
 
-   /***** Show a message with the number of users who have accepted and have email ****/
-   HTM_DIV_Begin ("class=\"DAT CM\"");
-   HTM_TxtF (Txt_X_users_who_have_accepted_and_who_have_email,
-	     NumAcceptedUsrsWithEmail);
-   HTM_DIV_End ();
+      /***** Show a message with the number of users who have accepted and have email ****/
+      HTM_DIV_Begin ("class=\"DAT CM\"");
+	 HTM_TxtF (Txt_X_users_who_have_accepted_and_who_have_email,
+		   NumAcceptedUsrsWithEmail);
+      HTM_DIV_End ();
 
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
 
-   /* Open the client email program */
-   HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
-		" title=\"%s\" class=\"%s\"",
-	        Gbl.Usrs.Me.UsrDat.Email,
-	        Gbl.Hierarchy.Crs.FullName,
-	        Gbl.Usrs.Me.UsrDat.Email,
-	        StrAddresses,
-	        Txt_Create_email_message,
-	        The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-   Ico_PutIconTextLink ("marker.svg",
-			Txt_Create_email_message);
-   HTM_A_End ();
+      /* Open the client email program */
+      HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
+		   " title=\"%s\" class=\"%s\"",
+		   Gbl.Usrs.Me.UsrDat.Email,
+		   Gbl.Hierarchy.Crs.FullName,
+		   Gbl.Usrs.Me.UsrDat.Email,
+		   StrAddresses,
+		   Txt_Create_email_message,
+		   The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+	 Ico_PutIconTextLink ("marker.svg",
+			      Txt_Create_email_message);
+      HTM_A_End ();
 
-   Mnu_ContextMenuEnd ();
+      Mnu_ContextMenuEnd ();
 
    /***** End the box used to list the emails *****/
    Box_BoxEnd ();
@@ -1153,19 +1153,19 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    /***** Begin section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
-   /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Email,
-                 Acc_PutLinkToRemoveMyAccount,NULL,
-                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
+      Box_BoxBegin (StrRecordWidth,Txt_Email,
+		    Acc_PutLinkToRemoveMyAccount,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-   /***** Show form to change email *****/
-   Mai_ShowFormChangeUsrEmail (true,	// ItsMe
-			       IMustFillInEmail,
-			       IShouldConfirmEmail);
+	 /***** Show form to change email *****/
+	 Mai_ShowFormChangeUsrEmail (true,	// ItsMe
+				     IMustFillInEmail,
+				     IShouldConfirmEmail);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -1184,19 +1184,19 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    /***** Begin section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
-   /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Email,
-                 NULL,NULL,
-                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
+      Box_BoxBegin (StrRecordWidth,Txt_Email,
+		    NULL,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-   /***** Show form to change email *****/
-   Mai_ShowFormChangeUsrEmail (false,	// ItsMe
-			       false,	// IMustFillInEmail
-			       false);	// IShouldConfirmEmail
+	 /***** Show form to change email *****/
+	 Mai_ShowFormChangeUsrEmail (false,	// ItsMe
+				     false,	// IMustFillInEmail
+				     false);	// IShouldConfirmEmail
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -1252,76 +1252,122 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** List emails *****/
-   for (NumEmail  = 1;
-	NumEmail <= NumEmails;
-	NumEmail++)
-     {
-      /* Get email */
-      row = mysql_fetch_row (mysql_res);
-      Confirmed = (row[1][0] == 'Y');
-
-      if (NumEmail == 1)
+      /***** List emails *****/
+      for (NumEmail  = 1;
+	   NumEmail <= NumEmails;
+	   NumEmail++)
 	{
-         HTM_TR_Begin (NULL);
+	 /* Get email */
+	 row = mysql_fetch_row (mysql_res);
+	 Confirmed = (row[1][0] == 'Y');
 
-	 /* The first mail is the current one */
-         /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_email);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
-	}
-      else if (NumEmail == 2)
-	{
-	 HTM_TR_Begin (NULL);
-
-	 /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_emails);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
-	}
-
-      /* Form to remove email */
-      if (ItsMe)
-	 Ico_PutContextualIconToRemove (ActRemMyMai,Mai_EMAIL_SECTION_ID,
-					Mai_PutParamsRemoveMyEmail,row[0]);
-      else
-	{
-	 switch (UsrDat->Roles.InCurrentCrs)
+	 if (NumEmail == 1)
 	   {
-	    case Rol_STD:
-	       NextAction = ActRemMaiStd;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActRemMaiTch;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActRemMaiOth;
-	       break;
+	    HTM_TR_Begin (NULL);
+
+	       /* The first mail is the current one */
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_email);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	   }
-	 Ico_PutContextualIconToRemove (NextAction,Mai_EMAIL_SECTION_ID,
-					Mai_PutParamsRemoveOtherEmail,row[0]);
+	 else if (NumEmail == 2)
+	   {
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_emails);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	   }
+
+	 /* Form to remove email */
+	 if (ItsMe)
+	    Ico_PutContextualIconToRemove (ActRemMyMai,Mai_EMAIL_SECTION_ID,
+					   Mai_PutParamsRemoveMyEmail,row[0]);
+	 else
+	   {
+	    switch (UsrDat->Roles.InCurrentCrs)
+	      {
+	       case Rol_STD:
+		  NextAction = ActRemMaiStd;
+		  break;
+	       case Rol_NET:
+	       case Rol_TCH:
+		  NextAction = ActRemMaiTch;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActRemMaiOth;
+		  break;
+	      }
+	    Ico_PutContextualIconToRemove (NextAction,Mai_EMAIL_SECTION_ID,
+					   Mai_PutParamsRemoveOtherEmail,row[0]);
+	   }
+
+	 /* Email */
+	 HTM_Txt (row[0]);
+
+	 /* Email confirmed? */
+	 if (Confirmed)
+	   {
+	    Ico_PutIcon ("check-circle.svg",
+			 Str_BuildStringStr (Txt_Email_X_confirmed,row[0]),
+			 "ICO16x16");
+	    Str_FreeString ();
+	   }
+
+	 /* Form to change user's email */
+	 if (NumEmail > 1 || (ItsMe && !Confirmed))
+	   {
+	    HTM_BR ();
+	    if (ItsMe)
+	       Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
+	    else
+	      {
+	       switch (UsrDat->Roles.InCurrentCrs)
+		 {
+		  case Rol_STD:
+		     NextAction = ActNewMaiStd;
+		     break;
+		  case Rol_NET:
+		  case Rol_TCH:
+		     NextAction = ActNewMaiTch;
+		     break;
+		  default:	// Guest, user or admin
+		     NextAction = ActNewMaiOth;
+		     break;
+		 }
+	       Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	      }
+	    Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
+	       Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
+								      Txt_Use_this_email);
+	    Frm_EndForm ();
+	   }
+
+	 if (NumEmail == 1 ||
+	     NumEmail == NumEmails)
+	   {
+	       HTM_TD_End ();
+	    HTM_TR_End ();
+	   }
+	 else
+	    HTM_BR ();
 	}
 
-      /* Email */
-      HTM_Txt (row[0]);
+      /***** Form to enter new email *****/
+      HTM_TR_Begin (NULL);
 
-      /* Email confirmed? */
-      if (Confirmed)
-	{
-	 Ico_PutIcon ("check-circle.svg",
-		      Str_BuildStringStr (Txt_Email_X_confirmed,row[0]),
-		      "ICO16x16");
-	 Str_FreeString ();
-	}
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
+		       NumEmails ? Txt_New_email :	// A new email
+				   Txt_Email);	// The first email
 
-      /* Form to change user's email */
-      if (NumEmail > 1 || (ItsMe && !Confirmed))
-	{
-         HTM_BR ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 	 if (ItsMe)
 	    Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else
@@ -1342,61 +1388,15 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
-	 Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
-         Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
-			                                        Txt_Use_this_email);
-	 Frm_EndForm ();
-	}
-
-      if (NumEmail == 1 ||
-	  NumEmail == NumEmails)
-	{
-         HTM_TD_End ();
-         HTM_TR_End ();
-	}
-      else
+	 HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
+			  "id=\"NewEmail\" size=\"18\"");
 	 HTM_BR ();
-     }
+	 Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
+						Txt_Save_changes);		// User has no email address yet
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
-   /***** Form to enter new email *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT","NewEmail",
-		    NumEmails ? Txt_New_email :	// A new email
-        	                Txt_Email);	// The first email
-
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
-   if (ItsMe)
-      Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
-   else
-     {
-      switch (UsrDat->Roles.InCurrentCrs)
-	{
-	 case Rol_STD:
-	    NextAction = ActNewMaiStd;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActNewMaiTch;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActNewMaiOth;
-	    break;
-	}
-      Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-     }
-   HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
-	            "id=\"NewEmail\" size=\"18\"");
-   HTM_BR ();
-   Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
-        	                          Txt_Save_changes);		// User has no email address yet
-   Frm_EndForm ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1469,7 +1469,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
       Par_GetParToText ("Email",Email,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
       /***** Remove one of user's old email addresses *****/
-      Mai_RemoveEmailFromDB (UsrDat->UsrCod,Email);
+      Mai_DB_RemoveEmail (UsrDat->UsrCod,Email);
 
       /***** Create alert *****/
       Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
@@ -1487,7 +1487,8 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
 /*************** Remove an old email address from database *******************/
 /*****************************************************************************/
 
-static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
+static void Mai_DB_RemoveEmail (long UsrCod,
+                                const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Remove an old email address *****/
    DB_QueryREPLACE ("can not remove an old email address",

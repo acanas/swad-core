@@ -203,14 +203,15 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    /***** Form to go to the system *****/
    HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
-   HTM_NBSP ();
 
-   Frm_BeginFormGoTo (ActMnu);
-   Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
-   HTM_BUTTON_SUBMIT_Begin (Txt_System,ClassLink,NULL);
-   HTM_Txt (Txt_System);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
+      HTM_NBSP ();
+
+      Frm_BeginFormGoTo (ActMnu);
+      Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_System,ClassLink,NULL);
+	    HTM_Txt (Txt_System);
+	 HTM_BUTTON_End ();
+      Frm_EndForm ();
 
    HTM_DIV_End ();
 
@@ -218,16 +219,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to see institutions of this country *****/
-      Frm_BeginFormGoTo (ActSeeIns);
-      Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],ClassLink,NULL);
-      HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to go to see institutions of this country *****/
+	 Frm_BeginFormGoTo (ActSeeIns);
+	 Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],ClassLink,NULL);
+	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -235,15 +236,15 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to select countries *****/
-      Frm_BeginFormGoTo (ActSeeCty);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Country,ClassLink,NULL);
-      HTM_Txt (Txt_Country);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to go to select countries *****/
+	 Frm_BeginFormGoTo (ActSeeCty);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Country,ClassLink,NULL);
+	       HTM_Txt (Txt_Country);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -252,16 +253,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to see centers of this institution *****/
-      Frm_BeginFormGoTo (ActSeeCtr);
-      Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ins.FullName,ClassLink,NULL);
-      HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to see centers of this institution *****/
+	 Frm_BeginFormGoTo (ActSeeCtr);
+	 Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ins.FullName,ClassLink,NULL);
+	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -269,15 +270,15 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to select institutions *****/
-      Frm_BeginFormGoTo (ActSeeIns);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Institution,ClassLink,NULL);
-      HTM_Txt (Txt_Institution);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to go to select institutions *****/
+	 Frm_BeginFormGoTo (ActSeeIns);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Institution,ClassLink,NULL);
+	       HTM_Txt (Txt_Institution);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -285,11 +286,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Hidden institution *****/
-      HTM_Txt (Txt_Institution);
+	 /***** Hidden institution *****/
+	 HTM_Txt (Txt_Institution);
 
       HTM_DIV_End ();
      }
@@ -298,16 +299,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to see degrees of this center *****/
-      Frm_BeginFormGoTo (ActSeeDeg);
-      Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ctr.FullName,ClassLink,NULL);
-      HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to see degrees of this center *****/
+	 Frm_BeginFormGoTo (ActSeeDeg);
+	 Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ctr.FullName,ClassLink,NULL);
+	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -315,15 +316,15 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to select centers *****/
-      Frm_BeginFormGoTo (ActSeeCtr);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Center,ClassLink,NULL);
-      HTM_Txt (Txt_Center);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to go to select centers *****/
+	 Frm_BeginFormGoTo (ActSeeCtr);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Center,ClassLink,NULL);
+	       HTM_Txt (Txt_Center);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -331,11 +332,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Hidden center *****/
-      HTM_Txt (Txt_Center);
+	 /***** Hidden center *****/
+	 HTM_Txt (Txt_Center);
 
       HTM_DIV_End ();
      }
@@ -344,16 +345,16 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to see courses of this degree *****/
-      Frm_BeginFormGoTo (ActSeeCrs);
-      Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-      HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Deg.FullName,ClassLink,NULL);
-      HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to go to see courses of this degree *****/
+	 Frm_BeginFormGoTo (ActSeeCrs);
+	 Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Deg.FullName,ClassLink,NULL);
+	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -361,15 +362,15 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Form to go to select degrees *****/
-      Frm_BeginFormGoTo (ActSeeDeg);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Degree,ClassLink,NULL);
-      HTM_Txt (Txt_Degree);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Form to go to select degrees *****/
+	 Frm_BeginFormGoTo (ActSeeDeg);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Degree,ClassLink,NULL);
+	       HTM_Txt (Txt_Degree);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
       HTM_DIV_End ();
      }
@@ -377,11 +378,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      {
       HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
-      /***** Separator *****/
-      HTM_Txt ("&nbsp;&gt;&nbsp;");
+	 /***** Separator *****/
+	 HTM_Txt ("&nbsp;&gt;&nbsp;");
 
-      /***** Hidden degree *****/
-      HTM_Txt (Txt_Degree);
+	 /***** Hidden degree *****/
+	 HTM_Txt (Txt_Degree);
 
       HTM_DIV_End ();
      }
@@ -392,8 +393,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 						    " BC_OFF"),
 		  ClassTxt);
 
-   /***** Separator *****/
-   HTM_Txt ("&nbsp;&gt;&nbsp;");
+      /***** Separator *****/
+      HTM_Txt ("&nbsp;&gt;&nbsp;");
 
    HTM_DIV_End ();
 
@@ -441,42 +442,42 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 
    /***** Text *****/
    HTM_DIV_Begin ("id=\"big_name_container\"");
-   if (Gbl.Hierarchy.Cty.CtyCod > 0)
-     {
-      HTM_DIV_Begin ("id=\"big_full_name\"");
-      HTM_Txt (	(Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
-	       ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.FullName :
-	       ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.FullName :
-	       ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.FullName :
-	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
-      HTM_DIV_End ();
+      if (Gbl.Hierarchy.Cty.CtyCod > 0)
+	{
+	 HTM_DIV_Begin ("id=\"big_full_name\"");
+	    HTM_Txt (	(Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.FullName :// Full name
+		     ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.FullName :
+		     ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.FullName :
+		     ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.FullName :
+							 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
+	 HTM_DIV_End ();
 
-      HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
-      HTM_Txt (" / ");	// To separate
-      HTM_DIV_End ();
+	 HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
+	    HTM_Txt (" / ");	// To separate
+	 HTM_DIV_End ();
 
-      HTM_DIV_Begin ("id=\"big_short_name\"");
-      HTM_Txt (	(Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.ShrtName :// Short name
-	       ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
-	       ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
-	       ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.ShrtName :
-	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
-      HTM_DIV_End ();
-     }
-   else	// No country specified ==> home page
-     {
-      HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
-      HTM_TxtF ("%s:&nbsp;%s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
-      HTM_DIV_End ();
+	 HTM_DIV_Begin ("id=\"big_short_name\"");
+	    HTM_Txt ( (Gbl.Hierarchy.Level == HieLvl_CRS) ? Gbl.Hierarchy.Crs.ShrtName :// Short name
+		     ((Gbl.Hierarchy.Level == HieLvl_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
+		     ((Gbl.Hierarchy.Level == HieLvl_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
+		     ((Gbl.Hierarchy.Level == HieLvl_INS) ? Gbl.Hierarchy.Ins.ShrtName :
+							    Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
+	 HTM_DIV_End ();
+	}
+      else	// No country specified ==> home page
+	{
+	 HTM_DIV_Begin ("id=\"big_full_name\"");	// Full name
+	    HTM_TxtF ("%s:&nbsp;%s",Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+	 HTM_DIV_End ();
 
-      HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
-      HTM_Txt (" / ");	// To separate
-      HTM_DIV_End ();
+	 HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
+	    HTM_Txt (" / ");	// To separate
+	 HTM_DIV_End ();
 
-      HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
-      HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-      HTM_DIV_End ();
-     }
+	 HTM_DIV_Begin ("id=\"big_short_name\"");	// Short name
+	    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+	 HTM_DIV_End ();
+	}
    HTM_DIV_End ();
    HTM_TxtF ("</h1>");
   }
@@ -714,68 +715,68 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	{
          HTM_TR_Begin (NULL);
 
-         /***** Indent *****/
-         HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-         Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
-                	                  "submid20x20.gif",
-		      "","ICO25x25");
-         HTM_TD_End ();
+	    /***** Indent *****/
+	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	       Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
+						"submid20x20.gif",
+			    "","ICO25x25");
+	    HTM_TD_End ();
 
-         /***** Write institution, center, degree *****/
-         HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
-                       ColSpan - 1,Gbl.RowEvenOdd);
+	    /***** Write institution, center, degree *****/
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
+			  ColSpan - 1,Gbl.RowEvenOdd);
 
-         /* Get next institution, center, degree */
-         row = mysql_fetch_row (mysql_res);
+	       /* Get next institution, center, degree */
+	       row = mysql_fetch_row (mysql_res);
 
-	 /* Get scope */
-	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
-	   {
-	    case HieLvl_SYS:	// System
-	       Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
-	       HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
-	       break;
-	    case HieLvl_INS:	// Institution
-	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
-	       if (Hie.Ins.InsCod > 0)
+	       /* Get scope */
+	       switch (Sco_GetScopeFromUnsignedStr (row[0]))
 		 {
-		  /* Get data of institution */
-		  Ins_GetDataOfInstitutionByCod (&Hie.Ins);
+		  case HieLvl_SYS:	// System
+		     Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
+		     HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
+		     break;
+		  case HieLvl_INS:	// Institution
+		     Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
+		     if (Hie.Ins.InsCod > 0)
+		       {
+			/* Get data of institution */
+			Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
-		  /* Write institution logo and name */
-		  Ins_DrawInstitutionLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,
-						          "BT_LINK DAT_SMALL_NOBR","LT");
-		 }
-	       break;
-	    case HieLvl_CTR:	// Center
-	       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
-	       if (Hie.Ctr.CtrCod > 0)
-		 {
-		  /* Get data of center */
-		  Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+			/* Write institution logo and name */
+			Ins_DrawInstitutionLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,
+								"BT_LINK DAT_SMALL_NOBR","LT");
+		       }
+		     break;
+		  case HieLvl_CTR:	// Center
+		     Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
+		     if (Hie.Ctr.CtrCod > 0)
+		       {
+			/* Get data of center */
+			Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
-		  /* Write center logo and name */
-		  Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
-						     "BT_LINK DAT_SMALL_NOBR","LT");
-		 }
-	       break;
-	    case HieLvl_DEG:	// Degree
-	       Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-	       if (Hie.Deg.DegCod > 0)
-		 {
-		  /* Get data of degree */
-		  Deg_GetDataOfDegreeByCod (&Hie.Deg);
+			/* Write center logo and name */
+			Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
+							   "BT_LINK DAT_SMALL_NOBR","LT");
+		       }
+		     break;
+		  case HieLvl_DEG:	// Degree
+		     Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
+		     if (Hie.Deg.DegCod > 0)
+		       {
+			/* Get data of degree */
+			Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
-		  /* Write degree logo and name */
-		  Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,
-						     "BT_LINK DAT_SMALL_NOBR","LT");
+			/* Write degree logo and name */
+			Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,
+							   "BT_LINK DAT_SMALL_NOBR","LT");
+		       }
+		     break;
+		  default:	// There are no administrators in other scopes
+		     Err_WrongScopeExit ();
+		     break;
 		 }
-	       break;
-	    default:	// There are no administrators in other scopes
-	       Err_WrongScopeExit ();
-	       break;
-           }
-         HTM_TD_End ();
+	    HTM_TD_End ();
 
          HTM_TR_End ();
         }

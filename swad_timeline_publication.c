@@ -563,5 +563,5 @@ void Tml_Pub_PublishPubInTimeline (struct Tml_Pub_Publication *Pub)
    Pub->PubCod = Tml_DB_CreateNewPub (Pub);
 
    /***** Increment number of publications in user's figures *****/
-   Prf_IncrementNumPubsUsr (Pub->PublisherCod);
+   Prf_DB_IncrementNumPubsUsr (Pub->PublisherCod);
   }

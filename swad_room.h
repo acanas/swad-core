@@ -134,7 +134,7 @@ void Roo_GetListRoomsInThisCtr (void);
 long Roo_GetParamRooCod (void);
 
 void Roo_RemoveRoom (void);
-void Roo_RemoveAllRoomsInCtr (long CtrCod);
+void Roo_DB_RemoveAllRoomsInCtr (long CtrCod);
 void Roo_ChangeBuilding (void);
 void Roo_ChangeFloor (void);
 void Roo_ChangeType (void);

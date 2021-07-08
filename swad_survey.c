@@ -762,89 +762,89 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
    extern const char *Txt_SURVEY_You_have_already_answered;
    extern const char *Txt_SURVEY_You_have_not_answered;
 
-   /***** Start list with items of status *****/
+   /***** Begin list with items of status *****/
    HTM_UL_Begin (NULL);
 
-   /* Write whether survey is visible or hidden */
-   if (Svy->Status.Visible)
-     {
-      HTM_LI_Begin ("class=\"STATUS_GREEN\"");
-      HTM_Txt (Txt_Visible_survey);
-     }
-   else
-     {
-      HTM_LI_Begin ("class=\"STATUS_RED_LIGHT\"");
-      HTM_Txt (Txt_Hidden_survey);
-     }
-   HTM_LI_End ();
+      /* Write whether survey is visible or hidden */
+      if (Svy->Status.Visible)
+	{
+	 HTM_LI_Begin ("class=\"STATUS_GREEN\"");
+	    HTM_Txt (Txt_Visible_survey);
+	}
+      else
+	{
+	 HTM_LI_Begin ("class=\"STATUS_RED_LIGHT\"");
+	    HTM_Txt (Txt_Hidden_survey);
+	}
+      HTM_LI_End ();
 
-   /* Write whether survey is open or closed */
-   if (Svy->Status.Open)
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_GREEN" :
-        	                          "STATUS_GREEN_LIGHT");
-      HTM_Txt (Txt_Open_survey);
-     }
-   else
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_RED" :
-        	                          "STATUS_RED_LIGHT");
-      HTM_Txt (Txt_Closed_survey);
-     }
-   HTM_LI_End ();
+      /* Write whether survey is open or closed */
+      if (Svy->Status.Open)
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_GREEN" :
+					     "STATUS_GREEN_LIGHT");
+	    HTM_Txt (Txt_Open_survey);
+	}
+      else
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_RED" :
+					     "STATUS_RED_LIGHT");
+	    HTM_Txt (Txt_Closed_survey);
+	}
+      HTM_LI_End ();
 
-   /* Write whether survey can be answered by me or not depending on user type */
-   if (Svy->Status.IAmLoggedWithAValidRoleToAnswer)
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_GREEN" :
-        	                          "STATUS_GREEN_LIGHT");
-      HTM_Txt (Txt_SURVEY_Type_of_user_allowed);
-     }
-   else
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_RED" :
-        	                          "STATUS_RED_LIGHT");
-      HTM_Txt (Txt_SURVEY_Type_of_user_not_allowed);
-     }
-   HTM_LI_End ();
+      /* Write whether survey can be answered by me or not depending on user type */
+      if (Svy->Status.IAmLoggedWithAValidRoleToAnswer)
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_GREEN" :
+					     "STATUS_GREEN_LIGHT");
+	    HTM_Txt (Txt_SURVEY_Type_of_user_allowed);
+	}
+      else
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_RED" :
+					     "STATUS_RED_LIGHT");
+	    HTM_Txt (Txt_SURVEY_Type_of_user_not_allowed);
+	}
+      HTM_LI_End ();
 
-   /* Write whether survey can be answered by me or not depending on groups */
-   if (Svy->Status.IBelongToScope)
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_GREEN" :
-        	                          "STATUS_GREEN_LIGHT");
-      HTM_Txt (Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
-     }
-   else
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_RED" :
-        	                          "STATUS_RED_LIGHT");
-      HTM_Txt (Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
-     }
-   HTM_LI_End ();
+      /* Write whether survey can be answered by me or not depending on groups */
+      if (Svy->Status.IBelongToScope)
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_GREEN" :
+					     "STATUS_GREEN_LIGHT");
+	    HTM_Txt (Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
+	}
+      else
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_RED" :
+					     "STATUS_RED_LIGHT");
+	    HTM_Txt (Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
+	}
+      HTM_LI_End ();
 
-   /* Write whether survey has been already answered by me or not */
-   if (Svy->Status.IHaveAnswered)
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_GREEN" :
-        	                          "STATUS_GREEN_LIGHT");
-      HTM_Txt (Txt_SURVEY_You_have_already_answered);
-     }
-   else
-     {
-      HTM_LI_Begin ("class=\"%s\"",
-                    Svy->Status.Visible ? "STATUS_RED" :
-        	                          "STATUS_RED_LIGHT");
-      HTM_Txt (Txt_SURVEY_You_have_not_answered);
-     }
-   HTM_LI_End ();
+      /* Write whether survey has been already answered by me or not */
+      if (Svy->Status.IHaveAnswered)
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_GREEN" :
+					     "STATUS_GREEN_LIGHT");
+	    HTM_Txt (Txt_SURVEY_You_have_already_answered);
+	}
+      else
+	{
+	 HTM_LI_Begin ("class=\"%s\"",
+		       Svy->Status.Visible ? "STATUS_RED" :
+					     "STATUS_RED_LIGHT");
+	    HTM_Txt (Txt_SURVEY_You_have_not_answered);
+	}
+      HTM_LI_End ();
 
    /***** End list with items of status *****/
    HTM_UL_End ();

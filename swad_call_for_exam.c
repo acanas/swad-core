@@ -969,13 +969,13 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       /* Show pending alerts */
       Ale_ShowAlerts (Anchor);
 
-      /* Start highlighted box */
+      /* Begin highlighted box */
       Box_BoxShadowBegin (Width,NULL,
                           FunctionToDrawContextualIcons,CallsForExams,
                           HelpLink);
      }
    else	// Don't highlight
-      /* Start normal box */
+      /* Begin normal box */
       Box_BoxBegin (Width,NULL,
                     FunctionToDrawContextualIcons,CallsForExams,
                     HelpLink,Box_NOT_CLOSABLE);

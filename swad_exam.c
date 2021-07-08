@@ -503,7 +503,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    if (ShowOnlyThisExam)
       HTM_TABLE_BeginWidePadding (2);
 
-   /***** Start first row of this exam *****/
+   /***** Begin first row of this exam *****/
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this exam *****/
@@ -603,7 +603,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    /***** End 1st row of this exam *****/
    HTM_TR_End ();
 
-   /***** Start 2nd row of this exam *****/
+   /***** Begin 2nd row of this exam *****/
    HTM_TR_Begin (NULL);
 
       /***** Author of the exam *****/

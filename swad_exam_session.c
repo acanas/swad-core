@@ -461,7 +461,7 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
    extern const char *Txt_Session;
    extern const char *Txt_Results;
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Column for icons *****/

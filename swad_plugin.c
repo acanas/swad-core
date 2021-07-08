@@ -79,8 +79,8 @@ static void Plg_PutParamPlgCod (void *PlgCod);
 static void Plg_GetListPlugins (void);
 static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
-static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod);
-static void Plg_CreatePlugin (struct Plugin *Plg);
+static bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod);
+static void Plg_DB_CreatePlugin (struct Plugin *Plg);
 
 static void Plg_EditingPluginConstructor (void);
 static void Plg_EditingPluginDestructor (void);
@@ -120,8 +120,8 @@ void Plg_ListPlugins (void)
    /***** Write table heading *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"LM",Txt_Plugin);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"LM",Txt_Plugin);
 
    HTM_TR_End ();
 
@@ -138,23 +138,23 @@ void Plg_ListPlugins (void)
       // TODO: Change plugin icons to 32x32
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
-      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-                   URL,Plg->Name);
-      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
-	       Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
-	       Plg->Name,
-	       "class=\"ICO40x40\"");
-      Str_FreeString ();
-      HTM_A_End ();
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+			 URL,Plg->Name);
+	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
+			Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
+			Plg->Name,
+			"class=\"ICO40x40\"");
+	       Str_FreeString ();
+	    HTM_A_End ();
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-                   URL,Plg->Name);
-      HTM_Txt (Plg->Name);
-      HTM_A_End ();
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+			 URL,Plg->Name);
+	       HTM_Txt (Plg->Name);
+	    HTM_A_End ();
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -204,12 +204,12 @@ static void Plg_EditPluginsInternal (void)
                  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
-   /***** Put a form to create a new plugin *****/
-   Plg_PutFormToCreatePlugin ();
+      /***** Put a form to create a new plugin *****/
+      Plg_PutFormToCreatePlugin ();
 
-   /***** List current plugins *****/
-   if (Gbl.Plugins.Num)
-      Plg_ListPluginsForEdition ();
+      /***** List current plugins *****/
+      if (Gbl.Plugins.Num)
+	 Plg_ListPluginsForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -360,102 +360,104 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   /***** Write heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Plg_PutHeadPlugins ();
 
-   /***** Write all the plugins *****/
-   for (NumPlg = 0;
-	NumPlg < Gbl.Plugins.Num;
-	NumPlg++)
-     {
-      Plg = &Gbl.Plugins.Lst[NumPlg];
+      /***** Write heading *****/
+      Plg_PutHeadPlugins ();
 
-      /* Row begin */
-      HTM_TR_Begin (NULL);
+      /***** Write all the plugins *****/
+      for (NumPlg = 0;
+	   NumPlg < Gbl.Plugins.Num;
+	   NumPlg++)
+	{
+	 Plg = &Gbl.Plugins.Lst[NumPlg];
 
-      /* Put icon to remove plugin */
-      HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActRemPlg,NULL,
-				     Plg_PutParamPlgCod,&Plg->PlgCod);
-      HTM_TD_End ();
+	 /* Row begin */
+	 HTM_TR_Begin (NULL);
 
-      /* Plugin code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Long (Plg->PlgCod);
-      HTM_TD_End ();
+	    /* Put icon to remove plugin */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToRemove (ActRemPlg,NULL,
+					      Plg_PutParamPlgCod,&Plg->PlgCod);
+	    HTM_TD_End ();
 
-      /* Plugin logo */
-      // TODO: Change plugin icons to 32x32
-      HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
-      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
-	       Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
-	       Gbl.Plugins.Lst[NumPlg].Name,
-	       "class=\"ICO40x40\"");
-      Str_FreeString ();
-      HTM_TD_End ();
+	    /* Plugin code */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Long (Plg->PlgCod);
+	    HTM_TD_End ();
 
-      /* Plugin name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenPlg);
-      Plg_PutParamPlgCod (&Plg->PlgCod);
-      HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"10\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Plugin logo */
+	    // TODO: Change plugin icons to 32x32
+	    HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
+	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
+			Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
+			Gbl.Plugins.Lst[NumPlg].Name,
+			"class=\"ICO40x40\"");
+	       Str_FreeString ();
+	    HTM_TD_End ();
 
-      /* Plugin description */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgPlgDes);
-      Plg_PutParamPlgCod (&Plg->PlgCod);
-      HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"30\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Plugin name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenPlg);
+	       Plg_PutParamPlgCod (&Plg->PlgCod);
+		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"10\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Plugin logo */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgPlgLog);
-      Plg_PutParamPlgCod (&Plg->PlgCod);
-      HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"4\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Plugin description */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgPlgDes);
+	       Plg_PutParamPlgCod (&Plg->PlgCod);
+		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"30\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Plugin application key */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgPlgAppKey);
-      Plg_PutParamPlgCod (&Plg->PlgCod);
-      HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"16\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Plugin logo */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgPlgLog);
+	       Plg_PutParamPlgCod (&Plg->PlgCod);
+		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"4\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Plugin URL */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgPlgURL);
-      Plg_PutParamPlgCod (&Plg->PlgCod);
-      HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
-		     "size=\"15\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Plugin application key */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgPlgAppKey);
+	       Plg_PutParamPlgCod (&Plg->PlgCod);
+		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"16\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Plugin IP */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgPlgIP);
-      Plg_PutParamPlgCod (&Plg->PlgCod);
-      HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
-		      "size=\"10\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Plugin URL */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgPlgURL);
+	       Plg_PutParamPlgCod (&Plg->PlgCod);
+		  HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
+				 "size=\"15\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Row end */
-      HTM_TR_End ();
-     }
+	    /* Plugin IP */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgPlgIP);
+	       Plg_PutParamPlgCod (&Plg->PlgCod);
+		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
+				  "size=\"10\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
+
+	 /* Row end */
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -544,7 +546,7 @@ void Plg_RenamePlugin (void)
       if (strcmp (Plg_EditingPlg->Name,NewPlgName))	// Different names
         {
          /***** If plugin was in database... *****/
-         if (Plg_CheckIfPluginNameExists (NewPlgName,Plg_EditingPlg->PlgCod))
+         if (Plg_DB_CheckIfPluginNameExists (NewPlgName,Plg_EditingPlg->PlgCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_plugin_X_already_exists,
                              NewPlgName);
@@ -580,7 +582,7 @@ void Plg_RenamePlugin (void)
 /******************** Check if the name of plugin exists *********************/
 /*****************************************************************************/
 
-static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
+static bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod)
   {
    /***** Get number of plugins with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a plugin"
@@ -857,73 +859,71 @@ static void Plg_PutFormToCreatePlugin (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewPlg);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_plugin,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_plugin,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
+	 /***** Write heading *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TH (1,1,"LM",Txt_Name);
+	    HTM_TH (1,1,"LM",Txt_Description);
+	    HTM_TH (1,1,"LM",Txt_Logo);
+	    HTM_TH (1,1,"LM",Txt_Application_key);
+	    HTM_TH (1,1,"LM",Txt_URL);
+	    HTM_TH (1,1,"LM",Txt_IP);
+	 HTM_TR_End ();
 
-   HTM_TH (1,1,"LM",Txt_Name);
-   HTM_TH (1,1,"LM",Txt_Description);
-   HTM_TH (1,1,"LM",Txt_Logo);
-   HTM_TH (1,1,"LM",Txt_Application_key);
-   HTM_TH (1,1,"LM",Txt_URL);
-   HTM_TH (1,1,"LM",Txt_IP);
+	 /***** Row begin *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TR_End ();
+	    /***** Plugin name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"10\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Row begin *****/
-   HTM_TR_Begin (NULL);
+	    /***** Plugin description *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
+			       Plg_EditingPlg->Description,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"30\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Plugin name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"10\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Plugin logo *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"4\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Plugin description *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
-		   Plg_EditingPlg->Description,
-		   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"30\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Plugin application key *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"16\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Plugin logo *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"4\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Plugin URL *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
+			      "size=\"15\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Plugin application key *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"16\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Plugin IP address *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"10\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Plugin URL *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "size=\"15\" required=\"required\"");
-   HTM_TD_End ();
+	 /***** Row end *****/
+	 HTM_TR_End ();
 
-   /***** Plugin IP address *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"10\" required=\"required\"");
-   HTM_TD_End ();
-
-   /***** Row end *****/
-   HTM_TR_End ();
-
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_plugin);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_plugin);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -944,17 +944,15 @@ static void Plg_PutHeadPlugins (void)
    extern const char *Txt_IP;
 
    HTM_TR_Begin (NULL);
-
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"LM",Txt_Name);
-   HTM_TH (1,1,"LM",Txt_Description);
-   HTM_TH (1,1,"LM",Txt_Logo);
-   HTM_TH (1,1,"LM",Txt_Application_key);
-   HTM_TH (1,1,"LM",Txt_URL);
-   HTM_TH (1,1,"LM",Txt_IP);
-
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"LM",Txt_Name);
+      HTM_TH (1,1,"LM",Txt_Description);
+      HTM_TH (1,1,"LM",Txt_Logo);
+      HTM_TH (1,1,"LM",Txt_Application_key);
+      HTM_TH (1,1,"LM",Txt_URL);
+      HTM_TH (1,1,"LM",Txt_IP);
    HTM_TR_End ();
   }
 
@@ -999,13 +997,13 @@ void Plg_ReceiveFormNewPlg (void)
 	  Plg_EditingPlg->IP[0])
         {
          /***** If name of plugin was in database... *****/
-         if (Plg_CheckIfPluginNameExists (Plg_EditingPlg->Name,-1L))
+         if (Plg_DB_CheckIfPluginNameExists (Plg_EditingPlg->Name,-1L))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_plugin_X_already_exists,
                              Plg_EditingPlg->Name);
          else	// Add new plugin to database
            {
-            Plg_CreatePlugin (Plg_EditingPlg);
+            Plg_DB_CreatePlugin (Plg_EditingPlg);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 		             Txt_Created_new_plugin_X,
 			     Plg_EditingPlg->Name);
@@ -1024,7 +1022,7 @@ void Plg_ReceiveFormNewPlg (void)
 /***************************** Create a new plugin ***************************/
 /*****************************************************************************/
 
-static void Plg_CreatePlugin (struct Plugin *Plg)
+static void Plg_DB_CreatePlugin (struct Plugin *Plg)
   {
    /***** Create a new plugin *****/
    DB_QueryINSERT ("can not create plugin",

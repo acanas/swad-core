@@ -86,6 +86,6 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[]);
 void Lay_HelpPlainEditor (void);
 void Lay_HelpRichEditor (void);
 
-void Lay_StartHTMLFile (FILE *File,const char *Title);
+void Lay_BeginHTMLFile (FILE *File,const char *Title);
 
 #endif

@@ -303,23 +303,23 @@ void Lgo_RequestLogo (HieLvl_Level_t Scope)
                  FunctionToDrawContextualIcons,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
-   /***** Begin form to upload logo *****/
-   Frm_BeginForm (ActionRec);
+      /***** Begin form to upload logo *****/
+      Frm_BeginForm (ActionRec);
 
-   /***** Write help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
-	          64,64);
+	 /***** Write help message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
+			64,64);
 
-   /***** Upload logo *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_File_with_the_logo);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/png",
-                   HTM_SUBMIT_ON_CHANGE,
-                   NULL);
-   HTM_LABEL_End ();
+	 /***** Upload logo *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_File_with_the_logo);
+	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/png",
+			    HTM_SUBMIT_ON_CHANGE,
+			    NULL);
+	 HTM_LABEL_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();

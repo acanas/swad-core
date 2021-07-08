@@ -1617,7 +1617,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
       /***** Put a form to select which forums *****/
       For_PutFormWhichForums (Forums);
 
-      /***** Start list *****/
+      /***** Begin list *****/
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Links to global forums *****/
@@ -2089,7 +2089,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
    Class = (NumThrsWithNewPosts ? The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme] :
 	                          The_ClassFormLinkInBox[Gbl.Prefs.Theme]);
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_LI_Begin (Highlight ? "class=\"LIGHT_BLUE\"" :
 			     NULL);
 
@@ -4198,7 +4198,7 @@ void For_ReceiveForumPost (void)
    Med_MediaDestructor (&Media);
 
    /***** Increment number of forum posts in my user's figures *****/
-   Prf_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Prf_DB_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Notify the new post to users in course *****/
    switch (Forums.Forum.Type)

@@ -1758,7 +1758,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
       Err_NotEnoughMemoryExit ();
 
    /***** Select questions *****/
-   /* Start query */
+   /* Begin query */
    Str_Copy (Query,"SELECT tst_questions.QstCod"	// row[0]
 		    " FROM tst_questions",Tst_MAX_BYTES_QUERY_TEST);
    if (!Test->Tags.All)
@@ -1903,7 +1903,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       Err_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
-   /* Start query */
+   /* Begin query */
    // Reject questions with any tag hidden
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions

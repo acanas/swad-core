@@ -1566,7 +1566,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
                                      "Can not create temporary file");
 
       /***** Write start of HTML code *****/
-      Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
+      Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
       fprintf (FileHTMLTmp,"<body>\n"
                            "<div class=\"DAT LM\">\n");
 
@@ -4598,7 +4598,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                        "Bad score interval",
 	                        "lowerScore or upperScore values not valid");
 
-   /***** Start query *****/
+   /***** Get test questions *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    NumRows = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get test questions",

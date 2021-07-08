@@ -191,7 +191,7 @@ void Log_LogAccess (const char *Comments)
 
    /***** Increment my number of clicks *****/
    if (Gbl.Usrs.Me.Logged)
-      Prf_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+      Prf_DB_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

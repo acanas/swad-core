@@ -557,7 +557,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    if (ShowOnlyThisGame)
       HTM_TABLE_BeginWidePadding (2);
 
-   /***** Start first row of this game *****/
+   /***** Begin first row of this game *****/
    HTM_TR_Begin (NULL);
 
       /***** Icons related to this game *****/
@@ -665,7 +665,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    /***** End 1st row of this game *****/
    HTM_TR_End ();
 
-   /***** Start 2nd row of this game *****/
+   /***** Begin 2nd row of this game *****/
    HTM_TR_Begin (NULL);
 
       /***** Author of the game *****/

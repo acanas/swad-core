@@ -1448,7 +1448,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Increment number of messages sent by me *****/
-   Prf_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Prf_DB_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    return MsgCod;
   }
@@ -2023,7 +2023,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 	 Messages->CurrentPage = (unsigned) Pagination.CurrentPage;
 
 	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
-	 Pag_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
+	 Pag_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
 					 Messages->CurrentPage);
 
 	 /***** Write links to pages *****/
@@ -3489,7 +3489,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    extern const char *Txt_See_message;
    extern const char *Txt_no_subject;
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
         	                                "MSG_TIT_BG_NEW");
 
@@ -3542,7 +3542,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
    HTM_TABLE_BeginPadding (2);
       HTM_TR_Begin (NULL);
 
-	 /***** Start first column with author's photo
+	 /***** Begin first column with author's photo
 		(if author has a web page, put a link to it) *****/
 	 if (BgColor)
 	    HTM_TD_Begin ("class=\"CT %s\" style=\"width:30px;\"",BgColor);
@@ -3609,7 +3609,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
-            HTM_TxtF ("(%s)",Txt_from_this_course);
+	       HTM_TxtF ("(%s)",Txt_from_this_course);
             HTM_DIV_End ();
            }
          else	// Message sent from another course

@@ -2540,7 +2540,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "LIGHT_BLUE" :
                                                      Gbl.ColorRows[RowEvenOdd];
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** User has accepted joining to this course/to any course in degree/to any course? *****/

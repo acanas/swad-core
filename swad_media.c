@@ -1429,7 +1429,7 @@ void Med_ShowMedia (const struct Med_Media *Media,
 	    if (!Media->Name[0])
 	       return;
 
-	    /* Start optional link to external URL */
+	    /* Begin optional link to external URL */
 	    PutLink = false;
 	    if (Media->URL)
 	       if (Media->URL[0])

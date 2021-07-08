@@ -359,29 +359,29 @@ void Lay_WriteStartOfPage (void)
    HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"%s\"",
 	          The_TabOnBgColors[Gbl.Prefs.Theme]);
 
-   /* Layout with horizontal or vertical menu */
-   HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
+      /* Layout with horizontal or vertical menu */
+      HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
 
-   /* Menu */
-   Mnu_WriteMenuThisTab ();
+	 /* Menu */
+	 Mnu_WriteMenuThisTab ();
 
-   /* Start canvas: main zone for actions output */
-   HTM_MAIN_Begin ("MAIN_ZONE_CANVAS");
+	 /* Begin canvas: main zone for actions output */
+	 HTM_MAIN_Begin ("MAIN_ZONE_CANVAS");
 
-   /* If it is mandatory to read any information about course */
-   if (Gbl.Crs.Info.ShowMsgMustBeRead)
-      Inf_WriteMsgYouMustReadInfo ();
+	    /* If it is mandatory to read any information about course */
+	    if (Gbl.Crs.Info.ShowMsgMustBeRead)
+	       Inf_WriteMsgYouMustReadInfo ();
 
-   /* Write title of the current action */
-   if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
-      Act_GetIndexInMenu (Gbl.Action.Act) >= 0)
-      Lay_WriteTitleAction ();
+	    /* Write title of the current action */
+	    if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
+	       Act_GetIndexInMenu (Gbl.Action.Act) >= 0)
+	       Lay_WriteTitleAction ();
 
-   Gbl.Layout.WritingHTMLStart = false;
-   Gbl.Layout.HTMLStartWritten = true;
+	    Gbl.Layout.WritingHTMLStart = false;
+	    Gbl.Layout.HTMLStartWritten = true;
 
-   /* Write message indicating number of clicks allowed before sending my photo */
-   Usr_InformAboutNumClicksBeforePhoto ();
+	    /* Write message indicating number of clicks allowed before sending my photo */
+	    Usr_InformAboutNumClicksBeforePhoto ();
   }
 
 /*****************************************************************************/
@@ -396,7 +396,7 @@ void Lay_WriteHTTPStatus204NoContent (void)
    Gbl.Layout.DivsEndWritten   =
    Gbl.Layout.HTMLEndWritten   = true;
 
-   /* Start HTTP response */
+   /* Begin HTTP response */
    fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
 
    /* Return HTTP status code 204 No Content:
@@ -414,19 +414,19 @@ void Lay_WriteEndOfPage (void)
   {
    if (!Gbl.Layout.DivsEndWritten)
      {
-      /***** End of central part of main zone *****/
-      HTM_MAIN_End ();	// Canvas (main zone to output content of the current action)
-      HTM_DIV_End ();	// Layout with horizontal or vertical menu
-      HTM_DIV_End ();	// main_zone_central_container
+		     /***** End of central part of main zone *****/
+		     HTM_MAIN_End ();	// Canvas (main zone to output content of the current action)
+		  HTM_DIV_End ();	// Layout with horizontal or vertical menu
+	       HTM_DIV_End ();		// main_zone_central_container
 
-      /***** Write page footer *****/
-      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-         Lay_WriteFootFromHTMLFile ();
+	       /***** Write page footer *****/
+	       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+		  Lay_WriteFootFromHTMLFile ();
 
-      /***** End of main zone and page *****/
-      HTM_DIV_End ();	// main_zone_central
-      HTM_DIV_End ();	// main_zone
-      HTM_DIV_End ();	// whole_page_* (box that contains the whole page except the foot)
+	    /***** End of main zone and page *****/
+	    HTM_DIV_End ();		// main_zone_central
+	 HTM_DIV_End ();		// main_zone
+      HTM_DIV_End ();			// whole_page_* (box that contains the whole page except the foot)
 
       Gbl.Layout.DivsEndWritten = true;
      }
@@ -513,16 +513,16 @@ static void Lay_WriteScripts (void)
 
    /***** Write script to initialize variables used to draw dates *****/
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_Txt ("\tvar DAYS = [");
-   for (DayOfWeek = 0;
-	DayOfWeek < 7;
-	DayOfWeek++)
-     {
-      if (DayOfWeek)
-	 HTM_Comma ();
-      HTM_TxtF ("'%s'",Txt_DAYS_SMALL[DayOfWeek]);
-     }
-   HTM_Txt ("];\n");
+      HTM_Txt ("\tvar DAYS = [");
+      for (DayOfWeek = 0;
+	   DayOfWeek < 7;
+	   DayOfWeek++)
+	{
+	 if (DayOfWeek)
+	    HTM_Comma ();
+	 HTM_TxtF ("'%s'",Txt_DAYS_SMALL[DayOfWeek]);
+	}
+      HTM_Txt ("];\n");
    HTM_SCRIPT_End ();
 
    /***** Prepare script to draw months *****/
@@ -548,42 +548,42 @@ static void Lay_WriteScripts (void)
       /***** Write script to initialize variables used to draw months *****/
       HTM_SCRIPT_Begin (NULL,NULL);
 
-      HTM_Txt ("\tvar DAYS_CAPS = [");
-      for (DayOfWeek = 0;
-	   DayOfWeek < 7;
-	   DayOfWeek++)
-	{
-	 if (DayOfWeek)
-	    HTM_Comma ();
-	 HTM_TxtF ("'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
-	}
-      HTM_Txt ("];\n");
+	 HTM_Txt ("\tvar DAYS_CAPS = [");
+	 for (DayOfWeek = 0;
+	      DayOfWeek < 7;
+	      DayOfWeek++)
+	   {
+	    if (DayOfWeek)
+	       HTM_Comma ();
+	    HTM_TxtF ("'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
+	   }
+	 HTM_Txt ("];\n");
 
-      HTM_Txt ("\tvar STR_EXAM = '");
-      HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
-      HTM_Txt ("';\n");
+	 HTM_Txt ("\tvar STR_EXAM = '");
+	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
+	 HTM_Txt ("';\n");
 
-      HTM_Txt ("\tvar Hlds = [];\n");
+	 HTM_Txt ("\tvar Hlds = [];\n");
 
-      for (NumHld = 0;
-	   NumHld < Holidays.Num;
-	   NumHld++)
-	 HTM_TxtF ("\tHlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
-		   Holidays.Lst[NumHld].PlcCod,
-		   (unsigned) Holidays.Lst[NumHld].HldTyp,
-		   Holidays.Lst[NumHld].StartDate.YYYYMMDD,
-		   Holidays.Lst[NumHld].EndDate.YYYYMMDD,
-		   Holidays.Lst[NumHld].Name);
+	 for (NumHld = 0;
+	      NumHld < Holidays.Num;
+	      NumHld++)
+	    HTM_TxtF ("\tHlds.push({ PlcCod: %ld, HldTyp: %u, StartDate: %s, EndDate: %s, Name: '%s' });\n",
+		      Holidays.Lst[NumHld].PlcCod,
+		      (unsigned) Holidays.Lst[NumHld].HldTyp,
+		      Holidays.Lst[NumHld].StartDate.YYYYMMDD,
+		      Holidays.Lst[NumHld].EndDate.YYYYMMDD,
+		      Holidays.Lst[NumHld].Name);
 
-      HTM_TxtF ("\tvar LstExamAnnouncements = [];\n");
-      for (NumExamAnnouncement = 0;
-	   NumExamAnnouncement < ExamAnns.NumCallsForExams;
-	   NumExamAnnouncement++)
-	 HTM_TxtF ("LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
-		   ExamAnns.Lst[NumExamAnnouncement].ExaCod,
-		   ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
-		   ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
-		   ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
+	 HTM_TxtF ("\tvar LstExamAnnouncements = [];\n");
+	 for (NumExamAnnouncement = 0;
+	      NumExamAnnouncement < ExamAnns.NumCallsForExams;
+	      NumExamAnnouncement++)
+	    HTM_TxtF ("LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
+		      ExamAnns.Lst[NumExamAnnouncement].ExaCod,
+		      ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
+		      ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
+		      ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
 
       HTM_SCRIPT_End ();
 
@@ -802,38 +802,38 @@ static void Lay_WriteScriptInit (void)
 
    HTM_SCRIPT_Begin (NULL,NULL);
 
-   Dat_WriteScriptMonths ();
+      Dat_WriteScriptMonths ();
 
-   if (RefreshNewTimeline)		// Refresh new timeline via AJAX
-      HTM_TxtF ("\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
-   else if (RefreshMatchStd)		// Refresh match via AJAX
-      HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
-   else if (RefreshMatchTch)		// Refresh match via AJAX
-      HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
+      if (RefreshNewTimeline)		// Refresh new timeline via AJAX
+	 HTM_TxtF ("\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
+      else if (RefreshMatchStd)		// Refresh match via AJAX
+	 HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
+      else if (RefreshMatchTch)		// Refresh match via AJAX
+	 HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
-   /***** Function init () ******/
-   HTM_Txt ("function init(){\n");
+      /***** Function init () ******/
+      HTM_Txt ("function init(){\n");
 
-   HTM_TxtF ("\tActionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+      HTM_TxtF ("\tActionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
-   if (RefreshConnected)	// Refresh connected users via AJAX
-     {
-      Con_WriteScriptClockConnected ();
-      HTM_TxtF ("\tsetTimeout(\"refreshConnected()\",%lu);\n",
-	        Gbl.Usrs.Connected.TimeToRefreshInMs);
-     }
+      if (RefreshConnected)	// Refresh connected users via AJAX
+	{
+	 Con_WriteScriptClockConnected ();
+	 HTM_TxtF ("\tsetTimeout(\"refreshConnected()\",%lu);\n",
+		   Gbl.Usrs.Connected.TimeToRefreshInMs);
+	}
 
-   if (RefreshLastClicks)		// Refresh last clicks via AJAX
-      HTM_TxtF ("\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
-                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (RefreshNewTimeline)		// Refresh timeline via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
-   else if (RefreshMatchStd)		// Refresh match for a student via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
-   else if (RefreshMatchTch)		// Refresh match for a teacher via AJAX
-      HTM_Txt ("\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
+      if (RefreshLastClicks)		// Refresh last clicks via AJAX
+	 HTM_TxtF ("\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
+		   Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+      else if (RefreshNewTimeline)		// Refresh timeline via AJAX
+	 HTM_Txt ("\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
+      else if (RefreshMatchStd)		// Refresh match for a student via AJAX
+	 HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
+      else if (RefreshMatchTch)		// Refresh match for a teacher via AJAX
+	 HTM_Txt ("\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
 
-   HTM_Txt ("}\n");
+      HTM_Txt ("}\n");
 
    HTM_SCRIPT_End ();
   }
@@ -844,108 +844,108 @@ static void Lay_WriteScriptInit (void)
 
 static void Lay_WriteScriptParamsAJAX (void)
   {
-   /***** Start script *****/
+   /***** Begin script *****/
    HTM_SCRIPT_Begin (NULL,NULL);
 
-   /***** Parameters with code of session and current course code *****/
-   // Refresh parameters
-   HTM_TxtF ("var RefreshParamIdSes = \"ses=%s\";\n"
-             "var RefreshParamCrsCod = \"crs=%ld\";\n",
-	     Gbl.Session.Id,
-	     Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Parameter to refresh connected users *****/
-   if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-      // Refresh parameter
-      HTM_TxtF ("var RefreshParamNxtActCon = \"act=%ld\";\n",
-	        Act_GetActCod (ActRefCon));
-
-   /***** Parameters related with expanding/contracting folders in file browsers *****/
-   if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
-      /* In all the actions related to file browsers ==>
-	 put parameters used by AJAX */
+      /***** Parameters with code of session and current course code *****/
       // Refresh parameters
-      HTM_TxtF ("var RefreshParamExpand = \"act=%ld\";\n"
-		"var RefreshParamContract = \"act=%ld\";\n",
-	        Act_GetActCod (Brw_GetActionExpand   ()),
-	        Act_GetActCod (Brw_GetActionContract ()));
+      HTM_TxtF ("var RefreshParamIdSes = \"ses=%s\";\n"
+		"var RefreshParamCrsCod = \"crs=%ld\";\n",
+		Gbl.Session.Id,
+		Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Parameters related with other actions *****/
-   switch (Gbl.Action.Act)
-     {
-      /* Parameters related with global timeline refreshing */
-      case ActSeeGblTL:
-      case ActRcvPstGblTL:
-      case ActRcvComGblTL:
-      case ActReqRemPubGblTL:
-      case ActRemPubGblTL:
-      case ActReqRemComGblTL:
-      case ActRemComGblTL:
-	 /* In all the actions related to view or editing global timeline ==>
-	    put parameters used by AJAX */
-	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
-		   "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-	           "var RefreshParamWho = \"Who=%u\";\n",
-		   Act_GetActCod (ActRefNewPubGblTL),
-		   Act_GetActCod (ActRefOldPubGblTL),
-		   (unsigned) Tml_Who_GetGlobalWho ());	// Global variable got in a priori function
-	 break;
-      /* Parameters related with user timeline refreshing */
-      case ActSeeOthPubPrf:
-      case ActRcvPstUsrTL:
-      case ActRcvComUsrTL:
-      case ActReqRemPubUsrTL:
-      case ActRemPubUsrTL:
-      case ActReqRemComUsrTL:
-      case ActRemComUsrTL:
-	 /* In all the actions related to view or editing user's timeline ==>
-	    put parameters used by AJAX */
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-	    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
-	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-		   "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
-		   Act_GetActCod (ActRefOldPubUsrTL),
-		   Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	 break;
-      /* Parameters related with match refreshing (for students) */
-      case ActJoiMch:
-      case ActSeeMchAnsQstStd:
-      case ActRemMchAnsQstStd:
-      case ActAnsMchQstStd:
-	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
-	           "var RefreshParamMchCod = \"MchCod=%ld\";\n",
-		   Act_GetActCod (ActRefMchStd),
-		   Mch_GetMchCodBeingPlayed ());
-	 break;
-      /* Parameters related with match refreshing (for teachers) */
-      case ActNewMch:
-      case ActResMch:
-      case ActBckMch:
-      case ActPlyPauMch:
-      case ActFwdMch:
-      case ActChgNumColMch:
-      case ActChgVisResMchQst:
-      case ActMchCntDwn:
-	 // Handle keys in keyboard/presenter
-	 HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
-	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
-		   "var RefreshParamMchCod = \"MchCod=%ld\";\n",
-		   Act_GetActCod (ActRefMchTch),
-		   Mch_GetMchCodBeingPlayed ());
-	 break;
-      /* Parameter related with clicks refreshing */
-      case ActLstClk:
+      /***** Parameter to refresh connected users *****/
+      if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
 	 // Refresh parameter
-	 HTM_TxtF ("var RefreshParamNxtActLstClk = \"act=%ld\";\n",
-		   Act_GetActCod (ActRefLstClk));
-	 break;
-      default:
-	 break;
-     }
+	 HTM_TxtF ("var RefreshParamNxtActCon = \"act=%ld\";\n",
+		   Act_GetActCod (ActRefCon));
+
+      /***** Parameters related with expanding/contracting folders in file browsers *****/
+      if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
+	 /* In all the actions related to file browsers ==>
+	    put parameters used by AJAX */
+	 // Refresh parameters
+	 HTM_TxtF ("var RefreshParamExpand = \"act=%ld\";\n"
+		   "var RefreshParamContract = \"act=%ld\";\n",
+		   Act_GetActCod (Brw_GetActionExpand   ()),
+		   Act_GetActCod (Brw_GetActionContract ()));
+
+      /***** Parameters related with other actions *****/
+      switch (Gbl.Action.Act)
+	{
+	 /* Parameters related with global timeline refreshing */
+	 case ActSeeGblTL:
+	 case ActRcvPstGblTL:
+	 case ActRcvComGblTL:
+	 case ActReqRemPubGblTL:
+	 case ActRemPubGblTL:
+	 case ActReqRemComGblTL:
+	 case ActRemComGblTL:
+	    /* In all the actions related to view or editing global timeline ==>
+	       put parameters used by AJAX */
+	    // Refresh parameters
+	    HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
+		      "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+		      "var RefreshParamWho = \"Who=%u\";\n",
+		      Act_GetActCod (ActRefNewPubGblTL),
+		      Act_GetActCod (ActRefOldPubGblTL),
+		      (unsigned) Tml_Who_GetGlobalWho ());	// Global variable got in a priori function
+	    break;
+	 /* Parameters related with user timeline refreshing */
+	 case ActSeeOthPubPrf:
+	 case ActRcvPstUsrTL:
+	 case ActRcvComUsrTL:
+	 case ActReqRemPubUsrTL:
+	 case ActRemPubUsrTL:
+	 case ActReqRemComUsrTL:
+	 case ActRemComUsrTL:
+	    /* In all the actions related to view or editing user's timeline ==>
+	       put parameters used by AJAX */
+	    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+	       Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
+	    // Refresh parameters
+	    HTM_TxtF ("var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+		      "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
+		      Act_GetActCod (ActRefOldPubUsrTL),
+		      Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	    break;
+	 /* Parameters related with match refreshing (for students) */
+	 case ActJoiMch:
+	 case ActSeeMchAnsQstStd:
+	 case ActRemMchAnsQstStd:
+	 case ActAnsMchQstStd:
+	    // Refresh parameters
+	    HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
+		      "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		      Act_GetActCod (ActRefMchStd),
+		      Mch_GetMchCodBeingPlayed ());
+	    break;
+	 /* Parameters related with match refreshing (for teachers) */
+	 case ActNewMch:
+	 case ActResMch:
+	 case ActBckMch:
+	 case ActPlyPauMch:
+	 case ActFwdMch:
+	 case ActChgNumColMch:
+	 case ActChgVisResMchQst:
+	 case ActMchCntDwn:
+	    // Handle keys in keyboard/presenter
+	    HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
+	    // Refresh parameters
+	    HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
+		      "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		      Act_GetActCod (ActRefMchTch),
+		      Mch_GetMchCodBeingPlayed ());
+	    break;
+	 /* Parameter related with clicks refreshing */
+	 case ActLstClk:
+	    // Refresh parameter
+	    HTM_TxtF ("var RefreshParamNxtActLstClk = \"act=%ld\";\n",
+		      Act_GetActCod (ActRefLstClk));
+	    break;
+	 default:
+	    break;
+	}
 
    /***** End script *****/
    HTM_SCRIPT_End ();
@@ -961,16 +961,16 @@ static void Lay_WriteScriptCustomDropzone (void)
    // "myAwesomeDropzone" is the camelized version of the HTML element's ID
    // Add a line "forceFallback: true,\n" to test classic upload
    HTM_SCRIPT_Begin (NULL,NULL);
-   HTM_TxtF ("Dropzone.options.myAwesomeDropzone = {\n"
-	     "maxFiles: 100,\n"
-	     "parallelUploads: 100,\n"
-	     "maxFilesize: %lu,\n"
-	     "fallback: function() {\n"
-	     "document.getElementById('dropzone-upload').style.display='none';\n"
-	     "document.getElementById('classic-upload').style.display='block';\n"
-	     "}\n"
-	     "};\n",
-             (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL) - 1));
+      HTM_TxtF ("Dropzone.options.myAwesomeDropzone = {\n"
+		"maxFiles: 100,\n"
+		"parallelUploads: 100,\n"
+		"maxFilesize: %lu,\n"
+		"fallback: function() {\n"
+		"document.getElementById('dropzone-upload').style.display='none';\n"
+		"document.getElementById('classic-upload').style.display='block';\n"
+		"}\n"
+		"};\n",
+		(unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL) - 1));
    HTM_SCRIPT_End ();
   }
 
@@ -1002,87 +1002,88 @@ static void Lay_WritePageTopHeading (void)
       [The_THEME_PINK  ] = "HEAD_ROW_2_PINK",
       };
 
-   /***** Start header *****/
+   /***** Begin header *****/
    HTM_Txt ("<header>");
 
-   /***** 1st. row *****/
-   /* Start 1st. row */
-   HTM_DIV_Begin ("id=\"head_row_1\" class=\"%s\"",ClassHeadRow1[Gbl.Prefs.Theme]);
+      /***** 1st. row *****/
+      /* Begin 1st. row */
+      HTM_DIV_Begin ("id=\"head_row_1\" class=\"%s\"",ClassHeadRow1[Gbl.Prefs.Theme]);
 
-   /* 1st. row, 1st. column: logo, tagline and search */
-   HTM_DIV_Begin ("id=\"head_row_1_left\"");
+	 /* 1st. row, 1st. column: logo, tagline and search */
+	 HTM_DIV_Begin ("id=\"head_row_1_left\"");
 
-   /* Begin form to go to home page */
-   Frm_BeginFormGoTo (ActMnu);
-   Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
+	    /* Begin form to go to home page */
+	    Frm_BeginFormGoTo (ActMnu);
+	    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 
-   HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
-		    Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_SMALL_CLASS);
-   HTM_DIV_End ();	// head_row_1_logo_small
+	       HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
+		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
+				   Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_SMALL_CLASS);
+	       HTM_DIV_End ();	// head_row_1_logo_small
 
-   HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
-		    Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_BIG_CLASS);
-   HTM_DIV_End ();	// head_row_1_logo_big
+	       HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
+		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
+				   Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_BIG_CLASS);
+	       HTM_DIV_End ();	// head_row_1_logo_big
 
-   HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
-   HTM_BUTTON_SUBMIT_Begin (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
-   HTM_Txt (Txt_TAGLINE_BR);
-   HTM_BUTTON_End ();
-   HTM_DIV_End ();	// head_row_1_tagline
+	       HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
+		  HTM_BUTTON_SUBMIT_Begin (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
+		     HTM_Txt (Txt_TAGLINE_BR);
+		  HTM_BUTTON_End ();
+	       HTM_DIV_End ();	// head_row_1_tagline
 
-   /* End form to go to home page */
-   Frm_EndForm ();
+	    /* End form to go to home page */
+	    Frm_EndForm ();
 
-   Sch_PutFormToSearchInPageTopHeading ();
+	    Sch_PutFormToSearchInPageTopHeading ();
 
-   HTM_DIV_End ();	// head_row_1_left
+	 HTM_DIV_End ();	// head_row_1_left
 
-   /* 1st. row, 3rd. column: logged user or language selection,
-      and link to open/close session */
-   HTM_DIV_Begin ("id=\"head_row_1_right\"");
-   if (Gbl.Usrs.Me.Logged)
-      Usr_WriteLoggedUsrHead ();
-   else
-      Lan_PutSelectorToSelectLanguage ();
+	 /* 1st. row, 3rd. column: logged user or language selection,
+	    and link to open/close session */
+	 HTM_DIV_Begin ("id=\"head_row_1_right\"");
 
-   HTM_DIV_Begin ("id=\"login_box\"");
-   if (Gbl.Usrs.Me.Logged)
-      Usr_PutFormLogOut ();
-   else
-      Usr_PutFormLogIn ();
-   HTM_DIV_End ();	// login_box
+	    if (Gbl.Usrs.Me.Logged)
+	       Usr_WriteLoggedUsrHead ();
+	    else
+	       Lan_PutSelectorToSelectLanguage ();
 
-   HTM_DIV_End ();	// head_row_1_right
+	    HTM_DIV_Begin ("id=\"login_box\"");
+	       if (Gbl.Usrs.Me.Logged)
+		  Usr_PutFormLogOut ();
+	       else
+		  Usr_PutFormLogIn ();
+	    HTM_DIV_End ();	// login_box
 
-   /* End 1st. row */
-   HTM_DIV_End ();	// head_row_1
+	 HTM_DIV_End ();	// head_row_1_right
 
-   /***** 2nd. row *****/
-   /* Start second row */
-   HTM_DIV_Begin ("id=\"head_row_2\" class=\"%s\"",ClassHeadRow2[Gbl.Prefs.Theme]);
+      /* End 1st. row */
+      HTM_DIV_End ();	// head_row_1
 
-   /* 2nd. row, 1st. column
-      Clock with hour:minute (server hour is shown) */
-   HTM_DIV_Begin ("id=\"head_row_2_time\"");
-   Dat_ShowClientLocalTime ();
-   HTM_DIV_End ();	// End first column
+      /***** 2nd. row *****/
+      /* Begin second row */
+      HTM_DIV_Begin ("id=\"head_row_2\" class=\"%s\"",ClassHeadRow2[Gbl.Prefs.Theme]);
 
-   /* 2nd. row, 2nd. column: degree and course */
-   HTM_DIV_Begin ("id=\"head_row_2_hierarchy\"");
-   Lay_WriteBreadcrumb ();
-   Hie_WriteBigNameCtyInsCtrDegCrs ();
-   HTM_DIV_End ();
+	 /* 2nd. row, 1st. column
+	    Clock with hour:minute (server hour is shown) */
+	 HTM_DIV_Begin ("id=\"head_row_2_time\"");
+	    Dat_ShowClientLocalTime ();
+	 HTM_DIV_End ();	// End first column
 
-   /* 2nd. row, 3rd. column */
-   HTM_DIV_Begin ("id=\"msg\"");	// Used for AJAX based refresh
-   if (Gbl.Usrs.Me.Logged)
-      Ntf_WriteNumberOfNewNtfs ();
-   HTM_DIV_End ();		// Used for AJAX based refresh
+	 /* 2nd. row, 2nd. column: degree and course */
+	 HTM_DIV_Begin ("id=\"head_row_2_hierarchy\"");
+	    Lay_WriteBreadcrumb ();
+	    Hie_WriteBigNameCtyInsCtrDegCrs ();
+	 HTM_DIV_End ();
 
-   /* End 2nd. row */
-   HTM_DIV_End ();
+	 /* 2nd. row, 3rd. column */
+	 HTM_DIV_Begin ("id=\"msg\"");	// Used for AJAX based refresh
+	    if (Gbl.Usrs.Me.Logged)
+	       Ntf_WriteNumberOfNewNtfs ();
+	 HTM_DIV_End ();		// Used for AJAX based refresh
+
+      /* End 2nd. row */
+      HTM_DIV_End ();
 
    /***** End header *****/
    HTM_Txt ("</header>");
@@ -1377,44 +1378,44 @@ void Lay_WriteAboutZone (void)
    extern const char *Txt_Questions_and_problems;
    unsigned i;
 
-   /***** Start about zone *****/
+   /***** Begin about zone *****/
    HTM_Txt ("<address id=\"about_zone\" class=\"ABOUT\">");
 
-   /***** Institution and center hosting the platform *****/
-   HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_URL);
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,Cfg_ABOUT_NAME,
-	    "style=\"width:%upx; height:%upx;\"",
-	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
-   HTM_DIV_Begin (NULL);
-   HTM_Txt (Cfg_ABOUT_NAME);
-   HTM_DIV_End ();
-   HTM_A_End ();
+      /***** Institution and center hosting the platform *****/
+      HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_URL);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,Cfg_ABOUT_NAME,
+		  "style=\"width:%upx; height:%upx;\"",
+		  Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
+	 HTM_DIV_Begin (NULL);
+	    HTM_Txt (Cfg_ABOUT_NAME);
+	 HTM_DIV_End ();
+      HTM_A_End ();
 
-   /***** Questions and problems *****/
-   HTM_DIV_Begin (NULL);
-   HTM_TxtColonNBSP (Txt_Questions_and_problems);
-   HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
-	        Cfg_PLATFORM_RESPONSIBLE_EMAIL);
-   HTM_Txt (Cfg_PLATFORM_RESPONSIBLE_EMAIL);
-   HTM_A_End ();
-   HTM_DIV_End ();
+      /***** Questions and problems *****/
+      HTM_DIV_Begin (NULL);
+	 HTM_TxtColonNBSP (Txt_Questions_and_problems);
+	 HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
+		      Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+	    HTM_Txt (Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+	 HTM_A_End ();
+      HTM_DIV_End ();
 
-   /***** About and time to generate and send page *****/
-   HTM_DIV_Begin (NULL);
+      /***** About and time to generate and send page *****/
+      HTM_DIV_Begin (NULL);
 
-   /* About */
-   HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_SWAD_URL);
-   HTM_TxtF (Txt_About_X,Log_PLATFORM_VERSION);
-   HTM_A_End ();
-   for (i = 0;
-	i < 5;
-	i++)
-      HTM_NBSP ();
+	 /* About */
+	 HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_SWAD_URL);
+	    HTM_TxtF (Txt_About_X,Log_PLATFORM_VERSION);
+	 HTM_A_End ();
+	 for (i = 0;
+	      i < 5;
+	      i++)
+	    HTM_NBSP ();
 
-   /* Time to generate and send page */
-   Sta_WriteTimeToGenerateAndSendPage ();
+	 /* Time to generate and send page */
+	 Sta_WriteTimeToGenerateAndSendPage ();
 
-   HTM_DIV_End ();
+      HTM_DIV_End ();
 
    /***** End about zone *****/
    HTM_Txt ("</address>");	// about_zone
@@ -1716,7 +1717,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 /************************** Help for the text editor *************************/
 /*****************************************************************************/
 
-void Lay_StartHTMLFile (FILE *File,const char *Title)
+void Lay_BeginHTMLFile (FILE *File,const char *Title)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 

@@ -123,7 +123,7 @@ static struct Roo_Room *Roo_EditingRoom = NULL;	// Static variable to keep the r
 
 static void Roo_GetAndListMACAddresses (long RooCod);
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
-static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res);
+static unsigned Roo_DB_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res);
 
 static Roo_Order_t Roo_GetParamRoomOrder (void);
 static bool Roo_CheckIfICanCreateRooms (void);
@@ -149,8 +149,10 @@ static int Roo_GetParamFloor (void);
 static Roo_RoomType_t Roo_GetParamType (void);
 
 static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Roo_CheckIfRoomNameExists (const char *FieldName,const char *Name,long RooCod);
-static void Roo_UpdateRoomNameDB (long RooCod,const char *FieldName,const char *NewRoomName);
+static bool Roo_DB_CheckIfRoomNameExists (long RooCod,
+                                          const char *FieldName,const char *Name);
+static void Roo_DB_UpdateRoomName (long RooCod,
+                                   const char *FieldName,const char *NewRoomName);
 
 static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity);
 
@@ -208,109 +210,109 @@ void Roo_SeeRooms (void)
    Box_BoxBegin (NULL,Txt_Rooms,
                  Roo_PutIconsListingRooms,NULL,
 		 Hlp_CENTER_Rooms,Box_NOT_CLOSABLE);
-   HTM_TABLE_BeginWideMarginPadding (2);
-   HTM_TR_Begin (NULL);
+      HTM_TABLE_BeginWideMarginPadding (2);
+	 HTM_TR_Begin (NULL);
 
-   /* Columns visible by all */
-   for (Order  = (Roo_Order_t) 0;
-	Order <= (Roo_Order_t) (Roo_NUM_ORDERS - 1);
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
-      Frm_BeginForm (ActSeeRoo);
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-      HTM_BUTTON_SUBMIT_Begin (Txt_ROOMS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-      if (Order == Rooms.SelectedOrder)
-	 HTM_U_Begin ();
-      HTM_Txt (Txt_ROOMS_ORDER[Order]);
-      if (Order == Rooms.SelectedOrder)
-	 HTM_U_End ();
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-      HTM_TH_End ();
-     }
+	 /* Columns visible by all */
+	 for (Order  = (Roo_Order_t) 0;
+	      Order <= (Roo_Order_t) (Roo_NUM_ORDERS - 1);
+	      Order++)
+	   {
+	    HTM_TH_Begin (1,1,"LM");
+	       Frm_BeginForm (ActSeeRoo);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_SUBMIT_Begin (Txt_ROOMS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+		     if (Order == Rooms.SelectedOrder)
+			HTM_U_Begin ();
+		     HTM_Txt (Txt_ROOMS_ORDER[Order]);
+		     if (Order == Rooms.SelectedOrder)
+			HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	    HTM_TH_End ();
+	   }
 
-   /* Column visible by admins */
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 HTM_TH_Begin (1,1,"LM");
-	 HTM_Txt (Txt_MAC_address);
-	 HTM_TH_End ();
-	 break;
-      default:
-	 break;
-     }
+	 /* Column visible by admins */
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_CTR_ADM:
+	    case Rol_INS_ADM:
+	    case Rol_SYS_ADM:
+	       HTM_TH_Begin (1,1,"LM");
+		  HTM_Txt (Txt_MAC_address);
+	       HTM_TH_End ();
+	       break;
+	    default:
+	       break;
+	   }
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Write list of rooms *****/
-   for (NumRoom = 0, RowEvenOdd = 1;
-	NumRoom < Rooms.Num;
-	NumRoom++, RowEvenOdd = 1 - RowEvenOdd)
-     {
-      HTM_TR_Begin (NULL);
+	 /***** Write list of rooms *****/
+	 for (NumRoom = 0, RowEvenOdd = 1;
+	      NumRoom < Rooms.Num;
+	      NumRoom++, RowEvenOdd = 1 - RowEvenOdd)
+	   {
+	    HTM_TR_Begin (NULL);
 
-      /* Building short name */
-      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
-      HTM_TD_End ();
+	       /* Building short name */
+	       HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
+	       HTM_TD_End ();
 
-      /* Floor */
-      HTM_TD_Begin ("class=\"DAT RT %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Int (Rooms.Lst[NumRoom].Floor);
-      HTM_TD_End ();
+	       /* Floor */
+	       HTM_TD_Begin ("class=\"DAT RT %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Int (Rooms.Lst[NumRoom].Floor);
+	       HTM_TD_End ();
 
-      /* Type */
-      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
-      Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
-      HTM_TD_End ();
+	       /* Type */
+	       HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
+	       HTM_TD_End ();
 
-      /* Short name */
-      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
-      HTM_TD_End ();
+	       /* Short name */
+	       HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
+	       HTM_TD_End ();
 
-      /* Full name */
-      HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
-      HTM_Txt (Rooms.Lst[NumRoom].FullName);
-      HTM_TD_End ();
+	       /* Full name */
+	       HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  HTM_Txt (Rooms.Lst[NumRoom].FullName);
+	       HTM_TD_End ();
 
-      /* Capacity */
-      HTM_TD_Begin ("class=\"DAT RT %s\"",Gbl.ColorRows[RowEvenOdd]);
-      Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
-      HTM_Txt (StrCapacity);
-      HTM_TD_End ();
+	       /* Capacity */
+	       HTM_TD_Begin ("class=\"DAT RT %s\"",Gbl.ColorRows[RowEvenOdd]);
+		  Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
+		  HTM_Txt (StrCapacity);
+	       HTM_TD_End ();
 
-      /* Column visible by admins */
-      switch (Gbl.Usrs.Me.Role.Logged)
+	       /* Column visible by admins */
+	       switch (Gbl.Usrs.Me.Role.Logged)
+		 {
+		  case Rol_CTR_ADM:
+		  case Rol_INS_ADM:
+		  case Rol_SYS_ADM:
+		     HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
+			Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
+		     HTM_TD_End ();
+		     break;
+		  default:
+		     break;
+		 }
+
+	    HTM_TR_End ();
+	   }
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Button to create room *****/
+      if (Roo_CheckIfICanCreateRooms ())
 	{
-	 case Rol_CTR_ADM:
-	 case Rol_INS_ADM:
-	 case Rol_SYS_ADM:
-            HTM_TD_Begin ("class=\"DAT LT %s\"",Gbl.ColorRows[RowEvenOdd]);
-            Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
-            HTM_TD_End ();
-	    break;
-	 default:
-	    break;
+	 Frm_BeginForm (ActEdiRoo);
+	    Btn_PutConfirmButton (Txt_New_room);
+	 Frm_EndForm ();
 	}
-
-      HTM_TR_End ();
-     }
-
-   /***** End table *****/
-   HTM_TABLE_End ();
-
-   /***** Button to create room *****/
-   if (Roo_CheckIfICanCreateRooms ())
-     {
-      Frm_BeginForm (ActEdiRoo);
-      Btn_PutConfirmButton (Txt_New_room);
-      Frm_EndForm ();
-     }
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -329,7 +331,7 @@ static void Roo_GetAndListMACAddresses (long RooCod)
    unsigned NumMACs;
 
    /***** Get MAC addresses from database *****/
-   NumMACs = Roo_GetMACAddresses (RooCod,&mysql_res);
+   NumMACs = Roo_DB_GetMACAddresses (RooCod,&mysql_res);
 
    /***** Write the MAC addresses *****/
    MAC_ListMACAddresses (NumMACs,&mysql_res);
@@ -345,7 +347,7 @@ static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor)
    unsigned NumMACs;
 
    /***** Get MAC addresses from database *****/
-   NumMACs = Roo_GetMACAddresses (RooCod,&mysql_res);
+   NumMACs = Roo_DB_GetMACAddresses (RooCod,&mysql_res);
 
    /***** Write the MAC addresses *****/
    MAC_EditMACAddresses (RooCod,Anchor,NumMACs,&mysql_res);
@@ -355,7 +357,7 @@ static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor)
 /***************** Get the MAC addresses associated to a room ****************/
 /*****************************************************************************/
 
-static unsigned Roo_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
+static unsigned Roo_DB_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
   {
    /***** Get MAC addresses from database *****/
    return (unsigned)
@@ -492,12 +494,12 @@ static void Roo_EditRoomsInternal (void)
                  Roo_PutIconsEditingRooms,NULL,
                  Hlp_CENTER_Rooms_edit,Box_NOT_CLOSABLE);
 
-   /***** Put a form to create a new room *****/
-   Roo_PutFormToCreateRoom (&Buildings);
+      /***** Put a form to create a new room *****/
+      Roo_PutFormToCreateRoom (&Buildings);
 
-   /***** Forms to edit current rooms *****/
-   if (Rooms.Num)
-      Roo_ListRoomsForEdition (&Buildings,&Rooms);
+      /***** Forms to edit current rooms *****/
+      if (Rooms.Num)
+	 Roo_ListRoomsForEdition (&Buildings,&Rooms);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -783,101 +785,102 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
    char *Anchor = NULL;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
-   /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
-   Roo_PutHeadRooms ();
 
-   /***** Write all the rooms *****/
-   for (NumRoom = 0;
-	NumRoom < Rooms->Num;
-	NumRoom++)
-     {
-      Room = &Rooms->Lst[NumRoom];
+      /***** Write heading *****/
+      Roo_PutHeadRooms ();
 
-      /* Build anchor string */
-      Frm_SetAnchorStr (Room->RooCod,&Anchor);
+      /***** Write all the rooms *****/
+      for (NumRoom = 0;
+	   NumRoom < Rooms->Num;
+	   NumRoom++)
+	{
+	 Room = &Rooms->Lst[NumRoom];
 
-      HTM_TR_Begin (NULL);
+	 /* Build anchor string */
+	 Frm_SetAnchorStr (Room->RooCod,&Anchor);
 
-      /* Put icon to remove room */
-      HTM_TD_Begin ("class=\"BT\"");
-      Ico_PutContextualIconToRemove (ActRemRoo,NULL,
-				     Roo_PutParamRooCod,&Room->RooCod);
-      HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-      /* Room code */
-      HTM_TD_Begin ("class=\"DAT RT\"");
-      HTM_ARTICLE_Begin (Anchor);
-      HTM_Long (Room->RooCod);
-      HTM_ARTICLE_End ();
-      HTM_TD_End ();
+	    /* Put icon to remove room */
+	    HTM_TD_Begin ("class=\"BT\"");
+	       Ico_PutContextualIconToRemove (ActRemRoo,NULL,
+					      Roo_PutParamRooCod,&Room->RooCod);
+	    HTM_TD_End ();
 
-      /* Building */
-      HTM_TD_Begin ("class=\"CT\"");
-      Frm_BeginFormAnchor (ActChgRooBld,Anchor);
-      Roo_PutParamRooCod (&Room->RooCod);
-      Roo_PutSelectorBuilding (Room->BldCod,Buildings,
-                               HTM_SUBMIT_ON_CHANGE);
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Room code */
+	    HTM_TD_Begin ("class=\"DAT RT\"");
+	       HTM_ARTICLE_Begin (Anchor);
+		  HTM_Long (Room->RooCod);
+	       HTM_ARTICLE_End ();
+	    HTM_TD_End ();
 
-      /* Floor */
-      HTM_TD_Begin ("class=\"LT\"");
-      Frm_BeginFormAnchor (ActChgRooFlo,Anchor);
-      Roo_PutParamRooCod (&Room->RooCod);
-      HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
-                      HTM_SUBMIT_ON_CHANGE,false,
-		      "class=\"INPUT_LONG\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Building */
+	    HTM_TD_Begin ("class=\"CT\"");
+	       Frm_BeginFormAnchor (ActChgRooBld,Anchor);
+	       Roo_PutParamRooCod (&Room->RooCod);
+		  Roo_PutSelectorBuilding (Room->BldCod,Buildings,
+					   HTM_SUBMIT_ON_CHANGE);
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Room type */
-      HTM_TD_Begin ("class=\"CT\"");
-      Frm_BeginFormAnchor (ActChgRooTyp,Anchor);
-      Roo_PutParamRooCod (&Room->RooCod);
-      Roo_PutSelectorType (Room->Type,
-                           HTM_SUBMIT_ON_CHANGE);
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Floor */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Frm_BeginFormAnchor (ActChgRooFlo,Anchor);
+	       Roo_PutParamRooCod (&Room->RooCod);
+		  HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Room->Floor,
+				  HTM_SUBMIT_ON_CHANGE,false,
+				  "class=\"INPUT_LONG\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Room short name */
-      HTM_TD_Begin ("class=\"LT\"");
-      Frm_BeginFormAnchor (ActRenRooSho,Anchor);
-      Roo_PutParamRooCod (&Room->RooCod);
-      HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Room type */
+	    HTM_TD_Begin ("class=\"CT\"");
+	       Frm_BeginFormAnchor (ActChgRooTyp,Anchor);
+	       Roo_PutParamRooCod (&Room->RooCod);
+		  Roo_PutSelectorType (Room->Type,
+				       HTM_SUBMIT_ON_CHANGE);
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Room full name */
-      HTM_TD_Begin ("class=\"LT\"");
-      Frm_BeginFormAnchor (ActRenRooFul,Anchor);
-      Roo_PutParamRooCod (&Room->RooCod);
-      HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"20\" class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Room short name */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Frm_BeginFormAnchor (ActRenRooSho,Anchor);
+	       Roo_PutParamRooCod (&Room->RooCod);
+		  HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"10\" class=\"INPUT_SHORT_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Seating capacity */
-      HTM_TD_Begin ("class=\"LT\"");
-      Frm_BeginFormAnchor (ActChgRooMaxUsr,Anchor);
-      Roo_PutParamRooCod (&Room->RooCod);
-      Roo_WriteCapacity (StrCapacity,Room->Capacity);
-      HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"3\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Room full name */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Frm_BeginFormAnchor (ActRenRooFul,Anchor);
+	       Roo_PutParamRooCod (&Room->RooCod);
+		  HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"20\" class=\"INPUT_FULL_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* MAC addresses */
-      HTM_TD_Begin ("class=\"LT\"");
-      Roo_GetAndEditMACAddresses (Room->RooCod,Anchor);
-      HTM_TD_End ();
+	    /* Seating capacity */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Frm_BeginFormAnchor (ActChgRooMaxUsr,Anchor);
+	       Roo_PutParamRooCod (&Room->RooCod);
+		  Roo_WriteCapacity (StrCapacity,Room->Capacity);
+		  HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "size=\"3\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    /* MAC addresses */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Roo_GetAndEditMACAddresses (Room->RooCod,Anchor);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -899,23 +902,23 @@ static void Roo_PutSelectorBuilding (long BldCod,
    HTM_SELECT_Begin (SubmitOnChange,
 		     "name=\"BldCod\" class=\"BLD_SEL\"");
 
-   /***** Option for no assigned building *****/
-   HTM_OPTION (HTM_Type_STRING,"-1",
-	       BldCod < 0,false,
-	       "%s",Txt_No_assigned_building);
+      /***** Option for no assigned building *****/
+      HTM_OPTION (HTM_Type_STRING,"-1",
+		  BldCod < 0,false,
+		  "%s",Txt_No_assigned_building);
 
-   /***** Option for another room *****/
-   HTM_OPTION (HTM_Type_STRING,"0",
-	       BldCod == 0,false,
-	       "%s",Txt_Another_building);
+      /***** Option for another room *****/
+      HTM_OPTION (HTM_Type_STRING,"0",
+		  BldCod == 0,false,
+		  "%s",Txt_Another_building);
 
-   /***** Options for buildings *****/
-   for (NumBld = 0;
-	NumBld < Buildings->Num;
-	NumBld++)
-      HTM_OPTION (HTM_Type_LONG,&Buildings->Lst[NumBld].BldCod,
-		  BldCod == Buildings->Lst[NumBld].BldCod,false,
-		  "%s",Buildings->Lst[NumBld].ShrtName);
+      /***** Options for buildings *****/
+      for (NumBld = 0;
+	   NumBld < Buildings->Num;
+	   NumBld++)
+	 HTM_OPTION (HTM_Type_LONG,&Buildings->Lst[NumBld].BldCod,
+		     BldCod == Buildings->Lst[NumBld].BldCod,false,
+		     "%s",Buildings->Lst[NumBld].ShrtName);
 
    /***** End selector *****/
    HTM_SELECT_End ();
@@ -935,13 +938,13 @@ static void Roo_PutSelectorType (Roo_RoomType_t RoomType,
    HTM_SELECT_Begin (SubmitOnChange,
 		     "name=\"Type\" class=\"ROOM_TYPE_SEL\"");
 
-   /***** Options for types *****/
-   for (Type  = (Roo_RoomType_t) 0;
-	Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
-	Type++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&Type,
-		  Type == RoomType,false,
-		  "%s",Txt_ROOM_TYPES[Type]);
+      /***** Options for types *****/
+      for (Type  = (Roo_RoomType_t) 0;
+	   Type <= (Roo_RoomType_t) (Roo_NUM_TYPES - 1);
+	   Type++)
+	 HTM_OPTION (HTM_Type_UNSIGNED,&Type,
+		     Type == RoomType,false,
+		     "%s",Txt_ROOM_TYPES[Type]);
 
    /***** End selector *****/
    HTM_SELECT_End ();
@@ -1035,7 +1038,7 @@ void Roo_RemoveRoom (void)
 /********************** Remove all rooms in a center *************************/
 /*****************************************************************************/
 
-void Roo_RemoveAllRoomsInCtr (long CtrCod)
+void Roo_DB_RemoveAllRoomsInCtr (long CtrCod)
   {
    /***** Remove all rooms in center *****/
    DB_QueryDELETE ("can not remove rooms",
@@ -1278,14 +1281,14 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If room was in database... *****/
-         if (Roo_CheckIfRoomNameExists (ParamName,NewClaName,Roo_EditingRoom->RooCod))
+         if (Roo_DB_CheckIfRoomNameExists (Roo_EditingRoom->RooCod,ParamName,NewClaName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_room_X_already_exists,
                              NewClaName);
          else
            {
             /* Update the table changing old name by new name */
-            Roo_UpdateRoomNameDB (Roo_EditingRoom->RooCod,FieldName,NewClaName);
+            Roo_DB_UpdateRoomName (Roo_EditingRoom->RooCod,FieldName,NewClaName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1309,7 +1312,8 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
 /********************** Check if the name of room exists *********************/
 /*****************************************************************************/
 
-static bool Roo_CheckIfRoomNameExists (const char *FieldName,const char *Name,long RooCod)
+static bool Roo_DB_CheckIfRoomNameExists (long RooCod,
+                                          const char *FieldName,const char *Name)
   {
    /***** Get number of rooms with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a room"
@@ -1328,7 +1332,8 @@ static bool Roo_CheckIfRoomNameExists (const char *FieldName,const char *Name,lo
 /******************** Update room name in table of rooms *********************/
 /*****************************************************************************/
 
-static void Roo_UpdateRoomNameDB (long RooCod,const char *FieldName,const char *NewRoomName)
+static void Roo_DB_UpdateRoomName (long RooCod,
+                                   const char *FieldName,const char *NewRoomName)
   {
    /***** Update room changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a room",
@@ -1440,77 +1445,77 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
    /***** Begin form *****/
    Frm_BeginForm (ActNewRoo);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_room,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_room,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Roo_PutHeadRooms ();
+	 /***** Write heading *****/
+	 Roo_PutHeadRooms ();
 
-   HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-   /***** Column to remove room, disabled here *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    /***** Column to remove room, disabled here *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   /***** Room code *****/
-   HTM_TD_Begin ("class=\"CODE\"");
-   HTM_TD_End ();
+	    /***** Room code *****/
+	    HTM_TD_Begin ("class=\"CODE\"");
+	    HTM_TD_End ();
 
-   /***** Building *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
-                            HTM_DONT_SUBMIT_ON_CHANGE);
-   HTM_TD_End ();
+	    /***** Building *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Roo_PutSelectorBuilding (Roo_EditingRoom->BldCod,Buildings,
+					HTM_DONT_SUBMIT_ON_CHANGE);
+	    HTM_TD_End ();
 
-   /***** Floor *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
-                   HTM_DONT_SUBMIT_ON_CHANGE,false,
-		   "class=\"INPUT_LONG\"");
-   HTM_TD_End ();
+	    /***** Floor *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_LONG ("Floor",(long) INT_MIN,(long) INT_MAX,(long) Roo_EditingRoom->Floor,
+			       HTM_DONT_SUBMIT_ON_CHANGE,false,
+			       "class=\"INPUT_LONG\"");
+	    HTM_TD_End ();
 
-   /***** Room type *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   Roo_PutSelectorType (Roo_EditingRoom->Type,
-                        HTM_DONT_SUBMIT_ON_CHANGE);
-   HTM_TD_End ();
+	    /***** Room type *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Roo_PutSelectorType (Roo_EditingRoom->Type,
+				    HTM_DONT_SUBMIT_ON_CHANGE);
+	    HTM_TD_End ();
 
-   /***** Room short name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Room short name *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Room full name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Room full name *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Seating capacity *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
-   HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"3\"");
-   HTM_TD_End ();
+	    /***** Seating capacity *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       Roo_WriteCapacity (StrCapacity,Roo_EditingRoom->Capacity);
+	       HTM_INPUT_TEXT ("Capacity",Cns_MAX_DECIMAL_DIGITS_UINT,StrCapacity,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"3\"");
+	    HTM_TD_End ();
 
-   /***** MAC address *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
-   HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
-		   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"8\"");
-   HTM_TD_End ();
+	    /***** MAC address *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       MAC_MACnumToMACstr (Roo_EditingRoom->MACnum,MACstr);
+	       HTM_INPUT_TEXT ("MAC",MAC_LENGTH_MAC_ADDRESS,MACstr,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"8\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_room);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_room);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1532,17 +1537,15 @@ static void Roo_PutHeadRooms (void)
    extern const char *Txt_MAC_address;
 
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_Building);
-   HTM_TH (1,1,"LM",Txt_Floor);
-   HTM_TH (1,1,"LM",Txt_Type);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"LM",Txt_Capacity_OF_A_ROOM);
-   HTM_TH (1,1,"LM",Txt_MAC_address);
-
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_Building);
+      HTM_TH (1,1,"LM",Txt_Floor);
+      HTM_TH (1,1,"LM",Txt_Type);
+      HTM_TH (1,1,"LM",Txt_Short_name);
+      HTM_TH (1,1,"LM",Txt_Full_name);
+      HTM_TH (1,1,"LM",Txt_Capacity_OF_A_ROOM);
+      HTM_TH (1,1,"LM",Txt_MAC_address);
    HTM_TR_End ();
   }
 
@@ -1590,11 +1593,11 @@ void Roo_ReceiveFormNewRoom (void)
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
       /***** If name of room was in database... *****/
-      if (Roo_CheckIfRoomNameExists ("ShortName",Roo_EditingRoom->ShrtName,-1L))
+      if (Roo_DB_CheckIfRoomNameExists (-1L,"ShortName",Roo_EditingRoom->ShrtName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_room_X_already_exists,
                           Roo_EditingRoom->ShrtName);
-      else if (Roo_CheckIfRoomNameExists ("FullName",Roo_EditingRoom->FullName,-1L))
+      else if (Roo_DB_CheckIfRoomNameExists (-1L,"FullName",Roo_EditingRoom->FullName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_room_X_already_exists,
                           Roo_EditingRoom->FullName);
@@ -1697,4 +1700,3 @@ void Roo_DB_RemoveBuildingFromRooms (long BldCod)
 		   " WHERE BldCod=%ld",
 		   BldCod);
   }
-

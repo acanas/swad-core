@@ -5589,7 +5589,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    else	// Not an assignment zone
       Gbl.FileBrowser.Asg.AsgCod = -1L;
 
-   /***** Start this row *****/
+   /***** Begin this row *****/
    if (asprintf (&Anchor,"fil_brw_%u_%s",
 		 Gbl.FileBrowser.Id,RowId) < 0)
       Err_NotEnoughMemoryExit ();
@@ -6168,7 +6168,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 
 static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata)
   {
-   /***** Start cell *****/
+   /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
       /***** Begin form *****/
@@ -6287,7 +6287,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
      {
       ICanEditFileOrFolder = Brw_GetIfICanEditFileOrFolder ();
 
-      /***** Start cell *****/
+      /***** Begin cell *****/
       HTM_TD_Begin (Gbl.FileBrowser.Clipboard.IsThisFile ? "class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"" :
 							   "class=\"%s LM\" style=\"width:99%%;\"",
 		    Gbl.FileBrowser.TxtStyle);
@@ -8276,7 +8276,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 
 		  /* Add a new entry of marks into database */
 		  if (AdminMarks)
-		     Mrk_AddMarksToDB (FilCod,&Marks);
+		     Mrk_DB_AddMarks (FilCod,&Marks);
 
 		  if (FileType == Brw_IS_FILE)
 		     (Pasted->NumFiles)++;
@@ -8871,7 +8871,7 @@ void Brw_RcvFileInFileBrwDropzone (void)
    Gbl.Layout.DivsEndWritten   =
    Gbl.Layout.HTMLEndWritten   = true;
 
-   /* Start HTTP response */
+   /* Begin HTTP response */
    fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
 
    /* Status code and message */
@@ -9039,7 +9039,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 
                            /* Add a new entry of marks into database */
 			   if (AdminMarks)
-                              Mrk_AddMarksToDB (FileMetadata.FilCod,&Marks);
+                              Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
 
                            /* Notify new file */
 			   if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
@@ -10750,7 +10750,7 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
 
       /***** Increment number of file views in my user's figures *****/
       if (Gbl.Usrs.Me.Logged)
-         Prf_IncrementNumFileViewsUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
+         Prf_DB_IncrementNumFileViewsUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
       FileMetadata->NumMyViews             =

@@ -106,7 +106,7 @@ static void Ins_PutParamGoToIns (void *InsCod);
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
 static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status);
-static void Ins_CreateInstitution (unsigned Status);
+static long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status);
 
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
@@ -176,46 +176,45 @@ void Ins_SeeInsWithPendingCtrs (void)
                          NULL,NULL,
                          Hlp_SYSTEM_Pending,Box_NOT_CLOSABLE,2);
 
-      /***** Write heading *****/
-      HTM_TR_Begin (NULL);
+	 /***** Write heading *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TH (1,1,"LM",Txt_Institution);
+	    HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
+	 HTM_TR_End ();
 
-      HTM_TH (1,1,"LM",Txt_Institution);
-      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
+	 /***** List the institutions *****/
+	 for (NumIns = 0;
+	      NumIns < NumInss;
+	      NumIns++)
+	   {
+	    /* Get next center */
+	    row = mysql_fetch_row (mysql_res);
 
-      HTM_TR_End ();
+	    /* Get institution code (row[0]) */
+	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
+	    BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
+								  Gbl.ColorRows[Gbl.RowEvenOdd];
 
-      /***** List the institutions *****/
-      for (NumIns = 0;
-	   NumIns < NumInss;
-	   NumIns++)
-        {
-         /* Get next center */
-         row = mysql_fetch_row (mysql_res);
+	    /* Get data of institution */
+	    Ins_GetDataOfInstitutionByCod (&Ins);
 
-         /* Get institution code (row[0]) */
-         Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
-                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
+	    /* Institution logo and name */
+	    HTM_TR_Begin (NULL);
 
-         /* Get data of institution */
-         Ins_GetDataOfInstitutionByCod (&Ins);
+	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
+							  "BT_LINK DAT_NOBR","CM");
+	       HTM_TD_End ();
 
-         /* Institution logo and name */
-         HTM_TR_Begin (NULL);
-         HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-         Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
-                                                 "BT_LINK DAT_NOBR","CM");
-         HTM_TD_End ();
+	       /* Number of pending centers (row[1]) */
+	       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+		  HTM_Txt (row[1]);
+	       HTM_TD_End ();
 
-         /* Number of pending centers (row[1]) */
-         HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-         HTM_Txt (row[1]);
-         HTM_TD_End ();
+	    HTM_TR_End ();
 
-         HTM_TR_End ();
-
-         Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-        }
+	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	   }
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -239,13 +238,13 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
      {
       Frm_BeginForm (ActSeeInsInf);
       Ins_PutParamInsCod (Ins->InsCod);
-      HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
    if (PutLink)
      {
-      HTM_BUTTON_End ();
+	 HTM_BUTTON_End ();
       Frm_EndForm ();
      }
   }
@@ -261,16 +260,16 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
    Frm_BeginFormGoTo (Action);
    Ins_PutParamInsCod (Ins->InsCod);
 
-   /***** Link to action *****/
-   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
-   Hie_FreeGoToMsg ();
+      /***** Link to action *****/
+      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
+      Hie_FreeGoToMsg ();
 
-   /***** Institution logo and name *****/
-   Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
-   HTM_TxtF ("&nbsp;%s",Ins->FullName);
+	 /***** Institution logo and name *****/
+	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+	 HTM_TxtF ("&nbsp;%s",Ins->FullName);
 
-   /***** End link *****/
-   HTM_BUTTON_End ();
+      /***** End link *****/
+      HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -324,32 +323,33 @@ static void Ins_ListInstitutions (void)
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   if (Gbl.Hierarchy.Inss.Num)	// There are institutions in the current country
-     {
-      /***** Begin table *****/
-      HTM_TABLE_BeginWideMarginPadding (2);
-      Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
+      if (Gbl.Hierarchy.Inss.Num)	// There are institutions in the current country
+	{
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (2);
+	 Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
-      /***** Write all the institutions and their nuber of users *****/
-      for (NumIns = 0;
-	   NumIns < Gbl.Hierarchy.Inss.Num;
-	   NumIns++)
-	 Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.Inss.Lst[NumIns]),NumIns + 1);
+	    /***** Write all the institutions and their nuber of users *****/
+	    for (NumIns = 0;
+		 NumIns < Gbl.Hierarchy.Inss.Num;
+		 NumIns++)
+	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.Inss.Lst[NumIns]),
+	                                        NumIns + 1);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No insrtitutions created in the current country
-      Ale_ShowAlert (Ale_INFO,Txt_No_institutions);
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+	}
+      else	// No insrtitutions created in the current country
+	 Ale_ShowAlert (Ale_INFO,Txt_No_institutions);
 
-   /***** Button to create institution *****/
-   if (Ins_CheckIfICanCreateInstitutions ())
-     {
-      Frm_BeginForm (ActEdiIns);
-      Btn_PutConfirmButton (Gbl.Hierarchy.Inss.Num ? Txt_Create_another_institution :
-	                                                 Txt_Create_institution);
-      Frm_EndForm ();
-     }
+      /***** Button to create institution *****/
+      if (Ins_CheckIfICanCreateInstitutions ())
+	{
+	 Frm_BeginForm (ActEdiIns);
+	    Btn_PutConfirmButton (Gbl.Hierarchy.Inss.Num ? Txt_Create_another_institution :
+							   Txt_Create_institution);
+	 Frm_EndForm ();
+	}
 
    Box_BoxEnd ();
   }
@@ -414,57 +414,57 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    HTM_TR_Begin (NULL);
 
-   /***** Number of institution in this list *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (NumIns);
-   HTM_TD_End ();
+      /***** Number of institution in this list *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (NumIns);
+      HTM_TD_End ();
 
-   /***** Institution logo and name *****/
-   HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-   Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
-                                           TxtClassStrong,"CM");
-   HTM_TD_End ();
+      /***** Institution logo and name *****/
+      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	 Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
+						 TxtClassStrong,"CM");
+      HTM_TD_End ();
 
-   /***** Number of users who claim to belong to this institution *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
-   HTM_TD_End ();
+      /***** Number of users who claim to belong to this institution *****/
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
+      HTM_TD_End ();
 
-   /***** Other stats *****/
-   /* Number of centers in this institution */
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->InsCod));
-   HTM_TD_End ();
+      /***** Other stats *****/
+      /* Number of centers in this institution */
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->InsCod));
+      HTM_TD_End ();
 
-   /* Number of degrees in this institution */
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Deg_GetCachedNumDegsInIns (Ins->InsCod));
-   HTM_TD_End ();
+      /* Number of degrees in this institution */
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Ins->InsCod));
+      HTM_TD_End ();
 
-   /* Number of courses in this institution */
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Crs_GetCachedNumCrssInIns (Ins->InsCod));
-   HTM_TD_End ();
+      /* Number of courses in this institution */
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Ins->InsCod));
+      HTM_TD_End ();
 
-   /* Number of departments in this institution */
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->InsCod));
-   HTM_TD_End ();
+      /* Number of departments in this institution */
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->InsCod));
+      HTM_TD_End ();
 
-   /* Number of users in courses of this institution */
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
-				             1 << Rol_STD |
-				             1 << Rol_NET |
-				             1 << Rol_TCH));	// Any user);
-   HTM_TD_End ();
+      /* Number of users in courses of this institution */
+      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
+						   1 << Rol_STD |
+						   1 << Rol_NET |
+						   1 << Rol_TCH));	// Any user);
+      HTM_TD_End ();
 
-   /***** Institution status *****/
-   StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-   if (StatusTxt != Ins_STATUS_ACTIVE) // If active ==> do not show anything
-      HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
-   HTM_TD_End ();
+      /***** Institution status *****/
+      StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
+      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+	 if (StatusTxt != Ins_STATUS_ACTIVE) // If active ==> do not show anything
+	    HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -497,41 +497,41 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
      };
 
    HTM_TR_Begin (NULL);
-   HTM_TH_Empty (1);
-   for (Order  = (Ins_Order_t) 0;
-	Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
-	Order++)
-     {
-      HTM_TH_Begin (1,1,ClassTH[Order]);
-      if (OrderSelectable)
-	{
-	 Frm_BeginForm (ActSeeIns);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],ClassButton[Order],NULL);
-	 if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
-	    HTM_U_Begin ();
-	}
-      HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
-      if (OrderSelectable)
-	{
-	 if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-      HTM_TH_End ();
-     }
 
-   HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
-   HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-   HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
-   HTM_TH (1,1,"RM",Txt_Departments_ABBREVIATION);
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   HTM_BR ();
-   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   HTM_TH_End ();
-   HTM_TH_Empty (1);
+      HTM_TH_Empty (1);
+      for (Order  = (Ins_Order_t) 0;
+	   Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
+	   Order++)
+	{
+	 HTM_TH_Begin (1,1,ClassTH[Order]);
+	    if (OrderSelectable)
+	      {
+	       Frm_BeginForm (ActSeeIns);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],ClassButton[Order],NULL);
+		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
+			HTM_U_Begin ();
+	      }
+	    HTM_Txt (Txt_INSTITUTIONS_ORDER[Order]);
+	    if (OrderSelectable)
+	      {
+		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
+			HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TH_End ();
+	}
+      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
+      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+      HTM_TH (1,1,"RM",Txt_Departments_ABBREVIATION);
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_BR ();
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      HTM_TH_End ();
+      HTM_TH_Empty (1);
 
    HTM_TR_End ();
   }
@@ -583,12 +583,12 @@ static void Ins_EditInstitutionsInternal (void)
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   /***** Put a form to create a new institution *****/
-   Ins_PutFormToCreateInstitution ();
+      /***** Put a form to create a new institution *****/
+      Ins_PutFormToCreateInstitution ();
 
-   /***** Forms to edit current institutions *****/
-   if (Gbl.Hierarchy.Inss.Num)
-      Ins_ListInstitutionsForEdition ();
+      /***** Forms to edit current institutions *****/
+      if (Gbl.Hierarchy.Inss.Num)
+	 Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -983,54 +983,59 @@ void Ins_WriteSelectorOfInstitution (void)
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeCtr);
-   if (Gbl.Hierarchy.Cty.CtyCod > 0)
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
-   else
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"ins\" name=\"ins\" class=\"HIE_SEL\""
-			" disabled=\"disabled\"");
-   HTM_OPTION (HTM_Type_STRING,"",
-	       Gbl.Hierarchy.Ins.InsCod < 0,true,
-	       "[%s]",Txt_Institution);
 
-   if (Gbl.Hierarchy.Cty.CtyCod > 0)
-     {
-      /***** Get institutions of selected country from database *****/
-      NumInss = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get institutions",
-		      "SELECT DISTINCT InsCod,"		// row[0]
-				      "ShortName"	// row[1]
-		       " FROM ins_instits"
-		      " WHERE CtyCod=%ld"
-		      " ORDER BY ShortName",
-		      Gbl.Hierarchy.Cty.CtyCod);
+      /***** Begin selector *****/
+      if (Gbl.Hierarchy.Cty.CtyCod > 0)
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
+      else
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL\""
+			   " disabled=\"disabled\"");
 
-      /***** List institutions *****/
-      for (NumIns = 0;
-	   NumIns < NumInss;
-	   NumIns++)
-        {
-         /* Get next institution */
-         row = mysql_fetch_row (mysql_res);
+      HTM_OPTION (HTM_Type_STRING,"",
+		  Gbl.Hierarchy.Ins.InsCod < 0,true,
+		  "[%s]",Txt_Institution);
 
-         /* Get institution code (row[0]) */
-         if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongInstitExit ();
+      if (Gbl.Hierarchy.Cty.CtyCod > 0)
+	{
+	 /***** Get institutions of selected country from database *****/
+	 NumInss = (unsigned)
+	 DB_QuerySELECT (&mysql_res,"can not get institutions",
+			 "SELECT DISTINCT InsCod,"		// row[0]
+					 "ShortName"	// row[1]
+			  " FROM ins_instits"
+			 " WHERE CtyCod=%ld"
+			 " ORDER BY ShortName",
+			 Gbl.Hierarchy.Cty.CtyCod);
 
-         /* Write option */
-	 HTM_OPTION (HTM_Type_LONG,&InsCod,
-		     Gbl.Hierarchy.Ins.InsCod > 0 &&
-		     InsCod == Gbl.Hierarchy.Ins.InsCod,false,
-		     "%s",row[1]);
-        }
+	 /***** List institutions *****/
+	 for (NumIns = 0;
+	      NumIns < NumInss;
+	      NumIns++)
+	   {
+	    /* Get next institution */
+	    row = mysql_fetch_row (mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
+	    /* Get institution code (row[0]) */
+	    if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongInstitExit ();
+
+	    /* Write option */
+	    HTM_OPTION (HTM_Type_LONG,&InsCod,
+			Gbl.Hierarchy.Ins.InsCod > 0 &&
+			InsCod == Gbl.Hierarchy.Ins.InsCod,false,
+			"%s",row[1]);
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
+
+      /***** End selector *****/
+      HTM_SELECT_End ();
 
    /***** End form *****/
-   HTM_SELECT_End ();
    Frm_EndForm ();
   }
 
@@ -1055,151 +1060,153 @@ static void Ins_ListInstitutionsForEdition (void)
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Write heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Ins_PutHeadInstitutionsForEdition ();
 
-   /***** Write all the institutions *****/
-   for (NumIns = 0;
-	NumIns < Gbl.Hierarchy.Inss.Num;
-	NumIns++)
-     {
-      Ins = &Gbl.Hierarchy.Inss.Lst[NumIns];
+      /***** Write heading *****/
+      Ins_PutHeadInstitutionsForEdition ();
 
-      ICanEdit = Ins_CheckIfICanEdit (Ins);
-      NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
-      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
-      NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
-						 1 << Rol_STD |
-						 1 << Rol_NET |
-						 1 << Rol_TCH);	// Any user
+      /***** Write all the institutions *****/
+      for (NumIns = 0;
+	   NumIns < Gbl.Hierarchy.Inss.Num;
+	   NumIns++)
+	{
+	 Ins = &Gbl.Hierarchy.Inss.Lst[NumIns];
 
-      HTM_TR_Begin (NULL);
+	 ICanEdit = Ins_CheckIfICanEdit (Ins);
+	 NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
+	 NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
+	 NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
+						    1 << Rol_STD |
+						    1 << Rol_NET |
+						    1 << Rol_TCH);	// Any user
 
-	 /* Put icon to remove institution */
-	 HTM_TD_Begin ("class=\"BM\"");
-	 if (!ICanEdit ||
-	     NumCtrs ||		// Institution has centers
-	     NumUsrsIns ||		// Institution has users
-	     NumUsrsInCrssOfIns)	// Institution has users
-	    // Institution has centers or users ==> deletion forbidden
-	    Ico_PutIconRemovalNotAllowed ();
-	 else
-	    Ico_PutContextualIconToRemove (ActRemIns,NULL,
-					   Ins_PutParamOtherInsCod,&Ins->InsCod);
-	 HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-	 /* Institution code */
-	 HTM_TD_Begin ("class=\"DAT CODE\"");
-	 HTM_Long (Ins->InsCod);
-	 HTM_TD_End ();
+	    /* Put icon to remove institution */
+	    HTM_TD_Begin ("class=\"BM\"");
+	    if (!ICanEdit ||
+		NumCtrs ||		// Institution has centers
+		NumUsrsIns ||		// Institution has users
+		NumUsrsInCrssOfIns)	// Institution has users
+	       // Institution has centers or users ==> deletion forbidden
+	       Ico_PutIconRemovalNotAllowed ();
+	    else
+	       Ico_PutContextualIconToRemove (ActRemIns,NULL,
+					      Ins_PutParamOtherInsCod,&Ins->InsCod);
+	    HTM_TD_End ();
 
-	 /* Institution logo */
-	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
-	 HTM_TD_End ();
+	    /* Institution code */
+	    HTM_TD_Begin ("class=\"DAT CODE\"");
+	    HTM_Long (Ins->InsCod);
+	    HTM_TD_End ();
 
-	 /* Institution short name */
-	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 if (ICanEdit)
-	   {
-	    Frm_BeginForm (ActRenInsSho);
-	    Ins_PutParamOtherInsCod (&Ins->InsCod);
-	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME\"");
-	    Frm_EndForm ();
-	   }
-	 else
-	    HTM_Txt (Ins->ShrtName);
-	 HTM_TD_End ();
+	    /* Institution logo */
+	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
+	    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+	    HTM_TD_End ();
 
-	 /* Institution full name */
-	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 if (ICanEdit)
-	   {
-	    Frm_BeginForm (ActRenInsFul);
-	    Ins_PutParamOtherInsCod (&Ins->InsCod);
-	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
-			    HTM_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME\"");
-	    Frm_EndForm ();
-	   }
-	 else
-	    HTM_Txt (Ins->FullName);
-	 HTM_TD_End ();
-
-	 /* Institution WWW */
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    /* Institution short name */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
 	    if (ICanEdit)
 	      {
-	       Frm_BeginForm (ActChgInsWWW);
+	       Frm_BeginForm (ActRenInsSho);
 	       Ins_PutParamOtherInsCod (&Ins->InsCod);
-	       HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_SHORT_NAME\"");
 	       Frm_EndForm ();
 	      }
 	    else
+	       HTM_Txt (Ins->ShrtName);
+	    HTM_TD_End ();
+
+	    /* Institution full name */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    if (ICanEdit)
 	      {
-	       Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
-	       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-	       HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
-			    Ins->WWW,Ins->WWW);
-	       HTM_Txt (WWW);
-	       HTM_A_End ();
-	       HTM_DIV_End ();
-	      }
-	 HTM_TD_End ();
-
-	 /* Number of users who claim to belong to this institution */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (NumUsrsIns);
-	 HTM_TD_End ();
-
-	 /* Number of centers */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (NumCtrs);
-	 HTM_TD_End ();
-
-	 /* Number of users in courses of this institution */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (NumUsrsInCrssOfIns);
-	 HTM_TD_End ();
-
-	 /* Institution requester */
-	 HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
-	    UsrDat.UsrCod = Ins->RequesterUsrCod;
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-						     Usr_DONT_GET_PREFS,
-						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-	 HTM_TD_End ();
-
-	 /* Institution status */
-	 HTM_TD_Begin ("class=\"DAT LM\"");
-	    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
-		StatusTxt == Ins_STATUS_PENDING)
-	      {
-	       Frm_BeginForm (ActChgInsSta);
+	       Frm_BeginForm (ActRenInsFul);
 	       Ins_PutParamOtherInsCod (&Ins->InsCod);
-	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				 "name=\"Status\" class=\"INPUT_STATUS\"");
-		  StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
-		  HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-			      "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
-		  StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
-		  HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-			      "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
-	       HTM_SELECT_End ();
+	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_FULL_NAME\"");
 	       Frm_EndForm ();
 	      }
-	    else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
-	       HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
-	 HTM_TD_End ();
+	    else
+	       HTM_Txt (Ins->FullName);
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    /* Institution WWW */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActChgInsWWW);
+		  Ins_PutParamOtherInsCod (&Ins->InsCod);
+		  HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+		  Frm_EndForm ();
+		 }
+	       else
+		 {
+		  Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
+		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
+			       Ins->WWW,Ins->WWW);
+		  HTM_Txt (WWW);
+		  HTM_A_End ();
+		  HTM_DIV_End ();
+		 }
+	    HTM_TD_End ();
+
+	    /* Number of users who claim to belong to this institution */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrsIns);
+	    HTM_TD_End ();
+
+	    /* Number of centers */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumCtrs);
+	    HTM_TD_End ();
+
+	    /* Number of users in courses of this institution */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrsInCrssOfIns);
+	    HTM_TD_End ();
+
+	    /* Institution requester */
+	    HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	       UsrDat.UsrCod = Ins->RequesterUsrCod;
+	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							Usr_DONT_GET_PREFS,
+							Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
+	    HTM_TD_End ();
+
+	    /* Institution status */
+	    HTM_TD_Begin ("class=\"DAT LM\"");
+	       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
+	       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
+		   StatusTxt == Ins_STATUS_PENDING)
+		 {
+		  Frm_BeginForm (ActChgInsSta);
+		  Ins_PutParamOtherInsCod (&Ins->InsCod);
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				    "name=\"Status\" class=\"INPUT_STATUS\"");
+		     StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
+		     HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+				 "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
+		     StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
+		     HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
+				 "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
+		  HTM_SELECT_End ();
+		  Frm_EndForm ();
+		 }
+	       else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
+		  HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1461,7 +1468,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
       if (strcmp (CurrentInsName,NewInsName))	// Different names
         {
          /***** If institution was in database... *****/
-         if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,
+         if (Ins_DB_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,
                                             Gbl.Hierarchy.Cty.CtyCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
@@ -1493,10 +1500,10 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
 /****** Check if the name of institution exists in the current country *******/
 /*****************************************************************************/
 
-bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
-                                    const char *Name,
-				    long InsCod,
-				    long CtyCod)
+bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
+                                       const char *Name,
+				       long InsCod,
+				       long CtyCod)
   {
    /***** Get number of institutions in current country with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of an institution"
@@ -1553,7 +1560,7 @@ void Ins_ChangeInsWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ins_UpdateInsWWWDB (Ins_EditingIns->InsCod,NewWWW);
+      Ins_DB_UpdateInsWWW (Ins_EditingIns->InsCod,NewWWW);
       Str_Copy (Ins_EditingIns->WWW,NewWWW,sizeof (Ins_EditingIns->WWW) - 1);
 
       /***** Write message to show the change made
@@ -1570,7 +1577,7 @@ void Ins_ChangeInsWWW (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
+void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
    /***** Update database changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of an institution",
@@ -1696,69 +1703,69 @@ static void Ins_PutFormToCreateInstitution (void)
                       NULL,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Ins_PutHeadInstitutionsForEdition ();
+      /***** Write heading *****/
+      Ins_PutHeadInstitutionsForEdition ();
 
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Column to remove institution, disabled here *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	 /***** Column to remove institution, disabled here *****/
+	 HTM_TD_Begin ("class=\"BM\"");
+	 HTM_TD_End ();
 
-   /***** Institution code *****/
-   HTM_TD_Begin ("class=\"CODE\"");
-   HTM_TD_End ();
+	 /***** Institution code *****/
+	 HTM_TD_Begin ("class=\"CODE\"");
+	 HTM_TD_End ();
 
-   /***** Institution logo *****/
-   HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
-   Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL,true);
-   HTM_TD_End ();
+	 /***** Institution logo *****/
+	 HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
+	    Lgo_DrawLogo (HieLvl_INS,-1L,"",20,NULL,true);
+	 HTM_TD_End ();
 
-   /***** Institution short name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	 /***** Institution short name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	 HTM_TD_End ();
 
-   /***** Institution full name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	 /***** Institution full name *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "class=\"INPUT_FULL_NAME\" required=\"required\"");
+	 HTM_TD_End ();
 
-   /***** Institution WWW *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-   HTM_TD_End ();
+	 /***** Institution WWW *****/
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	 HTM_TD_End ();
 
-   /***** Number of users who claim to belong to this institution ****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+	 /***** Number of users who claim to belong to this institution ****/
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-   /***** Number of centers *****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+	 /***** Number of centers *****/
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-   /***** Number of users in courses of this institution ****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+	 /***** Number of users in courses of this institution ****/
+	 HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-   /***** Institution requester *****/
-   HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
-   HTM_TD_End ();
+	 /***** Institution requester *****/
+	 HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
+	 HTM_TD_End ();
 
-   /***** Institution status *****/
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_TD_End ();
+	 /***** Institution status *****/
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_institution);
@@ -1784,21 +1791,21 @@ static void Ins_PutHeadInstitutionsForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"LM",Txt_Short_name_of_the_institution);
-   HTM_TH (1,1,"LM",Txt_Full_name_of_the_institution);
-   HTM_TH (1,1,"LM",Txt_WWW);
-   HTM_TH (1,1,"RM",Txt_Users);
-   HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
-   HTM_TH_Begin (1,1,"RM");
-   HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   HTM_BR ();
-   HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   HTM_TH_End ();
-   HTM_TH (1,1,"LM",Txt_Requester);
-   HTM_TH_Empty (1);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"LM",Txt_Short_name_of_the_institution);
+      HTM_TH (1,1,"LM",Txt_Full_name_of_the_institution);
+      HTM_TH (1,1,"LM",Txt_WWW);
+      HTM_TH (1,1,"RM",Txt_Users);
+      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
+      HTM_TH_Begin (1,1,"RM");
+	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_BR ();
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      HTM_TH_End ();
+      HTM_TH (1,1,"LM",Txt_Requester);
+      HTM_TH_Empty (1);
 
    HTM_TR_End ();
   }
@@ -1859,19 +1866,19 @@ static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status)
       if (Ins_EditingIns->WWW[0])
         {
          /***** If name of institution was in database... *****/
-         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins_EditingIns->ShrtName,
+         if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Ins_EditingIns->ShrtName,
                                             -1L,Gbl.Hierarchy.Cty.CtyCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              Ins_EditingIns->ShrtName);
-         else if (Ins_CheckIfInsNameExistsInCty ("FullName",Ins_EditingIns->FullName,
+         else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Ins_EditingIns->FullName,
                                                  -1L,Gbl.Hierarchy.Cty.CtyCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              Ins_EditingIns->FullName);
          else	// Add new institution to database
            {
-            Ins_CreateInstitution (Status);
+            Ins_EditingIns->InsCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 			     Txt_Created_new_institution_X,
 			     Ins_EditingIns->FullName);
@@ -1890,10 +1897,9 @@ static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status)
 /************************** Create a new institution *************************/
 /*****************************************************************************/
 
-static void Ins_CreateInstitution (unsigned Status)
+static long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status)
   {
-   /***** Create a new institution *****/
-   Ins_EditingIns->InsCod =
+   return
    DB_QueryINSERTandReturnCode ("can not create institution",
 				"INSERT INTO ins_instits"
 				" (CtyCod,Status,RequesterUsrCod,"
@@ -1901,12 +1907,12 @@ static void Ins_CreateInstitution (unsigned Status)
 				" VALUES"
 				" (%ld,%u,%ld,"
 				  "'%s','%s','%s')",
-				Ins_EditingIns->CtyCod,
+				Ins->CtyCod,
 				Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Ins_EditingIns->ShrtName,
-				Ins_EditingIns->FullName,
-				Ins_EditingIns->WWW);
+				Ins->ShrtName,
+				Ins->FullName,
+				Ins->WWW);
   }
 
 /*****************************************************************************/

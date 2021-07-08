@@ -86,7 +86,7 @@ extern struct Globals Gbl;
 
 static void Rec_WriteHeadingRecordFields (void);
 
-static unsigned Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res);
+static unsigned Rec_DB_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res);
 
 static void Rec_PutParamFieldCod (void *FieldCod);
 static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
@@ -279,53 +279,54 @@ void Rec_ListFieldsRecordsForEdition (void)
      {
       HTM_TR_Begin (NULL);
 
-      /* Write icon to remove the field */
-      HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
-				     Rec_PutParamFieldCod,&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      HTM_TD_End ();
+	 /* Write icon to remove the field */
+	 HTM_TD_Begin ("class=\"BM\"");
+	    Ico_PutContextualIconToRemove (ActReqRemFie,NULL,
+					   Rec_PutParamFieldCod,&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	 HTM_TD_End ();
 
-      /* Name of the field */
-      HTM_TD_Begin ("class=\"LM\"");
-      Frm_BeginForm (ActRenFie);
-      Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
-		      Gbl.Crs.Records.LstFields.Lst[NumField].Name,
-		      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"REC_FIELDNAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	 /* Name of the field */
+	 HTM_TD_Begin ("class=\"LM\"");
+	    Frm_BeginForm (ActRenFie);
+	    Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
+			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "class=\"REC_FIELDNAME\"");
+	    Frm_EndForm ();
+	 HTM_TD_End ();
 
-      /* Number of lines in the form */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgRowFie);
-      Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
-      HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"2\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	 /* Number of lines in the form */
+	 HTM_TD_Begin ("class=\"CM\"");
+	    Frm_BeginForm (ActChgRowFie);
+	    Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
+			 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
+	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "size=\"2\"");
+	    Frm_EndForm ();
+	 HTM_TD_End ();
 
-      /* Visibility of a field */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgVisFie);
-      Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"Visibility\"");
-      for (Vis  = (Rec_VisibilityRecordFields_t) 0;
-	   Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
-	   Vis++)
-        {
-	 VisUnsigned = (unsigned) Vis;
-	 HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Vis,false,
-		     "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
-        }
-      HTM_SELECT_End ();
-      Frm_EndForm ();
-      HTM_TD_End ();
+	 /* Visibility of a field */
+	 HTM_TD_Begin ("class=\"CM\"");
+	    Frm_BeginForm (ActChgVisFie);
+	    Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "name=\"Visibility\"");
+		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
+		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
+		       Vis++)
+		    {
+		     VisUnsigned = (unsigned) Vis;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
+				 Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Vis,false,
+				 "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
+		    }
+	       HTM_SELECT_End ();
+	    Frm_EndForm ();
+	 HTM_TD_End ();
+
       HTM_TR_End ();
      }
   }
@@ -347,56 +348,57 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewFie);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_record_field,
-                      NULL,NULL,
-                      Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_record_field,
+			 NULL,NULL,
+			 Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Rec_WriteHeadingRecordFields ();
+	 /***** Write heading *****/
+	 Rec_WriteHeadingRecordFields ();
 
-   /***** Write disabled icon to remove the field *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("class=\"BM\"");
-   Ico_PutIconRemovalNotAllowed ();
-   HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-   /***** Field name *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"REC_FIELDNAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Write disabled icon to remove the field *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutIconRemovalNotAllowed ();
+	    HTM_TD_End ();
 
-   /***** Number of lines in form ******/
-   HTM_TD_Begin ("class=\"CM\"");
-   snprintf (StrNumLines,sizeof (StrNumLines),"%u",
-	     Gbl.Crs.Records.Field.NumLines);
-   HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"2\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Field name *****/
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"REC_FIELDNAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Visibility to students *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Visibility\"");
-   for (Vis  = (Rec_VisibilityRecordFields_t) 0;
-	Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
-	Vis++)
-     {
-      VisUnsigned = (unsigned) Vis;
-      HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
-		  Gbl.Crs.Records.Field.Visibility == Vis,false,
-		  "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
-     }
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	    /***** Number of lines in form ******/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
+			 Gbl.Crs.Records.Field.NumLines);
+	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "size=\"2\" required=\"required\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	    /***** Visibility to students *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "name=\"Visibility\"");
+		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
+		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
+		       Vis++)
+		    {
+		     VisUnsigned = (unsigned) Vis;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&VisUnsigned,
+				 Gbl.Crs.Records.Field.Visibility == Vis,false,
+				 "%s",Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
+		    }
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_record_field);
+	 HTM_TR_End ();
+
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_record_field);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -413,12 +415,10 @@ static void Rec_WriteHeadingRecordFields (void)
    extern const char *Txt_Visible_by_BR_the_student;
 
    HTM_TR_Begin (NULL);
-
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"CM",Txt_Field_BR_name);
-   HTM_TH (1,1,"CM",Txt_Number_of_BR_lines);
-   HTM_TH (1,1,"CM",Txt_Visible_by_BR_the_student);
-
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"CM",Txt_Field_BR_name);
+      HTM_TH (1,1,"CM",Txt_Number_of_BR_lines);
+      HTM_TH (1,1,"CM",Txt_Visible_by_BR_the_student);
    HTM_TR_End ();
   }
 
@@ -496,7 +496,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
    unsigned NumRow;
 
    /* Query database */
-   if ((NumRows = Rec_GetAllFieldsInCurrCrs (&mysql_res)) > 0)	// If se han encontrado groups...
+   if ((NumRows = Rec_DB_GetAllFieldsInCurrCrs (&mysql_res)) > 0)	// If se han encontrado groups...
       /* Compare with all the tipos of group from the database */
       for (NumRow = 0;
 	   NumRow < NumRows;
@@ -523,7 +523,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
 /******* Get the fields of records already present in current course *********/
 /*****************************************************************************/
 
-static unsigned Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
+static unsigned Rec_DB_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
   {
    /***** Get fields of records in current course from database *****/
    return DB_QuerySELECT (mysql_res,"can not get fields of records"
@@ -574,7 +574,7 @@ void Rec_ReqRemField (void)
       Err_WrongRecordFieldExit ();
 
    /***** Check if exists any record with that field filled *****/
-   if ((NumRecords = Rec_CountNumRecordsInCurrCrsWithField (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
+   if ((NumRecords = Rec_DB_CountNumRecordsInCurrCrsWithField (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
       Rec_AskConfirmRemFieldWithRecords (NumRecords);
    else			// There are no records with that field filled
       Rec_RemoveFieldFromDB ();
@@ -594,7 +594,7 @@ long Rec_GetFieldCod (void)
 /*************** Get the number of records with a field filled ***************/
 /*****************************************************************************/
 
-unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
+unsigned Rec_DB_CountNumRecordsInCurrCrsWithField (long FieldCod)
   {
    /***** Get number of cards with a given field in a course from database *****/
    return (unsigned)
@@ -711,10 +711,8 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    /* Visible or editable by students? (row[2]) */
    if (sscanf (row[2],"%u",&Vis) != 1)
       Err_WrongRecordFieldExit ();
-   if (Vis < Rec_NUM_TYPES_VISIBILITY)
-      *Visibility = (Rec_VisibilityRecordFields_t) Vis;
-   else
-      *Visibility = Rec_VISIBILITY_DEFAULT;
+   *Visibility = (Vis < Rec_NUM_TYPES_VISIBILITY) ? (Rec_VisibilityRecordFields_t) Vis :
+						    Rec_VISIBILITY_DEFAULT;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -967,11 +965,11 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
 
-      /* Print view */
-      Frm_BeginForm (ActPrnRecSevGst);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Rec_ShowLinkToPrintPreviewOfRecords ();
-      Frm_EndForm ();
+	 /* Print view */
+	 Frm_BeginForm (ActPrnRecSevGst);
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Rec_ShowLinkToPrintPreviewOfRecords ();
+	 Frm_EndForm ();
 
       Mnu_ContextMenuEnd ();
      }
@@ -997,24 +995,25 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	 HTM_SECTION_Begin (RecordSectionId);
 
-	 if (Gbl.Action.Act == ActPrnRecSevGst &&
-	     NumUsr != 0 &&
-	     (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-	    HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
-	 else
-	    HTM_DIV_Begin ("class=\"REC_USR\"");
+	    if (Gbl.Action.Act == ActPrnRecSevGst &&
+		NumUsr != 0 &&
+		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	    else
+	       HTM_DIV_Begin ("class=\"REC_USR\"");
 
-	 /* Show optional alert */
-	 if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	    Ale_ShowAlerts (NULL);
+	    /* Show optional alert */
+	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+	       Ale_ShowAlerts (NULL);
 
-	 /* Shared record */
-	 HTM_DIV_Begin ("class=\"REC_LEFT\"");
-	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
-	 HTM_DIV_End ();
+	    /* Shared record */
+	    HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	       Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
+	    HTM_DIV_End ();
 
-         /* End container for this user */
-	 HTM_DIV_End ();
+	    /* End container for this user */
+	    HTM_DIV_End ();
+
 	 HTM_SECTION_End ();
 
 	 NumUsr++;
@@ -1073,7 +1072,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-   Rec_ShowLinkToPrintPreviewOfRecords ();
+      Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
    Mnu_ContextMenuEnd ();
@@ -1084,36 +1083,36 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
-   /***** Shared record *****/
-   HTM_DIV_Begin ("class=\"REC_LEFT\"");
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
-   HTM_DIV_End ();
+      /***** Shared record *****/
+      HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
+      HTM_DIV_End ();
 
-   /***** Record of the student in the course *****/
-   if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
-     {
-      switch (Gbl.Usrs.Me.Role.Logged)
-        {
-         case Rol_STD:
-            ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-            if (ItsMe)
-	      {
+      /***** Record of the student in the course *****/
+      if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
+	{
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	       if (ItsMe)
+		 {
+		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+		     Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
+		  HTM_DIV_End ();
+		 }
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
 	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	       Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
+		  Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
 	       HTM_DIV_End ();
-	      }
-            break;
-         case Rol_NET:
-         case Rol_TCH:
-         case Rol_SYS_ADM:
-	    HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-	    Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
-	    HTM_DIV_End ();
-	    break;
-         default:
-            break;
-        }
-     }
+	       break;
+	    default:
+	       break;
+	   }
+	}
 
    /***** End container for this user *****/
    HTM_DIV_End ();
@@ -1168,15 +1167,15 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
 
-      /* Edit record fields */
-      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
-         Rec_PutLinkToEditRecordFields ();
+	 /* Edit record fields */
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
+	    Rec_PutLinkToEditRecordFields ();
 
-      /* Print view */
-      Frm_BeginForm (ActPrnRecSevStd);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Rec_ShowLinkToPrintPreviewOfRecords ();
-      Frm_EndForm ();
+	 /* Print view */
+	 Frm_BeginForm (ActPrnRecSevStd);
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Rec_ShowLinkToPrintPreviewOfRecords ();
+	 Frm_EndForm ();
 
       Mnu_ContextMenuEnd ();
      }
@@ -1204,40 +1203,41 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	    HTM_SECTION_Begin (RecordSectionId);
 
-	    if (Gbl.Action.Act == ActPrnRecSevStd &&
-		NumUsr != 0 &&
-		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
-	    else
-	       HTM_DIV_Begin ("class=\"REC_USR\"");
+	       if (Gbl.Action.Act == ActPrnRecSevStd &&
+		   NumUsr != 0 &&
+		   (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	       else
+		  HTM_DIV_Begin ("class=\"REC_USR\"");
 
-	    /* Show optional alert */
-	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-               Ale_ShowAlerts (NULL);
+	       /* Show optional alert */
+	       if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+		  Ale_ShowAlerts (NULL);
 
-            /* Shared record */
-            HTM_DIV_Begin ("class=\"REC_LEFT\"");
-            Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat,RecordSectionId);
-            HTM_DIV_End ();
+	       /* Shared record */
+	       HTM_DIV_Begin ("class=\"REC_LEFT\"");
+		  Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat,RecordSectionId);
+	       HTM_DIV_End ();
 
-            /* Record of the student in the course */
-            if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
-              {
-               ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-	       if ( Gbl.Usrs.Me.Role.Logged == Rol_NET     ||
-		    Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
-		    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
-		   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// I am student in this course...
-		    ItsMe))					// ...and it's me
+	       /* Record of the student in the course */
+	       if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
 		 {
-		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
-                  HTM_DIV_End ();
+		  ItsMe = Usr_ItsMe (UsrDat.UsrCod);
+		  if ( Gbl.Usrs.Me.Role.Logged == Rol_NET     ||
+		       Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
+		       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
+		      (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// I am student in this course...
+		       ItsMe))					// ...and it's me
+		    {
+		     HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+			Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
+		     HTM_DIV_End ();
+		    }
 		 }
-              }
 
-            /* End container for this user */
-            HTM_DIV_End ();
+	       /* End container for this user */
+	       HTM_DIV_End ();
+
             HTM_SECTION_End ();
 
             NumUsr++;
@@ -1298,42 +1298,42 @@ static void Rec_ShowRecordOneTchCrs (void)
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
 
-   /* Show office hours? */
-   Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
+      /* Show office hours? */
+      Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
 
-   /* Print view */
-   Frm_BeginForm (ActPrnRecSevTch);
-   Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-   Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-   Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
-	                                                       'N');
-   Rec_ShowLinkToPrintPreviewOfRecords ();
-   Frm_EndForm ();
+      /* Print view */
+      Frm_BeginForm (ActPrnRecSevTch);
+      Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+      Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+      Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
+								  'N');
+	 Rec_ShowLinkToPrintPreviewOfRecords ();
+      Frm_EndForm ();
 
    Mnu_ContextMenuEnd ();
 
    /***** Begin container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
 
-   /***** Shared record *****/
-   HTM_DIV_Begin ("class=\"REC_LEFT\"");
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
-   HTM_DIV_End ();
-
-   /***** Office hours *****/
-   if (ShowOfficeHours)
-     {
-      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-      Timetable.Type = Tmt_TUTORING_TIMETABLE;
-      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Timetable.Type],
-                    NULL,NULL,
-                    Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
-      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Other.UsrDat.UsrCod);
-      Box_BoxEnd ();
+      /***** Shared record *****/
+      HTM_DIV_Begin ("class=\"REC_LEFT\"");
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
       HTM_DIV_End ();
-     }
+
+      /***** Office hours *****/
+      if (ShowOfficeHours)
+	{
+	 HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+	    Timetable.Type = Tmt_TUTORING_TIMETABLE;
+	    Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Timetable.Type],
+			  NULL,NULL,
+			  Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
+	       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Other.UsrDat.UsrCod);
+	    Box_BoxEnd ();
+	 HTM_DIV_End ();
+	}
 
    /***** Begin container for this user *****/
    HTM_DIV_End ();
@@ -1388,18 +1388,18 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
 
-      /* Show office hours? */
-      Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
+	 /* Show office hours? */
+	 Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
 
-      /* Print view */
-      Frm_BeginForm (ActPrnRecSevTch);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-      Par_PutHiddenParamChar ("ShowOfficeHours",
-                              ShowOfficeHours ? 'Y' :
-                        	                'N');
-      Rec_ShowLinkToPrintPreviewOfRecords ();
-      Frm_EndForm ();
+	 /* Print view */
+	 Frm_BeginForm (ActPrnRecSevTch);
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+	 Par_PutHiddenParamChar ("ShowOfficeHours",
+				 ShowOfficeHours ? 'Y' :
+						   'N');
+	    Rec_ShowLinkToPrintPreviewOfRecords ();
+	 Frm_EndForm ();
 
       Mnu_ContextMenuEnd ();
      }
@@ -1427,37 +1427,38 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
 	    HTM_SECTION_Begin (RecordSectionId);
 
-	    if (Gbl.Action.Act == ActPrnRecSevTch &&
-		NumUsr != 0 &&
-		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
-	    else
-	       HTM_DIV_Begin ("class=\"REC_USR\"");
+	       if (Gbl.Action.Act == ActPrnRecSevTch &&
+		   NumUsr != 0 &&
+		   (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+		  HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	       else
+		  HTM_DIV_Begin ("class=\"REC_USR\"");
 
-	    /* Show optional alert */
-	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	       Ale_ShowAlerts (NULL);
+	       /* Show optional alert */
+	       if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+		  Ale_ShowAlerts (NULL);
 
-	    /* Shared record */
-            HTM_DIV_Begin ("class=\"REC_LEFT\"");
-            Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
-            HTM_DIV_End ();
+	       /* Shared record */
+	       HTM_DIV_Begin ("class=\"REC_LEFT\"");
+		  Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
+	       HTM_DIV_End ();
 
-            /* Office hours */
-            if (ShowOfficeHours)
-              {
-	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
-               Timetable.Type = Tmt_TUTORING_TIMETABLE;
-	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Timetable.Type],
-	                     NULL,NULL,
-	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
-	       Tmt_ShowTimeTable (&Timetable,UsrDat.UsrCod);
-	       Box_BoxEnd ();
-               HTM_DIV_End ();
-              }
+	       /* Office hours */
+	       if (ShowOfficeHours)
+		 {
+		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
+		     Timetable.Type = Tmt_TUTORING_TIMETABLE;
+		     Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Timetable.Type],
+				   NULL,NULL,
+				   Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
+			Tmt_ShowTimeTable (&Timetable,UsrDat.UsrCod);
+		     Box_BoxEnd ();
+		  HTM_DIV_End ();
+		 }
 
-            /* End container for this user */
-            HTM_DIV_End ();
+	       /* End container for this user */
+	       HTM_DIV_End ();
+
             HTM_SECTION_End ();
 
             NumUsr++;
@@ -1484,21 +1485,21 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    unsigned i;
 
    HTM_BUTTON_SUBMIT_Begin (Txt_Print,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("print.svg",Txt_Print);
+      Ico_PutIconTextLink ("print.svg",Txt_Print);
    HTM_BUTTON_End ();
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_Txt ("(");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"RecsPerPag\"");
-   for (i = Rec_MIN_RECORDS_PER_PAGE;
-        i <= Rec_MAX_RECORDS_PER_PAGE;
-        i++)
-      HTM_OPTION (HTM_Type_UNSIGNED,&i,
-		  i == Gbl.Usrs.Listing.RecsPerPag,false,
-		  "%u",i);
-   HTM_SELECT_End ();
-   HTM_TxtF (" %s)",Txt_record_cards_per_page);
+      HTM_Txt ("(");
+      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			"name=\"RecsPerPag\"");
+	 for (i = Rec_MIN_RECORDS_PER_PAGE;
+	      i <= Rec_MAX_RECORDS_PER_PAGE;
+	      i++)
+	    HTM_OPTION (HTM_Type_UNSIGNED,&i,
+			i == Gbl.Usrs.Listing.RecsPerPag,false,
+			"%u",i);
+      HTM_SELECT_End ();
+      HTM_TxtF (" %s)",Txt_record_cards_per_page);
    HTM_LABEL_End ();
   }
 
@@ -1739,119 +1740,119 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                       NULL,NULL,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   HTM_TR_Begin (NULL);
+      /***** Write heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	    HTM_TABLE_BeginWide ();
+	       HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   HTM_TABLE_BeginWide ();
-   HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Rec_DEGREE_LOGO_SIZE);
+		     Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,
+				   Gbl.Hierarchy.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL,true);
+		  HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Rec_DEGREE_LOGO_SIZE);
-   Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,
-                 Gbl.Hierarchy.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL,true);
-   HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"REC_HEAD CM\"");
+		     HTM_Txt (Gbl.Hierarchy.Deg.FullName);
+		     HTM_BR ();
+		     HTM_Txt (Gbl.Hierarchy.Crs.FullName);
+		     HTM_BR ();
+		     HTM_Txt (UsrDat->FullName);
+		  HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"REC_HEAD CM\"");
-   HTM_Txt (Gbl.Hierarchy.Deg.FullName);
-   HTM_BR ();
-   HTM_Txt (Gbl.Hierarchy.Crs.FullName);
-   HTM_BR ();
-   HTM_Txt (UsrDat->FullName);
-   HTM_TD_End ();
+	       HTM_TR_End ();
+	    HTM_TABLE_End ();
+	 HTM_TD_End ();
+      HTM_TR_End ();
 
-   HTM_TR_End ();
-   HTM_TABLE_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   /***** Fields of the record that depends on the course *****/
-   for (NumField = 0, Gbl.RowEvenOdd = 0;
-	NumField < Gbl.Crs.Records.LstFields.Num;
-	NumField++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-     {
-      ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
-	            TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
-                  Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD;
-      // If the field must be shown...
-      if (ShowField)
-        {
-	 /* Can I edit this field? */
-	 switch (Gbl.Usrs.Me.Role.Logged)
+      /***** Fields of the record that depends on the course *****/
+      for (NumField = 0, Gbl.RowEvenOdd = 0;
+	   NumField < Gbl.Crs.Records.LstFields.Num;
+	   NumField++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	{
+	 ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
+		       TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
+		     Gbl.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD;
+	 // If the field must be shown...
+	 if (ShowField)
 	   {
-	    case Rol_STD:
-	       ICanEditThisField = (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
-				    Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
-	       break;
-	    case Rol_TCH:
-	    case Rol_SYS_ADM:
-	       ICanEditThisField = (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
-				    TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS);
-               break;
-	    default:
-	       ICanEditThisField = false;
-	       break;
+	    /* Can I edit this field? */
+	    switch (Gbl.Usrs.Me.Role.Logged)
+	      {
+	       case Rol_STD:
+		  ICanEditThisField = (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
+				       Gbl.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
+		  break;
+	       case Rol_TCH:
+	       case Rol_SYS_ADM:
+		  ICanEditThisField = (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+				       TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS);
+		  break;
+	       default:
+		  ICanEditThisField = false;
+		  break;
+	      }
+
+	    /* Name of the field */
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"REC_C1_BOT %s RT COLOR%u\"",
+			     ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
+						 "REC_DAT_SMALL",
+			     Gbl.RowEvenOdd);
+		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
+		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
+		    {
+		     HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+			HTM_NBSP ();
+			HTM_TxtF ("(%s)",Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+		     HTM_SPAN_End ();
+		    }
+	       HTM_TD_End ();
+
+	       /* Get the text of the field */
+	       if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
+						 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
+		 {
+		  ThisFieldHasText = true;
+		  row = mysql_fetch_row (mysql_res);
+		 }
+	       else
+		  ThisFieldHasText = false;
+
+	       /* Write form, text, or nothing depending on
+		  the user's role and the visibility of the field */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
+		  if (ICanEditThisField)	// Show with form
+		    {
+		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
+					 " class=\"REC_C2_BOT_INPUT\"",
+					 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
+			if (ThisFieldHasText)
+			   HTM_Txt (row[0]);
+		     HTM_TEXTAREA_End ();
+		    }
+		  else			// Show without form
+		    {
+		     if (ThisFieldHasText)
+		       {
+			Str_Copy (Text,row[0],sizeof (Text));
+			Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+					  Text,Cns_MAX_BYTES_TEXT,false);
+			HTM_Txt (Text);
+		       }
+		     else
+			HTM_Hyphen ();
+		    }
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /* Free structure that stores the query result */
+	    DB_FreeMySQLResult (&mysql_res);
 	   }
-
-         /* Name of the field */
-         HTM_TR_Begin (NULL);
-
-         HTM_TD_Begin ("class=\"REC_C1_BOT %s RT COLOR%u\"",
-		       ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
-					   "REC_DAT_SMALL",
-		       Gbl.RowEvenOdd);
-         HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
-         if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
-             TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
-           {
-            HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-            HTM_NBSP ();
-            HTM_TxtF ("(%s)",Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
-            HTM_SPAN_End ();
-           }
-         HTM_TD_End ();
-
-         /* Get the text of the field */
-         if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
-                                           Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
-           {
-            ThisFieldHasText = true;
-            row = mysql_fetch_row (mysql_res);
-           }
-         else
-            ThisFieldHasText = false;
-
-         /* Write form, text, or nothing depending on
-            the user's role and the visibility of the field */
-         HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
-         if (ICanEditThisField)	// Show with form
-           {
-            HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
-        	                " class=\"REC_C2_BOT_INPUT\"",
-                                Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-                                Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
-            if (ThisFieldHasText)
-               HTM_Txt (row[0]);
-            HTM_TEXTAREA_End ();
-           }
-         else			// Show without form
-           {
-            if (ThisFieldHasText)
-              {
-               Str_Copy (Text,row[0],sizeof (Text));
-               Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                                 Text,Cns_MAX_BYTES_TEXT,false);
-               HTM_Txt (Text);
-              }
-            else
-               HTM_Hyphen ();
-           }
-         HTM_TD_End ();
-         HTM_TR_End ();
-
-         /* Free structure that stores the query result */
-         DB_FreeMySQLResult (&mysql_res);
-        }
-     }
+	}
 
    /***** End box *****/
    if (ICanEdit)
@@ -2118,7 +2119,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
 
    /***** Show user's record *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat,NULL);
+      Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat,NULL);
    HTM_DIV_End ();
   }
 
@@ -2255,24 +2256,24 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    /***** Institution and user's photo *****/
    HTM_TR_Begin (NULL);
-   Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
-   Rec_ShowPhoto (UsrDat);
+      Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
+      Rec_ShowPhoto (UsrDat);
    HTM_TR_End ();
 
    /***** Full name *****/
    HTM_TR_Begin (NULL);
-   Rec_ShowFullName (UsrDat);
+      Rec_ShowFullName (UsrDat);
    HTM_TR_End ();
 
    /***** User's nickname *****/
    HTM_TR_Begin (NULL);
-   Rec_ShowNickname (UsrDat,PutFormLinks);
+      Rec_ShowNickname (UsrDat,PutFormLinks);
    HTM_TR_End ();
 
    /***** User's country, web and social networks *****/
    HTM_TR_Begin (NULL);
-   Rec_ShowCountryInHead (UsrDat,ShowData);
-   Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
+      Rec_ShowCountryInHead (UsrDat,ShowData);
+      Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
    HTM_TR_End ();
 
    if (ShowIDRows ||
@@ -2281,152 +2282,152 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      {
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"3\"");
+	 HTM_TD_Begin ("colspan=\"3\"");
 
-      /***** Show email and user's IDs *****/
-      if (ShowIDRows)
-	{
-         HTM_TABLE_BeginWidePadding (2);
-
-         /* Show email */
-	 Rec_ShowEmail (UsrDat);
-
-	 /* Show user's IDs */
-	 Rec_ShowUsrIDs (UsrDat,Anchor);
-
-         HTM_TABLE_End ();
-	}
-
-      /***** Begin form *****/
-      switch (TypeOfView)
-        {
-	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-            Frm_BeginForm (ActSignUp);
-            break;
-	 case Rec_SHA_MY_RECORD_FORM:
-	    Frm_BeginForm (ActChgMyData);
-            break;
-         case Rec_SHA_OTHER_EXISTING_USR_FORM:
-            switch (Gbl.Action.Act)
+	    /***** Show email and user's IDs *****/
+	    if (ShowIDRows)
 	      {
-               case ActReqMdfStd:
-		  NextAction = ActUpdStd;
+	       HTM_TABLE_BeginWidePadding (2);
+
+		  /* Show email */
+		  Rec_ShowEmail (UsrDat);
+
+		  /* Show user's IDs */
+		  Rec_ShowUsrIDs (UsrDat,Anchor);
+
+	       HTM_TABLE_End ();
+	      }
+
+	    /***** Begin form *****/
+	    switch (TypeOfView)
+	      {
+	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+		  Frm_BeginForm (ActSignUp);
 		  break;
-	       case ActReqMdfNET:
-		  NextAction = ActUpdNET;
+	       case Rec_SHA_MY_RECORD_FORM:
+		  Frm_BeginForm (ActChgMyData);
 		  break;
-	       case ActReqMdfTch:
-		  NextAction = ActUpdTch;
+	       case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		  switch (Gbl.Action.Act)
+		    {
+		     case ActReqMdfStd:
+			NextAction = ActUpdStd;
+			break;
+		     case ActReqMdfNET:
+			NextAction = ActUpdNET;
+			break;
+		     case ActReqMdfTch:
+			NextAction = ActUpdTch;
+			break;
+		     default:
+			NextAction = ActUpdOth;
+			break;
+		    }
+		  Frm_BeginForm (NextAction);
+		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+		  break;
+	       case Rec_SHA_OTHER_NEW_USR_FORM:
+		  switch (Gbl.Action.Act)
+		    {
+		     case ActReqMdfStd:
+			NextAction = ActCreStd;
+			break;
+		     case ActReqMdfNET:
+			NextAction = ActCreNET;
+			break;
+		     case ActReqMdfTch:
+			NextAction = ActCreTch;
+			break;
+		     default:
+			NextAction = ActCreOth;
+			break;
+		    }
+		  Frm_BeginForm (NextAction);
+		  ID_PutParamOtherUsrIDPlain ();				// New user
 		  break;
 	       default:
-		  NextAction = ActUpdOth;
 		  break;
 	      }
-	    Frm_BeginForm (NextAction);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
-	    break;
-	 case Rec_SHA_OTHER_NEW_USR_FORM:
-	    switch (Gbl.Action.Act)
-	      {
-	       case ActReqMdfStd:
-		  NextAction = ActCreStd;
-		  break;
-	       case ActReqMdfNET:
-		  NextAction = ActCreNET;
-		  break;
-	       case ActReqMdfTch:
-		  NextAction = ActCreTch;
-		  break;
-	       default:
-		  NextAction = ActCreOth;
-		  break;
-	      }
-	    Frm_BeginForm (NextAction);
-	    ID_PutParamOtherUsrIDPlain ();				// New user
-	    break;
-         default:
-            break;
-        }
 
-      HTM_TABLE_BeginWidePadding (2);
+	    HTM_TABLE_BeginWidePadding (2);
 
-      if (ShowIDRows)
-	{
-	 /***** Role or sex *****/
-	 Rec_ShowRole (UsrDat,TypeOfView);
-
-	 /***** Name *****/
-	 Rec_ShowSurname1 (UsrDat,ICanEdit);
-	 Rec_ShowSurname2 (UsrDat,ICanEdit);
-	 Rec_ShowFirstName (UsrDat,ICanEdit);
-
-	 /***** Country *****/
-	 if (CountryForm)
-            Rec_ShowCountry (UsrDat,ICanEdit);
-	}
-
-      /***** Address rows *****/
-      if (ShowAddressRows)
-	{
-	 /***** Date of birth *****/
-         Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
-
-	 /***** Phones *****/
-         Rec_ShowPhone (UsrDat,ShowData,ICanEdit,0);
-         Rec_ShowPhone (UsrDat,ShowData,ICanEdit,1);
-
-	 /***** User's comments *****/
-         Rec_ShowComments (UsrDat,ShowData,ICanEdit);
-	}
-
-      /***** Teacher's rows *****/
-      if (ShowTeacherRows)
-         Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
-
-      HTM_TABLE_End ();
-
-      /***** Button and end form *****/
-      switch (TypeOfView)
-        {
-	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
-	    Btn_PutConfirmButton (Txt_Sign_up);
-	    Frm_EndForm ();
-	    break;
-	 case Rec_SHA_MY_RECORD_FORM:
-	    Btn_PutConfirmButton (Txt_Save_changes);
-	    Frm_EndForm ();
-	    break;
-	 case Rec_SHA_OTHER_NEW_USR_FORM:
-	    if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-	       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
-	    Btn_PutConfirmButton (Txt_Register);
-	    Frm_EndForm ();
-	    break;
-	 case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	    /***** Show list of groups to register/remove me/user *****/
-	    if (Gbl.Crs.Grps.NumGrps) // This course has groups?
-	      {
-	       if (ItsMe)
+	       if (ShowIDRows)
 		 {
-		  // Don't show groups if I don't belong to course
-		  if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-		     Grp_ShowLstGrpsToChgMyGrps ();
+		  /***** Role or sex *****/
+		  Rec_ShowRole (UsrDat,TypeOfView);
+
+		  /***** Name *****/
+		  Rec_ShowSurname1 (UsrDat,ICanEdit);
+		  Rec_ShowSurname2 (UsrDat,ICanEdit);
+		  Rec_ShowFirstName (UsrDat,ICanEdit);
+
+		  /***** Country *****/
+		  if (CountryForm)
+		     Rec_ShowCountry (UsrDat,ICanEdit);
 		 }
-	       else	// Not me
-		  Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+
+	       /***** Address rows *****/
+	       if (ShowAddressRows)
+		 {
+		  /***** Date of birth *****/
+		  Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit);
+
+		  /***** Phones *****/
+		  Rec_ShowPhone (UsrDat,ShowData,ICanEdit,0);
+		  Rec_ShowPhone (UsrDat,ShowData,ICanEdit,1);
+
+		  /***** User's comments *****/
+		  Rec_ShowComments (UsrDat,ShowData,ICanEdit);
+		 }
+
+	       /***** Teacher's rows *****/
+	       if (ShowTeacherRows)
+		  Rec_ShowTeacherRows (UsrDat,&Ins,ShowData);
+
+	    HTM_TABLE_End ();
+
+	    /***** Button and end form *****/
+	    switch (TypeOfView)
+	      {
+	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:
+		  Btn_PutConfirmButton (Txt_Sign_up);
+		  Frm_EndForm ();
+		  break;
+	       case Rec_SHA_MY_RECORD_FORM:
+		  Btn_PutConfirmButton (Txt_Save_changes);
+		  Frm_EndForm ();
+		  break;
+	       case Rec_SHA_OTHER_NEW_USR_FORM:
+		  if (Gbl.Crs.Grps.NumGrps) // This course has groups?
+		     Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+		  Btn_PutConfirmButton (Txt_Register);
+		  Frm_EndForm ();
+		  break;
+	       case Rec_SHA_OTHER_EXISTING_USR_FORM:
+		  /***** Show list of groups to register/remove me/user *****/
+		  if (Gbl.Crs.Grps.NumGrps) // This course has groups?
+		    {
+		     if (ItsMe)
+		       {
+			// Don't show groups if I don't belong to course
+			if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+			   Grp_ShowLstGrpsToChgMyGrps ();
+		       }
+		     else	// Not me
+			Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
+		    }
+
+		  /***** Which action, register or removing? *****/
+		  if (Enr_PutActionsRegRemOneUsr (ItsMe))
+		     Btn_PutConfirmButton (Txt_Confirm);
+
+		  Frm_EndForm ();
+		  break;
+	       default:
+		  break;
 	      }
 
-	    /***** Which action, register or removing? *****/
-	    if (Enr_PutActionsRegRemOneUsr (ItsMe))
-	       Btn_PutConfirmButton (Txt_Confirm);
-
-	    Frm_EndForm ();
-	    break;
-	 default:
-	    break;
-        }
-
-      HTM_TD_End ();
+	 HTM_TD_End ();
       HTM_TR_End ();
      }
 
@@ -2470,186 +2471,186 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
-      if (ItsMe)
-	 /***** Button to edit my record card *****/
-	 Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,
-					NULL,NULL,
-					"pen.svg",
-					Txt_Edit_my_personal_data);
-      if (ICanViewUsrProfile)
-	 /***** Button to view user's profile *****/
-	 Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
-					Rec_PutParamUsrCodEncrypted,NULL,
-					"user.svg",
-					ItsMe ? Txt_My_public_profile :
-						Txt_Another_user_s_profile);
-
-      /***** Button to view user's record card *****/
-      if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
-	 /* View student's records: common record card and course record card */
-	 Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
-					Rec_PutParamUsrCodEncrypted,NULL,
-					"address-card.svg",
-					Txt_View_record_for_this_course);
-      else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
-					Rec_PutParamUsrCodEncrypted,NULL,
-					"address-card.svg",
-					Txt_View_record_and_office_hours);
-
-      /***** Button to view user's agenda *****/
-      if (ItsMe)
-	 Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,
-					NULL,NULL,
-					"calendar.svg",
-					Txt_Show_agenda);
-      else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
-	 Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
-					Rec_PutParamUsrCodEncrypted,NULL,
-					"calendar.svg",
-					Txt_Show_agenda);
-
-      /***** Button to admin user *****/
-      if (ItsMe ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	{
-	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:
-	       NextAction = ActReqMdfStd;
-	       break;
-	    case Rol_NET:
-	       NextAction = ActReqMdfNET;
-	       break;
-	    case Rol_TCH:
-	       NextAction = ActReqMdfTch;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActReqMdfOth;
-	       break;
-	   }
-	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
-					Rec_PutParamUsrCodEncrypted,NULL,
-					"user-cog.svg",
-					Txt_Administer_user);
-	}
-
-      if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-	{
-	 if (Gbl.Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
-	   {
-	    /***** Buttons to view student's test, exam and match results *****/
-	    if (Usr_CheckIfICanViewTstExaMchResult (Gbl.Record.UsrDat))
-	      {
-	       if (ItsMe)
-		 {
-		  /* My test results in course */
-		  Lay_PutContextualLinkOnlyIcon (ActSeeMyTstResCrs,NULL,
-						 Rec_PutParamsMyTsts,NULL,
-						 "check.svg",
-						 Txt_View_tests);
-		  /* My exam results in course */
-		  Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResCrs,NULL,
-						 Rec_PutParamsMyTsts,NULL,
-						 "file-signature.svg",
-						 Txt_View_exams);
-		  /* My match results in course */
-		  Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResCrs,NULL,
-						 Rec_PutParamsMyTsts,NULL,
-						 "gamepad.svg",
-						 Txt_View_games);
-		 }
-	       else	// Not me
-		 {
-		  /* User's test results in course */
-		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstResCrs,NULL,
-						 Rec_PutParamsStdTsts,NULL,
-						 "check.svg",
-						 Txt_View_tests);
-		  /* User's exam results in course */
-		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResCrs,NULL,
-						 Rec_PutParamsStdTsts,NULL,
-						 "file-signature.svg",
-						 Txt_View_exams);
-		  /* User's match results in course */
-		  Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResCrs,NULL,
-						 Rec_PutParamsStdTsts,NULL,
-						 "gamepad.svg",
-						 Txt_View_games);
-		 }
-	      }
-
-	    /***** Button to view student's assignments and works *****/
-	    if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
-	      {
-	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,
-						 NULL,NULL,
-						 "folder-open.svg",
-						 Txt_View_homework);
-	       else	// Not me, I am not a student in current course
-		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
-						 Rec_PutParamsWorks,NULL,
-						 "folder-open.svg",
-						 Txt_View_homework);
-	      }
-
-	    /***** Button to view student's attendance *****/
-	    if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
-	      {
-	       if (ItsMe)
-		  Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,
-						 NULL,NULL,
-						 "calendar-check.svg",
-						 Txt_View_attendance);
-	       else	// Not me
-		  Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
-						 Rec_PutParamsStudent,NULL,
-						 "calendar-check.svg",
-						 Txt_View_attendance);
-	      }
-	   }
-	}
-
-      /***** Button to print QR code *****/
-      QR_PutLinkToPrintQRCode (ActPrnUsrQR,
-			       Rec_PutParamUsrCodEncrypted,NULL);
-
-      /***** Button to send a message *****/
-      RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
-						     Gbl.Record.UsrDat->UsrCod);	// To:
-      if (!RecipientHasBannedMe)
-	 Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
-					Rec_PutParamsMsgUsr,NULL,
-					"envelope.svg",
-					Txt_Write_a_message);
-
-      /***** Button to follow / unfollow *****/
-      if (!ItsMe)	// Not me
-	{
-	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-				          Gbl.Record.UsrDat->UsrCod))
-	    // I follow user
-	    Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
+	 if (ItsMe)
+	    /***** Button to edit my record card *****/
+	    Lay_PutContextualLinkOnlyIcon (ActReqEdiRecSha,NULL,
+					   NULL,NULL,
+					   "pen.svg",
+					   Txt_Edit_my_personal_data);
+	 if (ICanViewUsrProfile)
+	    /***** Button to view user's profile *****/
+	    Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
-					   "user-check.svg",
-					   Txt_Following_unfollow);	// Put button to unfollow, even if I can not view user's profile
-	 else if (ICanViewUsrProfile)
-	    Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
+					   "user.svg",
+					   ItsMe ? Txt_My_public_profile :
+						   Txt_Another_user_s_profile);
+
+	 /***** Button to view user's record card *****/
+	 if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
+	    /* View student's records: common record card and course record card */
+	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
-					   "user-plus.svg",
-					   Txt_Follow);			// Put button to follow
-	}
+					   "address-card.svg",
+					   Txt_View_record_for_this_course);
+	 else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "address-card.svg",
+					   Txt_View_record_and_office_hours);
 
-      /***** Button to change user's photo *****/
-      Pho_PutIconToChangeUsrPhoto ();
+	 /***** Button to view user's agenda *****/
+	 if (ItsMe)
+	    Lay_PutContextualLinkOnlyIcon (ActSeeMyAgd,NULL,
+					   NULL,NULL,
+					   "calendar.svg",
+					   Txt_Show_agenda);
+	 else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
+	    Lay_PutContextualLinkOnlyIcon (ActSeeUsrAgd,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "calendar.svg",
+					   Txt_Show_agenda);
 
-      /***** Button to change user's account *****/
-      Acc_PutIconToChangeUsrAccount ();
+	 /***** Button to admin user *****/
+	 if (ItsMe ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
+	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	   {
+	    switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
+	      {
+	       case Rol_STD:
+		  NextAction = ActReqMdfStd;
+		  break;
+	       case Rol_NET:
+		  NextAction = ActReqMdfNET;
+		  break;
+	       case Rol_TCH:
+		  NextAction = ActReqMdfTch;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActReqMdfOth;
+		  break;
+	      }
+	    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+					   Rec_PutParamUsrCodEncrypted,NULL,
+					   "user-cog.svg",
+					   Txt_Administer_user);
+	   }
+
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+	   {
+	    if (Gbl.Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
+	      {
+	       /***** Buttons to view student's test, exam and match results *****/
+	       if (Usr_CheckIfICanViewTstExaMchResult (Gbl.Record.UsrDat))
+		 {
+		  if (ItsMe)
+		    {
+		     /* My test results in course */
+		     Lay_PutContextualLinkOnlyIcon (ActSeeMyTstResCrs,NULL,
+						    Rec_PutParamsMyTsts,NULL,
+						    "check.svg",
+						    Txt_View_tests);
+		     /* My exam results in course */
+		     Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResCrs,NULL,
+						    Rec_PutParamsMyTsts,NULL,
+						    "file-signature.svg",
+						    Txt_View_exams);
+		     /* My match results in course */
+		     Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResCrs,NULL,
+						    Rec_PutParamsMyTsts,NULL,
+						    "gamepad.svg",
+						    Txt_View_games);
+		    }
+		  else	// Not me
+		    {
+		     /* User's test results in course */
+		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrTstResCrs,NULL,
+						    Rec_PutParamsStdTsts,NULL,
+						    "check.svg",
+						    Txt_View_tests);
+		     /* User's exam results in course */
+		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResCrs,NULL,
+						    Rec_PutParamsStdTsts,NULL,
+						    "file-signature.svg",
+						    Txt_View_exams);
+		     /* User's match results in course */
+		     Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResCrs,NULL,
+						    Rec_PutParamsStdTsts,NULL,
+						    "gamepad.svg",
+						    Txt_View_games);
+		    }
+		 }
+
+	       /***** Button to view student's assignments and works *****/
+	       if (Usr_CheckIfICanViewAsgWrk (Gbl.Record.UsrDat))
+		 {
+		  if (ItsMe)
+		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkUsr,NULL,
+						    NULL,NULL,
+						    "folder-open.svg",
+						    Txt_View_homework);
+		  else	// Not me, I am not a student in current course
+		     Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrs,NULL,
+						    Rec_PutParamsWorks,NULL,
+						    "folder-open.svg",
+						    Txt_View_homework);
+		 }
+
+	       /***** Button to view student's attendance *****/
+	       if (Usr_CheckIfICanViewAtt (Gbl.Record.UsrDat))
+		 {
+		  if (ItsMe)
+		     Lay_PutContextualLinkOnlyIcon (ActSeeLstMyAtt,NULL,
+						    NULL,NULL,
+						    "calendar-check.svg",
+						    Txt_View_attendance);
+		  else	// Not me
+		     Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
+						    Rec_PutParamsStudent,NULL,
+						    "calendar-check.svg",
+						    Txt_View_attendance);
+		 }
+	      }
+	   }
+
+	 /***** Button to print QR code *****/
+	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,
+				  Rec_PutParamUsrCodEncrypted,NULL);
+
+	 /***** Button to send a message *****/
+	 RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
+							Gbl.Record.UsrDat->UsrCod);	// To:
+	 if (!RecipientHasBannedMe)
+	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
+					   Rec_PutParamsMsgUsr,NULL,
+					   "envelope.svg",
+					   Txt_Write_a_message);
+
+	 /***** Button to follow / unfollow *****/
+	 if (!ItsMe)	// Not me
+	   {
+	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					     Gbl.Record.UsrDat->UsrCod))
+	       // I follow user
+	       Lay_PutContextualLinkOnlyIcon (ActUnfUsr,NULL,
+					      Rec_PutParamUsrCodEncrypted,NULL,
+					      "user-check.svg",
+					      Txt_Following_unfollow);	// Put button to unfollow, even if I can not view user's profile
+	    else if (ICanViewUsrProfile)
+	       Lay_PutContextualLinkOnlyIcon (ActFolUsr,NULL,
+					      Rec_PutParamUsrCodEncrypted,NULL,
+					      "user-plus.svg",
+					      Txt_Follow);			// Put button to follow
+	   }
+
+	 /***** Button to change user's photo *****/
+	 Pho_PutIconToChangeUsrPhoto ();
+
+	 /***** Button to change user's account *****/
+	 Acc_PutIconToChangeUsrAccount ();
 
       /***** End container *****/
       HTM_DIV_End ();
@@ -2703,43 +2704,43 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
    HTM_TD_Begin ("rowspan=\"4\" class=\"REC_C1_TOP CM\"");
-   if (Ins->InsCod > 0)
-     {
-      /* Form to go to the institution */
-      if (PutFormLinks)
+      if (Ins->InsCod > 0)
 	{
-	 Frm_BeginFormGoTo (ActSeeInsInf);
-	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
+	 /* Form to go to the institution */
+	 if (PutFormLinks)
+	   {
+	    Frm_BeginFormGoTo (ActSeeInsInf);
+	    Ins_PutParamInsCod (Ins->InsCod);
+	       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
+	   }
+	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
+		       Rec_INSTITUTION_LOGO_SIZE,NULL,true);
+	 if (PutFormLinks)
+	   {
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
 	}
-      Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
-                    Rec_INSTITUTION_LOGO_SIZE,NULL,true);
-      if (PutFormLinks)
-	{
-         HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
    HTM_TD_End ();
 
    /***** Institution name *****/
    HTM_TD_Begin ("class=\"REC_C2_TOP REC_HEAD LM\"");
-   if (Ins->InsCod > 0)
-     {
-      /* Form to go to the institution */
-      if (PutFormLinks)
+      if (Ins->InsCod > 0)
 	{
-	 Frm_BeginFormGoTo (ActSeeInsInf);
-	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD LM",NULL);
+	 /* Form to go to the institution */
+	 if (PutFormLinks)
+	   {
+	    Frm_BeginFormGoTo (ActSeeInsInf);
+	    Ins_PutParamInsCod (Ins->InsCod);
+	       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD LM",NULL);
+	   }
+	 HTM_Txt (Ins->FullName);
+	 if (PutFormLinks)
+	   {
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
 	}
-      HTM_Txt (Ins->FullName);
-      if (PutFormLinks)
-	{
-         HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
    HTM_TD_End ();
   }
 
@@ -2762,20 +2763,20 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
 static void Rec_ShowFullName (struct UsrData *UsrDat)
   {
    HTM_TD_Begin ("class=\"REC_C2_MID LT\"");
-   HTM_DIV_Begin ("class=\"REC_NAME\"");
+      HTM_DIV_Begin ("class=\"REC_NAME\"");
 
-   /***** First name *****/
-   HTM_Txt (UsrDat->FrstName);
-   HTM_BR ();
+	 /***** First name *****/
+	 HTM_Txt (UsrDat->FrstName);
+	 HTM_BR ();
 
-   /***** Surname 1 *****/
-   HTM_Txt (UsrDat->Surname1);
-   HTM_BR ();
+	 /***** Surname 1 *****/
+	 HTM_Txt (UsrDat->Surname1);
+	 HTM_BR ();
 
-   /***** Surname 2 *****/
-   HTM_Txt (UsrDat->Surname2);
+	 /***** Surname 2 *****/
+	 HTM_Txt (UsrDat->Surname2);
 
-   HTM_DIV_End ();
+      HTM_DIV_End ();
    HTM_TD_End ();
   }
 
@@ -2790,28 +2791,28 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
    bool ItsMe;
 
    HTM_TD_Begin ("class=\"REC_C2_MID LB\"");
-   HTM_DIV_Begin ("class=\"REC_NICK\"");
-   if (UsrDat->Nickname[0])
-     {
-      if (PutFormLinks)
-	{
-	 /* Put form to go to public profile */
-         ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-	 Frm_BeginForm (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
-					  Txt_Another_user_s_profile,
-				  "BT_LINK REC_NICK",
-				  NULL);
-	}
-      HTM_TxtF ("@%s",UsrDat->Nickname);
-      if (PutFormLinks)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-     }
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"REC_NICK\"");
+	 if (UsrDat->Nickname[0])
+	   {
+	    if (PutFormLinks)
+	      {
+	       /* Put form to go to public profile */
+	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+	       Frm_BeginForm (ActSeeOthPubPrf);
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		  HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
+						   Txt_Another_user_s_profile,
+					   "BT_LINK REC_NICK",
+					   NULL);
+	      }
+	    HTM_TxtF ("@%s",UsrDat->Nickname);
+	    if (PutFormLinks)
+	      {
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	   }
+      HTM_DIV_End ();
    HTM_TD_End ();
   }
 
@@ -2822,10 +2823,10 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
   {
    HTM_TD_Begin ("class=\"REC_C2_MID DAT_N LT\"");
-   if (ShowData && UsrDat->CtyCod > 0)
-      /* Link to see country information */
-      Cty_WriteCountryName (UsrDat->CtyCod,
-                            "BT_LINK DAT_N");	// Put link to country
+      if (ShowData && UsrDat->CtyCod > 0)
+	 /* Link to see country information */
+	 Cty_WriteCountryName (UsrDat->CtyCod,
+			       "BT_LINK DAT_N");	// Put link to country
    HTM_TD_End ();
   }
 
@@ -2837,8 +2838,8 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView)
   {
    HTM_TD_Begin ("class=\"REC_C3_MID CT\"");
-   if (TypeOfView != Rec_SHA_RECORD_PRINT)
-      Net_ShowWebsAndSocialNets (UsrDat);
+      if (TypeOfView != Rec_SHA_RECORD_PRINT)
+	 Net_ShowWebsAndSocialNets (UsrDat);
    HTM_TD_End ();
   }
 
@@ -2853,25 +2854,25 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
    /***** Email *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Email);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Email);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (UsrDat->Email[0])
-     {
-      HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
-      if (Mai_ICanSeeOtherUsrEmail (UsrDat))
-	{
-	 HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_N\"",UsrDat->Email);
-	 HTM_Txt (UsrDat->Email);
-         HTM_A_End ();
-        }
-      else
-	 HTM_Txt ("********");
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 if (UsrDat->Email[0])
+	   {
+	    HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
+	       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
+		 {
+		  HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_N\"",UsrDat->Email);
+		     HTM_Txt (UsrDat->Email);
+		  HTM_A_End ();
+		 }
+	       else
+		  HTM_Txt ("********");
+	    HTM_DIV_End ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -2887,13 +2888,13 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
    /***** User's IDs *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
-   ID_WriteUsrIDs (UsrDat,Anchor);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+	 ID_WriteUsrIDs (UsrDat,Anchor);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -2921,65 +2922,150 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
    HTM_TR_Begin (NULL);
 
-   if (RoleForm)
-     {
-      /***** Form to select a role *****/
-      /* Get user's roles if not got */
-      Rol_GetRolesInAllCrss (UsrDat);
-
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","Role",Txt_Role);
-
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-      switch (TypeOfView)
+      if (RoleForm)
 	{
-	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
-            /***** Set default role *****/
-	    if (UsrDat->UsrCod == Gbl.Hierarchy.Crs.RequesterUsrCod ||	// Creator of the course
-		(UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
-	       DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
-	    else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
-	       DefaultRoleInForm = Rol_NET;	// Request sign up as a non-editing teacher
-	    else
-	       DefaultRoleInForm = Rol_STD;	// Request sign up as a student
+	 /***** Form to select a role *****/
+	 /* Get user's roles if not got */
+	 Rol_GetRolesInAllCrss (UsrDat);
 
-	    /***** Selector of role *****/
-	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"Role\" name=\"Role\"");
-	    for (Role = Rol_STD;
-		 Role <= Rol_TCH;
-		 Role++)
-	      {
-	       RoleUnsigned = (unsigned) Role;
-	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-			   Role == DefaultRoleInForm,false,
-			   "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
-	      }
-	    HTM_SELECT_End ();
-	    break;
-	 case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
-            if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-	      {
-               /***** Set default role *****/
-	       switch (UsrDat->Roles.InCurrentCrs)
-		 {
-		  case Rol_STD:	// Student in current course
-		  case Rol_NET:	// Non-editing teacher in current course
-		  case Rol_TCH:	// Teacher in current course
-		     DefaultRoleInForm = UsrDat->Roles.InCurrentCrs;
-		     break;
-		  default:	// User does not belong to current course
-		     /* If there is a request of this user, default role is the requested role */
-		     DefaultRoleInForm = Rol_GetRequestedRole (UsrDat->UsrCod);
+	 /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RM","Role",Txt_Role);
 
-	             switch (DefaultRoleInForm)
-	               {
-			case Rol_STD:	// Role requested: student
-			case Rol_NET:	// Role requested: non-editing teacher
-			case Rol_TCH:	// Role requested: teacher
+	 /* Data */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	    switch (TypeOfView)
+	      {
+	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
+		  /***** Set default role *****/
+		  if (UsrDat->UsrCod == Gbl.Hierarchy.Crs.RequesterUsrCod ||	// Creator of the course
+		      (UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
+		     DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
+		  else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
+		     DefaultRoleInForm = Rol_NET;	// Request sign up as a non-editing teacher
+		  else
+		     DefaultRoleInForm = Rol_STD;	// Request sign up as a student
+
+		  /***** Selector of role *****/
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "id=\"Role\" name=\"Role\"");
+		     for (Role = Rol_STD;
+			  Role <= Rol_TCH;
+			  Role++)
+		       {
+			RoleUnsigned = (unsigned) Role;
+			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
+				    Role == DefaultRoleInForm,false,
+				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+		       }
+		  HTM_SELECT_End ();
+		  break;
+	       case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
+		  if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+		    {
+		     /***** Set default role *****/
+		     switch (UsrDat->Roles.InCurrentCrs)
+		       {
+			case Rol_STD:	// Student in current course
+			case Rol_NET:	// Non-editing teacher in current course
+			case Rol_TCH:	// Teacher in current course
+			   DefaultRoleInForm = UsrDat->Roles.InCurrentCrs;
 			   break;
-			default:	// No role requested
+			default:	// User does not belong to current course
+			   /* If there is a request of this user, default role is the requested role */
+			   DefaultRoleInForm = Rol_DB_GetRequestedRole (UsrDat->UsrCod);
+
+			   switch (DefaultRoleInForm)
+			     {
+			      case Rol_STD:	// Role requested: student
+			      case Rol_NET:	// Role requested: non-editing teacher
+			      case Rol_TCH:	// Role requested: teacher
+				 break;
+			      default:	// No role requested
+				 switch (Gbl.Action.Act)
+				   {
+				    case ActReqMdfStd:
+				       DefaultRoleInForm = Rol_STD;
+				       break;
+				    case ActReqMdfNET:
+				       DefaultRoleInForm = Rol_NET;
+				       break;
+				    case ActReqMdfTch:
+				       DefaultRoleInForm = Rol_TCH;
+				       break;
+				    default:
+				       if ((UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
+					  DefaultRoleInForm = Rol_TCH;
+				       else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))	// Non-editing teacher in other courses
+					  DefaultRoleInForm = Rol_NET;
+				       else
+					  DefaultRoleInForm = Rol_STD;
+				       break;
+				   }
+				 break;
+			     }
+			   break;
+		       }
+
+		     /***** Selector of role *****/
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				       "id=\"Role\" name=\"Role\"");
+			switch (Gbl.Usrs.Me.Role.Logged)
+			  {
+			   case Rol_GST:
+			   case Rol_USR:
+			   case Rol_STD:
+			   case Rol_NET:
+			      RoleUnsigned = (unsigned) Gbl.Usrs.Me.Role.Logged;
+			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
+					  "%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
+			      break;
+			   case Rol_TCH:
+			   case Rol_DEG_ADM:
+			   case Rol_CTR_ADM:
+			   case Rol_INS_ADM:
+			   case Rol_SYS_ADM:
+			      for (Role = Rol_STD;
+				   Role <= Rol_TCH;
+				   Role++)
+				{
+				 RoleUnsigned = (unsigned) Role;
+				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
+					     Role == DefaultRoleInForm,false,
+					     "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+				}
+			      break;
+			   default: // The rest of users can not register other users
+			      break;
+			  }
+		     HTM_SELECT_End ();
+		    }
+		  else				// No course selected
+		    {
+		     /***** Set default role *****/
+		     DefaultRoleInForm = (UsrDat->Roles.InCrss & ((1 << Rol_STD) |
+								  (1 << Rol_NET) |
+								  (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
+										     Rol_GST;		// If user don't belong to any course
+
+		     /***** Selector of role *****/
+		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				       "id=\"Role\" name=\"Role\"");
+			RoleUnsigned = (unsigned) DefaultRoleInForm;
+			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
+				    "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
+		     HTM_SELECT_End ();
+		    }
+		  break;
+	       case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
+		  if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+		     switch (Gbl.Usrs.Me.Role.Logged)
+		       {
+			case Rol_TCH:
+			case Rol_DEG_ADM:
+			case Rol_CTR_ADM:
+			case Rol_INS_ADM:
+			case Rol_SYS_ADM:
+			   /***** Set default role *****/
 			   switch (Gbl.Action.Act)
 			     {
 			      case ActReqMdfStd:
@@ -2992,169 +3078,84 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 				 DefaultRoleInForm = Rol_TCH;
 				 break;
 			      default:
-				 if ((UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
-				    DefaultRoleInForm = Rol_TCH;
-				 else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))	// Non-editing teacher in other courses
-				    DefaultRoleInForm = Rol_NET;
-				 else
-				    DefaultRoleInForm = Rol_STD;
-			         break;
+				 DefaultRoleInForm = Rol_STD;
+				 break;
 			     }
+
+			   /***** Selector of role *****/
+			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+					     "id=\"Role\" name=\"Role\"");
+			      for (Role = Rol_STD;
+				   Role <= Rol_TCH;
+				   Role++)
+				{
+				 RoleUnsigned = (unsigned) Role;
+				 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
+					     Role == DefaultRoleInForm,false,
+					     "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
+				}
+			   HTM_SELECT_End ();
+			   break;
+			default:	// The rest of users can not register other users
 			   break;
 		       }
-		     break;
-		 }
-
-	       /***** Selector of role *****/
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"Role\" name=\"Role\"");
-	       switch (Gbl.Usrs.Me.Role.Logged)
-		 {
-		  case Rol_GST:
-		  case Rol_USR:
-		  case Rol_STD:
-		  case Rol_NET:
-		     RoleUnsigned = (unsigned) Gbl.Usrs.Me.Role.Logged;
-		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
-				 "%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][UsrDat->Sex]);
-		     break;
-		  case Rol_TCH:
-		  case Rol_DEG_ADM:
-		  case Rol_CTR_ADM:
-		  case Rol_INS_ADM:
-		  case Rol_SYS_ADM:
-		     for (Role = Rol_STD;
-			  Role <= Rol_TCH;
-			  Role++)
+		  else				// No course selected
+		     switch (Gbl.Usrs.Me.Role.Logged)
 		       {
-			RoleUnsigned = (unsigned) Role;
-			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-				    Role == DefaultRoleInForm,false,
-				    "%s",Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+			case Rol_SYS_ADM:
+			   /***** Selector of role *****/
+			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+					     "id=\"Role\" name=\"Role\"");
+			      RoleUnsigned = (unsigned) Rol_GST;
+			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
+					  true,false,
+					  "%s",Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+			   HTM_SELECT_End ();
+			   break;
+			default:	// The rest of users can not register other users
+			   break;
 		       }
-		     break;
-		  default: // The rest of users can not register other users
-		     break;
-		 }
-	       HTM_SELECT_End ();
+		  break;
+	       default:
+		  break;
 	      }
-	    else				// No course selected
-	      {
-               /***** Set default role *****/
-	       DefaultRoleInForm = (UsrDat->Roles.InCrss & ((1 << Rol_STD) |
-		                                            (1 << Rol_NET) |
-						            (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
-								               Rol_GST;		// If user don't belong to any course
-
-	       /***** Selector of role *****/
-	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"Role\" name=\"Role\"");
-	       RoleUnsigned = (unsigned) DefaultRoleInForm;
-	       HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
-			   "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
-	       HTM_SELECT_End ();
-	      }
-	    break;
-	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
-	    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-	       switch (Gbl.Usrs.Me.Role.Logged)
-		 {
-		  case Rol_TCH:
-		  case Rol_DEG_ADM:
-		  case Rol_CTR_ADM:
-		  case Rol_INS_ADM:
-		  case Rol_SYS_ADM:
-                     /***** Set default role *****/
-		     switch (Gbl.Action.Act)
-		       {
-			case ActReqMdfStd:
-			   DefaultRoleInForm = Rol_STD;
-			   break;
-			case ActReqMdfNET:
-			   DefaultRoleInForm = Rol_NET;
-			   break;
-			case ActReqMdfTch:
-			   DefaultRoleInForm = Rol_TCH;
-			   break;
-			default:
-			   DefaultRoleInForm = Rol_STD;
-			   break;
-		       }
-
-		     /***** Selector of role *****/
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"Role\" name=\"Role\"");
-		     for (Role = Rol_STD;
-			  Role <= Rol_TCH;
-			  Role++)
-		       {
-			RoleUnsigned = (unsigned) Role;
-			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-				    Role == DefaultRoleInForm,false,
-				    "%s",Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
-		       }
-		     HTM_SELECT_End ();
-		     break;
-		  default:	// The rest of users can not register other users
-		     break;
-		 }
-	    else				// No course selected
-	       switch (Gbl.Usrs.Me.Role.Logged)
-		 {
-		  case Rol_SYS_ADM:
-		     /***** Selector of role *****/
-		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"Role\" name=\"Role\"");
-		     RoleUnsigned = (unsigned) Rol_GST;
-		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-				 true,false,
-				 "%s",Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
-		     HTM_SELECT_End ();
-		     break;
-		  default:	// The rest of users can not register other users
-		     break;
-		 }
-	    break;
-	 default:
-	    break;
+	 HTM_TD_End ();
 	}
-      HTM_TD_End ();
-     }
-   else if (SexForm)
-     {
-      /***** Form to select a sex *****/
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","",
-		       Str_BuildStringStr ("%s*",Txt_Sex));
-      Str_FreeString ();
-
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      for (Sex  = Usr_SEX_FEMALE;
-	   Sex <= Usr_SEX_MALE;
-	   Sex++)
+      else if (SexForm)
 	{
-	 HTM_LABEL_Begin ("class=\"DAT_N\"");
-	 HTM_INPUT_RADIO ("Sex",false,
-			  "value=\"%u\"%s  required=\"required\"",
-			  (unsigned) Sex,
-			  Sex == Gbl.Usrs.Me.UsrDat.Sex ? " checked=\"checked\"" : "");
-	 HTM_TxtF ("%s&nbsp;%s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
-	 HTM_LABEL_End ();
-	}
-      HTM_TD_End ();
-     }
-   else	// RoleForm == false, SexForm == false
-     {
-      /***** No form, only text *****/
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Role);
+	 /***** Form to select a sex *****/
+	 /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RM","",
+			  Str_BuildStringStr ("%s*",Txt_Sex));
+	 Str_FreeString ();
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-      HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
-      HTM_TD_End ();
-     }
+	 /* Data */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	    for (Sex  = Usr_SEX_FEMALE;
+		 Sex <= Usr_SEX_MALE;
+		 Sex++)
+	      {
+	       HTM_LABEL_Begin ("class=\"DAT_N\"");
+		  HTM_INPUT_RADIO ("Sex",false,
+				   "value=\"%u\"%s  required=\"required\"",
+				   (unsigned) Sex,
+				   Sex == Gbl.Usrs.Me.UsrDat.Sex ? " checked=\"checked\"" : "");
+		  HTM_TxtF ("%s&nbsp;%s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
+	       HTM_LABEL_End ();
+	      }
+	 HTM_TD_End ();
+	}
+      else	// RoleForm == false, SexForm == false
+	{
+	 /***** No form, only text *****/
+	 /* Label */
+	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Role);
+
+	 /* Data */
+	 HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+	 HTM_TD_End ();
+	}
 
    HTM_TR_End ();
   }
@@ -3169,30 +3170,30 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   if (PutForm)
-     {
-      Frm_LabelColumn ("REC_C1_BOT RM","Surname1",
-		       Str_BuildStringStr ("%s*",Txt_Surname_1));
-      Str_FreeString ();
-     }
-   else
-      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
+      /* Label */
+      if (PutForm)
+	{
+	 Frm_LabelColumn ("REC_C1_BOT RM","Surname1",
+			  Str_BuildStringStr ("%s*",Txt_Surname_1));
+	 Str_FreeString ();
+	}
+      else
+	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (PutForm)
-      HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
-                      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\""
-		      " required=\"required\"");
-   else if (UsrDat->Surname1[0])
-     {
-      HTM_STRONG_Begin ();
-      HTM_Txt (UsrDat->Surname1);
-      HTM_STRONG_End ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 if (PutForm)
+	    HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\""
+			    " required=\"required\"");
+	 else if (UsrDat->Surname1[0])
+	   {
+	    HTM_STRONG_Begin ();
+	       HTM_Txt (UsrDat->Surname1);
+	    HTM_STRONG_End ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3207,25 +3208,25 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Surname2" :
-				              NULL,
-		    Txt_Surname_2);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "Surname2" :
+						 NULL,
+		       Txt_Surname_2);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (PutForm)
-      HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-		      UsrDat->Surname2,
-		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"Surname2\" class=\"REC_C2_BOT_INPUT\"");
-   else if (UsrDat->Surname2[0])
-     {
-      HTM_STRONG_Begin ();
-      HTM_Txt (UsrDat->Surname2);
-      HTM_STRONG_End ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 if (PutForm)
+	    HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
+			    UsrDat->Surname2,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Surname2\" class=\"REC_C2_BOT_INPUT\"");
+	 else if (UsrDat->Surname2[0])
+	   {
+	    HTM_STRONG_Begin ();
+	       HTM_Txt (UsrDat->Surname2);
+	    HTM_STRONG_End ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3240,31 +3241,31 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   if (PutForm)
-     {
-      Frm_LabelColumn ("REC_C1_BOT RM","FirstName",
-		       Str_BuildStringStr ("%s*",Txt_First_name));
-      Str_FreeString ();
-     }
-   else
-      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
+      /* Label */
+      if (PutForm)
+	{
+	 Frm_LabelColumn ("REC_C1_BOT RM","FirstName",
+			  Str_BuildStringStr ("%s*",Txt_First_name));
+	 Str_FreeString ();
+	}
+      else
+	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
 
-   /* Data */
-   HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT DAT_N LM\"");
-   if (PutForm)
-      HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-		      UsrDat->FrstName,
-		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\""
-		      " required=\"required\"");
-   else if (UsrDat->FrstName[0])
-     {
-      HTM_STRONG_Begin ();
-      HTM_Txt (UsrDat->FrstName);
-      HTM_STRONG_End ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT DAT_N LM\"");
+	 if (PutForm)
+	    HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
+			    UsrDat->FrstName,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\""
+			    " required=\"required\"");
+	 else if (UsrDat->FrstName[0])
+	   {
+	    HTM_STRONG_Begin ();
+	       HTM_Txt (UsrDat->FrstName);
+	    HTM_STRONG_End ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3329,25 +3330,25 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
    /***** Date of birth *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "" :
-				              NULL,
-		    Txt_Date_of_birth);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? "" :
+						 NULL,
+		       Txt_Date_of_birth);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	 Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
-			    Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
-			    "Birth",
-			    &(UsrDat->Birthday),
-			    false,false);
-      else if (UsrDat->StrBirthday[0])
-	 HTM_Txt (UsrDat->StrBirthday);
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 if (ShowData)
+	   {
+	    if (PutForm)
+	       Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
+				  Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
+				  "Birth",
+				  &(UsrDat->Birthday),
+				  false,false);
+	    else if (UsrDat->StrBirthday[0])
+	       HTM_Txt (UsrDat->StrBirthday);
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3375,27 +3376,27 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
    /***** Phone *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? Name :
-				              NULL,
-		    Label);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM",PutForm ? Name :
+						 NULL,
+		       Label);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	 HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
-	                HTM_DONT_SUBMIT_ON_CHANGE,
-	                "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",Name);
-      else if (UsrDat->Phone[NumPhone][0])
-	{
-	 HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone[NumPhone]);
-	 HTM_Txt (UsrDat->Phone[NumPhone]);
-	 HTM_A_End ();
-	}
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 if (ShowData)
+	   {
+	    if (PutForm)
+	       HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
+			      HTM_DONT_SUBMIT_ON_CHANGE,
+			      "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",Name);
+	    else if (UsrDat->Phone[NumPhone][0])
+	      {
+	       HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone[NumPhone]);
+		  HTM_Txt (UsrDat->Phone[NumPhone]);
+	       HTM_A_End ();
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -3417,30 +3418,30 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
    /***** Comments *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",PutForm ? "Comments" :
-				              NULL,
-		    Txt_USER_comments);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT",PutForm ? "Comments" :
+						 NULL,
+		       Txt_USER_comments);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
-   if (ShowData)
-     {
-      if (PutForm)
-	{
-	 HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
-	                     " rows=\"4\" class=\"REC_C2_BOT_INPUT\"");
-	 HTM_Txt (UsrDat->Comments);
-	 HTM_TEXTAREA_End ();
-	}
-      else if (UsrDat->Comments[0])
-	{
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML
-			   UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);
-	 HTM_Txt (UsrDat->Comments);
-	}
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+	 if (ShowData)
+	   {
+	    if (PutForm)
+	      {
+	       HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
+				   " rows=\"4\" class=\"REC_C2_BOT_INPUT\"");
+		  HTM_Txt (UsrDat->Comments);
+	       HTM_TEXTAREA_End ();
+	      }
+	    else if (UsrDat->Comments[0])
+	      {
+	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML
+				 UsrDat->Comments,Cns_MAX_BYTES_TEXT,false);
+	       HTM_Txt (UsrDat->Comments);
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3511,26 +3512,26 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
    /***** Center *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Center);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Center);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
-   if (ShowData)
-     {
-      if (UsrDat->Tch.CtrCod > 0)
-	{
-	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
-	 Ctr_GetDataOfCenterByCod (&Ctr);
-	 if (Ctr.WWW[0])
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		         Ctr.WWW);
-	 HTM_Txt (Ctr.FullName);
-	 if (Ctr.WWW[0])
-	    HTM_A_End ();
-	}
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+	 if (ShowData)
+	   {
+	    if (UsrDat->Tch.CtrCod > 0)
+	      {
+	       Ctr.CtrCod = UsrDat->Tch.CtrCod;
+	       Ctr_GetDataOfCenterByCod (&Ctr);
+	       if (Ctr.WWW[0])
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+			       Ctr.WWW);
+	       HTM_Txt (Ctr.FullName);
+	       if (Ctr.WWW[0])
+		  HTM_A_End ();
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3547,26 +3548,26 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
    /***** Department *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Department);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Department);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
-   if (ShowData)
-     {
-      if (UsrDat->Tch.DptCod > 0)
-	{
-	 Dpt.DptCod = UsrDat->Tch.DptCod;
-	 Dpt_GetDataOfDepartmentByCod (&Dpt);
-	 if (Dpt.WWW[0])
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		         Dpt.WWW);
-	 HTM_Txt (Dpt.FullName);
-	 if (Dpt.WWW[0])
-	    HTM_A_End ();
-	}
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+	 if (ShowData)
+	   {
+	    if (UsrDat->Tch.DptCod > 0)
+	      {
+	       Dpt.DptCod = UsrDat->Tch.DptCod;
+	       Dpt_GetDataOfDepartmentByCod (&Dpt);
+	       if (Dpt.WWW[0])
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+			       Dpt.WWW);
+	       HTM_Txt (Dpt.FullName);
+	       if (Dpt.WWW[0])
+		  HTM_A_End ();
+	      }
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3582,14 +3583,14 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
    /***** Office *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Office);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Office);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
-   if (ShowData)
-      HTM_Txt (UsrDat->Tch.Office);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+	 if (ShowData)
+	    HTM_Txt (UsrDat->Tch.Office);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3605,19 +3606,19 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
    /***** Office phone *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Phone);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Phone);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
-   if (ShowData)
-     {
-      HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",
-	           UsrDat->Tch.OfficePhone);
-      HTM_Txt (UsrDat->Tch.OfficePhone);
-      HTM_A_End ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 if (ShowData)
+	   {
+	    HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",
+			 UsrDat->Tch.OfficePhone);
+	       HTM_Txt (UsrDat->Tch.OfficePhone);
+	    HTM_A_End ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -3631,10 +3632,10 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
    HTM_DIV_Begin ("class=\"CM\"");
-   HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
-                Cfg_URL_DATA_PROTECTION_PUBLIC);
-   HTM_Txt (Txt_DATA_PROTECTION_CLAUSE);
-   HTM_A_End ();
+      HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
+		   Cfg_URL_DATA_PROTECTION_PUBLIC);
+	 HTM_Txt (Txt_DATA_PROTECTION_CLAUSE);
+      HTM_A_End ();
    HTM_DIV_End ();
   }
 

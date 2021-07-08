@@ -851,7 +851,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated;
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
-   /***** Start list of options *****/
+   /***** Begin list of options *****/
    HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 
       /***** Register / remove users listed or not listed *****/
@@ -1390,92 +1390,93 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	}
      }
 
-   /***** Start list of options *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   /***** Begin list of options *****/
+   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",
+                 The_ClassFormInBox[Gbl.Prefs.Theme]);
 
-   /***** Register user in course / Modify user's data *****/
-   if (Gbl.Hierarchy.Level == HieLvl_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
-     {
-      Enr_PutActionModifyOneUsr (&OptionChecked,UsrBelongsToCrs,ItsMe);
-      OptionsShown = true;
-     }
-
-   if (Gbl.Hierarchy.Ins.InsCod > 0)
-     {
-      if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+      /***** Register user in course / Modify user's data *****/
+      if (Gbl.Hierarchy.Level == HieLvl_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
 	{
-	 if (Gbl.Hierarchy.Deg.DegCod > 0)
-	    /***** Register user as administrator of degree *****/
-	    if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	 Enr_PutActionModifyOneUsr (&OptionChecked,UsrBelongsToCrs,ItsMe);
+	 OptionsShown = true;
+	}
+
+      if (Gbl.Hierarchy.Ins.InsCod > 0)
+	{
+	 if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+	   {
+	    if (Gbl.Hierarchy.Deg.DegCod > 0)
+	       /***** Register user as administrator of degree *****/
+	       if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+		 {
+		  Enr_PutActionRegOneDegAdm (&OptionChecked);
+		  OptionsShown = true;
+		 }
+
+	    /***** Register user as administrator of center *****/
+	    if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
 	      {
-	       Enr_PutActionRegOneDegAdm (&OptionChecked);
+	       Enr_PutActionRegOneCtrAdm (&OptionChecked);
 	       OptionsShown = true;
 	      }
+	   }
 
-	 /***** Register user as administrator of center *****/
-	 if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	 /***** Register user as administrator of institution *****/
+	 if (!UsrIsInsAdmin && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
-	    Enr_PutActionRegOneCtrAdm (&OptionChecked);
+	    Enr_PutActionRegOneInsAdm (&OptionChecked);
 	    OptionsShown = true;
 	   }
 	}
 
-      /***** Register user as administrator of institution *****/
-      if (!UsrIsInsAdmin && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      /***** Report user as possible duplicate *****/
+      if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
 	{
-	 Enr_PutActionRegOneInsAdm (&OptionChecked);
+	 Enr_PutActionRepUsrAsDup (&OptionChecked);
 	 OptionsShown = true;
 	}
-     }
 
-   /***** Report user as possible duplicate *****/
-   if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
-     {
-      Enr_PutActionRepUsrAsDup (&OptionChecked);
-      OptionsShown = true;
-     }
-
-   /***** Remove user from the course *****/
-   if (UsrBelongsToCrs)
-     {
-      Enr_PutActionRemUsrFromCrs (&OptionChecked,ItsMe);
-      OptionsShown = true;
-     }
-
-   if (Gbl.Hierarchy.Ins.InsCod > 0)
-     {
-      if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+      /***** Remove user from the course *****/
+      if (UsrBelongsToCrs)
 	{
-	 if (Gbl.Hierarchy.Ins.InsCod > 0)
-	    /***** Remove user as an administrator of the degree *****/
-	    if (UsrIsDegAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
+	 Enr_PutActionRemUsrFromCrs (&OptionChecked,ItsMe);
+	 OptionsShown = true;
+	}
+
+      if (Gbl.Hierarchy.Ins.InsCod > 0)
+	{
+	 if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+	   {
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)
+	       /***** Remove user as an administrator of the degree *****/
+	       if (UsrIsDegAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
+		 {
+		  Enr_PutActionRemUsrAsDegAdm (&OptionChecked,ItsMe);
+		  OptionsShown = true;
+		 }
+
+	     /***** Remove user as an administrator of the center *****/
+	     if (UsrIsCtrAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
 	      {
-	       Enr_PutActionRemUsrAsDegAdm (&OptionChecked,ItsMe);
+	       Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,ItsMe);
 	       OptionsShown = true;
 	      }
+	   }
 
-          /***** Remove user as an administrator of the center *****/
-	  if (UsrIsCtrAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
+	 /***** Remove user as an administrator of the institution *****/
+	 if (UsrIsInsAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
 	   {
-	    Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,ItsMe);
+	    Enr_PutActionRemUsrAsInsAdm (&OptionChecked,ItsMe);
 	    OptionsShown = true;
 	   }
 	}
 
-      /***** Remove user as an administrator of the institution *****/
-      if (UsrIsInsAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
+      /***** Eliminate user completely from platform *****/
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
-	 Enr_PutActionRemUsrAsInsAdm (&OptionChecked,ItsMe);
+	 Enr_PutActionRemUsrAcc (&OptionChecked,ItsMe);
 	 OptionsShown = true;
 	}
-     }
-
-   /***** Eliminate user completely from platform *****/
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
-     {
-      Enr_PutActionRemUsrAcc (&OptionChecked,ItsMe);
-      OptionsShown = true;
-     }
 
    /***** End list of options *****/
    HTM_UL_End ();
@@ -1994,7 +1995,7 @@ void Enr_AskIfRejectSignUp (void)
         }
       else        // User does not belong to this course
         {
-         Role = Rol_GetRequestedRole (Gbl.Usrs.Other.UsrDat.UsrCod);
+         Role = Rol_DB_GetRequestedRole (Gbl.Usrs.Other.UsrDat.UsrCod);
          if (Role == Rol_STD ||
              Role == Rol_NET ||
              Role == Rol_TCH)

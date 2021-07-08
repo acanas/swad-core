@@ -105,7 +105,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
-static void Pho_ClearPhotoName (long UsrCod);
+static void Pho_DB_ClearPhotoName (long UsrCod);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
@@ -131,10 +131,12 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static unsigned long Pho_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
-                                       MYSQL_RES **mysql_res);
+static unsigned long Pho_DB_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
+                                          MYSQL_RES **mysql_res);
 static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
-static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhoto);
+static void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
+                                   unsigned NumStds,unsigned NumStdsWithPhoto,
+                                   long TimeToComputeAvgPhoto);
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
 static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
@@ -326,40 +328,40 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 	                 Pho_PutIconToRequestRemoveOtherUsrPhoto,NULL,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   if (ItsMe)
-      Frm_BeginForm (ActDetMyPho);
-   else
-     {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
+      /***** Begin form *****/
+      if (ItsMe)
+	 Frm_BeginForm (ActDetMyPho);
+      else
 	{
-	 case Rol_STD:
-	    NextAction = ActDetStdPho;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActDetTchPho;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActDetOthPho;
-	    break;
+	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
+	   {
+	    case Rol_STD:
+	       NextAction = ActDetStdPho;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActDetTchPho;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActDetOthPho;
+	       break;
+	   }
+	 Frm_BeginForm (NextAction);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
-      Frm_BeginForm (NextAction);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-     }
 
-   /***** Show help message *****/
-   Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
+      /***** Show help message *****/
+      Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
-   /***** Form to upload photo *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_File_with_the_photo);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
-                   HTM_SUBMIT_ON_CHANGE,NULL);
-   HTM_LABEL_End ();
+      /***** Form to upload photo *****/
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TxtColonNBSP (Txt_File_with_the_photo);
+	 HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
+			 HTM_SUBMIT_ON_CHANGE,NULL);
+      HTM_LABEL_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -795,11 +797,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    snprintf (FileNamePhotoMap,sizeof (FileNamePhotoMap),"%s/%s_map.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
-   HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,
-	    Str_BuildStringStr ("%s_map.jpg",Gbl.UniqueNameEncrypted),
-	    Txt_Faces_detected,
-	    "usemap=\"#faces_map\"");
-   Str_FreeString ();
+      HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,
+	       Str_BuildStringStr ("%s_map.jpg",Gbl.UniqueNameEncrypted),
+	       Txt_Faces_detected,
+	       "usemap=\"#faces_map\"");
+      Str_FreeString ();
    HTM_DIV_End ();
 
    /***** End alert *****/
@@ -901,23 +903,23 @@ static void Pho_UpdatePhoto2 (void)
 
    /***** Show the three images resulting of the processing *****/
    HTM_TABLE_BeginWide ();
-   HTM_TR_Begin (NULL);
-   for (NumPhoto = 0;
-        NumPhoto < 3;
-        NumPhoto++)
-     {
-      HTM_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
-      if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
-         Err_NotEnoughMemoryExit ();
-      HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
-	       "style=\"width:%upx;height:%upx;\"",
-	       Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
-      free (Img);
-      HTM_BR ();
-      HTM_Txt (Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
-      HTM_TD_End ();
-     }
-   HTM_TR_End ();
+      HTM_TR_Begin (NULL);
+	 for (NumPhoto = 0;
+	      NumPhoto < 3;
+	      NumPhoto++)
+	   {
+	    HTM_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
+	       if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
+			"style=\"width:%upx;height:%upx;\"",
+			Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
+	       free (Img);
+	       HTM_BR ();
+	       HTM_Txt (Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
+	    HTM_TD_End ();
+	   }
+      HTM_TR_End ();
    HTM_TABLE_End ();
 
    /***** End alert *****/
@@ -1248,7 +1250,7 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
    if (UsrDat->Photo[0])
      {
       /***** Clear photo name in database *****/
-      Pho_ClearPhotoName (UsrDat->UsrCod);
+      Pho_DB_ClearPhotoName (UsrDat->UsrCod);
 
       /***** Remove public link *****/
       snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
@@ -1298,7 +1300,7 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 /****************** Clear photo name of an user in database ******************/
 /*****************************************************************************/
 
-static void Pho_ClearPhotoName (long UsrCod)
+static void Pho_DB_ClearPhotoName (long UsrCod)
   {
    /***** Clear photo name in user's data *****/
    DB_QueryUPDATE ("can not clear the name of a user's photo",
@@ -1413,7 +1415,7 @@ void Pho_CalcPhotoDegree (void)
         }
 
       /***** Store stats in database *****/
-      Pho_UpdateDegStats (DegCod,Sex,NumStds,NumStdsWithPhoto,TotalTimeToComputeAvgPhotoInMicroseconds);
+      Pho_DB_UpdateDegStats (DegCod,Sex,NumStds,NumStdsWithPhoto,TotalTimeToComputeAvgPhotoInMicroseconds);
      }
 
    /***** Free memory for students list *****/
@@ -1433,7 +1435,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    long DegCod;
 
    /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
-   Pho_RemoveObsoleteStatDegrees ();
+   Pho_DB_RemoveObsoleteStatDegrees ();
 
    /***** 1. If a degree is not in table of computed degrees,
              choose it as least recently updated *****/
@@ -1475,7 +1477,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 /* Delete all the degrees in sta_degrees table not present in degrees table **/
 /*****************************************************************************/
 
-void Pho_RemoveObsoleteStatDegrees (void)
+void Pho_DB_RemoveObsoleteStatDegrees (void)
   {
    DB_QueryDELETE ("can not remove old degrees from stats",
 		   "DELETE FROM sta_degrees"
@@ -1709,21 +1711,22 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Box_BoxBegin (NULL,Txt_Degrees,
 	               Pho_PutIconToPrintDegreeStats,&DegPhotos,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
-	 HTM_TABLE_BeginCenterPadding (2);
 
-	 /***** Put a selector for the type of average *****/
-	 Pho_PutSelectorForTypeOfAvg (&DegPhotos);
+	    HTM_TABLE_BeginCenterPadding (2);
 
-	 /***** Put a selector for the size of photos *****/
-	 Pho_PutSelectorForHowComputePhotoSize (&DegPhotos);
+	       /***** Put a selector for the type of average *****/
+	       Pho_PutSelectorForTypeOfAvg (&DegPhotos);
 
-	 /***** Put a selector for the order of degrees *****/
-	 Pho_PutSelectorForHowOrderDegrees (&DegPhotos);
+	       /***** Put a selector for the size of photos *****/
+	       Pho_PutSelectorForHowComputePhotoSize (&DegPhotos);
 
-	 HTM_TABLE_End ();
+	       /***** Put a selector for the order of degrees *****/
+	       Pho_PutSelectorForHowOrderDegrees (&DegPhotos);
 
-	 /***** Link to compute average photos *****/
-	 Pho_PutLinkToCalculateDegreeStats (&DegPhotos);
+	    HTM_TABLE_End ();
+
+	    /***** Link to compute average photos *****/
+	    Pho_PutLinkToCalculateDegreeStats (&DegPhotos);
 
 	 break;
       case Pho_DEGREES_PRINT:
@@ -1785,29 +1788,29 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
    /***** Type of average *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","AvgType",Txt_Average_type);
+      /* Label */
+      Frm_LabelColumn ("RT","AvgType",Txt_Average_type);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Frm_BeginForm (ActSeePhoDeg);
-   Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-   Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-   Usr_PutParamsPrefsAboutUsrList ();
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "id=\"AvgType\" name=\"AvgType\"");
-   for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
-	TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
-	TypeOfAvg++)
-     {
-      TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
-      HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
-		  TypeOfAvg == DegPhotos->TypeOfAverage,false,
-		  "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
-     }
-   HTM_SELECT_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 Frm_BeginForm (ActSeePhoDeg);
+	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
+	 Usr_PutParamsPrefsAboutUsrList ();
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			      "id=\"AvgType\" name=\"AvgType\"");
+	       for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
+		    TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
+		    TypeOfAvg++)
+		 {
+		  TypeOfAvgUnsigned = (unsigned) TypeOfAvg;
+		  HTM_OPTION (HTM_Type_UNSIGNED,&TypeOfAvgUnsigned,
+			      TypeOfAvg == DegPhotos->TypeOfAverage,false,
+			      "%s",Txt_AVERAGE_PHOTO_TYPES[TypeOfAvg]);
+		 }
+	    HTM_SELECT_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1849,29 +1852,29 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
    /***** Photo size *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","PhotoSize",Txt_Size_of_photos);
+      /* Label */
+      Frm_LabelColumn ("RT","PhotoSize",Txt_Size_of_photos);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Frm_BeginForm (ActSeePhoDeg);
-   Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-   Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-   Usr_PutParamsPrefsAboutUsrList ();
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "id=\"PhotoSize\" name=\"PhotoSize\"");
-   for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
-	PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
-	PhoSi++)
-     {
-      PhoSiUnsigned = (unsigned) PhoSi;
-      HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
-		  PhoSi == DegPhotos->HowComputePhotoSize,false,
-		  "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
-     }
-   HTM_SELECT_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 Frm_BeginForm (ActSeePhoDeg);
+	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
+	 Usr_PutParamsPrefsAboutUsrList ();
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			      "id=\"PhotoSize\" name=\"PhotoSize\"");
+	       for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
+		    PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
+		    PhoSi++)
+		 {
+		  PhoSiUnsigned = (unsigned) PhoSi;
+		  HTM_OPTION (HTM_Type_UNSIGNED,&PhoSiUnsigned,
+			      PhoSi == DegPhotos->HowComputePhotoSize,false,
+			      "%s",Txt_STAT_DEGREE_PHOTO_SIZE[PhoSi]);
+		 }
+	    HTM_SELECT_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1913,29 +1916,29 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
    /***** Order *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Order",Txt_Sort_degrees_by);
+      /* Label */
+      Frm_LabelColumn ("RT","Order",Txt_Sort_degrees_by);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Frm_BeginForm (ActSeePhoDeg);
-   Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-   Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-   Usr_PutParamsPrefsAboutUsrList ();
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "id=\"Order\" name=\"Order\"");
-   for (Order  = (Pho_HowOrderDegrees_t) 0;
-	Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);
-	Order++)
-     {
-      OrderUnsigned = (unsigned) Order;
-      HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
-		  Order == DegPhotos->HowOrderDegrees,false,
-		  "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
-     }
-   HTM_SELECT_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 Frm_BeginForm (ActSeePhoDeg);
+	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+	 Usr_PutParamsPrefsAboutUsrList ();
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			      "id=\"Order\" name=\"Order\"");
+	       for (Order  = (Pho_HowOrderDegrees_t) 0;
+		    Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);
+		    Order++)
+		 {
+		  OrderUnsigned = (unsigned) Order;
+		  HTM_OPTION (HTM_Type_UNSIGNED,&OrderUnsigned,
+			      Order == DegPhotos->HowOrderDegrees,false,
+			      "%s",Txt_STAT_DEGREE_PHOTO_ORDER[Order]);
+		 }
+	    HTM_SELECT_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -2015,41 +2018,42 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
       Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
       Usr_PutParamsPrefsAboutUsrList ();
-      HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
-	                         The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-                                 NULL);
-      Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
-      HTM_BUTTON_End ();
 
-      /* Selector with all the degrees with students */
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"name=\"OthDegCod\"");
-      for (NumDeg = 0;
-	   NumDeg < Degs.Num;
-	   NumDeg++)
-        {
-         /* Get time to compute average photo of this degree */
-         EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
-         if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
-            Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
-                      sizeof (StrEstimatedTimeToComputeAvgPhoto) - 1);
-         else
-            Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
-                           EstimatedTimeToComputeAvgPhotoInMicroseconds);
+	 HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
+				    The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				    NULL);
+	    Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
+	 HTM_BUTTON_End ();
 
-         Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
-         if (Selected)
-            Disabled = false;
-         else
-            // Too recently computed ?
-            Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
-                       Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
-	 HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,Selected,Disabled,
-		     "%s (%s: %s)",
-		     Degs.Lst[NumDeg].ShrtName,
-                     Txt_time,StrEstimatedTimeToComputeAvgPhoto);
-        }
-      HTM_SELECT_End ();
+	 /* Selector with all the degrees with students */
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   "name=\"OthDegCod\"");
+	    for (NumDeg = 0;
+		 NumDeg < Degs.Num;
+		 NumDeg++)
+	      {
+	       /* Get time to compute average photo of this degree */
+	       EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
+	       if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
+		  Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
+			    sizeof (StrEstimatedTimeToComputeAvgPhoto) - 1);
+	       else
+		  Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
+				 EstimatedTimeToComputeAvgPhotoInMicroseconds);
+
+	       Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
+	       if (Selected)
+		  Disabled = false;
+	       else
+		  // Too recently computed ?
+		  Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
+			     Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
+	       HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,Selected,Disabled,
+			   "%s (%s: %s)",
+			   Degs.Lst[NumDeg].ShrtName,
+			   Txt_time,StrEstimatedTimeToComputeAvgPhoto);
+	      }
+	 HTM_SELECT_End ();
 
       /* End form and contextual menu */
       Frm_EndForm ();
@@ -2123,7 +2127,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
+   NumDegs = Pho_DB_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
 
    if (NumDegs)	// Degrees with students found
      {
@@ -2132,46 +2136,46 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
       HTM_TABLE_BeginCenter ();
 
-      /***** Get and print degrees *****/
-      for (NumDeg = 0, NumDegsNotEmpty = 0;
-	   NumDeg < NumDegs;
-	   NumDeg++)
-	{
-	 /***** Get next degree *****/
-	 if ((Deg.DegCod = DB_GetNextCode (mysql_res)) < 0)
-	    Err_WrongDegreeExit ();
-
-	 /* Get data of degree */
-	 Deg_GetDataOfDegreeByCod (&Deg);
-
-	 /* Get number of students and number of students with photo in this degree */
-	 Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
-
-	 if (NumStds > 0)
+	 /***** Get and print degrees *****/
+	 for (NumDeg = 0, NumDegsNotEmpty = 0;
+	      NumDeg < NumDegs;
+	      NumDeg++)
 	   {
-	    if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
-	      {
-	       HTM_TR_Begin (NULL);
-	       TRIsOpen = true;
-	      }
+	    /***** Get next degree *****/
+	    if ((Deg.DegCod = DB_GetNextCode (mysql_res)) < 0)
+	       Err_WrongDegreeExit ();
 
-	    /***** Show average photo of students belonging to this degree *****/
-	    HTM_TD_Begin ("class=\"CLASSPHOTO CM\"");
-	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
-	                                   SeeOrPrint,
-	                                   Usr_SEX_ALL,
-	                                   NumStds,NumStdsWithPhoto);
-	    HTM_TD_End ();
+	    /* Get data of degree */
+	    Deg_GetDataOfDegreeByCod (&Deg);
 
-	    if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+	    /* Get number of students and number of students with photo in this degree */
+	    Pho_GetNumStdsInDegree (Deg.DegCod,Usr_SEX_ALL,&NumStds,&NumStdsWithPhoto);
+
+	    if (NumStds > 0)
 	      {
-	       HTM_TR_End ();
-	       TRIsOpen = false;
+	       if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+		 {
+		  HTM_TR_Begin (NULL);
+		  TRIsOpen = true;
+		 }
+
+	       /***** Show average photo of students belonging to this degree *****/
+	       HTM_TD_Begin ("class=\"CLASSPHOTO CM\"");
+		  Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
+						 SeeOrPrint,
+						 Usr_SEX_ALL,
+						 NumStds,NumStdsWithPhoto);
+	       HTM_TD_End ();
+
+	       if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
+		 {
+		  HTM_TR_End ();
+		  TRIsOpen = false;
+		 }
 	      }
 	   }
-	}
-      if (TRIsOpen)
-	 HTM_TR_End ();
+	 if (TRIsOpen)
+	    HTM_TR_End ();
 
       HTM_TABLE_End ();
      }
@@ -2204,7 +2208,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
+   NumDegs = Pho_DB_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
 
    if (NumDegs)	// Degrees with students found
      {
@@ -2215,69 +2219,69 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
-      HTM_TR_Begin (NULL);
-
-      HTM_TH (1,1,"RT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Degree);
-      for (Sex  = (Usr_Sex_t) 0;
-	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
-	   Sex++)
-	 HTM_TH (1,1,"CT",Txt_SEX_PLURAL_Abc[Sex]);
-
-      HTM_TR_End ();
-
-      /***** Get degrees *****/
-      for (NumDeg = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
-	   NumDeg < NumDegs;
-	   NumDeg++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-	{
-	 /***** Get next degree *****/
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get degree code (row[0]) */
-	 if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	    Err_WrongDegreeExit ();
-
-	 /* Get data of degree */
-	 Deg_GetDataOfDegreeByCod (&Deg);
-
 	 HTM_TR_Begin (NULL);
 
-	 /***** Show logo and name of this degree *****/
-	 HTM_TD_Begin ("class=\"DAT RM COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_Unsigned (++NumDegsNotEmpty);
-	 HTM_TD_End ();
-
-	 /***** Show logo and name of this degree *****/
-	 HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
-	 if (SeeOrPrint == Pho_DEGREES_SEE)
-	    Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-					       "BT_LINK DAT","CT");
-	 else	// Pho_DEGREES_PRINT
-	   {
-	    Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
-	    HTM_TxtF ("&nbsp;%s",Deg.FullName);
-	   }
-	 HTM_TD_End ();
-
+	 HTM_TH (1,1,"RT",Txt_No_INDEX);
+	 HTM_TH (1,1,"CT",Txt_Degree);
 	 for (Sex  = (Usr_Sex_t) 0;
 	      Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 	      Sex++)
-	   {
-	    /***** Show average photo of students belonging to this degree *****/
-	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-	    HTM_TD_Begin ("class=\"CLASSPHOTO RM COLOR%u\"",Gbl.RowEvenOdd);
-	    if (Gbl.Usrs.Listing.WithPhotos)
-	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
-	                                      SeeOrPrint,Sex,
-	                                      NumStds,NumStdsWithPhoto);
-	    else
-	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
-	    HTM_TD_End ();
-	   }
+	    HTM_TH (1,1,"CT",Txt_SEX_PLURAL_Abc[Sex]);
 
 	 HTM_TR_End ();
-	}
+
+	 /***** Get degrees *****/
+	 for (NumDeg = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
+	      NumDeg < NumDegs;
+	      NumDeg++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	   {
+	    /***** Get next degree *****/
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get degree code (row[0]) */
+	    if ((Deg.DegCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongDegreeExit ();
+
+	    /* Get data of degree */
+	    Deg_GetDataOfDegreeByCod (&Deg);
+
+	    HTM_TR_Begin (NULL);
+
+	       /***** Show logo and name of this degree *****/
+	       HTM_TD_Begin ("class=\"DAT RM COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_Unsigned (++NumDegsNotEmpty);
+	       HTM_TD_End ();
+
+	       /***** Show logo and name of this degree *****/
+	       HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
+		  if (SeeOrPrint == Pho_DEGREES_SEE)
+		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+							"BT_LINK DAT","CT");
+		  else	// Pho_DEGREES_PRINT
+		    {
+		     Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
+		     HTM_TxtF ("&nbsp;%s",Deg.FullName);
+		    }
+	       HTM_TD_End ();
+
+	       for (Sex  = (Usr_Sex_t) 0;
+		    Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
+		    Sex++)
+		 {
+		  /***** Show average photo of students belonging to this degree *****/
+		  Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
+		  HTM_TD_Begin ("class=\"CLASSPHOTO RM COLOR%u\"",Gbl.RowEvenOdd);
+		     if (Gbl.Usrs.Listing.WithPhotos)
+			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
+						       SeeOrPrint,Sex,
+						       NumStds,NumStdsWithPhoto);
+		     else
+			Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
+		  HTM_TD_End ();
+		 }
+
+	    HTM_TR_End ();
+	   }
 
       /***** Photos end *****/
       HTM_TABLE_End ();
@@ -2294,8 +2298,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 /****** Build a query to get the degrees ordered by different criteria *******/
 /*****************************************************************************/
 
-static unsigned long Pho_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
-                                       MYSQL_RES **mysql_res)
+static unsigned long Pho_DB_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
+                                          MYSQL_RES **mysql_res)
   {
    switch (HowOrderDegrees)
      {
@@ -2384,7 +2388,9 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
 /*********************** Update statistics of a degree ***********************/
 /*****************************************************************************/
 
-static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsigned NumStdsWithPhoto,long TimeToComputeAvgPhotoInMicroseconds)
+static void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
+                                   unsigned NumStds,unsigned NumStdsWithPhoto,
+                                   long TimeToComputeAvgPhotoInMicroseconds)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
 
@@ -2410,14 +2416,14 @@ static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
    extern const char *Txt_photos;
 
    HTM_SPAN_Begin ("class=\"DAT\"");
-   HTM_TxtF ("%d&nbsp;",NumStds);
+      HTM_TxtF ("%d&nbsp;",NumStds);
    HTM_SPAN_End ();
 
    HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-   HTM_TxtF ("(%d&nbsp;%s,&nbsp;%d%%)",
-             NumStdsWithPhoto,Txt_photos,
-             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-        	           0);
+      HTM_TxtF ("(%d&nbsp;%s,&nbsp;%d%%)",
+		NumStdsWithPhoto,Txt_photos,
+		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+			      0);
    HTM_SPAN_End ();
   }
 
@@ -2495,9 +2501,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 				    0);
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
-	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N\"");
-	    HTM_Txt (PhotoCaption);
-	    HTM_DIV_End ();
+	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N\"");
+		  HTM_Txt (PhotoCaption);
+	       HTM_DIV_End ();
 	    HTM_DIV_End ();
 	   }
 	}
@@ -2525,16 +2531,17 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
-   HTM_Txt (Deg->ShrtName);
-   HTM_BR ();
-   HTM_TxtF ("%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
-   HTM_BR ();
-   HTM_TxtF ("%d&nbsp;%s",NumStdsWithPhoto,Txt_photos);
-   HTM_BR ();
-   HTM_TxtF ("(%d%%)",
-             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
-        	           0);
+      HTM_Txt (Deg->ShrtName);
+      HTM_BR ();
+      HTM_TxtF ("%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);
+      HTM_BR ();
+      HTM_TxtF ("%d&nbsp;%s",NumStdsWithPhoto,Txt_photos);
+      HTM_BR ();
+      HTM_TxtF ("(%d%%)",
+		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
+			      0);
    HTM_DIV_End ();
+
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       HTM_BUTTON_End ();

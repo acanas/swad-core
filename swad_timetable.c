@@ -371,7 +371,7 @@ void Tmt_ShowClassTimeTable (void)
 		    NULL,NULL,
 		    Help[Timetable.Type],Box_NOT_CLOSABLE);
 
-   /***** Start time table drawing *****/
+   /***** Begin time table drawing *****/
    if (Timetable.Type == Tmt_COURSE_TIMETABLE)
       Lay_WriteHeaderClassPhoto (PrintView,false,
 				 Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);

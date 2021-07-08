@@ -274,24 +274,24 @@ void Pwd_ShowFormSendNewPwd (void)
    /***** Begin form *****/
    Frm_BeginForm (ActSndNewPwd);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Forgotten_password,
-                 NULL,NULL,
-                 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Forgotten_password,
+		    NULL,NULL,
+		    Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
-   /***** Help text *****/
-   Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
+	 /***** Help text *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
 
-   /***** User's ID/nickname *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_nick_email_or_ID);
-   HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"8\" required=\"required\"");
-   HTM_LABEL_End ();
+	 /***** User's ID/nickname *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_nick_email_or_ID);
+	    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"8\" required=\"required\"");
+	 HTM_LABEL_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -668,65 +668,65 @@ void Pwd_ShowFormChgMyPwd (void)
    /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
+      /***** Begin form *****/
+      Frm_BeginFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
-   /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_Password,
-                 NULL,NULL,
-		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
+	 /***** Begin box *****/
+	 snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
+	 Box_BoxBegin (StrRecordWidth,Txt_Password,
+		       NULL,NULL,
+		       Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
-   /***** Show possible alerts *****/
-   Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
+	    /***** Show possible alerts *****/
+	    Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
-   /***** Help message *****/
-   if (!IHaveAPasswordInDB) // If I don't have a password in database...
-      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
-   else if (Gbl.Usrs.Me.LoginPlainPassword[0])
-     {
-      if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
-	 Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
-     }
+	    /***** Help message *****/
+	    if (!IHaveAPasswordInDB) // If I don't have a password in database...
+	       Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
+	    else if (Gbl.Usrs.Me.LoginPlainPassword[0])
+	      {
+	       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
+		  Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
+	      }
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWidePadding (2);
 
-   /***** Current password *****/
-   if (IHaveAPasswordInDB) // If I have a password in database...
-     {
-      HTM_TR_Begin (NULL);
+	    /***** Current password *****/
+	    if (IHaveAPasswordInDB) // If I have a password in database...
+	      {
+	       HTM_TR_Begin (NULL);
 
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
+		  /* Label */
+		  Frm_LabelColumn ("REC_C1_BOT RM","UsrPwd",Txt_Current_password);
 
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
-			  "id=\"UsrPwd\"");
-      HTM_TD_End ();
+		  /* Data */
+		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
+					 "id=\"UsrPwd\"");
+		  HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	       HTM_TR_End ();
+	      }
 
-   /***** Help message *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\"");
-   Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
-	          Pwd_MIN_CHARS_PLAIN_PASSWORD);
-   HTM_TD_End ();
-   HTM_TR_End ();
+	    /***** Help message *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("colspan=\"2\"");
+		  Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
+				 Pwd_MIN_CHARS_PLAIN_PASSWORD);
+	       HTM_TD_End ();
+	    HTM_TR_End ();
 
-   /***** New password *****/
-   Pwd_PutFormToGetNewPasswordTwice ();
+	    /***** New password *****/
+	    Pwd_PutFormToGetNewPasswordTwice ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,
-			      IHaveAPasswordInDB ? Txt_Change_password :
-						   Txt_Set_password);
+	 /***** End table, send button and end box *****/
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,
+				    IHaveAPasswordInDB ? Txt_Change_password :
+							 Txt_Set_password);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -745,14 +745,14 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    /***** Password *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Paswd",Txt_Password);
+      /* Label */
+      Frm_LabelColumn ("RT","Paswd",Txt_Password);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
-		       "id=\"Paswd\"");
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
+			     "id=\"Paswd\"");
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -771,28 +771,28 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /***** 1st password *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM","Paswd1",Txt_New_password);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","Paswd1",Txt_New_password);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-   HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
-		       "id=\"Paswd1\"");
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
+			     "id=\"Paswd1\"");
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** 2nd password *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("REC_C1_BOT RM","Paswd2",Txt_Retype_new_password);
+      /* Label */
+      Frm_LabelColumn ("REC_C1_BOT RM","Paswd2",Txt_Retype_new_password);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-   HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
-		       "id=\"Paswd2\"");
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
+	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
+			     "id=\"Paswd2\"");
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -807,46 +807,47 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    extern const char *Txt_Change_password;
    Act_Action_t NextAction;
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Password,
-                 NULL,NULL,
-		 NULL,Box_NOT_CLOSABLE);
-
    /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
-   /***** Show possible alerts *****/
-   Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Password,
+		    NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
 
-   /***** Form to change password *****/
-   /* Begin form */
-   switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
-     {
-      case Rol_STD:
-	 NextAction = ActChgPwdStd;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 NextAction = ActChgPwdTch;
-	 break;
-      default:	// Guest, user or admin
-	 NextAction = ActChgPwdOth;
-	 break;
-     }
-   Frm_BeginFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
-   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 /***** Show possible alerts *****/
+	 Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
-   /* New password */
-   HTM_TABLE_BeginWidePadding (2);
-   Pwd_PutFormToGetNewPasswordTwice ();
-   HTM_TABLE_End ();
+	 /***** Form to change password *****/
+	 /* Begin form */
+	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
+	   {
+	    case Rol_STD:
+	       NextAction = ActChgPwdStd;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActChgPwdTch;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActChgPwdOth;
+	       break;
+	   }
+	 Frm_BeginFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
-   /* End form */
-   Btn_PutConfirmButton (Txt_Change_password);
-   Frm_EndForm ();
+	    /* New password */
+	    HTM_TABLE_BeginWidePadding (2);
+	    Pwd_PutFormToGetNewPasswordTwice ();
+	    HTM_TABLE_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	    Btn_PutConfirmButton (Txt_Change_password);
+
+	 /* End form */
+	 Frm_EndForm ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -864,21 +865,21 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:12px;\"");
 
-   /***** Checkbox *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("Consent",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"");
-   HTM_Txt (Txt_I_understand_that_this_action_can_not_be_undone);
-   HTM_LABEL_End ();
+      /***** Checkbox *****/
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_INPUT_CHECKBOX ("Consent",HTM_DONT_SUBMIT_ON_CHANGE,
+			     "value=\"Y\"");
+	 HTM_Txt (Txt_I_understand_that_this_action_can_not_be_undone);
+      HTM_LABEL_End ();
 
-   HTM_BR ();
+      HTM_BR ();
 
-   /***** Password *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
-   HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
-		       NULL);
-   HTM_LABEL_End ();
+      /***** Password *****/
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
+	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
+			     NULL);
+      HTM_LABEL_End ();
 
    HTM_DIV_End ();
   }

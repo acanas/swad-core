@@ -621,133 +621,133 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
    if (!NewItem)	// If the item is new (not stored in file), it has no number
       Syl_WriteNumItem (StrItemCod,NULL,Level,CodItem);
 
-   /***** Start the row *****/
+   /***** Begin the row *****/
    HTM_TR_Begin (NULL);
 
-   if (Syllabus->EditionIsActive)
-     {
-      if (NewItem)
+      if (Syllabus->EditionIsActive)
 	{
-         HTM_TD_Begin ("colspan=\"5\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-         HTM_TD_End ();
+	 if (NewItem)
+	   {
+	    HTM_TD_Begin ("colspan=\"5\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_End ();
+	   }
+	 else
+	   {
+	    /***** Icon to remove the row *****/
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       if (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren)
+		  Ico_PutIconRemovalNotAllowed ();
+	       else
+		  Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
+										     ActDelItmSylPra,NULL,
+						 Syl_PutParamNumItem,&Syllabus->ParamNumItem);
+	    HTM_TD_End ();
+
+	    /***** Icon to get up an item *****/
+	    Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       if (Subtree.MovAllowed)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
+										     ActUp_IteSylPra,
+						 NULL,
+						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 "arrow-up.svg",
+						 Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
+														 Txt_Move_up_X,
+								     StrItemCod));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+	    HTM_TD_End ();
+
+	    /***** Icon to get down item *****/
+	    Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       if (Subtree.MovAllowed)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
+										     ActDwnIteSylPra,
+						 NULL,
+						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 "arrow-down.svg",
+						 Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
+														 Txt_Move_down_X,
+								     StrItemCod));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+	    HTM_TD_End ();
+
+	    /***** Icon to increase the level of an item *****/
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       if (Level > 1)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
+										     ActRgtIteSylPra,
+						 NULL,
+						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 "arrow-left.svg",
+						 Str_BuildStringStr (Txt_Increase_level_of_X,
+								     StrItemCod));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
+	    HTM_TD_End ();
+
+	    /***** Icon to decrease level item *****/
+	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	       if (Level < LastLevel + 1 &&
+		   Level < Syl_MAX_LEVELS_SYLLABUS)
+		 {
+		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
+										     ActLftIteSylPra,
+						 NULL,
+						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
+						 "arrow-right.svg",
+						 Str_BuildStringStr (Txt_Decrease_level_of_X,
+								     StrItemCod));
+		  Str_FreeString ();
+		 }
+	       else
+		  Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
+	    HTM_TD_End ();
+
+	    LastLevel = Level;
+	   }
 	}
+
+      if (Syllabus->EditionIsActive)
+	 Syl_PutFormItemSyllabus (Syllabus,NewItem,NumItem,Level,CodItem,Text);
       else
 	{
-	 /***** Icon to remove the row *****/
-         HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-	 if (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren)
-            Ico_PutIconRemovalNotAllowed ();
-	 else
-	    Ico_PutContextualIconToRemove (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
-		                                                               ActDelItmSylPra,NULL,
-					   Syl_PutParamNumItem,&Syllabus->ParamNumItem);
-         HTM_TD_End ();
-
-	 /***** Icon to get up an item *****/
-	 Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
-	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-	 if (Subtree.MovAllowed)
-	   {
-	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
-									       ActUp_IteSylPra,
-					   NULL,
-					   Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-					   "arrow-up.svg",
-					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-													   Txt_Move_up_X,
-							       StrItemCod));
-	    Str_FreeString ();
-	   }
-	 else
-            Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
-         HTM_TD_End ();
-
-	 /***** Icon to get down item *****/
-	 Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
-	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-	 if (Subtree.MovAllowed)
-	   {
-	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
-									       ActDwnIteSylPra,
-					   NULL,
-					   Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-					   "arrow-down.svg",
-					   Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-													   Txt_Move_down_X,
-							       StrItemCod));
-	    Str_FreeString ();
-	   }
-	 else
-            Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
-         HTM_TD_End ();
-
-	 /***** Icon to increase the level of an item *****/
-	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	 /***** Indent depending on the level *****/
 	 if (Level > 1)
 	   {
-	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
-									       ActRgtIteSylPra,
-					   NULL,
-					   Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-					   "arrow-left.svg",
-					   Str_BuildStringStr (Txt_Increase_level_of_X,
-							       StrItemCod));
-	    Str_FreeString ();
+	    HTM_TD_Begin ("colspan=\"%d\" class=\"COLOR%u\"",Level - 1,Gbl.RowEvenOdd);
+	    HTM_TD_End ();
 	   }
-	 else
-            Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
-         HTM_TD_End ();
 
-	 /***** Icon to decrease level item *****/
-	 HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-	 if (Level < LastLevel + 1 &&
-	     Level < Syl_MAX_LEVELS_SYLLABUS)
-	   {
-	    Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
-									       ActLftIteSylPra,
-					   NULL,
-					   Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-					   "arrow-right.svg",
-					   Str_BuildStringStr (Txt_Decrease_level_of_X,
-							       StrItemCod));
-	    Str_FreeString ();
-	   }
-	 else
-            Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
-         HTM_TD_End ();
+	 /***** Code of the item *****/
+	 HTM_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
+		       StyleSyllabus[Level],Gbl.RowEvenOdd,
+		       Level * Syl_WIDTH_NUM_SYLLABUS);
+	    if (Level == 1)
+	       HTM_NBSP ();
+	    HTM_TxtF ("%s&nbsp;",StrItemCod);
+	 HTM_TD_End ();
 
-	 LastLevel = Level;
+	 /***** Text of the item *****/
+	 HTM_TD_Begin ("colspan=\"%d\" class=\"%s LT COLOR%u\"",
+		       Syl_LstItemsSyllabus.NumLevels - Level + 1,
+		       StyleSyllabus[Level],
+		       Gbl.RowEvenOdd);
+	    HTM_Txt (Text);
+	 HTM_TD_End ();
 	}
-     }
-
-   if (Syllabus->EditionIsActive)
-      Syl_PutFormItemSyllabus (Syllabus,NewItem,NumItem,Level,CodItem,Text);
-   else
-     {
-      /***** Indent depending on the level *****/
-      if (Level > 1)
-	{
-	 HTM_TD_Begin ("colspan=\"%d\" class=\"COLOR%u\"",Level - 1,Gbl.RowEvenOdd);
-         HTM_TD_End ();
-	}
-
-      /***** Code of the item *****/
-      HTM_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
-		    StyleSyllabus[Level],Gbl.RowEvenOdd,
-		    Level * Syl_WIDTH_NUM_SYLLABUS);
-      if (Level == 1)
-	 HTM_NBSP ();
-      HTM_TxtF ("%s&nbsp;",StrItemCod);
-      HTM_TD_End ();
-
-      /***** Text of the item *****/
-      HTM_TD_Begin ("colspan=\"%d\" class=\"%s LT COLOR%u\"",
-		    Syl_LstItemsSyllabus.NumLevels - Level + 1,
-		    StyleSyllabus[Level],
-		    Gbl.RowEvenOdd);
-      HTM_Txt (Text);
-      HTM_TD_End ();
-     }
 
    /***** End of the row *****/
    HTM_TR_End ();
@@ -766,7 +766,7 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
    int i;
 
    /***** Write start of HTML code *****/
-   Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
+   Lay_BeginHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
    fprintf (FileHTMLTmp,"<body>\n"
                         "<table>\n");
 
@@ -785,7 +785,7 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 	NumItem < Syl_LstItemsSyllabus.NumItems;
 	NumItem++)
      {
-      /***** Start the row *****/
+      /***** Begin the row *****/
       fprintf (FileHTMLTmp,"<tr>");
 
       /***** Indent depending on the level *****/

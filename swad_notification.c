@@ -599,12 +599,12 @@ void Ntf_ShowMyNotifications (void)
 						 false);
 		  HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("colspan=\"2\"");
-		  HTM_TD_End ();
+		     HTM_TD_Begin ("colspan=\"2\"");
+		     HTM_TD_End ();
 
-		  HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
-		  HTM_Txt (SummaryStr);
-		  HTM_TD_End ();
+		     HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
+			HTM_Txt (SummaryStr);
+		     HTM_TD_End ();
 
 		  HTM_TR_End ();
 		 }

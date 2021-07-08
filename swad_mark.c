@@ -90,7 +90,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 /****************** Add a new entry of marks into database *******************/
 /*****************************************************************************/
 
-void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks)
+void Mrk_DB_AddMarks (long FilCod,struct MarksProperties *Marks)
   {
    /***** Add file of marks to the database *****/
    DB_QueryINSERT ("can not add properties of marks to database",
@@ -128,36 +128,36 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
-      Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
-                                               ActChgNumRowHeaCrs);	// Course zone
-      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      HTM_LABEL_Begin (NULL);
-      HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
-      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
-      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
-                      Gbl.RowEvenOdd);
-      HTM_LABEL_End ();
-      Frm_EndForm ();
+	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
+						  ActChgNumRowHeaCrs);	// Course zone
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Header);
+	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
+	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
+			       Gbl.RowEvenOdd);
+	    HTM_LABEL_End ();
+	 Frm_EndForm ();
       HTM_TD_End ();
 
       /***** Write the number of rows of footer *****/
       HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
-      Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
-	                                       ActChgNumRowFooCrs);	// Course zone
-      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      HTM_LABEL_Begin (NULL);
-      HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
-      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
-      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
-                      Gbl.RowEvenOdd);
-      HTM_LABEL_End ();
-      Frm_EndForm ();
+	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
+						  ActChgNumRowFooCrs);	// Course zone
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	    HTM_LABEL_Begin (NULL);
+	       HTM_TxtF ("&nbsp;%s: ",Txt_TABLE_Footer);
+	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
+	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
+			       Gbl.RowEvenOdd);
+	    HTM_LABEL_End ();
+	 Frm_EndForm ();
       HTM_TD_End ();
      }
   }
@@ -660,7 +660,7 @@ void Mrk_ShowMyMarks (void)
          if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")) == NULL)
             Err_ShowErrorAndExit ("Can not open file with my marks.");
 
-         /* Start HTML output */
+         /* Begin HTML output */
          /*  Do not write charset here.
              Instead, delegate to the meta directive
              (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)

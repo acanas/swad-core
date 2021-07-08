@@ -1684,77 +1684,77 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
 					     "DAT";
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Start date/time *****/
-   UniqueId++;
-   if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
-		 Id,ClassDate,Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,false,0x7);
-   HTM_TD_End ();
-   free (Id);
+      /***** Start date/time *****/
+      UniqueId++;
+      if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
+		    Id,ClassDate,Gbl.RowEvenOdd);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,false,0x7);
+      HTM_TD_End ();
+      free (Id);
 
-   /***** End date/time *****/
-   UniqueId++;
-   if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
-		 Id,ClassDate,Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,false,0x7);
-   HTM_TD_End ();
-   free (Id);
+      /***** End date/time *****/
+      UniqueId++;
+      if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
+		    Id,ClassDate,Gbl.RowEvenOdd);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,false,0x7);
+      HTM_TD_End ();
+      free (Id);
 
-   /***** Project title *****/
-   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",
-		 ClassData,
-		 Gbl.RowEvenOdd);
-   HTM_Txt (Prj->Title);
-   HTM_TD_End ();
+      /***** Project title *****/
+      HTM_TD_Begin ("class=\"LT %s COLOR%u\"",
+		    ClassData,
+		    Gbl.RowEvenOdd);
+	 HTM_Txt (Prj->Title);
+      HTM_TD_End ();
 
-   /***** Department *****/
-   Prj_ShowTableAllProjectsDepartment (Prj);
+      /***** Department *****/
+      Prj_ShowTableAllProjectsDepartment (Prj);
 
-   /***** Assigned? *****/
-   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_Txt ((Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
-        	                              Txt_No);
-   HTM_TD_End ();
+      /***** Assigned? *****/
+      HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+	 HTM_Txt ((Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
+						    Txt_No);
+      HTM_TD_End ();
 
-   /***** Number of students *****/
-   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_Unsigned (Prj->NumStds);
-   HTM_TD_End ();
+      /***** Number of students *****/
+      HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+	 HTM_Unsigned (Prj->NumStds);
+      HTM_TD_End ();
 
-   /***** Project members *****/
-   for (NumRoleToShow = 0;
-	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	NumRoleToShow++)
-      Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
+      /***** Project members *****/
+      for (NumRoleToShow = 0;
+	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	   NumRoleToShow++)
+	 Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
-   /***** Proposal *****/
-   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
-   HTM_TD_End ();
+      /***** Proposal *****/
+      HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+	 HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
+      HTM_TD_End ();
 
-   /***** Write rows of data of this project *****/
-   /* Description of the project */
-   Prj_ShowTableAllProjectsTxtField (Prj,Prj->Description);
+      /***** Write rows of data of this project *****/
+      /* Description of the project */
+      Prj_ShowTableAllProjectsTxtField (Prj,Prj->Description);
 
-   /* Required knowledge to carry out the project */
-   Prj_ShowTableAllProjectsTxtField (Prj,Prj->Knowledge);
+      /* Required knowledge to carry out the project */
+      Prj_ShowTableAllProjectsTxtField (Prj,Prj->Knowledge);
 
-   /* Required materials to carry out the project */
-   Prj_ShowTableAllProjectsTxtField (Prj,Prj->Materials);
+      /* Required materials to carry out the project */
+      Prj_ShowTableAllProjectsTxtField (Prj,Prj->Materials);
 
-   /* Link to view more info about the project */
-   Prj_ShowTableAllProjectsURL (Prj);
+      /* Link to view more info about the project */
+      Prj_ShowTableAllProjectsURL (Prj);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -2062,129 +2062,129 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 
    if (WriteRow)
      {
-      /***** Start row with label and listing of users *****/
+      /***** Begin row with label and listing of users *****/
       HTM_TR_Begin (NULL);
 
-      /* Column for label */
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
-			  ClassLabel,Gbl.RowEvenOdd);
-	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    break;
-	 case Prj_FILE_BROWSER_PROJECT:
-	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
-	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    break;
-	 case Prj_PRINT_ONE_PROJECT:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
-	    HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-		                         Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    break;
-	 case Prj_EDIT_ONE_PROJECT:
-	    HTM_TD_Begin ("class=\"RT ASG_LABEL\"");
-	    HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    break;
-	}
-      HTM_TD_End ();
-
-      /* Start column with list of users */
-      switch (ProjectView)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
-			  ClassData,Gbl.RowEvenOdd);
-	    break;
-	 case Prj_FILE_BROWSER_PROJECT:
-	 case Prj_PRINT_ONE_PROJECT:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-			  ClassData);
-	    break;
-	 case Prj_EDIT_ONE_PROJECT:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT\"");
-	    break;
-	}
-
-      /***** Begin table with all members with this role *****/
-      HTM_TABLE_BeginPadding (2);
-
-      /***** Write users *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 /* Get user's code */
-	 row = mysql_fetch_row (mysql_res);
-	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	 /* Column for label */
+	 switch (ProjectView)
 	   {
-	    /* Start row for this user */
-	    HTM_TR_Begin (NULL);
+	    case Prj_LIST_PROJECTS:
+	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
+			     ClassLabel,Gbl.RowEvenOdd);
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	       break;
+	    case Prj_FILE_BROWSER_PROJECT:
+	       HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	       break;
+	    case Prj_PRINT_ONE_PROJECT:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	       break;
+	    case Prj_EDIT_ONE_PROJECT:
+	       HTM_TD_Begin ("class=\"RT ASG_LABEL\"");
+		  HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	       break;
+	   }
+	 HTM_TD_End ();
 
-	    /* Icon to remove user */
-	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
+	 /* Begin column with list of users */
+	 switch (ProjectView)
+	   {
+	    case Prj_LIST_PROJECTS:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+			     ClassData,Gbl.RowEvenOdd);
+	       break;
+	    case Prj_FILE_BROWSER_PROJECT:
+	    case Prj_PRINT_ONE_PROJECT:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+			     ClassData);
+	       break;
+	    case Prj_EDIT_ONE_PROJECT:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT\"");
+	       break;
+	   }
+
+	 /***** Begin table with all members with this role *****/
+	 HTM_TABLE_BeginPadding (2);
+
+	    /***** Write users *****/
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
 	      {
-	       HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
-	       Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
-					      Prj_PutCurrentParams,Projects,
-					      "trash.svg",
-					      Txt_Remove);
-	       HTM_TD_End ();
+	       /* Get user's code */
+	       row = mysql_fetch_row (mysql_res);
+	       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	       /* Get user's data */
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		 {
+		  /* Begin row for this user */
+		  HTM_TR_Begin (NULL);
+
+		     /* Icon to remove user */
+		     if (ProjectView == Prj_EDIT_ONE_PROJECT)
+		       {
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+			   Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
+							  Prj_PutCurrentParams,Projects,
+							  "trash.svg",
+							  Txt_Remove);
+			HTM_TD_End ();
+		       }
+
+		     /* Put user's photo */
+		     HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
+			Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+		     HTM_TD_End ();
+
+		     /* Write user's name */
+		     HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
+			HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
+		     HTM_TD_End ();
+
+		  /* End row for this user */
+		  HTM_TR_End ();
+		 }
 	      }
 
-	    /* Put user's photo */
-	    HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
-	    Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
-	    HTM_TD_End ();
+	    /***** Row to add a new user *****/
+	    switch (ProjectView)
+	      {
+	       case Prj_EDIT_ONE_PROJECT:
+		  HTM_TR_Begin (NULL);
+		  HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+		  Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
+		  Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
+					      Prj_PutCurrentParams,Projects,
+					      Str_BuildStringStr (Txt_Add_USERS,
+								  Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]));
+		  Str_FreeString ();
+		  HTM_TD_End ();
 
-	    /* Write user's name */
-	    HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
-	    HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
-	    HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
+		  HTM_TD_End ();
 
-	    /* End row for this user */
-	    HTM_TR_End ();
-	   }
-	}
+		  HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
+		  HTM_TD_End ();
 
-      /***** Row to add a new user *****/
-      switch (ProjectView)
-	{
-	 case Prj_EDIT_ONE_PROJECT:
-	    HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
-	    Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
-	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
-				        Prj_PutCurrentParams,Projects,
-				        Str_BuildStringStr (Txt_Add_USERS,
-							    Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]));
-	    Str_FreeString ();
-	    HTM_TD_End ();
+		  HTM_TR_End ();
+		  break;
+	       default:
+		  break;
+	      }
 
-	    HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
-	    HTM_TD_End ();
+	 /***** End table with all members with this role *****/
+	 HTM_TABLE_End ();
 
-	    HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
-	    HTM_TD_End ();
-
-	    HTM_TR_End ();
-	    break;
-	 default:
-	    break;
-	}
-
-      /***** End table with all members with this role *****/
-      HTM_TABLE_End ();
-
-      /***** End row with label and listing of users *****/
-      HTM_TD_End ();
+	 /***** End row with label and listing of users *****/
+	 HTM_TD_End ();
       HTM_TR_End ();
      }
 
@@ -2208,42 +2208,42 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
    /***** Get users in project from database *****/
    NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
 
-   /***** Start column with list of all members with this role *****/
+   /***** Begin column with list of all members with this role *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
 
-   if (NumUsrs)
-     {
-      /***** Write users *****/
-      HTM_UL_Begin ("class=\"PRJ_LST_USR\"");
-
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
+      if (NumUsrs)
 	{
-	 /* Get user's code */
-	 row = mysql_fetch_row (mysql_res);
-	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	 /***** Write users *****/
+	 HTM_UL_Begin ("class=\"PRJ_LST_USR\"");
 
-	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	   {
-	    /* Write user's name in "Surname1 Surname2, FirstName" format */
-            HTM_LI_Begin (NULL);
-            HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
-	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
-               HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
-            HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
-            HTM_LI_End ();
-	   }
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
+	      {
+	       /* Get user's code */
+	       row = mysql_fetch_row (mysql_res);
+	       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	       /* Get user's data */
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		 {
+		  /* Write user's name in "Surname1 Surname2, FirstName" format */
+		  HTM_LI_Begin (NULL);
+		     HTM_Txt (Gbl.Usrs.Other.UsrDat.Surname1);
+		     if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+			HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname2);
+		     HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
+		  HTM_LI_End ();
+		 }
+	      }
+
+	 HTM_UL_End ();
 	}
 
-      HTM_UL_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End column with list of all members with this role *****/
    HTM_TD_End ();
@@ -3628,7 +3628,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    unsigned ProposalUnsigned;
    unsigned NumRoleToShow;
 
-   /***** Start project box *****/
+   /***** Begin project box *****/
    if (ItsANewProject)
      {
       Projects->PrjCod = -1L;
@@ -3660,142 +3660,142 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
      }
 
    /***** 2. Project data *****/
-   /* Start data form */
+   /* Begin data form */
    Frm_BeginForm (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
    Prj_PutCurrentParams (Projects);
 
-   /* Begin box and table */
-   Box_BoxTableBegin (NULL,Txt_Data,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+      /* Begin box and table */
+      Box_BoxTableBegin (NULL,Txt_Data,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /* Project title */
-   HTM_TR_Begin (NULL);
+	 /* Project title */
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Title\" required=\"required\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Department */
-   HTM_TR_Begin (NULL);
+	 /* Department */
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
+	    /* Label */
+	    Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
-                                Prj->DptCod,			// Selected department
-                                "TITLE_DESCRIPTION_WIDTH",	// Selector class
-                                0,				// First option
-                                Txt_Another_department,		// Text when no department selected
-                                false);				// Don't submit on change
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
+					    Prj->DptCod,		// Selected department
+					    "TITLE_DESCRIPTION_WIDTH",	// Selector class
+					    0,				// First option
+					    Txt_Another_department,	// Text when no department selected
+					    false);			// Don't submit on change
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Assigned? */
-   HTM_TR_Begin (NULL);
+	 /* Assigned? */
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Assigned_QUESTION);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Assigned_QUESTION);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Assigned\"");
-   HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
-	       "%s",Txt_Yes);
-   HTM_OPTION (HTM_Type_STRING,"N",Prj->Assigned == Prj_NONASSIG,false,
-	       "%s",Txt_No);
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "name=\"Assigned\"");
+		  HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
+			      "%s",Txt_Yes);
+		  HTM_OPTION (HTM_Type_STRING,"N",Prj->Assigned == Prj_NONASSIG,false,
+			      "%s",Txt_No);
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Number of students */
-   HTM_TR_Begin (NULL);
+	 /* Number of students */
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Number_of_students);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Number_of_students);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,
-                   HTM_DONT_SUBMIT_ON_CHANGE,false,
-		   NULL);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,
+			       HTM_DONT_SUBMIT_ON_CHANGE,false,
+			       NULL);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Proposal */
-   HTM_TR_Begin (NULL);
+	 /* Proposal */
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Proposal);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Proposal);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"Proposal\" class=\"TITLE_DESCRIPTION_WIDTH\"");
-   for (Proposal  = (Prj_Proposal_t) 0;
-	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
-	Proposal++)
-     {
-      ProposalUnsigned = (unsigned) Proposal;
-      HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
-		  Prj->Proposal == Proposal,false,
-		  "%s",Txt_PROJECT_STATUS[Proposal]);
-     }
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "name=\"Proposal\" class=\"TITLE_DESCRIPTION_WIDTH\"");
+		  for (Proposal  = (Prj_Proposal_t) 0;
+		       Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
+		       Proposal++)
+		    {
+		     ProposalUnsigned = (unsigned) Proposal;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ProposalUnsigned,
+				 Prj->Proposal == Proposal,false,
+				 "%s",Txt_PROJECT_STATUS[Proposal]);
+		    }
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Description of the project */
-   Prj_EditOneProjectTxtArea ("Description",Txt_Description,
-                              Prj->Description,12,
-			      true);	// Required
+	 /* Description of the project */
+	 Prj_EditOneProjectTxtArea ("Description",Txt_Description,
+				    Prj->Description,12,
+				    true);	// Required
 
-   /* Required knowledge to carry out the project */
-   Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
-                              Prj->Knowledge,4,
-			      false);	// Not required
+	 /* Required knowledge to carry out the project */
+	 Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
+				    Prj->Knowledge,4,
+				    false);	// Not required
 
-   /* Required materials to carry out the project */
-   Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
-                              Prj->Materials,4,
-			      false);	// Not required
+	 /* Required materials to carry out the project */
+	 Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
+				    Prj->Materials,4,
+				    false);	// Not required
 
-   /* URL for additional info */
-   HTM_TR_Begin (NULL);
+	 /* URL for additional info */
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","WWW",Txt_URL);
+	    /* Label */
+	    Frm_LabelColumn ("RT","WWW",Txt_URL);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"DAT LT\"");
+	       HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
+			      "class=\"TITLE_DESCRIPTION_WIDTH\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* End table, send button and end box */
-   if (ItsANewProject)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_project);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /* End table, send button and end box */
+      if (ItsANewProject)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_project);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /* End data form */
    Frm_EndForm ();

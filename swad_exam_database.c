@@ -1,4 +1,4 @@
-// swad_maintenance.c: platform maintenance
+// swad_exam_database.c: exams operations with database
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -25,13 +25,23 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_course.h"
+//#define _GNU_SOURCE 		// For asprintf
+//#include <stdio.h>		// For asprintf
+//#include <stdlib.h>		// For system, getenv, etc.
+//#include <string.h>		// For string functions
+
+//#include "swad_action.h"
 #include "swad_database.h"
-#include "swad_menu.h"
+//#include "swad_error.h"
+#include "swad_exam_database.h"
+#include "swad_exam_log.h"
+#include "swad_global.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -49,62 +59,97 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Mtn_PutLinkToSetUp (void);
-
 /*****************************************************************************/
-/******************************** Maintenance ********************************/
+/******** Check if the current session id is the same as the last one ********/
 /*****************************************************************************/
 
-void Mtn_Maintenance (void)
+bool ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
   {
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-      Mtn_PutLinkToSetUp ();		// Set up
-      Crs_PutLinkToRemoveOldCrss ();	// Remove old courses
-   Mnu_ContextMenuEnd ();
+   /***** Check if the current session id
+          is the same as the last one stored in database *****/
+   return (DB_QueryCOUNT ("can not check session",
+			  "SELECT COUNT(*)"
+			   " FROM exa_log_sessions"
+			  " WHERE LogCod="
+				 "(SELECT MAX(LogCod)"
+				   " FROM exa_log_sessions"
+				  " WHERE PrnCod=%ld)"
+			    " AND SessionId='%s'",
+			  PrnCod,
+			  Gbl.Session.Id) != 0);
   }
 
 /*****************************************************************************/
-/************************ Put link to set up platform ************************/
+/******** Check if the current user agent is the same as the last one ********/
 /*****************************************************************************/
 
-static void Mtn_PutLinkToSetUp (void)
+bool ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB)
   {
-   extern const char *Txt_Set_up;
-
-   /***** Put form to set up platform *****/
-   Lay_PutContextualLinkIconText (ActSetUp,NULL,
-                                  NULL,NULL,
-				  "bolt.svg",
-				  Txt_Set_up);
+   /***** Get if the current user agent
+          is the same as the last stored in database *****/
+   return (DB_QueryCOUNT ("can not check user agent",
+			  "SELECT COUNT(*)"
+			   " FROM exa_log_user_agents"
+			  " WHERE LogCod="
+				 "(SELECT MAX(LogCod)"
+				   " FROM exa_log_user_agents"
+				  " WHERE PrnCod=%ld)"
+			    " AND UserAgent='%s'",
+			  PrnCod,
+			  UserAgentDB) != 0);
   }
 
 /*****************************************************************************/
-/****************************** Initial set up *******************************/
+/******************************** Log access *********************************/
 /*****************************************************************************/
 
-void Mtn_SetUp (void)
+void ExaLog_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
   {
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-      Crs_PutLinkToRemoveOldCrss ();	// Remove old courses
-   Mnu_ContextMenuEnd ();
-
-   /***** Create database tables if not exist *****/
-   DB_CreateTablesIfNotExist ();
+   /* Log access in exam log.
+      Redundant data (also present in log table) are stored for speed */
+   DB_QueryINSERT ("can not log exam access",
+		   "INSERT INTO exa_log "
+		   "(LogCod,PrnCod,ActCod,QstInd,CanAnswer,ClickTime,IP)"
+		   " VALUES "
+		   "(%ld,%ld,%ld,%d,'%c',NOW(),'%s')",
+		   LogCod,
+		   PrnCod,
+		   (unsigned) Action,
+		   ExaLog_GetQstInd (),
+		   ExaLog_GetIfCanAnswer () ? 'Y' :
+					      'N',
+		   // NOW()   	   Redundant, for speed
+		   Gbl.IP);	// Redundant, for speed
   }
 
 /*****************************************************************************/
-/****************************** Initial set up *******************************/
+/*************************** Log session in database *************************/
 /*****************************************************************************/
 
-void Mtn_RemoveOldCrss (void)
+void ExaLog_DB_LogSession (long LogCod,long PrnCod)
   {
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-      Mtn_PutLinkToSetUp ();		// Set up
-   Mnu_ContextMenuEnd ();
+   DB_QueryINSERT ("can not log session",
+		   "INSERT INTO exa_log_sessions "
+		   "(LogCod,PrnCod,SessionId)"
+		   " VALUES "
+		   "(%ld,%ld,'%s')",
+		   LogCod,
+		   PrnCod,
+		   Gbl.Session.Id);
+  }
 
-   /***** Write form to remove old courses *****/
-   Crs_AskRemoveOldCrss ();
+/*****************************************************************************/
+/************************* Log user agent in database ************************/
+/*****************************************************************************/
+
+void ExaLog_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB)
+  {
+   DB_QueryINSERT ("can not log user agent",
+		   "INSERT INTO exa_log_user_agents "
+		   "(LogCod,PrnCod,UserAgent)"
+		   " VALUES "
+		   "(%ld,%ld,'%s')",
+		   LogCod,
+		   PrnCod,
+		   UserAgentDB);
   }

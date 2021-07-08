@@ -137,7 +137,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
      {
       Fil_EndOfReadingStdin ();  // If stdin were not fully read, there will be problems with buffers
 
-      /* Start HTTP response */
+      /* Begin HTTP response */
       fprintf (stdout,"Content-type: text/plain; charset=windows-1252\n");
 
       /* Status code and message */

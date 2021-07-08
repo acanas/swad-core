@@ -53,7 +53,7 @@ static void Frm_BeginFormInternal (Act_Action_t NextAction,bool PutParameterLoca
                                    const char *Id,const char *Anchor,const char *OnSubmit);
 
 /*****************************************************************************/
-/******************************** Start a form *******************************/
+/******************************** Begin a form *******************************/
 /*****************************************************************************/
 
 void Frm_BeginFormGoTo (Act_Action_t NextAction)

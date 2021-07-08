@@ -138,9 +138,9 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 
 static void Mch_RemoveMatchFromAllTables (long MchCod);
-static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName);
-static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
-static void Mch_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName);
+static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName);
+static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
+static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName);
 static void Mch_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName);
 static void Mch_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName);
 
@@ -588,7 +588,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
    extern const char *Txt_Status;
    extern const char *Txt_Results;
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Column for icons *****/
@@ -1182,13 +1182,13 @@ mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'm
 static void Mch_RemoveMatchFromAllTables (long MchCod)
   {
    /***** Remove match from secondary tables *****/
-   Mch_RemoveMatchFromTable (MchCod,"mch_players");
-   Mch_RemoveMatchFromTable (MchCod,"mch_playing");
-   Mch_RemoveMatchFromTable (MchCod,"mch_results");
-   Mch_RemoveMatchFromTable (MchCod,"mch_answers");
-   Mch_RemoveMatchFromTable (MchCod,"mch_times");
-   Mch_RemoveMatchFromTable (MchCod,"mch_groups");
-   Mch_RemoveMatchFromTable (MchCod,"mch_indexes");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_players");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_playing");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_results");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_answers");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_times");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_groups");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_indexes");
 
    /***** Remove match from main table *****/
    DB_QueryDELETE ("can not remove match",
@@ -1197,7 +1197,7 @@ static void Mch_RemoveMatchFromAllTables (long MchCod)
 		   MchCod);
   }
 
-static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
+static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName)
   {
    /***** Remove match from secondary table *****/
    DB_QueryDELETE ("can not remove match from table",
@@ -1214,13 +1214,13 @@ static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
 void Mch_RemoveMatchesInGameFromAllTables (long GamCod)
   {
    /***** Remove matches from secondary tables *****/
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_players");
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_playing");
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_results");
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_answers");
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_times");
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_groups");
-   Mch_RemoveMatchesInGameFromTable (GamCod,"mch_indexes");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_players");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_playing");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_results");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_answers");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_times");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_groups");
+   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_indexes");
 
    /***** Remove matches from main table *****/
    DB_QueryDELETE ("can not remove matches of a game",
@@ -1229,7 +1229,7 @@ void Mch_RemoveMatchesInGameFromAllTables (long GamCod)
 		   GamCod);
   }
 
-static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
+static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
   {
    /***** Remove matches in game from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a game from table",
@@ -1251,13 +1251,13 @@ static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
 void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod)
   {
    /***** Remove matches from secondary tables *****/
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_players");
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_playing");
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_results");
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_answers");
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_times");
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_groups");
-   Mch_RemoveMatchesInCourseFromTable (CrsCod,"mch_indexes");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_players");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_playing");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_results");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_answers");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_times");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_groups");
+   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_indexes");
 
    /***** Remove matches from main table *****/
    DB_QueryDELETE ("can not remove matches of a course",
@@ -1269,7 +1269,7 @@ void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod)
 		   CrsCod);
   }
 
-static void Mch_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName)
+static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName)
   {
    /***** Remove matches in course from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a course from table",
@@ -1708,7 +1708,7 @@ static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match)
 		   Match->MchCod);
 
    /***** Update groups associated to the match *****/
-   Mch_RemoveMatchFromTable (Match->MchCod,"mch_groups");	// Remove all groups associated to this match
+   Mch_DB_RemoveMatchFromTable (Match->MchCod,"mch_groups");	// Remove all groups associated to this match
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Mch_CreateGrps (Match->MchCod);				// Associate selected groups
   }
@@ -2588,7 +2588,7 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
 
 static void Mch_ShowLeftColumnTch (struct Mch_Match *Match)
   {
-   /***** Start left container *****/
+   /***** Begin left container *****/
    HTM_DIV_Begin ("class=\"MCH_LEFT_TCH\"");
 
       /***** Refreshable part *****/
@@ -2860,7 +2860,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 
 static void Mch_ShowRightColumnTch (const struct Mch_Match *Match)
   {
-   /***** Start right container *****/
+   /***** Begin right container *****/
    HTM_DIV_Begin ("class=\"MCH_RIGHT_TCH\"");
 
       /***** Top row: match title *****/
@@ -2885,7 +2885,7 @@ static void Mch_ShowLeftColumnStd (const struct Mch_Match *Match,
   {
    bool Answered = UsrAnswer->NumOpt >= 0;
 
-   /***** Start left container *****/
+   /***** Begin left container *****/
    HTM_DIV_Begin ("class=\"MCH_LEFT_STD\"");
 
       /***** Top *****/
@@ -2926,7 +2926,7 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
   {
    extern const char *Txt_Please_wait_;
 
-   /***** Start right container *****/
+   /***** Begin right container *****/
    HTM_DIV_Begin ("class=\"MCH_RIGHT_STD\"");
 
       /***** Top row *****/
@@ -3000,7 +3000,7 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
    extern const char *Txt_Start;
    extern const char *Txt_Resume;
 
-   /***** Start buttons container *****/
+   /***** Begin buttons container *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTONS_CONT\"");
 
       /***** Left button *****/
@@ -3379,7 +3379,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 	   NumOpt < Question->Answer.NumOptions;
 	   NumOpt++)
 	{
-	 /***** Start row? *****/
+	 /***** Begin row? *****/
 	 if (NumOpt % Match->Status.NumCols == 0)
 	   {
 	    HTM_TR_Begin (NULL);
@@ -3459,7 +3459,7 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 	   NumOpt < NumOptions;
 	   NumOpt++)
 	{
-	 /***** Start row *****/
+	 /***** Begin row *****/
 	 HTM_TR_Begin (NULL);
 
 	    /***** Write letter for this option *****/

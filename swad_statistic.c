@@ -841,7 +841,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 /***** Show form again *****/
 	 Sta_PutFormGblHits (&Stats);
 
-	 /***** Start results section *****/
+	 /***** Begin results section *****/
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
@@ -884,7 +884,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 /***** Show the form again *****/
 	 Sta_PutFormCrsHits (&Stats);
 
-	 /***** Start results section *****/
+	 /***** Begin results section *****/
 	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
@@ -3063,69 +3063,69 @@ static void Sta_WriteAccessMinute (unsigned Minute,double HitsNum,double MaxX)
   {
    unsigned BarWidth;
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Labels of the Y axis, and Y axis *****/
-   if (!Minute)
-     {
-      // If minute 0
-      HTM_TD_Begin ("rowspan=\"30\" class=\"LOG LT\""
-		    " style=\"width:%upx;"
-		    " background-image:url('%s/ejey24x30.gif');"
-		    " background-size:30px 30px;"
-		    " background-repeat:repeat;\"",
-                    Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
-      HTM_Txt ("00h");
-      HTM_TD_End ();
-     }
-   else if (Minute == (Sta_NUM_MINUTES_PER_DAY - 30))
-     {
-      // If 23:30
-      HTM_TD_Begin ("rowspan=\"30\" class=\"LOG LB\""
-		    " style=\"width:%upx;"
-		    " background-image:url('%s/ejey24x30.gif');"
-		    " background-size:30px 30px;"
-		    " background-repeat:repeat;\"",
-                    Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
-      HTM_Txt ("24h");
-      HTM_TD_End ();
-     }
-   else if (!(Minute % 30) && (Minute % 60))
-     {
-      // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
-      HTM_TD_Begin ("rowspan=\"60\" class=\"LOG LM\""
-		    " style=\"width:%upx;"
-		    " background-image:url('%s/ejey24x60.gif');"
-		    " background-size:30px 60px;"
-		    " background-repeat:repeat;\"",
-	            Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
-      HTM_TxtF ("%02uh",(Minute + 30) / 60);
-      HTM_TD_End ();
-     }
+      /***** Labels of the Y axis, and Y axis *****/
+      if (!Minute)
+	{
+	 // If minute 0
+	 HTM_TD_Begin ("rowspan=\"30\" class=\"LOG LT\""
+		       " style=\"width:%upx;"
+		       " background-image:url('%s/ejey24x30.gif');"
+		       " background-size:30px 30px;"
+		       " background-repeat:repeat;\"",
+		       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
+	    HTM_Txt ("00h");
+	 HTM_TD_End ();
+	}
+      else if (Minute == (Sta_NUM_MINUTES_PER_DAY - 30))
+	{
+	 // If 23:30
+	 HTM_TD_Begin ("rowspan=\"30\" class=\"LOG LB\""
+		       " style=\"width:%upx;"
+		       " background-image:url('%s/ejey24x30.gif');"
+		       " background-size:30px 30px;"
+		       " background-repeat:repeat;\"",
+		       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
+	    HTM_Txt ("24h");
+	 HTM_TD_End ();
+	}
+      else if (!(Minute % 30) && (Minute % 60))
+	{
+	 // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
+	 HTM_TD_Begin ("rowspan=\"60\" class=\"LOG LM\""
+		       " style=\"width:%upx;"
+		       " background-image:url('%s/ejey24x60.gif');"
+		       " background-size:30px 60px;"
+		       " background-repeat:repeat;\"",
+		       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
+	    HTM_TxtF ("%02uh",(Minute + 30) / 60);
+	 HTM_TD_End ();
+	}
 
-   /***** Start cell for the graphic *****/
-   HTM_TD_Begin ("colspan=\"%u\" class=\"LB\""
-		 " style=\"width:%upx; height:1px;"
-		 " background-image:url('%s/malla%c48x1.gif');"
-		 " background-size:60px 1px;"
-		 " background-repeat:repeat;\"",
-	         Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Cfg_URL_ICON_PUBLIC,
-	         (Minute % 60) == 0 ? 'v' :
-		                      'h');
+      /***** Begin cell for the graphic *****/
+      HTM_TD_Begin ("colspan=\"%u\" class=\"LB\""
+		    " style=\"width:%upx; height:1px;"
+		    " background-image:url('%s/malla%c48x1.gif');"
+		    " background-size:60px 1px;"
+		    " background-repeat:repeat;\"",
+		    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Cfg_URL_ICON_PUBLIC,
+		    (Minute % 60) == 0 ? 'v' :
+					 'h');
 
-   /***** Draw bar with a width proportional to the number of hits *****/
-   if (HitsNum != 0.0)
-      if ((BarWidth = (unsigned) (((HitsNum * (double) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,
-		  (Minute % 60) == 0 ? "r1x1.png" :	// red background
-                	               "o1x1.png",	// orange background
-		  NULL,
-	          "style=\"display:block;width:%upx;height:1px;\"",
-	          BarWidth);
+	 /***** Draw bar with a width proportional to the number of hits *****/
+	 if (HitsNum != 0.0)
+	    if ((BarWidth = (unsigned) (((HitsNum * (double) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,
+			(Minute % 60) == 0 ? "r1x1.png" :	// red background
+					     "o1x1.png",	// orange background
+			NULL,
+			"style=\"display:block;width:%upx;height:1px;\"",
+			BarWidth);
 
-   /***** End cell of graphic and end row *****/
-   HTM_TD_End ();
+      /***** End cell of graphic and end row *****/
+      HTM_TD_End ();
    HTM_TR_End ();
   }
 
@@ -3432,24 +3432,24 @@ static void Sta_WriteCountry (long CtyCod)
   {
    struct Cty_Countr Cty;
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    HTM_TD_Begin ("class=\"LOG LM\"");
 
-   if (CtyCod > 0)	// Hit with a country selected
-     {
-      /***** Get data of country *****/
-      Cty.CtyCod = CtyCod;
-      Cty_GetDataOfCountryByCod (&Cty);
+      if (CtyCod > 0)	// Hit with a country selected
+	{
+	 /***** Get data of country *****/
+	 Cty.CtyCod = CtyCod;
+	 Cty_GetDataOfCountryByCod (&Cty);
 
-      /***** Form to go to country *****/
-      Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
-                                         "COUNTRY_TINY",
-                                         "COUNTRY_MAP_TINY",
-                                         "BT_LINK LT LOG");
-     }
-   else			// Hit with no country selected
-      /***** No country selected *****/
-      HTM_Txt ("&nbsp;-&nbsp;");
+	 /***** Form to go to country *****/
+	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
+					    "COUNTRY_TINY",
+					    "COUNTRY_MAP_TINY",
+					    "BT_LINK LT LOG");
+	}
+      else			// Hit with no country selected
+	 /***** No country selected *****/
+	 HTM_Txt ("&nbsp;-&nbsp;");
 
    /***** End cell *****/
    HTM_TD_End ();
@@ -3523,7 +3523,7 @@ static void Sta_WriteInstit (long InsCod)
   {
    struct Ins_Instit Ins;
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    if (InsCod > 0)	// Hit with an institution selected
      {
       /***** Get data of institution *****/
@@ -3533,15 +3533,15 @@ static void Sta_WriteInstit (long InsCod)
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ins.FullName);
 
-      /***** Form to go to institution *****/
-      Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
-                                              "BT_LINK LT LOG","CT");
+	 /***** Form to go to institution *****/
+	 Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
+						 "BT_LINK LT LOG","CT");
      }
    else			// Hit with no institution selected
      {
       /***** No institution selected *****/
       HTM_TD_Begin ("class=\"LOG LM\"");
-      HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_Txt ("&nbsp;-&nbsp;");
      }
 
    /***** End cell *****/
@@ -3616,7 +3616,7 @@ static void Sta_WriteCenter (long CtrCod)
   {
    struct Ctr_Center Ctr;
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    if (CtrCod > 0)	// Hit with a center selected
      {
       /***** Get data of center *****/
@@ -3626,15 +3626,15 @@ static void Sta_WriteCenter (long CtrCod)
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ctr.FullName);
 
-      /***** Form to go to center *****/
-      Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
-                                         "BT_LINK LT LOG","CT");
+	 /***** Form to go to center *****/
+	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
+					    "BT_LINK LT LOG","CT");
      }
    else			// Hit with no center selected
      {
       /***** No center selected *****/
       HTM_TD_Begin ("class=\"LOG LM\"");
-      HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_Txt ("&nbsp;-&nbsp;");
      }
 
    /***** End cell *****/
@@ -3709,7 +3709,7 @@ static void Sta_WriteDegree (long DegCod)
   {
    struct Deg_Degree Deg;
 
-   /***** Start cell *****/
+   /***** Begin cell *****/
    if (DegCod > 0)	// Hit with a degree selected
      {
       /***** Get data of degree *****/
@@ -3719,15 +3719,15 @@ static void Sta_WriteDegree (long DegCod)
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Deg.FullName);
 
-      /***** Form to go to degree *****/
-      Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-                                         "BT_LINK LT LOG","CT");
+	 /***** Form to go to degree *****/
+	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
+					    "BT_LINK LT LOG","CT");
      }
    else			// Hit with no degree selected
      {
       /***** No degree selected *****/
       HTM_TD_Begin ("class=\"LOG LM\"");
-      HTM_Txt ("&nbsp;-&nbsp;");
+	 HTM_Txt ("&nbsp;-&nbsp;");
      }
 
    /***** End cell *****/

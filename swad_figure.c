@@ -988,7 +988,7 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  int NumDegs,	// < 0 ==> do not show number
 				  int NumCrss)	// < 0 ==> do not show number
   {
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Write text *****/
@@ -3115,8 +3115,8 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
    double NumItemsPerCourse = 0.0;
 
    /***** Get the number of program items from this location *****/
-   if ((NumItems = Prg_GetNumItems (Gbl.Scope.Current)))
-      if ((NumCoursesWithItems = Prg_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
+   if ((NumItems = Prg_DB_GetNumItems (Gbl.Scope.Current)))
+      if ((NumCoursesWithItems = Prg_DB_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
          NumItemsPerCourse = (double) NumItems /
 	                     (double) NumCoursesWithItems;
 

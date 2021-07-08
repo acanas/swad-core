@@ -45,7 +45,7 @@ struct MarksProperties
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks);
+void Mrk_DB_AddMarks (long FilCod,struct MarksProperties *Marks);
 void Mrk_GetAndWriteNumRowsHeaderAndFooter (void);
 void Mrk_ChangeNumRowsHeader (void);
 void Mrk_ChangeNumRowsFooter (void);

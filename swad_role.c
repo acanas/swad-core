@@ -499,27 +499,27 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    /***** Begin form *****/
    Frm_BeginForm (ActChgMyRol);
 
-   PutClassSelect = false;
-   if (ClassSelect)
-      if (ClassSelect[0])
-	 PutClassSelect = true;
-   if (PutClassSelect)
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"MyRole\" class=\"%s\"",ClassSelect);
-   else
-      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"MyRole\"");
-   for (Role  = (Rol_Role_t) 1;
-        Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
-        Role++)
-     if (Gbl.Usrs.Me.Role.Available & (1 << Role))
-        {
-	 RoleUnsigned = (unsigned) Role;
-	 HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
-		     Role == Gbl.Usrs.Me.Role.Logged,false,
-		     "%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
-        }
-   HTM_SELECT_End ();
+      PutClassSelect = false;
+      if (ClassSelect)
+	 if (ClassSelect[0])
+	    PutClassSelect = true;
+      if (PutClassSelect)
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			   "name=\"MyRole\" class=\"%s\"",ClassSelect);
+      else
+	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			   "name=\"MyRole\"");
+      for (Role  = (Rol_Role_t) 1;
+	   Role <= (Rol_Role_t) (Rol_NUM_ROLES - 1);
+	   Role++)
+	if (Gbl.Usrs.Me.Role.Available & (1 << Role))
+	   {
+	    RoleUnsigned = (unsigned) Role;
+	    HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
+			Role == Gbl.Usrs.Me.Role.Logged,false,
+			"%s",Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
+	   }
+      HTM_SELECT_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -578,14 +578,14 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
       if ((RolesAllowed & (1 << Role)))
 	{
 	 HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_CHECKBOX ("Role",SubmitOnChange,
-			     "id=\"Role\" value=\"%u\"%s%s",
-			     (unsigned) Role,
-			     (RolesSelected & (1 << Role)) ? " checked=\"checked\"" :
-				                             "",
-		             Disabled ? " disabled=\"disabled\"" :
-		        	        "");
-	 HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	    HTM_INPUT_CHECKBOX ("Role",SubmitOnChange,
+				"id=\"Role\" value=\"%u\"%s%s",
+				(unsigned) Role,
+				(RolesSelected & (1 << Role)) ? " checked=\"checked\"" :
+								"",
+				Disabled ? " disabled=\"disabled\"" :
+					   "");
+	    HTM_Txt (Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 HTM_BR ();
         }
@@ -637,7 +637,7 @@ unsigned Rol_GetSelectedRoles (void)
 /************ Get requested role of a user in current course *****************/
 /*****************************************************************************/
 
-Rol_Role_t Rol_GetRequestedRole (long UsrCod)
+Rol_Role_t Rol_DB_GetRequestedRole (long UsrCod)
   {
    /***** Get requested role from database *****/
    return DB_QuerySELECTRole ("can not get requested role",

@@ -164,7 +164,7 @@ int main (void)
 	 /***** Write HTTP Status 204 No Content *****/
 	 Lay_WriteHTTPStatus204NoContent ();
 
-      /***** Start writing HTML output *****/
+      /***** Begin writing HTML output *****/
       Lay_WriteStartOfPage ();
 
       /***** If I am been redirected from another action... *****/

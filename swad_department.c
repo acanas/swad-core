@@ -1015,7 +1015,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    Dpt_GetListDepartments (&Departments,InsCod);
 
    /***** Selector to select department *****/
-   /* Start selector */
+   /* Begin selector */
    HTM_SELECT_Begin (SubmitFormOnChange,
 		     "id=\"%s\" name=\"%s\" class=\"%s\"",
 		     Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,SelectClass);

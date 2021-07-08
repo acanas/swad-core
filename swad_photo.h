@@ -133,7 +133,7 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat);
 void Pho_ChangePhotoVisibility (void);
 
 void Pho_CalcPhotoDegree (void);
-void Pho_RemoveObsoleteStatDegrees (void);
+void Pho_DB_RemoveObsoleteStatDegrees (void);
 void Pho_ShowPhotoDegree (void);
 void Pho_PrintPhotoDegree (void);
 

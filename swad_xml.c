@@ -261,7 +261,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
                            Gbl.XMLPtr
             */
            }
-         else	// Start of an attribute
+         else	// Begin of an attribute
            {
             /*
             <parent><child attribute1="value" attribute2="value">...</child>...</parent>
@@ -324,7 +324,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          Err_ShowErrorAndExit ("XML syntax error. Unexpected end of file.");
       else
         {
-         /* Start of attribute name:
+         /* Begin of attribute name:
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
                         ^
                         |

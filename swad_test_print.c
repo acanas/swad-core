@@ -2317,59 +2317,59 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
 	 break;
      }
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Visible_tests);
-   HTM_Unsigned (NumPrints);
-   HTM_TD_End ();
+      /***** Row title *****/
+      HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TxtColonNBSP (Txt_Visible_tests);
+	 HTM_Unsigned (NumPrints);
+      HTM_TD_End ();
 
-   /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumPrints)
-      HTM_Unsigned (NumTotalQsts->All);
-   HTM_TD_End ();
+      /***** Write total number of questions *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumPrints)
+	    HTM_Unsigned (NumTotalQsts->All);
+      HTM_TD_End ();
 
-   /***** Write total number of non-blank answers *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumPrints)
-      HTM_Unsigned (NumTotalQsts->NotBlank);
-   HTM_TD_End ();
+      /***** Write total number of non-blank answers *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumPrints)
+	    HTM_Unsigned (NumTotalQsts->NotBlank);
+      HTM_TD_End ();
 
-   /***** Write total number of blank answers *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumPrints)
-      HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
-   HTM_TD_End ();
+      /***** Write total number of blank answers *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumPrints)
+	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
+      HTM_TD_End ();
 
-   /***** Write total score *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
-     {
-      HTM_Double2Decimals (TotalScore);
-      HTM_Txt ("/");
-      HTM_Unsigned (NumTotalQsts->All);
-     }
-   HTM_TD_End ();
+      /***** Write total score *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (ICanViewTotalScore)
+	   {
+	    HTM_Double2Decimals (TotalScore);
+	    HTM_Txt ("/");
+	    HTM_Unsigned (NumTotalQsts->All);
+	   }
+      HTM_TD_End ();
 
-   /***** Write average score per question *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
-      HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
-			                       0.0);
-   HTM_TD_End ();
+      /***** Write average score per question *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (ICanViewTotalScore)
+	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
+						     0.0);
+      HTM_TD_End ();
 
-   /***** Write grade over Tst_SCORE_MAX *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
-      TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
-   HTM_TD_End ();
+      /***** Write grade over Tst_SCORE_MAX *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (ICanViewTotalScore)
+	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
+      HTM_TD_End ();
 
-   /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TD_End ();
+      /***** Last cell *****/
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();

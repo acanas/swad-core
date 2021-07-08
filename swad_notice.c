@@ -685,7 +685,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	 HTM_DIV_Begin ("class=\"NOTICE_HIGHLIGHT\"");
      }
 
-   /***** Start yellow note *****/
+   /***** Begin yellow note *****/
    HTM_DIV_Begin ("class=\"%s %s\"",
 	          ContainerClass[Status],ContainerWidthClass[TypeNoticesListing]);
 

@@ -283,7 +283,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
-   /***** Start div and link *****/
+   /***** Begin div and link *****/
    HTM_DIV_Begin ("id=\"MFU_actions\"");
 
       Frm_BeginForm (ActMFUAct);

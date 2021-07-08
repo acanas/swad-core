@@ -76,12 +76,13 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
 static void Plc_PutParamPlcCod (void *PlcCod);
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod);
-static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName);
+static bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
+                                           const char *FieldName,const char *Name);
+static void Plc_DB_UpdatePlcName (long PlcCod,const char *FieldName,const char *NewPlcName);
 
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
-static void Plc_CreatePlace (struct Plc_Place *Plc);
+static void Plc_DB_CreatePlace (struct Plc_Place *Plc);
 
 static void Plc_EditingPlaceConstructor (void);
 static void Plc_EditingPlaceDestructor (void);
@@ -131,95 +132,95 @@ void Plc_SeePlaces (void)
       Box_BoxBegin (NULL,Txt_Places,
                     Plc_PutIconsListingPlaces,NULL,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
-      HTM_TABLE_BeginWideMarginPadding (2);
-      HTM_TR_Begin (NULL);
-      for (Order  = (Plc_Order_t) 0;
-	   Order <= (Plc_Order_t) (Plc_NUM_ORDERS - 1);
-	   Order++)
-	{
-	 HTM_TH_Begin (1,1,"LM");
+	 HTM_TABLE_BeginWideMarginPadding (2);
+	    HTM_TR_Begin (NULL);
+	    for (Order  = (Plc_Order_t) 0;
+		 Order <= (Plc_Order_t) (Plc_NUM_ORDERS - 1);
+		 Order++)
+	      {
+	       HTM_TH_Begin (1,1,"LM");
 
-	 Frm_BeginForm (ActSeePlc);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_PLACES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-	 if (Order == Places.SelectedOrder)
-	    HTM_U_Begin ();
-	 HTM_Txt (Txt_PLACES_ORDER[Order]);
-	 if (Order == Places.SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
+		  Frm_BeginForm (ActSeePlc);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		     HTM_BUTTON_SUBMIT_Begin (Txt_PLACES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+			if (Order == Places.SelectedOrder)
+			   HTM_U_Begin ();
+			HTM_Txt (Txt_PLACES_ORDER[Order]);
+			if (Order == Places.SelectedOrder)
+			   HTM_U_End ();
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
 
-	 HTM_TH_End ();
-	}
-      HTM_TR_End ();
+	       HTM_TH_End ();
+	      }
+	    HTM_TR_End ();
 
-      /***** Write all places and their nuber of centers *****/
-      for (NumPlc = 0;
-	   NumPlc < Places.Num;
-	   NumPlc++)
-	{
-	 /* Write data of this place */
-	 HTM_TR_Begin (NULL);
+	    /***** Write all places and their nuber of centers *****/
+	    for (NumPlc = 0;
+		 NumPlc < Places.Num;
+		 NumPlc++)
+	      {
+	       /* Write data of this place */
+	       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
-	 HTM_Txt (Places.Lst[NumPlc].FullName);
-	 HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"DAT LM\"");
+		     HTM_Txt (Places.Lst[NumPlc].FullName);
+		  HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
-	 HTM_Unsigned (Places.Lst[NumPlc].NumCtrs);
-	 HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"DAT RM\"");
+		     HTM_Unsigned (Places.Lst[NumPlc].NumCtrs);
+		  HTM_TD_End ();
 
-	 HTM_TR_End ();
-	 NumCtrsWithPlc += Places.Lst[NumPlc].NumCtrs;
-	}
+	       HTM_TR_End ();
+	       NumCtrsWithPlc += Places.Lst[NumPlc].NumCtrs;
+	      }
 
-      /***** Separation row *****/
-      HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"2\" class=\"DAT\"");
-      HTM_NBSP ();
-      HTM_TD_End ();
-      HTM_TR_End ();
+	    /***** Separation row *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TD_Begin ("colspan=\"2\" class=\"DAT\"");
+		  HTM_NBSP ();
+	       HTM_TD_End ();
+	    HTM_TR_End ();
 
-      /***** Write centers (of the current institution) with other place *****/
-      NumCtrsInOtherPlcs = Ctr_DB_GetNumCtrsInPlc (0);
-      HTM_TR_Begin (NULL);
+	    /***** Write centers (of the current institution) with other place *****/
+	    NumCtrsInOtherPlcs = Ctr_DB_GetNumCtrsInPlc (0);
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_Other_places);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LM\"");
+		  HTM_Txt (Txt_Other_places);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (NumCtrsInOtherPlcs);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Unsigned (NumCtrsInOtherPlcs);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
-      NumCtrsWithPlc += NumCtrsInOtherPlcs;
+	    HTM_TR_End ();
+	    NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
-      /***** Write centers (of the current institution) with no place *****/
-      HTM_TR_Begin (NULL);
+	    /***** Write centers (of the current institution) with no place *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT LM\"");
-      HTM_Txt (Txt_Place_unspecified);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT LM\"");
+		  HTM_Txt (Txt_Place_unspecified);
+	       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
-	            NumCtrsWithPlc);
-      HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_Unsigned (Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
+				NumCtrsWithPlc);
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-      /***** Button to create place *****/
-      if (Plc_CheckIfICanCreatePlaces ())
-	{
-	 Frm_BeginForm (ActEdiPlc);
-	 Btn_PutConfirmButton (Txt_New_place);
-	 Frm_EndForm ();
-	}
+	 /***** Button to create place *****/
+	 if (Plc_CheckIfICanCreatePlaces ())
+	   {
+	    Frm_BeginForm (ActEdiPlc);
+	    Btn_PutConfirmButton (Txt_New_place);
+	    Frm_EndForm ();
+	   }
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -525,60 +526,62 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
    unsigned NumPlc;
    struct Plc_Place *Plc;
 
-   /***** Write heading *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
-   Plc_PutHeadPlaces ();
 
-   /***** Write all the places *****/
-   for (NumPlc = 0;
-	NumPlc < Places->Num;
-	NumPlc++)
-     {
-      Plc = &Places->Lst[NumPlc];
+      /***** Write heading *****/
+      Plc_PutHeadPlaces ();
 
-      HTM_TR_Begin (NULL);
+      /***** Write all the places *****/
+      for (NumPlc = 0;
+	   NumPlc < Places->Num;
+	   NumPlc++)
+	{
+	 Plc = &Places->Lst[NumPlc];
 
-      /* Put icon to remove place */
-      HTM_TD_Begin ("class=\"BM\"");
-      if (Plc->NumCtrs)	// Place has centers ==> deletion forbidden
-         Ico_PutIconRemovalNotAllowed ();
-      else
-	 Ico_PutContextualIconToRemove (ActRemPlc,NULL,
-					Plc_PutParamPlcCod,&Plc->PlcCod);
-      HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-      /* Place code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Long (Plc->PlcCod);
-      HTM_TD_End ();
+	    /* Put icon to remove place */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       if (Plc->NumCtrs)	// Place has centers ==> deletion forbidden
+		  Ico_PutIconRemovalNotAllowed ();
+	       else
+		  Ico_PutContextualIconToRemove (ActRemPlc,NULL,
+						 Plc_PutParamPlcCod,&Plc->PlcCod);
+	    HTM_TD_End ();
 
-      /* Place short name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenPlcSho);
-      Plc_PutParamPlcCod (&Plc->PlcCod);
-      HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_SHORT_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Place code */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Long (Plc->PlcCod);
+	    HTM_TD_End ();
 
-      /* Place full name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenPlcFul);
-      Plc_PutParamPlcCod (&Plc->PlcCod);
-      HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_FULL_NAME\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Place short name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenPlcSho);
+	       Plc_PutParamPlcCod (&Plc->PlcCod);
+		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Number of centers */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Unsigned (Plc->NumCtrs);
-      HTM_TD_End ();
+	    /* Place full name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenPlcFul);
+	       Plc_PutParamPlcCod (&Plc->PlcCod);
+		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	    /* Number of centers */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (Plc->NumCtrs);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -718,14 +721,14 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentPlcName,NewPlcName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_CheckIfPlaceNameExists (ParamName,NewPlcName,Plc_EditingPlc->PlcCod))
+         if (Plc_DB_CheckIfPlaceNameExists (Plc_EditingPlc->PlcCod,ParamName,NewPlcName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_place_X_already_exists,
                              NewPlcName);
          else
            {
             /* Update the table changing old name by new name */
-            Plc_UpdatePlcNameDB (Plc_EditingPlc->PlcCod,FieldName,NewPlcName);
+            Plc_DB_UpdatePlcName (Plc_EditingPlc->PlcCod,FieldName,NewPlcName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -749,7 +752,8 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 /********************** Check if the name of place exists ********************/
 /*****************************************************************************/
 
-static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod)
+static bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
+                                           const char *FieldName,const char *Name)
   {
    /***** Get number of places with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of a place"
@@ -767,7 +771,7 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 /****************** Update place name in table of places *********************/
 /*****************************************************************************/
 
-static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName)
+static void Plc_DB_UpdatePlcName (long PlcCod,const char *FieldName,const char *NewPlcName)
   {
    /***** Update place changing old name by new name */
    DB_QueryUPDATE ("can not update the name of a place",
@@ -806,47 +810,47 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewPlc);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_place,
-                      NULL,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_place,
+			 NULL,NULL,
+			 NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Plc_PutHeadPlaces ();
+	 /***** Write heading *****/
+	 Plc_PutHeadPlaces ();
 
-   HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-   /***** Column to remove place, disabled here *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    /***** Column to remove place, disabled here *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   /***** Place code *****/
-   HTM_TD_Begin ("class=\"CODE\"");
-   HTM_TD_End ();
+	    /***** Place code *****/
+	    HTM_TD_Begin ("class=\"CODE\"");
+	    HTM_TD_End ();
 
-   /***** Place short name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Place short name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Place full name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Place full name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_FULL_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Number of centers *****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+	    /***** Number of centers *****/
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (0);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_place);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_place);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -864,13 +868,11 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Centers;
 
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"RM",Txt_Centers);
-
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_Short_name);
+      HTM_TH (1,1,"LM",Txt_Full_name);
+      HTM_TH (1,1,"RM",Txt_Centers);
    HTM_TR_End ();
   }
 
@@ -898,17 +900,17 @@ void Plc_ReceiveFormNewPlace (void)
        Plc_EditingPlc->FullName[0])	// If there's a place name
      {
       /***** If name of place was in database... *****/
-      if (Plc_CheckIfPlaceNameExists ("ShortName",Plc_EditingPlc->ShrtName,-1L))
+      if (Plc_DB_CheckIfPlaceNameExists (-1L,"ShortName",Plc_EditingPlc->ShrtName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_place_X_already_exists,
                           Plc_EditingPlc->ShrtName);
-      else if (Plc_CheckIfPlaceNameExists ("FullName",Plc_EditingPlc->FullName,-1L))
+      else if (Plc_DB_CheckIfPlaceNameExists (-1L,"FullName",Plc_EditingPlc->FullName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_place_X_already_exists,
                           Plc_EditingPlc->FullName);
       else	// Add new place to database
         {
-         Plc_CreatePlace (Plc_EditingPlc);
+         Plc_DB_CreatePlace (Plc_EditingPlc);
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,
 			  Plc_EditingPlc->FullName);
         }
@@ -922,7 +924,7 @@ void Plc_ReceiveFormNewPlace (void)
 /**************************** Create a new place *****************************/
 /*****************************************************************************/
 
-static void Plc_CreatePlace (struct Plc_Place *Plc)
+static void Plc_DB_CreatePlace (struct Plc_Place *Plc)
   {
    /***** Create a new place *****/
    DB_QueryINSERT ("can not create place",

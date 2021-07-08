@@ -588,11 +588,11 @@ void InsCfg_ChangeInsCty (void)
       Cty_GetDataOfCountryByCod (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))
+      if (Ins_DB_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
 		          Gbl.Hierarchy.Ins.ShrtName);
-      else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Ins.FullName,-1L,NewCty.CtyCod))
+      else if (Ins_DB_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Ins.FullName,-1L,NewCty.CtyCod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
 		          Gbl.Hierarchy.Ins.FullName);
@@ -662,7 +662,7 @@ void InsCfg_ChangeInsWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ins_UpdateInsWWWDB (Gbl.Hierarchy.Ins.InsCod,NewWWW);
+      Ins_DB_UpdateInsWWW (Gbl.Hierarchy.Ins.InsCod,NewWWW);
       Str_Copy (Gbl.Hierarchy.Ins.WWW,NewWWW,sizeof (Gbl.Hierarchy.Ins.WWW) - 1);
 
       /***** Write message to show the change made *****/

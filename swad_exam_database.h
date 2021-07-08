@@ -1,7 +1,7 @@
-// swad_exam_log.h: exam access log
+// swad_exam_database.h: exams operations with database
 
-#ifndef _SWAD_EXA_LOG
-#define _SWAD_EXA_LOG
+#ifndef _SWAD_EXA_DB
+#define _SWAD_EXA_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -23,43 +23,26 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /*****************************************************************************/
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_exam_print.h"
+#include "swad_exam_log.h"
+// #include "swad_exam_print.h"
 
 /*****************************************************************************/
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define ExaLog_NUM_ACTIONS 5
-// Don't change the numbers! If change ==> update them in table exa_log
-typedef enum
-  {
-   ExaLog_UNKNOWN_ACTION  = 0,
-   ExaLog_START_EXAM      = 1,
-   ExaLog_RESUME_EXAM     = 2,
-   ExaLog_ANSWER_QUESTION = 3,
-   ExaLog_FINISH_EXAM     = 4,
-  } ExaLog_Action_t;
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ExaLog_SetPrnCod (long PrnCod);
-long ExaLog_GetPrnCod (void);
-void ExaLog_SetAction (ExaLog_Action_t Action);
-ExaLog_Action_t ExaLog_GetAction (void);
-void ExaLog_SetQstInd (unsigned QstInd);
-int ExaLog_GetQstInd (void);
-void ExaLog_SetIfCanAnswer (bool CanBeAnswered);
-bool ExaLog_GetIfCanAnswer (void);
+bool ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
+bool ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);
 
-void ExaLog_LogAccess (long LogCod);
-
-void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print);
+void ExaLog_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action);
+void ExaLog_DB_LogSession (long LogCod,long PrnCod);
+void ExaLog_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB);
 
 #endif

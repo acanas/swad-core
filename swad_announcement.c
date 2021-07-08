@@ -266,7 +266,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
 
-   /***** Start yellow note *****/
+   /***** Begin yellow note *****/
    HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Status]);
 
       if (ICanEdit)

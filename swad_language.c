@@ -94,7 +94,7 @@ void Lan_PutBoxToSelectLanguage (void)
    Box_BoxBegin (NULL,Txt_Language,
                  Lan_PutIconsLanguage,NULL,
                  Hlp_PROFILE_Settings_language,Box_NOT_CLOSABLE);
-   Lan_PutSelectorToSelectLanguage ();
+      Lan_PutSelectorToSelectLanguage ();
    Box_BoxEnd ();
   }
 
@@ -119,18 +119,18 @@ void Lan_PutSelectorToSelectLanguage (void)
    unsigned LanUnsigned;
 
    Frm_BeginForm (ActReqChgLan);
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "name=\"Lan\" style=\"width:112px; margin:0;\"");
-   for (Lan  = (Lan_Language_t) 1;
-	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	Lan++)
-     {
-      LanUnsigned = (unsigned) Lan;
-      HTM_OPTION (HTM_Type_UNSIGNED,&LanUnsigned,
-		  Lan == Gbl.Prefs.Language,false,
-		  "%s",Txt_STR_LANG_NAME[Lan]);
-     }
-   HTM_SELECT_End ();
+      HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			"name=\"Lan\" style=\"width:112px; margin:0;\"");
+	 for (Lan  = (Lan_Language_t) 1;
+	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	      Lan++)
+	   {
+	    LanUnsigned = (unsigned) Lan;
+	    HTM_OPTION (HTM_Type_UNSIGNED,&LanUnsigned,
+			Lan == Gbl.Prefs.Language,false,
+			"%s",Txt_STR_LANG_NAME[Lan]);
+	   }
+      HTM_SELECT_End ();
    Frm_EndForm ();
   }
 

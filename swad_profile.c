@@ -100,14 +100,14 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
                                    const struct UsrFigures *UsrFigures);
 static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
                                      const struct UsrFigures *UsrFigures);
-static void Prf_StartListItem (const char *Title,const char *Icon);
+static void Prf_BeginListItem (const char *Title,const char *Icon);
 static void Prf_EndListItem (void);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
 
-static unsigned Prf_GetRankingFigure (long UsrCod,const char *FieldName);
-static unsigned Prf_GetNumUsrsWithFigure (const char *FieldName);
-static unsigned Prf_GetRankingNumClicksPerDay (long UsrCod);
-static unsigned Prf_GetNumUsrsWithNumClicksPerDay (void);
+static unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName);
+static unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName);
+static unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
+static unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
 static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs);
 
 static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
@@ -120,7 +120,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
                                   bool CreatingMyOwnAccount);
-static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
+static bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe);
@@ -199,34 +199,34 @@ void Prf_RequestUserProfile (void)
      {
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
-      Prf_PutLinkMyPublicProfile ();	// My public profile
-      Fol_PutLinkWhoToFollow ();	// Users to follow
+	 Prf_PutLinkMyPublicProfile ();	// My public profile
+	 Fol_PutLinkWhoToFollow ();	// Users to follow
       Mnu_ContextMenuEnd ();
      }
 
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOthPubPrf);
 
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Another_user_s_profile,
-                 NULL,NULL,
-                 Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Another_user_s_profile,
+		    NULL,NULL,
+		    Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
 
-   /***** Form to request user's @nickname *****/
-   /* By default, the nickname is filled with my nickname
-      If no user logged ==> the nickname is empty */
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Nickname);
+	 /***** Form to request user's @nickname *****/
+	 /* By default, the nickname is filled with my nickname
+	    If no user logged ==> the nickname is empty */
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_Nickname);
 
-   snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
-	     Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICK_FROM_FORM,NickWithArr,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"18\"");
-   HTM_LABEL_End ();
+	    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
+		      Gbl.Usrs.Me.UsrDat.Nickname);
+	    HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICK_FROM_FORM,NickWithArr,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "size=\"18\"");
+	 HTM_LABEL_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Continue);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Continue);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -263,7 +263,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
 	    /* Show timeline */
 	    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
-   	    Tml_ShowTimelineUsr (&Timeline);
+	       Tml_ShowTimelineUsr (&Timeline);
 	    HTM_SECTION_End ();
 	   }
 	}
@@ -306,11 +306,11 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	{
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
-	 if (ItsMe)
-	    Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
-	 else	// Not me
-	    Prf_PutLinkMyPublicProfile ();		// My public profile
-	 Fol_PutLinkWhoToFollow ();			// Users to follow
+	    if (ItsMe)
+	       Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
+	    else	// Not me
+	       Prf_PutLinkMyPublicProfile ();		// My public profile
+	    Fol_PutLinkWhoToFollow ();			// Users to follow
 	 Mnu_ContextMenuEnd ();
 	}
 
@@ -415,53 +415,53 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
    /***** Left list *****/
-   /* Start left list */
+   /* Begin left list */
    HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONT\"");
-   HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
+      HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
 
-   /* Time since first click */
-   Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
+	 /* Time since first click */
+	 Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
 
-   /* Number of courses in which the user has a role */
-   for (Role = Rol_TCH;
-	Role >= Rol_STD;
-	Role--)
-      Prf_ShowNumCrssWithRole (UsrDat,Role);
+	 /* Number of courses in which the user has a role */
+	 for (Role = Rol_TCH;
+	      Role >= Rol_STD;
+	      Role--)
+	    Prf_ShowNumCrssWithRole (UsrDat,Role);
 
-   /* Number of files currently published */
-   Prf_ShowNumFilesCurrentlyPublished (UsrDat);
+	 /* Number of files currently published */
+	 Prf_ShowNumFilesCurrentlyPublished (UsrDat);
 
-   /* End left list */
-   HTM_UL_End ();
+      /* End left list */
+      HTM_UL_End ();
    HTM_DIV_End ();
 
    /***** Right list *****/
    HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONT\"");
 
-   UsrIsBannedFromRanking = Usr_DB_CheckIfUsrBanned (UsrDat->UsrCod);
-   if (!UsrIsBannedFromRanking)
-     {
-      /* Start right list */
-      HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
+      UsrIsBannedFromRanking = Usr_DB_CheckIfUsrBanned (UsrDat->UsrCod);
+      if (!UsrIsBannedFromRanking)
+	{
+	 /* Begin right list */
+	 HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
 
-      /* Number of clicks */
-      Prf_ShowNumClicks (UsrDat,&UsrFigures);
+	    /* Number of clicks */
+	    Prf_ShowNumClicks (UsrDat,&UsrFigures);
 
-      /* Number of file views */
-      Prf_ShowNumFileViews (UsrDat,&UsrFigures);
+	    /* Number of file views */
+	    Prf_ShowNumFileViews (UsrDat,&UsrFigures);
 
-      /* Number of social publications */
-      Prf_ShowNumSocialPublications (UsrDat,&UsrFigures);
+	    /* Number of social publications */
+	    Prf_ShowNumSocialPublications (UsrDat,&UsrFigures);
 
-      /* Number of posts in forums */
-      Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
+	    /* Number of posts in forums */
+	    Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
 
-      /* Number of messages sent */
-      Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
+	    /* Number of messages sent */
+	    Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
 
-      /* End right list */
-      HTM_UL_End ();
-     }
+	 /* End right list */
+	 HTM_UL_End ();
+	}
 
    HTM_DIV_End ();
   }
@@ -485,7 +485,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
    int NumMonths;
 
    /***** Time since first click *****/
-   Prf_StartListItem (Txt_TIME_Since,"clock.svg");
+   Prf_BeginListItem (Txt_TIME_Since,"clock.svg");
 
    if (UsrFigures->FirstClickTimeUTC)
      {
@@ -547,19 +547,19 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
    /***** Number of courses in which the user has a given role *****/
    NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
 
-   Prf_StartListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
+   Prf_BeginListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
 
-   HTM_TxtF ("%u&nbsp;%s",NumCrss,Txt_courses_ABBREVIATION);
+      HTM_TxtF ("%u&nbsp;%s",NumCrss,Txt_courses_ABBREVIATION);
 
-   if (NumCrss)
-      HTM_TxtF ("&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-	        Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
-		                            (1 << Rol_NET) |
-		                            (1 << Rol_TCH)),
-	        Txt_teachers_ABBREVIATION,
-	        Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
-					    (1 << Rol_STD)),
-	        Txt_students_ABBREVIATION);
+      if (NumCrss)
+	 HTM_TxtF ("&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+		   Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+					       (1 << Rol_NET) |
+					       (1 << Rol_TCH)),
+		   Txt_teachers_ABBREVIATION,
+		   Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+					       (1 << Rol_STD)),
+		   Txt_students_ABBREVIATION);
 
    Prf_EndListItem ();
   }
@@ -583,14 +583,14 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
    else
       NumPublicFiles = 0;
 
-   Prf_StartListItem (Txt_Files_uploaded,"file.svg");
+   Prf_BeginListItem (Txt_Files_uploaded,"file.svg");
 
-   HTM_TxtF ("%u&nbsp;%s",NumFiles,(NumFiles == 1) ? Txt_file :
-		                                   Txt_files);
-   HTM_NBSP ();
-   HTM_Txt ("(");
-   HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
-   HTM_Txt (")");
+      HTM_TxtF ("%u&nbsp;%s",NumFiles,(NumFiles == 1) ? Txt_file :
+						      Txt_files);
+      HTM_NBSP ();
+      HTM_Txt ("(");
+      HTM_TxtF ("%u&nbsp;%s",NumPublicFiles,Txt_public_FILES);
+      HTM_Txt (")");
 
    Prf_EndListItem ();
   }
@@ -607,28 +607,28 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
    extern const char *Txt_day;
 
    /***** Number of clicks *****/
-   Prf_StartListItem (Txt_Clicks,"mouse-pointer.svg");
+   Prf_BeginListItem (Txt_Clicks,"mouse-pointer.svg");
 
-   if (UsrFigures->NumClicks >= 0)
-     {
-      HTM_Long (UsrFigures->NumClicks);
-      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_clicks);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
-		       Prf_GetNumUsrsWithFigure ("NumClicks"));
-      if (UsrFigures->NumDays > 0)
+      if (UsrFigures->NumClicks >= 0)
 	{
-	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
-		              (double) UsrFigures->NumDays);
-	 HTM_TxtF ("/%s&nbsp;",Txt_day);
-	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
-			  Prf_GetNumUsrsWithNumClicksPerDay ());
-	 HTM_Txt (")");
+	 HTM_Long (UsrFigures->NumClicks);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",Txt_clicks);
+	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
+			  Prf_DB_GetNumUsrsWithFigure ("NumClicks"));
+	 if (UsrFigures->NumDays > 0)
+	   {
+	    HTM_TxtF ("&nbsp;%s","(");
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumClicks /
+				 (double) UsrFigures->NumDays);
+	    HTM_TxtF ("/%s&nbsp;",Txt_day);
+	    Prf_ShowRanking (Prf_DB_GetRankingNumClicksPerDay (UsrDat->UsrCod),
+			     Prf_DB_GetNumUsrsWithNumClicksPerDay ());
+	    HTM_Txt (")");
+	   }
 	}
-     }
-   else	// Number of clicks is unknown
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
+      else	// Number of clicks is unknown
+	 /***** Button to fetch and store user's figures *****/
+	 Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -646,26 +646,26 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
    extern const char *Txt_day;
 
    /***** Number of file views *****/
-   Prf_StartListItem (Txt_Downloads,"download.svg");
+   Prf_BeginListItem (Txt_Downloads,"download.svg");
 
-   if (UsrFigures->NumFileViews >= 0)
-     {
-      HTM_Long (UsrFigures->NumFileViews);
-      HTM_TxtF ("&nbsp;%s&nbsp;",(UsrFigures->NumFileViews == 1) ? Txt_download :
-						                   Txt_downloads);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
-		       Prf_GetNumUsrsWithFigure ("NumFileViews"));
-      if (UsrFigures->NumDays > 0)
+      if (UsrFigures->NumFileViews >= 0)
 	{
-	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_DoubleFewDigits ((double) UsrFigures->NumFileViews /
-	                      (double) UsrFigures->NumDays);
-	 HTM_TxtF ("/%s)",Txt_day);
+	 HTM_Long (UsrFigures->NumFileViews);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",(UsrFigures->NumFileViews == 1) ? Txt_download :
+								      Txt_downloads);
+	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
+			  Prf_DB_GetNumUsrsWithFigure ("NumFileViews"));
+	 if (UsrFigures->NumDays > 0)
+	   {
+	    HTM_TxtF ("&nbsp;%s","(");
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumFileViews /
+				 (double) UsrFigures->NumDays);
+	    HTM_TxtF ("/%s)",Txt_day);
+	   }
 	}
-     }
-   else	// Number of file views is unknown
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
+      else	// Number of file views is unknown
+	 /***** Button to fetch and store user's figures *****/
+	 Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -683,26 +683,26 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
    extern const char *Txt_day;
 
    /***** Number of social publications *****/
-   Prf_StartListItem (Txt_Timeline,"comment-dots.svg");
+   Prf_BeginListItem (Txt_Timeline,"comment-dots.svg");
 
-   if (UsrFigures->NumSocPub >= 0)
-     {
-      HTM_Int (UsrFigures->NumSocPub);
-      HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumSocPub == 1 ? Txt_TIMELINE_post :
-					                      Txt_TIMELINE_posts);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
-		       Prf_GetNumUsrsWithFigure ("NumSocPub"));
-      if (UsrFigures->NumDays > 0)
+      if (UsrFigures->NumSocPub >= 0)
 	{
-	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_DoubleFewDigits ((double) UsrFigures->NumSocPub /
-		              (double) UsrFigures->NumDays);
-	 HTM_TxtF ("/%s)",Txt_day);
+	 HTM_Int (UsrFigures->NumSocPub);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumSocPub == 1 ? Txt_TIMELINE_post :
+								 Txt_TIMELINE_posts);
+	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
+			  Prf_DB_GetNumUsrsWithFigure ("NumSocPub"));
+	 if (UsrFigures->NumDays > 0)
+	   {
+	    HTM_TxtF ("&nbsp;%s","(");
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumSocPub /
+				 (double) UsrFigures->NumDays);
+	    HTM_TxtF ("/%s)",Txt_day);
+	   }
 	}
-     }
-   else	// Number of social publications is unknown
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
+      else	// Number of social publications is unknown
+	 /***** Button to fetch and store user's figures *****/
+	 Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -720,26 +720,26 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
    extern const char *Txt_day;
 
    /***** Number of posts in forums *****/
-   Prf_StartListItem (Txt_Forums,"comments.svg");
+   Prf_BeginListItem (Txt_Forums,"comments.svg");
 
-   if (UsrFigures->NumForPst >= 0)
-     {
-      HTM_Long (UsrFigures->NumForPst);
-      HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForPst == 1 ? Txt_FORUM_post :
-					                      Txt_FORUM_posts);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
-		       Prf_GetNumUsrsWithFigure ("NumForPst"));
-      if (UsrFigures->NumDays > 0)
+      if (UsrFigures->NumForPst >= 0)
 	{
-	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_DoubleFewDigits ((double) UsrFigures->NumForPst /
-		              (double) UsrFigures->NumDays);
-	 HTM_TxtF ("/%s)",Txt_day);
+	 HTM_Long (UsrFigures->NumForPst);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForPst == 1 ? Txt_FORUM_post :
+								 Txt_FORUM_posts);
+	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
+			  Prf_DB_GetNumUsrsWithFigure ("NumForPst"));
+	 if (UsrFigures->NumDays > 0)
+	   {
+	    HTM_TxtF ("&nbsp;%s","(");
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumForPst /
+				 (double) UsrFigures->NumDays);
+	    HTM_TxtF ("/%s)",Txt_day);
+	   }
 	}
-     }
-   else	// Number of forum posts is unknown
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
+      else	// Number of forum posts is unknown
+	 /***** Button to fetch and store user's figures *****/
+	 Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
@@ -757,40 +757,40 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
    extern const char *Txt_day;
 
    /***** Number of messages sent *****/
-   Prf_StartListItem (Txt_Messages,"envelope.svg");
+   Prf_BeginListItem (Txt_Messages,"envelope.svg");
 
-   if (UsrFigures->NumMsgSnt >= 0)
-     {
-      HTM_Long (UsrFigures->NumMsgSnt);
-      HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMsgSnt == 1 ? Txt_message :
-					                      Txt_messages);
-      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
-		       Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
-      if (UsrFigures->NumDays > 0)
+      if (UsrFigures->NumMsgSnt >= 0)
 	{
-	 HTM_TxtF ("&nbsp;%s","(");
-	 HTM_DoubleFewDigits ((double) UsrFigures->NumMsgSnt /
-		              (double) UsrFigures->NumDays);
-	 HTM_TxtF ("/%s)",Txt_day);
+	 HTM_Long (UsrFigures->NumMsgSnt);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMsgSnt == 1 ? Txt_message :
+								 Txt_messages);
+	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
+			  Prf_DB_GetNumUsrsWithFigure ("NumMsgSnt"));
+	 if (UsrFigures->NumDays > 0)
+	   {
+	    HTM_TxtF ("&nbsp;%s","(");
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumMsgSnt /
+				 (double) UsrFigures->NumDays);
+	    HTM_TxtF ("/%s)",Txt_day);
+	   }
 	}
-     }
-   else	// Number of messages sent is unknown
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
+      else	// Number of messages sent is unknown
+	 /***** Button to fetch and store user's figures *****/
+	 Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
    Prf_EndListItem ();
   }
 
 /*****************************************************************************/
-/****************** Start/end list item in user's profile ********************/
+/****************** Begin/end list item in user's profile ********************/
 /*****************************************************************************/
 
-static void Prf_StartListItem (const char *Title,const char *Icon)
+static void Prf_BeginListItem (const char *Title,const char *Icon)
   {
    HTM_LI_Begin ("title=\"%s\" class=\"PRF_FIG_LI\""
 		 " style=\"background-image:url('%s/%s');\"",
-	    Title,
-	    Cfg_URL_ICON_PUBLIC,Icon);
+		 Title,
+		 Cfg_URL_ICON_PUBLIC,Icon);
   }
 
 static void Prf_EndListItem (void)
@@ -809,11 +809,11 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
 
    Frm_BeginForm (ActCalFig);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-   HTM_BUTTON_Animated_Begin (Txt_Calculate,
-			      The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
-			      NULL);
-   Ico_PutCalculateIconWithText (Txt_Calculate);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_Animated_Begin (Txt_Calculate,
+				 The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
+				 NULL);
+	 Ico_PutCalculateIconWithText (Txt_Calculate);
+      HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -889,7 +889,7 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 /********** Get ranking of a user according to the number of clicks **********/
 /*****************************************************************************/
 
-static unsigned Prf_GetRankingFigure (long UsrCod,const char *FieldName)
+static unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName)
   {
    /***** Select number of rows with figure
           greater than the figure of this user *****/
@@ -911,7 +911,7 @@ static unsigned Prf_GetRankingFigure (long UsrCod,const char *FieldName)
 /********************* Get number of users with a figure *********************/
 /*****************************************************************************/
 
-static unsigned Prf_GetNumUsrsWithFigure (const char *FieldName)
+static unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName)
   {
    /***** Select number of rows with values already calculated *****/
    return (unsigned)
@@ -926,7 +926,7 @@ static unsigned Prf_GetNumUsrsWithFigure (const char *FieldName)
 /****** Get ranking of a user according to the number of clicks per day ******/
 /*****************************************************************************/
 
-static unsigned Prf_GetRankingNumClicksPerDay (long UsrCod)
+static unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod)
   {
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
@@ -952,7 +952,7 @@ static unsigned Prf_GetRankingNumClicksPerDay (long UsrCod)
 /************** Get number of users with number of clicks per day ************/
 /*****************************************************************************/
 
-static unsigned Prf_GetNumUsrsWithNumClicksPerDay (void)
+static unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void)
   {
    /***** Select number of rows with values already calculated *****/
    return (unsigned)
@@ -977,13 +977,13 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
    Frm_BeginForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",HieLvl_SYS);
    Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
-   if (asprintf (&Title,"#%u %s %u",
-                 Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_BUTTON_SUBMIT_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
-   free (Title);
-   HTM_TxtF ("#%u",Rank);
-   HTM_BUTTON_End ();
+      if (asprintf (&Title,"#%u %s %u",
+		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_BUTTON_SUBMIT_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
+      free (Title);
+	 HTM_TxtF ("#%u",Rank);
+      HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -1088,7 +1088,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Update first click time in user's figures *****/
-      if (Prf_CheckIfUsrFiguresExists (UsrCod))
+      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
 			   " SET FirstClickTime=FROM_UNIXTIME(%ld)"
@@ -1122,7 +1122,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
 		     UsrCod);
 
       /***** Update number of clicks in user's figures *****/
-      if (Prf_CheckIfUsrFiguresExists (UsrCod))
+      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
 			   " SET NumClicks=%ld"
@@ -1151,7 +1151,7 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumSocPub = (int) Tml_DB_GetNumPubsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
-      if (Prf_CheckIfUsrFiguresExists (UsrCod))
+      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
 			   " SET NumSocPub=%d"
@@ -1180,7 +1180,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumFileViews = (long) Brw_DB_GetNumFileViewsUsr (UsrCod);
 
       /***** Update number of file views in user's figures *****/
-      if (Prf_CheckIfUsrFiguresExists (UsrCod))
+      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
 			   " SET NumFileViews=%d"
@@ -1209,7 +1209,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumForPst = For_DB_GetNumPostsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
-      if (Prf_CheckIfUsrFiguresExists (UsrCod))
+      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
 			   " SET NumForPst=%d"
@@ -1238,7 +1238,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       UsrFigures.NumMsgSnt = (int) Msg_DB_GetNumMsgsSentByUsr (UsrCod);
 
       /***** Update number of messages sent in user's figures *****/
-      if (Prf_CheckIfUsrFiguresExists (UsrCod))
+      if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 DB_QueryUPDATE ("can not update user's figures",
 			 "UPDATE usr_figures"
 			   " SET NumMsgSnt=%d"
@@ -1336,7 +1336,7 @@ void Prf_DB_RemoveUsrFigures (long UsrCod)
 /*** Check if it exists an entry for this user in table of user's figures ****/
 /*****************************************************************************/
 
-static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
+static bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod)
   {
    return (DB_QueryCOUNT ("can not get user's first click",
 			  "SELECT COUNT(*)"
@@ -1349,7 +1349,7 @@ static bool Prf_CheckIfUsrFiguresExists (long UsrCod)
 /*************** Increment number of clicks made by a user *******************/
 /*****************************************************************************/
 
-void Prf_IncrementNumClicksUsr (long UsrCod)
+void Prf_DB_IncrementNumClicksUsr (long UsrCod)
   {
    /***** Increment number of clicks *****/
    // If NumClicks < 0 ==> not yet calculated, so do nothing
@@ -1365,7 +1365,7 @@ void Prf_IncrementNumClicksUsr (long UsrCod)
 /********* Increment number of social publications sent by a user ************/
 /*****************************************************************************/
 
-void Prf_IncrementNumPubsUsr (long UsrCod)
+void Prf_DB_IncrementNumPubsUsr (long UsrCod)
   {
    /***** Increment number of social publications *****/
    // If NumSocPub < 0 ==> not yet calculated, so do nothing
@@ -1381,7 +1381,7 @@ void Prf_IncrementNumPubsUsr (long UsrCod)
 /************** Increment number of file views sent by a user ****************/
 /*****************************************************************************/
 
-void Prf_IncrementNumFileViewsUsr (long UsrCod)
+void Prf_DB_IncrementNumFileViewsUsr (long UsrCod)
   {
    /***** Increment number of file views *****/
    // If NumFileViews < 0 ==> not yet calculated, so do nothing
@@ -1397,7 +1397,7 @@ void Prf_IncrementNumFileViewsUsr (long UsrCod)
 /************* Increment number of forum posts sent by a user ****************/
 /*****************************************************************************/
 
-void Prf_IncrementNumForPstUsr (long UsrCod)
+void Prf_DB_IncrementNumForPstUsr (long UsrCod)
   {
    /***** Increment number of forum posts *****/
    // If NumForPst < 0 ==> not yet calculated, so do nothing
@@ -1413,7 +1413,7 @@ void Prf_IncrementNumForPstUsr (long UsrCod)
 /*************** Increment number of messages sent by a user *****************/
 /*****************************************************************************/
 
-void Prf_IncrementNumMsgSntUsr (long UsrCod)
+void Prf_DB_IncrementNumMsgSntUsr (long UsrCod)
   {
    /***** Increment number of messages sent *****/
    // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
@@ -1631,41 +1631,41 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
       HTM_TABLE_Begin (NULL);
 
-      for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
-	   NumUsr <= NumUsrs;
-	   NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-	{
-	 /***** Get user and number of clicks *****/
-	 row = mysql_fetch_row (*mysql_res);
-
-	 /* Get user's code (row[0]) */
-	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,
-	                              Usr_DONT_GET_PREFS,
-	                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	 /* Get figure (row[1]) */
-	 if (sscanf (row[1],"%ld",&Figure) != 1)
-	    Err_ShowErrorAndExit ("Error reading user's figure.");
-
-	 if (Figure < FigureHigh)
+	 for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
+	      NumUsr <= NumUsrs;
+	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
-	    Rank = NumUsr;
-	    FigureHigh = Figure;
-	   }
+	    /***** Get user and number of clicks *****/
+	    row = mysql_fetch_row (*mysql_res);
 
-	 /***** Show row *****/
-	 HTM_TR_Begin (NULL);
-         Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	 HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
-		       ItsMe ? "DAT_SMALL_N" :
-		               "DAT_SMALL",
-		       Gbl.RowEvenOdd);
-	 HTM_Long (Figure);
-	 HTM_TD_End ();
-	 HTM_TR_End ();
-	}
+	    /* Get user's code (row[0]) */
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+					 Usr_DONT_GET_PREFS,
+					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+	    /* Get figure (row[1]) */
+	    if (sscanf (row[1],"%ld",&Figure) != 1)
+	       Err_ShowErrorAndExit ("Error reading user's figure.");
+
+	    if (Figure < FigureHigh)
+	      {
+	       Rank = NumUsr;
+	       FigureHigh = Figure;
+	      }
+
+	    /***** Show row *****/
+	    HTM_TR_Begin (NULL);
+	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
+	       HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+			     ItsMe ? "DAT_SMALL_N" :
+				     "DAT_SMALL",
+			     Gbl.RowEvenOdd);
+		  HTM_Long (Figure);
+	       HTM_TD_End ();
+	    HTM_TR_End ();
+	   }
 
       HTM_TABLE_End ();
 
@@ -1847,39 +1847,39 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
       HTM_TABLE_Begin (NULL);
 
-      for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
-	   NumUsr <= NumUsrs;
-	   NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-	{
-	 /***** Get user and number of clicks *****/
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get user's code (row[0]) */
-	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,
-	                              Usr_DONT_GET_PREFS,
-	                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	 ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	 /* Get average number of clicks per day (row[1]) */
-	 NumClicksPerDay = Str_GetDoubleFromStr (row[1]);
-	 if (NumClicksPerDay < NumClicksPerDayHigh)
+	 for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
+	      NumUsr <= NumUsrs;
+	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
-	    Rank = NumUsr;
-	    NumClicksPerDayHigh = NumClicksPerDay;
-	   }
+	    /***** Get user and number of clicks *****/
+	    row = mysql_fetch_row (mysql_res);
 
-	 /***** Show row *****/
-	 HTM_TR_Begin (NULL);
-	 Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	 HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
-		       ItsMe ? "DAT_SMALL_N" :
-		               "DAT_SMALL",
-		       Gbl.RowEvenOdd);
-	 HTM_DoubleFewDigits (NumClicksPerDay);
-	 HTM_TD_End ();
-	 HTM_TR_End ();
-	}
+	    /* Get user's code (row[0]) */
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
+					 Usr_DONT_GET_PREFS,
+					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+
+	    /* Get average number of clicks per day (row[1]) */
+	    NumClicksPerDay = Str_GetDoubleFromStr (row[1]);
+	    if (NumClicksPerDay < NumClicksPerDayHigh)
+	      {
+	       Rank = NumUsr;
+	       NumClicksPerDayHigh = NumClicksPerDay;
+	      }
+
+	    /***** Show row *****/
+	    HTM_TR_Begin (NULL);
+	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
+	       HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+			     ItsMe ? "DAT_SMALL_N" :
+				     "DAT_SMALL",
+			     Gbl.RowEvenOdd);
+		  HTM_DoubleFewDigits (NumClicksPerDay);
+	       HTM_TD_End ();
+	    HTM_TR_End ();
+	   }
 
       HTM_TABLE_End ();
 

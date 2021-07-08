@@ -521,7 +521,7 @@ void Cht_OpenChatWindow (void)
    if ((FileChat = fopen (Cfg_PATH_AND_FILE_REL_CHAT_PRIVATE,"rb")) == NULL)
       Err_ShowErrorAndExit ("Can not open chat.");
 
-   /***** Start writing the index.html file to the output *****/
+   /***** Begin writing the index.html file to the output *****/
    HTM_Txt ("Content-type: text/html; charset=windows-1252\n\n");	// Two carriage returns at the end of the line are mandatory!
 
    Gbl.Layout.HTMLStartWritten = true;

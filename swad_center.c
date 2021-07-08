@@ -1088,7 +1088,7 @@ void Ctr_RemoveCenter (void)
       Brw_DB_RemoveCtrFiles (Ctr_EditingCtr->CtrCod);
 
       /***** Remove all rooms in center *****/
-      Roo_RemoveAllRoomsInCtr (Ctr_EditingCtr->CtrCod);
+      Roo_DB_RemoveAllRoomsInCtr (Ctr_EditingCtr->CtrCod);
 
       /***** Remove directories of the center *****/
       snprintf (PathCtr,sizeof (PathCtr),"%s/%02u/%u",

@@ -546,27 +546,27 @@ static void MchRes_ShowResultsBegin (struct Gam_Games *Games,
 
    /***** Begin box *****/
    HTM_SECTION_Begin (MchRes_RESULTS_BOX_ID);
-   Box_BoxBegin (NULL,Title,
-                 NULL,NULL,
-		 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,Title,
+		    NULL,NULL,
+		    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
-   /***** List games to select *****/
-   if (ListGamesToSelect)
-      MchRes_ListGamesToSelect (Games);
+	 /***** List games to select *****/
+	 if (ListGamesToSelect)
+	    MchRes_ListGamesToSelect (Games);
 
-   /***** Begin match results table *****/
-   HTM_SECTION_Begin (MchRes_RESULTS_TABLE_ID);
-   HTM_TABLE_BeginWidePadding (5);
+	 /***** Begin match results table *****/
+	 HTM_SECTION_Begin (MchRes_RESULTS_TABLE_ID);
+	    HTM_TABLE_BeginWidePadding (5);
   }
 
 static void MchRes_ShowResultsEnd (void)
   {
-   /***** End match results table *****/
-   HTM_TABLE_End ();
-   HTM_SECTION_End ();
+	    /***** End match results table *****/
+	    HTM_TABLE_End ();
+	 HTM_SECTION_End ();
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
    HTM_SECTION_End ();
   }
 
@@ -1081,55 +1081,55 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
   {
    extern const char *Txt_Matches;
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtColonNBSP (Txt_Matches);
-   HTM_Unsigned (NumResults);
-   HTM_TD_End ();
+      /***** Row title *****/
+      HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TxtColonNBSP (Txt_Matches);
+	 HTM_Unsigned (NumResults);
+      HTM_TD_End ();
 
-   /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumResults)
-      HTM_Unsigned (NumTotalQsts->All);
-   HTM_TD_End ();
+      /***** Write total number of questions *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumResults)
+	    HTM_Unsigned (NumTotalQsts->All);
+      HTM_TD_End ();
 
-   /***** Write total number of non-blank answers *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumResults)
-      HTM_Unsigned (NumTotalQsts->NotBlank);
-   HTM_TD_End ();
+      /***** Write total number of non-blank answers *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumResults)
+	    HTM_Unsigned (NumTotalQsts->NotBlank);
+      HTM_TD_End ();
 
-   /***** Write total number of blank answers *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   if (NumResults)
-      HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
-   HTM_TD_End ();
+      /***** Write total number of blank answers *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 if (NumResults)
+	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
+      HTM_TD_End ();
 
-   /***** Write total score *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (TotalScore);
-   HTM_Txt ("/");
-   HTM_Unsigned (NumTotalQsts->All);
-   HTM_TD_End ();
+      /***** Write total score *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Double2Decimals (TotalScore);
+	 HTM_Txt ("/");
+	 HTM_Unsigned (NumTotalQsts->All);
+      HTM_TD_End ();
 
-   /***** Write average score per question *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
-	                                    (double) NumTotalQsts->All :
-			                    0.0);
-   HTM_TD_End ();
+      /***** Write average score per question *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
+						  (double) NumTotalQsts->All :
+						  0.0);
+      HTM_TD_End ();
 
-   /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_Double2Decimals (TotalGrade);
-   HTM_TD_End ();
+      /***** Write total grade *****/
+      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_Double2Decimals (TotalGrade);
+      HTM_TD_End ();
 
-   /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TD_End ();
+      /***** Last cell *****/
+      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
 
    /***** End row *****/
    HTM_TR_End ();

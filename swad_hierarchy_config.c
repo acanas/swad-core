@@ -67,15 +67,15 @@ void HieCfg_Title (bool PutLink,
 		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-	           LogoWWW,LogoFullName);
-   Lgo_DrawLogo (LogoScope,LogoCod,LogoShrtName,64,NULL,true);
-   HTM_BR ();
-   HTM_Txt (TextFullName);
-   if (PutLink)
-      HTM_A_End ();
+      if (PutLink)
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+		      " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+		      LogoWWW,LogoFullName);
+      Lgo_DrawLogo (LogoScope,LogoCod,LogoShrtName,64,NULL,true);
+      HTM_BR ();
+      HTM_Txt (TextFullName);
+      if (PutLink)
+	 HTM_A_End ();
    HTM_DIV_End ();
   }
 
@@ -89,26 +89,26 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
    /***** Full name *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "FullName" :
-	                           NULL,
-		    Label);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "FullName" :
+				      NULL,
+		       Label);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LB\"");
-   if (PutForm)
-     {
-      /* Form to change full name */
-      Frm_BeginForm (NextAction);
-      HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "id=\"FullName\" class=\"INPUT_FULL_NAME\""
-		      " required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit full name
-      HTM_Txt (FullName);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT_N LB\"");
+	 if (PutForm)
+	   {
+	    /* Form to change full name */
+	    Frm_BeginForm (NextAction);
+	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "id=\"FullName\" class=\"INPUT_FULL_NAME\""
+			       " required=\"required\"");
+	    Frm_EndForm ();
+	   }
+	 else	// I can not edit full name
+	    HTM_Txt (FullName);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -125,26 +125,26 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
    /***** Short name *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "ShortName" :
-	                           NULL,
-		    Txt_Short_name);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "ShortName" :
+				      NULL,
+		       Txt_Short_name);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LB\"");
-   if (PutForm)
-     {
-      /* Form to change short name */
-      Frm_BeginForm (NextAction);
-      HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
-		      " required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not edit short name
-      HTM_Txt (ShrtName);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT_N LB\"");
+	 if (PutForm)
+	   {
+	    /* Form to change short name */
+	    Frm_BeginForm (NextAction);
+	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
+			       HTM_SUBMIT_ON_CHANGE,
+			       "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
+			       " required=\"required\"");
+	    Frm_EndForm ();
+	   }
+	 else	// I can not edit short name
+	    HTM_Txt (ShrtName);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -161,32 +161,32 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
    /***** Web *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",PutForm ? "WWW" :
-	                           NULL,
-		    Txt_Web);
+      /* Label */
+      Frm_LabelColumn ("RT",PutForm ? "WWW" :
+				      NULL,
+		       Txt_Web);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (PutForm)
-     {
-      /* Form to change web */
-      Frm_BeginForm (NextAction);
-      HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
-		     "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
-      Frm_EndForm ();
-     }
-   else	// I can not change web
-     {
-      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      if (!PrintView)
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",WWW);
-      HTM_Txt (WWW);
-      if (!PrintView)
-         HTM_A_End ();
-      HTM_DIV_End ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (PutForm)
+	   {
+	    /* Form to change web */
+	    Frm_BeginForm (NextAction);
+	       HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
+			      "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
+	    Frm_EndForm ();
+	   }
+	 else	// I can not change web
+	   {
+	    HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
+	       if (!PrintView)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",WWW);
+	       HTM_Txt (WWW);
+	       if (!PrintView)
+		  HTM_A_End ();
+	    HTM_DIV_End ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -202,31 +202,31 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
    /***** Short cut *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Shortcut);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Shortcut);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   if (!PrintView)
-     {
-      if (ParamName)
-	 HTM_A_Begin ("href=\"%s/?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 if (!PrintView)
+	   {
+	    if (ParamName)
+	       HTM_A_Begin ("href=\"%s/?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+			    Cfg_URL_SWAD_CGI,
+			    ParamName,HieCod);
+	    else
+	       HTM_A_Begin ("href=\"%s/\" class=\"DAT\" target=\"_blank\"",
+			    Cfg_URL_SWAD_CGI);
+	   }
+	 if (ParamName)
+	    HTM_TxtF ("%s/?%s=%ld",
 		      Cfg_URL_SWAD_CGI,
 		      ParamName,HieCod);
-      else
-	 HTM_A_Begin ("href=\"%s/\" class=\"DAT\" target=\"_blank\"",
+	 else
+	    HTM_TxtF ("%s/",
 		      Cfg_URL_SWAD_CGI);
-     }
-   if (ParamName)
-      HTM_TxtF ("%s/?%s=%ld",
-		Cfg_URL_SWAD_CGI,
-		ParamName,HieCod);
-   else
-      HTM_TxtF ("%s/",
-		Cfg_URL_SWAD_CGI);
-   if (!PrintView)
-      HTM_A_End ();
-   HTM_TD_End ();
+	 if (!PrintView)
+	    HTM_A_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -243,27 +243,27 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
    /***** Number of centers *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centers);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Centers);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   if (PutForm)
-     {
-      Frm_BeginFormGoTo (ActSeeCtr);
-      Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
-						   Gbl.Hierarchy.Ins.ShrtName),
-			       "BT_LINK DAT",NULL);
-      Str_FreeString ();
-     }
-   HTM_Unsigned (NumCtrs);
-   if (PutForm)
-     {
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 if (PutForm)
+	   {
+	    Frm_BeginFormGoTo (ActSeeCtr);
+	    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	       HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
+							    Gbl.Hierarchy.Ins.ShrtName),
+					"BT_LINK DAT",NULL);
+	       Str_FreeString ();
+	   }
+	 HTM_Unsigned (NumCtrs);
+	 if (PutForm)
+	   {
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -279,17 +279,17 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
    /***** Number of centers with map *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Centers_with_map);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Centers_with_map);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_TxtF ("%u (%.1lf%%)",
-	     NumCtrsWithMap,
-	     NumCtrs ? (double) NumCtrsWithMap * 100.0 /
-		       (double) NumCtrs :
-		       0.0);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_TxtF ("%u (%.1lf%%)",
+		   NumCtrsWithMap,
+		   NumCtrs ? (double) NumCtrsWithMap * 100.0 /
+			     (double) NumCtrs :
+			     0.0);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -305,13 +305,13 @@ void HieCfg_QR (const char *ParamName,long HieCod)
    /***** QR *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_QR_code);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_QR_code);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   QR_LinkTo (250,ParamName,HieCod);
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 QR_LinkTo (250,ParamName,HieCod);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -328,19 +328,19 @@ void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
    /***** Number of users in courses *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,
-		    Role == Rol_UNK ? Txt_Users_in_courses :
-		                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,
+		       Role == Rol_UNK ? Txt_Users_in_courses :
+					 Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Scope,Cod,
-					     Role == Rol_UNK ? (1 << Rol_STD) |
-							       (1 << Rol_NET) |
-							       (1 << Rol_TCH) :	// Any user
-							       (1 << Role)));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Scope,Cod,
+						   Role == Rol_UNK ? (1 << Rol_STD) |
+								     (1 << Rol_NET) |
+								     (1 << Rol_TCH) :	// Any user
+								     (1 << Role)));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }

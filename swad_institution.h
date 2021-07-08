@@ -116,12 +116,12 @@ void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
 void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
-bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
-                                    const char *Name,
-				    long InsCod,
-				    long CtyCod);
+bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
+                                       const char *Name,
+				       long InsCod,
+				       long CtyCod);
 void Ins_ChangeInsWWW (void);
-void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
 

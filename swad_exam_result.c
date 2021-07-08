@@ -1219,7 +1219,7 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    extern const char *Txt_Sessions;
    unsigned NumTotalQstsInvalid;
 
-   /***** Start row *****/
+   /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Row title *****/

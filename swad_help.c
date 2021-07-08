@@ -131,124 +131,124 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
                       NULL,NULL,
                       NULL,Box_CLOSABLE,2);
 
-   if (Gbl.Usrs.Me.Logged)		// I am logged
-     {
-      if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+      if (Gbl.Usrs.Me.Logged)		// I am logged
 	{
-	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
+	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	   {
-	    if (Gbl.Action.Act != ActLogIn &&
-		Gbl.Action.Act != ActLogInNew &&
-                Gbl.Action.Act != ActLogInLan)	// I am not just logged
-	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
-		 {
-		  /* Request my removing from this course */
-		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Remove_me_from_THE_COURSE_X,
-									   Gbl.Hierarchy.Crs.ShrtName),
-						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
-						       Btn_REMOVE_BUTTON,Txt_Remove_me);
-		  Str_FreeString ();
-		 }
-	   }
-	 else					// I do not belong to this course
-	   {
-	    /* Request my registration in this course */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_me_in_X,
-								     Gbl.Hierarchy.Crs.ShrtName),
-						 ActReqSignUp,
-						 Btn_CREATE_BUTTON,Txt_Sign_up);
-	    Str_FreeString ();
-	   }
-	}
-
-      if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
-	{
-	 if (Gbl.Hierarchy.Level == HieLvl_CRS &&				// Course selected
-	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
-	    if (!Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
-				             1 << Rol_STD))		// Current course probably has no students
+	    if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
 	      {
-	       /* Request students enrolment */
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_students_in_COURSE_X,
+	       if (Gbl.Action.Act != ActLogIn &&
+		   Gbl.Action.Act != ActLogInNew &&
+		   Gbl.Action.Act != ActLogInLan)	// I am not just logged
+		  if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
+		    {
+		     /* Request my removing from this course */
+		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Remove_me_from_THE_COURSE_X,
+									      Gbl.Hierarchy.Crs.ShrtName),
+							  ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
+							  Btn_REMOVE_BUTTON,Txt_Remove_me);
+		     Str_FreeString ();
+		    }
+	      }
+	    else					// I do not belong to this course
+	      {
+	       /* Request my registration in this course */
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_me_in_X,
 									Gbl.Hierarchy.Crs.ShrtName),
-						    ActReqEnrSevStd,
-						    Btn_CREATE_BUTTON,Txt_Register_students);
+						    ActReqSignUp,
+						    Btn_CREATE_BUTTON,Txt_Sign_up);
 	       Str_FreeString ();
 	      }
+	   }
 
-	 if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
-	    /* Request list my courses */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
-						 ActMyCrs,
-						 Btn_CONFIRM_BUTTON,Txt_My_courses);
+	 if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
+	   {
+	    if (Gbl.Hierarchy.Level == HieLvl_CRS &&				// Course selected
+		Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
+	       if (!Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+						1 << Rol_STD))		// Current course probably has no students
+		 {
+		  /* Request students enrolment */
+		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_Register_students_in_COURSE_X,
+									   Gbl.Hierarchy.Crs.ShrtName),
+						       ActReqEnrSevStd,
+						       Btn_CREATE_BUTTON,Txt_Register_students);
+		  Str_FreeString ();
+		 }
+
+	    if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
+	       /* Request list my courses */
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
+						    ActMyCrs,
+						    Btn_CONFIRM_BUTTON,Txt_My_courses);
+	   }
+
+	 if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
+	   {
+	    /* Select a course */
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
+												      Txt_Select_or_create_one_course_in_X,
+								     Gbl.Hierarchy.Deg.ShrtName),
+						 ActSeeCrs,
+						 Btn_CONFIRM_BUTTON,Txt_Courses);
+	    Str_FreeString ();
+	   }
+	 else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected
+	   {
+	    /* Select a degree */
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
+												    Txt_Select_or_create_one_degree_in_X,
+								     Gbl.Hierarchy.Ctr.ShrtName),
+						 ActSeeDeg,
+						 Btn_CONFIRM_BUTTON,Txt_Degrees);
+	    Str_FreeString ();
+	   }
+	 else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
+	   {
+	    /* Select a center */
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_center_in_X :
+												    Txt_Select_or_create_one_center_in_X,
+								     Gbl.Hierarchy.Ins.ShrtName),
+						 ActSeeCtr,
+						 Btn_CONFIRM_BUTTON,Txt_Centers);
+	    Str_FreeString ();
+	   }
+	 else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
+	   {
+	    /* Select an institution */
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
+												    Txt_Select_or_create_one_institution_in_X,
+								     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+						 ActSeeIns,
+						 Btn_CONFIRM_BUTTON,Txt_Institutions);
+	    Str_FreeString ();
+	   }
+	 else
+	    /* Select a country */
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Cty.CtyCod > 0 ? Txt_Select_another_country :
+										 Txt_Select_one_country,
+						 ActSeeCty,
+						 Btn_CONFIRM_BUTTON,Txt_Countries);
+
+	 if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
+						 ActReqMyPho,
+						 Btn_CREATE_BUTTON,Txt_Upload_photo);
 	}
-
-      if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
+      else					// I am not logged
 	{
-	 /* Select a course */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
-												   Txt_Select_or_create_one_course_in_X,
-							          Gbl.Hierarchy.Deg.ShrtName),
-				              ActSeeCrs,
-				              Btn_CONFIRM_BUTTON,Txt_Courses);
+	 /* Log in */
+	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
+					      ActFrmLogIn,
+					      Btn_CONFIRM_BUTTON,Txt_Log_in);
+
+	 /* Sign up */
+	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_New_on_PLATFORM_Sign_up,
+								  Cfg_PLATFORM_SHORT_NAME),
+					      ActFrmMyAcc,
+					      Btn_CREATE_BUTTON,Txt_Create_account);
 	 Str_FreeString ();
 	}
-      else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected
-	{
-	 /* Select a degree */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
-											         Txt_Select_or_create_one_degree_in_X,
-							          Gbl.Hierarchy.Ctr.ShrtName),
-				              ActSeeDeg,
-				              Btn_CONFIRM_BUTTON,Txt_Degrees);
-	 Str_FreeString ();
-	}
-      else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
-	{
-	 /* Select a center */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_center_in_X :
-											         Txt_Select_or_create_one_center_in_X,
-							          Gbl.Hierarchy.Ins.ShrtName),
-				              ActSeeCtr,
-				              Btn_CONFIRM_BUTTON,Txt_Centers);
-	 Str_FreeString ();
-	}
-      else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
-	{
-	 /* Select an institution */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Gbl.Hierarchy.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
-											         Txt_Select_or_create_one_institution_in_X,
-							          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-				              ActSeeIns,
-				              Btn_CONFIRM_BUTTON,Txt_Institutions);
-	 Str_FreeString ();
-	}
-      else
-	 /* Select a country */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Cty.CtyCod > 0 ? Txt_Select_another_country :
-						                              Txt_Select_one_country,
-				              ActSeeCty,
-				              Btn_CONFIRM_BUTTON,Txt_Countries);
-
-      if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
-				              ActReqMyPho,
-				              Btn_CREATE_BUTTON,Txt_Upload_photo);
-     }
-   else					// I am not logged
-     {
-      /* Log in */
-      Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
-					   ActFrmLogIn,
-					   Btn_CONFIRM_BUTTON,Txt_Log_in);
-
-      /* Sign up */
-      Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildStringStr (Txt_New_on_PLATFORM_Sign_up,
-							       Cfg_PLATFORM_SHORT_NAME),
-					   ActFrmMyAcc,
-					   Btn_CREATE_BUTTON,Txt_Create_account);
-      Str_FreeString ();
-     }
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -265,17 +265,17 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
   {
    HTM_TR_Begin (NULL);
 
-   /***** Description *****/
-   HTM_TD_Begin ("class=\"DAT RM\"");
-   HTM_TxtColon (Description);
-   HTM_TD_End ();
+      /***** Description *****/
+      HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TxtColon (Description);
+      HTM_TD_End ();
 
-   /***** Button *****/
-   HTM_TD_Begin ("class=\"LM\"");
-   Frm_BeginForm (Action);
-   Btn_PutButtonInline (Button,TxtButton);
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /***** Button *****/
+      HTM_TD_Begin ("class=\"LM\"");
+	 Frm_BeginForm (Action);
+	    Btn_PutButtonInline (Button,TxtButton);
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
