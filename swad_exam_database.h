@@ -28,7 +28,8 @@
 /*****************************************************************************/
 
 #include "swad_exam_log.h"
-// #include "swad_exam_print.h"
+#include "swad_exam_print.h"
+#include "swad_test_type.h"
 
 /*****************************************************************************/
 /************************* Public types and constants ************************/
@@ -38,11 +39,39 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
-bool ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);
+unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
+                                           long SetCod,unsigned NumQstsToPrint);
+unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
+unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 
-void ExaLog_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action);
-void ExaLog_DB_LogSession (long LogCod,long PrnCod);
-void ExaLog_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB);
+long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print);
+void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);
+unsigned Exa_DB_GetDataOfPrintByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
+unsigned Exa_DB_GetDataOfPrintBySesCodAndUsrCod (MYSQL_RES **mysql_res,
+                                                 long SesCod,long UsrCod);
+void Exa_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
+void Exa_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void Exa_DB_RemovePrintsInCrs (long CrsCod);
+
+void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
+                                unsigned QstInd);
+unsigned Exa_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);
+void Exa_DB_GetAnswersFromQstInPrint (long PrnCod,long QstCod,
+                                      char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
+unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod);
+double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod);
+void Exa_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod);
+void Exa_DB_RemovePrintsQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void Exa_DB_RemovePrintQuestionsInCrs (long CrsCod);
+
+bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
+bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);
+
+void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action);
+void Exa_DB_LogSession (long LogCod,long PrnCod);
+void Exa_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB);
+
+unsigned Exa_DB_GetExamLog (MYSQL_RES **mysql_res,long PrnCod);
 
 #endif

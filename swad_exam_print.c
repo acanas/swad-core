@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam.h"
+#include "swad_exam_database.h"
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
@@ -75,10 +76,10 @@ static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
 static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,long ExaCod);
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
-                                                  unsigned *NumQstInPrint);
+                                                  unsigned *NumQstsInPrint);
 static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
 					  bool Shuffle);
-static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print);
+static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print);
 
 static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
                                           const struct Exa_Exam *Exam,
@@ -140,15 +141,6 @@ static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question);
 static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question);
 //-----------------------------------------------------------------------------
-
-static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
-                                    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
-static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
-                                           unsigned QstInd);
-
-static unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod);
-static double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod);
-static void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);
 
 /*****************************************************************************/
 /**************************** Reset exam print *******************************/
@@ -216,7 +208,7 @@ void ExaPrn_ShowExamPrint (void)
 	 if (Print.NumQsts.All)
 	   {
 	    /***** Create new exam print in database *****/
-	    ExaPrn_CreatePrintInDB (&Print);
+	    ExaPrn_CreatePrint (&Print);
 
 	    /***** Set log print code and action *****/
 	    ExaLog_SetPrnCod (Print.PrnCod);
@@ -256,20 +248,7 @@ void ExaPrn_GetDataOfPrintByPrnCod (struct ExaPrn_Print *Print)
    unsigned NumPrints;
 
    /***** Make database query *****/
-   NumPrints = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-		   "SELECT PrnCod,"			// row[0]
-			  "SesCod,"			// row[1]
-			  "UsrCod,"			// row[2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
-			  "NumQsts,"			// row[5]
-			  "NumQstsNotBlank,"		// row[6]
-			  "Sent,"			// row[7]
-			  "Score"			// row[8]
-		    " FROM exa_prints"
-		   " WHERE PrnCod=%ld",
-		   Print->PrnCod);
+   NumPrints = Exa_DB_GetDataOfPrintByPrnCod (&mysql_res,Print->PrnCod);
 
    /***** Get data of print *****/
    ExaPrn_GetDataOfPrint (Print,&mysql_res,NumPrints);
@@ -285,22 +264,9 @@ void ExaPrn_GetDataOfPrintBySesCodAndUsrCod (struct ExaPrn_Print *Print)
    unsigned NumPrints;
 
    /***** Make database query *****/
-   NumPrints = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get data of an exam print",
-		   "SELECT PrnCod,"			// row[0]
-			  "SesCod,"			// row[1]
-			  "UsrCod,"			// row[2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
-			  "NumQsts,"			// row[5]
-			  "NumQstsNotBlank,"		// row[6]
-			  "Sent,"			// row[7]
-			  "Score"			// row[8]
-		    " FROM exa_prints"
-		   " WHERE SesCod=%ld"
-		     " AND UsrCod=%ld",
-		   Print->SesCod,
-		   Print->UsrCod);
+   NumPrints = Exa_DB_GetDataOfPrintBySesCodAndUsrCod (&mysql_res,
+                                                       Print->SesCod,
+                                                       Print->UsrCod);
 
    /***** Get data of print *****/
    ExaPrn_GetDataOfPrint (Print,&mysql_res,NumPrints);
@@ -369,22 +335,11 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
    unsigned NumSet;
    struct ExaSet_Set Set;
    unsigned NumQstsFromSet;
-   unsigned NumQstInPrint = 0;
-
-   /***** Get data of set of questions from database *****/
-   NumSets = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get sets of questions",
-		   "SELECT SetCod,"		// row[0]
-			  "NumQstsToPrint,"	// row[1]
-			  "Title"		// row[2]
-		    " FROM exa_sets"
-		   " WHERE ExaCod=%ld"
-		   " ORDER BY SetInd",
-		   ExaCod);
+   unsigned NumQstsInPrint = 0;
 
    /***** Get questions from all sets *****/
    Print->NumQsts.All = 0;
-   if (NumSets)
+   if ((NumSets = Exa_DB_GetExamSets (&mysql_res,ExaCod)))
       /***** For each set in exam... *****/
       for (NumSet = 0;
 	   NumSet < NumSets;
@@ -400,22 +355,21 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 	 row[1] NumQstsToPrint
 	 row[2] Title
 	 */
-	 /* Get set code (row[0]) */
-	 Set.SetCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get set index (row[1]) */
+	 /* Get set code (row[0])
+	    and set index (row[1]) */
+	 Set.SetCod         = Str_ConvertStrCodToLongCod (row[0]);
 	 Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[1]);
 
 	 /* Get the title of the set (row[2]) */
 	 Str_Copy (Set.Title,row[2],sizeof (Set.Title) - 1);
 
 	 /***** Questions in this set *****/
-	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstInPrint);
+	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstsInPrint);
 	 Print->NumQsts.All += NumQstsFromSet;
 	}
 
    /***** Check *****/
-   if (Print->NumQsts.All != NumQstInPrint)
+   if (Print->NumQsts.All != NumQstsInPrint)
       Err_ShowErrorAndExit ("Wrong number of questions.");
 
    /***** Free structure that stores the query result *****/
@@ -423,12 +377,12 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
   }
 
 /*****************************************************************************/
-/************************ Show questions from a set **************************/
+/********************** Get some questions from a set ************************/
 /*****************************************************************************/
 
 static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
                                                   struct ExaSet_Set *Set,
-                                                  unsigned *NumQstInPrint)
+                                                  unsigned *NumQstsInPrint)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -438,22 +392,14 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
    bool Shuffle;
 
    /***** Get questions from database *****/
-   NumQstsInSet = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions from set",
-		   "SELECT QstCod,"	// row[0]
-			  "AnsType,"	// row[1]
-			  "Shuffle"	// row[2]
-		    " FROM exa_set_questions"
-		   " WHERE SetCod=%ld"
-		   " ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
-		   " LIMIT %u",
-		   Set->SetCod,
-		   Set->NumQstsToPrint);
+   NumQstsInSet = Exa_DB_GetSomeQstsFromSetToPrint (&mysql_res,
+                                                    Set->SetCod,
+                                                    Set->NumQstsToPrint);
 
    /***** Questions in this set *****/
    for (NumQstInSet = 0;
 	NumQstInSet < NumQstsInSet;
-	NumQstInSet++, (*NumQstInPrint)++)
+	NumQstInSet++, (*NumQstsInPrint)++)
      {
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -466,10 +412,10 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
       */
 
       /* Get question code (row[0]) */
-      Print->PrintedQuestions[*NumQstInPrint].QstCod = Str_ConvertStrCodToLongCod (row[0]);
+      Print->PrintedQuestions[*NumQstsInPrint].QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Set set of questions */
-      Print->PrintedQuestions[*NumQstInPrint].SetCod = Set->SetCod;
+      Print->PrintedQuestions[*NumQstsInPrint].SetCod = Set->SetCod;
 
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
@@ -484,13 +430,13 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 	 case Tst_ANS_FLOAT:
 	 case Tst_ANS_TRUE_FALSE:
 	 case Tst_ANS_TEXT:
-	    Print->PrintedQuestions[*NumQstInPrint].StrIndexes[0] = '\0';
+	    Print->PrintedQuestions[*NumQstsInPrint].StrIndexes[0] = '\0';
 	    break;
 	 case Tst_ANS_UNIQUE_CHOICE:
 	 case Tst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
-	    ExaPrn_GenerateChoiceIndexes (&Print->PrintedQuestions[*NumQstInPrint],Shuffle);
+	    ExaPrn_GenerateChoiceIndexes (&Print->PrintedQuestions[*NumQstsInPrint],Shuffle);
 	    break;
 	 default:
 	    break;
@@ -500,10 +446,10 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
          Initially user has not answered the question ==> initially all the answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-      Print->PrintedQuestions[*NumQstInPrint].StrAnswers[0] = '\0';
+      Print->PrintedQuestions[*NumQstsInPrint].StrAnswers[0] = '\0';
 
       /* Reset score of this question in print */
-      Print->PrintedQuestions[*NumQstInPrint].Score = 0.0;
+      Print->PrintedQuestions[*NumQstsInPrint].Score = 0.0;
      }
 
    return NumQstsInSet;
@@ -578,29 +524,19 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
 /***************** Create new blank exam print in database *******************/
 /*****************************************************************************/
 
-static void ExaPrn_CreatePrintInDB (struct ExaPrn_Print *Print)
+static void ExaPrn_CreatePrint (struct ExaPrn_Print *Print)
   {
    unsigned QstInd;
 
-   /***** Insert new exam print into table *****/
-   Print->PrnCod =
-   DB_QueryINSERTandReturnCode ("can not create new exam print",
-				"INSERT INTO exa_prints"
-				" (SesCod,UsrCod,StartTime,EndTime,"
-				  "NumQsts,NumQstsNotBlank,Sent,Score)"
-				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),"
-				  "%u,0,'N',0)",
-				Print->SesCod,
-				Print->UsrCod,
-				Print->NumQsts.All);
+   /***** Insert new exam print into database *****/
+   Print->PrnCod = Exa_DB_CreatePrint (Print);
 
    /***** Store all questions (with blank answers)
           of this exam print just generated in database *****/
    for (QstInd = 0;
 	QstInd < Print->NumQsts.All;
 	QstInd++)
-      ExaPrn_StoreOneQstOfPrintInDB (Print,QstInd);
+      Exa_DB_StoreOneQstOfPrint (Print,QstInd);
   }
 
 /*****************************************************************************/
@@ -614,31 +550,18 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
    unsigned QstInd;
 
    /***** Get questions of an exam print from database *****/
-   Print->NumQsts.All = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions of an exam print",
-		   "SELECT QstCod,"	// row[0]
-			  "SetCod,"	// row[1]
-			  "Score,"	// row[2]
-			  "Indexes,"	// row[3]
-			  "Answers"	// row[4]
-		    " FROM exa_print_questions"
-		   " WHERE PrnCod=%ld"
-		   " ORDER BY QstInd",
-		   Print->PrnCod);
-
-   /***** Get questions *****/
-   if (Print->NumQsts.All <= ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
+   if ((Print->NumQsts.All = Exa_DB_GetPrintQuestions (&mysql_res,Print->PrnCod))
+       <= ExaPrn_MAX_QUESTIONS_PER_EXAM_PRINT)
       for (QstInd = 0;
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get question code (row[0]) */
+	 /* Get question code (row[0])
+	    and set code (row[1]) */
 	 if ((Print->PrintedQuestions[QstInd].QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
 	    Err_WrongQuestionExit ();
-
-	 /* Get set code (row[1]) */
 	 if ((Print->PrintedQuestions[QstInd].SetCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
 	    Err_WrongSetExit ();
 
@@ -648,11 +571,10 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
-	 /* Get indexes for this question (row[3]) */
+	 /* Get indexes for this question (row[3])
+	    and answers selected by user for this question (row[4]) */
 	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[3],
 		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
-
-	 /* Get answers selected by user for this question (row[4]) */
 	 Str_Copy (Print->PrintedQuestions[QstInd].StrAnswers,row[4],
 		   sizeof (Print->PrintedQuestions[QstInd].StrAnswers) - 1);
 	}
@@ -914,9 +836,9 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    HTM_TxtF ("<select id=\"%s\" name=\"Ans\"",Id);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
    HTM_Txt (" />");
-   HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0',false,"&nbsp;");
-   HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
-   HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
+      HTM_OPTION (HTM_Type_STRING,"" ,Print->PrintedQuestions[QstInd].StrAnswers[0] == '\0',false,"&nbsp;");
+      HTM_OPTION (HTM_Type_STRING,"T",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'T' ,false,"%s",Txt_TF_QST[0]);
+      HTM_OPTION (HTM_Type_STRING,"F",Print->PrintedQuestions[QstInd].StrAnswers[0] == 'F' ,false,"%s",Txt_TF_QST[1]);
    HTM_Txt ("</select>");
   }
 
@@ -953,37 +875,37 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 		or 3 1 0 2... (example) if shuffle *****/
 	 HTM_TR_Begin (NULL);
 
-	 /***** Write selectors and letter of this option *****/
-	 /* Initially user has not answered the question ==> initially all the answers will be blank.
-	    If the user does not confirm the submission of their exam ==>
-	    ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
-	 HTM_TD_Begin ("class=\"LT\"");
-	 snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
-	 HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
-		   Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
-								    "checkbox",
-		   Id,NumOpt,Indexes[NumOpt],
-		   UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
-						 "");
-	 ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
-	 HTM_Txt (" />");
-	 HTM_TD_End ();
+	    /***** Write selectors and letter of this option *****/
+	    /* Initially user has not answered the question ==> initially all the answers will be blank.
+	       If the user does not confirm the submission of their exam ==>
+	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
+	       HTM_TxtF ("<input type=\"%s\" id=\"%s_%u\" name=\"Ans\" value=\"%u\"%s",
+			 Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "radio" :
+									  "checkbox",
+			 Id,NumOpt,Indexes[NumOpt],
+			 UsrAnswers[Indexes[NumOpt]] ? " checked=\"checked\"" :
+						       "");
+	       ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,(int) NumOpt);
+	       HTM_Txt (" />");
+	    HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"LT\"");
-	 HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
-	 HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+		  HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-	 /***** Write the option text *****/
-	 HTM_TD_Begin ("class=\"LT\"");
-	 HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
-	 HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
-	 HTM_LABEL_End ();
-	 Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			"TEST_MED_SHOW_CONT",
-			"TEST_MED_SHOW");
-	 HTM_TD_End ();
+	    /***** Write the option text *****/
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
+	       HTM_LABEL_End ();
+	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
+			      "TEST_MED_SHOW_CONT",
+			      "TEST_MED_SHOW");
+	    HTM_TD_End ();
 
 	 HTM_TR_End ();
 	}
@@ -1009,7 +931,6 @@ static void ExaPrn_WriteTxtAnsToFill (const struct ExaPrn_Print *Print,
 	     Id,Tst_MAX_CHARS_ANSWERS_ONE_QST,
 	     Print->PrintedQuestions[QstInd].StrAnswers);
    ExaPrn_WriteJSToUpdateExamPrint (Print,QstInd,Id,-1);
-
    HTM_Txt (" />");
   }
 
@@ -1174,8 +1095,8 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
           ==> uncheck it by deleting answer *****/
    if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE)
      {
-      ExaPrn_GetAnswerFromDB (Print,Print->PrintedQuestions[QstInd].QstCod,
-                              CurrentStrAnswersInDB);
+      Exa_DB_GetAnswersFromQstInPrint (Print->PrnCod,Print->PrintedQuestions[QstInd].QstCod,
+                                       CurrentStrAnswersInDB);
       if (!strcmp (Print->PrintedQuestions[QstInd].StrAnswers,CurrentStrAnswersInDB))
 	{
 	 /* The answer just clicked by user
@@ -1186,8 +1107,8 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
      }
 
    /***** Store test exam question in database *****/
-   ExaPrn_StoreOneQstOfPrintInDB (Print,
-				  QstInd);	// 0, 1, 2, 3...
+   Exa_DB_StoreOneQstOfPrint (Print,
+			      QstInd);	// 0, 1, 2, 3...
   }
 
 /*****************************************************************************/
@@ -1271,12 +1192,7 @@ static void ExaPrn_GetCorrectIntAnswerFromDB (struct Tst_Question *Question)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Exa_DB_GetQstAnswersTextFromSet (&mysql_res,Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne (Question);
@@ -1298,12 +1214,7 @@ static void ExaPrn_GetCorrectFltAnswerFromDB (struct Tst_Question *Question)
    double Tmp;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Exa_DB_GetQstAnswersTextFromSet (&mysql_res,Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -1336,12 +1247,7 @@ static void ExaPrn_GetCorrectTF_AnswerFromDB (struct Tst_Question *Question)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Exa_DB_GetQstAnswersTextFromSet (&mysql_res,Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne (Question);
@@ -1361,13 +1267,7 @@ static void ExaPrn_GetCorrectChoAnswerFromDB (struct Tst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Correct"		// row[0]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld"
-		   " ORDER BY AnsInd",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Exa_DB_GetQstAnswersCorrFromSet (&mysql_res,Question->QstCod);
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
@@ -1390,12 +1290,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Exa_DB_GetQstAnswersTextFromSet (&mysql_res,Question->QstCod);
 
    /***** Get text and correctness of answers for this question from database (one row per answer) *****/
    for (NumOpt = 0;
@@ -1423,134 +1318,16 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Tst_Question *Question)
   }
 
 /*****************************************************************************/
-/************* Get the questions of an exam print from database **************/
-/*****************************************************************************/
-
-static void ExaPrn_GetAnswerFromDB (struct ExaPrn_Print *Print,long QstCod,
-                                    char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1])
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get questions of an exam print from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get answer in an exam print",
-		       "SELECT Answers"	// row[0]
-		        " FROM exa_print_questions"
-		       " WHERE PrnCod=%ld"
-		         " AND QstCod=%ld",
-		       Print->PrnCod,QstCod))
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get answers selected by user for this question (row[0]) */
-      Str_Copy (StrAnswers,row[0],strlen (StrAnswers) - 1);
-     }
-   else
-      StrAnswers[0] = '\0';
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************* Store user's answers of an test exam into database ************/
-/*****************************************************************************/
-
-static void ExaPrn_StoreOneQstOfPrintInDB (const struct ExaPrn_Print *Print,
-                                           unsigned QstInd)
-  {
-   /***** Insert question and user's answers into database *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryREPLACE ("can not update a question in an exam print",
-		    "REPLACE INTO exa_print_questions"
-		    " (PrnCod,QstCod,QstInd,SetCod,Score,Indexes,Answers)"
-		    " VALUES"
-		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
-		    Print->PrnCod,
-		    Print->PrintedQuestions[QstInd].QstCod,
-		    QstInd,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[QstInd].SetCod,
-		    Print->PrintedQuestions[QstInd].Score,
-		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].StrAnswers);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
-/************ Get number of questions not blank in an exam print *************/
-/*****************************************************************************/
-
-static unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod)
-  {
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of questions not blank",
-		  "SELECT COUNT(*)"
-		   " FROM exa_print_questions"
-		  " WHERE PrnCod=%ld"
-		    " AND Answers<>''",
-		  PrnCod);
-  }
-
-/*****************************************************************************/
-/************* Compute total score of questions of an exam print *************/
-/*****************************************************************************/
-
-static double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod)
-  {
-   return DB_QuerySELECTDouble ("can not get score of exam print",
-				"SELECT SUM(Score)"
-				 " FROM exa_print_questions"
-				" WHERE PrnCod=%ld",
-				PrnCod);
-  }
-
-/*****************************************************************************/
-/********************** Update exam print in database ************************/
-/*****************************************************************************/
-
-static void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
-  {
-   /***** Update exam print in database *****/
-   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   DB_QueryUPDATE ("can not update exam print",
-		   "UPDATE exa_prints"
-	           " SET EndTime=NOW(),"
-	                "NumQstsNotBlank=%u,"
-		        "Sent='%c',"
-	                "Score='%.15lg'"
-	           " WHERE PrnCod=%ld"
-	             " AND SesCod=%ld"
-	             " AND UsrCod=%ld",	// Extra checks
-		   Print->NumQsts.NotBlank,
-		   Print->Sent ? 'Y' :
-			         'N',
-		   Print->Score,
-		   Print->PrnCod,
-		   Print->SesCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /********************** Remove exam prints made by a user ********************/
 /*****************************************************************************/
 
 void ExaPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   {
    /***** Remove exam prints questions for the given user *****/
-   DB_QueryDELETE ("can not remove exam prints made by a user",
-		   "DELETE FROM exa_print_questions"
-	           " USING exa_prints,"
-	                  "exa_print_questions"
-                   " WHERE exa_prints.UsrCod=%ld"
-                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
-		   UsrCod);
+   Exa_DB_RemovePrintQuestionsMadeByUsrInAllCrss (UsrCod);
 
    /***** Remove exam prints made by the given user *****/
-   DB_QueryDELETE ("can not remove exam prints made by a user",
-		   "DELETE FROM exa_prints"
-	           " WHERE UsrCod=%ld",
-		   UsrCod);
+   Exa_DB_RemovePrintsMadeByUsrInAllCrss (UsrCod);
   }
 
 /*****************************************************************************/
@@ -1560,32 +1337,10 @@ void ExaPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
 void ExaPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
    /***** Remove questions of exams prints made by the given user in the given course *****/
-   DB_QueryDELETE ("can not remove exams prints made by a user in a course",
-		   "DELETE FROM exa_print_questions"
-	           " USING exa_exams,"
-	                  "exa_sessions,"
-	                  "exa_prints,"
-	                  "exa_print_questions"
-                   " WHERE exa_exams.CrsCod=%ld"
-                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-                     " AND exa_sessions.SesCod=exa_prints.SesCod"
-                     " AND exa_prints.UsrCod=%ld"
-                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
-		   CrsCod,
-		   UsrCod);
+   Exa_DB_RemovePrintsQuestionsMadeByUsrInCrs (UsrCod,CrsCod);
 
    /***** Remove exams prints made by the given user in the given course *****/
-   DB_QueryDELETE ("can not remove exams prints made by a user in a course",
-		   "DELETE FROM exa_prints"
-	           " USING exa_exams,"
-	                  "exa_sessions,"
-	                  "exa_prints"
-                   " WHERE exa_exams.CrsCod=%ld"
-                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-                     " AND exa_sessions.SesCod=exa_prints.SesCod"
-                     " AND exa_prints.UsrCod=%ld",
-		   CrsCod,
-		   UsrCod);
+   Exa_DB_RemovePrintsMadeByUsrInCrs (UsrCod,CrsCod);
   }
 
 /*****************************************************************************/
@@ -1595,26 +1350,8 @@ void ExaPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
 void ExaPrn_RemoveCrsPrints (long CrsCod)
   {
    /***** Remove questions of exams prints made by the given user in the given course *****/
-   DB_QueryDELETE ("can not remove exams prints in a course",
-		   "DELETE FROM exa_print_questions"
-	           " USING exa_exams,"
-	                  "exa_sessions,"
-	                  "exa_prints,"
-	                  "exa_print_questions"
-                   " WHERE exa_exams.CrsCod=%ld"
-                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-                     " AND exa_sessions.SesCod=exa_prints.SesCod"
-                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
-		   CrsCod);
+   Exa_DB_RemovePrintQuestionsInCrs (CrsCod);
 
    /***** Remove exams prints made by the given user in the given course *****/
-   DB_QueryDELETE ("can not remove exams prints in a course",
-		   "DELETE FROM exa_prints"
-	           " USING exa_exams,"
-	                  "exa_sessions,"
-	                  "exa_prints"
-                   " WHERE exa_exams.CrsCod=%ld"
-                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
-                     " AND exa_sessions.SesCod=exa_prints.SesCod",
-		   CrsCod);
+   Exa_DB_RemovePrintsInCrs (CrsCod);
   }

@@ -3944,7 +3944,7 @@ Rol_Role_t DB_QuerySELECTRole (const char *MsgError,
   }
 
 /*****************************************************************************/
-/**** Make a SELECT query for a unique row with one double from database *****/
+/**** Make a SELECT query for a unique row with one string from database *****/
 /*****************************************************************************/
 // StrSize does not include the ending byte '\0'
 

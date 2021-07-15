@@ -35,6 +35,7 @@
 //#include "swad_error.h"
 #include "swad_exam_database.h"
 #include "swad_exam_log.h"
+#include "swad_exam_print.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -60,10 +61,358 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/***************** Get sets of questions in a given exam *********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get sets of questions",
+		   "SELECT SetCod,"		// row[0]
+			  "NumQstsToPrint,"	// row[1]
+			  "Title"		// row[2]
+		    " FROM exa_sets"
+		   " WHERE ExaCod=%ld"
+		   " ORDER BY SetInd",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/******************* Get some random questions from a set ********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
+                                           long SetCod,unsigned NumQstsToPrint)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions from set",
+		   "SELECT QstCod,"	// row[0]
+			  "AnsType,"	// row[1]
+			  "Shuffle"	// row[2]
+		    " FROM exa_set_questions"
+		   " WHERE SetCod=%ld"
+		   " ORDER BY RAND()"	// Don't use RAND(NOW()) because the same ordering will be repeated across sets
+		   " LIMIT %u",
+		   SetCod,
+		   NumQstsToPrint);
+  }
+
+/*****************************************************************************/
+/************** Get answers text for a question in an exam set ***************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get text of answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM exa_set_answers"
+		   " WHERE QstCod=%ld",
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/********** Get answers correctness for a question in an exam set ************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get correctness of answers of a question",
+		   "SELECT Correct"		// row[0]
+		    " FROM exa_set_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY AnsInd",
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/***************** Create new blank exam print in database *******************/
+/*****************************************************************************/
+
+long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create new exam print",
+				"INSERT INTO exa_prints"
+				" (SesCod,UsrCod,StartTime,EndTime,"
+				  "NumQsts,NumQstsNotBlank,Sent,Score)"
+				" VALUES"
+				" (%ld,%ld,NOW(),NOW(),"
+				  "%u,0,'N',0)",
+				Print->SesCod,
+				Print->UsrCod,
+				Print->NumQsts.All);
+  }
+
+/*****************************************************************************/
+/********************** Update exam print in database ************************/
+/*****************************************************************************/
+
+void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print)
+  {
+   /***** Update exam print in database *****/
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   DB_QueryUPDATE ("can not update exam print",
+		   "UPDATE exa_prints"
+	           " SET EndTime=NOW(),"
+	                "NumQstsNotBlank=%u,"
+		        "Sent='%c',"
+	                "Score='%.15lg'"
+	           " WHERE PrnCod=%ld"
+	             " AND SesCod=%ld"
+	             " AND UsrCod=%ld",	// Extra checks
+		   Print->NumQsts.NotBlank,
+		   Print->Sent ? 'Y' :
+			         'N',
+		   Print->Score,
+		   Print->PrnCod,
+		   Print->SesCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/**************** Get data of an exam print using print code *****************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetDataOfPrintByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of an exam print",
+		   "SELECT PrnCod,"			// row[0]
+			  "SesCod,"			// row[1]
+			  "UsrCod,"			// row[2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
+			  "NumQsts,"			// row[5]
+			  "NumQstsNotBlank,"		// row[6]
+			  "Sent,"			// row[7]
+			  "Score"			// row[8]
+		    " FROM exa_prints"
+		   " WHERE PrnCod=%ld",
+		   PrnCod);
+  }
+
+/*****************************************************************************/
+/******** Get data of an exam print using session code and user code *********/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetDataOfPrintBySesCodAndUsrCod (MYSQL_RES **mysql_res,
+                                                 long SesCod,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of an exam print",
+		   "SELECT PrnCod,"			// row[0]
+			  "SesCod,"			// row[1]
+			  "UsrCod,"			// row[2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[4]
+			  "NumQsts,"			// row[5]
+			  "NumQstsNotBlank,"		// row[6]
+			  "Sent,"			// row[7]
+			  "Score"			// row[8]
+		    " FROM exa_prints"
+		   " WHERE SesCod=%ld"
+		     " AND UsrCod=%ld",
+		   SesCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove exam prints for a given user *********************/
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove exam prints made by a user",
+		   "DELETE FROM exa_prints"
+	           " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove exam prints made by a user in a course ***************/
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove exams prints made by a user in a course",
+		   "DELETE FROM exa_prints"
+	           " USING exa_exams,"
+	                  "exa_sessions,"
+	                  "exa_prints"
+                   " WHERE exa_exams.CrsCod=%ld"
+                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.UsrCod=%ld",
+		   CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/******* Remove exams prints made by the given user in the given course ******/
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove exams prints in a course",
+		   "DELETE FROM exa_prints"
+	           " USING exa_exams,"
+	                  "exa_sessions,"
+	                  "exa_prints"
+                   " WHERE exa_exams.CrsCod=%ld"
+                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************* Store user's answers of an test exam into database ************/
+/*****************************************************************************/
+
+void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
+                                unsigned QstInd)
+  {
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   DB_QueryREPLACE ("can not update a question in an exam print",
+		    "REPLACE INTO exa_print_questions"
+		    " (PrnCod,QstCod,QstInd,SetCod,Score,Indexes,Answers)"
+		    " VALUES"
+		    " (%ld,%ld,%u,%ld,'%.15lg','%s','%s')",
+		    Print->PrnCod,
+		    Print->PrintedQuestions[QstInd].QstCod,
+		    QstInd,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[QstInd].SetCod,
+		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].StrIndexes,
+		    Print->PrintedQuestions[QstInd].StrAnswers);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/************* Get the questions of an exam print from database **************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions of an exam print",
+		   "SELECT QstCod,"	// row[0]
+			  "SetCod,"	// row[1]
+			  "Score,"	// row[2]
+			  "Indexes,"	// row[3]
+			  "Answers"	// row[4]
+		    " FROM exa_print_questions"
+		   " WHERE PrnCod=%ld"
+		   " ORDER BY QstInd",
+		   PrnCod);
+  }
+
+/*****************************************************************************/
+/************** Get the answers of an exam print from database ***************/
+/*****************************************************************************/
+
+void Exa_DB_GetAnswersFromQstInPrint (long PrnCod,long QstCod,
+                                      char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1])
+  {
+   DB_QuerySELECTString (StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST,
+                         "can not get answer in an exam print",
+			 "SELECT Answers"
+			  " FROM exa_print_questions"
+			 " WHERE PrnCod=%ld"
+			   " AND QstCod=%ld",
+			 PrnCod,QstCod);
+  }
+
+/*****************************************************************************/
+/************ Get number of questions not blank in an exam print *************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of questions not blank",
+		  "SELECT COUNT(*)"
+		   " FROM exa_print_questions"
+		  " WHERE PrnCod=%ld"
+		    " AND Answers<>''",
+		  PrnCod);
+  }
+
+/*****************************************************************************/
+/************* Compute total score of questions of an exam print *************/
+/*****************************************************************************/
+
+double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod)
+  {
+   return DB_QuerySELECTDouble ("can not get score of exam print",
+				"SELECT SUM(Score)"
+				 " FROM exa_print_questions"
+				" WHERE PrnCod=%ld",
+				PrnCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove exam prints questions for a given user ***************/
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove exam prints made by a user",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_prints,"
+	                  "exa_print_questions"
+                   " WHERE exa_prints.UsrCod=%ld"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/* Remove questions of exams prints made by the given user in a given course */
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintsQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove exams prints made by a user in a course",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_exams,"
+	                  "exa_sessions,"
+	                  "exa_prints,"
+	                  "exa_print_questions"
+                   " WHERE exa_exams.CrsCod=%ld"
+                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.UsrCod=%ld"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/* Remove questions of exams prints made by the given user in a given course */
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintQuestionsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove exams prints in a course",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_exams,"
+	                  "exa_sessions,"
+	                  "exa_prints,"
+	                  "exa_print_questions"
+                   " WHERE exa_exams.CrsCod=%ld"
+                     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /******** Check if the current session id is the same as the last one ********/
 /*****************************************************************************/
 
-bool ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
+bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
   {
    /***** Check if the current session id
           is the same as the last one stored in database *****/
@@ -83,7 +432,7 @@ bool ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
 /******** Check if the current user agent is the same as the last one ********/
 /*****************************************************************************/
 
-bool ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB)
+bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB)
   {
    /***** Get if the current user agent
           is the same as the last stored in database *****/
@@ -103,7 +452,7 @@ bool ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserA
 /******************************** Log access *********************************/
 /*****************************************************************************/
 
-void ExaLog_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
+void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
   {
    /* Log access in exam log.
       Redundant data (also present in log table) are stored for speed */
@@ -126,7 +475,7 @@ void ExaLog_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action)
 /*************************** Log session in database *************************/
 /*****************************************************************************/
 
-void ExaLog_DB_LogSession (long LogCod,long PrnCod)
+void Exa_DB_LogSession (long LogCod,long PrnCod)
   {
    DB_QueryINSERT ("can not log session",
 		   "INSERT INTO exa_log_sessions "
@@ -142,7 +491,7 @@ void ExaLog_DB_LogSession (long LogCod,long PrnCod)
 /************************* Log user agent in database ************************/
 /*****************************************************************************/
 
-void ExaLog_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB)
+void Exa_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB)
   {
    DB_QueryINSERT ("can not log user agent",
 		   "INSERT INTO exa_log_user_agents "
@@ -152,4 +501,29 @@ void ExaLog_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB)
 		   LogCod,
 		   PrnCod,
 		   UserAgentDB);
+  }
+
+/*****************************************************************************/
+/********************* Get exam print log from database **********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetExamLog (MYSQL_RES **mysql_res,long PrnCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get exam print log",
+		   "SELECT exa_log.ActCod,"			// row[0]
+			  "exa_log.QstInd,"			// row[1]
+			  "exa_log.CanAnswer,"			// row[2]
+			  "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
+			  "exa_log.IP,"				// row[4]
+			  "exa_log_sessions.SessionId,"		// row[5]
+			  "exa_log_user_agents.UserAgent"	// row[6]
+		    " FROM exa_log"
+		    " LEFT JOIN exa_log_sessions"
+		      " ON exa_log.LogCod=exa_log_sessions.LogCod"
+		    " LEFT JOIN exa_log_user_agents"
+		      " ON exa_log.LogCod=exa_log_user_agents.LogCod"
+		   " WHERE exa_log.PrnCod=%ld"
+		   " ORDER BY exa_log.LogCod",
+		   PrnCod);
   }

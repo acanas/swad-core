@@ -151,7 +151,7 @@ void ExaLog_LogAccess (long LogCod)
 	 /***** Insert access into database *****/
 	 /* Log access in exam log.
 	    Redundant data (also present in log table) are stored for speed */
-	 ExaLog_DB_LogAccess (LogCod,PrnCod,Action);
+	 Exa_DB_LogAccess (LogCod,PrnCod,Action);
 
 	 /***** Log session and user agent *****/
 	 ExaLog_LogSession (LogCod,PrnCod);
@@ -168,8 +168,8 @@ static void ExaLog_LogSession (long LogCod,long PrnCod)
   {
    /***** Insert session id into database
           only if it's not the same as the last one stored *****/
-   if (!ExaLog_DB_CheckIfSessionIsTheSameAsTheLast (PrnCod))
-      ExaLog_DB_LogSession (LogCod,PrnCod);
+   if (!Exa_DB_CheckIfSessionIsTheSameAsTheLast (PrnCod))
+      Exa_DB_LogSession (LogCod,PrnCod);
   }
 
 /*****************************************************************************/
@@ -209,8 +209,8 @@ static void ExaLog_LogUsrAgent (long LogCod,long PrnCod)
 
    /***** Insert user agent into database
           only if it's not the same as the last one stored *****/
-   if (!ExaLog_DB_CheckIfUserAgentIsTheSameAsTheLast (PrnCod,UserAgentDB))
-      ExaLog_DB_LogUserAgent (LogCod,PrnCod,UserAgentDB);
+   if (!Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (PrnCod,UserAgentDB))
+      Exa_DB_LogUserAgent (LogCod,PrnCod,UserAgentDB);
 
    /***** Free user agent *****/
    free (UserAgentDB);
@@ -251,25 +251,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
    const char *Class;
 
    /***** Get print log from database *****/
-   NumClicks = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get exam print log",
-		   "SELECT exa_log.ActCod,"				// row[0]
-			  "exa_log.QstInd,"				// row[1]
-			  "exa_log.CanAnswer,"			// row[2]
-			  "UNIX_TIMESTAMP(exa_log.ClickTime),"	// row[3]
-			  "exa_log.IP,"				// row[4]
-			  "exa_log_sessions.SessionId,"		// row[5]
-			  "exa_log_user_agents.UserAgent"		// row[6]
-		    " FROM exa_log"
-		    " LEFT JOIN exa_log_sessions"
-		      " ON exa_log.LogCod=exa_log_sessions.LogCod"
-		    " LEFT JOIN exa_log_user_agents"
-		      " ON exa_log.LogCod=exa_log_user_agents.LogCod"
-		   " WHERE exa_log.PrnCod=%ld"
-		   " ORDER BY exa_log.LogCod",
-		   Print->PrnCod);
-
-   if (NumClicks)
+   if ((NumClicks = Exa_DB_GetExamLog (&mysql_res,Print->PrnCod)))
      {
       /***** Initialize last session id and last user agent ******/
       SessionId[0] = '\0';
