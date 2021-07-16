@@ -42,6 +42,7 @@
 unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
                                            long SetCod,unsigned NumQstsToPrint);
+unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 
@@ -67,11 +68,17 @@ void Exa_DB_RemovePrintQuestionsInCrs (long CrsCod);
 
 bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
 bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);
-
 void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action);
 void Exa_DB_LogSession (long LogCod,long PrnCod);
 void Exa_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB);
-
 unsigned Exa_DB_GetExamLog (MYSQL_RES **mysql_res,long PrnCod);
+
+unsigned Exa_DB_GetAllUsrsWhoHaveMadeExam (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod);
+unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
+			    Usr_MeOrOther_t MeOrOther,
+			    long SesCod,	// <= 0 ==> any
+			    long ExaCod,	// <= 0 ==> any
+			    const char *ExamsSelectedCommas);
 
 #endif

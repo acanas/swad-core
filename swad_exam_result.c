@@ -37,6 +37,7 @@
 #include "swad_date.h"
 #include "swad_error.h"
 #include "swad_exam.h"
+#include "swad_exam_database.h"
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
@@ -438,22 +439,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
    ExaRes_ShowHeaderResults (Usr_OTHER);
 
    /***** Get all users who have answered any session question in this exam *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get users in exam",
-		   "SELECT users.UsrCod"	// row[0]
-		    " FROM (SELECT DISTINCT exa_prints.UsrCod AS UsrCod"
-			    " FROM exa_prints,exa_sessions,exa_exams"
-			   " WHERE exa_sessions.ExaCod=%ld"
-			     " AND exa_sessions.SesCod=exa_prints.SesCod"
-			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-			     " AND exa_exams.CrsCod=%ld) AS users,"		// Extra check
-			  "usr_data"
-		   " WHERE users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
-		   ExaCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeExam (&mysql_res,ExaCod);
 
    /***** List sessions results for each user *****/
    for (NumUsr = 0;
@@ -530,22 +516,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
    ExaRes_ShowHeaderResults (Usr_OTHER);
 
    /***** Get all users who have answered any session question in this exam *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get users in session",
-		   "SELECT users.UsrCod"	// row[0]
-		    " FROM (SELECT exa_prints.UsrCod AS UsrCod"	// row[0]
-			    " FROM exa_prints,exa_sessions,exa_exams"
-			   " WHERE exa_prints.SesCod=%ld"
-			     " AND exa_prints.SesCod=exa_sessions.SesCod"
-			     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-			     " AND exa_exams.CrsCod=%ld) AS users,"	// Extra check
-			  "usr_data"
-		   " WHERE users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
-		   SesCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+   NumUsrs = Exa_DB_GetAllUsrsWhoHaveMadeSession (&mysql_res,SesCod);
 
    /***** List sessions results for each user *****/
    for (NumUsr = 0;
@@ -805,10 +776,6 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				const char *ExamsSelectedCommas)
   {
    extern const char *Txt_Result;
-   char *SesSubQuery;
-   char *HidSesSubQuery;
-   char *HidExaSubQuery;
-   char *ExaSubQuery;
    MYSQL_RES *mysql_res;
    struct UsrData *UsrDat;
    unsigned NumResults;
@@ -838,106 +805,14 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    TotalScore.All   =
    TotalScore.Valid = 0.0;
 
-   /***** Set user *****/
-   UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
-				    &Gbl.Usrs.Other.UsrDat;
-
-   /***** Build sessions subquery *****/
-   if (SesCod > 0)	// One unique session
-     {
-      if (asprintf (&SesSubQuery," AND exa_prints.SesCod=%ld",SesCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else			// All sessions of selected exams
-     {
-      if (asprintf (&SesSubQuery,"%s","") < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-
-   /***** Subquery: get hidden sessions?
-	  · A student will not be able to see their results in hidden sessions
-	  · A teacher will be able to see results from other users even in hidden sessions
-   *****/
-   switch (MeOrOther)
-     {
-      case Usr_ME:	// A student watching her/his results
-         if (asprintf (&HidSesSubQuery," AND exa_sessions.Hidden='N'") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-      default:		// A teacher/admin watching the results of other users
-	 if (asprintf (&HidSesSubQuery,"%s","") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-     }
-
-   /***** Build exams subquery *****/
-   if (ExaCod > 0)			// One unique exams
-     {
-      if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod=%ld",ExaCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else if (ExamsSelectedCommas)
-     {
-      if (ExamsSelectedCommas[0])	// Selected exams
-	{
-	 if (asprintf (&ExaSubQuery," AND exa_sessions.ExaCod IN (%s)",
-		       ExamsSelectedCommas) < 0)
-	    Err_NotEnoughMemoryExit ();
-	}
-      else
-	{
-	 if (asprintf (&ExaSubQuery,"%s","") < 0)
-	    Err_NotEnoughMemoryExit ();
-	}
-     }
-   else					// All exams
-     {
-      if (asprintf (&ExaSubQuery,"%s","") < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-
-   /***** Subquery: get hidden exams?
-	  · A student will not be able to see their results in hidden exams
-	  · A teacher will be able to see results from other users even in hidden exams
-   *****/
-   switch (MeOrOther)
-     {
-      case Usr_ME:	// A student watching her/his results
-         if (asprintf (&HidExaSubQuery," AND exa_exams.Hidden='N'") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-      default:		// A teacher/admin watching the results of other users
-	 if (asprintf (&HidExaSubQuery,"%s","") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-     }
-
    /***** Make database query *****/
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
-   NumResults = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get sessions results",
-		   "SELECT exa_prints.PrnCod"			// row[0]
-		    " FROM exa_prints,exa_sessions,exa_exams"
-		   " WHERE exa_prints.UsrCod=%ld"
-		      "%s"	// Session subquery
-		     " AND exa_prints.SesCod=exa_sessions.SesCod"
-		      "%s"	// Hidden sessions subquery
-		      "%s"	// Exams subquery
-		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
-		      "%s"	// Hidden exams subquery
-		     " AND exa_exams.CrsCod=%ld"			// Extra check
-		   " ORDER BY exa_sessions.Title",
-		   UsrDat->UsrCod,
-		   SesSubQuery,
-		   HidSesSubQuery,
-		   ExaSubQuery,
-		   HidExaSubQuery,
-		   Gbl.Hierarchy.Crs.CrsCod);
-   free (HidExaSubQuery);
-   free (ExaSubQuery);
-   free (HidSesSubQuery);
-   free (SesSubQuery);
+   NumResults = Exa_DB_GetResults (&mysql_res,MeOrOther,SesCod,ExaCod,ExamsSelectedCommas);
+
+   /***** Set user *****/
+   UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
+				    &Gbl.Usrs.Other.UsrDat;
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
@@ -1571,13 +1446,7 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
       /***** Get validity and answer type from database *****/
-      QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
-					"SELECT Invalid,"	// row[0]
-					       "AnsType"	// row[1]
-					 " FROM exa_set_questions"
-					" WHERE QstCod=%ld",
-					Question.QstCod) != 0);
-      if (QuestionExists)
+      if ((QuestionExists = (Exa_DB_GetValidityAndTypeOfQuestion (&mysql_res,Question.QstCod) != 0)))
 	{
 	 row = mysql_fetch_row (mysql_res);
 
