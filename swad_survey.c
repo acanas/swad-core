@@ -135,7 +135,7 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt);
-static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod);
+static void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod);
 static void Svy_CreateGrps (long SvyCod);
 static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy);
 static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
@@ -1644,7 +1644,7 @@ void Svy_RemoveSurvey (void)
 		   Svy.SvyCod);
 
    /***** Remove all the groups of this survey *****/
-   Svy_RemoveAllTheGrpsAssociatedToAndSurvey (Svy.SvyCod);
+   Svy_DB_RemoveAllGrpsAssociatedToSurvey (Svy.SvyCod);
 
    /***** Remove survey *****/
    DB_QueryDELETE ("can not remove survey",
@@ -2416,7 +2416,7 @@ static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
 
    /***** Update groups *****/
    /* Remove old groups */
-   Svy_RemoveAllTheGrpsAssociatedToAndSurvey (Svy->SvyCod);
+   Svy_DB_RemoveAllGrpsAssociatedToSurvey (Svy->SvyCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -2430,7 +2430,7 @@ static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
 /************************* Remove groups of a survey *************************/
 /*****************************************************************************/
 
-static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
+static void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod)
   {
    /***** Remove groups of the survey *****/
    DB_QueryDELETE ("can not remove the groups associated to a survey",
@@ -2440,24 +2440,10 @@ static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
   }
 
 /*****************************************************************************/
-/******************* Remove one group from all the surveys *******************/
-/*****************************************************************************/
-
-void Svy_RemoveGroup (long GrpCod)
-  {
-   /***** Remove group from all the surveys *****/
-   DB_QueryDELETE ("can not remove group from the associations"
-		   " between surveys and groups",
-		   "DELETE FROM svy_groups"
-		   " WHERE GrpCod=%ld",
-		   GrpCod);
-  }
-
-/*****************************************************************************/
 /*************** Remove groups of one type from all the surveys **************/
 /*****************************************************************************/
 
-void Svy_RemoveGroupsOfType (long GrpTypCod)
+void Svy_DB_RemoveGroupsOfType (long GrpTypCod)
   {
    /***** Remove group from all the surveys *****/
    DB_QueryDELETE ("can not remove groups of a type"
@@ -2468,6 +2454,20 @@ void Svy_RemoveGroupsOfType (long GrpTypCod)
                    " WHERE grp_groups.GrpTypCod=%ld"
                      " AND grp_groups.GrpCod=svy_groups.GrpCod",
 		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove one group from all the surveys *******************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveGroup (long GrpCod)
+  {
+   /***** Remove group from all the surveys *****/
+   DB_QueryDELETE ("can not remove group from the associations"
+		   " between surveys and groups",
+		   "DELETE FROM svy_groups"
+		   " WHERE GrpCod=%ld",
+		   GrpCod);
   }
 
 /*****************************************************************************/

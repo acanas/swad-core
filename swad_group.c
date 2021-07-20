@@ -37,7 +37,7 @@
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
-#include "swad_exam_session.h"
+#include "swad_exam_database.h"
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
@@ -3506,11 +3506,14 @@ static void Grp_RemoveGroupTypeCompletely (void)
    /***** Remove the associations of attendance events to groups of this type *****/
    Att_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
+   /***** Remove the associations of exam sessions to groups of this type *****/
+   Exa_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+
    /***** Remove the associations of matches to groups of this type *****/
-   Mch_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   Mch_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of surveys to groups of this type *****/
-   Svy_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   Svy_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Orphan all groups of this type in course timetable *****/
    Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
@@ -3557,10 +3560,13 @@ static void Grp_RemoveGroupCompletely (void)
    Att_DB_RemoveGroup (GrpDat.GrpCod);
 
    /***** Remove this group from all matches *****/
-   Mch_RemoveGroup (GrpDat.GrpCod);
+   Mch_DB_RemoveGroup (GrpDat.GrpCod);
+
+   /***** Remove this group from all exam sessions *****/
+   Exa_DB_RemoveGrpAssociatedToExamSessions (GrpDat.GrpCod);
 
    /***** Remove this group from all surveys *****/
-   Svy_RemoveGroup (GrpDat.GrpCod);
+   Svy_DB_RemoveGroup (GrpDat.GrpCod);
 
    /***** Orphan this group in course timetable *****/
    Tmt_DB_OrphanGrpInCrsTimeTable (GrpDat.GrpCod);

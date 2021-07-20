@@ -61,10 +61,6 @@ void ExaSes_ToggleVisResultsSesUsr (void);
 void ExaSes_RequestRemoveSession (void);
 void ExaSes_RemoveSession (void);
 
-void Exa_DB_RemoveSessionsInExamFromAllTables (long ExaCod);
-void Exa_DB_RemoveSessionInCourseFromAllTables (long CrsCod);
-void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod);
-
 void ExaSes_HideSession (void);
 void ExaSes_UnhideSession (void);
 
@@ -78,12 +74,6 @@ long ExaSes_GetParamSesCod (void);
 void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod);
 void ExaSes_RequestCreatOrEditSession (void);
 void ExaSes_ReceiveFormSession (void);
-
-void Exa_DB_RemoveGrpAssociatedToExamSessions (long GrpCod);
-void Exa_DB_RemoveGroupsOfTypeAssociatedToExamSessions (long GrpTypCod);
-
-unsigned ExaSes_GetNumSessionsInExam (long ExaCod);
-unsigned ExaSes_GetNumOpenSessionsInExam (long ExaCod);
 
 bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,
                                           const struct ExaSes_Session *Session);

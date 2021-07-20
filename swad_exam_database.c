@@ -27,10 +27,7 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
-//#include <stdlib.h>		// For system, getenv, etc.
-//#include <string.h>		// For string functions
 
-//#include "swad_action.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_database.h"
@@ -59,6 +56,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+static void Exa_DB_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
 /*****************************************************************************/
 /***************** Get sets of questions in a given exam *********************/
@@ -139,6 +138,521 @@ unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE QstCod=%ld"
 		   " ORDER BY AnsInd",
 		   QstCod);
+  }
+
+/*****************************************************************************/
+/************************* Create a new exam session *************************/
+/*****************************************************************************/
+
+long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create exam session",
+				"INSERT exa_sessions"
+				" (ExaCod,"
+				  "Hidden,"
+				  "UsrCod,"
+				  "StartTime,"
+				  "EndTime,"
+				  "Title,"
+				  "ShowUsrResults)"
+				" VALUES"
+				" (%ld,"		// ExaCod
+                                 "'%c',"		// Hidden
+				 "%ld,"			// UsrCod
+                                 "FROM_UNIXTIME(%ld),"	// Start time
+                                 "FROM_UNIXTIME(%ld),"	// End time
+				 "'%s',"		// Title
+				 "'N')",		// ShowUsrResults: Don't show user results initially
+				Session->ExaCod,
+				Session->Hidden ? 'Y' :
+					          'N',
+				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
+				Session->TimeUTC[Dat_START_TIME],	// Start time
+				Session->TimeUTC[Dat_END_TIME  ],	// End time
+				Session->Title);
+  }
+
+/*****************************************************************************/
+/********************** Update an existing exam session **********************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
+  {
+   /***** Insert this new exam session into database *****/
+   DB_QueryUPDATE ("can not update exam session",
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.Hidden='%c',"
+		          "exa_sessions.StartTime=FROM_UNIXTIME(%ld),"
+                          "exa_sessions.EndTime=FROM_UNIXTIME(%ld),"
+                          "exa_sessions.Title='%s',"
+                          "exa_sessions.ShowUsrResults='%c'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
+		   Session->Hidden ? 'Y' :
+			             'N',
+	           Session->TimeUTC[Dat_START_TIME],	// Start time
+		   Session->TimeUTC[Dat_END_TIME  ],	// End time
+		   Session->Title,
+		   Session->ShowUsrResults ? 'Y' :
+			                     'N',
+		   Session->SesCod,
+		   Session->ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********************* Get number of sessions in an exam *********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumSessionsInExam (long ExaCod)
+  {
+   /***** Trivial check *****/
+   if (ExaCod < 0)	// A non-existing exam...
+      return 0;		// ...has no sessions
+
+   /***** Get number of sessions in an exam from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of sessions of an exam",
+		  "SELECT COUNT(*)"
+		   " FROM exa_sessions"
+		  " WHERE ExaCod=%ld",
+		  ExaCod);
+  }
+
+/*****************************************************************************/
+/***************** Get number of open sessions in an exam ********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumOpenSessionsInExam (long ExaCod)
+  {
+   /***** Trivial check *****/
+   if (ExaCod < 0)	// A non-existing exam...
+      return 0;		// ...has no sessions
+
+   /***** Get number of open sessions in an exam from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of open sessions of an exam",
+		  "SELECT COUNT(*)"
+		   " FROM exa_sessions"
+		  " WHERE ExaCod=%ld"
+		    " AND NOW() BETWEEN StartTime AND EndTime",
+		  ExaCod);
+  }
+
+/*****************************************************************************/
+/************************ List the sessions of an exam ***********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   char *HiddenSubQuery;
+   char *GroupsSubQuery;
+   unsigned NumSessions;
+
+   /***** Subquery: get hidden sessions depending on user's role *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      default:
+	 Err_WrongRoleExit ();
+	 break;
+     }
+
+   /***** Subquery: get sessions depending on groups *****/
+   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
+     {
+      if (asprintf (&GroupsSubQuery," AND"
+				    "(SesCod NOT IN"
+				    " (SELECT SesCod FROM exa_groups)"
+				    " OR"
+				    " SesCod IN"
+				    " (SELECT exa_groups.SesCod"
+				       " FROM exa_groups,"
+				             "grp_users"
+				      " WHERE grp_users.UsrCod=%ld"
+				        " AND exa_groups.GrpCod=grp_users.GrpCod))",
+		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	  Err_NotEnoughMemoryExit ();
+      }
+    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+       if (asprintf (&GroupsSubQuery,"%s","") < 0)
+	  Err_NotEnoughMemoryExit ();
+
+   /***** Get data of sessions from database *****/
+   NumSessions = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get sessions",
+		   "SELECT SesCod,"					// row[0]
+			  "ExaCod,"					// row[1]
+			  "Hidden,"					// row[2]
+			  "UsrCod,"					// row[3]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			  "Title,"					// row[7]
+			  "ShowUsrResults"				// row[8]
+		    " FROM exa_sessions"
+		   " WHERE ExaCod=%ld%s%s"
+		   " ORDER BY SesCod",
+		   ExaCod,
+		   HiddenSubQuery,
+		   GroupsSubQuery);
+
+   /***** Free allocated memory for subqueries *****/
+   free (GroupsSubQuery);
+   free (HiddenSubQuery);
+
+   return NumSessions;
+  }
+
+/*****************************************************************************/
+/******************* Get exam session data using its code ********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetDataOfSessionByCod (MYSQL_RES **mysql_res,long SesCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get sessions",
+		   "SELECT SesCod,"					// row[0]
+			  "ExaCod,"					// row[1]
+			  "Hidden,"					// row[2]
+			  "UsrCod,"					// row[3]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[4]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[5]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[6]
+			  "Title,"					// row[7]
+			  "ShowUsrResults"				// row[8]
+		    " FROM exa_sessions"
+		   " WHERE SesCod=%ld"
+		     " AND ExaCod IN"		// Extra check
+		         " (SELECT ExaCod"
+			    " FROM exa_exams"
+			   " WHERE CrsCod='%ld')",
+		   SesCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/***************** Toggle visibility of exam session results *****************/
+/*****************************************************************************/
+
+void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session)
+  {
+   /***** Toggle visibility of exam session results *****/
+   DB_QueryUPDATE ("can not toggle visibility of session results",
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.ShowUsrResults='%c'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
+		   Session->ShowUsrResults ? 'Y' :
+			                     'N',
+		   Session->SesCod,
+		   Session->ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/******************************** Hide a session *****************************/
+/*****************************************************************************/
+
+void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,bool Hide)
+  {
+   DB_QueryUPDATE ("can not hide exam sessions",
+		   "UPDATE exa_sessions,"
+		          "exa_exams"
+		     " SET exa_sessions.Hidden='Y'"
+		   " WHERE exa_sessions.SesCod=%ld"
+		     " AND exa_sessions.ExaCod=%ld"	// Extra check
+		     " AND exa_sessions.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",	// Extra check
+		   Hide ? 'Y' :
+			  'N',
+		   Session->SesCod,
+		   Session->ExaCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove exam session from all tables *********************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSessionFromAllTables (long SesCod)
+  {
+   /* To delete orphan exam prints:
+   // DELETE FROM exa_print_questions WHERE PrnCod IN (SELECT PrnCod FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions));
+   // DELETE FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions);
+   */
+   /***** Remove exam prints in this session *****/
+   /*
+    * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   DB_QueryDELETE ("can not remove exam print questions in exam session",
+		   "DELETE FROM exa_print_questions"
+		   " USING exa_print_questions,
+		          "exa_prints"
+                   " WHERE exa_prints.SesCod=%ld"
+                   " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   SesCod);
+   DB_QueryDELETE ("can not remove exam prints in exam session",
+		   "DELETE FROM exa_prints"
+                   " WHERE exa_prints.SesCod=%ld",
+		   SesCod);
+   */
+
+   /***** Remove groups associated to this exam session *****/
+   DB_QueryDELETE ("can not remove groups associated to exam session",
+		   "DELETE FROM exa_groups"
+		   " WHERE SesCod=%ld",
+		   SesCod);
+
+   /***** Remove exam session from main table *****/
+   DB_QueryDELETE ("can not remove exam session",
+		   "DELETE FROM exa_sessions"
+		   " WHERE SesCod=%ld",
+		   SesCod);
+  }
+
+/*****************************************************************************/
+/**************** Remove exam session in exam from all tables ****************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSessionsInExamFromAllTables (long ExaCod)
+  {
+   /***** Remove exam prints in this session *****/
+   /*
+    * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   DB_QueryDELETE ("can not remove exam print questions in exam",
+		   "DELETE FROM exa_print_questions"
+		   " USING exa_print_questions,
+		          "exa_prints,
+		          "exa_sessions"
+                   " WHERE exa_sessions.ExaCod=%ld"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   ExaCod);
+   DB_QueryDELETE ("can not remove exam prints in exam",
+		   "DELETE FROM exa_prints"
+		   " USING exa_prints,
+		          "exa_sessions"
+                   " WHERE exa_sessions.ExaCod=%ld"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod",
+		   ExaCod);
+   */
+
+   /***** Remove groups associated to exam sessions of this exam *****/
+   DB_QueryDELETE ("can not remove groups associated to sessions of an exam",
+		   "DELETE FROM exa_groups"
+		   " USING exa_sessions,"
+		          "exa_groups"
+		   " WHERE exa_sessions.ExaCod=%ld"
+		     " AND exa_sessions.SesCod=exa_groups.SesCod",
+		   ExaCod);
+
+   /***** Remove sessions from main table *****/
+   DB_QueryDELETE ("can not remove sessions of an exam",
+		   "DELETE FROM exa_sessions"
+		   " WHERE ExaCod=%ld",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove exam session in course from all tables ***************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSessionInCourseFromAllTables (long CrsCod)
+  {
+   /***** Remove exam prints in this course *****/
+   /*
+    * TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   DB_QueryDELETE ("can not remove exam print questions in course",
+		   "DELETE FROM exa_print_questions"
+		   " USING exa_print_questions,
+		          "exa_prints,
+		          "exa_sessions,
+		          "exa_exams"
+		   " WHERE exa_exams.CrsCod=%ld"
+                     " AND exa_exams.ExaCod=exa_sessions"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   CrsCod);
+   DB_QueryDELETE ("can not remove exam print questions in course",
+		   "DELETE FROM exa_prints"
+		   " USING exa_prints,
+		          "exa_sessions,
+		          "exa_exams"
+		   " WHERE exa_exams.CrsCod=%ld"
+                     " AND exa_exams.ExaCod=exa_sessions"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod",
+		   CrsCod);
+   */
+
+   /***** Remove sessions from table of sessions groups *****/
+   DB_QueryDELETE ("can not remove sessions of a course",
+		   "DELETE FROM exa_groups"
+		   " USING exa_exams,"
+		          "exa_sessions,"
+		          "exa_groups"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+		     " AND exa_sessions.SesCod=exa_groups.SesCod",
+		   CrsCod);
+
+   /***** Remove sessions from exam sessions table *****/
+   DB_QueryDELETE ("can not remove sessions of a course",
+		   "DELETE FROM exa_sessions"
+		   " USING exa_exams,"
+		          "exa_sessions"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sessions.ExaCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************* Remove user from secondary exam session tables ****************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod)
+  {
+   /***** Remove student from secondary tables *****/
+   Exa_DB_RemoveUsrSesResultsInCrs (UsrCod,CrsCod,"exa_prints");
+  }
+
+static void Exa_DB_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName)
+  {
+   /***** Remove sessions in course from secondary table *****/
+   DB_QueryDELETE ("can not remove sessions of a user from table",
+		   "DELETE FROM %s"
+		   " USING exa_exams,"
+		          "exa_sessions,"
+		          "%s"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sessions.ExaCod"
+		     " AND exa_sessions.SesCod=%s.SesCod"
+		     " AND %s.UsrCod=%ld",
+		   TableName,
+		   TableName,
+		   CrsCod,
+		   TableName,
+		   TableName,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Create group associated to an exam session *****************/
+/*****************************************************************************/
+
+void Exa_DB_CreateGrpAssociatedToSession (long SesCod,long GrpCod)
+  {
+   DB_QueryINSERT ("can not associate a group to an exam session",
+		   "INSERT INTO exa_groups"
+		   " (SesCod,GrpCod)"
+		   " VALUES"
+		   " (%ld,%ld)",
+		   SesCod,
+		   GrpCod);
+  }
+
+/*****************************************************************************/
+/*********** Get groups associated to an exam session from database **********/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetGrpsAssociatedToSession (MYSQL_RES **mysql_res,long SesCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of an exam session",
+		   "SELECT grp_types.GrpTypName,"	// row[0]
+			  "grp_groups.GrpName"		// row[1]
+		    " FROM exa_groups,"
+			  "grp_groups,"
+			  "grp_types"
+		   " WHERE exa_groups.SesCod=%ld"
+		     " AND exa_groups.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   SesCod);
+  }
+
+/*****************************************************************************/
+/*** Check if I belong to any of the groups associated to the exam session ***/
+/*****************************************************************************/
+
+bool Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
+  {
+   return (DB_QueryCOUNT ("can not check if I can play an exam session",
+			  "SELECT COUNT(*)"
+			   " FROM exa_sessions"
+			  " WHERE SesCod=%ld"
+			  " AND (SesCod NOT IN"
+			       " (SELECT SesCod FROM exa_groups)"
+			       " OR"
+			       " SesCod IN"
+			       " (SELECT exa_groups.SesCod"
+				  " FROM exa_groups,"
+					"grp_users"
+				 " WHERE grp_users.UsrCod=%ld"
+				   " AND grp_users.GrpCod=exa_groups.GrpCod))",
+			  SesCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+  }
+
+/*****************************************************************************/
+/******************** Remove all groups from one session *********************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveAllGrpsAssociatedToSession (long SesCod)
+  {
+   DB_QueryDELETE ("can not remove groups associated to a session",
+		   "DELETE FROM exa_groups"
+		   " WHERE SesCod=%ld",
+		   SesCod);
+  }
+
+/*****************************************************************************/
+/**************** Remove groups of one type from all sessions ****************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveGroupsOfType (long GrpTypCod)
+  {
+   DB_QueryDELETE ("can not remove groups of a type"
+	           " from the associations between sessions and groups",
+		   "DELETE FROM exa_groups"
+		   " USING grp_groups,"
+		          "exa_groups"
+		   " WHERE grp_groups.GrpTypCod=%ld"
+		     " AND grp_groups.GrpCod=exa_groups.GrpCod",
+                   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove one group from all sessions *********************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveGrpAssociatedToExamSessions (long GrpCod)
+  {
+   /***** Remove group from all the sessions *****/
+   DB_QueryDELETE ("can not remove group"
+	           " from the associations between sessions and groups",
+		   "DELETE FROM exa_groups"
+		   " WHERE GrpCod=%ld",
+		   GrpCod);
   }
 
 /*****************************************************************************/

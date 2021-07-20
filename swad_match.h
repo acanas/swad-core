@@ -119,8 +119,8 @@ void Mch_ResumeMatch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 
-void Mch_RemoveGroup (long GrpCod);
-void Mch_RemoveGroupsOfType (long GrpTypCod);
+void Mch_DB_RemoveGroup (long GrpCod);
+void Mch_DB_RemoveGroupsOfType (long GrpTypCod);
 
 void Mch_PlayPauseMatch (void);
 void Mch_ChangeNumColsMch (void);

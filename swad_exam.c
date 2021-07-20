@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam.h"
+#include "swad_exam_database.h"
 #include "swad_exam_print.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
@@ -1000,10 +1001,10 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       Exam->NumQsts = Exa_DB_GetNumQstsExam (Exam->ExaCod);
 
       /* Get number of sessions */
-      Exam->NumSess = ExaSes_GetNumSessionsInExam (Exam->ExaCod);
+      Exam->NumSess = Exa_DB_GetNumSessionsInExam (Exam->ExaCod);
 
       /* Get number of open sessions */
-      Exam->NumOpenSess = ExaSes_GetNumOpenSessionsInExam (Exam->ExaCod);
+      Exam->NumOpenSess = Exa_DB_GetNumOpenSessionsInExam (Exam->ExaCod);
      }
    else
       /* Initialize to empty exam */

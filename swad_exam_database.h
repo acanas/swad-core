@@ -29,6 +29,7 @@
 
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
+#include "swad_exam_session.h"
 #include "swad_test_type.h"
 
 /*****************************************************************************/
@@ -45,6 +46,26 @@ unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
 unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
+
+long Exa_DB_CreateSession (const struct ExaSes_Session *Session);
+void Exa_DB_UpdateSession (const struct ExaSes_Session *Session);
+unsigned Exa_DB_GetNumSessionsInExam (long ExaCod);
+unsigned Exa_DB_GetNumOpenSessionsInExam (long ExaCod);
+unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetDataOfSessionByCod (MYSQL_RES **mysql_res,long SesCod);
+void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session);
+void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,bool Hide);
+void Exa_DB_RemoveSessionFromAllTables (long SesCod);
+void Exa_DB_RemoveSessionsInExamFromAllTables (long ExaCod);
+void Exa_DB_RemoveSessionInCourseFromAllTables (long CrsCod);
+void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod);
+
+void Exa_DB_CreateGrpAssociatedToSession (long SesCod,long GrpCod);
+unsigned Exa_DB_GetGrpsAssociatedToSession (MYSQL_RES **mysql_res,long SesCod);
+bool Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
+void Exa_DB_RemoveAllGrpsAssociatedToSession (long SesCod);
+void Exa_DB_RemoveGroupsOfType (long GrpTypCod);
+void Exa_DB_RemoveGrpAssociatedToExamSessions (long GrpCod);
 
 long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print);
 void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);

@@ -1975,7 +1975,7 @@ static void Mch_CreateGrps (long MchCod)
 /********************* Remove one group from all matches *********************/
 /*****************************************************************************/
 
-void Mch_RemoveGroup (long GrpCod)
+void Mch_DB_RemoveGroup (long GrpCod)
   {
    /***** Remove group from all the matches *****/
    DB_QueryDELETE ("can not remove group"
@@ -1989,7 +1989,7 @@ void Mch_RemoveGroup (long GrpCod)
 /***************** Remove groups of one type from all matches ****************/
 /*****************************************************************************/
 
-void Mch_RemoveGroupsOfType (long GrpTypCod)
+void Mch_DB_RemoveGroupsOfType (long GrpTypCod)
   {
    /***** Remove group from all the matches *****/
    DB_QueryDELETE ("can not remove groups of a type"

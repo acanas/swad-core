@@ -108,8 +108,8 @@ void Svy_ResetSurvey (void);
 void Svy_HideSurvey (void);
 void Svy_UnhideSurvey (void);
 void Svy_ReceiveFormSurvey (void);
-void Svy_RemoveGroup (long GrpCod);
-void Svy_RemoveGroupsOfType (long GrpTypCod);
+void Svy_DB_RemoveGroupsOfType (long GrpTypCod);
+void Svy_DB_RemoveGroup (long GrpCod);
 void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod);
 
 void Svy_RequestEditQuestion (void);
