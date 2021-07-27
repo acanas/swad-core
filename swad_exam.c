@@ -795,63 +795,16 @@ static Exa_Order_t Exa_GetParamOrder (void)
 
 void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder)
   {
-   static const char *OrderBySubQuery[Exa_NUM_ORDERS] =
-     {
-      [Exa_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,exa_exams.Title DESC",
-      [Exa_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,exa_exams.Title DESC",
-      [Exa_ORDER_BY_TITLE     ] = "exa_exams.Title",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char *HiddenSubQuery;
    unsigned NumExam;
 
    /***** Free list of exams *****/
    if (Exams->LstIsRead)
       Exa_FreeListExams (Exams);
 
-   /***** Subquery: get hidden exams depending on user's role *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         if (asprintf (&HiddenSubQuery," AND exa_exams.Hidden='N'") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-	 break;
-     }
-
    /***** Get list of exams from database *****/
-   Exams->Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get exams",
-		   "SELECT exa_exams.ExaCod,"				// row[0]
-			  "MIN(exa_sessions.StartTime) AS StartTime,"	// row[1]
-			  "MAX(exa_sessions.EndTime) AS EndTime"	// row[2]
-		    " FROM exa_exams"
-		    " LEFT JOIN exa_sessions"
-		      " ON exa_exams.ExaCod=exa_sessions.ExaCod"
-		   " WHERE exa_exams.CrsCod=%ld"
-		       "%s"
-		   " GROUP BY exa_exams.ExaCod"
-		   " ORDER BY %s",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   HiddenSubQuery,
-		   OrderBySubQuery[SelectedOrder]);
-
-   /***** Free allocated memory for subquery *****/
-   free (HiddenSubQuery);
-
-   if (Exams->Num) // Exams found...
+   if ((Exams->Num = Exa_DB_GetListExams (&mysql_res,SelectedOrder))) // Exams found...
      {
       /***** Create list of exams *****/
       if ((Exams->Lst = malloc ((size_t) Exams->Num *
@@ -956,25 +909,14 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
      }
 
    /***** Get exam data from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get exam data",
-		       "SELECT ExaCod,"		// row[0]
-			      "CrsCod,"		// row[1]
-			      "Hidden,"		// row[2]
-			      "UsrCod,"		// row[3]
-			      "MaxGrade,"	// row[4]
-			      "Visibility,"	// row[5]
-			      "Title"		// row[6]
-			" FROM exa_exams"
-		       " WHERE ExaCod=%ld",
-		       Exam->ExaCod)) // Exam found...
+   if (Exa_DB_GetDataOfExamByCod (&mysql_res,Exam->ExaCod)) // Exam found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the exam (row[0]) */
+      /* Get code of the exam (row[0])
+         and code of the course (row[1]) */
       Exam->ExaCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get code of the course (row[1]) */
       Exam->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the exam is hidden (row[2]) */
@@ -994,16 +936,13 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
       /* Get the title of the exam (row[6]) */
       Str_Copy (Exam->Title,row[6],sizeof (Exam->Title) - 1);
 
-      /* Get number of sets */
-      Exam->NumSets = Exa_DB_GetNumSetsExam (Exam->ExaCod);
-
-      /* Get number of questions */
-      Exam->NumQsts = Exa_DB_GetNumQstsExam (Exam->ExaCod);
-
-      /* Get number of sessions */
-      Exam->NumSess = Exa_DB_GetNumSessionsInExam (Exam->ExaCod);
-
-      /* Get number of open sessions */
+      /* Get number of sets,
+             number of questions,
+             number of sessions
+         and number of open sessions */
+      Exam->NumSets     = Exa_DB_GetNumSetsExam (Exam->ExaCod);
+      Exam->NumQsts     = Exa_DB_GetNumQstsExam (Exam->ExaCod);
+      Exam->NumSess     = Exa_DB_GetNumSessionsInExam (Exam->ExaCod);
       Exam->NumOpenSess = Exa_DB_GetNumOpenSessionsInExam (Exam->ExaCod);
      }
    else
@@ -1016,20 +955,14 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
    if (Exam->ExaCod > 0)
      {
       /***** Get start and end times from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get exam data",
-			  "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-				 "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
-			   " FROM exa_sessions"
-			  " WHERE ExaCod=%ld",
-			  Exam->ExaCod))
+      if (Exa_DB_GetExamStartEnd (&mysql_res,Exam->ExaCod))
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get start date (row[0] holds the start UTC time) */
+	 /* Get start date (row[0] holds the start UTC time)
+	    and end   date (row[1] holds the end   UTC time) */
 	 Exam->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
-
-	 /* Get end   date (row[1] holds the end   UTC time) */
 	 Exam->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
 	}
 
@@ -1057,20 +990,6 @@ void Exa_FreeListExams (struct Exa_Exams *Exams)
       Exams->Num       = 0;
       Exams->LstIsRead = false;
      }
-  }
-
-/*****************************************************************************/
-/********************** Get exam text from database **************************/
-/*****************************************************************************/
-
-void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get text of exam from database *****/
-   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get exam text",
-		         "SELECT Txt"
-			  " FROM exa_exams"
-		         " WHERE ExaCod=%ld",
-		         ExaCod);
   }
 
 /*****************************************************************************/

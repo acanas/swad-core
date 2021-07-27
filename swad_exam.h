@@ -68,8 +68,6 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam);
 void Exa_GetDataOfExamByFolder (struct Exa_Exam *Exam);
 void Exa_FreeListExams (struct Exa_Exams *Exams);
 
-void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-
 void Exa_AskRemExam (void);
 void Exa_RemoveExam (void);
 void Exa_RemoveCrsExams (long CrsCod);

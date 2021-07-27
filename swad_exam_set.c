@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam.h"
+#include "swad_exam_database.h"
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
 #include "swad_exam_set.h"
@@ -65,8 +66,6 @@ extern struct Globals Gbl;
 #define ExaSet_MAX_SELECTED_QUESTIONS			10000
 #define ExaSet_MAX_BYTES_LIST_SELECTED_QUESTIONS	(ExaSet_MAX_SELECTED_QUESTIONS * (Cns_MAX_DECIMAL_DIGITS_LONG + 1))
 
-#define ExaSet_AFTER_LAST_SET	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a session is finished
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -81,11 +80,6 @@ extern struct Globals Gbl;
 
 static void ExaSet_PutParamsOneQst (void *Exams);
 
-static unsigned Exa_DB_GetNumQstsInSet (long SetCod);
-
-static bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
-                                            const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
-
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct Exa_Exam *Exam,
 				  struct ExaSet_Set *Set,
@@ -96,20 +90,8 @@ static bool ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
 
 static void ExaSet_CreateSet (struct ExaSet_Set *Set);
 static void ExaSet_UpdateSet (const struct ExaSet_Set *Set);
-static void Exa_DB_UpdateSetTitle (const struct ExaSet_Set *Set,
-                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
-static void Exa_DB_UpdateNumQstsToExam (const struct ExaSet_Set *Set,
-                                        unsigned NumQstsToPrint);
 
 static void ExaSet_PutParamSetCod (long SetCod);
-
-static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod);
-static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
-
-static unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod);
-
-static unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
-static unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
 
 static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
                                      const struct Exa_Exam *Exam,
@@ -186,21 +168,6 @@ long ExaSet_GetParamSetCod (void)
   }
 
 /*****************************************************************************/
-/********************* Get number of questions in a set **********************/
-/*****************************************************************************/
-
-static unsigned Exa_DB_GetNumQstsInSet (long SetCod)
-  {
-   /***** Get number of questions in set from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of questions in a set",
-		  "SELECT COUNT(*)"
-		   " FROM exa_set_questions"
-		  " WHERE SetCod=%ld",
-		  SetCod);
-  }
-
-/*****************************************************************************/
 /*********************** Get set data using its code *************************/
 /*****************************************************************************/
 
@@ -219,15 +186,7 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
      }
 
    /***** Get data of set of questions from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get set data",
-		       "SELECT SetCod,"		// row[0]
-                              "ExaCod,"		// row[1]
-			      "SetInd,"		// row[2]
-			      "NumQstsToPrint,"	// row[3]
-			      "Title"		// row[4]
-		        " FROM exa_sets"
-		       " WHERE SetCod=%ld",
-		       Set->SetCod)) // Set found...
+   if (Exa_DB_GetDataOfSetByCod (&mysql_res,Set->SetCod)) // Set found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -260,28 +219,6 @@ void ExaSet_GetDataOfSetByCod (struct ExaSet_Set *Set)
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************** Check if the title of a set of questions exists **************/
-/*****************************************************************************/
-
-static bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
-                                            const char Title[ExaSet_MAX_BYTES_TITLE + 1])
-  {
-   /***** Get number of set of questions with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar sets of questions",
-			  "SELECT COUNT(*)"
-			   " FROM exa_sets,"
-			         "exa_exams"
-			  " WHERE exa_sets.ExaCod=%ld"
-			    " AND exa_sets.Title='%s'"
-			    " AND exa_sets.SetCod<>%ld"
-			    " AND exa_sets.ExaCod=exa_exams.ExaCod"
-			    " AND exa_exams.CrsCod=%ld",	// Extra check
-			  Set->ExaCod,Title,
-			  Set->SetCod,
-			  Gbl.Hierarchy.Crs.CrsCod) != 0);
   }
 
 /*****************************************************************************/
@@ -549,16 +486,7 @@ static void ExaSet_CreateSet (struct ExaSet_Set *Set)
    MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Set->ExaCod);
 
    /***** Create a new exam *****/
-   Set->SetCod =
-   DB_QueryINSERTandReturnCode ("can not create new set of questions",
-				"INSERT INTO exa_sets"
-				" (ExaCod,SetInd,NumQstsToPrint,Title)"
-				" VALUES"
-				" (%ld,%u,%u,'%s')",
-				Set->ExaCod,
-				MaxSetInd + 1,
-				Set->NumQstsToPrint,
-				Set->Title);
+   Set->SetCod = Exa_DB_CreateSet (Set,MaxSetInd + 1);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_set_of_questions_X,
@@ -574,86 +502,10 @@ static void ExaSet_UpdateSet (const struct ExaSet_Set *Set)
    extern const char *Txt_The_set_of_questions_has_been_modified;
 
    /***** Update the data of the set of questions *****/
-   DB_QueryUPDATE ("can not update set of questions",
-		   "UPDATE exa_sets"
-		     " SET ExaCod=%ld,"
-		          "SetInd=%u,"
-		          "NumQstsToPrint=%u,"
-		          "Title='%s'"
-		   " WHERE SetCod=%ld",
-		   Set->ExaCod,
-		   Set->SetInd,
-		   Set->NumQstsToPrint,
-	           Set->Title,
-	           Set->SetCod);
+   Exa_DB_UpdateSet (Set);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_set_of_questions_has_been_modified);
-  }
-
-/*****************************************************************************/
-/************************ Update set title in database ***********************/
-/*****************************************************************************/
-
-static void Exa_DB_UpdateSetTitle (const struct ExaSet_Set *Set,
-                                   const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
-  {
-   /***** Update set of questions changing old title by new title *****/
-   DB_QueryUPDATE ("can not update the title of a set of questions",
-		   "UPDATE exa_sets"
-		     " SET Title='%s'"
-		   " WHERE SetCod=%ld"
-		     " AND ExaCod=%ld",	// Extra check
-	           NewTitle,
-	           Set->SetCod,
-	           Set->ExaCod);
-  }
-
-/*****************************************************************************/
-/****** Update number of questions to appear in exam print in database *******/
-/*****************************************************************************/
-
-static void Exa_DB_UpdateNumQstsToExam (const struct ExaSet_Set *Set,
-                                        unsigned NumQstsToPrint)
-  {
-   /***** Update set of questions changing old number by new number *****/
-   DB_QueryUPDATE ("can not update the number of questions to appear in exam print",
-		   "UPDATE exa_sets"
-		     " SET NumQstsToPrint=%u"
-		   " WHERE SetCod=%ld"
-		     " AND ExaCod=%ld",	// Extra check
-	           NumQstsToPrint,
-	           Set->SetCod,
-	           Set->ExaCod);
-  }
-
-/*****************************************************************************/
-/******************* Get number of questions of an exam *********************/
-/*****************************************************************************/
-
-unsigned Exa_DB_GetNumSetsExam (long ExaCod)
-  {
-   /***** Get number of sets in an exam from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of sets in an exam",
-		  "SELECT COUNT(*)"
-		   " FROM exa_sets"
-		  " WHERE ExaCod=%ld",
-		  ExaCod);
-  }
-
-/*****************************************************************************/
-/******************* Get number of questions of an exam *********************/
-/*****************************************************************************/
-
-unsigned Exa_DB_GetNumQstsExam (long ExaCod)
-  {
-   /***** Get total number of questions to appear in exam print *****/
-   return DB_QuerySELECTUnsigned ("can not get number of questions in an exam print",
-				  "SELECT SUM(NumQstsToPrint)"
-				   " FROM exa_sets"
-				  " WHERE ExaCod=%ld",
-				  ExaCod);
   }
 
 /*****************************************************************************/
@@ -772,114 +624,6 @@ static void ExaSet_PutParamSetCod (long SetCod)
   }
 
 /*****************************************************************************/
-/****************** Get set index given exam and set code ********************/
-/*****************************************************************************/
-
-static unsigned ExaSet_GetSetIndFromSetCod (long ExaCod,long SetCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   long SetInd;
-
-   /***** Get set index from set code *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get set index",
-			"SELECT SetInd"		// row[0]
-			 " FROM exa_sets"
-			" WHERE SetCod=%u"
-			  " AND ExaCod=%ld",	// Extra check
-			SetCod,ExaCod))
-      Err_WrongSetExit ();
-
-   /***** Get set code (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   SetInd = Str_ConvertStrToUnsigned (row[0]);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return SetInd;
-  }
-
-/*****************************************************************************/
-/****************** Get set code given exam and set index ********************/
-/*****************************************************************************/
-
-static long ExaSet_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
-  {
-   long SetCod;
-
-   /***** Get set code from set index *****/
-   SetCod = DB_QuerySELECTCode ("can not get set code",
-				"SELECT SetCod"
-				 " FROM exa_sets"
-				" WHERE ExaCod=%ld"
-				  " AND SetInd=%u",
-				ExaCod,
-				SetInd);
-   if (SetCod <= 0)
-      Err_WrongSetExit ();
-
-   return SetCod;
-  }
-
-/*****************************************************************************/
-/********************* Get maximum set index in an exam **********************/
-/*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no questions
-
-static unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod)
-  {
-   /***** Get maximum set index in an exam from database *****/
-   return DB_QuerySELECTUnsigned ("can not get max set index",
-				  "SELECT MAX(SetInd)"
-				   " FROM exa_sets"
-				  " WHERE ExaCod=%ld",
-				  ExaCod);
-  }
-
-/*****************************************************************************/
-/*********** Get previous set index to a given set index in an exam **********/
-/*****************************************************************************/
-// Input set index can be 1, 2, 3... n-1
-// Return set index will be 1, 2, 3... n if previous set exists, or 0 if no previous set
-
-static unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
-  {
-   /***** Get previous set index in an exam from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get previous set index",
-				  "SELECT COALESCE(MAX(SetInd),0)"
-				   " FROM exa_sets"
-				  " WHERE ExaCod=%ld"
-				    " AND SetInd<%u",
-				  ExaCod,
-				  SetInd);
-  }
-
-/*****************************************************************************/
-/*************** Get next set index to a given index in an exam **************/
-/*****************************************************************************/
-// Input set index can be 0, 1, 2, 3... n-1
-// Return set index will be 1, 2, 3... n if next set exists, or big number if no next set
-
-static unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
-  {
-   /***** Get next set index in an exam from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get next set index",
-				  "SELECT COALESCE(MIN(SetInd),%u)"
-				   " FROM exa_sets"
-				  " WHERE ExaCod=%ld"
-				    " AND SetInd>%u",
-				  ExaSet_AFTER_LAST_SET,	// End of sets has been reached
-				  ExaCod,
-				  SetInd);
-  }
-
-/*****************************************************************************/
 /************************* List the sets of an exam **************************/
 /*****************************************************************************/
 
@@ -898,24 +642,15 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
    MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exam->ExaCod);
 
    /***** Get data of set of questions from database *****/
-   NumSets = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get sets of questions",
-		   "SELECT SetCod,"		// row[0]
-			  "SetInd,"		// row[1]
-			  "NumQstsToPrint,"	// row[2]
-			  "Title"		// row[3]
-		    " FROM exa_sets"
-		   " WHERE ExaCod=%ld"
-		   " ORDER BY SetInd",
-		   Exam->ExaCod);
+   NumSets = Exa_DB_GetExamSets (&mysql_res,Exam->ExaCod);
 
    /***** Begin box *****/
-   Exams->ExaCod = Exam->ExaCod;
    Box_BoxBegin (NULL,Txt_Sets_of_questions,
 		 NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_question_sets,Box_NOT_CLOSABLE);
 
    /***** Show table with sets *****/
+   Exams->ExaCod = Exam->ExaCod;
    if (NumSets)
       ExaSet_ListOneOrMoreSetsForEdition (Exams,Exam,
                                           MaxSetInd,
@@ -1861,7 +1596,7 @@ void ExaSet_MoveUpSet (void)
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
-   SetIndBottom = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
+   SetIndBottom = Exa_DB_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
 
    /***** Move up set *****/
    if (SetIndBottom > 1)
@@ -1909,7 +1644,7 @@ void ExaSet_MoveDownSet (void)
       Err_NoPermissionExit ();
 
    /***** Get set index *****/
-   SetIndTop = ExaSet_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
+   SetIndTop = Exa_DB_GetSetIndFromSetCod (Exam.ExaCod,Set.SetCod);
 
    /***** Get maximum set index *****/
    MaxSetInd = Exa_DB_GetMaxSetIndexInExam (Exam.ExaCod);
@@ -1919,7 +1654,7 @@ void ExaSet_MoveDownSet (void)
      {
       /* Indexes of sets to be exchanged */
       SetIndBottom = Exa_DB_GetNextSetIndexInExam (Exam.ExaCod,SetIndTop);
-      if (SetIndBottom == ExaSet_AFTER_LAST_SET)
+      if (SetIndBottom == 0)
 	 Err_ShowErrorAndExit ("Wrong set index.");
 
       /* Exchange sets */
@@ -2200,8 +1935,8 @@ static void ExaSet_ExchangeSets (long ExaCod,
    Gbl.DB.LockedTables = true;
 
    /***** Get set codes of the sets to be moved *****/
-   SetCodTop    = ExaSet_GetSetCodFromSetInd (ExaCod,SetIndTop);
-   SetCodBottom = ExaSet_GetSetCodFromSetInd (ExaCod,SetIndBottom);
+   SetCodTop    = Exa_DB_GetSetCodFromSetInd (ExaCod,SetIndTop);
+   SetCodBottom = Exa_DB_GetSetCodFromSetInd (ExaCod,SetIndBottom);
 
    /***** Exchange indexes of sets *****/
    /*

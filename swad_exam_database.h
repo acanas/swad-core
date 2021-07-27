@@ -30,6 +30,7 @@
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
 #include "swad_exam_session.h"
+#include "swad_exam_set.h"
 #include "swad_test_type.h"
 
 /*****************************************************************************/
@@ -40,7 +41,30 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder);
+unsigned Exa_DB_GetDataOfExamByCod (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
+void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+
+long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd);
+void Exa_DB_UpdateSet (const struct ExaSet_Set *Set);
+void Exa_DB_UpdateSetTitle (const struct ExaSet_Set *Set,
+                            const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
+void Exa_DB_UpdateNumQstsToExam (const struct ExaSet_Set *Set,
+                                 unsigned NumQstsToPrint);
+unsigned Exa_DB_GetNumSetsExam (long ExaCod);
+unsigned Exa_DB_GetNumQstsExam (long ExaCod);
 unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetDataOfSetByCod (MYSQL_RES **mysql_res,long SetCod);
+bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+                                     const char Title[ExaSet_MAX_BYTES_TITLE + 1]);
+unsigned Exa_DB_GetSetIndFromSetCod (long ExaCod,long SetCod);
+long Exa_DB_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
+unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod);
+unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
+unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
+
+unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
                                            long SetCod,unsigned NumQstsToPrint);
 unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod);

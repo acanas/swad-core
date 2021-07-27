@@ -339,34 +339,38 @@ static void ExaPrn_GetQuestionsForNewPrintFromDB (struct ExaPrn_Print *Print,lon
 
    /***** Get questions from all sets *****/
    Print->NumQsts.All = 0;
-   if ((NumSets = Exa_DB_GetExamSets (&mysql_res,ExaCod)))
-      /***** For each set in exam... *****/
-      for (NumSet = 0;
-	   NumSet < NumSets;
-	   NumSet++)
-	{
-	 /***** Create set of questions *****/
-	 ExaSet_ResetSet (&Set);
+   NumSets = Exa_DB_GetExamSets (&mysql_res,ExaCod);
 
-	 /***** Get set data *****/
-	 row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] SetCod
-	 row[1] NumQstsToPrint
-	 row[2] Title
-	 */
-	 /* Get set code (row[0])
-	    and set index (row[1]) */
-	 Set.SetCod         = Str_ConvertStrCodToLongCod (row[0]);
-	 Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[1]);
+   /***** For each set in exam... *****/
+   for (NumSet = 0;
+	NumSet < NumSets;
+	NumSet++)
+     {
+      /***** Create set of questions *****/
+      ExaSet_ResetSet (&Set);
 
-	 /* Get the title of the set (row[2]) */
-	 Str_Copy (Set.Title,row[2],sizeof (Set.Title) - 1);
+      /***** Get set data *****/
+      row = mysql_fetch_row (mysql_res);
+      /*
+      row[0] SetCod
+      row[1] SetInd
+      row[2] NumQstsToPrint
+      row[3] Title
+      */
+      /* Get set code (row[0]),
+	 set index (row[1]),
+	 and number of questions to print (row[2]) */
+      Set.SetCod         = Str_ConvertStrCodToLongCod (row[0]);
+      Set.SetInd         = Str_ConvertStrToUnsigned (row[1]);
+      Set.NumQstsToPrint = Str_ConvertStrToUnsigned (row[2]);
 
-	 /***** Questions in this set *****/
-	 NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstsInPrint);
-	 Print->NumQsts.All += NumQstsFromSet;
-	}
+      /* Get the title of the set (row[3]) */
+      Str_Copy (Set.Title,row[3],sizeof (Set.Title) - 1);
+
+      /***** Questions in this set *****/
+      NumQstsFromSet = ExaPrn_GetSomeQstsFromSetToPrint (Print,&Set,&NumQstsInPrint);
+      Print->NumQsts.All += NumQstsFromSet;
+     }
 
    /***** Check *****/
    if (Print->NumQsts.All != NumQstsInPrint)

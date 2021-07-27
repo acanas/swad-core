@@ -33,6 +33,7 @@
 #include "swad_exam_database.h"
 #include "swad_exam_log.h"
 #include "swad_exam_print.h"
+#include "swad_exam_set.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -60,6 +61,215 @@ extern struct Globals Gbl;
 static void Exa_DB_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
 /*****************************************************************************/
+/*********************** Get list of all the exams *************************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
+  {
+   static const char *OrderBySubQuery[Exa_NUM_ORDERS] =
+     {
+      [Exa_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,exa_exams.Title DESC",
+      [Exa_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,exa_exams.Title DESC",
+      [Exa_ORDER_BY_TITLE     ] = "exa_exams.Title",
+     };
+   char *HiddenSubQuery;
+   unsigned NumExams;
+
+   /***** Subquery: get hidden exams depending on user's role *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         if (asprintf (&HiddenSubQuery," AND exa_exams.Hidden='N'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      default:
+	 Err_WrongRoleExit ();
+	 break;
+     }
+
+   /***** Get list of exams from database *****/
+   NumExams = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get exams",
+		   "SELECT exa_exams.ExaCod,"				// row[0]
+			  "MIN(exa_sessions.StartTime) AS StartTime,"	// row[1]
+			  "MAX(exa_sessions.EndTime) AS EndTime"	// row[2]
+		    " FROM exa_exams"
+		    " LEFT JOIN exa_sessions"
+		      " ON exa_exams.ExaCod=exa_sessions.ExaCod"
+		   " WHERE exa_exams.CrsCod=%ld"
+		       "%s"
+		   " GROUP BY exa_exams.ExaCod"
+		   " ORDER BY %s",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   HiddenSubQuery,
+		   OrderBySubQuery[SelectedOrder]);
+
+   /***** Free allocated memory for subquery *****/
+   free (HiddenSubQuery);
+
+   return NumExams;
+  }
+
+/*****************************************************************************/
+/********************** Get exam data using its code *************************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetDataOfExamByCod (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get exam data",
+		   "SELECT ExaCod,"	// row[0]
+			  "CrsCod,"	// row[1]
+			  "Hidden,"	// row[2]
+			  "UsrCod,"	// row[3]
+			  "MaxGrade,"	// row[4]
+			  "Visibility,"	// row[5]
+			  "Title"	// row[6]
+		    " FROM exa_exams"
+		   " WHERE ExaCod=%ld",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get exam start and end times ************************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get exam data",
+		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+			  "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
+		    " FROM exa_sessions"
+		   " WHERE ExaCod=%ld",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/********************** Get exam text from database **************************/
+/*****************************************************************************/
+
+void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+  {
+   /***** Get text of exam from database *****/
+   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get exam text",
+		         "SELECT Txt"
+			  " FROM exa_exams"
+		         " WHERE ExaCod=%ld",
+		         ExaCod);
+  }
+
+/*****************************************************************************/
+/********************** Create a new set of questions ************************/
+/*****************************************************************************/
+
+long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create new set of questions",
+				"INSERT INTO exa_sets"
+				" (ExaCod,SetInd,NumQstsToPrint,Title)"
+				" VALUES"
+				" (%ld,%u,%u,'%s')",
+				Set->ExaCod,
+				SetInd,
+				Set->NumQstsToPrint,
+				Set->Title);
+  }
+
+/*****************************************************************************/
+/******************** Update an existing set of questions ********************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateSet (const struct ExaSet_Set *Set)
+  {
+   DB_QueryUPDATE ("can not update set of questions",
+		   "UPDATE exa_sets"
+		     " SET ExaCod=%ld,"
+		          "SetInd=%u,"
+		          "NumQstsToPrint=%u,"
+		          "Title='%s'"
+		   " WHERE SetCod=%ld",
+		   Set->ExaCod,
+		   Set->SetInd,
+		   Set->NumQstsToPrint,
+	           Set->Title,
+	           Set->SetCod);
+  }
+
+/*****************************************************************************/
+/************************ Update set title in database ***********************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateSetTitle (const struct ExaSet_Set *Set,
+                            const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1])
+  {
+   /***** Update set of questions changing old title by new title *****/
+   DB_QueryUPDATE ("can not update the title of a set of questions",
+		   "UPDATE exa_sets"
+		     " SET Title='%s'"
+		   " WHERE SetCod=%ld"
+		     " AND ExaCod=%ld",	// Extra check
+	           NewTitle,
+	           Set->SetCod,
+	           Set->ExaCod);
+  }
+
+/*****************************************************************************/
+/****** Update number of questions to appear in exam print in database *******/
+/*****************************************************************************/
+
+void Exa_DB_UpdateNumQstsToExam (const struct ExaSet_Set *Set,
+                                 unsigned NumQstsToPrint)
+  {
+   /***** Update set of questions changing old number by new number *****/
+   DB_QueryUPDATE ("can not update the number of questions to appear in exam print",
+		   "UPDATE exa_sets"
+		     " SET NumQstsToPrint=%u"
+		   " WHERE SetCod=%ld"
+		     " AND ExaCod=%ld",	// Extra check
+	           NumQstsToPrint,
+	           Set->SetCod,
+	           Set->ExaCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get number of sets in an exam ***********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumSetsExam (long ExaCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of sets in an exam",
+		  "SELECT COUNT(*)"
+		   " FROM exa_sets"
+		  " WHERE ExaCod=%ld",
+		  ExaCod);
+  }
+
+/*****************************************************************************/
+/************* Get total number of questions to print in an exam *************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumQstsExam (long ExaCod)
+  {
+   return DB_QuerySELECTUnsigned ("can not get number of questions to print in an exam",
+				  "SELECT SUM(NumQstsToPrint)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld",
+				  ExaCod);
+  }
+
+/*****************************************************************************/
 /***************** Get sets of questions in a given exam *********************/
 /*****************************************************************************/
 
@@ -68,12 +278,160 @@ unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get sets of questions",
 		   "SELECT SetCod,"		// row[0]
-			  "NumQstsToPrint,"	// row[1]
-			  "Title"		// row[2]
+			  "SetInd,"		// row[1]
+			  "NumQstsToPrint,"	// row[2]
+			  "Title"		// row[3]
 		    " FROM exa_sets"
 		   " WHERE ExaCod=%ld"
 		   " ORDER BY SetInd",
 		   ExaCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get set data using its code *************************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetDataOfSetByCod (MYSQL_RES **mysql_res,long SetCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get set data",
+		   "SELECT SetCod,"		// row[0]
+			  "ExaCod,"		// row[1]
+			  "SetInd,"		// row[2]
+			  "NumQstsToPrint,"	// row[3]
+			  "Title"		// row[4]
+		    " FROM exa_sets"
+		   " WHERE SetCod=%ld",
+		   SetCod);
+  }
+
+/*****************************************************************************/
+/************** Check if the title of a set of questions exists **************/
+/*****************************************************************************/
+
+bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
+                                     const char Title[ExaSet_MAX_BYTES_TITLE + 1])
+  {
+   /***** Get number of set of questions with a field value from database *****/
+   return (DB_QueryCOUNT ("can not get similar sets of questions",
+			  "SELECT COUNT(*)"
+			   " FROM exa_sets,"
+			         "exa_exams"
+			  " WHERE exa_sets.ExaCod=%ld"
+			    " AND exa_sets.Title='%s'"
+			    " AND exa_sets.SetCod<>%ld"
+			    " AND exa_sets.ExaCod=exa_exams.ExaCod"
+			    " AND exa_exams.CrsCod=%ld",	// Extra check
+			  Set->ExaCod,Title,
+			  Set->SetCod,
+			  Gbl.Hierarchy.Crs.CrsCod) != 0);
+  }
+
+/*****************************************************************************/
+/****************** Get set index given exam and set code ********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetSetIndFromSetCod (long ExaCod,long SetCod)
+  {
+   return DB_QuerySELECTUnsigned ("can not get set index",
+				  "SELECT SetInd"	// row[0]
+				   " FROM exa_sets"
+				  " WHERE SetCod=%u"
+				    " AND ExaCod=%ld",	// Extra check
+				  SetCod,ExaCod);
+  }
+
+/*****************************************************************************/
+/****************** Get set code given exam and set index ********************/
+/*****************************************************************************/
+
+long Exa_DB_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
+  {
+   long SetCod;
+
+   /***** Get set code from set index *****/
+   SetCod = DB_QuerySELECTCode ("can not get set code",
+				"SELECT SetCod"
+				 " FROM exa_sets"
+				" WHERE ExaCod=%ld"
+				  " AND SetInd=%u",
+				ExaCod,
+				SetInd);
+   if (SetCod <= 0)
+      Err_WrongSetExit ();
+
+   return SetCod;
+  }
+
+/*****************************************************************************/
+/********************* Get maximum set index in an exam **********************/
+/*****************************************************************************/
+// Question index can be 1, 2, 3...
+// Return 0 if no questions
+
+unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod)
+  {
+   /***** Get maximum set index in an exam from database *****/
+   return DB_QuerySELECTUnsigned ("can not get max set index",
+				  "SELECT MAX(SetInd)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld",
+				  ExaCod);
+  }
+
+/*****************************************************************************/
+/*********** Get previous set index to a given set index in an exam **********/
+/*****************************************************************************/
+// Input set index can be 1, 2, 3... n-1
+// Return set index will be 1, 2, 3... n if previous set exists, or 0 if no previous set
+
+unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd)
+  {
+   /***** Get previous set index in an exam from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   return DB_QuerySELECTUnsigned ("can not get previous set index",
+				  "SELECT COALESCE(MAX(SetInd),0)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld"
+				    " AND SetInd<%u",
+				  ExaCod,
+				  SetInd);
+  }
+
+/*****************************************************************************/
+/*************** Get next set index to a given index in an exam **************/
+/*****************************************************************************/
+// Input set index can be 0, 1, 2, 3... n-1
+// Return set index will be 1, 2, 3... n if next set exists, or 0 if no next set
+
+unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
+  {
+   /***** Get next set index in an exam from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   return DB_QuerySELECTUnsigned ("can not get next set index",
+				  "SELECT COALESCE(MIN(SetInd),0)"
+				   " FROM exa_sets"
+				  " WHERE ExaCod=%ld"
+				    " AND SetInd>%u",
+				  ExaCod,
+				  SetInd);
+  }
+
+/*****************************************************************************/
+/********************* Get number of questions in a set **********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetNumQstsInSet (long SetCod)
+  {
+   /***** Get number of questions in set from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of questions in a set",
+		  "SELECT COUNT(*)"
+		   " FROM exa_set_questions"
+		  " WHERE SetCod=%ld",
+		  SetCod);
   }
 
 /*****************************************************************************/
