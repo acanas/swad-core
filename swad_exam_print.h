@@ -90,8 +90,4 @@ void ExaPrn_ReceivePrintAnswer (void);
 void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				struct Tst_Question *Question);
 
-void ExaPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
-void ExaPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void ExaPrn_RemoveCrsPrints (long CrsCod);
-
 #endif

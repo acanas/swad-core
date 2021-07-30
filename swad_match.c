@@ -141,7 +141,7 @@ static void Mch_RemoveMatchFromAllTables (long MchCod);
 static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName);
 static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
 static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName);
-static void Mch_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName);
+static void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName);
 static void Mch_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName);
 
 static void Mch_PutParamsPlay (void *MchCod);
@@ -1293,12 +1293,12 @@ static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *Table
 void Mch_RemoveMatchesMadeByUsrInAllCrss (long UsrCod)
   {
    /***** Remove student from secondary tables *****/
-   Mch_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_players");
-   Mch_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_results");
-   Mch_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_answers");
+   Mch_DB_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_players");
+   Mch_DB_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_results");
+   Mch_DB_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_answers");
   }
 
-static void Mch_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName)
+static void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName)
   {
    /***** Remove matches in course from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a user from table",

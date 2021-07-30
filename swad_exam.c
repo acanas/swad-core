@@ -137,8 +137,10 @@ static Exa_Order_t Exa_GetParamOrder (void);
 
 static void Exa_RemoveExamFromAllTables (long ExaCod);
 
-static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
-static void Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
+static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (long ExaCod);
+static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long CrsCod);
+static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (long ExaCod);
+static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod);
 
 static bool Exa_DB_CheckIfSimilarExamExists (const struct Exa_Exam *Exam);
 
@@ -1076,29 +1078,26 @@ void Exa_RemoveExam (void)
 
 static void Exa_RemoveExamFromAllTables (long ExaCod)
   {
+   /***** Remove questions of exams prints, and exam prints, of this exam *****/
+   Exa_DB_RemovePrintQuestionsFromExam (ExaCod);
+   Exa_DB_RemovePrintsFromExam (ExaCod);
+
    /***** Remove all sessions in this exam *****/
    Exa_DB_RemoveSessionsInExamFromAllTables (ExaCod);
 
-   /***** Remove exam questions *****/
-   DB_QueryDELETE ("can not remove exam questions",
-		   "DELETE FROM exa_set_questions"
-		   " USING exa_sets,"
-		          "exa_set_questions"
-		   " WHERE exa_sets.ExaCod=%ld"
-		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
-		   ExaCod);
+   /***** Remove media associated to exam questions in the exam *****/
+   Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (ExaCod);
+   Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (ExaCod);
+
+   /***** Remove the answers and the questions in sets of questions *****/
+   Exa_DB_RemoveSetAnswersFromExam (ExaCod);
+   Exa_DB_RemoveSetQuestionsFromExam (ExaCod);
 
    /***** Remove exam sets *****/
-   DB_QueryDELETE ("can not remove exam sets",
-		   "DELETE FROM exa_sets"
-		   " WHERE ExaCod=%ld",
-		   ExaCod);
+   Exa_DB_RemoveSetsFromExam (ExaCod);
 
    /***** Remove exam *****/
-   DB_QueryDELETE ("can not remove exam",
-		   "DELETE FROM exa_exams"
-		   " WHERE ExaCod=%ld",
-		   ExaCod);
+   Exa_DB_RemoveExam (ExaCod);
   }
 
 /*****************************************************************************/
@@ -1107,61 +1106,60 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
 
 void Exa_RemoveCrsExams (long CrsCod)
   {
-   /***** Remove all exams prints made in the course *****/
-   ExaPrn_RemoveCrsPrints (CrsCod);
+   /***** Remove questions of exams prints, and exam prints,
+          made in the given course *****/
+   Exa_DB_RemovePrintQuestionsFromCrs (CrsCod);
+   Exa_DB_RemovePrintsFromCrs (CrsCod);
 
    /***** Remove all sessions in the course *****/
    Exa_DB_RemoveSessionInCourseFromAllTables (CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
-   Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
-   Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
+   Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (CrsCod);
+   Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (CrsCod);
 
-   /***** Remove the answers in set of questions *****/
-   DB_QueryDELETE ("can not remove answers in course exams",
-		   "DELETE FROM exa_set_answers"
-		   " USING exa_exams,"
-		          "exa_sets,"
-		          "exa_set_questions,"
-		          "exa_set_answers"
-		   " WHERE exa_exams.CrsCod=%ld"
-		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
-		     " AND exa_sets.SetCod=exa_set_questions.SetCod"
-		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
-                   CrsCod);
-
-   /***** Remove the questions in set of questions *****/
-   DB_QueryDELETE ("can not remove questions in course exams",
-		   "DELETE FROM exa_set_questions"
-		   " USING exa_exams,"
-		          "exa_sets,"
-		          "exa_set_questions"
-		   " WHERE exa_exams.CrsCod=%ld"
-		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
-		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
-                   CrsCod);
+   /***** Remove the answers and the questions in sets of questions *****/
+   Exa_DB_RemoveSetAnswersFromCrs (CrsCod);
+   Exa_DB_RemoveSetQuestionsFromCrs (CrsCod);
 
    /***** Remove the sets of questions in exams *****/
-   DB_QueryDELETE ("can not remove sets in course exams",
-		   "DELETE FROM exa_sets"
-		   " USING exa_exams,"
-		          "exa_sets"
-		   " WHERE exa_exams.CrsCod=%ld"
-		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
-                   CrsCod);
+   Exa_DB_RemoveSetsFromCrs (CrsCod);
 
    /***** Remove the exams *****/
-   DB_QueryDELETE ("can not remove course exams",
-		   "DELETE FROM exa_exams"
-		   " WHERE CrsCod=%ld",
-                   CrsCod);
+   Exa_DB_RemoveExamsFromCrs (CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Remove all media associated to stems of an exam questions *********/
+/*****************************************************************************/
+
+static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumMedia;
+
+   /***** Get media codes associated to stems of an exam questions from database *****/
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT exa_set_questions.MedCod"
+		    " FROM exa_sets,"
+			  "exa_set_questions"
+		   " WHERE exa_sets.ExaCod=%ld"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		   ExaCod);
+
+   /***** Go over result removing media files *****/
+   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
 /** Remove all media associated to stems of all exam questions in a course ***/
 /*****************************************************************************/
 
-static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
+static void Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -1186,10 +1184,38 @@ static void Exa_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
   }
 
 /*****************************************************************************/
+/** Remove media associated to all answers of all exam questions in an exam **/
+/*****************************************************************************/
+
+static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned NumMedia;
+
+   /***** Get names of media files associated to answers of exam questions from database *****/
+   NumMedia = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get media",
+		   "SELECT exa_set_answers.MedCod"
+		    " FROM exa_sets,"
+			  "exa_set_questions,"
+			  "exa_set_answers"
+		   " WHERE exa_sets.ExaCod=%ld"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod"
+		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
+		   ExaCod);
+
+   /***** Go over result removing media files *****/
+   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /* Remove media associated to all answers of all exam questions in a course **/
 /*****************************************************************************/
 
-static void Exa_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
+static void Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;

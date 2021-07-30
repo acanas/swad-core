@@ -45,6 +45,8 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder);
 unsigned Exa_DB_GetDataOfExamByCod (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+void Exa_DB_RemoveExam (long ExaCod);
+void Exa_DB_RemoveExamsFromCrs (long CrsCod);
 
 long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd);
 void Exa_DB_UpdateSet (const struct ExaSet_Set *Set);
@@ -63,13 +65,20 @@ long Exa_DB_GetSetCodFromSetInd (long ExaCod,unsigned SetInd);
 unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod);
 unsigned Exa_DB_GetPrevSetIndexInExam (long ExaCod,unsigned SetInd);
 unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
+void Exa_DB_RemoveSetsFromExam (long ExaCod);
+void Exa_DB_RemoveSetsFromCrs (long CrsCod);
 
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
                                            long SetCod,unsigned NumQstsToPrint);
 unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod);
+void Exa_DB_RemoveSetQuestionsFromExam (long ExaCod);
+void Exa_DB_RemoveSetQuestionsFromCrs (long CrsCod);
+
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
+void Exa_DB_RemoveSetAnswersFromExam (long ExaCod);
+void Exa_DB_RemoveSetAnswersFromCrs (long CrsCod);
 
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session);
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session);
@@ -98,7 +107,8 @@ unsigned Exa_DB_GetDataOfPrintBySesCodAndUsrCod (MYSQL_RES **mysql_res,
                                                  long SesCod,long UsrCod);
 void Exa_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
 void Exa_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Exa_DB_RemovePrintsInCrs (long CrsCod);
+void Exa_DB_RemovePrintsFromExam (long ExaCod);
+void Exa_DB_RemovePrintsFromCrs (long CrsCod);
 
 void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
                                 unsigned QstInd);
@@ -109,7 +119,8 @@ unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod);
 double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod);
 void Exa_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod);
 void Exa_DB_RemovePrintsQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Exa_DB_RemovePrintQuestionsInCrs (long CrsCod);
+void Exa_DB_RemovePrintQuestionsFromExam (long ExaCod);
+void Exa_DB_RemovePrintQuestionsFromCrs (long CrsCod);
 
 bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
 bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);

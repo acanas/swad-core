@@ -41,7 +41,7 @@
 #include "swad_enrolment.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
-#include "swad_exam_print.h"
+#include "swad_exam_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -3212,7 +3212,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
 	 /* Remove tests, exams and matches results made by user in course */
 	 TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
-	 ExaPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
+	 Exa_DB_RemovePrintsQuestionsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
+	 Exa_DB_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
          Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
 	}
 

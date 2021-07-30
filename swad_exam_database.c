@@ -169,6 +169,30 @@ void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   }
 
 /*****************************************************************************/
+/********************************* Remove exam *******************************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveExam (long ExaCod)
+  {
+   DB_QueryDELETE ("can not remove exam",
+		   "DELETE FROM exa_exams"
+		   " WHERE ExaCod=%ld",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/********************** Remove all exams from a course ***********************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveExamsFromCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove course exams",
+		   "DELETE FROM exa_exams"
+		   " WHERE CrsCod=%ld",
+                   CrsCod);
+  }
+
+/*****************************************************************************/
 /********************** Create a new set of questions ************************/
 /*****************************************************************************/
 
@@ -420,6 +444,33 @@ unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd)
   }
 
 /*****************************************************************************/
+/***************** Remove the sets of questions from an course ***************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSetsFromExam (long ExaCod)
+  {
+   DB_QueryDELETE ("can not remove exam sets",
+		   "DELETE FROM exa_sets"
+		   " WHERE ExaCod=%ld",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/************ Remove the sets of questions from exams in a course ************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSetsFromCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove sets in course exams",
+		   "DELETE FROM exa_sets"
+		   " USING exa_exams,"
+		          "exa_sets"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
+                   CrsCod);
+  }
+
+/*****************************************************************************/
 /********************* Get number of questions in a set **********************/
 /*****************************************************************************/
 
@@ -470,6 +521,38 @@ unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod)
   }
 
 /*****************************************************************************/
+/********* Remove the questions in sets of questions from an exam ************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSetQuestionsFromExam (long ExaCod)
+  {
+   DB_QueryDELETE ("can not remove exam questions",
+		   "DELETE FROM exa_set_questions"
+		   " USING exa_sets,"
+		          "exa_set_questions"
+		   " WHERE exa_sets.ExaCod=%ld"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/********* Remove the questions in sets of questions from a course ***********/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSetQuestionsFromCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove questions in course exams",
+		   "DELETE FROM exa_set_questions"
+		   " USING exa_exams,"
+		          "exa_sets,"
+		          "exa_set_questions"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+                   CrsCod);
+   }
+
+/*****************************************************************************/
 /************** Get answers text for a question in an exam set ***************/
 /*****************************************************************************/
 
@@ -496,6 +579,42 @@ unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod)
 		   " WHERE QstCod=%ld"
 		   " ORDER BY AnsInd",
 		   QstCod);
+  }
+
+/*****************************************************************************/
+/********** Remove the answers in sets of questions from an exam *************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSetAnswersFromExam (long ExaCod)
+  {
+   DB_QueryDELETE ("can not remove exam answers",
+		   "DELETE FROM exa_set_answers"
+		   " USING exa_sets,"
+		          "exa_set_questions,"
+		          "exa_set_answers"
+		   " WHERE exa_sets.ExaCod=%ld"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/********** Remove the answers in sets of questions from a course ************/
+/*****************************************************************************/
+
+void Exa_DB_RemoveSetAnswersFromCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove answers in course exams",
+		   "DELETE FROM exa_set_answers"
+		   " USING exa_exams,"
+		          "exa_sets,"
+		          "exa_set_questions,"
+		          "exa_set_answers"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod",
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod"
+		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
+                   CrsCod);
   }
 
 /*****************************************************************************/
@@ -1138,10 +1257,25 @@ void Exa_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/******* Remove exams prints made by the given user in the given course ******/
+/**************** Remove exams prints made in the given exam *****************/
 /*****************************************************************************/
 
-void Exa_DB_RemovePrintsInCrs (long CrsCod)
+void Exa_DB_RemovePrintsFromExam (long ExaCod)
+  {
+   DB_QueryDELETE ("can not remove exams prints in a course",
+		   "DELETE FROM exa_prints"
+	           " USING exa_sessions,"
+	                  "exa_prints"
+                   " WHERE exa_sessions.ExaCod=%ld"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove exams prints made in the given course ****************/
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintsFromCrs (long CrsCod)
   {
    DB_QueryDELETE ("can not remove exams prints in a course",
 		   "DELETE FROM exa_prints"
@@ -1277,10 +1411,27 @@ void Exa_DB_RemovePrintsQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/* Remove questions of exams prints made by the given user in a given course */
+/************ Remove questions of exams prints in a given course *************/
 /*****************************************************************************/
 
-void Exa_DB_RemovePrintQuestionsInCrs (long CrsCod)
+void Exa_DB_RemovePrintQuestionsFromExam (long ExaCod)
+  {
+   DB_QueryDELETE ("can not remove exams prints in an exam",
+		   "DELETE FROM exa_print_questions"
+	           " USING exa_sessions,"
+	                  "exa_prints,"
+	                  "exa_print_questions"
+                   " WHERE exa_sessions.ExaCod=%ld"
+                     " AND exa_sessions.SesCod=exa_prints.SesCod"
+                     " AND exa_prints.PrnCod=exa_print_questions.PrnCod",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/************ Remove questions of exams prints in a given course *************/
+/*****************************************************************************/
+
+void Exa_DB_RemovePrintQuestionsFromCrs (long CrsCod)
   {
    DB_QueryDELETE ("can not remove exams prints in a course",
 		   "DELETE FROM exa_print_questions"

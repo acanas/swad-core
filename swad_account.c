@@ -40,7 +40,7 @@
 #include "swad_duplicate_database.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
-#include "swad_exam_print.h"
+#include "swad_exam_database.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_forum.h"
@@ -1017,7 +1017,8 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove test, exams and matches made by user in all courses *****/
    TstPrn_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
-   ExaPrn_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   Exa_DB_RemovePrintQuestionsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   Exa_DB_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
    Mch_RemoveMatchesMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
