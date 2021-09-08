@@ -68,6 +68,7 @@ unsigned Exa_DB_GetNextSetIndexInExam (long ExaCod,unsigned SetInd);
 void Exa_DB_RemoveSetsFromExam (long ExaCod);
 void Exa_DB_RemoveSetsFromCrs (long CrsCod);
 
+long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,long MedCod);
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
@@ -78,6 +79,10 @@ unsigned Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod);
 void Exa_DB_RemoveSetQuestionsFromExam (long ExaCod);
 void Exa_DB_RemoveSetQuestionsFromCrs (long CrsCod);
 
+void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
+                              const char *Answer,const char *Feedback,
+                              long MedCod,bool Correct);
+unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 void Exa_DB_RemoveSetAnswersFromExam (long ExaCod);

@@ -60,8 +60,6 @@ void ExaSet_ResetSet (struct ExaSet_Set *Set);
 
 Tst_AnswerType_t ExaSet_GetAnswerType (long QstCod);
 void ExaSet_GetQstDataFromDB (struct Tst_Question *Question);
-void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
-                           bool Shuffle);
 
 void ExaSet_AddQstsToSet (void);
 

@@ -114,7 +114,7 @@ static void ExaSet_ListQuestionForEdition (struct Tst_Question *Question,
 static void ExaSet_AllocateListSelectedQuestions (struct Exa_Exams *Exams);
 static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
 
-static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod);
+static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long QstCod);
 
 static void ExaSet_RemoveMediaFromStemOfQst (long SetCod,long QstCod);
 static void ExaSet_RemoveMediaFromAllAnsOfQst (long SetCod,long QstCod);
@@ -1104,8 +1104,9 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the answers from the database *****/
-      ExaSet_GetAnswersQst (Question,&mysql_res,
-			    false);	// Don't shuffle
+      Question->Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
+			                                         Question->QstCod,
+			                                         false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer
@@ -1178,32 +1179,6 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
    if (!QuestionExists)
       Err_WrongQuestionExit ();
   }
-
-/*****************************************************************************/
-/*************** Get answers of a test question from database ****************/
-/*****************************************************************************/
-
-void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
-                           bool Shuffle)
-  {
-   /***** Get answers of a question from database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get answers of a question",
-		   "SELECT AnsInd,"		// row[0]
-			  "Answer,"		// row[1]
-			  "Feedback,"		// row[2]
-			  "MedCod,"		// row[3]
-			  "Correct"		// row[4]
-		    " FROM exa_set_answers"
-		   " WHERE QstCod=%ld"
-		   " ORDER BY %s",
-		   Question->QstCod,
-		   Shuffle ? "RAND()" :
-		             "AnsInd");
-   if (!Question->Answer.NumOptions)
-      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
-  }
-
 
 /*****************************************************************************/
 /********************* List question in set for edition **********************/
@@ -1355,9 +1330,8 @@ static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams)
 /******* Copy question and answers from back of questions to exam set ********/
 /*****************************************************************************/
 
-static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
+static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long QstCod)
   {
-   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Question_removed;
    struct Tst_Question Question;
    long CloneMedCod;
@@ -1365,11 +1339,6 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   static char CharInvalid[Tst_NUM_VALIDITIES] =
-     {
-      [Tst_INVALID_QUESTION] = 'Y',
-      [Tst_VALID_QUESTION  ] = 'N'
-     };
 
    /***** Create test question *****/
    Tst_QstConstructor (&Question);
@@ -1381,23 +1350,8 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
       /***** Clone media *****/
       CloneMedCod = Med_CloneMedia (&Question.Media);
 
-      /***** Insert question in table of questions *****/
-      QstCodInSet =
-      DB_QueryINSERTandReturnCode ("can not add question to set",
-				   "INSERT INTO exa_set_questions"
-				   " (SetCod,Invalid,AnsType,Shuffle,"
-				     "Stem,Feedback,MedCod)"
-				   " VALUES"
-				   " (%ld,'%c','%s','%c',"
-				    "'%s','%s',%ld)",
-				   Set->SetCod,
-				   CharInvalid[Question.Validity],
-				   Tst_StrAnswerTypesDB[Question.Answer.Type],
-				   Question.Answer.Shuffle ? 'Y' :
-							     'N',
-				   Question.Stem,
-				   Question.Feedback,
-				   CloneMedCod);
+      /***** Add question to set *****/
+      QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
 
       /***** Get the answers from the database *****/
       Tst_GetAnswersQst (&Question,&mysql_res,
@@ -1423,17 +1377,12 @@ static void ExaSet_CopyQstFromBankToExamSet (struct ExaSet_Set *Set,long QstCod)
 	 CloneMedCod = Med_CloneMedia (&Question.Answer.Options[NumOpt].Media);
 
 	 /* Copy answer option to exam set */
-	 DB_QueryINSERT ("can not add answer to set",
-			 "INSERT INTO exa_set_answers"
-			 " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
-			 " VALUES"
-			 " (%ld,%u,'%s','%s',%ld,'%s')",
-			 QstCodInSet,	// Question code in set
-			 NumOpt,	// Answer index (number of option)
-			 row[1],	// Copy of text
-			 row[2],	// Copy of feedback
-			 CloneMedCod,	// Media code of the new cloned media
-			 row[4]);	// Copy of correct
+	 Exa_DB_AddAnsToQstInSet (QstCodInSet,		// Question code in set
+	                          NumOpt,		// Answer index (number of option)
+				  row[1],		// Copy of text
+				  row[2],		// Copy of feedback
+				  CloneMedCod,		// Media code of the new cloned media
+				  row[4][0] == 'Y');	// Copy of correct
 	}
 
       /* Free structure that stores the query result */

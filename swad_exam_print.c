@@ -479,7 +479,9 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
    Question.QstCod = PrintedQuestion->QstCod;
 
    /***** Get answers of question from database *****/
-   ExaSet_GetAnswersQst (&Question,&mysql_res,Shuffle);
+   Question.Answer.NumOptions = Exa_DB_GetQstAnswersFromSet (&mysql_res,
+                                                             Question.QstCod,
+                                                             Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -487,7 +489,6 @@ static void ExaPrn_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *Printed
    row[3] MedCod
    row[4] Correct
    */
-
    for (NumOpt = 0;
 	NumOpt < Question.Answer.NumOptions;
 	NumOpt++)

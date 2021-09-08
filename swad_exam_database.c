@@ -471,6 +471,37 @@ void Exa_DB_RemoveSetsFromCrs (long CrsCod)
   }
 
 /*****************************************************************************/
+/******************* Insert question in table of questions *******************/
+/*****************************************************************************/
+
+long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,long MedCod)
+  {
+   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
+   static char CharInvalid[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = 'Y',
+      [Tst_VALID_QUESTION  ] = 'N'
+     };
+
+   return
+   DB_QueryINSERTandReturnCode ("can not add question to set",
+				"INSERT INTO exa_set_questions"
+				" (SetCod,Invalid,AnsType,Shuffle,"
+				  "Stem,Feedback,MedCod)"
+				" VALUES"
+				" (%ld,'%c','%s','%c',"
+				 "'%s','%s',%ld)",
+				SetCod,
+				CharInvalid[Question->Validity],
+				Tst_StrAnswerTypesDB[Question->Answer.Type],
+				Question->Answer.Shuffle ? 'Y' :
+							   'N',
+				Question->Stem,
+				Question->Feedback,
+				MedCod);
+  }
+
+/*****************************************************************************/
 /********************* Get number of questions in a set **********************/
 /*****************************************************************************/
 
@@ -599,6 +630,57 @@ void Exa_DB_RemoveSetQuestionsFromCrs (long CrsCod)
 		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
                    CrsCod);
    }
+
+/*****************************************************************************/
+/********************* Add one answer to question in set *********************/
+/*****************************************************************************/
+
+void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
+                              const char *Answer,const char *Feedback,
+                              long MedCod,bool Correct)
+  {
+   DB_QueryINSERT ("can not add answer to set",
+		   "INSERT INTO exa_set_answers"
+		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
+		   " VALUES"
+		   " (%ld,%u,'%s','%s',%ld,'%c')",
+		   QstCod,	// Question code in set
+		   AnsInd,	// Answer index (number of option)
+		   Answer,	// Copy of text
+		   Feedback,	// Copy of feedback
+		   MedCod,	// Media code of the new cloned media
+		   Correct ? 'Y' :
+			     'N');	// Copy of correct
+  }
+
+/*****************************************************************************/
+/*************** Get answers of a test question from database ****************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
+  {
+   unsigned NumOptions;
+
+   /***** Get answers of a question from database *****/
+   NumOptions = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd,"	// row[0]
+			  "Answer,"	// row[1]
+			  "Feedback,"	// row[2]
+			  "MedCod,"	// row[3]
+			  "Correct"	// row[4]
+		    " FROM exa_set_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY %s",
+		   QstCod,
+		   Shuffle ? "RAND()" :
+		             "AnsInd");
+
+   if (!NumOptions)
+      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
+
+   return NumOptions;
+  }
 
 /*****************************************************************************/
 /************** Get answers text for a question in an exam set ***************/
