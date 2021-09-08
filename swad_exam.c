@@ -1078,12 +1078,14 @@ void Exa_RemoveExam (void)
 
 static void Exa_RemoveExamFromAllTables (long ExaCod)
   {
-   /***** Remove questions of exams prints, and exam prints, of this exam *****/
-   Exa_DB_RemovePrintQuestionsFromExam (ExaCod);
-   Exa_DB_RemovePrintsFromExam (ExaCod);
+   /***** Remove questions of exams prints, and exam prints, in this exam *****/
+   // TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   Exa_DB_RemovePrintQstsFromExa (ExaCod);
+   Exa_DB_RemovePrintsFromExa (ExaCod);
 
-   /***** Remove all sessions in this exam *****/
-   Exa_DB_RemoveSessionsInExamFromAllTables (ExaCod);
+   /***** Remove groups associated to sessions, and sessions, in this exam *****/
+   Exa_DB_RemoveGrpsFromExa (ExaCod);
+   Exa_DB_RemoveSessionsFromExam (ExaCod);
 
    /***** Remove media associated to exam questions in the exam *****/
    Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (ExaCod);
@@ -1108,11 +1110,13 @@ void Exa_RemoveCrsExams (long CrsCod)
   {
    /***** Remove questions of exams prints, and exam prints,
           made in the given course *****/
-   Exa_DB_RemovePrintQuestionsFromCrs (CrsCod);
+   // TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   Exa_DB_RemovePrintQstsFromCrs (CrsCod);
    Exa_DB_RemovePrintsFromCrs (CrsCod);
 
-   /***** Remove all sessions in the course *****/
-   Exa_DB_RemoveSessionInCourseFromAllTables (CrsCod);
+   /***** Remove groups associated to sessions, and sessions, in this course *****/
+   Exa_DB_RemoveGrpsFromCrs (CrsCod);
+   Exa_DB_RemoveSessionsFromCrs (CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
    Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (CrsCod);

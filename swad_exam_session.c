@@ -582,7 +582,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
    unsigned NumGrp;
 
    /***** Get groups *****/
-   NumGrps = Exa_DB_GetGrpsAssociatedToSession (&mysql_res,Session->SesCod);
+   NumGrps = Exa_DB_GetGrpsAssociatedToSes (&mysql_res,Session->SesCod);
 
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Session->Hidden ? "ASG_GRP_LIGHT":
@@ -852,6 +852,15 @@ void ExaSes_RemoveSession (void)
    /***** Check if I can remove this exam session *****/
    if (!ExaSes_CheckIfICanEditThisSession (&Session))
       Err_NoPermissionExit ();
+
+   /***** Remove questions of exams prints, and exam prints, in this session *****/
+   //* TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
+   /* To delete orphan exam prints:
+   // DELETE FROM exa_print_questions WHERE PrnCod IN (SELECT PrnCod FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions));
+   // DELETE FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions);
+   */
+   Exa_DB_RemovePrintQstsFromSes (Session.SesCod);
+   Exa_DB_RemovePrintsFromSes (Session.SesCod);
 
    /***** Remove the exam session from all database tables *****/
    Exa_DB_RemoveSessionFromAllTables (Session.SesCod);
@@ -1298,7 +1307,7 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session)
    Exa_DB_UpdateSession (Session);
 
    /***** Update groups associated to the exam session *****/
-   Exa_DB_RemoveAllGrpsAssociatedToSession (Session->SesCod);	// Remove all groups associated to this session
+   Exa_DB_RemoveGrpsFromSes (Session->SesCod);	// Remove all groups associated to this session
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       ExaSes_CreateGrpsAssociatedToExamSession (Session->SesCod,&Gbl.Crs.Grps.LstGrpsSel);	// Associate new groups
   }
@@ -1317,7 +1326,7 @@ static void ExaSes_CreateGrpsAssociatedToExamSession (long SesCod,
 	NumGrpSel < LstGrpsSel->NumGrps;
 	NumGrpSel++)
       /* Create group */
-      Exa_DB_CreateGrpAssociatedToSession (SesCod,LstGrpsSel->GrpCods[NumGrpSel]);
+      Exa_DB_CreateGrpAssociatedToSes (SesCod,LstGrpsSel->GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
