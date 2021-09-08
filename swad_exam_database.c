@@ -486,6 +486,21 @@ unsigned Exa_DB_GetNumQstsInSet (long SetCod)
   }
 
 /*****************************************************************************/
+/*********************** Get all questions from a set ************************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions from set",
+		   "SELECT QstCod"	// row[0]
+		    " FROM exa_set_questions"
+		   " WHERE SetCod=%ld"
+		   " ORDER BY Stem",
+		   SetCod);
+  }
+
+/*****************************************************************************/
 /******************* Get some random questions from a set ********************/
 /*****************************************************************************/
 
@@ -506,15 +521,48 @@ unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/********************* Get data from a question in a set *********************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get a question",
+		   "SELECT Invalid,"	// row[0]
+			  "AnsType,"	// row[1]
+			  "Shuffle,"	// row[2]
+			  "Stem,"	// row[3]
+			  "Feedback,"	// row[4]
+			  "MedCod"	// row[5]
+		    " FROM exa_set_questions"
+		   " WHERE QstCod=%ld",
+		   QstCod);
+  }
+
+/*****************************************************************************/
 /********** Get validity and answer type from a question in a set ************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod)
+unsigned Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get a question",
 		   "SELECT Invalid,"	// row[0]
 			  "AnsType"	// row[1]
+		    " FROM exa_set_questions"
+		   " WHERE QstCod=%ld",
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/***************** Get answer type from a question in a set ******************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get a question",
+		   "SELECT AnsType"		// row[0]
 		    " FROM exa_set_questions"
 		   " WHERE QstCod=%ld",
 		   QstCod);

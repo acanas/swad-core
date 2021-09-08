@@ -682,36 +682,25 @@ static void ExaSet_ListSetQuestions (struct Exa_Exams *Exams,
    unsigned NumQsts;
    bool ICanEditQuestions = Exa_CheckIfEditable (Exam);
 
-   /***** Get data of questions from database *****/
-   NumQsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get exam questions",
-		   "SELECT QstCod"	// row[0]
-		    " FROM exa_set_questions"
-		   " WHERE SetCod=%ld"
-		   " ORDER BY Stem",
-		   Set->SetCod);
-
    /***** Begin box *****/
-   if (ICanEditQuestions)
-      Box_BoxBegin (NULL,Txt_Questions,
-		    ExaSet_PutIconToAddNewQuestions,Exams,
-		    Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
-   else
-      Box_BoxBegin (NULL,Txt_Questions,
-		    NULL,NULL,
-		    Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Questions,
+		 ICanEditQuestions ? ExaSet_PutIconToAddNewQuestions :
+				     NULL,
+		 ICanEditQuestions ? Exams :
+				     NULL,
+		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
-   /***** Show table with questions *****/
-   if (NumQsts)
-      ExaSet_ListOneOrMoreQuestionsForEdition (Exams,NumQsts,mysql_res,
-					       ICanEditQuestions);
+      /***** Show table with questions *****/
+      if ((NumQsts = Exa_DB_GetQstsFromSet (&mysql_res,Set->SetCod)))
+	 ExaSet_ListOneOrMoreQuestionsForEdition (Exams,NumQsts,mysql_res,
+						  ICanEditQuestions);
 
-   /***** Put button to add a new question in this set *****/
-   if (ICanEditQuestions)		// I can edit questions
-      ExaSet_PutButtonToAddNewQuestions (Exams);
+      /***** Put button to add a new question in this set *****/
+      if (ICanEditQuestions)		// I can edit questions
+	 ExaSet_PutButtonToAddNewQuestions (Exams);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1049,18 +1038,14 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 /*************** Get answer type of a question from database *****************/
 /*****************************************************************************/
 
-Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod)
+Tst_AnswerType_t ExaSet_GetAnswerType (long QstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Tst_AnswerType_t AnswerType;
 
    /***** Get type of answer from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get the type of a question",
-		       "SELECT AnsType"		// row[0]
-		        " FROM exa_set_questions"
-		       " WHERE QstCod=%ld",
-		       QstCod))
+   if (!Exa_DB_GetAnswerType (&mysql_res,QstCod))
       Err_WrongQuestionExit ();
 
    /* Get type of answer */
@@ -1085,18 +1070,7 @@ void ExaSet_GetQstDataFromDB (struct Tst_Question *Question)
    unsigned NumOpt;
 
    /***** Get question data from database *****/
-   QuestionExists = (DB_QuerySELECT (&mysql_res,"can not get a question",
-				     "SELECT Invalid,"			// row[0]
-				            "AnsType,"			// row[1]
-					    "Shuffle,"			// row[2]
-					    "Stem,"			// row[3]
-					    "Feedback,"			// row[4]
-					    "MedCod"			// row[5]
-				      " FROM exa_set_questions"
-				     " WHERE QstCod=%ld",
-				     Question->QstCod) != 0);
-
-   if (QuestionExists)
+   if ((QuestionExists = (Exa_DB_GetQstDataByCod (&mysql_res,Question->QstCod) != 0)))
      {
       row = mysql_fetch_row (mysql_res);
 

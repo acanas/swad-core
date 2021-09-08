@@ -1448,7 +1448,7 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
 
       /***** Get validity and answer type from database *****/
-      if ((QuestionExists = (Exa_DB_GetValidityAndTypeOfQuestion (&mysql_res,Question.QstCod) != 0)))
+      if ((QuestionExists = (Exa_DB_GetValidityAndAnswerType (&mysql_res,Question.QstCod) != 0)))
 	{
 	 row = mysql_fetch_row (mysql_res);
 

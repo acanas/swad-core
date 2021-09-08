@@ -58,7 +58,7 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 
 void ExaSet_ResetSet (struct ExaSet_Set *Set);
 
-Tst_AnswerType_t ExaSet_GetQstAnswerTypeFromDB (long QstCod);
+Tst_AnswerType_t ExaSet_GetAnswerType (long QstCod);
 void ExaSet_GetQstDataFromDB (struct Tst_Question *Question);
 void ExaSet_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
                            bool Shuffle);

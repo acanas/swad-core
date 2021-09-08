@@ -1091,7 +1091,7 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
    /***** Compute question score *****/
    Tst_QstConstructor (&Question);
    Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
-   Question.Answer.Type = ExaSet_GetQstAnswerTypeFromDB (Question.QstCod);
+   Question.Answer.Type = ExaSet_GetAnswerType (Question.QstCod);
    ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
    Tst_QstDestructor (&Question);
 

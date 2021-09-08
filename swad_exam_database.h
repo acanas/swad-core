@@ -69,9 +69,12 @@ void Exa_DB_RemoveSetsFromExam (long ExaCod);
 void Exa_DB_RemoveSetsFromCrs (long CrsCod);
 
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
+unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
                                            long SetCod,unsigned NumQstsToPrint);
-unsigned Exa_DB_GetValidityAndTypeOfQuestion (MYSQL_RES **mysql_res,long QstCod);
+unsigned Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
+unsigned Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod);
+unsigned Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod);
 void Exa_DB_RemoveSetQuestionsFromExam (long ExaCod);
 void Exa_DB_RemoveSetQuestionsFromCrs (long CrsCod);
 
