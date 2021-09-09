@@ -3507,7 +3507,7 @@ static void Grp_RemoveGroupTypeCompletely (void)
    Att_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of exam sessions to groups of this type *****/
-   Exa_DB_RemoveGrpsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+   Exa_DB_RemoveAllGrpsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of matches to groups of this type *****/
    Mch_DB_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);

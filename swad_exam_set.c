@@ -116,8 +116,8 @@ static void ExaSet_FreeListsSelectedQuestions (struct Exa_Exams *Exams);
 
 static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long QstCod);
 
-static void ExaSet_RemoveMediaFromStemOfQst (long SetCod,long QstCod);
-static void ExaSet_RemoveMediaFromAllAnsOfQst (long SetCod,long QstCod);
+static void ExaSet_RemoveMediaFromStemOfQst (long QstCod,long SetCod);
+static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod);
 
 static void ExaSet_ChangeValidityQst (Tst_Validity_t Valid);
 
@@ -415,7 +415,7 @@ void ExaSet_ChangeSetTitle (void)
    if (ExaSet_CheckSetTitleReceivedFromForm (&Set,NewTitle))
      {
       /* Update the table changing old title by new title */
-      Exa_DB_UpdateSetTitle (&Set,NewTitle);
+      Exa_DB_UpdateSetTitle (Set.SetCod,Set.ExaCod,NewTitle);
 
       /* Update title */
       Str_Copy (Set.Title,NewTitle,sizeof (Set.Title) - 1);
@@ -462,7 +462,7 @@ void ExaSet_ChangeNumQstsToExam (void)
    if (NumQstsToPrint != Set.NumQstsToPrint)
      {
       /* Update the table changing old number by new number */
-      Exa_DB_UpdateNumQstsToExam (&Set,NumQstsToPrint);
+      Exa_DB_UpdateNumQstsToExam (Set.SetCod,Set.ExaCod,NumQstsToPrint);
 
       /* Update title */
       Set.NumQstsToPrint = NumQstsToPrint;
@@ -1456,34 +1456,13 @@ void ExaSet_RemoveSet (void)
 
    /***** Remove the set from all the tables *****/
    /* Remove questions associated to set */
-   DB_QueryDELETE ("can not remove questions associated to set",
-		   "DELETE FROM exa_set_questions"
-		   " USING exa_set_questions,"
-		          "exa_sets"
-		   " WHERE exa_set_questions.SetCod=%ld"
-                     " AND exa_set_questions.SetCod=exa_sets.SetCod"
-		     " AND exa_sets.ExaCod=%ld",	// Extra check
-		   Set.SetCod,
-		   Set.ExaCod);
+   Exa_DB_RemoveAllSetQuestionsFromSet (Set.SetCod,Set.ExaCod);
 
    /* Remove the set itself */
-   DB_QueryDELETE ("can not remove set",
-		   "DELETE FROM exa_sets"
-		   " WHERE SetCod=%ld"
-                     " AND ExaCod=%ld",		// Extra check
-		   Set.SetCod,
-		   Set.ExaCod);
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Err_ShowErrorAndExit ("The set to be removed does not exist.");
+   Exa_DB_RemoveSetFromExam (Set.SetCod,Set.ExaCod);
 
-   /* Change index of sets greater than this */
-   DB_QueryUPDATE ("can not update indexes of sets",
-		   "UPDATE exa_sets"
-		     " SET SetInd=SetInd-1"
-		   " WHERE ExaCod=%ld"
-		     " AND SetInd>%u",
-		   Set.ExaCod,
-		   Set.SetInd);
+   /* Change indexes of sets greater than this */
+   Exa_DB_UpdateSetIndexesInExamGreaterThan (Set.ExaCod,Set.SetInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Set_of_questions_removed);
@@ -1657,19 +1636,11 @@ void ExaSet_RemoveQstFromSet (void)
    QstCod = ExaSet_GetParamQstCod ();
 
    /***** Remove media associated to question *****/
-   ExaSet_RemoveMediaFromStemOfQst (Set.SetCod,QstCod);
-   ExaSet_RemoveMediaFromAllAnsOfQst (Set.SetCod,QstCod);
+   ExaSet_RemoveMediaFromStemOfQst (QstCod,Set.SetCod);
+   ExaSet_RemoveMediaFromAllAnsOfQst (QstCod,Set.SetCod);
 
    /***** Remove the question from set *****/
-   /* Remove the question itself */
-   DB_QueryDELETE ("can not remove a question from a set",
-		   "DELETE FROM exa_set_questions"
-		   " WHERE QstCod=%ld"
-		     " AND SetCod=%ld",	// Extra check
-		   QstCod,
-		   Set.SetCod);
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Err_WrongQuestionExit ();
+   Exa_DB_RemoveSetQuestion (QstCod,Set.SetCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -1683,20 +1654,13 @@ void ExaSet_RemoveQstFromSet (void)
 /************ Remove media associated to stem of a test question *************/
 /*****************************************************************************/
 
-static void ExaSet_RemoveMediaFromStemOfQst (long SetCod,long QstCod)
+static void ExaSet_RemoveMediaFromStemOfQst (long QstCod,long SetCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get media code associated to stem of test question from database *****/
-   NumMedia = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT MedCod"	// row[0]
-		    " FROM exa_set_questions"
-		   " WHERE QstCod=%ld"
-		     " AND SetCod=%ld",	// Extra check
-		   QstCod,
-		   SetCod);
+   /***** Get media code associated to stem of set question from database *****/
+   NumMedia = Exa_DB_GetMediaFromStemOfQst (&mysql_res,QstCod,SetCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -1706,24 +1670,13 @@ static void ExaSet_RemoveMediaFromStemOfQst (long SetCod,long QstCod)
 /****** Remove all media associated to all answers of an exam question *******/
 /*****************************************************************************/
 
-static void ExaSet_RemoveMediaFromAllAnsOfQst (long SetCod,long QstCod)
+static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
    /***** Get media codes associated to answers of test question from database *****/
-   NumMedia = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT exa_set_answers.MedCod"	// row[0]
-		    " FROM exa_set_answers,"
-			  "exa_set_questions"
-		   " WHERE exa_set_answers.QstCod=%ld"
-		     " AND exa_set_answers.QstCod=exa_set_questions.QstCod"
-		     " AND exa_set_questions.SetCod=%ld"	// Extra check
-		     " AND exa_set_questions.QstCod=%ld",	// Extra check
-		   QstCod,
-		   SetCod,
-		   QstCod);
+   NumMedia = Exa_DB_GetMediaFromAllAnsOfQst (&mysql_res,QstCod,SetCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);

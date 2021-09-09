@@ -2354,8 +2354,6 @@ void Gam_RemoveQstFromGame (void)
 		     " AND QstInd=%u",
 		   Game.GamCod,
 		   QstInd);
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Err_WrongQuestionExit ();
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions in table of answers",

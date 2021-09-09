@@ -4862,9 +4862,6 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
 		     " AND CrsCod=%ld",
 		   QstCod,
 		   CrsCod);
-
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Err_WrongQuestionExit ();
   }
 
 /*****************************************************************************/

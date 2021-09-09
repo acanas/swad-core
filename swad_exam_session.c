@@ -860,7 +860,7 @@ void ExaSes_RemoveSession (void)
    // DELETE FROM exa_prints WHERE SesCod NOT IN (SELECT SesCod FROM exa_sessions);
    */
    Exa_DB_RemovePrintQstsFromSes (Session.SesCod);
-   Exa_DB_RemovePrintsFromSes (Session.SesCod);
+   Exa_DB_RemoveAllPrintsFromSes (Session.SesCod);
 
    /***** Remove the exam session from all database tables *****/
    Exa_DB_RemoveSessionFromAllTables (Session.SesCod);
@@ -1307,7 +1307,7 @@ static void ExaSes_UpdateSession (struct ExaSes_Session *Session)
    Exa_DB_UpdateSession (Session);
 
    /***** Update groups associated to the exam session *****/
-   Exa_DB_RemoveGrpsFromSes (Session->SesCod);	// Remove all groups associated to this session
+   Exa_DB_RemoveAllGrpsFromSes (Session->SesCod);	// Remove all groups associated to this session
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       ExaSes_CreateGrpsAssociatedToExamSession (Session->SesCod,&Gbl.Crs.Grps.LstGrpsSel);	// Associate new groups
   }

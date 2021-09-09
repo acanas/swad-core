@@ -3213,7 +3213,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 	 /* Remove tests, exams and matches results made by user in course */
 	 TstPrn_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
 	 Exa_DB_RemovePrintQstsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
-	 Exa_DB_RemovePrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
+	 Exa_DB_RemoveAllPrintsMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
          Mch_RemoveMatchesMadeByUsrInCrs (UsrDat->UsrCod,Crs->CrsCod);
 	}
 

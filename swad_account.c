@@ -1018,7 +1018,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove test, exams and matches made by user in all courses *****/
    TstPrn_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
    Exa_DB_RemovePrintQstsMadeByUsrInAllCrss (UsrDat->UsrCod);
-   Exa_DB_RemovePrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   Exa_DB_RemoveAllPrintsMadeByUsrInAllCrss (UsrDat->UsrCod);
    Mch_RemoveMatchesMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/

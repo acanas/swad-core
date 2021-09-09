@@ -3756,8 +3756,6 @@ void Svy_RemoveQst (void)
 		   "DELETE FROM svy_questions"
 		   " WHERE QstCod=%ld",
 		   SvyQst.QstCod);
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Err_WrongQuestionExit ();
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions",

@@ -1081,22 +1081,22 @@ static void Exa_RemoveExamFromAllTables (long ExaCod)
    /***** Remove questions of exams prints, and exam prints, in this exam *****/
    // TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
    Exa_DB_RemovePrintQstsFromExa (ExaCod);
-   Exa_DB_RemovePrintsFromExa (ExaCod);
+   Exa_DB_RemoveAllPrintsFromExa (ExaCod);
 
    /***** Remove groups associated to sessions, and sessions, in this exam *****/
-   Exa_DB_RemoveGrpsFromExa (ExaCod);
-   Exa_DB_RemoveSessionsFromExam (ExaCod);
+   Exa_DB_RemoveAllGrpsFromExa (ExaCod);
+   Exa_DB_RemoveAllSessionsFromExam (ExaCod);
 
    /***** Remove media associated to exam questions in the exam *****/
    Exa_RemoveAllMedFilesFromStemOfAllQstsFromExam (ExaCod);
    Exa_RemoveAllMedFilesFromAnsOfAllQstsFromExam (ExaCod);
 
    /***** Remove the answers and the questions in sets of questions *****/
-   Exa_DB_RemoveSetAnswersFromExam (ExaCod);
-   Exa_DB_RemoveSetQuestionsFromExam (ExaCod);
+   Exa_DB_RemoveAllSetAnswersFromExam (ExaCod);
+   Exa_DB_RemoveAllSetQuestionsFromExam (ExaCod);
 
    /***** Remove exam sets *****/
-   Exa_DB_RemoveSetsFromExam (ExaCod);
+   Exa_DB_RemoveAllSetsFromExam (ExaCod);
 
    /***** Remove exam *****/
    Exa_DB_RemoveExam (ExaCod);
@@ -1112,25 +1112,25 @@ void Exa_RemoveCrsExams (long CrsCod)
           made in the given course *****/
    // TODO: DO NOT REMOVE EXAMS PRINTS. Instead move them to tables of deleted prints
    Exa_DB_RemovePrintQstsFromCrs (CrsCod);
-   Exa_DB_RemovePrintsFromCrs (CrsCod);
+   Exa_DB_RemoveAllPrintsFromCrs (CrsCod);
 
    /***** Remove groups associated to sessions, and sessions, in this course *****/
-   Exa_DB_RemoveGrpsFromCrs (CrsCod);
-   Exa_DB_RemoveSessionsFromCrs (CrsCod);
+   Exa_DB_RemoveAllGrpsFromCrs (CrsCod);
+   Exa_DB_RemoveAllSessionsFromCrs (CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
    Exa_RemoveAllMedFilesFromStemOfAllQstsFromCrs (CrsCod);
    Exa_RemoveAllMedFilesFromAnsOfAllQstsFromCrs (CrsCod);
 
    /***** Remove the answers and the questions in sets of questions *****/
-   Exa_DB_RemoveSetAnswersFromCrs (CrsCod);
-   Exa_DB_RemoveSetQuestionsFromCrs (CrsCod);
+   Exa_DB_RemoveAllSetAnswersFromCrs (CrsCod);
+   Exa_DB_RemoveAllSetQuestionsFromCrs (CrsCod);
 
    /***** Remove the sets of questions in exams *****/
-   Exa_DB_RemoveSetsFromCrs (CrsCod);
+   Exa_DB_RemoveAllSetsFromCrs (CrsCod);
 
    /***** Remove the exams *****/
-   Exa_DB_RemoveExamsFromCrs (CrsCod);
+   Exa_DB_RemoveAllExamsFromCrs (CrsCod);
   }
 
 /*****************************************************************************/
