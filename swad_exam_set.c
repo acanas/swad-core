@@ -1686,7 +1686,7 @@ static void ExaSet_RemoveMediaFromAllAnsOfQst (long QstCod,long SetCod)
   }
 
 /*****************************************************************************/
-/***************************** Validate a question ***************************/
+/*********************** Validate/invalidate a question **********************/
 /*****************************************************************************/
 
 void ExaSet_ValidateQst (void)
@@ -1705,11 +1705,6 @@ static void ExaSet_ChangeValidityQst (Tst_Validity_t Validity)
    struct Exa_Exam Exam;
    struct ExaSet_Set Set;
    long QstCod;
-   static char CharInvalid[Tst_NUM_VALIDITIES] =
-     {
-      [Tst_INVALID_QUESTION] = 'Y',
-      [Tst_VALID_QUESTION  ] = 'N'
-     };
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -1722,22 +1717,9 @@ static void ExaSet_ChangeValidityQst (Tst_Validity_t Validity)
    /***** Get question index *****/
    QstCod = ExaSet_GetParamQstCod ();
 
-   /***** Validate question *****/
-   DB_QueryUPDATE ("can not validate question",
-		   "UPDATE exa_set_questions,"
-		          "exa_sets,exa_exams"
-		     " SET exa_set_questions.Invalid='%c'"
-		   " WHERE exa_set_questions.QstCod=%ld"
-		     " AND exa_set_questions.SetCod=%ld"	// Extra check
-		     " AND exa_set_questions.SetCod=exa_sets.SetCod"
-		     " AND exa_sets.ExaCod=%ld"			// Extra check
-		     " AND exa_sets.ExaCod=exa_exams.ExaCod"
-		     " AND exa_exams.CrsCod=%ld",		// Extra check
-		   CharInvalid[Validity],
-		   QstCod,
-		   Set.SetCod,
-		   Exam.ExaCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Validate/unvalidate question *****/
+   Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exam.ExaCod,Gbl.Hierarchy.Crs.CrsCod,
+                             Validity);
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,
@@ -1806,12 +1788,10 @@ static void ExaSet_ExchangeSets (long ExaCod,
    long SetCodBottom;
 
    /***** Lock table to make the move atomic *****/
-   DB_Query ("can not lock tables to exchange sets of questions",
-	     "LOCK TABLES exa_sets WRITE");
-   Gbl.DB.LockedTables = true;
+   Exa_DB_LockTables ();
 
    /***** Get set codes of the sets to be moved *****/
-   SetCodTop    = Exa_DB_GetSetCodFromSetInd (ExaCod,SetIndTop);
+   SetCodTop    = Exa_DB_GetSetCodFromSetInd (ExaCod,SetIndTop   );
    SetCodBottom = Exa_DB_GetSetCodFromSetInd (ExaCod,SetIndBottom);
 
    /***** Exchange indexes of sets *****/
@@ -1830,40 +1810,16 @@ static void ExaSet_ExchangeSets (long ExaCod,
    */
    /* Step 1: change temporarily top index to minus bottom index
               in order to not repeat unique index (ExaCod,SetInd) */
-   DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets"
-		     " SET SetInd=-%u"
-		   " WHERE ExaCod=%ld"
-		     " AND SetCod=%ld",
-		   SetIndBottom,
-		   ExaCod,
-		   SetCodTop);
+   Exa_DB_UpdateSetIndex (-((long) SetIndBottom),SetCodTop   ,ExaCod);
 
    /* Step 2: change bottom index to old top index  */
-   DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets"
-		     " SET SetInd=%u"
-		   " WHERE ExaCod=%ld"
-		     " AND SetCod=%ld",
-		   SetIndTop,
-		   ExaCod,
-		   SetCodBottom);
+   Exa_DB_UpdateSetIndex (  (long) SetIndTop    ,SetCodBottom,ExaCod);
 
    /* Step 3: change top index to old bottom index */
-   DB_QueryUPDATE ("can not exchange indexes of sets",
-		   "UPDATE exa_sets"
-		     " SET SetInd=%u"
-		   " WHERE ExaCod=%ld"
-		     " AND SetCod=%ld",
-		   SetIndBottom,
-		   ExaCod,
-		   SetCodTop);
+   Exa_DB_UpdateSetIndex (  (long) SetIndBottom ,SetCodTop   ,ExaCod);
 
    /***** Unlock table *****/
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after exchanging sets of questions",
-	     "UNLOCK TABLES");
+   Exa_DB_LockTables ();
   }
 
 /*****************************************************************************/

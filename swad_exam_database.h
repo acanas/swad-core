@@ -54,6 +54,9 @@ void Exa_DB_UpdateSetTitle (long SetCod,long ExaCod,
                             const char NewTitle[ExaSet_MAX_BYTES_TITLE + 1]);
 void Exa_DB_UpdateNumQstsToExam (long SetCod,long ExaCod,unsigned NumQstsToPrint);
 void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,long SetInd);
+void Exa_DB_UpdateSetIndex (long SetInd,long SetCod,long ExaCod);
+void Exa_DB_LockTables (void);
+void Exa_DB_UnlockTables (void);
 unsigned Exa_DB_GetNumSetsExam (long ExaCod);
 unsigned Exa_DB_GetNumQstsExam (long ExaCod);
 unsigned Exa_DB_GetExamSets (MYSQL_RES **mysql_res,long ExaCod);
@@ -70,6 +73,8 @@ void Exa_DB_RemoveAllSetsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetsFromCrs (long CrsCod);
 
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,long MedCod);
+void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
+                               Tst_Validity_t Validity);
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,

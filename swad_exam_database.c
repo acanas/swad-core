@@ -281,6 +281,45 @@ void Exa_DB_UpdateSetIndexesInExamGreaterThan (long ExaCod,long SetInd)
   }
 
 /*****************************************************************************/
+/********************* Change index of a set in an exam **********************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateSetIndex (long SetInd,long SetCod,long ExaCod)
+  {
+   DB_QueryUPDATE ("can not exchange indexes of sets",
+		   "UPDATE exa_sets"
+		     " SET SetInd=%ld"
+		   " WHERE SetCod=%ld"
+		     " AND ExaCod=%ld",	// Extra check
+		   SetInd,
+		   SetCod,
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/************ Lock tables to make the exchange of sets atomic ****************/
+/*****************************************************************************/
+
+void Exa_DB_LockTables (void)
+  {
+   DB_Query ("can not lock tables to exchange sets of questions",
+	     "LOCK TABLES exa_sets WRITE");
+   Gbl.DB.LockedTables = true;
+  }
+
+/*****************************************************************************/
+/********** Unlock tables to make the exchange of sets atomic ****************/
+/*****************************************************************************/
+
+void Exa_DB_UnlockTables (void)
+  {
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables after exchanging sets of questions",
+	     "UNLOCK TABLES");
+  }
+
+/*****************************************************************************/
 /*********************** Get number of sets in an exam ***********************/
 /*****************************************************************************/
 
@@ -527,6 +566,37 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,lo
 				Question->Stem,
 				Question->Feedback,
 				MedCod);
+  }
+
+/*****************************************************************************/
+/*********************** Validate/invalidate a question **********************/
+/*****************************************************************************/
+
+void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
+                               Tst_Validity_t Validity)
+  {
+   static char CharInvalid[Tst_NUM_VALIDITIES] =
+     {
+      [Tst_INVALID_QUESTION] = 'Y',
+      [Tst_VALID_QUESTION  ] = 'N'
+     };
+
+   DB_QueryUPDATE ("can not validate question",
+		   "UPDATE exa_set_questions,"
+		          "exa_sets,"
+		          "exa_exams"
+		     " SET exa_set_questions.Invalid='%c'"
+		   " WHERE exa_set_questions.QstCod=%ld"
+		     " AND exa_set_questions.SetCod=%ld"	// Extra check
+		     " AND exa_set_questions.SetCod=exa_sets.SetCod"
+		     " AND exa_sets.ExaCod=%ld"			// Extra check
+		     " AND exa_sets.ExaCod=exa_exams.ExaCod"
+		     " AND exa_exams.CrsCod=%ld",		// Extra check
+		   CharInvalid[Validity],
+		   QstCod,
+		   SetCod,
+		   ExaCod,
+		   CrsCod);
   }
 
 /*****************************************************************************/
