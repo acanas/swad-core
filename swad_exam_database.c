@@ -60,6 +60,74 @@ extern struct Globals Gbl;
 
 static void Exa_DB_RemoveUsrSesResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
+
+/*****************************************************************************/
+/**************************** Create a new exam ******************************/
+/*****************************************************************************/
+
+long Exa_DB_CreateExam (const struct Exa_Exam *Exam,const char *Txt)
+  {
+   long ExaCod;
+
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   ExaCod =
+   DB_QueryINSERTandReturnCode ("can not create new exam",
+				"INSERT INTO exa_exams"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,"
+				  "Title,Txt)"
+				" VALUES"
+				" (%ld,'N',%ld,%.15lg,%u,"
+				  "'%s','%s')",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Exam->MaxGrade,
+				Exam->Visibility,
+				Exam->Title,
+				Txt);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+
+   return ExaCod;
+  }
+
+/*****************************************************************************/
+/************************* Update an existing exam *************************/
+/*****************************************************************************/
+
+void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+   DB_QueryUPDATE ("can not update exam",
+		   "UPDATE exa_exams"
+		     " SET CrsCod=%ld,"
+		          "MaxGrade=%.15lg,"
+		          "Visibility=%u,"
+		          "Title='%s',"
+		          "Txt='%s'"
+		   " WHERE ExaCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Exam->MaxGrade,
+		   Exam->Visibility,
+	           Exam->Title,
+	           Txt,
+	           Exam->ExaCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/***************************** Hide/unhide exam ******************************/
+/*****************************************************************************/
+
+void Exa_DB_HideUnhideExam (long ExaCod,bool Hide)
+  {
+   DB_QueryUPDATE ("can not hide exam",
+		   "UPDATE exa_exams"
+		     " SET Hidden='%c'"
+		   " WHERE ExaCod=%ld",
+		   Hide ? 'Y' :
+			  'N',
+		   ExaCod);
+  }
+
 /*****************************************************************************/
 /*********************** Get list of all the exams *************************/
 /*****************************************************************************/
@@ -166,6 +234,256 @@ void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 			  " FROM exa_exams"
 		         " WHERE ExaCod=%ld",
 		         ExaCod);
+  }
+
+/*****************************************************************************/
+/******************* Check if the title of an exam exists ********************/
+/*****************************************************************************/
+
+bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title)
+  {
+   return (DB_QueryCOUNT ("can not get similar exams",
+			  "SELECT COUNT(*)"
+			   " FROM exa_exams"
+			  " WHERE CrsCod=%ld"
+			    " AND Title='%s'"
+			    " AND ExaCod<>%ld",
+			  CrsCod,
+			  Title,
+			  ExaCod) != 0);
+  }
+
+/*****************************************************************************/
+/********************* Get number of courses with exams **********************/
+/*****************************************************************************/
+// Returns the number of courses with exams in this location
+
+unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope)
+  {
+   /***** Get number of courses with exams from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+         return DB_QueryCOUNT ("can not get number of courses with exams",
+			       "SELECT COUNT(DISTINCT CrsCod)"
+				" FROM exa_exams");
+      case HieLvl_CTY:
+         return DB_QueryCOUNT ("can not get number of courses with exams",
+			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+				" FROM ins_instits,"
+				      "ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "exa_exams"
+			       " WHERE ins_instits.CtyCod=%ld"
+				 " AND ins_instits.InsCod=ctr_centers.InsCod"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_INS:
+         return DB_QueryCOUNT ("can not get number of courses with exams",
+			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+				" FROM ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "exa_exams"
+			       " WHERE ctr_centers.InsCod=%ld"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_CTR:
+         return DB_QueryCOUNT ("can not get number of courses with exams",
+			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+				" FROM deg_degrees,"
+				      "crs_courses,"
+				      "exa_exams"
+			       " WHERE deg_degrees.CtrCod=%ld"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Ctr.CtrCod);
+      case HieLvl_DEG:
+         return DB_QueryCOUNT ("can not get number of courses with exams",
+			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
+				" FROM crs_courses,"
+				      "exa_exams"
+			       " WHERE crs_courses.DegCod=%ld"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Deg.DegCod);
+      case HieLvl_CRS:
+         return DB_QueryCOUNT ("can not get number of courses with exams",
+			       "SELECT COUNT(DISTINCT CrsCod)"
+				" FROM exa_exams"
+			       " WHERE CrsCod=%ld",
+			       Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/**************************** Get number of exams ****************************/
+/*****************************************************************************/
+// Returns the number of exams in this location
+
+unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope)
+  {
+   /***** Get number of exams from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+         return DB_QueryCOUNT ("can not get number of exams",
+			       "SELECT COUNT(*)"
+				" FROM exa_exams");
+      case HieLvl_CTY:
+         return DB_QueryCOUNT ("can not get number of exams",
+			       "SELECT COUNT(*)"
+				" FROM ins_instits,"
+				      "ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "exa_exams"
+			       " WHERE ins_instits.CtyCod=%ld"
+				 " AND ins_instits.InsCod=ctr_centers.InsCod"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+         return DB_QueryCOUNT ("can not get number of exams",
+			       "SELECT COUNT(*)"
+				" FROM ctr_centers,"
+				      "deg_degrees,"
+				      "crs_courses,"
+				      "exa_exams"
+			       " WHERE ctr_centers.InsCod=%ld"
+				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_CTR:
+         return DB_QueryCOUNT ("can not get number of exams",
+			       "SELECT COUNT(*)"
+				" FROM deg_degrees,"
+				      "crs_courses,"
+				      "exa_exams"
+			       " WHERE deg_degrees.CtrCod=%ld"
+				 " AND deg_degrees.DegCod=crs_courses.DegCod"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Ctr.CtrCod);
+      case HieLvl_DEG:
+         return DB_QueryCOUNT ("can not get number of exams",
+			       "SELECT COUNT(*)"
+				" FROM crs_courses,"
+				      "exa_exams"
+			       " WHERE crs_courses.DegCod=%ld"
+				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
+			       Gbl.Hierarchy.Deg.DegCod);
+      case HieLvl_CRS:
+         return DB_QueryCOUNT ("can not get number of exams",
+			       "SELECT COUNT(*)"
+				" FROM exa_exams"
+			       " WHERE CrsCod=%ld",
+			       Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/************* Get average number of questions per course exam ***************/
+/*****************************************************************************/
+
+double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope)
+  {
+   /***** Get number of questions per exam from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM exa_exams,"
+						     "exa_set_questions"
+					      " WHERE exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable");
+      case HieLvl_CTY:
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					      "  FROM ins_instits,"
+						     "ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					       " WHERE ins_instits.CtyCod=%ld"
+						 " AND ins_instits.InsCod=ctr_centers.InsCod"
+						 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						 " AND deg_degrees.DegCod=crs_courses.DegCod"
+						 " AND crs_courses.CrsCod=exa_exams.CrsCod"
+						 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					       " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					      " WHERE ctr_centers.InsCod=%ld"
+					        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_CTR:
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM deg_degrees,"
+						     "crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					      " WHERE deg_degrees.CtrCod=%ld"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Ctr.CtrCod);
+      case HieLvl_DEG:
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM crs_courses,"
+						     "exa_exams,"
+						     "exa_set_questions"
+					      " WHERE crs_courses.DegCod=%ld"
+					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Deg.DegCod);
+      case HieLvl_CRS:
+         return DB_QuerySELECTDouble ("can not get number of questions per exam",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(exa_set_questions.QstCod) AS NumQsts"
+					       " FROM exa_exams,"
+						     "exa_set_questions"
+					      " WHERE exa_exams.Cod=%ld"
+					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
+					      " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0.0;	// Not reached
+     }
   }
 
 /*****************************************************************************/
@@ -714,6 +1032,40 @@ unsigned Exa_DB_GetMediaFromStemOfQst (MYSQL_RES **mysql_res,long QstCod,long Se
   }
 
 /*****************************************************************************/
+/********* Get media codes associated to stems of an exam questions **********/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT exa_set_questions.MedCod"
+		    " FROM exa_sets,"
+			  "exa_set_questions"
+		   " WHERE exa_sets.ExaCod=%ld"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/*** Get media codes associated to stems of all exam questions in a course ***/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT exa_set_questions.MedCod"
+		    " FROM exa_exams,"
+			  "exa_sets,"
+			  "exa_set_questions"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /**************** Remove a question from a set of questions ******************/
 /*****************************************************************************/
 
@@ -872,6 +1224,44 @@ unsigned Exa_DB_GetMediaFromAllAnsOfQst (MYSQL_RES **mysql_res,long QstCod,long 
 		     " AND exa_set_questions.SetCod=%ld",	// Extra check
 		   QstCod,
 		   SetCod);
+  }
+
+/*****************************************************************************/
+/********** Get media codes associated to answers of exam questions **********/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT exa_set_answers.MedCod"
+		    " FROM exa_sets,"
+			  "exa_set_questions,"
+			  "exa_set_answers"
+		   " WHERE exa_sets.ExaCod=%ld"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod"
+		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
+		   ExaCod);
+  }
+
+/*****************************************************************************/
+/***** Get media codes associated to answers of exam questions ********/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT exa_set_answers.MedCod"
+		    " FROM exa_exams,"
+			  "exa_sets,"
+			  "exa_set_questions,"
+			  "exa_set_answers"
+		   " WHERE exa_exams.CrsCod=%ld"
+		     " AND exa_exams.ExaCod=exa_sets.ExaCod"
+		     " AND exa_sets.SetCod=exa_set_questions.SetCod"
+		     " AND exa_set_questions.QstCod=exa_set_answers.QstCod",
+		   CrsCod);
   }
 
 /*****************************************************************************/

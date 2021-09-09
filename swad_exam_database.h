@@ -41,13 +41,22 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//---------------------------- Exams ------------------------------------------
+long Exa_DB_CreateExam (const struct Exa_Exam *Exam,const char *Txt);
+void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt);
+void Exa_DB_HideUnhideExam (long ExaCod,bool Hide);
 unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder);
 unsigned Exa_DB_GetDataOfExamByCod (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetExamStartEnd (MYSQL_RES **mysql_res,long ExaCod);
 void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title);
+unsigned Exa_DB_GetNumCoursesWithExams (HieLvl_Level_t Scope);
+unsigned Exa_DB_GetNumExams (HieLvl_Level_t Scope);
+double Exa_DB_GetNumQstsPerCrsExam (HieLvl_Level_t Scope);
 void Exa_DB_RemoveExam (long ExaCod);
 void Exa_DB_RemoveAllExamsFromCrs (long CrsCod);
 
+//--------------------------------- Sets --------------------------------------
 long Exa_DB_CreateSet (const struct ExaSet_Set *Set,unsigned SetInd);
 void Exa_DB_UpdateSet (const struct ExaSet_Set *Set);
 void Exa_DB_UpdateSetTitle (long SetCod,long ExaCod,
@@ -72,6 +81,7 @@ void Exa_DB_RemoveSetFromExam (long SetCod,long ExaCod);
 void Exa_DB_RemoveAllSetsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetsFromCrs (long CrsCod);
 
+//------------------------------ Set questions --------------------------------
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,long MedCod);
 void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
                                Tst_Validity_t Validity);
@@ -83,11 +93,14 @@ unsigned Exa_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetValidityAndAnswerType (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetAnswerType (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromStemOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
+unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetAllMediaFomStemOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
 void Exa_DB_RemoveSetQuestion (long QstCod,long SetCod);
 void Exa_DB_RemoveAllSetQuestionsFromSet (long SetCod,long ExaCod);
 void Exa_DB_RemoveAllSetQuestionsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetQuestionsFromCrs (long CrsCod);
 
+//--------------------------- Set question answers ----------------------------
 void Exa_DB_AddAnsToQstInSet (long QstCod,unsigned AnsInd,
                               const char *Answer,const char *Feedback,
                               long MedCod,bool Correct);
@@ -95,9 +108,12 @@ unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shu
 unsigned Exa_DB_GetQstAnswersTextFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetQstAnswersCorrFromSet (MYSQL_RES **mysql_res,long QstCod);
 unsigned Exa_DB_GetMediaFromAllAnsOfQst (MYSQL_RES **mysql_res,long QstCod,long SetCod);
+unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromExam (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetAllMediaFromAnsOfAllQstsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
 void Exa_DB_RemoveAllSetAnswersFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetAnswersFromCrs (long CrsCod);
 
+//-------------------------------- Sessions -----------------------------------
 long Exa_DB_CreateSession (const struct ExaSes_Session *Session);
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session);
 unsigned Exa_DB_GetNumSessionsInExam (long ExaCod);
@@ -111,6 +127,7 @@ void Exa_DB_RemoveAllSessionsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSessionsFromCrs (long CrsCod);
 void Exa_DB_RemoveUsrFromSessionTablesInCrs (long UsrCod,long CrsCod);
 
+//--------------------------------- Groups ------------------------------------
 void Exa_DB_CreateGrpAssociatedToSes (long SesCod,long GrpCod);
 unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod);
 bool Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod);
@@ -120,6 +137,7 @@ void Exa_DB_RemoveAllGrpsFromSes (long SesCod);
 void Exa_DB_RemoveAllGrpsOfType (long GrpTypCod);
 void Exa_DB_RemoveGrpAssociatedToExamSess (long GrpCod);
 
+//---------------------------------- Prints -----------------------------------
 long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print);
 void Exa_DB_UpdatePrint (const struct ExaPrn_Print *Print);
 unsigned Exa_DB_GetDataOfPrintByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
@@ -131,6 +149,7 @@ void Exa_DB_RemoveAllPrintsFromSes (long SesCod);
 void Exa_DB_RemoveAllPrintsFromExa (long ExaCod);
 void Exa_DB_RemoveAllPrintsFromCrs (long CrsCod);
 
+//------------------------------- Print questions -----------------------------
 void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
                                 unsigned QstInd);
 unsigned Exa_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);
@@ -144,6 +163,7 @@ void Exa_DB_RemovePrintQstsFromSes (long SesCod);
 void Exa_DB_RemovePrintQstsFromExa (long ExaCod);
 void Exa_DB_RemovePrintQstsFromCrs (long CrsCod);
 
+//---------------------------------- Logs -------------------------------------
 bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod);
 bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB);
 void Exa_DB_LogAccess (long LogCod,long PrnCod,ExaLog_Action_t Action);
@@ -151,6 +171,7 @@ void Exa_DB_LogSession (long LogCod,long PrnCod);
 void Exa_DB_LogUserAgent (long LogCod,long PrnCod,const char *UserAgentDB);
 unsigned Exa_DB_GetExamLog (MYSQL_RES **mysql_res,long PrnCod);
 
+//--------------------------------- Results -----------------------------------
 unsigned Exa_DB_GetAllUsrsWhoHaveMadeExam (MYSQL_RES **mysql_res,long ExaCod);
 unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod);
 unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
