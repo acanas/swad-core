@@ -29,6 +29,7 @@
 
 #include "swad_database.h"
 #include "swad_figure_cache.h"
+#include "swad_figure_database.h"
 #include "swad_scope.h"
 #include "swad_string.h"
 
@@ -53,7 +54,7 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
-/************** Get number of users who have chosen an option ****************/
+/*************************** Update figure into cache ************************/
 /*****************************************************************************/
 
 void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
@@ -68,34 +69,18 @@ void FigCch_UpdateFigureIntoCache (FigCch_FigureCached_t Figure,
    switch (Type)
      {
       case FigCch_UNSIGNED:
-	 DB_QueryREPLACE ("can not update cached figure value",
-			  "REPLACE INTO fig_figures"
-			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
-			  " VALUES"
-			  " (%u,'%s',%ld,%u,'0.0')",
-			  (unsigned) Figure,
-			  Sco_GetDBStrFromScope (Scope),
-			  Cod,
-			  *((unsigned *) ValuePtr));
+	 Fig_DB_UpdateUnsignedFigureIntoCache (Figure,Scope,Cod,
+	                                      *((unsigned *) ValuePtr));
 	 break;
       case FigCch_DOUBLE:
-         Str_SetDecimalPointToUS ();	// To write the decimal point as a dot
-	 DB_QueryREPLACE ("can not update cached figure value",
-			  "REPLACE INTO fig_figures"
-			  " (Figure,Scope,Cod,ValueInt,ValueDouble)"
-			  " VALUES"
-			  " (%u,'%s',%ld,0,'%.15lg')",
-			  (unsigned) Figure,
-			  Sco_GetDBStrFromScope (Scope),
-			  Cod,
-			  *((double *) ValuePtr));
-         Str_SetDecimalPointToLocal ();	// Return to local system
+	 Fig_DB_UpdateDoubleFigureIntoCache (Figure,Scope,Cod,
+			                     *((double *) ValuePtr));
 	 break;
      }
   }
 
 /*****************************************************************************/
-/************** Get number of users who have chosen an option ****************/
+/************************** Get figure from cache ****************************/
 /*****************************************************************************/
 // Return true is figure is found (if figure is cached and recently updated)
 
@@ -113,11 +98,6 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
       [HieLvl_CTR] = (time_t) ( 3UL * 60UL * 60UL),	// Center
       [HieLvl_DEG] = (time_t) ( 1UL * 60UL * 60UL),	// Degree
       [HieLvl_CRS] = (time_t) (              60UL),	// Course
-     };
-   static const char *Field[FigCch_NUM_TYPES] =
-     {
-      [FigCch_UNSIGNED] = "ValueInt",
-      [FigCch_DOUBLE  ] = "ValueDouble",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -140,16 +120,7 @@ bool FigCch_GetFigureFromCache (FigCch_FigureCached_t Figure,
       return false;
 
    /***** Get figure's value if cached and recent *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get cached figure value",
-		       "SELECT %s"		// row[0]
-		        " FROM fig_figures"
-		       " WHERE Figure=%u"
-		         " AND Scope='%s'"
-		         " AND Cod=%ld"
-		         " AND LastUpdate>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		       Field[Type],
-		       (unsigned) Figure,Sco_GetDBStrFromScope (Scope),Cod,
-		       TimeCached[Scope]))
+   if (Fig_DB_GetFigureFromCache (&mysql_res,Figure,Scope,Cod,Type,TimeCached[Scope]))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);

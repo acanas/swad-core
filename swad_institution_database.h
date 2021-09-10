@@ -61,6 +61,18 @@ unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long CtyCod
 unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod);
 unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod);
 
+unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfCtrs (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfDegs (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfCrss (MYSQL_RES **mysql_res);
+
+unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCtrs (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfDegs (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCrss (MYSQL_RES **mysql_res);
+
+unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCtrs (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfDegs (MYSQL_RES **mysql_res);
+unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCrss (MYSQL_RES **mysql_res);
+
 unsigned Ins_DB_GetNumInssInCty (long CtyCod);
 
 unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod);

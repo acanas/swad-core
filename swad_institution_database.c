@@ -297,6 +297,7 @@ unsigned Ins_DB_GetInssInCtyOrderedByFullName (MYSQL_RES **mysql_res,long CtyCod
 		   " ORDER BY FullName",
 		   CtyCod);
   }
+
 /*****************************************************************************/
 /************* Get full list of institutions                    **************/
 /************* with number of users who claim to belong to them **************/
@@ -347,6 +348,154 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
   }
 
 /*****************************************************************************/
+/**************** Get list of institutions in system           ***************/
+/**************** ordered by number of centers/degrees/courses ***************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfCtrs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT InsCod,"		// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ctr_centers"
+		   " GROUP BY InsCod"
+		   " ORDER BY N DESC");
+  }
+
+unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ctr_centers,"
+			  "deg_degrees"
+		   " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+		   " GROUP BY InsCod"
+		   " ORDER BY N DESC");
+  }
+
+unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ctr_centers,"
+			  "deg_degrees,"
+			  "crs_courses"
+		   " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		   " GROUP BY InsCod"
+		   " ORDER BY N DESC");
+  }
+
+/*****************************************************************************/
+/************ Get list of institutions in current country  *******************/
+/************ ordered by number of centers/degrees/courses *******************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCtrs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ins_instits,"
+			  "ctr_centers"
+		   " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=ctr_centers.InsCod"
+		   " GROUP BY ctr_centers.InsCod"
+		   " ORDER BY N DESC",
+		   Gbl.Hierarchy.Cty.CtyCod);
+  }
+
+unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ins_instits,"
+			  "ctr_centers,"
+			  "deg_degrees"
+		   " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		   " GROUP BY ctr_centers.InsCod"
+		   " ORDER BY N DESC",
+		   Gbl.Hierarchy.Cty.CtyCod);
+   }
+
+unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ins_instits,"
+			  "ctr_centers,"
+			  "deg_degrees,"
+			  "crs_courses"
+		   " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=ctr_centers.InsCod"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		   " GROUP BY ctr_centers.InsCod"
+		   " ORDER BY N DESC",
+		   Gbl.Hierarchy.Cty.CtyCod);
+   }
+
+/*****************************************************************************/
+/***** Get current institution and its number of centers/degrees/courses *****/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCtrs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT InsCod,"		// row[0]
+			  "COUNT(*) AS N"	// row[1]
+		    " FROM ctr_centers"
+		   " WHERE InsCod=%ld"
+		   " GROUP BY InsCod",
+		   Gbl.Hierarchy.Ins.InsCod);
+  }
+
+unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"		// row[1]
+		    " FROM ctr_centers,"
+			  "deg_degrees"
+		   " WHERE ctr_centers.InsCod=%ld"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		   " GROUP BY ctr_centers.InsCod"
+		   " ORDER BY N DESC",
+		   Gbl.Hierarchy.Ins.InsCod);
+  }
+
+unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get institutions",
+		   "SELECT ctr_centers.InsCod,"	// row[0]
+			  "COUNT(*) AS N"		// row[1]
+		    " FROM ctr_centers,"
+			  "deg_degrees,"
+			  "crs_courses"
+		   " WHERE ctr_centers.InsCod=%ld"
+		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		     " AND deg_degrees.DegCod=crs_courses.DegCod"
+		   " GROUP BY ctr_centers.InsCod"
+		   " ORDER BY N DESC",
+		   Gbl.Hierarchy.Ins.InsCod);
+   }
+
+/*****************************************************************************/
 /**************** Get number of institutions in a country ********************/
 /*****************************************************************************/
 
@@ -375,7 +524,8 @@ unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod)
 		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
 		   " FROM ins_instits,"
 			 "ctr_centers"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod",
+		  " WHERE %s"
+		         "ins_instits.InsCod=ctr_centers.InsCod",
 		  SubQuery);
   }
 
@@ -395,7 +545,8 @@ unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod)
 		   " FROM ins_instits,"
 			 "ctr_centers,"
 			 "deg_degrees"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		  " WHERE %s"
+		         "ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		  SubQuery);
   }
@@ -417,7 +568,8 @@ unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod)
 			 "ctr_centers,"
 			 "deg_degrees,"
 			 "crs_courses"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		  " WHERE %s"
+		         "ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  SubQuery);

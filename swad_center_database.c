@@ -427,7 +427,8 @@ unsigned Ctr_DB_GetNumCtrsWithDegs (HieLvl_Level_t Scope,long Cod)
 		   " FROM ins_instits,"
 			 "ctr_centers,"
 			 "deg_degrees"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		  " WHERE %s"
+		         "ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
 		  SubQuery);
   }
@@ -449,7 +450,8 @@ unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Scope,long Cod)
 			 "ctr_centers,"
 			 "deg_degrees,"
 			 "crs_courses"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		  " WHERE %s"
+		         "ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod",
 		  SubQuery);
@@ -475,7 +477,7 @@ unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
 			 "crs_courses,"
 			 "crs_users"
 		  " WHERE %s"
-			 "institutions.InsCod=ctr_centers.InsCod"
+			 "ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod"
 		    " AND crs_courses.CrsCod=crs_users.CrsCod"

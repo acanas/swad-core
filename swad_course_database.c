@@ -372,7 +372,7 @@ unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
 			 "crs_courses,"
 			 "crs_users"
 		  " WHERE %s"
-			 "institutions.InsCod=ctr_centers.InsCod"
+			 "ins_instits.InsCod=ctr_centers.InsCod"
 		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 		    " AND deg_degrees.DegCod=crs_courses.DegCod"
 		    " AND crs_courses.CrsCod=crs_users.CrsCod"

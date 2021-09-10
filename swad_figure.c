@@ -48,6 +48,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
+#include "swad_institution_database.h"
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_network.h"
@@ -1013,40 +1014,16 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
       switch (Gbl.Scope.Current)
 	{
 	 case HieLvl_SYS:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT InsCod,"		// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ctr_centers"
-			    " GROUP BY InsCod"
-			    " ORDER BY N DESC");
+	    NumInss = Ins_DB_GetInssInCurrentSysOrderedByNumberOfCtrs (&mysql_res);
 	    break;
 	 case HieLvl_CTY:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ins_instits,"
-				   "ctr_centers"
-			    " WHERE ins_instits.CtyCod=%ld"
-			      " AND ins_instits.InsCod=ctr_centers.InsCod"
-			    " GROUP BY ctr_centers.InsCod"
-			    " ORDER BY N DESC",
-			    Gbl.Hierarchy.Cty.CtyCod);
+	    NumInss = Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCtrs (&mysql_res);
 	    break;
 	 case HieLvl_INS:
 	 case HieLvl_CTR:
 	 case HieLvl_DEG:
 	 case HieLvl_CRS:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT InsCod,"		// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ctr_centers"
-			    " WHERE InsCod=%ld"
-			    " GROUP BY InsCod"
-			    " ORDER BY N DESC",
-			    Gbl.Hierarchy.Ins.InsCod);
+	    NumInss = Ins_DB_GetInssInCurrentInsOrderedByNumberOfCtrs (&mysql_res);
 	    break;
 	 default:
 	    Err_WrongScopeExit ();
@@ -1083,46 +1060,16 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
       switch (Gbl.Scope.Current)
 	{
 	 case HieLvl_SYS:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ctr_centers,"
-				   "deg_degrees"
-			    " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " GROUP BY InsCod"
-			    " ORDER BY N DESC");
+	    NumInss = Ins_DB_GetInssInCurrentSysOrderedByNumberOfDegs (&mysql_res);
 	    break;
 	 case HieLvl_CTY:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ins_instits,"
-				   "ctr_centers,"
-				   "deg_degrees"
-			    " WHERE ins_instits.CtyCod=%ld"
-			      " AND ins_instits.InsCod=ctr_centers.InsCod"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " GROUP BY ctr_centers.InsCod"
-			    " ORDER BY N DESC",
-			    Gbl.Hierarchy.Cty.CtyCod);
+	    NumInss = Ins_DB_GetInssInCurrentCtyOrderedByNumberOfDegs (&mysql_res);
 	    break;
 	 case HieLvl_INS:
 	 case HieLvl_CTR:
 	 case HieLvl_DEG:
 	 case HieLvl_CRS:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ctr_centers,"
-				   "deg_degrees"
-			    " WHERE ctr_centers.InsCod=%ld"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			    " GROUP BY ctr_centers.InsCod"
-			    " ORDER BY N DESC",
-			    Gbl.Hierarchy.Ins.InsCod);
+	    NumInss = Ins_DB_GetInssInCurrentInsOrderedByNumberOfDegs (&mysql_res);
 	    break;
 	 default:
 	    Err_WrongScopeExit ();
@@ -1159,52 +1106,16 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
       switch (Gbl.Scope.Current)
 	{
 	 case HieLvl_SYS:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ctr_centers,"
-				   "deg_degrees,"
-				   "crs_courses"
-			    " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " GROUP BY InsCod"
-			    " ORDER BY N DESC");
+	    NumInss = Ins_DB_GetInssInCurrentSysOrderedByNumberOfCrss (&mysql_res);
 	    break;
 	 case HieLvl_CTY:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ins_instits,"
-				   "ctr_centers,"
-				   "deg_degrees,"
-				   "crs_courses"
-			    " WHERE ins_instits.CtyCod=%ld"
-			      " AND ins_instits.InsCod=ctr_centers.InsCod"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " GROUP BY ctr_centers.InsCod"
-			    " ORDER BY N DESC",
-			    Gbl.Hierarchy.Cty.CtyCod);
+	    NumInss = Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCrss (&mysql_res);
 	    break;
 	 case HieLvl_INS:
 	 case HieLvl_CTR:
 	 case HieLvl_DEG:
 	 case HieLvl_CRS:
-	    NumInss = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get institutions",
-			    "SELECT ctr_centers.InsCod,"	// row[0]
-				   "COUNT(*) AS N"		// row[1]
-			     " FROM ctr_centers,"
-				   "deg_degrees,"
-				   "crs_courses"
-			    " WHERE ctr_centers.InsCod=%ld"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " GROUP BY ctr_centers.InsCod"
-			    " ORDER BY N DESC",
-			    Gbl.Hierarchy.Ins.InsCod);
+	    NumInss = Ins_DB_GetInssInCurrentInsOrderedByNumberOfCrss (&mysql_res);
 	    break;
 	 default:
 	    Err_WrongScopeExit ();
