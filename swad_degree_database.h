@@ -64,8 +64,9 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
 bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
                                        long DegCod,long CtrCod);
 
-unsigned Deg_DB_GetNumDegsWithCrss (const char *SubQuery);
-unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod);
+unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod);
 unsigned Deg_DB_GetNumDegsInCty (long CtyCod);
 unsigned Deg_DB_GetNumDegsInIns (long InsCod);
 unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);

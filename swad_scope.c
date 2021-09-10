@@ -366,3 +366,29 @@ const char *Sco_GetDBStrFromScope (HieLvl_Level_t Scope)
 
    return Sco_ScopeDB[Scope];
   }
+
+/*****************************************************************************/
+/**************************** Get current scope code *************************/
+/*****************************************************************************/
+
+long Sco_GetCurrentCod (void)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return -1L;
+      case HieLvl_CTY:
+	 return Gbl.Hierarchy.Cty.CtyCod;
+      case HieLvl_INS:
+	 return Gbl.Hierarchy.Ins.InsCod;
+      case HieLvl_CTR:
+	 return Gbl.Hierarchy.Ctr.CtrCod;
+      case HieLvl_DEG:
+	 return Gbl.Hierarchy.Deg.DegCod;
+      case HieLvl_CRS:
+	 return Gbl.Hierarchy.Crs.CrsCod;
+      default:
+	 Err_WrongScopeExit ();
+	 return -1L;	// Not reached
+     }
+  }

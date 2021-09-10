@@ -29,6 +29,7 @@
 #include "swad_degree_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -476,8 +477,12 @@ bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
 /***************** Get current number of degrees with courses ****************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsWithCrss (const char *SubQuery)
+unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of degrees with courses",
 		  "SELECT COUNT(DISTINCT deg_degrees.DegCod)"
@@ -495,8 +500,13 @@ unsigned Deg_DB_GetNumDegsWithCrss (const char *SubQuery)
 /**************** Get current number of degrees with users *******************/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of degrees with users",
 		  "SELECT COUNT(DISTINCT deg_degrees.DegCod)"

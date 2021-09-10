@@ -61,7 +61,8 @@ unsigned Crs_DB_GetNumCrssInCty (long CtyCod);
 unsigned Crs_DB_GetNumCrssInIns (long InsCod);
 unsigned Crs_DB_GetNumCrssInCtr (long CtrCod);
 unsigned Crs_DB_GetNumCrssInDeg (long DegCod);
-unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod);
 
 void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
 void Crs_DB_UpdateCrsStatus (long CrsCod,Crs_Status_t Status);

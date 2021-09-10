@@ -1833,18 +1833,18 @@ unsigned Ctr_GetCachedNumCtrsWithMapInIns (long InsCod)
 /********************* Get number of centers with degrees ********************/
 /*****************************************************************************/
 
-unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ctr_GetCachedNumCtrsWithDegs (void)
   {
    unsigned NumCtrsWithDegs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of centers with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_DEGS,Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_DEGS,Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumCtrsWithDegs))
      {
       /***** Get current number of centers with degrees from database and update cache *****/
-      NumCtrsWithDegs = Ctr_DB_GetNumCtrsWithDegs (SubQuery);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Scope,Cod,
+      NumCtrsWithDegs = Ctr_DB_GetNumCtrsWithDegs (Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_DEGS,Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithDegs);
      }
 
@@ -1855,18 +1855,18 @@ unsigned Ctr_GetCachedNumCtrsWithDegs (const char *SubQuery,
 /********************* Get number of centers with courses ********************/
 /*****************************************************************************/
 
-unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ctr_GetCachedNumCtrsWithCrss (void)
   {
    unsigned NumCtrsWithCrss;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of centers with courses *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_CRSS,Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_CTRS_WITH_CRSS,Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumCtrsWithCrss))
      {
       /***** Get number of centers with courses *****/
-      NumCtrsWithCrss = Ctr_DB_GetNumCtrsWithCrss (SubQuery);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Scope,Cod,
+      NumCtrsWithCrss = Ctr_DB_GetNumCtrsWithCrss (Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_CTRS_WITH_CRSS,Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithCrss);
      }
 
@@ -1877,8 +1877,7 @@ unsigned Ctr_GetCachedNumCtrsWithCrss (const char *SubQuery,
 /********************* Get number of centers with users **********************/
 /*****************************************************************************/
 
-unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureCtrs[Rol_NUM_ROLES] =
      {
@@ -1887,14 +1886,15 @@ unsigned Ctr_GetCachedNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       [Rol_TCH] = FigCch_NUM_CTRS_WITH_TCHS,	// Teachers
      };
    unsigned NumCtrsWithUsrs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of centers with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureCtrs[Role],Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumCtrsWithUsrs))
      {
       /***** Get current number of centers with users from database and update cache *****/
-      NumCtrsWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (Role,SubQuery);
-      FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Scope,Cod,
+      NumCtrsWithUsrs = Ctr_DB_GetNumCtrsWithUsrs (Role,Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigureCtrs[Role],Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumCtrsWithUsrs);
      }
 

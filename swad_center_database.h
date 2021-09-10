@@ -60,9 +60,10 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod);
 unsigned Ctr_DB_GetNumCtrsWithMap (void);
 unsigned Ctr_DB_GetNumCtrsWithMapInCty (long CtyCod);
 unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod);
-unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery);
-unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery);
-unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery);
+unsigned Ctr_DB_GetNumCtrsWithDegs (HieLvl_Level_t Scope,long Cod);
+unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Scope,long Cod);
+unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod);
 
 void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);

@@ -69,4 +69,6 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 char *Hie_BuildGoToMsg (const char *Where);
 void Hie_FreeGoToMsg (void);
 
+void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod);
+
 #endif

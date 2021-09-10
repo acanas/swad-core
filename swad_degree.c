@@ -1808,18 +1808,18 @@ unsigned Deg_GetCachedNumDegsInCtr (long CtrCod)
 /********************* Get number of centers with courses ********************/
 /*****************************************************************************/
 
-unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Deg_GetCachedNumDegsWithCrss (void)
   {
    unsigned NumDegsWithCrss;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of degrees with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_DEGS_WITH_CRSS,Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumDegsWithCrss))
      {
       /***** Get current number of degrees with courses from database and update cache *****/
-      NumDegsWithCrss = Deg_DB_GetNumDegsWithCrss (SubQuery);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Scope,Cod,
+      NumDegsWithCrss = Deg_DB_GetNumDegsWithCrss (Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_DEGS_WITH_CRSS,Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumDegsWithCrss);
      }
 
@@ -1830,8 +1830,7 @@ unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
 /********************* Get number of degrees with users **********************/
 /*****************************************************************************/
 
-unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureDegs[Rol_NUM_ROLES] =
      {
@@ -1840,14 +1839,15 @@ unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
       [Rol_TCH] = FigCch_NUM_DEGS_WITH_TCHS,	// Teachers
      };
    unsigned NumDegsWithUsrs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of degrees with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureDegs[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureDegs[Role],Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumDegsWithUsrs))
      {
       /***** Get current number of degrees with users from database and update cache *****/
-      NumDegsWithUsrs = Deg_DB_GetNumDegsWithUsrs (Role,SubQuery);
-      FigCch_UpdateFigureIntoCache (FigureDegs[Role],Scope,Cod,
+      NumDegsWithUsrs = Deg_DB_GetNumDegsWithUsrs (Role,Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigureDegs[Role],Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumDegsWithUsrs);
      }
 

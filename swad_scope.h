@@ -57,4 +57,6 @@ HieLvl_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
 HieLvl_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr);
 const char *Sco_GetDBStrFromScope (HieLvl_Level_t Scope);
 
+long Sco_GetCurrentCod (void);
+
 #endif

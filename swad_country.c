@@ -1759,8 +1759,7 @@ unsigned Cty_GetCachedNumCtysWithCrss (void)
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureCtys[Rol_NUM_ROLES] =
      {
@@ -1769,14 +1768,15 @@ unsigned Cty_GetCachedNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery,
       [Rol_TCH] = FigCch_NUM_CTYS_WITH_TCHS,	// Teachers
      };
    unsigned NumCtysWithUsrs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of countries with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCtys[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureCtys[Role],Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumCtysWithUsrs))
      {
       /***** Get current number of countries with users from database and update cache *****/
-      NumCtysWithUsrs = Cty_DB_GetNumCtysWithUsrs (Role,SubQuery);
-      FigCch_UpdateFigureIntoCache (FigureCtys[Role],Scope,Cod,
+      NumCtysWithUsrs = Cty_DB_GetNumCtysWithUsrs (Role,Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigureCtys[Role],Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumCtysWithUsrs);
      }
 

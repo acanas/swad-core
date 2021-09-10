@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -413,8 +414,12 @@ unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
 /********************* Get number of centers with degrees ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery)
+unsigned Ctr_DB_GetNumCtrsWithDegs (HieLvl_Level_t Scope,long Cod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with degrees",
 		  "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
@@ -430,8 +435,12 @@ unsigned Ctr_DB_GetNumCtrsWithDegs (const char *SubQuery)
 /********************* Get number of centers with courses ********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery)
+unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Scope,long Cod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with courses",
 		  "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"
@@ -449,8 +458,13 @@ unsigned Ctr_DB_GetNumCtrsWithCrss (const char *SubQuery)
 /********************* Get number of centers with users **********************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of centers with users",
 		  "SELECT COUNT(DISTINCT ctr_centers.CtrCod)"

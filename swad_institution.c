@@ -1983,24 +1983,18 @@ unsigned Ins_GetCachedNumInssInCty (long CtyCod)
 /***************** Get number of institutions with centers *******************/
 /*****************************************************************************/
 
-unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ins_GetCachedNumInssWithCtrs (void)
   {
    unsigned NumInssWithCtrs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of institutions with centers from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CTRS,Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumInssWithCtrs))
      {
       /***** Get current number of institutions with centers from database and update cache *****/
-      NumInssWithCtrs = (unsigned)
-      DB_QueryCOUNT ("can not get number of institutions with centers",
-		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		      " FROM ins_instits,"
-			    "ctr_centers"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod",
-		     SubQuery);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CTRS,Scope,Cod,
+      NumInssWithCtrs = Ins_DB_GetNumInssWithCtrs (Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CTRS,Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumInssWithCtrs);
      }
 
@@ -2008,29 +2002,40 @@ unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
   }
 
 /*****************************************************************************/
+/****************** Get number of institutions with centres ******************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod)
+  {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of institutions with centers",
+		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod",
+		  SubQuery);
+  }
+
+/*****************************************************************************/
 /****************** Get number of institutions with degrees ******************/
 /*****************************************************************************/
 
-unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ins_GetCachedNumInssWithDegs (void)
   {
    unsigned NumInssWithDegs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of institutions with degrees from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_DEGS,Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumInssWithDegs))
      {
       /***** Get current number of institutions with degrees from database and update cache *****/
-      NumInssWithDegs = (unsigned)
-      DB_QueryCOUNT ("can not get number of institutions with degrees",
-		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		      " FROM ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
-		     SubQuery);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Scope,Cod,
+      NumInssWithDegs = Ins_DB_GetNumInssWithDegs (Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_DEGS,Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumInssWithDegs);
      }
 
@@ -2038,31 +2043,42 @@ unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
   }
 
 /*****************************************************************************/
+/****************** Get number of institutions with degrees ******************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod)
+  {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of institutions with degrees",
+		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
+		  SubQuery);
+  }
+
+/*****************************************************************************/
 /****************** Get number of institutions with courses ******************/
 /*****************************************************************************/
 
-unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ins_GetCachedNumInssWithCrss (void)
   {
    unsigned NumInssWithCrss;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of institutions with courses from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_INSS_WITH_CRSS,Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumInssWithCrss))
      {
       /***** Get current number of institutions with courses from database and update cache *****/
-      NumInssWithCrss = (unsigned)
-      DB_QueryCOUNT ("can not get number of institutions with courses",
-		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		      " FROM ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees,"
-		            "crs_courses"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		       " AND deg_degrees.DegCod=crs_courses.DegCod",
-		     SubQuery);
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Scope,Cod,
+      NumInssWithCrss = Ins_DB_GetNumInssWithCrss (Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS_WITH_CRSS,Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumInssWithCrss);
      }
 
@@ -2070,11 +2086,33 @@ unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
   }
 
 /*****************************************************************************/
+/****************** Get number of institutions with courses ******************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod)
+  {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of institutions with courses",
+		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses"
+		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod",
+		  SubQuery);
+  }
+
+/*****************************************************************************/
 /****************** Get number of institutions with users ********************/
 /*****************************************************************************/
 
-unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureInss[Rol_NUM_ROLES] =
      {
@@ -2083,31 +2121,47 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       [Rol_TCH] = FigCch_NUM_INSS_WITH_TCHS,	// Teachers
      };
    unsigned NumInssWithUsrs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of institutions with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureInss[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureInss[Role],Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumInssWithUsrs))
      {
       /***** Get current number of institutions with users from database and update cache *****/
-      NumInssWithUsrs = (unsigned)
-      DB_QueryCOUNT ("can not get number of institutions with users",
-		     "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		      " FROM ins_instits,"
-		            "ctr_centers,"
-		            "deg_degrees,"
-		            "crs_courses,"
-		            "crs_users"
-		     " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		       " AND deg_degrees.DegCod=crs_courses.DegCod"
-		       " AND crs_courses.CrsCod=crs_users.CrsCod"
-		       " AND crs_users.Role=%u",
-		     SubQuery,(unsigned) Role);
-      FigCch_UpdateFigureIntoCache (FigureInss[Role],Scope,Cod,
+      NumInssWithUsrs = Ins_DB_GetNumInnsWithUsrs (Role,Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigureInss[Role],Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumInssWithUsrs);
      }
 
    return NumInssWithUsrs;
+  }
+
+/*****************************************************************************/
+/************* Get current number of institutions with users *****************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod)
+  {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of institutions with users",
+		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
+		   " FROM ins_instits,"
+			 "ctr_centers,"
+			 "deg_degrees,"
+			 "crs_courses,"
+			 "crs_users"
+		  " WHERE %s"
+			 "ins_instits.InsCod=ctr_centers.InsCod"
+		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		    " AND deg_degrees.DegCod=crs_courses.DegCod"
+		    " AND crs_courses.CrsCod=crs_users.CrsCod"
+		    " AND crs_users.Role=%u",
+		  SubQuery,(unsigned) Role);
   }
 
 /*****************************************************************************/

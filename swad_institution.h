@@ -134,14 +134,15 @@ void Ins_FlushCacheNumInssInCty (void);
 unsigned Ins_GetNumInssInCty (long CtyCod);
 unsigned Ins_GetCachedNumInssInCty (long CtyCod);
 
-unsigned Ins_GetCachedNumInssWithCtrs (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod);
-unsigned Ins_GetCachedNumInssWithDegs (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod);
-unsigned Ins_GetCachedNumInssWithCrss (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod);
-unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithCtrs (void);
+unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithDegs (void);
+unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithCrss (void);
+unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
+unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 

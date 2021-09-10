@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -340,8 +341,13 @@ unsigned Cty_DB_GetNumCtysWithCrss (void)
 /******************* Get number of countries with users **********************/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
+unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod)
   {
+   char SubQuery[128];
+
+   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
+
    return (unsigned)
    DB_QueryCOUNT ("can not get number of countries with users",
 		  "SELECT COUNT(DISTINCT cty_countrs.CtyCod)"

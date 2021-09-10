@@ -142,10 +142,8 @@ void Deg_FlushCacheNumDegsInCtr (void);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetCachedNumDegsInCtr (long CtrCod);
 
-unsigned Deg_GetCachedNumDegsWithCrss (const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod);
-unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod);
+unsigned Deg_GetCachedNumDegsWithCrss (void);
+unsigned Deg_GetCachedNumDegsWithUsrs (Rol_Role_t Role);
 
 void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumCrss);
 

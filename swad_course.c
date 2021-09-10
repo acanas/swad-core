@@ -598,8 +598,7 @@ unsigned Crs_GetCachedNumCrssInDeg (long DegCod)
 /********************* Get number of courses with users **********************/
 /*****************************************************************************/
 
-unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
-                                       HieLvl_Level_t Scope,long Cod)
+unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
   {
    static const FigCch_FigureCached_t FigureCrss[Rol_NUM_ROLES] =
      {
@@ -608,14 +607,15 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery,
       [Rol_TCH] = FigCch_NUM_CRSS_WITH_TCHS,	// Teachers
      };
    unsigned NumCrssWithUsrs;
+   long Cod = Sco_GetCurrentCod ();
 
    /***** Get number of courses with users from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureCrss[Role],Scope,Cod,
+   if (!FigCch_GetFigureFromCache (FigureCrss[Role],Gbl.Scope.Current,Cod,
 				   FigCch_UNSIGNED,&NumCrssWithUsrs))
      {
       /***** Get current number of courses with users from database and update cache *****/
-      NumCrssWithUsrs = Crs_DB_GetNumCrssWithUsrs (Role,SubQuery);
-      FigCch_UpdateFigureIntoCache (FigureCrss[Role],Scope,Cod,
+      NumCrssWithUsrs = Crs_DB_GetNumCrssWithUsrs (Role,Gbl.Scope.Current,Cod);
+      FigCch_UpdateFigureIntoCache (FigureCrss[Role],Gbl.Scope.Current,Cod,
 				    FigCch_UNSIGNED,&NumCrssWithUsrs);
      }
 
