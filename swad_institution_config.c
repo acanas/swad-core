@@ -43,6 +43,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
+#include "swad_institution_database.h"
 #include "swad_logo.h"
 #include "swad_place.h"
 
@@ -83,7 +84,6 @@ static void InsCfg_NumUsrs (void);
 static void InsCfg_NumDegs (void);
 static void InsCfg_NumCrss (void);
 static void InsCfg_NumDpts (void);
-static void InsCfg_UpdateInsCtyDB (long InsCod,long CtyCod);
 
 /*****************************************************************************/
 /*************** Show information of the current institution *****************/
@@ -599,7 +599,7 @@ void InsCfg_ChangeInsCty (void)
       else
 	{
 	 /***** Update the table changing the country of the institution *****/
-	 InsCfg_UpdateInsCtyDB (Gbl.Hierarchy.Ins.InsCod,NewCty.CtyCod);
+	 Ins_DB_UpdateInsCty (Gbl.Hierarchy.Ins.InsCod,NewCty.CtyCod);
          Gbl.Hierarchy.Ins.CtyCod =
          Gbl.Hierarchy.Cty.CtyCod = NewCty.CtyCod;
 
@@ -612,21 +612,6 @@ void InsCfg_ChangeInsCty (void)
 		          Gbl.Hierarchy.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
 	}
      }
-  }
-
-/*****************************************************************************/
-/****************** Update country in table of institutions ******************/
-/*****************************************************************************/
-
-static void InsCfg_UpdateInsCtyDB (long InsCod,long CtyCod)
-  {
-   /***** Update country in table of institutions *****/
-   DB_QueryUPDATE ("can not update the country of an institution",
-		   "UPDATE ins_instits"
-		     " SET CtyCod=%ld"
-		   " WHERE InsCod=%ld",
-                   CtyCod,
-                   InsCod);
   }
 
 /*****************************************************************************/

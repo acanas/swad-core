@@ -44,6 +44,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_institution.h"
+#include "swad_institution_database.h"
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_place.h"
@@ -106,7 +107,6 @@ static void Ins_PutParamGoToIns (void *InsCod);
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
 static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status);
-static long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status);
 
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
@@ -859,28 +859,6 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   }
 
 /*****************************************************************************/
-/*********** Get the short name of an institution from its code **************/
-/*****************************************************************************/
-
-void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
-  {
-   /***** Trivial check: institution code should be > 0 *****/
-   if (InsCod <= 0)
-     {
-      ShrtName[0] = '\0';	// Empty name
-      return;
-     }
-
-   /***** Get short name of institution from database *****/
-   DB_QuerySELECTString (ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME,
-			 "can not get the short name of an institution",
-			 "SELECT ShortName"
-			  " FROM ins_instits"
-			 " WHERE InsCod=%ld",
-			 InsCod);
-  }
-
-/*****************************************************************************/
 /************ Get the full name of an institution from its code **************/
 /*****************************************************************************/
 
@@ -1497,26 +1475,6 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
   }
 
 /*****************************************************************************/
-/****** Check if the name of institution exists in the current country *******/
-/*****************************************************************************/
-
-bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
-                                       const char *Name,
-				       long InsCod,
-				       long CtyCod)
-  {
-   /***** Get number of institutions in current country with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of an institution"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ins_instits"
-			  " WHERE CtyCod=%ld"
-			    " AND %s='%s'"
-			    " AND InsCod<>%ld",
-			  CtyCod,FieldName,Name,InsCod) != 0);
-  }
-
-/*****************************************************************************/
 /************ Update institution name in table of institutions ***************/
 /*****************************************************************************/
 
@@ -1571,21 +1529,6 @@ void Ins_ChangeInsWWW (void)
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();
-  }
-
-/*****************************************************************************/
-/**************** Update database changing old WWW by new WWW ****************/
-/*****************************************************************************/
-
-void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
-  {
-   /***** Update database changing old WWW by new WWW *****/
-   DB_QueryUPDATE ("can not update the web of an institution",
-		   "UPDATE ins_instits"
-		     " SET WWW='%s'"
-		   " WHERE InsCod=%ld",
-	           NewWWW,
-	           InsCod);
   }
 
 /*****************************************************************************/
@@ -1894,28 +1837,6 @@ static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status)
   }
 
 /*****************************************************************************/
-/************************** Create a new institution *************************/
-/*****************************************************************************/
-
-static long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status)
-  {
-   return
-   DB_QueryINSERTandReturnCode ("can not create institution",
-				"INSERT INTO ins_instits"
-				" (CtyCod,Status,RequesterUsrCod,"
-				  "ShortName,FullName,WWW)"
-				" VALUES"
-				" (%ld,%u,%ld,"
-				  "'%s','%s','%s')",
-				Ins->CtyCod,
-				Status,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Ins->ShrtName,
-				Ins->FullName,
-				Ins->WWW);
-  }
-
-/*****************************************************************************/
 /********************* Get total number of institutions **********************/
 /*****************************************************************************/
 
@@ -2002,25 +1923,6 @@ unsigned Ins_GetCachedNumInssWithCtrs (void)
   }
 
 /*****************************************************************************/
-/****************** Get number of institutions with centres ******************/
-/*****************************************************************************/
-
-unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod)
-  {
-   char SubQuery[128];
-
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
-
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of institutions with centers",
-		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		   " FROM ins_instits,"
-			 "ctr_centers"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod",
-		  SubQuery);
-  }
-
-/*****************************************************************************/
 /****************** Get number of institutions with degrees ******************/
 /*****************************************************************************/
 
@@ -2043,27 +1945,6 @@ unsigned Ins_GetCachedNumInssWithDegs (void)
   }
 
 /*****************************************************************************/
-/****************** Get number of institutions with degrees ******************/
-/*****************************************************************************/
-
-unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod)
-  {
-   char SubQuery[128];
-
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
-
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of institutions with degrees",
-		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		   " FROM ins_instits,"
-			 "ctr_centers,"
-			 "deg_degrees"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod",
-		  SubQuery);
-  }
-
-/*****************************************************************************/
 /****************** Get number of institutions with courses ******************/
 /*****************************************************************************/
 
@@ -2083,29 +1964,6 @@ unsigned Ins_GetCachedNumInssWithCrss (void)
      }
 
    return NumInssWithCrss;
-  }
-
-/*****************************************************************************/
-/****************** Get number of institutions with courses ******************/
-/*****************************************************************************/
-
-unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod)
-  {
-   char SubQuery[128];
-
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
-
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of institutions with courses",
-		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		   " FROM ins_instits,"
-			 "ctr_centers,"
-			 "deg_degrees,"
-			 "crs_courses"
-		  " WHERE %sinstitutions.InsCod=ctr_centers.InsCod"
-		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		    " AND deg_degrees.DegCod=crs_courses.DegCod",
-		  SubQuery);
   }
 
 /*****************************************************************************/
@@ -2134,34 +1992,6 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role)
      }
 
    return NumInssWithUsrs;
-  }
-
-/*****************************************************************************/
-/************* Get current number of institutions with users *****************/
-/*****************************************************************************/
-
-unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod)
-  {
-   char SubQuery[128];
-
-   Hie_DB_BuildSubquery (SubQuery,Scope,Cod);
-
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of institutions with users",
-		  "SELECT COUNT(DISTINCT ins_instits.InsCod)"
-		   " FROM ins_instits,"
-			 "ctr_centers,"
-			 "deg_degrees,"
-			 "crs_courses,"
-			 "crs_users"
-		  " WHERE %s"
-			 "ins_instits.InsCod=ctr_centers.InsCod"
-		    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		    " AND deg_degrees.DegCod=crs_courses.DegCod"
-		    " AND crs_courses.CrsCod=crs_users.CrsCod"
-		    " AND crs_users.Role=%u",
-		  SubQuery,(unsigned) Role);
   }
 
 /*****************************************************************************/

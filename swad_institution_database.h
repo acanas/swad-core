@@ -1,0 +1,58 @@
+// swad_institution_database.h: institutions operations with database
+
+#ifndef _SWAD_INS_DB
+#define _SWAD_INS_DB
+/*
+    SWAD (Shared Workspace At a Distance in Spanish),
+    is a web platform developed at the University of Granada (Spain),
+    and used to support university teaching.
+
+    This file is part of SWAD core.
+    Copyright (C) 1999-2021 Antonio Cañas Vargas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*****************************************************************************/
+/********************************** Headers **********************************/
+/*****************************************************************************/
+
+#include "swad_constant.h"
+#include "swad_hierarchy_level.h"
+#include "swad_role_type.h"
+
+/*****************************************************************************/
+/************************ Public types and constants *************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/***************************** Public prototypes *****************************/
+/*****************************************************************************/
+
+long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status);
+void Ins_DB_UpdateInsCty (long InsCod,long CtyCod);
+void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
+
+void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
+                                       const char *Name,
+				       long InsCod,
+				       long CtyCod);
+
+unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod);
+unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
+                                    HieLvl_Level_t Scope,long Cod);
+
+#endif

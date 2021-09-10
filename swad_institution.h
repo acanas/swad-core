@@ -104,7 +104,6 @@ void Ins_GetFullListOfInstitutions (long CtyCod);
 
 void Ins_WriteInstitutionNameAndCty (long InsCod);
 bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins);
-void Ins_DB_GetShortNameOfInstitution (long InsCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
 
 void Ins_FreeListInstitutions (void);
@@ -116,12 +115,7 @@ void Ins_RemoveInstitution (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
 void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
-bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
-                                       const char *Name,
-				       long InsCod,
-				       long CtyCod);
 void Ins_ChangeInsWWW (void);
-void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
 
@@ -135,14 +129,9 @@ unsigned Ins_GetNumInssInCty (long CtyCod);
 unsigned Ins_GetCachedNumInssInCty (long CtyCod);
 
 unsigned Ins_GetCachedNumInssWithCtrs (void);
-unsigned Ins_DB_GetNumInssWithCtrs (HieLvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithDegs (void);
-unsigned Ins_DB_GetNumInssWithDegs (HieLvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithCrss (void);
-unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod);
 unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
-unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
-                                    HieLvl_Level_t Scope,long Cod);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 

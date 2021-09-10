@@ -38,6 +38,7 @@
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_HTML.h"
+#include "swad_institution_database.h"
 #include "swad_log.h"
 #include "swad_profile.h"
 #include "swad_role.h"
