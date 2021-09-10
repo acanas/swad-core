@@ -406,7 +406,8 @@ unsigned Ctr_DB_GetNumCtrsWithMapInIns (long InsCod)
 		   " FROM ctr_centers"
 		  " WHERE InsCod=%ld"
 		    " AND (Latitude<>0"
-		      " OR Longitude<>0)",
+		         " OR"
+		         " Longitude<>0)",
 		  InsCod);
   }
 

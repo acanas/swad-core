@@ -126,7 +126,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    extern const char *Txt_There_are_no_institutions_with_requests_for_centers_to_be_confirmed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumInss;
+   unsigned NumInss = 0;
    unsigned NumIns;
    struct Ins_Instit Ins;
    const char *BgColor;
@@ -135,37 +135,14 @@ void Ins_SeeInsWithPendingCtrs (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_INS_ADM:
-         NumInss = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get institutions with pending centers",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM ctr_centers,"
-			        "ins_admin,"
-			        "ins_instits"
-			 " WHERE (ctr_centers.Status & %u)<>0"
-			   " AND ctr_centers.InsCod=ins_admin.InsCod"
-			   " AND ins_admin.UsrCod=%ld"
-			   " AND ctr_centers.InsCod=ins_instits.InsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY ins_instits.ShortName",
-			 (unsigned) Ctr_STATUS_BIT_PENDING,
-			 Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumInss = Ins_DB_GetInsWithPendingCtrsAdminByMe (&mysql_res);
          break;
       case Rol_SYS_ADM:
-         NumInss = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get institutions with pending centers",
-			 "SELECT ctr_centers.InsCod,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM ctr_centers,"
-			        "ins_instits"
-			 " WHERE (ctr_centers.Status & %u)<>0"
-			   " AND ctr_centers.InsCod=ins_instits.InsCod"
-			 " GROUP BY ctr_centers.InsCod"
-			 " ORDER BY ins_instits.ShortName",
-			 (unsigned) Ctr_STATUS_BIT_PENDING);
+         NumInss = Ins_DB_GetAllInsWithPendingCtr (&mysql_res);
          break;
       default:	// Forbidden for other users
-	 return;
+         Err_WrongRoleExit ();
+         break;	// Not reached
      }
 
    /***** Get institutions *****/
@@ -636,21 +613,7 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
    struct Ins_Instit *Ins;
 
    /***** Get institutions from database *****/
-   Gbl.Hierarchy.Inss.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get institutions",
-		   "SELECT InsCod,"		// row[0]
-			  "CtyCod,"		// row[1]
-			  "Status,"		// row[2]
-			  "RequesterUsrCod,"	// row[3]
-			  "ShortName,"		// row[4]
-			  "FullName,"		// row[5]
-			  "WWW"			// row[6]
-		    " FROM ins_instits"
-		   " WHERE CtyCod=%ld"
-		   " ORDER BY FullName",
-		   CtyCod);
-
-   if (Gbl.Hierarchy.Inss.Num) // Institutions found...
+   if ((Gbl.Hierarchy.Inss.Num = Ins_DB_GetInssInCtyOrderedByFullName (&mysql_res,CtyCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
@@ -686,53 +649,13 @@ void Ins_GetBasicListOfInstitutions (long CtyCod)
 
 void Ins_GetFullListOfInstitutions (long CtyCod)
   {
-   static const char *OrderBySubQuery[Ins_NUM_ORDERS] =
-     {
-      [Ins_ORDER_BY_INSTITUTION] = "FullName",
-      [Ins_ORDER_BY_NUM_USRS   ] = "NumUsrs DESC,FullName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumIns;
    struct Ins_Instit *Ins;
 
    /***** Get institutions from database *****/
-   /* Query database */
-   Gbl.Hierarchy.Inss.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get institutions",
-		   "(SELECT ins_instits.InsCod,"		// row[0]
-			   "ins_instits.CtyCod,"		// row[1]
-			   "ins_instits.Status,"		// row[2]
-			   "ins_instits.RequesterUsrCod,"	// row[3]
-			   "ins_instits.ShortName,"		// row[4]
-			   "ins_instits.FullName,"		// row[5]
-			   "ins_instits.WWW,"			// row[6]
-			   "COUNT(*) AS NumUsrs"		// row[7]
-		    " FROM ins_instits,"
-			  "usr_data"
-		   " WHERE ins_instits.CtyCod=%ld"
-		     " AND ins_instits.InsCod=usr_data.InsCod"
-		   " GROUP BY ins_instits.InsCod)"
-		   " UNION "
-		   "(SELECT InsCod,"				// row[0]
-			   "CtyCod,"				// row[1]
-			   "Status,"				// row[2]
-			   "RequesterUsrCod,"			// row[3]
-			   "ShortName,"				// row[4]
-			   "FullName,"				// row[5]
-			   "WWW,"				// row[6]
-			   "0 AS NumUsrs"			// row[7]
-		     " FROM ins_instits"
-		    " WHERE CtyCod=%ld"
-		      " AND InsCod NOT IN"
-			  " (SELECT DISTINCT InsCod"
-			     " FROM usr_data))"
-			    " ORDER BY %s",
-		   CtyCod,
-		   CtyCod,
-		   OrderBySubQuery[Gbl.Hierarchy.Inss.SelectedOrder]);
-
-   if (Gbl.Hierarchy.Inss.Num) // Institutions found...
+   if ((Gbl.Hierarchy.Inss.Num = Ins_DB_GetFullListOfInssInCty (&mysql_res,CtyCod))) // Institutions found...
      {
       /***** Create list with institutions *****/
       if ((Gbl.Hierarchy.Inss.Lst = calloc ((size_t) Gbl.Hierarchy.Inss.Num,
@@ -804,17 +727,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
    if (Ins->InsCod > 0)
      {
       /***** Get data of an institution from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of an institution",
-			  "SELECT InsCod,"		// row[0]
-			         "CtyCod,"		// row[1]
-			         "Status,"		// row[2]
-			         "RequesterUsrCod,"	// row[3]
-			         "ShortName,"		// row[4]
-			         "FullName,"		// row[5]
-			         "WWW"			// row[6]
-			   " FROM ins_instits"
-			  " WHERE InsCod=%ld",
-			  Ins->InsCod))	// Institution found...
+      if (Ins_DB_GetDataOfInstitutionByCod (&mysql_res,Ins->InsCod))	// Institution found...
 	{
          /* Get institution data */
 	 row = mysql_fetch_row (mysql_res);
@@ -837,6 +750,15 @@ bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
 
 static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   {
+   /*
+   row[0]: InsCod
+   row[1]: CtyCod
+   row[2]: Status
+   row[3]: RequesterUsrCod
+   row[4]: ShortName
+   row[5]: FullName
+   row[6]: WWW
+   */
    /***** Get institution code (row[0]) *****/
    if ((Ins->InsCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Err_WrongInstitExit ();
@@ -859,20 +781,19 @@ static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row)
   }
 
 /*****************************************************************************/
-/************ Get the full name of an institution from its code **************/
+/******** Get short name and country of an institution from its code *********/
 /*****************************************************************************/
 
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   {
-   Gbl.Cache.InstitutionShrtNameAndCty.InsCod = -1L;
+   Gbl.Cache.InstitutionShrtNameAndCty.InsCod      = -1L;
    Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
-   Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0] = '\0';
+   Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0]  = '\0';
   }
 
 static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
                                                 char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -897,15 +818,7 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
    /***** 3. Slow: get short name and country of institution from database *****/
    Gbl.Cache.InstitutionShrtNameAndCty.InsCod = Ins->InsCod;
 
-   if (DB_QuerySELECT (&mysql_res,"can not get short name and country"
-				  " of an institution",
-		       "SELECT ins_instits.ShortName,"	// row[0]
-		              "cty_countrs.Name_%s"	// row[1]
-		        " FROM ins_instits,"
-		              "cty_countrs"
-		       " WHERE ins_instits.InsCod=%ld"
-		         " AND ins_instits.CtyCod=cty_countrs.CtyCod",
-		       Lan_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod) == 1)
+   if (Ins_DB_GetShrtNameAndCtyOfIns (&mysql_res,Ins->InsCod) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -977,15 +890,8 @@ void Ins_WriteSelectorOfInstitution (void)
 
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
 	{
-	 /***** Get institutions of selected country from database *****/
-	 NumInss = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get institutions",
-			 "SELECT DISTINCT InsCod,"		// row[0]
-					 "ShortName"	// row[1]
-			  " FROM ins_instits"
-			 " WHERE CtyCod=%ld"
-			 " ORDER BY ShortName",
-			 Gbl.Hierarchy.Cty.CtyCod);
+	 /***** Get institutions of current country *****/
+	 NumInss = Ins_DB_GetInssInCtyOrderedByShrtName (&mysql_res,Gbl.Hierarchy.Cty.CtyCod);
 
 	 /***** List institutions *****/
 	 for (NumIns = 0;
@@ -1355,10 +1261,7 @@ void Ins_RemoveInstitution (void)
       Adm_DB_RemAdmins (HieLvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove institution *****/
-      DB_QueryDELETE ("can not remove an institution",
-		      "DELETE FROM ins_instits"
-		      " WHERE InsCod=%ld",
-		      Ins_EditingIns->InsCod);
+      Ins_DB_RemoveInstitution (Ins_EditingIns->InsCod);
 
       /***** Flush caches *****/
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
@@ -1481,12 +1384,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
   {
    /***** Update institution changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of an institution",
-		   "UPDATE ins_instits"
-		     " SET %s='%s'"
-		   " WHERE InsCod=%ld",
-	           FieldName,NewInsName,
-	           InsCod);
+   Ins_DB_UpdateInsName (InsCod,FieldName,NewInsName);
 
    /***** Flush caches *****/
    Ins_FlushCacheFullNameAndCtyOfInstitution ();
@@ -1563,12 +1461,7 @@ void Ins_ChangeInsStatus (void)
    Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
 
    /***** Update status in table of institutions *****/
-   DB_QueryUPDATE ("can not update the status of an institution",
-		   "UPDATE ins_instits"
-		     " SET Status=%u"
-		   " WHERE InsCod=%ld",
-                   (unsigned) Status,
-                   Ins_EditingIns->InsCod);
+   Ins_DB_UpdateInsStatus (Status,Ins_EditingIns->InsCod);
    Ins_EditingIns->Status = Status;
 
    /***** Create message to show the change made
@@ -1875,13 +1768,8 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
 
    /***** 2. Slow: number of institutions in a country from database *****/
    Gbl.Cache.NumInssInCty.CtyCod  = CtyCod;
-   Gbl.Cache.NumInssInCty.NumInss = (unsigned)
-   DB_QueryCOUNT ("can not get the number of institutions in a country",
-		  "SELECT COUNT(*)"
-		   " FROM ins_instits"
-		  " WHERE CtyCod=%ld",
-		  CtyCod);
-   Gbl.Cache.NumInssInCty.Valid = true;
+   Gbl.Cache.NumInssInCty.NumInss = Ins_DB_GetNumInssInCty (CtyCod);
+   Gbl.Cache.NumInssInCty.Valid   = true;
    FigCch_UpdateFigureIntoCache (FigCch_NUM_INSS,HieLvl_CTY,Gbl.Cache.NumInssInCty.CtyCod,
 				 FigCch_UNSIGNED,&Gbl.Cache.NumInssInCty.NumInss);
    return Gbl.Cache.NumInssInCty.NumInss;
@@ -2083,7 +1971,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
   {
    extern const char *Txt_Map;
 
-   if (Ins_GetIfMapIsAvailable (Ins->InsCod))
+   if (Ins_DB_GetIfMapIsAvailable (Ins->InsCod))
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,
@@ -2091,37 +1979,4 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
 				     "map-marker-alt.svg",
 				     Txt_Map);
      }
-  }
-
-/*****************************************************************************/
-/********** Check if any of the centers in an institution has map ************/
-/*****************************************************************************/
-
-bool Ins_GetIfMapIsAvailable (long InsCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool MapIsAvailable = false;
-
-   /***** Get if any center in current institution has a coordinate set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
-		       "SELECT EXISTS"	// row[0]
-		       "(SELECT *"
-		         " FROM ctr_centers"
-		        " WHERE InsCod=%ld"
-		          " AND (Latitude<>0"
-		               " OR"
-		               " Longitude<>0))",
-		       InsCod))
-     {
-      /* Get if map is available */
-      row = mysql_fetch_row (mysql_res);
-      MapIsAvailable = (row[0][0] == '1');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MapIsAvailable;
   }

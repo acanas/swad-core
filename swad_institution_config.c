@@ -72,7 +72,6 @@ extern struct Globals Gbl;
 static void InsCfg_Configuration (bool PrintView);
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void InsCfg_Title (bool PutLink);
-static void InsCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 static void InsCfg_Map (void);
 static void InsCfg_Country (bool PrintView,bool PutForm);
 static void InsCfg_FullName (bool PutForm);
@@ -147,52 +146,52 @@ static void InsCfg_Configuration (bool PrintView)
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-   /***** Country *****/
-   InsCfg_Country (PrintView,PutFormCty);
+	 /***** Country *****/
+	 InsCfg_Country (PrintView,PutFormCty);
 
-   /***** Institution name *****/
-   InsCfg_FullName (PutFormName);
-   InsCfg_ShrtName (PutFormName);
+	 /***** Institution name *****/
+	 InsCfg_FullName (PutFormName);
+	 InsCfg_ShrtName (PutFormName);
 
-   /***** Institution WWW *****/
-   InsCfg_WWW (PrintView,PutFormWWW);
+	 /***** Institution WWW *****/
+	 InsCfg_WWW (PrintView,PutFormWWW);
 
-   /***** Shortcut to the institution *****/
-   InsCfg_Shortcut (PrintView);
+	 /***** Shortcut to the institution *****/
+	 InsCfg_Shortcut (PrintView);
 
-   NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.InsCod);
-   if (PrintView)
-      /***** QR code with link to the institution *****/
-      InsCfg_QR ();
-   else
-     {
-      NumCtrs = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Ins.InsCod);
+	 if (PrintView)
+	    /***** QR code with link to the institution *****/
+	    InsCfg_QR ();
+	 else
+	   {
+	    NumCtrs = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
 
-      /***** Number of users who claim to belong to this institution,
-             number of centers,
-             number of degrees,
-             number of courses,
-             number of departments *****/
-      InsCfg_NumUsrs ();
-      HieCfg_NumCtrs (NumCtrs,
-		      true);	// Put form
-      HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
-      InsCfg_NumDegs ();
-      InsCfg_NumCrss ();
-      InsCfg_NumDpts ();
+	    /***** Number of users who claim to belong to this institution,
+		   number of centers,
+		   number of degrees,
+		   number of courses,
+		   number of departments *****/
+	    InsCfg_NumUsrs ();
+	    HieCfg_NumCtrs (NumCtrs,
+			    true);	// Put form
+	    HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+	    InsCfg_NumDegs ();
+	    InsCfg_NumCrss ();
+	    InsCfg_NumDpts ();
 
-      /***** Number of users in courses of this institution *****/
-      HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_TCH);
-      HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_NET);
-      HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_STD);
-      HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_UNK);
-     }
+	    /***** Number of users in courses of this institution *****/
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Rol_UNK);
+	   }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
    /***** End of left part *****/
    HTM_DIV_End ();
@@ -202,8 +201,8 @@ static void InsCfg_Configuration (bool PrintView)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
-      /***** Institution map *****/
-      InsCfg_Map ();
+	 /***** Institution map *****/
+	 InsCfg_Map ();
 
       HTM_DIV_End ();
      }
@@ -246,32 +245,6 @@ static void InsCfg_Title (bool PutLink)
   }
 
 /*****************************************************************************/
-/********* Get average coordinates of centers in current institution *********/
-/*****************************************************************************/
-
-static void InsCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
-  {
-   char *Query;
-
-   /***** Get average coordinates of centers of current institution
-          with both coordinates set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (asprintf (&Query,
-		 "SELECT AVG(Latitude),"				// row[0]
-			"AVG(Longitude),"				// row[1]
-			"GREATEST(MAX(Latitude)-MIN(Latitude),"
-				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		  " FROM ctr_centers"
-		 " WHERE InsCod=%ld"
-		   " AND Latitude<>0"
-		   " AND Longitude<>0",
-		 Gbl.Hierarchy.Ins.InsCod) < 0)
-      Err_NotEnoughMemoryExit ();
-   Map_GetCoordAndZoom (Coord,Zoom,Query);
-   free (Query);
-  }
-
-/*****************************************************************************/
 /****************************** Draw center map ******************************/
 /*****************************************************************************/
 
@@ -300,21 +273,14 @@ static void InsCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map with pretty Mapbox Streets tiles */
-   InsCfg_GetCoordAndZoom (&InsAvgCoord,&Zoom);
+   Ins_DB_GetCoordAndZoom (&InsAvgCoord,&Zoom);
    Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord,Zoom);
 
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();
 
    /* Get centers with coordinates */
-   NumCtrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
-		   "SELECT CtrCod"	// row[0]
-		    " FROM ctr_centers"
-		   " WHERE InsCod=%ld"
-		     " AND Latitude<>0"
-		     " AND Longitude<>0",
-		   Gbl.Hierarchy.Ins.InsCod);
+   NumCtrs = Ins_DB_GetCtrsWithCoordsInCurrentIns (&mysql_res);
 
    /* Add a marker and a popup for each center */
    for (NumCtr = 0;
@@ -385,16 +351,16 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
 	       Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-					"BT_LINK LT DAT",NULL);
-	       Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+					   "BT_LINK LT DAT",NULL);
+		  Hie_FreeGoToMsg ();
 	      }
 	    Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
 	    HTM_NBSP ();
 	    HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	    if (!PrintView)
 	      {
-	       HTM_BUTTON_End ();
+		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
 	      }
 	   }
@@ -464,13 +430,13 @@ static void InsCfg_NumUsrs (void)
    /***** Number of users *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_institution);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_institution);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -486,13 +452,13 @@ static void InsCfg_NumDegs (void)
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -508,13 +474,13 @@ static void InsCfg_NumCrss (void)
    /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -530,13 +496,13 @@ static void InsCfg_NumDpts (void)
    /***** Number of departments *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Departments);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Departments);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Dpt_DB_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Dpt_DB_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -673,4 +639,3 @@ void InsCfg_ContEditAfterChgIns (void)
    /***** Show the form again *****/
    InsCfg_ShowConfiguration ();
   }
-
