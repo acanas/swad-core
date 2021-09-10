@@ -481,7 +481,7 @@ unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
 unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
   {
    return (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get institutions",
+   DB_QuerySELECT (mysql_res,"can not get institutions",
 		   "SELECT ctr_centers.InsCod,"	// row[0]
 			  "COUNT(*) AS N"		// row[1]
 		    " FROM ctr_centers,"
