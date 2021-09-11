@@ -213,6 +213,199 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
   }
 
 /*****************************************************************************/
+/********** Get number of notes and users depending on note type *************/
+/*****************************************************************************/
+
+unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
+                                          Tml_Not_NoteType_t NoteType)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(*),"				// row[0]
+				"COUNT(DISTINCT UsrCod)"		// row[1]
+			  " FROM tml_notes"
+			 " WHERE NoteType=%u",
+			 (unsigned) NoteType);
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod"
+			   " AND tml_notes.NoteType=%u",
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 (unsigned) NoteType);
+      case HieLvl_INS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod"
+			   " AND tml_notes.NoteType=%u",
+			 Gbl.Hierarchy.Ins.InsCod,
+			 (unsigned) NoteType);
+      case HieLvl_CTR:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM deg_degrees,"
+				"crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod"
+			   " AND tml_notes.NoteType=%u",
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 (unsigned) NoteType);
+      case HieLvl_DEG:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE crs_courses.DegCod=%ld"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod"
+			   " AND tml_notes.NoteType=%u",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 (unsigned) NoteType);
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM crs_users,"
+				"tml_notes"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod"
+			   " AND tml_notes.NoteType=%u",
+			 Gbl.Hierarchy.Crs.CrsCod,
+			 (unsigned) NoteType);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/******************** Get total number of notes and users ********************/
+/*****************************************************************************/
+
+unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(*),"				// row[0]
+				"COUNT(DISTINCT UsrCod)"		// row[1]
+			 " FROM tml_notes");
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod",
+			 Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_CTR:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM deg_degrees,"
+				"crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod",
+			 Gbl.Hierarchy.Ctr.CtrCod);
+      case HieLvl_DEG:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM crs_courses,"
+				"crs_users,"
+				"tml_notes"
+			 " WHERE crs_courses.DegCod=%ld"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod",
+			 Gbl.Hierarchy.Deg.DegCod);
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get number of social notes",
+			 "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
+				"COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
+			  " FROM crs_users,"
+				"tml_notes"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=tml_notes.UsrCod",
+			 Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
 /******* Create temporary tables used to not get notes already shown *********/
 /*****************************************************************************/
 
@@ -489,7 +682,7 @@ unsigned Tml_DB_GetNumCommsInNote (long NotCod)
   }
 
 /*****************************************************************************/
-/************** Get publication codes of comments of a note from database *****************/
+/******* Get publication codes of comments of a note from database ***********/
 /*****************************************************************************/
 // Returns the number of rows got
 

@@ -60,6 +60,11 @@ void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod);
 void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
                                                     Brw_FileBrowser_t FileBrowser,
                                                     long Cod,const char *Path);
+
+unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
+                                          Tml_Not_NoteType_t NoteType);
+unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res);
+
 void Tml_DB_CreateTmpTableJustRetrievedNotes (void);
 void Tml_DB_CreateTmpTableVisibleTimeline (void);
 void Tml_DB_InsertNoteInJustRetrievedNotes (long NotCod);
@@ -69,6 +74,7 @@ void Tml_DB_DropTmpTableJustRetrievedNotes (void);
 void Tml_DB_DropTmpTableVisibleTimeline (void);
 void Tml_DB_ClearOldTimelinesNotesFromDB (void);
 void Tml_DB_ClearTimelineNotesOfSessionFromDB (void);
+
 void Tml_DB_RemoveNoteFavs (long NotCod);
 void Tml_DB_RemoveNotePubs (long NotCod);
 void Tml_DB_RemoveNote (long NotCod);

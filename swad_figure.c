@@ -61,6 +61,7 @@
 #include "swad_survey.h"
 #include "swad_test.h"
 #include "swad_timeline.h"
+#include "swad_timeline_database.h"
 #include "swad_timeline_note.h"
 
 /*****************************************************************************/
@@ -1764,117 +1765,8 @@ static void Fig_GetNumberOfOERs (Brw_License_t License,
    unsigned Public;
 
    /***** Get the size of a file browser *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT Public,"		// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM brw_files"
-			 " WHERE License=%u"
-			 " GROUP BY Public",
-			 (unsigned) License);
-         break;
-      case HieLvl_CTY:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "brw_files"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Cty.CtyCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-         break;
-      case HieLvl_INS:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "brw_files"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Ins.InsCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-         break;
-      case HieLvl_CTR:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "brw_files"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Ctr.CtrCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-         break;
-      case HieLvl_DEG:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM crs_courses,"
-			        "brw_files"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Deg.DegCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-         break;
-      case HieLvl_CRS:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of OERs",
-			 "SELECT Public,"		// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM brw_files"
-			 " WHERE Cod=%ld"
-			   " AND FileBrowser IN (%u,%u)"
-			   " AND License=%u"
-			 " GROUP BY Public",
-			 Gbl.Hierarchy.Crs.CrsCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+   /* Query database */
+   NumRows = Brw_DB_GetNumberOfOERs (&mysql_res,License);
 
    /* Reset values to zero */
    NumFiles[0] = NumFiles[1] = 0L;
@@ -2338,7 +2230,6 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    MYSQL_ROW row;
    Tml_Not_NoteType_t NoteType;
    unsigned NumNotes;
-   unsigned NumRows;
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
@@ -2359,120 +2250,17 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       /***** Get total number of users *****/
       NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
-      /***** Get total number of following/followers from database *****/
+      /***** Get total number of timeline notes and users for each note type *****/
       for (NoteType  = (Tml_Not_NoteType_t) 0;
 	   NoteType <= (Tml_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
 	   NoteType++)
 	{
-	 switch (Gbl.Scope.Current)
+	 /***** Get number of timeline notes and users for this type *****/
+	 if (Tml_DB_GetNumNotesAndUsrsByType (&mysql_res,NoteType))
 	   {
-	    case HieLvl_SYS:
-	       NumRows = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			       "SELECT COUNT(*),"				// row[0]
-				      "COUNT(DISTINCT UsrCod)"		// row[1]
-			       " FROM tml_notes WHERE NoteType=%u",
-			       NoteType);
-	       break;
-	    case HieLvl_CTY:
-	       NumRows = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-				" FROM ins_instits,"
-				      "ctr_centers,"
-				      "deg_degrees,"
-				      "crs_courses,"
-				      "crs_users,"
-				      "tml_notes"
-			       " WHERE ins_instits.CtyCod=%ld"
-				 " AND ins_instits.InsCod=ctr_centers.InsCod"
-				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				 " AND deg_degrees.DegCod=crs_courses.DegCod"
-				 " AND crs_courses.CrsCod=crs_users.CrsCod"
-				 " AND crs_users.UsrCod=tml_notes.UsrCod"
-				 " AND tml_notes.NoteType=%u",
-			       Gbl.Hierarchy.Cty.CtyCod,
-			       (unsigned) NoteType);
-	       break;
-	    case HieLvl_INS:
-	       NumRows = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-				" FROM ctr_centers,"
-				      "deg_degrees,"
-				      "crs_courses,"
-				      "crs_users,"
-				      "tml_notes"
-			       " WHERE ctr_centers.InsCod=%ld"
-				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				 " AND deg_degrees.DegCod=crs_courses.DegCod"
-				 " AND crs_courses.CrsCod=crs_users.CrsCod"
-				 " AND crs_users.UsrCod=tml_notes.UsrCod"
-				 " AND tml_notes.NoteType=%u",
-			       Gbl.Hierarchy.Ins.InsCod,
-			       (unsigned) NoteType);
-	       break;
-	    case HieLvl_CTR:
-	       NumRows = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-				" FROM deg_degrees,"
-				      "crs_courses,"
-				      "crs_users,"
-				      "tml_notes"
-			       " WHERE deg_degrees.CtrCod=%ld"
-				 " AND deg_degrees.DegCod=crs_courses.DegCod"
-				 " AND crs_courses.CrsCod=crs_users.CrsCod"
-				 " AND crs_users.UsrCod=tml_notes.UsrCod"
-				 " AND tml_notes.NoteType=%u",
-			       Gbl.Hierarchy.Ctr.CtrCod,
-			       (unsigned) NoteType);
-	       break;
-	    case HieLvl_DEG:
-	       NumRows = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-				" FROM crs_courses,"
-				      "crs_users,"
-				      "tml_notes"
-			       " WHERE crs_courses.DegCod=%ld"
-				 " AND crs_courses.CrsCod=crs_users.CrsCod"
-				 " AND crs_users.UsrCod=tml_notes.UsrCod"
-				 " AND tml_notes.NoteType=%u",
-			       Gbl.Hierarchy.Deg.DegCod,
-			       (unsigned) NoteType);
-	       break;
-	    case HieLvl_CRS:
-	       NumRows = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			       "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				      "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-				" FROM crs_users,"
-				      "tml_notes"
-			       " WHERE crs_users.CrsCod=%ld"
-				 " AND crs_users.UsrCod=tml_notes.UsrCod"
-				 " AND tml_notes.NoteType=%u",
-			       Gbl.Hierarchy.Crs.CrsCod,
-			       (unsigned) NoteType);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       NumRows = 0;	// Initialized to avoid warning
-	       break;
-	   }
-	 NumNotes = 0;
-	 NumUsrs = 0;
-
-	 if (NumRows)
-	   {
-	    /***** Get number of social notes and number of users *****/
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Get number of social notes */
+	    /* Get number of timeline notes */
 	    if (row[0])
 	       if (sscanf (row[0],"%u",&NumNotes) != 1)
 		  NumNotes = 0;
@@ -2482,11 +2270,16 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	       if (sscanf (row[1],"%u",&NumUsrs) != 1)
 		  NumUsrs = 0;
 	   }
+	 else
+	   {
+	    NumNotes = 0;
+	    NumUsrs = 0;
+	   }
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
 
-	 /***** Write number of social notes and number of users *****/
+	 /***** Write number of timeline notes and number of users *****/
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2508,107 +2301,16 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT RM\"");
-	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
-				    0.0);
+	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes /
+			                      (double) NumUsrs :
+				              0.0);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
 	}
 
       /***** Get and write totals *****/
-      switch (Gbl.Scope.Current)
-	{
-	 case HieLvl_SYS:
-	    NumRows = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(*),"				// row[0]
-				   "COUNT(DISTINCT UsrCod)"		// row[1]
-			    " FROM tml_notes");
-	    break;
-	 case HieLvl_CTY:
-	    NumRows = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-			     " FROM ins_instits,"
-				   "ctr_centers,"
-				   "deg_degrees,"
-				   "crs_courses,"
-				   "crs_users,"
-				   "tml_notes"
-			    " WHERE ins_instits.CtyCod=%ld"
-			      " AND ins_instits.InsCod=ctr_centers.InsCod"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod",
-			    Gbl.Hierarchy.Cty.CtyCod);
-	    break;
-	 case HieLvl_INS:
-	    NumRows = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-			     " FROM ctr_centers,"
-				   "deg_degrees,"
-				   "crs_courses,"
-				   "crs_users,"
-				   "tml_notes"
-			    " WHERE ctr_centers.InsCod=%ld"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod",
-			    Gbl.Hierarchy.Ins.InsCod);
-	    break;
-	 case HieLvl_CTR:
-	    NumRows = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-			     " FROM deg_degrees,"
-				   "crs_courses,"
-				   "crs_users,"
-				   "tml_notes"
-			    " WHERE deg_degrees.CtrCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod",
-			    Gbl.Hierarchy.Ctr.CtrCod);
-	    break;
-	 case HieLvl_DEG:
-	    NumRows = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-			     " FROM crs_courses,"
-				   "crs_users,"
-				   "tml_notes"
-			    " WHERE crs_courses.DegCod=%ld"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod",
-			    Gbl.Hierarchy.Deg.DegCod);
-	    break;
-	 case HieLvl_CRS:
-	    NumRows = (unsigned)
-	    DB_QuerySELECT (&mysql_res,"can not get number of social notes",
-			    "SELECT COUNT(DISTINCT tml_notes.NotCod),"	// row[0]
-				   "COUNT(DISTINCT tml_notes.UsrCod)"	// row[1]
-			     " FROM crs_users,"
-				   "tml_notes"
-			    " WHERE crs_users.CrsCod=%ld"
-			      " AND crs_users.UsrCod=tml_notes.UsrCod",
-			    Gbl.Hierarchy.Crs.CrsCod);
-	    break;
-	 default:
-	    Err_WrongScopeExit ();
-	    NumRows = 0;	// Initialized to avoid warning
-	    break;
-	}
-      NumNotes = 0;
-      NumUsrs = 0;
-
-      if (NumRows)
+      if (Tml_DB_GetNumNotesAndUsrsTotal (&mysql_res))
 	{
 	 /* Get number of social notes and number of users */
 	 row = mysql_fetch_row (mysql_res);
@@ -2622,6 +2324,11 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 if (row[1])
 	    if (sscanf (row[1],"%u",&NumUsrs) != 1)
 	       NumUsrs = 0;
+	}
+      else
+	{
+	 NumNotes = 0;
+	 NumUsrs = 0;
 	}
 
       /* Free structure that stores the query result */

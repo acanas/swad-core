@@ -278,5 +278,6 @@ Act_Action_t Brw_GetActionContract (void);
 
 void Brw_DB_GetSizeOfFileZone (MYSQL_RES **mysql_res,
 			       Brw_FileBrowser_t FileBrowser);
+unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
 
 #endif
