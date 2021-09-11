@@ -348,152 +348,275 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
   }
 
 /*****************************************************************************/
-/**************** Get list of institutions in system           ***************/
-/**************** ordered by number of centers/degrees/courses ***************/
+/*************** Get institutions ordered by number of centers ***************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfCtrs (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumCtrs (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT InsCod,"		// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ctr_centers"
-		   " GROUP BY InsCod"
-		   " ORDER BY N DESC");
-  }
-
-unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ctr_centers,"
-			  "deg_degrees"
-		   " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-		   " GROUP BY InsCod"
-		   " ORDER BY N DESC");
-  }
-
-unsigned Ins_DB_GetInssInCurrentSysOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ctr_centers,"
-			  "deg_degrees,"
-			  "crs_courses"
-		   " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		   " GROUP BY InsCod"
-		   " ORDER BY N DESC");
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT InsCod,"		// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ctr_centers"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC");
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT InsCod,"		// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ctr_centers"
+			 " WHERE InsCod=%ld"
+			 " GROUP BY InsCod",
+			 Gbl.Hierarchy.Ins.InsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
   }
 
 /*****************************************************************************/
-/************ Get list of institutions in current country  *******************/
-/************ ordered by number of centers/degrees/courses *******************/
+/************** Get institutions ordered by number of degrees ****************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCtrs (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ins_instits,"
-			  "ctr_centers"
-		   " WHERE ins_instits.CtyCod=%ld"
-		     " AND ins_instits.InsCod=ctr_centers.InsCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY N DESC",
-		   Gbl.Hierarchy.Cty.CtyCod);
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees"
+			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC");
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Ins.InsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
   }
-
-unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ins_instits,"
-			  "ctr_centers,"
-			  "deg_degrees"
-		   " WHERE ins_instits.CtyCod=%ld"
-		     " AND ins_instits.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY N DESC",
-		   Gbl.Hierarchy.Cty.CtyCod);
-   }
-
-unsigned Ins_DB_GetInssInCurrentCtyOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ins_instits,"
-			  "ctr_centers,"
-			  "deg_degrees,"
-			  "crs_courses"
-		   " WHERE ins_instits.CtyCod=%ld"
-		     " AND ins_instits.InsCod=ctr_centers.InsCod"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY N DESC",
-		   Gbl.Hierarchy.Cty.CtyCod);
-   }
 
 /*****************************************************************************/
-/***** Get current institution and its number of centers/degrees/courses *****/
+/*************** Get institutions ordered by number of courses ***************/
 /*****************************************************************************/
 
-unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCtrs (MYSQL_RES **mysql_res)
+unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT InsCod,"		// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM ctr_centers"
-		   " WHERE InsCod=%ld"
-		   " GROUP BY InsCod",
-		   Gbl.Hierarchy.Ins.InsCod);
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"crs_courses"
+			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC");
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees,"
+				"crs_courses"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"crs_courses"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Ins.InsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
   }
 
-unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfDegs (MYSQL_RES **mysql_res)
+/*****************************************************************************/
+/*************** Get institutions ordered by users in courses ****************/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"		// row[1]
-		    " FROM ctr_centers,"
-			  "deg_degrees"
-		   " WHERE ctr_centers.InsCod=%ld"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY N DESC",
-		   Gbl.Hierarchy.Ins.InsCod);
+   /***** Get institutions ordered by number of users in courses *****/
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"			// row[0]
+				"COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users"
+			 " WHERE ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC");
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"			// row[0]
+				"COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT ctr_centers.InsCod,"			// row[0]
+				"COUNT(DISTINCT crs_users.UsrCod) AS N"	// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"crs_courses,"
+				"crs_users"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			 " GROUP BY ctr_centers.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Ins.InsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
   }
 
-unsigned Ins_DB_GetInssInCurrentInsOrderedByNumberOfCrss (MYSQL_RES **mysql_res)
+/*****************************************************************************/
+/** Get institutions ordered by number of users who claim to belong to them **/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql_res)
   {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT ctr_centers.InsCod,"	// row[0]
-			  "COUNT(*) AS N"		// row[1]
-		    " FROM ctr_centers,"
-			  "deg_degrees,"
-			  "crs_courses"
-		   " WHERE ctr_centers.InsCod=%ld"
-		     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		     " AND deg_degrees.DegCod=crs_courses.DegCod"
-		   " GROUP BY ctr_centers.InsCod"
-		   " ORDER BY N DESC",
-		   Gbl.Hierarchy.Ins.InsCod);
-   }
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT InsCod,"		// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM usr_data"
+			 " WHERE InsCod>0"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC");
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT usr_data.InsCod,"	// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM ins_instits,usr_data"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=usr_data.InsCod"
+			 " GROUP BY usr_data.InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get institutions",
+			 "SELECT InsCod,"		// row[0]
+				"COUNT(*) AS N"		// row[1]
+			  " FROM usr_data"
+			 " WHERE InsCod=%ld"
+			 " GROUP BY InsCod"
+			 " ORDER BY N DESC",
+			 Gbl.Hierarchy.Ins.InsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
 
 /*****************************************************************************/
 /**************** Get number of institutions in a country ********************/

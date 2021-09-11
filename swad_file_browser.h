@@ -276,4 +276,7 @@ void Brw_RemoveOldFilesBriefcase (void);
 Act_Action_t Brw_GetActionExpand (void);
 Act_Action_t Brw_GetActionContract (void);
 
+void Brw_DB_GetSizeOfFileZone (MYSQL_RES **mysql_res,
+			       Brw_FileBrowser_t FileBrowser);
+
 #endif
