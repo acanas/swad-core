@@ -25,38 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
-// #include <string.h>		// For string functions
-
-// #include "swad_account.h"
-// #include "swad_account_database.h"
 #include "swad_admin.h"
 #include "swad_admin_database.h"
-// #include "swad_announcement.h"
-// #include "swad_attendance_database.h"
-// #include "swad_box.h"
-// #include "swad_database.h"
-// #include "swad_duplicate.h"
-// #include "swad_enrolment.h"
-// #include "swad_enrolment_database.h"
-// #include "swad_error.h"
-// #include "swad_exam_print.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_match.h"
-// #include "swad_message.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
-// #include "swad_role.h"
-// #include "swad_setting.h"
-// #include "swad_test_print.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

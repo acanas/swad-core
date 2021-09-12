@@ -2071,11 +2071,11 @@ void Rec_ShowFormSignUpInCrsWithMySharedRecord (void)
 void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole)
   {
    /***** Show the form *****/
-   /* In this case UsrDat->Roles.InCurrentCrsDB
+   /* In this case UsrDat->Roles.InCurrentCrs
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
    UsrDat->Roles.InCurrentCrs = (Gbl.Hierarchy.Level == HieLvl_CRS) ? DefaultRole :	// Course selected
-	                                                               Rol_UNK;		// No course selected
+	                                                              Rol_UNK;		// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 

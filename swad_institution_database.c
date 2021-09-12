@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE 		// For asprintf
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 
 #include "swad_database.h"
 #include "swad_error.h"

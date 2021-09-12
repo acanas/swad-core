@@ -597,13 +597,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
      {
       case Usr_DONT_GET_ROLE_IN_CURRENT_CRS:
 	 UsrDat->Roles.InCurrentCrs = Rol_UNK;
-	 UsrDat->Roles.InCrss = -1;
+	 UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	 break;
       case Usr_GET_ROLE_IN_CURRENT_CRS:
 	 UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
 							   Gbl.Hierarchy.Crs.CrsCod);
 	 UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
-	 // Rol_GetRolesInAllCrss (UsrDat);
 	 break;
      }
 

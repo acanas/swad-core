@@ -1798,7 +1798,7 @@ void Enr_RemAllStdsThisCrs (void)
 /*****************************************************************************/
 /***************** Remove all the students from a given course ***************/
 /*****************************************************************************/
-// Returns the numbers of students in the course before deletion
+// Returns the numbers of students in list
 
 unsigned Enr_RemAllStdsInCrs (struct Crs_Course *Crs)
   {
@@ -1816,6 +1816,7 @@ unsigned Enr_RemAllStdsInCrs (struct Crs_Course *Crs)
 	NumUsr++)
      {
       Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
+      Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].RoleInCurrentCrsDB;
       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,Crs,
 				    Enr_REMOVE_USR_PRODUCTION,
 				    Cns_QUIET);
