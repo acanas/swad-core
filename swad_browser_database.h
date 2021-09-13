@@ -1,7 +1,7 @@
-// swad_marks.h: marks
+// swad_browser_database.h: file browsers operations with database
 
-#ifndef _SWAD_MRK
-#define _SWAD_MRK
+#ifndef _SWAD_BROWSER_DATABASE
+#define _SWAD_BROWSER_DATABASE
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,33 +27,28 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
+// #include <linux/limits.h>	// For PATH_MAX
+#include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_browser.h"
+// #include "swad_course.h"
+// #include "swad_group.h"
+// #include "swad_notification.h"
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/************************ Public types and constants *************************/
 /*****************************************************************************/
 
-struct MarksProperties
-  {
-   unsigned Header;
-   unsigned Footer;
-  };
+/*****************************************************************************/
+/****************************** Public constants *****************************/
+/*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mrk_DB_AddMarks (long FilCod,struct MarksProperties *Marks);
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (void);
-void Mrk_ChangeNumRowsHeader (void);
-void Mrk_ChangeNumRowsFooter (void);
-
-bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks);
-void Mrk_ShowMyMarks (void);
-void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,
-                          long MrkCod,long UsrCod,bool GetContent);
+void Brw_DB_GetSizeOfFileZone (MYSQL_RES **mysql_res,
+			       Brw_FileBrowser_t FileBrowser);
+unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
 
 #endif

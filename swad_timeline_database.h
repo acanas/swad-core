@@ -27,8 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_browser.h"
 #include "swad_database.h"
-#include "swad_file_browser.h"
 #include "swad_timeline_comment.h"
 #include "swad_timeline_favourite.h"
 #include "swad_timeline_note.h"

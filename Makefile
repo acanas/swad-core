@@ -31,8 +31,9 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_announcement.o swad_announcement_database.o swad_API.o \
        swad_assignment.o swad_assignment_database.o swad_attendance.o \
        swad_attendance_database.o \
-       swad_banner.o swad_banner_database.o swad_box.o swad_building.o \
-       swad_building_database.o swad_button.o \
+       swad_banner.o swad_banner_database.o swad_box.o swad_browser.o \
+       swad_browser_database.o swad_building.o swad_building_database.o \
+       swad_button.o \
        swad_calendar.o swad_call_for_exam.o swad_call_for_exam_database.o \
        swad_center.o swad_center_config.o swad_center_database.o swad_chat.o \
        swad_chat_database.o swad_config.o swad_connected.o \
@@ -47,9 +48,8 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_exam_database.o swad_exam_log.o swad_exam_print.o \
        swad_exam_result.o swad_exam_session.o swad_exam_set.o \
        swad_figure.o swad_figure_cache.o swad_figure_database.o swad_file.o \
-       swad_file_browser.o swad_file_extension.o swad_file_MIME.o \
-       swad_firewall.o swad_follow.o swad_follow_database.o swad_form.o \
-       swad_forum.o \
+       swad_file_extension.o swad_file_MIME.o swad_firewall.o swad_follow.o \
+       swad_follow_database.o swad_form.o swad_forum.o \
        swad_game.o swad_global.o swad_group.o swad_group_database.o \
        swad_help.o swad_hierarchy.o swad_hierarchy_config.o swad_holiday.o \
        swad_HTML.o \

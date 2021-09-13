@@ -1,7 +1,7 @@
-// swad_file_browser.h: file browsers
+// swad_browser.h: file browsers
 
-#ifndef _SWAD_FILE_BROWSER
-#define _SWAD_FILE_BROWSER
+#ifndef _SWAD_BROWSER
+#define _SWAD_BROWSER
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -275,9 +275,5 @@ void Brw_RemoveOldFilesBriefcase (void);
 
 Act_Action_t Brw_GetActionExpand (void);
 Act_Action_t Brw_GetActionContract (void);
-
-void Brw_DB_GetSizeOfFileZone (MYSQL_RES **mysql_res,
-			       Brw_FileBrowser_t FileBrowser);
-unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
 
 #endif

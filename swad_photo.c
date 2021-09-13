@@ -37,12 +37,12 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment.h"
 #include "swad_error.h"
 #include "swad_file.h"
-#include "swad_file_browser.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"

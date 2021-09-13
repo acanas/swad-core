@@ -37,9 +37,9 @@
 #include <unistd.h>		// For chdir...
 
 #include "swad_box.h"
+#include "swad_browser.h"
 #include "swad_config.h"
 #include "swad_error.h"
-#include "swad_file_browser.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"

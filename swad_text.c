@@ -58,6 +58,7 @@
 
 #include "swad_action.h"
 #include "swad_assignment.h"
+#include "swad_browser.h"
 #include "swad_building.h"
 #include "swad_center.h"
 #include "swad_config.h"
@@ -69,7 +70,6 @@
 #include "swad_department.h"
 #include "swad_exam_log.h"
 #include "swad_figure.h"
-#include "swad_file_browser.h"
 #include "swad_forum.h"
 #include "swad_holiday.h"
 #include "swad_info.h"
