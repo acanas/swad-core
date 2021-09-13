@@ -289,159 +289,161 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
    Str_FreeString ();
 
-   /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
-                                      Grp_MY_GROUPS);
+      /***** Show form to select the groups *****/
+      Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
+					 Grp_MY_GROUPS);
 
-   /***** Begin section with user list *****/
-   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+      /***** Begin section with user list *****/
+      HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
-   if (NumTotalUsrs)
-     {
-      if (Usr_GetIfShowBigList (NumTotalUsrs,
-                                NULL,NULL,
-                                NULL))
-        {
-	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (NULL,NULL);
+	 if (NumTotalUsrs)
+	   {
+	    if (Usr_GetIfShowBigList (NumTotalUsrs,
+				      NULL,NULL,
+				      NULL))
+	      {
+	       /***** Form to select type of list used for select several users *****/
+	       Usr_ShowFormsToSelectUsrListType (NULL,NULL);
 
-	 /***** Put link to register students *****/
-         Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+	       /***** Put link to register students *****/
+	       Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-	 /***** Begin form *****/
-         Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+	       /***** Begin form *****/
+	       Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
-         Grp_PutParamsCodGrps ();
-         Par_PutHiddenParamLong (NULL,"FirstRow",0);
-         Par_PutHiddenParamLong (NULL,"LastRow",0);
+	       Grp_PutParamsCodGrps ();
+	       Par_PutHiddenParamLong (NULL,"FirstRow",0);
+	       Par_PutHiddenParamLong (NULL,"LastRow",0);
 
-         /***** Put list of users to select some of them *****/
-         HTM_TABLE_BeginCenterPadding (2);
+		  /***** Put list of users to select some of them *****/
+		  HTM_TABLE_BeginCenterPadding (2);
 
-         HTM_TR_Begin (NULL);
+		     HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Users);
-         HTM_TD_End ();
+			HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_TxtColon (Txt_Users);
+			HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TABLE_Begin (NULL);
-         Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
-         Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
-         Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
-         HTM_TABLE_End ();
-         HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_TABLE_Begin (NULL);
+			      Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);
+			      Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);
+			      Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);
+			   HTM_TABLE_End ();
+			HTM_TD_End ();
 
-         HTM_TR_End ();
+		     HTM_TR_End ();
 
-         /***** Initial and final dates of the search *****/
-         if (Gbl.Action.Act == ActReqAccCrs)
-           {
-            SetHMS[Dat_START_TIME] = Dat_HMS_TO_000000;
-	    SetHMS[Dat_END_TIME  ] = Dat_HMS_TO_235959;
+		     /***** Initial and final dates of the search *****/
+		     if (Gbl.Action.Act == ActReqAccCrs)
+		       {
+			SetHMS[Dat_START_TIME] = Dat_HMS_TO_000000;
+			SetHMS[Dat_END_TIME  ] = Dat_HMS_TO_235959;
+		       }
+		     else
+		       {
+			SetHMS[Dat_START_TIME] = Dat_HMS_DO_NOT_SET;
+			SetHMS[Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET;
+		       }
+		     Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+
+		     /***** Selection of action *****/
+		     Sta_WriteSelectorAction (Stats);
+
+		     /***** Option a) Listing of clicks distributed by some metric *****/
+		     HTM_TR_Begin (NULL);
+
+			HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_TxtColon (Txt_Show);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"LM\"");
+
+			   if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
+				Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
+				Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+			      Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
+
+			   HTM_INPUT_RADIO ("GroupedOrDetailed",false,
+					    "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
+					    (unsigned) Sta_CLICKS_GROUPED,
+					    Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+												     " checked=\"checked\"");
+
+			   /* Selection of count type (number of pages generated, accesses per user, etc.) */
+			   Sta_WriteSelectorCountType (Stats);
+
+			   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			      HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
+			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+						"id=\"GroupedBy\" name=\"GroupedBy\"");
+				 for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
+				      ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
+				      ClicksGroupedBy++)
+				   {
+				    ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
+				    HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
+						ClicksGroupedBy == Stats->ClicksGroupedBy,false,
+						"%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
+				   }
+			      HTM_SELECT_End ();
+			   HTM_LABEL_End ();
+
+			   /***** Separator *****/
+			   HTM_BR ();
+
+			   /***** Option b) Listing of detailed clicks to this course *****/
+			   HTM_LABEL_Begin (NULL);
+			      HTM_INPUT_RADIO ("GroupedOrDetailed",false,
+					       "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
+					       (unsigned) Sta_CLICKS_DETAILED,
+					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" :
+													"");
+			      HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
+			   HTM_LABEL_End ();
+
+			   /* Separator */
+			   HTM_Txt (" ");
+
+			   /* Number of rows per page */
+			   // To use getElementById in Firefox, it's necessary to have the id attribute
+			   HTM_LABEL_Begin (NULL);
+			      HTM_TxtF ("(%s: ",Txt_results_per_page);
+			      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+						"id=\"RowsPage\" name=\"RowsPage\"%s",
+						Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
+													 " disabled=\"disabled\"");
+				 for (i = 0;
+				      i < NUM_OPTIONS_ROWS_PER_PAGE;
+				      i++)
+				    HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
+						RowsPerPage[i] == Stats->RowsPerPage,false,
+						"%u",RowsPerPage[i]);
+			      HTM_SELECT_End ();
+			      HTM_Txt (")");
+			   HTM_LABEL_End ();
+
+			HTM_TD_End ();
+
+		     HTM_TR_End ();
+
+		  HTM_TABLE_End ();
+
+		  /***** Hidden param used to get client time zone *****/
+		  Dat_PutHiddenParBrowserTZDiff ();
+
+		  /***** Send button *****/
+		  Btn_PutConfirmButton (Txt_Show_hits);
+
+	       /***** End form *****/
+	       Frm_EndForm ();
+	      }
 	   }
-         else
-           {
-            SetHMS[Dat_START_TIME] = Dat_HMS_DO_NOT_SET;
-	    SetHMS[Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET;
-	   }
-         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+	 else	// No teachers nor students found
+	    Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
 
-         /***** Selection of action *****/
-         Sta_WriteSelectorAction (Stats);
-
-         /***** Option a) Listing of clicks distributed by some metric *****/
-         HTM_TR_Begin (NULL);
-
-         HTM_TD_Begin ("class=\"RM %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtColon (Txt_Show);
-         HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"LM\"");
-
-         if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
-              Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
-              Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-            Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
-
-	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
-			  "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
-			  (unsigned) Sta_CLICKS_GROUPED,
-			  Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-				                                                   " checked=\"checked\"");
-
-         /* Selection of count type (number of pages generated, accesses per user, etc.) */
-         Sta_WriteSelectorCountType (Stats);
-
-         HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
-         HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		           "id=\"GroupedBy\" name=\"GroupedBy\"");
-         for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
-              ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
-              ClicksGroupedBy++)
-           {
-            ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
-            HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-			ClicksGroupedBy == Stats->ClicksGroupedBy,false,
-	                "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
-           }
-         HTM_SELECT_End ();
-         HTM_LABEL_End ();
-
-         /***** Separator *****/
-         HTM_BR ();
-
-         /***** Option b) Listing of detailed clicks to this course *****/
-         HTM_LABEL_Begin (NULL);
-	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
-			  "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
-			  (unsigned) Sta_CLICKS_DETAILED,
-			  Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" :
-				                                                   "");
-         HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
-         HTM_LABEL_End ();
-
-         /* Separator */
-         HTM_Txt (" ");
-
-         /* Number of rows per page */
-         // To use getElementById in Firefox, it's necessary to have the id attribute
-         HTM_LABEL_Begin (NULL);
-         HTM_TxtF ("(%s: ",Txt_results_per_page);
-         HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		           "id=\"RowsPage\" name=\"RowsPage\"%s",
-                           Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" :
-                        	                                                    " disabled=\"disabled\"");
-         for (i = 0;
-              i < NUM_OPTIONS_ROWS_PER_PAGE;
-              i++)
-            HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-			RowsPerPage[i] == Stats->RowsPerPage,false,
-	                "%u",RowsPerPage[i]);
-         HTM_SELECT_End ();
-         HTM_Txt (")");
-         HTM_LABEL_End ();
-         HTM_TD_End ();
-
-         HTM_TR_End ();
-         HTM_TABLE_End ();
-
-	 /***** Hidden param used to get client time zone *****/
-	 Dat_PutHiddenParBrowserTZDiff ();
-
-         /***** Send button *****/
-	 Btn_PutConfirmButton (Txt_Show_hits);
-
-         /***** End form *****/
-         Frm_EndForm ();
-        }
-     }
-   else	// No teachers nor students found
-      Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
-
-   /***** End section with user list *****/
-   HTM_SECTION_End ();
+      /***** End section with user list *****/
+      HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

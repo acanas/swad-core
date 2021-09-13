@@ -40,6 +40,12 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+static const char *FieldDB[2] =
+  {
+   "FollowedCod",
+   "FollowerCod"
+  };
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -309,6 +315,208 @@ unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res)
 		   " WHERE FollowedCod=%ld"
 		   " ORDER BY FollowTime DESC",
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************** Get and show number of following and followers ***************/
+/*****************************************************************************/
+
+unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the total number of following/followers",
+			"SELECT COUNT(DISTINCT %s)"
+			 " FROM usr_follow",
+			FieldDB[Fol]);
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the total number of following/followers",
+			"SELECT COUNT(DISTINCT usr_follow.%s)"
+			 " FROM ins_instits,"
+			       "ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_users,"
+			       "usr_follow"
+			" WHERE ins_instits.CtyCod=%ld"
+			  " AND ins_instits.InsCod=ctr_centers.InsCod"
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.CrsCod=crs_users.CrsCod"
+			  " AND crs_users.UsrCod=usr_follow.%s",
+			FieldDB[Fol],
+			Gbl.Hierarchy.Cty.CtyCod,
+			FieldDB[Fol]);
+      case HieLvl_INS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the total number of following/followers",
+			"SELECT COUNT(DISTINCT usr_follow.%s)"
+			 " FROM ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "crs_users,"
+			       "usr_follow"
+			" WHERE ctr_centers.InsCod=%ld"
+			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.CrsCod=crs_users.CrsCod"
+			  " AND crs_users.UsrCod=usr_follow.%s",
+			FieldDB[Fol],
+			Gbl.Hierarchy.Ins.InsCod,
+			FieldDB[Fol]);
+      case HieLvl_CTR:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the total number of following/followers",
+			"SELECT COUNT(DISTINCT usr_follow.%s)"
+			" FROM deg_degrees,"
+			      "crs_courses,"
+			      "crs_users,"
+			      "usr_follow"
+			" WHERE deg_degrees.CtrCod=%ld"
+			  " AND deg_degrees.DegCod=crs_courses.DegCod"
+			  " AND crs_courses.CrsCod=crs_users.CrsCod"
+			  " AND crs_users.UsrCod=usr_follow.%s",
+			FieldDB[Fol],
+			Gbl.Hierarchy.Ctr.CtrCod,
+			FieldDB[Fol]);
+      case HieLvl_DEG:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the total number of following/followers",
+			"SELECT COUNT(DISTINCT usr_follow.%s)"
+			 " FROM crs_courses,"
+			       "crs_users,"
+			       "usr_follow"
+			" WHERE crs_courses.DegCod=%ld"
+			  " AND crs_courses.CrsCod=crs_users.CrsCod"
+			  " AND crs_users.UsrCod=usr_follow.%s",
+			FieldDB[Fol],
+			Gbl.Hierarchy.Deg.DegCod,
+			FieldDB[Fol]);
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QueryCOUNT ("can not get the total number of following/followers",
+			"SELECT COUNT(DISTINCT usr_follow.%s)"
+			 " FROM crs_users,"
+			       "usr_follow"
+			" WHERE crs_users.CrsCod=%ld"
+			  " AND crs_users.UsrCod=usr_follow.%s",
+			FieldDB[Fol],
+			Gbl.Hierarchy.Crs.CrsCod,
+			FieldDB[Fol]);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/************** Get and show number of following and followers ***************/
+/*****************************************************************************/
+
+double Fol_DB_GetNumFollowedPerFollower (unsigned Fol)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
+				      "SELECT AVG(N)"
+				       " FROM (SELECT COUNT(%s) AS N"
+					       " FROM usr_follow"
+					      " GROUP BY %s) AS F",
+				      FieldDB[Fol],
+				      FieldDB[1 - Fol]);
+      case HieLvl_CTY:
+	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
+	                              "SELECT AVG(N)"
+				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+					       " FROM ins_instits,"
+						     "ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "crs_users,"
+						     "usr_follow"
+					      " WHERE ins_instits.CtyCod=%ld"
+						" AND ins_instits.InsCod=ctr_centers.InsCod"
+						" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						" AND deg_degrees.DegCod=crs_courses.DegCod"
+						" AND crs_courses.CrsCod=crs_users.CrsCod"
+						" AND crs_users.UsrCod=usr_follow.%s"
+					      " GROUP BY %s) AS F",
+				      FieldDB[Fol],
+				      Gbl.Hierarchy.Cty.CtyCod,
+				      FieldDB[Fol],
+				      FieldDB[1 - Fol]);
+      case HieLvl_INS:
+	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
+				      "SELECT AVG(N)"
+				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+					       " FROM ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "crs_users,"
+						     "usr_follow"
+					      " WHERE ctr_centers.InsCod=%ld"
+						" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						" AND deg_degrees.DegCod=crs_courses.DegCod"
+						" AND crs_courses.CrsCod=crs_users.CrsCod"
+						" AND crs_users.UsrCod=usr_follow.%s"
+					      " GROUP BY %s) AS F",
+				      FieldDB[Fol],
+				      Gbl.Hierarchy.Ins.InsCod,
+				      FieldDB[Fol],
+				      FieldDB[1 - Fol]);
+      case HieLvl_CTR:
+	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
+				      "SELECT AVG(N)"
+				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+					       " FROM deg_degrees,"
+						     "crs_courses,"
+						     "crs_users,"
+						     "usr_follow"
+					      " WHERE deg_degrees.CtrCod=%ld"
+						" AND deg_degrees.DegCod=crs_courses.DegCod"
+						" AND crs_courses.CrsCod=crs_users.CrsCod"
+						" AND crs_users.UsrCod=usr_follow.%s"
+					      " GROUP BY %s) AS F",
+				      FieldDB[Fol],
+				      Gbl.Hierarchy.Ctr.CtrCod,
+				      FieldDB[Fol],
+				      FieldDB[1 - Fol]);
+      case HieLvl_DEG:
+	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
+				      "SELECT AVG(N)"
+				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+					       " FROM crs_courses,"
+						     "crs_users,"
+						     "usr_follow"
+					      " WHERE crs_courses.DegCod=%ld"
+						" AND crs_courses.CrsCod=crs_users.CrsCod"
+						" AND crs_users.UsrCod=usr_follow.%s"
+					      " GROUP BY %s) AS F",
+				      FieldDB[Fol],
+				      Gbl.Hierarchy.Deg.DegCod,
+				      FieldDB[Fol],
+				      FieldDB[1 - Fol]);
+      case HieLvl_CRS:
+	 return DB_QuerySELECTDouble ("can not get number of followed per follower",
+				      "SELECT AVG(N)"
+				       " FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
+					       " FROM crs_users,"
+						     "usr_follow"
+					      " WHERE crs_users.CrsCod=%ld"
+						" AND crs_users.UsrCod=usr_follow.%s"
+					      " GROUP BY %s) AS F",
+				      FieldDB[Fol],
+				      Gbl.Hierarchy.Crs.CrsCod,
+				      FieldDB[Fol],
+				      FieldDB[1 - Fol]);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0.0;	// Not reached
+     }
   }
 
 /*****************************************************************************/

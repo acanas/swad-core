@@ -6386,37 +6386,37 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
    HTM_DIV_Begin ("class=\"%s\"",
 		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
 								    "PREF_OFF");
-   Usr_FormToSelectUsrListType (FuncParams,Args,
-                                Usr_LIST_AS_CLASS_PHOTO);
+      Usr_FormToSelectUsrListType (FuncParams,Args,
+				   Usr_LIST_AS_CLASS_PHOTO);
 
-   /* Number of columns in the class photo */
-   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
-			Usr_USER_LIST_SECTION_ID);
-   Grp_PutParamsCodGrps ();
-   Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
-   Usr_PutParamListWithPhotos ();
-   Usr_PutSelectorNumColsClassPhoto ();
-   if (FuncParams)
-      FuncParams (Args);
-   Frm_EndForm ();
+      /* Number of columns in the class photo */
+      Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
+			   Usr_USER_LIST_SECTION_ID);
+      Grp_PutParamsCodGrps ();
+      Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
+      Usr_PutParamListWithPhotos ();
+      Usr_PutSelectorNumColsClassPhoto ();
+      if (FuncParams)
+	 FuncParams (Args);
+      Frm_EndForm ();
    HTM_DIV_End ();
 
    /***** Select Usr_LIST_AS_LISTING *****/
    HTM_DIV_Begin ("class=\"%s\"",
 		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
 								"PREF_OFF");
-   Usr_FormToSelectUsrListType (FuncParams,Args,
-                                Usr_LIST_AS_LISTING);
+      Usr_FormToSelectUsrListType (FuncParams,Args,
+				   Usr_LIST_AS_LISTING);
 
-   /* See the photos in list? */
-   Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
-			Usr_USER_LIST_SECTION_ID);
-   Grp_PutParamsCodGrps ();
-   Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
-   if (FuncParams)
-      FuncParams (Args);
-   Usr_PutCheckboxListWithPhotos ();
-   Frm_EndForm ();
+      /* See the photos in list? */
+      Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
+			   Usr_USER_LIST_SECTION_ID);
+      Grp_PutParamsCodGrps ();
+      Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
+      if (FuncParams)
+	 FuncParams (Args);
+      Usr_PutCheckboxListWithPhotos ();
+      Frm_EndForm ();
    HTM_DIV_End ();
 
    Set_EndOneSettingSelector ();

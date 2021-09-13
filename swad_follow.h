@@ -80,7 +80,4 @@ void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Fol_RemoveUsrFromUsrFollow (long UsrCod);
 
-void Fol_DB_CreateTmpTableMeAndUsrsIFollow (void);
-void Fol_DB_DropTmpTableMeAndUsrsIFollow (void);
-
 #endif

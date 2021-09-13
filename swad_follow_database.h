@@ -53,6 +53,9 @@ unsigned Fol_DB_GetNumFollowers (long UsrCod);
 unsigned Fol_DB_GetListFollowing (long UsrCod,MYSQL_RES **mysql_res);
 unsigned Fol_DB_GetListFollowers (long UsrCod,MYSQL_RES **mysql_res);
 
+unsigned Fol_DB_GetNumFollowinFollowers (unsigned Fol);
+double Fol_DB_GetNumFollowedPerFollower (unsigned Fol);
+
 void Fol_DB_FollowUsr (long UsrCod);
 void Fol_DB_UnfollowUsr (long UsrCod);
 

@@ -1194,7 +1194,7 @@ void Deg_RemoveDegree (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Get degree code *****/
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1387,7 +1387,7 @@ void Deg_RenameDegreeShort (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
    Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
   }
 
@@ -1397,7 +1397,7 @@ void Deg_RenameDegreeFull (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
    Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
   }
 
@@ -1488,7 +1488,7 @@ void Deg_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
 
    /* Get the new degree type */
    NewDegTypCod = DegTyp_GetAndCheckParamOtherDegTypCod (1);
@@ -1521,7 +1521,7 @@ void Deg_ChangeDegWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree */
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
 
    /* Get the new WWW for the degree */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1561,7 +1561,7 @@ void Deg_ChangeDegStatus (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
 
    /* Get parameter with status */
    Status = (Deg_Status_t)

@@ -1388,38 +1388,42 @@ void Pho_CalcPhotoDegree (void)
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PRIVATE);
 
    /***** Get the degree which photo will be computed *****/
-   DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   DegCod = Deg_GetAndCheckParamOtherDegCod (-1L);	// Parameter may be omitted
+							// (when selecting classphoto/list)
 
-   /***** Prevent the computing of an average photo too recently updated *****/
-   if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
-       Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
-      Err_ShowErrorAndExit ("Average photo has been computed recently.");
-
-   /***** Get list of students in this degree *****/
-   Usr_GetUnorderedStdsCodesInDeg (DegCod);
-
-   for (Sex  = (Usr_Sex_t) 0;
-	Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
-	Sex++)
+   if (DegCod > 0)
      {
-      TotalTimeToComputeAvgPhotoInMicroseconds = 0;
-      for (TypeOfAverage  = (Pho_AvgPhotoTypeOfAverage_t) 0;
-	   TypeOfAverage <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
-	   TypeOfAverage++)
-        {
-         /***** Compute average photos of students belonging this degree *****/
-         Pho_ComputeAveragePhoto (DegCod,Sex,Rol_STD,
-                                  TypeOfAverage,DirAvgPhotosRelPath[TypeOfAverage],
-                                  &NumStds,&NumStdsWithPhoto,&PartialTimeToComputeAvgPhotoInMicroseconds);
-         TotalTimeToComputeAvgPhotoInMicroseconds += PartialTimeToComputeAvgPhotoInMicroseconds;
-        }
+      /***** Prevent the computing of an average photo too recently updated *****/
+      if (Pho_GetTimeAvgPhotoWasComputed (DegCod) >=
+	  Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO)
+	 Err_ShowErrorAndExit ("Average photo has been computed recently.");
 
-      /***** Store stats in database *****/
-      Pho_DB_UpdateDegStats (DegCod,Sex,NumStds,NumStdsWithPhoto,TotalTimeToComputeAvgPhotoInMicroseconds);
+      /***** Get list of students in this degree *****/
+      Usr_GetUnorderedStdsCodesInDeg (DegCod);
+
+      for (Sex  = (Usr_Sex_t) 0;
+	   Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
+	   Sex++)
+	{
+	 TotalTimeToComputeAvgPhotoInMicroseconds = 0;
+	 for (TypeOfAverage  = (Pho_AvgPhotoTypeOfAverage_t) 0;
+	      TypeOfAverage <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
+	      TypeOfAverage++)
+	   {
+	    /***** Compute average photos of students belonging this degree *****/
+	    Pho_ComputeAveragePhoto (DegCod,Sex,Rol_STD,
+				     TypeOfAverage,DirAvgPhotosRelPath[TypeOfAverage],
+				     &NumStds,&NumStdsWithPhoto,&PartialTimeToComputeAvgPhotoInMicroseconds);
+	    TotalTimeToComputeAvgPhotoInMicroseconds += PartialTimeToComputeAvgPhotoInMicroseconds;
+	   }
+
+	 /***** Store stats in database *****/
+	 Pho_DB_UpdateDegStats (DegCod,Sex,NumStds,NumStdsWithPhoto,TotalTimeToComputeAvgPhotoInMicroseconds);
+	}
+
+      /***** Free memory for students list *****/
+      Usr_FreeUsrsList (Rol_STD);
      }
-
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STD);
 
    /***** Show photos *****/
    Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
@@ -2134,6 +2138,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto,DegPhotos);
+
       HTM_TABLE_BeginCenter ();
 
 	 /***** Get and print degrees *****/

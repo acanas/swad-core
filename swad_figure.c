@@ -41,6 +41,7 @@
 #include "swad_figure_cache.h"
 #include "swad_file_browser.h"
 #include "swad_follow.h"
+#include "swad_follow_database.h"
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -2380,11 +2381,6 @@ static void Fig_GetAndShowFollowStats (void)
    extern const char *Txt_Followed;
    extern const char *Txt_Followers;
    extern const char *Txt_FollowPerFollow[2];
-   static const char *FieldDB[2] =
-     {
-      "FollowedCod",
-      "FollowerCod"
-     };
    unsigned Fol;
    unsigned NumUsrsTotal;
    unsigned NumUsrs;
@@ -2410,100 +2406,7 @@ static void Fig_GetAndShowFollowStats (void)
 	   Fol < 2;
 	   Fol++)
 	{
-	 switch (Gbl.Scope.Current)
-	   {
-	    case HieLvl_SYS:
-	       NumUsrs = (unsigned)
-	       DB_QueryCOUNT ("can not get the total number of following/followers",
-			      "SELECT COUNT(DISTINCT %s)"
-			       " FROM usr_follow",
-			      FieldDB[Fol]);
-	       break;
-	    case HieLvl_CTY:
-	       NumUsrs = (unsigned)
-	       DB_QueryCOUNT ("can not get the total number of following/followers",
-			      "SELECT COUNT(DISTINCT usr_follow.%s)"
-			       " FROM ins_instits,"
-				     "ctr_centers,"
-				     "deg_degrees,"
-				     "crs_courses,"
-				     "crs_users,"
-				     "usr_follow"
-			      " WHERE ins_instits.CtyCod=%ld"
-				" AND ins_instits.InsCod=ctr_centers.InsCod"
-				" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				" AND deg_degrees.DegCod=crs_courses.DegCod"
-				" AND crs_courses.CrsCod=crs_users.CrsCod"
-				" AND crs_users.UsrCod=usr_follow.%s",
-			      FieldDB[Fol],
-			      Gbl.Hierarchy.Cty.CtyCod,
-			      FieldDB[Fol]);
-	       break;
-	    case HieLvl_INS:
-	       NumUsrs = (unsigned)
-	       DB_QueryCOUNT ("can not get the total number of following/followers",
-			      "SELECT COUNT(DISTINCT usr_follow.%s)"
-			       " FROM ctr_centers,"
-				     "deg_degrees,"
-				     "crs_courses,"
-				     "crs_users,"
-				     "usr_follow"
-			      " WHERE ctr_centers.InsCod=%ld"
-				" AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				" AND deg_degrees.DegCod=crs_courses.DegCod"
-				" AND crs_courses.CrsCod=crs_users.CrsCod"
-				" AND crs_users.UsrCod=usr_follow.%s",
-			      FieldDB[Fol],
-			      Gbl.Hierarchy.Ins.InsCod,
-			      FieldDB[Fol]);
-	       break;
-	    case HieLvl_CTR:
-	       NumUsrs = (unsigned)
-	       DB_QueryCOUNT ("can not get the total number of following/followers",
-			      "SELECT COUNT(DISTINCT usr_follow.%s)"
-			      " FROM deg_degrees,"
-				    "crs_courses,"
-				    "crs_users,"
-				    "usr_follow"
-			      " WHERE deg_degrees.CtrCod=%ld"
-				" AND deg_degrees.DegCod=crs_courses.DegCod"
-				" AND crs_courses.CrsCod=crs_users.CrsCod"
-				" AND crs_users.UsrCod=usr_follow.%s",
-			      FieldDB[Fol],
-			      Gbl.Hierarchy.Ctr.CtrCod,
-			      FieldDB[Fol]);
-	       break;
-	    case HieLvl_DEG:
-	       NumUsrs = (unsigned)
-	       DB_QueryCOUNT ("can not get the total number of following/followers",
-			      "SELECT COUNT(DISTINCT usr_follow.%s)"
-			       " FROM crs_courses,"
-				     "crs_users,"
-				     "usr_follow"
-			      " WHERE crs_courses.DegCod=%ld"
-				" AND crs_courses.CrsCod=crs_users.CrsCod"
-				" AND crs_users.UsrCod=usr_follow.%s",
-			      FieldDB[Fol],
-			      Gbl.Hierarchy.Deg.DegCod,
-			      FieldDB[Fol]);
-	       break;
-	    case HieLvl_CRS:
-	       NumUsrs = (unsigned)
-	       DB_QueryCOUNT ("can not get the total number of following/followers",
-			      "SELECT COUNT(DISTINCT usr_follow.%s)"
-			       " FROM crs_users,"
-				     "usr_follow"
-			      " WHERE crs_users.CrsCod=%ld"
-				" AND crs_users.UsrCod=usr_follow.%s",
-			      FieldDB[Fol],
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      FieldDB[Fol]);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       NumUsrs = 0;	// Not reached. Initialized to av oid warning
-	       break;
-	   }
+	 NumUsrs = Fol_DB_GetNumFollowinFollowers (Fol);
 
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
@@ -2531,118 +2434,7 @@ static void Fig_GetAndShowFollowStats (void)
 	   Fol < 2;
 	   Fol++)
 	{
-	 switch (Gbl.Scope.Current)
-	   {
-	    case HieLvl_SYS:
-	       Average = DB_QuerySELECTDouble ("can not get number of questions"
-					       " per survey",
-					       "SELECT AVG(N)"
-						" FROM (SELECT COUNT(%s) AS N"
-							" FROM usr_follow"
-						       " GROUP BY %s) AS F",
-					       FieldDB[Fol],
-					       FieldDB[1 - Fol]);
-	       break;
-	    case HieLvl_CTY:
-	       Average = DB_QuerySELECTDouble ("can not get number of questions"
-					       " per survey",
-					       "SELECT AVG(N)"
-						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-							" FROM ins_instits,"
-							      "ctr_centers,"
-							      "deg_degrees,"
-							      "crs_courses,"
-							      "crs_users,"
-							      "usr_follow"
-						       " WHERE ins_instits.CtyCod=%ld"
-							 " AND ins_instits.InsCod=ctr_centers.InsCod"
-							 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-							 " AND deg_degrees.DegCod=crs_courses.DegCod"
-							 " AND crs_courses.CrsCod=crs_users.CrsCod"
-							 " AND crs_users.UsrCod=usr_follow.%s"
-						       " GROUP BY %s) AS F",
-					       FieldDB[Fol],
-					       Gbl.Hierarchy.Cty.CtyCod,
-					       FieldDB[Fol],
-					       FieldDB[1 - Fol]);
-	       break;
-	    case HieLvl_INS:
-	       Average = DB_QuerySELECTDouble ("can not get number of questions"
-					       " per survey",
-					       "SELECT AVG(N)"
-						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-							" FROM ctr_centers,"
-							      "deg_degrees,"
-							      "crs_courses,"
-							      "crs_users,"
-							      "usr_follow"
-						       " WHERE ctr_centers.InsCod=%ld"
-							 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-							 " AND deg_degrees.DegCod=crs_courses.DegCod"
-							 " AND crs_courses.CrsCod=crs_users.CrsCod"
-							 " AND crs_users.UsrCod=usr_follow.%s"
-						       " GROUP BY %s) AS F",
-					       FieldDB[Fol],
-					       Gbl.Hierarchy.Ins.InsCod,
-					       FieldDB[Fol],
-					       FieldDB[1 - Fol]);
-	       break;
-	    case HieLvl_CTR:
-	       Average = DB_QuerySELECTDouble ("can not get number of questions"
-					       " per survey",
-					       "SELECT AVG(N)"
-						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-							" FROM deg_degrees,"
-							      "crs_courses,"
-							      "crs_users,"
-							      "usr_follow"
-						       " WHERE deg_degrees.CtrCod=%ld"
-							 " AND deg_degrees.DegCod=crs_courses.DegCod"
-							 " AND crs_courses.CrsCod=crs_users.CrsCod"
-							 " AND crs_users.UsrCod=usr_follow.%s"
-						       " GROUP BY %s) AS F",
-					       FieldDB[Fol],
-					       Gbl.Hierarchy.Ctr.CtrCod,
-					       FieldDB[Fol],
-					       FieldDB[1 - Fol]);
-	       break;
-	    case HieLvl_DEG:
-	       Average = DB_QuerySELECTDouble ("can not get number of questions"
-					       " per survey",
-					       "SELECT AVG(N)"
-						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-							" FROM crs_courses,"
-							      "crs_users,"
-							      "usr_follow"
-						       " WHERE crs_courses.DegCod=%ld"
-							 " AND crs_courses.CrsCod=crs_users.CrsCod"
-							 " AND crs_users.UsrCod=usr_follow.%s"
-						       " GROUP BY %s) AS F",
-					       FieldDB[Fol],
-					       Gbl.Hierarchy.Deg.DegCod,
-					       FieldDB[Fol],
-					       FieldDB[1 - Fol]);
-	       break;
-	    case HieLvl_CRS:
-	       Average = DB_QuerySELECTDouble ("can not get number of questions"
-					       " per survey",
-					       "SELECT AVG(N)"
-						" FROM (SELECT COUNT(DISTINCT usr_follow.%s) AS N"
-							" FROM crs_users,"
-							      "usr_follow"
-						       " WHERE crs_users.CrsCod=%ld"
-							 " AND crs_users.UsrCod=usr_follow.%s"
-						       " GROUP BY %s) AS F",
-					       FieldDB[Fol],
-					       Gbl.Hierarchy.Crs.CrsCod,
-					       FieldDB[Fol],
-					       FieldDB[1 - Fol]);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       Average = 0.0;	// Not reached
-	       break;
-	   }
+	 Average = Fol_DB_GetNumFollowedPerFollower (Fol);
 
 	 /***** Write number of followed per follower *****/
 	 HTM_TR_Begin (NULL);
