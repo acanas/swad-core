@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_follow.h"
+#include "swad_follow_database.h"
 #include "swad_global.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"

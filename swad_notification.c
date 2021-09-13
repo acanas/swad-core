@@ -2223,3 +2223,93 @@ void Ntf_DB_RemoveUsrNtfs (long ToUsrCod)
 		   " WHERE ToUsrCod=%ld",
                    ToUsrCod);
   }
+
+/*****************************************************************************/
+/****************** Get number of notifications by email *********************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(NumEvents),"			// row[0]
+				"SUM(NumMails)"				// row[1]
+			  " FROM sta_notifications"
+			 " WHERE NotifyEvent=%u",
+			 (unsigned) NotifyEvent);
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				"SUM(sta_notifications.NumMails)"	// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees,"
+				"sta_notifications"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
+			   " AND sta_notifications.NotifyEvent=%u",
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_INS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				"SUM(sta_notifications.NumMails)"	// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"sta_notifications"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
+			   " AND sta_notifications.NotifyEvent=%u",
+			 Gbl.Hierarchy.Ins.InsCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_CTR:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				"SUM(sta_notifications.NumMails)"	// row[1]
+			  " FROM deg_degrees,"
+				"sta_notifications"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
+			   " AND sta_notifications.NotifyEvent=%u",
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_DEG:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(NumEvents),"			// row[0]
+				"SUM(NumMails)"			// row[1]
+			  " FROM sta_notifications"
+			 " WHERE DegCod=%ld"
+			   " AND NotifyEvent=%u",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(NumEvents),"			// row[0]
+				"SUM(NumMails)"			// row[1]
+			  " FROM sta_notifications"
+			 " WHERE CrsCod=%ld"
+			   " AND NotifyEvent=%u",
+			 Gbl.Hierarchy.Crs.CrsCod,
+			 (unsigned) NotifyEvent);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }

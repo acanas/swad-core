@@ -2858,108 +2858,33 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 	 free (SubQuery);
 
 	 /* Get number of notifications by email from database */
-	 switch (Gbl.Scope.Current)
+	 if (Ntf_DB_GetNumNotifs (&mysql_res,NotifyEvent))
 	   {
-	    case HieLvl_SYS:
-	       DB_QuerySELECT (&mysql_res,"can not get the number"
-					  " of notifications by email",
-			       "SELECT SUM(NumEvents),"			// row[0]
-				      "SUM(NumMails)"			// row[1]
-				" FROM sta_notifications"
-			       " WHERE NotifyEvent=%u",
-			       (unsigned) NotifyEvent);
-	       break;
-	    case HieLvl_CTY:
-	       DB_QuerySELECT (&mysql_res,"can not get the number"
-					  " of notifications by email",
-			       "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
-				      "SUM(sta_notifications.NumMails)"	// row[1]
-				" FROM ins_instits,"
-				      "ctr_centers,"
-				      "deg_degrees,"
-				      "sta_notifications"
-			       " WHERE ins_instits.CtyCod=%ld"
-				 " AND ins_instits.InsCod=ctr_centers.InsCod"
-				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				 " AND deg_degrees.DegCod=sta_notifications.DegCod"
-				 " AND sta_notifications.NotifyEvent=%u",
-			       Gbl.Hierarchy.Cty.CtyCod,
-			       (unsigned) NotifyEvent);
-	       break;
-	    case HieLvl_INS:
-	       DB_QuerySELECT (&mysql_res,"can not get the number"
-					  " of notifications by email",
-			       "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
-				      "SUM(sta_notifications.NumMails)"	// row[1]
-				" FROM ctr_centers,"
-				      "deg_degrees,"
-				      "sta_notifications"
-			       " WHERE ctr_centers.InsCod=%ld"
-				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-				 " AND deg_degrees.DegCod=sta_notifications.DegCod"
-				 " AND sta_notifications.NotifyEvent=%u",
-			       Gbl.Hierarchy.Ins.InsCod,
-			       (unsigned) NotifyEvent);
-	       break;
-	    case HieLvl_CTR:
-	       DB_QuerySELECT (&mysql_res,"can not get the number"
-					  " of notifications by email",
-			       "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
-				      "SUM(sta_notifications.NumMails)"	// row[1]
-				" FROM deg_degrees,"
-				      "sta_notifications"
-			       " WHERE deg_degrees.CtrCod=%ld"
-				 " AND deg_degrees.DegCod=sta_notifications.DegCod"
-				 " AND sta_notifications.NotifyEvent=%u",
-			       Gbl.Hierarchy.Ctr.CtrCod,
-			       (unsigned) NotifyEvent);
-	       break;
-	    case HieLvl_DEG:
-	       DB_QuerySELECT (&mysql_res,"can not get the number"
-					  " of notifications by email",
-			       "SELECT SUM(NumEvents),"			// row[0]
-				      "SUM(NumMails)"			// row[1]
-				" FROM sta_notifications"
-			       " WHERE DegCod=%ld"
-				 " AND NotifyEvent=%u",
-			       Gbl.Hierarchy.Deg.DegCod,
-			       (unsigned) NotifyEvent);
-	       break;
-	    case HieLvl_CRS:
-	       DB_QuerySELECT (&mysql_res,"can not get the number"
-					  " of notifications by email",
-			       "SELECT SUM(NumEvents),"			// row[0]
-				      "SUM(NumMails)"			// row[1]
-				" FROM sta_notifications"
-			       " WHERE CrsCod=%ld"
-				 " AND NotifyEvent=%u",
-			       Gbl.Hierarchy.Crs.CrsCod,
-			       (unsigned) NotifyEvent);
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       break;
-	   }
+	    row = mysql_fetch_row (mysql_res);
 
-	 row = mysql_fetch_row (mysql_res);
+	    /* Get number of events notified */
+	    if (row[0])
+	      {
+	       if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
+		  Err_ShowErrorAndExit ("Error when getting the number of notifications by email.");
+	      }
+	    else
+	       NumEvents[NotifyEvent] = 0;
 
-	 /* Get number of events notified */
-	 if (row[0])
-	   {
-	    if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
-	       Err_ShowErrorAndExit ("Error when getting the number of notifications by email.");
+	    /* Get number of mails sent */
+	    if (row[1])
+	      {
+	       if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
+		  Err_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
+	      }
+	    else
+	       NumMails[NotifyEvent] = 0;
 	   }
 	 else
+	   {
 	    NumEvents[NotifyEvent] = 0;
-
-	 /* Get number of mails sent */
-	 if (row[1])
-	   {
-	    if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
-	       Err_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
+	    NumMails[NotifyEvent]  = 0;
 	   }
-	 else
-	    NumMails[NotifyEvent] = 0;
 
 	 /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);

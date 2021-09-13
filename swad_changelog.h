@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.0.1 (2021-09-13)"
+#define Log_PLATFORM_VERSION	"SWAD 21.0.2 (2021-09-13)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.69.1.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.0.2:   Sep 13, 2021  Queries moved to module swad_notification. (314927 lines)
 	Version 21.0.1:   Sep 13, 2021  Queries moved to module swad_follow_database. (314910 lines)
 	Version 21.0:     Sep 13, 2021  Fixed bug in degrees photo. (314914 lines)
 	Version 20.100.5: Sep 12, 2021  Fixed bug removing all students in a course. Reported by José Luis Bernier Villamor and Francisco J. Pelayo Valle. (314909 lines)

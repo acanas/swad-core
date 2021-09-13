@@ -142,4 +142,6 @@ void Ntf_ChangeNotifyEvents (void);
 void Ntf_WriteNumberOfNewNtfs (void);
 void Ntf_DB_RemoveUsrNtfs (long ToUsrCod);
 
+unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent);
+
 #endif
