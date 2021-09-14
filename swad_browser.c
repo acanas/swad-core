@@ -42,6 +42,7 @@
 #include "swad_browser.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_file_extension.h"
@@ -2680,13 +2681,8 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    char PathFolder[PATH_MAX * 2 + 128];
    bool FolderExists = false;
 
-   /***** Get all the users belonging to current course from database *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get users from current course",
-		   "SELECT UsrCod"
-		    " FROM crs_users"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Get all users belonging to current course *****/
+   NumUsrs = Enr_DB_GetUsrsFromCurrentCrs (&mysql_res);
 
    /***** Check folders *****/
    for (NumUsr = 0;
@@ -2796,13 +2792,8 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    unsigned NumUsrsError = 0;
    unsigned NumUsrsSuccess = 0;
 
-   /***** Get all the users belonging to current course from database *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get users from current course",
-		   "SELECT UsrCod"		// row[0]
-		    " FROM crs_users"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Get all users belonging to current course *****/
+   NumUsrs = Enr_DB_GetUsrsFromCurrentCrs (&mysql_res);
 
    /***** Check if there exist folders with the new name *****/
    for (NumUsr = 0;
@@ -2913,13 +2904,8 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
    long UsrCod;
    char PathFolder[PATH_MAX * 2 + 128];
 
-   /***** Get all the users belonging to current course from database *****/
-   NumUsrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get users from current course",
-		   "SELECT UsrCod"		// row[0]
-		    " FROM crs_users"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Get all users belonging to current course *****/
+   NumUsrs = Enr_DB_GetUsrsFromCurrentCrs (&mysql_res);
 
    /***** Remove folders *****/
    for (NumUsr = 0;

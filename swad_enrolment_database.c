@@ -93,6 +93,20 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
+/*********** Get all user codes belonging to the current course **************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users from current course",
+		   "SELECT UsrCod"
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /************************** Remove user from course **************************/
 /*****************************************************************************/
 
