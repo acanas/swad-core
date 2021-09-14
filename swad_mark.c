@@ -169,7 +169,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   long Cod = Brw_GetCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -252,7 +252,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
      {
       /***** Update properties of marks in the database *****/
-      Cod = Brw_GetCodForFiles ();
+      Cod = Brw_GetCodForFileBrowser ();
       DB_QueryUPDATE ("can not update properties of marks",
 		      "UPDATE mrk_marks,"
 		             "brw_files"

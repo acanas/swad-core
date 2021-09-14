@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_database.h"
 #include "swad_department.h"
 #include "swad_error.h"
@@ -3425,7 +3426,7 @@ void Prj_RemoveProject (void)
 	              Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Remove information related to files in project *****/
-      Brw_RemovePrjFilesFromDB (Prj.PrjCod);
+      Brw_DB_RemovePrjFiles (Prj.PrjCod);
 
       /***** Remove directory of the project *****/
       snprintf (PathRelPrj,sizeof (PathRelPrj),"%s/%ld/%s/%02u/%ld",

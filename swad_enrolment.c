@@ -36,6 +36,7 @@
 #include "swad_announcement.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
@@ -3222,7 +3223,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       Rec_DB_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs);
 
       /***** Remove some information about files in course and groups *****/
-      Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (UsrDat->UsrCod,Crs->CrsCod);
+      Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Set all the notifications for this user in this course as removed,
              except notifications about new messages *****/

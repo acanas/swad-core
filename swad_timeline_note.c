@@ -1045,7 +1045,7 @@ void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 	       return;
 	   }
          Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (NoteType,
-                                                        FileBrowser,Brw_GetCodForFiles (),
+                                                        FileBrowser,Brw_GetCodForFileBrowser (),
                                                         Path);
          break;
       default:

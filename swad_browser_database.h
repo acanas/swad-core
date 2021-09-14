@@ -47,8 +47,31 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Brw_DB_GetSizeOfFileZone (MYSQL_RES **mysql_res,
-			       Brw_FileBrowser_t FileBrowser);
+void Brw_DB_StoreSizeOfFileZone (void);
+
+void Brw_DB_UpdateDateMyLastAccFileBrowser (Brw_FileBrowser_t FileBrowser);
+unsigned Brw_DB_GetDateMyLastAccFileBrowser (MYSQL_RES **mysql_res,
+                                             Brw_FileBrowser_t FileBrowser);
+unsigned Brw_DB_GetGrpLastAccFileBrowser (MYSQL_RES **mysql_res,const char *FieldNameDB);
+
+void Brw_DB_AddPathToClipboards (void);
+void Brw_DB_UpdatePathInClipboard (void);
+unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res);
+
+unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod);
+
+void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
+			          Brw_FileBrowser_t FileBrowser);
 unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
+
+void Brw_DB_RemoveInsFiles (long InsCod);
+void Brw_DB_RemoveCtrFiles (long CtrCod);
+void Brw_DB_RemoveDegFiles (long DegCod);
+void Brw_DB_RemoveCrsFiles (long CrsCod);
+void Brw_DB_RemoveGrpFiles (long GrpCod);
+void Brw_DB_RemovePrjFiles (long PrjCod);
+void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod);
+void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod);
+void Brw_DB_RemoveUsrFiles (long UsrCod);
 
 #endif

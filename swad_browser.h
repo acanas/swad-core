@@ -185,16 +185,6 @@ void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 
-void Brw_DB_RemoveInsFiles (long InsCod);
-void Brw_DB_RemoveCtrFiles (long CtrCod);
-void Brw_DB_RemoveDegFiles (long DegCod);
-void Brw_DB_RemoveCrsFiles (long CrsCod);
-void Brw_RemoveGrpFilesFromDB (long GrpCod);
-void Brw_RemovePrjFilesFromDB (long PrjCod);
-void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod);
-void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
-void Brw_RemoveUsrFilesFromDB (long UsrCod);
-
 void Brw_PutHiddenParamFullTreeIfSelected (void *FullTree);
 
 void Brw_CreateDirDownloadTmp (void);
@@ -232,7 +222,7 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 
-long Brw_GetCodForFiles (void);
+long Brw_GetZoneUsrCodForFileBrowser (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *InsCod,
                                     long *CtrCod,
@@ -245,6 +235,9 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       bool IsPublic,Brw_License_t License);
 
 bool Brw_CheckIfICanViewProjectFiles (long PrjCod);
+
+long Brw_GetCodForFileBrowser (void);
+long Brw_GetZoneUsrCodForFileBrowser (void);
 
 void Brw_DB_RemoveExpiredExpandedFolders (void);
 

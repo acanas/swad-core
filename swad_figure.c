@@ -1375,7 +1375,7 @@ static void Fig_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
 
    /***** Get the size of a file browser *****/
    /* Query database */
-   Brw_DB_GetSizeOfFileZone (&mysql_res,FileBrowser);
+   Brw_DB_GetSizeOfFileBrowser (&mysql_res,FileBrowser);
 
    /* Get row */
    row = mysql_fetch_row (mysql_res);

@@ -34,6 +34,7 @@
 #include "swad_announcement_database.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_calendar.h"
 #include "swad_connected_database.h"
 #include "swad_database.h"
@@ -1007,7 +1008,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    For_DB_RemoveUsrFromThrClipboard (UsrDat->UsrCod);
 
    /***** Remove some files of the user's from database *****/
-   Brw_RemoveUsrFilesFromDB (UsrDat->UsrCod);
+   Brw_DB_RemoveUsrFiles (UsrDat->UsrCod);
 
    /***** Remove the file tree of a user *****/
    Acc_RemoveUsrBriefcase (UsrDat);

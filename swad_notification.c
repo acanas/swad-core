@@ -1105,7 +1105,7 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   long Cod = Brw_GetCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
    Ntf_NotifyEvent_t NotifyEvent;
 
    switch (FileBrowser)

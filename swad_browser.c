@@ -40,6 +40,7 @@
 
 #include "swad_box.h"
 #include "swad_browser.h"
+#include "swad_browser_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_enrolment_database.h"
@@ -1297,7 +1298,6 @@ static void Brw_UpdateLastAccess (void);
 static void Brw_WriteSubtitleOfFileBrowser (void);
 static void Brw_InitHiddenLevels (void);
 static void Brw_ShowAndStoreSizeOfFileTree (void);
-static void Brw_StoreSizeOfFileTreeInDB (void);
 
 static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParamsFullTree (void);
@@ -1370,23 +1370,17 @@ static void Brw_WriteCurrentClipboard (void);
 
 static bool Brw_GetMyClipboard (void);
 static bool Brw_CheckIfClipboardIsInThisTree (void);
-static void Brw_AddPathToClipboards (void);
-static void Brw_UpdatePathInClipboard (void);
-static long Brw_GetCodForClipboard (void);
-static long Brw_GetWorksUsrCodForClipboard (void);
 
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char Path[PATH_MAX + 1]);
 static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void);
-static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
-                                               long MyUsrCod,long WorksUsrCod,
-                                               const char *OldPath,const char *NewPath);
-static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1]);
-static long Brw_GetCodForExpandedFolders (void);
-static long Brw_GetWorksUsrCodForExpandedFolders (void);
+static void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1]);
+static void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void);
+static void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1]);
+static void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1]);
+static void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
+                                                  long MyUsrCod,long WorksUsrCod,
+                                                  const char *OldPath,const char *NewPath);
+static bool Brw_DB_GetIfExpandedTree (const char Path[PATH_MAX + 1]);
 
 static void Brw_DB_RemoveExpiredClipboards (void);
 static void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
@@ -1426,8 +1420,6 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
 
 static void Brw_ChangeFilePublicInDB (struct FileMetadata *FileMetadata,
                                       bool IsPublic,Brw_License_t License);
-
-static long Brw_GetZoneUsrCodForFiles (void);
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1]);
 static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1]);
@@ -2726,27 +2718,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
    char PathFolderAsg[PATH_MAX + 1 + PATH_MAX + 1];
 
    /***** Get assignment folders from database *****/
-   NumFolders = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get folders of assignments",
-		   "SELECT Folder"		// row[0]
-		    " FROM asg_assignments"
-		   " WHERE CrsCod=%ld"
-		     " AND Hidden='N'"
-		     " AND Folder<>''"
-		     " AND ("
-			   "AsgCod NOT IN"
-			   " (SELECT AsgCod"
-			      " FROM asg_groups)"
-			   " OR "
-			   "AsgCod IN"
-			   " (SELECT asg_groups.AsgCod"
-			      " FROM grp_users,"
-				    "asg_groups"
-			     " WHERE grp_users.UsrCod=%ld"
-			       " AND asg_groups.GrpCod=grp_users.GrpCod)"
-			  ")",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   ZoneUsrCod);
+   NumFolders = Brw_DB_GetFoldersAssignments (&mysql_res,ZoneUsrCod);
 
    /***** Create one folder for each assignment *****/
    for (NumFolder = 0;
@@ -2863,10 +2835,10 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,OldFolderName);
                snprintf (NewPath,sizeof (NewPath),"%s/%s",
 			 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,NewFolderName);
-               Brw_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
-        	                                  OldPath,NewPath);
-               Brw_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
-        	                                  OldPath,NewPath);
+               Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_USR,UsrCod,-1L,
+        	                                     OldPath,NewPath);
+               Brw_DB_RenameAffectedExpandedFolders (Brw_ADMI_ASG_CRS,-1L,UsrCod,
+        	                                     OldPath,NewPath);
 
                NumUsrsSuccess++;
               }
@@ -4112,854 +4084,12 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
 		      FileSizeStr);
 	   }
 
-	 Brw_StoreSizeOfFileTreeInDB ();
+	 Brw_DB_StoreSizeOfFileZone ();
 	}
       else
 	 HTM_NBSP ();	// Blank to occupy the same space as the text for the browser size
 
    HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/****************** Store size of a file browser in database *****************/
-/*****************************************************************************/
-
-static void Brw_StoreSizeOfFileTreeInDB (void)
-  {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-
-   /***** Update size of the file browser in database *****/
-   DB_QueryREPLACE ("can not store the size of a file browser",
-		    "REPLACE INTO brw_sizes"
-		    " (FileBrowser,Cod,ZoneUsrCod,"
-		      "NumLevels,NumFolders,NumFiles,TotalSize)"
-		    " VALUES"
-		    " (%u,%ld,%ld,"
-		      "%u,'%lu','%lu','%llu')",
-	            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		    Cod,ZoneUsrCod,
-	            Gbl.FileBrowser.Size.NumLevls,
-	            Gbl.FileBrowser.Size.NumFolds,
-	            Gbl.FileBrowser.Size.NumFiles,
-	            Gbl.FileBrowser.Size.TotalSiz);
-  }
-
-/*****************************************************************************/
-/******** Remove files related to an institution from the database ***********/
-/*****************************************************************************/
-
-void Brw_DB_RemoveInsFiles (long InsCod)
-  {
-   /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views to files of an institution",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_INS,
-	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of an institution",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_INS,
-	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards"
-		   " related to files of an institution",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_INS,
-	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
-
-   /***** Remove from database the entries that store
-          the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove file last visits"
-		   " to files of an institution",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_INS,
-	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
-
-   /***** Remove from database the entries that store
-          the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of file zones of an institution",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_INS,
-	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files of an institution",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_INS,
-	           (unsigned) Brw_ADMI_SHR_INS,
-	           InsCod);
-  }
-
-/*****************************************************************************/
-/************ Remove files related to a center from the database *************/
-/*****************************************************************************/
-
-void Brw_DB_RemoveCtrFiles (long CtrCod)
-  {
-   /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views to files of a center",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_CTR,
-	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of a center",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CTR,
-	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards related to files of a center",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CTR,
-	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove file last visits to files of a center",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CTR,
-	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of file zones of a center",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CTR,
-	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files of a center",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CTR,
-	           (unsigned) Brw_ADMI_SHR_CTR,
-	           CtrCod);
-  }
-
-/*****************************************************************************/
-/************ Remove files related to a degree from the database *************/
-/*****************************************************************************/
-
-void Brw_DB_RemoveDegFiles (long DegCod)
-  {
-   /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views to files of a degree",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_DEG,
-	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of a degree",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_DEG,
-	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards related to files of a degree",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_DEG,
-	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove file last visits to files of a degree",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_DEG,
-	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of file zones of a degree",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_DEG,
-	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files of a degree",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_DEG,
-	           (unsigned) Brw_ADMI_SHR_DEG,
-	           DegCod);
-  }
-
-/*****************************************************************************/
-/************ Remove files related to a course from the database *************/
-/*****************************************************************************/
-/* Remove information related to files in course,
-   including groups and projects,
-   so this function must be called
-   before removing groups and projects */
-
-void Brw_DB_RemoveCrsFiles (long CrsCod)
-  {
-   char SubqueryGrp[256];
-   char SubqueryPrj[128];
-
-   /***** Build subquery for groups *****/
-   sprintf (SubqueryGrp,"(SELECT grp_groups.GrpCod"
-	                  " FROM grp_types,"
-	                        "grp_groups"
-		         " WHERE grp_types.CrsCod=%ld"
-		           " AND grp_types.GrpTypCod=grp_groups.GrpTypCod)",
-            CrsCod);
-
-   /***** Build subquery for projects *****/
-   sprintf (SubqueryPrj,"(SELECT PrjCod"
-	                  " FROM prj_projects"
-	                 " WHERE CrsCod=%ld)",
-            CrsCod);
-
-   /***** Remove format of files of marks *****/
-   DB_QueryDELETE ("can not remove the properties of marks"
-		   " associated to a course",
-		   "DELETE FROM mrk_marks"
-		   " USING brw_files,"
-		          "mrk_marks"
-		   " WHERE brw_files.FileBrowser=%u"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=mrk_marks.FilCod",
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /***** Remove from database the entries that store the file views *****/
-   /* Remove from course file zones */
-   DB_QueryDELETE ("can not remove file views to files of a course",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /* Remove from group file zones */
-   DB_QueryDELETE ("can not remove file views to files of a course",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u)"
-		     " AND brw_files.Cod IN %s"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           SubqueryGrp);
-
-   /* Remove from project file zones */
-   DB_QueryDELETE ("can not remove file views to files of a course",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u)"
-		     " AND brw_files.Cod IN %s"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           SubqueryPrj);
-
-   /***** Remove from database expanded folders *****/
-   /* Remove from course file zones */
-   DB_QueryDELETE ("can not remove expanded folders of a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_ASG_CRS,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_WRK_CRS,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /* Remove from group file zones */
-   DB_QueryDELETE ("can not remove expanded folders of a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           SubqueryGrp);
-
-   /* Remove from project file zones */
-   DB_QueryDELETE ("can not remove expanded folders of a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           SubqueryPrj);
-
-   /***** Remove from database the entries that store clipboards *****/
-   /* Remove from course file zones */
-   DB_QueryDELETE ("can not remove clipboards related to files of a course",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_ASG_CRS,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_WRK_CRS,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /* Remove from group file zones */
-   DB_QueryDELETE ("can not remove clipboards related to files of a course",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           SubqueryGrp);
-
-   /* Remove from project file zones */
-   DB_QueryDELETE ("can not remove clipboards related to files of a course",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           SubqueryPrj);
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   // Assignments and works are stored as one in brw_last...
-   // ...because a user views them at the same time
-   /* Remove from course file zones */
-   DB_QueryDELETE ("can not remove file last visits to files of a course",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /* Remove from group file zones */
-    DB_QueryDELETE ("can not remove file last visits to files of a course",
-		    "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           SubqueryGrp);
-
-   /* Remove from project file zones */
-   DB_QueryDELETE ("can not remove file last visits to files of a course",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           SubqueryPrj);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   /* Remove from course file zones */
-   DB_QueryDELETE ("can not remove sizes of file zones of a course",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /* Remove from group file zones */
-   DB_QueryDELETE ("can not remove sizes of file zones of a course",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           SubqueryGrp);
-
-   /* Remove from project file zones */
-   DB_QueryDELETE ("can not remove sizes of file zones of a course",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           SubqueryPrj);
-
-   /***** Remove from database the entries that store the data files *****/
-   /* Remove from course file zones */
-   DB_QueryDELETE ("can not remove files of a course",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod);
-
-   /* Remove from group file zones */
-   DB_QueryDELETE ("can not remove files of a course",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           SubqueryGrp);
-
-   /* Remove from project file zones */
-   DB_QueryDELETE ("can not remove files of a course",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod IN %s",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           SubqueryPrj);
-  }
-
-/*****************************************************************************/
-/************ Remove files related to a group from the database **************/
-/*****************************************************************************/
-
-void Brw_RemoveGrpFilesFromDB (long GrpCod)
-  {
-   /***** Remove format of files of marks *****/
-   DB_QueryDELETE ("can not remove the properties of marks"
-		   " associated to a group",
-		   "DELETE FROM mrk_marks"
-		   " USING brw_files,"
-		          "mrk_marks"
-		   " WHERE brw_files.FileBrowser=%u"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=mrk_marks.FilCod",
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-
-   /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views to files of a group",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u,%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of a group",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		   " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards related to files of a group",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove file last visits to files of a group",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		   " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of file zones of a group",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		   " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files of a group",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u,%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           GrpCod);
-  }
-
-/*****************************************************************************/
-/*********** Remove files related to a project from the database *************/
-/*****************************************************************************/
-
-void Brw_RemovePrjFilesFromDB (long PrjCod)
-  {
-   /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views to files of a project",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           PrjCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of a project",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           PrjCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards related to files of a project",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           PrjCod);
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove file last visits to files of a project",
-		   "DELETE FROM brw_last"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           PrjCod);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of file zones of a project",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           PrjCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files of a project",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld",
-	           (unsigned) Brw_ADMI_DOC_PRJ,
-	           (unsigned) Brw_ADMI_ASS_PRJ,
-	           PrjCod);
-  }
-
-/*****************************************************************************/
-/* Remove some info about files related to a course and a user from database */
-/*****************************************************************************/
-
-void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
-  {
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders for a user in a course",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE UsrCod=%ld"
-		     " AND ("
-			    "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-			    " AND Cod=%ld)"
-			    " OR "
-			    "(FileBrowser IN (%u,%u,%u,%u)"
-			    " AND Cod IN"
-			    " (SELECT grp_groups.GrpCod"
-			       " FROM grp_types,"
-			             "grp_groups"
-			      " WHERE grp_types.CrsCod=%ld"
-			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod))"
-		          ")",
-	           UsrCod,
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_ASG_CRS,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_WRK_CRS,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod,
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           CrsCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove source of copy for a user in a course",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE UsrCod=%ld"
-		     " AND ("
-			    "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
-			    " AND Cod=%ld)"
-			    " OR "
-			    "(FileBrowser IN (%u,%u,%u,%u)"
-			    " AND Cod IN"
-			    " (SELECT grp_groups.GrpCod"
-			       " FROM grp_types,"
-			             "grp_groups"
-			      " WHERE grp_types.CrsCod=%ld"
-			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod))"
-		          ")",
-	           UsrCod,
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_ASG_CRS,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           (unsigned) Brw_ADMI_WRK_CRS,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod,
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           CrsCod);
-
-   /***** Remove from database the entries that store the last time user visited file zones *****/
-   // Assignments and works are stored as one in brw_last...
-   // ...because a user views them at the same time
-   DB_QueryDELETE ("can not remove file last visits to files of a course"
-		   " from a user",
-		   "DELETE FROM brw_last"
-		   " WHERE UsrCod=%ld"
-		     " AND ("
-			    "(FileBrowser IN (%u,%u,%u,%u,%u)"
-			    " AND Cod=%ld)"
-			    " OR "
-			    "(FileBrowser IN (%u,%u,%u,%u)"
-			    " AND Cod IN"
-			    " (SELECT grp_groups.GrpCod"
-			       " FROM grp_types,"
-			             "grp_groups"
-			      " WHERE grp_types.CrsCod=%ld"
-			        " AND grp_types.GrpTypCod=grp_groups.GrpTypCod))"
-		          ")",
-	           UsrCod,
-	           (unsigned) Brw_ADMI_DOC_CRS,
-	           (unsigned) Brw_ADMI_TCH_CRS,
-	           (unsigned) Brw_ADMI_SHR_CRS,
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_MRK_CRS,
-	           CrsCod,
-	           (unsigned) Brw_ADMI_DOC_GRP,
-	           (unsigned) Brw_ADMI_TCH_GRP,
-	           (unsigned) Brw_ADMI_SHR_GRP,
-	           (unsigned) Brw_ADMI_MRK_GRP,
-	           CrsCod);
-  }
-
-/*****************************************************************************/
-/*************** Remove user's works in a course from database ***************/
-/*****************************************************************************/
-
-void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
-  {
-   /***** Remove from database the entries that store the file views *****/
-   DB_QueryDELETE ("can not remove file views",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.FileBrowser IN (%u,%u)"
-		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.ZoneUsrCod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           CrsCod,UsrCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders of a group",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld"
-		     " AND WorksUsrCod=%ld",
-	           (unsigned) Brw_ADMI_ASG_CRS,
-	           (unsigned) Brw_ADMI_WRK_CRS,
-	           CrsCod,UsrCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove clipboards",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld"
-		     " AND WorksUsrCod=%ld",
-	           (unsigned) Brw_ADMI_ASG_CRS,
-	           (unsigned) Brw_ADMI_WRK_CRS,
-	           CrsCod,UsrCod);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove file browser sizes",
-		   "DELETE FROM brw_sizes"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld",
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           CrsCod,UsrCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files",
-		   "DELETE FROM brw_files"
-		   " WHERE FileBrowser IN (%u,%u)"
-		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld",
-	           (unsigned) Brw_ADMI_ASG_USR,
-	           (unsigned) Brw_ADMI_WRK_USR,
-	           CrsCod,UsrCod);
-  }
-
-/*****************************************************************************/
-/************* Remove files related to a user from the database **************/
-/*****************************************************************************/
-
-void Brw_RemoveUsrFilesFromDB (long UsrCod)
-  {
-   /***** Remove from database the entries that store the file views *****/
-   // User is not removed from brw_views table,
-   // in order to take into account his/her views
-   DB_QueryDELETE ("can not remove file views to files of a user",
-		   "DELETE FROM brw_views"
-		   " USING brw_files,"
-		          "brw_views"
-		   " WHERE brw_files.ZoneUsrCod=%ld"
-		     " AND brw_files.FilCod=brw_views.FilCod",
-	           UsrCod);
-
-   /***** Remove from database expanded folders *****/
-   DB_QueryDELETE ("can not remove expanded folders for a user",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE UsrCod=%ld",
-	           UsrCod);
-
-   /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove user's clipboards",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE UsrCod=%ld",	// User's clipboard
-	           UsrCod);
-
-   /***** Remove from database the entries that store the last time users visited file zones *****/
-   DB_QueryDELETE ("can not remove user's last visits to file zones",
-		   "DELETE FROM brw_last"
-		   " WHERE UsrCod=%ld",	// User's last visits to all zones
-	           UsrCod);
-
-   /***** Remove from database the entries that store the sizes of the file zones *****/
-   DB_QueryDELETE ("can not remove sizes of user's file zones",
-		   "DELETE FROM brw_sizes"
-		   " WHERE ZoneUsrCod=%ld",
-	           UsrCod);
-
-   /***** Remove from database the entries that store the data files *****/
-   DB_QueryDELETE ("can not remove files in user's file zones",
-		   "DELETE FROM brw_files"
-		   " WHERE ZoneUsrCod=%ld",
-	           UsrCod);
   }
 
 /*****************************************************************************/
@@ -5137,70 +4267,13 @@ void Brw_CreateDirDownloadTmp (void)
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
   {
-   long Cod;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
 
    /***** Get date of last accesss to a file browser from database *****/
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_SHOW_DOC_INS:
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-	 Cod = Gbl.Hierarchy.Ins.InsCod;
-         break;
-      case Brw_SHOW_DOC_CTR:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
-         break;
-      case Brw_SHOW_DOC_DEG:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-	 Cod = Gbl.Hierarchy.Deg.DegCod;
-         break;
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_WRK_CRS:
-	 Cod = Gbl.Hierarchy.Crs.CrsCod;
-         break;
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
-	 Cod = Gbl.Crs.Grps.GrpCod;
-         break;
-      case Brw_ADMI_DOC_PRJ:
-      case Brw_ADMI_ASS_PRJ:
-	 Cod = Prj_GetPrjCod ();
-         break;
-      case Brw_ADMI_BRF_USR:
-	 Cod = -1L;
-	 break;
-      default:
-	 return;
-     }
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get date-time"
-			      " of last access to a file browser",
-		   "SELECT UNIX_TIMESTAMP(LastClick)"	// row[0]
-		    " FROM brw_last"
-		   " WHERE UsrCod=%ld"
-		     " AND FileBrowser=%u"
-		     " AND Cod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
-		   Cod);
+   NumRows = Brw_DB_GetDateMyLastAccFileBrowser (&mysql_res,
+                                                 Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type]);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialize to a big value in order to show files as old
@@ -5220,38 +4293,22 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update date of my last access to file browser in this course *****/
-   DB_QueryREPLACE ("can not update date of last access to a file browser",
-		    "REPLACE INTO brw_last"
-		    " (UsrCod,FileBrowser,Cod,LastClick)"
-		    " VALUES"
-		    " (%ld,%u,%ld,NOW())",
-	            Gbl.Usrs.Me.UsrDat.UsrCod,
-	            (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
-	            Cod);
+   Brw_DB_UpdateDateMyLastAccFileBrowser (Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type]);
   }
 
 /*****************************************************************************/
-/************* Get the group of my last access to a common zone **************/
+/************* Get the group of my last access to a file browser *************/
 /*****************************************************************************/
 
-static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
+long Brw_GetGrpLastAccZone (const char *FieldNameDB)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrps;
    long GrpCod = -1L;
 
-   /***** Get the group of my last access to a common zone from database *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get the group of your last access"
-			      " to a file browser",
-		   "SELECT %s"	// row[0]
-		    " FROM crs_user_settings"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-		   FieldNameDB,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Get the group of my last access to a file browser *****/
+   NumGrps = Brw_DB_GetGrpLastAccFileBrowser (&mysql_res,FieldNameDB);
 
    if (NumGrps == 0)	// May be an administrator not belonging to this course
       GrpCod = -1L;
@@ -5424,7 +4481,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 			IconSubtree = Brw_ICON_TREE_NOTHING;
 		     else
 			/***** Check if the tree starting at this subdirectory must be expanded *****/
-			IconSubtree = Brw_GetIfExpandedTree (Gbl.FileBrowser.FilFolLnk.Full) ? Brw_ICON_TREE_CONTRACT :
+			IconSubtree = Brw_DB_GetIfExpandedTree (Gbl.FileBrowser.FilFolLnk.Full) ? Brw_ICON_TREE_CONTRACT :
 												    Brw_ICON_TREE_EXPAND;
 		     for (NumFileInSubdir = 0;
 			  NumFileInSubdir < NumFilesInSubdir;
@@ -5551,13 +4608,13 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /* Style of the text in this row */
    Gbl.FileBrowser.TxtStyle   = (LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_HID" :
-	                                                                                                "LST_REC_HID") :
+	                                                                                                      "LST_REC_HID") :
                                               (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST" :
-                                        	                                                        "LST_REC"));
+                                        	                                                              "LST_REC"));
    Gbl.FileBrowser.InputStyle = (LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_EDIT_HID" :
-	                                                                                                "LST_EDIT_REC_HID") :
+	                                                                                                      "LST_EDIT_REC_HID") :
                                               (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_EDIT" :
-                                        	                                                        "LST_EDIT_REC"));
+                                        	                                                              "LST_EDIT_REC"));
 
    /***** Get data of assignment using the name of the folder *****/
    if (AssignmentsZone)
@@ -5583,21 +4640,30 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      {
       case Brw_ICON_TREE_NOTHING:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\""
+        	          " style=\"display:none;\"",
+        	          Anchor);
 	 else
-            HTM_TR_Begin ("id=\"%s\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\"",
+                          Anchor);
 	 break;
       case Brw_ICON_TREE_EXPAND:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\" style=\"display:none;\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
+        	          " style=\"display:none;\"",
+        	          Anchor);
 	 else
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",
+                          Anchor);
 	 break;
       case Brw_ICON_TREE_CONTRACT:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\" style=\"display:none;\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
+        	          " style=\"display:none;\"",
+        	          Anchor);
 	 else
-            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",
+                          Anchor);
 	 break;
      }
 
@@ -5656,7 +4722,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	       Brw_PutIconFileWithLinkToViewMetadata (&FileMetadata);
 
 	    /* Check if is a new file or folder */
-	    // If our last access was before the last modify ==> indicate the file is new by putting a blinking star
+	    // If our last access was before the last modify ==>
+	    // indicate the file is new by putting a blinking star
 	    if (Gbl.Usrs.Me.TimeLastAccToThisFileBrowser < FileMetadata.Time)
 	       Brw_PutIconNewFileOrFolder ();
 
@@ -5758,7 +4825,8 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
       return false;	// Pasting into top level of assignments is forbidden
 
    /**** If we are in the same tree of the clipboard... *****/
-   if (Gbl.FileBrowser.Clipboard.IsThisTree)	// We are in the same tree of the clipboard ==> we can paste or not depending on the subtree
+   if (Gbl.FileBrowser.Clipboard.IsThisTree)	// We are in the same tree of the clipboard ==>
+						// we can paste or not depending on the subtree
      {
       /***** Construct the name of the file or folder destination *****/
       snprintf (PathDstWithFile,sizeof (PathDstWithFile),"%s/%s",
@@ -5952,9 +5020,12 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 
    /***** Begin container *****/
    if (Hidden)
-      HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",FileBrowserId,RowId);
+      HTM_DIV_Begin ("id=\"contract_%s_%s\""
+	             " style=\"display:none;\"",
+	             FileBrowserId,RowId);
    else
-      HTM_DIV_Begin ("id=\"contract_%s_%s\"",FileBrowserId,RowId);
+      HTM_DIV_Begin ("id=\"contract_%s_%s\"",
+                     FileBrowserId,RowId);
 
    /***** Form and icon *****/
    snprintf (JavaScriptFuncToContractFolder,sizeof (JavaScriptFuncToContractFolder),
@@ -6726,7 +5797,7 @@ void Brw_RemSubtreeInFileBrowser (void)
 				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Remove affected expanded folders */
-      Brw_RemoveAffectedExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
+      Brw_DB_RemoveAffectedExpandedFolders (Gbl.FileBrowser.FilFolLnk.Full);
 
       /***** Write message of confirmation *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_and_all_its_contents_removed,
@@ -6779,9 +5850,9 @@ void Brw_CopyFromFileBrowser (void)
 
    /***** Put the path in the clipboard *****/
    if (Brw_GetMyClipboard ())
-      Brw_UpdatePathInClipboard ();
+      Brw_DB_UpdatePathInClipboard ();
    else
-      Brw_AddPathToClipboards ();
+      Brw_DB_AddPathToClipboards ();
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -7077,18 +6148,7 @@ static bool Brw_GetMyClipboard (void)
    Gbl.FileBrowser.Clipboard.Level             = 0;
 
    /***** Get my current clipboard from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get source of copy from clipboard",
-		   "SELECT FileBrowser,"	// row[0]
-		          "Cod,"		// row[1]
-		          "WorksUsrCod,"	// row[2]
-		          "FileType,"		// row[3]
-		          "Path"		// row[4]
-		    " FROM brw_clipboards"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   if (NumRows == 1)
+   if ((NumRows = Brw_DB_GetMyClipboard (&mysql_res)) == 1)
      {
       /***** Get clipboard data *****/
       row = mysql_fetch_row (mysql_res);
@@ -7195,90 +6255,50 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
   }
 
 /*****************************************************************************/
-/***************************** Add path to clipboards ************************/
+/* Get code of institution, degree, course, group depending on file browser **/
 /*****************************************************************************/
 
-static void Brw_AddPathToClipboards (void)
+long Brw_GetCodForFileBrowser (void)
   {
-   long Cod = Brw_GetCodForClipboard ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
-
-   /***** Add path to clipboards *****/
-   DB_QueryINSERT ("can not add source of copy to clipboard",
-		   "INSERT INTO brw_clipboards"
-		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"
-		   " VALUES"
-		   " (%ld,%u,%ld,%ld,%u,'%s')",
-	           Gbl.Usrs.Me.UsrDat.UsrCod,
-	           (unsigned) Gbl.FileBrowser.Type,
-	           Cod,
-	           WorksUsrCod,
-	           (unsigned) Gbl.FileBrowser.FilFolLnk.Type,
-	           Gbl.FileBrowser.FilFolLnk.Full);
-  }
-
-/*****************************************************************************/
-/************************** Update path in my clipboard **********************/
-/*****************************************************************************/
-
-static void Brw_UpdatePathInClipboard (void)
-  {
-   long Cod = Brw_GetCodForClipboard ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
-
-   /***** Update path in my clipboard *****/
-   DB_QueryUPDATE ("can not update source of copy in clipboard",
-		   "UPDATE brw_clipboards"
-		     " SET FileBrowser=%u,"
-		          "Cod=%ld,"
-		          "WorksUsrCod=%ld,"
-		          "FileType=%u,"
-		          "Path='%s'"
-		   " WHERE UsrCod=%ld",
-	           (unsigned) Gbl.FileBrowser.Type,
-	           Cod,
-	           WorksUsrCod,
-	           (unsigned) Gbl.FileBrowser.FilFolLnk.Type,
-	           Gbl.FileBrowser.FilFolLnk.Full,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/**** Get code of institution, degree, course, group for expanded folders ****/
-/*****************************************************************************/
-
-static long Brw_GetCodForClipboard (void)
-  {
-   switch (Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
+   switch (Gbl.FileBrowser.Type)
      {
+      case Brw_SHOW_DOC_INS:
       case Brw_ADMI_DOC_INS:
       case Brw_ADMI_SHR_INS:
 	 return Gbl.Hierarchy.Ins.InsCod;
+      case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
 	 return Gbl.Hierarchy.Ctr.CtrCod;
+      case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
 	 return Gbl.Hierarchy.Deg.DegCod;
+      case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_TCH_CRS:
       case Brw_ADMI_SHR_CRS:
+      case Brw_SHOW_MRK_CRS:
+      case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_USR:
       case Brw_ADMI_WRK_CRS:
-      case Brw_ADMI_MRK_CRS:
 	 return Gbl.Hierarchy.Crs.CrsCod;
+      case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
       case Brw_ADMI_SHR_GRP:
+      case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
 	 return Gbl.Crs.Grps.GrpCod;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 return Prj_GetPrjCod ();
+      case Brw_ADMI_BRF_USR:
+	 return -1L;
       default:
-         return -1L;
+	 return -1L;
      }
   }
 
@@ -7286,16 +6306,18 @@ static long Brw_GetCodForClipboard (void)
 /******** Get code of user in assignment / works for expanded folders ********/
 /*****************************************************************************/
 
-static long Brw_GetWorksUsrCodForClipboard (void)
+long Brw_GetZoneUsrCodForFileBrowser (void)
   {
-   switch (Brw_FileBrowserForDB_clipboard[Gbl.FileBrowser.Type])
-     {
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_CRS:
-	 return Gbl.Usrs.Other.UsrDat.UsrCod;
-      default:
-         return -1L;
-     }
+   if (Brw_GetIfBriefcaseFileBrowser ())	// Briefcase
+      return Gbl.Usrs.Me.UsrDat.UsrCod;
+
+   if (Brw_GetIfUsrAssigWorksFileBrowser ())	// My assignments or works
+      return Gbl.Usrs.Me.UsrDat.UsrCod;
+
+   if (Brw_GetIfCrsAssigWorksFileBrowser ())	// Course assignments or works
+      return Gbl.Usrs.Other.UsrDat.UsrCod;
+
+   return -1L;
   }
 
 /*****************************************************************************/
@@ -7324,8 +6346,8 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char 
      {
       if ((Ptr = strrchr (CopyOfPath,'/')))	// If '/' found (backwards from the end)
 	{
-	 if (!Brw_GetIfExpandedTree (CopyOfPath))
-	    Brw_InsertFolderInExpandedFolders (CopyOfPath);
+	 if (!Brw_DB_GetIfExpandedTree (CopyOfPath))
+	    Brw_DB_InsertFolderInExpandedFolders (CopyOfPath);
 	 // Now Ptr points to the last '/' in SubPath
 	 *Ptr = '\0';	// Substitute '/' for '\0' to shorten CopyOfPath
 	}
@@ -7333,7 +6355,7 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char 
    while (Ptr);
 
    /***** Update paths of the current file browser in table of expanded folders *****/
-   Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders ();
+   Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders ();
   }
 
 /*****************************************************************************/
@@ -7344,20 +6366,20 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char 
 static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char Path[PATH_MAX + 1])
   {
    /***** Remove Path from expanded folders table *****/
-   Brw_RemoveFolderFromExpandedFolders (Path);
+   Brw_DB_RemoveFolderFromExpandedFolders (Path);
 
    /***** Update paths of the current file browser in table of expanded folders *****/
-   Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders ();
+   Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders ();
   }
 
 /*****************************************************************************/
 /************************* Insert path in expanded folders *******************/
 /*****************************************************************************/
 
-static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
+static void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForExpandedFolders ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Update path time in table of expanded folders *****/
    // Path must be stored with final '/'
@@ -7376,10 +6398,10 @@ static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
 /******* Update paths of the current file browser in expanded folders ********/
 /*****************************************************************************/
 
-static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
+static void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
   {
-   long Cod = Brw_GetCodForExpandedFolders ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Update click time in table of expanded folders *****/
@@ -7422,10 +6444,10 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
 /********************** Remove path from expanded folders ********************/
 /*****************************************************************************/
 
-static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
+static void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForExpandedFolders ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Remove expanded folders associated to a file browser *****/
@@ -7466,10 +6488,10 @@ static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
 /***** Remove expanded folders with paths from a course or from a user *******/
 /*****************************************************************************/
 
-static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
+static void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForExpandedFolders ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Remove expanded folders associated to a file browser from a course or from a user *****/
@@ -7511,11 +6533,11 @@ static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
 /***** Remove expanded folders with paths from a course or from a user *******/
 /*****************************************************************************/
 
-static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
-                                               long MyUsrCod,long WorksUsrCod,
-                                               const char *OldPath,const char *NewPath)
+static void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
+                                                  long MyUsrCod,long WorksUsrCod,
+                                                  const char *OldPath,const char *NewPath)
   {
-   long Cod = Brw_GetCodForExpandedFolders ();
+   long Cod = Brw_GetCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[FileBrowser];
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
@@ -7593,11 +6615,11 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 /************* Check if a folder from a file browser is expanded *************/
 /*****************************************************************************/
 
-static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
+static bool Brw_DB_GetIfExpandedTree (const char Path[PATH_MAX + 1])
   {
    bool Expanded;
-   long Cod = Brw_GetCodForExpandedFolders ();
-   long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Get if a folder is expanded from database *****/
@@ -7640,58 +6662,6 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
 				 (unsigned) FileBrowserForExpandedFolders,
 				 Path) != 0);
    return Expanded;
-  }
-
-/*****************************************************************************/
-/**** Get code of institution, degree, course, group for expanded folders ****/
-/*****************************************************************************/
-
-static long Brw_GetCodForExpandedFolders (void)
-  {
-   switch (Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type])
-     {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-	 return Gbl.Hierarchy.Ins.InsCod;
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-	 return Gbl.Hierarchy.Ctr.CtrCod;
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-	 return Gbl.Hierarchy.Deg.DegCod;
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_WRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-	 return Gbl.Hierarchy.Crs.CrsCod;
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_ADMI_MRK_GRP:
-	 return Gbl.Crs.Grps.GrpCod;
-      default:
-         return -1L;
-     }
-  }
-
-/*****************************************************************************/
-/******** Get code of user in assignment / works for expanded folders ********/
-/*****************************************************************************/
-
-static long Brw_GetWorksUsrCodForExpandedFolders (void)
-  {
-   switch (Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type])
-     {
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_CRS:
-	 return Gbl.Usrs.Other.UsrDat.UsrCod;
-      default:
-         return -1L;
-     }
   }
 
 /*****************************************************************************/
@@ -8812,11 +7782,11 @@ void Brw_RenFolderFileBrowser (void)
         	                                Gbl.Usrs.Other.UsrDat.UsrCod);
 
                /* Remove affected expanded folders */
-               Brw_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
-        	                                  Gbl.Usrs.Me.UsrDat.UsrCod,
-        	                                  Gbl.Usrs.Other.UsrDat.UsrCod,
-        	                                  OldPathInTree,
-        	                                  NewPathInTree);
+               Brw_DB_RenameAffectedExpandedFolders (Gbl.FileBrowser.Type,
+        	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
+        	                                     Gbl.Usrs.Other.UsrDat.UsrCod,
+        	                                     OldPathInTree,
+        	                                     NewPathInTree);
 
                /* Write message of confirmation */
                Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_name_X_has_changed_to_Y,
@@ -9355,8 +8325,8 @@ void Brw_SetDocumentAsHidden (void)
 
 bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path)
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool IsHidden = false;
@@ -10057,7 +9027,7 @@ static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod)
 	}
       else									// The file has no publisher
 	{
-	 ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+	 ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 	 if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
 	     ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
 	    return true;
@@ -10364,8 +9334,8 @@ static Brw_License_t Brw_GetParLicense (void)
 
 long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Get code of a file from database *****/
    return DB_QuerySELECTCode ("can not get file code",
@@ -10392,8 +9362,8 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
@@ -10892,8 +9862,8 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
 
 static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Get if a file or folder is public from database *****/
    return (DB_QueryCOUNT ("can not check if a folder contains public files",
@@ -10952,8 +9922,8 @@ unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod)
 
 static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool IsHidden)
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Mark file as hidden in database *****/
    DB_QueryUPDATE ("can not change status of a file in database",
@@ -10977,8 +9947,8 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
 static void Brw_ChangeFilePublicInDB (struct FileMetadata *FileMetadata,
                                       bool IsPublic,Brw_License_t License)
   {
-   long Cod        = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Trivial check *****/
    if (FileMetadata->FilCod <= 0)
@@ -11001,61 +9971,6 @@ static void Brw_ChangeFilePublicInDB (struct FileMetadata *FileMetadata,
 	           Cod,ZoneUsrCod,
 	           FileMetadata->FilCod,
 	           FileMetadata->FilFolLnk.Full);
-  }
-
-/*****************************************************************************/
-/**** Get code of institution, degree, course, group for expanded folders ****/
-/*****************************************************************************/
-
-long Brw_GetCodForFiles (void)
-  {
-   switch (Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type])
-     {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-	 return Gbl.Hierarchy.Ins.InsCod;
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-	 return Gbl.Hierarchy.Ctr.CtrCod;
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-	 return Gbl.Hierarchy.Deg.DegCod;
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_MRK_CRS:
-	 return Gbl.Hierarchy.Crs.CrsCod;
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_ADMI_MRK_GRP:
-	 return Gbl.Crs.Grps.GrpCod;
-      case Brw_ADMI_DOC_PRJ:
-      case Brw_ADMI_ASS_PRJ:
-	 return Prj_GetPrjCod ();
-      default:
-         return -1L;
-     }
-  }
-
-/*****************************************************************************/
-/******** Get code of user in assignment / works for expanded folders ********/
-/*****************************************************************************/
-
-static long Brw_GetZoneUsrCodForFiles (void)
-  {
-   if (Brw_GetIfBriefcaseFileBrowser ())	// Briefcase
-      return Gbl.Usrs.Me.UsrDat.UsrCod;
-
-   if (Brw_GetIfUsrAssigWorksFileBrowser ())	// My assignments or works
-      return Gbl.Usrs.Me.UsrDat.UsrCod;
-
-   if (Brw_GetIfCrsAssigWorksFileBrowser ())	// Course assignments or works
-      return Gbl.Usrs.Other.UsrDat.UsrCod;
-
-   return -1L;
   }
 
 /*****************************************************************************/
@@ -11166,8 +10081,8 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
 long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
                       const char *FullPathInTree,bool IsPublic,Brw_License_t License)
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Add path to the database *****/
    return
@@ -11194,8 +10109,8 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
@@ -11247,8 +10162,8 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
 
 static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
@@ -11301,8 +10216,8 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
 static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
                                      const char NewPath[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Update file or folder in table of common files *****/
    DB_QueryUPDATE ("can not update folder name in a common zone",
@@ -11325,8 +10240,8 @@ static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
 static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 1],
                                                   const char NewPath[PATH_MAX + 1])
   {
-   long Cod = Brw_GetCodForFiles ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
    /***** Update children of a folder in table of files *****/
@@ -11681,7 +10596,7 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
 
 static long Brw_GetPublisherOfSubtree (void)
   {
-   long Cod = Brw_GetCodForFiles ();
+   long Cod = Brw_GetCodForFileBrowser ();
 
    /***** Get all common files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
@@ -11739,7 +10654,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
    Ntf_DB_MarkNotifFilesInGroupAsRemoved (GrpCod);
 
    /***** Remove files in the group from database *****/
-   Brw_RemoveGrpFilesFromDB (GrpCod);
+   Brw_DB_RemoveGrpFiles (GrpCod);
 
    /***** Remove group zones *****/
    snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),"%s/%ld/grp/%ld",
@@ -11756,7 +10671,7 @@ void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Crs_Course *Crs)
    char PathUsrInCrs[PATH_MAX + 1];
 
    /***** Remove user's works in the course from database *****/
-   Brw_RemoveWrkFilesFromDB (Crs->CrsCod,UsrDat->UsrCod);
+   Brw_DB_RemoveWrkFiles (Crs->CrsCod,UsrDat->UsrCod);
 
    /***** Remove the folder for this user inside the course *****/
    snprintf (PathUsrInCrs,sizeof (PathUsrInCrs),"%s/%ld/usr/%02u/%ld",
@@ -12471,7 +11386,7 @@ static int Brw_RemoveFolderFromDiskAndDB (const char Path[PATH_MAX + 1],
       Brw_RemoveOneFileOrFolderFromDB (FullPathInTree);
 
       /***** Remove affected expanded folders *****/
-      Brw_RemoveAffectedExpandedFolders (FullPathInTree);
+      Brw_DB_RemoveAffectedExpandedFolders (FullPathInTree);
      }
 
    return Result;

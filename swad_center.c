@@ -31,6 +31,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_admin_database.h"
+#include "swad_browser_database.h"
 #include "swad_center.h"
 #include "swad_center_config.h"
 #include "swad_center_database.h"
