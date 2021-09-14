@@ -105,6 +105,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_API.h"
 #include "swad_attendance_database.h"
 #include "swad_browser.h"
+#include "swad_browser_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_forum.h"
@@ -5623,7 +5624,7 @@ static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
-	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FilFolLnk.Type,
+	 FileMetadata.FilCod = Brw_DB_AddPath (-1L,FileMetadata.FilFolLnk.Type,
 	                                        Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;

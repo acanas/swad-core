@@ -33,6 +33,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_call_for_exam.h"
 #include "swad_config.h"
 #include "swad_config.h"
@@ -51,6 +52,7 @@
 #include "swad_message.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_survey.h"
 #include "swad_timeline.h"
@@ -965,7 +967,6 @@ void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,lon
 
 void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
-   /***** Set notification as removed *****/
    DB_QueryUPDATE ("can not set notification(s) as removed",
 		   "UPDATE ntf_notifications"
 		     " SET Status=(Status | %u)"
@@ -1105,7 +1106,6 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   long Cod = Brw_GetCodForFileBrowser ();
    Ntf_NotifyEvent_t NotifyEvent;
 
    switch (FileBrowser)
@@ -1140,20 +1140,9 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 	    default:
 	       return;
 	   }
-	 DB_QueryUPDATE ("can not set notification(s) as removed",
-			 "UPDATE ntf_notifications"
-			   " SET Status=(Status | %u)"
-			 " WHERE NotifyEvent=%u"
-			   " AND Cod IN"
-			       " (SELECT FilCod"
-				  " FROM brw_files"
-				 " WHERE FileBrowser=%u"
-				   " AND Cod=%ld"
-				   " AND Path LIKE '%s/%%')",
-		         (unsigned) Ntf_STATUS_BIT_REMOVED,
-		         (unsigned) NotifyEvent,
-		         (unsigned) FileBrowser,Cod,
-		         Path);
+	 Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent,FileBrowser,
+                                                    Brw_GetCodForFileBrowser (),
+                                                    Path);
          break;
       default:
 	 break;

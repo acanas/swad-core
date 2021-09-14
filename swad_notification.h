@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+// #include "swad_browser.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -123,6 +124,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     bool GetContent);
 void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod);
 void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
+
 void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod);
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path);

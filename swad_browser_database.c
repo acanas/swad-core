@@ -166,6 +166,36 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYP
 /*****************************************************************************/
 
 /*****************************************************************************/
+/**************** Add a path of file/folder to the database ******************/
+/*****************************************************************************/
+
+long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
+                     const char *FullPathInTree,bool IsPublic,Brw_License_t License)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+
+   /***** Add path to the database *****/
+   return
+   DB_QueryINSERTandReturnCode ("can not add path to database",
+				"INSERT INTO brw_files"
+				" (FileBrowser,Cod,ZoneUsrCod,PublisherUsrCod,"
+				  "FileType,Path,Hidden,Public,License)"
+				" VALUES"
+				" (%u,%ld,%ld,%ld,"
+				  "%u,'%s','N','%c',%u)",
+				(unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+				Cod,ZoneUsrCod,
+				PublisherUsrCod,
+				(unsigned) FileType,
+				FullPathInTree,
+				IsPublic ? 'Y' :
+					   'N',
+				(unsigned) License);
+  }
+
+/*****************************************************************************/
 /*********************** Get file code using its path ************************/
 /*****************************************************************************/
 // Path is the full path in tree
@@ -269,6 +299,114 @@ unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
 		  UsrCod,
 		  (unsigned) Brw_IS_FILE,
 		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+  }
+
+/*****************************************************************************/
+/**************** Remove a file or folder from the database ******************/
+/*****************************************************************************/
+
+void Brw_DB_RemoveOneFileOrFolder (const char Path[PATH_MAX + 1])
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+
+   /***** Remove from database the entries that store the marks properties *****/
+   if (FileBrowser == Brw_ADMI_MRK_CRS ||
+       FileBrowser == Brw_ADMI_MRK_GRP)
+      DB_QueryDELETE ("can not remove properties of marks from database",
+		      "DELETE FROM mrk_marks"
+		      " USING brw_files,"
+		             "mrk_marks"
+		      " WHERE brw_files.FileBrowser=%u"
+		        " AND brw_files.Cod=%ld"
+		        " AND brw_files.Path='%s'"
+		        " AND brw_files.FilCod=mrk_marks.FilCod",
+	              (unsigned) FileBrowser,
+	              Cod,
+	              Path);
+
+   /***** Remove from database the entries that store the file views *****/
+   DB_QueryDELETE ("can not remove file views from database",
+		  "DELETE FROM brw_views"
+		  " USING brw_files,"
+		         "brw_views"
+		  " WHERE brw_files.FileBrowser=%u"
+		    " AND brw_files.Cod=%ld"
+		    " AND brw_files.ZoneUsrCod=%ld"
+		    " AND brw_files.Path='%s'"
+		    " AND brw_files.FilCod=brw_views.FilCod",
+	          (unsigned) FileBrowser,
+	          Cod,
+	          ZoneUsrCod,
+	          Path);
+
+   /***** Remove from database the entry that stores the data of a file *****/
+   DB_QueryDELETE ("can not remove path from database",
+		   "DELETE FROM brw_files"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
+	           (unsigned) FileBrowser,
+	           Cod,
+	           ZoneUsrCod,
+	           Path);
+  }
+
+/*****************************************************************************/
+/************** Remove children of a folder from the database ****************/
+/*****************************************************************************/
+
+void Brw_DB_RemoveChildrenOfFolder (const char Path[PATH_MAX + 1])
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+
+   /***** Remove from database the entries that store the marks properties *****/
+   if (FileBrowser == Brw_ADMI_MRK_CRS ||
+       FileBrowser == Brw_ADMI_MRK_GRP)
+      DB_QueryDELETE ("can not remove properties of marks from database",
+		      "DELETE FROM mrk_marks"
+		      " USING brw_files,"
+		             "mrk_marks"
+		      " WHERE brw_files.FileBrowser=%u"
+		        " AND brw_files.Cod=%ld"
+		        " AND brw_files.Path LIKE '%s/%%'"
+		        " AND brw_files.FilCod=mrk_marks.FilCod",
+	              (unsigned) FileBrowser,
+	              Cod,
+	              Path);
+
+   /***** Remove from database the entries that store the file views *****/
+   DB_QueryDELETE ("can not remove file views from database",
+		  "DELETE FROM brw_views"
+		  " USING brw_files,"
+		         "brw_views"
+		  " WHERE brw_files.FileBrowser=%u"
+		    " AND brw_files.Cod=%ld"
+		    " AND brw_files.ZoneUsrCod=%ld"
+		    " AND brw_files.Path LIKE '%s/%%'"
+		    " AND brw_files.FilCod=brw_views.FilCod",
+                  (unsigned) FileBrowser,
+                  Cod,
+                  ZoneUsrCod,
+                  Path);
+
+   /***** Remove from database the entries that store the data of files *****/
+   DB_QueryDELETE ("can not remove paths from database",
+		   "DELETE FROM brw_files"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path LIKE '%s/%%'",
+                   (unsigned) FileBrowser,
+                   Cod,
+                   ZoneUsrCod,
+                   Path);
   }
 
 /*****************************************************************************/
@@ -1089,6 +1227,41 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
   }
 
 /*****************************************************************************/
+/************ Change public and license of file in the database **************/
+/*****************************************************************************/
+
+void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
+                              bool IsPublic,Brw_License_t License)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+
+   /***** Trivial check *****/
+   if (FileMetadata->FilCod <= 0)
+      return;
+
+   /***** Change publisher, public and license of file in database *****/
+   DB_QueryUPDATE ("can not change metadata of a file in database",
+		   "UPDATE brw_files"
+		     " SET Public='%c',"
+		          "License=%u"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND FilCod=%ld"
+		     " AND Path='%s'",
+	           IsPublic ? 'Y' :
+			      'N',
+	           (unsigned) License,
+	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           Cod,
+	           ZoneUsrCod,
+	           FileMetadata->FilCod,
+	           FileMetadata->FilFolLnk.Full);
+  }
+
+/*****************************************************************************/
 /*********** Check if a folder contains file(s) marked as public *************/
 /*****************************************************************************/
 
@@ -1420,6 +1593,32 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
 			    " FROM brw_views"
 			   " WHERE UsrCod=%ld",
 			   UsrCod);
+  }
+
+/*****************************************************************************/
+/***************** Change hiddeness of file in the database ******************/
+/*****************************************************************************/
+
+void Brw_DB_ChangeFileOrFolderHidden (const char Path[PATH_MAX + 1],bool IsHidden)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+
+   /***** Mark file as hidden/unhidden in database *****/
+   DB_QueryUPDATE ("can not change status of a file in database",
+		   "UPDATE brw_files"
+		     " SET Hidden='%c'"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
+	           IsHidden ? 'Y' :
+			      'N',
+	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           Cod,
+	           ZoneUsrCod,
+	           Path);
   }
 
 /*****************************************************************************/

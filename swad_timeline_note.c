@@ -31,6 +31,7 @@
 
 #include "swad_alert.h"
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_call_for_exam.h"
 #include "swad_course.h"
 #include "swad_forum.h"
@@ -1044,8 +1045,8 @@ void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 	    default:
 	       return;
 	   }
-         Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (NoteType,
-                                                        FileBrowser,Brw_GetCodForFileBrowser (),
+         Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (NoteType,FileBrowser,
+                                                        Brw_GetCodForFileBrowser (),
                                                         Path);
          break;
       default:

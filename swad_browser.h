@@ -225,10 +225,6 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
                                     long *CrsCod,
                                     long *GrpCod);
 
-long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
-                      const char *FullPathInTree,
-                      bool IsPublic,Brw_License_t License);
-
 bool Brw_CheckIfICanViewProjectFiles (long PrjCod);
 
 long Brw_GetCodForFileBrowser (void);

@@ -38,6 +38,7 @@
 
 #include "swad_box.h"
 #include "swad_browser.h"
+#include "swad_browser_database.h"
 #include "swad_config.h"
 #include "swad_error.h"
 #include "swad_form.h"
