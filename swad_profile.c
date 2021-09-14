@@ -32,6 +32,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_error.h"

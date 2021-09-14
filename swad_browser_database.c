@@ -166,36 +166,109 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYP
 /*****************************************************************************/
 
 /*****************************************************************************/
-/*********************** Get folders of assignments **************************/
+/*********************** Get file code using its path ************************/
 /*****************************************************************************/
-// Get folder of an assignment when:
-// 1. The assignment is visible (not hidden)
-// 2. ...and the folder name is not empty (the teacher has set that the user must send work(s) for that assignment)
-// 3. ...the assignment is not restricted to groups or (if restricted to groups), the owner of zone belong to any of the groups
+// Path is the full path in tree
+// Example: descarga/folder/file.pdf
 
-unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod)
+long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+
+   return DB_QuerySELECTCode ("can not get file code",
+			      "SELECT FilCod"
+			       " FROM brw_files"
+			      " WHERE FileBrowser=%u"
+			        " AND Cod=%ld"
+			        " AND ZoneUsrCod=%ld"
+			        " AND Path='%s'"
+			        "%s",
+			      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			      Cod,
+			      ZoneUsrCod,
+			      Path,
+			      OnlyIfPublic ? " AND Public='Y'" :
+					     "");
+  }
+
+/*****************************************************************************/
+/********************* Get file metadata using its path **********************/
+/*****************************************************************************/
+// This function only gets metadata stored in table files,
+// does not get size, time, numviews...
+
+unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get file metadata",
+		   "SELECT FilCod,"		// row[0]
+			  "FileBrowser,"	// row[1]
+			  "Cod,"		// row[2]
+			  "ZoneUsrCod,"		// row[3]
+			  "PublisherUsrCod,"	// row[4]
+			  "FileType,"		// row[5]
+			  "Path,"		// row[6]
+			  "Hidden,"		// row[7]
+			  "Public,"		// row[8]
+			  "License"		// row[9]
+		    " FROM brw_files"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
+		   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		   Cod,
+		   ZoneUsrCod,
+		   Path);
+  }
+
+/*****************************************************************************/
+/********************* Get file metadata using its code **********************/
+/*****************************************************************************/
+// FileMetadata.FilCod must be filled
+// This function only gets metadata stored in table files,
+// does not get size, time, numviews...
+
+unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get folders of assignments",
-		   "SELECT Folder"		// row[0]
-		    " FROM asg_assignments"
-		   " WHERE CrsCod=%ld"
-		     " AND Hidden='N'"
-		     " AND Folder<>''"
-		     " AND ("
-			   "AsgCod NOT IN"
-			   " (SELECT AsgCod"
-			      " FROM asg_groups)"
-			   " OR "
-			   "AsgCod IN"
-			   " (SELECT asg_groups.AsgCod"
-			      " FROM grp_users,"
-				    "asg_groups"
-			     " WHERE grp_users.UsrCod=%ld"
-			       " AND asg_groups.GrpCod=grp_users.GrpCod)"
-			  ")",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   ZoneUsrCod);
+   DB_QuerySELECT (mysql_res,"can not get file metadata",
+		   "SELECT FilCod,"		// row[0]
+			  "FileBrowser,"	// row[1]
+			  "Cod,"		// row[2]
+			  "ZoneUsrCod,"		// row[3]
+			  "PublisherUsrCod,"	// row[4]
+			  "FileType,"		// row[5]
+			  "Path,"		// row[6]
+			  "Hidden,"		// row[7]
+			  "Public,"		// row[8]
+			  "License"		// row[9]
+		    " FROM brw_files"
+		   " WHERE FilCod=%ld",
+		   FilCod);
+  }
+
+/*****************************************************************************/
+/************ Get current number of files published by a user ****************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of files from a user",
+		  "SELECT COUNT(*)"
+		   " FROM brw_files"
+		  " WHERE PublisherUsrCod=%ld"
+		    " AND FileType IN (%u,%u)",
+		  UsrCod,
+		  (unsigned) Brw_IS_FILE,
+		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
   }
 
 /*****************************************************************************/
@@ -1016,6 +1089,195 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
   }
 
 /*****************************************************************************/
+/*********** Check if a folder contains file(s) marked as public *************/
+/*****************************************************************************/
+
+bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
+  {
+   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   long Cod = Brw_GetCodForFileBrowser ();
+   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
+
+   /***** Get if a file or folder is public from database *****/
+   return (DB_QueryCOUNT ("can not check if a folder contains public files",
+			  "SELECT COUNT(*)"
+			   " FROM brw_files"
+			  " WHERE FileBrowser=%u"
+			    " AND Cod=%ld"
+			    " AND ZoneUsrCod=%ld"
+			    " AND Path LIKE '%s/%%'"
+			    " AND Public='Y'",
+			  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			  Cod,
+			  ZoneUsrCod,
+			  Path) != 0);
+  }
+
+/*****************************************************************************/
+/********** Get current number of public files published by a user ***********/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of public files from a user",
+		  "SELECT COUNT(*)"
+		   " FROM brw_files"
+		  " WHERE PublisherUsrCod=%ld"
+		    " AND FileType IN (%u,%u)"
+		    " AND Public='Y'",
+		  UsrCod,
+		  (unsigned) Brw_IS_FILE,
+		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
+  }
+
+/*****************************************************************************/
+/***************** Get number of OERs depending on license *******************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of OERs",
+			 "SELECT Public,"		// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM brw_files"
+			 " WHERE License=%u"
+			 " GROUP BY Public",
+			 (unsigned) License);
+      case HieLvl_CTY:
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of OERs",
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "brw_files"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 (unsigned) Brw_ADMI_DOC_CRS,
+			 (unsigned) Brw_ADMI_SHR_CRS,
+			 (unsigned) License);
+      case HieLvl_INS:
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of OERs",
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "brw_files"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
+			 Gbl.Hierarchy.Ins.InsCod,
+			 (unsigned) Brw_ADMI_DOC_CRS,
+			 (unsigned) Brw_ADMI_SHR_CRS,
+			 (unsigned) License);
+      case HieLvl_CTR:
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of OERs",
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "brw_files"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 (unsigned) Brw_ADMI_DOC_CRS,
+			 (unsigned) Brw_ADMI_SHR_CRS,
+			 (unsigned) License);
+      case HieLvl_DEG:
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of OERs",
+			 "SELECT brw_files.Public,"	// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM crs_courses,"
+			        "brw_files"
+			 " WHERE crs_courses.DegCod=%ld"
+			   " AND crs_courses.CrsCod=brw_files.Cod"
+			   " AND brw_files.FileBrowser IN (%u,%u)"
+			   " AND brw_files.License=%u"
+			 " GROUP BY brw_files.Public",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 (unsigned) Brw_ADMI_DOC_CRS,
+			 (unsigned) Brw_ADMI_SHR_CRS,
+			 (unsigned) License);
+      case HieLvl_CRS:
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of OERs",
+			 "SELECT Public,"		// row[0]
+			        "COUNT(*)"		// row[1]
+			  " FROM brw_files"
+			 " WHERE Cod=%ld"
+			   " AND FileBrowser IN (%u,%u)"
+			   " AND License=%u"
+			 " GROUP BY Public",
+			 Gbl.Hierarchy.Crs.CrsCod,
+			 (unsigned) Brw_ADMI_DOC_CRS,
+			 (unsigned) Brw_ADMI_SHR_CRS,
+			 (unsigned) License);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Get folders of assignments **************************/
+/*****************************************************************************/
+// Get folder of an assignment when:
+// 1. The assignment is visible (not hidden)
+// 2. ...and the folder name is not empty (the teacher has set that the user must send work(s) for that assignment)
+// 3. ...the assignment is not restricted to groups or (if restricted to groups), the owner of zone belong to any of the groups
+
+unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get folders of assignments",
+		   "SELECT Folder"		// row[0]
+		    " FROM asg_assignments"
+		   " WHERE CrsCod=%ld"
+		     " AND Hidden='N'"
+		     " AND Folder<>''"
+		     " AND ("
+			   "AsgCod NOT IN"
+			   " (SELECT AsgCod"
+			      " FROM asg_groups)"
+			   " OR "
+			   "AsgCod IN"
+			   " (SELECT asg_groups.AsgCod"
+			      " FROM grp_users,"
+				    "asg_groups"
+			     " WHERE grp_users.UsrCod=%ld"
+			       " AND asg_groups.GrpCod=grp_users.GrpCod)"
+			  ")",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   ZoneUsrCod);
+  }
+
+/*****************************************************************************/
 /************ Update the date of my last access to file browser **************/
 /*****************************************************************************/
 
@@ -1070,6 +1332,94 @@ unsigned Brw_DB_GetGrpLastAccFileBrowser (MYSQL_RES **mysql_res,const char *Fiel
 		   FieldNameDB,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*************************** Update file views *******************************/
+/*****************************************************************************/
+
+void Brw_DB_UpdateFileViews (unsigned NumViews,long FilCod)
+  {
+   if (NumViews)
+      /* Update number of views in database */
+      DB_QueryUPDATE ("can not update number of views of a file",
+		      "UPDATE brw_views"
+		        " SET NumViews=NumViews+1"
+		      " WHERE FilCod=%ld"
+		        " AND UsrCod=%ld",
+	              FilCod,
+	              Gbl.Usrs.Me.UsrDat.UsrCod);
+   else	// NumViews == 0
+      /* Insert number of views in database */
+      DB_QueryINSERT ("can not insert number of views of a file",
+		      "INSERT INTO brw_views"
+		      " (FilCod,UsrCod,NumViews)"
+		      " VALUES"
+		      " (%ld,%ld,1)",
+		      FilCod,
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************************** Get file views from me ***************************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetFileViewsFromMe (MYSQL_RES **mysql_res,long FilCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get your number of views of a file",
+		   "SELECT NumViews"	// row[0]
+		    " FROM brw_views"
+		   " WHERE FilCod=%ld"
+		     " AND UsrCod=%ld",
+		   FilCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/******************** Get file views from logged users ***********************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetFileViewsFromLoggedUsrs (MYSQL_RES **mysql_res,long FilCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get number of views of a file"
+			     " from logged users",
+		   "SELECT COUNT(DISTINCT UsrCod),"	// row[0]
+			  "SUM(NumViews)"		// row[1]
+		    " FROM brw_views"
+		   " WHERE FilCod=%ld"
+		     " AND UsrCod>0",
+		   FilCod);
+  }
+
+/*****************************************************************************/
+/******************** Get number of public views of a file *******************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod)
+  {
+   return
+   DB_QuerySELECTUnsigned ("can not get number of public views of a file",
+			   "SELECT SUM(NumViews)"
+			    " FROM brw_views"
+			   " WHERE FilCod=%ld"
+			     " AND UsrCod<=0",
+			   FilCod);
+  }
+
+/*****************************************************************************/
+/******************** Get number of file views from a user *******************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
+  {
+   return
+   DB_QuerySELECTUnsigned ("can not get number of file views",
+			   "SELECT SUM(NumViews)"
+			    " FROM brw_views"
+			   " WHERE UsrCod=%ld",
+			   UsrCod);
   }
 
 /*****************************************************************************/
@@ -2538,118 +2888,5 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
       default:
 	 Err_WrongScopeExit ();
 	 break;
-     }
-  }
-
-/*****************************************************************************/
-/***************** Get number of OERs depending on license *******************/
-/*****************************************************************************/
-
-unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License)
-  {
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get number of OERs",
-			 "SELECT Public,"		// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM brw_files"
-			 " WHERE License=%u"
-			 " GROUP BY Public",
-			 (unsigned) License);
-      case HieLvl_CTY:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "brw_files"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Cty.CtyCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-      case HieLvl_INS:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "brw_files"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Ins.InsCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "brw_files"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Ctr.CtrCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get number of OERs",
-			 "SELECT brw_files.Public,"	// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM crs_courses,"
-			        "brw_files"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=brw_files.Cod"
-			   " AND brw_files.FileBrowser IN (%u,%u)"
-			   " AND brw_files.License=%u"
-			 " GROUP BY brw_files.Public",
-			 Gbl.Hierarchy.Deg.DegCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get number of OERs",
-			 "SELECT Public,"		// row[0]
-			        "COUNT(*)"		// row[1]
-			  " FROM brw_files"
-			 " WHERE Cod=%ld"
-			   " AND FileBrowser IN (%u,%u)"
-			   " AND License=%u"
-			 " GROUP BY Public",
-			 Gbl.Hierarchy.Crs.CrsCod,
-			 (unsigned) Brw_ADMI_DOC_CRS,
-			 (unsigned) Brw_ADMI_SHR_CRS,
-			 (unsigned) License);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
      }
   }

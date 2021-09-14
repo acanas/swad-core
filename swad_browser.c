@@ -1330,10 +1330,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 static bool Brw_GetParamPublicFile (void);
 static Brw_License_t Brw_GetParLicense (void);
 static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata);
-static unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod);
 static unsigned Brw_GetFileViewsFromMe (long FilCod);
-static void Brw_UpdateFileViews (unsigned NumViews,long FilCod);
-static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 
 static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool IsHidden);
 
@@ -4513,8 +4510,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /***** Is this row public or private? *****/
    if (SeeDocsZone || AdminDocsZone || SharedZone)
      {
-      RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
-	                                                             FileMetadata.IsPublic;
+      RowSetAsPublic = (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER) ? Brw_DB_GetIfFolderHasPublicFiles (Gbl.FileBrowser.FilFolLnk.Full) :
+	                                                                   FileMetadata.IsPublic;
       if (Gbl.FileBrowser.ShowOnlyPublicFiles && !RowSetAsPublic)
          return false;
      }
@@ -8244,24 +8241,24 @@ void Brw_ShowFileMetadata (void)
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_DOC_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_TCH_CRS:
 	 case Brw_ADMI_TCH_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
-				   FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_SHR_CRS:
 	 case Brw_ADMI_SHR_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 case Brw_SHOW_MRK_CRS:
 	 case Brw_SHOW_MRK_GRP:
 	 case Brw_ADMI_MRK_CRS:
 	 case Brw_ADMI_MRK_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 default:
 	    break;
@@ -8785,34 +8782,6 @@ static Brw_License_t Brw_GetParLicense (void)
   }
 
 /*****************************************************************************/
-/*********************** Get file code using its path ************************/
-/*****************************************************************************/
-// Path is the full path in tree
-// Example: descarga/folder/file.pdf
-
-long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-
-   /***** Get code of a file from database *****/
-   return DB_QuerySELECTCode ("can not get file code",
-			      "SELECT FilCod"
-			       " FROM brw_files"
-			      " WHERE FileBrowser=%u"
-			        " AND Cod=%ld"
-			        " AND ZoneUsrCod=%ld"
-			        " AND Path='%s'"
-			        "%s",
-			      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			      Cod,
-			      ZoneUsrCod,
-			      Path,
-			      OnlyIfPublic ? " AND Public='Y'" :
-					     "");
-  }
-
-/*****************************************************************************/
 /********************* Get file metadata using its path **********************/
 /*****************************************************************************/
 // This function only gets metadata stored in table files,
@@ -8820,32 +8789,12 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
   {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get file metadata",
-		       "SELECT FilCod,"			// row[0]
-		              "FileBrowser,"		// row[1]
-		              "Cod,"			// row[2]
-		              "ZoneUsrCod,"		// row[3]
-		              "PublisherUsrCod,"	// row[4]
-		              "FileType,"		// row[5]
-		              "Path,"			// row[6]
-		              "Hidden,"			// row[7]
-		              "Public,"			// row[8]
-		              "License"			// row[9]
-		        " FROM brw_files"
-		       " WHERE FileBrowser=%u"
-		         " AND Cod=%ld"
-		         " AND ZoneUsrCod=%ld"
-		         " AND Path='%s'",
-		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		       Cod,ZoneUsrCod,
-		       Gbl.FileBrowser.FilFolLnk.Full))
+   if (Brw_DB_GetFileMetadataByPath (&mysql_res,Gbl.FileBrowser.FilFolLnk.Full))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -8969,20 +8918,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
    unsigned UnsignedNum;
 
    /***** Get metadata of a file from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get file metadata",
-		       "SELECT FilCod,"			// row[0]
-		              "FileBrowser,"		// row[1]
-		              "Cod,"			// row[2]
-		              "ZoneUsrCod,"		// row[3]
-		              "PublisherUsrCod,"	// row[4]
-		              "FileType,"		// row[5]
-		              "Path,"			// row[6]
-		              "Hidden,"			// row[7]
-		              "Public,"			// row[8]
-		              "License"			// row[9]
-		        " FROM brw_files"
-		       " WHERE FilCod=%ld",
-		       FileMetadata->FilCod))
+   if (Brw_DB_GetFileMetadataByCod (&mysql_res,FileMetadata->FilCod))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -9160,7 +9096,7 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
          FileMetadata->NumMyViews = FileMetadata->NumPublicViews;
 
       /***** Update number of my views *****/
-      Brw_UpdateFileViews (FileMetadata->NumMyViews,FileMetadata->FilCod);
+      Brw_DB_UpdateFileViews (FileMetadata->NumMyViews,FileMetadata->FilCod);
 
       /***** Increment number of file views in my user's figures *****/
       if (Gbl.Usrs.Me.Logged)
@@ -9180,21 +9116,7 @@ void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata)
 void Brw_UpdateMyFileViews (long FilCod)
   {
    /***** Update number of my views *****/
-   Brw_UpdateFileViews (Brw_GetFileViewsFromMe (FilCod),FilCod);
-  }
-
-/*****************************************************************************/
-/******************** Get number of file views from a user *******************/
-/*****************************************************************************/
-
-unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
-  {
-   /***** Get number of filw views *****/
-   return DB_QuerySELECTUnsigned ("can not get number of file views",
-				  "SELECT SUM(NumViews)"
-				   " FROM brw_views"
-				  " WHERE UsrCod=%ld",
-				  UsrCod);
+   Brw_DB_UpdateFileViews (Brw_GetFileViewsFromMe (FilCod),FilCod);
   }
 
 /*****************************************************************************/
@@ -9211,14 +9133,7 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
    MYSQL_ROW row;
 
    /***** Get number total of views from logged users *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of views of a file"
-				  " from logged users",
-		       "SELECT COUNT(DISTINCT UsrCod),"	// row[0]
-		              "SUM(NumViews)"		// row[1]
-		        " FROM brw_views"
-		       " WHERE FilCod=%ld"
-		         " AND UsrCod>0",
-		       FileMetadata->FilCod))
+   if (Brw_DB_GetFileViewsFromLoggedUsrs (&mysql_res,FileMetadata->FilCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -9243,21 +9158,6 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
   }
 
 /*****************************************************************************/
-/******************** Get number of public views of a file *******************/
-/*****************************************************************************/
-
-static unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod)
-  {
-   return
-   DB_QuerySELECTUnsigned ("can not get number of public views of a file",
-			   "SELECT SUM(NumViews)"
-			    " FROM brw_views"
-			   " WHERE FilCod=%ld"
-			     " AND UsrCod<=0",
-			   FilCod);
-  }
-
-/*****************************************************************************/
 /************************** Get file views from me ***************************/
 /*****************************************************************************/
 
@@ -9268,12 +9168,7 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
    unsigned NumMyViews;
 
    /***** Get number of my views *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get your number of views of a file",
-		       "SELECT NumViews"	// row[0]
-		        " FROM brw_views"
-		       " WHERE FilCod=%ld"
-		         " AND UsrCod=%ld",
-		       FilCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (Brw_DB_GetFileViewsFromMe (&mysql_res,FilCod))
      {
       /* Get number of my views */
       row = mysql_fetch_row (mysql_res);
@@ -9287,91 +9182,6 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
    DB_FreeMySQLResult (&mysql_res);
 
    return NumMyViews;
-  }
-
-/*****************************************************************************/
-/*************************** Update file views *******************************/
-/*****************************************************************************/
-
-static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
-  {
-   if (NumViews)
-      /* Update number of views in database */
-      DB_QueryUPDATE ("can not update number of views of a file",
-		      "UPDATE brw_views"
-		        " SET NumViews=NumViews+1"
-		      " WHERE FilCod=%ld"
-		        " AND UsrCod=%ld",
-	              FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   else	// NumViews == 0
-      /* Insert number of views in database */
-      DB_QueryINSERT ("can not insert number of views of a file",
-		      "INSERT INTO brw_views"
-		      " (FilCod,UsrCod,NumViews)"
-		      " VALUES"
-		      " (%ld,%ld,1)",
-		      FilCod,
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/*********** Check if a folder contains file(s) marked as public *************/
-/*****************************************************************************/
-
-static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-
-   /***** Get if a file or folder is public from database *****/
-   return (DB_QueryCOUNT ("can not check if a folder contains public files",
-			  "SELECT COUNT(*)"
-			   " FROM brw_files"
-			  " WHERE FileBrowser=%u"
-			    " AND Cod=%ld"
-			    " AND ZoneUsrCod=%ld"
-			    " AND Path LIKE '%s/%%'"
-			    " AND Public='Y'",
-			  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			  Cod,ZoneUsrCod,
-			  Path) != 0);
-  }
-
-/*****************************************************************************/
-/*********************** Get number of files from a user *********************/
-/*****************************************************************************/
-
-unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
-  {
-   /***** Get current number of files published by a user from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of files from a user",
-		  "SELECT COUNT(*)"
-		   " FROM brw_files"
-		  " WHERE PublisherUsrCod=%ld"
-		    " AND FileType IN (%u,%u)",
-		  UsrCod,
-		  (unsigned) Brw_IS_FILE,
-		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
-  }
-
-/*****************************************************************************/
-/******************* Get number of public files from a user ******************/
-/*****************************************************************************/
-
-unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod)
-  {
-   /***** Get current number of public files published by a user from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of public files from a user",
-		  "SELECT COUNT(*)"
-		   " FROM brw_files"
-		  " WHERE PublisherUsrCod=%ld"
-		    " AND FileType IN (%u,%u)"
-		    " AND Public='Y'",
-		  UsrCod,
-		  (unsigned) Brw_IS_FILE,
-		  (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
   }
 
 /*****************************************************************************/

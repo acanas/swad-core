@@ -211,15 +211,11 @@ void Brw_ShowFileMetadata (void);
 void Brw_DownloadFile (void);
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL);
 void Brw_ChgFileMetadata (void);
-long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic);
 void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata);
 void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata);
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
-unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
-unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
-unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 
 long Brw_GetZoneUsrCodForFileBrowser (void);
 void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,

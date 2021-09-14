@@ -47,10 +47,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-//------------------------------- Assignments ---------------------------------
-unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod);
-
 //---------------------------------- Files ------------------------------------
+long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic);
+unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path);
+unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod);
+unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
 void Brw_DB_RemoveInsFiles (long InsCod);
 void Brw_DB_RemoveCtrFiles (long CtrCod);
 void Brw_DB_RemoveDegFiles (long DegCod);
@@ -61,10 +62,25 @@ void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod);
 void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod);
 void Brw_DB_RemoveUsrFiles (long UsrCod);
 
+//------------------------------ Public files ---------------------------------
+bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
+unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
+unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License);
+
+//------------------------------- Assignments ---------------------------------
+unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod);
+
 //--------------------- My last access to file browsers -----------------------
 void Brw_DB_UpdateDateMyLastAccFileBrowser (void);
 unsigned Brw_DB_GetDateMyLastAccFileBrowser (MYSQL_RES **mysql_res);
 unsigned Brw_DB_GetGrpLastAccFileBrowser (MYSQL_RES **mysql_res,const char *FieldNameDB);
+
+//-------------------------------- File views ---------------------------------
+void Brw_DB_UpdateFileViews (unsigned NumViews,long FilCod);
+unsigned Brw_DB_GetFileViewsFromMe (MYSQL_RES **mysql_res,long FilCod);
+unsigned Brw_DB_GetFileViewsFromLoggedUsrs (MYSQL_RES **mysql_res,long FilCod);
+unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod);
+unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 
 //------------------------------- Hidden files --------------------------------
 unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res,
@@ -93,8 +109,5 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 void Brw_DB_StoreSizeOfFileZone (void);
 void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			          Brw_FileBrowser_t FileBrowser);
-
-//-------------------- OERs (Open Educational Resources) ----------------------
-unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
 
 #endif

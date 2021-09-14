@@ -953,7 +953,7 @@ void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path)
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_SHR_CRS:
          /***** Get file code *****/
-	 FilCod = Brw_GetFilCodByPath (Path,true);	// Only if file is public
+	 FilCod = Brw_DB_GetFilCodByPath (Path,true);	// Only if file is public
 	 if (FilCod > 0)
 	   {
 	    /***** Mark possible note as unavailable *****/

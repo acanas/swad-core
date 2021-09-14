@@ -1767,7 +1767,7 @@ static void Fig_GetNumberOfOERs (Brw_License_t License,
 
    /***** Get the size of a file browser *****/
    /* Query database */
-   NumRows = Brw_DB_GetNumberOfOERs (&mysql_res,License);
+   NumRows = Brw_DB_GetNumberOfPublicFiles (&mysql_res,License);
 
    /* Reset values to zero */
    NumFiles[0] = NumFiles[1] = 0L;

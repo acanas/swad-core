@@ -1064,7 +1064,7 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
          /***** Get file code *****/
-	 FilCod = Brw_GetFilCodByPath (Path,false);	// Any file, public or not
+	 FilCod = Brw_DB_GetFilCodByPath (Path,false);	// Any file, public or not
 	 if (FilCod > 0)
 	   {
 	    /***** Set notification as removed *****/
