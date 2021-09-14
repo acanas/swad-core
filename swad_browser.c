@@ -245,76 +245,6 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_clipboard[Brw_NUM_TYPES_FILE
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 
-// Browsers types for database "expanded_folders" table
-static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
-
-// Browsers types for database "brw_last" table
-// Assignments and works are stored as one in brw_last...
-// ...because a user views them at the same time
-static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
-
 static const bool Brw_FileBrowserIsEditable[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = false,
@@ -1373,18 +1303,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void);
 
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char Path[PATH_MAX + 1]);
 static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void);
-static void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1]);
-static void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
-                                                  long MyUsrCod,long WorksUsrCod,
-                                                  const char *OldPath,const char *NewPath);
-static bool Brw_DB_GetIfExpandedTree (const char Path[PATH_MAX + 1]);
 
-static void Brw_DB_RemoveExpiredClipboards (void);
-static void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
-                                             long MyUsrCod,long WorksUsrCod);
 static void Brw_PasteClipboard (void);
 static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
 static bool Brw_PasteTreeIntoFolder (unsigned Level,
@@ -4272,8 +4191,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    unsigned NumRows;
 
    /***** Get date of last accesss to a file browser from database *****/
-   NumRows = Brw_DB_GetDateMyLastAccFileBrowser (&mysql_res,
-                                                 Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type]);
+   NumRows = Brw_DB_GetDateMyLastAccFileBrowser (&mysql_res);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
       Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialize to a big value in order to show files as old
@@ -4293,7 +4211,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update date of my last access to file browser in this course *****/
-   Brw_DB_UpdateDateMyLastAccFileBrowser (Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type]);
+   Brw_DB_UpdateDateMyLastAccFileBrowser ();
   }
 
 /*****************************************************************************/
@@ -4481,7 +4399,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 			IconSubtree = Brw_ICON_TREE_NOTHING;
 		     else
 			/***** Check if the tree starting at this subdirectory must be expanded *****/
-			IconSubtree = Brw_DB_GetIfExpandedTree (Gbl.FileBrowser.FilFolLnk.Full) ? Brw_ICON_TREE_CONTRACT :
+			IconSubtree = Brw_DB_GetIfExpandedFolder (Gbl.FileBrowser.FilFolLnk.Full) ? Brw_ICON_TREE_CONTRACT :
 												    Brw_ICON_TREE_EXPAND;
 		     for (NumFileInSubdir = 0;
 			  NumFileInSubdir < NumFilesInSubdir;
@@ -6346,7 +6264,7 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char 
      {
       if ((Ptr = strrchr (CopyOfPath,'/')))	// If '/' found (backwards from the end)
 	{
-	 if (!Brw_DB_GetIfExpandedTree (CopyOfPath))
+	 if (!Brw_DB_GetIfExpandedFolder (CopyOfPath))
 	    Brw_DB_InsertFolderInExpandedFolders (CopyOfPath);
 	 // Now Ptr points to the last '/' in SubPath
 	 *Ptr = '\0';	// Substitute '/' for '\0' to shorten CopyOfPath
@@ -6370,425 +6288,6 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (const char P
 
    /***** Update paths of the current file browser in table of expanded folders *****/
    Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders ();
-  }
-
-/*****************************************************************************/
-/************************* Insert path in expanded folders *******************/
-/*****************************************************************************/
-
-static void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-
-   /***** Update path time in table of expanded folders *****/
-   // Path must be stored with final '/'
-   DB_QueryINSERT ("can not expand the content of a folder",
-		   "INSERT INTO brw_expanded"
-		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
-		   " VALUES"
-		   " (%ld,%u,%ld,%ld,'%s/',NOW())",
-	           Gbl.Usrs.Me.UsrDat.UsrCod,
-	           (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
-	           Cod,WorksUsrCod,
-	           Path);
-  }
-
-/*****************************************************************************/
-/******* Update paths of the current file browser in expanded folders ********/
-/*****************************************************************************/
-
-static void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
-
-   /***** Update click time in table of expanded folders *****/
-   if (Cod > 0)
-     {
-      if (WorksUsrCod > 0)
-	 DB_QueryUPDATE ("can not update expanded folder",
-			 "UPDATE brw_expanded"
-			   " SET ClickTime=NOW()"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld",
-		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) FileBrowserForExpandedFolders,
-		         Cod,
-		         WorksUsrCod);
-      else
-	 DB_QueryUPDATE ("can not update expanded folder",
-			 "UPDATE brw_expanded"
-			   " SET ClickTime=NOW()"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld",
-		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) FileBrowserForExpandedFolders,
-		         Cod);
-     }
-   else	// Briefcase
-      DB_QueryUPDATE ("can not update expanded folder",
-		      "UPDATE brw_expanded"
-		        " SET ClickTime=NOW()"
-		      " WHERE UsrCod=%ld"
-		        " AND FileBrowser=%u",
-	              Gbl.Usrs.Me.UsrDat.UsrCod,
-	              (unsigned) FileBrowserForExpandedFolders);
-  }
-
-/*****************************************************************************/
-/********************** Remove path from expanded folders ********************/
-/*****************************************************************************/
-
-static void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
-
-   /***** Remove expanded folders associated to a file browser *****/
-   if (Cod > 0)
-     {
-      if (WorksUsrCod > 0)
-         DB_QueryDELETE ("can not contract the content of a folder",
-			 "DELETE FROM brw_expanded"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld"
-			   " AND Path='%s/'",
-		         Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
-		         Cod,WorksUsrCod,Path);
-      else
-	 DB_QueryDELETE ("can not contract the content of a folder",
-		         "DELETE FROM brw_expanded"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND Path='%s/'",
-		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) FileBrowserForExpandedFolders,
-		         Cod,Path);
-     }
-   else	// Briefcase
-      DB_QueryDELETE ("can not contract the content of a folder",
-		      "DELETE FROM brw_expanded"
-		      " WHERE UsrCod=%ld"
-		        " AND FileBrowser=%u"
-		        " AND Path='%s/'",
-	              Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
-	              Path);
-  }
-
-/*****************************************************************************/
-/***** Remove expanded folders with paths from a course or from a user *******/
-/*****************************************************************************/
-
-static void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
-
-   /***** Remove expanded folders associated to a file browser from a course or from a user *****/
-   if (Cod > 0)
-     {
-      if (WorksUsrCod > 0)
-         DB_QueryDELETE ("can not remove expanded folders",
-			 "DELETE FROM brw_expanded"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld"
-			   " AND Path LIKE '%s/%%'",
-		         Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
-		         Cod,WorksUsrCod,Path);
-      else
-         DB_QueryDELETE ("can not remove expanded folders",
-			 "DELETE FROM brw_expanded"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND Path LIKE '%s/%%'",
-		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) FileBrowserForExpandedFolders,
-		         Cod,Path);
-     }
-   else	// Briefcase
-      DB_QueryDELETE ("can not remove expanded folders",
-		      "DELETE FROM brw_expanded"
-		      " WHERE UsrCod=%ld"
-		        " AND FileBrowser=%u"
-		        " AND Path LIKE '%s/%%'",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      (unsigned) FileBrowserForExpandedFolders,
-		      Path);
-  }
-
-/*****************************************************************************/
-/***** Remove expanded folders with paths from a course or from a user *******/
-/*****************************************************************************/
-
-static void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
-                                                  long MyUsrCod,long WorksUsrCod,
-                                                  const char *OldPath,const char *NewPath)
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[FileBrowser];
-   unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
-
-   /***** Update expanded folders associated to a file browser from a course or from a user *****/
-   if (Cod > 0)
-     {
-      if (MyUsrCod > 0)
-	{
-	 if (WorksUsrCod > 0)
-	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded"
-			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			    " WHERE UsrCod=%ld"
-			      " AND FileBrowser=%u"
-			      " AND Cod=%ld"
-			      " AND WorksUsrCod=%ld"
-			      " AND Path LIKE '%s/%%'",
-		            NewPath,StartFinalSubpathNotChanged,
-		            MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
-		            Cod,WorksUsrCod,
-		            OldPath);
-	 else
-	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded"
-			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			    " WHERE UsrCod=%ld"
-			      " AND FileBrowser=%u"
-			      " AND Cod=%ld"
-			      " AND Path LIKE '%s/%%'",
-		            NewPath,StartFinalSubpathNotChanged,
-		            MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
-		            Cod,
-		            OldPath);
-	}
-      else	// MyUsrCod <= 0 means expanded folders for any user
-	{
-	 if (WorksUsrCod > 0)
-	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded"
-			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			    " WHERE FileBrowser=%u"
-			      " AND Cod=%ld"
-			      " AND WorksUsrCod=%ld"
-			      " AND Path LIKE '%s/%%'",
-		            NewPath,StartFinalSubpathNotChanged,
-		            (unsigned) FileBrowserForExpandedFolders,Cod,
-		            WorksUsrCod,
-		            OldPath);
-	 else
-	    DB_QueryUPDATE ("can not update expanded folders",
-			    "UPDATE brw_expanded"
-			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			    " WHERE FileBrowser=%u"
-			      " AND Cod=%ld"
-			      " AND Path LIKE '%s/%%'",
-			    NewPath,StartFinalSubpathNotChanged,
-			    (unsigned) FileBrowserForExpandedFolders,Cod,
-			    OldPath);
-	}
-     }
-   else	// Briefcase
-      DB_QueryUPDATE ("can not update expanded folders",
-		      "UPDATE brw_expanded"
-		        " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-		      " WHERE UsrCod=%ld"
-		        " AND FileBrowser=%u"
-		        " AND Path LIKE '%s/%%'",
-	              NewPath,StartFinalSubpathNotChanged,
-	              MyUsrCod,
-	              (unsigned) FileBrowserForExpandedFolders,
-	              OldPath);
-  }
-
-/*****************************************************************************/
-/************* Check if a folder from a file browser is expanded *************/
-/*****************************************************************************/
-
-static bool Brw_DB_GetIfExpandedTree (const char Path[PATH_MAX + 1])
-  {
-   bool Expanded;
-   long Cod = Brw_GetCodForFileBrowser ();
-   long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
-
-   /***** Get if a folder is expanded from database *****/
-   if (Cod > 0)
-     {
-      if (WorksUsrCod > 0)
-         Expanded = (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				    "SELECT COUNT(*)"
-				     " FROM brw_expanded"
-				    " WHERE UsrCod=%ld"
-				      " AND FileBrowser=%u"
-				      " AND Cod=%ld"
-				      " AND WorksUsrCod=%ld"
-				      " AND Path='%s/'",
-				    Gbl.Usrs.Me.UsrDat.UsrCod,
-				    (unsigned) FileBrowserForExpandedFolders,
-				    Cod,WorksUsrCod,
-				    Path) != 0);
-      else
-         Expanded = (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				    "SELECT COUNT(*)"
-				     " FROM brw_expanded"
-				    " WHERE UsrCod=%ld"
-				      " AND FileBrowser=%u"
-				      " AND Cod=%ld"
-				      " AND Path='%s/'",
-				    Gbl.Usrs.Me.UsrDat.UsrCod,
-				    (unsigned) FileBrowserForExpandedFolders,
-				    Cod,
-				    Path) != 0);
-     }
-   else	// Briefcase
-      Expanded = (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				 "SELECT COUNT(*)"
-				  " FROM brw_expanded"
-				 " WHERE UsrCod=%ld"
-				   " AND FileBrowser=%u"
-				   " AND Path='%s/'",
-				 Gbl.Usrs.Me.UsrDat.UsrCod,
-				 (unsigned) FileBrowserForExpandedFolders,
-				 Path) != 0);
-   return Expanded;
-  }
-
-/*****************************************************************************/
-/************* Remove expired expanded folders (from all users) **************/
-/*****************************************************************************/
-
-void Brw_DB_RemoveExpiredExpandedFolders (void)
-  {
-   /***** Remove all expired clipboards *****/
-   DB_QueryDELETE ("can not remove old expanded folders",
-		   "DELETE LOW_PRIORITY FROM brw_expanded"
-		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS);
-  }
-
-/*****************************************************************************/
-/****************** Remove expired clipboards (from all users) ***************/
-/*****************************************************************************/
-
-static void Brw_DB_RemoveExpiredClipboards (void)
-  {
-   /***** Remove all expired clipboards *****/
-   DB_QueryDELETE ("can not remove old paths from clipboard",
-		   "DELETE LOW_PRIORITY FROM brw_clipboards"
-		   " WHERE CopyTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD);
-  }
-
-/*****************************************************************************/
-/********* Remove clipboards with paths from a course or from a user *********/
-/*****************************************************************************/
-
-static void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
-                                             long MyUsrCod,long WorksUsrCod)
-  {
-   /***** Remove clipboards associated to a file browser
-          from a course or from a user *****/
-   switch (FileBrowser)
-     {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld",
-			 (unsigned) FileBrowser,
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld",
-                         (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld",
-                         (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_MRK_CRS:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld",
-                         (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_ADMI_MRK_GRP:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld",
-                         (unsigned) FileBrowser,
-                         Gbl.Crs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_WRK_USR:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u"
-			   " AND Cod=%ld",
-                         MyUsrCod,(unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_CRS:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld",
-                         (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.CrsCod,WorksUsrCod);
-         break;
-      case Brw_ADMI_DOC_PRJ:
-      case Brw_ADMI_ASS_PRJ:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE FileBrowser=%u"
-			   " AND Cod=%ld",
-                         (unsigned) FileBrowser,
-                         Prj_GetPrjCod ());
-	 break;
-      case Brw_ADMI_BRF_USR:
-         DB_QueryDELETE ("can not remove source of copy",
-			 "DELETE FROM brw_clipboards"
-			 " WHERE UsrCod=%ld"
-			   " AND FileBrowser=%u",
-                         MyUsrCod,(unsigned) FileBrowser);
-         break;
-      default:
-         break;
-     }
   }
 
 /*****************************************************************************/
@@ -7028,7 +6527,7 @@ static void Brw_PasteClipboard (void)
             Brw_GetFileMetadataByCod (&FileMetadata);
 
 	    /* Notify only is destination folder is visible */
-	    if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
+	    if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
 	       switch (Gbl.FileBrowser.Type)
 		 {
 		  case Brw_ADMI_DOC_CRS:
@@ -7998,7 +7497,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                               Mrk_DB_AddMarks (FileMetadata.FilCod,&Marks);
 
                            /* Notify new file */
-			   if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
+			   if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
 			      switch (Gbl.FileBrowser.Type)
 				{
 				 case Brw_ADMI_DOC_CRS:
@@ -8170,7 +7669,7 @@ void Brw_RecLinkFileBrowser (void)
 		     Brw_GetFileMetadataByCod (&FileMetadata);
 
 		     /* Notify new file */
-		     if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
+		     if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
 			switch (Gbl.FileBrowser.Type)
 			  {
 			   case Brw_ADMI_DOC_CRS:
@@ -8325,23 +7824,12 @@ void Brw_SetDocumentAsHidden (void)
 
 bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const char *Path)
   {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool IsHidden = false;
 
    /***** Get if a file or folder is hidden from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not check if a file is hidden",
-		       "SELECT Hidden"		// row[0]
-		        " FROM brw_files"
-		       " WHERE FileBrowser=%u"
-		         " AND Cod=%ld"
-		         " AND ZoneUsrCod=%ld"
-		         " AND Path='%s'",
-		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		       Cod,ZoneUsrCod,
-		       Path))
+   if (Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (&mysql_res,Path))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -8357,36 +7845,6 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
    DB_FreeMySQLResult (&mysql_res);
 
    return IsHidden;
-  }
-
-/*****************************************************************************/
-/******** Check if a file / folder from the documents zone is hidden *********/
-/*****************************************************************************/
-
-bool Brw_DB_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
-  {
-   /***** Get if a file or folder is under a hidden folder from database *****/
-   /*
-      The argument Path passed to this function is hidden if:
-      1) the argument Path is exactly the same as a path stored in database
-         or
-      2) the argument Path begins by 'x/', where x is a path stored in database
-   */
-   return (DB_QueryCOUNT ("can not check if a file or folder is hidden",
-			  "SELECT COUNT(*)"
-			   " FROM brw_files"
-			  " WHERE FileBrowser=%u"
-			    " AND Cod=%ld"
-			    " AND ZoneUsrCod=%ld"
-			    " AND Hidden='Y'"
-			    " AND (Path='%s'"
-			         " OR"
-			         " LOCATE(CONCAT(Path,'/'),'%s')=1)",
-			  FileMetadata->FileBrowser,
-			  FileMetadata->Cod,
-			  FileMetadata->ZoneUsrCod,
-			  FileMetadata->FilFolLnk.Full,
-			  FileMetadata->FilFolLnk.Full) != 0);
   }
 
 /*****************************************************************************/
@@ -8450,20 +7908,20 @@ void Brw_ShowFileMetadata (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+               ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
 	    break;
 	 default:
 	    break;
@@ -8850,20 +8308,20 @@ void Brw_DownloadFile (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+	       ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = !Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata);
+               ICanView = !Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata);
 	    break;
 	 default:
 	    break;
@@ -10902,7 +10360,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    FileMetadata.FilCod = Str_ConvertStrCodToLongCod (row[0]);
    Brw_GetFileMetadataByCod (&FileMetadata);
 
-   if (!Brw_DB_CheckIfFileOrFolderIsHidden (&FileMetadata))
+   if (!Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (&FileMetadata))
      {
       /***** Get institution code (row[2]) *****/
       InsCod = Str_ConvertStrCodToLongCod (row[2]);

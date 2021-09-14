@@ -47,23 +47,10 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Brw_DB_StoreSizeOfFileZone (void);
-
-void Brw_DB_UpdateDateMyLastAccFileBrowser (Brw_FileBrowser_t FileBrowser);
-unsigned Brw_DB_GetDateMyLastAccFileBrowser (MYSQL_RES **mysql_res,
-                                             Brw_FileBrowser_t FileBrowser);
-unsigned Brw_DB_GetGrpLastAccFileBrowser (MYSQL_RES **mysql_res,const char *FieldNameDB);
-
-void Brw_DB_AddPathToClipboards (void);
-void Brw_DB_UpdatePathInClipboard (void);
-unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res);
-
+//------------------------------- Assignments ---------------------------------
 unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod);
 
-void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
-			          Brw_FileBrowser_t FileBrowser);
-unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
-
+//---------------------------------- Files ------------------------------------
 void Brw_DB_RemoveInsFiles (long InsCod);
 void Brw_DB_RemoveCtrFiles (long CtrCod);
 void Brw_DB_RemoveDegFiles (long DegCod);
@@ -73,5 +60,41 @@ void Brw_DB_RemovePrjFiles (long PrjCod);
 void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long CrsCod);
 void Brw_DB_RemoveWrkFiles (long CrsCod,long UsrCod);
 void Brw_DB_RemoveUsrFiles (long UsrCod);
+
+//--------------------- My last access to file browsers -----------------------
+void Brw_DB_UpdateDateMyLastAccFileBrowser (void);
+unsigned Brw_DB_GetDateMyLastAccFileBrowser (MYSQL_RES **mysql_res);
+unsigned Brw_DB_GetGrpLastAccFileBrowser (MYSQL_RES **mysql_res,const char *FieldNameDB);
+
+//------------------------------- Hidden files --------------------------------
+unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res,
+                                                           const char *Path);
+bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct FileMetadata *FileMetadata);
+
+//---------------------------- Expanded folders -------------------------------
+void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1]);
+void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void);
+bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1]);
+void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1]);
+void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1]);
+void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
+                                           long MyUsrCod,long WorksUsrCod,
+                                           const char *OldPath,const char *NewPath);
+
+//------------------------------- Cliboards -----------------------------------
+void Brw_DB_AddPathToClipboards (void);
+void Brw_DB_UpdatePathInClipboard (void);
+unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res);
+void Brw_DB_RemoveExpiredClipboards (void);
+void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
+                                      long MyUsrCod,long WorksUsrCod);
+
+//-------------------------- Size of file zones -------------------------------
+void Brw_DB_StoreSizeOfFileZone (void);
+void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
+			          Brw_FileBrowser_t FileBrowser);
+
+//-------------------- OERs (Open Educational Resources) ----------------------
+unsigned Brw_DB_GetNumberOfOERs (MYSQL_RES **mysql_res,Brw_License_t License);
 
 #endif
