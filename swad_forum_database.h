@@ -27,13 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include "swad_center.h"
-// #include "swad_degree.h"
-// #include "swad_institution.h"
-// #include "swad_notification.h"
-// #include "swad_pagination.h"
-// #include "swad_scope.h"
-// #include "swad_string.h"
+#include "swad_forum.h"
 
 /*****************************************************************************/
 /************************ Public constants and types *************************/
@@ -43,11 +37,20 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//------------------------------- Forums --------------------------------------
+unsigned For_DB_GetNumThrsInForum (const struct For_Forum *Forum);
+unsigned For_DB_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
+                                                 const char *Time);
+void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation);
+
 //------------------------------- Posts ---------------------------------------
 long For_DB_InsertForumPst (long ThrCod,long UsrCod,
                             const char *Subject,const char *Content,
                             long MedCod);
+void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
+                                                   unsigned NumUsrsToBeNotifiedByEMail);
 bool For_DB_GetIfForumPstExists (long PstCod);
+unsigned For_DB_GetNumPostsUsr (long UsrCod);
 unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstCod);
 void For_DB_RemovePst (long PstCod);
 void For_DB_RemoveThreadPsts (long ThrCod);
@@ -55,13 +58,58 @@ void For_DB_RemoveThreadPsts (long ThrCod);
 //------------------------------ Threads --------------------------------------
 long For_DB_InsertForumThread (const struct For_Forums *Forums,
                                long FirstPstCod);
+void For_DB_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
+void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod);
+unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod);
+bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
+long For_DB_GetThrLastPst (long ThrCod);
 void For_DB_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
+unsigned For_DB_GetNumOfWritersInThr (long ThrCod);
+unsigned For_DB_GetNumPstsInThr (long ThrCod);
+unsigned For_DB_GetNumMyPstsInThr (long ThrCod);
+unsigned For_DB_GetNumPstsInThrNewerThan (long ThrCod,const char *Time);
 void For_DB_RemoveThread (long ThrCod);
+
+//----------------------------- Thread read -----------------------------------
+void For_DB_UpdateThrReadTime (long ThrCod,
+                               time_t CreatTimeUTCOfTheMostRecentPostRead);
+unsigned For_DB_GetNumReadersOfThr (long ThrCod);
+void For_DB_RemoveThrFromReadThrs (long ThrCod);
+void For_DB_RemoveUsrFromReadThrs (long UsrCod);
+
+//-------------------------- Thread clipboard ---------------------------------
+void For_DB_InsertThrInMyClipboard (long ThrCod);
+void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums);
+long For_DB_GetThrInMyClipboard (void);
+void For_DB_RemoveThrFromClipboard (long ThrCod);
+void For_DB_RemoveUsrFromClipboard (long UsrCod);
+void For_DB_RemoveExpiredClipboards (void);
 
 //--------------------------- Disabled posts ----------------------------------
 void For_DB_InsertPstIntoDisabled (long PstCod);
 bool For_DB_GetIfPstIsEnabled (long PstCod);
 void For_DB_RemovePstFromDisabled (long PstCod);
 void For_DB_RemoveDisabledPstsInThread (long ThrCod);
+
+//----------------------------- Statistics ------------------------------------
+unsigned For_DB_GetNumTotalForumsOfType (For_ForumType_t ForumType,
+                                         long CtyCod,
+                                         long InsCod,
+                                         long CtrCod,
+                                         long DegCod,
+                                         long CrsCod);
+unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
+                                               long CtyCod,
+                                               long InsCod,
+                                               long CtrCod,
+                                               long DegCod,
+                                               long CrsCod);
+unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
+                                               long CtyCod,
+                                               long InsCod,
+                                               long CtrCod,
+                                               long DegCod,
+                                               long CrsCod,
+                                               unsigned *NumUsrsToBeNotifiedByEMail);
 
 #endif

@@ -43,7 +43,7 @@
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -1823,7 +1823,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Not_DB_RemoveCrsNotices (CrsCod);
 
       /***** Remove all the threads and posts in forums of the course *****/
-      For_RemoveForums (HieLvl_CRS,CrsCod);
+      For_DB_RemoveForums (HieLvl_CRS,CrsCod);
 
       /***** Remove all surveys in the course *****/
       Svy_RemoveSurveys (HieLvl_CRS,CrsCod);

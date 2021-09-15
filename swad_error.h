@@ -90,6 +90,7 @@ void Err_WrongEventExit (void);
 void Err_WrongAnnouncementExit (void);
 void Err_WrongNoticeExit (void);
 void Err_WrongForumExit (void);
+void Err_WrongThreadExit (void);
 void Err_WrongPostExit (void);
 void Err_WrongMessageExit (void);
 void Err_WrongMailDomainExit (void);

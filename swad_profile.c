@@ -39,7 +39,7 @@
 #include "swad_figure.h"
 #include "swad_follow_database.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"

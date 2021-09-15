@@ -35,7 +35,7 @@
 #include "swad_department.h"
 #include "swad_error.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
@@ -1452,7 +1452,7 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
 
    /***** Indicator #3: information about online tutoring *****/
    IndicatorsCrs->NumThreads = For_DB_GetNumTotalThrsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod);
-   IndicatorsCrs->NumPosts   = For_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
+   IndicatorsCrs->NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,CrsCod,&(IndicatorsCrs->NumUsrsToBeNotifiedByEMail));
    IndicatorsCrs->NumMsgsSentByTchs = Msg_DB_GetNumMsgsSentByTchsCrs (CrsCod);
    IndicatorsCrs->ThereIsOnlineTutoring = (IndicatorsCrs->NumThreads        != 0) ||
 	                                  (IndicatorsCrs->NumPosts          != 0) ||

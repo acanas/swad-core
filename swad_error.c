@@ -468,6 +468,11 @@ void Err_WrongForumExit (void)
    Err_ShowErrorAndExit ("Wrong forum.");
   }
 
+void Err_WrongThreadExit (void)
+  {
+   Err_ShowErrorAndExit ("Wrong thread.");
+  }
+
 void Err_WrongPostExit (void)
   {
    Err_ShowErrorAndExit ("Wrong post.");

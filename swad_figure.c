@@ -44,6 +44,7 @@
 #include "swad_follow_database.h"
 #include "swad_form.h"
 #include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
@@ -2670,7 +2671,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    /***** Compute number of forums, number of threads and number of posts *****/
    NumForums  = For_DB_GetNumTotalForumsOfType       (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
    NumThreads = For_DB_GetNumTotalThrsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
-   NumPosts   = For_GetNumTotalPstsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
+   NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
    NumThrsPerForum = (NumForums ? (double) NumThreads / (double) NumForums :

@@ -39,7 +39,7 @@
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
@@ -1243,7 +1243,7 @@ void Ins_RemoveInstitution (void)
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
-      For_RemoveForums (HieLvl_INS,Ins_EditingIns->InsCod);
+      For_DB_RemoveForums (HieLvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove surveys of the institution *****/
       Svy_RemoveSurveys (HieLvl_INS,Ins_EditingIns->InsCod);

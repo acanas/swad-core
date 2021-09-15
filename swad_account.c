@@ -44,7 +44,7 @@
 #include "swad_exam_database.h"
 #include "swad_follow.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
@@ -1005,7 +1005,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove user's clipboard in forums *****/
-   For_DB_RemoveUsrFromThrClipboard (UsrDat->UsrCod);
+   For_DB_RemoveUsrFromClipboard (UsrDat->UsrCod);
 
    /***** Remove some files of the user's from database *****/
    Brw_DB_RemoveUsrFiles (UsrDat->UsrCod);

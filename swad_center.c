@@ -41,7 +41,7 @@
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
@@ -1080,7 +1080,7 @@ void Ctr_RemoveCenter (void)
    else	// Center has no degrees or users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the center *****/
-      For_RemoveForums (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
+      For_DB_RemoveForums (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove surveys of the center *****/
       Svy_RemoveSurveys (HieLvl_CTR,Ctr_EditingCtr->CtrCod);

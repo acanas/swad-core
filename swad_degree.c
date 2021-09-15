@@ -42,7 +42,7 @@
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
-#include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_HTML.h"
@@ -1350,7 +1350,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove all the threads and posts in forums of the degree *****/
-   For_RemoveForums (HieLvl_DEG,DegCod);
+   For_DB_RemoveForums (HieLvl_DEG,DegCod);
 
    /***** Remove surveys of the degree *****/
    Svy_RemoveSurveys (HieLvl_DEG,DegCod);
