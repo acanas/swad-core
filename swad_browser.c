@@ -97,40 +97,6 @@ struct Brw_NumObjects
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-// Browsers types for database "files" and "brw_sizes" tables
-const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_USR,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
-
 // Names of root folders
 const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -1334,10 +1300,6 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod);
 
 static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1]);
 static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1]);
-static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
-                                     const char NewPath[PATH_MAX + 1]);
-static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 1],
-                                                  const char NewPath[PATH_MAX + 1]);
 
 static void Brw_SetIfICanEditFileOrFolder (bool Value);
 static bool Brw_GetIfICanEditFileOrFolder (void);
@@ -1350,7 +1312,6 @@ static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod);
 static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod);
 static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void);
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void);
-static long Brw_GetPublisherOfSubtree (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
@@ -7262,10 +7223,10 @@ void Brw_RenFolderFileBrowser (void)
 	       /* If a folder is renamed,
                   it is necessary to rename all the entries in the tables of files
                   that belong to the subtree starting at that folder */
-               Brw_RenameOneFolderInDB (OldPathInTree,
-        	                        NewPathInTree);
-               Brw_RenameChildrenFilesOrFoldersInDB (OldPathInTree,
-        	                                     NewPathInTree);
+               Brw_DB_RenameOneFolder (OldPathInTree,
+        	                       NewPathInTree);
+               Brw_DB_RenameChildrenFilesOrFolders (OldPathInTree,
+        	                                    NewPathInTree);
 
                /* Remove affected clipboards */
                Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -9315,55 +9276,6 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
   }
 
 /*****************************************************************************/
-/*************** Rename a file or folder in table of files *******************/
-/*****************************************************************************/
-
-static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
-                                     const char NewPath[PATH_MAX + 1])
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-
-   /***** Update file or folder in table of common files *****/
-   DB_QueryUPDATE ("can not update folder name in a common zone",
-		   "UPDATE brw_files"
-		     " SET Path='%s'"
-		   " WHERE FileBrowser=%u"
-		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
-		     " AND Path='%s'",
-		   NewPath,
-		   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		   Cod,ZoneUsrCod,
-		   OldPath);
-  }
-
-/*****************************************************************************/
-/************** Rename children of a folder in table of files ****************/
-/*****************************************************************************/
-
-static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 1],
-                                                  const char NewPath[PATH_MAX + 1])
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-   long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
-
-   /***** Update children of a folder in table of files *****/
-   DB_QueryUPDATE ("can not rename file or folder names in a common zone",
-		   "UPDATE brw_files"
-		     " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-		   " WHERE FileBrowser=%u"
-		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
-		     " AND Path LIKE '%s/%%'",
-	           NewPath,StartFinalSubpathNotChanged,
-	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-	           Cod,ZoneUsrCod,
-	           OldPath);
-  }
-
-/*****************************************************************************/
 /********** Check if I have permission to modify a file or folder ************/
 /*****************************************************************************/
 
@@ -9535,7 +9447,7 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
      {
       case Rol_STD:	// If I am a student or a non-editing teacher...
       case Rol_NET:	// ...I can modify the file/folder if I am the publisher
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
+         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -9554,7 +9466,7 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
      {
       case Rol_NET:	// If I am a student or a non-editing teacher...
 			// ...I can modify the file/folder if I am the publisher
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
+         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -9654,7 +9566,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
       case Rol_NET:
 	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
 	 if (MyRolesInProject)	// I am a member
-            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
+            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
 	 return false;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
@@ -9684,7 +9596,7 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
 	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
 	 if ((MyRolesInProject & (1 << Prj_ROLE_TUT |	// Tutor...
 	                          1 << Prj_ROLE_EVL)))	// ...or evaluator
-            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
+            return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
 	 return false;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
@@ -9693,30 +9605,6 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
          return false;
      }
    return false;
-  }
-
-/*****************************************************************************/
-/************************ Get the publisher of a subtree *********************/
-/*****************************************************************************/
-
-static long Brw_GetPublisherOfSubtree (void)
-  {
-   long Cod = Brw_GetCodForFileBrowser ();
-
-   /***** Get all common files that are equal to full path (including filename)
-	  or that are under that full path from database *****/
-   return DB_QuerySELECTCode ("can not get publishers of files",
-			      "SELECT DISTINCT(PublisherUsrCod)"
-			       " FROM brw_files"
-			      " WHERE FileBrowser=%u"
-			        " AND Cod=%ld"
-			        " AND (Path='%s'"
-				     " OR"
-				     " Path LIKE '%s/%%')",
-			      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			      Cod,
-			      Gbl.FileBrowser.FilFolLnk.Full,
-			      Gbl.FileBrowser.FilFolLnk.Full);
   }
 
 /*****************************************************************************/

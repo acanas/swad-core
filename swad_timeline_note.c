@@ -938,8 +938,8 @@ void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
 
 void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
    Tml_Not_NoteType_t NoteType;
 
@@ -1001,8 +1001,8 @@ void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path)
 
 void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    Tml_Not_NoteType_t NoteType;
 
    switch (FileBrowser)

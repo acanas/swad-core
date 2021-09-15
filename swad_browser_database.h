@@ -50,9 +50,14 @@
 //---------------------------------- Files ------------------------------------
 long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
                      const char *FullPathInTree,bool IsPublic,Brw_License_t License);
+void Brw_DB_RenameOneFolder (const char OldPath[PATH_MAX + 1],
+                             const char NewPath[PATH_MAX + 1]);
+void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
+                                          const char NewPath[PATH_MAX + 1]);
 long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic);
 unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path);
 unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod);
+long Brw_DB_GetPublisherOfSubtree (const char *Path);
 unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
 void Brw_DB_RemoveOneFileOrFolder (const char Path[PATH_MAX + 1]);
 void Brw_DB_RemoveChildrenOfFolder (const char Path[PATH_MAX + 1]);

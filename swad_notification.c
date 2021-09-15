@@ -1049,8 +1049,8 @@ void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
 
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
    Ntf_NotifyEvent_t NotifyEvent;
 
@@ -1104,8 +1104,8 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    Ntf_NotifyEvent_t NotifyEvent;
 
    switch (FileBrowser)

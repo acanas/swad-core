@@ -87,10 +87,44 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+// Browsers types for database "files" and "brw_sizes" tables
+const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_USR,
+   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_USR,
+   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
+  };
+
 // Browsers types for database "brw_last" table
 // Assignments and works are stored as one in brw_last...
 // ...because a user views them at the same time
-static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_file_browser_last[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
    [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
@@ -124,7 +158,7 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_file_browser_last[Brw_NUM_TY
   };
 
 // Browsers types for database "expanded_folders" table
-static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
+static const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_expanded_folders[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_UNKNOWN     ] = Brw_UNKNOWN,
    [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
@@ -172,7 +206,6 @@ static const Brw_FileBrowser_t Brw_FileBrowserForDB_expanded_folders[Brw_NUM_TYP
 long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
                      const char *FullPathInTree,bool IsPublic,Brw_License_t License)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -185,14 +218,62 @@ long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
 				" VALUES"
 				" (%u,%ld,%ld,%ld,"
 				  "%u,'%s','N','%c',%u)",
-				(unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-				Cod,ZoneUsrCod,
+				(unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+				Cod,
+				ZoneUsrCod,
 				PublisherUsrCod,
 				(unsigned) FileType,
 				FullPathInTree,
 				IsPublic ? 'Y' :
 					   'N',
 				(unsigned) License);
+  }
+
+/*****************************************************************************/
+/*************** Rename a file or folder in table of files *******************/
+/*****************************************************************************/
+
+void Brw_DB_RenameOneFolder (const char OldPath[PATH_MAX + 1],
+                             const char NewPath[PATH_MAX + 1])
+  {
+   /***** Update file or folder in table of common files *****/
+   DB_QueryUPDATE ("can not update folder name in a common zone",
+		   "UPDATE brw_files"
+		     " SET Path='%s'"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path='%s'",
+		   NewPath,
+		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		   Brw_GetCodForFileBrowser (),
+		   Brw_GetZoneUsrCodForFileBrowser (),
+		   OldPath);
+  }
+
+/*****************************************************************************/
+/************** Rename children of a folder in table of files ****************/
+/*****************************************************************************/
+
+void Brw_DB_RenameChildrenFilesOrFolders (const char OldPath[PATH_MAX + 1],
+                                          const char NewPath[PATH_MAX + 1])
+  {
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
+
+   /***** Update children of a folder in table of files *****/
+   DB_QueryUPDATE ("can not rename file or folder names in a common zone",
+		   "UPDATE brw_files"
+		     " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
+		   " WHERE FileBrowser=%u"
+		     " AND Cod=%ld"
+		     " AND ZoneUsrCod=%ld"
+		     " AND Path LIKE '%s/%%'",
+	           NewPath,StartFinalSubpathNotChanged,
+	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           Brw_GetCodForFileBrowser (),
+	           Brw_GetZoneUsrCodForFileBrowser (),
+	           OldPath);
   }
 
 /*****************************************************************************/
@@ -203,7 +284,6 @@ long Brw_DB_AddPath (long PublisherUsrCod,Brw_FileType_t FileType,
 
 long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -215,7 +295,7 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 			        " AND ZoneUsrCod=%ld"
 			        " AND Path='%s'"
 			        "%s",
-			      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			      Cod,
 			      ZoneUsrCod,
 			      Path,
@@ -231,7 +311,6 @@ long Brw_DB_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 
 unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -252,7 +331,7 @@ unsigned Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,const char *Path)
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
-		   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,
 		   Path);
@@ -285,6 +364,28 @@ unsigned Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
   }
 
 /*****************************************************************************/
+/************************ Get the publisher of a subtree *********************/
+/*****************************************************************************/
+
+long Brw_DB_GetPublisherOfSubtree (const char *Path)
+  {
+   /***** Get all common files that are equal to full path (including filename)
+	  or that are under that full path from database *****/
+   return DB_QuerySELECTCode ("can not get publishers of files",
+			      "SELECT DISTINCT(PublisherUsrCod)"
+			       " FROM brw_files"
+			      " WHERE FileBrowser=%u"
+			        " AND Cod=%ld"
+			        " AND (Path='%s'"
+				     " OR"
+				     " Path LIKE '%s/%%')",
+			      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			      Brw_GetCodForFileBrowser (),
+			      Path,
+			      Path);
+  }
+
+/*****************************************************************************/
 /************ Get current number of files published by a user ****************/
 /*****************************************************************************/
 
@@ -307,10 +408,9 @@ unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
 
 void Brw_DB_RemoveOneFileOrFolder (const char Path[PATH_MAX + 1])
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
@@ -361,10 +461,9 @@ void Brw_DB_RemoveOneFileOrFolder (const char Path[PATH_MAX + 1])
 
 void Brw_DB_RemoveChildrenOfFolder (const char Path[PATH_MAX + 1])
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
@@ -1233,7 +1332,6 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
 void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
                               bool IsPublic,Brw_License_t License)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -1254,7 +1352,7 @@ void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
 	           IsPublic ? 'Y' :
 			      'N',
 	           (unsigned) License,
-	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Cod,
 	           ZoneUsrCod,
 	           FileMetadata->FilCod,
@@ -1267,7 +1365,6 @@ void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
 
 bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -1280,7 +1377,7 @@ bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 			    " AND ZoneUsrCod=%ld"
 			    " AND Path LIKE '%s/%%'"
 			    " AND Public='Y'",
-			  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+			  (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			  Cod,
 			  ZoneUsrCod,
 			  Path) != 0);
@@ -1464,7 +1561,7 @@ void Brw_DB_UpdateDateMyLastAccFileBrowser (void)
 		    " VALUES"
 		    " (%ld,%u,%ld,NOW())",
 	            Gbl.Usrs.Me.UsrDat.UsrCod,
-	            (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
+	            (unsigned) Brw_DB_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	            Cod);
   }
 
@@ -1485,7 +1582,7 @@ unsigned Brw_DB_GetDateMyLastAccFileBrowser (MYSQL_RES **mysql_res)
 		     " AND FileBrowser=%u"
 		     " AND Cod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
+		   (unsigned) Brw_DB_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 		   Cod);
   }
 
@@ -1601,7 +1698,6 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
 
 void Brw_DB_ChangeFileOrFolderHidden (const char Path[PATH_MAX + 1],bool IsHidden)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -1615,7 +1711,7 @@ void Brw_DB_ChangeFileOrFolderHidden (const char Path[PATH_MAX + 1],bool IsHidde
 		     " AND Path='%s'",
 	           IsHidden ? 'Y' :
 			      'N',
-	           (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Cod,
 	           ZoneUsrCod,
 	           Path);
@@ -1628,7 +1724,6 @@ void Brw_DB_ChangeFileOrFolderHidden (const char Path[PATH_MAX + 1],bool IsHidde
 unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res,
                                                            const char *Path)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -1640,7 +1735,7 @@ unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
-		   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		   Cod,
 		   ZoneUsrCod,
 		   Path);
@@ -1692,7 +1787,7 @@ void Brw_DB_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
 		   " VALUES"
 		   " (%ld,%u,%ld,%ld,'%s/',NOW())",
 	           Gbl.Usrs.Me.UsrDat.UsrCod,
-	           (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
+	           (unsigned) Brw_DB_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
 	           Cod,
 	           WorksUsrCod,
 	           Path);
@@ -1706,7 +1801,7 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_DB_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    if (Cod > 0)
      {
@@ -1751,7 +1846,7 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_DB_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    if (Cod > 0)
      {
@@ -1802,7 +1897,7 @@ void Brw_DB_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_DB_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    if (Cod > 0)
      {
@@ -1847,7 +1942,7 @@ void Brw_DB_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long WorksUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_DB_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    if (Cod > 0)
      {
@@ -1896,7 +1991,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
                                            const char *OldPath,const char *NewPath)
   {
    long Cod = Brw_GetCodForFileBrowser ();
-   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[FileBrowser];
+   Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_DB_FileBrowserForDB_expanded_folders[FileBrowser];
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
    if (Cod > 0)
@@ -2169,7 +2264,6 @@ void Brw_DB_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 
 void Brw_DB_StoreSizeOfFileZone (void)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
@@ -2181,7 +2275,7 @@ void Brw_DB_StoreSizeOfFileZone (void)
 		    " VALUES"
 		    " (%u,%ld,%ld,"
 		      "%u,'%lu','%lu','%llu')",
-	            (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	            (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		    Cod,ZoneUsrCod,
 	            Gbl.FileBrowser.Size.NumLevls,
 	            Gbl.FileBrowser.Size.NumFolds,

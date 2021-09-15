@@ -168,7 +168,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -191,7 +191,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
 		       " LIMIT 1",	// On duplicate entries, get the more recent
 		       Mrk_HeadOrFootStr[Brw_HEADER],
 		       Mrk_HeadOrFootStr[Brw_FOOTER],
-		       (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		       (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		       Cod,
 		       Gbl.FileBrowser.FilFolLnk.Full) == 1)
      {
@@ -238,7 +238,7 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    extern const char *Txt_The_number_of_rows_is_now_X;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    long Cod;
@@ -262,7 +262,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 		        " AND brw_files.Path='%s'"
 		        " AND brw_files.FilCod=mrk_marks.FilCod",
 		      Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
-		      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		      Cod,
 		      Gbl.FileBrowser.FilFolLnk.Full);
 

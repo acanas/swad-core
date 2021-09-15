@@ -88,10 +88,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
 static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
 static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators);
-static unsigned Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod);
-static unsigned Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod);
-static unsigned Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod);
-static unsigned Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod);
+static unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod);
+static unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod);
+static unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod);
+static unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod);
 
 /*****************************************************************************/
 /******************* Request showing statistics of courses *******************/
@@ -1427,8 +1427,8 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    IndicatorsCrs->NumIndicators = 0;
 
    /***** Get whether download zones are empty or not *****/
-   IndicatorsCrs->NumFilesInDocumentZones = Ind_GetNumFilesInDocumZonesOfCrsFromDB (CrsCod);
-   IndicatorsCrs->NumFilesInSharedZones   = Ind_GetNumFilesInShareZonesOfCrsFromDB (CrsCod);
+   IndicatorsCrs->NumFilesInDocumentZones = Brw_DB_GetNumFilesInDocumZonesOfCrs (CrsCod);
+   IndicatorsCrs->NumFilesInSharedZones   = Brw_DB_GetNumFilesInShareZonesOfCrs (CrsCod);
 
    /***** Indicator #1: information about syllabus *****/
    IndicatorsCrs->SyllabusLecSrc   = Inf_GetInfoSrcFromDB (CrsCod,Inf_LECTURES);
@@ -1442,8 +1442,8 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
 
    /***** Indicator #2: information about assignments *****/
    IndicatorsCrs->NumAssignments      = Asg_DB_GetNumAssignmentsInCrs (CrsCod);
-   IndicatorsCrs->NumFilesAssignments = Ind_GetNumFilesInAssigZonesOfCrsFromDB (CrsCod);
-   IndicatorsCrs->NumFilesWorks       = Ind_GetNumFilesInWorksZonesOfCrsFromDB (CrsCod);
+   IndicatorsCrs->NumFilesAssignments = Brw_DB_GetNumFilesInAssigZonesOfCrs (CrsCod);
+   IndicatorsCrs->NumFilesWorks       = Brw_DB_GetNumFilesInWorksZonesOfCrs (CrsCod);
    IndicatorsCrs->ThereAreAssignments = (IndicatorsCrs->NumAssignments      != 0) ||
                                         (IndicatorsCrs->NumFilesAssignments != 0) ||
                                         (IndicatorsCrs->NumFilesWorks       != 0);
@@ -1488,9 +1488,9 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
 /*********** Get the number of files in document zones of a course ***********/
 /*****************************************************************************/
 
-static unsigned Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
+static unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
@@ -1506,19 +1506,19 @@ static unsigned Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
 				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 				      " AND brw_sizes.FileBrowser=%u"
 				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
-				  (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
 				  CrsCod,
 				  CrsCod,
-				  (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
   }
 
 /*****************************************************************************/
 /*********** Get the number of files in shared zones of a course ***********/
 /*****************************************************************************/
 
-static unsigned Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
+static unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
@@ -1534,19 +1534,19 @@ static unsigned Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
 				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 				      " AND brw_sizes.FileBrowser=%u"
 				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
-				  (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
 				  CrsCod,
 				  CrsCod,
-				  (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
   }
 
 /*****************************************************************************/
 /********* Get the number of files in assignment zones of a course ***********/
 /*****************************************************************************/
 
-static unsigned Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
+static unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
@@ -1554,7 +1554,7 @@ static unsigned Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
 				   " FROM brw_sizes"
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld",
-				  (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
 				  CrsCod);
   }
 
@@ -1562,9 +1562,9 @@ static unsigned Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
 /************* Get the number of files in works zones of a course ************/
 /*****************************************************************************/
 
-static unsigned Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
+static unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod)
   {
-   extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
 
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
@@ -1572,6 +1572,6 @@ static unsigned Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
 				   " FROM brw_sizes"
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld",
-				  (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
 				  CrsCod);
   }
