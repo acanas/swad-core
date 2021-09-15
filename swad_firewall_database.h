@@ -1,7 +1,7 @@
-// swad_firewall.h: firewall to mitigate denial of service attacks
+// swad_firewall_database.h: firewall to mitigate denial of service attacks, operations with database
 
-#ifndef _SWAD_FW
-#define _SWAD_FW
+#ifndef _SWAD_FW_DB
+#define _SWAD_FW_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -31,22 +31,15 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-/* The maximum number of clicks in the interval
-   should be large enough to prevent an IP from being banned
-   due to automatic refresh when the user is viewing the last clicks. */
-#define Fw_CHECK_INTERVAL		((time_t)(30UL))	// Check clicks in the last 30 seconds
-#define Fw_MAX_CLICKS_IN_INTERVAL	150			// Maximum of 150 clicks allowed in 30 seconds
-								// (5 clicks/s sustained for 30 s)
-
-#define Fw_TIME_BANNED			((time_t)(60UL*60UL))	// Ban IP for 1 hour
-
-#define Fw_TIME_TO_DELETE_OLD_CLICKS	Fw_CHECK_INTERVAL	// Remove clicks older than these seconds
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Fir_CheckFirewallAndExitIfBanned (void);
-void Fir_CheckFirewallAndExitIfTooManyRequests (void);
+void Fir_DB_LogAccess (void);
+unsigned Fir_DB_GetNumClicksFromLog (void);
+void Fir_DB_PurgeFirewallLog (void);
+
+void Fir_DB_BanIP (void);
+unsigned Fir_DB_GetNumBansIP (void);
 
 #endif

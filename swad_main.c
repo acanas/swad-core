@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_firewall.h"
+#include "swad_firewall_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"

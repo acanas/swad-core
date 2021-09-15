@@ -1,4 +1,4 @@
-// swad_firewall.c: firewall to mitigate denial of service attacks
+// swad_firewall_database.c: firewall to mitigate denial of service attacks, operations with database
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -29,7 +29,6 @@
 
 #include "swad_database.h"
 #include "swad_firewall.h"
-#include "swad_firewall_database.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -50,82 +49,74 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Fir_WriteHTML (const char *Title,const char *H1);
-
 /*****************************************************************************/
-/*************************** Check if IP is banned ***************************/
+/********************* Log access into firewall recent log *******************/
 /*****************************************************************************/
 
-void Fir_CheckFirewallAndExitIfBanned (void)
+void Fir_DB_LogAccess (void)
   {
-   unsigned NumCurrentBans;
-
-   /***** Get number of current bans from database *****/
-   NumCurrentBans = Fir_DB_GetNumBansIP ();
-
-   /***** Exit with status 403 if banned *****/
-   /* RFC 6585 suggests "403 Forbidden", according to
-      https://stackoverflow.com/questions/7447283/proper-http-status-to-return-for-hacking-attempts
-      https://tools.ietf.org/html/rfc2616#section-10.4.4 */
-   if (NumCurrentBans)
-     {
-      /* Return status 403 Forbidden */
-      fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
-	              "Status: 403\r\n\r\n");
-      Fir_WriteHTML ("Forbidden","You are temporarily banned");
-
-      /* Close database connection and exit */
-      DB_CloseDBConnection ();
-      exit (0);
-     }
+   DB_QueryINSERT ("can not log access into firewall_log",
+		   "INSERT INTO fir_log"
+		   " (ClickTime,IP)"
+		   " VALUES"
+		   " (NOW(),'%s')",
+		   Gbl.IP);
   }
 
 /*****************************************************************************/
-/**************** Check if too many connections from this IP *****************/
+/********************* Get number of clicks from database ********************/
 /*****************************************************************************/
 
-void Fir_CheckFirewallAndExitIfTooManyRequests (void)
+unsigned Fir_DB_GetNumClicksFromLog (void)
   {
-   unsigned NumClicks;
+   return (unsigned)
+   DB_QueryCOUNT ("can not check firewall log",
+		  "SELECT COUNT(*)"
+		   " FROM fir_log"
+		  " WHERE IP='%s'"
+		    " AND ClickTime>FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		  Gbl.IP,
+		  Fw_CHECK_INTERVAL);
+  }
 
-   /***** Get number of clicks from database *****/
-   NumClicks = Fir_DB_GetNumClicksFromLog ();
+/*****************************************************************************/
+/********************** Remove old clicks from firewall **********************/
+/*****************************************************************************/
 
-   /***** Exit with status 429 if too many connections *****/
-   /* RFC 6585 suggests "429 Too Many Requests", according to
-      https://stackoverflow.com/questions/46664695/whats-the-correct-http-response-code-to-return-for-denial-of-service-dos-atta
-      https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429 */
-   if (NumClicks > Fw_MAX_CLICKS_IN_INTERVAL)
-     {
-      /* Ban this IP */
-      Fir_DB_BanIP ();
-
-      /* Return status 429 Too Many Requests */
-      fprintf (stdout,"Content-Type: text/html; charset=windows-1252\n"
-                      "Retry-After: %lu\n"
-	              "Status: 429\r\n\r\n",
-	       (unsigned long) Fw_TIME_BANNED);
-      Fir_WriteHTML ("Too Many Requests","Please stop that");
-
-      /* Close database connection and exit */
-      DB_CloseDBConnection ();
-      exit (0);
-     }
+void Fir_DB_PurgeFirewallLog (void)
+  {
+   DB_QueryDELETE ("can not purge firewall log",
+		   "DELETE LOW_PRIORITY FROM fir_log"
+		   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+                   (unsigned long) Fw_TIME_TO_DELETE_OLD_CLICKS);
   }
 
 /*****************************************************************************/
 /********************************* Ban an IP *********************************/
 /*****************************************************************************/
 
-static void Fir_WriteHTML (const char *Title,const char *H1)
+void Fir_DB_BanIP (void)
   {
-   fprintf (stdout,"<html>"
-		      "<head>"
-			 "<title>%s</title>"
-		      "</head>"
-		      "<body>"
-			 "<h1>%s</h1>"
-		      "</body>"
-		   "</html>\n",
-	    Title,H1);
+   DB_QueryINSERT ("can not ban IP",
+		   "INSERT INTO fir_banned"
+		   " (IP,BanTime,UnbanTime)"
+		   " VALUES"
+		   " ('%s',NOW(),FROM_UNIXTIME(UNIX_TIMESTAMP()+%lu))",
+		   Gbl.IP,
+		   (unsigned long) Fw_TIME_BANNED);
+  }
+
+/*****************************************************************************/
+/***************** Get number of current bans from database ******************/
+/*****************************************************************************/
+
+unsigned Fir_DB_GetNumBansIP (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not check firewall log",
+		  "SELECT COUNT(*)"
+		   " FROM fir_banned"
+		  " WHERE IP='%s'"
+		    " AND UnbanTime>NOW()",
+		  Gbl.IP);
   }

@@ -41,7 +41,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_session.h"
-#include "swad_firewall.h"
+#include "swad_firewall_database.h"
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -1437,7 +1437,7 @@ void Lay_RefreshNotifsAndConnected (void)
    if      (!(Gbl.PID %  11))
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
    else if (!(Gbl.PID %  19))
-      Fir_DB_PurgeFirewall ();			// Remove old clicks from firewall
+      Fir_DB_PurgeFirewallLog ();			// Remove old clicks from firewall
    else if (!(Gbl.PID %  23))
       Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES	,false);	// Remove the oldest temporary public directories used for downloading
    else if (!(Gbl.PID % 101))
