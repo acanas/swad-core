@@ -25,38 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stddef.h>		// For NULL
-// #include <stdlib.h>		// For system
-// #include <string.h>
-// #include <sys/wait.h>		// For the macro WEXITSTATUS
-// #include <unistd.h>		// For unlink
-
-// #include "swad_action.h"
-// #include "swad_box.h"
-// #include "swad_call_for_exam.h"
-// #include "swad_config.h"
-// #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_enrolment.h"
-// #include "swad_error.h"
-// #include "swad_figure.h"
-// #include "swad_follow.h"
-// #include "swad_form.h"
-// #include "swad_forum.h"
-// #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_mark.h"
-// #include "swad_message.h"
-// #include "swad_notice.h"
-// #include "swad_notification.h"
 #include "swad_notification_database.h"
-// #include "swad_parameter.h"
-// #include "swad_survey.h"
-// #include "swad_timeline.h"
-// #include "swad_timeline_notification.h"
-// #include "swad_timeline_publication.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

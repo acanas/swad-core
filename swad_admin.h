@@ -28,11 +28,8 @@
 /*****************************************************************************/
 
 #include "swad_admin.h"
-// #include "swad_course.h"
 #include "swad_enrolment.h"
 #include "swad_hierarchy.h"
-// #include "swad_notification.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

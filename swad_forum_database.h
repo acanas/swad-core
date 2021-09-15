@@ -1,7 +1,7 @@
-// swad_media_database.h: processing of image/video uploaded in a form
+// swad_forum_database.h: forums operations with database
 
-#ifndef _SWAD_MED_DB
-#define _SWAD_MED_DB
+#ifndef _SWAD_FOR_DB
+#define _SWAD_FOR_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,24 +27,41 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
+// #include "swad_center.h"
+// #include "swad_degree.h"
+// #include "swad_institution.h"
+// #include "swad_notification.h"
+// #include "swad_pagination.h"
+// #include "swad_scope.h"
+// #include "swad_string.h"
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/************************ Public constants and types *************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Med_DB_GetMediaDataByCod (MYSQL_RES **mysql_res,long MedCod);
+//------------------------------- Posts ---------------------------------------
+long For_DB_InsertForumPst (long ThrCod,long UsrCod,
+                            const char *Subject,const char *Content,
+                            long MedCod);
+bool For_DB_GetIfForumPstExists (long PstCod);
+unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstCod);
+void For_DB_RemovePst (long PstCod);
+void For_DB_RemoveThreadPsts (long ThrCod);
 
-long Med_DB_StoreMedia (const struct Med_Media *Media);
+//------------------------------ Threads --------------------------------------
+long For_DB_InsertForumThread (const struct For_Forums *Forums,
+                               long FirstPstCod);
+void For_DB_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
+void For_DB_RemoveThread (long ThrCod);
 
-void Med_DB_RemoveMedia (long MedCod);
-
-Med_Type_t Med_DB_GetTypeFromStr (const char *Str);
+//--------------------------- Disabled posts ----------------------------------
+void For_DB_InsertPstIntoDisabled (long PstCod);
+bool For_DB_GetIfPstIsEnabled (long PstCod);
+void For_DB_RemovePstFromDisabled (long PstCod);
+void For_DB_RemoveDisabledPstsInThread (long ThrCod);
 
 #endif

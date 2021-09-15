@@ -28,8 +28,6 @@
 #include "swad_database.h"
 #include "swad_admin.h"
 #include "swad_admin_database.h"
-// #include "swad_error.h"
-// #include "swad_global.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

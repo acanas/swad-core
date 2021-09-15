@@ -25,49 +25,15 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <dirent.h>		// For scandir, etc.
-// #include <errno.h>		// For errno
-// #include <linux/limits.h>	// For PATH_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For exit, system, free, etc
 #include <string.h>		// For string functions
-// #include <sys/types.h>		// For lstat, time_t
-// #include <sys/stat.h>		// For lstat
-// #include <time.h>		// For time
-// #include <unistd.h>		// For access, lstat, getpid, chdir, symlink
 
-// #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"
-// #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_error.h"
-// #include "swad_figure.h"
-// #include "swad_file_extension.h"
-// #include "swad_file_MIME.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_group_database.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_logo.h"
-// #include "swad_mark.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
-// #include "swad_profile.h"
 #include "swad_project.h"
-// #include "swad_role.h"
-// #include "swad_setting.h"
-// #include "swad_string.h"
-// #include "swad_timeline.h"
-// #include "swad_timeline_note.h"
-// #include "swad_zip.h"
 
 /*****************************************************************************/
 /******************** Global variables from other modules ********************/

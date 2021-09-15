@@ -31,7 +31,6 @@
 #include "swad_degree.h"
 #include "swad_institution.h"
 #include "swad_notification.h"
-// #include "swad_pagination.h"
 #include "swad_scope.h"
 #include "swad_string.h"
 

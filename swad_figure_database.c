@@ -25,13 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stdio.h>		// For sscanf
-
 #include "swad_database.h"
-// #include "swad_figure_cache.h"
 #include "swad_figure_database.h"
-// #include "swad_scope.h"
-// #include "swad_string.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

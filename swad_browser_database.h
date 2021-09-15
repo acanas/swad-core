@@ -27,13 +27,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <linux/limits.h>	// For PATH_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_browser.h"
-// #include "swad_course.h"
-// #include "swad_group.h"
-// #include "swad_notification.h"
 
 /*****************************************************************************/
 /************************ Public types and constants *************************/

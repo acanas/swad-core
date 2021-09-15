@@ -41,6 +41,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_forum.h"
+#include "swad_forum_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_HTML.h"
@@ -298,23 +299,14 @@ static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
 /***************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static bool For_DB_GetIfForumPstExists (long PstCod);
-
-static bool For_DB_GetIfPstIsEnabled (long PstCod);
-static void For_DB_RemovePstFromDisabledPstTable (long PstCod);
-static void For_DB_InsertPstIntoBannedPstTable (long PstCod);
-
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
                                 struct Med_Media *Media);
 static bool For_RemoveForumPst (long PstCod,long MedCod);
 static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 
-static long For_DB_InsertForumThread (const struct For_Forums *Forums,
-                                      long FirstPstCod);
 static void For_RemoveThreadOnly (long ThrCod);
 static void For_RemoveThreadAndItsPsts (long ThrCod);
-static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 
 static void For_DB_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
 static void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod);
@@ -452,7 +444,7 @@ void For_EnablePost (void)
    For_GetParamsForums (&Forums);
 
    /***** Delete post from table of disabled posts *****/
-   For_DB_RemovePstFromDisabledPstTable (Forums.PstCod);
+   For_DB_RemovePstFromDisabled (Forums.PstCod);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -480,7 +472,7 @@ void For_DisablePost (void)
    if (For_DB_GetIfForumPstExists (Forums.PstCod))
      {
       /***** Insert post into table of banned posts *****/
-      For_DB_InsertPstIntoBannedPstTable (Forums.PstCod);
+      For_DB_InsertPstIntoDisabled (Forums.PstCod);
 
       /***** Show forum list again *****/
       For_ShowForumList (&Forums);
@@ -496,67 +488,6 @@ void For_DisablePost (void)
   }
 
 /*****************************************************************************/
-/******************** Get if a forum post exists in database *****************/
-/*****************************************************************************/
-
-static bool For_DB_GetIfForumPstExists (long PstCod)
-  {
-   /***** Get if a forum post exists from database *****/
-   return (DB_QueryCOUNT ("can not check if a post of a forum already existed",
-			  "SELECT COUNT(*)"
-			   " FROM for_posts"
-			  " WHERE PstCod=%ld",
-			  PstCod) != 0);	// Post exists if it appears in table of forum posts
-  }
-
-/*****************************************************************************/
-/*********************** Get if a forum post is enabled **********************/
-/*****************************************************************************/
-
-static bool For_DB_GetIfPstIsEnabled (long PstCod)
-  {
-   /***** Trivial check: post code should be > 0 *****/
-   if (PstCod <= 0)
-      return false;
-
-   /***** Get if post is disabled from database *****/
-   return (DB_QueryCOUNT ("can not check if a post of a forum is disabled",
-			  "SELECT COUNT(*)"
-			   " FROM for_disabled"
-			  " WHERE PstCod=%ld",
-			  PstCod) == 0);	// Post is enabled if it does not appear in table of disabled posts
-  }
-
-/*****************************************************************************/
-/****************** Remove post from table of disabled posts *****************/
-/*****************************************************************************/
-
-static void For_DB_RemovePstFromDisabledPstTable (long PstCod)
-  {
-   /***** Remove post from disabled posts table *****/
-   DB_QueryDELETE ("can not unban a post of a forum",
-		   "DELETE FROM for_disabled"
-		   " WHERE PstCod=%ld",
-		   PstCod);
-  }
-
-/*****************************************************************************/
-/****************** Insert post into table of banned posts *******************/
-/*****************************************************************************/
-
-static void For_DB_InsertPstIntoBannedPstTable (long PstCod)
-  {
-   /***** Remove post from banned posts table *****/
-   DB_QueryREPLACE ("can not ban a post of a forum",
-		    "REPLACE INTO for_disabled"
-		    " (PstCod,UsrCod,DisableTime)"
-		    " VALUES"
-		    " (%ld,%ld,NOW())",
-                    PstCod,
-                    Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /************** Insert a post new in the table of posts of forums ************/
 /*****************************************************************************/
 
@@ -564,26 +495,11 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
                                 struct Med_Media *Media)
   {
-   long PstCod;
-
    /***** Store media in filesystem and database *****/
    Med_RemoveKeepOrStoreMedia (-1L,Media);
 
    /***** Insert forum post in the database *****/
-   PstCod =
-   DB_QueryINSERTandReturnCode ("can not create a new post in a forum",
-				"INSERT INTO for_posts"
-				" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-				  "Subject,Content,MedCod)"
-				" VALUES"
-				" (%ld,%ld,NOW(),NOW(),0,"
-				  "'%s','%s',%ld)",
-				ThrCod,
-				UsrCod,
-				Subject,
-				Content,Media->MedCod);
-
-   return PstCod;
+   return For_DB_InsertForumPst (ThrCod,UsrCod,Subject,Content,Media->MedCod);
   }
 
 /*****************************************************************************/
@@ -606,14 +522,11 @@ static bool For_RemoveForumPst (long PstCod,long MedCod)
       ThreadDeleted = true;
      }
 
-   /***** Delete post from forum post table *****/
-   DB_QueryDELETE ("can not remove a post from a forum",
-		   "DELETE FROM for_posts"
-		   " WHERE PstCod=%ld",
-		   PstCod);
-
    /***** Delete the post from the table of disabled forum posts *****/
-   For_DB_RemovePstFromDisabledPstTable (PstCod);
+   For_DB_RemovePstFromDisabled (PstCod);
+
+   /***** Delete post from forum post table *****/
+   For_DB_RemovePst (PstCod);
 
    /***** Update the last post of the thread *****/
    if (!ThreadDeleted)
@@ -641,47 +554,21 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
       return NumPsts;
 
    /***** Get number of posts in the thread that holds a post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of posts in a thread",
-		       "SELECT COUNT(PstCod),"	// row[0]
-		              "ThrCod"		// row[1]
-		        " FROM for_posts"
-		       " WHERE ThrCod IN"
-		             " (SELECT ThrCod"
-		                " FROM for_posts"
-		               " WHERE PstCod=%ld)"
-		       " GROUP BY ThrCod;",
-		       PstCod) == 1)	// Result should have one row
+   if (For_DB_GetThreadAndNumPostsGivenPstCod (&mysql_res,PstCod) == 1)	// Result should have one row
      {
       row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%u",&NumPsts) != 1)
+      /*
+      row[0]: ThrCod
+      row[1]: COUNT(PstCod)
+      */
+      if (sscanf (row[0],"%ld",ThrCod) != 1)
 	 Err_ShowErrorAndExit ("Error when getting number of posts in a thread.");
-      if (sscanf (row[1],"%ld",ThrCod) != 1)
+      if (sscanf (row[1],"%u",&NumPsts) != 1)
 	 Err_ShowErrorAndExit ("Error when getting number of posts in a thread.");
      }
    DB_FreeMySQLResult (&mysql_res);
 
    return NumPsts;
-  }
-
-/*****************************************************************************/
-/*************** Insert a new thread in table of forum threads ***************/
-/*****************************************************************************/
-// Returns the code of the new inserted thread
-
-static long For_DB_InsertForumThread (const struct For_Forums *Forums,
-                                      long FirstPstCod)
-  {
-   /***** Insert new thread in the database *****/
-   return
-   DB_QueryINSERTandReturnCode ("can not create a new thread in a forum",
-				"INSERT INTO for_threads"
-				" (ForumType,Location,FirstPstCod,LastPstCod)"
-				" VALUES"
-				" (%u,%ld,%ld,%ld)",
-				(unsigned) Forums->Forum.Type,
-				Forums->Forum.Location,
-				FirstPstCod,
-				FirstPstCod);
   }
 
 /*****************************************************************************/
@@ -697,10 +584,7 @@ static void For_RemoveThreadOnly (long ThrCod)
    For_DB_RemoveThrCodFromThrClipboard (ThrCod);
 
    /***** Delete thread from forum thread table *****/
-   DB_QueryDELETE ("can not remove a thread from a forum",
-		   "DELETE FROM for_threads"
-		   " WHERE ThrCod=%ld",
-		   ThrCod);
+   For_DB_RemoveThread (ThrCod);
   }
 
 /*****************************************************************************/
@@ -709,49 +593,14 @@ static void For_RemoveThreadOnly (long ThrCod)
 
 static void For_RemoveThreadAndItsPsts (long ThrCod)
   {
-   /***** Delete banned posts in thread *****/
-   DB_QueryDELETE ("can not unban the posts of a thread of a forum",
-		   "DELETE FROM for_disabled"
-		    "USING for_posts,"
-		          "for_disabled"
-		   " WHERE for_posts.ThrCod=%ld"
-		     " AND for_posts.PstCod=for_disabled.PstCod",
-                   ThrCod);
+   /***** Delete disabled posts in thread *****/
+   For_DB_RemoveDisabledPstsInThread (ThrCod);
 
    /***** Delete thread posts *****/
-   DB_QueryDELETE ("can not remove the posts of a thread of a forum",
-		   "DELETE FROM for_posts"
-		   " WHERE ThrCod=%ld",
-		   ThrCod);
+   For_DB_RemoveThreadPsts (ThrCod);
 
    /***** Delete thread from forum thread table *****/
    For_RemoveThreadOnly (ThrCod);
-  }
-
-/*****************************************************************************/
-/********************* Get the thread subject from a thread ******************/
-/*****************************************************************************/
-
-static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get subject of a thread from database *****/
-   DB_QuerySELECT (&mysql_res,"can not get the subject of a thread of a forum",
-		   "SELECT for_posts.Subject"	// row[0]
-		    " FROM for_threads,"
-		          "for_posts"
-		   " WHERE for_threads.ThrCod=%ld"
-		     " AND for_threads.FirstPstCod=for_posts.PstCod",
-		   ThrCod);
-
-   /***** Write the subject of the thread *****/
-   row = mysql_fetch_row (mysql_res);
-   Str_Copy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -4352,7 +4201,7 @@ void For_RequestRemoveThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of the thread to delete *****/
-   For_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -4412,7 +4261,7 @@ void For_RemoveThread (void)
        (1 << Gbl.Usrs.Me.Role.Logged)) // If I have permission to remove thread in this forum...
      {
       /***** Get subject of thread to delete *****/
-      For_GetThrSubject (Forums.Thread.Current,Subject);
+      For_DB_GetThrSubject (Forums.Thread.Current,Subject);
 
       /***** Remove the thread and all its posts *****/
       For_RemoveThreadAndItsPsts (Forums.Thread.Current);
@@ -4453,7 +4302,7 @@ void For_CutThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of thread to cut *****/
-   For_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Mark the thread as cut *****/
    For_InsertThrInClipboard (Forums.Thread.Current);
@@ -4494,7 +4343,7 @@ void For_PasteThread (void)
    For_GetParamsForums (&Forums);
 
    /***** Get subject of thread to paste *****/
-   For_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
 
    /***** Check if paste (move) the thread to current forum has sense *****/
    if (For_DB_CheckIfThrBelongsToForum (Forums.Thread.Current,&Forums.Forum))
