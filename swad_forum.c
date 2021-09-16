@@ -1077,36 +1077,15 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
   {
    extern const char *Txt_FORUM_post;
    extern const char *Txt_FORUM_posts;
-   char SubQuery[256];
    unsigned NumPsts;
 
-   /***** Star table cell *****/
-   HTM_DIV_Begin ("class=\"AUTHOR_TXT LT\"");
-
    /***** Get number of posts from database *****/
-   if (Forums->Forum.Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",
-               Forums->Forum.Location);
-   else
-      SubQuery[0] = '\0';
-   NumPsts = (unsigned)
-   DB_QueryCOUNT ("can not get the number of posts of a user in a forum",
-		  "SELECT COUNT(*)"
-		   " FROM for_posts,"
-			 "for_threads"
-		  " WHERE for_posts.UsrCod=%ld"
-		    " AND for_posts.ThrCod=for_threads.ThrCod"
-		    " AND for_threads.ForumType=%u"
-		    "%s",
-		  UsrCod,
-		  (unsigned) Forums->Forum.Type,
-		  SubQuery);
+   NumPsts = For_DB_GetNumPstsOfUsrInForum (&Forums->Forum,UsrCod);
 
-   /***** Write number of threads and number of posts *****/
-   HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
-	                                      Txt_FORUM_posts);
-
-   /***** End table cell *****/
+   /***** Write number of posts *****/
+   HTM_DIV_Begin ("class=\"AUTHOR_TXT LT\"");
+      HTM_TxtF ("[%u %s]",NumPsts,NumPsts == 1 ? Txt_FORUM_post :
+						 Txt_FORUM_posts);
    HTM_DIV_End ();
   }
 
@@ -1901,32 +1880,16 @@ void For_SetForumName (const struct For_Forum *Forum,
 static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
                                                   unsigned NumThreads)
   {
-   char SubQuery[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumThrsWithNewPosts = NumThreads;	// By default, all the threads are new to me
 
    /***** Get last time I read this forum from database *****/
-   if (Forum->Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
-   else
-      SubQuery[0] = '\0';
-   if (DB_QuerySELECT (&mysql_res,"can not get the date of reading of a forum",
-		       "SELECT IFNULL(MAX(for_read.ReadTime),"	// row[0]
-			      "FROM_UNIXTIME(0))"			// row[1]
-			" FROM for_read,"
-			      "for_threads"
-		       " WHERE for_read.UsrCod=%ld"
-			 " AND for_read.ThrCod=for_threads.ThrCod"
-			 " AND for_threads.ForumType=%u"
-			 "%s",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       (unsigned) Forum->Type,
-		       SubQuery))
+   if (For_DB_GetLastTimeIReadForum (&mysql_res,Forum))
      {
       /***** Get number of threads with a last message modify time > newest read time (row[0]) *****/
       row = mysql_fetch_row (mysql_res);
-      NumThrsWithNewPosts = For_DB_GetNumOfThreadsInForumNewerThan (Forum,row[0]);
+      NumThrsWithNewPosts = For_DB_GetNumThrsInForumNewerThan (Forum,row[0]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1946,13 +1909,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
    unsigned NumUnreadPosts = NumPostsInThr;	// By default, all the posts are unread by me
 
    /***** Get last time I read this thread from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get the date of reading of a thread",
-		       "SELECT ReadTime"		// row[0]
-			" FROM for_read"
-		       " WHERE ThrCod=%ld"
-			 " AND UsrCod=%ld",
-		       ThrCod,
-		       Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (For_DB_GetLastTimeIReadThread (&mysql_res,ThrCod))
      {
       /***** Get the number of posts in thread with a modify time > newest read time for me (row[0]) *****/
       row = mysql_fetch_row (mysql_res);

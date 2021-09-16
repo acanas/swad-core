@@ -39,8 +39,10 @@
 
 //------------------------------- Forums --------------------------------------
 unsigned For_DB_GetNumThrsInForum (const struct For_Forum *Forum);
-unsigned For_DB_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
-                                                 const char *Time);
+unsigned For_DB_GetNumThrsInForumNewerThan (const struct For_Forum *Forum,
+                                            const char *Time);
+unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
+                                        long UsrCod);
 void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation);
 
 //------------------------------- Posts ---------------------------------------
@@ -81,6 +83,9 @@ void For_DB_UpdateThrReadTime (long ThrCod,
                                time_t CreatTimeUTCOfTheMostRecentPostRead);
 unsigned For_DB_GetNumReadersOfThr (long ThrCod);
 unsigned For_DB_GetThrReadTime (MYSQL_RES **mysql_res,long ThrCod);
+unsigned For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
+                                       const struct For_Forum *Forum);
+unsigned For_DB_GetLastTimeIReadThread (MYSQL_RES **mysql_res,long ThrCod);
 void For_DB_RemoveThrFromReadThrs (long ThrCod);
 void For_DB_RemoveUsrFromReadThrs (long UsrCod);
 

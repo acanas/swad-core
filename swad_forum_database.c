@@ -79,8 +79,8 @@ unsigned For_DB_GetNumThrsInForum (const struct For_Forum *Forum)
 /**** Get number of threads in forum with a modify time > a specified time ***/
 /*****************************************************************************/
 
-unsigned For_DB_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
-                                                 const char *Time)
+unsigned For_DB_GetNumThrsInForumNewerThan (const struct For_Forum *Forum,
+                                            const char *Time)
   {
    char SubQuery[256];
 
@@ -103,6 +103,35 @@ unsigned For_DB_GetNumOfThreadsInForumNewerThan (const struct For_Forum *Forum,
 		  (unsigned) Forum->Type,
 		  SubQuery,
 		  Time);
+  }
+
+/*****************************************************************************/
+/***************** Get number of posts of a user in a forum ******************/
+/*****************************************************************************/
+
+unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
+                                        long UsrCod)
+  {
+   char SubQuery[256];
+
+   /***** Get number of posts from database *****/
+   if (Forum->Location > 0)
+      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
+   else
+      SubQuery[0] = '\0';
+
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of posts of a user in a forum",
+		  "SELECT COUNT(*)"
+		   " FROM for_posts,"
+			 "for_threads"
+		  " WHERE for_posts.UsrCod=%ld"
+		    " AND for_posts.ThrCod=for_threads.ThrCod"
+		    " AND for_threads.ForumType=%u"
+		    "%s",
+		  UsrCod,
+		  (unsigned) Forum->Type,
+		  SubQuery);
   }
 
 /*****************************************************************************/
@@ -668,6 +697,50 @@ unsigned For_DB_GetThrReadTime (MYSQL_RES **mysql_res,long ThrCod)
    DB_QuerySELECT (mysql_res,"can not get date of reading"
 			     " of a thread of a forum",
 		   "SELECT UNIX_TIMESTAMP(ReadTime)"	// row[0]
+		    " FROM for_read"
+		   " WHERE ThrCod=%ld"
+		     " AND UsrCod=%ld",
+		   ThrCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get last time I read a forum ************************/
+/*****************************************************************************/
+
+unsigned For_DB_GetLastTimeIReadForum (MYSQL_RES **mysql_res,
+                                       const struct For_Forum *Forum)
+  {
+   char SubQuery[256];
+
+   if (Forum->Location > 0)
+      sprintf (SubQuery," AND for_threads.Location=%ld",Forum->Location);
+   else
+      SubQuery[0] = '\0';
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the date of reading of a forum",
+		   "SELECT IFNULL(MAX(for_read.ReadTime),FROM_UNIXTIME(0))"	// row[0]
+		    " FROM for_read,"
+			  "for_threads"
+		   " WHERE for_read.UsrCod=%ld"
+		     " AND for_read.ThrCod=for_threads.ThrCod"
+		     " AND for_threads.ForumType=%u"
+		     "%s",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Forum->Type,
+		   SubQuery);
+  }
+
+/*****************************************************************************/
+/*********************** Get last time I read a thread ***********************/
+/*****************************************************************************/
+
+unsigned For_DB_GetLastTimeIReadThread (MYSQL_RES **mysql_res,long ThrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the date of reading of a thread",
+		   "SELECT ReadTime"		// row[0]
 		    " FROM for_read"
 		   " WHERE ThrCod=%ld"
 		     " AND UsrCod=%ld",
