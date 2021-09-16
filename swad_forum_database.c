@@ -238,6 +238,56 @@ bool For_DB_GetIfForumPstExists (long PstCod)
   }
 
 /*****************************************************************************/
+/*************************** Get data of a forum post ************************/
+/*****************************************************************************/
+
+unsigned For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a post",
+		   "SELECT UsrCod,"			// row[0]
+			  "UNIX_TIMESTAMP(CreatTime),"	// row[1]
+			  "Subject,"			// row[2]
+			  "Content,"			// row[3]
+			  "MedCod"			// row[4]
+		    " FROM for_posts"
+		   " WHERE PstCod=%ld",
+		   PstCod);
+  }
+
+/*****************************************************************************/
+/***************** Get subject and content for a forum post ******************/
+/*****************************************************************************/
+
+unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get subject and content",
+		   "SELECT Subject,"	// row[0]
+			  "Content"		// row[1]
+		    " FROM for_posts"
+		   " WHERE PstCod=%ld",
+		   PstCod);
+  }
+
+/*****************************************************************************/
+/*************** Get the forum type and location of a post *******************/
+/*****************************************************************************/
+
+unsigned For_DB_GetForumTypeAndLocationOfAPost (MYSQL_RES **mysql_res,long PstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get forum type and location",
+		   "SELECT for_threads.ForumType,"	// row[0]
+			  "for_threads.Location"	// row[1]
+		    " FROM for_posts,"
+			  "for_threads"
+		   " WHERE for_posts.PstCod=%ld"
+		     " AND for_posts.ThrCod=for_threads.ThrCod",
+		   PstCod);
+  }
+
+/*****************************************************************************/
 /*********************** Get number of posts from a user *********************/
 /*****************************************************************************/
 
@@ -248,6 +298,22 @@ unsigned For_DB_GetNumPostsUsr (long UsrCod)
 			  " FROM for_posts"
 			 " WHERE UsrCod=%ld",
 			 UsrCod);
+  }
+
+/*****************************************************************************/
+/************************* Get posts of a thread *****************************/
+/*****************************************************************************/
+
+unsigned For_DB_GetPostsOfAThread (MYSQL_RES **mysql_res,long ThrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get posts of a thread",
+		   "SELECT PstCod,"			// row[0]
+			  "UNIX_TIMESTAMP(CreatTime)"	// row[1]
+		    " FROM for_posts"
+		   " WHERE ThrCod=%ld"
+		   " ORDER BY PstCod",
+		   ThrCod);
   }
 
 /*****************************************************************************/
@@ -342,6 +408,53 @@ void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod)
 		   " WHERE ThrCod=%ld",
                    LastPstCod,
                    ThrCod);
+  }
+
+/*****************************************************************************/
+/********** Show available threads of a forum highlighting a thread **********/
+/*****************************************************************************/
+
+unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
+                                 const struct For_Forums *Forums)
+  {
+   char SubQuery[256];
+
+   /***** Get threads of a forum from database *****/
+   if (Forums->Forum.Location > 0)
+      sprintf (SubQuery," AND for_threads.Location=%ld",
+	       Forums->Forum.Location);
+   else
+      SubQuery[0] = '\0';
+
+   switch (Forums->ThreadsOrder)
+     {
+      case Dat_START_TIME:	// First post time
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get thread of a forum",
+			 "SELECT for_threads.ThrCod"	// row[0]
+			  " FROM for_threads,"
+				"for_posts"
+			 " WHERE for_threads.ForumType=%u"
+			   "%s"
+			   " AND for_threads.FirstPstCod=for_posts.PstCod"
+			 " ORDER BY for_posts.CreatTime DESC",
+			 (unsigned) Forums->Forum.Type,
+			 SubQuery);
+      case Dat_END_TIME:	// Last post time
+         return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get thread of a forum",
+			 "SELECT for_threads.ThrCod"	// row[0]
+			  " FROM for_threads,"
+				"for_posts"
+			 " WHERE for_threads.ForumType=%u"
+			   "%s"
+			   " AND for_threads.LastPstCod=for_posts.PstCod"
+			 " ORDER BY for_posts.CreatTime DESC",
+			 (unsigned) Forums->Forum.Type,
+			 SubQuery);
+      default:	// Impossible
+	 return 0;
+     }
   }
 
 /*****************************************************************************/
@@ -543,6 +656,23 @@ unsigned For_DB_GetNumReadersOfThr (long ThrCod)
 		   " FROM for_read"
 		  " WHERE ThrCod=%ld",
 		  ThrCod);
+  }
+
+/*****************************************************************************/
+/****************** Get thread read time for the current user ****************/
+/*****************************************************************************/
+
+unsigned For_DB_GetThrReadTime (MYSQL_RES **mysql_res,long ThrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get date of reading"
+			     " of a thread of a forum",
+		   "SELECT UNIX_TIMESTAMP(ReadTime)"	// row[0]
+		    " FROM for_read"
+		   " WHERE ThrCod=%ld"
+		     " AND UsrCod=%ld",
+		   ThrCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

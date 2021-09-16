@@ -50,7 +50,11 @@ long For_DB_InsertForumPst (long ThrCod,long UsrCod,
 void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
                                                    unsigned NumUsrsToBeNotifiedByEMail);
 bool For_DB_GetIfForumPstExists (long PstCod);
+unsigned For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod);
+unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod);
+unsigned For_DB_GetForumTypeAndLocationOfAPost (MYSQL_RES **mysql_res,long PstCod);
 unsigned For_DB_GetNumPostsUsr (long UsrCod);
+unsigned For_DB_GetPostsOfAThread (MYSQL_RES **mysql_res,long ThrCod);
 unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstCod);
 void For_DB_RemovePst (long PstCod);
 void For_DB_RemoveThreadPsts (long ThrCod);
@@ -60,6 +64,8 @@ long For_DB_InsertForumThread (const struct For_Forums *Forums,
                                long FirstPstCod);
 void For_DB_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
 void For_DB_UpdateThrLastPst (long ThrCod,long LastPstCod);
+unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
+                                 const struct For_Forums *Forums);
 unsigned For_DB_GetThreadData (MYSQL_RES **mysql_res,long ThrCod);
 bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum);
 long For_DB_GetThrLastPst (long ThrCod);
@@ -74,6 +80,7 @@ void For_DB_RemoveThread (long ThrCod);
 void For_DB_UpdateThrReadTime (long ThrCod,
                                time_t CreatTimeUTCOfTheMostRecentPostRead);
 unsigned For_DB_GetNumReadersOfThr (long ThrCod);
+unsigned For_DB_GetThrReadTime (MYSQL_RES **mysql_res,long ThrCod);
 void For_DB_RemoveThrFromReadThrs (long ThrCod);
 void For_DB_RemoveUsrFromReadThrs (long UsrCod);
 

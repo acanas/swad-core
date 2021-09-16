@@ -596,14 +596,7 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct For_Forum *Forum)
    Forum->Location = -1L;
 
    /***** Check if there is a row with forum type *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get forum type and location",
-		       "SELECT for_threads.ForumType,"	// row[0]
-		              "for_threads.Location"	// row[1]
-		        " FROM for_posts,"
-		              "for_threads"
-		       " WHERE for_posts.PstCod=%ld"
-		         " AND for_posts.ThrCod=for_threads.ThrCod",
-		       PstCod))
+   if (For_DB_GetForumTypeAndLocationOfAPost (&mysql_res,PstCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -632,13 +625,7 @@ static time_t For_GetThrReadTime (long ThrCod)
    time_t ReadTimeUTC;
 
    /***** Get read time of a thread from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get date of reading"
-				  " of a thread of a forum",
-		       "SELECT UNIX_TIMESTAMP(ReadTime)"	// row[0]
-		        " FROM for_read"
-		       " WHERE ThrCod=%ld"
-		         " AND UsrCod=%ld",
-		       ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (For_DB_GetThrReadTime (&mysql_res,ThrCod))
      {
       /***** There is a row ==> get read time *****/
       row = mysql_fetch_row (mysql_res);
@@ -646,7 +633,8 @@ static time_t For_GetThrReadTime (long ThrCod)
       ReadTimeUTC = Dat_GetUNIXTimeFromStr (row[0]);
      }
    else
-      ReadTimeUTC = (time_t) 0;	// If there is no row for this thread and current user, then current user has not read this thread
+      ReadTimeUTC = (time_t) 0;	// If there is no row for this thread and current user,
+				// then current user has not read this thread
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -706,17 +694,8 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 		    Hlp_COMMUNICATION_Forums_posts,Box_NOT_CLOSABLE);
 
 	 /***** Get posts of a thread from database *****/
-	 NumPsts = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
-			 "SELECT PstCod,"			// row[0]
-				"UNIX_TIMESTAMP(CreatTime)"	// row[1]
-			  " FROM for_posts"
-			 " WHERE ThrCod=%ld"
-			 " ORDER BY PstCod",
-			 Thread.ThrCod);
-
 	 LastSubject[0] = '\0';
-	 if (NumPsts)		// If there are posts...
+	 if ((NumPsts = For_DB_GetPostsOfAThread (&mysql_res,Thread.ThrCod)))		// If there are posts...
 	   {
 	    /***** Check if I can moderate posts in forum *****/
 	    switch (Forums->Forum.Type)
@@ -1024,15 +1003,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    MYSQL_ROW row;
 
    /***** Get data of a post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a post",
-			     "SELECT UsrCod,"				// row[0]
-			            "UNIX_TIMESTAMP(CreatTime),"	// row[1]
-			            "Subject,"				// row[2]
-			            "Content,"				// row[3]
-			            "MedCod"				// row[4]
-			      " FROM for_posts"
-			     " WHERE PstCod=%ld",
-			     PstCod) != 1)
+   if (For_DB_GetPstData (&mysql_res,PstCod) != 1)
       Err_WrongPostExit ();
 
    /***** Get number of rows *****/
@@ -1071,12 +1042,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get post subject and content from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get subject and content",
-		       "SELECT Subject,"	// row[0]
-		              "Content"		// row[1]
-		        " FROM for_posts"
-                       " WHERE PstCod=%ld",
-                       PstCod) == 1)
+   if (For_DB_GetPstSubjectAndContent (&mysql_res,PstCod) == 1)
      {
       /***** Get subject and content of the post *****/
       row = mysql_fetch_row (mysql_res);
@@ -2050,7 +2016,6 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
    extern const char *Txt_Unread_BR_msgs;
    extern const char *Txt_WriBRters;
    extern const char *Txt_ReaBRders;
-   char SubQuery[256];
    MYSQL_RES *mysql_res;
    char FrameTitle[128 + For_MAX_BYTES_FORUM_NAME];
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -2066,42 +2031,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	             ForumName,Gbl.Prefs.Language,true);
 
    /***** Get threads of a forum from database *****/
-   if (Forums->Forum.Location > 0)
-      sprintf (SubQuery," AND for_threads.Location=%ld",
-	       Forums->Forum.Location);
-   else
-      SubQuery[0] = '\0';
-   switch (Forums->ThreadsOrder)
-     {
-      case Dat_START_TIME:	// First post time
-         NumThrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
-			 "SELECT for_threads.ThrCod"	// row[0]
-			  " FROM for_threads,"
-				"for_posts"
-			 " WHERE for_threads.ForumType=%u"
-			   "%s"
-			   " AND for_threads.FirstPstCod=for_posts.PstCod"
-			 " ORDER BY for_posts.CreatTime DESC",
-			 (unsigned) Forums->Forum.Type,
-			 SubQuery);
-         break;
-      case Dat_END_TIME:	// Last post time
-         NumThrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get thread of a forum",
-			 "SELECT for_threads.ThrCod"	// row[0]
-			  " FROM for_threads,"
-				"for_posts"
-			 " WHERE for_threads.ForumType=%u"
-			   "%s"
-			   " AND for_threads.LastPstCod=for_posts.PstCod"
-			 " ORDER BY for_posts.CreatTime DESC",
-			 (unsigned) Forums->Forum.Type,
-			 SubQuery);
-         break;
-      default:	// Impossible
-	 return;
-     }
+   NumThrs = For_DB_GetForumThreads (&mysql_res,Forums);
 
    /***** Compute variables related to pagination of threads *****/
    PaginationThrs.NumItems = NumThrs;
@@ -2197,7 +2127,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 
 	 /***** Put a form to write the first post of a new thread *****/
 	 HTM_SECTION_Begin (For_NEW_THREAD_SECTION_ID);
-	 For_WriteFormForumPst (Forums,false,NULL);
+	    For_WriteFormForumPst (Forums,false,NULL);
 	 HTM_SECTION_End ();
 
       /***** End box with threads of this forum ****/
@@ -2439,19 +2369,17 @@ static void For_GetThreadData (struct For_Thread *Thr)
           and the last message (row[1]) in this thread *****/
    if (sscanf (row[0],"%ld",&(Thr->PstCod[Dat_START_TIME])) != 1)
       Err_WrongPostExit ();
-   if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME])) != 1)
+   if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME  ])) != 1)
       Err_WrongPostExit ();
 
-   /***** Get the author of the first post in this thread (row[2]) *****/
+   /***** Get the author of the first post in this thread (row[2])
+          and the author of the last  post in this thread (row[3]) *****/
    Thr->UsrCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[2]);
-
-   /***** Get the author of the last  post in this thread (row[3]) *****/
    Thr->UsrCod[Dat_END_TIME  ] = Str_ConvertStrCodToLongCod (row[3]);
 
-   /***** Get the date of the first post in this thread (row[4]) *****/
+   /***** Get the date of the first post in this thread (row[4])
+          and the date of the last  post in this thread (row[5]) *****/
    Thr->WriteTime[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
-
-   /***** Get the date of the last  post in this thread (row[5]) *****/
    Thr->WriteTime[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
@@ -2463,7 +2391,7 @@ static void For_GetThreadData (struct For_Thread *Thr)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get if first or last message are enabled *****/
-   for (Order = Dat_START_TIME;
+   for (Order  = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
       Thr->Enabled[Order] = For_DB_GetIfPstIsEnabled (Thr->PstCod[Order]);
