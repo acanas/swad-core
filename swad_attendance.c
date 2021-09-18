@@ -261,7 +261,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-	       for (Order  = Dat_START_TIME;
+	       for (Order  = Dat_STR_TIME;
 		    Order <= Dat_END_TIME;
 		    Order++)
 		 {
@@ -984,8 +984,8 @@ void Att_RequestCreatOrEditAttEvent (void)
    char Description[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Reset attendance events *****/

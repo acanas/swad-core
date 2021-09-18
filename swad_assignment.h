@@ -73,7 +73,7 @@ struct Asg_Assignment
 				// I belong to any of the groups)
   };
 
-#define Asg_ORDER_DEFAULT Dat_START_TIME
+#define Asg_ORDER_DEFAULT Dat_STR_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

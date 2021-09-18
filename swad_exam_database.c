@@ -1329,8 +1329,8 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session)
 				Session->Hidden ? 'Y' :
 					          'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,		// Session creator
-				Session->TimeUTC[Dat_START_TIME],	// Start time
-				Session->TimeUTC[Dat_END_TIME  ],	// End time
+				Session->TimeUTC[Dat_STR_TIME],	// Start time
+				Session->TimeUTC[Dat_END_TIME],	// End time
 				Session->Title);
   }
 
@@ -1355,8 +1355,8 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		     " AND exa_exams.CrsCod=%ld",	// Extra check
 		   Session->Hidden ? 'Y' :
 			             'N',
-	           Session->TimeUTC[Dat_START_TIME],	// Start time
-		   Session->TimeUTC[Dat_END_TIME  ],	// End time
+	           Session->TimeUTC[Dat_STR_TIME],	// Start time
+		   Session->TimeUTC[Dat_END_TIME],	// End time
 		   Session->Title,
 		   Session->ShowUsrResults ? 'Y' :
 			                     'N',

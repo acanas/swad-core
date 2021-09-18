@@ -42,7 +42,7 @@ typedef enum
    Svy_START_TIME = 0,
    Svy_END_TIME   = 1,
   } Svy_StartOrEndTime_t;
-#define Svy_ORDER_DEFAULT Dat_START_TIME
+#define Svy_ORDER_DEFAULT Dat_STR_TIME
 
 struct Svy_Surveys
   {

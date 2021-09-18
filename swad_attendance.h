@@ -51,7 +51,7 @@ typedef enum
    Att_OLDEST_FIRST,
   } Att_OrderNewestOldest_t;
 
-#define Att_ORDER_DEFAULT Dat_START_TIME
+#define Att_ORDER_DEFAULT Dat_STR_TIME
 
 struct Att_Event
   {

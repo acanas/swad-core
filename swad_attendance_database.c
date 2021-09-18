@@ -71,17 +71,17 @@ static const char *Att_DB_HiddenSubQuery[Rol_NUM_ROLES] =
   };
 static const char *Att_DB_OrderBySubQuery[Dat_NUM_START_END_TIME][Att_NUM_ORDERS_NEWEST_OLDEST] =
   {
-   [Dat_START_TIME][Att_NEWEST_FIRST] = "StartTime DESC,"
-	                                "EndTime DESC,"
-	                                "Title DESC",
-   [Dat_START_TIME][Att_OLDEST_FIRST] = "StartTime,"
-	                                "EndTime,"
-	                                "Title",
+   [Dat_STR_TIME][Att_NEWEST_FIRST] = "StartTime DESC,"
+	                              "EndTime DESC,"
+	                              "Title DESC",
+   [Dat_STR_TIME][Att_OLDEST_FIRST] = "StartTime,"
+	                              "EndTime,"
+	                              "Title",
 
-   [Dat_END_TIME  ][Att_NEWEST_FIRST] = "EndTime DESC,"
+   [Dat_END_TIME][Att_NEWEST_FIRST] = "EndTime DESC,"
 	                                "StartTime DESC,"
 	                                "Title DESC",
-   [Dat_END_TIME  ][Att_OLDEST_FIRST] = "EndTime,"
+   [Dat_END_TIME][Att_OLDEST_FIRST] = "EndTime,"
 	                                "StartTime,"
 	                                "Title",
   };

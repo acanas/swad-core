@@ -4499,3 +4499,21 @@ unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
 		   " WHERE GamCod=%ld",
 		   GamCod);
   }
+
+/*****************************************************************************/
+/********************** Remove answers of a game question ********************/
+/*****************************************************************************/
+
+void Mch_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
+  {
+   /***** Remove answers from all matches of this game *****/
+   DB_QueryDELETE ("can not remove the answers of a question",
+		   "DELETE FROM mch_answers"
+		   " USING mch_matches,"
+		          "mch_answers"
+		   " WHERE mch_matches.GamCod=%ld"	// From all matches of this game...
+		     " AND mch_matches.MchCod=mch_answers.MchCod"
+		     " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
+		   GamCod,
+		   QstInd);
+  }

@@ -76,7 +76,7 @@ typedef enum
 #define Agd_DEFAULT_HIDDEN_EVENTS	(0 << Agd_HIDDEN_EVENTS)	// off
 #define Agd_DEFAULT_VISIBL_EVENTS	(1 << Agd_VISIBL_EVENTS)	// on
 
-#define Agd_ORDER_DEFAULT Dat_START_TIME
+#define Agd_ORDER_DEFAULT Dat_STR_TIME
 
 struct Agd_Agenda
   {

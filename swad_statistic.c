@@ -337,13 +337,13 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 		     /***** Initial and final dates of the search *****/
 		     if (Gbl.Action.Act == ActReqAccCrs)
 		       {
-			SetHMS[Dat_START_TIME] = Dat_HMS_TO_000000;
-			SetHMS[Dat_END_TIME  ] = Dat_HMS_TO_235959;
+			SetHMS[Dat_STR_TIME] = Dat_HMS_TO_000000;
+			SetHMS[Dat_END_TIME] = Dat_HMS_TO_235959;
 		       }
 		     else
 		       {
-			SetHMS[Dat_START_TIME] = Dat_HMS_DO_NOT_SET;
-			SetHMS[Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET;
+			SetHMS[Dat_STR_TIME] = Dat_HMS_DO_NOT_SET;
+			SetHMS[Dat_END_TIME] = Dat_HMS_DO_NOT_SET;
 		       }
 		     Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
@@ -486,8 +486,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    extern const char *Txt_Show_hits;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_TO_000000,
-      [Dat_END_TIME  ] = Dat_HMS_TO_235959
+      [Dat_STR_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME] = Dat_HMS_TO_235959
      };
    Sta_Role_t RoleStat;
    unsigned RoleStatUnsigned;
@@ -719,8 +719,8 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 
 void Sta_SetIniEndDates (void)
   {
-   Gbl.DateRange.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
-   Gbl.DateRange.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC;
+   Gbl.DateRange.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC - ((Cfg_DAYS_IN_RECENT_LOG - 1) * 24 * 60 * 60);
+   Gbl.DateRange.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC;
   }
 
 /*****************************************************************************/
@@ -1127,8 +1127,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	             " BETWEEN FROM_UNIXTIME(%ld)"
 	                 " AND FROM_UNIXTIME(%ld)",
             LogTable,
-            (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
-            (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
+            (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME],
+            (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
    Str_Concat (Query,QueryAux,Sta_MAX_BYTES_QUERY_ACCESS);
 
    switch (GlobalOrCourse)

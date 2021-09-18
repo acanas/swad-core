@@ -151,8 +151,8 @@ void ExaPrn_ResetPrint (struct ExaPrn_Print *Print)
    Print->PrnCod = -1L;
    Print->SesCod = -1L;
    Print->UsrCod = -1L;
-   Print->TimeUTC[Dat_START_TIME] =
-   Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Print->TimeUTC[Dat_STR_TIME] =
+   Print->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Print->Sent                    = false;	// After creating an exam print, it's not sent
    Print->NumQsts.All                  =
    Print->NumQsts.NotBlank             =
@@ -296,8 +296,8 @@ static void ExaPrn_GetDataOfPrint (struct ExaPrn_Print *Print,
       Print->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get date-time (row[3] and row[4] hold UTC date-time) */
-      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get number of questions (row[5]) */
       if (sscanf (row[5],"%u",&Print->NumQsts.All) != 1)

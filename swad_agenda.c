@@ -623,7 +623,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
    /***** Table head *****/
    HTM_TR_Begin (NULL);
 
-      for (Order  = Dat_START_TIME;
+      for (Order  = Dat_STR_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
@@ -1119,8 +1119,8 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
       AgdEvent->Hidden = (row[2][0] == 'Y');
 
       /* Get start date (row[3]) and end date (row[4]) in UTC time */
-      AgdEvent->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-      AgdEvent->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      AgdEvent->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      AgdEvent->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the event is past, present or future (row(5), row[6]) */
       AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
@@ -1134,14 +1134,14 @@ static void Agd_GetDataOfEventByCod (struct Agd_Event *AgdEvent)
    else
      {
       /***** Clear all event data *****/
-      AgdEvent->AgdCod                  = -1L;
-      AgdEvent->Public                  = false;
-      AgdEvent->Hidden                  = false;
-      AgdEvent->TimeUTC[Dat_START_TIME] =
-      AgdEvent->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-      AgdEvent->TimeStatus              = Dat_FUTURE;
-      AgdEvent->Event[0]                = '\0';
-      AgdEvent->Location[0]             = '\0';
+      AgdEvent->AgdCod                = -1L;
+      AgdEvent->Public                = false;
+      AgdEvent->Hidden                = false;
+      AgdEvent->TimeUTC[Dat_STR_TIME] =
+      AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
+      AgdEvent->TimeStatus            = Dat_FUTURE;
+      AgdEvent->Event[0]              = '\0';
+      AgdEvent->Location[0]           = '\0';
      }
 
    /***** Free structure that stores the query result *****/
@@ -1397,8 +1397,8 @@ void Agd_RequestCreatOrEditEvent (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Reset agenda context *****/
@@ -1416,8 +1416,8 @@ void Agd_RequestCreatOrEditEvent (void)
      {
       /* Initialize to empty event */
       AgdEvent.AgdCod = -1L;
-      AgdEvent.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      AgdEvent.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      AgdEvent.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      AgdEvent.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       AgdEvent.TimeStatus = Dat_FUTURE;
       AgdEvent.Event[0]    = '\0';
       AgdEvent.Location[0] = '\0';
@@ -1555,8 +1555,8 @@ void Agd_ReceiveFormEvent (void)
    ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) <= 0);
 
    /***** Get start/end date-times *****/
-   AgdEvent.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   AgdEvent.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   AgdEvent.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get event location *****/
    Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);
@@ -1568,10 +1568,10 @@ void Agd_ReceiveFormEvent (void)
    Par_GetParToHTML ("Txt",EventTxt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (AgdEvent.TimeUTC[Dat_START_TIME] == 0)
-      AgdEvent.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (AgdEvent.TimeUTC[Dat_STR_TIME] == 0)
+      AgdEvent.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
    if (AgdEvent.TimeUTC[Dat_END_TIME] == 0)
-      AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+      AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Location[0])	// If there is no event

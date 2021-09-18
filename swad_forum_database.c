@@ -457,7 +457,7 @@ unsigned For_DB_GetForumThreads (MYSQL_RES **mysql_res,
 
    switch (Forums->ThreadsOrder)
      {
-      case Dat_START_TIME:	// First post time
+      case Dat_STR_TIME:	// First post time
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get thread of a forum",
 			 "SELECT for_threads.ThrCod"	// row[0]

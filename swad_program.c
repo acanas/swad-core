@@ -1109,8 +1109,8 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
 
       /* Get start date (row[5] holds the start UTC time)
          and end date   (row[6] holds the end   UTC time) */
-      Item->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
-      Item->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[6]);
+      Item->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
+      Item->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
 
       /* Get whether the program item is open or closed (row(7)) */
       Item->Open = (row[7][0] == '1');
@@ -1134,8 +1134,8 @@ static void Prg_ResetItem (struct ProgramItem *Item)
    Item->Hierarchy.Level  = 0;
    Item->Hierarchy.Hidden = false;
    Item->UsrCod = -1L;
-   Item->TimeUTC[Dat_START_TIME] =
-   Item->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Item->TimeUTC[Dat_STR_TIME] =
+   Item->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Item->Open = false;
    Item->Title[0] = '\0';
   }
@@ -1808,8 +1808,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    struct ProgramItem Item;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_TO_000000,
-      [Dat_END_TIME  ] = Dat_HMS_TO_235959
+      [Dat_STR_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME] = Dat_HMS_TO_235959
      };
 
    /***** Get data of the parent program item from database *****/
@@ -1818,8 +1818,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
 
    /***** Initialize to empty program item *****/
    Prg_ResetItem (&Item);
-   Item.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-   Item.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+   Item.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+   Item.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
    Item.Open = true;
 
    /***** Show pending alerts */
@@ -1857,8 +1857,8 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Get data of the program item from database *****/
@@ -1965,8 +1965,8 @@ void Prg_ReceiveFormNewItem (void)
    NewItem.Hierarchy.Level = ParentItem.Hierarchy.Level + 1;	// Create as child
 
    /***** Get start/end date-times *****/
-   NewItem.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewItem.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get program item title *****/
    Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
@@ -1975,10 +1975,10 @@ void Prg_ReceiveFormNewItem (void)
    Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewItem.TimeUTC[Dat_START_TIME] == 0)
-      NewItem.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewItem.TimeUTC[Dat_STR_TIME] == 0)
+      NewItem.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewItem.TimeUTC[Dat_END_TIME] == 0)
-      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Create a new program item *****/
    Prg_InsertItem (&ParentItem,&NewItem,Description);
@@ -2020,8 +2020,8 @@ void Prg_ReceiveFormChgItem (void)
    Prg_GetDataOfItemByCod (&OldItem);
 
    /***** Get start/end date-times *****/
-   NewItem.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewItem.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewItem.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewItem.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get program item title *****/
    Par_GetParToText ("Title",NewItem.Title,Prg_MAX_BYTES_PROGRAM_ITEM_TITLE);
@@ -2030,10 +2030,10 @@ void Prg_ReceiveFormChgItem (void)
    Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewItem.TimeUTC[Dat_START_TIME] == 0)
-      NewItem.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewItem.TimeUTC[Dat_STR_TIME] == 0)
+      NewItem.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewItem.TimeUTC[Dat_END_TIME] == 0)
-      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+      NewItem.TimeUTC[Dat_END_TIME] = NewItem.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Update existing item *****/
    Prg_DB_UpdateItem (&NewItem,Description);
@@ -2141,8 +2141,8 @@ static long Prg_DB_InsertItem (struct ProgramItem *Item,const char *Txt)
 			        Item->Hierarchy.Index,
 			        Item->Hierarchy.Level,
 			        Gbl.Usrs.Me.UsrDat.UsrCod,
-			        Item->TimeUTC[Dat_START_TIME],
-			        Item->TimeUTC[Dat_END_TIME  ],
+			        Item->TimeUTC[Dat_STR_TIME],
+			        Item->TimeUTC[Dat_END_TIME],
 			        Item->Title,
 			        Txt);
   }
@@ -2162,8 +2162,8 @@ static void Prg_DB_UpdateItem (struct ProgramItem *Item,const char *Txt)
 		          "Txt='%s'"
 		   " WHERE ItmCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-                   Item->TimeUTC[Dat_START_TIME],
-                   Item->TimeUTC[Dat_END_TIME  ],
+                   Item->TimeUTC[Dat_STR_TIME],
+                   Item->TimeUTC[Dat_END_TIME],
                    Item->Title,
                    Txt,
                    Item->Hierarchy.ItmCod,

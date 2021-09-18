@@ -74,8 +74,14 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
    char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY + 1];
    static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = "StartTime,EndTime,Event,Location",
-      [Dat_END_TIME  ] = "EndTime,StartTime,Event,Location",
+      [Dat_STR_TIME] = "StartTime,"
+	               "EndTime,"
+	               "Event,"
+	               "Location",
+      [Dat_END_TIME] = "EndTime,"
+	               "StartTime,"
+	               "Event,"
+	               "Location",
      };
    unsigned NumEvents;
 
@@ -250,8 +256,8 @@ long Agd_DB_CreateEvent (const struct Agd_Event *AgdEvent,const char *Txt)
 				" (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s','%s')",
 				AgdEvent->UsrCod,
-				AgdEvent->TimeUTC[Dat_START_TIME],
-				AgdEvent->TimeUTC[Dat_END_TIME  ],
+				AgdEvent->TimeUTC[Dat_STR_TIME],
+				AgdEvent->TimeUTC[Dat_END_TIME],
 				AgdEvent->Event,
 				AgdEvent->Location,
 				Txt);
@@ -273,8 +279,8 @@ void Agd_DB_UpdateEvent (const struct Agd_Event *AgdEvent,const char *Txt)
 		          "Txt='%s'"
 		   " WHERE AgdCod=%ld"
 		     " AND UsrCod=%ld",
-                   AgdEvent->TimeUTC[Dat_START_TIME],
-                   AgdEvent->TimeUTC[Dat_END_TIME  ],
+                   AgdEvent->TimeUTC[Dat_STR_TIME],
+                   AgdEvent->TimeUTC[Dat_END_TIME],
                    AgdEvent->Event,
                    AgdEvent->Location,
                    Txt,

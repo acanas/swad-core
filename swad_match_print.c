@@ -67,8 +67,8 @@ void MchPrn_ResetPrint (struct MchPrn_Print *Print)
   {
    Print->MchCod = -1L;
    Print->UsrCod = -1L;
-   Print->TimeUTC[Dat_START_TIME] =
-   Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Print->TimeUTC[Dat_STR_TIME] =
+   Print->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Print->NumQsts.All      =
    Print->NumQsts.NotBlank = 0;
    Print->Score            = 0.0;

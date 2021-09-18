@@ -1003,8 +1003,8 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
    MYSQL_RES *mysql_res;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Begin box *****/
@@ -1101,8 +1101,8 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
    MYSQL_RES *mysql_res;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Begin box *****/
@@ -1163,8 +1163,8 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
    MYSQL_RES *mysql_res;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Begin box *****/
@@ -1770,7 +1770,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
    Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (LongStr,sizeof (LongStr),"%ld",
-             (long) Gbl.DateRange.TimeUTC[Dat_START_TIME]);
+             (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME]);
    Str_Concat (Query,LongStr,Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
                Tst_MAX_BYTES_QUERY_TEST);

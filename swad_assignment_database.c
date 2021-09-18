@@ -69,12 +69,12 @@ static const char *Asg_DB_HiddenSubQuery[Rol_NUM_ROLES] =
   };
 static const char *Asg_DB_OrderSubQuery[Dat_NUM_START_END_TIME] =
   {
-   [Dat_START_TIME] = "StartTime DESC,"
-		      "EndTime DESC,"
-		      "Title DESC",
-   [Dat_END_TIME  ] = "EndTime DESC,"
-		      "StartTime DESC,"
-		      "Title DESC",
+   [Dat_STR_TIME] = "StartTime DESC,"
+		    "EndTime DESC,"
+		    "Title DESC",
+   [Dat_END_TIME] = "EndTime DESC,"
+		    "StartTime DESC,"
+		    "Title DESC",
   };
 
 /*****************************************************************************/
@@ -245,8 +245,8 @@ long Asg_DB_CreateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
 				  "'%s','%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Asg->TimeUTC[Dat_START_TIME],
-				Asg->TimeUTC[Dat_END_TIME  ],
+				Asg->TimeUTC[Dat_STR_TIME],
+				Asg->TimeUTC[Dat_END_TIME],
 				Asg->Title,
 				Asg->Folder,
 				Txt);
@@ -268,8 +268,8 @@ void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
 		          "Txt='%s'"
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-                   Asg->TimeUTC[Dat_START_TIME],
-                   Asg->TimeUTC[Dat_END_TIME  ],
+                   Asg->TimeUTC[Dat_STR_TIME],
+                   Asg->TimeUTC[Dat_END_TIME],
                    Asg->Title,
                    Asg->Folder,
                    Txt,

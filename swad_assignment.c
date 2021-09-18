@@ -230,7 +230,7 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
    HTM_TR_Begin (NULL);
 
       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-      for (Order  = Dat_START_TIME;
+      for (Order  = Dat_STR_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
@@ -806,8 +806,8 @@ static void Asg_GetDataOfAssignment (struct Asg_Assignment *Asg,
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get start and end dates (row[3] and row[4] hold the start UTC time) */
-      Asg->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-      Asg->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      Asg->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      Asg->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
       Asg->Open = (row[5][0] == '1');
@@ -836,8 +836,8 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
    Asg->AsgCod = -1L;
    Asg->Hidden = false;
    Asg->UsrCod = -1L;
-   Asg->TimeUTC[Dat_START_TIME] =
-   Asg->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Asg->TimeUTC[Dat_STR_TIME] =
+   Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Asg->Open = false;
    Asg->Title[0] = '\0';
    Asg->SendWork = Asg_DO_NOT_SEND_WORK;
@@ -1087,13 +1087,13 @@ void Asg_RequestCreatOrEditAsg (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMSDontSet[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
    static const Dat_SetHMS SetHMSAllDay[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_TO_000000,
-      [Dat_END_TIME  ] = Dat_HMS_TO_235959
+      [Dat_STR_TIME] = Dat_HMS_TO_000000,
+      [Dat_END_TIME] = Dat_HMS_TO_235959
      };
 
    /***** Reset assignments *****/
@@ -1112,8 +1112,8 @@ void Asg_RequestCreatOrEditAsg (void)
      {
       /* Initialize to empty assignment */
       Asg.AsgCod = -1L;
-      Asg.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Asg.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Asg.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      Asg.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Asg.Open = true;
       Asg.Title[0] = '\0';
       Asg.SendWork = Asg_DO_NOT_SEND_WORK;
@@ -1338,8 +1338,8 @@ void Asg_ReceiveFormAssignment (void)
      }
 
    /***** Get start/end date-times *****/
-   NewAsg.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAsg.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewAsg.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewAsg.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get assignment title *****/
    Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
@@ -1353,10 +1353,10 @@ void Asg_ReceiveFormAssignment (void)
    Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAsg.TimeUTC[Dat_START_TIME] == 0)
-      NewAsg.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewAsg.TimeUTC[Dat_STR_TIME] == 0)
+      NewAsg.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewAsg.TimeUTC[Dat_END_TIME] == 0)
-      NewAsg.TimeUTC[Dat_END_TIME] = NewAsg.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
+      NewAsg.TimeUTC[Dat_END_TIME] = NewAsg.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
    if (NewAsg.Title[0])	// If there's an assignment title

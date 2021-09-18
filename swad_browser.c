@@ -5370,7 +5370,7 @@ static void Brw_WriteDatesAssignment (void)
 	 if (asprintf (&Id,"asg_start_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_SPAN_Begin ("id=\"%s\"",Id);
-	    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
+	    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_STR_TIME],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					  true,true,false,0x7);
 	 HTM_SPAN_End ();

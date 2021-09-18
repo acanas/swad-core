@@ -197,8 +197,8 @@ void TstPrn_ResetPrint (struct TstPrn_Print *Print)
 
 static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
   {
-   Print->TimeUTC[Dat_START_TIME] =
-   Print->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Print->TimeUTC[Dat_STR_TIME] =
+   Print->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Print->NumQsts.All      =
    Print->NumQsts.NotBlank = 0;
    Print->Sent             = false;	// After creating an exam, it's not sent
@@ -692,7 +692,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
    /***** If this question has been edited later than test time
 	  ==> don't show question ****/
    if (QuestionExists)
-      QuestionUneditedAfterExam = (Question->EditTime < TimeUTC[Dat_START_TIME]);
+      QuestionUneditedAfterExam = (Question->EditTime < TimeUTC[Dat_STR_TIME]);
    else
       QuestionUneditedAfterExam = false;
 
@@ -1885,8 +1885,8 @@ void TstPrn_SelDatesToSeeMyPrints (void)
    extern const char *Txt_View_results;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
 
    /***** Begin form *****/
@@ -2009,8 +2009,8 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 
    HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                                               Usr_SEX_UNKNOWN]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_STR_TIME]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME]);
    HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Questions);
    HTM_TH (1,2,"CT LINE_LEFT",Txt_Answers);
    HTM_TH (1,2,"CT LINE_LEFT",Txt_Score);
@@ -2085,8 +2085,8 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 		   " ORDER BY ExaCod",
 		   Gbl.Hierarchy.Crs.CrsCod,
 		   UsrDat->UsrCod,
-		   (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
-		   (long) Gbl.DateRange.TimeUTC[Dat_END_TIME  ]);
+		   (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME],
+		   (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
@@ -2718,8 +2718,8 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get date-time (row[1] and row[2] hold UTC date-time) */
-      Print->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
-      Print->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[2]);
+      Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
+      Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
       if (sscanf (row[3],"%u",&Print->NumQsts.All) != 1)

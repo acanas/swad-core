@@ -1014,8 +1014,8 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 	 HTM_TR_Begin (NULL);
 	    HTM_TH (1,1,"LM",Txt_Place);
 	    HTM_TH (1,1,"LM",Txt_Type);
-	    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
-	    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME  ]);
+	    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_STR_TIME]);
+	    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
 	    HTM_TH (1,1,"LM",Txt_Holiday);
 	 HTM_TR_End ();
 
@@ -1105,8 +1105,8 @@ static void Hld_PutHeadHolidays (void)
       HTM_TH (1,1,"RM",Txt_Code);
       HTM_TH (1,1,"LM",Txt_Place);
       HTM_TH (1,1,"LM",Txt_Type);
-      HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
-      HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME  ]);
+      HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_STR_TIME]);
+      HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
       HTM_TH (1,1,"LM",Txt_Holiday);
    HTM_TR_End ();
   }

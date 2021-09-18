@@ -41,7 +41,12 @@
 
 unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder);
 unsigned Gam_DB_GetDataOfGameByCod (MYSQL_RES **mysql_res,long GamCod);
+void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game);
+
 unsigned Gam_DB_GetNumQstsGame (long GamCod);
+unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
+unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);
 
 unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);

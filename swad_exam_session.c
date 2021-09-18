@@ -200,8 +200,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,
 	    /* Reset session */
 	    ExaSes_ResetSession (Session);
 	    Session->ExaCod = Exam->ExaCod;
-	    Session->TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;			// Now
-	    Session->TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
+	    Session->TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;			// Now
+	    Session->TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (1 * 60 * 60);	// Now + 1 hour
             Str_Copy (Session->Title,Exam->Title,sizeof (Session->Title) - 1);
 
 	    /* Put form to create new session */
@@ -1012,8 +1012,8 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
    extern const char *Txt_Save_changes;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
-      [Dat_START_TIME] = Dat_HMS_DO_NOT_SET,
-      [Dat_END_TIME  ] = Dat_HMS_DO_NOT_SET
+      [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
+      [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
    bool ItsANewSession = Session->SesCod <= 0;
 
@@ -1249,8 +1249,8 @@ void ExaSes_ReceiveFormSession (void)
    Par_GetParToText ("Title",Session.Title,ExaSes_MAX_BYTES_TITLE);
 
    /* Get start/end date-times */
-   Session.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   Session.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   Session.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   Session.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /* Get groups associated to the session */
    Grp_GetParCodsSeveralGrps ();

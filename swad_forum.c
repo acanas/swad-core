@@ -2037,7 +2037,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
 		  HTM_TH (1,1,"LM",Txt_MSG_Subject);
 
-		  for (Order  = Dat_START_TIME;
+		  for (Order  = Dat_STR_TIME;
 		       Order <= Dat_END_TIME;
 		       Order++)
 		    {
@@ -2229,7 +2229,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	    Pag_WriteLinksToPages (Pag_POSTS_FORUM,
 				   &PaginationPsts,
 				   Forums,Thr.ThrCod,
-				   Thr.Enabled[Dat_START_TIME],
+				   Thr.Enabled[Dat_STR_TIME],
 				   Thr.Subject,
 				   Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
 							The_ClassFormInBox[Gbl.Prefs.Theme],
@@ -2237,11 +2237,11 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	 HTM_TD_End ();
 
 	 /***** Write the authors and date-times of first and last posts *****/
-	 for (Order  = Dat_START_TIME;
+	 for (Order  = Dat_STR_TIME;
 	      Order <= Dat_END_TIME;
 	      Order++)
 	   {
-	    if (Order == Dat_START_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
+	    if (Order == Dat_STR_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
 	      {
 	       /* Write the author of first or last message */
 	       UsrDat.UsrCod = Thr.UsrCod[Order];
@@ -2319,25 +2319,25 @@ static void For_GetThreadData (struct For_Thread *Thr)
 
    /***** Get the codes of the first (row[0])
           and the last post (row[1]) in this thread *****/
-   Thr->PstCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[0]);
-   Thr->PstCod[Dat_END_TIME  ] = Str_ConvertStrCodToLongCod (row[1]);
+   Thr->PstCod[Dat_STR_TIME] = Str_ConvertStrCodToLongCod (row[0]);
+   Thr->PstCod[Dat_END_TIME] = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get the code of the first message (row[0])
           and the last message (row[1]) in this thread *****/
-   if (sscanf (row[0],"%ld",&(Thr->PstCod[Dat_START_TIME])) != 1)
+   if (sscanf (row[0],"%ld",&(Thr->PstCod[Dat_STR_TIME])) != 1)
       Err_WrongPostExit ();
-   if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME  ])) != 1)
+   if (sscanf (row[1],"%ld",&(Thr->PstCod[Dat_END_TIME])) != 1)
       Err_WrongPostExit ();
 
    /***** Get the author of the first post in this thread (row[2])
           and the author of the last  post in this thread (row[3]) *****/
-   Thr->UsrCod[Dat_START_TIME] = Str_ConvertStrCodToLongCod (row[2]);
-   Thr->UsrCod[Dat_END_TIME  ] = Str_ConvertStrCodToLongCod (row[3]);
+   Thr->UsrCod[Dat_STR_TIME] = Str_ConvertStrCodToLongCod (row[2]);
+   Thr->UsrCod[Dat_END_TIME] = Str_ConvertStrCodToLongCod (row[3]);
 
    /***** Get the date of the first post in this thread (row[4])
           and the date of the last  post in this thread (row[5]) *****/
-   Thr->WriteTime[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
-   Thr->WriteTime[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+   Thr->WriteTime[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+   Thr->WriteTime[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
    Str_Copy (Thr->Subject,row[6],sizeof (Thr->Subject) - 1);
@@ -2348,7 +2348,7 @@ static void For_GetThreadData (struct For_Thread *Thr)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get if first or last message are enabled *****/
-   for (Order  = Dat_START_TIME;
+   for (Order  = Dat_STR_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
       Thr->Enabled[Order] = For_DB_GetIfPstIsEnabled (Thr->PstCod[Order]);

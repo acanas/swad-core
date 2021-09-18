@@ -2372,7 +2372,7 @@ const char *Txt_Assignments_and_other_works =
 
 const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
 	{
- 	[Dat_START_TIME] =
+ 	[Dat_STR_TIME] =
 #if   L==1	// ca
 	"Ordenar per data de comen&ccedil;ament"
 #elif L==2	// de
@@ -2417,7 +2417,7 @@ const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
 
 const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
 	{
- 	[Dat_START_TIME] =
+ 	[Dat_STR_TIME] =
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de
@@ -14159,7 +14159,7 @@ const char *Txt_Forum_threads =
 
 const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
 	{
-	[Dat_START_TIME] =
+	[Dat_STR_TIME] =
 #if   L==1	// ca
 	"Ordenar por fecha del primer mensaje"	// Necessita traduccio
 #elif L==2	// de
@@ -14204,7 +14204,7 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME] =
 
 const char *Txt_FORUM_THREAD_ORDER[Dat_NUM_START_END_TIME] =
 	{
-	[Dat_START_TIME] =
+	[Dat_STR_TIME] =
 #if   L==1	// ca
 	"Primer comentari"
 #elif L==2	// de

@@ -183,8 +183,8 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->UsrCod                  = -1L;
    Exam->MaxGrade                = Exa_MAX_GRADE_DEFAULT;
    Exam->Visibility              = TstVis_VISIBILITY_DEFAULT;
-   Exam->TimeUTC[Dat_START_TIME] = (time_t) 0;
-   Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Exam->TimeUTC[Dat_STR_TIME] = (time_t) 0;
+   Exam->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Exam->Title[0]                = '\0';
    Exam->Hidden                  = false;
    Exam->NumSets                 = 0;
@@ -541,7 +541,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 			  Id,Color,Gbl.RowEvenOdd);
-	 if (Exam->TimeUTC[Dat_START_TIME])
+	 if (Exam->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,true,0x6);
@@ -964,8 +964,8 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
 
 	 /* Get start date (row[0] holds the start UTC time)
 	    and end   date (row[1] holds the end   UTC time) */
-	 Exam->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
-	 Exam->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
+	 Exam->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
+	 Exam->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
 	}
 
       /* Free structure that stores the query result */
@@ -973,8 +973,8 @@ void Exa_GetDataOfExamByCod (struct Exa_Exam *Exam)
      }
    else
      {
-      Exam->TimeUTC[Dat_START_TIME] =
-      Exam->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+      Exam->TimeUTC[Dat_STR_TIME] =
+      Exam->TimeUTC[Dat_END_TIME] = (time_t) 0;
      }
   }
 

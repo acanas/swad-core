@@ -135,11 +135,7 @@ static void Gam_PutParamsOneQst (void *Games);
 static void Gam_PutHiddenParamOrder (Gam_Order_t SelectedOrder);
 static Gam_Order_t Gam_GetParamOrder (void);
 
-static void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
-
 static void Gam_RemoveGameFromAllTables (long GamCod);
-
-static bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game);
 
 static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 				     struct Gam_Game *Game,
@@ -152,11 +148,6 @@ static bool Gam_CheckGameFieldsReceivedFromForm (const struct Gam_Game *Game);
 static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt);
 
-static void Gam_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
-
-static unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
-
-static unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);
 static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						  long GamCod,unsigned NumQsts,
@@ -206,8 +197,8 @@ void Gam_ResetGame (struct Gam_Game *Game)
    Game->UsrCod                  = -1L;
    Game->MaxGrade                = Gam_MAX_GRADE_DEFAULT;
    Game->Visibility              = TstVis_VISIBILITY_DEFAULT;
-   Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
-   Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Game->TimeUTC[Dat_STR_TIME] = (time_t) 0;
+   Game->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Game->Title[0]                = '\0';
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
@@ -601,7 +592,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
 			  Id,Color,Gbl.RowEvenOdd);
-	 if (Game->TimeUTC[Dat_START_TIME])
+	 if (Game->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,true,0x7);
@@ -1034,8 +1025,8 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
 
 	 /* Get start date (row[0] holds the start UTC time)
 	    and end   date (row[1] holds the end   UTC time) */
-	 Game->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
-	 Game->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
+	 Game->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
+	 Game->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
 	}
 
       /* Free structure that stores the query result */
@@ -1043,8 +1034,8 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
      }
    else
      {
-      Game->TimeUTC[Dat_START_TIME] =
-      Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+      Game->TimeUTC[Dat_STR_TIME] =
+      Game->TimeUTC[Dat_END_TIME] = (time_t) 0;
      }
   }
 
@@ -1062,20 +1053,6 @@ void Gam_FreeListGames (struct Gam_Games *Games)
       Games->Num       = 0;
       Games->LstIsRead = false;
      }
-  }
-
-/*****************************************************************************/
-/********************** Get game text from database ************************/
-/*****************************************************************************/
-
-static void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get text of game from database *****/
-   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get game text",
-		         "SELECT Txt"	// row[0]
-			  " FROM gam_games"
-		         " WHERE GamCod=%ld",
-		         GamCod);
   }
 
 /*****************************************************************************/
@@ -1267,24 +1244,6 @@ void Gam_UnhideGame (void)
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
-  }
-
-/*****************************************************************************/
-/******************* Check if the title of a game exists *******************/
-/*****************************************************************************/
-
-static bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
-  {
-   /***** Get number of games with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar games",
-			  "SELECT COUNT(*)"
-			   " FROM gam_games"
-			  " WHERE CrsCod=%ld"
-			    " AND Title='%s'"
-			    " AND GamCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Game->Title,
-			  Game->GamCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1736,41 +1695,6 @@ unsigned Gam_GetParamQstInd (void)
   }
 
 /*****************************************************************************/
-/********************** Remove answers of a game question ********************/
-/*****************************************************************************/
-
-static void Gam_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
-  {
-   /***** Remove answers from all matches of this game *****/
-   DB_QueryDELETE ("can not remove the answers of a question",
-		   "DELETE FROM mch_answers"
-		   " USING mch_matches,"
-		          "mch_answers"
-		   " WHERE mch_matches.GamCod=%ld"	// From all matches of this game...
-		     " AND mch_matches.MchCod=mch_answers.MchCod"
-		     " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
-		   GamCod,
-		   QstInd);
-  }
-
-/*****************************************************************************/
-/************ Get question index given game and code of question *************/
-/*****************************************************************************/
-// Return 0 is question is not present in game
-
-static unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod)
-  {
-   /***** Get question index in a game given the question code *****/
-   return DB_QuerySELECTUnsigned ("can not get question index",
-				  "SELECT QstInd"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld"
-				    " AND QstCod=%ld",
-				  GamCod,
-				  QstCod);
-  }
-
-/*****************************************************************************/
 /************ Get question code given game and index of question *************/
 /*****************************************************************************/
 
@@ -1790,22 +1714,6 @@ long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
       Err_WrongQuestionExit ();
 
    return QstCod;
-  }
-
-/*****************************************************************************/
-/****************** Get maximum question index in a game *********************/
-/*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no questions
-
-static unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod)
-  {
-   /***** Get maximum question index in a game from database *****/
-   return DB_QuerySELECTUnsigned ("can not get last question index",
-				  "SELECT MAX(QstInd)"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld",
-				  GamCod);
   }
 
 /*****************************************************************************/
@@ -2223,7 +2131,7 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Gam_DB_RemAnswersOfAQuestion (Game.GamCod,QstInd);
+   Mch_DB_RemAnswersOfAQuestion (Game.GamCod,QstInd);
 
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",

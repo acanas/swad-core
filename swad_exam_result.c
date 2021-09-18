@@ -700,8 +700,8 @@ static void ExaRes_ShowHeaderResults (Usr_MeOrOther_t MeOrOther)
    HTM_TR_Begin (NULL);
       HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 						      Usr_SEX_UNKNOWN]);
-      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
-      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_STR_TIME]);
+      HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME]);
       HTM_TH (3,1,"LT LINE_BOTTOM",Txt_Session);
       HTM_TH (1,3,"CT LINE_LEFT",Txt_Questions);
       HTM_TH (1,5,"CT LINE_LEFT",Txt_Valid_answers);

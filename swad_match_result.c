@@ -688,8 +688,8 @@ static void MchRes_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 
    HTM_TH (3,2,"CT LINE_BOTTOM",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                                               Usr_SEX_UNKNOWN]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_START_TIME]);
-   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME  ]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_STR_TIME]);
+   HTM_TH (3,1,"LT LINE_BOTTOM",Txt_START_END_TIME[Dat_END_TIME]);
    HTM_TH (3,1,"LT LINE_BOTTOM",Txt_Match);
    HTM_TH (3,1,"RT LINE_BOTTOM LINE_LEFT",Txt_Questions);
    HTM_TH (1,2,"CT LINE_LEFT",Txt_Answers);
