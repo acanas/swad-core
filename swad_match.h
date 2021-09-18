@@ -128,8 +128,8 @@ void Mch_ToggleVisResultsMchQst (void);
 void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
 
-unsigned Mch_GetNumMchsInGame (long GamCod);
-unsigned Mch_GetNumUnfinishedMchsInGame (long GamCod);
+unsigned Mch_DB_GetNumMchsInGame (long GamCod);
+unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod);
 
 bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match);
 
@@ -154,8 +154,10 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print);
 
 void Mch_ComputeScore (struct MchPrn_Print *Print);
 
-unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
-unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
+unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
+unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
+
+unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 
 #endif

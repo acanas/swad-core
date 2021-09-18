@@ -38,6 +38,7 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_game.h"
+#include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
@@ -867,63 +868,16 @@ static Gam_Order_t Gam_GetParamOrder (void)
 
 void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
   {
-   static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
-     {
-      [Gam_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,gam_games.Title DESC",
-      [Gam_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,gam_games.Title DESC",
-      [Gam_ORDER_BY_TITLE     ] = "gam_games.Title",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char *HiddenSubQuery;
    unsigned NumGame;
 
    /***** Free list of games *****/
    if (Games->LstIsRead)
       Gam_FreeListGames (Games);
 
-   /***** Subquery: get hidden games depending on user's role *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-         if (asprintf (&HiddenSubQuery," AND gam_games.Hidden='N'") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
-	    Err_NotEnoughMemoryExit ();
-	 break;
-      default:
-	 Err_WrongRoleExit ();
-	 break;
-     }
-
    /***** Get list of games from database *****/
-   Games->Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get games",
-		   "SELECT gam_games.GamCod,"				// row[0]
-			  "MIN(mch_matches.StartTime) AS StartTime,"	// row[1]
-			  "MAX(mch_matches.EndTime) AS EndTime"	// row[2]
-		    " FROM gam_games"
-		    " LEFT JOIN mch_matches"
-		      " ON gam_games.GamCod=mch_matches.GamCod"
-		   " WHERE gam_games.CrsCod=%ld"
-		      "%s"
-		   " GROUP BY gam_games.GamCod"
-		   " ORDER BY %s",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   HiddenSubQuery,
-		   OrderBySubQuery[SelectedOrder]);
-
-   /***** Free allocated memory for subquery *****/
-   free (HiddenSubQuery);
-
-   if (Games->Num) // Games found...
+   if ((Games->Num = Gam_DB_GetListGames (&mysql_res,SelectedOrder))) // Games found...
      {
       /***** Create list of games *****/
       if ((Games->Lst = malloc ((size_t) Games->Num *
@@ -1026,21 +980,7 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
    MYSQL_ROW row;
 
    /***** Get data of game from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get game data",
-		       "SELECT gam_games.GamCod,"		// row[0]
-			      "gam_games.CrsCod,"		// row[1]
-			      "gam_games.Hidden,"		// row[2]
-			      "gam_games.UsrCod,"		// row[3]
-			      "gam_games.MaxGrade,"	// row[4]
-			      "gam_games.Visibility,"	// row[5]
-			      "gam_games.Title"		// row[6]
-			" FROM gam_games"
-			" LEFT JOIN mch_matches"
-			  " ON gam_games.GamCod=mch_matches.GamCod"
-		       " WHERE gam_games.GamCod=%ld"
-			 " AND gam_games.CrsCod='%ld'",	// Extra check
-		       Game->GamCod,
-		       Gbl.Hierarchy.Crs.CrsCod)) // Game found...
+   if (Gam_DB_GetDataOfGameByCod (&mysql_res,Game->GamCod)) // Game found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1072,10 +1012,10 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
       Game->NumQsts = Gam_DB_GetNumQstsGame (Game->GamCod);
 
       /* Get number of matches */
-      Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
+      Game->NumMchs = Mch_DB_GetNumMchsInGame (Game->GamCod);
 
       /* Get number of unfinished matches */
-      Game->NumUnfinishedMchs = Mch_GetNumUnfinishedMchsInGame (Game->GamCod);
+      Game->NumUnfinishedMchs = Mch_DB_GetNumUnfinishedMchsInGame (Game->GamCod);
      }
    else
       /* Initialize to empty game */
@@ -1087,20 +1027,14 @@ void Gam_GetDataOfGameByCod (struct Gam_Game *Game)
    if (Game->GamCod > 0)
      {
       /***** Get start and end times from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get game data",
-			  "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-				 "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
-			  " FROM mch_matches"
-			  " WHERE GamCod=%ld",
-			  Game->GamCod))
+      if (Mch_DB_GetStartEndMatchesInGame (&mysql_res,Game->GamCod))
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get start date (row[0] holds the start UTC time) */
+	 /* Get start date (row[0] holds the start UTC time)
+	    and end   date (row[1] holds the end   UTC time) */
 	 Game->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
-
-	 /* Get end   date (row[1] holds the end   UTC time) */
 	 Game->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
 	}
 
@@ -1716,21 +1650,6 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt)
   }
 
 /*****************************************************************************/
-/******************* Get number of questions of a game *********************/
-/*****************************************************************************/
-
-unsigned Gam_DB_GetNumQstsGame (long GamCod)
-  {
-   /***** Get nuumber of questions in a game from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of questions of a game",
-		  "SELECT COUNT(*)"
-		   " FROM gam_questions"
-		  " WHERE GamCod=%ld",
-		  GamCod);
-  }
-
-/*****************************************************************************/
 /*************** Put a form to edit/create a question in game ****************/
 /*****************************************************************************/
 
@@ -1887,47 +1806,6 @@ static unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod)
 				   " FROM gam_questions"
 				  " WHERE GamCod=%ld",
 				  GamCod);
-  }
-
-/*****************************************************************************/
-/*********** Get previous question index to a given index in a game **********/
-/*****************************************************************************/
-// Input question index can be 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
-
-unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
-  {
-   /***** Get previous question index in a game from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get previous question index",
-				  "SELECT COALESCE(MAX(QstInd),0)"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld"
-				    " AND QstInd<%u",
-				  GamCod,
-				  QstInd);
-  }
-
-/*****************************************************************************/
-/************* Get next question index to a given index in a game ************/
-/*****************************************************************************/
-// Input question index can be 0, 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
-
-unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
-  {
-   /***** Get next question index in a game from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get next question index",
-				  "SELECT COALESCE(MIN(QstInd),%u)"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld"
-				    " AND QstInd>%u",
-				  Gam_AFTER_LAST_QUESTION,	// End of questions has been reached
-				  GamCod,
-				  QstInd);
   }
 
 /*****************************************************************************/
@@ -2612,249 +2490,6 @@ void Gam_RequestNewMatch (void)
    Gam_ShowOnlyOneGame (&Games,&Game,
                         false,	// Do not list game questions
                         true);	// Put form to start new match
-  }
-
-/*****************************************************************************/
-/********************* Get number of courses with games **********************/
-/*****************************************************************************/
-// Returns the number of courses with games in this location
-
-unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope)
-  {
-   /***** Get number of courses with games from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT CrsCod)"
-			  " FROM gam_games");
-      case HieLvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "gam_games"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "gam_games"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "gam_games"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
-			  " FROM crs_courses,"
-			        "gam_games"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Deg.DegCod);
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT CrsCod)"
-			  " FROM gam_games"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 return 0;
-     }
-  }
-
-/*****************************************************************************/
-/**************************** Get number of games ****************************/
-/*****************************************************************************/
-// Returns the number of games in this location
-
-unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope)
-  {
-   /***** Get number of games from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of games",
-                         "SELECT COUNT(*)"
-			  " FROM gam_games");
-      case HieLvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of games",
-                         "SELECT COUNT(*)"
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "gam_games"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Cty.CtyCod);
-      case HieLvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of games",
-                         "SELECT COUNT(*)"
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "gam_games"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of games",
-                         "SELECT COUNT(*)"
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "gam_games"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Ctr.CtrCod);
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of games",
-                         "SELECT COUNT(*)"
-			  " FROM crs_courses,"
-			        "gam_games"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=gam_games.CrsCod",
-		         Gbl.Hierarchy.Deg.DegCod);
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of games",
-                         "SELECT COUNT(*)"
-			  " FROM gam_games"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 return 0;
-     }
-  }
-
-/*****************************************************************************/
-/***************** Get average number of questions per game ******************/
-/*****************************************************************************/
-
-double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
-  {
-   /***** Get number of questions per game from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         return DB_QuerySELECTDouble ("can not get number of questions per game",
-				      "SELECT AVG(NumQsts)"
-				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-					       " FROM gam_games,"
-						     "gam_questions"
-					      " WHERE gam_games.GamCod=gam_questions.GamCod"
-					      " GROUP BY gam_questions.GamCod) AS NumQstsTable");
-      case HieLvl_CTY:
-         return DB_QuerySELECTDouble ("can not get number of questions per game",
-				      "SELECT AVG(NumQsts)"
-				      " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-					      " FROM ins_instits,"
-						    "ctr_centers,"
-						    "deg_degrees,"
-						    "crs_courses,"
-						    "gam_games,"
-						    "gam_questions"
-					     " WHERE ins_instits.CtyCod=%ld"
-					       " AND ins_instits.InsCod=ctr_centers.InsCod"
-					       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-					       " AND deg_degrees.DegCod=crs_courses.DegCod"
-					       " AND crs_courses.CrsCod=gam_games.CrsCod"
-					       " AND gam_games.GamCod=gam_questions.GamCod"
-					     " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Cty.CtyCod);
-      case HieLvl_INS:
-         return DB_QuerySELECTDouble ("can not get number of questions per game",
-				      "SELECT AVG(NumQsts)"
-				      " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-					      " FROM ctr_centers,"
-						    "deg_degrees,"
-						    "crs_courses,"
-						    "gam_games,"
-						    "gam_questions"
-					     " WHERE ctr_centers.InsCod=%ld"
-					       " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-					       " AND deg_degrees.DegCod=crs_courses.DegCod"
-					       " AND crs_courses.CrsCod=gam_games.CrsCod"
-					       " AND gam_games.GamCod=gam_questions.GamCod"
-					    " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_CTR:
-         return DB_QuerySELECTDouble ("can not get number of questions per game",
-				      "SELECT AVG(NumQsts)"
-				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-					       " FROM deg_degrees,"
-						     "crs_courses,"
-						     "gam_games,"
-						     "gam_questions"
-					      " WHERE deg_degrees.CtrCod=%ld"
-					        " AND deg_degrees.DegCod=crs_courses.DegCod"
-					        " AND crs_courses.CrsCod=gam_games.CrsCod"
-					        " AND gam_games.GamCod=gam_questions.GamCod"
-					      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Ctr.CtrCod);
-      case HieLvl_DEG:
-         return DB_QuerySELECTDouble ("can not get number of questions per game",
-				      "SELECT AVG(NumQsts)"
-				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-					       " FROM crs_courses,"
-						     "gam_games,"
-						     "gam_questions"
-					      " WHERE crs_courses.DegCod=%ld"
-					        " AND crs_courses.CrsCod=gam_games.CrsCod"
-					        " AND gam_games.GamCod=gam_questions.GamCod"
-					      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Deg.DegCod);
-      case HieLvl_CRS:
-         return DB_QuerySELECTDouble ("can not get number of questions per game",
-				      "SELECT AVG(NumQsts)"
-				       " FROM (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-					       " FROM gam_games,"
-						     "gam_questions"
-					      " WHERE gam_games.Cod=%ld"
-					        " AND gam_games.GamCod=gam_questions.GamCod"
-					      " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0.0;	// Not reached
-     }
   }
 
 /*****************************************************************************/

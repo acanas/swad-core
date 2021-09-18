@@ -37,6 +37,7 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_game.h"
+#include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
 #include "swad_HTML.h"
@@ -142,7 +143,7 @@ static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName);
 static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
 static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName);
 static void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName);
-static void Mch_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName);
+static void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName);
 
 static void Mch_PutParamsPlay (void *MchCod);
 static void Mch_PutParamMchCod (long MchCod);
@@ -234,17 +235,17 @@ static void Mch_PutBigButtonClose (void);
 
 static void Mch_ShowWaitImage (const char *Txt);
 
-static void Mch_RemoveOldPlayers (void);
-static void Mch_UpdateMatchAsBeingPlayed (long MchCod);
-static void Mch_SetMatchAsNotBeingPlayed (long MchCod);
-static bool Mch_GetIfMatchIsBeingPlayed (long MchCod);
-static void Mch_GetNumPlayers (struct Mch_Match *Match);
+static void Mch_DB_RemoveOldPlayers (void);
+static void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);
+static void Mch_DB_SetMatchAsNotBeingPlayed (long MchCod);
+static bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod);
+static void Mch_DB_GetNumPlayers (struct Mch_Match *Match);
 
-static void Mch_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
-                                               const struct Mch_UsrAnswer *UsrAnswer);
-static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
+static void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
+                                                  const struct Mch_UsrAnswer *UsrAnswer);
+static void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
 
-static unsigned Mch_GetNumUsrsWhoHavePlayedMch (long MchCod);
+static unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod);
 
 /*****************************************************************************/
 /*************** Set/Get match code of the match being played ****************/
@@ -837,7 +838,7 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_Unsigned (Mch_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
+      HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
 
@@ -1080,7 +1081,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    if (Match->Status.Showing == Mch_END)	// Match over
       Match->Status.Playing = false;
    else						// Match not over
-      Match->Status.Playing = Mch_GetIfMatchIsBeingPlayed (Match->MchCod);
+      Match->Status.Playing = Mch_DB_GetIfMatchIsBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -1315,12 +1316,12 @@ static void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *Tabl
 void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
    /***** Remove student from secondary tables *****/
-   Mch_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_players");
-   Mch_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_results");
-   Mch_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_answers");
+   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_players");
+   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_results");
+   Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_answers");
   }
 
-static void Mch_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName)
+static void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName)
   {
    /***** Remove matches in course from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a user from table",
@@ -1727,7 +1728,7 @@ void Mch_ResumeMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2053,10 +2054,10 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
 
    if (Match->Status.Playing)	// Match is being played
       /* Update match as being played */
-      Mch_UpdateMatchAsBeingPlayed (Match->MchCod);
+      Mch_DB_UpdateMatchAsBeingPlayed (Match->MchCod);
    else				// Match is paused, not being played
       /* Update match as not being played */
-      Mch_SetMatchAsNotBeingPlayed (Match->MchCod);
+      Mch_DB_SetMatchAsNotBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -2179,7 +2180,7 @@ void Mch_PlayPauseMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2216,7 +2217,7 @@ void Mch_ChangeNumColsMch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2252,7 +2253,7 @@ void Mch_ToggleVisResultsMchQst (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2287,7 +2288,7 @@ void Mch_BackMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2319,7 +2320,7 @@ void Mch_ForwardMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2507,7 +2508,7 @@ static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Upda
 /********************** Get number of matches in a game **********************/
 /*****************************************************************************/
 
-unsigned Mch_GetNumMchsInGame (long GamCod)
+unsigned Mch_DB_GetNumMchsInGame (long GamCod)
   {
    /***** Trivial check *****/
    if (GamCod < 0)	// A non-existing game...
@@ -2526,7 +2527,7 @@ unsigned Mch_GetNumMchsInGame (long GamCod)
 /*************** Get number of unfinished matches in a game ******************/
 /*****************************************************************************/
 
-unsigned Mch_GetNumUnfinishedMchsInGame (long GamCod)
+unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod)
   {
    /***** Trivial check *****/
    if (GamCod < 0)	// A non-existing game...
@@ -2703,7 +2704,7 @@ static void Mch_WriteNumRespondersQst (struct Mch_Match *Match)
 	       HTM_Hyphen ();	// Do not write number of responders
 	       break;
 	    default:
-	       HTM_Unsigned (Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,
+	       HTM_Unsigned (Mch_DB_GetNumUsrsWhoAnsweredQst (Match->MchCod,
 							   Match->Status.QstInd));
 	       break;
 	   }
@@ -2712,7 +2713,7 @@ static void Mch_WriteNumRespondersQst (struct Mch_Match *Match)
 	 if (Match->Status.Playing)	// Match is being played
 	   {
 	    /* Get current number of players */
-	    Mch_GetNumPlayers (Match);
+	    Mch_DB_GetNumPlayers (Match);
 
 	    /* Show current number of players */
 	    HTM_TxtF ("/%u",Match->Status.NumPlayers);
@@ -3363,7 +3364,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
    /***** Get number of users who have answered this question from database *****/
-   NumRespondersQst = Mch_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
+   NumRespondersQst = Mch_DB_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
 
    /***** Change format of answers text *****/
    Tst_ChangeFormatAnswersText (Question);
@@ -3406,7 +3407,7 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 	       if (ShowResult)
 		 {
 		  /* Get number of users who selected this answer */
-		  NumRespondersAns = Mch_GetNumUsrsWhoHaveChosenAns (Match->MchCod,Match->Status.QstInd,Indexes[NumOpt]);
+		  NumRespondersAns = Mch_DB_GetNumUsrsWhoHaveChosenAns (Match->MchCod,Match->Status.QstInd,Indexes[NumOpt]);
 
 		  /* Draw proportional bar for this answer */
 		  Mch_DrawBarNumUsrs (NumRespondersAns,NumRespondersQst,
@@ -3811,7 +3812,7 @@ static void Mch_ShowWaitImage (const char *Txt)
 /**************************** Remove old players *****************************/
 /*****************************************************************************/
 
-static void Mch_RemoveOldPlayers (void)
+static void Mch_DB_RemoveOldPlayers (void)
   {
    /***** Delete matches not being played by teacher *****/
    DB_QueryDELETE ("can not update matches as not being played",
@@ -3830,7 +3831,7 @@ static void Mch_RemoveOldPlayers (void)
 /********************** Update match as being played *************************/
 /*****************************************************************************/
 
-static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
+static void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod)
   {
    /***** Insert match as being played *****/
    DB_QueryREPLACE ("can not set match as being played",
@@ -3845,7 +3846,7 @@ static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
 /**************** Update match as paused, not being played *******************/
 /*****************************************************************************/
 
-static void Mch_SetMatchAsNotBeingPlayed (long MchCod)
+static void Mch_DB_SetMatchAsNotBeingPlayed (long MchCod)
   {
    /***** Delete all match players ******/
    DB_QueryDELETE ("can not update match players",
@@ -3864,7 +3865,7 @@ static void Mch_SetMatchAsNotBeingPlayed (long MchCod)
 /*********************** Get if match is being played ************************/
 /*****************************************************************************/
 
-static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
+static bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod)
   {
    /***** Get if a match is being played or not *****/
    return (DB_QueryCOUNT ("can not get if match is being played",
@@ -3878,7 +3879,7 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
 /*************************** Get number of players ***************************/
 /*****************************************************************************/
 
-static void Mch_GetNumPlayers (struct Mch_Match *Match)
+static void Mch_DB_GetNumPlayers (struct Mch_Match *Match)
   {
    /***** Get number of players who are playing a match *****/
    Match->Status.NumPlayers = (unsigned)
@@ -4000,7 +4001,7 @@ void Mch_RemoveMyQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd)
        QstInd == Match->Status.QstInd)		// Removing answer to the current question being played
      {
       /***** Remove my answer to this question *****/
-      Mch_RemoveMyAnswerToMatchQuestion (Match);
+      Mch_DB_RemoveMyAnswerToMatchQuestion (Match);
 
       /***** Compute score and update my match result *****/
       MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match->MchCod);
@@ -4025,7 +4026,7 @@ void Mch_StartCountdown (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -4059,7 +4060,7 @@ void Mch_RefreshMatchTch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -4248,7 +4249,7 @@ void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
 	  UsrAnswer->AnsInd != PreviousUsrAnswer.AnsInd)
 	{
 	 /***** Update my answer to this question *****/
-	 Mch_UpdateMyAnswerToMatchQuestion (Match,UsrAnswer);
+	 Mch_DB_UpdateMyAnswerToMatchQuestion (Match,UsrAnswer);
 
 	 /***** Compute score and update my match result *****/
 	 MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match->MchCod);
@@ -4260,8 +4261,8 @@ void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
 /******************** Update my answer to match question *********************/
 /*****************************************************************************/
 
-static void Mch_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
-                                               const struct Mch_UsrAnswer *UsrAnswer)
+static void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
+                                                  const struct Mch_UsrAnswer *UsrAnswer)
   {
    DB_QueryREPLACE ("can not register your answer to the match question",
 		    "REPLACE mch_answers"
@@ -4279,7 +4280,7 @@ static void Mch_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
 /******************* Remove my answer to match question **********************/
 /*****************************************************************************/
 
-static void Mch_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
+static void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
   {
    DB_QueryDELETE ("can not remove your answer to the match question",
 		    "DELETE FROM mch_answers"
@@ -4384,7 +4385,7 @@ void Mch_ComputeScore (struct MchPrn_Print *Print)
 /********** Get number of users who answered a question in a match ***********/
 /*****************************************************************************/
 
-unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
+unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
   {
    /***** Get number of users who answered
           a question in a match from database *****/
@@ -4402,7 +4403,7 @@ unsigned Mch_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
 /*** Get number of users who have chosen a given answer of a game question ***/
 /*****************************************************************************/
 
-unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
+unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
   {
    /***** Get number of users who have chosen
           an answer of a question from database *****/
@@ -4422,7 +4423,7 @@ unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned An
 /************ Get number of users who have played a given match **************/
 /*****************************************************************************/
 
-static unsigned Mch_GetNumUsrsWhoHavePlayedMch (long MchCod)
+static unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod)
   {
    /***** Get number of users who have played the match
           (users who have a result for this match, even blank result)
@@ -4482,4 +4483,19 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,boo
 
    /***** End container *****/
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********* Get start of first match and end of last match in a game **********/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get game data",
+		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
+		   " FROM mch_matches"
+		   " WHERE GamCod=%ld",
+		   GamCod);
   }

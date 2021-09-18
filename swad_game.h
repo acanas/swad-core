@@ -143,16 +143,12 @@ void Gam_RequestCreatOrEditGame (void);
 
 void Gam_ReceiveFormGame (void);
 
-unsigned Gam_DB_GetNumQstsGame (long GamCod);
-
 void Gam_ReqSelectQstsToAddToGame (void);
 void Gam_ListQstsToAddToGame (void);
 
 void Gam_PutParamQstInd (unsigned QstInd);
 unsigned Gam_GetParamQstInd (void);
 long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
-unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
-unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 
 void Gam_AddQstsToGame (void);
 
@@ -164,10 +160,6 @@ void Gam_MoveDownQst (void);
 
 void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod);
 void Gam_RequestNewMatch (void);
-
-unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope);
-unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope);
-double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
 
