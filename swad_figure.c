@@ -45,6 +45,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_forum_database.h"
+#include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"

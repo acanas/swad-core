@@ -1138,17 +1138,11 @@ static void Gam_RemoveGameFromAllTables (long GamCod)
    /***** Remove all matches in this game *****/
    Mch_RemoveMatchesInGameFromAllTables (GamCod);
 
-   /***** Remove game question *****/
-   DB_QueryDELETE ("can not remove game questions",
-		   "DELETE FROM gam_questions"
-		   " WHERE GamCod=%ld",
-		   GamCod);
+   /***** Remove game questions *****/
+   Gam_DB_RemoveGameQsts (GamCod);
 
    /***** Remove game *****/
-   DB_QueryDELETE ("can not remove game",
-		   "DELETE FROM gam_games"
-		   " WHERE GamCod=%ld",
-		   GamCod);
+   Gam_DB_RemoveGame (GamCod);
   }
 
 /*****************************************************************************/
@@ -1161,19 +1155,10 @@ void Gam_RemoveCrsGames (long CrsCod)
    Mch_RemoveMatchesInCourseFromAllTables (CrsCod);
 
    /***** Remove the questions in games *****/
-   DB_QueryDELETE ("can not remove questions in course games",
-		   "DELETE FROM gam_questions"
-		   " USING gam_games,"
-		          "gam_questions"
-		   " WHERE gam_games.CrsCod=%ld"
-		     " AND gam_games.GamCod=gam_questions.GamCod",
-                   CrsCod);
+   Gam_DB_RemoveCrsGameQsts (CrsCod);
 
    /***** Remove the games *****/
-   DB_QueryDELETE ("can not remove course games",
-		   "DELETE FROM gam_games"
-		   " WHERE CrsCod=%ld",
-                   CrsCod);
+   Gam_DB_RemoveCrsGames (CrsCod);
   }
 
 /*****************************************************************************/
@@ -1201,11 +1186,7 @@ void Gam_HideGame (void)
       Err_NoPermissionExit ();
 
    /***** Hide game *****/
-   DB_QueryUPDATE ("can not hide game",
-		   "UPDATE gam_games"
-		     " SET Hidden='Y'"
-		   " WHERE GamCod=%ld",
-		   Game.GamCod);
+   Gam_DB_HideGame (Game.GamCod);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1235,12 +1216,8 @@ void Gam_UnhideGame (void)
    if (!Gam_CheckIfICanEditGames ())
       Err_NoPermissionExit ();
 
-   /***** Show game *****/
-   DB_QueryUPDATE ("can not show game",
-		   "UPDATE gam_games"
-		     " SET Hidden='N'"
-		   " WHERE GamCod=%ld",
-		   Game.GamCod);
+   /***** Unhide game *****/
+   Gam_DB_UnhideGame (Game.GamCod);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1556,22 +1533,7 @@ static void Gam_CreateGame (struct Gam_Game *Game,const char *Txt)
    extern const char *Txt_Created_new_game_X;
 
    /***** Create a new game *****/
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-   Game->GamCod =
-   DB_QueryINSERTandReturnCode ("can not create new game",
-				"INSERT INTO gam_games"
-				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,"
-				  "Title,Txt)"
-				" VALUES"
-				" (%ld,'N',%ld,%.15lg,%u,"
-				  "'%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Game->MaxGrade,
-				Game->Visibility,
-				Game->Title,
-				Txt);
-   Str_SetDecimalPointToLocal ();	// Return to local system
+   Game->GamCod = Gam_DB_CreateGame (Game,Txt);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,
@@ -1587,22 +1549,7 @@ static void Gam_UpdateGame (struct Gam_Game *Game,const char *Txt)
    extern const char *Txt_The_game_has_been_modified;
 
    /***** Update the data of the game *****/
-   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
-   DB_QueryUPDATE ("can not update game",
-		   "UPDATE gam_games"
-		     " SET CrsCod=%ld,"
-		          "MaxGrade=%.15lg,"
-		          "Visibility=%u,"
-		          "Title='%s',"
-		          "Txt='%s'"
-		   " WHERE GamCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Game->MaxGrade,
-		   Game->Visibility,
-	           Game->Title,
-	           Txt,
-	           Game->GamCod);
-   Str_SetDecimalPointToLocal ();	// Return to local system
+   Gam_DB_UpdateGame (Game,Txt);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
@@ -1695,28 +1642,6 @@ unsigned Gam_GetParamQstInd (void)
   }
 
 /*****************************************************************************/
-/************ Get question code given game and index of question *************/
-/*****************************************************************************/
-
-long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
-  {
-   long QstCod;
-
-   /***** Get question code of the question to be moved up *****/
-   QstCod = DB_QuerySELECTCode ("can not get question code",
-				"SELECT QstCod"
-				 " FROM gam_questions"
-				" WHERE GamCod=%ld"
-				  " AND QstInd=%u",
-				GamCod,
-				QstInd);
-   if (QstCod <= 0)
-      Err_WrongQuestionExit ();
-
-   return QstCod;
-  }
-
-/*****************************************************************************/
 /************************ List the questions of a game ***********************/
 /*****************************************************************************/
 
@@ -1729,14 +1654,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
    bool ICanEditQuestions = Gam_CheckIfEditable (Game);
 
    /***** Get data of questions from database *****/
-   NumQsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get game questions",
-		   "SELECT QstInd,"	// row[0]
-			  "QstCod"	// row[1]
-		    " FROM gam_questions"
-		   " WHERE GamCod=%ld"
-		   " ORDER BY QstInd",
-		   Game->GamCod);
+   NumQsts = Gam_DB_GetGameQuestions (&mysql_res,Game->GamCod);
 
    /***** Begin box *****/
    Games->GamCod = Game->GamCod;
@@ -1997,14 +1915,7 @@ void Gam_AddQstsToGame (void)
 	    MaxQstInd = Gam_DB_GetMaxQuestionIndexInGame (Game.GamCod);	// 0 is no questions in game
 
 	    /* Insert question in the table of questions */
-	    DB_QueryINSERT ("can not add question to game",
-			    "INSERT INTO gam_questions"
-			    " (GamCod,QstInd,QstCod)"
-			    " VALUES"
-			    " (%ld,%u,%ld)",
-			    Game.GamCod,
-			    MaxQstInd + 1,
-			    QstCod);
+            Gam_DB_InsertQstInGame (Game.GamCod,MaxQstInd + 1,QstCod);
 
 	    NumQstsAdded++;
 	   }
@@ -2134,30 +2045,11 @@ void Gam_RemoveQstFromGame (void)
    Mch_DB_RemAnswersOfAQuestion (Game.GamCod,QstInd);
 
    /* Remove the question itself */
-   DB_QueryDELETE ("can not remove a question",
-		   "DELETE FROM gam_questions"
-		   " WHERE GamCod=%ld"
-		     " AND QstInd=%u",
-		   Game.GamCod,
-		   QstInd);
+   Gam_DB_RemoveQstFromGame (Game.GamCod,QstInd);
 
-   /* Change index of questions greater than this */
-   DB_QueryUPDATE ("can not update indexes of questions in table of answers",
-		   "UPDATE mch_answers,"
-		          "mch_matches"
-		     " SET mch_answers.QstInd=mch_answers.QstInd-1"
-		   " WHERE mch_matches.GamCod=%ld"
-		     " AND mch_matches.MchCod=mch_answers.MchCod"
-		     " AND mch_answers.QstInd>%u",
-		   Game.GamCod,
-		   QstInd);
-   DB_QueryUPDATE ("can not update indexes of questions",
-		   "UPDATE gam_questions"
-		     " SET QstInd=QstInd-1"
-		   " WHERE GamCod=%ld"
-		     " AND QstInd>%u",
-		   Game.GamCod,
-		   QstInd);
+   /* Change indexes of questions greater than this */
+   Mch_DB_UpdateIndexesOfQstsGreaterThan (Game.GamCod,QstInd);
+   Gam_DB_UpdateIndexesOfQstsGreaterThan (Game.GamCod,QstInd);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -2288,8 +2180,8 @@ static void Gam_ExchangeQuestions (long GamCod,
    Gbl.DB.LockedTables = true;
 
    /***** Get question code of the questions to be moved *****/
-   QstCodTop    = Gam_GetQstCodFromQstInd (GamCod,QstIndTop);
-   QstCodBottom = Gam_GetQstCodFromQstInd (GamCod,QstIndBottom);
+   QstCodTop    = Gam_DB_GetQstCodFromQstInd (GamCod,QstIndTop);
+   QstCodBottom = Gam_DB_GetQstCodFromQstInd (GamCod,QstIndBottom);
 
    /***** Exchange indexes of questions *****/
    /*

@@ -148,7 +148,6 @@ void Gam_ListQstsToAddToGame (void);
 
 void Gam_PutParamQstInd (unsigned QstInd);
 unsigned Gam_GetParamQstInd (void);
-long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 
 void Gam_AddQstsToGame (void);
 

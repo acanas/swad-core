@@ -2378,7 +2378,7 @@ static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
 							  Match->Status.QstInd);
    if (Match->Status.QstInd)		// Start of questions not reached
      {
-      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+      Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
       Match->Status.Showing = Match->Status.ShowQstResults ? Mch_RESULTS :
 							     Mch_ANSWERS;
@@ -2443,7 +2443,7 @@ static void Mch_SetMatchStatusToNextQst (struct Mch_Match *Match)
    /***** Get question code *****/
    if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)	// End of questions not reached
      {
-      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+      Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
       Match->Status.Showing = Mch_STEM;
      }
@@ -4483,6 +4483,23 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,boo
 
    /***** End container *****/
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*********** Update indexes of questions greater than a given one ************/
+/*****************************************************************************/
+
+void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd)
+  {
+   DB_QueryUPDATE ("can not update indexes of questions",
+		   "UPDATE mch_answers,"
+		          "mch_matches"
+		     " SET mch_answers.QstInd=mch_answers.QstInd-1"
+		   " WHERE mch_matches.GamCod=%ld"
+		     " AND mch_matches.MchCod=mch_answers.MchCod"
+		     " AND mch_answers.QstInd>%u",
+		   GamCod,
+		   QstInd);
   }
 
 /*****************************************************************************/

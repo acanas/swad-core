@@ -39,20 +39,37 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//--------------------------------- Games -------------------------------------
+long Gam_DB_CreateGame (const struct Gam_Game *Game,const char *Txt);
+void Gam_DB_UpdateGame (const struct Gam_Game *Game,const char *Txt);
+void Gam_DB_HideGame (long GamCod);
+void Gam_DB_UnhideGame (long GamCod);
+
 unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder);
 unsigned Gam_DB_GetDataOfGameByCod (MYSQL_RES **mysql_res,long GamCod);
 void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game);
-
-unsigned Gam_DB_GetNumQstsGame (long GamCod);
-unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
-unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);
-
-unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
-unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
-
 unsigned Gam_DB_GetNumCoursesWithGames (HieLvl_Level_t Scope);
 unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope);
+
+void Gam_DB_RemoveGame (long GamCod);
+void Gam_DB_RemoveCrsGames (long CrsCod);
+
+//---------------------------- Game questions ---------------------------------
+void Gam_DB_InsertQstInGame (long GamCod,unsigned QstInd,long QstCod);
+void Gam_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd);
+
+unsigned Gam_DB_GetNumQstsGame (long GamCod);
+unsigned Gam_DB_GetGameQuestions (MYSQL_RES **mysql_res,long GamCod);
+long Gam_DB_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
+unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
+unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);
+unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
+unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope);
+
+void Gam_DB_RemoveQstFromGame (long GamCod,unsigned QstInd);
+void Gam_DB_RemoveGameQsts (long GamCod);
+void Gam_DB_RemoveCrsGameQsts (long CrsCod);
 
 #endif

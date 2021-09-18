@@ -72,6 +72,83 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/**************************** Create a new game ******************************/
+/*****************************************************************************/
+
+long Gam_DB_CreateGame (const struct Gam_Game *Game,const char *Txt)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+
+   return
+   DB_QueryINSERTandReturnCode ("can not create new game",
+				"INSERT INTO gam_games"
+				" (CrsCod,Hidden,UsrCod,MaxGrade,Visibility,"
+				  "Title,Txt)"
+				" VALUES"
+				" (%ld,'N',%ld,%.15lg,%u,"
+				  "'%s','%s')",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Game->MaxGrade,
+				Game->Visibility,
+				Game->Title,
+				Txt);
+
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+/*****************************************************************************/
+/*************************** Update an existing game *************************/
+/*****************************************************************************/
+
+void Gam_DB_UpdateGame (const struct Gam_Game *Game,const char *Txt)
+  {
+   Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
+
+   DB_QueryUPDATE ("can not update game",
+		   "UPDATE gam_games"
+		     " SET CrsCod=%ld,"
+		          "MaxGrade=%.15lg,"
+		          "Visibility=%u,"
+		          "Title='%s',"
+		          "Txt='%s'"
+		   " WHERE GamCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Game->MaxGrade,
+		   Game->Visibility,
+	           Game->Title,
+	           Txt,
+	           Game->GamCod);
+
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/********************************** Hide a game ******************************/
+/*****************************************************************************/
+
+void Gam_DB_HideGame (long GamCod)
+  {
+   DB_QueryUPDATE ("can not hide game",
+		   "UPDATE gam_games"
+		     " SET Hidden='Y'"
+		   " WHERE GamCod=%ld",
+		   GamCod);
+  }
+
+/*****************************************************************************/
+/******************************** Unhide a game ******************************/
+/*****************************************************************************/
+
+void Gam_DB_UnhideGame (long GamCod)
+  {
+   DB_QueryUPDATE ("can not show game",
+		   "UPDATE gam_games"
+		     " SET Hidden='N'"
+		   " WHERE GamCod=%ld",
+		   GamCod);
+  }
+
+/*****************************************************************************/
 /************* Get list of all the games in the current course ***************/
 /*****************************************************************************/
 
@@ -188,95 +265,6 @@ bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
 			  Gbl.Hierarchy.Crs.CrsCod,
 			  Game->Title,
 			  Game->GamCod) != 0);
-  }
-
-/*****************************************************************************/
-/******************* Get number of questions of a game *********************/
-/*****************************************************************************/
-
-unsigned Gam_DB_GetNumQstsGame (long GamCod)
-  {
-   /***** Get nuumber of questions in a game from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of questions of a game",
-		  "SELECT COUNT(*)"
-		   " FROM gam_questions"
-		  " WHERE GamCod=%ld",
-		  GamCod);
-  }
-
-/*****************************************************************************/
-/************ Get question index given game and code of question *************/
-/*****************************************************************************/
-// Return 0 is question is not present in game
-
-unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod)
-  {
-   /***** Get question index in a game given the question code *****/
-   return DB_QuerySELECTUnsigned ("can not get question index",
-				  "SELECT QstInd"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld"
-				    " AND QstCod=%ld",
-				  GamCod,
-				  QstCod);
-  }
-
-/*****************************************************************************/
-/****************** Get maximum question index in a game *********************/
-/*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no questions
-
-unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod)
-  {
-   /***** Get maximum question index in a game from database *****/
-   return DB_QuerySELECTUnsigned ("can not get last question index",
-				  "SELECT MAX(QstInd)"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld",
-				  GamCod);
-  }
-
-/*****************************************************************************/
-/*********** Get previous question index to a given index in a game **********/
-/*****************************************************************************/
-// Input question index can be 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
-
-unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
-  {
-   /***** Get previous question index in a game from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get previous question index",
-				  "SELECT COALESCE(MAX(QstInd),0)"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld"
-				    " AND QstInd<%u",
-				  GamCod,
-				  QstInd);
-  }
-
-/*****************************************************************************/
-/************* Get next question index to a given index in a game ************/
-/*****************************************************************************/
-// Input question index can be 0, 1, 2, 3... n-1
-// Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
-
-unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
-  {
-   /***** Get next question index in a game from database *****/
-   // Although indexes are always continuous...
-   // ...this implementation works even with non continuous indexes
-   return DB_QuerySELECTUnsigned ("can not get next question index",
-				  "SELECT COALESCE(MIN(QstInd),%u)"
-				   " FROM gam_questions"
-				  " WHERE GamCod=%ld"
-				    " AND QstInd>%u",
-				  Gam_AFTER_LAST_QUESTION,	// End of questions has been reached
-				  GamCod,
-				  QstInd);
   }
 
 /*****************************************************************************/
@@ -430,6 +418,187 @@ unsigned Gam_DB_GetNumGames (HieLvl_Level_t Scope)
   }
 
 /*****************************************************************************/
+/********************************* Remove game *******************************/
+/*****************************************************************************/
+
+void Gam_DB_RemoveGame (long GamCod)
+  {
+   DB_QueryDELETE ("can not remove game",
+		   "DELETE FROM gam_games"
+		   " WHERE GamCod=%ld",
+		   GamCod);
+  }
+
+/*****************************************************************************/
+/*********************** Remove the games of a course ************************/
+/*****************************************************************************/
+
+void Gam_DB_RemoveCrsGames (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove course games",
+		   "DELETE FROM gam_games"
+		   " WHERE CrsCod=%ld",
+                   CrsCod);
+  }
+
+/*****************************************************************************/
+/**************** Insert question in the table of questions ******************/
+/*****************************************************************************/
+
+void Gam_DB_InsertQstInGame (long GamCod,unsigned QstInd,long QstCod)
+  {
+   DB_QueryINSERT ("can not add question to game",
+		   "INSERT INTO gam_questions"
+		   " (GamCod,QstInd,QstCod)"
+		   " VALUES"
+		   " (%ld,%u,%ld)",
+		   GamCod,
+		   QstInd,
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/*********** Update indexes of questions greater than a given one ************/
+/*****************************************************************************/
+
+void Gam_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd)
+  {
+   DB_QueryUPDATE ("can not update indexes of questions",
+		   "UPDATE gam_questions"
+		     " SET QstInd=QstInd-1"
+		   " WHERE GamCod=%ld"
+		     " AND QstInd>%u",
+		   GamCod,
+		   QstInd);
+  }
+
+/*****************************************************************************/
+/******************* Get number of questions of a game *********************/
+/*****************************************************************************/
+
+unsigned Gam_DB_GetNumQstsGame (long GamCod)
+  {
+   /***** Get nuumber of questions in a game from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of questions of a game",
+		  "SELECT COUNT(*)"
+		   " FROM gam_questions"
+		  " WHERE GamCod=%ld",
+		  GamCod);
+  }
+/*****************************************************************************/
+/************************ Get the questions of a game ************************/
+/*****************************************************************************/
+
+unsigned Gam_DB_GetGameQuestions (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get game questions",
+		   "SELECT QstInd,"	// row[0]
+			  "QstCod"	// row[1]
+		    " FROM gam_questions"
+		   " WHERE GamCod=%ld"
+		   " ORDER BY QstInd",
+		   GamCod);
+  }
+
+/*****************************************************************************/
+/************ Get question code given game and index of question *************/
+/*****************************************************************************/
+
+long Gam_DB_GetQstCodFromQstInd (long GamCod,unsigned QstInd)
+  {
+   long QstCod;
+
+   /***** Get question code of the question to be moved up *****/
+   QstCod = DB_QuerySELECTCode ("can not get question code",
+				"SELECT QstCod"
+				 " FROM gam_questions"
+				" WHERE GamCod=%ld"
+				  " AND QstInd=%u",
+				GamCod,
+				QstInd);
+   if (QstCod <= 0)
+      Err_WrongQuestionExit ();
+
+   return QstCod;
+  }
+
+/*****************************************************************************/
+/************ Get question index given game and code of question *************/
+/*****************************************************************************/
+// Return 0 is question is not present in game
+
+unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod)
+  {
+   /***** Get question index in a game given the question code *****/
+   return DB_QuerySELECTUnsigned ("can not get question index",
+				  "SELECT QstInd"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld"
+				    " AND QstCod=%ld",
+				  GamCod,
+				  QstCod);
+  }
+
+/*****************************************************************************/
+/****************** Get maximum question index in a game *********************/
+/*****************************************************************************/
+// Question index can be 1, 2, 3...
+// Return 0 if no questions
+
+unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod)
+  {
+   /***** Get maximum question index in a game from database *****/
+   return DB_QuerySELECTUnsigned ("can not get last question index",
+				  "SELECT MAX(QstInd)"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld",
+				  GamCod);
+  }
+
+/*****************************************************************************/
+/*********** Get previous question index to a given index in a game **********/
+/*****************************************************************************/
+// Input question index can be 1, 2, 3... n-1
+// Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
+
+unsigned Gam_DB_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
+  {
+   /***** Get previous question index in a game from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   return DB_QuerySELECTUnsigned ("can not get previous question index",
+				  "SELECT COALESCE(MAX(QstInd),0)"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld"
+				    " AND QstInd<%u",
+				  GamCod,
+				  QstInd);
+  }
+
+/*****************************************************************************/
+/************* Get next question index to a given index in a game ************/
+/*****************************************************************************/
+// Input question index can be 0, 1, 2, 3... n-1
+// Return question index will be 1, 2, 3... n if next question exists, or big number if no next question
+
+unsigned Gam_DB_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
+  {
+   /***** Get next question index in a game from database *****/
+   // Although indexes are always continuous...
+   // ...this implementation works even with non continuous indexes
+   return DB_QuerySELECTUnsigned ("can not get next question index",
+				  "SELECT COALESCE(MIN(QstInd),%u)"
+				   " FROM gam_questions"
+				  " WHERE GamCod=%ld"
+				    " AND QstInd>%u",
+				  Gam_AFTER_LAST_QUESTION,	// End of questions has been reached
+				  GamCod,
+				  QstInd);
+  }
+
+/*****************************************************************************/
 /***************** Get average number of questions per game ******************/
 /*****************************************************************************/
 
@@ -526,4 +695,45 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 	 Err_WrongScopeExit ();
 	 return 0.0;	// Not reached
      }
+  }
+
+/*****************************************************************************/
+/************************* Remove question from game *************************/
+/*****************************************************************************/
+
+void Gam_DB_RemoveQstFromGame (long GamCod,unsigned QstInd)
+  {
+   DB_QueryDELETE ("can not remove a question",
+		   "DELETE FROM gam_questions"
+		   " WHERE GamCod=%ld"
+		     " AND QstInd=%u",
+		   GamCod,
+		   QstInd);
+   }
+
+/*****************************************************************************/
+/**************************** Remove game questions **************************/
+/*****************************************************************************/
+
+void Gam_DB_RemoveGameQsts (long GamCod)
+  {
+   DB_QueryDELETE ("can not remove game questions",
+		   "DELETE FROM gam_questions"
+		   " WHERE GamCod=%ld",
+		   GamCod);
+  }
+
+/*****************************************************************************/
+/***************** Remove the questions in games of a course *****************/
+/*****************************************************************************/
+
+void Gam_DB_RemoveCrsGameQsts (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove questions in course games",
+		   "DELETE FROM gam_questions"
+		   " USING gam_games,"
+		          "gam_questions"
+		   " WHERE gam_games.CrsCod=%ld"
+		     " AND gam_games.GamCod=gam_questions.GamCod",
+                   CrsCod);
   }
