@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_group_database.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_database.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_logo.h"
@@ -665,121 +666,80 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    struct Hie_Hierarchy Hie;
 
    /***** Get institutions, centers, degrees admin by user from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get institutions, centers, degrees"
-			      " admin by a user",
-		   "(SELECT %u AS S,"			// row[0]
-		           "-1 AS Cod,"			// row[1]
-		           "'' AS FullName"		// row[2]
-		     " FROM usr_admins"
-		    " WHERE UsrCod=%ld"
-		      " AND Scope='%s')"
-		   " UNION "
-		   "(SELECT %u AS S,"			// row[0]
-			   "usr_admins.Cod,"		// row[1]
-			   "ins_instits.FullName"	// row[2]
-		     " FROM usr_admins,"
-			   "ins_instits"
-		    " WHERE usr_admins.UsrCod=%ld"
-		      " AND usr_admins.Scope='%s'"
-		      " AND usr_admins.Cod=ins_instits.InsCod)"
-		   " UNION "
-		   "(SELECT %u AS S,"			// row[0]
-			   "usr_admins.Cod,"		// row[1]
-			   "ctr_centers.FullName"	// row[2]
-		     " FROM usr_admins,"
-			   "ctr_centers"
-		    " WHERE usr_admins.UsrCod=%ld"
-		      " AND usr_admins.Scope='%s'"
-		      " AND usr_admins.Cod=ctr_centers.CtrCod)"
-		   " UNION "
-		   "(SELECT %u AS S,"			// row[0]
-			   "usr_admins.Cod,"		// row[1]
-			   "deg_degrees.FullName"	// row[2]
-		     " FROM usr_admins,"
-		           "deg_degrees"
-		    " WHERE usr_admins.UsrCod=%ld"
-		      " AND usr_admins.Scope='%s'"
-		      " AND usr_admins.Cod=deg_degrees.DegCod)"
-		   " ORDER BY S,"
-		             "FullName",
-		   (unsigned) HieLvl_SYS,UsrCod,Sco_GetDBStrFromScope (HieLvl_SYS),
-		   (unsigned) HieLvl_INS,UsrCod,Sco_GetDBStrFromScope (HieLvl_INS),
-		   (unsigned) HieLvl_CTR,UsrCod,Sco_GetDBStrFromScope (HieLvl_CTR),
-		   (unsigned) HieLvl_DEG,UsrCod,Sco_GetDBStrFromScope (HieLvl_DEG));
-   if (NumRows)
-      /***** Get the list of degrees *****/
-      for (NumRow = 1;
-	   NumRow <= NumRows;
-	   NumRow++)
-	{
-         HTM_TR_Begin (NULL);
+   NumRows = Hie_DB_GetInsCtrDegAdminBy (&mysql_res,UsrCod);
 
-	    /***** Indent *****/
-	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-	       Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
-						"submid20x20.gif",
-			    "","ICO25x25");
-	    HTM_TD_End ();
+   /***** Get the list of degrees *****/
+   for (NumRow  = 1;
+	NumRow <= NumRows;
+	NumRow++)
+     {
+      HTM_TR_Begin (NULL);
 
-	    /***** Write institution, center, degree *****/
-	    HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
-			  ColSpan - 1,Gbl.RowEvenOdd);
+	 /***** Indent *****/
+	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	    Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
+					     "submid20x20.gif",
+			 "","ICO25x25");
+	 HTM_TD_End ();
 
-	       /* Get next institution, center, degree */
-	       row = mysql_fetch_row (mysql_res);
+	 /***** Write institution, center, degree *****/
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
+		       ColSpan - 1,Gbl.RowEvenOdd);
 
-	       /* Get scope */
-	       switch (Sco_GetScopeFromUnsignedStr (row[0]))
-		 {
-		  case HieLvl_SYS:	// System
-		     Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
-		     HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
-		     break;
-		  case HieLvl_INS:	// Institution
-		     Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
-		     if (Hie.Ins.InsCod > 0)
-		       {
-			/* Get data of institution */
-			Ins_GetDataOfInstitutionByCod (&Hie.Ins);
+	    /* Get next institution, center, degree */
+	    row = mysql_fetch_row (mysql_res);
 
-			/* Write institution logo and name */
-			Ins_DrawInstitutionLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,
-								"BT_LINK DAT_SMALL_NOBR","LT");
-		       }
-		     break;
-		  case HieLvl_CTR:	// Center
-		     Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
-		     if (Hie.Ctr.CtrCod > 0)
-		       {
-			/* Get data of center */
-			Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+	    /* Get scope */
+	    switch (Sco_GetScopeFromUnsignedStr (row[0]))
+	      {
+	       case HieLvl_SYS:	// System
+		  Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
+		  HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
+		  break;
+	       case HieLvl_INS:	// Institution
+		  Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
+		  if (Hie.Ins.InsCod > 0)
+		    {
+		     /* Get data of institution */
+		     Ins_GetDataOfInstitutionByCod (&Hie.Ins);
 
-			/* Write center logo and name */
-			Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
-							   "BT_LINK DAT_SMALL_NOBR","LT");
-		       }
-		     break;
-		  case HieLvl_DEG:	// Degree
-		     Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-		     if (Hie.Deg.DegCod > 0)
-		       {
-			/* Get data of degree */
-			Deg_GetDataOfDegreeByCod (&Hie.Deg);
+		     /* Write institution logo and name */
+		     Ins_DrawInstitutionLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,
+							     "BT_LINK DAT_SMALL_NOBR","LT");
+		    }
+		  break;
+	       case HieLvl_CTR:	// Center
+		  Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
+		  if (Hie.Ctr.CtrCod > 0)
+		    {
+		     /* Get data of center */
+		     Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
-			/* Write degree logo and name */
-			Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,
-							   "BT_LINK DAT_SMALL_NOBR","LT");
-		       }
-		     break;
-		  default:	// There are no administrators in other scopes
-		     Err_WrongScopeExit ();
-		     break;
-		 }
-	    HTM_TD_End ();
+		     /* Write center logo and name */
+		     Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
+							"BT_LINK DAT_SMALL_NOBR","LT");
+		    }
+		  break;
+	       case HieLvl_DEG:	// Degree
+		  Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
+		  if (Hie.Deg.DegCod > 0)
+		    {
+		     /* Get data of degree */
+		     Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
-         HTM_TR_End ();
-        }
+		     /* Write degree logo and name */
+		     Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,
+							"BT_LINK DAT_SMALL_NOBR","LT");
+		    }
+		  break;
+	       default:	// There are no administrators in other scopes
+		  Err_WrongScopeExit ();
+		  break;
+	      }
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
