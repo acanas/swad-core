@@ -175,8 +175,8 @@ struct Globals
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
    time_t StartExecutionTimeUTC;
-   struct DateTime Now;
-   struct Date Yesterday;
+   struct Dat_DateTime Now;
+   struct Dat_Date Yesterday;
    unsigned RowEvenOdd;	// To alternate row colors in listings
    char *ColorRows[2];
    const char *XMLPtr;
@@ -435,8 +435,8 @@ struct Globals
      } FileBrowser;	// Struct used for a file browser
    struct
      {
-      struct DateTime DateIni;	// TODO: Remove in future versions
-      struct DateTime DateEnd;	// TODO: Remove in future versions
+      struct Dat_DateTime DateIni;	// TODO: Remove in future versions
+      struct Dat_DateTime DateEnd;	// TODO: Remove in future versions
       time_t TimeUTC[Dat_NUM_START_END_TIME];
      } DateRange;
 

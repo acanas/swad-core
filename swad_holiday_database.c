@@ -87,6 +87,67 @@ void Hld_DB_CreateHoliday (const struct Hld_Holiday *Hld)
   }
 
 /*****************************************************************************/
+/************************* Change the place of a holiday *********************/
+/*****************************************************************************/
+
+void Hld_DB_ChangePlace (long HldCod,long PlcCod)
+  {
+   DB_QueryUPDATE ("can not update the place of a holiday",
+		   "UPDATE hld_holidays"
+		     " SET PlcCod=%ld"
+		   " WHERE HldCod=%ld",
+                   PlcCod,
+                   HldCod);
+  }
+
+/*****************************************************************************/
+/************************* Change the type of a holiday **********************/
+/*****************************************************************************/
+
+void Hld_DB_ChangeType (long HldCod,Hld_HolidayType_t HldTyp)
+  {
+   DB_QueryUPDATE ("can not update the type of a holiday",
+		   "UPDATE hld_holidays"
+		     " SET HldTyp=%u,"
+		          "EndDate=StartDate"
+		   " WHERE HldCod=%ld",
+	           (unsigned) HldTyp,
+	           HldCod);
+  }
+
+/*****************************************************************************/
+/**************** Change the start/end date of a holiday *********************/
+/*****************************************************************************/
+
+void Hld_DB_ChangeDate (long HldCod,const char *StrStartOrEndDate,
+                        const struct Dat_Date *NewDate)
+  {
+   DB_QueryUPDATE ("can not update the date of a holiday",
+		   "UPDATE hld_holidays"
+		     " SET %s='%04u%02u%02u'"
+		   " WHERE HldCod=%ld",
+	           StrStartOrEndDate,
+	           NewDate->Year,
+	           NewDate->Month,
+	           NewDate->Day,
+	           HldCod);
+  }
+
+/*****************************************************************************/
+/************* Update holiday name changing old name by new name *************/
+/*****************************************************************************/
+
+void Hld_DB_ChangeName (long HldCod,char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1])
+  {
+   DB_QueryUPDATE ("can not update the text of a holiday",
+		   "UPDATE hld_holidays"
+		     " SET Name='%s'"
+		   " WHERE HldCod=%ld",
+		   NewHldName,
+		   HldCod);
+  }
+
+/*****************************************************************************/
 /*************************** List all the holidays ***************************/
 /*****************************************************************************/
 
@@ -177,3 +238,16 @@ unsigned Hld_DB_GetDataOfHolidayByCod (MYSQL_RES **mysql_res,long HldCod)
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ins.InsCod);
   }
+
+/*****************************************************************************/
+/******************************* Remove a holiday ****************************/
+/*****************************************************************************/
+
+void Hld_DB_RemoveHoliday (long HldCod)
+  {
+   DB_QueryDELETE ("can not remove a holiday",
+		   "DELETE FROM hld_holidays"
+		   " WHERE HldCod=%ld",
+		   HldCod);
+  }
+

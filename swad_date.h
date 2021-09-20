@@ -48,7 +48,7 @@
 /*****************************************************************************/
 
 #define Dat_LENGTH_YYYYMMDD (4 + 2 + 2)
-struct Date
+struct Dat_Date
   {
    unsigned Day;
    unsigned Month;
@@ -56,21 +56,21 @@ struct Date
    unsigned Week;
    char YYYYMMDD[Dat_LENGTH_YYYYMMDD + 1];
   };
-struct Time
+struct Dat_Time
   {
    unsigned Hour;
    unsigned Minute;
    unsigned Second;
   };
-struct Hour
+struct Dat_Hour
   {
    unsigned Hour;
    unsigned Minute;
   };
-struct DateTime
+struct Dat_DateTime
   {
-   struct Date Date;
-   struct Time Time;
+   struct Dat_Date Date;
+   struct Dat_Time Time;
    char YYYYMMDDHHMMSS[4 + 2 + 2 + 2 + 2 + 2 + 1];
   };
 
@@ -124,8 +124,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dat_ResetDate (struct Date *Date);
-void Dat_ResetHour (struct Hour *Hour);
+void Dat_ResetDate (struct Dat_Date *Date);
+void Dat_ResetHour (struct Dat_Hour *Hour);
 
 void Dat_PutBoxToSelectDateFormat (void);
 
@@ -139,12 +139,12 @@ void Dat_GetStartExecutionTimeUTC (void);
 void Dat_GetAndConvertCurrentDateTime (void);
 
 time_t Dat_GetUNIXTimeFromStr (const char *Str);
-bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDDString);
+bool Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,const char *YYYYMMDDString);
 
 void Dat_ShowClientLocalTime (void);
 
 struct tm *Dat_GetLocalTimeFromClock (const time_t *timep);
-void Dat_ConvDateToDateStr (const struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1]);
+void Dat_ConvDateToDateStr (const struct Dat_Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1]);
 
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME]);
 void Dat_PutFormStartEndClientLocalDateTimes (const time_t TimeUTC[Dat_NUM_START_END_TIME],
@@ -166,7 +166,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1]);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
-		        struct Date *DateSelected,
+		        struct Dat_Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled);
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year);
@@ -177,32 +177,32 @@ void Dat_GetIniEndDatesFromForm (void);
 
 void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm);
 
-void Dat_GetDateAfter   (struct Date *Date,struct Date *SubsequentDate);
-void Dat_GetDateBefore  (struct Date *Date,struct Date *PrecedingDate );
-void Dat_GetWeekBefore  (struct Date *Date,struct Date *PrecedingDate );
-void Dat_GetMonthBefore (struct Date *Date,struct Date *PrecedingDate );
-void Dat_GetYearBefore  (struct Date *Date,struct Date *PrecedingDate );
-unsigned Dat_GetNumDaysBetweenDates   (struct Date *DateIni,
-                                       struct Date *DateEnd);
-unsigned Dat_GetNumWeeksBetweenDates  (struct Date *DateIni,
-                                       struct Date *DateEnd);
-unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,
-                                       struct Date *DateEnd);
-unsigned Dat_GetNumYearsBetweenDates  (struct Date *DateIni,
-                                       struct Date *DateEnd);
+void Dat_GetDateAfter   (struct Dat_Date *Date,struct Dat_Date *SubsequentDate);
+void Dat_GetDateBefore  (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
+void Dat_GetWeekBefore  (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
+void Dat_GetMonthBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
+void Dat_GetYearBefore  (struct Dat_Date *Date,struct Dat_Date *PrecedingDate );
+unsigned Dat_GetNumDaysBetweenDates   (struct Dat_Date *DateIni,
+                                       struct Dat_Date *DateEnd);
+unsigned Dat_GetNumWeeksBetweenDates  (struct Dat_Date *DateIni,
+                                       struct Dat_Date *DateEnd);
+unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateIni,
+                                       struct Dat_Date *DateEnd);
+unsigned Dat_GetNumYearsBetweenDates  (struct Dat_Date *DateIni,
+                                       struct Dat_Date *DateEnd);
 unsigned Dat_GetNumDaysInYear (unsigned Year);
 unsigned Dat_GetNumDaysFebruary (unsigned Year);
 bool Dat_GetIfLeapYear (unsigned Year);
 unsigned Dat_GetNumWeeksInYear (unsigned Year);
 unsigned Dat_GetDayOfWeek (unsigned Year,unsigned Month,unsigned Day);
-unsigned Dat_GetDayOfYear (struct Date *Date);
-void Dat_CalculateWeekOfYear (struct Date *Date);
-void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc);
+unsigned Dat_GetDayOfYear (struct Dat_Date *Date);
+void Dat_CalculateWeekOfYear (struct Dat_Date *Date);
+void Dat_AssignDate (struct Dat_Date *DateDst,struct Dat_Date *DateSrc);
 
 void Dat_WriteScriptMonths (void);
 
 void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
-void Dat_WriteHoursMinutesSeconds (struct Time *Time);
+void Dat_WriteHoursMinutesSeconds (struct Dat_Time *Time);
 
 void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   Dat_Format_t DateFormat,Dat_Separator_t Separator,

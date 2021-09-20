@@ -65,10 +65,10 @@ struct Cfe_CallForExam
    char CrsFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
    unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
    char Session[Cfe_MAX_BYTES_SESSION + 1];	// Exam session is june, september, etc.
-   struct Date CallDate;
-   struct Date ExamDate;
-   struct Hour StartTime;
-   struct Hour Duration;
+   struct Dat_Date CallDate;
+   struct Dat_Date ExamDate;
+   struct Dat_Hour StartTime;
+   struct Dat_Hour Duration;
    char *Place;
    char *Mode;
    char *Structure;
@@ -81,7 +81,7 @@ struct Cfe_CallForExam
 struct Cfe_ExamCodeAndDate
   {
    long ExaCod;
-   struct Date ExamDate;
+   struct Dat_Date ExamDate;
   };
 
 struct Cfe_CallsForExams

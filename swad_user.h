@@ -195,7 +195,7 @@ struct UsrData
    Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)
    Pri_Visibility_t ExPrfVisibility;	// Who can see user's extended public profile (figures, follow)
    long CtyCod;		// Country
-   struct Date Birthday;
+   struct Dat_Date Birthday;
    char StrBirthday	[Cns_MAX_BYTES_DATE + 1];
    char Phone           [2][Usr_MAX_BYTES_PHONE + 1];
    char *Comments;
@@ -384,7 +384,7 @@ void Usr_WelcomeUsr (void);
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
                               char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1]);
-void Usr_FilterUsrBirthday (struct Date *Birthday);
+void Usr_FilterUsrBirthday (struct Dat_Date *Birthday);
 
 void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);

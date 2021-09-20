@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_date.h"
 #include "swad_holiday.h"
 
 /*****************************************************************************/
@@ -38,8 +39,15 @@
 /*****************************************************************************/
 
 void Hld_DB_CreateHoliday (const struct Hld_Holiday *Hld);
+void Hld_DB_ChangePlace (long HldCod,long PlcCod);
+void Hld_DB_ChangeType (long HldCod,Hld_HolidayType_t HldTyp);
+void Hld_DB_ChangeDate (long HldCod,const char *StrStartOrEndDate,
+                        const struct Dat_Date *NewDate);
+void Hld_DB_ChangeName (long HldCod,char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1]);
 
 unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder);
 unsigned Hld_DB_GetDataOfHolidayByCod (MYSQL_RES **mysql_res,long HldCod);
+
+void Hld_DB_RemoveHoliday (long HldCod);
 
 #endif

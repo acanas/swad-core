@@ -2782,7 +2782,7 @@ static void Usr_InsertMyBirthday (void)
 /************************* Filter some user's data ***************************/
 /*****************************************************************************/
 
-void Usr_FilterUsrBirthday (struct Date *Birthday)
+void Usr_FilterUsrBirthday (struct Dat_Date *Birthday)
   {
    /***** Fix birthday *****/
    if (Birthday->Year < Gbl.Now.Date.Year-99 ||

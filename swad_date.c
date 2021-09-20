@@ -103,7 +103,7 @@ static unsigned Dat_GetParamDateFormat (void);
 /******************************** Reset date *********************************/
 /*****************************************************************************/
 
-void Dat_ResetDate (struct Date *Date)
+void Dat_ResetDate (struct Dat_Date *Date)
   {
    Date->Day = 0;
    Date->Month = 0;
@@ -112,7 +112,7 @@ void Dat_ResetDate (struct Date *Date)
    Date->YYYYMMDD[0] = '\0';
   }
 
-void Dat_ResetHour (struct Hour *Hour)
+void Dat_ResetHour (struct Dat_Hour *Hour)
   {
    Hour->Hour = 0;
    Hour->Minute = 0;
@@ -303,7 +303,7 @@ time_t Dat_GetUNIXTimeFromStr (const char *Str)
 /*********** Get a struct Date from a string in YYYYMMDD format **************/
 /*****************************************************************************/
 
-bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
+bool Dat_GetDateFromYYYYMMDD (struct Dat_Date *Date,const char *YYYYMMDD)
   {
    if (YYYYMMDD)
       if (YYYYMMDD[0])
@@ -402,7 +402,7 @@ struct tm *Dat_GetLocalTimeFromClock (const time_t *timep)
 /********* Convert a struct with Day, Month and Year to a date string ********/
 /*****************************************************************************/
 
-void Dat_ConvDateToDateStr (const struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1])
+void Dat_ConvDateToDateStr (const struct Dat_Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1])
   {
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
 
@@ -853,7 +853,7 @@ See also http://www.ashleyit.com/rs/jsrs/select/php/select.php
 */
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,
-		        struct Date *DateSelected,
+		        struct Dat_Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled)
   {
    extern const char *Txt_MONTHS_SMALL[12];
@@ -1087,7 +1087,7 @@ void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm_ptr)
 /************** Compute the subsequent date of a given date ******************/
 /*****************************************************************************/
 
-void Dat_GetDateAfter (struct Date *Date,struct Date *SubsequentDate)
+void Dat_GetDateAfter (struct Dat_Date *Date,struct Dat_Date *SubsequentDate)
   {
    unsigned NumDaysInMonth = (Date->Month == 2) ? Dat_GetNumDaysFebruary (Date->Year) :
 	                                          Dat_NumDaysMonth[Date->Month];
@@ -1119,7 +1119,7 @@ void Dat_GetDateAfter (struct Date *Date,struct Date *SubsequentDate)
 /************** Compute the preceding date of a given date *******************/
 /*****************************************************************************/
 
-void Dat_GetDateBefore (struct Date *Date,struct Date *PrecedingDate)
+void Dat_GetDateBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate)
   {
    if (Date->Day == 1)
      {
@@ -1149,7 +1149,7 @@ void Dat_GetDateBefore (struct Date *Date,struct Date *PrecedingDate)
 /**************** Compute the week before to a given week ********************/
 /*****************************************************************************/
 
-void Dat_GetWeekBefore (struct Date *Date,struct Date *PrecedingDate)
+void Dat_GetWeekBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate)
   {
    if (Date->Week == 1)
      {
@@ -1167,7 +1167,7 @@ void Dat_GetWeekBefore (struct Date *Date,struct Date *PrecedingDate)
 /*************** Compute the month before to a given month *******************/
 /*****************************************************************************/
 
-void Dat_GetMonthBefore (struct Date *Date,struct Date *PrecedingDate)
+void Dat_GetMonthBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate)
   {
    if (Date->Month == 1)
      {
@@ -1185,7 +1185,7 @@ void Dat_GetMonthBefore (struct Date *Date,struct Date *PrecedingDate)
 /**************** Compute the year before to a given year ********************/
 /*****************************************************************************/
 
-void Dat_GetYearBefore (struct Date *Date,struct Date *PrecedingDate)
+void Dat_GetYearBefore (struct Dat_Date *Date,struct Dat_Date *PrecedingDate)
   {
    PrecedingDate->Year = Date->Year - 1;
   }
@@ -1197,8 +1197,8 @@ void Dat_GetYearBefore (struct Date *Date,struct Date *PrecedingDate)
 // If the old date is the day before the new data, return 2
 // ...
 
-unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,
-                                     struct Date *DateEnd)
+unsigned Dat_GetNumDaysBetweenDates (struct Dat_Date *DateIni,
+                                     struct Dat_Date *DateEnd)
   {
    int DiffDays;
    unsigned Year;
@@ -1223,8 +1223,8 @@ unsigned Dat_GetNumDaysBetweenDates (struct Date *DateIni,
 /*****************************************************************************/
 // If the two dates are in the same week, return 1
 
-unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,
-                                      struct Date *DateEnd)
+unsigned Dat_GetNumWeeksBetweenDates (struct Dat_Date *DateIni,
+                                      struct Dat_Date *DateEnd)
   {
    int DiffWeeks;
    unsigned Year;
@@ -1250,8 +1250,8 @@ unsigned Dat_GetNumWeeksBetweenDates (struct Date *DateIni,
 /*****************************************************************************/
 // If the two dates are in the same month, return 1
 
-unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,
-                                       struct Date *DateEnd)
+unsigned Dat_GetNumMonthsBetweenDates (struct Dat_Date *DateIni,
+                                       struct Dat_Date *DateEnd)
   {
    int DiffMonths;
 
@@ -1267,8 +1267,8 @@ unsigned Dat_GetNumMonthsBetweenDates (struct Date *DateIni,
 /*****************************************************************************/
 // If the two dates are in the same year, return 1
 
-unsigned Dat_GetNumYearsBetweenDates (struct Date *DateIni,
-                                      struct Date *DateEnd)
+unsigned Dat_GetNumYearsBetweenDates (struct Dat_Date *DateIni,
+                                      struct Dat_Date *DateEnd)
   {
    int DiffYears;
 
@@ -1496,7 +1496,7 @@ continue:
 /***************** Compute the day of year (from 1 to 366) *******************/
 /*****************************************************************************/
 
-unsigned Dat_GetDayOfYear (struct Date *Date)
+unsigned Dat_GetDayOfYear (struct Dat_Date *Date)
   {
    unsigned Month;
    unsigned DayYear;
@@ -1519,7 +1519,7 @@ unsigned Dat_GetDayOfYear (struct Date *Date)
    01/01/2006 was sunday => it is counted in the week 52 of 2005, which goes from the 26/12/2005 (monday) until the 01/01/2006 (sunday).
    Week 1 of 2006 goes from the 02/01/2006 (monday) until the 08/01/2006 (sunday) */
 
-void Dat_CalculateWeekOfYear (struct Date *Date)
+void Dat_CalculateWeekOfYear (struct Dat_Date *Date)
   {
    /*
    If January 1 of Year is...   | ...then first week of Year starts the day  |
@@ -1564,7 +1564,7 @@ void Dat_CalculateWeekOfYear (struct Date *Date)
 /******************* Assign the values of a date to another ******************/
 /*****************************************************************************/
 
-void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
+void Dat_AssignDate (struct Dat_Date *DateDst,struct Dat_Date *DateSrc)
   {
    DateDst->Year  = DateSrc->Year;
    DateDst->Month = DateSrc->Month;
@@ -1628,7 +1628,7 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
 /******************* Write time as hours:minutes:seconds *********************/
 /*****************************************************************************/
 
-void Dat_WriteHoursMinutesSeconds (struct Time *Time)
+void Dat_WriteHoursMinutesSeconds (struct Dat_Time *Time)
   {
    if (Time->Hour)
       HTM_TxtF ("%u:%02u&prime;%02u&Prime;",Time->Hour,Time->Minute,Time->Second);

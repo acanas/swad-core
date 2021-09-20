@@ -164,11 +164,11 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match);
 
 static void Mch_UpdateElapsedTimeInQuestion (const struct Mch_Match *Match);
 static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
-				          struct Time *Time);
+				          struct Dat_Time *Time);
 static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
-				       struct Time *Time);
+				       struct Dat_Time *Time);
 static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
-				struct Time *Time);
+				struct Dat_Time *Time);
 
 static void Mch_SetMatchStatusToPrev (struct Mch_Match *Match);
 static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match);
@@ -2088,7 +2088,7 @@ static void Mch_UpdateElapsedTimeInQuestion (const struct Mch_Match *Match)
 /*****************************************************************************/
 
 static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
-					  struct Time *Time)
+					  struct Dat_Time *Time)
   {
    MYSQL_RES *mysql_res;
    unsigned NumRows;
@@ -2115,7 +2115,7 @@ static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
 /*****************************************************************************/
 
 static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
-				       struct Time *Time)
+				       struct Dat_Time *Time)
   {
    MYSQL_RES *mysql_res;
    unsigned NumRows;
@@ -2140,7 +2140,7 @@ static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
 /*****************************************************************************/
 
 static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
-				struct Time *Time)
+				struct Dat_Time *Time)
   {
    MYSQL_ROW row;
    bool ElapsedTimeGotFromDB = false;
@@ -2643,7 +2643,7 @@ static void Mch_ShowRefreshablePartTch (struct Mch_Match *Match)
 
 static void Mch_WriteElapsedTimeInMch (struct Mch_Match *Match)
   {
-   struct Time Time;
+   struct Dat_Time Time;
 
    HTM_DIV_Begin ("class=\"MCH_TOP CT\"");
 
@@ -2662,7 +2662,7 @@ static void Mch_WriteElapsedTimeInMch (struct Mch_Match *Match)
 
 static void Mch_WriteElapsedTimeInQst (struct Mch_Match *Match)
   {
-   struct Time Time;
+   struct Dat_Time Time;
 
    HTM_DIV_Begin ("class=\"MCH_TIME_QST\"");
 

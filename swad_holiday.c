@@ -664,10 +664,7 @@ void Hld_RemoveHoliday (void)
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Remove holiday *****/
-   DB_QueryDELETE ("can not remove a holiday",
-		   "DELETE FROM hld_holidays"
-		   " WHERE HldCod=%ld",
-		   Hld_EditingHld->HldCod);
+   Hld_DB_RemoveHoliday (Hld_EditingHld->HldCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -702,12 +699,7 @@ void Hld_ChangeHolidayPlace (void)
    Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Update the place in database *****/
-   DB_QueryUPDATE ("can not update the place of a holiday",
-		   "UPDATE hld_holidays"
-		     " SET PlcCod=%ld"
-		   " WHERE HldCod=%ld",
-                   NewPlace.PlcCod,
-                   Hld_EditingHld->HldCod);
+   Hld_DB_ChangePlace (Hld_EditingHld->HldCod,NewPlace.PlcCod);
    Hld_EditingHld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld_EditingHld->PlaceFullName,NewPlace.FullName,
              sizeof (Hld_EditingHld->PlaceFullName) - 1);
@@ -741,13 +733,7 @@ void Hld_ChangeHolidayType (void)
 
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld_EditingHld->EndDate,&Hld_EditingHld->StartDate);
-   DB_QueryUPDATE ("can not update the type of a holiday",
-		   "UPDATE hld_holidays"
-		     " SET HldTyp=%u,"
-		          "EndDate=StartDate"
-		   " WHERE HldCod=%ld",
-	           (unsigned) Hld_EditingHld->HldTyp,
-	           Hld_EditingHld->HldCod);
+   Hld_DB_ChangeType (Hld_EditingHld->HldCod,Hld_EditingHld->HldTyp);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -780,8 +766,8 @@ void Hld_ChangeEndDate (void)
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
   {
    extern const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y;
-   struct Date NewDate;
-   struct Date *PtrDate = NULL;			// Initialized to avoid warning
+   struct Dat_Date NewDate;
+   struct Dat_Date *PtrDate = NULL;			// Initialized to avoid warning
    const char *StrStartOrEndDate = NULL;	// Initialized to avoid warning
    char StrDate[Cns_MAX_BYTES_DATE + 1];
 
@@ -829,15 +815,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
      }
 
    /***** Update the date in database *****/
-   DB_QueryUPDATE ("can not update the date of a holiday",
-		   "UPDATE hld_holidays"
-		     " SET %s='%04u%02u%02u'"
-		   " WHERE HldCod=%ld",
-	           StrStartOrEndDate,
-	           NewDate.Year,
-	           NewDate.Month,
-	           NewDate.Day,
-	           Hld_EditingHld->HldCod);
+   Hld_DB_ChangeDate (Hld_EditingHld->HldCod,StrStartOrEndDate,&NewDate);
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
@@ -880,12 +858,7 @@ void Hld_RenameHoliday (void)
         {
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
-	 DB_QueryUPDATE ("can not update the text of a holiday",
-			 "UPDATE hld_holidays"
-			   " SET Name='%s'"
-			 " WHERE HldCod=%ld",
-		         NewHldName,
-		         Hld_EditingHld->HldCod);
+	 Hld_DB_ChangeName (Hld_EditingHld->HldCod,NewHldName);
 	 Str_Copy (Hld_EditingHld->Name,NewHldName,
 		   sizeof (Hld_EditingHld->Name) - 1);
 
