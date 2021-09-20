@@ -39,6 +39,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_ID_database.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_user.h"
@@ -80,28 +81,7 @@ static void ID_PutParamsRemoveMyID (void *ID);
 static void ID_PutParamsRemoveOtherID (void *ID);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
-static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
-static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID);
 static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe);
-
-/*****************************************************************************/
-/*************************** Create new user's ID ****************************/
-/*****************************************************************************/
-
-void ID_DB_InsertANewUsrID (long UsrCod,
-		            const char ID[ID_MAX_BYTES_USR_ID + 1],
-		            bool Confirmed)
-  {
-   DB_QueryINSERT ("can not create user's ID",
-		   "INSERT INTO usr_ids"
-		   " (UsrCod,UsrID,CreatTime,Confirmed)"
-		   " VALUES"
-		   " (%ld,'%s',NOW(),'%c')",
-		   UsrCod,
-		   ID,
-		   Confirmed ? 'Y' :
-			       'N');
-  }
 
 /*****************************************************************************/
 /********************** Get list of IDs of a user ****************************/
@@ -122,16 +102,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       /***** Get user's IDs from database *****/
       // First the confirmed  (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
-      NumIDs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get user's IDs",
-		      "SELECT UsrID,"		// row[0]
-			     "Confirmed"	// row[1]
-		       " FROM usr_ids"
-		      " WHERE UsrCod=%ld"
-		      " ORDER BY Confirmed DESC,"
-			        "UsrID",
-		      UsrDat->UsrCod);
-      if (NumIDs)
+      if ((NumIDs = ID_DB_GetIDsFromUsrCod (&mysql_res,UsrDat->UsrCod)))
 	{
 	 /***** Allocate space for the list *****/
          ID_ReallocateListIDs (UsrDat,NumIDs);
@@ -200,72 +171,15 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
                                      struct ListUsrCods *ListUsrCods,
                                      bool OnlyConfirmedIDs)
   {
-   char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + ID_MAX_BYTES_USR_ID + 1 + 1];
    MYSQL_RES *mysql_res;
-   size_t MaxLength;
-   unsigned NumID;
    unsigned NumUsr;
-   bool CheckPassword = false;
 
    if (UsrDat->IDs.Num)
      {
-      if (EncryptedPassword)
-	 if (EncryptedPassword[0])
-	    CheckPassword = true;
-
-      /***** Allocate memory for subquery string *****/
-      MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
-      if ((SubQueryAllUsrs = malloc (MaxLength + 1)) == NULL)
-         Err_NotEnoughMemoryExit ();
-      SubQueryAllUsrs[0] = '\0';
-
-      /***** Get user's code(s) from database *****/
-      for (NumID = 0;
-	   NumID < UsrDat->IDs.Num;
-	   NumID++)
-	{
-	 if (NumID)
-	    Str_Concat (SubQueryAllUsrs,",",MaxLength);
-	 sprintf (SubQueryOneUsr,"'%s'",UsrDat->IDs.List[NumID].ID);
-
-	 Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,MaxLength);
-	}
-
-      if (CheckPassword)
-        {
-	 // Get user's code if I have written the correct password
-	 // or if password in database is empty (new user)
-	 ListUsrCods->NumUsrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get user's codes",
-			 "SELECT DISTINCT(usr_ids.UsrCod)"
-			  " FROM usr_ids,"
-			        "usr_data"
-			 " WHERE usr_ids.UsrID IN (%s)"
-			    "%s"
-			   " AND usr_ids.UsrCod=usr_data.UsrCod"
-			   " AND (usr_data.Password='%s'"
-			     " OR usr_data.Password='')",
-			 SubQueryAllUsrs,
-			 OnlyConfirmedIDs ? " AND usr_ids.Confirmed='Y'" :
-					    "",
-			 EncryptedPassword);
-        }
-      else
-	 ListUsrCods->NumUsrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get user's codes",
-			 "SELECT DISTINCT(UsrCod)"
-			  " FROM usr_ids"
-			 " WHERE UsrID IN (%s)"
-			    "%s",
-			 SubQueryAllUsrs,
-			 OnlyConfirmedIDs ? " AND Confirmed='Y'" :
-					    "");
-
-      /***** Free memory for subquery string *****/
-      free (SubQueryAllUsrs);
-
-      if (ListUsrCods->NumUsrs)
+      if ((ListUsrCods->NumUsrs = ID_DB_GetUsrCodsFromUsrID (&mysql_res,
+                                                             UsrDat,
+                                                             EncryptedPassword,
+                                                             OnlyConfirmedIDs)))
         {
 	 /***** Allocate space for the list of users' codes *****/
 	 Usr_AllocateListUsrCods (ListUsrCods);
@@ -516,10 +430,10 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
    Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
-   /***** Put link *****/
-   HTM_BUTTON_SUBMIT_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink ("check.svg",Txt_Confirm_ID);
-   HTM_BUTTON_End ();
+      /***** Put link *****/
+      HTM_BUTTON_SUBMIT_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+	 Ico_PutIconTextLink ("check.svg",Txt_Confirm_ID);
+      HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -538,18 +452,18 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
-   /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_ID,
-                 Acc_PutLinkToRemoveMyAccount,NULL,
-                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
+      Box_BoxBegin (StrRecordWidth,Txt_ID,
+		    Acc_PutLinkToRemoveMyAccount,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-   /***** Show form to change ID *****/
-   ID_ShowFormChangeUsrID (true,	// ItsMe
-			   IShouldFillInID);
+	 /***** Show form to change ID *****/
+	 ID_ShowFormChangeUsrID (true,	// ItsMe
+				 IShouldFillInID);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -568,18 +482,18 @@ void ID_ShowFormChangeOtherUsrID (void)
    /***** Begin section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
-   /***** Begin box *****/
-   snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
-   Box_BoxBegin (StrRecordWidth,Txt_ID,
-                 NULL,NULL,
-                 Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
+      /***** Begin box *****/
+      snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
+      Box_BoxBegin (StrRecordWidth,Txt_ID,
+		    NULL,NULL,
+		    Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-   /***** Show form to change ID *****/
-   ID_ShowFormChangeUsrID (false,	// ItsMe
-			   false);	// IShouldFillInID
+	 /***** Show form to change ID *****/
+	 ID_ShowFormChangeUsrID (false,	// ItsMe
+				 false);	// IShouldFillInID
 
-   /***** End box *****/
-   Box_BoxEnd ();
+      /***** End box *****/
+      Box_BoxEnd ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -614,128 +528,129 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** List existing user's IDs *****/
-   for (NumID = 0;
-	NumID < UsrDat->IDs.Num;
-	NumID++)
-     {
-      if (NumID == 0)
+      /***** List existing user's IDs *****/
+      for (NumID = 0;
+	   NumID < UsrDat->IDs.Num;
+	   NumID++)
 	{
-	 HTM_TR_Begin (NULL);
-
-	 /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
-
-	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
-	}
-      else	// NumID >= 1
-         HTM_BR ();
-
-      if (UsrDat->IDs.Num > 1)	// I have two or more IDs
-	{
-	 if (ItsMe && UsrDat->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
-            /* Put disabled icon to remove user's ID */
-            Ico_PutIconRemovalNotAllowed ();
-	 else							// I can remove
+	 if (NumID == 0)
 	   {
-	    /* Form to remove user's ID */
-	    if (ItsMe)
-	       Ico_PutContextualIconToRemove (ActRemMyID,ID_ID_SECTION_ID,
-				              ID_PutParamsRemoveMyID,UsrDat->IDs.List[NumID].ID);
-	    else
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
+	   }
+	 else	// NumID >= 1
+	    HTM_BR ();
+
+	 if (UsrDat->IDs.Num > 1)	// I have two or more IDs
+	   {
+	    if (ItsMe && UsrDat->IDs.List[NumID].Confirmed)	// I can not remove my confirmed IDs
+	       /* Put disabled icon to remove user's ID */
+	       Ico_PutIconRemovalNotAllowed ();
+	    else							// I can remove
 	      {
-	       switch (UsrDat->Roles.InCurrentCrs)
+	       /* Form to remove user's ID */
+	       if (ItsMe)
+		  Ico_PutContextualIconToRemove (ActRemMyID,ID_ID_SECTION_ID,
+						 ID_PutParamsRemoveMyID,UsrDat->IDs.List[NumID].ID);
+	       else
 		 {
-		  case Rol_STD:
-		     NextAction = ActRemID_Std;
-		     break;
-		  case Rol_NET:
-		  case Rol_TCH:
-		     NextAction = ActRemID_Tch;
-		     break;
-		  default:	// Guest, user or admin
-		     NextAction = ActRemID_Oth;
-		     break;
+		  switch (UsrDat->Roles.InCurrentCrs)
+		    {
+		     case Rol_STD:
+			NextAction = ActRemID_Std;
+			break;
+		     case Rol_NET:
+		     case Rol_TCH:
+			NextAction = ActRemID_Tch;
+			break;
+		     default:	// Guest, user or admin
+			NextAction = ActRemID_Oth;
+			break;
+		    }
+		  Ico_PutContextualIconToRemove (NextAction,ID_ID_SECTION_ID,
+						 ID_PutParamsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
 		 }
-	       Ico_PutContextualIconToRemove (NextAction,ID_ID_SECTION_ID,
-				              ID_PutParamsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
 	      }
 	   }
-	}
 
-      /* User's ID */
-      HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
-                      UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
-                                                          "USR_ID_NC",
-                      Str_BuildStringStr (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-									      Txt_ID_X_not_confirmed,
-				          UsrDat->IDs.List[NumID].ID));
-      Str_FreeString ();
-      HTM_Txt (UsrDat->IDs.List[NumID].ID);
-      HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
-		                                    "");
-      HTM_SPAN_End ();
-      if (NumID == UsrDat->IDs.Num - 1)
-	{
-	 HTM_TD_End ();
-         HTM_TR_End ();
-	}
-     }
+	    /* User's ID */
+	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
+			    UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
+								"USR_ID_NC",
+			    Str_BuildStringStr (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+										    Txt_ID_X_not_confirmed,
+						UsrDat->IDs.List[NumID].ID));
+	    Str_FreeString ();
+	       HTM_Txt (UsrDat->IDs.List[NumID].ID);
+	       HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
+							     "");
+	    HTM_SPAN_End ();
 
-   if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
-     {
-      /***** Write help text *****/
-      HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("colspan=\"2\" class=\"DAT CM\"");
-      Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
-      HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Form to enter new user's ID *****/
-      HTM_TR_Begin (NULL);
-
-      /* Label */
-      Frm_LabelColumn ("REC_C1_BOT RT","NewID",
-		       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
-		                         Txt_ID);		// The first user's ID
-
-      /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
-      if (ItsMe)
-	 Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
-      else
-	{
-	 switch (UsrDat->Roles.InCurrentCrs)
+	 if (NumID == UsrDat->IDs.Num - 1)
 	   {
-	    case Rol_STD:
-	       NextAction = ActNewID_Std;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActNewID_Tch;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActNewID_Oth;
-	       break;
+	       HTM_TD_End ();
+	    HTM_TR_End ();
 	   }
-	 Frm_BeginFormAnchor (NextAction,ID_ID_SECTION_ID);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
-      HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
-		      UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
-		                        "",	// Show the most recent ID
-		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"NewID\" size=\"18\"");
-      HTM_BR ();
-      Btn_PutCreateButtonInline (Txt_Add_this_ID);
-      Frm_EndForm ();
-      HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+      if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
+	{
+	 /***** Write help text *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("colspan=\"2\" class=\"DAT CM\"");
+	       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Form to enter new user's ID *****/
+	 HTM_TR_Begin (NULL);
+
+	    /* Label */
+	    Frm_LabelColumn ("REC_C1_BOT RT","NewID",
+			     UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
+					       Txt_ID);		// The first user's ID
+
+	    /* Data */
+	    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	       if (ItsMe)
+		  Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
+	       else
+		 {
+		  switch (UsrDat->Roles.InCurrentCrs)
+		    {
+		     case Rol_STD:
+			NextAction = ActNewID_Std;
+			break;
+		     case Rol_NET:
+		     case Rol_TCH:
+			NextAction = ActNewID_Tch;
+			break;
+		     default:	// Guest, user or admin
+			NextAction = ActNewID_Oth;
+			break;
+		    }
+		  Frm_BeginFormAnchor (NextAction,ID_ID_SECTION_ID);
+		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		 }
+	       HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
+			       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
+						 "",	// Show the most recent ID
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"NewID\" size=\"18\"");
+	       HTM_BR ();
+	       Btn_PutCreateButtonInline (Txt_Add_this_ID);
+	       Frm_EndForm ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -826,14 +741,14 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 ICanRemove = false;
       else if (ItsMe)
 	 // I can remove my ID only if it is not confirmed
-	 ICanRemove = !ID_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
+	 ICanRemove = !ID_DB_CheckIfConfirmed (UsrDat->UsrCod,UsrID);
       else
 	 ICanRemove = true;
 
       if (ICanRemove)
 	{
 	 /***** Remove one of the user's IDs *****/
-	 ID_RemoveUsrIDFromDB (UsrDat->UsrCod,UsrID);
+	 ID_DB_RemoveUsrID (UsrDat->UsrCod,UsrID);
 
 	 /***** Show message *****/
 	 Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
@@ -846,50 +761,6 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
      }
    else
       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-  }
-
-/*****************************************************************************/
-/************************ Check if an ID is confirmed ************************/
-/*****************************************************************************/
-
-static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
-  {
-   /***** Get if ID is confirmed from database *****/
-   return (DB_QueryCOUNT ("can not check if ID is confirmed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_ids"
-			  " WHERE UsrCod=%ld"
-			    " AND UsrID='%s'"
-			    " AND Confirmed='Y'",
-			  UsrCod,
-			  UsrID) != 0);
-  }
-
-/*****************************************************************************/
-/**************** Remove one of my user's IDs from database ******************/
-/*****************************************************************************/
-
-static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
-  {
-   /***** Remove one of my user's IDs *****/
-   DB_QueryREPLACE ("can not remove a user's ID",
-		    "DELETE FROM usr_ids"
-		    " WHERE UsrCod=%ld"
-		      " AND UsrID='%s'",
-                    UsrCod,
-                    UsrID);
-  }
-
-/*****************************************************************************/
-/****************************** Remove user's IDs ****************************/
-/*****************************************************************************/
-
-void ID_DB_RemoveUsrIDs (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's IDs",
-		   "DELETE FROM usr_ids"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -984,7 +855,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    else	// It's not me && !Confirmed
 	      {
 	       /***** Mark this ID as confirmed *****/
-	       ID_ConfirmUsrID (UsrDat,NewID);
+	       ID_DB_ConfirmUsrID (UsrDat->UsrCod,NewID);
 
 	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
 		                Txt_The_ID_X_has_been_confirmed,
@@ -1081,8 +952,8 @@ void ID_ConfirmOtherUsrID (void)
 	 else
 	   {
 	    /***** Mark this ID as confirmed *****/
-	    ID_ConfirmUsrID (&Gbl.Usrs.Other.UsrDat,
-			     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    ID_DB_ConfirmUsrID (Gbl.Usrs.Other.UsrDat.UsrCod,
+			        Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	    Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
 	    /***** Write success message *****/
@@ -1121,21 +992,4 @@ void ID_ConfirmOtherUsrID (void)
 				  &Gbl.Usrs.Other.UsrDat,NULL);
 	 break;
      }
-  }
-
-/*****************************************************************************/
-/*********************** Set a user's ID as confirmed ************************/
-/*****************************************************************************/
-
-void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
-  {
-   /***** Update database *****/
-   DB_QueryINSERT ("can not confirm a user's ID",
-		   "UPDATE usr_ids"
-		     " SET Confirmed='Y'"
-		   " WHERE UsrCod=%ld"
-		     " AND UsrID='%s'"
-		     " AND Confirmed<>'Y'",
-                   UsrDat->UsrCod,
-                   UsrID);
   }

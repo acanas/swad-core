@@ -1,7 +1,7 @@
-// swad_setting.h: user's settings / preferences
+// swad_ID_database.h: Users' IDs operations with database
 
-#ifndef _SWAD_SET
-#define _SWAD_SET
+#ifndef _SWAD_ID_DB
+#define _SWAD_ID_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,45 +27,27 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
-
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************* Public types ********************************/
+/************************* Public types and constants ************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Set_EditSettings (void);
+void ID_DB_InsertANewUsrID (long UsrCod,
+		            const char ID[ID_MAX_BYTES_USR_ID + 1],
+		            bool Confirmed);
+void ID_DB_ConfirmUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
 
-void Set_GetSettingsFromIP (void);
-void Set_SetSettingsFromIP (void);
-void Set_RemoveOldSettingsFromIP (void);
+unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
+bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
+unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
+                                    const struct UsrData *UsrDat,
+                                    const char *EncryptedPassword,
+                                    bool OnlyConfirmedIDs);
 
-void Set_ChangeSideCols (void);
-unsigned Set_GetParamSideCols (void);
-
-void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
-void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek);
-void Set_DB_ChangeIconSet (const char *IconSetId);
-void Set_DB_ChangeMenu (Mnu_Menu_t Menu);
-
-void Set_BeginSettingsHead (void);
-void Set_EndSettingsHead (void);
-void Set_BeginOneSettingSelector (void);
-void Set_EndOneSettingSelector (void);
-
-void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
-
-void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
-
-void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
-void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
-void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
+void ID_DB_RemoveUsrID (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1]);
+void ID_DB_RemoveUsrIDs (long UsrCod);
 
 #endif

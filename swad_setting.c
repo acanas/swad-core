@@ -82,17 +82,17 @@ void Set_EditSettings (void)
                  NULL,NULL,
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   Lan_PutBoxToSelectLanguage ();		// 1. Language
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Lan_PutBoxToSelectLanguage ();		// 1. Language
+      HTM_DIV_End ();
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
+      HTM_DIV_End ();
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   Dat_PutBoxToSelectDateFormat ();		// 3. Date format
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Dat_PutBoxToSelectDateFormat ();		// 3. Date format
+      HTM_DIV_End ();
 
    Box_BoxEnd ();
 
@@ -101,21 +101,21 @@ void Set_EditSettings (void)
                  NULL,NULL,
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   Ico_PutIconsToSelectIconSet ();		// 4. Icon set
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Ico_PutIconsToSelectIconSet ();		// 4. Icon set
+      HTM_DIV_End ();
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   Mnu_PutIconsToSelectMenu ();			// 5. Menu
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Mnu_PutIconsToSelectMenu ();			// 5. Menu
+      HTM_DIV_End ();
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   The_PutIconsToSelectTheme ();		// 6. Theme
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 The_PutIconsToSelectTheme ();		// 6. Theme
+      HTM_DIV_End ();
 
-   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-   Set_PutIconsToSelectSideCols ();		// 7. Side columns
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Set_PutIconsToSelectSideCols ();		// 7. Side columns
+      HTM_DIV_End ();
 
    Box_BoxEnd ();
 
@@ -364,6 +364,20 @@ void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek)
 		     " SET FirstDayOfWeek=%u"
 		   " WHERE UsrCod=%ld",
 		   FirstDayOfWeek,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************* Update my settings about icon set *********************/
+/*****************************************************************************/
+
+void Set_DB_ChangeIconSet (const char *IconSetId)
+  {
+   DB_QueryUPDATE ("can not update your setting about icon set",
+		   "UPDATE usr_data"
+		     " SET IconSet='%s'"
+		   " WHERE UsrCod=%ld",
+		   IconSetId,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

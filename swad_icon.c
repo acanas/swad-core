@@ -118,26 +118,26 @@ void Ico_PutIconsToSelectIconSet (void)
    Box_BoxBegin (NULL,Txt_Icons,
                  Ico_PutIconsIconSet,NULL,
                  Hlp_PROFILE_Settings_icons,Box_NOT_CLOSABLE);
-   Set_BeginSettingsHead ();
-   Set_BeginOneSettingSelector ();
-   for (IconSet  = (Ico_IconSet_t) 0;
-	IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
-	IconSet++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",
-                     IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
-        	                                    "PREF_OFF");
-      Frm_BeginForm (ActChgIco);
-      Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
-      snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
-		Cfg_ICON_FOLDER_SETS,
-                Ico_IconSetId[IconSet]);
-      Ico_PutSettingIconLink (Icon,Ico_IconSetNames[IconSet]);
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
-   Set_EndOneSettingSelector ();
-   Set_EndSettingsHead ();
+      Set_BeginSettingsHead ();
+	 Set_BeginOneSettingSelector ();
+	    for (IconSet  = (Ico_IconSet_t) 0;
+		 IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
+		 IconSet++)
+	      {
+	       HTM_DIV_Begin ("class=\"%s\"",
+			      IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
+							     "PREF_OFF");
+		  Frm_BeginForm (ActChgIco);
+		  Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
+		     snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
+			       Cfg_ICON_FOLDER_SETS,
+			       Ico_IconSetId[IconSet]);
+		     Ico_PutSettingIconLink (Icon,Ico_IconSetNames[IconSet]);
+		  Frm_EndForm ();
+	       HTM_DIV_End ();
+	      }
+	 Set_EndOneSettingSelector ();
+      Set_EndSettingsHead ();
    Box_BoxEnd ();
   }
 
@@ -165,12 +165,7 @@ void Ico_ChangeIconSet (void)
 
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your setting about icon set",
-		      "UPDATE usr_data"
-		        " SET IconSet='%s'"
-		      " WHERE UsrCod=%ld",
-		      Ico_IconSetId[Gbl.Prefs.IconSet],
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Set_DB_ChangeIconSet (Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

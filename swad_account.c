@@ -48,6 +48,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_ID_database.h"
 #include "swad_language.h"
 #include "swad_match.h"
 #include "swad_message.h"
