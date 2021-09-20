@@ -31,6 +31,7 @@
 #include "swad_action.h"
 #include "swad_assignment_database.h"
 #include "swad_box.h"
+#include "swad_browser_database.h"
 #include "swad_database.h"
 #include "swad_department.h"
 #include "swad_error.h"
@@ -70,8 +71,8 @@ typedef enum
 
 static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators);
 static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators);
-static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
-                                       MYSQL_RES **mysql_res);
+static unsigned Ind_DB_GetTableOfCourses (const struct Ind_Indicators *Indicators,
+                                          MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
                                   unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
@@ -87,11 +88,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
 static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
-static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators);
-static unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod);
-static unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod);
-static unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod);
-static unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod);
+static void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators);
 
 /*****************************************************************************/
 /******************* Request showing statistics of courses *******************/
@@ -124,107 +121,107 @@ void Ind_ReqIndicatorsCourses (void)
                  NULL,NULL,
                  Hlp_ANALYTICS_Indicators,Box_NOT_CLOSABLE);
 
-   /***** Form to update indicators *****/
-   /* Begin form and table */
-   Frm_BeginForm (ActReqStaCrs);
-   HTM_TABLE_BeginWidePadding (2);
+      /***** Form to update indicators *****/
+      /* Begin form and table */
+      Frm_BeginForm (ActReqStaCrs);
+	 HTM_TABLE_BeginWidePadding (2);
 
-   /* Scope */
-   HTM_TR_Begin (NULL);
+	    /* Scope */
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","ScopeInd",Txt_Scope);
+	       /* Label */
+	       Frm_LabelColumn ("RT","ScopeInd",Txt_Scope);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE);
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Sco_PutSelectorScope ("ScopeInd",HTM_SUBMIT_ON_CHANGE);
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /* Compute stats for a type of degree */
-   HTM_TR_Begin (NULL);
+	    /* Compute stats for a type of degree */
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
+	       /* Label */
+	       Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LT\"");
-   DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
-   HTM_Txt (" (");
-   HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
-   HTM_Txt (")");
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"DAT LT\"");
+		  DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
+		  HTM_Txt (" (");
+		  HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
+		  HTM_Txt (")");
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
-   HTM_TR_Begin (NULL);
+	    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
+	       /* Label */
+	       Frm_LabelColumn ("RT",Dpt_PARAM_DPT_COD_NAME,Txt_Department);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
-                                Indicators.DptCod,		// Selected department
-                                "INDICATORS_INPUT",		// Selector class
-                                -1L,				// First option
-                                Txt_Any_department,		// Text when no department selected
-                                true);				// Submit on change
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
+					       Indicators.DptCod,		// Selected department
+					       "INDICATORS_INPUT",		// Selector class
+					       -1L,				// First option
+					       Txt_Any_department,		// Text when no department selected
+					       true);				// Submit on change
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Get courses from database *****/
-   /* The result will contain courses with any number of indicators
-      If Indicators.NumIndicators <  0 ==> all courses in result will be listed
-      If Indicators.NumIndicators >= 0 ==> only those courses in result
-                                         with Indicators.NumIndicators set to yes
-                                         will be listed */
-   NumCrss = Ind_GetTableOfCourses (&Indicators,&mysql_res);
+	    /***** Get courses from database *****/
+	    /* The result will contain courses with any number of indicators
+	       If Indicators.NumIndicators <  0 ==> all courses in result will be listed
+	       If Indicators.NumIndicators >= 0 ==> only those courses in result
+						  with Indicators.NumIndicators set to yes
+						  will be listed */
+	    NumCrss = Ind_DB_GetTableOfCourses (&Indicators,&mysql_res);
 
-   /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
-   Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
+	    /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
+	    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
-   /* Selection of the number of indicators */
-   HTM_TR_Begin (NULL);
+	    /* Selection of the number of indicators */
+	    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Number_of_indicators);
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Number_of_indicators);
+	       HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LT\"");
-   Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,true);
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LT\"");
+		  Ind_ShowNumCoursesWithIndicators (&Indicators,NumCrssWithIndicatorYes,NumCrss,true);
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /* End table and form */
-   HTM_TABLE_End ();
-   Frm_EndForm ();
-
-   /***** Show the stats of courses *****/
-   for (Ind = 0, NumCrssToList = 0;
-	Ind <= Ind_NUM_INDICATORS;
-	Ind++)
-      if (Indicators.IndicatorsSelected[Ind])
-         NumCrssToList += NumCrssWithIndicatorYes[Ind];
-   if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
-     {
-      /* Show table */
-      Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
-
-      /* Button to show more details */
-      Frm_BeginForm (ActSeeAllStaCrs);
-      Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-      Par_PutHiddenParamLong (NULL,"OthDegTypCod",Indicators.DegTypCod);
-      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Indicators.DptCod);
-      if (Indicators.StrIndicatorsSelected[0])
-         Par_PutHiddenParamString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
-      Btn_PutConfirmButton (Txt_Show_more_details);
+	 /* End table and form */
+	 HTM_TABLE_End ();
       Frm_EndForm ();
-     }
+
+      /***** Show the stats of courses *****/
+      for (Ind = 0, NumCrssToList = 0;
+	   Ind <= Ind_NUM_INDICATORS;
+	   Ind++)
+	 if (Indicators.IndicatorsSelected[Ind])
+	    NumCrssToList += NumCrssWithIndicatorYes[Ind];
+      if (Ind_GetIfShowBigList (&Indicators,NumCrssToList))
+	{
+	 /* Show table */
+	 Ind_ShowTableOfCoursesWithIndicators (&Indicators,Ind_INDICATORS_BRIEF,NumCrss,mysql_res);
+
+	 /* Button to show more details */
+	 Frm_BeginForm (ActSeeAllStaCrs);
+	 Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
+	 Par_PutHiddenParamLong (NULL,"OthDegTypCod",Indicators.DegTypCod);
+	 Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Indicators.DptCod);
+	 if (Indicators.StrIndicatorsSelected[0])
+	    Par_PutHiddenParamString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
+	 Btn_PutConfirmButton (Txt_Show_more_details);
+	 Frm_EndForm ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -276,7 +273,7 @@ void Ind_ShowIndicatorsCourses (void)
    Ind_GetParamsIndicators (&Indicators);
 
    /***** Get courses from database *****/
-   NumCrss = Ind_GetTableOfCourses (&Indicators,&mysql_res);
+   NumCrss = Ind_DB_GetTableOfCourses (&Indicators,&mysql_res);
 
    /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
@@ -344,8 +341,8 @@ static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators)
 /*****************************************************************************/
 // Return the number of courses found
 
-static unsigned Ind_GetTableOfCourses (const struct Ind_Indicators *Indicators,
-                                       MYSQL_RES **mysql_res)
+static unsigned Ind_DB_GetTableOfCourses (const struct Ind_Indicators *Indicators,
+                                          MYSQL_RES **mysql_res)
   {
    unsigned NumCrss = 0;	// Initialized to avoid warning
 
@@ -753,73 +750,73 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
    /***** Write number of courses with each number of indicators valid *****/
    HTM_TABLE_BeginPadding (2);
 
-   HTM_TR_Begin (NULL);
-
-   if (PutForm)
-      HTM_TH_Empty (1);
-   HTM_TH (1,1,"RM",Txt_Indicators);
-   HTM_TH (1,2,"RM",Txt_Courses);
-
-   HTM_TR_End ();
-
-   for (Ind = 0;
-	Ind <= Ind_NUM_INDICATORS;
-	Ind++)
-     {
-      Class = Indicators->IndicatorsSelected[Ind] ? ClassHighlight :
-                                                    ClassNormal;
       HTM_TR_Begin (NULL);
 
       if (PutForm)
-	{
-	 HTM_TD_Begin ("class=\"%s\"",Class);
-	 HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
-			     "id=\"Indicators%u\" value=\"%u\"%s",
-			     Ind,Ind,
-			     Indicators->IndicatorsSelected[Ind] ? " checked=\"checked\"" :
-				                                   "");
-	 HTM_TD_End ();
-	}
-
-      HTM_TD_Begin ("class=\"%s\"",Class);
-      HTM_LABEL_Begin ("for=\"Indicators%u\"",Ind);
-      HTM_Unsigned (Ind);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"%s\"",Class);
-      HTM_Unsigned (NumCrssWithIndicatorYes[Ind]);
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"%s\"",Class);
-      HTM_TxtF ("(%.1f%%)",
-                NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
-                          (double) NumCrss :
-        	          0.0);
-      HTM_TD_End ();
+	 HTM_TH_Empty (1);
+      HTM_TH (1,1,"RM",Txt_Indicators);
+      HTM_TH (1,2,"RM",Txt_Courses);
 
       HTM_TR_End ();
-     }
 
-   /***** Write total of courses *****/
-   HTM_TR_Begin (NULL);
+      for (Ind = 0;
+	   Ind <= Ind_NUM_INDICATORS;
+	   Ind++)
+	{
+	 Class = Indicators->IndicatorsSelected[Ind] ? ClassHighlight :
+						       ClassNormal;
+	 HTM_TR_Begin (NULL);
 
-   if (PutForm)
-      HTM_TD_Empty (1);
+	    if (PutForm)
+	      {
+	       HTM_TD_Begin ("class=\"%s\"",Class);
+		  HTM_INPUT_CHECKBOX ("Indicators",HTM_SUBMIT_ON_CHANGE,
+				      "id=\"Indicators%u\" value=\"%u\"%s",
+				      Ind,Ind,
+				      Indicators->IndicatorsSelected[Ind] ? " checked=\"checked\"" :
+									    "");
+	       HTM_TD_End ();
+	      }
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Txt (Txt_Total);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s\"",Class);
+	       HTM_LABEL_Begin ("for=\"Indicators%u\"",Ind);
+		  HTM_Unsigned (Ind);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_Unsigned (NumCrss);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s\"",Class);
+	       HTM_Unsigned (NumCrssWithIndicatorYes[Ind]);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
-   HTM_TxtF ("(%.1f%%)",100.0);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s\"",Class);
+	       HTM_TxtF ("(%.1f%%)",
+			 NumCrss ? (double) NumCrssWithIndicatorYes[Ind] * 100.0 /
+				   (double) NumCrss :
+				   0.0);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
+	}
+
+      /***** Write total of courses *****/
+      HTM_TR_Begin (NULL);
+
+	 if (PutForm)
+	    HTM_TD_Empty (1);
+
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_Unsigned (NumCrss);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	    HTM_TxtF ("(%.1f%%)",100.0);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
 
    HTM_TABLE_End ();
   }
@@ -869,474 +866,474 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    /***** Begin table *****/
    HTM_TABLE_Begin ("INDICATORS");
 
-   /***** Write table heading *****/
-   switch (IndicatorsLayout)
-     {
-      case Ind_INDICATORS_BRIEF:
-         HTM_TR_Begin (NULL);
-
-         HTM_TH (3,1,"LM COLOR0",Txt_Degree);
-         HTM_TH (3,1,"LM COLOR0",Txt_Course);
-         HTM_TH (3,1,"LM COLOR0",Txt_Institutional_BR_code);
-         HTM_TH (3,1,"LM COLOR0",Txt_Web_page_of_the_course);
-         HTM_TH (1,11,"CM COLOR0",Txt_Indicators);
-
-         HTM_TR_End ();
-
-         HTM_TR_Begin (NULL);
-
-         HTM_TH (2,1,"CT COLOR0",Txt_No_INDEX);
-         HTM_TH_Begin (1,2,"CT COLOR0");
-         HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,2,"CT COLOR0");
-         HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,2,"CT COLOR0");
-         HTM_TxtF ("(C) %s",Txt_Online_tutoring);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,2,"CT COLOR0");
-         HTM_TxtF ("(D) %s",Txt_Materials);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,2,"CT COLOR0");
-         HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
-         HTM_TH_End ();
-
-         HTM_TR_End ();
-
-         HTM_TR_Begin (NULL);
-
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-
-         HTM_TR_End ();
-         break;
-      case Ind_INDICATORS_FULL:
-         HTM_TR_Begin (NULL);
-
-         HTM_TH (3,1,"LM COLOR0",Txt_Degree);
-         HTM_TH (3,1,"LM COLOR0",Txt_Course);
-         HTM_TH (3,1,"LM COLOR0",Txt_Institutional_BR_code);
-         HTM_TH (3,1,"LM COLOR0",Txt_Web_page_of_the_course);
-         HTM_TH (3,1,"LM COLOR0",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-         HTM_TH (3,1,"LM COLOR0",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-         HTM_TH (1,24,"CM COLOR0",Txt_Indicators);
-
-         HTM_TR_End ();
-
-         HTM_TR_Begin (NULL);
-
-         HTM_TH (2,1,"CT COLOR0",Txt_No_INDEX);
-         HTM_TH_Begin (1,5,"CT COLOR0");
-         HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,5,"CT COLOR0");
-         HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,5,"CT COLOR0");
-         HTM_TxtF ("(C) %s",Txt_Online_tutoring);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,4,"CT COLOR0");
-         HTM_TxtF ("(D) %s",Txt_Materials);
-         HTM_TH_End ();
-         HTM_TH_Begin (1,4,"CT COLOR0");
-         HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
-         HTM_TH_End ();
-
-         HTM_TR_End ();
-
-         HTM_TR_Begin (NULL);
-
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_LECTURES]);
-         HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_PRACTICALS]);
-         HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"RM COLOR0",Txt_Assignments);
-         HTM_TH (1,1,"RM COLOR0",Txt_Files_assignments);
-         HTM_TH (1,1,"RM COLOR0",Txt_Files_works);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"RM COLOR0",Txt_Forum_threads);
-         HTM_TH (1,1,"RM COLOR0",Txt_Forum_posts);
-         HTM_TH (1,1,"RM COLOR0",Txt_Messages_sent_by_teachers);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"RM COLOR0",Txt_Number_of_files_in_DOCUM_zones);
-         HTM_TH (1,1,"RM COLOR0",Txt_Number_of_files_in_SHARE_zones);
-         HTM_TH (1,1,"CM COLOR0",Txt_YES);
-         HTM_TH (1,1,"CM COLOR0",Txt_NO);
-         HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_ASSESSMENT]);
-         HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
-
-         HTM_TR_End ();
-      break;
-     }
-
-   /***** List courses *****/
-   mysql_data_seek (mysql_res,0);
-   for (Gbl.RowEvenOdd = 1, NumCrs = 0;
-	NumCrs < NumCrss;
-	NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
-     {
-      /* Get next course */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get course code (row[2]) */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
-         Err_WrongCourseExit ();
-
-      /* Get stored number of indicators of this course */
-      NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
-      if (Indicators->IndicatorsSelected[NumIndicators])
+      /***** Write table heading *****/
+      switch (IndicatorsLayout)
 	{
-	 /* Compute and store indicators */
-	 Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
+	 case Ind_INDICATORS_BRIEF:
+	    HTM_TR_Begin (NULL);
 
-	 /* The number of indicators may have changed */
-	 if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators])
+	       HTM_TH (3,1,"LM COLOR0",Txt_Degree);
+	       HTM_TH (3,1,"LM COLOR0",Txt_Course);
+	       HTM_TH (3,1,"LM COLOR0",Txt_Institutional_BR_code);
+	       HTM_TH (3,1,"LM COLOR0",Txt_Web_page_of_the_course);
+	       HTM_TH (1,11,"CM COLOR0",Txt_Indicators);
+
+	    HTM_TR_End ();
+
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TH (2,1,"CT COLOR0",Txt_No_INDEX);
+	       HTM_TH_Begin (1,2,"CT COLOR0");
+		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,2,"CT COLOR0");
+		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,2,"CT COLOR0");
+		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,2,"CT COLOR0");
+		  HTM_TxtF ("(D) %s",Txt_Materials);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,2,"CT COLOR0");
+		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
+	       HTM_TH_End ();
+
+	    HTM_TR_End ();
+
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+
+	    HTM_TR_End ();
+	    break;
+	 case Ind_INDICATORS_FULL:
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TH (3,1,"LM COLOR0",Txt_Degree);
+	       HTM_TH (3,1,"LM COLOR0",Txt_Course);
+	       HTM_TH (3,1,"LM COLOR0",Txt_Institutional_BR_code);
+	       HTM_TH (3,1,"LM COLOR0",Txt_Web_page_of_the_course);
+	       HTM_TH (3,1,"LM COLOR0",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	       HTM_TH (3,1,"LM COLOR0",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+	       HTM_TH (1,24,"CM COLOR0",Txt_Indicators);
+
+	    HTM_TR_End ();
+
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TH (2,1,"CT COLOR0",Txt_No_INDEX);
+	       HTM_TH_Begin (1,5,"CT COLOR0");
+		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,5,"CT COLOR0");
+		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,5,"CT COLOR0");
+		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,4,"CT COLOR0");
+		  HTM_TxtF ("(D) %s",Txt_Materials);
+	       HTM_TH_End ();
+	       HTM_TH_Begin (1,4,"CT COLOR0");
+		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
+	       HTM_TH_End ();
+
+	    HTM_TR_End ();
+
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_LECTURES]);
+	       HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_PRACTICALS]);
+	       HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Assignments);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Files_assignments);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Files_works);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Forum_threads);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Forum_posts);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Messages_sent_by_teachers);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Number_of_files_in_DOCUM_zones);
+	       HTM_TH (1,1,"RM COLOR0",Txt_Number_of_files_in_SHARE_zones);
+	       HTM_TH (1,1,"CM COLOR0",Txt_YES);
+	       HTM_TH (1,1,"CM COLOR0",Txt_NO);
+	       HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_ASSESSMENT]);
+	       HTM_TH (1,1,"LM COLOR0",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+
+	    HTM_TR_End ();
+	 break;
+	}
+
+      /***** List courses *****/
+      mysql_data_seek (mysql_res,0);
+      for (Gbl.RowEvenOdd = 1, NumCrs = 0;
+	   NumCrs < NumCrss;
+	   NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	{
+	 /* Get next course */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get course code (row[2]) */
+	 if ((CrsCod = Str_ConvertStrCodToLongCod (row[2])) <= 0)
+	    Err_WrongCourseExit ();
+
+	 /* Get stored number of indicators of this course */
+	 NumIndicators = Ind_GetAndUpdateNumIndicatorsCrs (CrsCod);
+	 if (Indicators->IndicatorsSelected[NumIndicators])
 	   {
-            ActCod = Act_GetActCod (ActReqStaCrs);
+	    /* Compute and store indicators */
+	    Ind_ComputeAndStoreIndicatorsCrs (CrsCod,(int) NumIndicators,&IndicatorsCrs);
 
-	    /* Write a row for this course */
-	    switch (IndicatorsLayout)
+	    /* The number of indicators may have changed */
+	    if (Indicators->IndicatorsSelected[IndicatorsCrs.NumIndicators])
 	      {
-	       case Ind_INDICATORS_BRIEF:
-		  HTM_TR_Begin (NULL);
+	       ActCod = Act_GetActCod (ActReqStaCrs);
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (row[0]);
-		  HTM_TD_End ();
+	       /* Write a row for this course */
+	       switch (IndicatorsLayout)
+		 {
+		  case Ind_INDICATORS_BRIEF:
+		     HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (row[1]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (row[0]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (row[3]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (row[1]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
-		  HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
-			       Cfg_URL_SWAD_CGI,CrsCod,ActCod);
-		  HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
-			    Cfg_URL_SWAD_CGI,CrsCod,ActCod);
-		  HTM_A_End ();
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (row[3]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumIndicators);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
+			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
+					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
+					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+			   HTM_A_End ();
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereIsSyllabus)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereIsSyllabus)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereIsSyllabus)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereAreAssignments)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereIsSyllabus)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereAreAssignments)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereAreAssignments)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereIsOnlineTutoring)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereAreAssignments)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereIsOnlineTutoring)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereIsOnlineTutoring)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereAreMaterials)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereAreMaterials)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereAreMaterials)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereIsAssessment)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereAreMaterials)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereIsAssessment)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereIsAssessment)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TR_End ();
-		  break;
-	       case Ind_INDICATORS_FULL:
-		  /* Get number of users */
-		  NumTchs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
-				                  1 << Rol_NET |	// Non-editing teachers
-						  1 << Rol_TCH);	// Teachers
-		  NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
-				                  1 << Rol_STD);	// Students
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereIsAssessment)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
 
-		  HTM_TR_Begin (NULL);
+		     HTM_TR_End ();
+		     break;
+		  case Ind_INDICATORS_FULL:
+		     /* Get number of users */
+		     NumTchs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+						     1 << Rol_NET |	// Non-editing teachers
+						     1 << Rol_TCH);	// Teachers
+		     NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+						     1 << Rol_STD);	// Students
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (row[0]);
-		  HTM_TD_End ();
+		     HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (row[1]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (row[0]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (row[3]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (row[1]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
-		  HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
-			       Cfg_URL_SWAD_CGI,CrsCod,ActCod);
-		  HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
-			    Cfg_URL_SWAD_CGI,CrsCod,ActCod);
-		  HTM_A_End ();
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (row[3]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        NumTchs != 0 ? "DAT_SMALL_GREEN" :
-					       "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (NumTchs);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
+			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
+					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
+					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+			   HTM_A_End ();
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        NumStds != 0 ? "DAT_SMALL_GREEN" :
-					       "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (NumStds);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      NumTchs != 0 ? "DAT_SMALL_GREEN" :
+						     "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (NumTchs);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
-			        (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
-							           "DAT_SMALL_RED"),
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumIndicators);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      NumStds != 0 ? "DAT_SMALL_GREEN" :
+						     "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (NumStds);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereIsSyllabus)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
+				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
+									 "DAT_SMALL_RED"),
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereIsSyllabus)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereIsSyllabus)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-									     "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereIsSyllabus)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-									     "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
+										   "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-									       "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
+										   "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereAreAssignments)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereAreAssignments)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
-								      "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumAssignments);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
-								           "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumFilesAssignments);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
-								     "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumFilesWorks);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereIsOnlineTutoring)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereIsOnlineTutoring)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumThreads != 0) ? "DAT_SMALL_GREEN" :
-							          "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumThreads);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumPosts != 0) ? "DAT_SMALL_GREEN" :
-							        "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumPosts);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
-								         "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumMsgsSentByTchs);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereAreMaterials)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereAreMaterials)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
-									       "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumFilesInDocumentZones);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-			        (IndicatorsCrs.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
-									     "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Unsigned (IndicatorsCrs.NumFilesInSharedZones);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (IndicatorsCrs.ThereIsAssessment)
-		     HTM_Txt (Txt_YES);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  if (!IndicatorsCrs.ThereIsAssessment)
-		     HTM_Txt (Txt_NO);
-		  HTM_TD_End ();
-
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.AssessmentSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
-		  HTM_TD_End ();
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-			        (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
-										        "DAT_SMALL_RED",
-			        Gbl.RowEvenOdd);
-		  HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereAreAssignments)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
 
-		  HTM_TR_End ();
-		  break;
-		 }
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereAreAssignments)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
+									    "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumAssignments);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
+										 "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumFilesAssignments);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
+									   "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumFilesWorks);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereIsOnlineTutoring)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumThreads != 0) ? "DAT_SMALL_GREEN" :
+									"DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumThreads);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumPosts != 0) ? "DAT_SMALL_GREEN" :
+								      "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumPosts);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
+									       "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumMsgsSentByTchs);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereAreMaterials)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereAreMaterials)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
+										     "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumFilesInDocumentZones);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+				      (IndicatorsCrs.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
+										   "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Unsigned (IndicatorsCrs.NumFilesInSharedZones);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (IndicatorsCrs.ThereIsAssessment)
+			      HTM_Txt (Txt_YES);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM COLOR%u\"",
+				      Gbl.RowEvenOdd);
+			   if (!IndicatorsCrs.ThereIsAssessment)
+			      HTM_Txt (Txt_NO);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      (IndicatorsCrs.AssessmentSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
+										  "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
+			HTM_TD_End ();
+
+			HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
+										     "DAT_SMALL_RED",
+				      Gbl.RowEvenOdd);
+			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
+			HTM_TD_End ();
+
+		     HTM_TR_End ();
+		     break;
+		    }
+	      }
 	   }
 	}
-     }
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1401,7 +1398,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
 /************ Store number of indicators of a course in database *************/
 /*****************************************************************************/
 
-static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators)
+static void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
   {
    /***** Store number of indicators of a course in database *****/
    DB_QueryUPDATE ("can not store number of indicators of a course",
@@ -1481,97 +1478,5 @@ void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
    /***** Update number of indicators into database
           if different to the stored one *****/
    if (NumIndicatorsFromDB != (int) IndicatorsCrs->NumIndicators)
-      Ind_StoreIndicatorsCrsIntoDB (CrsCod,IndicatorsCrs->NumIndicators);
-  }
-
-/*****************************************************************************/
-/*********** Get the number of files in document zones of a course ***********/
-/*****************************************************************************/
-
-static unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod)
-  {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-
-   /***** Get number of files in document zones of a course from database *****/
-   return DB_QuerySELECTUnsigned ("can not get the number of files",
-				  "SELECT"
-				  " (SELECT COALESCE(SUM(NumFiles),0)"
-				     " FROM brw_sizes"
-				    " WHERE FileBrowser=%u AND Cod=%ld) +"
-				  " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
-				     " FROM grp_types,"
-					   "grp_groups,"
-					   "brw_sizes"
-				    " WHERE grp_types.CrsCod=%ld"
-				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-				      " AND brw_sizes.FileBrowser=%u"
-				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
-				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
-				  CrsCod,
-				  CrsCod,
-				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
-  }
-
-/*****************************************************************************/
-/*********** Get the number of files in shared zones of a course ***********/
-/*****************************************************************************/
-
-static unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod)
-  {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-
-   /***** Get number of files in document zones of a course from database *****/
-   return DB_QuerySELECTUnsigned ("can not get the number of files",
-				  "SELECT"
-				  " (SELECT COALESCE(SUM(NumFiles),0)"
-				     " FROM brw_sizes"
-				    " WHERE FileBrowser=%u AND Cod=%ld) +"
-				  " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
-				     " FROM grp_types,"
-					   "grp_groups,"
-					   "brw_sizes"
-				    " WHERE grp_types.CrsCod=%ld"
-				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-				      " AND brw_sizes.FileBrowser=%u"
-				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
-				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
-				  CrsCod,
-				  CrsCod,
-				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
-  }
-
-/*****************************************************************************/
-/********* Get the number of files in assignment zones of a course ***********/
-/*****************************************************************************/
-
-static unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod)
-  {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-
-   /***** Get number of files in document zones of a course from database *****/
-   return DB_QuerySELECTUnsigned ("can not get the number of files",
-				  "SELECT COALESCE(SUM(NumFiles),0)"
-				   " FROM brw_sizes"
-				  " WHERE FileBrowser=%u"
-				    " AND Cod=%ld",
-				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
-				  CrsCod);
-  }
-
-/*****************************************************************************/
-/************* Get the number of files in works zones of a course ************/
-/*****************************************************************************/
-
-static unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod)
-  {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-
-   /***** Get number of files in document zones of a course from database *****/
-   return DB_QuerySELECTUnsigned ("can not get the number of files",
-				  "SELECT COALESCE(SUM(NumFiles),0)"
-				   " FROM brw_sizes"
-				  " WHERE FileBrowser=%u"
-				    " AND Cod=%ld",
-				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
-				  CrsCod);
+      Ind_DB_StoreIndicatorsCrs (CrsCod,IndicatorsCrs->NumIndicators);
   }

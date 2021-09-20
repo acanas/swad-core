@@ -369,6 +369,98 @@ unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
   }
 
 /*****************************************************************************/
+/*********** Get the number of files in document zones of a course ***********/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+
+   /***** Get number of files in document zones of a course from database *****/
+   return DB_QuerySELECTUnsigned ("can not get the number of files",
+				  "SELECT"
+				  " (SELECT COALESCE(SUM(NumFiles),0)"
+				     " FROM brw_sizes"
+				    " WHERE FileBrowser=%u AND Cod=%ld) +"
+				  " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
+				     " FROM grp_types,"
+					   "grp_groups,"
+					   "brw_sizes"
+				    " WHERE grp_types.CrsCod=%ld"
+				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+				      " AND brw_sizes.FileBrowser=%u"
+				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_CRS],
+				  CrsCod,
+				  CrsCod,
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_DOC_GRP]);
+  }
+
+/*****************************************************************************/
+/*********** Get the number of files in shared zones of a course ***********/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+
+   /***** Get number of files in document zones of a course from database *****/
+   return DB_QuerySELECTUnsigned ("can not get the number of files",
+				  "SELECT"
+				  " (SELECT COALESCE(SUM(NumFiles),0)"
+				     " FROM brw_sizes"
+				    " WHERE FileBrowser=%u AND Cod=%ld) +"
+				  " (SELECT COALESCE(SUM(brw_sizes.NumFiles),0)"
+				     " FROM grp_types,"
+					   "grp_groups,"
+					   "brw_sizes"
+				    " WHERE grp_types.CrsCod=%ld"
+				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+				      " AND brw_sizes.FileBrowser=%u"
+				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_CRS],
+				  CrsCod,
+				  CrsCod,
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_SHR_GRP]);
+  }
+
+/*****************************************************************************/
+/********* Get the number of files in assignment zones of a course ***********/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+
+   /***** Get number of files in document zones of a course from database *****/
+   return DB_QuerySELECTUnsigned ("can not get the number of files",
+				  "SELECT COALESCE(SUM(NumFiles),0)"
+				   " FROM brw_sizes"
+				  " WHERE FileBrowser=%u"
+				    " AND Cod=%ld",
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_ASG_USR],
+				  CrsCod);
+  }
+
+/*****************************************************************************/
+/************* Get the number of files in works zones of a course ************/
+/*****************************************************************************/
+
+unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long CrsCod)
+  {
+   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+
+   /***** Get number of files in document zones of a course from database *****/
+   return DB_QuerySELECTUnsigned ("can not get the number of files",
+				  "SELECT COALESCE(SUM(NumFiles),0)"
+				   " FROM brw_sizes"
+				  " WHERE FileBrowser=%u"
+				    " AND Cod=%ld",
+				  (unsigned) Brw_DB_FileBrowserForDB_files[Brw_ADMI_WRK_USR],
+				  CrsCod);
+  }
+
+/*****************************************************************************/
 /**************** Remove a file or folder from the database ******************/
 /*****************************************************************************/
 
