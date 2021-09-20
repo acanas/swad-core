@@ -54,7 +54,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_game.o swad_game_database.o swad_global.o swad_group.o \
        swad_group_database.o swad_help.o swad_hierarchy.o \
        swad_hierarchy_config.o swad_hierarchy_database.o swad_holiday.o \
-       swad_HTML.o \
+       swad_holiday_database.o swad_HTML.o \
        swad_icon.o swad_ID.o swad_indicator.o swad_info.o swad_institution.o \
        swad_institution_config.o swad_institution_database.o \
        swad_language.o swad_layout.o swad_link.o swad_log.o swad_logo.o \
