@@ -1,7 +1,7 @@
-// swad_indicator.h: indicators of courses
+// swad_indicator_database.h: indicators of courses, operations with database
 
-#ifndef _SWAD_IND
-#define _SWAD_IND
+#ifndef _SWAD_IND_DB
+#define _SWAD_IND_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,56 +27,18 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_info.h"
-
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Ind_NUM_INDICATORS 5
-#define Ind_MAX_SIZE_INDICATORS_SELECTED ((1 + Ind_NUM_INDICATORS) * (10 + 1))
-
-struct Ind_IndicatorsCrs
-  {
-   unsigned NumFilesInDocumentZones;
-   unsigned NumFilesInSharedZones;
-   bool ThereIsSyllabus;
-   Inf_Src_t TeachingGuideSrc;
-   Inf_Src_t SyllabusLecSrc;
-   Inf_Src_t SyllabusPraSrc;
-   bool ThereAreAssignments;
-   unsigned NumAssignments;
-   unsigned NumFilesAssignments;
-   unsigned NumFilesWorks;
-   bool ThereIsOnlineTutoring;
-   unsigned NumThreads;
-   unsigned NumPosts;
-   unsigned NumUsrsToBeNotifiedByEMail;
-   unsigned NumMsgsSentByTchs;
-   bool ThereAreMaterials;
-   bool ThereIsAssessment;
-   Inf_Src_t AssessmentSrc;
-   unsigned NumIndicators;
-   bool CoursePartiallyOK;
-   bool CourseAllOK;
-  };
-
-struct Ind_Indicators
-  {
-   long DegTypCod;
-   long DptCod;
-   char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
-   bool IndicatorsSelected[1 + Ind_NUM_INDICATORS];
-  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Ind_ReqIndicatorsCourses (void);
-void Ind_ShowIndicatorsCourses (void);
-int Ind_GetNumIndicatorsCrsFromDB (long CrsCod);
-void Ind_ComputeAndStoreIndicatorsCrs (long CrsCod,int NumIndicatorsFromDB,
-                                       struct Ind_IndicatorsCrs *IndicatorsCrs);
+void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators);
+unsigned Ind_DB_GetNumIndicatorsCrs (MYSQL_RES **mysql_res,long CrsCod);
+
+unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
+                                   const struct Ind_Indicators *Indicators);
 
 #endif

@@ -41,6 +41,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_indicator.h"
+#include "swad_indicator_database.h"
 #include "swad_message.h"
 #include "swad_parameter.h"
 #include "swad_theme.h"
@@ -71,8 +72,6 @@ typedef enum
 
 static void Ind_GetParamsIndicators (struct Ind_Indicators *Indicators);
 static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators);
-static unsigned Ind_DB_GetTableOfCourses (const struct Ind_Indicators *Indicators,
-                                          MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
                                   unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
@@ -88,7 +87,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
 static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod);
-static void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators);
 
 /*****************************************************************************/
 /******************* Request showing statistics of courses *******************/
@@ -179,7 +177,7 @@ void Ind_ReqIndicatorsCourses (void)
 	       If Indicators.NumIndicators >= 0 ==> only those courses in result
 						  with Indicators.NumIndicators set to yes
 						  will be listed */
-	    NumCrss = Ind_DB_GetTableOfCourses (&Indicators,&mysql_res);
+	    NumCrss = Ind_DB_GetTableOfCourses (&mysql_res,&Indicators);
 
 	    /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
 	    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
@@ -273,7 +271,7 @@ void Ind_ShowIndicatorsCourses (void)
    Ind_GetParamsIndicators (&Indicators);
 
    /***** Get courses from database *****/
-   NumCrss = Ind_DB_GetTableOfCourses (&Indicators,&mysql_res);
+   NumCrss = Ind_DB_GetTableOfCourses (&mysql_res,&Indicators);
 
    /***** Get vector with numbers of courses with 0, 1, 2... indicators set to yes *****/
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
@@ -334,313 +332,6 @@ static void Ind_GetParamNumIndicators (struct Ind_Indicators *Indicators)
 	   Ind <= Ind_NUM_INDICATORS;
 	   Ind++)
 	 Indicators->IndicatorsSelected[Ind] = true;
-  }
-
-/*****************************************************************************/
-/******************* Build query to get table of courses *********************/
-/*****************************************************************************/
-// Return the number of courses found
-
-static unsigned Ind_DB_GetTableOfCourses (const struct Ind_Indicators *Indicators,
-                                          MYSQL_RES **mysql_res)
-  {
-   unsigned NumCrss = 0;	// Initialized to avoid warning
-
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-         if (Indicators->DptCod >= 0)	// 0 means another department
-           {
-            if (Indicators->DegTypCod > 0)
-               NumCrss = (unsigned)
-               DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT DISTINCTROW "
-				      "deg_degrees.FullName,"	// row[0]
-				      "crs_courses.FullName,"	// row[1]
-				      "crs_courses.CrsCod,"	// row[2]
-				      "crs_courses.InsCrsCod"	// row[3]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_data"
-			       " WHERE deg_degrees.DegTypCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.DptCod=%ld"
-			       " ORDER BY deg_degrees.FullName,"
-					 "crs_courses.FullName",
-			       Indicators->DegTypCod,
-			       (unsigned) Rol_TCH,
-			       Indicators->DptCod);
-            else
-               NumCrss = (unsigned)
-               DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT DISTINCTROW "
-				      "deg_degrees.FullName,"	// row[0]
-				      "crs_courses.FullName,"	// row[1]
-				      "crs_courses.CrsCod,"	// row[2]
-				      "crs_courses.InsCrsCod"	// row[3]
-			        " FROM deg_degrees,"
-			              "crs_courses,"
-			              "crs_users,"
-			              "usr_data"
-			       " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.Role=%u"
-			         " AND crs_users.UsrCod=usr_data.UsrCod"
-			         " AND usr_data.DptCod=%ld"
-			       " ORDER BY deg_degrees.FullName,"
-				 	 "crs_courses.FullName",
-			       (unsigned) Rol_TCH,
-			       Indicators->DptCod);
-           }
-         else
-           {
-            if (Indicators->DegTypCod > 0)
-               NumCrss = (unsigned)
-               DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT deg_degrees.FullName,"	// row[0]
-				      "crs_courses.FullName,"	// row[1]
-				      "crs_courses.CrsCod,"	// row[2]
-				      "crs_courses.InsCrsCod"	// row[3]
-			        " FROM deg_degrees,"
-			              "crs_courses"
-			       " WHERE deg_degrees.DegTypCod=%ld"
-			         " AND deg_degrees.DegCod=crs_courses.DegCod"
-			       " ORDER BY deg_degrees.FullName,"
-					 "crs_courses.FullName",
-			       Indicators->DegTypCod);
-            else
-               NumCrss = (unsigned)
-               DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT deg_degrees.FullName,"	// row[0]
-				      "crs_courses.FullName,"	// row[1]
-				      "crs_courses.CrsCod,"	// row[2]
-				      "crs_courses.InsCrsCod"	// row[3]
-			        " FROM deg_degrees,"
-			              "crs_courses"
-			       " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-			       " ORDER BY deg_degrees.FullName,"
-					 "crs_courses.FullName");
-           }
-         break;
-      case HieLvl_CTY:
-         if (Indicators->DptCod >= 0)	// 0 means another department
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM ins_instits,"
-			           "ctr_centers,"
-			           "deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "usr_data"
-			    " WHERE ins_instits.CtyCod=%ld"
-			      " AND ins_instits.InsCod=ctr_centers.InsCod"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.Role=%u"
-			      " AND crs_users.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    (unsigned) Rol_TCH,
-			    Indicators->DptCod);
-         else
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM ins_instits,"
-			           "ctr_centers,"
-			           "deg_degrees,"
-			           "crs_courses"
-			    " WHERE ins_instits.CtyCod=%ld"
-			      " AND ins_instits.InsCod=ctr_centers.InsCod"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-         if (Indicators->DptCod >= 0)	// 0 means another department
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM ctr_centers,"
-			           "deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "usr_data"
-			    " WHERE ctr_centers.InsCod=%ld"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.Role=%u"
-			      " AND crs_users.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Ins.InsCod,
-			    (unsigned) Rol_TCH,
-			    Indicators->DptCod);
-         else
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM ctr_centers,"
-			           "deg_degrees,"
-			           "crs_courses"
-			    " WHERE ctr_centers.InsCod=%ld"
-			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case HieLvl_CTR:
-         if (Indicators->DptCod >= 0)	// 0 means another department
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "usr_data"
-			    " WHERE deg_degrees.CtrCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.Role=%u"
-			      " AND crs_users.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    (unsigned) Rol_TCH,
-			    Indicators->DptCod);
-         else
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM deg_degrees,"
-			           "crs_courses"
-			    " WHERE deg_degrees.CtrCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case HieLvl_DEG:
-         if (Indicators->DptCod >= 0)	// 0 means another department
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "usr_data"
-			    " WHERE deg_degrees.DegCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.Role=%u"
-			      " AND crs_users.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Deg.DegCod,
-			    (unsigned) Rol_TCH,
-			    Indicators->DptCod);
-         else
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM deg_degrees,"
-			           "crs_courses"
-			    " WHERE deg_degrees.DegCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case HieLvl_CRS:
-         if (Indicators->DptCod >= 0)	// 0 means another department
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
-				   "deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM deg_degrees,"
-			           "crs_courses,"
-			           "crs_users,"
-			           "usr_data"
-			    " WHERE crs_courses.CrsCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			      " AND crs_courses.CrsCod=crs_users.CrsCod"
-			      " AND crs_users.CrsCod=%ld"
-			      " AND crs_users.Role=%u"
-			      " AND crs_users.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.DptCod=%ld"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    (unsigned) Rol_TCH,
-			    Indicators->DptCod);
-         else
-            NumCrss = (unsigned)
-            DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT deg_degrees.FullName,"	// row[0]
-				   "crs_courses.FullName,"	// row[1]
-				   "crs_courses.CrsCod,"	// row[2]
-				   "crs_courses.InsCrsCod"	// row[3]
-			     " FROM deg_degrees,"
-			           "crs_courses"
-			    " WHERE crs_courses.CrsCod=%ld"
-			      " AND deg_degrees.DegCod=crs_courses.DegCod"
-			    " ORDER BY deg_degrees.FullName,"
-				      "crs_courses.FullName",
-			    Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
-
-   return NumCrss;
   }
 
 /*****************************************************************************/
@@ -1374,11 +1065,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
    int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
    /***** Get number of indicators of a course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of indicators",
-	               "SELECT NumIndicators"	// row[0]
-	                " FROM crs_courses"
-	               " WHERE CrsCod=%ld",
-		       CrsCod))
+   if (Ind_DB_GetNumIndicatorsCrs (&mysql_res,CrsCod))
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1392,21 +1079,6 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
    DB_FreeMySQLResult (&mysql_res);
 
    return NumIndicatorsFromDB;
-  }
-
-/*****************************************************************************/
-/************ Store number of indicators of a course in database *************/
-/*****************************************************************************/
-
-static void Ind_DB_StoreIndicatorsCrs (long CrsCod,unsigned NumIndicators)
-  {
-   /***** Store number of indicators of a course in database *****/
-   DB_QueryUPDATE ("can not store number of indicators of a course",
-		   "UPDATE crs_courses"
-		     " SET NumIndicators=%u"
-		   " WHERE CrsCod=%ld",
-                   NumIndicators,
-                   CrsCod);
   }
 
 /*****************************************************************************/
