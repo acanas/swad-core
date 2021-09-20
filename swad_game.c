@@ -2175,9 +2175,7 @@ static void Gam_ExchangeQuestions (long GamCod,
    long QstCodBottom;
 
    /***** Lock table to make the move atomic *****/
-   DB_Query ("can not lock tables to move game question",
-	     "LOCK TABLES gam_questions WRITE");
-   Gbl.DB.LockedTables = true;
+   Gam_DB_LockTable ();
 
    /***** Get question code of the questions to be moved *****/
    QstCodTop    = Gam_DB_GetQstCodFromQstInd (GamCod,QstIndTop);
@@ -2199,40 +2197,16 @@ static void Gam_ExchangeQuestions (long GamCod,
    */
    /* Step 1: change temporarily top index to minus bottom index
               in order to not repeat unique index (GamCod,QstInd) */
-   DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions"
-		     " SET QstInd=-%u"
-		   " WHERE GamCod=%ld"
-		     " AND QstCod=%ld",
-		   QstIndBottom,
-		   GamCod,
-		   QstCodTop);
+   Gam_DB_UpdateQstIndex (-((long) QstIndBottom),GamCod,QstCodTop   );
 
    /* Step 2: change bottom index to old top index  */
-   DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions"
-		     " SET QstInd=%u"
-		   " WHERE GamCod=%ld"
-		     " AND QstCod=%ld",
-		   QstIndTop,
-		   GamCod,
-		   QstCodBottom);
+   Gam_DB_UpdateQstIndex (  (long) QstIndTop    ,GamCod,QstCodBottom);
 
    /* Step 3: change top index to old bottom index */
-   DB_QueryUPDATE ("can not exchange indexes of questions",
-		   "UPDATE gam_questions"
-		     " SET QstInd=%u"
-		   " WHERE GamCod=%ld"
-		     " AND QstCod=%ld",
-		   QstIndBottom,
-		   GamCod,
-		   QstCodTop);
+   Gam_DB_UpdateQstIndex (  (long) QstIndBottom ,GamCod,QstCodTop   );
 
    /***** Unlock table *****/
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after moving game questions",
-	     "UNLOCK TABLES");
+   Gam_DB_UnlockTable ();
   }
 
 /*****************************************************************************/
@@ -2302,17 +2276,7 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
    unsigned long NumTags;
 
    /***** Get all tags of questions in this game *****/
-   NumTags = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get tags present in a match result",
-		   "SELECT tst_tags.TagTxt"	// row[0]
-		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
-			    " FROM tst_question_tags,gam_questions"
-			   " WHERE gam_questions.GamCod=%ld"
-			     " AND gam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
-			  "tst_tags"
-		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
-		   " ORDER BY tst_tags.TagTxt",
-		   GamCod);
+   NumTags = Gam_DB_GetTstTagsPresentInAGame (&mysql_res,GamCod);
    Tst_ShowTagList (NumTags,mysql_res);
 
    /***** Free structure that stores the query result *****/
@@ -2332,14 +2296,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
    unsigned NumAnswers;
 
    /***** Get maximum score of a game from database *****/
-   NumQsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get data of a question",
-		   "SELECT COUNT(tst_answers.AnsInd) AS N"	// row[0]
-		    " FROM tst_answers,gam_questions"
-		   " WHERE gam_questions.GamCod=%ld"
-		     " AND gam_questions.QstCod=tst_answers.QstCod"
-		   " GROUP BY tst_answers.QstCod",
-		   GamCod);
+   NumQsts = Gam_DB_GetNumAnswersOfQstsInGame (&mysql_res,GamCod);
    for (NumQst = 0, *MinScore = *MaxScore = 0.0;
 	NumQst < NumQsts;
 	NumQst++)
@@ -2350,9 +2307,11 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
       if (sscanf (row[0],"%u",&NumAnswers) != 1)
          NumAnswers = 0;
 
-      /* Accumulate minimum and maximum score */
+      /* Check number of answers */
       if (NumAnswers < 2)
 	 Err_ShowErrorAndExit ("Wrong number of answers.");
+
+      /* Accumulate minimum and maximum score */
       *MinScore += -1.0 / (double) (NumAnswers - 1);
       *MaxScore +=  1.0;
      }

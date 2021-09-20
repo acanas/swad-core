@@ -473,6 +473,45 @@ void Gam_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd)
   }
 
 /*****************************************************************************/
+/********************* Change index of a set in an exam **********************/
+/*****************************************************************************/
+
+void Gam_DB_UpdateQstIndex (long QstInd,long GamCod,long QstCod)
+  {
+   DB_QueryUPDATE ("can not exchange indexes of questions",
+		   "UPDATE gam_questions"
+		     " SET QstInd=%ld"
+		   " WHERE GamCod=%ld"
+		     " AND QstCod=%ld",
+		   QstInd,
+		   GamCod,
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/************ Lock table to make the exchange of questions atomic ************/
+/*****************************************************************************/
+
+void Gam_DB_LockTable (void)
+  {
+   DB_Query ("can not lock tables to move game question",
+	     "LOCK TABLES gam_questions WRITE");
+   Gbl.DB.LockedTables = true;
+  }
+
+/*****************************************************************************/
+/********** Unlock table to make the exchange of questions atomic ************/
+/*****************************************************************************/
+
+void Gam_DB_UnlockTable (void)
+  {
+   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
+				// ...to not retry the unlock if error in unlocking
+   DB_Query ("can not unlock tables after moving game questions",
+	     "UNLOCK TABLES");
+  }
+
+/*****************************************************************************/
 /******************* Get number of questions of a game *********************/
 /*****************************************************************************/
 
@@ -695,6 +734,42 @@ double Gam_DB_GetNumQstsPerGame (HieLvl_Level_t Scope)
 	 Err_WrongScopeExit ();
 	 return 0.0;	// Not reached
      }
+  }
+
+/*****************************************************************************/
+/********************* Get all tags of questions in a game *******************/
+/*****************************************************************************/
+
+unsigned Gam_DB_GetTstTagsPresentInAGame (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get tags present in a match result",
+		   "SELECT tst_tags.TagTxt"	// row[0]
+		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
+			    " FROM tst_question_tags,gam_questions"
+			   " WHERE gam_questions.GamCod=%ld"
+			     " AND gam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
+			  "tst_tags"
+		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
+		   " ORDER BY tst_tags.TagTxt",
+		   GamCod);
+  }
+
+/*****************************************************************************/
+/************* Get number of answers of each question in a game **************/
+/*****************************************************************************/
+
+unsigned Gam_DB_GetNumAnswersOfQstsInGame (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a question",
+		   "SELECT COUNT(tst_answers.AnsInd) AS N"	// row[0]
+		    " FROM tst_answers,"
+		          "gam_questions"
+		   " WHERE gam_questions.GamCod=%ld"
+		     " AND gam_questions.QstCod=tst_answers.QstCod"
+		   " GROUP BY tst_answers.QstCod",
+		   GamCod);
   }
 
 /*****************************************************************************/
