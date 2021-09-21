@@ -42,6 +42,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_info_database.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
 #include "swad_xml.h"
@@ -964,7 +965,7 @@ void Syl_RemoveItemSyllabus (void)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
    	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
@@ -1070,7 +1071,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
 						         Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
@@ -1239,7 +1240,7 @@ static void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreas
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
    	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
@@ -1310,7 +1311,7 @@ void Syl_InsertItemSyllabus (void)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
    	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
@@ -1362,7 +1363,7 @@ void Syl_ModifyItemSyllabus (void)
 
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
-   Inf_SetInfoSrcIntoDB (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
+   Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
    	                                                 Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/

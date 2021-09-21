@@ -3204,7 +3204,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user's status about reading of course information *****/
-      Inf_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->CrsCod);
+      Inf_DB_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove important production of this user in course *****/
       if (RemoveUsrWorks == Enr_REMOVE_USR_PRODUCTION)

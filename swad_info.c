@@ -41,6 +41,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_info.h"
+#include "swad_info_database.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
 
@@ -95,16 +96,6 @@ static void (*Inf_FormsForEditionTypes[Inf_NUM_SOURCES])(Inf_Src_t InfoSrc) =
    [Inf_RICH_TEXT ] = Inf_FormToEnterRichTextEditor,
    [Inf_PAGE      ] = Inf_FormToSendPage,
    [Inf_URL       ] = Inf_FormToSendURL,
-  };
-
-static const char *Inf_NamesInDBForInfoSrc[Inf_NUM_SOURCES] =
-  {
-   [Inf_NONE      ] = "none",
-   [Inf_EDITOR    ] = "editor",
-   [Inf_PLAIN_TEXT] = "plain_text",
-   [Inf_RICH_TEXT ] = "rich_text",
-   [Inf_PAGE      ] = "page",
-   [Inf_URL       ] = "URL",
   };
 
 static const Act_Action_t Inf_ActionsEditInfo[Inf_NUM_TYPES] =
@@ -236,18 +227,6 @@ static const Act_Action_t Inf_ActionsRcvRchTxtInfo[Inf_NUM_TYPES] =
    [Inf_ASSESSMENT    ] = ActRcvRchTxtAss,
   };
 
-static const char *Inf_NamesInDBForInfoType[Inf_NUM_TYPES] =
-  {
-   [Inf_INTRODUCTION  ] = "intro",		// TODO: Change this to "introduction"!
-   [Inf_TEACHING_GUIDE] = "description",	// TODO: Change this to "guide"!
-   [Inf_LECTURES      ] = "theory",		// TODO: Change this to "lectures"!
-   [Inf_PRACTICALS    ] = "practices",		// TODO: Change this to "practicals"!
-   [Inf_BIBLIOGRAPHY  ] = "bibliography",
-   [Inf_FAQ           ] = "FAQ",
-   [Inf_LINKS         ] = "links",
-   [Inf_ASSESSMENT    ] = "assessment",
-  };
-
 /***** Help *****/
 extern const char *Hlp_COURSE_Information_textual_information;
 extern const char *Hlp_COURSE_Guide;
@@ -273,11 +252,8 @@ static void Inf_PutButtonToEditInfo (void);
 static void Inf_PutIconToViewInfo (void *Type);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
-static bool Inf_CheckIfIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
-static void Inf_SetForceReadIntoDB (bool MustBeRead);
-static void Inf_SetIHaveReadIntoDB (bool IHaveRead);
 
 static bool Inf_CheckPage (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPage (void);
@@ -293,7 +269,6 @@ static bool Inf_CheckIfInfoAvailable (struct Syl_Syllabus *Syllabus,
                                       Inf_Src_t InfoSrc);
 static void Inf_AsignInfoType (struct Inf_Info *Info,
                                struct Syl_Syllabus *Syllabus);
-static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD);
 
 static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType);
 static bool Inf_CheckAndShowPlainTxt (void);
@@ -443,7 +418,7 @@ static void Inf_PutButtonToEditInfo (void)
    extern const char *Txt_Edit;
 
    Frm_BeginForm (Inf_ActionsEditInfo[Gbl.Crs.Info.Type]);
-   Btn_PutConfirmButton (Txt_Edit);
+      Btn_PutConfirmButton (Txt_Edit);
    Frm_EndForm ();
   }
 
@@ -488,7 +463,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
   {
    extern const char *Txt_I_have_read_this_information;
-   bool IHaveRead = Inf_CheckIfIHaveReadInfo ();
+   bool IHaveRead = Inf_DB_CheckIfIHaveReadInfo ();
 
    Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.Crs.Info.Type],
                               NULL,
@@ -496,24 +471,6 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
                               IHaveRead,false,
                               Txt_I_have_read_this_information,
                               Txt_I_have_read_this_information);
-  }
-
-/*****************************************************************************/
-/******************** Check I have read a course info ************************/
-/*****************************************************************************/
-
-static bool Inf_CheckIfIHaveReadInfo (void)
-  {
-   /***** Get if info source is already stored in database *****/
-   return (DB_QueryCOUNT ("can not get if I have read course info",
-			  "SELECT COUNT(*)"
-			   " FROM crs_info_read"
-			  " WHERE UsrCod=%ld"
-			    " AND CrsCod=%ld"
-			    " AND InfoType='%s'",
-			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]) != 0);
   }
 
 /*****************************************************************************/
@@ -558,7 +515,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get info type (row[0]) */
-      InfoType = Inf_ConvertFromStrDBToInfoType (row[0]);
+      InfoType = Inf_DB_ConvertFromStrDBToInfoType (row[0]);
 
       Gbl.Crs.Info.MustBeRead[InfoType] = true;
      }
@@ -585,28 +542,28 @@ void Inf_WriteMsgYouMustReadInfo (void)
                  NULL,NULL,
                  NULL,Box_CLOSABLE);
 
-   /***** Write message *****/
-   Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
+      /***** Write message *****/
+      Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
 
-   /***** Write every information I must read *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
-   for (InfoType  = (Inf_Type_t) 0;
-	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
-	InfoType++)
-      if (Gbl.Crs.Info.MustBeRead[InfoType])
-        {
-         HTM_LI_Begin (NULL);
-         Frm_BeginForm (Inf_ActionsSeeInfo[InfoType]);
-         HTM_BUTTON_SUBMIT_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
-                                  The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-         HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
-         HTM_BUTTON_End ();
-         Frm_EndForm ();
-         HTM_LI_End ();
-        }
-   HTM_UL_End ();
-   HTM_DIV_End ();
+      /***** Write every information I must read *****/
+      HTM_DIV_Begin ("class=\"CM\"");
+	 HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
+	    for (InfoType  = (Inf_Type_t) 0;
+		 InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
+		 InfoType++)
+	       if (Gbl.Crs.Info.MustBeRead[InfoType])
+		 {
+		  HTM_LI_Begin (NULL);
+		     Frm_BeginForm (Inf_ActionsSeeInfo[InfoType]);
+			HTM_BUTTON_SUBMIT_Begin (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
+						 The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+			   HTM_Txt (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
+		  HTM_LI_End ();
+		 }
+	 HTM_UL_End ();
+      HTM_DIV_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -630,7 +587,7 @@ void Inf_ChangeForceReadInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Set status (if info must be read or not) into database *****/
-   Inf_SetForceReadIntoDB (MustBeRead);
+   Inf_DB_SetForceRead (MustBeRead);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,
@@ -659,7 +616,7 @@ void Inf_ChangeIHaveReadInfo (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Set status (if I have read or not a information) into database *****/
-   Inf_SetIHaveReadIntoDB (IHaveRead);
+   Inf_DB_SetIHaveRead (IHaveRead);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,
@@ -689,56 +646,10 @@ static bool Inf_GetIfIHaveReadFromForm (void)
   }
 
 /*****************************************************************************/
-/***************** Set if students must read course info *********************/
-/*****************************************************************************/
-
-static void Inf_SetForceReadIntoDB (bool MustBeRead)
-  {
-   /***** Insert or replace info source for a specific type of course information *****/
-   DB_QueryUPDATE ("can not update if info must be read",
-		   "UPDATE crs_info_src"
-		     " SET MustBeRead='%c'"
-		   " WHERE CrsCod=%ld"
-		     " AND InfoType='%s'",
-                   MustBeRead ? 'Y' :
-        	                'N',
-                   Gbl.Hierarchy.Crs.CrsCod,
-		   Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
-  }
-
-/*****************************************************************************/
-/********************* Set if I have read course info ************************/
-/*****************************************************************************/
-
-static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
-  {
-   if (IHaveRead)
-      /***** Insert I have read course information *****/
-      DB_QueryREPLACE ("can not set that I have read course info",
-		       "REPLACE INTO crs_info_read"
-		       " (UsrCod,CrsCod,InfoType)"
-		       " VALUES"
-		       " (%ld,%ld,'%s')",
-                       Gbl.Usrs.Me.UsrDat.UsrCod,
-                       Gbl.Hierarchy.Crs.CrsCod,
-                       Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
-   else
-      /***** Remove I have read course information *****/
-      DB_QueryDELETE ("can not set that I have not read course info",
-		      "DELETE FROM crs_info_read"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld"
-		        " AND InfoType='%s'",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
-  }
-
-/*****************************************************************************/
 /********* Remove user's status about reading of course information **********/
 /*****************************************************************************/
 
-void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
+void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
   {
    /***** Remove user's status about reading of course information *****/
    DB_QueryDELETE ("can not set that I have not read course info",
@@ -969,8 +880,8 @@ static void Inf_ShowPage (const char *URL)
    /***** Link to view in a new window *****/
    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
 	        URL,The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-   Ico_PutIconTextLink ("expand-arrows-alt.svg",
-		        Txt_View_in_a_new_window);
+      Ico_PutIconTextLink ("expand-arrows-alt.svg",
+			   Txt_View_in_a_new_window);
    HTM_A_End ();
 
    /***** End box *****/
@@ -993,7 +904,7 @@ void Inf_SetInfoSrc (void)
    Inf_AsignInfoType (&Gbl.Crs.Info,&Syllabus);
 
    /***** Set info source into database *****/
-   Inf_SetInfoSrcIntoDB (InfoSrcSelected);
+   Inf_DB_SetInfoSrc (InfoSrcSelected);
 
    /***** Show the selected info *****/
    Inf_ShowInfo ();
@@ -1049,7 +960,7 @@ void Inf_FormsToSelSendInfo (void)
        !InfoAvailable[FromDB.Src])
      {
       FromDB.Src = Inf_NONE;
-      Inf_SetInfoSrcIntoDB (Inf_NONE);
+      Inf_DB_SetInfoSrc (Inf_NONE);
      }
 
    /***** Form to choice between alternatives *****/
@@ -1058,54 +969,53 @@ void Inf_FormsToSelSendInfo (void)
                       Inf_PutIconToViewInfo,&Gbl.Crs.Info.Type,
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
-   /* Options */
-   for (InfoSrc  = (Inf_Src_t) 0;
-	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
-	InfoSrc++)
-     {
-      HTM_TR_Begin (NULL);
-
-      /* Select info source */
-      if (InfoSrc == FromDB.Src)
-	 HTM_TD_Begin ("class=\"DAT LT LIGHT_BLUE\"");
-      else
-	 HTM_TD_Begin ("class=\"DAT LT\"");
-      Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
-
-      HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
-	                         (InfoSrc == Inf_NONE ||
-	                          InfoAvailable[InfoSrc]),	// Info available for this source
-		       "id=\"InfoSrc%u\" value=\"%u\"%s",
-		       (unsigned) InfoSrc,(unsigned) InfoSrc,
-		       InfoSrc == FromDB.Src ? " checked=\"checked\"" :
-			                       (InfoSrc == Inf_NONE ||
-	                                       InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
-						                         " disabled=\"disabled\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
-
-      /* Form for this info source */
-      if (InfoSrc == FromDB.Src)
-	 HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
-      else
-	 HTM_TD_Begin ("class=\"LT\"");
-      HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"%s\"",
-	               (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
-      HTM_LABEL_End ();
-      if (Txt_INFO_SRC_HELP[InfoSrc])
+      /* Options */
+      for (InfoSrc  = (Inf_Src_t) 0;
+	   InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
+	   InfoSrc++)
 	{
-         HTM_SPAN_Begin ("class=\"DAT\"");
-         HTM_BR ();
-         HTM_TxtF ("(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
-         HTM_SPAN_End ();
-	}
-      if (Inf_FormsForEditionTypes[InfoSrc])
-         Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
-      HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
 
-      HTM_TR_End ();
-     }
+	    /* Select info source */
+	    if (InfoSrc == FromDB.Src)
+	       HTM_TD_Begin ("class=\"DAT LT LIGHT_BLUE\"");
+	    else
+	       HTM_TD_Begin ("class=\"DAT LT\"");
+	    Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+	       HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
+					  (InfoSrc == Inf_NONE ||
+					   InfoAvailable[InfoSrc]),	// Info available for this source
+				"id=\"InfoSrc%u\" value=\"%u\"%s",
+				(unsigned) InfoSrc,(unsigned) InfoSrc,
+				InfoSrc == FromDB.Src ? " checked=\"checked\"" :
+							(InfoSrc == Inf_NONE ||
+							InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
+										  " disabled=\"disabled\"");
+	    Frm_EndForm ();
+	    HTM_TD_End ();
+
+	    /* Form for this info source */
+	    if (InfoSrc == FromDB.Src)
+	       HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
+	    else
+	       HTM_TD_Begin ("class=\"LT\"");
+	    HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"%s\"",
+			     (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+	    HTM_LABEL_End ();
+	    if (Txt_INFO_SRC_HELP[InfoSrc])
+	      {
+	       HTM_SPAN_Begin ("class=\"DAT\"");
+		  HTM_BR ();
+		  HTM_TxtF ("(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
+	       HTM_SPAN_End ();
+	      }
+	    if (Inf_FormsForEditionTypes[InfoSrc])
+	       Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -1161,7 +1071,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_Src_t InfoSrc)
    extern const char *Txt_Edit;
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-   Btn_PutConfirmButton (Txt_Edit);
+      Btn_PutConfirmButton (Txt_Edit);
    Frm_EndForm ();
   }
 
@@ -1174,7 +1084,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_Src_t InfoSrc)
    extern const char *Txt_Edit_plain_text;
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-   Btn_PutConfirmButton (Txt_Edit_plain_text);
+      Btn_PutConfirmButton (Txt_Edit_plain_text);
    Frm_EndForm ();
   }
 
@@ -1187,7 +1097,7 @@ void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc)
    extern const char *Txt_Edit_rich_text;
 
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
-   Btn_PutConfirmButton (Txt_Edit_rich_text);
+      Btn_PutConfirmButton (Txt_Edit_rich_text);
    Frm_EndForm ();
   }
 
@@ -1204,18 +1114,18 @@ void Inf_FormToSendPage (Inf_Src_t InfoSrc)
    /***** Begin form *****/
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
-   /***** File *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_File);
-   HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-                   NULL);
-   HTM_LABEL_End ();
-   HTM_DIV_End ();
+      /***** File *****/
+      HTM_DIV_Begin ("class=\"CM\"");
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_File);
+	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,".htm,.html,.pdf,.zip",
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    NULL);
+	 HTM_LABEL_End ();
+      HTM_DIV_End ();
 
-   /***** Send button *****/
-   Btn_PutCreateButton (Txt_Upload_file);
+      /***** Send button *****/
+      Btn_PutCreateButton (Txt_Upload_file);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1239,27 +1149,27 @@ void Inf_FormToSendURL (Inf_Src_t InfoSrc)
    /***** Begin form *****/
    Frm_BeginForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
-   /***** Link *****/
-   if ((FileURL = fopen (PathFile,"rb")) != NULL)
-     {
-      if (fgets (Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
-         Gbl.Crs.Info.URL[0] = '\0';
-      /* File is not longer needed. Close it */
-      fclose (FileURL);
-     }
-   else
-      Gbl.Crs.Info.URL[0] = '\0';
+      /***** Link *****/
+      if ((FileURL = fopen (PathFile,"rb")) != NULL)
+	{
+	 if (fgets (Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+	    Gbl.Crs.Info.URL[0] = '\0';
+	 /* File is not longer needed. Close it */
+	 fclose (FileURL);
+	}
+      else
+	 Gbl.Crs.Info.URL[0] = '\0';
 
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_URL);
-   HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "size=\"50\"");
-   HTM_LABEL_End ();
-   HTM_DIV_End ();
+      HTM_DIV_Begin ("class=\"CM\"");
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_URL);
+	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
+			   "size=\"50\"");
+	 HTM_LABEL_End ();
+      HTM_DIV_End ();
 
-   /***** Send button *****/
-   Btn_PutCreateButton (Txt_Send_URL);
+      /***** Send button *****/
+      Btn_PutCreateButton (Txt_Send_URL);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1412,54 +1322,6 @@ Inf_Src_t Inf_GetInfoSrcFromForm (void)
   }
 
 /*****************************************************************************/
-/********* Set info source for a type of course info from database ***********/
-/*****************************************************************************/
-
-void Inf_SetInfoSrcIntoDB (Inf_Src_t InfoSrc)
-  {
-   /***** Get if info source is already stored in database *****/
-   if (DB_QueryCOUNT ("can not get if info source is already stored in database",
-		      "SELECT COUNT(*)"
-		       " FROM crs_info_src"
-		      " WHERE CrsCod=%ld"
-		        " AND InfoType='%s'",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]))
-      // Info is already stored in database, so update it
-     {	// Update info source
-      if (InfoSrc == Inf_NONE)
-         DB_QueryUPDATE ("can not update info source",
-			 "UPDATE crs_info_src"
-			   " SET InfoSrc='%s',"
-			        "MustBeRead='N'"
-			 " WHERE CrsCod=%ld"
-			   " AND InfoType='%s'",
-                         Inf_NamesInDBForInfoSrc[Inf_NONE],
-                         Gbl.Hierarchy.Crs.CrsCod,
-                         Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
-      else	// MustBeRead remains unchanged
-         DB_QueryUPDATE ("can not update info source",
-			 "UPDATE crs_info_src"
-			   " SET InfoSrc='%s'"
-		         " WHERE CrsCod=%ld"
-		           " AND InfoType='%s'",
-		         Inf_NamesInDBForInfoSrc[InfoSrc],
-		         Gbl.Hierarchy.Crs.CrsCod,
-		         Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type]);
-     }
-   else		// Info is not stored in database, so insert it
-      DB_QueryINSERT ("can not insert info source",
-		      "INSERT INTO crs_info_src"
-		      " (CrsCod,InfoType,InfoSrc,MustBeRead)"
-		      " VALUES"
-		      " (%ld,'%s','%s','N')",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type],
-		      Inf_NamesInDBForInfoSrc[InfoSrc]);
-  }
-
-
-/*****************************************************************************/
 /***** Get and check info source for a type of course info from database *****/
 /*****************************************************************************/
 
@@ -1470,19 +1332,13 @@ Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType)
    Inf_Src_t InfoSrc;
 
    /***** Get info source for a specific type of info from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get info source",
-		       "SELECT InfoSrc"		// row[0]
-		        " FROM crs_info_src"
-		       " WHERE CrsCod=%ld"
-		         " AND InfoType='%s'",
-		       CrsCod,
-		       Inf_NamesInDBForInfoType[InfoType]))
+   if (Inf_DB_GetInfoSrc (&mysql_res,CrsCod,InfoType))
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
       /* Get info source (row[0]) */
-      InfoSrc = Inf_ConvertFromStrDBToInfoSrc (row[0]);
+      InfoSrc = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
      }
    else
       InfoSrc = Inf_NONE;
@@ -1499,7 +1355,7 @@ Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType)
 
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
                                    long CrsCod,
-                                   Inf_Type_t Type,
+                                   Inf_Type_t InfoType,
                                    struct Inf_FromDB *FromDB)
   {
    MYSQL_RES *mysql_res;
@@ -1510,20 +1366,13 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
    FromDB->MustBeRead = false;
 
    /***** Get info source for a specific type of info from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get info source",
-		       "SELECT InfoSrc,"	// row[0]
-			      "MustBeRead"	// row[1]
-			" FROM crs_info_src"
-		       " WHERE CrsCod=%ld"
-			 " AND InfoType='%s'",
-		       CrsCod,
-		       Inf_NamesInDBForInfoType[Type]) == 1)
+   if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,CrsCod,InfoType) == 1)
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
       /* Get info source (row[0]) and if students must read info (row[1]) */
-      FromDB->Src        = Inf_ConvertFromStrDBToInfoSrc (row[0]);
+      FromDB->Src        = Inf_DB_ConvertFromStrDBToInfoSrc (row[0]);
       FromDB->MustBeRead = (row[1][0] == 'Y');
      }
 
@@ -1536,7 +1385,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
       case Inf_NONE:
          break;
       case Inf_EDITOR:
-         switch (Type)
+         switch (InfoType)
            {
             case Inf_LECTURES:
 	       Syllabus->WhichSyllabus = Syl_LECTURES;
@@ -1559,77 +1408,25 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
            }
          break;
       case Inf_PLAIN_TEXT:
-	 if (!Inf_CheckPlainTxt (CrsCod,Type))
+	 if (!Inf_CheckPlainTxt (CrsCod,InfoType))
             FromDB->Src = Inf_NONE;
          break;
       case Inf_RICH_TEXT:
-	 if (!Inf_CheckRichTxt (CrsCod,Type))
+	 if (!Inf_CheckRichTxt (CrsCod,InfoType))
             FromDB->Src = Inf_NONE;
          break;
       case Inf_PAGE:
-	 if (!Inf_CheckPage (CrsCod,Type))
+	 if (!Inf_CheckPage (CrsCod,InfoType))
 	    FromDB->Src = Inf_NONE;
          break;
       case Inf_URL:
-	 if (!Inf_CheckURL (CrsCod,Type))
+	 if (!Inf_CheckURL (CrsCod,InfoType))
 	    FromDB->Src = Inf_NONE;
          break;
      }
 
    if (FromDB->Src == Inf_NONE)
       FromDB->MustBeRead = false;
-  }
-
-/*****************************************************************************/
-/*** Convert a string with info type in database to a Inf_InfoType_t value ***/
-/*****************************************************************************/
-
-Inf_Type_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB)
-  {
-   Inf_Type_t InfoType;
-
-   for (InfoType  = (Inf_Type_t) 0;
-	InfoType <= (Inf_Type_t) (Inf_NUM_TYPES - 1);
-	InfoType++)
-      if (!strcmp (StrInfoTypeDB,Inf_NamesInDBForInfoType[InfoType]))
-         return InfoType;
-
-   return (Inf_Type_t) 0;
-  }
-
-/*****************************************************************************/
-/** Convert a string with info source in database to a Inf_InfoSrc_t value ***/
-/*****************************************************************************/
-
-Inf_Src_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
-  {
-   Inf_Src_t InfoSrc;
-
-   for (InfoSrc  = (Inf_Src_t) 0;
-	InfoSrc <= (Inf_Src_t) (Inf_NUM_SOURCES - 1);
-	InfoSrc++)
-      if (!strcmp (StrInfoSrcDB,Inf_NamesInDBForInfoSrc[InfoSrc]))
-         return InfoSrc;
-
-   return Inf_NONE;
-  }
-
-/*****************************************************************************/
-/********** Set info text for a type of course info from database ************/
-/*****************************************************************************/
-
-static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
-  {
-   /***** Insert or replace info source for a specific type of course information *****/
-   DB_QueryREPLACE ("can not update info text",
-		    "REPLACE INTO crs_info_txt"
-		    " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
-		    " VALUES"
-		    " (%ld,'%s','%s','%s')",
-		    Gbl.Hierarchy.Crs.CrsCod,
-		    Inf_NamesInDBForInfoType[Gbl.Crs.Info.Type],
-		    InfoTxtHTML,
-		    InfoTxtMD);
   }
 
 /*****************************************************************************/
@@ -1645,14 +1442,7 @@ void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
 
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get info text",
-			     "SELECT InfoTxtHTML,"	// row[0]
-			            "InfoTxtMD"		// row[1]
-			      " FROM crs_info_txt"
-			     " WHERE CrsCod=%ld"
-			       " AND InfoType='%s'",
-			     CrsCod,
-			     Inf_NamesInDBForInfoType[InfoType]) == 1)
+   if (Inf_DB_GetInfoTxt (&mysql_res,CrsCod,InfoType) == 1)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
@@ -1737,13 +1527,13 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
       HTM_DIV_Begin ("class=\"DAT LM\"");
 
-      /***** Convert to respectful HTML and insert links *****/
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
-      Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+	 /***** Convert to respectful HTML and insert links *****/
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
+	 Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
-      /***** Write text *****/
-      HTM_Txt (TxtHTML);
+	 /***** Write text *****/
+	 HTM_Txt (TxtHTML);
 
       /***** End box *****/
       HTM_DIV_End ();
@@ -1825,75 +1615,75 @@ static bool Inf_CheckAndShowRichTxt (void)
 
       HTM_DIV_Begin ("id=\"crs_info\" class=\"LM\"");
 
-      /***** Store text into a temporary .md file in HTML output directory *****/
-      // TODO: change to another directory?
-      /* Create a unique name for the .md file */
-      snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
-	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
-      snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
-	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+	 /***** Store text into a temporary .md file in HTML output directory *****/
+	 // TODO: change to another directory?
+	 /* Create a unique name for the .md file */
+	 snprintf (PathFileMD,sizeof (PathFileMD),"%s/%s.md",
+		   Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
+	 snprintf (PathFileHTML,sizeof (PathFileHTML),"%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+		   Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
-      /* Open Markdown file for writing */
-      if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
-	 Err_ShowErrorAndExit ("Can not create temporary Markdown file.");
+	 /* Open Markdown file for writing */
+	 if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
+	    Err_ShowErrorAndExit ("Can not create temporary Markdown file.");
 
-      /* Write text into Markdown file */
-      fprintf (FileMD,"%s",TxtMD);
+	 /* Write text into Markdown file */
+	 fprintf (FileMD,"%s",TxtMD);
 
-      /* Close Markdown file */
-      fclose (FileMD);
+	 /* Close Markdown file */
+	 fclose (FileMD);
 
-      /***** Convert from Markdown to HTML *****/
-      /* MathJax 2.5.1
+	 /***** Convert from Markdown to HTML *****/
+	 /* MathJax 2.5.1
 #ifdef Cfg_MATHJAX_LOCAL
-      // Use the local copy of MathJax
-      snprintf (MathJaxURL,sizeof (MathJaxURL),
-	        "=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
-	        Cfg_URL_SWAD_PUBLIC);
+	 // Use the local copy of MathJax
+	 snprintf (MathJaxURL,sizeof (MathJaxURL),
+		   "=%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",
+		   Cfg_URL_SWAD_PUBLIC);
 #else
-      // Use the MathJax Content Delivery Network (CDN)
-      MathJaxURL[0] = '\0';
+	 // Use the MathJax Content Delivery Network (CDN)
+	 MathJaxURL[0] = '\0';
 #endif
-      */
-      /* MathJax 3.0.1 */
+	 */
+	 /* MathJax 3.0.1 */
 #ifdef Cfg_MATHJAX_LOCAL
-      // Use the local copy of MathJax
-      snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
-	        Cfg_URL_SWAD_PUBLIC);
+	 // Use the local copy of MathJax
+	 snprintf (MathJaxURL,sizeof (MathJaxURL),"=%s/mathjax/tex-chtml.js",
+		   Cfg_URL_SWAD_PUBLIC);
 #else
-      // Use the MathJax Content Delivery Network (CDN)
-      MathJaxURL[0] = '\0';
+	 // Use the MathJax Content Delivery Network (CDN)
+	 MathJaxURL[0] = '\0';
 #endif
-      // --ascii uses only ascii characters in output
-      //         (uses numerical entities instead of UTF-8)
-      //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
-      snprintf (Command,sizeof (Command),
-	        "iconv -f WINDOWS-1252 -t UTF-8 %s"
-	        " | "
-	        "pandoc --ascii --mathjax%s -f markdown_github+tex_math_dollars -t html5"
-	        " | "
-	        "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
-	        PathFileMD,
-	        MathJaxURL,
-	        PathFileHTML);
-      ReturnCode = system (Command);
-      if (ReturnCode == -1)
-	 Err_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
+	 // --ascii uses only ascii characters in output
+	 //         (uses numerical entities instead of UTF-8)
+	 //         is mandatory in order to convert (with iconv) the UTF-8 output of pandoc to WINDOWS-1252
+	 snprintf (Command,sizeof (Command),
+		   "iconv -f WINDOWS-1252 -t UTF-8 %s"
+		   " | "
+		   "pandoc --ascii --mathjax%s -f markdown_github+tex_math_dollars -t html5"
+		   " | "
+		   "iconv -f UTF-8 -t WINDOWS-1252 -o %s",
+		   PathFileMD,
+		   MathJaxURL,
+		   PathFileHTML);
+	 ReturnCode = system (Command);
+	 if (ReturnCode == -1)
+	    Err_ShowErrorAndExit ("Error when running command to convert from Markdown to HTML.");
 
-      /***** Remove Markdown file *****/
-      unlink (PathFileMD);
+	 /***** Remove Markdown file *****/
+	 unlink (PathFileMD);
 
-      /***** Copy HTML file just created to HTML output *****/
-      /* Open temporary HTML file for reading */
-      if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
-	 Err_ShowErrorAndExit ("Can not open temporary HTML file.");
+	 /***** Copy HTML file just created to HTML output *****/
+	 /* Open temporary HTML file for reading */
+	 if ((FileHTML = fopen (PathFileHTML,"rb")) == NULL)
+	    Err_ShowErrorAndExit ("Can not open temporary HTML file.");
 
-      /* Copy from temporary HTML file to output file */
-      Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
+	 /* Copy from temporary HTML file to output file */
+	 Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
 
-      /* Close and remove temporary HTML file */
-      fclose (FileHTML);
-      unlink (PathFileHTML);
+	 /* Close and remove temporary HTML file */
+	 fclose (FileHTML);
+	 unlink (PathFileHTML);
 
       /***** End box *****/
       HTM_DIV_End ();
@@ -1935,28 +1725,28 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Begin form and box *****/
    Frm_BeginForm (Inf_ActionsRcvPlaTxtInfo[Gbl.Crs.Info.Type]);
-   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-                 NULL,NULL,
-                 HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		    NULL,NULL,
+		    HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-   if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-       Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-      Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+	 if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
+	     Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
+	    Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
-                         TxtHTML,NULL);
+	 /***** Get info text from database *****/
+	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+			       TxtHTML,NULL);
 
-   /***** Edition area *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   Lay_HelpPlainEditor ();
-   HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
-   HTM_Txt (TxtHTML);
-   HTM_TEXTAREA_End ();
-   HTM_DIV_End ();
+	 /***** Edition area *****/
+	 HTM_DIV_Begin ("class=\"CM\"");
+	    Lay_HelpPlainEditor ();
+	    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
+	       HTM_Txt (TxtHTML);
+	    HTM_TEXTAREA_End ();
+	 HTM_DIV_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
    Frm_EndForm ();
   }
 
@@ -1990,28 +1780,28 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Begin form and box *****/
    Frm_BeginForm (Inf_ActionsRcvRchTxtInfo[Gbl.Crs.Info.Type]);
-   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
-                 NULL,NULL,
-                 HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+		    NULL,NULL,
+		    HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-   if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
-       Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
-      Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
+      if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
+	  Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
+	 Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
-                         TxtHTML,NULL);
+      /***** Get info text from database *****/
+      Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,
+			    TxtHTML,NULL);
 
-   /***** Edition area *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   Lay_HelpRichEditor ();
-   HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
-   HTM_Txt (TxtHTML);
-   HTM_TEXTAREA_End ();
-   HTM_DIV_End ();
+      /***** Edition area *****/
+      HTM_DIV_Begin ("class=\"CM\"");
+	 Lay_HelpRichEditor ();
+	 HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
+	    HTM_Txt (TxtHTML);
+	 HTM_TEXTAREA_End ();
+      HTM_DIV_End ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
    Frm_EndForm ();
   }
 
@@ -2041,10 +1831,10 @@ void Inf_RecAndChangePlainTxtInfo (void)
                      Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_SetInfoTxtIntoDB (Txt_HTMLFormat,Txt_MarkdownFormat);
+   Inf_DB_SetInfoTxt (Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "plain text" in database *****/
-   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_PLAIN_TEXT :
+   Inf_DB_SetInfoSrc (Txt_HTMLFormat[0] ? Inf_PLAIN_TEXT :
 	                                     Inf_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
@@ -2080,10 +1870,10 @@ void Inf_RecAndChangeRichTxtInfo (void)
                      Txt_MarkdownFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store a copy in Markdown format
 
    /***** Update text of course info in database *****/
-   Inf_SetInfoTxtIntoDB (Txt_HTMLFormat,Txt_MarkdownFormat);
+   Inf_DB_SetInfoTxt (Txt_HTMLFormat,Txt_MarkdownFormat);
 
    /***** Change info source to "rich text" in database *****/
-   Inf_SetInfoSrcIntoDB (Txt_HTMLFormat[0] ? Inf_RICH_TEXT :
+   Inf_DB_SetInfoSrc (Txt_HTMLFormat[0] ? Inf_RICH_TEXT :
 	                                     Inf_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
@@ -2137,7 +1927,7 @@ void Inf_ReceiveURLInfo (void)
    if (URLIsOK)
      {
       /***** Change info source to URL in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_URL);
+      Inf_DB_SetInfoSrc (Inf_URL);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2145,7 +1935,7 @@ void Inf_ReceiveURLInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_NONE);
+      Inf_DB_SetInfoSrc (Inf_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();
@@ -2274,7 +2064,7 @@ void Inf_ReceivePagInfo (void)
    if (FileIsOK)
      {
       /***** Change info source to page in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_PAGE);
+      Inf_DB_SetInfoSrc (Inf_PAGE);
 
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -2282,7 +2072,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Change info source to none in database *****/
-      Inf_SetInfoSrcIntoDB (Inf_NONE);
+      Inf_DB_SetInfoSrc (Inf_NONE);
 
       /***** Show again the form to select and send course info *****/
       Inf_FormsToSelSendInfo ();

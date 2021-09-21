@@ -3031,7 +3031,7 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
    /***** Check if user exists and get her/his data *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                 Usr_DONT_GET_PREFS,
-                                                Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                Usr_GET_ROLE_IN_CURRENT_CRS))
       // Existing user
       return true;
 

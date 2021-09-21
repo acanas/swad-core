@@ -1,4 +1,4 @@
-// swad_info.c: info about course
+// swad_info.h: info about course
 
 #ifndef _SWAD_INF
 #define _SWAD_INF
@@ -88,7 +88,7 @@ void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
-void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
+void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
 void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);
@@ -99,14 +99,11 @@ void Inf_FormToEnterRichTextEditor (Inf_Src_t InfoSrc);
 void Inf_FormToSendPage (Inf_Src_t InfoSrc);
 void Inf_FormToSendURL (Inf_Src_t InfoSrc);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
-void Inf_SetInfoSrcIntoDB (Inf_Src_t InfoSrc);
 Inf_Src_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Syl_Syllabus *Syllabus,
                                    long CrsCod,
-                                   Inf_Type_t Type,
+                                   Inf_Type_t InfoType,
                                    struct Inf_FromDB *FromDB);
-Inf_Type_t Inf_ConvertFromStrDBToInfoType (const char *StrInfoTypeDB);
-Inf_Src_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB);
 
 void Inf_GetInfoTxtFromDB (long CrsCod,Inf_Type_t InfoType,
                            char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],

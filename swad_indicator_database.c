@@ -25,25 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stddef.h>		// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
 
-// #include "swad_action.h"
-// #include "swad_assignment_database.h"
-// #include "swad_box.h"
-// #include "swad_browser_database.h"
 #include "swad_database.h"
-// #include "swad_department.h"
 #include "swad_error.h"
-// #include "swad_form.h"
-// #include "swad_forum_database.h"
 #include "swad_global.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
 #include "swad_indicator.h"
-// #include "swad_message.h"
-// #include "swad_parameter.h"
-// #include "swad_theme.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
