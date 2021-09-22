@@ -40,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_mail.h"
+#include "swad_mail_database.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_tab.h"
@@ -77,19 +78,14 @@ static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_GetMailDomain (const char *Email,
                                char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
-static bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (void *MaiCod);
 
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
-static void Mai_DB_UpdateMailDomainName (long MaiCod,
-                                         const char *FieldName,const char *NewMaiName);
 
 static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
-static void Mai_DB_CreateMailDomain (struct Mail *Mai);
 
 static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *Args);
 static void Mai_ListEmails (__attribute__((unused)) void *Args);
@@ -253,18 +249,6 @@ static void Mai_EditMailDomainsInternal (void)
 
 static void Mai_GetListMailDomainsAllowedForNotif (void)
   {
-   static const char *OrderBySubQuery[Mai_NUM_ORDERS] =
-     {
-      [Mai_ORDER_BY_DOMAIN] = "Domain,"
-	                      "Info,"
-	                      "N DESC",
-      [Mai_ORDER_BY_INFO  ] = "Info,"
-	                      "Domain,"
-	                      "N DESC",
-      [Mai_ORDER_BY_USERS ] = "N DESC,"
-	                      "Info,"
-	                      "Domain",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumMai;
@@ -275,42 +259,12 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    // ...because a unique temporary table can not be used twice in the same query
 
    /***** Create temporary table with all the mail domains present in users' emails table *****/
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS T1,T2");
+   Mai_DB_RemoveTmpTables ();
 
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
-	     " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,COUNT(*) as N"
-    	       " FROM usr_emails"
-    	      " GROUP BY Domain");
-
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE T2 ENGINE=MEMORY"
-	     " SELECT *"
-	       " FROM T1");
+   Mai_DB_CreateTmpTables ();
 
    /***** Get mail domains from database *****/
-   Gbl.Mails.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get mail domains",
-		   "(SELECT ntf_mail_domains.MaiCod,"		// row[0]
-			   "ntf_mail_domains.Domain AS Domain,"	// row[1]
-			   "ntf_mail_domains.Info AS Info,"	// row[2]
-			   "T1.N AS N"				// row[3]
-		    " FROM ntf_mail_domains,T1"
-		    " WHERE ntf_mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
-		   " UNION "
-		   "(SELECT MaiCod,"				// row[0]
-			   "Domain,"				// row[1]
-			   "Info,"				// row[2]
-			   "0 AS N"				// row[3]
-		     " FROM ntf_mail_domains"
-		    " WHERE Domain NOT IN"
-			  " (SELECT Domain COLLATE 'latin1_bin'"
-			     " FROM T2))"
-		   " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
-		   OrderBySubQuery[Gbl.Mails.SelectedOrder]);
-
-   if (Gbl.Mails.Num) // Mail domains found...
+   if ((Gbl.Mails.Num = Mai_DB_GetMailDomains (&mysql_res))) // Mail domains found...
      {
       /***** Create list with places *****/
       if ((Gbl.Mails.Lst = calloc ((size_t) Gbl.Mails.Num,
@@ -345,9 +299,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Drop temporary table *****/
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS T1,"
-	                                    "T2");
+   Mai_DB_RemoveTmpTables ();
   }
 
 /*****************************************************************************/
@@ -388,21 +340,6 @@ static void Mai_GetMailDomain (const char *Email,
   }
 
 /*****************************************************************************/
-/************ Check if a mail domain is allowed for notifications ************/
-/*****************************************************************************/
-
-static bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
-  {
-   /***** Get number of mail_domains with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if a mail domain"
-			  " is allowed for notifications",
-			  "SELECT COUNT(*)"
-			   " FROM ntf_mail_domains"
-			  " WHERE Domain='%s'",
-			  MailDomain) != 0);
-  }
-
-/*****************************************************************************/
 /***************** Show warning about notifications via email ****************/
 /*****************************************************************************/
 
@@ -439,12 +376,7 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a mail domain",
-			  "SELECT Domain,"	// row[0]
-				 "Info"		// row[1]
-			   " FROM ntf_mail_domains"
-			  " WHERE MaiCod=%ld",
-			  Mai->MaiCod)) // Mail found...
+      if (Mai_DB_GetDataOfMailDomainByCod (&mysql_res,Mai->MaiCod)) // Mail found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -576,18 +508,15 @@ void Mai_RemoveMailDomain (void)
    /***** Mail domain constructor *****/
    Mai_EditingMailDomainConstructor ();
 
-   /***** Get mail code *****/
+   /***** Get mail domain code *****/
    if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) <= 0)
       Err_WrongMailDomainExit ();
 
-   /***** Get data of the mail from database *****/
+   /***** Get data of the mail domain rom database *****/
    Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
 
-   /***** Remove mail *****/
-   DB_QueryDELETE ("can not remove a mail domain",
-		   "DELETE FROM ntf_mail_domains"
-		   " WHERE MaiCod=%ld",
-		   Mai_EditingMai->MaiCod);
+   /***** Remove mail domain *****/
+   Mai_DB_RemoveMailDomain (Mai_EditingMai->MaiCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -696,38 +625,6 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update name *****/
    Str_Copy (CurrentMaiName,NewMaiName,MaxBytes);
-  }
-
-/*****************************************************************************/
-/********************** Check if the name of mail exists *********************/
-/*****************************************************************************/
-
-static bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
-  {
-   /***** Get number of mail_domains with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name"
-			  " of a mail domain already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ntf_mail_domains"
-			  " WHERE %s='%s'"
-			    " AND MaiCod<>%ld",
-			  FieldName,Name,MaiCod) != 0);
-  }
-
-/*****************************************************************************/
-/****************** Update name in table of mail domains *********************/
-/*****************************************************************************/
-
-static void Mai_DB_UpdateMailDomainName (long MaiCod,
-                                         const char *FieldName,const char *NewMaiName)
-  {
-   /***** Update mail domain changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of a mail domain",
-		   "UPDATE ntf_mail_domains"
-		     " SET %s='%s'"
-		   " WHERE MaiCod=%ld",
-	           FieldName,NewMaiName,
-	           MaiCod);
   }
 
 /*****************************************************************************/
@@ -859,22 +756,6 @@ void Mai_ReceiveFormNewMailDomain (void)
    else	// If there is not a mail name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
-  }
-
-/*****************************************************************************/
-/************************** Create a new mail domain *************************/
-/*****************************************************************************/
-
-static void Mai_DB_CreateMailDomain (struct Mail *Mai)
-  {
-   /***** Create a new mail *****/
-   DB_QueryINSERT ("can not create mail domain",
-		   "INSERT INTO ntf_mail_domains"
-		   " (Domain,Info)"
-		   " VALUES"
-		   " ('%s','%s')",
-	           Mai->Domain,
-	           Mai->Info);
   }
 
 /*****************************************************************************/

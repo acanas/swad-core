@@ -25,24 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <stdlib.h>		// For free
-// #include <string.h>		// For strlen
-
-// #include "swad_action.h"
-// #include "swad_banner.h"
-// #include "swad_center_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_degree_database.h"
-// #include "swad_exam_log.h"
 #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_HTML.h"
-// #include "swad_institution_database.h"
 #include "swad_log.h"
-// #include "swad_profile.h"
-// #include "swad_role.h"
-// #include "swad_statistic.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

@@ -25,24 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <limits.h>		// For maximum values
-// #include <linux/limits.h>	// For PATH_MAX, NAME_MAX
-// #include <stddef.h>		// For NULL
-// #include <stdlib.h>		// For getenv, etc
-// #include <stdsoap2.h>		// For SOAP_OK and soap functions
 #include <string.h>		// For string functions
-// #include <unistd.h>		// For unlink
 
-// #include "swad_action.h"
-// #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_HTML.h"
-// #include "swad_info.h"
-// #include "swad_parameter.h"
-// #include "swad_string.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

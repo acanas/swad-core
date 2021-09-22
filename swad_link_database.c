@@ -25,28 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stddef.h>		// For NULL
-// #include <stdlib.h>		// For calloc
-// #include <string.h>		// For string functions
-
-// #include "swad_banner.h"
-// #include "swad_box.h"
-// #include "swad_constant.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
-// #include "swad_global.h"
-// #include "swad_HTML.h"
-// #include "swad_language.h"
-// #include "swad_link.h"
 #include "swad_link_database.h"
-// #include "swad_parameter.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
-
-// extern struct Globals Gbl;
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
