@@ -55,8 +55,6 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Mai_LENGTH_EMAIL_CONFIRM_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -97,8 +95,6 @@ static void Mai_PutParamsRemoveMyEmail (void *Email);
 static void Mai_PutParamsRemoveOtherEmail (void *Email);
 
 static void Mai_RemoveEmail (struct UsrData *UsrDat);
-static void Mai_DB_RemoveEmail (long UsrCod,
-                                const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
@@ -968,20 +964,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
    bool Found;
 
    /***** Get current (last updated) user's nickname from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get email address",
-		       "SELECT E_mail,"		// row[0]
-			      "Confirmed"	// row[1]
-			" FROM usr_emails"
-		       " WHERE UsrCod=%ld"
-		       " ORDER BY CreatTime DESC"
-		       " LIMIT 1",
-		       UsrDat->UsrCod) == 0)
-     {
-      UsrDat->Email[0] = '\0';
-      UsrDat->EmailConfirmed = false;
-      Found = false;
-     }
-   else
+   if (Mai_DB_GetEmailFromUsrCod (&mysql_res,UsrDat->UsrCod))
      {
       /* Get email */
       row = mysql_fetch_row (mysql_res);
@@ -989,36 +972,17 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
       UsrDat->EmailConfirmed = (row[1][0] == 'Y');
       Found = true;
      }
+   else
+     {
+      UsrDat->Email[0] = '\0';
+      UsrDat->EmailConfirmed = false;
+      Found = false;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    return Found;
-  }
-
-/*****************************************************************************/
-/************* Get user's code of a user from his/her email ******************/
-/*****************************************************************************/
-// Returns -1L if email not found
-
-long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
-  {
-   /***** Trivial check 1: email should be not null ******/
-   if (!Email)
-      return -1L;
-
-   /***** Trivial check 2: email should be not empty ******/
-   if (!Email[0])
-      return -1L;
-
-   /***** Get user's code from database *****/
-   return DB_QuerySELECTCode ("can not get user's code",
-			      "SELECT usr_emails.UsrCod"
-			       " FROM usr_emails,"
-				     "usr_data"
-			      " WHERE usr_emails.E_mail='%s'"
-				" AND usr_emails.UsrCod=usr_data.UsrCod",
-			      Email);
   }
 
 /*****************************************************************************/
@@ -1121,14 +1085,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_confirm_your_email_address);
 
    /***** Get my emails *****/
-   NumEmails = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get old email addresses of a user",
-		   "SELECT E_mail,"	// row[0]
-		          "Confirmed"	// row[1]
-		    " FROM usr_emails"
-		   " WHERE UsrCod=%ld"
-		   " ORDER BY CreatTime DESC",
-		  UsrDat->UsrCod);
+   NumEmails = Mai_DB_GetMyEmails (&mysql_res,UsrDat->UsrCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -1365,46 +1322,6 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*************** Remove an old email address from database *******************/
-/*****************************************************************************/
-
-static void Mai_DB_RemoveEmail (long UsrCod,
-                                const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
-  {
-   /***** Remove an old email address *****/
-   DB_QueryREPLACE ("can not remove an old email address",
-		    "DELETE FROM usr_emails"
-		    " WHERE UsrCod=%ld"
-		      " AND E_mail='%s'",
-                    UsrCod,
-                    Email);
-  }
-
-/*****************************************************************************/
-/**************************** Remove user's emails ***************************/
-/*****************************************************************************/
-
-void Mai_DB_RemoveUsrEmails (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's emails",
-		   "DELETE FROM usr_emails"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/************** Remove a given user from list of pending emails **************/
-/*****************************************************************************/
-
-void Mai_DB_RemoveUsrPendingEmails (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove pending user's emails",
-		   "DELETE FROM usr_pending_emails"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
 /************************* New user's email for me ***************************/
 /*****************************************************************************/
 
@@ -1511,40 +1428,15 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
    /***** Check if the new email matches any of the confirmed emails of other users *****/
-   if (DB_QueryCOUNT ("can not check if email already existed",
-		      "SELECT COUNT(*)"
-		       " FROM usr_emails"
-		      " WHERE E_mail='%s'"
-		        " AND Confirmed='Y'"
-		        " AND UsrCod<>%ld",
-		      NewEmail,
-		      UsrDat->UsrCod))	// An email of another user is the same that my email
+   if (Mai_DB_CheckIfEmailBelongToAnotherUsr (UsrDat->UsrCod,NewEmail))	// An email of another user is the same that my email
       return false;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/
-   DB_QueryDELETE ("can not remove pending email for other users",
-		   "DELETE FROM usr_pending_emails"
-		   " WHERE E_mail='%s'"
-		     " AND UsrCod<>%ld",
-	           NewEmail,
-	           UsrDat->UsrCod);
-
-   DB_QueryDELETE ("can not remove not confirmed email for other users",
-		   "DELETE FROM usr_emails"
-		   " WHERE E_mail='%s'"
-		     " AND Confirmed='N'"
-		     " AND UsrCod<>%ld",
-	           NewEmail,
-	           UsrDat->UsrCod);
+   Mai_DB_RemovePendingEmailForOtherUsrs (UsrDat->UsrCod,NewEmail);
+   Mai_DB_RemoveNotConfirmedEmailForOtherUsrs (UsrDat->UsrCod,NewEmail);
 
    /***** Update email in database *****/
-   DB_QueryREPLACE ("can not update email",
-		    "REPLACE INTO usr_emails"
-		    " (UsrCod,E_mail,CreatTime)"
-		    " VALUES"
-		    " (%ld,'%s',NOW())",
-                    UsrDat->UsrCod,
-                    NewEmail);
+   Mai_DB_UpdateEmail (UsrDat->UsrCod,NewEmail);
 
    return true;	// Successfully updated
   }
@@ -1640,20 +1532,10 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
    /***** Remove expired pending emails from database *****/
-   DB_QueryDELETE ("can not remove old pending mail keys",
-		   "DELETE LOW_PRIORITY FROM usr_pending_emails"
-		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);
+   Mai_DB_RemoveExpiredPendingEmails ();
 
    /***** Insert mail key in database *****/
-   DB_QueryREPLACE ("can not create pending password",
-		    "INSERT INTO usr_pending_emails"
-		    " (UsrCod,E_mail,MailKey,DateAndTime)"
-		    " VALUES"
-		    " (%ld,'%s','%s',NOW())",
-	            Gbl.Usrs.Me.UsrDat.UsrCod,
-	            Email,
-	            MailKey);
+   Mai_DB_InsertPendingEmail (Email,MailKey);
   }
 
 /*****************************************************************************/
@@ -1671,25 +1553,19 @@ void Mai_ConfirmEmail (void)
    long UsrCod;
    char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    bool KeyIsCorrect;
-   char StrConfirmed[1 + 1];
 
    /***** Get parameter Key *****/
    Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
    /***** Get user's code and email from key *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's code and email from key",
-		       "SELECT UsrCod,"		// row[0]
-		              "E_mail"		// row[1]
-		        " FROM usr_pending_emails"
-		       " WHERE MailKey='%s'",
-		       MailKey))
+   if (Mai_DB_GetPendingEmail (&mysql_res,MailKey))
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get user's code */
+      /* Get user's code (row[0]) */
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get user's email */
+      /* Get user's email (row[1]) */
       Str_Copy (Email,row[1],sizeof (Email) - 1);
 
       KeyIsCorrect = true;
@@ -1706,22 +1582,12 @@ void Mai_ConfirmEmail (void)
 
    if (KeyIsCorrect)
      {
-      /***** Delete this key *****/
-      DB_QueryDELETE ("can not remove an email key",
-		      "DELETE FROM usr_pending_emails"
-		      " WHERE MailKey='%s'",
-		      MailKey);
+      /***** Delete this pending email *****/
+      Mai_DB_RemovePendingEmail (MailKey);
 
       /***** Check user's code and email
              and get if email is already confirmed *****/
-      DB_QuerySELECTString (StrConfirmed,1,"can not check if email is confirmed",
-			    "SELECT Confirmed"
-			     " FROM usr_emails"
-			    " WHERE UsrCod=%ld"
-			      " AND E_mail='%s'",
-			    UsrCod,
-			    Email);
-      switch (StrConfirmed[0])
+      switch (Mai_DB_CheckIfEmailIsConfirmed (UsrCod,Email))
         {
 	 case '\0':
             Ale_ShowAlert (Ale_WARNING,Txt_Failed_email_confirmation_key);
@@ -1732,13 +1598,7 @@ void Mai_ConfirmEmail (void)
             break;
 	 default:
             /***** Confirm email *****/
-	    DB_QueryUPDATE ("can not confirm email",
-			    "UPDATE usr_emails"
-			      " SET Confirmed='Y'"
-			    " WHERE usr_emails.UsrCod=%ld"
-			      " AND usr_emails.E_mail='%s'",
-		            UsrCod,
-		            Email);
+	    Mai_DB_ConfirmEmail (UsrCod,Email);
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_email_X_has_been_confirmed,
 		           Email);
             break;

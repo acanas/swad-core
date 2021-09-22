@@ -61,6 +61,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_language.h"
+#include "swad_mail_database.h"
 #include "swad_MFU.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
@@ -2925,7 +2926,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 	}
       else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))		// 2: It's an email
 	{
-	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
+	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
 	   {
 	    ListUsrCods->NumUsrs = 1;	// One user found
 	    Usr_AllocateListUsrCods (ListUsrCods);
@@ -3230,7 +3231,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
       // User is trying to log using his/her email
-      if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
+      if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
 	{
 	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
@@ -6041,7 +6042,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	      }
 	    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))	// 2: It's an email
 	      {
-	       if ((UsrDat.UsrCod = Mai_GetUsrCodFromEmail (UsrIDNickOrEmail)) > 0)
+	       if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrIDNickOrEmail)) > 0)
 		 {
 		  ListUsrCods.NumUsrs = 1;
 		  Usr_AllocateListUsrCods (&ListUsrCods);

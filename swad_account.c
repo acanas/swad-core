@@ -50,6 +50,7 @@
 #include "swad_ID.h"
 #include "swad_ID_database.h"
 #include "swad_language.h"
+#include "swad_mail_database.h"
 #include "swad_match.h"
 #include "swad_message.h"
 #include "swad_network.h"

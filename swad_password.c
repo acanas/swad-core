@@ -40,6 +40,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_mail_database.h"
 #include "swad_password.h"
 #include "swad_parameter.h"
 #include "swad_user.h"
@@ -338,7 +339,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
-      if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) > 0)
+      if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) > 0)
 	{
          /* Get user's data */
 	 ListUsrCods.NumUsrs = 1;

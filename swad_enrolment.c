@@ -49,6 +49,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_info_database.h"
+#include "swad_mail_database.h"
 #include "swad_match.h"
 #include "swad_message.h"
 #include "swad_notification.h"
@@ -1118,7 +1119,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	      }
 	    else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))	// 2: It's an email
 	      {
-	       if ((UsrDat.UsrCod = Mai_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
+	       if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
 		 {
 		  ListUsrCods.NumUsrs = 1;
 		  Usr_AllocateListUsrCods (&ListUsrCods);
@@ -1246,7 +1247,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	   }
 	 else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))		// 2: It's an email
 	   {
-	    if ((UsrDat.UsrCod = Mai_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
+	    if ((UsrDat.UsrCod = Mai_DB_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
 	      {
 	       ListUsrCods.NumUsrs = 1;
 	       Usr_AllocateListUsrCods (&ListUsrCods);

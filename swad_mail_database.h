@@ -37,6 +37,33 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//------------------------------ User email -----------------------------------
+void Mai_DB_UpdateEmail (long UsrCod,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+void Mai_DB_ConfirmEmail (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+
+unsigned Mai_DB_GetMyEmails (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Mai_DB_GetEmailFromUsrCod (MYSQL_RES **mysql_res,long UsrCod);
+long Mai_DB_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+
+void Mai_DB_RemoveNotConfirmedEmailForOtherUsrs (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+void Mai_DB_RemoveEmail (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+void Mai_DB_RemoveUsrEmails (long UsrCod);
+
+//---------------------------- Pending emails ---------------------------------
+void Mai_DB_InsertPendingEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
+                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
+
+unsigned Mai_DB_GetPendingEmail (MYSQL_RES **mysql_res,
+                                 const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
+
+void Mai_DB_RemovePendingEmailForOtherUsrs (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
+void Mai_DB_RemovePendingEmail (const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
+void Mai_DB_RemoveUsrPendingEmails (long UsrCod);
+void Mai_DB_RemoveExpiredPendingEmails (void);
+
+//----------------------------- Mail domains ----------------------------------
 void Mai_DB_CreateTmpTables (void);
 void Mai_DB_CreateMailDomain (const struct Mail *Mai);
 void Mai_DB_UpdateMailDomainName (long MaiCod,

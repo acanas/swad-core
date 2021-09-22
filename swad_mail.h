@@ -36,6 +36,8 @@
 #define Mai_MAX_CHARS_MAIL_INFO		(128 - 1)	// 127
 #define Mai_MAX_BYTES_MAIL_INFO		((Mai_MAX_CHARS_MAIL_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+#define Mai_LENGTH_EMAIL_CONFIRM_KEY	Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+
 #define Mai_NUM_ORDERS 3
 typedef enum
   {
@@ -77,15 +79,12 @@ void Mai_GetSelUsrsAndListEmails (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
-long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail);
 void Mai_ShowFormChangeOtherUsrEmail (void);
 
 void Mai_RemoveMyUsrEmail (void);
 void Mai_RemoveOtherUsrEmail (void);
-void Mai_DB_RemoveUsrEmails (long UsrCod);
-void Mai_DB_RemoveUsrPendingEmails (long UsrCod);
 
 void May_NewMyUsrEmail (void);
 void Mai_NewOtherUsrEmail (void);
