@@ -88,7 +88,6 @@ void Inf_WriteMsgYouMustReadInfo (void);
 void Inf_ChangeForceReadInfo (void);
 void Inf_ChangeIHaveReadInfo (void);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
-void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
 void Inf_BuildPathPage (long CrsCod,Inf_Type_t InfoType,char PathDir[PATH_MAX + 1]);
 void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1]);
 void Inf_SetInfoSrc (void);

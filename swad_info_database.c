@@ -301,3 +301,38 @@ bool Inf_DB_CheckIfIHaveReadInfo (void)
 			  Gbl.Hierarchy.Crs.CrsCod,
 			  Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]) != 0);
   }
+
+/*****************************************************************************/
+/******************* Get info types where I must read info *******************/
+/*****************************************************************************/
+
+unsigned Inf_DB_GetInfoTypesfIMustReadInfo (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get if you must read any course info",
+		   "SELECT InfoType"		// row[0]
+		    " FROM crs_info_src"
+		   " WHERE CrsCod=%ld"
+		     " AND MustBeRead='Y'"
+		     " AND InfoType NOT IN"
+		         " (SELECT InfoType"
+			    " FROM crs_info_read"
+			   " WHERE UsrCod=%ld"
+			     " AND CrsCod=%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Remove user's status about reading of course information **********/
+/*****************************************************************************/
+
+void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not set that I have not read course info",
+		   "DELETE FROM crs_info_read"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+                   UsrCod,CrsCod);
+  }

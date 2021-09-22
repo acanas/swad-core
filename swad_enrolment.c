@@ -48,6 +48,7 @@
 #include "swad_hierarchy.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_info_database.h"
 #include "swad_match.h"
 #include "swad_message.h"
 #include "swad_notification.h"

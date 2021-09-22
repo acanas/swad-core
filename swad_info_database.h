@@ -67,5 +67,8 @@ void Inf_DB_SetForceRead (bool MustBeRead);
 void Inf_DB_SetIHaveRead (bool IHaveRead);
 
 bool Inf_DB_CheckIfIHaveReadInfo (void);
+unsigned Inf_DB_GetInfoTypesfIMustReadInfo (MYSQL_RES **mysql_res);
+
+void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
 
 #endif

@@ -331,8 +331,8 @@ void Inf_ShowInfo (void)
            {
             /***** Contextual menu *****/
             Mnu_ContextMenuBegin ();
-            Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
-							// ...I have read this couse info
+	       Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
+							   // ...I have read this couse info
             Mnu_ContextMenuEnd ();
            }
          break;
@@ -344,9 +344,9 @@ void Inf_ShowInfo (void)
            {
             /***** Contextual menu *****/
             Mnu_ContextMenuBegin ();
-            Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
-            Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,Disabled);	// Checkbox to force students...
-									// ...to read this couse info
+	       Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
+	       Inf_PutCheckboxForceStdsToReadInfo (FromDB.MustBeRead,Disabled);	// Checkbox to force students...
+										// ...to read this couse info
             Mnu_ContextMenuEnd ();
            }
          break;
@@ -492,20 +492,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       Gbl.Crs.Info.MustBeRead[InfoType] = false;
 
    /***** Get info types where students must read info *****/
-   NumInfos = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get if you must read any course info",
-		   "SELECT InfoType"		// row[0]
-		    " FROM crs_info_src"
-		   " WHERE CrsCod=%ld"
-		     " AND MustBeRead='Y'"
-		     " AND InfoType NOT IN"
-		         " (SELECT InfoType"
-			    " FROM crs_info_read"
-			   " WHERE UsrCod=%ld"
-			     " AND CrsCod=%ld)",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+   NumInfos = Inf_DB_GetInfoTypesfIMustReadInfo (&mysql_res);
 
    /***** Set must-be-read to true for each rown in result *****/
    for (NumInfo = 0;
@@ -643,20 +630,6 @@ static bool Inf_GetMustBeReadFromForm (void)
 static bool Inf_GetIfIHaveReadFromForm (void)
   {
    return Par_GetParToBool ("IHaveRead");
-  }
-
-/*****************************************************************************/
-/********* Remove user's status about reading of course information **********/
-/*****************************************************************************/
-
-void Inf_DB_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
-  {
-   /***** Remove user's status about reading of course information *****/
-   DB_QueryDELETE ("can not set that I have not read course info",
-		   "DELETE FROM crs_info_read"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-                   UsrCod,CrsCod);
   }
 
 /*****************************************************************************/
@@ -1835,7 +1808,7 @@ void Inf_RecAndChangePlainTxtInfo (void)
 
    /***** Change info source to "plain text" in database *****/
    Inf_DB_SetInfoSrc (Txt_HTMLFormat[0] ? Inf_PLAIN_TEXT :
-	                                     Inf_NONE);
+	                                  Inf_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();
@@ -1874,7 +1847,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
 
    /***** Change info source to "rich text" in database *****/
    Inf_DB_SetInfoSrc (Txt_HTMLFormat[0] ? Inf_RICH_TEXT :
-	                                     Inf_NONE);
+	                                  Inf_NONE);
    if (Txt_HTMLFormat[0])
       /***** Show the updated info *****/
       Inf_ShowInfo ();

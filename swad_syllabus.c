@@ -263,7 +263,7 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
 	{
 	 /***** Button to view *****/
          Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
-	 Btn_PutConfirmButton (Txt_Done);
+	    Btn_PutConfirmButton (Txt_Done);
 	 Frm_EndForm ();
 	}
 
@@ -853,29 +853,29 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
       HTM_TD_Begin ("class=\"%s LM COLOR%u\" style=\"width:%dpx;\"",
 		    StyleSyllabus[Level],Gbl.RowEvenOdd,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
-      if (Level == 1)
+	 if (Level == 1)
+	    HTM_NBSP ();
+	 Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
 	 HTM_NBSP ();
-      Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
-      HTM_NBSP ();
       HTM_TD_End ();
      }
 
    /***** Text of the item *****/
    HTM_TD_Begin ("colspan=\"%d\" class=\"LM COLOR%u\"",
 		 Syl_LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
-   Frm_BeginForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
-	                                                         ActInsIteSylPra) :
-                            (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
-                        	                                 ActModIteSylPra));
-   Syllabus->ParamNumItem = NumItem;
-   Syl_PutParamNumItem (&Syllabus->ParamNumItem);
-   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
-                   HTM_SUBMIT_ON_CHANGE,
-		   "size=\"60\" placeholder=\"%s\"%s",
-	           Txt_Enter_a_new_item_here,
-                   NewItem ? " autofocus=\"autofocus\"" :
-                	     "");
-   Frm_EndForm ();
+      Frm_BeginForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
+								    ActInsIteSylPra) :
+			       (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
+								    ActModIteSylPra));
+      Syllabus->ParamNumItem = NumItem;
+      Syl_PutParamNumItem (&Syllabus->ParamNumItem);
+	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
+			 HTM_SUBMIT_ON_CHANGE,
+			 "size=\"60\" placeholder=\"%s\"%s",
+			 Txt_Enter_a_new_item_here,
+			 NewItem ? " autofocus=\"autofocus\"" :
+				   "");
+      Frm_EndForm ();
    HTM_TD_End ();
   }
 
