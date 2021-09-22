@@ -53,6 +53,7 @@
 #include "swad_language.h"
 #include "swad_link.h"
 #include "swad_log.h"
+#include "swad_log_database.h"
 #include "swad_logo.h"
 #include "swad_match.h"
 #include "swad_MFU.h"
@@ -1449,7 +1450,7 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 103))
       Set_RemoveOldSettingsFromIP ();		// Remove old settings from IP
    else if (!(Gbl.PID % 107))
-      Log_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
+      Log_DB_RemoveOldEntriesRecentLog ();	// Remove old entries in recent log table, it's a slow query
    else if (!(Gbl.PID % 109))
       Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE		,Cfg_TIME_TO_DELETE_HTML_OUTPUT		,false);
    else if (!(Gbl.PID % 113))

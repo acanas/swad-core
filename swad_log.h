@@ -31,6 +31,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+#define Log_SECONDS_IN_RECENT_LOG ((time_t) (Cfg_DAYS_IN_RECENT_LOG * 24UL * 60UL * 60UL))	// Remove entries in recent log oldest than this time
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -40,7 +42,6 @@
 /*****************************************************************************/
 
 void Log_LogAccess (const char *Comments);
-void Log_RemoveOldEntriesRecentLog (void);
 
 void Log_PutLinkToLastClicks (void);
 void Log_ShowLastClicks (void);

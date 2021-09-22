@@ -40,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_institution_database.h"
 #include "swad_log.h"
+#include "swad_log_database.h"
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_statistic.h"
@@ -51,8 +52,6 @@
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
-
-#define Log_SECONDS_IN_RECENT_LOG ((time_t) (Cfg_DAYS_IN_RECENT_LOG * 24UL * 60UL * 60UL))	// Remove entries in recent log oldest than this time
 
 /*****************************************************************************/
 /****************************** Private types ********************************/
@@ -88,50 +87,10 @@ void Log_LogAccess (const char *Comments)
 
    /***** Insert access into database *****/
    /* Log access in historical log */
-   LogCod =
-   DB_QueryINSERTandReturnCode ("can not log access",
-				"INSERT INTO log"
-				" (ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-				  "UsrCod,Role,ClickTime,"
-				  "TimeToGenerate,TimeToSend,IP)"
-				" VALUES"
-				" (%ld,%ld,%ld,%ld,%ld,%ld,"
-				  "%ld,%u,NOW(),"
-				  "%ld,%ld,'%s')",
-				ActCod,
-				Gbl.Hierarchy.Cty.CtyCod,
-				Gbl.Hierarchy.Ins.InsCod,
-				Gbl.Hierarchy.Ctr.CtrCod,
-				Gbl.Hierarchy.Deg.DegCod,
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				(unsigned) RoleToStore,
-				Gbl.TimeGenerationInMicroseconds,
-				Gbl.TimeSendInMicroseconds,
-				Gbl.IP);
+   LogCod = Log_DB_LogAccessInHistoricalLog (ActCod,RoleToStore);
 
    /* Log access in recent log (log_recent) */
-   DB_QueryINSERT ("can not log access (recent)",
-		   "INSERT INTO log_recent"
-	           " (LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	             "UsrCod,Role,ClickTime,"
-	             "TimeToGenerate,TimeToSend,IP)"
-                   " VALUES"
-                   " (%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
-                     "%ld,%u,NOW(),"
-                     "%ld,%ld,'%s')",
-		   LogCod,
-		   ActCod,
-		   Gbl.Hierarchy.Cty.CtyCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ctr.CtrCod,
-		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) RoleToStore,
-		   Gbl.TimeGenerationInMicroseconds,
-		   Gbl.TimeSendInMicroseconds,
-		   Gbl.IP);
+   Log_DB_LogAccessInRecentLog (LogCod,ActCod,RoleToStore);
 
    /* Log access while answering exam prints */
    ExaLog_LogAccess (LogCod);
@@ -145,67 +104,29 @@ void Log_LogAccess (const char *Comments)
 	 Str_Copy (CommentsDB,Comments,MaxLength);
 	 Str_ChangeFormat (Str_FROM_TEXT,Str_TO_TEXT,
 			   CommentsDB,MaxLength,true);	// Avoid SQL injection
-	 DB_QueryINSERT ("can not log access (comments)",
-			 "INSERT INTO log_comments"
-			 " (LogCod,Comments)"
-			 " VALUES"
-			 " (%ld,'%s')",
-			 LogCod,
-			 CommentsDB);
+	 Log_DB_LogComments (LogCod,CommentsDB);
 	 free (CommentsDB);
 	}
      }
 
    /* Log search string */
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
-      DB_QueryINSERT ("can not log access (search)",
-		      "INSERT INTO log_search"
-		      " (LogCod,SearchStr)"
-		      " VALUES"
-		      " (%ld,'%s')",
-		      LogCod,
-		      Gbl.Search.Str);
+      Log_DB_LogSearchString (LogCod);
 
    if (Gbl.WebService.IsWebService)
-      /* Log web service plugin and function */
-      DB_QueryINSERT ("can not log access (comments)",
-		      "INSERT INTO log_api"
-	              " (LogCod,PlgCod,FunCod)"
-                      " VALUES"
-                      " (%ld,%ld,%u)",
-	              LogCod,
-	              Gbl.WebService.PlgCod,
-		      (unsigned) Gbl.WebService.Function);
+      /* Log web service plugin and API function */
+      Log_DB_LogAPI (LogCod);
    else
      {
       BanCodClicked = Ban_GetBanCodClicked ();
       if (BanCodClicked > 0)
 	 /* Log banner clicked */
-	 DB_QueryINSERT ("can not log banner clicked",
-			 "INSERT INTO log_banners"
-			 " (LogCod,BanCod)"
-			 " VALUES"
-			 " (%ld,%ld)",
-			 LogCod,
-			 BanCodClicked);
+	 Log_DB_LogBanner (LogCod,BanCodClicked);
      }
 
    /***** Increment my number of clicks *****/
    if (Gbl.Usrs.Me.Logged)
       Prf_DB_IncrementNumClicksUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/************ Sometimes, we delete old entries in recent log table ***********/
-/*****************************************************************************/
-
-void Log_RemoveOldEntriesRecentLog (void)
-  {
-   /***** Remove all expired clipboards *****/
-   DB_QueryDELETE ("can not remove old entries from recent log",
-		   "DELETE LOW_PRIORITY FROM log_recent"
-                   " WHERE ClickTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Log_SECONDS_IN_RECENT_LOG);
   }
 
 /*****************************************************************************/
@@ -233,8 +154,8 @@ void Log_ShowLastClicks (void)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Sta_PutLinkToGlobalHits ();	// Global hits
-   Sta_PutLinkToCourseHits ();	// Course hits
+      Sta_PutLinkToGlobalHits ();	// Global hits
+      Sta_PutLinkToCourseHits ();	// Course hits
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/
@@ -242,10 +163,10 @@ void Log_ShowLastClicks (void)
                  NULL,NULL,
                  Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
 
-   /***** Get and show last clicks *****/
-   HTM_DIV_Begin ("id=\"lastclicks\" class=\"CM\"");	// Used for AJAX based refresh
-   Log_GetAndShowLastClicks ();
-   HTM_DIV_End ();					// Used for AJAX based refresh
+      /***** Get and show last clicks *****/
+      HTM_DIV_Begin ("id=\"lastclicks\" class=\"CM\"");	// Used for AJAX based refresh
+	 Log_GetAndShowLastClicks ();
+      HTM_DIV_End ();					// Used for AJAX based refresh
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -277,20 +198,7 @@ void Log_GetAndShowLastClicks (void)
    struct Hie_Hierarchy Hie;
 
    /***** Get last clicks from database *****/
-   NumClicks = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get last clicks",
-		   "SELECT LogCod,"			// row[0]
-			  "ActCod,"			// row[1]
-			  "UNIX_TIMESTAMP()-"
-			  "UNIX_TIMESTAMP(ClickTime),"	// row[2]
-			  "Role,"			// row[3]
-			  "CtyCod,"			// row[4]
-			  "InsCod,"			// row[5]
-			  "CtrCod,"			// row[6]
-			  "DegCod"			// row[7]
-		    " FROM log_recent"
-		   " ORDER BY LogCod DESC"
-		   " LIMIT 20");
+   NumClicks = Log_DB_GetLastClicks (&mysql_res);
 
    /***** Write list of connected users *****/
    HTM_TABLE_BeginCenterPadding (1);
