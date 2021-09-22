@@ -314,6 +314,22 @@ void Set_ChangeSideCols (void)
   }
 
 /*****************************************************************************/
+/**************** Update my language to the current language *****************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutLanguage (void)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   DB_QueryUPDATE ("can not update your language",
+		   "UPDATE usr_data"
+		     " SET Language='%s'"
+		   " WHERE UsrCod=%ld",
+	           Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /************** Update layout of side colums on user data table **************/
 /*****************************************************************************/
 

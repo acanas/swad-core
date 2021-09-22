@@ -196,18 +196,11 @@ void Lan_ChangeLanguage (void)
 
 void Lan_UpdateMyLanguageToCurrentLanguage (void)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
    /***** Set my language to the current language *****/
    Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
 
    /***** Update my language in database *****/
-   DB_QueryUPDATE ("can not update your language",
-		   "UPDATE usr_data"
-		     " SET Language='%s'"
-		   " WHERE UsrCod=%ld",
-	           Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+   Set_DB_UpdateMySettingsAboutLanguage ();
   }
 
 /*****************************************************************************/

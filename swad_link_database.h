@@ -1,7 +1,7 @@
-// swad_setting.h: user's settings / preferences
+// swad_link_database.h: institutional links, operations with database
 
-#ifndef _SWAD_SET
-#define _SWAD_SET
+#ifndef _SWAD_LNK_DB
+#define _SWAD_LNK_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,46 +27,26 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
+#include <mysql/mysql.h>	// To access MySQL databases
+
+#include "swad_link.h"
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************* Public types ********************************/
+/************************** Public types and constants ***********************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Set_EditSettings (void);
+void Lnk_DB_CreateLink (const struct Link *Lnk);
+void Lnk_DB_UpdateLnkName (long LnkCod,const char *FieldName,const char *NewLnkName);
+void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
-void Set_GetSettingsFromIP (void);
-void Set_SetSettingsFromIP (void);
-void Set_RemoveOldSettingsFromIP (void);
+unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res);
+unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod);
+bool Lnk_DB_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
 
-void Set_ChangeSideCols (void);
-unsigned Set_GetParamSideCols (void);
-
-void Set_DB_UpdateMySettingsAboutLanguage (void);
-void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
-void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek);
-void Set_DB_ChangeIconSet (const char *IconSetId);
-void Set_DB_ChangeMenu (Mnu_Menu_t Menu);
-
-void Set_BeginSettingsHead (void);
-void Set_EndSettingsHead (void);
-void Set_BeginOneSettingSelector (void);
-void Set_EndOneSettingSelector (void);
-
-void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
-
-void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
-
-void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
-void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
-void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
+void Lnk_DB_RemoveLink (long LnkCod);
 
 #endif

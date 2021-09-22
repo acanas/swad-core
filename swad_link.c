@@ -39,6 +39,7 @@
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_link.h"
+#include "swad_link_database.h"
 #include "swad_parameter.h"
 
 /*****************************************************************************/
@@ -72,16 +73,15 @@ static void Lnk_WriteListOfLinks (void);
 static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
 
+static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Link *Lnk);
+
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (void *LnkCod);
 
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
-static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName);
 
 static void Lnk_PutFormToCreateLink (void);
 static void Lnk_PutHeadLinks (void);
-static void Lnk_CreateLink (struct Link *Lnk);
 
 static void Lnk_EditingLinkConstructor (void);
 static void Lnk_EditingLinkDestructor (void);
@@ -105,19 +105,19 @@ void Lnk_SeeLinks (void)
                  Lnk_PutIconsListingLinks,NULL,
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
-   /***** Write all links *****/
-   if (Gbl.Links.Num)	// There are links
-      Lnk_WriteListOfLinks ();
-   else			// No links created
-      Ale_ShowAlert (Ale_INFO,Txt_No_links);
+      /***** Write all links *****/
+      if (Gbl.Links.Num)	// There are links
+	 Lnk_WriteListOfLinks ();
+      else			// No links created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_links);
 
-   /***** Button to create link *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-     {
-      Frm_BeginForm (ActEdiLnk);
-      Btn_PutConfirmButton (Txt_New_link);
-      Frm_EndForm ();
-     }
+      /***** Button to create link *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	{
+	 Frm_BeginForm (ActEdiLnk);
+	    Btn_PutConfirmButton (Txt_New_link);
+	 Frm_EndForm ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -166,13 +166,14 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
      {
       HTM_DIV_Begin ("id=\"institutional_links\"");
 
-      Frm_BeginForm (ActSeeLnk);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Links,"BT_LINK LINK_TITLE",NULL);
-      HTM_TxtF ("%s",Txt_Links);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeeLnk);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Links,"BT_LINK LINK_TITLE",NULL);
+	       HTM_TxtF ("%s",Txt_Links);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
-      Lnk_WriteListOfLinks ();
+	 Lnk_WriteListOfLinks ();
+
       HTM_DIV_End ();
      }
 
@@ -191,20 +192,20 @@ static void Lnk_WriteListOfLinks (void)
    /***** List start *****/
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   /***** Write all links *****/
-   for (NumLnk = 0;
-	NumLnk < Gbl.Links.Num;
-	NumLnk++)
-     {
-      /* Write data of this link */
-      HTM_LI_Begin ("class=\"INS_LNK\"");
-      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\"",
-	           Gbl.Links.Lst[NumLnk].WWW,
-	           Gbl.Links.Lst[NumLnk].FullName);
-      HTM_Txt (Gbl.Links.Lst[NumLnk].ShrtName);
-      HTM_A_End ();
-      HTM_LI_End ();
-     }
+      /***** Write all links *****/
+      for (NumLnk = 0;
+	   NumLnk < Gbl.Links.Num;
+	   NumLnk++)
+	{
+	 /* Write data of this link */
+	 HTM_LI_Begin ("class=\"INS_LNK\"");
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\"",
+			 Gbl.Links.Lst[NumLnk].WWW,
+			 Gbl.Links.Lst[NumLnk].FullName);
+	       HTM_Txt (Gbl.Links.Lst[NumLnk].ShrtName);
+	    HTM_A_End ();
+	 HTM_LI_End ();
+	}
 
    /***** List end *****/
    HTM_UL_End ();
@@ -239,12 +240,12 @@ static void Lnk_EditLinksInternal (void)
                  Lnk_PutIconsEditingLinks,NULL,
                  Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE);
 
-   /***** Put a form to create a new link *****/
-   Lnk_PutFormToCreateLink ();
+      /***** Put a form to create a new link *****/
+      Lnk_PutFormToCreateLink ();
 
-   /***** Forms to edit current links *****/
-   if (Gbl.Links.Num)
-      Lnk_ListLinksForEdition ();
+      /***** Forms to edit current links *****/
+      if (Gbl.Links.Num)
+	 Lnk_ListLinksForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -287,23 +288,12 @@ void Lnk_PutIconToViewLinks (void)
 void Lnk_GetListLinks (void)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumLnk;
-   struct Link *Lnk;
 
    if (Gbl.DB.DatabaseIsOpen)
      {
       /***** Get institutional links from database *****/
-      Gbl.Links.Num = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get institutional links",
-		      "SELECT LnkCod,"		// row[0]
-			     "ShortName,"	// row[1]
-			     "FullName,"	// row[2]
-			     "WWW"		// row[3]
-		       " FROM lnk_links"
-		      " ORDER BY ShortName");
-
-      if (Gbl.Links.Num) // Places found...
+      if ((Gbl.Links.Num = Lnk_DB_GetLinks (&mysql_res))) // Links found...
 	{
 	 /***** Create list with places *****/
 	 if ((Gbl.Links.Lst = calloc ((size_t) Gbl.Links.Num,
@@ -314,22 +304,8 @@ void Lnk_GetListLinks (void)
 	 for (NumLnk = 0;
 	      NumLnk < Gbl.Links.Num;
 	      NumLnk++)
-	   {
-	    Lnk = &(Gbl.Links.Lst[NumLnk]);
-
 	    /* Get next link */
-	    row = mysql_fetch_row (mysql_res);
-
-	    /* Get link code (row[0]) */
-	    if ((Lnk->LnkCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	       Err_WrongLinkExit ();
-
-            /* Get the short name (row[0]), the full name (row[1])
-               and de URL (row[2]) of the link */
-	    Str_Copy (Lnk->ShrtName,row[1],sizeof (Lnk->ShrtName) - 1);
-	    Str_Copy (Lnk->FullName,row[2],sizeof (Lnk->FullName) - 1);
-	    Str_Copy (Lnk->WWW     ,row[3],sizeof (Lnk->WWW     ) - 1);
-	   }
+	    Lnk_GetDataOfLink (mysql_res,&(Gbl.Links.Lst[NumLnk]));
 	}
 
       /***** Free structure that stores the query result *****/
@@ -344,36 +320,41 @@ void Lnk_GetListLinks (void)
 void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Clear data *****/
-   Lnk->ShrtName[0] = Lnk->FullName[0] = Lnk->WWW[0] = '\0';
+   Lnk->ShrtName[0] =
+   Lnk->FullName[0] =
+   Lnk->WWW[0] = '\0';
 
    /***** Check if link code is correct *****/
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of an institutional link",
-			  "SELECT ShortName,"	// row[0]
-				 "FullName,"	// row[1]
-				 "WWW"		// row[2]
-			   " FROM lnk_links"
-			  " WHERE LnkCod=%ld",
-			  Lnk->LnkCod)) // Link found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
-
-         /* Get the short name (row[0]), the full name (row[1])
-            and de URL (row[2]) of the link */
-         Str_Copy (Lnk->ShrtName,row[0],sizeof (Lnk->ShrtName) - 1);
-         Str_Copy (Lnk->FullName,row[1],sizeof (Lnk->FullName) - 1);
-         Str_Copy (Lnk->WWW     ,row[2],sizeof (Lnk->WWW     ) - 1);
-        }
+      if (Lnk_DB_GetDataOfLinkByCod (&mysql_res,Lnk->LnkCod)) // Link found...
+	 Lnk_GetDataOfLink (mysql_res,Lnk);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
+  }
+
+/*****************************************************************************/
+/**************************** Get data of link *******************************/
+/*****************************************************************************/
+
+static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Link *Lnk)
+  {
+   MYSQL_ROW row;
+
+   /***** Get row *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get the short name (row[0]),
+	      the full name (row[1])
+          and the URL (row[2]) of the link *****/
+   Str_Copy (Lnk->ShrtName,row[0],sizeof (Lnk->ShrtName) - 1);
+   Str_Copy (Lnk->FullName,row[1],sizeof (Lnk->FullName) - 1);
+   Str_Copy (Lnk->WWW     ,row[2],sizeof (Lnk->WWW     ) - 1);
   }
 
 /*****************************************************************************/
@@ -403,60 +384,60 @@ static void Lnk_ListLinksForEdition (void)
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** Table head *****/
-   Lnk_PutHeadLinks ();
+      /***** Table head *****/
+      Lnk_PutHeadLinks ();
 
-   /***** Write all the links *****/
-   for (NumLnk = 0;
-	NumLnk < Gbl.Links.Num;
-	NumLnk++)
-     {
-      Lnk = &Gbl.Links.Lst[NumLnk];
+      /***** Write all the links *****/
+      for (NumLnk = 0;
+	   NumLnk < Gbl.Links.Num;
+	   NumLnk++)
+	{
+	 Lnk = &Gbl.Links.Lst[NumLnk];
 
-      HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-      /* Put icon to remove link */
-      HTM_TD_Begin ("class=\"BM\"");
-      Ico_PutContextualIconToRemove (ActRemLnk,NULL,
-				     Lnk_PutParamLnkCod,&Lnk->LnkCod);
-      HTM_TD_End ();
+	    /* Put icon to remove link */
+	    HTM_TD_Begin ("class=\"BM\"");
+	       Ico_PutContextualIconToRemove (ActRemLnk,NULL,
+					      Lnk_PutParamLnkCod,&Lnk->LnkCod);
+	    HTM_TD_End ();
 
-      /* Link code */
-      HTM_TD_Begin ("class=\"DAT RM\"");
-      HTM_Long (Lnk->LnkCod);
-      HTM_TD_End ();
+	    /* Link code */
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Long (Lnk->LnkCod);
+	    HTM_TD_End ();
 
-      /* Link short name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenLnkSho);
-      Lnk_PutParamLnkCod (&Lnk->LnkCod);
-      HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Link short name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenLnkSho);
+	       Lnk_PutParamLnkCod (&Lnk->LnkCod);
+		  HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Link full name */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActRenLnkFul);
-      Lnk_PutParamLnkCod (&Lnk->LnkCod);
-      HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
-                      HTM_SUBMIT_ON_CHANGE,
-		      "class=\"INPUT_FULL_NAME\" required=\"required\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Link full name */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActRenLnkFul);
+	       Lnk_PutParamLnkCod (&Lnk->LnkCod);
+		  HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME\" required=\"required\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      /* Link WWW */
-      HTM_TD_Begin ("class=\"CM\"");
-      Frm_BeginForm (ActChgLnkWWW);
-      Lnk_PutParamLnkCod (&Lnk->LnkCod);
-      HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
-		     "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-      Frm_EndForm ();
-      HTM_TD_End ();
+	    /* Link WWW */
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Frm_BeginForm (ActChgLnkWWW);
+	       Lnk_PutParamLnkCod (&Lnk->LnkCod);
+		  HTM_INPUT_URL ("WWW",Lnk->WWW,HTM_SUBMIT_ON_CHANGE,
+				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	       Frm_EndForm ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	 HTM_TR_End ();
+	}
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -501,10 +482,7 @@ void Lnk_RemoveLink (void)
    Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
 
    /***** Remove link *****/
-   DB_QueryDELETE ("can not remove an institutional link",
-		   "DELETE FROM lnk_links"
-		   " WHERE LnkCod=%ld",
-		   Lnk_EditingLnk->LnkCod);
+   Lnk_DB_RemoveLink (Lnk_EditingLnk->LnkCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -588,14 +566,14 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentLnkName,NewLnkName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk_EditingLnk->LnkCod))
+         if (Lnk_DB_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk_EditingLnk->LnkCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_link_X_already_exists,
                              NewLnkName);
          else
            {
             /* Update the table changing old name by new name */
-            Lnk_UpdateLnkNameDB (Lnk_EditingLnk->LnkCod,FieldName,NewLnkName);
+            Lnk_DB_UpdateLnkName (Lnk_EditingLnk->LnkCod,FieldName,NewLnkName);
 
             /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -613,37 +591,6 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update name *****/
    Str_Copy (CurrentLnkName,NewLnkName,MaxBytes);
-  }
-
-/*****************************************************************************/
-/********************** Check if the name of link exists *********************/
-/*****************************************************************************/
-
-static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod)
-  {
-   /***** Get number of links with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of an institutional link"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM lnk_links"
-			  " WHERE %s='%s'"
-			    " AND LnkCod<>%ld",
-			  FieldName,Name,LnkCod) != 0);
-  }
-
-/*****************************************************************************/
-/************ Update link name in table of institutional links ***************/
-/*****************************************************************************/
-
-static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName)
-  {
-   /***** Update institutional link changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of an institutional link",
-		   "UPDATE lnk_links"
-		     " SET %s='%s'"
-		   " WHERE LnkCod=%ld",
-	           FieldName,NewLnkName,
-	           LnkCod);
   }
 
 /*****************************************************************************/
@@ -673,12 +620,7 @@ void Lnk_ChangeLinkWWW (void)
    if (NewWWW[0])
      {
       /***** Update the table changing old WWW by new WWW *****/
-      DB_QueryUPDATE ("can not update the web of an institutional link",
-		      "UPDATE lnk_links"
-		        " SET WWW='%s'"
-		      " WHERE LnkCod=%ld",
-                      NewWWW,
-                      Lnk_EditingLnk->LnkCod);
+      Lnk_DB_UpdateLnkWWW (Lnk_EditingLnk->LnkCod,NewWWW);
 
       /***** Message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -721,46 +663,46 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Begin form *****/
    Frm_BeginForm (ActNewLnk);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_New_link,
-                      NULL,NULL,
-                      Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_New_link,
+			 NULL,NULL,
+			 Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
 
-   /***** Write heading *****/
-   Lnk_PutHeadLinks ();
+	 /***** Write heading *****/
+	 Lnk_PutHeadLinks ();
 
-   HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-   /***** Link code *****/
-   HTM_TD_Begin ("class=\"BM\"");
-   HTM_TD_End ();
+	    /***** Link code *****/
+	    HTM_TD_Begin ("class=\"BM\"");
+	    HTM_TD_End ();
 
-   HTM_TD_Empty (1);
+	    HTM_TD_Empty (1);
 
-   /***** Link short name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Link short name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Link full name *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Link full name *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "class=\"INPUT_FULL_NAME\" required=\"required\"");
+	    HTM_TD_End ();
 
-   /***** Link WWW *****/
-   HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-		  "class=\"INPUT_WWW_NARROW\" required=\"required\"");
-   HTM_TD_End ();
+	    /***** Link WWW *****/
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
+			      "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table, send button and end box *****/
-   Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
+      /***** End table, send button and end box *****/
+      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_link);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -779,11 +721,11 @@ static void Lnk_PutHeadLinks (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"BM",NULL);
-   HTM_TH (1,1,"RM",Txt_Code);
-   HTM_TH (1,1,"LM",Txt_Short_name);
-   HTM_TH (1,1,"LM",Txt_Full_name);
-   HTM_TH (1,1,"LM",Txt_WWW);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,"LM",Txt_Short_name);
+      HTM_TH (1,1,"LM",Txt_Full_name);
+      HTM_TH (1,1,"LM",Txt_WWW);
 
    HTM_TR_End ();
   }
@@ -816,11 +758,11 @@ void Lnk_ReceiveFormNewLink (void)
        Lnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk_EditingLnk->ShrtName,-1L))
+      if (Lnk_DB_CheckIfLinkNameExists ("ShortName",Lnk_EditingLnk->ShrtName,-1L))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_link_X_already_exists,
                           Lnk_EditingLnk->ShrtName);
-      else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk_EditingLnk->FullName,-1L))
+      else if (Lnk_DB_CheckIfLinkNameExists ("FullName",Lnk_EditingLnk->FullName,-1L))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_link_X_already_exists,
                           Lnk_EditingLnk->FullName);
@@ -829,7 +771,7 @@ void Lnk_ReceiveFormNewLink (void)
                           Txt_You_must_specify_the_URL_of_the_new_link);
       else	// Add new link to database
         {
-         Lnk_CreateLink (Lnk_EditingLnk);
+         Lnk_DB_CreateLink (Lnk_EditingLnk);
       	 Ale_CreateAlert (Ale_SUCCESS,NULL,
       	                  Txt_Created_new_link_X,
 			  Lnk_EditingLnk->ShrtName);
@@ -838,23 +780,6 @@ void Lnk_ReceiveFormNewLink (void)
    else	// If there is not a link name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
-  }
-
-/*****************************************************************************/
-/**************************** Create a new link ******************************/
-/*****************************************************************************/
-
-static void Lnk_CreateLink (struct Link *Lnk)
-  {
-   /***** Create a new link *****/
-   DB_QueryINSERT ("can not create institutional link",
-		   "INSERT INTO lnk_links"
-		   " (ShortName,FullName,WWW)"
-		   " VALUES"
-		   " ('%s','%s','%s')",
-                   Lnk->ShrtName,
-                   Lnk->FullName,
-                   Lnk->WWW);
   }
 
 /*****************************************************************************/

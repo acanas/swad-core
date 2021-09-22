@@ -269,12 +269,12 @@ void Lay_WriteStartOfPage (void)
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
-	 HTM_Txt ("<body onload=\"init();\">\n");
-	 HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
-	          "class=\"IMG_USR\" id=\"zoomImg\"");
-	 HTM_DIV_Begin ("id=\"zoomTxt\" class=\"CM\"");
-	 HTM_DIV_End ();
+	       HTM_Txt ("<body onload=\"init();\">\n");
+	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
+		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
+			   "class=\"IMG_USR\" id=\"zoomImg\"");
+	       HTM_DIV_Begin ("id=\"zoomTxt\" class=\"CM\"");
+	    HTM_DIV_End ();
 	 HTM_DIV_End ();
 	 break;
       case Act_BRW_NEW_TAB:
@@ -311,77 +311,77 @@ void Lay_WriteStartOfPage (void)
    /***** Begin box that contains the whole page except the foot *****/
    HTM_DIV_Begin ("id=\"whole_page\"");
 
-   /***** Header of layout *****/
-   Lay_WritePageTopHeading ();
+      /***** Header of layout *****/
+      Lay_WritePageTopHeading ();
 
-   /***** 3rd. row (tabs) *****/
-   Tab_DrawTabs ();
+      /***** 3rd. row (tabs) *****/
+      Tab_DrawTabs ();
 
-   /***** 4th row: main zone *****/
-   HTM_DIV_Begin ("id=\"main_zone\"");
+      /***** 4th row: main zone *****/
+      HTM_DIV_Begin ("id=\"main_zone\"");
 
-   /* Left column */
-   if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
-     {
-      HTM_Txt ("<aside id=\"left_col\">");
-      Lay_ShowLeftColumn ();
-      HTM_Txt ("</aside>");
-     }
+	 /* Left column */
+	 if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
+	   {
+	    HTM_Txt ("<aside id=\"left_col\">");
+	    Lay_ShowLeftColumn ();
+	    HTM_Txt ("</aside>");
+	   }
 
-   /* Right column */
-   // Right column is written before central column
-   // but it must be drawn at right using "position:absolute; right:0".
-   // The reason to write right column before central column
-   // is that central column may hold a lot of content drawn slowly.
-   if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
-     {
-      HTM_Txt ("<aside id=\"right_col\">");
-      Lay_ShowRightColumn ();
-      HTM_Txt ("</aside>");
-     }
+	 /* Right column */
+	 // Right column is written before central column
+	 // but it must be drawn at right using "position:absolute; right:0".
+	 // The reason to write right column before central column
+	 // is that central column may hold a lot of content drawn slowly.
+	 if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
+	   {
+	    HTM_Txt ("<aside id=\"right_col\">");
+	    Lay_ShowRightColumn ();
+	    HTM_Txt ("</aside>");
+	   }
 
-   /* Central (main) column */
-   switch (Gbl.Prefs.SideCols)
-     {
-      case 0:
-         HTM_DIV_Begin ("id=\"main_zone_central_none\"");
-	 break;
-      case Lay_SHOW_LEFT_COLUMN:
-         HTM_DIV_Begin ("id=\"main_zone_central_left\"");
-	 break;
-      case Lay_SHOW_RIGHT_COLUMN:
-         HTM_DIV_Begin ("id=\"main_zone_central_right\"");
-	 break;
-      case (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN):
-         HTM_DIV_Begin ("id=\"main_zone_central_both\"");
-         break;
-     }
-   HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"%s\"",
-	          The_TabOnBgColors[Gbl.Prefs.Theme]);
+	 /* Central (main) column */
+	 switch (Gbl.Prefs.SideCols)
+	   {
+	    case 0:
+	       HTM_DIV_Begin ("id=\"main_zone_central_none\"");
+	       break;
+	    case Lay_SHOW_LEFT_COLUMN:
+	       HTM_DIV_Begin ("id=\"main_zone_central_left\"");
+	       break;
+	    case Lay_SHOW_RIGHT_COLUMN:
+	       HTM_DIV_Begin ("id=\"main_zone_central_right\"");
+	       break;
+	    case (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN):
+	       HTM_DIV_Begin ("id=\"main_zone_central_both\"");
+	       break;
+	   }
+	    HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"%s\"",
+			   The_TabOnBgColors[Gbl.Prefs.Theme]);
 
-      /* Layout with horizontal or vertical menu */
-      HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
+	       /* Layout with horizontal or vertical menu */
+	       HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
 
-	 /* Menu */
-	 Mnu_WriteMenuThisTab ();
+		  /* Menu */
+		  Mnu_WriteMenuThisTab ();
 
-	 /* Begin canvas: main zone for actions output */
-	 HTM_MAIN_Begin ("MAIN_ZONE_CANVAS");
+		  /* Begin canvas: main zone for actions output */
+		  HTM_MAIN_Begin ("MAIN_ZONE_CANVAS");
 
-	    /* If it is mandatory to read any information about course */
-	    if (Gbl.Crs.Info.ShowMsgMustBeRead)
-	       Inf_WriteMsgYouMustReadInfo ();
+		     /* If it is mandatory to read any information about course */
+		     if (Gbl.Crs.Info.ShowMsgMustBeRead)
+			Inf_WriteMsgYouMustReadInfo ();
 
-	    /* Write title of the current action */
-	    if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
-	       Act_GetIndexInMenu (Gbl.Action.Act) >= 0)
-	       Lay_WriteTitleAction ();
+		     /* Write title of the current action */
+		     if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
+			Act_GetIndexInMenu (Gbl.Action.Act) >= 0)
+			Lay_WriteTitleAction ();
 
-	    Gbl.Layout.WritingHTMLStart = false;
-	    Gbl.Layout.HTMLStartWritten = true;
+		     Gbl.Layout.WritingHTMLStart = false;
+		     Gbl.Layout.HTMLStartWritten = true;
 
-	    /* Write message indicating number of clicks allowed before sending my photo */
-	    Usr_InformAboutNumClicksBeforePhoto ();
+		     /* Write message indicating number of clicks allowed before sending my photo */
+		     Usr_InformAboutNumClicksBeforePhoto ();
   }
 
 /*****************************************************************************/
@@ -1096,9 +1096,9 @@ static void Lay_WritePageTopHeading (void)
 static void Lay_WriteBreadcrumb (void)
   {
    HTM_Txt ("<nav id=\"breadcrumb\">");
-   Crs_PutIconToSelectMyCoursesInBreadcrumb ();
-   Hie_WriteHierarchyInBreadcrumb ();
-   Crs_WriteSelectorMyCoursesInBreadcrumb ();
+      Crs_PutIconToSelectMyCoursesInBreadcrumb ();
+      Hie_WriteHierarchyInBreadcrumb ();
+      Crs_WriteSelectorMyCoursesInBreadcrumb ();
    HTM_Txt ("</nav>");
   }
 
@@ -1117,16 +1117,16 @@ static void Lay_WriteTitleAction (void)
 	          Gbl.Prefs.URLIconSet,
 	          Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
-   /***** Title *****/
-   HTM_DIV_Begin ("class=\"%s\"",The_ClassTitleAction[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s &gt; %s",Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
-	                  Act_GetTitleAction (Gbl.Action.Act));
-   HTM_DIV_End ();
+      /***** Title *****/
+      HTM_DIV_Begin ("class=\"%s\"",The_ClassTitleAction[Gbl.Prefs.Theme]);
+	 HTM_TxtF ("%s &gt; %s",Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
+				Act_GetTitleAction (Gbl.Action.Act));
+      HTM_DIV_End ();
 
-   /***** Subtitle *****/
-   HTM_DIV_Begin ("class=\"%s\"",The_ClassSubtitleAction[Gbl.Prefs.Theme]);
-   HTM_Txt (Act_GetSubtitleAction (Gbl.Action.Act));
-   HTM_DIV_End ();
+      /***** Subtitle *****/
+      HTM_DIV_Begin ("class=\"%s\"",The_ClassSubtitleAction[Gbl.Prefs.Theme]);
+	 HTM_Txt (Act_GetSubtitleAction (Gbl.Action.Act));
+      HTM_DIV_End ();
 
    /***** Container end *****/
    HTM_DIV_End ();
@@ -1142,33 +1142,33 @@ static void Lay_ShowLeftColumn (void)
 
    HTM_DIV_Begin ("style=\"width:160px;\"");
 
-   HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-   if (Gbl.Usrs.Me.Logged)
-     {
-      /***** Most frequently used actions *****/
-      MFU_AllocateMFUActions (&ListMFUActions,6);
-      MFU_GetMFUActions (&ListMFUActions,6);
-      MFU_WriteSmallMFUActions (&ListMFUActions);
-      MFU_FreeMFUActions (&ListMFUActions);
-     }
-   else
-      /***** Institutional links *****/
-      Lnk_WriteMenuWithInstitutionalLinks ();
-   HTM_DIV_End ();
-
-   /***** Month *****/
-   HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-   Cal_DrawCurrentMonth ();
-   HTM_DIV_End ();
-
-   /***** Notices (yellow notes) *****/
-   if (Gbl.Hierarchy.Level == HieLvl_CRS)
-     {
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-      Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
-	               -1L);	// No notice highlighted
+	 if (Gbl.Usrs.Me.Logged)
+	   {
+	    /***** Most frequently used actions *****/
+	    MFU_AllocateMFUActions (&ListMFUActions,6);
+	    MFU_GetMFUActions (&ListMFUActions,6);
+	    MFU_WriteSmallMFUActions (&ListMFUActions);
+	    MFU_FreeMFUActions (&ListMFUActions);
+	   }
+	 else
+	    /***** Institutional links *****/
+	    Lnk_WriteMenuWithInstitutionalLinks ();
       HTM_DIV_End ();
-     }
+
+      /***** Month *****/
+      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
+	 Cal_DrawCurrentMonth ();
+      HTM_DIV_End ();
+
+      /***** Notices (yellow notes) *****/
+      if (Gbl.Hierarchy.Level == HieLvl_CRS)
+	{
+	 HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
+	    Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
+			     -1L);	// No notice highlighted
+	 HTM_DIV_End ();
+	}
 
    HTM_DIV_End ();
   }
@@ -1190,7 +1190,7 @@ static void Lay_ShowRightColumn (void)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       HTM_DIV_Begin ("id=\"globalconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
-      Con_ShowGlobalConnectedUsrs ();
+	 Con_ShowGlobalConnectedUsrs ();
       HTM_DIV_End ();								// Used for AJAX based refresh
      }
 
@@ -1198,15 +1198,15 @@ static void Lay_ShowRightColumn (void)
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// There is a course selected
      {
       HTM_DIV_Begin ("id=\"courseconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
-      Gbl.Scope.Current = HieLvl_CRS;
-      Con_ShowConnectedUsrsBelongingToCurrentCrs ();
+	 Gbl.Scope.Current = HieLvl_CRS;
+	 Con_ShowConnectedUsrsBelongingToCurrentCrs ();
       HTM_DIV_End ();								// Used for AJAX based refresh
      }
    else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
       /***** Suggest one user to follow *****/
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-      Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
+	 Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
       HTM_DIV_End ();
      }
 
@@ -1214,12 +1214,12 @@ static void Lay_ShowRightColumn (void)
      {
       /***** SWADroid advertisement *****/
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-      HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-		   " target=\"_blank\" title=\"%s\"",
-	           Txt_If_you_have_an_Android_device_try_SWADroid);
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid120x200.png","SWADroid",
-	       "style=\"width:150px; height:250px;\"");
-      HTM_A_End ();
+	 HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+		      " target=\"_blank\" title=\"%s\"",
+		      Txt_If_you_have_an_Android_device_try_SWADroid);
+	    HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid120x200.png","SWADroid",
+		     "style=\"width:150px; height:250px;\"");
+	 HTM_A_End ();
       HTM_DIV_End ();
      }
   }
@@ -1267,7 +1267,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 
    /***** Put icon and text with link *****/
    HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-   Ico_PutIconTextLink (Icon,Text);
+      Ico_PutIconTextLink (Icon,Text);
    HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -1301,7 +1301,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
 
    /***** Put icon with link *****/
    HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
-   Ico_PutIconTextLink (Icon,Text);
+      Ico_PutIconTextLink (Icon,Text);
    HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -1334,29 +1334,33 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    if (FuncParams)
       FuncParams ();
 
-   /***** Begin container and label *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT %s %s\" title=\"%s\"",
 		  Checked ? "CHECKBOX_CHECKED" :
 			    "CHECKBOX_UNCHECKED",
 		  The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
 		  Title);
-   HTM_LABEL_Begin (NULL);
 
-   /****** Checkbox *****/
-   HTM_INPUT_CHECKBOX (CheckboxName,HTM_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s%s",
-		       Checked ? " checked=\"checked\"" :
-			         "",
-		       Disabled ? " disabled=\"disabled\"" :
-			          "");
+      /***** Begin label *****/
+      HTM_LABEL_Begin (NULL);
 
-   /***** Text *****/
-   if (Text)
-      if (Text[0])
-	 HTM_TxtF ("&nbsp;%s",Text);
+	 /****** Checkbox *****/
+	 HTM_INPUT_CHECKBOX (CheckboxName,HTM_SUBMIT_ON_CHANGE,
+			     "value=\"Y\"%s%s",
+			     Checked ? " checked=\"checked\"" :
+				       "",
+			     Disabled ? " disabled=\"disabled\"" :
+					"");
 
-   /***** End label and container *****/
-   HTM_LABEL_End ();
+	 /***** Text *****/
+	 if (Text)
+	    if (Text[0])
+	       HTM_TxtF ("&nbsp;%s",Text);
+
+      /***** End label *****/
+      HTM_LABEL_End ();
+
+   /***** End container *****/
    HTM_DIV_End ();
 
    /***** End form *****/
@@ -1513,9 +1517,9 @@ static void Lay_WriteFootFromHTMLFile (void)
      {
       HTM_Txt ("<footer id=\"foot_zone\">");
 
-      /***** Copy HTML to output file *****/
-      Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
-      fclose (FileHTML);
+	 /***** Copy HTML to output file *****/
+	 Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
+	 fclose (FileHTML);
 
       HTM_Txt ("</footer>");
      }
@@ -1544,69 +1548,71 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (10);
-   HTM_TR_Begin (NULL);
 
-   /***** First column: institution logo *****/
-   HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
-   if (InsCod > 0)
-     {
-      if (!PrintView)
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie.Ins.WWW);
-      Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,40,NULL,true);
-      if (!PrintView)
-         HTM_A_End ();
-     }
-   HTM_TD_End ();
+      HTM_TR_Begin (NULL);
 
-   /***** Second column: class photo title *****/
-   HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
-   if (InsCod > 0)
-     {
-      if (!PrintView)
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
-                      Hie.Ins.WWW);
-      HTM_Txt (Hie.Ins.FullName);
-      if (!PrintView)
-         HTM_A_End ();
-     }
-   if (DegCod > 0)
-     {
-      if (Hie.Ins.InsCod > 0)
-         HTM_Txt (" - ");
-      if (!PrintView)
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
-                      Hie.Deg.WWW);
-      HTM_Txt (Hie.Deg.FullName);
-      if (!PrintView)
-         HTM_A_End ();
-     }
-   HTM_BR ();
-   if (CrsCod > 0)
-     {
-      HTM_Txt (Hie.Crs.FullName);
-      if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
-        {
-         HTM_BR ();
-         Grp_WriteNamesOfSelectedGrps ();
-        }
-     }
-   HTM_TD_End ();
+	 /***** First column: institution logo *****/
+	 HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
+	    if (InsCod > 0)
+	      {
+	       if (!PrintView)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Hie.Ins.WWW);
+	       Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,40,NULL,true);
+	       if (!PrintView)
+		  HTM_A_End ();
+	      }
+	 HTM_TD_End ();
 
-   /***** Third column: degree logo *****/
-   HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
-   if (DegCod > 0)
-     {
-      if (!PrintView)
-         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
-                      Hie.Deg.WWW);
-      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL,true);
-      if (!PrintView)
-         HTM_A_End ();
-     }
-   HTM_TD_End ();
+	 /***** Second column: class photo title *****/
+	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
+	    if (InsCod > 0)
+	      {
+	       if (!PrintView)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
+			       Hie.Ins.WWW);
+	       HTM_Txt (Hie.Ins.FullName);
+	       if (!PrintView)
+		  HTM_A_End ();
+	      }
+	    if (DegCod > 0)
+	      {
+	       if (Hie.Ins.InsCod > 0)
+		  HTM_Txt (" - ");
+	       if (!PrintView)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
+			       Hie.Deg.WWW);
+	       HTM_Txt (Hie.Deg.FullName);
+	       if (!PrintView)
+		  HTM_A_End ();
+	      }
+	    HTM_BR ();
+	    if (CrsCod > 0)
+	      {
+	       HTM_Txt (Hie.Crs.FullName);
+	       if (DrawingClassPhoto && !Gbl.Usrs.ClassPhoto.AllGroups)
+		 {
+		  HTM_BR ();
+		  Grp_WriteNamesOfSelectedGrps ();
+		 }
+	      }
+	 HTM_TD_End ();
+
+	 /***** Third column: degree logo *****/
+	 HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
+	    if (DegCod > 0)
+	      {
+	       if (!PrintView)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
+			       Hie.Deg.WWW);
+	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL,true);
+	       if (!PrintView)
+		  HTM_A_End ();
+	      }
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
 
    /***** End table *****/
-   HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -1629,19 +1635,19 @@ void Lay_AdvertisementMobile (void)
                          NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,8);
 
-      /***** Show advertisement *****/
-      HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("class=\"DAT CM\"");
-      HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-	           " class=\"DAT\"");
-      HTM_Txt (Txt_Stay_connected_with_SWADroid);
-      HTM_BR ();
-      HTM_BR ();
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid200x300.png",Txt_Stay_connected_with_SWADroid,
-	       "style=\"width:250px; height:375px;\"");
-      HTM_A_End ();
-      HTM_TD_End ();
-      HTM_TR_End ();
+	 /***** Show advertisement *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("class=\"DAT CM\"");
+	       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+			    " class=\"DAT\"");
+		  HTM_Txt (Txt_Stay_connected_with_SWADroid);
+		  HTM_BR ();
+		  HTM_BR ();
+		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid200x300.png",Txt_Stay_connected_with_SWADroid,
+			   "style=\"width:250px; height:375px;\"");
+	       HTM_A_End ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -1702,14 +1708,14 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
    extern const char *Txt_Equation_centered;
 
    HTM_DIV_Begin ("class=\"HELP_EDIT\"");
-   HTM_TxtF ("%s: %s"
-             " "
-             "%s: <code>%s</code>"
-             " "
-             "%s: <code>%s</code>",
-             Txt_Text,Text,
-             Txt_Inline_math,InlineMath,
-             Txt_Equation_centered,Equation);
+      HTM_TxtF ("%s: %s"
+		" "
+		"%s: <code>%s</code>"
+		" "
+		"%s: <code>%s</code>",
+		Txt_Text,Text,
+		Txt_Inline_math,InlineMath,
+		Txt_Equation_centered,Equation);
    HTM_DIV_End ();
   }
 
@@ -1723,11 +1729,13 @@ void Lay_BeginHTMLFile (FILE *File,const char *Title)
 
    fprintf (File,"<!DOCTYPE html>\n"
 		 "<html lang=\"%s\">\n"
-		 "<head>\n"
-		 "<meta http-equiv=\"Content-Type\""
-		 " content=\"text/html;charset=windows-1252\" />\n"
-		 "<title>%s</title>\n"
-		 "</head>\n",
+		    "<head>\n"
+		       "<meta http-equiv=\"Content-Type\""
+		       " content=\"text/html;charset=windows-1252\" />\n"
+		       "<title>"
+			  "%s"
+		       "</title>\n"
+		    "</head>\n",
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],	// Language
 	    Title);					// Page title
   }
