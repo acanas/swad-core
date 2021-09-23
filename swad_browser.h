@@ -114,6 +114,12 @@ typedef enum
    Brw_ICON_EDIT = 2
   } Brw_IconViewEdit_t;
 
+typedef enum
+  {
+   Brw_HEADER = 0,
+   Brw_FOOTER = 1,
+  } Brw_HeadOrFoot_t;
+
 struct FilFolLnk
   {
    char Full[PATH_MAX + 1];	// Full path = Path/Name

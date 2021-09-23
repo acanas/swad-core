@@ -57,6 +57,7 @@
 #include "swad_ID.h"
 #include "swad_logo.h"
 #include "swad_mark.h"
+#include "swad_mark_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -6560,7 +6561,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
    struct stat FileStatus;
    struct dirent **FileList;
    bool AdminMarks;
-   struct MarksProperties Marks;
+   struct Mrk_Properties Marks;
    int NumFile;
    int NumFiles;
    unsigned NumLevls;
@@ -7330,7 +7331,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    bool FileIsValid = true;
    long FilCod = -1L;	// Code of new file in database
    struct FileMetadata FileMetadata;
-   struct MarksProperties Marks;
+   struct Mrk_Properties Marks;
    char FileNameToShow[NAME_MAX + 1];
    bool UploadSucessful = false;
 

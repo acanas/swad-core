@@ -42,6 +42,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_mark.h"
+#include "swad_mark_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
@@ -57,17 +58,11 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Brw_HEADER = 0,
-   Brw_FOOTER = 1,
-  } Brw_HeadOrFoot_t;
-
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Mrk_HeadOrFootStr[2] =	// Names of columns in database, so don't change!
+static const char *Mrk_HeadOrFootStr[2] =	// Names of fields in forms
   {
    "Header",
    "Footer",
@@ -79,31 +74,12 @@ static const char *Mrk_HeadOrFootStr[2] =	// Names of columns in database, so do
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks);
+static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks);
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
 static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
                              const char *PathFileAllMarks,
-                             struct MarksProperties *Marks);
-
-/*****************************************************************************/
-/****************** Add a new entry of marks into database *******************/
-/*****************************************************************************/
-
-void Mrk_DB_AddMarks (long FilCod,struct MarksProperties *Marks)
-  {
-   /***** Add file of marks to the database *****/
-   DB_QueryINSERT ("can not add properties of marks to database",
-		   "INSERT INTO mrk_marks"
-		   " (FilCod,%s,%s)"
-		   " VALUES"
-		   " (%ld,%u,%u)",
-	           Mrk_HeadOrFootStr[Brw_HEADER],
-	           Mrk_HeadOrFootStr[Brw_FOOTER],
-	           FilCod,
-	           Marks->Header,
-	           Marks->Footer);
-  }
+                             struct Mrk_Properties *Marks);
 
 /*****************************************************************************/
 /********* Write number of header and footer rows of a file of marks *********/
@@ -114,7 +90,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
    extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
-   struct MarksProperties Marks;
+   struct Mrk_Properties Marks;
    char StrHeadOrFoot[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
@@ -166,10 +142,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 /******** Get number of rows of header and of footer of a file of marks ******/
 /*****************************************************************************/
 
-static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
+static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   long Cod = Brw_GetCodForFileBrowser ();
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -177,23 +151,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   if (DB_QuerySELECT (&mysql_res,"can not get the number of rows"
-				  " in header and footer",
-		       "SELECT mrk_marks.%s,"	// row[0]
-			      "mrk_marks.%s"	// row[1]
-			" FROM brw_files,"
-			      "mrk_marks"
-		       " WHERE brw_files.FileBrowser=%u"
-			 " AND brw_files.Cod=%ld"
-			 " AND brw_files.Path='%s'"
-			 " AND brw_files.FilCod=mrk_marks.FilCod"
-		       " ORDER BY brw_files.FilCod DESC"
-		       " LIMIT 1",	// On duplicate entries, get the more recent
-		       Mrk_HeadOrFootStr[Brw_HEADER],
-		       Mrk_HeadOrFootStr[Brw_FOOTER],
-		       (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		       Cod,
-		       Gbl.FileBrowser.FilFolLnk.Full) == 1)
+   if (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res) == 1)
      {
       /***** Get number of header and footer rows *****/
       row = mysql_fetch_row (mysql_res);
@@ -238,10 +196,8 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
-   extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    extern const char *Txt_The_number_of_rows_is_now_X;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   long Cod;
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
@@ -252,19 +208,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
      {
       /***** Update properties of marks in the database *****/
-      Cod = Brw_GetCodForFileBrowser ();
-      DB_QueryUPDATE ("can not update properties of marks",
-		      "UPDATE mrk_marks,"
-		             "brw_files"
-		        " SET mrk_marks.%s=%u"
-		      " WHERE brw_files.FileBrowser=%u"
-		        " AND brw_files.Cod=%ld"
-		        " AND brw_files.Path='%s'"
-		        " AND brw_files.FilCod=mrk_marks.FilCod",
-		      Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
-		      (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-		      Cod,
-		      Gbl.FileBrowser.FilFolLnk.Full);
+      Mrk_DB_ChangeNumRowsHeaderOrFooter (HeaderOrFooter,NumRows);
 
       /***** Write message of success *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_number_of_rows_is_now_X,
@@ -284,7 +228,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 // Returns true if the format of the HTML file of marks is wrong
 // Gbl.Alert.Txt will contain feedback text
 
-bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
+bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks)
   {
    extern const char *Txt_There_are_more_than_one_table_in_the_file_of_marks;
    extern const char *Txt_Table_not_found_in_the_file_of_marks;
@@ -424,7 +368,7 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
 
 static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
                              const char *PathFileAllMarks,
-                             struct MarksProperties *Marks)
+                             struct Mrk_Properties *Marks)
   {
    extern const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks;
    unsigned Row;
@@ -587,7 +531,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
 void Mrk_ShowMyMarks (void)
   {
-   struct MarksProperties Marks;
+   struct Mrk_Properties Marks;
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    char PathPrivate[PATH_MAX + 1 +
@@ -706,7 +650,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    long DegCod;	// Not applicable here
    long CrsCod;
    long GrpCod;
-   struct MarksProperties Marks;
+   struct Mrk_Properties Marks;
    char FullPathInTreeFromDBMarksTable[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
@@ -727,19 +671,8 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    UsrDat.UsrCod = UsrCod;
    ID_GetListIDsFromUsrCod (&UsrDat);
 
-   /***** Get subject of message from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get the number of rows"
-				  " in header and footer",
-		       "SELECT brw_files.FileBrowser,"	// row[0]
-		              "brw_files.Cod,"		// row[1]
-		              "brw_files.Path,"		// row[2]
-		              "mrk_marks.Header,"	// row[3]
-		              "mrk_marks.Footer"	// row[4]
-		        " FROM brw_files,"
-		              "mrk_marks"
-		       " WHERE brw_files.FilCod=%ld"
-		         " AND brw_files.FilCod=mrk_marks.FilCod",
-			MrkCod) == 1)	// Result should have a unique row
+   /***** Get marks data from database *****/
+   if (Mrk_DB_GetDataOfMarksByCod (&mysql_res,MrkCod) == 1)	// Result should have a unique row
      {
       /***** Get data of this file of marks *****/
       row = mysql_fetch_row (mysql_res);

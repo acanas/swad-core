@@ -1,7 +1,7 @@
-// swad_marks.h: marks
+// swad_marks_database.h: marks operations with database
 
-#ifndef _SWAD_MRK
-#define _SWAD_MRK
+#ifndef _SWAD_MRK_DB
+#define _SWAD_MRK_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,32 +27,20 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-
-#include "swad_browser.h"
+#include "swad_mark.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct Mrk_Properties
-  {
-   unsigned Header;
-   unsigned Footer;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (void);
-void Mrk_ChangeNumRowsHeader (void);
-void Mrk_ChangeNumRowsFooter (void);
+void Mrk_DB_AddMarks (long FilCod,const struct Mrk_Properties *Marks);
+void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows);
 
-bool Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks);
-void Mrk_ShowMyMarks (void);
-void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                          char **ContentStr,
-                          long MrkCod,long UsrCod,bool GetContent);
+unsigned Mrk_DB_GetDataOfMarksByCod (MYSQL_RES **mysql_res,long MrkCod);
+unsigned Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res);
 
 #endif
