@@ -283,56 +283,11 @@ void Mch_ListMatches (struct Gam_Games *Games,
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Matches;
-   char *SubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumMatches;
 
    /***** Get data of matches from database *****/
-   /* Fill subquery for game */
-   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
-     {
-      if (asprintf (&SubQuery," AND"
-			      " (MchCod NOT IN"
-			       " (SELECT MchCod"
-			          " FROM mch_groups)"
-			       " OR"
-			       " MchCod IN"
-			       " (SELECT mch_groups.MchCod"
-			          " FROM grp_users,"
-			                "mch_groups"
-			         " WHERE grp_users.UsrCod=%ld"
-			           " AND grp_users.GrpCod=mch_groups.GrpCod))",
-		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	  Err_NotEnoughMemoryExit ();
-      }
-    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-       if (asprintf (&SubQuery,"%s","") < 0)
-	  Err_NotEnoughMemoryExit ();
-
-   /* Make query */
-   NumMatches = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get matches",
-		   "SELECT MchCod,"			// row[ 0]
-			  "GamCod,"			// row[ 1]
-			  "UsrCod,"			// row[ 2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
-			  "Title,"			// row[ 5]
-			  "QstInd,"			// row[ 6]
-			  "QstCod,"			// row[ 7]
-			  "Showing,"			// row[ 8]
-			  "Countdown,"			// row[ 9]
-			  "NumCols,"			// row[10]
-			  "ShowQstResults,"		// row[11]
-			  "ShowUsrResults"		// row[12]
-		    " FROM mch_matches"
-		   " WHERE GamCod=%ld%s"
-		   " ORDER BY MchCod",
-		   Game->GamCod,
-		   SubQuery);
-
-   /* Free allocated memory for subquery */
-   free (SubQuery);
+   NumMatches = Mch_DB_GetMatches (&mysql_res,Game->GamCod);
 
    /***** Begin box *****/
    Games->GamCod = Game->GamCod;
@@ -391,33 +346,9 @@ void Mch_ListMatches (struct Gam_Games *Games,
 void Mch_GetDataOfMatchByCod (struct Mch_Match *Match)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumRows;
 
    /***** Get data of match from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get matches",
-		   "SELECT MchCod,"			// row[ 0]
-			  "GamCod,"			// row[ 1]
-			  "UsrCod,"			// row[ 2]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
-			  "Title,"			// row[ 5]
-			  "QstInd,"			// row[ 6]
-			  "QstCod,"			// row[ 7]
-			  "Showing,"			// row[ 8]
-			  "Countdown,"			// row[ 9]
-			  "NumCols,"			// row[10]
-			  "ShowQstResults,"		// row[11]
-			  "ShowUsrResults"		// row[12]
-		    " FROM mch_matches"
-		   " WHERE MchCod=%ld"
-		     " AND GamCod IN"		// Extra check
-		         " (SELECT GamCod"
-		            " FROM gam_games"
-		           " WHERE CrsCod='%ld')",
-		 Match->MchCod,
-		 Gbl.Hierarchy.Crs.CrsCod);
-   if (NumRows) // Match found...
+   if (Mch_DB_GetDataOfMatchByCod (&mysql_res,Match->MchCod)) // Match found...
       /* Get match data from row */
       Mch_GetMatchDataFromRow (mysql_res,Match);
    else
@@ -760,19 +691,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
    unsigned NumGrp;
 
    /***** Get groups associated to a match from database *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-		   "SELECT grp_types.GrpTypName,"	// row[0]
-			  "grp_groups.GrpName"		// row[1]
-		    " FROM mch_groups,"
-			  "grp_groups,"
-			  "grp_types"
-		   " WHERE mch_groups.MchCod=%ld"
-		     " AND mch_groups.GrpCod=grp_groups.GrpCod"
-		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
-		   Match->MchCod);
+   NumGrps = Mch_DB_GetGrpsAssociatedToMatch (&mysql_res,Match->MchCod);
 
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
 
@@ -967,13 +886,7 @@ void Mch_ToggleVisResultsMchUsr (void)
 
    /***** Toggle visibility of match results *****/
    Match.Status.ShowUsrResults = !Match.Status.ShowUsrResults;
-   DB_QueryUPDATE ("can not toggle visibility of match results",
-		   "UPDATE mch_matches"
-		     " SET ShowUsrResults='%c'"
-		   " WHERE MchCod=%ld",
-		   Match.Status.ShowUsrResults ? 'Y' :
-			                         'N',
-		   Match.MchCod);
+   Mch_DB_UpdateVisResultsMchUsr (Match.MchCod,Match.Status.ShowUsrResults);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -1583,7 +1496,7 @@ void Mch_ChangeMatch (void)
 static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match)
   {
    /***** Update match title into database *****/
-   Mch_DB_UpdateMatchTitle (Match);
+   Mch_DB_UpdateMatchTitle (Match->MchCod,Match->Title);
 
    /***** Update groups associated to the match *****/
    Mch_DB_RemoveMatchFromTable (Match->MchCod,"mch_groups");	// Remove all groups associated to this match
@@ -1828,14 +1741,9 @@ static void Mch_GetElapsedTimeInQuestion (const struct Mch_Match *Match,
    unsigned NumRows;
 
    /***** Query database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get elapsed time",
-		   "SELECT ElapsedTime"	// row[0]
-		    " FROM mch_times"
-		   " WHERE MchCod=%ld"
-		     " AND QstInd=%u",
-		   Match->MchCod,
-		   Match->Status.QstInd);
+   NumRows = Mch_DB_GetElapsedTimeInQuestion (&mysql_res,
+                                              Match->MchCod,
+                                              Match->Status.QstInd);
 
    /***** Get elapsed time from query result *****/
    Mch_GetElapsedTime (NumRows,mysql_res,Time);
@@ -1855,12 +1763,7 @@ static void Mch_GetElapsedTimeInMatch (const struct Mch_Match *Match,
    unsigned NumRows;
 
    /***** Query database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get elapsed time",
-		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"	// row[0]
-		    " FROM mch_times"
-		   " WHERE MchCod=%ld",
-		   Match->MchCod);
+   NumRows = Mch_DB_GetElapsedTimeInMatch (&mysql_res,Match->MchCod);
 
    /***** Get elapsed time from query result *****/
    Mch_GetElapsedTime (NumRows,mysql_res,Time);
@@ -2249,23 +2152,7 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match)
       case Rol_STD:
 	 /***** Check if I belong to any of the groups
 	        associated to the match *****/
-	 return (DB_QueryCOUNT ("can not check if I can play a match",
-				"SELECT COUNT(*)"
-				 " FROM mch_matches"
-				" WHERE MchCod=%ld"
-				  " AND (MchCod NOT IN"
-				       " (SELECT MchCod"
-				          " FROM mch_groups)"
-				       " OR"
-				       " MchCod IN"
-				       " (SELECT mch_groups.MchCod"
-					  " FROM grp_users,"
-					        "mch_groups"
-					 " WHERE grp_users.UsrCod=%ld"
-					   " AND grp_users.GrpCod=mch_groups.GrpCod))",
-				Match->MchCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
-	 break;
+	 return Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
       case Rol_NET:
 	 /***** Only if I am the creator *****/
 	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);

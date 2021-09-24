@@ -1356,7 +1356,6 @@ bool ExaSes_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
 	 /***** Check if I belong to any of the groups
 	        associated to the exam session *****/
 	 return Exa_DB_CheckIfICanListThisSessionBasedOnGrps (SesCod);
-	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:

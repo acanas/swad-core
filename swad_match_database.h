@@ -44,8 +44,12 @@
 //------------------------------- Matches -------------------------------------
 long Mch_DB_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1]);
 void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match);
-void Mch_DB_UpdateMatchTitle (const struct Mch_Match *Match);
+void Mch_DB_UpdateMatchTitle (long MchCod,
+                              const char Title[Gam_MAX_BYTES_TITLE + 1]);
+void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults);
 
+unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod);
+unsigned Mch_DB_GetMatches (MYSQL_RES **mysql_res,long GamCod);
 Mch_Showing_t Mch_DB_GetShowingFromStr (const char *Str);
 unsigned Mch_DB_GetNumMchsInGame (long GamCod);
 unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod);
@@ -62,6 +66,9 @@ void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,
 //---------------------------------Groups -------------------------------------
 void Mch_DB_AssociateGroupToMatch (long MchCod,long GrpCod);
 
+unsigned Mch_DB_GetGrpsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod);
+bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
+
 void Mch_DB_RemoveGroup (long GrpCod);
 void Mch_DB_RemoveGroupsOfType (long GrpTypCod);
 
@@ -76,5 +83,9 @@ void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
 
 //----------------------------- Elapsed times ---------------------------------
 void Mch_DB_UpdateElapsedTimeInQuestion (long MchCod,long QstInd);
+
+unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
+					  long MchCod,unsigned QstInd);
+unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
 
 #endif

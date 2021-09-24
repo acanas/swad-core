@@ -165,14 +165,116 @@ void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match)
 /********************* Update title of an existing match *********************/
 /*****************************************************************************/
 
-void Mch_DB_UpdateMatchTitle (const struct Mch_Match *Match)
+void Mch_DB_UpdateMatchTitle (long MchCod,
+                              const char Title[Gam_MAX_BYTES_TITLE + 1])
   {
    DB_QueryUPDATE ("can not update match",
 		   "UPDATE mch_matches"
 		     " SET Title='%s'"
                    " WHERE MchCod=%ld",
-		   Match->Title,
-		   Match->MchCod);
+		   Title,
+		   MchCod);
+  }
+
+/*****************************************************************************/
+/******************** Toggle visibility of match results *********************/
+/*****************************************************************************/
+
+void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults)
+  {
+   DB_QueryUPDATE ("can not toggle visibility of match results",
+		   "UPDATE mch_matches"
+		     " SET ShowUsrResults='%c'"
+		   " WHERE MchCod=%ld",
+		   ShowUsrResults ? 'Y' :
+			            'N',
+		   MchCod);
+  }
+
+/*****************************************************************************/
+/********************** Get match data using its code ************************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get matches",
+		   "SELECT MchCod,"			// row[ 0]
+			  "GamCod,"			// row[ 1]
+			  "UsrCod,"			// row[ 2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+			  "Title,"			// row[ 5]
+			  "QstInd,"			// row[ 6]
+			  "QstCod,"			// row[ 7]
+			  "Showing,"			// row[ 8]
+			  "Countdown,"			// row[ 9]
+			  "NumCols,"			// row[10]
+			  "ShowQstResults,"		// row[11]
+			  "ShowUsrResults"		// row[12]
+		    " FROM mch_matches"
+		   " WHERE MchCod=%ld"
+		     " AND GamCod IN"		// Extra check
+		         " (SELECT GamCod"
+		            " FROM gam_games"
+		           " WHERE CrsCod='%ld')",
+		 MchCod,
+		 Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/************************* Get the matches of a game *************************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetMatches (MYSQL_RES **mysql_res,long GamCod)
+  {
+   char *SubQuery;
+
+   /***** Fill subquery for game *****/
+   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
+     {
+      if (asprintf (&SubQuery," AND"
+			      " (MchCod NOT IN"
+			       " (SELECT MchCod"
+			          " FROM mch_groups)"
+			       " OR"
+			       " MchCod IN"
+			       " (SELECT mch_groups.MchCod"
+			          " FROM grp_users,"
+			                "mch_groups"
+			         " WHERE grp_users.UsrCod=%ld"
+			           " AND grp_users.GrpCod=mch_groups.GrpCod))",
+		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	  Err_NotEnoughMemoryExit ();
+      }
+    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+       if (asprintf (&SubQuery,"%s","") < 0)
+	  Err_NotEnoughMemoryExit ();
+
+   /***** Make query *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get matches",
+		   "SELECT MchCod,"			// row[ 0]
+			  "GamCod,"			// row[ 1]
+			  "UsrCod,"			// row[ 2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+			  "Title,"			// row[ 5]
+			  "QstInd,"			// row[ 6]
+			  "QstCod,"			// row[ 7]
+			  "Showing,"			// row[ 8]
+			  "Countdown,"			// row[ 9]
+			  "NumCols,"			// row[10]
+			  "ShowQstResults,"		// row[11]
+			  "ShowUsrResults"		// row[12]
+		    " FROM mch_matches"
+		   " WHERE GamCod=%ld%s"
+		   " ORDER BY MchCod",
+		   GamCod,
+		   SubQuery);
+
+   /***** Free allocated memory for subquery *****/
+   free (SubQuery);
   }
 
 /*****************************************************************************/
@@ -363,6 +465,51 @@ void Mch_DB_AssociateGroupToMatch (long MchCod,long GrpCod)
   }
 
 /*****************************************************************************/
+/************** Get groups associated to a match from database ***************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetGrpsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of a match",
+		   "SELECT grp_types.GrpTypName,"	// row[0]
+			  "grp_groups.GrpName"		// row[1]
+		    " FROM mch_groups,"
+			  "grp_groups,"
+			  "grp_types"
+		   " WHERE mch_groups.MchCod=%ld"
+		     " AND mch_groups.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   MchCod);
+  }
+
+/*****************************************************************************/
+/************ Check if I belong to any of the groups of a match **************/
+/*****************************************************************************/
+
+bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
+  {
+   return (DB_QueryCOUNT ("can not check if I can play a match",
+			  "SELECT COUNT(*)"
+			   " FROM mch_matches"
+			  " WHERE MchCod=%ld"
+			    " AND (MchCod NOT IN"
+				 " (SELECT MchCod"
+				    " FROM mch_groups)"
+				 " OR"
+				 " MchCod IN"
+				 " (SELECT mch_groups.MchCod"
+				    " FROM grp_users,"
+					  "mch_groups"
+				   " WHERE grp_users.UsrCod=%ld"
+				     " AND grp_users.GrpCod=mch_groups.GrpCod))",
+			  MchCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+  }
+
+/*****************************************************************************/
 /********************* Remove one group from all matches *********************/
 /*****************************************************************************/
 
@@ -461,3 +608,34 @@ void Mch_DB_UpdateElapsedTimeInQuestion (long MchCod,long QstInd)
 		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH);
   }
 
+/*****************************************************************************/
+/******************* Get elapsed time in a match question ********************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
+					  long MchCod,unsigned QstInd)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get elapsed time",
+		   "SELECT ElapsedTime"	// row[0]
+		    " FROM mch_times"
+		   " WHERE MchCod=%ld"
+		     " AND QstInd=%u",
+		   MchCod,
+		   QstInd);
+  }
+
+
+/*****************************************************************************/
+/*********************** Get elapsed time in a match *************************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get elapsed time",
+		   "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"	// row[0]
+		    " FROM mch_times"
+		   " WHERE MchCod=%ld",
+		   MchCod);
+  }
