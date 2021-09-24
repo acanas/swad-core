@@ -1750,7 +1750,7 @@ void Exa_DB_RemoveAllGrpsOfType (long GrpTypCod)
 /******************** Remove one group from all sessions *********************/
 /*****************************************************************************/
 
-void Exa_DB_RemoveGrpAssociatedToExamSess (long GrpCod)
+void Exa_DB_RemoveGroup (long GrpCod)
   {
    /***** Remove group from all the sessions *****/
    DB_QueryDELETE ("can not remove group"

@@ -187,4 +187,7 @@ void Tst_RemoveCrsTests (long CrsCod);
 
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
+unsigned Tst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                            const struct Tst_Question *Question);
+
 #endif

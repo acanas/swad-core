@@ -42,6 +42,7 @@
 #include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
+#include "swad_match_database.h"
 #include "swad_match_result.h"
 #include "swad_role.h"
 #include "swad_setting.h"
@@ -81,18 +82,6 @@ typedef enum
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
-
-const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
-  {
-   [Mch_START  ] = "start",
-   [Mch_STEM   ] = "stem",
-   [Mch_ANSWERS] = "answers",
-   [Mch_RESULTS] = "results",
-   [Mch_END    ] = "end",
-  };
-
-#define Mch_MAX_COLS 4
-#define Mch_NUM_COLS_DEFAULT 1
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
@@ -136,14 +125,8 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Mch_Match *Match);
-static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 
 static void Mch_RemoveMatchFromAllTables (long MchCod);
-static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName);
-static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
-static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName);
-static void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName);
-static void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName);
 
 static void Mch_PutParamsPlay (void *MchCod);
 static void Mch_PutParamMchCod (long MchCod);
@@ -1060,7 +1043,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    Match->Status.QstCod = Str_ConvertStrCodToLongCod (row[7]);
 
    /* Get what to show (stem, answers, results) (row(8)) */
-   Match->Status.Showing = Mch_GetShowingFromStr (row[8]);
+   Match->Status.Showing = Mch_DB_GetShowingFromStr (row[8]);
 
    /* Get countdown (row[9]) */
    Match->Status.Countdown = Str_ConvertStrCodToLongCod (row[9]);
@@ -1082,23 +1065,6 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
       Match->Status.Playing = false;
    else						// Match not over
       Match->Status.Playing = Mch_DB_GetIfMatchIsBeingPlayed (Match->MchCod);
-  }
-
-/*****************************************************************************/
-/****************** Get parameter with what is being shown *******************/
-/*****************************************************************************/
-
-static Mch_Showing_t Mch_GetShowingFromStr (const char *Str)
-  {
-   Mch_Showing_t Showing;
-
-   for (Showing  = (Mch_Showing_t) 0;
-	Showing <= (Mch_Showing_t) (Mch_NUM_SHOWING - 1);
-	Showing++)
-      if (!strcmp (Str,Mch_ShowingStringsDB[Showing]))
-         return Showing;
-
-   return (Mch_Showing_t) Mch_SHOWING_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -1192,20 +1158,7 @@ static void Mch_RemoveMatchFromAllTables (long MchCod)
    Mch_DB_RemoveMatchFromTable (MchCod,"mch_indexes");
 
    /***** Remove match from main table *****/
-   DB_QueryDELETE ("can not remove match",
-		   "DELETE FROM mch_matches"
-		   " WHERE MchCod=%ld",
-		   MchCod);
-  }
-
-static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName)
-  {
-   /***** Remove match from secondary table *****/
-   DB_QueryDELETE ("can not remove match from table",
-		   "DELETE FROM %s"
-		   " WHERE MchCod=%ld",
-		   TableName,
-		   MchCod);
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_matches");
   }
 
 /*****************************************************************************/
@@ -1215,34 +1168,16 @@ static void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName)
 void Mch_RemoveMatchesInGameFromAllTables (long GamCod)
   {
    /***** Remove matches from secondary tables *****/
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_players");
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_playing");
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_results");
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_answers");
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_times");
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_groups");
-   Mch_DB_RemoveMatchesInGameFromTable (GamCod,"mch_indexes");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_players");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_playing");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_results");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_answers");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_times");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_groups");
+   Mch_DB_RemoveMatchesInGameFromOtherTable (GamCod,"mch_indexes");
 
-   /***** Remove matches from main table *****/
-   DB_QueryDELETE ("can not remove matches of a game",
-		   "DELETE FROM mch_matches"
-		   " WHERE GamCod=%ld",
-		   GamCod);
-  }
-
-static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
-  {
-   /***** Remove matches in game from secondary table *****/
-   DB_QueryDELETE ("can not remove matches of a game from table",
-		   "DELETE FROM %s"
-		   " USING mch_matches,"
-		          "%s"
-		   " WHERE mch_matches.GamCod=%ld"
-		     " AND mch_matches.MchCod=%s.MchCod",
-		   TableName,
-		   TableName,
-		   GamCod,
-		   TableName);
+   /***** Remove matches in game from main table *****/
+   Mch_DB_RemoveMatchesInGameFromMainTable (GamCod);
   }
 
 /*****************************************************************************/
@@ -1252,39 +1187,16 @@ static void Mch_DB_RemoveMatchesInGameFromTable (long GamCod,const char *TableNa
 void Mch_RemoveMatchesInCourseFromAllTables (long CrsCod)
   {
    /***** Remove matches from secondary tables *****/
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_players");
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_playing");
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_results");
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_answers");
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_times");
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_groups");
-   Mch_DB_RemoveMatchesInCourseFromTable (CrsCod,"mch_indexes");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_players");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_playing");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_results");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_answers");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_times");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_groups");
+   Mch_DB_RemoveMatchesInCrsFromOtherTable (CrsCod,"mch_indexes");
 
-   /***** Remove matches from main table *****/
-   DB_QueryDELETE ("can not remove matches of a course",
-		   "DELETE FROM mch_matches"
-		   " USING gam_games,"
-		          "mch_matches"
-		   " WHERE gam_games.CrsCod=%ld"
-		     " AND gam_games.GamCod=mch_matches.GamCod",
-		   CrsCod);
-  }
-
-static void Mch_DB_RemoveMatchesInCourseFromTable (long CrsCod,const char *TableName)
-  {
-   /***** Remove matches in course from secondary table *****/
-   DB_QueryDELETE ("can not remove matches of a course from table",
-		   "DELETE FROM %s"
-		   " USING gam_games,"
-		          "mch_matches,"
-		          "%s"
-		   " WHERE gam_games.CrsCod=%ld"
-		     " AND gam_games.GamCod=mch_matches.GamCod"
-		     " AND mch_matches.MchCod=%s.MchCod",
-		   TableName,
-		   TableName,
-		   CrsCod,
-		   TableName);
+   /***** Remove matches in course from main table *****/
+   Mch_DB_RemoveMatchesInCrsFromMainTable (CrsCod);
   }
 
 /*****************************************************************************/
@@ -1299,16 +1211,6 @@ void Mch_RemoveMatchesMadeByUsrInAllCrss (long UsrCod)
    Mch_DB_RemoveMatchesMadeByUsrFromTable (UsrCod,"mch_answers");
   }
 
-static void Mch_DB_RemoveMatchesMadeByUsrFromTable (long UsrCod,const char *TableName)
-  {
-   /***** Remove matches in course from secondary table *****/
-   DB_QueryDELETE ("can not remove matches of a user from table",
-		   "DELETE FROM %s"
-		   " WHERE UsrCod=%ld",
-		   TableName,
-		   UsrCod);
-  }
-
 /*****************************************************************************/
 /***************** Remove matches made by user in a course *******************/
 /*****************************************************************************/
@@ -1319,26 +1221,6 @@ void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long CrsCod)
    Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_players");
    Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_results");
    Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (UsrCod,CrsCod,"mch_answers");
-  }
-
-static void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,const char *TableName)
-  {
-   /***** Remove matches in course from secondary table *****/
-   DB_QueryDELETE ("can not remove matches of a user from table",
-		   "DELETE FROM %s"
-		   " USING gam_games,"
-		          "mch_matches,"
-		          "%s"
-		   " WHERE gam_games.CrsCod=%ld"
-		     " AND gam_games.GamCod=mch_matches.GamCod"
-		     " AND mch_matches.MchCod=%s.MchCod"
-		     " AND %s.UsrCod=%ld",
-		   TableName,
-		   TableName,
-		   CrsCod,
-		   TableName,
-		   TableName,
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1701,12 +1583,7 @@ void Mch_ChangeMatch (void)
 static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match)
   {
    /***** Update match title into database *****/
-   DB_QueryUPDATE ("can not update match",
-		   "UPDATE mch_matches"
-		     " SET Title='%s'"
-                   " WHERE MchCod=%ld",
-		   Match->Title,
-		   Match->MchCod);
+   Mch_DB_UpdateMatchTitle (Match);
 
    /***** Update groups associated to the match *****/
    Mch_DB_RemoveMatchFromTable (Match->MchCod,"mch_groups");	// Remove all groups associated to this match
@@ -1756,30 +1633,7 @@ static long Mch_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1])
    long MchCod;
 
    /***** Insert this new match into database *****/
-   MchCod =
-   DB_QueryINSERTandReturnCode ("can not create match",
-				"INSERT mch_matches"
-				" (GamCod,UsrCod,StartTime,EndTime,Title,"
-				  "QstInd,QstCod,Showing,Countdown,"
-				  "NumCols,ShowQstResults,ShowUsrResults)"
-				" VALUES"
-				" (%ld,"	// GamCod
-				  "%ld,"	// UsrCod
-				  "NOW(),"	// StartTime
-				  "NOW(),"	// EndTime
-				  "'%s',"	// Title
-				  "0,"		// QstInd: Match has not started, so not the first question yet
-				  "-1,"		// QstCod: Non-existent question
-				  "'%s',"	// Showing: What is being shown
-				  "-1,"		// Countdown: No countdown
-				  "%u,"		// NumCols: Number of columns in answers
-				  "'N',"	// ShowQstResults: Don't show question results initially
-				  "'N')",	// ShowUsrResults: Don't show user results initially
-				GamCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
-				Title,
-				Mch_ShowingStringsDB[Mch_SHOWING_DEFAULT],
-				Mch_NUM_COLS_DEFAULT);
+   MchCod = Mch_DB_CreateMatch (GamCod,Title);
 
    /***** Create indexes for answers *****/
    Mch_CreateIndexes (GamCod,MchCod);
@@ -1809,18 +1663,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
    unsigned QstInd;
 
    /***** Get questions of the game *****/
-   NumQsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions of a game",
-		   "SELECT gam_questions.QstCod,"	// row[0]
-			  "gam_questions.QstInd,"	// row[1]
-			  "tst_questions.AnsType,"	// row[2]
-			  "tst_questions.Shuffle"	// row[3]
-		    " FROM gam_questions,"
-		          "tst_questions"
-		   " WHERE gam_questions.GamCod=%ld"
-		     " AND gam_questions.QstCod=tst_questions.QstCod"
-		   " ORDER BY gam_questions.QstInd",
-		   GamCod);
+   NumQsts = Gam_DB_GetGameQuestionsFull (&mysql_res,GamCod);
 
    /***** For each question in game... *****/
    for (NumQst = 0;
@@ -1883,16 +1726,8 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
 
-   /***** Get questions of the game *****/
-   NumAnss = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions of a game",
-		   "SELECT AnsInd"	// row[0]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld"
-		   " ORDER BY %s",
-		   Question->QstCod,
-		   Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
-					      "AnsInd");
+   /***** Get suffled/not-shuffled answers indexes of question *****/
+   NumAnss = Tst_DB_GetShuffledAnswersIndexes (&mysql_res,Question);
 
    /***** For each answer in question... *****/
    for (NumAns = 0;
@@ -1915,14 +1750,7 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Create entry for this question in table of match indexes *****/
-   DB_QueryINSERT ("can not create match indexes",
-		   "INSERT INTO mch_indexes"
-		   " (MchCod,QstInd,Indexes)"
-		   " VALUES"
-		   " (%ld,%u,'%s')",
-		   MchCod,
-		   QstInd,
-		   StrAnswersOneQst);
+   Mch_DB_CreateQstIndexes (MchCod,QstInd,StrAnswersOneQst);
   }
 
 /*****************************************************************************/
@@ -1935,14 +1763,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
    char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
-   DB_QuerySELECTString (StrIndexesOneQst,sizeof (StrIndexesOneQst) - 1,
-                         "can not get data of a question",
-			 "SELECT Indexes"	// row[0]
-			  " FROM mch_indexes"
-			 " WHERE MchCod=%ld"
-			   " AND QstInd=%u",
-		 	 MchCod,
-			 QstInd);
+   Mch_DB_GetIndexes (MchCod,QstInd,StrIndexesOneQst);
    if (!StrIndexesOneQst[0])
       Err_ShowErrorAndExit ("No indexes found for a question.");
 
@@ -1958,49 +1779,11 @@ static void Mch_CreateGrps (long MchCod)
   {
    unsigned NumGrpSel;
 
-   /***** Create groups associated to the match *****/
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
-      /* Create group */
-      DB_QueryINSERT ("can not associate a group to a match",
-		      "INSERT INTO mch_groups"
-		      " (MchCod,GrpCod)"
-		      " VALUES"
-		      " (%ld,%ld)",
-                      MchCod,
-                      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
-  }
-
-/*****************************************************************************/
-/********************* Remove one group from all matches *********************/
-/*****************************************************************************/
-
-void Mch_DB_RemoveGroup (long GrpCod)
-  {
-   /***** Remove group from all the matches *****/
-   DB_QueryDELETE ("can not remove group"
-	           " from the associations between matches and groups",
-		   "DELETE FROM mch_groups"
-		   " WHERE GrpCod=%ld",
-		   GrpCod);
-  }
-
-/*****************************************************************************/
-/***************** Remove groups of one type from all matches ****************/
-/*****************************************************************************/
-
-void Mch_DB_RemoveGroupsOfType (long GrpTypCod)
-  {
-   /***** Remove group from all the matches *****/
-   DB_QueryDELETE ("can not remove groups of a type"
-	           " from the associations between matches and groups",
-		   "DELETE FROM mch_groups"
-		   " USING grp_groups,"
-		          "mch_groups"
-		   " WHERE grp_groups.GrpTypCod=%ld"
-		     " AND grp_groups.GrpCod=mch_groups.GrpCod",
-                   GrpTypCod);
+      Mch_DB_AssociateGroupToMatch (MchCod,
+                                    Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -2009,49 +1792,10 @@ void Mch_DB_RemoveGroupsOfType (long GrpTypCod)
 
 static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
   {
-   char *MchSubQuery;
-
-   /***** Update end time only if match is currently being played *****/
-   if (Match->Status.Playing)	// Match is being played
-     {
-      if (asprintf (&MchSubQuery,"mch_matches.EndTime=NOW(),") < 0)
-         Err_NotEnoughMemoryExit ();
-     }
-   else				// Match is paused, not being played
-     {
-      if (asprintf (&MchSubQuery,"%s","") < 0)
-         Err_NotEnoughMemoryExit ();
-     }
-
    /***** Update match status in database *****/
-   DB_QueryUPDATE ("can not update match being played",
-		   "UPDATE mch_matches,"
-		          "gam_games"
-		     " SET %s"
-			  "mch_matches.QstInd=%u,"
-			  "mch_matches.QstCod=%ld,"
-			  "mch_matches.Showing='%s',"
-		          "mch_matches.Countdown=%ld,"
-		          "mch_matches.NumCols=%u,"
-			  "mch_matches.ShowQstResults='%c',"
-			  "mch_matches.ShowUsrResults='%c'"
-		   " WHERE mch_matches.MchCod=%ld"
-		     " AND mch_matches.GamCod=gam_games.GamCod"
-		     " AND gam_games.CrsCod=%ld",	// Extra check
-		   MchSubQuery,
-		   Match->Status.QstInd,
-		   Match->Status.QstCod,
-		   Mch_ShowingStringsDB[Match->Status.Showing],
-		   Match->Status.Countdown,
-		   Match->Status.NumCols,
-		   Match->Status.ShowQstResults ? 'Y' :
-			                          'N',
-		   Match->Status.ShowUsrResults ? 'Y' :
-			                          'N',
-		   Match->MchCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-   free (MchSubQuery);
+   Mch_DB_UpdateMatchStatus (Match);
 
+   /***** Update match as being/not-being played */
    if (Match->Status.Playing)	// Match is being played
       /* Update match as being played */
       Mch_DB_UpdateMatchAsBeingPlayed (Match->MchCod);
@@ -2070,17 +1814,7 @@ static void Mch_UpdateElapsedTimeInQuestion (const struct Mch_Match *Match)
    if (Match->Status.Playing &&		// Match is being played
        Match->Status.Showing != Mch_START &&
        Match->Status.Showing != Mch_END)
-      DB_QueryINSERT ("can not update elapsed time in question",
-		      "INSERT INTO mch_times"
-		      " (MchCod,QstInd,ElapsedTime)"
-		      " VALUES"
-		      " (%ld,%u,SEC_TO_TIME(%u))"
-		      " ON DUPLICATE KEY"
-		      " UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(%u))",
-		      Match->MchCod,
-		      Match->Status.QstInd,
-		      Cfg_SECONDS_TO_REFRESH_MATCH_TCH,
-		      Cfg_SECONDS_TO_REFRESH_MATCH_TCH);
+      Mch_DB_UpdateElapsedTimeInQuestion (Match->MchCod,Match->Status.QstInd);
   }
 
 /*****************************************************************************/
@@ -2375,11 +2109,11 @@ static void Mch_SetMatchStatusToPrevQst (struct Mch_Match *Match)
   {
    /***** Get index of the previous question *****/
    Match->Status.QstInd = Gam_DB_GetPrevQuestionIndexInGame (Match->GamCod,
-							  Match->Status.QstInd);
+							     Match->Status.QstInd);
    if (Match->Status.QstInd)		// Start of questions not reached
      {
       Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
-						      Match->Status.QstInd);
+						         Match->Status.QstInd);
       Match->Status.Showing = Match->Status.ShowQstResults ? Mch_RESULTS :
 							     Mch_ANSWERS;
      }
@@ -2438,13 +2172,13 @@ static void Mch_SetMatchStatusToNextQst (struct Mch_Match *Match)
   {
    /***** Get index of the next question *****/
    Match->Status.QstInd = Gam_DB_GetNextQuestionIndexInGame (Match->GamCod,
-							  Match->Status.QstInd);
+							     Match->Status.QstInd);
 
    /***** Get question code *****/
    if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)	// End of questions not reached
      {
       Match->Status.QstCod = Gam_DB_GetQstCodFromQstInd (Match->GamCod,
-						      Match->Status.QstInd);
+						         Match->Status.QstInd);
       Match->Status.Showing = Mch_STEM;
      }
    else							// End of questions reached
@@ -2502,46 +2236,6 @@ static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Upda
 
    /***** Right column *****/
    Mch_ShowRightColumnStd (Match,&UsrAnswer,Update);
-  }
-
-/*****************************************************************************/
-/********************** Get number of matches in a game **********************/
-/*****************************************************************************/
-
-unsigned Mch_DB_GetNumMchsInGame (long GamCod)
-  {
-   /***** Trivial check *****/
-   if (GamCod < 0)	// A non-existing game...
-      return 0;		// ...has no matches
-
-   /***** Get number of matches in a game from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of matches of a game",
-		  "SELECT COUNT(*)"
-		   " FROM mch_matches"
-		  " WHERE GamCod=%ld",
-		  GamCod);
-  }
-
-/*****************************************************************************/
-/*************** Get number of unfinished matches in a game ******************/
-/*****************************************************************************/
-
-unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod)
-  {
-   /***** Trivial check *****/
-   if (GamCod < 0)	// A non-existing game...
-      return 0;		// ...has no matches
-
-   /***** Get number of matches in a game from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of unfinished matches of a game",
-		  "SELECT COUNT(*)"
-		   " FROM mch_matches"
-		  " WHERE GamCod=%ld"
-		    " AND Showing<>'%s'",
-		  GamCod,
-		  Mch_ShowingStringsDB[Mch_END]);
   }
 
 /*****************************************************************************/
@@ -2705,7 +2399,7 @@ static void Mch_WriteNumRespondersQst (struct Mch_Match *Match)
 	       break;
 	    default:
 	       HTM_Unsigned (Mch_DB_GetNumUsrsWhoAnsweredQst (Match->MchCod,
-							   Match->Status.QstInd));
+							      Match->Status.QstInd));
 	       break;
 	   }
 
@@ -2905,7 +2599,7 @@ static void Mch_ShowLeftColumnStd (const struct Mch_Match *Match,
 	    /***** Write whether question is answered or not *****/
 	    Mch_PutIfAnswered (Match,Answered);
 
-	    if (Match->Status.Playing &&			// Match is being played
+	    if (Match->Status.Playing &&		// Match is being played
 		Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
 		Answered)				// I have answered this question
 	       /***** Put icon to remove my answet *****/
@@ -2934,7 +2628,7 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
       Mch_ShowMatchTitleStd (Match);
 
       /***** Bottom row *****/
-      if (Match->Status.Playing)			// Match is being played
+      if (Match->Status.Playing)		// Match is being played
 	{
 	 if (Match->Status.Showing == Mch_END)	// Match over
 	    Mch_ShowWaitImage (Txt_Please_wait_);
@@ -2956,7 +2650,7 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
 	    HTM_DIV_End ();
 	   }
 	}
-      else						// Match is not being played
+      else					// Match is not being played
 	 Mch_ShowWaitImage (Txt_Please_wait_);
 
    /***** End right container *****/
@@ -2979,7 +2673,7 @@ static void Mch_ShowNumQstInMch (const struct Mch_Match *Match)
 	 case Mch_START:	// Not started
 	    HTM_Txt (Txt_MATCH_Start);
 	    break;
-	 case Mch_END:	// Match over
+	 case Mch_END:		// Match over
 	    HTM_Txt (Txt_MATCH_End);
 	    break;
 	 default:
@@ -4515,22 +4209,4 @@ unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
 		   " FROM mch_matches"
 		   " WHERE GamCod=%ld",
 		   GamCod);
-  }
-
-/*****************************************************************************/
-/********************** Remove answers of a game question ********************/
-/*****************************************************************************/
-
-void Mch_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
-  {
-   /***** Remove answers from all matches of this game *****/
-   DB_QueryDELETE ("can not remove the answers of a question",
-		   "DELETE FROM mch_answers"
-		   " USING mch_matches,"
-		          "mch_answers"
-		   " WHERE mch_matches.GamCod=%ld"	// From all matches of this game...
-		     " AND mch_matches.MchCod=mch_answers.MchCod"
-		     " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
-		   GamCod,
-		   QstInd);
   }

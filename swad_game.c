@@ -43,6 +43,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_match.h"
+#include "swad_match_database.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
 #include "swad_role.h"
@@ -1654,7 +1655,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games,struct Gam_Game *Game
    bool ICanEditQuestions = Gam_CheckIfEditable (Game);
 
    /***** Get data of questions from database *****/
-   NumQsts = Gam_DB_GetGameQuestions (&mysql_res,Game->GamCod);
+   NumQsts = Gam_DB_GetGameQuestionsBasic (&mysql_res,Game->GamCod);
 
    /***** Begin box *****/
    Games->GamCod = Game->GamCod;
@@ -1743,16 +1744,15 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 /***** Get question data *****/
 	 row = mysql_fetch_row (mysql_res);
 	 /*
-	 row[0] QstInd
-	 row[1] QstCod
+	 row[0] QstCod
+	 row[1] QstInd
 	 */
+	 /* Get question code (row[0]) */
+	 Question.QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	 /* Get question index (row[0]) */
-	 QstInd = Str_ConvertStrToUnsigned (row[0]);
+	 /* Get question index (row[1]) */
+	 QstInd = Str_ConvertStrToUnsigned (row[1]);
 	 snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
-
-	 /* Get question code (row[1]) */
-	 Question.QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	 /* Initialize context */
 	 Games->GamCod = GamCod;

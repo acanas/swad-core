@@ -52,6 +52,10 @@ typedef enum
   } Mch_Showing_t;
 #define Mch_SHOWING_DEFAULT Mch_START
 
+/* Columns */
+#define Mch_MAX_COLS 4
+#define Mch_NUM_COLS_DEFAULT 1
+
 struct Mch_Match
   {
    long MchCod;
@@ -119,17 +123,11 @@ void Mch_ResumeMatch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 
-void Mch_DB_RemoveGroup (long GrpCod);
-void Mch_DB_RemoveGroupsOfType (long GrpTypCod);
-
 void Mch_PlayPauseMatch (void);
 void Mch_ChangeNumColsMch (void);
 void Mch_ToggleVisResultsMchQst (void);
 void Mch_BackMatch (void);
 void Mch_ForwardMatch (void);
-
-unsigned Mch_DB_GetNumMchsInGame (long GamCod);
-unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod);
 
 bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (const struct Mch_Match *Match);
 
@@ -161,6 +159,5 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,boo
 void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd);
 
 unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
-void Mch_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
 #endif

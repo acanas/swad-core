@@ -44,7 +44,7 @@
 #include "swad_group.h"
 #include "swad_group_database.h"
 #include "swad_HTML.h"
-#include "swad_match.h"
+#include "swad_match_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_program.h"
@@ -3563,7 +3563,7 @@ static void Grp_RemoveGroupCompletely (void)
    Mch_DB_RemoveGroup (GrpDat.GrpCod);
 
    /***** Remove this group from all exam sessions *****/
-   Exa_DB_RemoveGrpAssociatedToExamSess (GrpDat.GrpCod);
+   Exa_DB_RemoveGroup (GrpDat.GrpCod);
 
    /***** Remove this group from all surveys *****/
    Svy_DB_RemoveGroup (GrpDat.GrpCod);

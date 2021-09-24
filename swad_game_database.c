@@ -511,19 +511,40 @@ unsigned Gam_DB_GetNumQstsGame (long GamCod)
 		  " WHERE GamCod=%ld",
 		  GamCod);
   }
+
 /*****************************************************************************/
 /************************ Get the questions of a game ************************/
 /*****************************************************************************/
 
-unsigned Gam_DB_GetGameQuestions (MYSQL_RES **mysql_res,long GamCod)
+unsigned Gam_DB_GetGameQuestionsBasic (MYSQL_RES **mysql_res,long GamCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get game questions",
-		   "SELECT QstInd,"	// row[0]
-			  "QstCod"	// row[1]
+		   "SELECT QstCod,"	// row[0]
+			  "QstInd"	// row[1]
 		    " FROM gam_questions"
 		   " WHERE GamCod=%ld"
 		   " ORDER BY QstInd",
+		   GamCod);
+  }
+
+/*****************************************************************************/
+/************************ Get the questions of a game ************************/
+/*****************************************************************************/
+
+unsigned Gam_DB_GetGameQuestionsFull (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions of a game",
+		   "SELECT gam_questions.QstCod,"	// row[0]
+			  "gam_questions.QstInd,"	// row[1]
+			  "tst_questions.AnsType,"	// row[2]
+			  "tst_questions.Shuffle"	// row[3]
+		    " FROM gam_questions,"
+		          "tst_questions"
+		   " WHERE gam_questions.GamCod=%ld"
+		     " AND gam_questions.QstCod=tst_questions.QstCod"
+		   " ORDER BY gam_questions.QstInd",
 		   GamCod);
   }
 

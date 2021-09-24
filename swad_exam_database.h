@@ -135,7 +135,7 @@ void Exa_DB_RemoveAllGrpsFromExa (long ExaCod);
 void Exa_DB_RemoveAllGrpsFromCrs (long CrsCod);
 void Exa_DB_RemoveAllGrpsFromSes (long SesCod);
 void Exa_DB_RemoveAllGrpsOfType (long GrpTypCod);
-void Exa_DB_RemoveGrpAssociatedToExamSess (long GrpCod);
+void Exa_DB_RemoveGroup (long GrpCod);
 
 //---------------------------------- Prints -----------------------------------
 long Exa_DB_CreatePrint (const struct ExaPrn_Print *Print);

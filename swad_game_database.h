@@ -61,7 +61,8 @@ void Gam_DB_LockTable (void);
 void Gam_DB_UnlockTable (void);
 
 unsigned Gam_DB_GetNumQstsGame (long GamCod);
-unsigned Gam_DB_GetGameQuestions (MYSQL_RES **mysql_res,long GamCod);
+unsigned Gam_DB_GetGameQuestionsBasic (MYSQL_RES **mysql_res,long GamCod);
+unsigned Gam_DB_GetGameQuestionsFull (MYSQL_RES **mysql_res,long GamCod);
 long Gam_DB_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 unsigned Gam_DB_GetQstIndFromQstCod (long GamCod,long QstCod);
 unsigned Gam_DB_GetMaxQuestionIndexInGame (long GamCod);

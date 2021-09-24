@@ -729,49 +729,49 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteNumQst (QstInd,"BIG_INDEX");
-   if (QuestionExists)
-      Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+      Tst_WriteNumQst (QstInd,"BIG_INDEX");
+      if (QuestionExists)
+	 Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Write question code *****/
    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+      HTM_TxtF ("%ld&nbsp;",Question->QstCod);
    HTM_TD_End ();
 
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   if (QuestionExists)
-      Tst_GetAndWriteTagsQst (Question->QstCod);
+      if (QuestionExists)
+	 Tst_GetAndWriteTagsQst (Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   if (QuestionExists)
-     {
-      /* Write stem */
-      Tst_WriteQstStem (Question->Stem,"TEST_TXT",
-			true);	// Visible
+      HTM_ARTICLE_Begin (Anchor);
+	 if (QuestionExists)
+	   {
+	    /* Write stem */
+	    Tst_WriteQstStem (Question->Stem,"TEST_TXT",
+			      true);	// Visible
 
-      /* Show media */
-      Med_ShowMedia (&Question->Media,
-		     "TEST_MED_EDIT_LIST_CONT",
-		     "TEST_MED_EDIT_LIST");
+	    /* Show media */
+	    Med_ShowMedia (&Question->Media,
+			   "TEST_MED_EDIT_LIST_CONT",
+			   "TEST_MED_EDIT_LIST");
 
-      /* Show feedback */
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
+	    /* Show feedback */
+	    Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
 
-      /* Show answers */
-      Tst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
-     }
-   else
-     {
-      HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
-      HTM_Txt (Txt_Question_removed);
-      HTM_SPAN_End ();
-     }
-   HTM_ARTICLE_End ();
+	    /* Show answers */
+	    Tst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
+	   }
+	 else
+	   {
+	    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+	       HTM_Txt (Txt_Question_removed);
+	    HTM_SPAN_End ();
+	   }
+      HTM_ARTICLE_End ();
    HTM_TD_End ();
   }
 
@@ -2770,7 +2770,7 @@ static void Tst_WriteIntAnsBank (struct Tst_Question *Question,
                                  __attribute__((unused)) const char *ClassFeedback)
   {
    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-   HTM_TxtF ("(%ld)",Question->Answer.Integer);
+      HTM_TxtF ("(%ld)",Question->Answer.Integer);
    HTM_SPAN_End ();
   }
 
@@ -2783,11 +2783,11 @@ static void Tst_WriteFltAnsBank (struct Tst_Question *Question,
                                  __attribute__((unused)) const char *ClassFeedback)
   {
    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-   HTM_Txt ("([");
-   HTM_Double (Question->Answer.FloatingPoint[0]);
-   HTM_Txt ("; ");
-   HTM_Double (Question->Answer.FloatingPoint[1]);
-   HTM_Txt ("])");
+      HTM_Txt ("([");
+      HTM_Double (Question->Answer.FloatingPoint[0]);
+      HTM_Txt ("; ");
+      HTM_Double (Question->Answer.FloatingPoint[1]);
+      HTM_Txt ("])");
    HTM_SPAN_End ();
   }
 
@@ -2801,9 +2801,9 @@ static void Tst_WriteTF_AnsBank (struct Tst_Question *Question,
   {
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-   HTM_Txt ("(");
-   Tst_WriteAnsTF (Question->Answer.TF);
-   HTM_Txt (")");
+      HTM_Txt ("(");
+      Tst_WriteAnsTF (Question->Answer.TF);
+      HTM_Txt (")");
    HTM_SPAN_End ();
   }
 
@@ -2825,42 +2825,42 @@ static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
    Tst_ChangeFormatAnswersFeedback (Question);
 
    HTM_TABLE_BeginPadding (2);
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-     {
-      HTM_TR_Begin (NULL);
+      for (NumOpt = 0;
+	   NumOpt < Question->Answer.NumOptions;
+	   NumOpt++)
+	{
+	 HTM_TR_Begin (NULL);
 
-      /* Put an icon that indicates whether the answer is correct or wrong */
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-      if (Question->Answer.Options[NumOpt].Correct)
-	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
-      HTM_TD_End ();
+	    /* Put an icon that indicates whether the answer is correct or wrong */
+	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	       if (Question->Answer.Options[NumOpt].Correct)
+		  Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
+	    HTM_TD_End ();
 
-      /* Write the number of option */
-      HTM_TD_Begin ("class=\"%s LT\"",ClassTxt);
-      HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
-      HTM_TD_End ();
+	    /* Write the number of option */
+	    HTM_TD_Begin ("class=\"%s LT\"",ClassTxt);
+	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
+	    HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"LT\"");
 
-      /* Write the text of the answer and the media */
-      HTM_DIV_Begin ("class=\"%s\"",ClassTxt);
-      HTM_Txt (Question->Answer.Options[NumOpt].Text);
-      Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
-		     "TEST_MED_EDIT_LIST_CONT",
-		     "TEST_MED_EDIT_LIST");
-      HTM_DIV_End ();
+	       /* Write the text of the answer and the media */
+	       HTM_DIV_Begin ("class=\"%s\"",ClassTxt);
+		  HTM_Txt (Question->Answer.Options[NumOpt].Text);
+		  Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
+				 "TEST_MED_EDIT_LIST_CONT",
+				 "TEST_MED_EDIT_LIST");
+	       HTM_DIV_End ();
 
-      /* Write the text of the feedback */
-      HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
-      HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
-      HTM_DIV_End ();
+	       /* Write the text of the feedback */
+	       HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
+		  HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
+	       HTM_DIV_End ();
 
-      HTM_TD_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+	 HTM_TR_End ();
+	}
    HTM_TABLE_End ();
   }
 
@@ -5890,4 +5890,22 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
       default:
 	 return 0;
      }
+  }
+
+/*****************************************************************************/
+/*********** Get suffled/not-shuffled answers indexes of question ************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                            const struct Tst_Question *Question)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions of a game",
+		   "SELECT AnsInd"	// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY %s",
+		   Question->QstCod,
+		   Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
+					      "AnsInd");
   }
