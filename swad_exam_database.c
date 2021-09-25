@@ -1175,7 +1175,7 @@ unsigned Exa_DB_GetQstAnswersFromSet (MYSQL_RES **mysql_res,long QstCod,bool Shu
 		             "AnsInd");
 
    if (!NumOptions)
-      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
+      Err_WrongAnswerExit ();
 
    return NumOptions;
   }

@@ -348,7 +348,6 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
 bool Tml_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
   {
    extern const char *Txt_The_post_no_longer_exists;
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
    /***** Trivial check 1: note/comment code should be > 0 *****/
    if (Cod <= 0)
@@ -361,7 +360,7 @@ bool Tml_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
 			   I can not fav/share my own notes/comments *****/
    if (!Gbl.Usrs.Me.Logged || Usr_ItsMe (UsrCod))
      {
-      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+      Err_NoPermission ();
       return false;
      }
 
@@ -375,7 +374,6 @@ bool Tml_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
 bool Tml_Usr_CheckIfICanRemove (long Cod,long UsrCod)
   {
    extern const char *Txt_The_post_no_longer_exists;
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 
    /***** Trivial check 1: note/comment code should be > 0 *****/
    if (Cod <= 0)
@@ -388,7 +386,7 @@ bool Tml_Usr_CheckIfICanRemove (long Cod,long UsrCod)
 			   I can only remove my own notes/comments *****/
    if (!Gbl.Usrs.Me.Logged || !Usr_ItsMe (UsrCod))
      {
-      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+      Err_NoPermission ();
       return false;
      }
 

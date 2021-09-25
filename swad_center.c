@@ -1621,7 +1621,7 @@ static void Ctr_ReceiveFormRequestOrCreateCtr (Ctr_Status_t Status)
 
    /* Get place */
    if ((Ctr_EditingCtr->PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
-      Ale_ShowAlert (Ale_ERROR,"Wrong place.");
+      Err_WrongPlaceExit ();
 
    /* Get center short name and full name */
    Par_GetParToText ("ShortName",Ctr_EditingCtr->ShrtName,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);

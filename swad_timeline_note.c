@@ -34,6 +34,7 @@
 #include "swad_browser_database.h"
 #include "swad_call_for_exam.h"
 #include "swad_course.h"
+#include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -1214,7 +1215,6 @@ void Tml_Not_RemoveNoteGbl (void)
 static void Tml_Not_RemoveNote (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_TIMELINE_Post_removed;
    struct Tml_Not_Note Not;
 
@@ -1232,7 +1232,7 @@ static void Tml_Not_RemoveNote (void)
    /***** Trivial check 2: Am I the author of this note *****/
    if (!Usr_ItsMe (Not.UsrCod))
      {
-      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+      Err_NoPermission ();
       return;
      }
 

@@ -88,4 +88,11 @@ unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
 					  long MchCod,unsigned QstInd);
 unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
 
+//------------------------------- Players -------------------------------------
+void Mch_DB_RemoveOldPlayers (void);
+
+//----------------------------- Match results ---------------------------------
+unsigned Mch_DB_GetMaxUsrs (long MchCod);
+unsigned Mch_DB_GetUsrsPerScore (MYSQL_RES **mysql_res,long MchCod);
+
 #endif

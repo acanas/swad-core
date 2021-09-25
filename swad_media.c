@@ -167,6 +167,8 @@ static void Med_AlertThirdPartyCookies (void);
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
                                              const char *MIMEType);
 
+static void Med_ErrorProcessingMediaFile (void);
+
 /*****************************************************************************/
 /********************** Media (image/video) constructor **********************/
 /*****************************************************************************/
@@ -839,7 +841,6 @@ static bool Med_DetectIfAnimated (struct Med_Media *Media,
 static void Med_ProcessJPG (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1])
   {
-   extern const char *Txt_The_file_could_not_be_processed_successfully;
    char PathFileJPGTmp[PATH_MAX + 1];	// Full name of temporary processed file
 
    /***** Convert original media to temporary JPG processed file
@@ -856,7 +857,7 @@ static void Med_ProcessJPG (struct Med_Media *Media,
 	 unlink (PathFileJPGTmp);
 
       /* Show error alert */
-      Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+      Med_ErrorProcessingMediaFile ();
      }
   }
 
@@ -867,7 +868,6 @@ static void Med_ProcessJPG (struct Med_Media *Media,
 static void Med_ProcessGIF (struct Med_Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1])
   {
-   extern const char *Txt_The_file_could_not_be_processed_successfully;
    extern const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X;
    struct stat FileStatus;
    char PathFilePNGTmp[PATH_MAX + 1];	// Full name of temporary processed file
@@ -899,7 +899,7 @@ static void Med_ProcessGIF (struct Med_Media *Media,
 		  unlink (PathFilePNGTmp);
 
 	       /* Show error alert */
-	       Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+               Med_ErrorProcessingMediaFile ();
 	      }
 	    else					// Success
 	       Media->Status = Med_PROCESSED;
@@ -911,7 +911,7 @@ static void Med_ProcessGIF (struct Med_Media *Media,
 	       unlink (PathFilePNGTmp);
 
 	    /* Show error alert */
-	    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+            Med_ErrorProcessingMediaFile ();
 	   }
 	}
       else	// Size exceeded
@@ -925,7 +925,7 @@ static void Med_ProcessGIF (struct Med_Media *Media,
      }
    else // Error getting file data
       /* Show error alert */
-      Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+      Med_ErrorProcessingMediaFile ();
   }
 
 /*****************************************************************************/
@@ -935,7 +935,6 @@ static void Med_ProcessGIF (struct Med_Media *Media,
 static void Med_ProcessVideo (struct Med_Media *Media,
 			      const char PathFileOrg[PATH_MAX + 1])
   {
-   extern const char *Txt_The_file_could_not_be_processed_successfully;
    extern const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X;
    struct stat FileStatus;
    char PathFileTmp[PATH_MAX + 1];	// Full name of temporary processed file
@@ -954,7 +953,7 @@ static void Med_ProcessVideo (struct Med_Media *Media,
 		   Media->Name,Med_Extensions[Media->Type]);
 	 if (rename (PathFileOrg,PathFileTmp))	// Fail
 	    /* Show error alert */
-	    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+            Med_ErrorProcessingMediaFile ();
 	 else						// Success
 	    Media->Status = Med_PROCESSED;
 	}
@@ -969,7 +968,7 @@ static void Med_ProcessVideo (struct Med_Media *Media,
      }
    else // Error getting file data
       /* Show error alert */
-      Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+      Med_ErrorProcessingMediaFile ();
   }
 
 /*****************************************************************************/
@@ -1364,7 +1363,7 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 				     const char *Extension)
   {
    char PathFileTmp[PATH_MAX + 1];	// Full name of temporary processed file
-   char PathFile[PATH_MAX + 1];	// Full name of definitive processed file
+   char PathFile[PATH_MAX + 1];		// Full name of definitive processed file
 
    /***** Temporary processed media file *****/
    snprintf (PathFileTmp,sizeof (PathFileTmp),"%s/%s.%s",
@@ -1377,7 +1376,7 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
    /***** Move JPG file *****/
    if (rename (PathFileTmp,PathFile))	// Fail
      {
-      Ale_ShowAlert (Ale_ERROR,"Can not move file.");
+      Med_ErrorProcessingMediaFile ();
       return false;
      }
 
@@ -2113,3 +2112,15 @@ static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
 
    return Med_TYPE_NONE;
   }
+
+/*****************************************************************************/
+/******* Write error message when a media file could not be processed ********/
+/*****************************************************************************/
+
+static void Med_ErrorProcessingMediaFile (void)
+  {
+   extern const char *Txt_The_file_could_not_be_processed_successfully;
+
+   Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+  }
+

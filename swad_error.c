@@ -391,6 +391,11 @@ void Err_WrongAnswerIndexExit (void)
    Err_ShowErrorAndExit ("Wrong answer index.");
   }
 
+void Err_WrongAnswerTypeExit (void)
+  {
+   Err_ShowErrorAndExit ("Wrong answer type.");
+  }
+
 /*****************************************************************************/
 /*********** Write error message and exit when wrong exam session ************/
 /*****************************************************************************/
@@ -514,6 +519,17 @@ void Err_WrongUserExit (void)
    extern const char *Txt_The_user_does_not_exist;
 
    Err_ShowErrorAndExit (Txt_The_user_does_not_exist);
+  }
+
+/*****************************************************************************/
+/******** Write error message when no permission to perform an action ********/
+/*****************************************************************************/
+
+void Err_NoPermission (void)
+  {
+   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
+
+   Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
   }
 
 /*****************************************************************************/

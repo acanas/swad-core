@@ -2699,7 +2699,7 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 		   Shuffle ? "RAND()" :
 		             "AnsInd");
    if (!Question->Answer.NumOptions)
-      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
+      Err_WrongAnswerExit ();
   }
 
 /*****************************************************************************/

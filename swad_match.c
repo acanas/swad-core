@@ -198,7 +198,7 @@ static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
 static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
                                          struct Tst_Question *Question,
                                          const char *Class,bool ShowResult);
-static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
+static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update);
 
@@ -218,7 +218,6 @@ static void Mch_PutBigButtonClose (void);
 
 static void Mch_ShowWaitImage (const char *Txt);
 
-static void Mch_DB_RemoveOldPlayers (void);
 static void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);
 static void Mch_DB_SetMatchAsNotBeingPlayed (long MchCod);
 static bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod);
@@ -2528,8 +2527,7 @@ static void Mch_ShowRightColumnStd (struct Mch_Match *Match,
 		 {
 		  if (Match->Status.Showing == Mch_ANSWERS)	// Teacher's screen is showing question answers
 		     /* Show current question and possible answers */
-		     if (!Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update))
-			Ale_ShowAlert (Ale_ERROR,"Wrong question.");
+		     Mch_ShowQuestionAndAnswersStd (Match,UsrAnswer,Update);
 		 }
 	       else
 		  Ale_ShowAlert (Ale_ERROR,"You can not join this match.");
@@ -2871,7 +2869,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 
 	 /* Write stem */
 	 Tst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
-			   true);	// Visible
+			   true);		// Visible
 
 	 /* Show media */
 	 Med_ShowMedia (&Question.Media,
@@ -2882,7 +2880,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 	 switch (Match->Status.Showing)
 	   {
 	    case Mch_ANSWERS:
-	       if (Match->Status.Playing)			// Match is being played
+	       if (Match->Status.Playing)		// Match is being played
 		  /* Write answers */
 		  Mch_WriteAnswersMatchResult (Match,
 					       &Question,
@@ -2896,7 +2894,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 	       Mch_WriteAnswersMatchResult (Match,
 					    &Question,
 					    "MCH_TCH_ANS",
-					    true);		// Show result
+					    true);	// Show result
 	       break;
 	    default:
 	       /* Don't write anything */
@@ -2927,7 +2925,7 @@ static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
 				   Question,
 				   Class,ShowResult);
    else
-      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+      Err_WrongAnswerTypeExit ();
   }
 
 /*****************************************************************************/
@@ -3021,9 +3019,8 @@ static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
 /*****************************************************************************/
 /***** Show question and its answers when playing a match (as a student) *****/
 /*****************************************************************************/
-// Return true on valid question, false on invalid question
 
-static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
+static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
 					   Mch_Update_t Update)
   {
@@ -3079,8 +3076,6 @@ static bool Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 
    /***** End table *****/
    HTM_TABLE_End ();
-
-   return true;
   }
 
 /*****************************************************************************/
@@ -3114,25 +3109,10 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    NumRowsPerScorePoint = (double) Mch_NUM_ROWS_SCORE / Range;
 
    /***** Get maximum number of users *****/
-   MaxUsrs = DB_QuerySELECTUnsigned ("can not get max users",
-				     "SELECT MAX(NumUsrs)"
-				      " FROM (SELECT COUNT(*) AS NumUsrs"
-					      " FROM mch_results"
-					     " WHERE MchCod=%ld"
-					     " GROUP BY Score"
-					     " ORDER BY Score) AS Scores",
-				     Match->MchCod);
+   MaxUsrs = Mch_DB_GetMaxUsrs (Match->MchCod);
 
    /***** Get scores from database *****/
-   NumScores = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get scores",
-		   "SELECT Score,"		// row[0]
-			  "COUNT(*) AS NumUsrs"	// row[1]
-		    " FROM mch_results"
-		   " WHERE MchCod=%ld"
-		   " GROUP BY Score"
-		   " ORDER BY Score DESC",
-		   Match->MchCod);
+   NumScores = Mch_DB_GetUsrsPerScore (&mysql_res,Match->MchCod);
 
    /***** Begin table ****/
    HTM_TABLE_BeginWide ();
@@ -3387,25 +3367,6 @@ static void Mch_ShowWaitImage (const char *Txt)
    HTM_DIV_Begin ("class=\"MCH_WAIT_CONT\"");
       Ico_PutIcon ("Spin-1s-200px.gif",Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/**************************** Remove old players *****************************/
-/*****************************************************************************/
-
-static void Mch_DB_RemoveOldPlayers (void)
-  {
-   /***** Delete matches not being played by teacher *****/
-   DB_QueryDELETE ("can not update matches as not being played",
-		   "DELETE FROM mch_playing"
-		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
-
-   /***** Delete players (students) who have left matches *****/
-   DB_QueryDELETE ("can not update match players",
-		   "DELETE FROM mch_players"
-		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
   }
 
 /*****************************************************************************/

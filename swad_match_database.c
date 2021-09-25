@@ -639,3 +639,55 @@ unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
 		   " WHERE MchCod=%ld",
 		   MchCod);
   }
+
+/*****************************************************************************/
+/**************************** Remove old players *****************************/
+/*****************************************************************************/
+
+void Mch_DB_RemoveOldPlayers (void)
+  {
+   /***** Delete matches not being played by teacher *****/
+   DB_QueryDELETE ("can not update matches as not being played",
+		   "DELETE FROM mch_playing"
+		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
+
+   /***** Delete players (students) who have left matches *****/
+   DB_QueryDELETE ("can not update match players",
+		   "DELETE FROM mch_players"
+		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
+  }
+
+/*****************************************************************************/
+/********* Get maximum number of users per score in match results ************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetMaxUsrs (long MchCod)
+  {
+   return DB_QuerySELECTUnsigned ("can not get max users",
+				  "SELECT MAX(NumUsrs)"
+				   " FROM (SELECT COUNT(*) AS NumUsrs"
+					   " FROM mch_results"
+					  " WHERE MchCod=%ld"
+					  " GROUP BY Score"
+					  " ORDER BY Score) AS Scores",
+				  MchCod);
+  }
+
+/*****************************************************************************/
+/************** Get number of users per score in match results ***************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetUsrsPerScore (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get scores",
+		   "SELECT Score,"		// row[0]
+			  "COUNT(*) AS NumUsrs"	// row[1]
+		    " FROM mch_results"
+		   " WHERE MchCod=%ld"
+		   " GROUP BY Score"
+		   " ORDER BY Score DESC",
+		   MchCod);
+  }

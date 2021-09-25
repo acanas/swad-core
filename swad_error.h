@@ -81,6 +81,7 @@ void Err_WrongQuestionExit (void);
 void Err_WrongQuestionIndexExit (void);
 void Err_WrongAnswerExit (void);
 void Err_WrongAnswerIndexExit (void);
+void Err_WrongAnswerTypeExit (void);
 void Err_WrongExamSessionExit (void);
 void Err_WrongGameExit (void);
 void Err_WrongMatchExit (void);
@@ -96,6 +97,7 @@ void Err_WrongMessageExit (void);
 void Err_WrongMailDomainExit (void);
 void Err_WrongRoleExit (void);
 void Err_WrongUserExit (void);
+void Err_NoPermission (void);
 void Err_NoPermissionExit (void);
 void Err_ShowErrorAndExit (const char *Txt);
 

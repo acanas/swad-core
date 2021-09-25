@@ -2992,23 +2992,22 @@ static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
 
 static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
   {
-   unsigned long NumRows;
+   unsigned NumAnswers;
 
    /***** Get answers of a question from database *****/
-   NumRows = DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			     "SELECT AnsInd,"	// row[0]
-			            "NumUsrs,"	// row[1]
-			            "Answer"	// row[2]
-			      " FROM svy_answers"
-			     " WHERE QstCod=%ld"
-			     " ORDER BY AnsInd",
-			     QstCod);
+   NumAnswers = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd,"	// row[0]
+			  "NumUsrs,"	// row[1]
+			  "Answer"	// row[2]
+		    " FROM svy_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY AnsInd",
+		   QstCod);
+   if (!NumAnswers)
+      Err_WrongAnswerExit ();
 
-   /***** Count number of rows of result *****/
-   if (NumRows == 0)
-      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
-
-   return (unsigned) NumRows;
+   return NumAnswers;
   }
 
 /*****************************************************************************/

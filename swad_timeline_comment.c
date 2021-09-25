@@ -956,7 +956,6 @@ void Tml_Com_RemoveComGbl (void)
 static void Tml_Com_RemoveComm (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
-   extern const char *Txt_You_dont_have_permission_to_perform_this_action;
    extern const char *Txt_Comment_removed;
    struct Tml_Com_Comment Com;
 
@@ -979,7 +978,7 @@ static void Tml_Com_RemoveComm (void)
    if (!Usr_ItsMe (Com.UsrCod))
      {
       Med_MediaDestructor (&Com.Content.Media);
-      Ale_ShowAlert (Ale_ERROR,Txt_You_dont_have_permission_to_perform_this_action);
+      Err_NoPermission ();
       return;
      }
 
