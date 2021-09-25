@@ -218,11 +218,6 @@ static void Mch_PutBigButtonClose (void);
 
 static void Mch_ShowWaitImage (const char *Txt);
 
-static void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);
-static void Mch_DB_SetMatchAsNotBeingPlayed (long MchCod);
-static bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod);
-static void Mch_DB_GetNumPlayers (struct Mch_Match *Match);
-
 static void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
                                                   const struct Mch_UsrAnswer *UsrAnswer);
 static void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
@@ -1517,7 +1512,7 @@ void Mch_ResumeMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -1713,7 +1708,7 @@ static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match)
       Mch_DB_UpdateMatchAsBeingPlayed (Match->MchCod);
    else				// Match is paused, not being played
       /* Update match as not being played */
-      Mch_DB_SetMatchAsNotBeingPlayed (Match->MchCod);
+      Mch_DB_RemoveMatchFromBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -1816,7 +1811,7 @@ void Mch_PlayPauseMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -1853,7 +1848,7 @@ void Mch_ChangeNumColsMch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -1889,7 +1884,7 @@ void Mch_ToggleVisResultsMchQst (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -1924,7 +1919,7 @@ void Mch_BackMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -1956,7 +1951,7 @@ void Mch_ForwardMatch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -2293,7 +2288,7 @@ static void Mch_WriteNumRespondersQst (struct Mch_Match *Match)
 	 if (Match->Status.Playing)	// Match is being played
 	   {
 	    /* Get current number of players */
-	    Mch_DB_GetNumPlayers (Match);
+	    Match->Status.NumPlayers = Mch_DB_GetNumPlayers (Match->MchCod);
 
 	    /* Show current number of players */
 	    HTM_TxtF ("/%u",Match->Status.NumPlayers);
@@ -2609,12 +2604,12 @@ static void Mch_PutMatchControlButtons (const struct Mch_Match *Match)
 	   {
 	    switch (Match->Status.Showing)
 	      {
-	       case Mch_START:		// Match just started, before first question
+	       case Mch_START:	// Match just started, before first question
 		  /* Put button to start playing match */
 		  Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
 				    Mch_ICON_PLAY,Txt_Start);
 		  break;
-	       case Mch_END:			// Match over
+	       case Mch_END:	// Match over
 		  /* Put disabled button to play match */
 		  Mch_PutBigButtonHidden (Mch_ICON_PLAY);
 		  break;
@@ -3370,69 +3365,6 @@ static void Mch_ShowWaitImage (const char *Txt)
   }
 
 /*****************************************************************************/
-/********************** Update match as being played *************************/
-/*****************************************************************************/
-
-static void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod)
-  {
-   /***** Insert match as being played *****/
-   DB_QueryREPLACE ("can not set match as being played",
-		    "REPLACE mch_playing"
-		    " (MchCod)"
-		     " VALUE"
-		     " (%ld)",
-		    MchCod);
-  }
-
-/*****************************************************************************/
-/**************** Update match as paused, not being played *******************/
-/*****************************************************************************/
-
-static void Mch_DB_SetMatchAsNotBeingPlayed (long MchCod)
-  {
-   /***** Delete all match players ******/
-   DB_QueryDELETE ("can not update match players",
-		    "DELETE FROM mch_players"
-		    " WHERE MchCod=%ld",
-		    MchCod);
-
-   /***** Delete match as being played ******/
-   DB_QueryDELETE ("can not set match as not being played",
-		    "DELETE FROM mch_playing"
-		    " WHERE MchCod=%ld",
-		    MchCod);
-  }
-
-/*****************************************************************************/
-/*********************** Get if match is being played ************************/
-/*****************************************************************************/
-
-static bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod)
-  {
-   /***** Get if a match is being played or not *****/
-   return (DB_QueryCOUNT ("can not get if match is being played",
-			  "SELECT COUNT(*)"
-			   " FROM mch_playing"
-			  " WHERE MchCod=%ld",
-			  MchCod) != 0);
-  }
-
-/*****************************************************************************/
-/*************************** Get number of players ***************************/
-/*****************************************************************************/
-
-static void Mch_DB_GetNumPlayers (struct Mch_Match *Match)
-  {
-   /***** Get number of players who are playing a match *****/
-   Match->Status.NumPlayers = (unsigned)
-   DB_QueryCOUNT ("can not get number of players",
-		  "SELECT COUNT(*)"
-		   " FROM mch_players"
-		  " WHERE MchCod=%ld",
-		  Match->MchCod);
-  }
-
-/*****************************************************************************/
 /******************* Register me as a player in a match **********************/
 /*****************************************************************************/
 // Return true on success
@@ -3568,7 +3500,7 @@ void Mch_StartCountdown (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();
@@ -3602,7 +3534,7 @@ void Mch_RefreshMatchTch (void)
    /***** Remove old players.
           This function must be called by a teacher
           before getting match status. *****/
-   Mch_DB_RemoveOldPlayers ();
+   Mch_DB_RemoveOldPlaying ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Mch_GetMchCodBeingPlayed ();

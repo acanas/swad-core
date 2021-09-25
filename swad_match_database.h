@@ -81,15 +81,21 @@ void Mch_DB_CreateQstIndexes (long MchCod,unsigned QstInd,
 void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
 		        char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1]);
 
+//-------------------------- Matches being played -----------------------------
+void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);
+
+bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod);
+unsigned Mch_DB_GetNumPlayers (long MchCod);
+
+void Mch_DB_RemoveMatchFromBeingPlayed (long MchCod);
+void Mch_DB_RemoveOldPlaying (void);
+
 //----------------------------- Elapsed times ---------------------------------
 void Mch_DB_UpdateElapsedTimeInQuestion (long MchCod,long QstInd);
 
 unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
 					  long MchCod,unsigned QstInd);
 unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
-
-//------------------------------- Players -------------------------------------
-void Mch_DB_RemoveOldPlayers (void);
 
 //----------------------------- Match results ---------------------------------
 unsigned Mch_DB_GetMaxUsrs (long MchCod);

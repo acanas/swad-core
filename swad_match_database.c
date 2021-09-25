@@ -590,6 +590,85 @@ void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
   }
 
 /*****************************************************************************/
+/********************** Update match as being played *************************/
+/*****************************************************************************/
+
+void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod)
+  {
+   DB_QueryREPLACE ("can not set match as being played",
+		    "REPLACE mch_playing"
+		    " (MchCod)"
+		     " VALUE"
+		     " (%ld)",
+		    MchCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get if match is being played ************************/
+/*****************************************************************************/
+
+bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod)
+  {
+   return (DB_QueryCOUNT ("can not get if match is being played",
+			  "SELECT COUNT(*)"
+			   " FROM mch_playing"
+			  " WHERE MchCod=%ld",
+			  MchCod) != 0);
+  }
+
+/*****************************************************************************/
+/************** Get number of players who are playing a match ****************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetNumPlayers (long MchCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of players",
+		  "SELECT COUNT(*)"
+		   " FROM mch_players"
+		  " WHERE MchCod=%ld",
+		  MchCod);
+  }
+
+/*****************************************************************************/
+/**************** Update match as paused, not being played *******************/
+/*****************************************************************************/
+
+void Mch_DB_RemoveMatchFromBeingPlayed (long MchCod)
+  {
+   /***** Delete all match players ******/
+   DB_QueryDELETE ("can not update match players",
+		    "DELETE FROM mch_players"
+		    " WHERE MchCod=%ld",
+		    MchCod);
+
+   /***** Delete match as being played ******/
+   DB_QueryDELETE ("can not set match as not being played",
+		    "DELETE FROM mch_playing"
+		    " WHERE MchCod=%ld",
+		    MchCod);
+  }
+
+/*****************************************************************************/
+/**************************** Remove old players *****************************/
+/*****************************************************************************/
+
+void Mch_DB_RemoveOldPlaying (void)
+  {
+   /***** Delete matches not being played by teacher *****/
+   DB_QueryDELETE ("can not update matches as not being played",
+		   "DELETE FROM mch_playing"
+		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
+
+   /***** Delete players (students) who have left matches *****/
+   DB_QueryDELETE ("can not update match players",
+		   "DELETE FROM mch_players"
+		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
+  }
+
+/*****************************************************************************/
 /********** Update elapsed time in current question (by a teacher) ***********/
 /*****************************************************************************/
 
@@ -625,7 +704,6 @@ unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
 		   QstInd);
   }
 
-
 /*****************************************************************************/
 /*********************** Get elapsed time in a match *************************/
 /*****************************************************************************/
@@ -638,25 +716,6 @@ unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
 		    " FROM mch_times"
 		   " WHERE MchCod=%ld",
 		   MchCod);
-  }
-
-/*****************************************************************************/
-/**************************** Remove old players *****************************/
-/*****************************************************************************/
-
-void Mch_DB_RemoveOldPlayers (void)
-  {
-   /***** Delete matches not being played by teacher *****/
-   DB_QueryDELETE ("can not update matches as not being played",
-		   "DELETE FROM mch_playing"
-		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
-
-   /***** Delete players (students) who have left matches *****/
-   DB_QueryDELETE ("can not update match players",
-		   "DELETE FROM mch_players"
-		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
   }
 
 /*****************************************************************************/
