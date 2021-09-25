@@ -3522,7 +3522,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
      {
       /* Check number of answers */
       if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
-	 Err_ShowErrorAndExit ("Wrong number of answers.");
+         Err_WrongAnswerExit ();
 
       /* Write one row for each answer */
       HTM_TABLE_BeginPadding (5);

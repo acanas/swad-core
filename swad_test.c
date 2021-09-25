@@ -2088,7 +2088,7 @@ void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
       else
          ErrorInIndex = true;
       if (ErrorInIndex)
-         Err_ShowErrorAndExit ("Wrong index of answer.");
+         Err_WrongAnswerIndexExit ();
 
       snprintf (StrInd,sizeof (StrInd),NumOpt ? ",%u" :
 						"%u",Index);
@@ -4069,9 +4069,9 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
    unsigned AnsType;
 
    if (sscanf (UnsignedStr,"%u",&AnsType) != 1)
-      Err_ShowErrorAndExit ("Wrong type of answer. 2");
+      Err_WrongAnswerExit ();
    if (AnsType >= Tst_NUM_ANS_TYPES)
-      Err_ShowErrorAndExit ("Wrong type of answer. 3");
+      Err_WrongAnswerExit ();
    return (Tst_AnswerType_t) AnsType;
   }
 

@@ -26,27 +26,13 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
-// #include "swad_date.h"
 #include "swad_error.h"
-// #include "swad_form.h"
-// #include "swad_game.h"
-// #include "swad_game_database.h"
 #include "swad_global.h"
-// #include "swad_group_database.h"
-// #include "swad_HTML.h"
-// #include "swad_match.h"
 #include "swad_match_database.h"
-// #include "swad_match_result.h"
-// #include "swad_role.h"
-// #include "swad_setting.h"
-// #include "swad_test.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -220,6 +206,21 @@ unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod)
 		           " WHERE CrsCod='%ld')",
 		 MchCod,
 		 Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Get start of first match and end of last match in a game **********/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get game data",
+		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
+		   " FROM mch_matches"
+		   " WHERE GamCod=%ld",
+		   GamCod);
   }
 
 /*****************************************************************************/
@@ -539,10 +540,139 @@ void Mch_DB_RemoveGroupsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/******** Remove answers of a question from all matches of this game *********/
+/*************** Get the questions of a match from database ******************/
 /*****************************************************************************/
 
-void Mch_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
+unsigned Mch_DB_GetMatchQuestions (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions and indexes of options"
+			     " of a match result",
+		   "SELECT gam_questions.QstCod,"	// row[0]
+			  "gam_questions.QstInd,"	// row[1]
+			  "mch_indexes.Indexes"		// row[2]
+		    " FROM mch_matches,"
+		          "gam_questions,"
+		          "mch_indexes"
+		   " WHERE mch_matches.MchCod=%ld"
+		     " AND mch_matches.GamCod=gam_questions.GamCod"
+		     " AND mch_matches.MchCod=mch_indexes.MchCod"
+		     " AND gam_questions.QstInd=mch_indexes.QstInd"
+		   " ORDER BY gam_questions.QstInd",
+		   MchCod);
+  }
+
+/*****************************************************************************/
+/******************** Update my answer to match question *********************/
+/*****************************************************************************/
+
+void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
+                                           const struct Mch_UsrAnswer *UsrAnswer)
+  {
+   DB_QueryREPLACE ("can not register your answer to the match question",
+		    "REPLACE mch_answers"
+		    " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
+		    " VALUES"
+		    " (%ld,%ld,%u,%d,%d)",
+		    Match->MchCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Match->Status.QstInd,
+		    UsrAnswer->NumOpt,
+		    UsrAnswer->AnsInd);
+  }
+
+/*****************************************************************************/
+/*** Update indexes of user answers to questions greater than a given one ****/
+/*****************************************************************************/
+
+void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd)
+  {
+   DB_QueryUPDATE ("can not update indexes of questions",
+		   "UPDATE mch_answers,"
+		          "mch_matches"
+		     " SET mch_answers.QstInd=mch_answers.QstInd-1"
+		   " WHERE mch_matches.GamCod=%ld"
+		     " AND mch_matches.MchCod=mch_answers.MchCod"
+		     " AND mch_answers.QstInd>%u",
+		   GamCod,
+		   QstInd);
+  }
+
+/*****************************************************************************/
+/******************** Get user's answer to a match question ******************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
+                                long MchCod,long UsrCod,unsigned QstInd)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's answer to a match question",
+		   "SELECT NumOpt,"	// row[0]
+			  "AnsInd"	// row[1]
+		    " FROM mch_answers"
+		   " WHERE MchCod=%ld"
+		     " AND UsrCod=%ld"
+		     " AND QstInd=%u",
+		   MchCod,
+		   UsrCod,
+		   QstInd);
+  }
+
+/*****************************************************************************/
+/********** Get number of users who answered a question in a match ***********/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who answered a question",
+		  "SELECT COUNT(*)"
+		   " FROM mch_answers"
+		  " WHERE MchCod=%ld"
+		    " AND QstInd=%u",
+		  MchCod,
+		  QstInd);
+  }
+
+/*****************************************************************************/
+/*** Get number of users who have chosen a given answer of a game question ***/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who have chosen an answer",
+		  "SELECT COUNT(*)"
+		   " FROM mch_answers"
+		  " WHERE MchCod=%ld"
+		    " AND QstInd=%u"
+		    " AND AnsInd=%u",
+		  MchCod,
+		  QstInd,
+		  AnsInd);
+  }
+
+/*****************************************************************************/
+/******************* Remove my answer to match question **********************/
+/*****************************************************************************/
+
+void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
+  {
+   DB_QueryDELETE ("can not remove your answer to the match question",
+		    "DELETE FROM mch_answers"
+		    " WHERE MchCod=%ld"
+		      " AND UsrCod=%ld"
+		      " AND QstInd=%u",
+		    Match->MchCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    Match->Status.QstInd);
+  }
+
+/*****************************************************************************/
+/***** Remove users' answers of a question from all matches of this game *****/
+/*****************************************************************************/
+
+void Mch_DB_RemUsrAnswersOfAQuestion (long GamCod,unsigned QstInd)
   {
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM mch_answers"
@@ -601,6 +731,21 @@ void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod)
 		     " VALUE"
 		     " (%ld)",
 		    MchCod);
+  }
+
+/*****************************************************************************/
+/******************* Register me as a player in a match **********************/
+/*****************************************************************************/
+
+void Mch_DB_RegisterMeAsPlayerInMatch (long MchCod)
+  {
+   DB_QueryREPLACE ("can not insert match player",
+		    "REPLACE mch_players"
+		    " (MchCod,UsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+		    MchCod,
+		    Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -716,6 +861,23 @@ unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod)
 		    " FROM mch_times"
 		   " WHERE MchCod=%ld",
 		   MchCod);
+  }
+
+/*****************************************************************************/
+/************ Get number of users who have played a given match **************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod)
+  {
+   /***** Get number of users who have played the match
+          (users who have a result for this match, even blank result)
+          from database *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who have played a match",
+		  "SELECT COUNT(*)"
+		   " FROM mch_results"
+		  " WHERE MchCod=%ld",
+		  MchCod);
   }
 
 /*****************************************************************************/

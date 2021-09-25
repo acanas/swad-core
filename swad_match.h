@@ -152,12 +152,6 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print);
 
 void Mch_ComputeScore (struct MchPrn_Print *Print);
 
-unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
-unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
-
-void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd);
-
-unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 
 #endif

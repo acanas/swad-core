@@ -218,12 +218,6 @@ static void Mch_PutBigButtonClose (void);
 
 static void Mch_ShowWaitImage (const char *Txt);
 
-static void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
-                                                  const struct Mch_UsrAnswer *UsrAnswer);
-static void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
-
-static unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod);
-
 /*****************************************************************************/
 /*************** Set/Get match code of the match being played ****************/
 /*****************************************************************************/
@@ -1672,7 +1666,7 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
    /***** Get indexes for a question from database *****/
    Mch_DB_GetIndexes (MchCod,QstInd,StrIndexesOneQst);
    if (!StrIndexesOneQst[0])
-      Err_ShowErrorAndExit ("No indexes found for a question.");
+      Err_WrongAnswerIndexExit ();
 
    /***** Get indexes from string *****/
    TstPrn_GetIndexesFromStr (StrIndexesOneQst,Indexes);
@@ -3295,7 +3289,7 @@ static unsigned Mch_GetParamNumOpt (void)
 
    NumOpt = Par_GetParToLong ("NumOpt");
    if (NumOpt < 0)
-      Err_ShowErrorAndExit ("Wrong number of option.");
+      Err_WrongAnswerExit ();
 
    return (unsigned) NumOpt;
   }
@@ -3388,13 +3382,7 @@ bool Mch_RegisterMeAsPlayerInMatch (struct Mch_Match *Match)
       return false;
 
    /***** Insert me as match player *****/
-   DB_QueryREPLACE ("can not insert match player",
-		    "REPLACE mch_players"
-		    " (MchCod,UsrCod)"
-		    " VALUES"
-		    " (%ld,%ld)",
-		    Match->MchCod,
-		    Gbl.Usrs.Me.UsrDat.UsrCod);
+   Mch_DB_RegisterMeAsPlayerInMatch (Match->MchCod);
    return true;
   }
 
@@ -3608,35 +3596,23 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
 
    /***** Set default values for number of option and answer index *****/
    UsrAnswer->NumOpt = -1;	// < 0 ==> no answer selected
    UsrAnswer->AnsInd = -1;	// < 0 ==> no answer selected
 
    /***** Get student's answer *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's answer to a match question",
-		   "SELECT NumOpt,"	// row[0]
-			  "AnsInd"	// row[1]
-		    " FROM mch_answers"
-		   " WHERE MchCod=%ld"
-		     " AND UsrCod=%ld"
-		     " AND QstInd=%u",
-		   MchCod,
-		   UsrCod,
-		   QstInd);
-   if (NumRows) // Answer found...
+   if (Mch_DB_GetUsrAnsToQst (&mysql_res,MchCod,UsrCod,QstInd)) // Answer found...
      {
       row = mysql_fetch_row (mysql_res);
 
       /***** Get number of option index (row[0]) *****/
       if (sscanf (row[0],"%d",&(UsrAnswer->NumOpt)) != 1)
-	 Err_ShowErrorAndExit ("Error when getting student's answer to a match question.");
+         Err_WrongAnswerExit ();
 
       /***** Get answer index (row[1]) *****/
       if (sscanf (row[1],"%d",&(UsrAnswer->AnsInd)) != 1)
-	 Err_ShowErrorAndExit ("Error when getting student's answer to a match question.");
+         Err_WrongAnswerIndexExit ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3732,41 +3708,6 @@ void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
   }
 
 /*****************************************************************************/
-/******************** Update my answer to match question *********************/
-/*****************************************************************************/
-
-static void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
-                                                  const struct Mch_UsrAnswer *UsrAnswer)
-  {
-   DB_QueryREPLACE ("can not register your answer to the match question",
-		    "REPLACE mch_answers"
-		    " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
-		    " VALUES"
-		    " (%ld,%ld,%u,%d,%d)",
-		    Match->MchCod,
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Match->Status.QstInd,
-		    UsrAnswer->NumOpt,
-		    UsrAnswer->AnsInd);
-  }
-
-/*****************************************************************************/
-/******************* Remove my answer to match question **********************/
-/*****************************************************************************/
-
-static void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match)
-  {
-   DB_QueryDELETE ("can not remove your answer to the match question",
-		    "DELETE FROM mch_answers"
-		    " WHERE MchCod=%ld"
-		      " AND UsrCod=%ld"
-		      " AND QstInd=%u",
-		    Match->MchCod,
-		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Match->Status.QstInd);
-  }
-
-/*****************************************************************************/
 /*************** Get the questions of a match from database ******************/
 /*****************************************************************************/
 
@@ -3779,19 +3720,8 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a match result *****/
-   Print->NumQsts.All = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-			      " of a match result",
-		   "SELECT gam_questions.QstCod,"	// row[0]
-			  "gam_questions.QstInd,"	// row[1]
-			  "mch_indexes.Indexes"	// row[2]
-		    " FROM mch_matches,gam_questions,mch_indexes"
-		   " WHERE mch_matches.MchCod=%ld"
-		     " AND mch_matches.GamCod=gam_questions.GamCod"
-		     " AND mch_matches.MchCod=mch_indexes.MchCod"
-		     " AND gam_questions.QstInd=mch_indexes.QstInd"
-		   " ORDER BY gam_questions.QstInd",
-		   Print->MchCod);
+   Print->NumQsts.All = Mch_DB_GetMatchQuestions (&mysql_res,Print->MchCod);
+
    for (NumQst = 0, Print->NumQsts.NotBlank = 0;
 	NumQst < Print->NumQsts.All;
 	NumQst++)
@@ -3856,61 +3786,6 @@ void Mch_ComputeScore (struct MchPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/********** Get number of users who answered a question in a match ***********/
-/*****************************************************************************/
-
-unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd)
-  {
-   /***** Get number of users who answered
-          a question in a match from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users who answered a question",
-		  "SELECT COUNT(*)"
-		   " FROM mch_answers"
-		  " WHERE MchCod=%ld"
-		    " AND QstInd=%u",
-		  MchCod,
-		  QstInd);
-  }
-
-/*****************************************************************************/
-/*** Get number of users who have chosen a given answer of a game question ***/
-/*****************************************************************************/
-
-unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
-  {
-   /***** Get number of users who have chosen
-          an answer of a question from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users who have chosen an answer",
-		  "SELECT COUNT(*)"
-		   " FROM mch_answers"
-		  " WHERE MchCod=%ld"
-		    " AND QstInd=%u"
-		    " AND AnsInd=%u",
-		  MchCod,
-		  QstInd,
-		  AnsInd);
-  }
-
-/*****************************************************************************/
-/************ Get number of users who have played a given match **************/
-/*****************************************************************************/
-
-static unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod)
-  {
-   /***** Get number of users who have played the match
-          (users who have a result for this match, even blank result)
-          from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users who have played a match",
-		  "SELECT COUNT(*)"
-		   " FROM mch_results"
-		  " WHERE MchCod=%ld",
-		  MchCod);
-  }
-
-/*****************************************************************************/
 /***************** Draw a bar with the percentage of answers *****************/
 /*****************************************************************************/
 
@@ -3957,36 +3832,4 @@ void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,boo
 
    /***** End container *****/
    HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/*********** Update indexes of questions greater than a given one ************/
-/*****************************************************************************/
-
-void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd)
-  {
-   DB_QueryUPDATE ("can not update indexes of questions",
-		   "UPDATE mch_answers,"
-		          "mch_matches"
-		     " SET mch_answers.QstInd=mch_answers.QstInd-1"
-		   " WHERE mch_matches.GamCod=%ld"
-		     " AND mch_matches.MchCod=mch_answers.MchCod"
-		     " AND mch_answers.QstInd>%u",
-		   GamCod,
-		   QstInd);
-  }
-
-/*****************************************************************************/
-/********* Get start of first match and end of last match in a game **********/
-/*****************************************************************************/
-
-unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get game data",
-		   "SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-			  "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
-		   " FROM mch_matches"
-		   " WHERE GamCod=%ld",
-		   GamCod);
   }

@@ -27,11 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include "swad_game.h"
 #include "swad_match.h"
-// #include "swad_match_print.h"
-// #include "swad_scope.h"
-// #include "swad_test.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -49,6 +45,7 @@ void Mch_DB_UpdateMatchTitle (long MchCod,
 void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults);
 
 unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod);
+unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 unsigned Mch_DB_GetMatches (MYSQL_RES **mysql_res,long GamCod);
 Mch_Showing_t Mch_DB_GetShowingFromStr (const char *Str);
 unsigned Mch_DB_GetNumMchsInGame (long GamCod);
@@ -72,8 +69,21 @@ bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
 void Mch_DB_RemoveGroup (long GrpCod);
 void Mch_DB_RemoveGroupsOfType (long GrpTypCod);
 
-//-------------------------------- Answers ------------------------------------
-void Mch_DB_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
+//---------------------------- Match questions --------------------------------
+unsigned Mch_DB_GetMatchQuestions (MYSQL_RES **mysql_res,long MchCod);
+
+//------------------------------ User answers ---------------------------------
+void Mch_DB_UpdateMyAnswerToMatchQuestion (const struct Mch_Match *Match,
+                                           const struct Mch_UsrAnswer *UsrAnswer);
+void Mch_DB_UpdateIndexesOfQstsGreaterThan (long GamCod,unsigned QstInd);
+
+unsigned Mch_DB_GetUsrAnsToQst (MYSQL_RES **mysql_res,
+                                long MchCod,long UsrCod,unsigned QstInd);
+unsigned Mch_DB_GetNumUsrsWhoAnsweredQst (long MchCod,unsigned QstInd);
+unsigned Mch_DB_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
+
+void Mch_DB_RemoveMyAnswerToMatchQuestion (const struct Mch_Match *Match);
+void Mch_DB_RemUsrAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
 //----------------------------- Answers indexes -------------------------------
 void Mch_DB_CreateQstIndexes (long MchCod,unsigned QstInd,
@@ -83,6 +93,7 @@ void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
 
 //-------------------------- Matches being played -----------------------------
 void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);
+void Mch_DB_RegisterMeAsPlayerInMatch (long MchCod);
 
 bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod);
 unsigned Mch_DB_GetNumPlayers (long MchCod);
@@ -98,7 +109,9 @@ unsigned Mch_DB_GetElapsedTimeInQuestion (MYSQL_RES **mysql_res,
 unsigned Mch_DB_GetElapsedTimeInMatch (MYSQL_RES **mysql_res,long MchCod);
 
 //----------------------------- Match results ---------------------------------
+unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod);
 unsigned Mch_DB_GetMaxUsrs (long MchCod);
 unsigned Mch_DB_GetUsrsPerScore (MYSQL_RES **mysql_res,long MchCod);
+
 
 #endif

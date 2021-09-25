@@ -2042,7 +2042,7 @@ void Gam_RemoveQstFromGame (void)
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Mch_DB_RemAnswersOfAQuestion (Game.GamCod,QstInd);
+   Mch_DB_RemUsrAnswersOfAQuestion (Game.GamCod,QstInd);
 
    /* Remove the question itself */
    Gam_DB_RemoveQstFromGame (Game.GamCod,QstInd);
@@ -2309,7 +2309,7 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
 
       /* Check number of answers */
       if (NumAnswers < 2)
-	 Err_ShowErrorAndExit ("Wrong number of answers.");
+         Err_WrongAnswerExit ();
 
       /* Accumulate minimum and maximum score */
       *MinScore += -1.0 / (double) (NumAnswers - 1);
