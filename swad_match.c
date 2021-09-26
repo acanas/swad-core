@@ -3098,10 +3098,10 @@ static void Mch_ShowMatchScore (const struct Mch_Match *Match)
    NumRowsPerScorePoint = (double) Mch_NUM_ROWS_SCORE / Range;
 
    /***** Get maximum number of users *****/
-   MaxUsrs = Mch_DB_GetMaxUsrs (Match->MchCod);
+   MaxUsrs = Mch_DB_GetMaxUsrsPerScore (Match->MchCod);
 
    /***** Get scores from database *****/
-   NumScores = Mch_DB_GetUsrsPerScore (&mysql_res,Match->MchCod);
+   NumScores = Mch_DB_GetNumUsrsPerScore (&mysql_res,Match->MchCod);
 
    /***** Begin table ****/
    HTM_TABLE_BeginWide ();

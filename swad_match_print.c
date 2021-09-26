@@ -29,6 +29,7 @@
 #include "swad_date.h"
 #include "swad_global.h"
 #include "swad_match.h"
+#include "swad_match_database.h"
 #include "swad_match_print.h"
 
 /*****************************************************************************/
@@ -57,7 +58,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MchPrn_UpdateMyMatchPrintInDB (struct MchPrn_Print *Print);
+static void MchPrn_UpdateMatchPrintInDB (const struct MchPrn_Print *Print);
 
 /*****************************************************************************/
 /**************************** Reset match print ******************************/
@@ -90,53 +91,21 @@ void MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (long MchCod)
    Mch_ComputeScore (&Print);
 
    /***** Update my match result in database *****/
-   MchPrn_UpdateMyMatchPrintInDB (&Print);
+   MchPrn_UpdateMatchPrintInDB (&Print);
   }
 
 /*****************************************************************************/
-/******************** Create/update my result in a match *********************/
+/************************* Create/update match print *************************/
 /*****************************************************************************/
 
-static void MchPrn_UpdateMyMatchPrintInDB (struct MchPrn_Print *Print)
+static void MchPrn_UpdateMatchPrintInDB (const struct MchPrn_Print *Print)
   {
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   if (DB_QueryCOUNT ("can not get if match result exists",
-		      "SELECT COUNT(*)"
-		       " FROM mch_results"
-		      " WHERE MchCod=%ld"
-		        " AND UsrCod=%ld",
-		      Print->MchCod,Print->UsrCod))	// Match print exists
-      /* Update result */
-      DB_QueryUPDATE ("can not update match result",
-		       "UPDATE mch_results"
-		         " SET EndTime=NOW(),"
-			      "NumQsts=%u,"
-			      "NumQstsNotBlank=%u,"
-			      "Score='%.15lg'"
-		       " WHERE MchCod=%ld"
-		         " AND UsrCod=%ld",
-		       Print->NumQsts.All,
-		       Print->NumQsts.NotBlank,
-		       Print->Score,
-		       Print->MchCod,Print->UsrCod);
-   else							// Match print doesn't exist
-      /* Create result */
-      DB_QueryINSERT ("can not create match result",
-		       "INSERT mch_results "
-		       "(MchCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Score)"
-		       " VALUES "
-		       "(%ld,"		// MchCod
-		       "%ld,"		// UsrCod
-		       "NOW(),"		// StartTime
-		       "NOW(),"		// EndTime
-		       "%u,"		// NumQsts
-		       "%u,"		// NumQstsNotBlank
-		       "'%.15lg')",	// Score
-		       Print->MchCod,Print->UsrCod,
-		       Print->NumQsts.All,
-		       Print->NumQsts.NotBlank,
-		       Print->Score);
-   Str_SetDecimalPointToLocal ();	// Return to local system
+   if (Mch_DB_CheckIfMatchPrintExists (Print))	// Match print exists
+      /* Update match print */
+      Mch_DB_UpdateMatchPrint (Print);
+   else					// Match print doesn't exist
+      /* Create match print */
+      Mch_DB_CreateMatchPrint (Print);
   }
 
 /*****************************************************************************/
@@ -150,27 +119,12 @@ void MchPrn_GetMatchPrintDataByMchCodAndUsrCod (struct MchPrn_Print *Print)
    Dat_StartEndTime_t StartEndTime;
 
    /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a match print",
-		       "SELECT UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
-			      "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
-		              "mch_results.NumQsts,"			// row[3]
-		              "mch_results.NumQstsNotBlank,"		// row[4]
-		              "mch_results.Score"			// row[5]
-		        " FROM mch_results,"
-		              "mch_matches,"
-		              "gam_games"
-		       " WHERE mch_results.MchCod=%ld"
-		         " AND mch_results.UsrCod=%ld"
-		         " AND mch_results.MchCod=mch_matches.MchCod"
-		         " AND mch_matches.GamCod=gam_games.GamCod"
-		         " AND gam_games.CrsCod=%ld",	// Extra check
-		       Print->MchCod,Print->UsrCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
+   if (Mch_DB_GetMatchPrintData (&mysql_res,Print) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get start time (row[0] and row[1] hold UTC date-times) */
-      for (StartEndTime = (Dat_StartEndTime_t) 0;
+      for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
          Print->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
