@@ -1040,6 +1040,7 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
    char *MchSubQuery;
    char *GamSubQuery;
    char *HidGamSubQuery;
+   unsigned NumResults;
 
    /***** Build matches subquery *****/
    if (MchCod > 0)
@@ -1096,7 +1097,7 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
      }
 
    /***** Make database query *****/
-   return (unsigned)
+   NumResults = (unsigned)
    DB_QuerySELECT (mysql_res,"can not get matches results",
 		   "SELECT mch_results.MchCod"
 		    " FROM mch_results,"
@@ -1121,6 +1122,8 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
    free (HidGamSubQuery);
    free (GamSubQuery);
    free (MchSubQuery);
+
+   return NumResults;
   }
 
 /*****************************************************************************/

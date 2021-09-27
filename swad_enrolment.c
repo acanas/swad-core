@@ -807,7 +807,7 @@ void Enr_RemoveOldUsrs (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Move unused contents of messages to table of deleted contents of messages *****/
-      Msg_MoveUnusedMsgsContentToDeleted ();
+      Msg_DB_MoveUnusedMsgsContentToDeleted ();
      }
 
    /***** Write end message *****/
@@ -1293,7 +1293,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
    if (NumUsrsEliminated)
       /***** Move unused contents of messages to table of deleted contents of messages *****/
-      Msg_MoveUnusedMsgsContentToDeleted ();
+      Msg_DB_MoveUnusedMsgsContentToDeleted ();
 
    /***** Write messages with the number of users enroled/removed *****/
    if (WhatToDo.RemoveUsrs)

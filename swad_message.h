@@ -104,15 +104,15 @@ void Msg_ConRecMsg (void);
 void Msg_DB_SetReceivedMsgAsOpen (long MsgCod,long UsrCod);
 
 void Msg_DelAllRecAndSntMsgsUsr (long UsrCod);
-void Msg_MoveUnusedMsgsContentToDeleted (void);
+void Msg_DB_MoveUnusedMsgsContentToDeleted (void);
 
 void Msg_ShowSntMsgs (void);
 void Msg_ShowRecMsgs (void);
 
 unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod);
 unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod);
-unsigned Msg_GetNumMsgsSent (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
-unsigned Msg_GetNumMsgsReceived (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_DB_GetNumRcvMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
 
 void Msg_PutHiddenParamsMsgsFilters (void *Messages);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

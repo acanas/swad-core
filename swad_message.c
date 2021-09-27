@@ -49,6 +49,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_message.h"
+#include "swad_message_database.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -65,8 +66,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
-
-#define Msg_MAX_BYTES_MESSAGES_QUERY (4 * 1024 - 1)
 
 // Forum images will be saved with:
 // - maximum width of Msg_IMAGE_SAVED_MAX_HEIGHT
@@ -96,13 +95,8 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages);
 static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
                                 char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
-static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages);
-static unsigned Msg_DB_GetNumUsrsBannedByMe (void);
+static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages);
 static void Msg_PutLinkToViewBannedUsers(void);
-static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
-					   long UsrCod,
-					   const char *FilterFromToSubquery,
-					   MYSQL_RES **mysql_res);
 
 static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
                                char **NumMsgsStr,unsigned NumUnreadMsgs);
@@ -118,8 +112,6 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (const struct Msg_Messages *Mes
 static bool Msg_GetParamOnlyUnreadMsgs (void);
 static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
                                             long MsgNum,long MsgCod);
-static bool Msg_DB_GetStatusOfSentMsg (long MsgCod);
-static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded);
 static long Msg_GetParamMsgCod (void);
 static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages *Messages);
 static void Msg_PutParamsShowMorePotentialRecipients (const void *Messages);
@@ -139,27 +131,19 @@ static void Msg_GetParamMsgsCrsCod (struct Msg_Messages *Messages);
 static void Msg_GetParamFilterFromTo (struct Msg_Messages *Messages);
 static void Msg_GetParamFilterContent (struct Msg_Messages *Messages);
 
-static void Msg_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
-                                          char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
-
-static void Msg_ExpandSentMsg (long MsgCod);
-static void Msg_ExpandReceivedMsg (long MsgCod);
-static void Msg_DB_ContractSentMsg (long MsgCod);
-static void Msg_DB_ContractReceivedMsg (long MsgCod);
-
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
                               struct Med_Media *Media);
 
-static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
-                                                 long UsrCod,
-                                                 const char *FilterFromToSubquery);
-static void Msg_DB_InsertReceivedMsg (long MsgCod,long UsrCod,bool NotifyByEmail);
-static void Msg_DB_SetReceivedMsgAsReplied (long MsgCod);
-static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod);
-static void Msg_MoveSentMsgToDeleted (long MsgCod);
+static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
+                                                    long UsrCod,
+                                                    const char *FilterFromToSubquery);
+static void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail);
+static void Msg_DB_SetRcvMsgAsReplied (long MsgCod);
+static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
+static void Msg_MoveSntMsgToDeleted (long MsgCod);
 static void Msg_MoveMsgContentToDeleted (long MsgCod);
-static bool Msg_DB_CheckIfSentMsgIsDeleted (long MsgCod);
-static bool Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod);
+static bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod);
+static bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod);
 static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
                                       const char *FilterFromToSubquery);
 
@@ -167,7 +151,6 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted);
-static void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                                struct Med_Media *Media);
 
@@ -611,12 +594,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		  if (!SubjectAndContentComeFromForm)
 		    {
 		     /* Get subject and content of message from database */
-		     if (DB_QuerySELECT (&mysql_res,"can not get message content",
-					 "SELECT Subject,"	// row[0]
-						"Content"	// row[1]
-					  " FROM msg_content"
-					 " WHERE MsgCod=%ld",
-					 MsgCod) != 1)
+		     if (Msg_DB_GetSubjectAndContent (&mysql_res,MsgCod) != 1)
 			Err_WrongMessageExit ();
 
 		     row = mysql_fetch_row (mysql_res);
@@ -863,7 +841,7 @@ void Msg_RecMsgFromUsr (void)
 
             /***** Create the received message for this recipient
                    and increment number of new messages received by this recipient *****/
-            Msg_DB_InsertReceivedMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
+            Msg_DB_CreateRcvMsg (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
 
             /***** Create notification for this recipient.
                    If this recipient wants to receive notifications by -mail,
@@ -908,7 +886,7 @@ void Msg_RecMsgFromUsr (void)
 
    /***** Update received message setting Replied field to true *****/
    if (Replied)
-      Msg_DB_SetReceivedMsgAsReplied (OriginalMsgCod);
+      Msg_DB_SetRcvMsgAsReplied (OriginalMsgCod);
 
    /***** Write final message *****/
    if (NumRecipients)
@@ -982,7 +960,7 @@ void Msg_ReqDelAllRecMsgs (void)
 
    /* Show received messages again */
    Messages.TypeOfMessages = Msg_RECEIVED;
-   Msg_ShowSentOrReceivedMessages (&Messages);
+   Msg_ShowSntOrRcvMessages (&Messages);
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,NULL,
@@ -1025,7 +1003,7 @@ void Msg_ReqDelAllSntMsgs (void)
 
    /* Show sent messages again */
    Messages.TypeOfMessages = Msg_SENT;
-   Msg_ShowSentOrReceivedMessages (&Messages);
+   Msg_ShowSntOrRcvMessages (&Messages);
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,NULL,
@@ -1051,11 +1029,11 @@ void Msg_DelAllRecMsgs (void)
    Msg_GetParamFilterFromTo (&Messages);
    Msg_GetParamFilterContent (&Messages);
    Messages.ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
-   Msg_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
+   Msg_DB_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
    Messages.TypeOfMessages = Msg_RECEIVED;
-   NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
+   NumMsgs = Msg_RemoveSomeRecOrSntMsgsUsr (&Messages,
                                          Gbl.Usrs.Me.UsrDat.UsrCod,
                                          FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
@@ -1079,11 +1057,11 @@ void Msg_DelAllSntMsgs (void)
    Msg_GetParamMsgsCrsCod (&Messages);
    Msg_GetParamFilterFromTo (&Messages);
    Msg_GetParamFilterContent (&Messages);
-   Msg_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
+   Msg_DB_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
    Messages.TypeOfMessages = Msg_SENT;
-   NumMsgs = Msg_DelSomeRecOrSntMsgsUsr (&Messages,
+   NumMsgs = Msg_RemoveSomeRecOrSntMsgsUsr (&Messages,
                                          Gbl.Usrs.Me.UsrDat.UsrCod,
                                          FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
@@ -1152,38 +1130,6 @@ static void Msg_GetParamFilterContent (struct Msg_Messages *Messages)
   }
 
 /*****************************************************************************/
-/************************* Make "from"/"to" subquery *************************/
-/*****************************************************************************/
-
-static void Msg_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
-                                          char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1])
-  {
-   const char *Ptr;
-   char SearchWord[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
-
-   /***** Split "from"/"to" string into words *****/
-   if (Messages->FilterFromTo[0])
-     {
-      Ptr = Messages->FilterFromTo;
-      Str_Copy (FilterFromToSubquery,
-                " AND CONCAT(usr_data.FirstName,' ',usr_data.Surname1,' ',usr_data.Surname2) LIKE '",
-                Msg_MAX_BYTES_MESSAGES_QUERY);
-      while (*Ptr)
-        {
-         Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-         if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 >
-             Msg_MAX_BYTES_MESSAGES_QUERY)	// Prevent string overflow
-            break;
-         Str_Concat (FilterFromToSubquery,"%",Msg_MAX_BYTES_MESSAGES_QUERY);
-         Str_Concat (FilterFromToSubquery,SearchWord,Msg_MAX_BYTES_MESSAGES_QUERY);
-        }
-      Str_Concat (FilterFromToSubquery,"%'",Msg_MAX_BYTES_MESSAGES_QUERY);
-     }
-   else
-      FilterFromToSubquery[0] = '\0';
-  }
-
-/*****************************************************************************/
 /****************************** Delete a sent message ************************/
 /*****************************************************************************/
 
@@ -1198,7 +1144,7 @@ void Msg_DelSntMsg (void)
 
    /***** Delete the message *****/
    /* Delete the sent message */
-   Msg_MoveSentMsgToDeleted (MsgCod);
+   Msg_MoveSntMsgToDeleted (MsgCod);
    Ale_ShowAlert (Ale_SUCCESS,Txt_Message_deleted);
 
    /* Show the remaining messages */
@@ -1220,7 +1166,7 @@ void Msg_DelRecMsg (void)
 
    /***** Delete the message *****/
    /* Delete the received message */
-   Msg_MoveReceivedMsgToDeleted (MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Msg_MoveRcvMsgToDeleted (MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ale_ShowAlert (Ale_SUCCESS,Txt_Message_deleted);
 
    /* Show the remaining messages */
@@ -1243,7 +1189,7 @@ void Msg_ExpSntMsg (void)
       Err_WrongMessageExit ();
 
    /***** Expand the message *****/
-   Msg_ExpandSentMsg (Messages.ExpandedMsgCod);
+   Msg_DB_ExpandSntMsg (Messages.ExpandedMsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowSntMsgs ();
@@ -1265,7 +1211,7 @@ void Msg_ExpRecMsg (void)
       Err_WrongMessageExit ();
 
    /***** Expand the message *****/
-   Msg_ExpandReceivedMsg (Messages.ExpandedMsgCod);
+   Msg_DB_ExpandRcvMsg (Messages.ExpandedMsgCod);
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_MESSAGE,
@@ -1289,7 +1235,7 @@ void Msg_ConSntMsg (void)
       Err_WrongMessageExit ();
 
    /***** Contract the message *****/
-   Msg_DB_ContractSentMsg (MsgCod);
+   Msg_DB_ContractSntMsg (MsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowSntMsgs ();
@@ -1308,93 +1254,10 @@ void Msg_ConRecMsg (void)
       Err_WrongMessageExit ();
 
    /***** Contract the message *****/
-   Msg_DB_ContractReceivedMsg (MsgCod);
+   Msg_DB_ContractRcvMsg (MsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowRecMsgs ();
-  }
-
-/*****************************************************************************/
-/**************************** Expand a sent message **************************/
-/*****************************************************************************/
-
-static void Msg_ExpandSentMsg (long MsgCod)
-  {
-   /***** Expand message in sent message table *****/
-   DB_QueryUPDATE ("can not expand a sent message",
-		   "UPDATE msg_snt"
-		     " SET Expanded='Y'"
-		   " WHERE MsgCod=%ld"
-		     " AND UsrCod=%ld",
-                   MsgCod,
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Contract all my other messages in sent message table *****/
-   DB_QueryUPDATE ("can not contract a sent message",
-		   "UPDATE msg_snt"
-		     " SET Expanded='N'"
-		   " WHERE UsrCod=%ld"
-		     " AND MsgCod<>%ld",
-                   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   MsgCod);
-  }
-
-/*****************************************************************************/
-/************************* Expand a received message *************************/
-/*****************************************************************************/
-
-static void Msg_ExpandReceivedMsg (long MsgCod)
-  {
-   /***** Expand message in received message table and mark it as read by me *****/
-   DB_QueryUPDATE ("can not expand a received message",
-		   "UPDATE msg_rcv"
-		     " SET Open='Y',"
-		          "Expanded='Y'"
-		   " WHERE MsgCod=%ld"
-		     " AND UsrCod=%ld",
-                   MsgCod,
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Contract all my other messages in received message table *****/
-   DB_QueryUPDATE ("can not contract a received message",
-		   "UPDATE msg_rcv"
-		     " SET Expanded='N'"
-		   " WHERE UsrCod=%ld"
-		     " AND MsgCod<>%ld",
-                   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   MsgCod);
-  }
-
-/*****************************************************************************/
-/************************** Contract a sent message **************************/
-/*****************************************************************************/
-
-static void Msg_DB_ContractSentMsg (long MsgCod)
-  {
-   /***** Contract message in sent message table *****/
-   DB_QueryUPDATE ("can not contract a sent message",
-		   "UPDATE msg_snt"
-		     " SET Expanded='N'"
-		   " WHERE MsgCod=%ld"
-		     " AND UsrCod=%ld",
-                   MsgCod,
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/************************ Contract a received message ************************/
-/*****************************************************************************/
-
-static void Msg_DB_ContractReceivedMsg (long MsgCod)
-  {
-   /***** Contract message in received message table *****/
-   DB_QueryUPDATE ("can not contract a received message",
-		   "UPDATE msg_rcv"
-		     " SET Expanded='N'"
-		   " WHERE MsgCod=%ld"
-		     " AND UsrCod=%ld",
-                   MsgCod,
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1457,9 +1320,9 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 /************** Delete some received or sent messages of a user **************/
 /*****************************************************************************/
 
-static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
-                                                 long UsrCod,
-                                                 const char *FilterFromToSubquery)
+static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *Messages,
+                                                    long UsrCod,
+                                                    const char *FilterFromToSubquery)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMsgs;
@@ -1467,10 +1330,8 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
    long MsgCod;
 
    /***** Get some of the messages received or sent by this user from database *****/
-   NumMsgs = Msg_GetSentOrReceivedMsgs (Messages,
-                                        UsrCod,
-					FilterFromToSubquery,
-				        &mysql_res);
+   NumMsgs = Msg_DB_GetSntOrRcvMsgs (&mysql_res,
+                                     Messages,UsrCod,FilterFromToSubquery);
 
    /***** Delete each message *****/
    for (NumMsg = 0;
@@ -1483,10 +1344,10 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (const struct Msg_Messages *Mess
       switch (Messages->TypeOfMessages)
         {
          case Msg_RECEIVED:
-            Msg_MoveReceivedMsgToDeleted (MsgCod,UsrCod);
+            Msg_MoveRcvMsgToDeleted (MsgCod,UsrCod);
             break;
          case Msg_SENT:
-            Msg_MoveSentMsgToDeleted (MsgCod);
+            Msg_MoveSntMsgToDeleted (MsgCod);
             break;
          default:
             break;
@@ -1549,7 +1410,7 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 /**** Insert a message y su destinatario in the table of messages received ***/
 /*****************************************************************************/
 
-static void Msg_DB_InsertReceivedMsg (long MsgCod,long UsrCod,bool NotifyByEmail)
+static void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail)
   {
    /***** Insert message received in the database *****/
    DB_QueryINSERT ("can not create received message",
@@ -1567,7 +1428,7 @@ static void Msg_DB_InsertReceivedMsg (long MsgCod,long UsrCod,bool NotifyByEmail
 /******** Update received message by setting Replied field to true ***********/
 /*****************************************************************************/
 
-static void Msg_DB_SetReceivedMsgAsReplied (long MsgCod)
+static void Msg_DB_SetRcvMsgAsReplied (long MsgCod)
   {
    /***** Update received message by setting Replied field to true *****/
    DB_QueryUPDATE ("can not update a received message",
@@ -1583,7 +1444,7 @@ static void Msg_DB_SetReceivedMsgAsReplied (long MsgCod)
 /************ Delete a message from the received message table ***************/
 /*****************************************************************************/
 
-static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
+static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
   {
    /***** Move message from msg_rcv to msg_rcv_deleted *****/
    /* Insert message into msg_rcv_deleted */
@@ -1610,8 +1471,8 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
                    UsrCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
-   if (Msg_DB_CheckIfSentMsgIsDeleted (MsgCod))
-      if (Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
+   if (Msg_DB_CheckIfSntMsgIsDeleted (MsgCod))
+      if (Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (MsgCod))
          Msg_MoveMsgContentToDeleted (MsgCod);
 
    /***** Mark possible notifications as removed *****/
@@ -1622,7 +1483,7 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
 /************** Delete a message from the sent message table *****************/
 /*****************************************************************************/
 
-static void Msg_MoveSentMsgToDeleted (long MsgCod)
+static void Msg_MoveSntMsgToDeleted (long MsgCod)
   {
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
@@ -1644,7 +1505,7 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
 		   MsgCod);
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
-   if (Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (MsgCod))
+   if (Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (MsgCod))
       Msg_MoveMsgContentToDeleted (MsgCod);
   }
 
@@ -1681,7 +1542,7 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
 /***** Delete the subject and content of all completely deleted messages *****/
 /*****************************************************************************/
 
-void Msg_MoveUnusedMsgsContentToDeleted (void)
+void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
   {
    /***** Move messages from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
@@ -1717,7 +1578,7 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
 /******************** Check if a sent message is deleted *********************/
 /*****************************************************************************/
 
-static bool Msg_DB_CheckIfSentMsgIsDeleted (long MsgCod)
+static bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
   {
    /***** Get if the message code is in table of sent messages not deleted *****/
    return (DB_QueryCOUNT ("can not check if a sent message is deleted",
@@ -1733,7 +1594,7 @@ static bool Msg_DB_CheckIfSentMsgIsDeleted (long MsgCod)
 /***** Check if a received message has been deleted by all its recipients ****/
 /*****************************************************************************/
 
-static bool Msg_DB_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
+static bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
   {
    /***** Get if the message code is in table of received messages not deleted *****/
    return (DB_QueryCOUNT ("can not check if a received message"
@@ -1848,7 +1709,7 @@ void Msg_ShowSntMsgs (void)
 
    /***** Show the sent messages *****/
    Messages.TypeOfMessages = Msg_SENT;
-   Msg_ShowSentOrReceivedMessages (&Messages);
+   Msg_ShowSntOrRcvMessages (&Messages);
   }
 
 /*****************************************************************************/
@@ -1872,14 +1733,14 @@ void Msg_ShowRecMsgs (void)
 
    /***** Show the received messages *****/
    Messages.TypeOfMessages = Msg_RECEIVED;
-   Msg_ShowSentOrReceivedMessages (&Messages);
+   Msg_ShowSntOrRcvMessages (&Messages);
   }
 
 /*****************************************************************************/
 /************************ Show sent or received messages *********************/
 /*****************************************************************************/
 
-static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
+static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
   {
    extern const char *Hlp_COMMUNICATION_Messages_received;
    extern const char *Hlp_COMMUNICATION_Messages_received_filter;
@@ -1891,10 +1752,8 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
    char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow;
-   unsigned long NumRows;
+   unsigned NumMsg;
    char *NumMsgsStr;
-   unsigned long NumMsg;
    unsigned NumUnreadMsgs;
    struct Pagination Pagination;
    long MsgCod;
@@ -1930,7 +1789,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
    Msg_GetParamMsgsCrsCod (Messages);
    Msg_GetParamFilterFromTo (Messages);
    Msg_GetParamFilterContent (Messages);
-   Msg_MakeFilterFromToSubquery (Messages,FilterFromToSubquery);
+   Msg_DB_MakeFilterFromToSubquery (Messages,FilterFromToSubquery);
    Msg_GetDistinctCoursesInMyMessages (Messages);
 
    /***** Get number of unread messages *****/
@@ -1950,11 +1809,9 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
      }
 
    /***** Get messages from database *****/
-   NumRows = Msg_GetSentOrReceivedMsgs (Messages,
-                                        Gbl.Usrs.Me.UsrDat.UsrCod,
-					FilterFromToSubquery,
-				        &mysql_res);
-   Messages->NumMsgs = (unsigned) NumRows;
+   Messages->NumMsgs = Msg_DB_GetSntOrRcvMsgs (&mysql_res,
+                                               Messages,Gbl.Usrs.Me.UsrDat.UsrCod,
+				               FilterFromToSubquery);
 
    /***** Begin box with messages *****/
    Msg_SetNumMsgsStr (Messages,&NumMsgsStr,NumUnreadMsgs);
@@ -2000,9 +1857,9 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 						   // from a notification of received message, so show the page where the message is inside
 	   {
 	    /***** Get the page where the expanded message is inside *****/
-	    for (NumRow = 0;
-		 NumRow < NumRows;
-		 NumRow++)
+	    for (NumMsg = 0;
+		 NumMsg < Messages->NumMsgs;
+		 NumMsg++)
 	      {
 	       row = mysql_fetch_row (mysql_res);
 	       if (sscanf (row[0],"%ld",&MsgCod) != 1)
@@ -2010,7 +1867,7 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 
 	       if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
 		 {
-		  Messages->CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
+		  Messages->CurrentPage = NumMsg / Pag_ITEMS_PER_PAGE + 1;
 		  break;
 		 }
 	      }
@@ -2034,16 +1891,17 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
 	 HTM_TABLE_BeginWidePadding (2);
 
 	    mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
-	    for (NumRow  = Pagination.FirstItemVisible;
-		 NumRow <= Pagination.LastItemVisible;
-		 NumRow++)
+	    for (NumMsg  = Pagination.FirstItemVisible;
+		 NumMsg <= Pagination.LastItemVisible;
+		 NumMsg++)
 	      {
 	       row = mysql_fetch_row (mysql_res);
 
 	       if (sscanf (row[0],"%ld",&MsgCod) != 1)
 		  Err_WrongMessageExit ();
-	       NumMsg = NumRows - NumRow + 1;
-	       Msg_ShowASentOrReceivedMessage (Messages,NumMsg,MsgCod);
+	       Msg_ShowASentOrReceivedMessage (Messages,
+	                                       Messages->NumMsgs - NumMsg + 1,
+	                                       MsgCod);
 	      }
 
 	 HTM_TABLE_End ();
@@ -2061,21 +1919,6 @@ static void Msg_ShowSentOrReceivedMessages (struct Msg_Messages *Messages)
   }
 
 /*****************************************************************************/
-/********************* Get number of user I have banned **********************/
-/*****************************************************************************/
-
-static unsigned Msg_DB_GetNumUsrsBannedByMe (void)
-  {
-   /***** Get number of users I have banned *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users you have banned",
-		  "SELECT COUNT(*)"
-		   " FROM msg_banned"
-		  " WHERE ToUsrCod=%ld",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /****************** Put a link (form) to view banned users *******************/
 /*****************************************************************************/
 
@@ -2090,219 +1933,11 @@ static void Msg_PutLinkToViewBannedUsers(void)
   }
 
 /*****************************************************************************/
-/********* Generate a query to select messages received or sent **************/
-/*****************************************************************************/
-
-static unsigned Msg_GetSentOrReceivedMsgs (const struct Msg_Messages *Messages,
-					   long UsrCod,
-					   const char *FilterFromToSubquery,
-					   MYSQL_RES **mysql_res)
-  {
-   char *SubQuery;
-   const char *StrUnreadMsg;
-   unsigned NumMsgs;
-
-   if (Messages->FilterCrsCod > 0)	// If origin course selected
-      switch (Messages->TypeOfMessages)
-        {
-         case Msg_RECEIVED:
-            StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
-        	                                           "");
-            if (FilterFromToSubquery[0])
-              {
-               if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
-				         " FROM msg_rcv,"
-				               "msg_snt,"
-				               "usr_data"
-				        " WHERE msg_rcv.UsrCod=%ld%s"
-				          " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				          " AND msg_snt.CrsCod=%ld"
-				          " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
-				       " UNION "
-				       "(SELECT msg_rcv.MsgCod"
-				         " FROM msg_rcv,"
-				               "msg_snt_deleted,"
-				               "usr_data"
-				        " WHERE msg_rcv.UsrCod=%ld%s"
-				          " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
-				          " AND msg_snt_deleted.CrsCod=%ld"
-				          " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
-			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,FilterFromToSubquery,
-			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            else
-              {
-               if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
-				         " FROM msg_rcv,"
-				               "msg_snt"
-				        " WHERE msg_rcv.UsrCod=%ld"
-				          "%s"
-				          " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				          " AND msg_snt.CrsCod=%ld)"
-				       " UNION "
-				       "(SELECT msg_rcv.MsgCod"
-				         " FROM msg_rcv,"
-				               "msg_snt_deleted"
-				        " WHERE msg_rcv.UsrCod=%ld"
-				          "%s"
-				          " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
-				          " AND msg_snt_deleted.CrsCod=%ld)",
-			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod,
-			     UsrCod,StrUnreadMsg,Messages->FilterCrsCod) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            break;
-         case Msg_SENT:
-            if (FilterFromToSubquery[0])
-              {
-               if (asprintf (&SubQuery,"(SELECT DISTINCT msg_snt.MsgCod"
-				         " FROM msg_snt,"
-				               "msg_rcv,"
-				               "usr_data"
-				        " WHERE msg_snt.UsrCod=%ld"
-				          " AND msg_snt.CrsCod=%ld"
-				          " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				          " AND msg_rcv.UsrCod=usr_data.UsrCod"
-				          "%s)"
-				       " UNION "
-				       "(SELECT DISTINCT msg_snt.MsgCod"
-				         " FROM msg_snt,"
-				               "msg_rcv_deleted,"
-				               "usr_data"
-				        " WHERE msg_snt.UsrCod=%ld"
-				          " AND msg_snt.CrsCod=%ld"
-				          " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				          " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod"
-				          "%s)",
-			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery,
-			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            else
-              {
-               if (asprintf (&SubQuery,"SELECT MsgCod"
-				        " FROM msg_snt"
-				       " WHERE UsrCod=%ld"
-				         " AND CrsCod=%ld",
-			     UsrCod,Messages->FilterCrsCod) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            break;
-         default: // Not aplicable here
-            break;
-        }
-   else	// If no origin course selected
-      switch (Messages->TypeOfMessages)
-        {
-         case Msg_RECEIVED:
-            if (FilterFromToSubquery[0])
-              {
-               StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
-        	                                              "");
-               if (asprintf (&SubQuery,"(SELECT msg_rcv.MsgCod"
-				         " FROM msg_rcv,"
-				               "msg_snt,"
-				               "usr_data"
-				        " WHERE msg_rcv.UsrCod=%ld"
-				          "%s"
-				          " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				          " AND msg_snt.UsrCod=usr_data.UsrCod"
-				          "%s)"
-				       " UNION "
-				       "(SELECT msg_rcv.MsgCod"
-				         " FROM msg_rcv,"
-				               "msg_snt_deleted,"
-				               "usr_data"
-				        " WHERE msg_rcv.UsrCod=%ld"
-				          "%s"
-				          " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
-				          " AND msg_snt_deleted.UsrCod=usr_data.UsrCod"
-				          "%s)",
-			     UsrCod,StrUnreadMsg,FilterFromToSubquery,
-			     UsrCod,StrUnreadMsg,FilterFromToSubquery) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            else
-              {
-               StrUnreadMsg = (Messages->ShowOnlyUnreadMsgs ? " AND Open='N'" :
-        	                                              "");
-               if (asprintf (&SubQuery,"SELECT MsgCod"
-				        " FROM msg_rcv"
-				       " WHERE UsrCod=%ld"
-				          "%s",
-			     UsrCod,StrUnreadMsg) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            break;
-         case Msg_SENT:
-            if (FilterFromToSubquery[0])
-              {
-               if (asprintf (&SubQuery,"(SELECT msg_snt.MsgCod"
-				         " FROM msg_snt,"
-				               "msg_rcv,"
-				               "usr_data"
-				        " WHERE msg_snt.UsrCod=%ld"
-				          " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-				          " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
-				        " UNION "
-				       "(SELECT msg_snt.MsgCod"
-				         " FROM msg_snt,"
-				               "msg_rcv_deleted,"
-				               "usr_data"
-				        " WHERE msg_snt.UsrCod=%ld"
-				          " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
-				          " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
-			     UsrCod,FilterFromToSubquery,
-			     UsrCod,FilterFromToSubquery) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            else
-              {
-               if (asprintf (&SubQuery,"SELECT MsgCod"
-				        " FROM msg_snt"
-				       " WHERE UsrCod=%ld",
-                             UsrCod) < 0)
-                  Err_NotEnoughMemoryExit ();
-              }
-            break;
-         default: // Not aplicable here
-            break;
-        }
-
-   if (Messages->FilterContent[0])
-      /* Match against the content written in filter form */
-      NumMsgs = (unsigned)
-      DB_QuerySELECT (mysql_res,"can not get messages",
-		      "SELECT MsgCod"
-		       " FROM msg_content"
-		      " WHERE MsgCod IN"
-			    " (SELECT MsgCod"
-			       " FROM (%s) AS M)"
-		        " AND MATCH (Subject,Content) AGAINST ('%s')"
-		      " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
-		      SubQuery,
-		      Messages->FilterContent);
-   else
-      NumMsgs = (unsigned)
-      DB_QuerySELECT (mysql_res,"can not get messages",
-		      "%s"
-		      " ORDER BY MsgCod DESC",	// End the query ordering the result from most recent message to oldest
-		      SubQuery);
-
-   /***** Free memory used for subquery *****/
-   free (SubQuery);
-
-   return NumMsgs;
-  }
-
-/*****************************************************************************/
 /**** Get the number of unique messages sent by any teacher from a course ****/
 /*****************************************************************************/
 
 unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
   {
-   /***** Get the number of unique messages sent by any teacher from this course *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of messages sent by teachers",
 		  "SELECT COUNT(*)"
@@ -2310,11 +1945,12 @@ unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
 			 "crs_users"
 		  " WHERE msg_snt.CrsCod=%ld"
 		    " AND crs_users.CrsCod=%ld"
-		    " AND crs_users.Role=%u"
+		    " AND crs_users.Role IN (%u,%u)"
 		    " AND msg_snt.UsrCod=crs_users.UsrCod",
 		  CrsCod,
 		  CrsCod,
-		  (unsigned) Rol_TCH);
+		  (unsigned) Rol_NET,	// Non-editing teacher
+		  (unsigned) Rol_TCH);	// Teacher
   }
 
 /*****************************************************************************/
@@ -2323,7 +1959,6 @@ unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
 
 unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod)
   {
-   /***** Get the number of unique messages sent by any teacher from this course *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of messages sent by a user",
 		  "SELECT"
@@ -2343,7 +1978,7 @@ unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod)
 /******** (all the platform, current degree or current course)      **********/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsSent (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
+unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
   {
    const char *Table = "msg_snt";
 
@@ -2437,7 +2072,7 @@ unsigned Msg_GetNumMsgsSent (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
 /****** (all the platform, current degree or current course)          ********/
 /*****************************************************************************/
 
-unsigned Msg_GetNumMsgsReceived (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
+unsigned Msg_DB_GetNumRcvMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
   {
    char *Table;
 
@@ -3123,21 +2758,6 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
   }
 
 /*****************************************************************************/
-/************************ Get the subject of a message ***********************/
-/*****************************************************************************/
-
-static void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
-  {
-   /***** Get subject of message from database *****/
-   DB_QuerySELECTString (Subject,Cns_MAX_BYTES_SUBJECT,
-                         "can not get the subject of a message",
-			 "SELECT Subject"		// row[0]
-			  " FROM msg_content"
-			 " WHERE MsgCod=%ld",
-			 MsgCod);
-  }
-
-/*****************************************************************************/
 /*************** Get content and optional image of a message *****************/
 /*****************************************************************************/
 
@@ -3165,64 +2785,6 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    /***** Get media (row[1]) *****/
    Media->MedCod = Str_ConvertStrCodToLongCod (row[1]);
    Med_GetMediaDataByCod (Media);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********************** Get if a sent message is expanded ********************/
-/*****************************************************************************/
-
-static bool Msg_DB_GetStatusOfSentMsg (long MsgCod)
-  {
-   char StrExpanded[1 + 1];
-
-   /***** Get if sent message has been expanded from database *****/
-   DB_QuerySELECTString (StrExpanded,1,
-                         "can not get if a sent message has been expanded",
-		         "SELECT Expanded"		// row[0]
-			  " FROM msg_snt"
-		         " WHERE MsgCod=%ld"
-			   " AND UsrCod=%ld",
-		         MsgCod,
-		         Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Get if message is expanded *****/
-   return (StrExpanded[0] == 'Y');
-  }
-
-/*****************************************************************************/
-/********* Get if a received message has been open/replied/expanded **********/
-/*****************************************************************************/
-
-static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,bool *Expanded)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get if received message has been open/replied/expanded from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if a received message"
-				  " has been replied/expanded",
-		       "SELECT Open,"		// row[0]
-			      "Replied,"		// row[1]
-			      "Expanded"		// row[2]
-			" FROM msg_rcv"
-		       " WHERE MsgCod=%ld"
-			 " AND UsrCod=%ld",
-		       MsgCod,
-		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
-      Err_ShowErrorAndExit ("Error when getting if a received message has been replied/expanded.");
-
-   /***** Get number of rows *****/
-   row = mysql_fetch_row (mysql_res);
-
-   /***** Get if message has been read by me (row[0]),
-              if message has been replied (row[1]), and
-              if message is expanded (row[2]) *****/
-   *Open     = (row[0][0] == 'Y');
-   *Replied  = (row[1][0] == 'Y');
-   *Expanded = (row[2][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3269,10 +2831,10 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         Msg_GetStatusOfReceivedMsg (MsgCod,&Open,&Replied,&Expanded);
+         Msg_DB_GetStatusOfRcvMsg (MsgCod,&Open,&Replied,&Expanded);
          break;
       case Msg_SENT:
-         Expanded = Msg_DB_GetStatusOfSentMsg (MsgCod);
+         Expanded = Msg_DB_GetStatusOfSntMsg (MsgCod);
          break;
       default:
 	 break;

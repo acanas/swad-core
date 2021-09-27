@@ -848,7 +848,7 @@ void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
 	    Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
 
 	    /***** Move unused contents of messages to table of deleted contents of messages *****/
-	    Msg_MoveUnusedMsgsContentToDeleted ();
+	    Msg_DB_MoveUnusedMsgsContentToDeleted ();
 	   }
 	 else
 	    Acc_AskIfRemoveUsrAccount (ItsMe);
@@ -953,7 +953,7 @@ void Acc_RemoveMyAccount (void)
       Acc_CompletelyEliminateAccount (&Gbl.Usrs.Me.UsrDat,Cns_VERBOSE);
 
       /***** Move unused contents of messages to table of deleted contents of messages *****/
-      Msg_MoveUnusedMsgsContentToDeleted ();
+      Msg_DB_MoveUnusedMsgsContentToDeleted ();
      }
    else
       Acc_AskIfRemoveUsrAccount (true);

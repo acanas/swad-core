@@ -3055,12 +3055,12 @@ static void Fig_GetAndShowMsgsStats (void)
    unsigned NumMsgsReceivedAndNotified;
 
    /***** Get the number of unique messages sent from this location *****/
-   NumMsgsSentNotDeleted      = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_ALL     );
-   NumMsgsSentDeleted         = Msg_GetNumMsgsSent     (Gbl.Scope.Current,Msg_STATUS_DELETED );
+   NumMsgsSentNotDeleted      = Msg_DB_GetNumSntMsgs     (Gbl.Scope.Current,Msg_STATUS_ALL     );
+   NumMsgsSentDeleted         = Msg_DB_GetNumSntMsgs     (Gbl.Scope.Current,Msg_STATUS_DELETED );
 
-   NumMsgsReceivedNotDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_ALL     );
-   NumMsgsReceivedAndDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_DELETED );
-   NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
+   NumMsgsReceivedNotDeleted  = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_ALL     );
+   NumMsgsReceivedAndDeleted  = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_DELETED );
+   NumMsgsReceivedAndNotified = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_MESSAGES],
