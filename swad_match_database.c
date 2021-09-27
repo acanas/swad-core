@@ -976,6 +976,154 @@ unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod)
   }
 
 /*****************************************************************************/
+/**** Get all users who have answered any match question in a given match *****/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetUsrsWhoHavePlayedMch (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users in match",
+		   "SELECT users.UsrCod"
+		    " FROM (SELECT mch_results.UsrCod AS UsrCod"
+			    " FROM mch_results,"
+				  "mch_matches,"
+				  "gam_games"
+			   " WHERE mch_results.MchCod=%ld"
+			     " AND mch_results.MchCod=mch_matches.MchCod"
+			     " AND mch_matches.GamCod=gam_games.GamCod"
+			     " AND gam_games.CrsCod=%ld) AS users,"	// Extra check
+			  "usr_data"
+		   " WHERE users.UsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   MchCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/**** Get all users who have answered any match question in a given game *****/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetUsrsWhoHavePlayedGam (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users in game",
+		   "SELECT users.UsrCod"
+		    " FROM (SELECT DISTINCT mch_results.UsrCod AS UsrCod"
+			    " FROM mch_results,"
+				  "mch_matches,"
+				  "gam_games"
+			   " WHERE mch_matches.GamCod=%ld"
+			     " AND mch_matches.MchCod=mch_results.MchCod"
+			     " AND mch_matches.GamCod=gam_games.GamCod"
+			     " AND gam_games.CrsCod=%ld) AS users,"		// Extra check
+			   "usr_data"
+		   " WHERE users.UsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   GamCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Show the matches results of a user in the current course **********/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
+                                  Usr_MeOrOther_t MeOrOther,
+				  long MchCod,	// <= 0 ==> any
+				  long GamCod,	// <= 0 ==> any
+				  const char *GamesSelectedCommas)
+  {
+   char *MchSubQuery;
+   char *GamSubQuery;
+   char *HidGamSubQuery;
+
+   /***** Build matches subquery *****/
+   if (MchCod > 0)
+     {
+      if (asprintf (&MchSubQuery," AND mch_results.MchCod=%ld",MchCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (&MchSubQuery,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+
+   /***** Build games subquery *****/
+   if (GamCod > 0)
+     {
+      if (asprintf (&GamSubQuery," AND mch_matches.GamCod=%ld",GamCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else if (GamesSelectedCommas)
+     {
+      if (GamesSelectedCommas[0])
+	{
+	 if (asprintf (&GamSubQuery," AND mch_matches.GamCod IN (%s)",
+		       GamesSelectedCommas) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+      else
+	{
+	 if (asprintf (&GamSubQuery,"%s","") < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+     }
+   else
+     {
+      if (asprintf (&GamSubQuery,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+
+   /***** Subquery: get hidden games?
+	  · A student will not be able to see their results in hidden games
+	  · A teacher will be able to see results from other users even in hidden games
+   *****/
+   switch (MeOrOther)
+     {
+      case Usr_ME:	// A student watching her/his results
+         if (asprintf (&HidGamSubQuery," AND gam_games.Hidden='N'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+      default:		// A teacher/admin watching the results of other users
+	 if (asprintf (&HidGamSubQuery,"%s","") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
+     }
+
+   /***** Make database query *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get matches results",
+		   "SELECT mch_results.MchCod"
+		    " FROM mch_results,"
+			  "mch_matches,"
+			  "gam_games"
+		   " WHERE mch_results.UsrCod=%ld"
+		      "%s"	// Match subquery
+		     " AND mch_results.MchCod=mch_matches.MchCod"
+		     "%s"	// Games subquery
+		     " AND mch_matches.GamCod=gam_games.GamCod"
+		     "%s"	// Hidden games subquery
+		     " AND gam_games.CrsCod=%ld"	// Extra check
+		   " ORDER BY mch_matches.Title",
+		   (MeOrOther == Usr_ME) ? Gbl.Usrs.Me.UsrDat.UsrCod :
+				           Gbl.Usrs.Other.UsrDat.UsrCod,
+		   MchSubQuery,
+		   GamSubQuery,
+		   HidGamSubQuery,
+		   Gbl.Hierarchy.Crs.CrsCod);
+
+   /***** Free subqueries *****/
+   free (HidGamSubQuery);
+   free (GamSubQuery);
+   free (MchSubQuery);
+  }
+
+/*****************************************************************************/
 /********* Get maximum number of users per score in match results ************/
 /*****************************************************************************/
 

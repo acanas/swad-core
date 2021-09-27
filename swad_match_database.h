@@ -116,6 +116,13 @@ bool Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print);
 unsigned Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
                                    const struct MchPrn_Print *Print);
 unsigned Mch_DB_GetNumUsrsWhoHavePlayedMch (long MchCod);
+unsigned Mch_DB_GetUsrsWhoHavePlayedMch (MYSQL_RES **mysql_res,long MchCod);
+unsigned Mch_DB_GetUsrsWhoHavePlayedGam (MYSQL_RES **mysql_res,long GamCod);
+unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
+                                  Usr_MeOrOther_t MeOrOther,
+				  long MchCod,	// <= 0 ==> any
+				  long GamCod,	// <= 0 ==> any
+				  const char *GamesSelectedCommas);
 unsigned Mch_DB_GetMaxUsrsPerScore (long MchCod);
 unsigned Mch_DB_GetNumUsrsPerScore (MYSQL_RES **mysql_res,long MchCod);
 
