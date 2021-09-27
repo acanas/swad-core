@@ -76,6 +76,72 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/************* Insert message subject and content in the database ************/
+/*****************************************************************************/
+// Return the code of the new inserted message
+
+long Msg_DB_CreateNewMsg (const char *Subject,const char *Content,long MedCod)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create message",
+				"INSERT INTO msg_content"
+				" (Subject,Content,MedCod)"
+				" VALUES"
+				" ('%s','%s',%ld)",
+				Subject,
+				Content,
+				MedCod);
+  }
+
+/*****************************************************************************/
+/************* Insert a message in the table of sent messages ****************/
+/*****************************************************************************/
+
+void Msg_DB_CreateSntMsg (long MsgCod)
+  {
+   DB_QueryINSERT ("can not create sent message",
+		   "INSERT INTO msg_snt"
+		   " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
+		   " VALUES"
+		   " (%ld,%ld,%ld,'N',NOW())",
+	           MsgCod,
+	           Gbl.Hierarchy.Crs.CrsCod,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/*********** Insert a message in the table of received messages **************/
+/*****************************************************************************/
+
+void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail)
+  {
+   DB_QueryINSERT ("can not create received message",
+		   "INSERT INTO msg_rcv"
+		   " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
+		   " VALUES"
+		   " (%ld,%ld,'%c','N','N','N')",
+	           MsgCod,
+	           UsrCod,
+	           NotifyByEmail ? 'Y' :
+			           'N');
+  }
+
+/*****************************************************************************/
+/******** Update received message by setting Replied field to true ***********/
+/*****************************************************************************/
+
+void Msg_DB_SetRcvMsgAsReplied (long MsgCod)
+  {
+   DB_QueryUPDATE ("can not update a received message",
+		   "UPDATE msg_rcv"
+		     " SET Replied='Y'"
+		   " WHERE MsgCod=%ld"
+		     " AND UsrCod=%ld",
+                   MsgCod,
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /**************************** Expand a sent message **************************/
 /*****************************************************************************/
 
@@ -156,6 +222,61 @@ void Msg_DB_ContractRcvMsg (long MsgCod)
 		     " AND UsrCod=%ld",
                    MsgCod,
                    Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************** Mark a received message as open **********************/
+/*****************************************************************************/
+
+void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod)
+  {
+   /***** Mark message as read by user *****/
+   DB_QueryUPDATE ("can not mark a received message as open",
+		   "UPDATE msg_rcv"
+		     " SET Open='Y'"
+		   " WHERE MsgCod=%ld"
+		     " AND UsrCod=%ld",
+                   MsgCod,
+                   UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Insert received message into deleted ********************/
+/*****************************************************************************/
+
+void Msg_DB_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
+  {
+   DB_QueryINSERT ("can not remove a received message",
+		   "INSERT IGNORE INTO msg_rcv_deleted"
+		   " (MsgCod,UsrCod,Notified,Open,Replied)"
+		   " SELECT MsgCod,"
+		           "UsrCod,"
+		           "Notified,"
+		           "Open,"
+		           "Replied"
+		     " FROM msg_rcv"
+		    " WHERE MsgCod=%ld"
+		      " AND UsrCod=%ld",
+                   MsgCod,
+                   UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Insert received message into deleted ********************/
+/*****************************************************************************/
+
+void Msg_DB_MoveSntMsgToDeleted (long MsgCod)
+  {
+   DB_QueryINSERT ("can not remove a sent message",
+		   "INSERT IGNORE INTO msg_snt_deleted"
+		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		   " SELECT MsgCod,"
+		           "CrsCod,"
+		           "UsrCod,"
+		           "CreatTime"
+		     " FROM msg_snt"
+		    " WHERE MsgCod=%ld",
+                   MsgCod);
   }
 
 /*****************************************************************************/
@@ -487,7 +608,541 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
   }
 
 /*****************************************************************************/
-/********************* Get number of user I have banned **********************/
+/******************** Check if a sent message is deleted *********************/
+/*****************************************************************************/
+
+bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a sent message is deleted",
+			  "SELECT COUNT(*)"
+			   " FROM msg_snt"
+			  " WHERE MsgCod=%ld",
+			  MsgCod) == 0);	// The message has been deleted
+						// by its author when it is not present
+						// in table of sent messages undeleted
+  }
+
+/*****************************************************************************/
+/***** Check if a received message has been deleted by all its recipients ****/
+/*****************************************************************************/
+
+bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a received message"
+			  " is deleted by all recipients",
+			  "SELECT COUNT(*)"
+			   " FROM msg_rcv"
+			  " WHERE MsgCod=%ld",
+			  MsgCod) == 0);	// The message has been deleted
+						// by all its recipients when it is not present
+						// in table of received messages undeleted
+  }
+
+/*****************************************************************************/
+/******** Get the number of unique messages sent from this location **********/
+/******** (all the platform, current degree or current course)      **********/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
+  {
+   const char *Table = "msg_snt";
+
+   /***** Get the number of messages sent from this location
+          (all the platform, current degree or current course) from database *****/
+   switch (MsgStatus)
+     {
+      case Msg_STATUS_ALL:
+      case Msg_STATUS_NOTIFIED:
+         Table = "msg_snt";
+         break;
+      case Msg_STATUS_DELETED:
+         Table = "msg_snt_deleted";
+         break;
+     }
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 return (unsigned) DB_GetNumRowsTable (Table);
+      case HieLvl_CTY:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		         " FROM ins_instits,"
+		               "ctr_centers,"
+		               "deg_degrees,"
+		               "crs_courses,"
+		               "%s"
+		        " WHERE ins_instits.CtyCod=%ld"
+		          " AND ins_instits.InsCod=ctr_centers.InsCod"
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Cty.CtyCod,
+		        Table);
+      case HieLvl_INS:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		         " FROM ctr_centers,"
+		               "deg_degrees,"
+		               "crs_courses,"
+		               "%s"
+		        " WHERE ctr_centers.InsCod=%ld"
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Ins.InsCod,
+		        Table);
+      case HieLvl_CTR:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		         " FROM deg_degrees,"
+		               "crs_courses,"
+		               "%s"
+		        " WHERE deg_degrees.CtrCod=%ld"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Ctr.CtrCod,
+		        Table);
+      case HieLvl_DEG:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		         " FROM crs_courses,"
+		               "%s"
+		        " WHERE crs_courses.DegCod=%ld"
+		          " AND crs_courses.CrsCod=%s.CrsCod",
+		        Table,
+		        Gbl.Hierarchy.Deg.DegCod,
+		        Table);
+      case HieLvl_CRS:
+         return (unsigned)
+	 DB_QueryCOUNT ("can not get number of sent messages",
+		        "SELECT COUNT(*)"
+		         " FROM %s"
+		        " WHERE CrsCod=%ld",
+		        Table,
+		        Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 return 0;
+     }
+  }
+
+/*****************************************************************************/
+/****** Get the number of unique messages received from this location ********/
+/****** (all the platform, current degree or current course)          ********/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetNumRcvMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus)
+  {
+   char *Table;
+
+   /***** Get the number of unique messages sent from this location
+          (all the platform, current degree or current course) from database *****/
+   switch (MsgStatus)
+     {
+      case Msg_STATUS_ALL:
+      case Msg_STATUS_DELETED:
+         Table = (MsgStatus == Msg_STATUS_ALL) ? "msg_rcv" :
+                                                 "msg_rcv_deleted";
+         switch (Scope)
+           {
+            case HieLvl_SYS:
+               return (unsigned) DB_GetNumRowsTable (Table);
+            case HieLvl_CTY:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			       " FROM ins_instits,"
+			             "ctr_centers,"
+			             "deg_degrees,"
+			             "crs_courses,"
+			             "%s,"
+			             "msg_snt"
+			      " WHERE ins_instits.CtyCod=%ld"
+			        " AND ins_instits.InsCod=ctr_centers.InsCod"
+			        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			        " AND deg_degrees.DegCod=crs_courses.DegCod"
+			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			        " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      Table);
+            case HieLvl_INS:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			       " FROM ctr_centers,"
+			             "deg_degrees,"
+			             "crs_courses,"
+			             "%s,"
+			             "msg_snt"
+			      " WHERE ctr_centers.InsCod=%ld"
+			        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			        " AND deg_degrees.DegCod=crs_courses.DegCod"
+			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			        " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Table);
+            case HieLvl_CTR:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			       " FROM deg_degrees,"
+			             "crs_courses,"
+			             "%s,"
+			             "msg_snt"
+			      " WHERE deg_degrees.CtrCod=%ld"
+			        " AND deg_degrees.DegCod=crs_courses.DegCod"
+			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			        " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      Table);
+            case HieLvl_DEG:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			       " FROM crs_courses,"
+			             "%s,"
+			             "msg_snt"
+			      " WHERE crs_courses.DegCod=%ld"
+			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			        " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Table);
+            case HieLvl_CRS:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT COUNT(*)"
+			       " FROM msg_snt,"
+			             "%s"
+			      " WHERE msg_snt.CrsCod=%ld"
+			        " AND msg_snt.MsgCod=%s.MsgCod",
+			      Table,
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Table);
+            case HieLvl_UNK:
+	    default:
+	       return 0;
+           }
+         return 0;
+      case Msg_STATUS_NOTIFIED:
+         switch (Scope)
+           {
+            case HieLvl_SYS:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			        " FROM msg_rcv"
+			       " WHERE Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			        " FROM msg_rcv_deleted"
+			       " WHERE Notified='Y')");
+            case HieLvl_CTY:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			        " FROM ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv"
+			       " WHERE ins_instits.CtyCod=%ld"
+			         " AND ins_instits.InsCod=ctr_centers.InsCod"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			         " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			        " FROM ins_instits,"
+			              "ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv_deleted"
+			       " WHERE ins_instits.CtyCod=%ld"
+			         " AND ins_instits.InsCod=ctr_centers.InsCod"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			         " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      Gbl.Hierarchy.Cty.CtyCod);
+            case HieLvl_INS:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			        " FROM ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv"
+			       " WHERE ctr_centers.InsCod=%ld"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			         " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			        " FROM ctr_centers,"
+			              "deg_degrees,"
+			              "crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv_deleted"
+			       " WHERE ctr_centers.InsCod=%ld"
+			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			         " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Gbl.Hierarchy.Ins.InsCod);
+            case HieLvl_CTR:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			        " FROM deg_degrees,"
+			              "crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			         " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			        " FROM deg_degrees,"
+			              "crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv_deleted"
+			       " WHERE deg_degrees.CtrCod=%ld"
+			         " AND deg_degrees.DegCod=crs_courses.DegCod"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			         " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      Gbl.Hierarchy.Ctr.CtrCod);
+            case HieLvl_DEG:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			        " FROM crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv"
+			       " WHERE crs_courses.DegCod=%ld"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			         " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			        " FROM crs_courses,"
+			              "msg_snt,"
+			              "msg_rcv_deleted"
+			       " WHERE crs_courses.DegCod=%ld"
+			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
+			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			         " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Gbl.Hierarchy.Deg.DegCod);
+            case HieLvl_CRS:
+               return (unsigned)
+               DB_QueryCOUNT ("can not get number of received messages",
+			      "SELECT "
+			      "(SELECT COUNT(*)"
+			        " FROM msg_snt,"
+			              "msg_rcv"
+			       " WHERE msg_snt.CrsCod=%ld"
+			         " AND msg_snt.MsgCod=msg_rcv.MsgCod"
+			         " AND msg_rcv.Notified='Y')"
+			      " + "
+			      "(SELECT COUNT(*)"
+			        " FROM msg_snt,"
+			              "msg_rcv_deleted"
+			       " WHERE msg_snt.CrsCod=%ld"
+			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+			         " AND msg_rcv_deleted.Notified='Y')",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      Gbl.Hierarchy.Crs.CrsCod);
+            case HieLvl_UNK:
+	    default:
+	       return 0;
+           }
+         return 0;
+      default:
+         return 0;
+     }
+  }
+
+/*****************************************************************************/
+/**** Get the number of unique messages sent by any teacher from a course ****/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of messages sent by teachers",
+		  "SELECT COUNT(*)"
+		   " FROM msg_snt,"
+			 "crs_users"
+		  " WHERE msg_snt.CrsCod=%ld"
+		    " AND crs_users.CrsCod=%ld"
+		    " AND crs_users.Role IN (%u,%u)"
+		    " AND msg_snt.UsrCod=crs_users.UsrCod",
+		  CrsCod,
+		  CrsCod,
+		  (unsigned) Rol_NET,	// Non-editing teacher
+		  (unsigned) Rol_TCH);	// Teacher
+  }
+
+/*****************************************************************************/
+/************** Get the number of unique messages sent by a user *************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of messages sent by a user",
+		  "SELECT"
+		  " (SELECT COUNT(*)"
+		     " FROM msg_snt"
+		    " WHERE UsrCod=%ld)"
+		  " +"
+		  " (SELECT COUNT(*)"
+		     " FROM msg_snt_deleted"
+		    " WHERE UsrCod=%ld)",
+		  UsrCod,
+		  UsrCod);
+  }
+
+/*****************************************************************************/
+/****************** Remove message from received messages ********************/
+/*****************************************************************************/
+
+void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove a received message",
+		   "DELETE FROM msg_rcv"
+		   " WHERE MsgCod=%ld"
+		     " AND UsrCod=%ld",
+                   MsgCod,
+                   UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove message from sent messages ***********************/
+/*****************************************************************************/
+
+void Msg_DB_RemoveSntMsg (long MsgCod)
+  {
+   DB_QueryDELETE ("can not remove a sent message",
+		   "DELETE FROM msg_snt"
+		   " WHERE MsgCod=%ld",
+		   MsgCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove all received or sent messages of a user **************/
+/*****************************************************************************/
+
+void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
+  {
+   /***** Move messages from msg_rcv to msg_rcv_deleted *****/
+   /* Insert messages into msg_rcv_deleted */
+   DB_QueryINSERT ("can not remove received messages",
+		   "INSERT IGNORE INTO msg_rcv_deleted"
+		   " (MsgCod,UsrCod,Notified,Open,Replied)"
+		   " SELECT MsgCod,"
+		           "UsrCod,"
+		           "Notified,"
+		           "Open,"
+		           "Replied"
+		     " FROM msg_rcv"
+		    " WHERE UsrCod=%ld",
+                   UsrCod);
+
+   /* Delete messages from msg_rcv *****/
+   DB_QueryDELETE ("can not remove received messages",
+		   "DELETE FROM msg_rcv"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+
+   /***** Move message from msg_snt to msg_snt_deleted *****/
+   /* Insert message into msg_snt_deleted */
+   DB_QueryINSERT ("can not remove sent messages",
+		   "INSERT IGNORE INTO msg_snt_deleted"
+		   " (MsgCod,CrsCod,UsrCod,CreatTime)"
+		   " SELECT MsgCod,"
+		           "CrsCod,"
+		           "UsrCod,"
+		           "CreatTime"
+		     " FROM msg_snt"
+		    " WHERE UsrCod=%ld",
+                   UsrCod);
+
+   /* Delete message from msg_snt *****/
+   DB_QueryDELETE ("can not remove sent messages",
+		   "DELETE FROM msg_snt"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/***** Delete the subject and content of all completely deleted messages *****/
+/*****************************************************************************/
+
+void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
+  {
+   /***** Move messages from msg_content to msg_content_deleted *****/
+   /* Insert message content into msg_content_deleted */
+   DB_QueryINSERT ("can not remove the content of some messages",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content)"
+		   " SELECT MsgCod,"
+		           "Subject,"
+		           "Content"
+		     " FROM msg_content"
+		    " WHERE MsgCod NOT IN"
+		          " (SELECT MsgCod"
+		             " FROM msg_snt)"
+		      " AND MsgCod NOT IN"
+		          " (SELECT DISTINCT MsgCod"
+		             " FROM msg_rcv)");
+
+   /* Messages in msg_content_deleted older than a certain time
+      should be deleted to ensure the protection of personal data */
+
+   /* Delete message from msg_content *****/
+   DB_QueryDELETE ("can not remove the content of some messages",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod NOT IN"
+		         " (SELECT MsgCod"
+		            " FROM msg_snt)"
+		     " AND MsgCod NOT IN"
+		         " (SELECT DISTINCT MsgCod"
+		            " FROM msg_rcv)");
+  }
+
+/*****************************************************************************/
+/******************** Get number of users I have banned **********************/
 /*****************************************************************************/
 
 unsigned Msg_DB_GetNumUsrsBannedByMe (void)
@@ -498,4 +1153,51 @@ unsigned Msg_DB_GetNumUsrsBannedByMe (void)
 		   " FROM msg_banned"
 		  " WHERE ToUsrCod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************************* Get users I have banned ***************************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetUsrsBannedByMe (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get banned users",
+		   "SELECT msg_banned.FromUsrCod"
+		    " FROM msg_banned,"
+			  "usr_data"
+		   " WHERE msg_banned.ToUsrCod=%ld"
+		     " AND msg_banned.FromUsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Chech if a user is banned by another user ******************/
+/*****************************************************************************/
+
+bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
+  {
+   /***** Get if FromUsrCod is banned by ToUsrCod *****/
+   return (DB_QueryCOUNT ("can not check if a user is banned",
+			  "SELECT COUNT(*)"
+			   " FROM msg_banned"
+			  " WHERE FromUsrCod=%ld"
+			    " AND ToUsrCod=%ld",
+			  FromUsrCod,ToUsrCod) != 0);
+  }
+
+/*****************************************************************************/
+/************************ Remove user from banned table **********************/
+/*****************************************************************************/
+
+void Msg_DB_RemoveUsrFromBanned (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user from table of banned users",
+		   "DELETE FROM msg_banned"
+		   " WHERE FromUsrCod=%ld"
+		      " OR ToUsrCod=%ld",
+                   UsrCod,UsrCod);
   }

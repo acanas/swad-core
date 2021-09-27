@@ -53,6 +53,7 @@
 #include "swad_mail_database.h"
 #include "swad_match.h"
 #include "swad_message.h"
+#include "swad_message_database.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
@@ -1028,7 +1029,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Ntf_DB_RemoveUsrNtfs (UsrDat->UsrCod);
 
    /***** Delete user's messages sent and received *****/
-   Msg_DelAllRecAndSntMsgsUsr (UsrDat->UsrCod);
+   Msg_DB_RemoveAllRecAndSntMsgsUsr (UsrDat->UsrCod);
    if (QuietOrVerbose == Cns_VERBOSE)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Messages_of_THE_USER_X_have_been_deleted,
                      UsrDat->FullName);

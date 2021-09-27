@@ -43,6 +43,7 @@
 #include "swad_indicator.h"
 #include "swad_indicator_database.h"
 #include "swad_message.h"
+#include "swad_message_database.h"
 #include "swad_parameter.h"
 #include "swad_theme.h"
 

@@ -101,18 +101,9 @@ void Msg_ExpSntMsg (void);
 void Msg_ExpRecMsg (void);
 void Msg_ConSntMsg (void);
 void Msg_ConRecMsg (void);
-void Msg_DB_SetReceivedMsgAsOpen (long MsgCod,long UsrCod);
-
-void Msg_DelAllRecAndSntMsgsUsr (long UsrCod);
-void Msg_DB_MoveUnusedMsgsContentToDeleted (void);
 
 void Msg_ShowSntMsgs (void);
 void Msg_ShowRecMsgs (void);
-
-unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod);
-unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod);
-unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
-unsigned Msg_DB_GetNumRcvMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
 
 void Msg_PutHiddenParamsMsgsFilters (void *Messages);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
@@ -128,8 +119,6 @@ void Msg_PutHiddenParamMsgCod (long MsgCod);
 void Msg_BanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenListingUsrs (void);
-bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
-void Msg_DB_RemoveUsrFromBanned (long UsrCod);
 void Msg_ListBannedUsrs (void);
 
 #endif

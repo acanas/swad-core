@@ -50,6 +50,7 @@
 #include "swad_HTML.h"
 #include "swad_mark.h"
 #include "swad_message.h"
+#include "swad_message_database.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
@@ -907,7 +908,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
          Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,GetContent);
          if (Gbl.WebService.IsWebService)
             /* Set the message as open by me, because I can read it in an extern application */
-            Msg_DB_SetReceivedMsgAsOpen (Cod,UsrCod);
+            Msg_DB_SetRcvMsgAsOpen (Cod,UsrCod);
          break;
       case Ntf_EVENT_SURVEY:
          Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,GetContent);

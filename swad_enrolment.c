@@ -52,6 +52,7 @@
 #include "swad_mail_database.h"
 #include "swad_match.h"
 #include "swad_message.h"
+#include "swad_message_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"

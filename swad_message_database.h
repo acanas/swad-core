@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 // #include "swad_course.h"
+#include "swad_hierarchy_level.h"
 // #include "swad_notification.h"
 // #include "swad_statistic.h"
 
@@ -47,10 +48,17 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+long Msg_DB_CreateNewMsg (const char *Subject,const char *Content,long MedCod);
+void Msg_DB_CreateSntMsg (long MsgCod);
+void Msg_DB_CreateRcvMsg (long MsgCod,long UsrCod,bool NotifyByEmail);
+void Msg_DB_SetRcvMsgAsReplied (long MsgCod);
 void Msg_DB_ExpandSntMsg (long MsgCod);
 void Msg_DB_ExpandRcvMsg (long MsgCod);
 void Msg_DB_ContractSntMsg (long MsgCod);
 void Msg_DB_ContractRcvMsg (long MsgCod);
+void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod);
+void Msg_DB_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
+void Msg_DB_MoveSntMsgToDeleted (long MsgCod);
 
 void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
                                       char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
@@ -63,6 +71,23 @@ void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 bool Msg_DB_GetStatusOfSntMsg (long MsgCod);
 void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
                                bool *Open,bool *Replied,bool *Expanded);
+bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod);
+bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod);
+unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_DB_GetNumRcvMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
+unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod);
+unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod);
+
+void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod);
+void Msg_DB_RemoveSntMsg (long MsgCod);
+void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod);
+void Msg_DB_MoveUnusedMsgsContentToDeleted (void);
+
+//--------------------------- Users banned ------------------------------------
 unsigned Msg_DB_GetNumUsrsBannedByMe (void);
+unsigned Msg_DB_GetUsrsBannedByMe (MYSQL_RES **mysql_res);
+bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
+
+void Msg_DB_RemoveUsrFromBanned (long UsrCod);
 
 #endif
