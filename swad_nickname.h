@@ -38,9 +38,7 @@
 #define Nck_MAX_CHARS_NICK_WITHOUT_ARROBA	16
 #define Nck_MAX_BYTES_NICK_WITHOUT_ARROBA	Nck_MAX_CHARS_NICK_WITHOUT_ARROBA
 
-#define Nck_MAX_BYTES_NICK_FROM_FORM	(128 - 1)	// For variables that store characters typed in a form
-
-#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICK_FROM_FORM + 2) * Cfg_MAX_USRS_IN_LIST)
+#define Nck_MAX_BYTES_LIST_NICKS		((Cns_MAX_BYTES_USR_LOGIN + 2) * Cfg_MAX_USRS_IN_LIST)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -48,20 +46,15 @@
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
-void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
-                                   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
-long Nck_GetUsrCodFromNickname (const char *Nickname);
+long Nck_GetUsrCodFromNickname (const char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1]);
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
 void Nck_ShowFormChangeOtherUsrNickname (void);
 
 void Nck_RemoveMyNick (void);
 void Nck_RemoveOtherUsrNick (void);
-void Nck_DB_RemoveUsrNicknames (long UsrCod);
 
 void Nck_UpdateMyNick (void);
 void Nck_UpdateOtherUsrNick (void);
-
-void Nck_DB_UpdateNick (long UsrCod,const char *NewNickname);
 
 #endif

@@ -66,8 +66,9 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_match.o swad_match_database.o swad_match_print.o \
        swad_match_result.o swad_media.o swad_media_database.o swad_menu.o \
        swad_message.o swad_message_database.o swad_MFU.o swad_MFU_database.o \
-       swad_network.o swad_network_database.o swad_nickname.o swad_notice.o \
-       swad_notification.o swad_notification_database.o swad_pagination.o \
+       swad_network.o swad_network_database.o swad_nickname.o \
+       swad_nickname_database.o swad_notice.o swad_notification.o \
+       swad_notification_database.o swad_pagination.o \
        swad_parameter.o swad_password.o swad_photo.o swad_place.o \
        swad_plugin.o swad_privacy.o swad_profile.o swad_program.o \
        swad_project.o \

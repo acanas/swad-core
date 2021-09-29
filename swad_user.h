@@ -166,13 +166,13 @@ struct UsrData
   {
    long UsrCod;
    char EnUsrCod [Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// String to store the ID, nickname or email
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;
       unsigned Num;
      } IDs;
-   char Nickname        [Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char Nickname        [Cns_MAX_BYTES_USR_LOGIN + 1];
    char Password        [Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    struct
      {

@@ -50,6 +50,7 @@
 #include "swad_ID.h"
 #include "swad_message.h"
 #include "swad_message_database.h"
+#include "swad_nickname_database.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -673,7 +674,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
-   char NickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
 
    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",UsrDat->Nickname);
    Par_PutHiddenParamString (NULL,"OtherRecipients",NickWithArr);

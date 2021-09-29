@@ -80,7 +80,7 @@ unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
 /****** Check if a nickname matches any of the nicknames of other users ******/
 /*****************************************************************************/
 
-bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1])
+bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1])
   {
    return (DB_QueryCOUNT ("can not check if nickname already existed",
 			  "SELECT COUNT(*)"

@@ -56,6 +56,7 @@
 #include "swad_message_database.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
+#include "swad_nickname_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
@@ -93,9 +94,9 @@ extern struct Globals Gbl;
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
-static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
+static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],
                                                      const char *NewEmail);
-static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
+static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],
                                      char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                      char *NewEncryptedPassword);
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
@@ -360,7 +361,7 @@ void Acc_ShowFormCreateMyAccount (void)
 /************ Show form to create a new account using parameters *************/
 /*****************************************************************************/
 
-static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
+static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
@@ -370,7 +371,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   char NewNickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NewNickWithArr[Cns_MAX_BYTES_USR_LOGIN + 1];
 
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
@@ -595,7 +596,7 @@ static void Acc_PutParamsToRemoveMyAccount (void *EncryptedUsrCod)
 
 bool Acc_CreateMyNewAccountAndLogIn (void)
   {
-   char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
@@ -643,7 +644,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 /*****************************************************************************/
 // Return false on error
 
-static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],
+static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],
                                      char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                      char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
   {
@@ -651,15 +652,15 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_F
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char NewNickWithArr[1 + Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NewNickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNickWithArr,Nck_MAX_BYTES_NICK_FROM_FORM);
+   Par_GetParToText ("NewNick",NewNickWithArr,Cns_MAX_BYTES_USR_LOGIN);
 
    /* Remove arrobas at the beginning */
-   Str_Copy (NewNickWithoutArr,NewNickWithArr,Nck_MAX_BYTES_NICK_FROM_FORM);
+   Str_Copy (NewNickWithoutArr,NewNickWithArr,Cns_MAX_BYTES_USR_LOGIN);
    Str_RemoveLeadingArrobas (NewNickWithoutArr);
 
    /* Create a new version of the nickname with arroba */

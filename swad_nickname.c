@@ -33,6 +33,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_nickname_database.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_user.h"
@@ -66,8 +67,6 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 static void Nck_PutParamsRemoveMyNick (void *Nick);
 static void Nck_PutParamsRemoveOtherNick (void *Nick);
 
-static void Nck_DB_RemoveNickname (long UsrCod,const char *Nickname);
-
 static void Nck_UpdateUsrNick (struct UsrData *UsrDat);
 
 /*****************************************************************************/
@@ -76,7 +75,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat);
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
   {
-   char NickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
    unsigned Length;
    const char *Ptr;
 
@@ -109,32 +108,14 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
   }
 
 /*****************************************************************************/
-/************* Get nickname of a user from his/her user's code ***************/
-/*****************************************************************************/
-
-void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
-                                   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
-  {
-   /***** Get current (last updated) user's nickname from database *****/
-   DB_QuerySELECTString (Nickname,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA,
-                         "can not get nickname",
-		         "SELECT Nickname"
-		          " FROM usr_nicknames"
-		         " WHERE UsrCod=%ld"
-		         " ORDER BY CreatTime DESC"
-		         " LIMIT 1",
-		         UsrCod);
-  }
-
-/*****************************************************************************/
 /************** Get user's code of a user from his/her nickname **************/
 /*****************************************************************************/
 // Nickname may have leading '@'
 // Returns true if nickname found in database
 
-long Nck_GetUsrCodFromNickname (const char *Nickname)
+long Nck_GetUsrCodFromNickname (const char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1])
   {
-   char NickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
 
    /***** Trivial check 1: nickname should be not null *****/
    if (!Nickname)
@@ -149,13 +130,7 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
    Str_RemoveLeadingArrobas (NickWithoutArr);
 
    /***** Get user's code from database *****/
-   return DB_QuerySELECTCode ("can not get user's code",
-			      "SELECT usr_nicknames.UsrCod"
-			       " FROM usr_nicknames,"
-				     "usr_data"
-			      " WHERE usr_nicknames.Nickname='%s'"
-				" AND usr_nicknames.UsrCod=usr_data.UsrCod",
-			      NickWithoutArr);
+   return Nck_DB_GetUsrCodFromNickname (NickWithoutArr);
   }
 
 /*****************************************************************************/
@@ -200,7 +175,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    unsigned NumNicks;
    unsigned NumNick;
    Act_Action_t NextAction;
-   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
    const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
@@ -208,13 +183,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
       /***** Get my nicknames *****/
-      NumNicks = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get nicknames of a user",
-		      "SELECT Nickname"	// row[0]
-		       " FROM usr_nicknames"
-		      " WHERE UsrCod=%ld"
-		      " ORDER BY CreatTime DESC",
-		      UsrDat->UsrCod);
+      NumNicks = Nck_DB_GetUsrNicknames (&mysql_res,UsrDat->UsrCod);
 
       /***** Begin box *****/
       snprintf (StrRecordWidth,sizeof (StrRecordWidth),"%upx",Rec_RECORD_WIDTH);
@@ -471,33 +440,6 @@ void Nck_RemoveOtherUsrNick (void)
   }
 
 /*****************************************************************************/
-/********************** Remove a nickname from database **********************/
-/*****************************************************************************/
-
-static void Nck_DB_RemoveNickname (long UsrCod,const char *Nickname)
-  {
-   /***** Remove a nickname *****/
-   DB_QueryREPLACE ("can not remove a nickname",
-		    "DELETE FROM usr_nicknames"
-		    " WHERE UsrCod=%ld"
-		      " AND Nickname='%s'",
-                    UsrCod,
-                    Nickname);
-  }
-
-/*****************************************************************************/
-/************************** Remove user's nicknames **************************/
-/*****************************************************************************/
-
-void Nck_DB_RemoveUsrNicknames (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's nicknames",
-		   "DELETE FROM usr_nicknames"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
 /***************************** Update my nickname ****************************/
 /*****************************************************************************/
 
@@ -544,12 +486,11 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
    extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
    extern const char *Txt_The_nickname_X_has_been_registered_successfully;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
-   char NewNickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
-   char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NewNickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NewNickWithoutArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    /***** Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNickWithArr,
-		     Nck_MAX_BYTES_NICK_FROM_FORM);
+   Par_GetParToText ("NewNick",NewNickWithArr,sizeof (NewNickWithArr) - 1);
    if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
@@ -564,21 +505,11 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
       else if (strcasecmp (UsrDat->Nickname,NewNickWithoutArr))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
-         if (DB_QueryCOUNT ("can not check if nickname already existed",
-			    "SELECT COUNT(*)"
-			     " FROM usr_nicknames"
-			    " WHERE UsrCod=%ld"
-			      " AND Nickname='%s'",
-			    UsrDat->UsrCod,
-			    NewNickWithoutArr) == 0)	// No matches
+         if (!Nck_DB_CheckIfNickMatchesAnyUsrNick (UsrDat->UsrCod,
+                                                   NewNickWithoutArr))		// No matches
             /***** Check if the new nickname matches any of the nicknames of other users *****/
-            if (DB_QueryCOUNT ("can not check if nickname already existed",
-        		       "SELECT COUNT(*)"
-        		        " FROM usr_nicknames"
-			       " WHERE Nickname='%s'"
-			         " AND UsrCod<>%ld",
-			       NewNickWithoutArr,
-			       UsrDat->UsrCod))	// A nickname of another user is the same that user's nickname
+            if (Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (UsrDat->UsrCod,
+                                                            NewNickWithoutArr))	// A nickname of another user is the same that user's nickname
                Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
         	                Txt_The_nickname_X_had_been_registered_by_another_user,
                                 NewNickWithoutArr);
@@ -601,20 +532,4 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 		       NewNickWithArr,
 		       Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
 		       Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
-  }
-
-/*****************************************************************************/
-/******************* Update user's nickname in database **********************/
-/*****************************************************************************/
-
-void Nck_DB_UpdateNick (long UsrCod,const char *NewNickname)
-  {
-   /***** Update user's nickname in database *****/
-   DB_QueryREPLACE ("can not update nickname",
-		    "REPLACE INTO usr_nicknames"
-		    " (UsrCod,Nickname,CreatTime)"
-		    " VALUES"
-		    " (%ld,'%s',NOW())",
-                    UsrCod,
-                    NewNickname);
   }

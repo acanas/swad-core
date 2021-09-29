@@ -25,21 +25,11 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <string.h>
-
-// #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
-// #include "swad_figure.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
 #include "swad_network.h"
 #include "swad_network_database.h"
-// #include "swad_parameter.h"
-// #include "swad_profile.h"
-// #include "swad_theme.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

@@ -47,7 +47,7 @@
 unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
                                const char ID[ID_MAX_BYTES_USR_ID + 1]);
 
-bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1]);
+bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1]);
 bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat);

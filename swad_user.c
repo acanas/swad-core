@@ -64,6 +64,7 @@
 #include "swad_mail_database.h"
 #include "swad_MFU.h"
 #include "swad_nickname.h"
+#include "swad_nickname_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
@@ -2869,7 +2870,7 @@ void Usr_PutFormLogOut (void)
 
 void Usr_GetParamUsrIdLogin (void)
   {
-   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Cns_MAX_BYTES_EMAIL_ADDRESS);
+   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Cns_MAX_BYTES_USR_LOGIN);
    // Users' IDs are always stored internally without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
   }
@@ -2883,7 +2884,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Par_GetParToText ("OtherUsrIDNickOrEMail",
                      Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
-                     Cns_MAX_BYTES_EMAIL_ADDRESS);
+                     Cns_MAX_BYTES_USR_LOGIN);
 
    // If it's a user's ID (if does not contain '@')
    if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' not found
@@ -5987,7 +5988,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    size_t LengthSelectedUsrsCods;
    size_t LengthUsrCod;
    const char *Ptr;
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
    struct UsrData UsrDat;
    struct ListUsrCods ListUsrCods;
    bool Error = false;
@@ -6015,7 +6016,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
       while (*Ptr)
         {
          /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-         Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
+         Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,Cns_MAX_BYTES_USR_LOGIN);
 
          /* Check if string is plain user's ID or nickname and get encrypted user's ID */
          if (UsrIDNickOrEmail[0])
@@ -10169,7 +10170,7 @@ void Usr_DB_RemoveUsrFromBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   char NewNickWithArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NewNickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {

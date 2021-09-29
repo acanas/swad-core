@@ -115,6 +115,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_hierarchy_level.h"
 #include "swad_ID.h"
 #include "swad_match.h"
+#include "swad_nickname_database.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_password.h"
@@ -230,7 +231,7 @@ static int API_GetCurrentDegCodFromCurrentCrsCod (void);
 static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 
 static int API_CheckParamsNewAccount (char *NewNickWithArr,	// Input
-                                      char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],	// Output
+                                      char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],	// Output
                                       char *NewEmail,			// Input-output
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword);	// Output
@@ -678,7 +679,7 @@ int swad__createAccount (struct soap *soap,
                          char *userNickname,char *userEmail,char *userPassword,char *appKey,	// input
                          struct swad__createAccountOutput *createAccountOut)			// output
   {
-   char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    int Result;
    int ReturnCode;
@@ -700,7 +701,7 @@ int swad__createAccount (struct soap *soap,
 
    /***** Check parameters used to create the new account *****/
    Result = API_CheckParamsNewAccount (userNickname,		// Input
-                                       NewNickWithoutArr,// Output
+                                       NewNickWithoutArr,	// Output
                                        userEmail,		// Input-output
                                        userPassword,		// Input
                                        NewEncryptedPassword);	// Output
@@ -750,15 +751,15 @@ int swad__createAccount (struct soap *soap,
 /*****************************************************************************/
 // Return false on error
 //char *userNickname,char *userEmail,char *userID,char *userPassword
-static int API_CheckParamsNewAccount (char *NewNickWithArr,	// Input
-                                      char NewNickWithoutArr[Nck_MAX_BYTES_NICK_FROM_FORM + 1],	// Output
+static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
+                                      char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],	// Output
                                       char *NewEmail,			// Input-output
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword)	// Output
   {
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
-   Str_Copy (NewNickWithoutArr,NewNickWithArr,Nck_MAX_BYTES_NICK_FROM_FORM);
+   Str_Copy (NewNickWithoutArr,NewNickWithArr,Cns_MAX_BYTES_USR_LOGIN);
    if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
@@ -806,7 +807,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
                                   char *userID,char *userPassword,char *appKey,				// input
                                   struct swad__loginByUserPasswordKeyOutput *loginByUserPasswordKeyOut)	// output
   {
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
    int ReturnCode;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    bool UsrFound;
@@ -1155,7 +1156,7 @@ int swad__getNewPassword (struct soap *soap,
                           struct swad__getNewPasswordOutput *getNewPasswordOut)	// output
   {
    int ReturnCode;
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_USR_LOGIN + 1];
    char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
 
    /***** Initializations *****/
@@ -3568,7 +3569,7 @@ int swad__sendMessage (struct soap *soap,
   {
    int ReturnCode;
    long ReplyUsrCod = -1L;
-   char Nickname[Nck_MAX_BYTES_NICK_FROM_FORM + 1];
+   char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1];
    char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3657,7 +3658,7 @@ int swad__sendMessage (struct soap *soap,
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,Nickname,Nck_MAX_BYTES_NICK_FROM_FORM);
+      Str_GetNextStringUntilComma (&Ptr,Nickname,Cns_MAX_BYTES_USR_LOGIN);
 
       /* Check if string is a valid nickname */
       if (Nck_CheckIfNickWithArrIsValid (Nickname))	// String is a nickname?
