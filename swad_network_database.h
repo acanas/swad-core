@@ -1,7 +1,7 @@
-// swad_network.h: users' webs and social networks
+// swad_network_database.h: users' webs and social networks, operations with database
 
-#ifndef _SWAD_NET
-#define _SWAD_NET
+#ifndef _SWAD_NET_DB
+#define _SWAD_NET_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,60 +27,28 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_constant.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 30
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Net_WWW,		// Personal web page
-   Net_500PX,
-   Net_DELICIOUS,
-   Net_DEVIANTART,
-   Net_DIASPORA,
-   Net_EDMODO,
-   Net_FACEBOOK,
-   Net_FLICKR,
-   Net_FOURSQUARE,
-   Net_GITHUB,
-   Net_GNU_SOCIAL,
-   Net_GOOGLE_PLUS,
-   Net_GOOGLE_SCHOLAR,
-   Net_IDENTICA,
-   Net_INSTAGRAM,
-   Net_LINKEDIN,
-   Net_ORCID,
-   Net_PAPERLI,
-   Net_PINTEREST,
-   Net_RESEARCH_GATE,
-   Net_RESEARCHERID,
-   Net_SCOOPIT,
-   Net_SLIDESHARE,
-   Net_STACK_OVERFLOW,
-   Net_STORIFY,
-   Net_TUMBLR,
-   Net_TWITCH,
-   Net_TWITTER,
-   Net_WIKIPEDIA,
-   Net_YOUTUBE,
-  } Net_WebsAndSocialNetworks_t;
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat);
+void Net_DB_UpdateMyWeb (Net_WebsAndSocialNetworks_t NumURL,
+                         const char URL[Cns_MAX_BYTES_WWW + 1]);
 
-void Net_ShowFormMyWebsAndSocialNets (void);
-void Net_UpdateMyWebsAndSocialNets (void);
-void Net_ShowWebAndSocialNetworksStats (void);
+void Net_DB_GetURL (long UsrCod,Net_WebsAndSocialNetworks_t NumURL,
+                    char URL[Cns_MAX_BYTES_WWW + 1]);
+unsigned Net_DB_GetWebAndSocialNetworksStats (MYSQL_RES **mysql_res);
 
+void Net_DB_RemoveMyWeb (Net_WebsAndSocialNetworks_t NumURL);
 void Net_DB_RemoveUsrWebs (long UsrCod);
 
 #endif

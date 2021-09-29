@@ -37,6 +37,8 @@
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_network.h"
+#include "swad_network_database.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -49,77 +51,9 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Net_NUM_WEBS_AND_SOCIAL_NETWORKS 30
-typedef enum
-  {
-   Net_WWW,		// Personal web page
-   Net_500PX,
-   Net_DELICIOUS,
-   Net_DEVIANTART,
-   Net_DIASPORA,
-   Net_EDMODO,
-   Net_FACEBOOK,
-   Net_FLICKR,
-   Net_FOURSQUARE,
-   Net_GITHUB,
-   Net_GNU_SOCIAL,
-   Net_GOOGLE_PLUS,
-   Net_GOOGLE_SCHOLAR,
-   Net_IDENTICA,
-   Net_INSTAGRAM,
-   Net_LINKEDIN,
-   Net_ORCID,
-   Net_PAPERLI,
-   Net_PINTEREST,
-   Net_RESEARCH_GATE,
-   Net_RESEARCHERID,
-   Net_SCOOPIT,
-   Net_SLIDESHARE,
-   Net_STACK_OVERFLOW,
-   Net_STORIFY,
-   Net_TUMBLR,
-   Net_TWITCH,
-   Net_TWITTER,
-   Net_WIKIPEDIA,
-   Net_YOUTUBE,
-  } Net_WebsAndSocialNetworks_t;
 #define Net_WEB_SOCIAL_NET_DEFAULT Net_WWW
 
 #define Net_MAX_BYTES_NETWORK_NAME 32
-
-static const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
-  {
-   [Net_WWW           ] = "www",
-   [Net_500PX         ] = "500px",
-   [Net_DELICIOUS     ] = "delicious",
-   [Net_DEVIANTART    ] = "deviantart",
-   [Net_DIASPORA      ] = "diaspora",
-   [Net_EDMODO        ] = "edmodo",
-   [Net_FACEBOOK      ] = "facebook",
-   [Net_FLICKR        ] = "flickr",
-   [Net_FOURSQUARE    ] = "foursquare",
-   [Net_GITHUB        ] = "github",
-   [Net_GNU_SOCIAL    ] = "gnusocial",
-   [Net_GOOGLE_PLUS   ] = "googleplus",
-   [Net_GOOGLE_SCHOLAR] = "googlescholar",
-   [Net_IDENTICA      ] = "identica",
-   [Net_INSTAGRAM     ] = "instagram",
-   [Net_LINKEDIN      ] = "linkedin",
-   [Net_ORCID         ] = "orcid",
-   [Net_PAPERLI       ] = "paperli",
-   [Net_PINTEREST     ] = "pinterest",
-   [Net_RESEARCH_GATE ] = "researchgate",
-   [Net_RESEARCHERID  ] = "researcherid",
-   [Net_SCOOPIT       ] = "scoopit",
-   [Net_SLIDESHARE    ] = "slideshare",
-   [Net_STACK_OVERFLOW] = "stackoverflow",
-   [Net_STORIFY       ] = "storify",
-   [Net_TUMBLR        ] = "tumblr",
-   [Net_TWITCH        ] = "twitch",
-   [Net_TWITTER       ] = "twitter",
-   [Net_WIKIPEDIA     ] = "wikipedia",
-   [Net_YOUTUBE       ] = "youtube",
-  };
 
 static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
@@ -224,14 +158,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	   NumURL++)
 	{
 	 /***** Check if exists the web / social network for this user *****/
-	 DB_QuerySELECTString (URL,sizeof (URL) - 1,
-			       "can not get user's web / social network",
-			       "SELECT URL"	// row[0]
-				" FROM usr_webs"
-			       " WHERE UsrCod=%ld"
-				 " AND Web='%s'",
-			       UsrDat->UsrCod,
-			       Net_WebsAndSocialNetworksDB[NumURL]);
+	 Net_DB_GetURL (UsrDat->UsrCod,NumURL,URL);
 	 if (URL[0])
 	    /* Show the web / social network */
 	    Net_ShowAWebOrSocialNet (URL,
@@ -294,14 +221,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 		    NumURL++)
 		 {
 		  /***** Get user's web / social network from database *****/
-		  DB_QuerySELECTString (URL,sizeof (URL) - 1,
-					"can not get user's web / social network",
-					"SELECT URL"	// row[0]
-					 " FROM usr_webs"
-					" WHERE UsrCod=%ld"
-					 " AND Web='%s'",
-					Gbl.Usrs.Me.UsrDat.UsrCod,
-					Net_WebsAndSocialNetworksDB[NumURL]);
+		  Net_DB_GetURL (Gbl.Usrs.Me.UsrDat.UsrCod,NumURL,URL);
 
 		  /***** Row for this web / social network *****/
 		  snprintf (StrName,sizeof (StrName),"URL%u",(unsigned) NumURL);
@@ -310,8 +230,11 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 		     HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
 			HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
 					 StrName,The_ClassFormInBox[Gbl.Prefs.Theme]);
-			   HTM_IMG (Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],Net_WebsAndSocialNetworksTitle[NumURL],
-				    "class=\"CONTEXT_ICO_16x16\" style=\"margin-right:6px;\"");
+			   HTM_IMG (Cfg_URL_ICON_PUBLIC,
+			            Net_WebsAndSocialNetworksIcons[NumURL],
+			            Net_WebsAndSocialNetworksTitle[NumURL],
+				    "class=\"CONTEXT_ICO_16x16\""
+				    " style=\"margin-right:6px;\"");
 			   HTM_TxtColon (Net_WebsAndSocialNetworksTitle[NumURL]);
 			HTM_LABEL_End ();
 		     HTM_TD_End ();
@@ -384,22 +307,10 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 
       if (URL[0])
 	 /***** Insert or replace web / social network *****/
-	 DB_QueryREPLACE ("can not update user's web / social network",
-			  "REPLACE INTO usr_webs"
-			  " (UsrCod,Web,URL)"
-			  " VALUES"
-			  " (%ld,'%s','%s')",
-			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Net_WebsAndSocialNetworksDB[NumURL],
-			  URL);
+	 Net_DB_UpdateMyWeb (NumURL,URL);
       else
 	 /***** Remove web / social network *****/
-	 DB_QueryDELETE ("can not remove user's web / social network",
-			 "DELETE FROM usr_webs"
-			 " WHERE UsrCod=%ld"
-			   " AND Web='%s'",
-			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Net_WebsAndSocialNetworksDB[NumURL]);
+	 Net_DB_RemoveMyWeb (NumURL);
      }
   }
 
@@ -410,14 +321,15 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 void Net_ShowWebAndSocialNetworksStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_webs_social_networks;
+   extern const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows = 0;	// Initialized to avoid warning
-   unsigned NumRow;
+   unsigned NumNetworks;
+   unsigned NumNetwork;
    Net_WebsAndSocialNetworks_t Web;
    char NetName[Net_MAX_BYTES_NETWORK_NAME + 1];
    unsigned NumUsrsTotal;
@@ -427,118 +339,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
    /***** Get number of users with a web / social network *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of users"
-				    " with webs / social networks",
-			 "SELECT Web,"					// row[0]
-			        "COUNT(*) AS N"				// row[1]
-			  " FROM usr_webs"
-			 " GROUP BY Web"
-			 " ORDER BY N DESC,"
-			           "Web");
-         break;
-      case HieLvl_CTY:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of users"
-				    " with webs / social networks",
-			 "SELECT usr_webs.Web,"				// row[0]
-			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_webs"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of users"
-				    " with webs / social networks",
-			 "SELECT usr_webs.Web,"				// row[0]
-			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_webs"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case HieLvl_CTR:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of users"
-				    " with webs / social networks",
-			 "SELECT usr_webs.Web,"				// row[0]
-			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_webs"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
-			 Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case HieLvl_DEG:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of users"
-				    " with webs / social networks",
-			 "SELECT usr_webs.Web,"				// row[0]
-			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"	// row[1]
-			  " FROM crs_courses,"
-			        "crs_users,"
-			        "usr_webs"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
-			 Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case HieLvl_CRS:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get number of users"
-				    " with webs / social networks",
-			 "SELECT usr_webs.Web,"				// row[0]
-			        "COUNT(DISTINCT usr_webs.UsrCod) AS N"	// row[1]
-			  " FROM crs_users,"
-			        "usr_webs"
-			 " WHERE crs_users.CrsCod=%ld"
-			   " AND crs_users.UsrCod=usr_webs.UsrCod"
-			 " GROUP BY usr_webs.Web"
-			 " ORDER BY N DESC,"
-			           "usr_webs.Web",
-			 Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+   NumNetworks = Net_DB_GetWebAndSocialNetworksStats (&mysql_res);
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],
@@ -553,9 +354,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
       HTM_TR_End ();
 
       /***** For each web / social network... *****/
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumNetwork = 0;
+	   NumNetwork < NumNetworks;
+	   NumNetwork++)
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -565,7 +366,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 for (Web  = (Net_WebsAndSocialNetworks_t) 0;
 	      Web <= (Net_WebsAndSocialNetworks_t) (Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1);
 	      Web++)
-	    if (!strcmp (Net_WebsAndSocialNetworksDB[Web],NetName))
+	    if (!strcmp (Net_DB_WebsAndSocialNetworks[Web],NetName))
 	       break;
 	 if (Web < Net_NUM_WEBS_AND_SOCIAL_NETWORKS)
 	   {
@@ -576,8 +377,11 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"DAT LM\"");
-		  HTM_IMG (Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[Web],Net_WebsAndSocialNetworksTitle[Web],
-			   "class=\"CONTEXT_ICO_16x16\" style=\"margin-right:6px;\"");
+		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
+		           Net_WebsAndSocialNetworksIcons[Web],
+		           Net_WebsAndSocialNetworksTitle[Web],
+			   "class=\"CONTEXT_ICO_16x16\""
+			   " style=\"margin-right:6px;\"");
 		  HTM_Txt (Net_WebsAndSocialNetworksTitle[Web]);
 	       HTM_TD_End ();
 
@@ -600,16 +404,4 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************* Remove user's webs / social networks ********************/
-/*****************************************************************************/
-
-void Net_DB_RemoveUsrWebs (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's webs / social networks",
-		   "DELETE FROM usr_webs"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
