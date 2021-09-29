@@ -60,6 +60,8 @@ void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod);
 void Msg_DB_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
 void Msg_DB_MoveSntMsgToDeleted (long MsgCod);
 
+unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res);
+unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res);
 void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
                                       char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
 unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
@@ -68,11 +70,15 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 			         const char *FilterFromToSubquery);
 unsigned Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod);
 void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
+unsigned Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod);
+unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted);
 bool Msg_DB_GetStatusOfSntMsg (long MsgCod);
 void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
                                bool *Open,bool *Replied,bool *Expanded);
 bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod);
 bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod);
+unsigned Msg_DB_GetNumRecipients (long MsgCod);
+unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod);
 unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_DB_GetNumRcvMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_DB_GetNumMsgsSentByTchsCrs (long CrsCod);
@@ -84,10 +90,12 @@ void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod);
 void Msg_DB_MoveUnusedMsgsContentToDeleted (void);
 
 //--------------------------- Users banned ------------------------------------
-unsigned Msg_DB_GetNumUsrsBannedByMe (void);
-unsigned Msg_DB_GetUsrsBannedByMe (MYSQL_RES **mysql_res);
+void Msg_DB_CreateUsrsPairIntoBanned (long FromUsrCod,long ToUsrCod);
+unsigned Msg_DB_GetNumUsrsBannedBy (long UsrCod);
+unsigned Msg_DB_GetUsrsBannedBy (MYSQL_RES **mysql_res,long UsrCod);
 bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
 
+void Msg_DB_RemoveUsrsPairFromBanned (long FromUsrCod,long ToUsrCod);
 void Msg_DB_RemoveUsrFromBanned (long UsrCod);
 
 #endif

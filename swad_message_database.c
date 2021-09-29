@@ -280,6 +280,44 @@ void Msg_DB_MoveSntMsgToDeleted (long MsgCod)
   }
 
 /*****************************************************************************/
+/*************** Get dictinct courses in my received messages ****************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get distinct courses in your messages",
+		   "SELECT DISTINCT crs_courses.CrsCod,"	// row[0]
+				   "crs_courses.ShortName"	// row[1]
+		    " FROM msg_rcv,"
+			  "msg_snt,"
+			  "crs_courses"
+		   " WHERE msg_rcv.UsrCod=%ld"
+		     " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+		     " AND msg_snt.CrsCod=crs_courses.CrsCod"
+		   " ORDER BY crs_courses.ShortName",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/***************** Get dictinct courses in my sent messages ******************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get distinct courses in your messages",
+		   "SELECT DISTINCT crs_courses.CrsCod,"	// row[0]
+				   "crs_courses.ShortName"	// row[1]
+		    " FROM msg_snt,"
+			  "crs_courses"
+		   " WHERE msg_snt.UsrCod=%ld"
+		     " AND msg_snt.CrsCod=crs_courses.CrsCod"
+		   " ORDER BY crs_courses.ShortName",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /************************* Make "from"/"to" subquery *************************/
 /*****************************************************************************/
 
@@ -549,6 +587,58 @@ void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
   }
 
 /*****************************************************************************/
+/*************** Get content and optional image of a message *****************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the content of a message",
+		   "SELECT Content,"	// row[0]
+			  "MedCod"	// row[1]
+		    " FROM msg_content"
+		   " WHERE MsgCod=%ld",
+		   MsgCod);
+  }
+
+/*****************************************************************************/
+/***************************** Get data of a message *************************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetMsgSntData (MYSQL_RES **mysql_res,long MsgCod,bool *Deleted)
+  {
+   unsigned NumRows;
+
+   /***** Get data of message from table msg_snt *****/
+   *Deleted = false;
+   NumRows = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a message",
+		   "SELECT CrsCod,"				// row[0]
+			  "UsrCod,"				// row[1]
+			  "UNIX_TIMESTAMP(CreatTime)"		// row[2]
+		    " FROM msg_snt"
+		   " WHERE MsgCod=%ld",
+		   MsgCod);
+
+   if (NumRows == 0)   // If not result ==> sent message is deleted
+     {
+      /***** Get data of message from table msg_snt_deleted *****/
+      NumRows = (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get data of a message",
+		      "SELECT CrsCod,"				// row[0]
+			     "UsrCod,"				// row[1]
+			     "UNIX_TIMESTAMP(CreatTime)"	// row[2]
+		       " FROM msg_snt_deleted"
+		      " WHERE MsgCod=%ld",
+		      MsgCod);
+
+      *Deleted = true;
+     }
+
+   return NumRows;
+  }
+
+/*****************************************************************************/
 /********************** Get if a sent message is expanded ********************/
 /*****************************************************************************/
 
@@ -636,6 +726,62 @@ bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
 			  MsgCod) == 0);	// The message has been deleted
 						// by all its recipients when it is not present
 						// in table of received messages undeleted
+  }
+
+/*****************************************************************************/
+/************ Get number of recipients of a message from database ************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetNumRecipients (long MsgCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of recipients",
+		  "SELECT "
+		  "(SELECT COUNT(*)"
+		    " FROM msg_rcv"
+		   " WHERE MsgCod=%ld)"
+		  " + "
+		  "(SELECT COUNT(*)"
+		    " FROM msg_rcv_deleted"
+		   " WHERE MsgCod=%ld)",
+		  MsgCod,
+		  MsgCod);
+  }
+
+/*****************************************************************************/
+/*************** Get known recipients of a message from database *************/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get recipients of a message",
+		   "(SELECT msg_rcv.UsrCod,"		// row[0]
+			   "'N',"			// row[1]
+			   "msg_rcv.Open,"		// row[2]
+			   "usr_data.Surname1 AS S1,"	// row[3]
+			   "usr_data.Surname2 AS S2,"	// row[4]
+			   "usr_data.FirstName AS FN"	// row[5]
+		     " FROM msg_rcv,"
+		 	   "usr_data"
+		    " WHERE msg_rcv.MsgCod=%ld"
+		      " AND msg_rcv.UsrCod=usr_data.UsrCod)"
+		   " UNION "
+		   "(SELECT msg_rcv_deleted.UsrCod,"	// row[0]
+			   "'Y',"			// row[1]
+			   "msg_rcv_deleted.Open,"	// row[2]
+			   "usr_data.Surname1 AS S1,"	// row[3]
+			   "usr_data.Surname2 AS S2,"	// row[4]
+			   "usr_data.FirstName AS FN"	// row[5]
+		     " FROM msg_rcv_deleted,"
+			   "usr_data"
+		    " WHERE msg_rcv_deleted.MsgCod=%ld"
+		      " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
+		    " ORDER BY S1,"
+			      "S2,"
+			      "FN",
+		   MsgCod,
+		   MsgCod);
   }
 
 /*****************************************************************************/
@@ -1142,24 +1288,39 @@ void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
   }
 
 /*****************************************************************************/
+/***** Insert pair (sender's code - my code) in table of banned senders ******/
+/*****************************************************************************/
+
+void Msg_DB_CreateUsrsPairIntoBanned (long FromUsrCod,long ToUsrCod)
+  {
+   DB_QueryREPLACE ("can not ban sender",
+		    "REPLACE INTO msg_banned"
+		    " (FromUsrCod,ToUsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+                    FromUsrCod,
+                    ToUsrCod);
+  }
+
+/*****************************************************************************/
 /******************** Get number of users I have banned **********************/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetNumUsrsBannedByMe (void)
+unsigned Msg_DB_GetNumUsrsBannedBy (long UsrCod)
   {
    return (unsigned)
-   DB_QueryCOUNT ("can not get number of users you have banned",
+   DB_QueryCOUNT ("can not get number of users banned",
 		  "SELECT COUNT(*)"
 		   " FROM msg_banned"
 		  " WHERE ToUsrCod=%ld",
-		  Gbl.Usrs.Me.UsrDat.UsrCod);
+		  UsrCod);
   }
 
 /*****************************************************************************/
 /************************* Get users I have banned ***************************/
 /*****************************************************************************/
 
-unsigned Msg_DB_GetUsrsBannedByMe (MYSQL_RES **mysql_res)
+unsigned Msg_DB_GetUsrsBannedBy (MYSQL_RES **mysql_res,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get banned users",
@@ -1171,7 +1332,7 @@ unsigned Msg_DB_GetUsrsBannedByMe (MYSQL_RES **mysql_res)
 		   " ORDER BY usr_data.Surname1,"
 			     "usr_data.Surname2,"
 			     "usr_data.FirstName",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1190,7 +1351,21 @@ bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   }
 
 /*****************************************************************************/
-/************************ Remove user from banned table **********************/
+/**** Remove pair (sender's code - recipient's code) from table of banned ****/
+/*****************************************************************************/
+
+void Msg_DB_RemoveUsrsPairFromBanned (long FromUsrCod,long ToUsrCod)
+  {
+   DB_QueryDELETE ("can not unban sender",
+		   "DELETE FROM msg_banned"
+		   " WHERE FromUsrCod=%ld"
+		     " AND ToUsrCod=%ld",
+                   FromUsrCod,
+                   ToUsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Remove user from table of banned senders *******************/
 /*****************************************************************************/
 
 void Msg_DB_RemoveUsrFromBanned (long UsrCod)
@@ -1199,5 +1374,6 @@ void Msg_DB_RemoveUsrFromBanned (long UsrCod)
 		   "DELETE FROM msg_banned"
 		   " WHERE FromUsrCod=%ld"
 		      " OR ToUsrCod=%ld",
-                   UsrCod,UsrCod);
+                   UsrCod,
+                   UsrCod);
   }

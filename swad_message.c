@@ -140,14 +140,15 @@ static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *M
 static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
 static void Msg_MoveSntMsgToDeleted (long MsgCod);
 static void Msg_MoveMsgContentToDeleted (long MsgCod);
-static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
-                                      const char *FilterFromToSubquery);
+static unsigned Msg_DB_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
+                                         const char *FilterFromToSubquery);
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted);
-static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+static void Msg_GetMsgContent (long MsgCod,
+                               char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                                struct Med_Media *Media);
 
 static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
@@ -1398,8 +1399,8 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
 /******** Get number of received messages that haven't been read by me *******/
 /*****************************************************************************/
 
-static unsigned Msg_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
-                                      const char *FilterFromToSubquery)
+static unsigned Msg_DB_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
+                                         const char *FilterFromToSubquery)
   {
    char *SubQuery;
    unsigned NumMsgs;
@@ -1510,7 +1511,7 @@ void Msg_ShowRecMsgs (void)
    /***** Reset messages context *****/
    Msg_ResetMessages (&Messages);
 
-   if (Msg_DB_GetNumUsrsBannedByMe ())
+   if (Msg_DB_GetNumUsrsBannedBy (Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
@@ -1584,7 +1585,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
      {
       case Msg_RECEIVED:
          Messages->ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
-         NumUnreadMsgs = Msg_GetNumUnreadMsgs (Messages,
+         NumUnreadMsgs = Msg_DB_GetNumUnreadMsgs (Messages,
                                                FilterFromToSubquery);
          break;
       case Msg_SENT:
@@ -1920,30 +1921,10 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
-         NumCrss = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get distinct courses in your messages",
-			 "SELECT DISTINCT crs_courses.CrsCod,"		// row[0]
-			                 "crs_courses.ShortName"	// row[1]
-			  " FROM msg_rcv,"
-			        "msg_snt,"
-			        "crs_courses"
-			 " WHERE msg_rcv.UsrCod=%ld"
-			   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-			   " AND msg_snt.CrsCod=crs_courses.CrsCod"
-			 " ORDER BY crs_courses.ShortName",
-			 Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumCrss = Msg_DB_GetDistinctCrssInMyRcvMsgs (&mysql_res);
          break;
       case Msg_SENT:
-         NumCrss = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get distinct courses in your messages",
-			  "SELECT DISTINCT crs_courses.CrsCod,"		// row[0]
-			                  "crs_courses.ShortName"	// row[1]
-			   " FROM msg_snt,"
-			         "crs_courses"
-			  " WHERE msg_snt.UsrCod=%ld"
-			    " AND msg_snt.CrsCod=crs_courses.CrsCod"
-			  " ORDER BY crs_courses.ShortName",
-			  Gbl.Usrs.Me.UsrDat.UsrCod);
+         NumCrss = Msg_DB_GetDistinctCrssInMySntMsgs (&mysql_res);
          break;
       default: // Not aplicable here
          break;
@@ -2098,36 +2079,10 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
 
    /***** Get data of message from table msg_snt *****/
-   *Deleted = false;
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get data of a message",
-		   "SELECT CrsCod,"				// row[0]
-			  "UsrCod,"				// row[1]
-			  "UNIX_TIMESTAMP(CreatTime)"		// row[2]
-		    " FROM msg_snt"
-		   " WHERE MsgCod=%ld",
-		   MsgCod);
-
-   if (NumRows == 0)   // If not result ==> sent message is deleted
-     {
-      /***** Get data of message from table msg_snt_deleted *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get data of a message",
-		      "SELECT CrsCod,"			// row[0]
-			     "UsrCod,"			// row[1]
-			     "UNIX_TIMESTAMP(CreatTime)"	// row[2]
-		       " FROM msg_snt_deleted"
-		      " WHERE MsgCod=%ld",
-		      MsgCod);
-
-      *Deleted = true;
-     }
-
    /* Result should have a unique row */
-   if (NumRows != 1)
+   if (Msg_DB_GetMsgSntData (&mysql_res,MsgCod,Deleted) != 1)
       Err_WrongMessageExit ();
 
    /* Get number of rows */
@@ -2153,19 +2108,15 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 /*************** Get content and optional image of a message *****************/
 /*****************************************************************************/
 
-static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+static void Msg_GetMsgContent (long MsgCod,
+                               char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
                                struct Med_Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get content of message from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get the content of a message",
-			     "SELECT Content,"		// row[0]
-				    "MedCod"		// row[1]
-			      " FROM msg_content"
-			     " WHERE MsgCod=%ld",
-			     MsgCod) != 1)
+   if (Msg_DB_GetMsgContent (&mysql_res,MsgCod) != 1)
       Err_WrongMessageExit ();
 
    /***** Get number of rows *****/
@@ -2382,13 +2333,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get subject of message from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get subject and content"
-				  " of a message",
-		       "SELECT Subject,"	// row[0]
-		              "Content"		// row[1]
-		        " FROM msg_content"
-		       " WHERE MsgCod=%ld",
-		       MsgCod) == 1)	// Result should have a unique row
+   if (Msg_DB_GetSubjectAndContent (&mysql_res,MsgCod) == 1)	// Result should have a unique row
      {
       /***** Get subject and content of the message *****/
       row = mysql_fetch_row (mysql_res);
@@ -2445,13 +2390,13 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
-        	                                "MSG_TIT_BG_NEW");
+        	                          "MSG_TIT_BG_NEW");
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
-										     ActExpRcvMsg) :
-									 (Expanded ? ActConSntMsg :
-										     ActExpSntMsg));
+									    ActExpRcvMsg) :
+							        (Expanded ? ActConSntMsg :
+									    ActExpSntMsg));
       Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
       Msg_PutHiddenParamsOneMsg (Messages);
 
@@ -2706,10 +2651,13 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRcp;
-   unsigned NumRecipientsTotal;
-   unsigned NumRecipientsKnown;
-   unsigned NumRecipientsUnknown;
-   unsigned NumRecipientsToShow;
+   struct
+     {
+      unsigned Total;
+      unsigned Known;
+      unsigned Unknown;
+      unsigned ToShow;
+     } NumRecipients;
    struct UsrData UsrDat;
    bool Deleted;
    bool OpenByDst;
@@ -2725,69 +2673,31 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
      };
 
    /***** Get number of recipients of a message from database *****/
-   NumRecipientsTotal = (unsigned)
-   DB_QueryCOUNT ("can not get number of recipients",
-		  "SELECT "
-		  "(SELECT COUNT(*)"
-		    " FROM msg_rcv"
-		   " WHERE MsgCod=%ld)"
-		  " + "
-		  "(SELECT COUNT(*)"
-		    " FROM msg_rcv_deleted"
-		   " WHERE MsgCod=%ld)",
-		  MsgCod,
-		  MsgCod);
+   NumRecipients.Total = Msg_DB_GetNumRecipients (MsgCod);
 
    /***** Get recipients of a message from database *****/
-   NumRecipientsKnown = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get recipients of a message",
-		   "(SELECT msg_rcv.UsrCod,"		// row[0]
-			   "'N',"			// row[1]
-			   "msg_rcv.Open,"		// row[2]
-			   "usr_data.Surname1 AS S1,"	// row[3]
-			   "usr_data.Surname2 AS S2,"	// row[4]
-			   "usr_data.FirstName AS FN"	// row[5]
-		     " FROM msg_rcv,"
-		 	   "usr_data"
-		    " WHERE msg_rcv.MsgCod=%ld"
-		      " AND msg_rcv.UsrCod=usr_data.UsrCod)"
-		   " UNION "
-		   "(SELECT msg_rcv_deleted.UsrCod,"	// row[0]
-			   "'Y',"			// row[1]
-			   "msg_rcv_deleted.Open,"	// row[2]
-			   "usr_data.Surname1 AS S1,"	// row[3]
-			   "usr_data.Surname2 AS S2,"	// row[4]
-			   "usr_data.FirstName AS FN"	// row[5]
-		     " FROM msg_rcv_deleted,"
-			   "usr_data"
-		    " WHERE msg_rcv_deleted.MsgCod=%ld"
-		      " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
-		    " ORDER BY S1,"
-			      "S2,"
-			      "FN",
-		   MsgCod,
-		   MsgCod);
+   NumRecipients.Known = Msg_DB_GetKnownRecipients (&mysql_res,MsgCod);
 
    /***** Check number of recipients *****/
-   if (NumRecipientsTotal)
+   if (NumRecipients.Total)
      {
       /***** Begin table *****/
       HTM_TABLE_Begin (NULL);
 
 	 /***** How many recipients will be shown? *****/
-	 if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
-	    NumRecipientsToShow = NumRecipientsKnown;
+	 if (NumRecipients.Known <= Msg_MAX_RECIPIENTS_TO_SHOW)
+	    NumRecipients.ToShow = NumRecipients.Known;
 	 else	// A lot of recipients
 	    /***** Get parameter that indicates if I want to see all recipients *****/
-	    NumRecipientsToShow = Par_GetParToBool ("SeeAllRcpts") ? NumRecipientsKnown :
-								     Msg_DEF_RECIPIENTS_TO_SHOW;
+	    NumRecipients.ToShow = Par_GetParToBool ("SeeAllRcpts") ? NumRecipients.Known :
+								      Msg_DEF_RECIPIENTS_TO_SHOW;
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** Write known recipients *****/
 	 for (NumRcp = 0;
-	      NumRcp < NumRecipientsToShow;
+	      NumRcp < NumRecipients.ToShow;
 	      NumRcp++)
 	   {
 	    /* Get user's code */
@@ -2831,7 +2741,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       /* Write user's name */
 	       HTM_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
-								    "AUTHOR_TXT_NEW");
+							   "AUTHOR_TXT_NEW");
 		  if (UsrValid)
 		     HTM_Txt (UsrDat.FullName);
 		  else
@@ -2842,23 +2752,23 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	   }
 
 	 /***** If any recipients are unknown *****/
-	 if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
+	 if ((NumRecipients.Unknown = NumRecipients.Total - NumRecipients.Known))
 	   {
 	    /***** Begin form to show all the users *****/
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
 		  HTM_TxtF ("[%u %s]",
-			    NumRecipientsUnknown,
-			    (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
-							  Txt_unknown_recipients);
+			    NumRecipients.Unknown,
+			    (NumRecipients.Unknown == 1) ? Txt_unknown_recipient :
+							   Txt_unknown_recipients);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 	   }
 
 	 /***** If any known recipient is not listed *****/
-	 if (NumRecipientsToShow < NumRecipientsKnown)
+	 if (NumRecipients.ToShow < NumRecipients.Known)
 	   {
 	    /***** Begin form to show all the users *****/
 	    HTM_TR_Begin (NULL);
@@ -2870,7 +2780,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 		  Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
 		     HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
 			HTM_TxtF (Txt_and_X_other_recipients,
-				  NumRecipientsKnown - NumRecipientsToShow);
+				  NumRecipients.Known - NumRecipients.ToShow);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
@@ -3008,13 +2918,8 @@ void Msg_BanSenderWhenShowingMsgs (void)
       Err_WrongUserExit ();
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
-   DB_QueryREPLACE ("can not ban sender",
-		    "REPLACE INTO msg_banned"
-		    " (FromUsrCod,ToUsrCod)"
-		    " VALUES"
-		    " (%ld,%ld)",
-                    Gbl.Usrs.Other.UsrDat.UsrCod,
-                    Gbl.Usrs.Me.UsrDat.UsrCod);
+   Msg_DB_CreateUsrsPairIntoBanned (Gbl.Usrs.Other.UsrDat.UsrCod,	// From
+                                    Gbl.Usrs.Me.UsrDat.UsrCod);		// To
 
    /***** Show alert with the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_From_this_time_you_will_not_receive_messages_from_X,
@@ -3068,12 +2973,8 @@ static void Msg_UnbanSender (void)
       Err_WrongUserExit ();
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
-   DB_QueryDELETE ("can not ban sender",
-		   "DELETE FROM msg_banned"
-		   " WHERE FromUsrCod=%ld"
-		     " AND ToUsrCod=%ld",
-                   Gbl.Usrs.Other.UsrDat.UsrCod,
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Msg_DB_RemoveUsrsPairFromBanned (Gbl.Usrs.Other.UsrDat.UsrCod,	// From
+                                    Gbl.Usrs.Me.UsrDat.UsrCod);		// To
 
    /***** Show alert with the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_From_this_time_you_can_receive_messages_from_X,
@@ -3095,7 +2996,7 @@ void Msg_ListBannedUsrs (void)
    struct UsrData UsrDat;
 
    /***** Get users banned by me *****/
-   if ((NumUsrs = Msg_DB_GetUsrsBannedByMe (&mysql_res)))
+   if ((NumUsrs = Msg_DB_GetUsrsBannedBy (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod)))
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);

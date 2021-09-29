@@ -10329,6 +10329,10 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 	                  "ICO_HIGHLIGHT PHOTO15x20");
 	 break;
       case Usr_WHO_SELECTED:
+         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"search.svg",
+			  Txt_WHO[Who],
+			  "ICO_HIGHLIGHT ICOx20");
+	 break;
       case Usr_WHO_FOLLOWED:
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 			  Txt_WHO[Who],
