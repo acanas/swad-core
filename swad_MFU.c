@@ -1,4 +1,4 @@
-// swad_role.c: user's roles
+// swad_MFU.c: Most Frequently Used actions
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -38,6 +38,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_MFU.h"
+#include "swad_MFU_database.h"
 #include "swad_tab.h"
 #include "swad_theme.h"
 
@@ -109,14 +110,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
    Act_Action_t Action;
 
    /***** Get most frequently used actions *****/
-   NumActions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get most frequently used actions",
-		   "SELECT ActCod"
-		    " FROM act_frequent"
-		   " WHERE UsrCod=%ld"
-		   " ORDER BY Score DESC,"
-			     "LastClick DESC",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumActions = MFU_DB_GetMFUActionsOrderByScore (&mysql_res);
 
    /***** Write list of frequently used actions *****/
    for (NumAction = 0, ListMFUActions->NumActions = 0;
@@ -153,14 +147,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
      {
       /***** Get my most frequently used actions *****/
-      NumActions = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get the most frequently used actions",
-		      "SELECT ActCod"
-		       " FROM act_frequent"
-		      " WHERE UsrCod=%ld"
-		      " ORDER BY LastClick DESC,"
-		                "Score DESC",
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
+      NumActions = MFU_DB_GetMFUActionsOrderByLastClick (&mysql_res);
 
       /***** Loop over list of frequently used actions *****/
       for (NumAct = 0;
@@ -333,11 +320,6 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 /******************** Update most frequently used actions ********************/
 /*****************************************************************************/
 
-#define MFU_MIN_SCORE		  0.5
-#define MFU_MAX_SCORE		100.0
-#define MFU_INCREASE_FACTOR	  1.2
-#define MFU_DECREASE_FACTOR	  0.99
-
 void MFU_UpdateMFUActions (void)
   {
    MYSQL_RES *mysql_res;
@@ -360,13 +342,7 @@ void MFU_UpdateMFUActions (void)
    Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 
    /***** Get current score *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get score for current action",
-	               "SELECT Score"	// row[0]
-	                " FROM act_frequent"
-		       " WHERE UsrCod=%ld"
-		         " AND ActCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       ActCod))
+   if (MFU_DB_GetScoreForCurrentAction (&mysql_res,ActCod))
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%lf",&Score) != 1)
@@ -382,25 +358,10 @@ void MFU_UpdateMFUActions (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update score for the current action *****/
-   DB_QueryREPLACE ("can not update most frequently used actions",
-		    "REPLACE INTO act_frequent"
-		    " (UsrCod,ActCod,Score,LastClick)"
-		    " VALUES"
-		    " (%ld,%ld,'%15lg',NOW())",
-	            Gbl.Usrs.Me.UsrDat.UsrCod,
-	            ActCod,
-	            Score);
+   MFU_DB_UpdateScoreForCurrentAction (ActCod,Score);
 
    /***** Update score for other actions *****/
-   DB_QueryUPDATE ("can not update most frequently used actions",
-		   "UPDATE act_frequent"
-		     " SET Score=GREATEST(Score*'%.15lg','%.15lg')"
-		   " WHERE UsrCod=%ld"
-		     " AND ActCod<>%ld",
-                   MFU_DECREASE_FACTOR,
-                   MFU_MIN_SCORE,
-                   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   ActCod);
+   MFU_DB_UpdateScoreForOtherActions (ActCod);
 
    Str_SetDecimalPointToLocal ();	// Return to local system
   }

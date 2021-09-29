@@ -1,7 +1,7 @@
-// swad_MFU.h: Most Frequently Used actions
+// swad_MFU_database.h: Most Frequently Used actions, operations with database
 
-#ifndef _SWAD_MFU
-#define _SWAD_MFU
+#ifndef _SWAD_MFU_DB
+#define _SWAD_MFU_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,36 +27,25 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include <mysql/mysql.h>	// To access MySQL databases
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
-
-#define MFU_MIN_SCORE		  0.5
-#define MFU_MAX_SCORE		100.0
-#define MFU_INCREASE_FACTOR	  1.2
-#define MFU_DECREASE_FACTOR	  0.99
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct MFU_ListMFUActions
-  {
-   unsigned NumActions;
-   Act_Action_t *Actions;
-  };
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void MFU_AllocateMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
-void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions);
-void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown);
-Act_Action_t MFU_GetMyLastActionInCurrentTab (void);
-void MFU_ShowMyMFUActions (void);
-void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions);
-void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions);
-void MFU_UpdateMFUActions (void);
+void MFU_DB_UpdateScoreForCurrentAction (long ActCod,double Score);
+void MFU_DB_UpdateScoreForOtherActions (long ActCod);
+
+unsigned MFU_DB_GetMFUActionsOrderByScore (MYSQL_RES **mysql_res);
+unsigned MFU_DB_GetMFUActionsOrderByLastClick (MYSQL_RES **mysql_res);
+unsigned MFU_DB_GetScoreForCurrentAction (MYSQL_RES **mysql_res,long ActCod);
 
 #endif
