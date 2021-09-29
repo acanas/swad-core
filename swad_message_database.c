@@ -26,36 +26,14 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
-// #include <time.h>		// For time
 
-// #include "swad_action.h"
-// #include "swad_box.h"
-// #include "swad_config.h"
-// #include "swad_course.h"
 #include "swad_database.h"
 #include "swad_error.h"
-// #include "swad_figure.h"
-// #include "swad_form.h"
-// #include "swad_forum.h"
 #include "swad_global.h"
-// #include "swad_group.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
 #include "swad_message.h"
 #include "swad_message_database.h"
-// #include "swad_notification.h"
-// #include "swad_pagination.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
-// #include "swad_profile.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -322,7 +300,7 @@ unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
-                                      char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1])
+                                      char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1])
   {
    const char *Ptr;
    char SearchWord[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
@@ -333,20 +311,111 @@ void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
       Ptr = Messages->FilterFromTo;
       Str_Copy (FilterFromToSubquery,
                 " AND CONCAT(usr_data.FirstName,' ',usr_data.Surname1,' ',usr_data.Surname2) LIKE '",
-                Msg_MAX_BYTES_MESSAGES_QUERY);
+                Msg_DB_MAX_BYTES_MESSAGES_QUERY);
       while (*Ptr)
         {
          Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
          if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 >
-             Msg_MAX_BYTES_MESSAGES_QUERY)	// Prevent string overflow
+             Msg_DB_MAX_BYTES_MESSAGES_QUERY)	// Prevent string overflow
             break;
-         Str_Concat (FilterFromToSubquery,"%",Msg_MAX_BYTES_MESSAGES_QUERY);
-         Str_Concat (FilterFromToSubquery,SearchWord,Msg_MAX_BYTES_MESSAGES_QUERY);
+         Str_Concat (FilterFromToSubquery,"%",Msg_DB_MAX_BYTES_MESSAGES_QUERY);
+         Str_Concat (FilterFromToSubquery,SearchWord,Msg_DB_MAX_BYTES_MESSAGES_QUERY);
         }
-      Str_Concat (FilterFromToSubquery,"%'",Msg_MAX_BYTES_MESSAGES_QUERY);
+      Str_Concat (FilterFromToSubquery,"%'",Msg_DB_MAX_BYTES_MESSAGES_QUERY);
      }
    else
       FilterFromToSubquery[0] = '\0';
+  }
+
+/*****************************************************************************/
+/******** Get number of received messages that haven't been read by me *******/
+/*****************************************************************************/
+
+unsigned Msg_DB_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
+                                  const char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1])
+  {
+   char *SubQuery;
+   unsigned NumMsgs;
+
+   /***** Get number of unread messages from database *****/
+   if (Messages->FilterCrsCod > 0)	// If origin course selected
+     {
+      if (FilterFromToSubquery[0])
+	{
+         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod"
+        	                  " FROM msg_rcv,"
+        	                        "msg_snt,"
+        	                        "usr_data"
+				 " WHERE msg_rcv.UsrCod=%ld"
+				   " AND msg_rcv.Open='N'"
+				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				   " AND msg_snt.CrsCod=%ld"
+				   " AND msg_snt.UsrCod=usr_data.UsrCod%s",
+		       Gbl.Usrs.Me.UsrDat.UsrCod,
+		       Messages->FilterCrsCod,
+		       FilterFromToSubquery) < 0)
+            Err_NotEnoughMemoryExit ();
+	}
+      else
+        {
+         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod"
+        	                  " FROM msg_rcv,"
+        	                        "msg_snt"
+				 " WHERE msg_rcv.UsrCod=%ld"
+				   " AND msg_rcv.Open='N'"
+				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				   " AND msg_snt.CrsCod=%ld",
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			Messages->FilterCrsCod) < 0)
+            Err_NotEnoughMemoryExit ();
+        }
+     }
+   else	// If no origin course selected
+     {
+      if (FilterFromToSubquery[0])
+	{
+         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod"
+        	                  " FROM msg_rcv,"
+        	                        "msg_snt,"
+        	                        "usr_data"
+				 " WHERE msg_rcv.UsrCod=%ld"
+				   " AND msg_rcv.Open='N'"
+				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
+				   " AND msg_snt.UsrCod=usr_data.UsrCod%s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			FilterFromToSubquery) < 0)
+	    Err_NotEnoughMemoryExit ();
+        }
+      else
+	{
+         if (asprintf (&SubQuery,"SELECT MsgCod"
+        	                  " FROM msg_rcv"
+			         " WHERE UsrCod=%ld"
+			           " AND Open='N'",
+		        Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	    Err_NotEnoughMemoryExit ();
+        }
+     }
+
+   if (Messages->FilterContent[0])
+      NumMsgs = (unsigned)
+      DB_QueryCOUNT ("can not get number of unread messages",
+		     "SELECT COUNT(*)"
+		      " FROM msg_content"
+		     " WHERE MsgCod IN (%s)"
+		       " AND MATCH (Subject,Content) AGAINST ('%s')",
+		     SubQuery,
+		     Messages->FilterContent);
+   else
+      NumMsgs = (unsigned)
+      DB_QueryCOUNT ("can not get number of unread messages",
+		     "SELECT COUNT(*)"
+		      " FROM (%s) AS T",
+		     SubQuery);
+
+   free (SubQuery);
+
+   return NumMsgs;
   }
 
 /*****************************************************************************/
@@ -356,7 +425,7 @@ void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
 unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
                                  const struct Msg_Messages *Messages,
 			         long UsrCod,
-			         const char *FilterFromToSubquery)
+			         const char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1])
   {
    char *SubQuery;
    const char *StrUnreadMsg;
@@ -1249,6 +1318,35 @@ void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod)
 		   "DELETE FROM msg_snt"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Delete the subject and content of a message *****************/
+/*****************************************************************************/
+
+void Msg_DB_MoveMsgContentToDeleted (long MsgCod)
+  {
+   /***** Move message from msg_content to msg_content_deleted *****/
+   /* Insert message content into msg_content_deleted */
+   DB_QueryINSERT ("can not remove the content of a message",
+		   "INSERT IGNORE INTO msg_content_deleted"
+		   " (MsgCod,Subject,Content,MedCod)"
+		   " SELECT MsgCod,"
+		           "Subject,"
+		           "Content,"
+		           "MedCod"
+		     " FROM msg_content"
+		    " WHERE MsgCod=%ld",
+                   MsgCod);
+
+   /* TODO: Messages in msg_content_deleted older than a certain time
+      should be deleted to ensure the protection of personal data */
+
+   /* Delete message from msg_content *****/
+   DB_QueryDELETE ("can not remove the content of a message",
+		   "DELETE FROM msg_content"
+		   " WHERE MsgCod=%ld",
+		   MsgCod);
   }
 
 /*****************************************************************************/

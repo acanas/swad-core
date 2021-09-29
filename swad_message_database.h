@@ -29,16 +29,13 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-// #include "swad_course.h"
 #include "swad_hierarchy_level.h"
-// #include "swad_notification.h"
-// #include "swad_statistic.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Msg_MAX_BYTES_MESSAGES_QUERY (4 * 1024 - 1)
+#define Msg_DB_MAX_BYTES_MESSAGES_QUERY (4 * 1024 - 1)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -63,11 +60,13 @@ void Msg_DB_MoveSntMsgToDeleted (long MsgCod);
 unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res);
 unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res);
 void Msg_DB_MakeFilterFromToSubquery (const struct Msg_Messages *Messages,
-                                      char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
+                                      char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1]);
+unsigned Msg_DB_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
+                                  const char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1]);
 unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
                                  const struct Msg_Messages *Messages,
 			         long UsrCod,
-			         const char *FilterFromToSubquery);
+			         const char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1]);
 unsigned Msg_DB_GetSubjectAndContent (MYSQL_RES **mysql_res,long MsgCod);
 void Msg_DB_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 unsigned Msg_DB_GetMsgContent (MYSQL_RES **mysql_res,long MsgCod);
@@ -87,6 +86,7 @@ unsigned Msg_DB_GetNumMsgsSentByUsr (long UsrCod);
 void Msg_DB_RemoveRcvMsg (long MsgCod,long UsrCod);
 void Msg_DB_RemoveSntMsg (long MsgCod);
 void Msg_DB_RemoveAllRecAndSntMsgsUsr (long UsrCod);
+void Msg_DB_MoveMsgContentToDeleted (long MsgCod);
 void Msg_DB_MoveUnusedMsgsContentToDeleted (void);
 
 //--------------------------- Users banned ------------------------------------

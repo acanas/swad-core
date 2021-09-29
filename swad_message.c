@@ -139,9 +139,6 @@ static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *M
                                                     const char *FilterFromToSubquery);
 static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
 static void Msg_MoveSntMsgToDeleted (long MsgCod);
-static void Msg_MoveMsgContentToDeleted (long MsgCod);
-static unsigned Msg_DB_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
-                                         const char *FilterFromToSubquery);
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                time_t *CreatTimeUTC,
@@ -1015,7 +1012,7 @@ void Msg_ReqDelAllSntMsgs (void)
 void Msg_DelAllRecMsgs (void)
   {
    struct Msg_Messages Messages;
-   char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
    /***** Reset messages context *****/
@@ -1031,8 +1028,8 @@ void Msg_DelAllRecMsgs (void)
    /***** Delete messages *****/
    Messages.TypeOfMessages = Msg_RECEIVED;
    NumMsgs = Msg_RemoveSomeRecOrSntMsgsUsr (&Messages,
-                                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                                         FilterFromToSubquery);
+                                            Gbl.Usrs.Me.UsrDat.UsrCod,
+                                            FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
    Msg_ShowRecMsgs ();
   }
@@ -1044,7 +1041,7 @@ void Msg_DelAllRecMsgs (void)
 void Msg_DelAllSntMsgs (void)
   {
    struct Msg_Messages Messages;
-   char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
    /***** Reset messages context *****/
@@ -1059,8 +1056,8 @@ void Msg_DelAllSntMsgs (void)
    /***** Delete messages *****/
    Messages.TypeOfMessages = Msg_SENT;
    NumMsgs = Msg_RemoveSomeRecOrSntMsgsUsr (&Messages,
-                                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                                         FilterFromToSubquery);
+                                            Gbl.Usrs.Me.UsrDat.UsrCod,
+                                            FilterFromToSubquery);
    Msg_ShowNumMsgsDeleted (NumMsgs);
    Msg_ShowSntMsgs ();
   }
@@ -1342,7 +1339,7 @@ static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
    if (Msg_DB_CheckIfSntMsgIsDeleted (MsgCod))
       if (Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (MsgCod))
-         Msg_MoveMsgContentToDeleted (MsgCod);
+         Msg_DB_MoveMsgContentToDeleted (MsgCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_MESSAGE,MsgCod,UsrCod);
@@ -1363,125 +1360,7 @@ static void Msg_MoveSntMsgToDeleted (long MsgCod)
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
    if (Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (MsgCod))
-      Msg_MoveMsgContentToDeleted (MsgCod);
-  }
-
-/*****************************************************************************/
-/*************** Delete the subject and content of a message *****************/
-/*****************************************************************************/
-
-static void Msg_MoveMsgContentToDeleted (long MsgCod)
-  {
-   /***** Move message from msg_content to msg_content_deleted *****/
-   /* Insert message content into msg_content_deleted */
-   DB_QueryINSERT ("can not remove the content of a message",
-		   "INSERT IGNORE INTO msg_content_deleted"
-		   " (MsgCod,Subject,Content,MedCod)"
-		   " SELECT MsgCod,"
-		           "Subject,"
-		           "Content,"
-		           "MedCod"
-		     " FROM msg_content"
-		    " WHERE MsgCod=%ld",
-                   MsgCod);
-
-   /* TODO: Messages in msg_content_deleted older than a certain time
-      should be deleted to ensure the protection of personal data */
-
-   /* Delete message from msg_content *****/
-   DB_QueryDELETE ("can not remove the content of a message",
-		   "DELETE FROM msg_content"
-		   " WHERE MsgCod=%ld",
-		   MsgCod);
-  }
-
-/*****************************************************************************/
-/******** Get number of received messages that haven't been read by me *******/
-/*****************************************************************************/
-
-static unsigned Msg_DB_GetNumUnreadMsgs (const struct Msg_Messages *Messages,
-                                         const char *FilterFromToSubquery)
-  {
-   char *SubQuery;
-   unsigned NumMsgs;
-
-   /***** Get number of unread messages from database *****/
-   if (Messages->FilterCrsCod >= 0)	// If origin course selected
-     {
-      if (FilterFromToSubquery[0])
-	{
-         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod"
-        	                  " FROM msg_rcv,"
-        	                        "msg_snt,"
-        	                        "usr_data"
-				 " WHERE msg_rcv.UsrCod=%ld"
-				   " AND msg_rcv.Open='N'"
-				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				   " AND msg_snt.CrsCod=%ld"
-				   " AND msg_snt.UsrCod=usr_data.UsrCod%s",
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       Messages->FilterCrsCod,
-		       FilterFromToSubquery) < 0)
-            Err_NotEnoughMemoryExit ();
-	}
-      else
-        {
-         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod"
-        	                  " FROM msg_rcv,"
-        	                        "msg_snt"
-				 " WHERE msg_rcv.UsrCod=%ld"
-				   " AND msg_rcv.Open='N'"
-				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				   " AND msg_snt.CrsCod=%ld",
-			Gbl.Usrs.Me.UsrDat.UsrCod,
-			Messages->FilterCrsCod) < 0)
-            Err_NotEnoughMemoryExit ();
-        }
-     }
-   else	// If no origin course selected
-     {
-      if (FilterFromToSubquery[0])
-	{
-         if (asprintf (&SubQuery,"SELECT msg_rcv.MsgCod"
-        	                  " FROM msg_rcv,msg_snt,usr_data"
-				 " WHERE msg_rcv.UsrCod=%ld"
-				   " AND msg_rcv.Open='N'"
-				   " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-				   " AND msg_snt.UsrCod=usr_data.UsrCod%s",
-			Gbl.Usrs.Me.UsrDat.UsrCod,
-			FilterFromToSubquery) < 0)
-	    Err_NotEnoughMemoryExit ();
-        }
-      else
-	{
-         if (asprintf (&SubQuery,"SELECT MsgCod"
-        	                  " FROM msg_rcv"
-			         " WHERE UsrCod=%ld"
-			           " AND Open='N'",
-		        Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	    Err_NotEnoughMemoryExit ();
-        }
-     }
-
-   if (Messages->FilterContent[0])
-      NumMsgs = (unsigned)
-      DB_QueryCOUNT ("can not get number of unread messages",
-		     "SELECT COUNT(*)"
-		      " FROM msg_content"
-		     " WHERE MsgCod IN (%s)"
-		       " AND MATCH (Subject,Content) AGAINST ('%s')",
-		     SubQuery,
-		     Messages->FilterContent);
-   else
-      NumMsgs = (unsigned)
-      DB_QueryCOUNT ("can not get number of unread messages",
-		     "SELECT COUNT(*)"
-		      " FROM (%s) AS T",
-		     SubQuery);
-
-   free (SubQuery);
-
-   return NumMsgs;
+      Msg_DB_MoveMsgContentToDeleted (MsgCod);
   }
 
 /*****************************************************************************/
@@ -1537,7 +1416,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
-   char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   char FilterFromToSubquery[Msg_DB_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumMsg;
@@ -1586,7 +1465,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
       case Msg_RECEIVED:
          Messages->ShowOnlyUnreadMsgs = Msg_GetParamOnlyUnreadMsgs ();
          NumUnreadMsgs = Msg_DB_GetNumUnreadMsgs (Messages,
-                                               FilterFromToSubquery);
+                                                  FilterFromToSubquery);
          break;
       case Msg_SENT:
          NumUnreadMsgs = 0;
@@ -2700,14 +2579,13 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	      NumRcp < NumRecipients.ToShow;
 	      NumRcp++)
 	   {
-	    /* Get user's code */
 	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get user's code (row[0]) */
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	    /* Get if message has been deleted by recipient */
+	    /* Get if message has been deleted (row[1]) and read (row[2]) by recipient */
 	    Deleted   = (row[1][0] == 'Y');
-
-	    /* Get if message has been read by recipient */
 	    OpenByDst = (row[2][0] == 'Y');
 
 	    /* Get user's data */
