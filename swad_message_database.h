@@ -54,8 +54,8 @@ void Msg_DB_ExpandRcvMsg (long MsgCod);
 void Msg_DB_ContractSntMsg (long MsgCod);
 void Msg_DB_ContractRcvMsg (long MsgCod);
 void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod);
-void Msg_DB_MoveRcvMsgToDeleted (long MsgCod,long UsrCod);
-void Msg_DB_MoveSntMsgToDeleted (long MsgCod);
+void Msg_DB_CopyRcvMsgToDeleted (long MsgCod,long UsrCod);
+void Msg_DB_CopySntMsgToDeleted (long MsgCod);
 
 unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res);
 unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res);

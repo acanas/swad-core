@@ -77,6 +77,4 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif);
 
 void Not_PutHiddenParamNotCod (long NotCod);
 
-void Not_DB_RemoveCrsNotices (long CrsCod);
-
 #endif

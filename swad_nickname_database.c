@@ -25,24 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <string.h>		// For string functions
-
-// #include "swad_account.h"
-// #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_form.h"
-// #include "swad_global.h"
-// #include "swad_HTML.h"
 #include "swad_nickname_database.h"
-// #include "swad_parameter.h"
-// #include "swad_QR.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
-
-// extern struct Globals Gbl;
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/

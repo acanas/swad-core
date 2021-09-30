@@ -222,7 +222,7 @@ void Msg_DB_SetRcvMsgAsOpen (long MsgCod,long UsrCod)
 /******************* Insert received message into deleted ********************/
 /*****************************************************************************/
 
-void Msg_DB_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
+void Msg_DB_CopyRcvMsgToDeleted (long MsgCod,long UsrCod)
   {
    DB_QueryINSERT ("can not remove a received message",
 		   "INSERT IGNORE INTO msg_rcv_deleted"
@@ -243,7 +243,7 @@ void Msg_DB_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
 /******************* Insert received message into deleted ********************/
 /*****************************************************************************/
 
-void Msg_DB_MoveSntMsgToDeleted (long MsgCod)
+void Msg_DB_CopySntMsgToDeleted (long MsgCod)
   {
    DB_QueryINSERT ("can not remove a sent message",
 		   "INSERT IGNORE INTO msg_snt_deleted"

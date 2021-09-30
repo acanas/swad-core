@@ -1332,7 +1332,7 @@ static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
   {
    /***** Move message from msg_rcv to msg_rcv_deleted *****/
    /* Insert message into msg_rcv_deleted */
-   Msg_DB_MoveRcvMsgToDeleted (MsgCod,UsrCod);
+   Msg_DB_CopyRcvMsgToDeleted (MsgCod,UsrCod);
 
    /* Delete message from msg_rcv *****/
    Msg_DB_RemoveRcvMsg (MsgCod,UsrCod);
@@ -1354,7 +1354,7 @@ static void Msg_MoveSntMsgToDeleted (long MsgCod)
   {
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   Msg_DB_MoveSntMsgToDeleted (MsgCod);
+   Msg_DB_CopySntMsgToDeleted (MsgCod);
 
    /* Delete message from msg_snt *****/
    Msg_DB_RemoveSntMsg (MsgCod);

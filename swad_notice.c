@@ -41,6 +41,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_notice.h"
+#include "swad_notice_database.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_RSS.h"
@@ -86,9 +87,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              const char *Content,
                              long UsrCod,
                              Not_Status_t Status);
-static long Not_DB_InsertNotice (const char *Content);
-static void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
-                                                            unsigned NumUsrsToBeNotifiedByEMail);
+
 static void Not_PutParams (void *NotCod);
 static long Not_GetParamNotCod (void);
 
@@ -167,42 +166,6 @@ void Not_ReceiveNotice (void)
   }
 
 /*****************************************************************************/
-/******************* Insert a notice in the table of notices *****************/
-/*****************************************************************************/
-// Return the code of the new inserted notice
-
-static long Not_DB_InsertNotice (const char *Content)
-  {
-   /***** Insert notice in the database *****/
-   return
-   DB_QueryINSERTandReturnCode ("can not create notice",
-				"INSERT INTO not_notices"
-				" (CrsCod,UsrCod,CreatTime,Content,Status)"
-				" VALUES"
-				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Content,
-				(unsigned) Not_ACTIVE_NOTICE);
-  }
-
-/*****************************************************************************/
-/*********** Update number of users notified in table of notices *************/
-/*****************************************************************************/
-
-static void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
-                                                            unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   /***** Update number of users notified *****/
-   DB_QueryUPDATE ("can not update the number of notifications of a notice",
-		   "UPDATE not_notices"
-		     " SET NumNotif=%u"
-		   " WHERE NotCod=%ld",
-	           NumUsrsToBeNotifiedByEMail,
-	           NotCod);
-  }
-
-/*****************************************************************************/
 /******************* List notices after removing one of them *****************/
 /*****************************************************************************/
 
@@ -250,14 +213,7 @@ void Not_HideActiveNotice (void)
    NotCod = Not_GetParamNotCod ();
 
    /***** Set notice as hidden *****/
-   DB_QueryUPDATE ("can not hide notice",
-		   "UPDATE not_notices"
-		     " SET Status=%u"
-		   " WHERE NotCod=%ld"
-		     " AND CrsCod=%ld",
-	           (unsigned) Not_OBSOLETE_NOTICE,
-	           NotCod,
-	           Gbl.Hierarchy.Crs.CrsCod);
+   Not_DB_ChangeNoticeStatus (NotCod,Not_OBSOLETE_NOTICE);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -278,14 +234,7 @@ void Not_RevealHiddenNotice (void)
    NotCod = Not_GetParamNotCod ();
 
    /***** Set notice as active *****/
-   DB_QueryUPDATE ("can not reveal notice",
-		   "UPDATE not_notices"
-		     " SET Status=%u"
-		   " WHERE NotCod=%ld"
-		     " AND CrsCod=%ld",
-	           (unsigned) Not_ACTIVE_NOTICE,
-	           NotCod,
-	           Gbl.Hierarchy.Crs.CrsCod);
+   Not_DB_ChangeNoticeStatus (NotCod,Not_ACTIVE_NOTICE);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
@@ -337,28 +286,10 @@ void Not_RemoveNotice (void)
 
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
-   DB_QueryINSERT ("can not remove notice",
-		   "INSERT IGNORE INTO not_deleted"
-		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		   " SELECT NotCod,"
-		           "CrsCod,"
-		           "UsrCod,"
-		           "CreatTime,"
-		           "Content,"
-		           "NumNotif"
-		     " FROM not_notices"
-		    " WHERE NotCod=%ld"
-		      " AND CrsCod=%ld",
-                   NotCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Not_DB_CopyNoticeToDeleted (NotCod);
 
    /* Remove notice */
-   DB_QueryDELETE ("can not remove notice",
-		   "DELETE FROM not_notices"
-		   " WHERE NotCod=%ld"
-		     " AND CrsCod=%ld",
-                   NotCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Not_DB_RemoveNotice (NotCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
@@ -401,32 +332,10 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
-	 NumNotices = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get notices from database",
-		         "SELECT NotCod,"				// row[0]
-			        "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-			        "UsrCod,"				// row[2]
-			        "Content,"				// row[3]
-			        "Status"				// row[4]
-			  " FROM not_notices"
-		        " WHERE CrsCod=%ld"
-			   " AND Status=%u"
-		         " ORDER BY CreatTime DESC",
-		         Gbl.Hierarchy.Crs.CrsCod,
-		         (unsigned) Not_ACTIVE_NOTICE);
+	 NumNotices = Not_DB_GetActiveNotices (&mysql_res);
 	 break;
       case Not_LIST_FULL_NOTICES:
-	 NumNotices = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get notices from database",
-		         "SELECT NotCod,"				// row[0]
-			        "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-			        "UsrCod,"				// row[2]
-			        "Content,"				// row[3]
-			        "Status"				// row[4]
-			  " FROM not_notices"
-		         " WHERE CrsCod=%ld"
-		         " ORDER BY CreatTime DESC",
-		         Gbl.Hierarchy.Crs.CrsCod);
+	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
 	 break;
      }
 
@@ -438,8 +347,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
       Box_BoxBegin (StrWidth,Txt_Notices,
 		    Not_PutIconsListNotices,NULL,
 		    Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE);
-      if (!NumNotices)
-	 Ale_ShowAlert (Ale_INFO,Txt_No_notices);
+	 if (!NumNotices)
+	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
      }
 
    /***** Show the notices *****/
@@ -501,16 +410,16 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
 	 /* Put a link to the RSS file */
 	 HTM_DIV_Begin ("class=\"CM\"");
-	 RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.CrsCod);
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
-	 Ico_PutIcon ("rss-square.svg","RSS","ICO16x16");
-	 HTM_A_End ();
+	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.CrsCod);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
+	       Ico_PutIcon ("rss-square.svg","RSS","ICO16x16");
+	    HTM_A_End ();
 	 HTM_DIV_End ();
 	 break;
       case Not_LIST_FULL_NOTICES:
-	 /***** Button to add new notice *****/
-	 if (Not_CheckIfICanEditNotices ())
-	    Not_PutButtonToAddNewNotice ();
+	    /***** Button to add new notice *****/
+	    if (Not_CheckIfICanEditNotices ())
+	       Not_PutButtonToAddNewNotice ();
 
 	 /***** End box *****/
 	 Box_BoxEnd ();
@@ -591,16 +500,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
    Not_Status_t Status;
 
    /***** Get notice data from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get notice from database",
-		       "SELECT UNIX_TIMESTAMP(CreatTime) AS F,"	// row[0]
-			      "UsrCod,"				// row[1]
-			      "Content,"			// row[2]
-			      "Status"				// row[3]
-		        " FROM not_notices"
-		       " WHERE NotCod=%ld"
-		         " AND CrsCod=%ld",
-		       NotCod,
-		       Gbl.Hierarchy.Crs.CrsCod))
+   if (Not_DB_GetDataOfNotice (&mysql_res,NotCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -801,12 +701,8 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
-   /***** Get subject of message from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get content of notice",
-		       "SELECT Content"		// row[0]
-		        " FROM not_notices"
-		       " WHERE NotCod=%ld",
-		       NotCod) == 1)	// Result should have a unique row
+   /***** Get content of message from database *****/
+   if (Not_DB_ContentNotice (&mysql_res,NotCod) == 1)	// Result should have a unique row
      {
       /***** Get sumary / content *****/
       row = mysql_fetch_row (mysql_res);
@@ -851,104 +747,27 @@ unsigned Not_GetNumNotices (HieLvl_Level_t Scope,Not_Status_t Status,unsigned *N
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   switch (Scope)
+   if (Not_DB_GetNumNotices (&mysql_res,Scope,Status) == 1)
      {
-      case HieLvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM not_notices"
-			 " WHERE Status=%u",
-                         Status);
-         break;
-      case HieLvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_notices.NumNotif)"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "not_notices"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Cty.CtyCod,
-                         Status);
-         break;
-      case HieLvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_notices.NumNotif)"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "not_notices"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Ins.InsCod,
-                         Status);
-         break;
-      case HieLvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_notices.NumNotif)"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "not_notices"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Ctr.CtrCod,
-                         Status);
-         break;
-      case HieLvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_notices.NumNotif)"	// row[1]
-			  " FROM crs_courses,"
-			        "not_notices"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=not_notices.CrsCod"
-			   " AND not_notices.Status=%u",
-                         Gbl.Hierarchy.Deg.DegCod,
-                         Status);
-         break;
-      case HieLvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM not_notices"
-			 " WHERE CrsCod=%ld"
-			   " AND Status=%u",
-                         Gbl.Hierarchy.Crs.CrsCod,
-                         Status);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get number of notices *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&NumNotices) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of notices.");
 
-   /***** Get number of notices *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumNotices) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of notices.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of notifications of notices.");
+      /***** Get number of notifications by email *****/
+      if (row[1])
+	{
+	 if (sscanf (row[1],"%u",NumNotif) != 1)
+	    Err_ShowErrorAndExit ("Error when getting number of notifications of notices.");
+	}
+      else
+	 *NumNotif = 0;
      }
    else
+     {
+      NumNotices = 0;
       *NumNotif = 0;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -969,92 +788,27 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif)
    unsigned NumNotices;
 
    /***** Get number of notices from database *****/
-   switch (Scope)
+   if (Not_DB_GetNumNoticesDeleted (&mysql_res,Scope) == 1)
      {
-      case HieLvl_SYS:
-         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM not_deleted");
-         break;
-      case HieLvl_CTY:
-         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_deleted.NumNotif)"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "not_deleted"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_deleted.NumNotif)"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "not_deleted"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case HieLvl_CTR:
-         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_deleted.NumNotif)"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "not_deleted"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			 " AND deg_degrees.DegCod=crs_courses.DegCod"
-			 " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case HieLvl_DEG:
-         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(not_deleted.NumNotif)"	// row[1]
-			  " FROM crs_courses,"
-			        "not_deleted"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case HieLvl_CRS:
-         DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
-			 "SELECT COUNT(*),"			// row[0]
-			        "SUM(NumNotif)"			// row[1]
-			  " FROM not_deleted"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+      /***** Get number of notices *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&NumNotices) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of deleted notices.");
 
-   /***** Get number of notices *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumNotices) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of deleted notices.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Err_ShowErrorAndExit ("Error when getting number of notifications of deleted notices.");
+      /***** Get number of notifications by email *****/
+      if (row[1])
+	{
+	 if (sscanf (row[1],"%u",NumNotif) != 1)
+	    Err_ShowErrorAndExit ("Error when getting number of notifications of deleted notices.");
+	}
+      else
+	 *NumNotif = 0;
      }
    else
+     {
+      NumNotices = 0;
       *NumNotif = 0;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1089,31 +843,4 @@ static long Not_GetParamNotCod (void)
   {
    /***** Get notice code *****/
    return Par_GetParToLong ("NotCod");
-  }
-
-/*****************************************************************************/
-/************************* Remove notices in a course ************************/
-/*****************************************************************************/
-
-void Not_DB_RemoveCrsNotices (long CrsCod)
-  {
-   /***** Copy all notices from the course to table of deleted notices *****/
-   DB_QueryINSERT ("can not remove notices in a course",
-		   "INSERT INTO not_deleted"
-		   " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
-		   " SELECT NotCod,"
-			   "CrsCod,"
-			   "UsrCod,"
-			   "CreatTime,"
-			   "Content,"
-			   "NumNotif"
-		    " FROM not_notices"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
-
-   /***** Remove all notices from the course *****/
-   DB_QueryDELETE ("can not remove notices in a course",
-		   "DELETE FROM not_notices"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
   }

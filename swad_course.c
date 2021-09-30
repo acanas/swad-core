@@ -54,6 +54,7 @@
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_notice.h"
+#include "swad_notice_database.h"
 #include "swad_project.h"
 #include "swad_search.h"
 #include "swad_setting.h"
