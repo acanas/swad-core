@@ -62,6 +62,7 @@
 #include "swad_ID.h"
 #include "swad_language.h"
 #include "swad_mail_database.h"
+#include "swad_message.h"
 #include "swad_MFU.h"
 #include "swad_nickname.h"
 #include "swad_nickname_database.h"
@@ -2870,7 +2871,7 @@ void Usr_PutFormLogOut (void)
 
 void Usr_GetParamUsrIdLogin (void)
   {
-   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Cns_MAX_BYTES_USR_LOGIN);
+   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,sizeof (Gbl.Usrs.Me.UsrIdLogin) - 1);
    // Users' IDs are always stored internally without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
   }
@@ -2884,7 +2885,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Par_GetParToText ("OtherUsrIDNickOrEMail",
                      Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
-                     Cns_MAX_BYTES_USR_LOGIN);
+                     sizeof (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail) - 1);
 
    // If it's a user's ID (if does not contain '@')
    if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' not found
@@ -6003,7 +6004,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 
    /***** Get recipients written explicetely *****/
    Par_GetParToText ("OtherRecipients",Gbl.Usrs.ListOtherRecipients,
-                     Nck_MAX_BYTES_LIST_NICKS);
+                     Msg_MAX_BYTES_LIST_OTHER_RECIPIENTS);
 
    /***** Add encrypted users' IDs to the list with all selected users *****/
    if (Gbl.Usrs.ListOtherRecipients[0])
@@ -6016,7 +6017,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
       while (*Ptr)
         {
          /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-         Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,Cns_MAX_BYTES_USR_LOGIN);
+         Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,sizeof (UsrIDNickOrEmail) - 1);
 
          /* Check if string is plain user's ID or nickname and get encrypted user's ID */
          if (UsrIDNickOrEmail[0])
@@ -6356,7 +6357,7 @@ static void Usr_AllocateListOtherRecipients (void)
   {
    if (!Gbl.Usrs.ListOtherRecipients)
      {
-      if ((Gbl.Usrs.ListOtherRecipients = malloc (Nck_MAX_BYTES_LIST_NICKS + 1)) == NULL)
+      if ((Gbl.Usrs.ListOtherRecipients = malloc (Msg_MAX_BYTES_LIST_OTHER_RECIPIENTS + 1)) == NULL)
          Err_NotEnoughMemoryExit ();
       Gbl.Usrs.ListOtherRecipients[0] = '\0';
      }
@@ -10170,7 +10171,7 @@ void Usr_DB_RemoveUsrFromBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   char NewNickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NewNickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {

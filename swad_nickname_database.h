@@ -40,12 +40,12 @@
 
 void Nck_DB_UpdateNick (long UsrCod,const char *NewNickname);
 
-long Nck_DB_GetUsrCodFromNickname (const char NickWithoutArroba[Cns_MAX_BYTES_USR_LOGIN + 1]);
+long Nck_DB_GetUsrCodFromNickname (const char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
-                                   char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1]);
+                                   char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 unsigned Nck_DB_GetUsrNicknames (MYSQL_RES **mysql_res,long UsrCod);
-bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1]);
-bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1]);
+bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
+bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 
 void Nck_DB_RemoveNickname (long UsrCod,const char *Nickname);
 void Nck_DB_RemoveUsrNicknames (long UsrCod);

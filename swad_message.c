@@ -674,7 +674,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 
 static void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
-   char NickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",UsrDat->Nickname);
    Par_PutHiddenParamString (NULL,"OtherRecipients",NickWithArr);

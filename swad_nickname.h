@@ -38,15 +38,13 @@
 #define Nck_MAX_CHARS_NICK_WITHOUT_ARROBA	16
 #define Nck_MAX_BYTES_NICK_WITHOUT_ARROBA	Nck_MAX_CHARS_NICK_WITHOUT_ARROBA
 
-#define Nck_MAX_BYTES_LIST_NICKS		((Cns_MAX_BYTES_USR_LOGIN + 2) * Cfg_MAX_USRS_IN_LIST)
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
-long Nck_GetUsrCodFromNickname (const char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1]);
+long Nck_GetUsrCodFromNickname (const char Nickname[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
 void Nck_ShowFormChangeOtherUsrNickname (void);

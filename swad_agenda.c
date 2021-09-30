@@ -156,7 +156,7 @@ void Agd_PutFormLogInToShowUsrAgenda (void)
 
 void Agd_PutParamAgd (void)
   {
-   char Nickname[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
+   char Nickname[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    snprintf (Nickname,sizeof (Nickname),"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
    Par_PutHiddenParamString (NULL,"agd",Nickname);
@@ -710,7 +710,7 @@ static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod)
 
 static void Agd_PutIconToShowQR (void)
   {
-   char URL[Cns_MAX_BYTES_WWW + Cns_MAX_BYTES_USR_LOGIN + 1];
+   char URL[Cns_MAX_BYTES_WWW + 1];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    snprintf (URL,sizeof (URL),"%s/%s?agd=@%s",

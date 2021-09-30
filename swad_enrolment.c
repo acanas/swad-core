@@ -1102,7 +1102,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	    /* Find next string in text */
 	    Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                     Cns_MAX_BYTES_USR_LOGIN);
+	                                     sizeof (UsrDat.UsrIDNickOrEmail) - 1);
 
 	    /* Reset default list of users' codes */
 	    ListUsrCods.NumUsrs = 0;
@@ -1230,7 +1230,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	 /* Find next string in text */
 	 Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                  Cns_MAX_BYTES_USR_LOGIN);
+	                                  sizeof (UsrDat.UsrIDNickOrEmail) - 1);
 
 	 /* Reset default list of users' codes */
 	 ListUsrCods.NumUsrs = 0;

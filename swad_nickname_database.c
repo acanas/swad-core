@@ -79,7 +79,7 @@ void Nck_DB_UpdateNick (long UsrCod,const char *NewNickname)
 /************** Get user's code of a user from his/her nickname **************/
 /*****************************************************************************/
 
-long Nck_DB_GetUsrCodFromNickname (const char NickWithoutArroba[Cns_MAX_BYTES_USR_LOGIN + 1])
+long Nck_DB_GetUsrCodFromNickname (const char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
    return DB_QuerySELECTCode ("can not get user's code",
 			      "SELECT usr_nicknames.UsrCod"
@@ -87,7 +87,7 @@ long Nck_DB_GetUsrCodFromNickname (const char NickWithoutArroba[Cns_MAX_BYTES_US
 				     "usr_data"
 			      " WHERE usr_nicknames.Nickname='%s'"
 				" AND usr_nicknames.UsrCod=usr_data.UsrCod",
-			      NickWithoutArroba);
+			      NickWithoutArr);
   }
 
 /*****************************************************************************/
@@ -95,10 +95,10 @@ long Nck_DB_GetUsrCodFromNickname (const char NickWithoutArroba[Cns_MAX_BYTES_US
 /*****************************************************************************/
 
 void Nck_DB_GetNicknameFromUsrCod (long UsrCod,
-                                   char NickWithoutArroba[Cns_MAX_BYTES_USR_LOGIN + 1])
+                                   char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
    /***** Get current (last updated) user's nickname from database *****/
-   DB_QuerySELECTString (NickWithoutArroba,Cns_MAX_BYTES_USR_LOGIN,
+   DB_QuerySELECTString (NickWithoutArr,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA,
                          "can not get nickname",
 		         "SELECT Nickname"
 		          " FROM usr_nicknames"
@@ -127,7 +127,7 @@ unsigned Nck_DB_GetUsrNicknames (MYSQL_RES **mysql_res,long UsrCod)
 /************ Check if nickname matches any of a user's nicknames ************/
 /*****************************************************************************/
 
-bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1])
+bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
    return (DB_QueryCOUNT ("can not check if nickname already existed",
 			  "SELECT COUNT(*)"
@@ -142,7 +142,7 @@ bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char NickWithoutArr[
 /********* Check if nickname matches any of other user's nicknames ***********/
 /*****************************************************************************/
 
-bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1])
+bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
    return (DB_QueryCOUNT ("can not check if nickname already existed",
 			  "SELECT COUNT(*)"

@@ -1885,16 +1885,16 @@ void Str_RemoveLeadingZeros (char *Str)
 
 void Str_RemoveLeadingArrobas (char *Str)
   {
-   size_t NumLeadingArrobas;
+   size_t NumLeadingArr;
 
    if (Str)
       if (Str[0])
 	{
-	 NumLeadingArrobas = strspn (Str,"@");
-	 if (NumLeadingArrobas)
+	 NumLeadingArr = strspn (Str,"@");
+	 if (NumLeadingArr)
 	    // Do not use strcpy / memcpy because the strings overlap
-	    memmove (Str,&Str[NumLeadingArrobas],
-		     strlen (Str) - NumLeadingArrobas + 1);
+	    memmove (Str,&Str[NumLeadingArr],
+		     strlen (Str) - NumLeadingArr + 1);
 	}
   }
 

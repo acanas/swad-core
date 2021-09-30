@@ -75,7 +75,7 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat);
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
   {
-   char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    unsigned Length;
    const char *Ptr;
 
@@ -113,9 +113,10 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
 // Nickname may have leading '@'
 // Returns true if nickname found in database
 
-long Nck_GetUsrCodFromNickname (const char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1])
+long Nck_GetUsrCodFromNickname (const char Nickname[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
-   char NickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    /***** Trivial check 1: nickname should be not null *****/
    if (!Nickname)
@@ -125,9 +126,12 @@ long Nck_GetUsrCodFromNickname (const char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1]
    if (!Nickname[0])
       return -1L;
 
-   /***** Make a copy without possible starting arrobas *****/
-   Str_Copy (NickWithoutArr,Nickname,sizeof (NickWithoutArr) - 1);
-   Str_RemoveLeadingArrobas (NickWithoutArr);
+   /***** Make a copy with possible leading arrobas *****/
+   Str_Copy (NickWithArr,Nickname,sizeof (NickWithArr) - 1);
+
+   /***** Remove leading arrobas *****/
+   Str_RemoveLeadingArrobas (NickWithArr);
+   Str_Copy (NickWithoutArr,NickWithArr,sizeof (NickWithoutArr) - 1);
 
    /***** Get user's code from database *****/
    return Nck_DB_GetUsrCodFromNickname (NickWithoutArr);
@@ -175,7 +179,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    unsigned NumNicks;
    unsigned NumNick;
    Act_Action_t NextAction;
-   char NickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 

@@ -231,7 +231,7 @@ static int API_GetCurrentDegCodFromCurrentCrsCod (void);
 static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 
 static int API_CheckParamsNewAccount (char *NewNickWithArr,	// Input
-                                      char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],	// Output
+                                      char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
                                       char *NewEmail,			// Input-output
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword);	// Output
@@ -679,7 +679,7 @@ int swad__createAccount (struct soap *soap,
                          char *userNickname,char *userEmail,char *userPassword,char *appKey,	// input
                          struct swad__createAccountOutput *createAccountOut)			// output
   {
-   char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    int Result;
    int ReturnCode;
@@ -752,14 +752,14 @@ int swad__createAccount (struct soap *soap,
 // Return false on error
 //char *userNickname,char *userEmail,char *userID,char *userPassword
 static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
-                                      char NewNickWithoutArr[Cns_MAX_BYTES_USR_LOGIN + 1],	// Output
+                                      char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
                                       char *NewEmail,			// Input-output
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword)	// Output
   {
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
-   Str_Copy (NewNickWithoutArr,NewNickWithArr,Cns_MAX_BYTES_USR_LOGIN);
+   Str_Copy (NewNickWithoutArr,NewNickWithArr,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
    if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
@@ -3569,7 +3569,7 @@ int swad__sendMessage (struct soap *soap,
   {
    int ReturnCode;
    long ReplyUsrCod = -1L;
-   char Nickname[Cns_MAX_BYTES_USR_LOGIN + 1];
+   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3658,7 +3658,7 @@ int swad__sendMessage (struct soap *soap,
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,Nickname,Cns_MAX_BYTES_USR_LOGIN);
+      Str_GetNextStringUntilComma (&Ptr,Nickname,sizeof (Nickname) - 1);
 
       /* Check if string is a valid nickname */
       if (Nck_CheckIfNickWithArrIsValid (Nickname))	// String is a nickname?

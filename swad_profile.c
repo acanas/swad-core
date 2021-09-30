@@ -195,7 +195,7 @@ void Prf_RequestUserProfile (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
-   char NickWithArr[1 + Cns_MAX_BYTES_USR_LOGIN + 1];
+   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -222,7 +222,7 @@ void Prf_RequestUserProfile (void)
 
 	    snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
 		      Gbl.Usrs.Me.UsrDat.Nickname);
-	    HTM_INPUT_TEXT ("usr",Cns_MAX_BYTES_USR_LOGIN,NickWithArr,
+	    HTM_INPUT_TEXT ("usr",sizeof (NickWithArr) - 1,NickWithArr,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "size=\"18\"");
 	 HTM_LABEL_End ();
