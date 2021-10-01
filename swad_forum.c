@@ -1811,13 +1811,13 @@ void For_SetForumName (const struct For_Forum *Forum,
          break;
       case For_FORUM_INSTIT_USRS:
 	 Hie.Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
+	 if (!Ins_GetDataOfInstitByCod (&Hie.Ins))
 	    Err_WrongInstitExit ();
          Str_Copy (ForumName,Hie.Ins.ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
 	 Hie.Ins.InsCod = Forum->Location;
-	 if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
+	 if (!Ins_GetDataOfInstitByCod (&Hie.Ins))
 	    Err_WrongInstitExit ();
          snprintf (ForumName,For_MAX_BYTES_FORUM_NAME + 1,"%s%s",
                    Hie.Ins.ShrtName,

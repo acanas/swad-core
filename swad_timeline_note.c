@@ -446,7 +446,7 @@ static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
       case TL_NOTE_INS_SHA_PUB_FILE:
 	 /* Get institution data */
 	 Hie->Ins.InsCod = Not->HieCod;
-	 Ins_GetDataOfInstitutionByCod (&Hie->Ins);
+	 Ins_GetDataOfInstitByCod (&Hie->Ins);
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:

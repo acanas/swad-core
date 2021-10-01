@@ -404,7 +404,7 @@ void Ntf_ShowMyNotifications (void)
 
 	       /* Get institution code (row[2]) */
 	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-	       Ins_GetDataOfInstitutionByCod (&Hie.Ins);
+	       Ins_GetDataOfInstitByCod (&Hie.Ins);
 
 		/* Get center code (row[3]) */
 	       Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -1394,10 +1394,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Delete old notifications ******/
-   DB_QueryDELETE ("can not remove old notifications",
-		   "DELETE LOW_PRIORITY FROM ntf_notifications"
-		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Cfg_TIME_TO_DELETE_OLD_NOTIF);
+   Ntf_DB_RemoveOldNtfs ();
   }
 
 /*****************************************************************************/
@@ -1418,8 +1415,8 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumNots;
-   unsigned NumNot;
+   unsigned NumNtfs;
+   unsigned NumNtf;
    Lan_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
@@ -1436,34 +1433,13 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    int ReturnCode;
 
    /***** Return 0 notifications and 0 mails when error *****/
-   *NumNotif = *NumMails = 0;
+   *NumNotif =
+   *NumMails = 0;
 
    if (Mai_CheckIfUsrCanReceiveEmailNotif (ToUsrDat))
      {
       /***** Get pending notifications of this user from database ******/
-      NumNots = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get pending notifications"
-			         " of a user",
-		      "SELECT NotifyEvent,"	// row[0]
-			     "FromUsrCod,"	// row[1]
-			     "InsCod,"		// row[2]
-			     "CtrCod,"		// row[3]
-			     "DegCod,"		// row[4]
-			     "CrsCod,"		// row[5]
-			     "Cod"		// row[6]
-		       " FROM ntf_notifications"
-		      " WHERE ToUsrCod=%ld"
-		        " AND (Status & %u)<>0"
-		        " AND (Status & %u)=0"
-		        " AND (Status & %u)=0"
-		      " ORDER BY TimeNotif,"
-			        "NotifyEvent",
-		      ToUsrDat->UsrCod,
-		      (unsigned) Ntf_STATUS_BIT_EMAIL,
-		      (unsigned) Ntf_STATUS_BIT_SENT,
-		      (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
-
-      if (NumNots) // Events found
+      if ((NumNtfs = Ntf_DB_GetPendingNtfsToUsr (&mysql_res,ToUsrDat->UsrCod))) // Notifications found
 	{
 	 /***** If user has no language, set it to current language *****/
 	 ToUsrLanguage = ToUsrDat->Prefs.Language;
@@ -1475,21 +1451,21 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 /***** Welcome note *****/
 	 Mai_WriteWelcomeNoteEMail (FileMail,ToUsrDat);
-	 if (NumNots == 1)
+	 if (NumNtfs == 1)
 	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[ToUsrLanguage],
 		     Cfg_PLATFORM_SHORT_NAME);
 	 else
 	    fprintf (FileMail,Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[ToUsrLanguage],
-		     (unsigned) NumNots,Cfg_PLATFORM_SHORT_NAME);
+		     (unsigned) NumNtfs,Cfg_PLATFORM_SHORT_NAME);
 	 fprintf (FileMail,": \n");
 
 	 /***** Initialize structure with origin user's data *****/
 	 Usr_UsrDataConstructor (&FromUsrDat);
 
 	 /***** Inform about the events one by one *****/
-	 for (NumNot = 0;
-	      NumNot < NumNots;
-	      NumNot++)
+	 for (NumNtf = 0;
+	      NumNtf < NumNtfs;
+	      NumNtf++)
 	   {
 	    /* Get next event */
 	    row = mysql_fetch_row (mysql_res);
@@ -1503,20 +1479,19 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	                                             Usr_DONT_GET_PREFS,
 	                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-	    /* Get institution code (row[2]) */
+	    /* Get institution code (row[2]),
+	           center code (row[3]),
+	           degree code (row[4]),
+	           course code (row[5]) */
 	    Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
-	    Ins_GetDataOfInstitutionByCod (&Hie.Ins);
-
-	    /* Get center code (row[3]) */
 	    Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[3]);
-	    Ctr_GetDataOfCenterByCod (&Hie.Ctr);
-
-	    /* Get degree code (row[4]) */
 	    Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[4]);
-	    Deg_GetDataOfDegreeByCod (&Hie.Deg);
-
-	    /* Get course code (row[5]) */
 	    Hie.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[5]);
+
+	    /* Get data of institution, center, degree and course */
+	    Ins_GetDataOfInstitByCod (&Hie.Ins);
+	    Ctr_GetDataOfCenterByCod (&Hie.Ctr);
+	    Deg_GetDataOfDegreeByCod (&Hie.Deg);
 	    Crs_GetDataOfCourseByCod (&Hie.Crs);
 
 	    /* Get message/post/... code (row[6]) */
@@ -1617,7 +1592,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	 ReturnCode = WEXITSTATUS(ReturnCode);
 	 if (ReturnCode == 0)	// Message sent successfully
 	   {
-	    *NumNotif = NumNots;
+	    *NumNotif = NumNtfs;
 	    *NumMails = 1;
 
 	    /* Update statistics about notifications */
@@ -1625,18 +1600,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	   }
 
 	 /***** Mark all the pending notifications of this user as 'sent' *****/
-	 DB_QueryUPDATE ("can not set pending notifications of a user as sent",
-			 "UPDATE ntf_notifications"
-			   " SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld"
-			   " AND (Status & %u)<>0"
-			   " AND (Status & %u)=0"
-			   " AND (Status & %u)=0",
-		         (unsigned) Ntf_STATUS_BIT_SENT,
-		         ToUsrDat->UsrCod,
-		         (unsigned) Ntf_STATUS_BIT_EMAIL,
-		         (unsigned) Ntf_STATUS_BIT_SENT,
-		         (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+	 Ntf_DB_MarkPendingNtfsAsSent (ToUsrDat->UsrCod);
 	}
 
       /***** Free structure that stores the query result *****/

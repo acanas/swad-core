@@ -1023,7 +1023,7 @@ void CtrCfg_ChangeCtrIns (void)
    if (NewIns.InsCod != Gbl.Hierarchy.Ctr.InsCod)
      {
       /***** Get data of new institution *****/
-      Ins_GetDataOfInstitutionByCod (&NewIns);
+      Ins_GetDataOfInstitByCod (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
       if (Ctr_DB_CheckIfCtrNameExistsInIns ("ShortName",

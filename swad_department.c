@@ -465,7 +465,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 
 	 /* Get data of institution of this department */
 	 Ins.InsCod = Dpt->InsCod;
-	 Ins_GetDataOfInstitutionByCod (&Ins);
+	 Ins_GetDataOfInstitByCod (&Ins);
 
 	 HTM_TR_Begin (NULL);
 

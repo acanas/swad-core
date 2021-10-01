@@ -3530,7 +3530,7 @@ static void Sta_WriteInstit (long InsCod)
      {
       /***** Get data of institution *****/
       Ins.InsCod = InsCod;
-      Ins_GetDataOfInstitutionByCod (&Ins);
+      Ins_GetDataOfInstitByCod (&Ins);
 
       /***** Title in cell *****/
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ins.FullName);

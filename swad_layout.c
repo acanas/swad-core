@@ -1537,7 +1537,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Get data of institution *****/
    Hie.Ins.InsCod = InsCod;
-   Ins_GetDataOfInstitutionByCod (&Hie.Ins);
+   Ins_GetDataOfInstitByCod (&Hie.Ins);
 
    /***** Get data of degree *****/
    Hie.Deg.DegCod = DegCod;

@@ -1270,7 +1270,7 @@ static unsigned Fig_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
 
    /***** Get data of this institution (row[0]) *****/
    Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
-   if (!Ins_GetDataOfInstitutionByCod (Ins))
+   if (!Ins_GetDataOfInstitByCod (Ins))
       Err_WrongInstitExit ();
 
    /***** Get statistic (row[1]) *****/

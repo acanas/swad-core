@@ -174,7 +174,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 								  Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of institution */
-	    Ins_GetDataOfInstitutionByCod (&Ins);
+	    Ins_GetDataOfInstitByCod (&Ins);
 
 	    /* Institution logo and name */
 	    HTM_TR_Begin (NULL);
@@ -709,7 +709,7 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-bool Ins_GetDataOfInstitutionByCod (struct Ins_Instit *Ins)
+bool Ins_GetDataOfInstitByCod (struct Ins_Instit *Ins)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1220,7 +1220,7 @@ void Ins_RemoveInstitution (void)
    Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Get data of the institution from database *****/
-   Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
+   Ins_GetDataOfInstitByCod (Ins_EditingIns);
 
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
@@ -1340,7 +1340,7 @@ void Ins_RenameInstitution (struct Ins_Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFu
    Par_GetParToText (ParamName,NewInsName,MaxBytes);
 
    /***** Get from the database the old names of the institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins);
+   Ins_GetDataOfInstitByCod (Ins);
 
    /***** Check if new name is empty *****/
    if (NewInsName[0])
@@ -1411,7 +1411,7 @@ void Ins_ChangeInsWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
+   Ins_GetDataOfInstitByCod (Ins_EditingIns);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1459,7 +1459,7 @@ void Ins_ChangeInsStatus (void)
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins_EditingIns);
+   Ins_GetDataOfInstitByCod (Ins_EditingIns);
 
    /***** Update status in table of institutions *****/
    Ins_DB_UpdateInsStatus (Status,Ins_EditingIns->InsCod);
@@ -1918,7 +1918,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	 Ins.InsCod = DB_GetNextCode (*mysql_res);
 
 	 /* Get data of institution */
-	 Ins_GetDataOfInstitutionByCod (&Ins);
+	 Ins_GetDataOfInstitByCod (&Ins);
 
 	 /* Write data of this institution */
 	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);

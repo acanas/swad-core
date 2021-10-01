@@ -2240,7 +2240,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    Ins.InsCod = UsrDat->InsCod;
    if (Ins.InsCod > 0)
-      Ins_GetDataOfInstitutionByCod (&Ins);
+      Ins_GetDataOfInstitByCod (&Ins);
 
    /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -4114,7 +4114,7 @@ void Rec_UpdateMyInstitution (void)
    /* Get country of institution */
    if (Ins.InsCod > 0)
      {
-      Ins_GetDataOfInstitutionByCod (&Ins);
+      Ins_GetDataOfInstitByCod (&Ins);
       if (Gbl.Usrs.Me.UsrDat.InsCtyCod != Ins.CtyCod)
 	 Gbl.Usrs.Me.UsrDat.InsCtyCod = Ins.CtyCod;
      }

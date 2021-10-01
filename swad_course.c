@@ -254,7 +254,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 	       /***** Get data of this institution *****/
 	       Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	       if (!Ins_GetDataOfInstitutionByCod (&Hie.Ins))
+	       if (!Ins_GetDataOfInstitByCod (&Hie.Ins))
 		  Err_WrongInstitExit ();
 
 	       /***** Write link to institution *****/

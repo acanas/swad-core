@@ -89,6 +89,26 @@ void Ntf_DB_UpdateMyLastAccessToNotifications (void)
   }
 
 /*****************************************************************************/
+/********** Mark all the pending notifications of a user as 'sent' ***********/
+/*****************************************************************************/
+
+void Ntf_DB_MarkPendingNtfsAsSent (long ToUsrCod)
+  {
+   DB_QueryUPDATE ("can not set pending notifications of a user as sent",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE ToUsrCod=%ld"
+		     " AND (Status & %u)<>0"
+		     " AND (Status & %u)=0"
+		     " AND (Status & %u)=0",
+		   (unsigned) Ntf_STATUS_BIT_SENT,
+		   ToUsrCod,
+		   (unsigned) Ntf_STATUS_BIT_EMAIL,
+		   (unsigned) Ntf_STATUS_BIT_SENT,
+		   (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+  }
+
+/*****************************************************************************/
 /********************** Set possible notification as seen ********************/
 /*****************************************************************************/
 
@@ -304,6 +324,34 @@ unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications)
   }
 
 /*****************************************************************************/
+/******************* Get pending notifications to a user *********************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetPendingNtfsToUsr (MYSQL_RES **mysql_res,long ToUsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's pending notifications",
+		   "SELECT NotifyEvent,"	// row[0]
+			  "FromUsrCod,"		// row[1]
+			  "InsCod,"		// row[2]
+			  "CtrCod,"		// row[3]
+			  "DegCod,"		// row[4]
+			  "CrsCod,"		// row[5]
+			  "Cod"			// row[6]
+		    " FROM ntf_notifications"
+		   " WHERE ToUsrCod=%ld"
+		     " AND (Status & %u)<>0"
+		     " AND (Status & %u)=0"
+		     " AND (Status & %u)=0"
+		   " ORDER BY TimeNotif,"
+			     "NotifyEvent",
+		   ToUsrCod,
+		   (unsigned) Ntf_STATUS_BIT_EMAIL,
+		   (unsigned) Ntf_STATUS_BIT_SENT,
+		   (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+  }
+
+/*****************************************************************************/
 /************* Get the number of (all) my unseen notifications ***************/
 /*****************************************************************************/
 
@@ -462,3 +510,15 @@ void Ntf_DB_RemoveUsrNtfs (long ToUsrCod)
                    ToUsrCod);
   }
 
+
+/*****************************************************************************/
+/************************* Delete old notifications **************************/
+/*****************************************************************************/
+
+void Ntf_DB_RemoveOldNtfs (void)
+  {
+   DB_QueryDELETE ("can not remove old notifications",
+		   "DELETE LOW_PRIORITY FROM ntf_notifications"
+		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+                   Cfg_TIME_TO_DELETE_OLD_NOTIF);
+  }

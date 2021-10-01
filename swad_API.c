@@ -3354,7 +3354,7 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get institution (row[4]) */
          Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-         Ins_GetDataOfInstitutionByCod (&Hie.Ins);
+         Ins_GetDataOfInstitByCod (&Hie.Ins);
 
          /* Get center (row[5]) */
          Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
