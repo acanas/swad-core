@@ -59,6 +59,7 @@
 #include "swad_mark.h"
 #include "swad_mark_database.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
@@ -8156,19 +8157,19 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_SHOW_DOC_GRP:
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_DOC_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_TCH_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_SHR_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -8176,7 +8177,7 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_SHOW_MRK_GRP:
 	    case Brw_ADMI_MRK_CRS:
 	    case Brw_ADMI_MRK_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -8306,19 +8307,19 @@ void Brw_DownloadFile (void)
 	    case Brw_SHOW_DOC_GRP:
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_DOC_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_TCH_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_SHR_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -8326,7 +8327,7 @@ void Brw_DownloadFile (void)
 	    case Brw_SHOW_MRK_GRP:
 	    case Brw_ADMI_MRK_CRS:
 	    case Brw_ADMI_MRK_GRP:
-	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
+	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
 				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;

@@ -38,6 +38,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
@@ -613,7 +614,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
       /***** If it's me, mark possible notification as seen *****/
       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
       if (ItsMe)
-	 Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
+	 Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
 			      -1L,-1L,
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
      }

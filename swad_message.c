@@ -52,6 +52,7 @@
 #include "swad_message_database.h"
 #include "swad_nickname_database.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -1209,7 +1210,7 @@ void Msg_ExpRecMsg (void)
    Msg_DB_ExpandRcvMsg (Messages.ExpandedMsgCod);
 
    /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_MESSAGE,
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_MESSAGE,
 	                Messages.ExpandedMsgCod,-1L,
 	                Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -1343,7 +1344,7 @@ static void Msg_MoveRcvMsgToDeleted (long MsgCod,long UsrCod)
          Msg_DB_MoveMsgContentToDeleted (MsgCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_MESSAGE,MsgCod,UsrCod);
+   Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_MESSAGE,MsgCod,UsrCod);
   }
 
 /*****************************************************************************/

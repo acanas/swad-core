@@ -58,6 +58,7 @@
 #include "swad_nickname.h"
 #include "swad_nickname_database.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_project.h"

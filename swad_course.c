@@ -55,6 +55,7 @@
 #include "swad_message.h"
 #include "swad_notice.h"
 #include "swad_notice_database.h"
+#include "swad_notification_database.h"
 #include "swad_project.h"
 #include "swad_search.h"
 #include "swad_setting.h"
@@ -1785,7 +1786,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Set all the notifications from the course as removed,
 	     except notifications about new messages *****/
-      Ntf_MarkNotifInCrsAsRemoved (-1L,CrsCod);
+      Ntf_DB_MarkNotifInCrsAsRemoved (-1L,CrsCod);
 
       /***** Remove information of the course ****/
       /* Remove information of the course */

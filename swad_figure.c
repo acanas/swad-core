@@ -57,6 +57,7 @@
 #include "swad_message_database.h"
 #include "swad_network.h"
 #include "swad_notice.h"
+#include "swad_notification_database.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_program.h"

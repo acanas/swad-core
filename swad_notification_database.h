@@ -43,8 +43,26 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
+                                       struct UsrData *UsrDat,
+                                       long Cod,Ntf_Status_t Status,
+                                       long InsCod,long CtrCod,long DegCod,long CrsCod);
+void Ntf_DB_UpdateMyLastAccessToNotifications (void);
+void Ntf_DB_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod);
+void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
+void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod);
+void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
+void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod);
 void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
                                                 Brw_FileBrowser_t FileBrowser,
                                                 long Cod,const char *Path);
+
+unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications);
+unsigned Ntf_DB_GetNumAllMyUnseenNtfs (void);
+unsigned Ntf_DB_GetNumMyNewUnseenNtfs (void);
+unsigned Ntf_DB_GetUsrsWhoMustBeNotified (MYSQL_RES **mysql_res);
+unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent);
+
+void Ntf_DB_RemoveUsrNtfs (long ToUsrCod);
 
 #endif

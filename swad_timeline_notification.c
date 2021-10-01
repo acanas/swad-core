@@ -29,6 +29,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_global.h"
+#include "swad_notification_database.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_note.h"
@@ -216,8 +217,8 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Tml_Ntf_MarkMyNotifAsSeen (void)
   {
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_TL_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TL_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TL_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TL_SHARE  ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TL_MENTION,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
   }

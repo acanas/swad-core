@@ -49,6 +49,7 @@
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
@@ -776,7 +777,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 		    {
 		     case For_FORUM_COURSE_TCHS:
 		     case For_FORUM_COURSE_USRS:
-			Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
+			Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
 					     Forums->PstCod,Gbl.Hierarchy.Crs.CrsCod,
 					     Gbl.Usrs.Me.UsrDat.UsrCod);
 			break;
@@ -784,7 +785,7 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 			break;
 		    }
 		  if (Thread.NumMyPosts)
-		     Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
+		     Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
 					  Forums->PstCod,-1L,
 					  Gbl.Usrs.Me.UsrDat.UsrCod);
 		 }

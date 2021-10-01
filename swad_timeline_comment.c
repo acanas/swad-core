@@ -34,6 +34,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_message.h"
+#include "swad_notification_database.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"

@@ -43,6 +43,7 @@
 #include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
@@ -719,7 +720,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Mark possible notification as seen *****/
    if (Svy.Scope == HieLvl_CRS)	// Only course surveys are notified
-      Ntf_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
+      Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
 	                   SvyCod,Svy.Cod,
 	                   Gbl.Usrs.Me.UsrDat.UsrCod);
 

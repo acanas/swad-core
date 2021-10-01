@@ -45,6 +45,7 @@
 #include "swad_HTML.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_RSS.h"
@@ -550,7 +551,7 @@ void Cfe_ListCallsForExamsSee (void)
    Cfe_ListCallsForExams (&CallsForExams,Cfe_NORMAL_VIEW);
 
    /***** Mark possible notifications as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_CALL_FOR_EXAM,
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_CALL_FOR_EXAM,
 	                -1L,Gbl.Hierarchy.Crs.CrsCod,
 	                Gbl.Usrs.Me.UsrDat.UsrCod);
   }

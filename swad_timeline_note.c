@@ -39,6 +39,7 @@
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_notice.h"
+#include "swad_notification_database.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_timeline.h"

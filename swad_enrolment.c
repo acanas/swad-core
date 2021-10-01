@@ -54,6 +54,7 @@
 #include "swad_message.h"
 #include "swad_message_database.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"
@@ -316,9 +317,9 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    Enr_RemUsrEnrolmentRequestInCrs (UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Remove old enrolment notifications before inserting the new one ******/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1,UsrDat->UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_NET,-1,UsrDat->UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
+   Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1,UsrDat->UsrCod);
+   Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_NET,-1,UsrDat->UsrCod);
+   Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent));
@@ -446,7 +447,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 Err_WrongRoleExit ();
 	 break;
      }
-   Ntf_MarkNotifAsSeen (NotifyEvent,-1L,Gbl.Hierarchy.Crs.CrsCod,
+   Ntf_DB_MarkNotifAsSeen (NotifyEvent,-1L,Gbl.Hierarchy.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -2341,7 +2342,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		  HTM_TR_End ();
 
 		  /***** Mark possible notification as seen *****/
-		  Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
+		  Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
 				      ReqCod,Gbl.Hierarchy.Crs.CrsCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod);
 		 }
@@ -2795,9 +2796,9 @@ void Enr_AcceptRegisterMeInCrs (void)
 
    /***** Mark all notifications about enrolment (as student or as teacher)
           in current course as removed *****/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1L,
+   Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1L,
+   Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/
@@ -3230,7 +3231,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
       /***** Set all the notifications for this user in this course as removed,
              except notifications about new messages *****/
-      Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
+      Ntf_DB_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from the tables of courses-users *****/
       Set_DB_RemUsrFromCrsSettings (UsrDat->UsrCod,Crs->CrsCod);

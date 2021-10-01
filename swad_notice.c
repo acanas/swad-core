@@ -43,6 +43,7 @@
 #include "swad_notice.h"
 #include "swad_notice_database.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_parameter.h"
 #include "swad_RSS.h"
 #include "swad_timeline.h"
@@ -430,7 +431,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
 			-1L,Gbl.Hierarchy.Crs.CrsCod,
 			Gbl.Usrs.Me.UsrDat.UsrCod);
   }

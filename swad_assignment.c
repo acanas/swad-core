@@ -44,6 +44,7 @@
 #include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
@@ -521,7 +522,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
    /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
+   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
 	                AsgCod,Gbl.Hierarchy.Crs.CrsCod,
 	                Gbl.Usrs.Me.UsrDat.UsrCod);
   }

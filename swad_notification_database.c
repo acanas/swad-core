@@ -26,6 +26,8 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_error.h"
+#include "swad_global.h"
 #include "swad_notification_database.h"
 
 /*****************************************************************************/
@@ -45,6 +47,201 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/************** Store a notify event to one user into database ***************/
+/*****************************************************************************/
+
+void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
+                                       struct UsrData *UsrDat,
+                                       long Cod,Ntf_Status_t Status,
+                                       long InsCod,long CtrCod,long DegCod,long CrsCod)
+  {
+   DB_QueryINSERT ("can not create new notification event",
+		   "INSERT INTO ntf_notifications"
+		   " (NotifyEvent,ToUsrCod,FromUsrCod,"
+		     "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
+		   " VALUES"
+		   " (%u,%ld,%ld,"
+		     "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
+	           (unsigned) NotifyEvent,
+		   UsrDat->UsrCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+	           InsCod,
+	           CtrCod,
+	           DegCod,
+	           CrsCod,
+	           Cod,
+	           (unsigned) Status);
+  }
+
+/*****************************************************************************/
+/***************** Update my last access to notifications ********************/
+/*****************************************************************************/
+
+void Ntf_DB_UpdateMyLastAccessToNotifications (void)
+  {
+   DB_QueryUPDATE ("can not update last access to notifications",
+		   "UPDATE usr_last"
+		     " SET LastAccNotif=NOW()"
+		   " WHERE UsrCod=%ld",
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************** Set possible notification as seen ********************/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod)
+  {
+   /***** Set notification as seen by me *****/
+   if (ToUsrCod > 0)	// If the user code is specified
+     {
+      if (Cod > 0)		// Set only one notification
+				// for the user as seen
+         DB_QueryUPDATE ("can not set notification(s) as seen",
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
+			 " WHERE ToUsrCod=%ld"
+			   " AND NotifyEvent=%u"
+			   " AND Cod=%ld",
+                         (unsigned) Ntf_STATUS_BIT_READ,
+                         ToUsrCod,
+                         (unsigned) NotifyEvent,
+                         Cod);
+      else if (CrsCod > 0)	// Set all notifications of this type
+				// in the current course for the user as seen
+         DB_QueryUPDATE ("can not set notification(s) as seen",
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
+			 " WHERE ToUsrCod=%ld"
+			   " AND NotifyEvent=%u"
+			   " AND CrsCod=%ld",
+                         (unsigned) Ntf_STATUS_BIT_READ,
+                         ToUsrCod,
+                         (unsigned) NotifyEvent,
+                         Gbl.Hierarchy.Crs.CrsCod);
+      else			// Set all notifications of this type
+				// for the user as seen
+         DB_QueryUPDATE ("can not set notification(s) as seen",
+			 "UPDATE ntf_notifications"
+			   " SET Status=(Status | %u)"
+			 " WHERE ToUsrCod=%ld"
+			   " AND NotifyEvent=%u",
+                         (unsigned) Ntf_STATUS_BIT_READ,
+                         ToUsrCod,
+                         (unsigned) NotifyEvent);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Set possible notification as removed *******************/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod)
+  {
+   /***** Set notification as removed *****/
+   if (Cod > 0)	// Set only one notification as removed
+      DB_QueryUPDATE ("can not set notification(s) as removed",
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
+		      " WHERE ToUsrCod=%ld"
+		        " AND NotifyEvent=%u"
+		        " AND Cod=%ld",
+	              (unsigned) Ntf_STATUS_BIT_REMOVED,
+	              ToUsrCod,
+	              (unsigned) NotifyEvent,
+		      Cod);
+   else		// Set all notifications of this type,
+		// in the current course for the user, as removed
+      DB_QueryUPDATE ("can not set notification(s) as removed",
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
+		      " WHERE ToUsrCod=%ld"
+		        " AND NotifyEvent=%u"
+		        " AND CrsCod=%ld",
+	              (unsigned) Ntf_STATUS_BIT_REMOVED,
+	              ToUsrCod,
+	              (unsigned) NotifyEvent,
+		      Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*********** Set possible notifications from a course as removed *************/
+/*****************************************************************************/
+// This function should be called when a course is removed
+// because notifications from this course will not be available after course removing.
+// However, notifications about new messages should not be removed
+// because the messages will remain available
+
+void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
+  {
+   /***** Set all notifications from the course as removed,
+          except notifications about new messages *****/
+   if (ToUsrCod > 0)	// If the user code is specified
+      DB_QueryUPDATE ("can not set notification(s) as removed",
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
+		      " WHERE ToUsrCod=%ld"
+		        " AND CrsCod=%ld"
+		        " AND NotifyEvent<>%u",	// messages will remain available
+	              (unsigned) Ntf_STATUS_BIT_REMOVED,
+	              ToUsrCod,
+	              CrsCod,
+	              (unsigned) Ntf_EVENT_MESSAGE);
+   else			// User code not specified ==> any user
+      DB_QueryUPDATE ("can not set notification(s) as removed",
+		      "UPDATE ntf_notifications"
+		        " SET Status=(Status | %u)"
+		      " WHERE CrsCod=%ld"
+		        " AND NotifyEvent<>%u",	// messages will remain available
+	              (unsigned) Ntf_STATUS_BIT_REMOVED,
+	              CrsCod,
+	              (unsigned) Ntf_EVENT_MESSAGE);
+  }
+
+/*****************************************************************************/
+/******************* Set possible notifications as removed *******************/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
+  {
+   DB_QueryUPDATE ("can not set notification(s) as removed",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE NotifyEvent=%u"
+		     " AND Cod=%ld",
+	           (unsigned) Ntf_STATUS_BIT_REMOVED,
+	           (unsigned) NotifyEvent,
+	           Cod);
+  }
+
+/*****************************************************************************/
+/******* Set all possible notifications of files in a group as removed *******/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod)
+  {
+   DB_QueryUPDATE ("can not set notification(s) as removed",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE NotifyEvent IN (%u,%u,%u,%u)"
+		     " AND Cod IN"
+			 " (SELECT FilCod"
+			    " FROM brw_files"
+			   " WHERE FileBrowser IN (%u,%u,%u,%u)"
+			     " AND Cod=%ld)",
+	           (unsigned) Ntf_STATUS_BIT_REMOVED,
+	           (unsigned) Ntf_EVENT_DOCUMENT_FILE,
+	           (unsigned) Ntf_EVENT_TEACHERS_FILE,
+	           (unsigned) Ntf_EVENT_SHARED_FILE,
+	           (unsigned) Ntf_EVENT_MARKS_FILE,
+	           (unsigned) Brw_ADMI_DOC_GRP,
+	           (unsigned) Brw_ADMI_TCH_GRP,
+	           (unsigned) Brw_ADMI_SHR_GRP,
+	           (unsigned) Brw_ADMI_MRK_GRP,
+	           GrpCod);
+  }
 
 /*****************************************************************************/
 /************ Set possible notifications of children as removed **************/
@@ -70,3 +267,198 @@ void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
 		   Cod,
 		   Path);
   }
+
+/*****************************************************************************/
+/*************************** Get my notifications ***************************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications)
+  {
+   char SubQuery[128];
+
+   /***** Get my notifications from database *****/
+   if (AllNotifications)
+      SubQuery[0] = '\0';
+   else
+      sprintf (SubQuery," AND (Status&%u)=0",
+               Ntf_STATUS_BIT_READ |
+               Ntf_STATUS_BIT_REMOVED);
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get your notifications",
+		   "SELECT NotifyEvent,"		// row[0]
+			  "FromUsrCod,"			// row[1]
+			  "InsCod,"			// row[2]
+			  "CtrCod,"			// row[3]
+			  "DegCod,"			// row[4]
+			  "CrsCod,"			// row[5]
+			  "Cod,"			// row[6]
+			  "UNIX_TIMESTAMP(TimeNotif),"	// row[7]
+			  "Status"			// row[8]
+		    " FROM ntf_notifications"
+		   " WHERE ToUsrCod=%ld"
+		       "%s"
+		   " ORDER BY TimeNotif DESC",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   SubQuery);
+  }
+
+/*****************************************************************************/
+/************* Get the number of (all) my unseen notifications ***************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetNumAllMyUnseenNtfs (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of unseen notifications",
+		  "SELECT COUNT(*)"
+		   " FROM ntf_notifications"
+		  " WHERE ToUsrCod=%ld"
+		    " AND (Status & %u)=0",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+  }
+
+/*****************************************************************************/
+/************** Get the number of my new unseen notifications ****************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetNumMyNewUnseenNtfs (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of unseen notifications",
+		  "SELECT COUNT(*)"
+		   " FROM ntf_notifications"
+		  " WHERE ToUsrCod=%ld"
+		    " AND (Status & %u)=0"
+		    " AND TimeNotif>FROM_UNIXTIME(%ld)",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED),
+		  Gbl.Usrs.Me.UsrLast.LastAccNotif);
+  }
+
+/*****************************************************************************/
+/********************** Get users who must be notified ***********************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetUsrsWhoMustBeNotified (MYSQL_RES **mysql_res)
+  {
+   //  (Status & Ntf_STATUS_BIT_EMAIL) &&
+   // !(Status & Ntf_STATUS_BIT_SENT) &&
+   // !(Status & (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED))
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users who must be notified",
+		   "SELECT DISTINCT ToUsrCod"
+		    " FROM ntf_notifications"
+		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+		     " AND (Status & %u)<>0"
+		     " AND (Status & %u)=0"
+		     " AND (Status & %u)=0",
+		   Cfg_TIME_TO_SEND_PENDING_NOTIF,
+		   (unsigned) Ntf_STATUS_BIT_EMAIL,
+		   (unsigned) Ntf_STATUS_BIT_SENT,
+		   (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
+  }
+
+/*****************************************************************************/
+/****************** Get number of notifications by email *********************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(NumEvents),"			// row[0]
+				"SUM(NumMails)"				// row[1]
+			  " FROM sta_notifications"
+			 " WHERE NotifyEvent=%u",
+			 (unsigned) NotifyEvent);
+      case HieLvl_CTY:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				"SUM(sta_notifications.NumMails)"	// row[1]
+			  " FROM ins_instits,"
+				"ctr_centers,"
+				"deg_degrees,"
+				"sta_notifications"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
+			   " AND sta_notifications.NotifyEvent=%u",
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_INS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				"SUM(sta_notifications.NumMails)"	// row[1]
+			  " FROM ctr_centers,"
+				"deg_degrees,"
+				"sta_notifications"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
+			   " AND sta_notifications.NotifyEvent=%u",
+			 Gbl.Hierarchy.Ins.InsCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_CTR:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(sta_notifications.NumEvents),"	// row[0]
+				"SUM(sta_notifications.NumMails)"	// row[1]
+			  " FROM deg_degrees,"
+				"sta_notifications"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
+			   " AND sta_notifications.NotifyEvent=%u",
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_DEG:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(NumEvents),"			// row[0]
+				"SUM(NumMails)"				// row[1]
+			  " FROM sta_notifications"
+			 " WHERE DegCod=%ld"
+			   " AND NotifyEvent=%u",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 (unsigned) NotifyEvent);
+      case HieLvl_CRS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get the number"
+				    " of notifications by email",
+			 "SELECT SUM(NumEvents),"			// row[0]
+				"SUM(NumMails)"				// row[1]
+			  " FROM sta_notifications"
+			 " WHERE CrsCod=%ld"
+			   " AND NotifyEvent=%u",
+			 Gbl.Hierarchy.Crs.CrsCod,
+			 (unsigned) NotifyEvent);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/**************** Remove all notifications made to a user ********************/
+/*****************************************************************************/
+
+void Ntf_DB_RemoveUsrNtfs (long ToUsrCod)
+  {
+   DB_QueryDELETE ("can not remove notifications of a user",
+		   "DELETE LOW_PRIORITY FROM ntf_notifications"
+		   " WHERE ToUsrCod=%ld",
+                   ToUsrCod);
+  }
+

@@ -121,19 +121,10 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
                                     bool GetContent);
-void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod);
-void Ntf_DB_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 
-void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
-void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod);
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path);
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path);
-void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod);
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod);
-void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
-                                       struct UsrData *UsrDat,
-                                       long Cod,Ntf_Status_t Status,
-                                       long InsCod,long CtrCod,long DegCod,long CrsCod);
 void Ntf_SendPendingNotifByEMailToAllUsrs (void);
 Ntf_NotifyEvent_t Ntf_GetNotifyEventFromStr (const char *Str);
 void Ntf_MarkAllNotifAsSeen (void);
@@ -141,8 +132,5 @@ void Ntf_PutFormChangeNotifSentByEMail (void);
 void Ntf_ChangeNotifyEvents (void);
 
 void Ntf_WriteNumberOfNewNtfs (void);
-void Ntf_DB_RemoveUsrNtfs (long ToUsrCod);
-
-unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,Ntf_NotifyEvent_t NotifyEvent);
 
 #endif
