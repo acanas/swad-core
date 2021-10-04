@@ -60,6 +60,7 @@
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_photo_database.h"
 #include "swad_profile.h"
 #include "swad_project.h"
 #include "swad_report.h"

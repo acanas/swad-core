@@ -412,6 +412,22 @@ void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu)
   }
 
 /*****************************************************************************/
+/***************** Update my settings about photo visibility *****************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutPhoto (void)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+
+   DB_QueryUPDATE ("can not update user's settings",
+		   "UPDATE usr_data"
+		     " SET PhotoVisibility='%s'"
+		   " WHERE UsrCod=%ld",
+		   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /******************* Update my settings about notify events ******************/
 /*****************************************************************************/
 

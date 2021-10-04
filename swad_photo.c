@@ -52,6 +52,7 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_photo_database.h"
 #include "swad_privacy.h"
 #include "swad_setting.h"
 #include "swad_statistic.h"
@@ -105,7 +106,6 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat);
 static void Pho_UpdatePhoto2 (void);
-static void Pho_DB_ClearPhotoName (long UsrCod);
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
 static long Pho_GetTimeAvgPhotoWasComputed (long DegCod);
@@ -129,14 +129,10 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static unsigned long Pho_DB_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
-                                          MYSQL_RES **mysql_res);
-static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
-static void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
-                                   unsigned NumStds,unsigned NumStdsWithPhoto,
-                                   long TimeToComputeAvgPhoto);
+
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto);
 static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            const struct Pho_DegPhotos *DegPhotos,
@@ -939,12 +935,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    unsigned NumClicks;
 
    /***** Get number of clicks without photo from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of clicks"
-				  " without photo",
-		       "SELECT NumClicks"		// row[0]
-			" FROM usr_clicks_without_photo"
-		       " WHERE UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod))        // The user exists ==> update number of clicks without photo
+   if (Pho_DB_GetMyClicksWithoutPhoto (&mysql_res))        // The user exists ==> update number of clicks without photo
      {
       /* Get current number of clicks */
       row = mysql_fetch_row (mysql_res);
@@ -953,23 +944,14 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       /* Update number of clicks */
       if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
         {
-         DB_QueryUPDATE ("can not update number of clicks without photo",
-			 "UPDATE usr_clicks_without_photo"
-			   " SET NumClicks=NumClicks+1"
-			 " WHERE UsrCod=%ld",
-		         Gbl.Usrs.Me.UsrDat.UsrCod);
+         Pho_DB_IncrMyClicksWithoutPhoto ();
          NumClicks++;
         }
      }
    else                                      		  // The user does not exist ==> add him/her
      {
       /* Add the user, with one access */
-      DB_QueryINSERT ("can not create number of clicks without photo",
-		      "INSERT INTO usr_clicks_without_photo"
-		      " (UsrCod,NumClicks)"
-		      " VALUES"
-		      " (%ld,1)",
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Pho_DB_InitMyClicksWithoutPhoto ();
       NumClicks = 1;
      }
 
@@ -978,18 +960,6 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 
    /***** Return the number of rows of the result *****/
    return NumClicks;
-  }
-
-/*****************************************************************************/
-/******** Remove user from table with number of clicks without photo *********/
-/*****************************************************************************/
-
-void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove a user from the list of users without photo",
-		   "DELETE FROM usr_clicks_without_photo"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -1297,20 +1267,6 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/****************** Clear photo name of an user in database ******************/
-/*****************************************************************************/
-
-static void Pho_DB_ClearPhotoName (long UsrCod)
-  {
-   /***** Clear photo name in user's data *****/
-   DB_QueryUPDATE ("can not clear the name of a user's photo",
-		   "UPDATE usr_data"
-		     " SET Photo=''"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
 /***************** Update photo name of an user in database ******************/
 /*****************************************************************************/
 
@@ -1319,12 +1275,7 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
    char PathPublPhoto[PATH_MAX + 1];
 
    /***** Update photo name in database *****/
-   DB_QueryUPDATE ("can not update the name of a user's photo",
-		   "UPDATE usr_data"
-		     " SET Photo='%s'"
-		   " WHERE UsrCod=%ld",
-                   Gbl.UniqueNameEncrypted,
-                   UsrDat->UsrCod);
+   Pho_DB_UpdatePhotoName (UsrDat->UsrCod,Gbl.UniqueNameEncrypted);
 
    /***** Remove the old symbolic link to photo *****/
    snprintf (PathPublPhoto,sizeof (PathPublPhoto),"%s/%s.jpg",
@@ -1341,19 +1292,12 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 
 void Pho_ChangePhotoVisibility (void)
   {
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho",
 	                                                        Pri_PHOTO_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
-   DB_QueryUPDATE ("can not update your setting about photo visibility",
-		   "UPDATE usr_data"
-		     " SET PhotoVisibility='%s'"
-		   " WHERE UsrCod=%ld",
-		   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Set_DB_UpdateMySettingsAboutPhoto ();
 
    /***** Show form again *****/
    Set_EditSettings ();
@@ -1475,19 +1419,6 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 				   (unsigned) Rol_STD);
 
    return DegCod;
-  }
-
-/*****************************************************************************/
-/* Delete all the degrees in sta_degrees table not present in degrees table **/
-/*****************************************************************************/
-
-void Pho_DB_RemoveObsoleteStatDegrees (void)
-  {
-   DB_QueryDELETE ("can not remove old degrees from stats",
-		   "DELETE FROM sta_degrees"
-		   " WHERE DegCod NOT IN"
-		         " (SELECT DegCod"
-		            " FROM deg_degrees)");
   }
 
 /*****************************************************************************/
@@ -2131,9 +2062,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
    bool TRIsOpen = false;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_DB_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
-
-   if (NumDegs)	// Degrees with students found
+   if ((NumDegs = Pho_DB_QueryDegrees (&mysql_res,DegPhotos->HowOrderDegrees)))	// Degrees with students found
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2213,9 +2142,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
    Usr_Sex_t Sex;
 
    /***** Get degrees from database *****/
-   NumDegs = Pho_DB_QueryDegrees (DegPhotos->HowOrderDegrees,&mysql_res);
-
-   if (NumDegs)	// Degrees with students found
+   if ((NumDegs = Pho_DB_QueryDegrees (&mysql_res,DegPhotos->HowOrderDegrees)))	// Degrees with students found
      {
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2300,62 +2227,6 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
   }
 
 /*****************************************************************************/
-/****** Build a query to get the degrees ordered by different criteria *******/
-/*****************************************************************************/
-
-static unsigned long Pho_DB_QueryDegrees (Pho_HowOrderDegrees_t HowOrderDegrees,
-                                          MYSQL_RES **mysql_res)
-  {
-   switch (HowOrderDegrees)
-     {
-      case Pho_NUMBER_OF_STUDENTS:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get degrees",
-		         "SELECT deg_degrees.DegCod"
-			  " FROM deg_degrees,sta_degrees"
-		         " WHERE sta_degrees.Sex='all'"
-			   " AND sta_degrees.NumStds>0"
-			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY sta_degrees.NumStds DESC,"
-				   "sta_degrees.NumStdsWithPhoto DESC,"
-				   "deg_degrees.ShortName");
-      case Pho_NUMBER_OF_PHOTOS:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get degrees",
-		         "SELECT deg_degrees.DegCod"
-			  " FROM deg_degrees,sta_degrees"
-		         " WHERE sta_degrees.Sex='all'"
-			   " AND sta_degrees.NumStds>0"
-			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY sta_degrees.NumStdsWithPhoto DESC,"
-				   "sta_degrees.NumStds DESC,"
-				   "deg_degrees.ShortName");
-      case Pho_PERCENT:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get degrees",
-		         "SELECT deg_degrees.DegCod"
-			  " FROM deg_degrees,sta_degrees"
-		         " WHERE sta_degrees.Sex='all'"
-			   " AND sta_degrees.NumStds>0"
-			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY sta_degrees.NumStdsWithPhoto/"
-				   "sta_degrees.NumStds DESC,"
-				   "deg_degrees.ShortName");
-      case Pho_DEGREE_NAME:
-         return (unsigned)
-         DB_QuerySELECT (mysql_res,"can not get degrees",
-		         "SELECT deg_degrees.DegCod"
-			  " FROM deg_degrees,sta_degrees"
-		         " WHERE sta_degrees.Sex='all'"
-			   " AND sta_degrees.NumStds>0"
-			   " AND deg_degrees.DegCod=sta_degrees.DegCod"
-		         " ORDER BY deg_degrees.ShortName");
-     }
-
-   return 0;
-  }
-
-/*****************************************************************************/
 /*** Get number of students and number of students with photo in a degree ****/
 /*****************************************************************************/
 
@@ -2387,29 +2258,6 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
-  }
-
-/*****************************************************************************/
-/*********************** Update statistics of a degree ***********************/
-/*****************************************************************************/
-
-static void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
-                                   unsigned NumStds,unsigned NumStdsWithPhoto,
-                                   long TimeToComputeAvgPhotoInMicroseconds)
-  {
-   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-
-   DB_QueryREPLACE ("can not save stats of a degree",
-		    "REPLACE INTO sta_degrees"
-		    " (DegCod,Sex,NumStds,NumStdsWithPhoto,"
-		    "TimeAvgPhoto,TimeToComputeAvgPhoto)"
-		    " VALUES"
-		    " (%ld,'%s',%u,%u,NOW(),%ld)",
-	            DegCod,
-	            Usr_StringsSexDB[Sex],
-	            NumStds,
-	            NumStdsWithPhoto,
-		    TimeToComputeAvgPhotoInMicroseconds);
   }
 
 /*****************************************************************************/

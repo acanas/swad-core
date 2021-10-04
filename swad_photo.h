@@ -114,7 +114,6 @@ void Pho_UpdateUsrPhoto1 (void);
 void Pho_UpdateUsrPhoto2 (void);
 
 unsigned Pho_UpdateMyClicksWithoutPhoto (void);
-void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 
 void Pho_ShowUsrPhotoIfAllowed (struct UsrData *UsrDat,
                                 const char *ClassPhoto,Pho_Zoom_t Zoom,
@@ -133,7 +132,6 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat);
 void Pho_ChangePhotoVisibility (void);
 
 void Pho_CalcPhotoDegree (void);
-void Pho_DB_RemoveObsoleteStatDegrees (void);
 void Pho_ShowPhotoDegree (void);
 void Pho_PrintPhotoDegree (void);
 

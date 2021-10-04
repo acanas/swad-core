@@ -1,7 +1,7 @@
-// swad_setting.h: user's settings / preferences
+// swad_photo_database.h: Users' photos management, operations with database
 
-#ifndef _SWAD_SET
-#define _SWAD_SET
+#ifndef _SWAD_PHO_DB
+#define _SWAD_PHO_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,48 +27,38 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
+#include <mysql/mysql.h>	// To access MySQL databases
+
+#include "swad_cryptography.h"
+#include "swad_photo.h"
+// #include "swad_user.h"
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************* Public types ********************************/
+/************************* Public types and constants ************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Set_EditSettings (void);
+void Pho_DB_ClearPhotoName (long UsrCod);
+void Pho_DB_UpdatePhotoName (long UsrCod,
+                             const char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 
-void Set_GetSettingsFromIP (void);
-void Set_SetSettingsFromIP (void);
-void Set_RemoveOldSettingsFromIP (void);
+//-------------------------- Clicks without photo -----------------------------
+void Pho_DB_InitMyClicksWithoutPhoto (void);
+void Pho_DB_IncrMyClicksWithoutPhoto (void);
 
-void Set_ChangeSideCols (void);
-unsigned Set_GetParamSideCols (void);
+unsigned Pho_DB_GetMyClicksWithoutPhoto (MYSQL_RES **mysql_res);
 
-void Set_DB_UpdateMySettingsAboutLanguage (void);
-void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
-void Set_DB_UpdateMySettingsAboutFirstDayOfWeek (unsigned FirstDayOfWeek);
-void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId);
-void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
-void Set_DB_UpdateMySettingsAboutPhoto (void);
-void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
+void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 
-void Set_BeginSettingsHead (void);
-void Set_EndSettingsHead (void);
-void Set_BeginOneSettingSelector (void);
-void Set_EndOneSettingSelector (void);
-
-void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
-
-void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
-
-void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
-void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
-void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
+//------------------------ Statistics about degrees ---------------------------
+void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
+			    unsigned NumStds,unsigned NumStdsWithPhoto,
+			    long TimeToComputeAvgPhotoInMicroseconds);
+unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
+                              Pho_HowOrderDegrees_t HowOrderDegrees);
+void Pho_DB_RemoveObsoleteStatDegrees (void);
 
 #endif
