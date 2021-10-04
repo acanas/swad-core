@@ -151,7 +151,7 @@ void Cal_ChangeFirstDayOfWeek (void)
 
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
-      Set_DB_ChangeFirstDayOfWeek (Gbl.Prefs.FirstDayOfWeek);
+      Set_DB_UpdateMySettingsAboutFirstDayOfWeek (Gbl.Prefs.FirstDayOfWeek);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

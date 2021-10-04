@@ -117,6 +117,7 @@ unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res);
 long Tml_DB_GetNotCodFromPubCod (long PubCod);
 long Tml_DB_GetPubCodFromSession (const char *FieldName);
 unsigned Tml_DB_GetNumPubsUsr (long UsrCod);
+unsigned Tml_DB_GetPublishersInNoteExceptMe (MYSQL_RES **mysql_res,long PubCod);
 long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub);
 void Tml_DB_UpdateFirstPubCodInSession (long FirstPubCod);
 void Tml_DB_UpdateLastPubCodInSession (void);

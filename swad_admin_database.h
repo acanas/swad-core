@@ -42,6 +42,9 @@
 /*****************************************************************************/
 
 void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod);
+
+unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res);
+
 void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod);
 void Adm_DB_RemUsrAsAdmin (long UsrCod);
 void Adm_DB_RemAdmins (HieLvl_Level_t Scope,long Cod);

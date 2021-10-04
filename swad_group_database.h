@@ -59,6 +59,8 @@ bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,lo
 
 unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
+unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res);
 
 bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 bool Grp_DB_CheckIfIBelongToGrp (long GrpCod);

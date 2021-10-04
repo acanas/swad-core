@@ -165,7 +165,7 @@ void Ico_ChangeIconSet (void)
 
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
-      Set_DB_ChangeIconSet (Ico_IconSetId[Gbl.Prefs.IconSet]);
+      Set_DB_UpdateMySettingsAboutIconSet (Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

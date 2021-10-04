@@ -25,9 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include "swad_database.h"
 #include "swad_admin.h"
 #include "swad_admin_database.h"
+#include "swad_database.h"
+#include "swad_global.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -69,6 +70,28 @@ void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod)
 		    UsrCod,
 		    Sco_GetDBStrFromScope (Scope),
 		    Cod);
+  }
+
+/*****************************************************************************/
+/********** Get all admin codes above the current course, except me **********/
+/*****************************************************************************/
+
+unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get admins from current scope",
+		   "SELECT UsrCod"
+		    " FROM usr_admins"
+		   " WHERE (Scope='%s'"
+			  " OR (Scope='%s' AND Cod=%ld)"
+			  " OR (Scope='%s' AND Cod=%ld)"
+			  " OR (Scope='%s' AND Cod=%ld))"
+		     " AND UsrCod<>%ld",
+		   Sco_GetDBStrFromScope (HieLvl_SYS),
+		   Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+		   Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+		   Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

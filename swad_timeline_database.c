@@ -1098,6 +1098,24 @@ unsigned Tml_DB_GetNumPubsUsr (long UsrCod)
   }
 
 /*****************************************************************************/
+/************** Get all publisher codes in a note, except me *****************/
+/*****************************************************************************/
+
+unsigned Tml_DB_GetPublishersInNoteExceptMe (MYSQL_RES **mysql_res,long PubCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get publishers of a note",
+		   "SELECT DISTINCT(PublisherCod)"
+		    " FROM tml_pubs"
+		   " WHERE NotCod=(SELECT NotCod"
+				   " FROM tml_pubs"
+				  " WHERE PubCod=%ld)"
+				    " AND PublisherCod<>%ld",
+		   PubCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /********************* Insert new publication in database ********************/
 /*****************************************************************************/
 // Return just created publication code

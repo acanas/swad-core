@@ -107,6 +107,40 @@ unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/******* Get all user codes belonging to the current course, except me *******/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users from current course",
+		   "SELECT UsrCod"
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod<>%ld",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/***** Get all teachers codes belonging to the current course, except me *****/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get teachers from current course",
+		   "SELECT UsrCod"
+		    " FROM crs_users"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod<>%ld"
+		     " AND Role=%u",	// Teachers only
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Rol_TCH);
+  }
+
+/*****************************************************************************/
 /************************** Remove user from course **************************/
 /*****************************************************************************/
 

@@ -89,7 +89,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 void Pag_PutHiddenParamPagNum (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate);
 
-void Pag_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);
 
 #endif

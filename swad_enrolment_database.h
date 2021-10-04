@@ -47,6 +47,8 @@ void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
 void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
 
 unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res);
+unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res);
 
 void Enr_DB_RemUsrFromCrs (long UsrCod,long CrsCod);
 void Enr_DB_RemUsrFromAllCrss (long UsrCod);

@@ -58,6 +58,7 @@ unsigned For_DB_GetForumTypeAndLocationOfAPost (MYSQL_RES **mysql_res,long PstCo
 unsigned For_DB_GetNumPostsUsr (long UsrCod);
 unsigned For_DB_GetPostsOfAThread (MYSQL_RES **mysql_res,long ThrCod);
 unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstCod);
+unsigned For_DB_GetPublishersInThreadExceptMe (MYSQL_RES **mysql_res,long PstCod);
 void For_DB_RemovePst (long PstCod);
 void For_DB_RemoveThreadPsts (long ThrCod);
 

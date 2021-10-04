@@ -129,7 +129,7 @@ int main (void)
 	 Fil_CreateFileForHTMLOutput ();
 
 	 /***** Remove old (expired) sessions *****/
-	 Ses_RemoveExpiredSessions ();
+	 Ses_DB_RemoveExpiredSessions ();
 
 	 /***** Remove old users from connected list *****/
 	 Con_DB_RemoveOldConnected ();

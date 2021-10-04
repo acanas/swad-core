@@ -3105,7 +3105,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Usr_SetMyPrefsAndRoles ();
 
 	       if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
-		  Ses_UpdateSessionLastRefreshInDB ();
+		  Ses_DB_UpdateSessionLastRefresh ();
 	       else
 		 {
 		  Act_AdjustCurrentAction ();

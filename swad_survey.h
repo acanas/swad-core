@@ -124,4 +124,6 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (HieLvl_Level_t Scope);
 unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
 double Svy_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
 
+unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod);
+
 #endif

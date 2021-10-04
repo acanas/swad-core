@@ -89,6 +89,20 @@ void Ntf_DB_UpdateMyLastAccessToNotifications (void)
   }
 
 /*****************************************************************************/
+/******************** Mark all my notifications as seen **********************/
+/*****************************************************************************/
+
+void Ntf_DB_MarkAllMyNotifAsSeen (void)
+  {
+   DB_QueryUPDATE ("can not set notification(s) as seen",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE ToUsrCod=%ld",
+	           (unsigned) Ntf_STATUS_BIT_READ,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /********** Mark all the pending notifications of a user as 'sent' ***********/
 /*****************************************************************************/
 
@@ -286,6 +300,47 @@ void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
 		   (unsigned) FileBrowser,
 		   Cod,
 		   Path);
+  }
+
+/*****************************************************************************/
+/******************** Update number of notify emails sent ********************/
+/*****************************************************************************/
+
+void Ntf_DB_UpdateNumNotifSent (long DegCod,long CrsCod,
+                                Ntf_NotifyEvent_t NotifyEvent,
+                                unsigned NumEvents,unsigned NumMails)
+  {
+   DB_QueryREPLACE ("can not update the number of sent notifications",
+		    "REPLACE INTO sta_notifications"
+		    " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
+		    " VALUES"
+		    " (%ld,%ld,%u,%u,%u)",
+	            DegCod,
+	            CrsCod,
+	            (unsigned) NotifyEvent,
+	            NumEvents,
+	            NumMails);
+  }
+/*****************************************************************************/
+/************* Get number of events notified and emails sent *****************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetNumNotifSent (MYSQL_RES **mysql_res,
+                                 long DegCod,long CrsCod,
+                                 Ntf_NotifyEvent_t NotifyEvent)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get number of notifications"
+			     " sent by email",
+		   "SELECT NumEvents,"	// row[0]
+			  "NumMails"	// row[1]
+		    " FROM sta_notifications"
+		   " WHERE DegCod=%ld"
+		     " AND CrsCod=%ld"
+		     " AND NotifyEvent=%u",
+		   DegCod,
+		   CrsCod,
+		   (unsigned) NotifyEvent);
   }
 
 /*****************************************************************************/

@@ -461,13 +461,47 @@ void Asg_DB_RemoveCrsAssignments (long CrsCod)
 void Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail)
   {
-   /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifs. of an assignment",
 		   "UPDATE asg_assignments"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE AsgCod=%ld",
                    NumUsrsToBeNotifiedByEMail,
                    AsgCod);
+  }
+
+/*****************************************************************************/
+/********** Get all user codes belonging to an assignment, except me *********/
+/*****************************************************************************/
+
+unsigned Asg_DB_GetUsrsFromAssignmentExceptMe (MYSQL_RES **mysql_res,long AsgCod)
+  {
+   // 1. If the assignment is available for the whole course ==> get all users enroled in the course except me
+   // 2. If the assignment is available only for some groups ==> get all users who belong to any of the groups except me
+   // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users to be notified",
+		   "(SELECT crs_users.UsrCod"
+		     " FROM asg_assignments,"
+			   "crs_users"
+		   " WHERE asg_assignments.AsgCod=%ld"
+		     " AND asg_assignments.AsgCod NOT IN"
+			 " (SELECT AsgCod"
+			    " FROM asg_groups"
+			   " WHERE AsgCod=%ld)"
+		     " AND asg_assignments.CrsCod=crs_users.CrsCod"
+		     " AND crs_users.UsrCod<>%ld)"
+		   " UNION "
+		   "(SELECT DISTINCT grp_users.UsrCod"
+		     " FROM asg_groups,"
+			   "grp_users"
+		    " WHERE asg_groups.AsgCod=%ld"
+		      " AND asg_groups.GrpCod=grp_users.GrpCod"
+		      " AND grp_users.UsrCod<>%ld)",
+		   AsgCod,
+		   AsgCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   AsgCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

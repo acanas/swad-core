@@ -365,6 +365,24 @@ unsigned For_DB_GetThreadAndNumPostsGivenPstCod (MYSQL_RES **mysql_res,long PstC
   }
 
 /*****************************************************************************/
+/************* Get all publisher codes in a thread, except me ****************/
+/*****************************************************************************/
+
+unsigned For_DB_GetPublishersInThreadExceptMe (MYSQL_RES **mysql_res,long PstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get publishers in thread",
+		   "SELECT DISTINCT(UsrCod)"
+		    " FROM for_posts"
+		   " WHERE ThrCod=(SELECT ThrCod"
+				   " FROM for_posts"
+				  " WHERE PstCod=%ld)"
+		   " AND UsrCod<>%ld",
+		   PstCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /********************* Remove post from forum posts table ********************/
 /*****************************************************************************/
 

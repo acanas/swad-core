@@ -173,123 +173,123 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    if (Subject)
      {
       HTM_DIV_Begin (NULL);
-      if (LinkToPagCurrent)
-        {
-         switch (WhatPaginate)
-           {
-            case Pag_ASSIGNMENTS:
-               Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
-               break;
-            case Pag_PROJECTS:
-               Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-               Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-                              ((struct Prj_Projects *) Context)->SelectedOrder,
-                              1,
-                              Cod);
-               break;
-            case Pag_EXAMS:
-               Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
-               break;
-            case Pag_GAMES:
-               Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
-               break;
-            case Pag_SURVEYS:
-               Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
-               break;
-            case Pag_ATT_EVENTS:
-               Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
-               break;
-            case Pag_THREADS_FORUM:
-               Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
-                                    Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                            1,	// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    -1L,
-					    -1L);
-               break;
-            case Pag_POSTS_FORUM:
-               Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
-                                    Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-                                            1,				// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    Cod,
-					    -1L);
-	       break;
-            case Pag_MESSAGES_RECEIVED:
-               Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
-               break;
-            case Pag_MESSAGES_SENT:
-               Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
-               break;
-            case Pag_MY_AGENDA:
-               Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-               Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-                                      ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-                                      ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-			              ((struct Agd_Agenda *) Context)->SelectedOrder,
-                                      1,
-                                      Cod);
-               break;
-            case Pag_ANOTHER_AGENDA:
-               Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-               Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-               break;
-            default:
-               break;
-           }
-	 if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
-	    Err_NotEnoughMemoryExit ();
-         if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
-	    Err_NotEnoughMemoryExit ();
-         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-         free (Title);
-         free (ClassLink);
-        }
-      else
-         HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-      if (FirstMsgEnabled)
-         HTM_Txt (Subject);
-      else
-         HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
-      if (LinkToPagCurrent)
-	{
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-	}
-      else
-	 HTM_SPAN_End ();
+	 if (LinkToPagCurrent)
+	   {
+	    switch (WhatPaginate)
+	      {
+	       case Pag_ASSIGNMENTS:
+		  Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  break;
+	       case Pag_PROJECTS:
+		  Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
+		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				 ((struct Prj_Projects *) Context)->SelectedOrder,
+				 1,
+				 Cod);
+		  break;
+	       case Pag_EXAMS:
+		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  break;
+	       case Pag_GAMES:
+		  Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  break;
+	       case Pag_SURVEYS:
+		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  break;
+	       case Pag_ATT_EVENTS:
+		  Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  break;
+	       case Pag_THREADS_FORUM:
+		  Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
+				       Pagination->Anchor);
+		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					       1,	// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       -1L,
+					       -1L);
+		  break;
+	       case Pag_POSTS_FORUM:
+		  Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
+				       Pagination->Anchor);
+		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+					       1,				// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       Cod,
+					       -1L);
+		  break;
+	       case Pag_MESSAGES_RECEIVED:
+		  Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  break;
+	       case Pag_MESSAGES_SENT:
+		  Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  break;
+	       case Pag_MY_AGENDA:
+		  Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
+		  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					 ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					 ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					 ((struct Agd_Agenda *) Context)->SelectedOrder,
+					 1,
+					 Cod);
+		  break;
+	       case Pag_ANOTHER_AGENDA:
+		  Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
+		  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  break;
+	       default:
+		  break;
+	      }
+	    if (asprintf (&ClassLink,"BT_LINK LT %s",ClassTxt) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+	    free (Title);
+	    free (ClassLink);
+	   }
+	 else
+	    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+	 if (FirstMsgEnabled)
+	    HTM_Txt (Subject);
+	 else
+	    HTM_TxtF ("[%s]",Txt_FORUM_Post_banned);
+	 if (LinkToPagCurrent)
+	   {
+	    HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+	 else
+	    HTM_SPAN_End ();
       HTM_DIV_End ();
      }
 
@@ -399,14 +399,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
 	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-         HTM_Unsigned (1);
+	    HTM_Unsigned (1);
          HTM_BUTTON_End ();
          free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
            {
             HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-            HTM_Txt ("&hellip;");
+	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
         }
@@ -513,14 +513,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		       Pagination->LeftPage,Pagination->NumPags) < 0)
 	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-         HTM_Unsigned (Pagination->LeftPage);
+	    HTM_Unsigned (Pagination->LeftPage);
          HTM_BUTTON_End ();
          free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
             HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-            HTM_Txt ("&hellip;");
+	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
         }
@@ -535,7 +535,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
            {
             HTM_SPAN_Begin ("title=\"%s\" class=\"PAG_CUR %s\"",Title,ClassTxt);
-            HTM_Unsigned (NumPage);
+	       HTM_Unsigned (NumPage);
             HTM_SPAN_End ();
            }
          else
@@ -635,7 +635,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		  break;
               }
             HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-            HTM_Unsigned (NumPage);
+	       HTM_Unsigned (NumPage);
             HTM_BUTTON_End ();
             Frm_EndForm ();
            }
@@ -649,7 +649,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->RightPage > Pagination->EndPage + 1)
            {
             HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-            HTM_Txt ("&hellip;");
+	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
          switch (WhatPaginate)
@@ -750,7 +750,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		       Pagination->RightPage,Pagination->NumPags) < 0)
 	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-         HTM_Unsigned (Pagination->RightPage);
+	    HTM_Unsigned (Pagination->RightPage);
          HTM_BUTTON_End ();
          free (Title);
          Frm_EndForm ();
@@ -762,7 +762,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          if (Pagination->NumPags > Pagination->RightPage + 1)
            {
             HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
-            HTM_Txt ("&hellip;");
+	       HTM_Txt ("&hellip;");
             HTM_SPAN_End ();
            }
          switch (WhatPaginate)
@@ -863,7 +863,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 		       Pagination->NumPags,Pagination->NumPags) < 0)
 	    Err_NotEnoughMemoryExit ();
          HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-         HTM_Unsigned (Pagination->NumPags);
+	    HTM_Unsigned (Pagination->NumPags);
          HTM_BUTTON_End ();
          free (Title);
          Frm_EndForm ();
@@ -920,32 +920,11 @@ unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
   }
 
 /*****************************************************************************/
-/********* Save last page of received/sent messages into session *************/
-/*****************************************************************************/
-
-void Pag_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
-  {
-   /***** Save last page of received/sent messages *****/
-   DB_QueryUPDATE ("can not update last page of messages",
-		   "UPDATE ses_sessions"
-		     " SET %s=%u"
-		   " WHERE SessionId='%s'",
-                   WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-        	                                           "LastPageMsgSnt",
-                   NumPage,Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
 /********* Get last page of received/sent messages stored in session *********/
 /*****************************************************************************/
 
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
-   static const char *Field[Pag_NUM_WHAT_PAGINATE] =
-     {
-      [Pag_MESSAGES_RECEIVED] = "LastPageMsgRcv",
-      [Pag_MESSAGES_SENT    ] = "LastPageMsgSnt",
-     };
    unsigned NumPage;
 
    switch (WhatPaginate)
@@ -953,13 +932,7 @@ unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
       case Pag_MESSAGES_RECEIVED:
       case Pag_MESSAGES_SENT:
 	 /***** Get last page of received/sent messages from database *****/
-	 NumPage = DB_QuerySELECTUnsigned ("can not get last page of messages",
-					   "SELECT %s"
-					    " FROM ses_sessions"
-					   " WHERE SessionId='%s'",
-					   Field[WhatPaginate],
-					   Gbl.Session.Id);
-	 if (NumPage == 0)
+	 if ((NumPage = Ses_DB_GetLastPageMsgFromSession (WhatPaginate)) == 0)
 	    return 1;
 	 return NumPage;
       default:

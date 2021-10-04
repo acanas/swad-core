@@ -307,6 +307,46 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
   }
 
 /*****************************************************************************/
+/******** Get all user codes belonging to the current group, except me *******/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetUsrsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users from current group",
+		   "SELECT UsrCod"
+		    " FROM grp_users"
+		   " WHERE GrpCod=%ld"
+		     " AND UsrCod<>%ld",
+		   Gbl.Crs.Grps.GrpCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/****** Get all teacher codes belonging to the current group, except me ******/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get teachers from current group",
+		   "SELECT grp_users.UsrCod"
+		    " FROM grp_users,"
+			  "grp_groups,"
+			  "grp_types,"
+			  "crs_users"
+		   " WHERE grp_users.GrpCod=%ld"
+		     " AND grp_users.UsrCod<>%ld"
+		     " AND grp_users.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		     " AND grp_types.CrsCod=crs_users.CrsCod"
+		     " AND crs_users.Role=%u",	// Teachers only
+		   Gbl.Crs.Grps.GrpCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Rol_TCH);
+  }
+
+/*****************************************************************************/
 /********* Check if I belong to any groups of a given type I belong **********/
 /*****************************************************************************/
 

@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_action.h"
+#include "swad_pagination.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -43,8 +44,8 @@ bool Ses_CheckIfSessionExists (const char *IdSes);
 void Ses_CloseSession (void);
 void Ses_InsertSessionInDB (void);
 void Ses_UpdateSessionDataInDB (void);
-void Ses_UpdateSessionLastRefreshInDB (void);
-void Ses_RemoveExpiredSessions (void);
+void Ses_DB_UpdateSessionLastRefresh (void);
+void Ses_DB_RemoveExpiredSessions (void);
 void Ses_DB_RemoveUsrSessions (long UsrCod);
 bool Ses_GetSessionData (void);
 
@@ -59,5 +60,8 @@ void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
                               const char TmpPubDir[PATH_MAX + 1]);
 void Ses_RemovePublicDirsCache (void);
 void Ses_RemovePublicDirsFromExpiredSessions (void);
+
+void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
+unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);
 
 #endif

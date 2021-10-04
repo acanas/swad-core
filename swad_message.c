@@ -1549,7 +1549,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	 Messages->CurrentPage = (unsigned) Pagination.CurrentPage;
 
 	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
-	 Pag_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
+	 Ses_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
 					 Messages->CurrentPage);
 
 	 /***** Write links to pages *****/

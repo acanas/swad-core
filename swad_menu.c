@@ -329,7 +329,7 @@ void Mnu_ChangeMenu (void)
 
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
-      Set_DB_ChangeMenu (Gbl.Prefs.Menu);
+      Set_DB_UpdateMySettingsAboutMenu (Gbl.Prefs.Menu);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

@@ -373,7 +373,7 @@ void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat)
 /***************** Update my settings about first day of week ****************/
 /*****************************************************************************/
 
-void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek)
+void Set_DB_UpdateMySettingsAboutFirstDayOfWeek (unsigned FirstDayOfWeek)
   {
    DB_QueryUPDATE ("can not update your setting about first day of week",
 		   "UPDATE usr_data"
@@ -387,7 +387,7 @@ void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek)
 /********************* Update my settings about icon set *********************/
 /*****************************************************************************/
 
-void Set_DB_ChangeIconSet (const char *IconSetId)
+void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId)
   {
    DB_QueryUPDATE ("can not update your setting about icon set",
 		   "UPDATE usr_data"
@@ -401,7 +401,7 @@ void Set_DB_ChangeIconSet (const char *IconSetId)
 /***************** Update my settings about first day of week ****************/
 /*****************************************************************************/
 
-void Set_DB_ChangeMenu (Mnu_Menu_t Menu)
+void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu)
   {
    DB_QueryUPDATE ("can not update your setting about menu",
 		   "UPDATE usr_data"
@@ -409,6 +409,22 @@ void Set_DB_ChangeMenu (Mnu_Menu_t Menu)
 		   " WHERE UsrCod=%ld",
 		   (unsigned) Menu,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Update my settings about notify events ******************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutNotifyEvents (void)
+  {
+   DB_QueryUPDATE ("can not update user's settings",
+		   "UPDATE usr_data"
+		     " SET NotifNtfEvents=%u,"
+		          "EmailNtfEvents=%u"
+		   " WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif,
+	           Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

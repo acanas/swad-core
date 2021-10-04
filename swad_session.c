@@ -34,6 +34,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
+#include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_timeline_database.h"
 
@@ -214,12 +215,11 @@ void Ses_UpdateSessionDataInDB (void)
   }
 
 /*****************************************************************************/
-/******************** Modify session last refresh in database ****************/
+/******************** Update session last refresh in database ****************/
 /*****************************************************************************/
 
-void Ses_UpdateSessionLastRefreshInDB (void)
+void Ses_DB_UpdateSessionLastRefresh (void)
   {
-   /***** Update session in database *****/
    DB_QueryUPDATE ("can not update session",
 		   "UPDATE ses_sessions"
 		     " SET LastRefresh=NOW()"
@@ -248,7 +248,7 @@ static void Ses_RemoveSessionFromDB (void)
 /*************************** Remove expired sessions *************************/
 /*****************************************************************************/
 
-void Ses_RemoveExpiredSessions (void)
+void Ses_DB_RemoveExpiredSessions (void)
   {
    /***** Remove expired sessions *****/
    /* A session expire
@@ -559,4 +559,40 @@ void Ses_RemovePublicDirsFromExpiredSessions (void)
                    " WHERE SessionId NOT IN"
                          " (SELECT SessionId"
                           " FROM ses_sessions)");
+  }
+
+/*****************************************************************************/
+/********* Save last page of received/sent messages into session *************/
+/*****************************************************************************/
+
+void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
+  {
+   /***** Save last page of received/sent messages *****/
+   DB_QueryUPDATE ("can not update last page of messages",
+		   "UPDATE ses_sessions"
+		     " SET %s=%u"
+		   " WHERE SessionId='%s'",
+                   WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
+        	                                           "LastPageMsgSnt",
+                   NumPage,Gbl.Session.Id);
+  }
+
+/*****************************************************************************/
+/********* Get last page of received/sent messages stored in session *********/
+/*****************************************************************************/
+
+unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
+  {
+   static const char *Field[Pag_NUM_WHAT_PAGINATE] =
+     {
+      [Pag_MESSAGES_RECEIVED] = "LastPageMsgRcv",
+      [Pag_MESSAGES_SENT    ] = "LastPageMsgSnt",
+     };
+
+   return DB_QuerySELECTUnsigned ("can not get last page of messages",
+				     "SELECT %s"
+				      " FROM ses_sessions"
+				     " WHERE SessionId='%s'",
+				     Field[WhatPaginate],
+				     Gbl.Session.Id);
   }

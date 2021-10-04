@@ -52,9 +52,10 @@ unsigned Set_GetParamSideCols (void);
 
 void Set_DB_UpdateMySettingsAboutLanguage (void);
 void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
-void Set_DB_ChangeFirstDayOfWeek (unsigned FirstDayOfWeek);
-void Set_DB_ChangeIconSet (const char *IconSetId);
-void Set_DB_ChangeMenu (Mnu_Menu_t Menu);
+void Set_DB_UpdateMySettingsAboutFirstDayOfWeek (unsigned FirstDayOfWeek);
+void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId);
+void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
+void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 
 void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);
