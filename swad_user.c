@@ -10488,3 +10488,21 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 
    return 0;	// Not reached
   }
+
+/*****************************************************************************/
+/****** Check if a string is found in first name or surnames of anybody ******/
+/*****************************************************************************/
+
+bool Usr_DB_FindStrInUsrsNames (const char *Str)
+  {
+   return (DB_QueryCOUNT ("can not check if a string matches"
+			  " a first name or a surname",
+			  "SELECT COUNT(*)"
+			   " FROM usr_data"
+			  " WHERE FirstName='%s'"
+			     " OR Surname1='%s'"
+			     " OR Surname2='%s'",
+			  Str,
+			  Str,
+			  Str) != 0);
+  }

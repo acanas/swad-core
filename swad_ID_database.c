@@ -122,6 +122,19 @@ bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
   }
 
 /*****************************************************************************/
+/********************** Check if a string is a user's ID *********************/
+/*****************************************************************************/
+
+bool ID_DB_FindStrInUsrsIDs (const char *Str)
+  {
+   return (DB_QueryCOUNT ("can not check if a string matches any user's ID",
+			  "SELECT COUNT(*)"
+			   " FROM usr_ids"
+			  " WHERE UsrID='%s'",
+			  Str) != 0);
+  }
+
+/*****************************************************************************/
 /***************** Get list of user codes from user's IDs ********************/
 /*****************************************************************************/
 // Returns the number of users with any of these IDs

@@ -556,4 +556,6 @@ unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
 
 unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 
+bool Usr_DB_FindStrInUsrsNames (const char *Str);
+
 #endif

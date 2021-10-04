@@ -40,8 +40,10 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_ID_database.h"
 #include "swad_mail_database.h"
 #include "swad_password.h"
+#include "swad_password_database.h"
 #include "swad_parameter.h"
 #include "swad_user.h"
 
@@ -81,7 +83,6 @@ static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin);
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
-static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPassword,long UsrCod);
 
 /*****************************************************************************/
 /************* Get parameter with my plain password from a form **************/
@@ -118,13 +119,7 @@ bool Pwd_CheckCurrentPassword (void)
 bool Pwd_CheckPendingPassword (void)
   {
    /***** Get pending password from database *****/
-   DB_QuerySELECTString (Gbl.Usrs.Me.PendingPassword,
-                         sizeof (Gbl.Usrs.Me.PendingPassword) - 1,
-                         "can not get pending password",
-		         "SELECT PendingPassword"	// row[0]
-		          " FROM usr_pending_passwd"
-		         " WHERE UsrCod=%ld",
-		         Gbl.Usrs.Me.UsrDat.UsrCod);
+   Pwd_DB_GetPendingPassword ();
 
    return (Gbl.Usrs.Me.PendingPassword[0] ?
            !strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,Gbl.Usrs.Me.PendingPassword) :
@@ -138,12 +133,7 @@ bool Pwd_CheckPendingPassword (void)
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
   {
    /***** Update my current password in database *****/
-   DB_QueryUPDATE ("can not update your password",
-		   "UPDATE usr_data"
-		     " SET Password='%s'"
-		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.PendingPassword,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+   Pwd_DB_AssignMyPendingPasswordToMyCurrentPassword ();
 
    /***** Update my current password *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,
@@ -151,10 +141,7 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
 
    /***** Remove my pending password from database
           since it is not longer necessary *****/
-   DB_QueryDELETE ("can not remove pending password",
-		   "DELETE FROM usr_pending_passwd"
-		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+   Pwd_DB_RemoveMyPendingPassword ();
   }
 
 /*****************************************************************************/
@@ -488,19 +475,10 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.PendingPassword);
 
    /***** Remove expired pending passwords from database *****/
-   DB_QueryDELETE ("can not remove expired pending passwords",
-		   "DELETE LOW_PRIORITY FROM usr_pending_passwd"
-		   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-                   Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS);
+   Pwd_DB_RemoveExpiredPendingPassword ();
 
-   /***** Update my current password in database *****/
-   DB_QueryREPLACE ("can not create pending password",
-		    "REPLACE INTO usr_pending_passwd"
-		    " (UsrCod,PendingPassword,DateAndTime)"
-		    " VALUES"
-		    " (%ld,'%s',NOW())",
-                    Gbl.Usrs.Me.UsrDat.UsrCod,
-                    Gbl.Usrs.Me.PendingPassword);
+   /***** Update my current pending password in database *****/
+   Pwd_DB_UpdateMyPendingPassword ();
   }
 
 /*****************************************************************************/
@@ -526,7 +504,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN
      }
 
    /***** Check if password is used by too many other users *****/
-   if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
+   if (Pwd_DB_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
       Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
@@ -543,64 +521,12 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char PlainPassword[Pwd_MAX_BYTES_PLAIN
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
   {
-   bool Found;
+   /***** Check if password is found in user's ID *****/
+   if (ID_DB_FindStrInUsrsIDs (PlainPassword))
+      return true;	// Found
 
-   /***** Get if password is found in user's ID from database *****/
-   Found = (DB_QueryCOUNT ("can not check if a password matches a user's ID",
-			   "SELECT COUNT(*)"
-			    " FROM usr_ids"
-			   " WHERE UsrID='%s'",
-			   PlainPassword) != 0);
-
-   /***** Get if password is found in first name or surnames of anybody, from database *****/
-   if (!Found)
-      Found = (DB_QueryCOUNT ("can not check if a password matches"
-			      " a first name or a surname",
-			      "SELECT COUNT(*)"
-			       " FROM usr_data"
-			      " WHERE FirstName='%s'"
-			         " OR Surname1='%s'"
-			         " OR Surname2='%s'",
-			      PlainPassword,
-			      PlainPassword,
-			      PlainPassword) != 0);
-
-   return Found;
-  }
-
-/*****************************************************************************/
-/************** Get the number of users who use yet a password ***************/
-/*****************************************************************************/
-
-static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPassword,long UsrCod)
-  {
-   unsigned NumUsrs;
-   char *SubQuery;
-
-   /***** Build subquery *****/
-   if (UsrCod > 0)
-     {
-      if (asprintf (&SubQuery," AND UsrCod<>%ld",UsrCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else
-      SubQuery = "";
-
-   /***** Get number of other users who use a password from database *****/
-   NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not check if a password is trivial",
-		  "SELECT COUNT(*)"
-		   " FROM usr_data"
-		  " WHERE Password='%s'"
-		     "%s",
-		  EncryptedPassword,
-		  SubQuery);
-
-   /***** Free subquery *****/
-   if (UsrCod > 0)
-      free (SubQuery);
-
-   return NumUsrs;
+   /***** Check if password is found in first name or surnames of anybody *****/
+   return Usr_DB_FindStrInUsrsNames (PlainPassword);
   }
 
 /*****************************************************************************/
