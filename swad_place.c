@@ -40,6 +40,7 @@
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_place.h"
+#include "swad_place_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -76,13 +77,9 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
 static void Plc_PutParamPlcCod (void *PlcCod);
 
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
-                                           const char *FieldName,const char *Name);
-static void Plc_DB_UpdatePlcName (long PlcCod,const char *FieldName,const char *NewPlcName);
 
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
-static void Plc_DB_CreatePlace (struct Plc_Place *Plc);
 
 static void Plc_EditingPlaceConstructor (void);
 static void Plc_EditingPlaceDestructor (void);
@@ -355,49 +352,13 @@ void Plc_PutIconToViewPlaces (void)
 
 void Plc_GetListPlaces (struct Plc_Places *Places)
   {
-   static const char *OrderBySubQuery[Plc_NUM_ORDERS] =
-     {
-      [Plc_ORDER_BY_PLACE   ] = "FullName",
-      [Plc_ORDER_BY_NUM_CTRS] = "NumCtrs DESC,FullName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumPlc;
    struct Plc_Place *Plc;
 
    /***** Get places from database *****/
-   Places->Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get places",
-		   "(SELECT plc_places.PlcCod,"		// row[0]
-			   "plc_places.ShortName,"	// row[1]
-			   "plc_places.FullName,"	// row[2]
-			   "COUNT(*) AS NumCtrs"	// row[3]
-		     " FROM plc_places,"
-			   "ctr_centers"
-		    " WHERE plc_places.InsCod=%ld"
-		      " AND plc_places.PlcCod=ctr_centers.PlcCod"
-		      " AND ctr_centers.InsCod=%ld"
-		    " GROUP BY plc_places.PlcCod)"
-		   " UNION "
-		   "(SELECT PlcCod,"
-			   "ShortName,"
-			   "FullName,"
-			   "0 AS NumCtrs"
-		     " FROM plc_places"
-		    " WHERE InsCod=%ld"
-		      " AND PlcCod NOT IN"
-			  " (SELECT DISTINCT PlcCod"
-			     " FROM ctr_centers"
-			    " WHERE InsCod=%ld))"
-		   " ORDER BY %s",
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   OrderBySubQuery[Places->SelectedOrder]);
-
-   /***** Count number of rows in result *****/
-   if (Places->Num) // Places found...
+   if ((Places->Num = Plc_DB_GetListPlaces (&mysql_res,Places->SelectedOrder))) // Places found...
      {
       /***** Create list with courses in center *****/
       if ((Places->Lst = calloc ((size_t) Places->Num,
@@ -462,28 +423,7 @@ void Plc_GetDataOfPlaceByCod (struct Plc_Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of a place",
-			  "(SELECT plc_places.ShortName,"	// row[0]
-				  "plc_places.FullName,"	// row[1]
-				  "COUNT(*)"			// row[2]
-			    " FROM plc_places,"
-				  "ctr_centers"
-			   " WHERE plc_places.PlcCod=%ld"
-			     " AND plc_places.PlcCod=ctr_centers.PlcCod"
-			     " AND ctr_centers.PlcCod=%ld"
-			   " GROUP BY plc_places.PlcCod)"
-			  " UNION "
-			  "(SELECT ShortName,"			// row[0]
-				  "FullName,"			// row[1]
-				  "0"				// row[2]
-			    " FROM plc_places"
-			   " WHERE PlcCod=%ld"
-			     " AND PlcCod NOT IN"
-				 " (SELECT DISTINCT PlcCod"
-				    " FROM ctr_centers))",
-			  Plc->PlcCod,
-			  Plc->PlcCod,
-			  Plc->PlcCod)) // Place found...
+      if (Plc_DB_GetDataOfPlaceByCod (&mysql_res,Plc->PlcCod)) // Place found...
         {
          /* Get row */
          row = mysql_fetch_row (mysql_res);
@@ -633,10 +573,7 @@ void Plc_RemovePlace (void)
    else			// Place has no centers ==> remove it
      {
       /***** Remove place *****/
-      DB_QueryDELETE ("can not remove a place",
-		      "DELETE FROM plc_places"
-		      " WHERE PlcCod=%ld",
-		      Plc_EditingPlc->PlcCod);
+      Plc_DB_RemovePlace (Plc_EditingPlc->PlcCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -746,40 +683,6 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update place name *****/
    Str_Copy (CurrentPlcName,NewPlcName,MaxBytes);
-  }
-
-/*****************************************************************************/
-/********************** Check if the name of place exists ********************/
-/*****************************************************************************/
-
-static bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
-                                           const char *FieldName,const char *Name)
-  {
-   /***** Get number of places with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a place"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM plc_places"
-			  " WHERE InsCod=%ld"
-			    " AND %s='%s'"
-			    " AND PlcCod<>%ld",
-			  Gbl.Hierarchy.Ins.InsCod,
-			  FieldName,Name,PlcCod) != 0);
-  }
-
-/*****************************************************************************/
-/****************** Update place name in table of places *********************/
-/*****************************************************************************/
-
-static void Plc_DB_UpdatePlcName (long PlcCod,const char *FieldName,const char *NewPlcName)
-  {
-   /***** Update place changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of a place",
-		   "UPDATE plc_places"
-		     " SET %s='%s'"
-		   " WHERE PlcCod=%ld",
-		   FieldName,NewPlcName,
-		   PlcCod);
   }
 
 /*****************************************************************************/
@@ -918,23 +821,6 @@ void Plc_ReceiveFormNewPlace (void)
    else	// If there is not a place name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
-  }
-
-/*****************************************************************************/
-/**************************** Create a new place *****************************/
-/*****************************************************************************/
-
-static void Plc_DB_CreatePlace (struct Plc_Place *Plc)
-  {
-   /***** Create a new place *****/
-   DB_QueryINSERT ("can not create place",
-		   "INSERT INTO places"
-		   " (InsCod,ShortName,FullName)"
-		   " VALUES"
-		   " (%ld,'%s','%s')",
-                   Gbl.Hierarchy.Ins.InsCod,
-                   Plc->ShrtName,
-                   Plc->FullName);
   }
 
 /*****************************************************************************/
