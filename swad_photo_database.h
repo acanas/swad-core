@@ -57,8 +57,16 @@ void Pho_DB_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod);
 void Pho_DB_UpdateDegStats (long DegCod,Usr_Sex_t Sex,
 			    unsigned NumStds,unsigned NumStdsWithPhoto,
 			    long TimeToComputeAvgPhotoInMicroseconds);
+
 unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
                               Pho_HowOrderDegrees_t HowOrderDegrees);
+long Pho_DB_GetADegWithStdsNotInTableOfComputedDegs (void);
+long Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated (void);
+unsigned Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res);
+unsigned Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex);
+unsigned Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod);
+unsigned Pho_DB_GetTimeToComputeAvgPhoto (MYSQL_RES **mysql_res,long DegCod);
+
 void Pho_DB_RemoveObsoleteStatDegrees (void);
 
 #endif

@@ -250,6 +250,111 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/******** Get degree with students not in table of computed degrees **********/
+/*****************************************************************************/
+
+long Pho_DB_GetADegWithStdsNotInTableOfComputedDegs (void)
+  {
+   return DB_QuerySELECTCode ("can not get degree",
+			      "SELECT DISTINCT deg_degrees.DegCod"
+			       " FROM deg_degrees,"
+				     "crs_courses,"
+				     "crs_users"
+			      " WHERE deg_degrees.DegCod=crs_courses.DegCod"
+			        " AND crs_courses.CrsCod=crs_users.CrsCod"
+			        " AND crs_users.Role=%u"
+			        " AND deg_degrees.DegCod NOT IN"
+				    " (SELECT DISTINCT DegCod"
+				       " FROM sta_degrees)"
+			      " LIMIT 1",
+			     (unsigned) Rol_STD);
+  }
+/*****************************************************************************/
+/********* Get the least recently updated degree that has students ***********/
+/*****************************************************************************/
+
+long Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
+  {
+   return DB_QuerySELECTCode ("can not get degree",
+			      "SELECT sta_degrees.DegCod"
+			       " FROM sta_degrees,"
+				     "crs_courses,"
+				     "crs_users"
+			      " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
+			        " AND sta_degrees.DegCod=crs_courses.DegCod"
+			        " AND crs_courses.CrsCod=crs_users.CrsCod"
+			        " AND crs_users.Role=%u"
+			      " ORDER BY sta_degrees.TimeAvgPhoto"
+			      " LIMIT 1",
+			      Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
+			      (unsigned) Rol_STD);
+  }
+
+/*****************************************************************************/
+/********* Get maximum number of students in a degree from database **********/
+/*****************************************************************************/
+
+unsigned Pho_DB_GetMaxStdsPerDegree (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get maximum number of students in a degree",
+		   "SELECT MAX(NumStds),"			// row[0]
+			  "MAX(NumStdsWithPhoto),"		// row[1]
+			  "MAX(NumStdsWithPhoto/NumStds)"	// row[2]
+		    " FROM sta_degrees"
+		   " WHERE Sex='all'"
+		     " AND NumStds>0");
+  }
+
+/*****************************************************************************/
+/*** Get number of students and number of students with photo in a degree ****/
+/*****************************************************************************/
+
+unsigned Pho_DB_GetNumStdsInDegree (MYSQL_RES **mysql_res,long DegCod,Usr_Sex_t Sex)
+  {
+   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the number of students in a degree",
+		   "SELECT NumStds,"		// row[0]
+			  "NumStdsWithPhoto"	// row[1]
+		    " FROM sta_degrees"
+		   " WHERE DegCod=%ld"
+		     " AND Sex='%s'",
+		   DegCod,
+		   Usr_StringsSexDB[Sex]);
+  }
+
+/*****************************************************************************/
+/********* Get last time an average photo was computed from database *********/
+/*****************************************************************************/
+
+unsigned Pho_DB_GetTimeAvgPhotoWasComputed (MYSQL_RES **mysql_res,long DegCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get last time"
+			    " an average photo was computed",
+		   "SELECT COALESCE(MIN(UNIX_TIMESTAMP(TimeAvgPhoto)),0)"	// row[0]
+		    " FROM sta_degrees"
+		   " WHERE DegCod=%ld",
+		   DegCod);
+  }
+
+/*****************************************************************************/
+/********************* Get time to compute average photo *********************/
+/*****************************************************************************/
+
+unsigned Pho_DB_GetTimeToComputeAvgPhoto (MYSQL_RES **mysql_res,long DegCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get time to compute average photo",
+		   "SELECT TimeToComputeAvgPhoto"	// row[0]
+		    " FROM sta_degrees"
+		   " WHERE DegCod=%ld",
+		   DegCod);
+  }
+
+/*****************************************************************************/
 /* Delete all the degrees in sta_degrees table not present in degrees table **/
 /*****************************************************************************/
 

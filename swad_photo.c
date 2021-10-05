@@ -129,7 +129,8 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto);
+static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
+                                    int *NumStds,int *NumStdsWithPhoto);
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
 
@@ -1387,38 +1388,12 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 
    /***** 1. If a degree is not in table of computed degrees,
              choose it as least recently updated *****/
-   DegCod = DB_QuerySELECTCode ("can not get degrees",
-			        "SELECT DISTINCT deg_degrees.DegCod"
-				 " FROM deg_degrees,"
-				       "crs_courses,"
-				       "crs_users"
-			        " WHERE deg_degrees.DegCod=crs_courses.DegCod"
-				  " AND crs_courses.CrsCod=crs_users.CrsCod"
-				  " AND crs_users.Role=%u"
-				  " AND deg_degrees.DegCod NOT IN"
-				      " (SELECT DISTINCT DegCod"
-					 " FROM sta_degrees)"
-			        " LIMIT 1",
-			      (unsigned) Rol_STD);
+   if ((DegCod = Pho_DB_GetADegWithStdsNotInTableOfComputedDegs ()) > 0)
+      return DegCod;
 
-   if (DegCod <= 0)
-      /***** 2. If all the degrees are in table,
-                choose the least recently updated that has students *****/
-      DegCod = DB_QuerySELECTCode ("can not get degrees",
-				   "SELECT sta_degrees.DegCod"
-				    " FROM sta_degrees,"
-					  "crs_courses,"
-					  "crs_users"
-				   " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-				     " AND sta_degrees.DegCod=crs_courses.DegCod"
-				     " AND crs_courses.CrsCod=crs_users.CrsCod"
-				     " AND crs_users.Role=%u"
-				   " ORDER BY sta_degrees.TimeAvgPhoto"
-				   " LIMIT 1",
-				   Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
-				   (unsigned) Rol_STD);
-
-   return DegCod;
+   /***** 2. If all the degrees are in table,
+	     choose the least recently updated that has students *****/
+   return Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated ();
   }
 
 /*****************************************************************************/
@@ -1432,12 +1407,7 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
    long TimeAvgPhotoWasComputed = 0L;
 
    /***** Get last time an average photo was computed from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get last time"
-				  " an average photo was computed",
-		       "SELECT COALESCE(MIN(UNIX_TIMESTAMP(TimeAvgPhoto)),0)"	// row[0]
-			" FROM sta_degrees"
-		       " WHERE DegCod=%ld",
-		       DegCod) == 1)
+   if (Pho_DB_GetTimeAvgPhotoWasComputed (&mysql_res,DegCod) == 1)
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1466,11 +1436,7 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
    long TotalTimeToComputeAvgPhoto = -1L;
 
    /***** Get time to compute average photo from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get time to compute average photo",
-		       "SELECT TimeToComputeAvgPhoto"	// row[0]
-			" FROM sta_degrees"
-		       " WHERE DegCod=%ld",
-		       DegCod) == Usr_NUM_SEXS)
+   if (Pho_DB_GetTimeToComputeAvgPhoto (&mysql_res,DegCod) == Usr_NUM_SEXS)
      {
       TotalTimeToComputeAvgPhoto = 0;
       for (Sex  = (Usr_Sex_t) 0;
@@ -2009,14 +1975,7 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
    MYSQL_ROW row;
 
    /***** Get maximum number of students in a degree from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get maximum"
-				  " number of students in a degree",
-		       "SELECT MAX(NumStds),"			// row[0]
-			      "MAX(NumStdsWithPhoto),"		// row[1]
-			      "MAX(NumStdsWithPhoto/NumStds)"	// row[2]
-			" FROM sta_degrees"
-		       " WHERE Sex='all'"
-			 " AND NumStds>0") == 1)
+   if (Pho_DB_GetMaxStdsPerDegree (&mysql_res) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -2230,26 +2189,19 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 /*** Get number of students and number of students with photo in a degree ****/
 /*****************************************************************************/
 
-static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *NumStdsWithPhoto)
+static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
+                                    int *NumStds,int *NumStdsWithPhoto)
   {
-   extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get the number of students in a degree from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get the number of students"
-				  " in a degree",
-		       "SELECT NumStds,"		// row[0]
-			      "NumStdsWithPhoto"	// row[1]
-			" FROM sta_degrees"
-		       " WHERE DegCod=%ld"
-			 " AND Sex='%s'",
-		       DegCod,
-		       Usr_StringsSexDB[Sex]) == 0)
-      *NumStds = *NumStdsWithPhoto = -1;
-   else
+   if (Pho_DB_GetNumStdsInDegree (&mysql_res,DegCod,Sex))
      {
       row = mysql_fetch_row (mysql_res);
+
+      /* Get number of students (row[0])
+         and number of students with photo (row[1]) */
       if (sscanf (row[0],"%d",NumStds) != 1)
 	 *NumStds = -1;
       if (sscanf (row[1],"%d",NumStdsWithPhoto) != 1)
@@ -2258,6 +2210,8 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
+   else
+      *NumStds = *NumStdsWithPhoto = -1;
   }
 
 /*****************************************************************************/
