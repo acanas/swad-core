@@ -25,20 +25,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-// #include <stddef.h>		// For NULL
-// #include <stdlib.h>		// For calloc
-// #include <string.h>		// For string functions
-
-// #include "swad_box.h"
-// #include "swad_center_database.h"
-// #include "swad_constant.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_HTML.h"
-// #include "swad_language.h"
-// #include "swad_parameter.h"
 #include "swad_place.h"
 
 /*****************************************************************************/

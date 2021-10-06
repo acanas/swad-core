@@ -49176,6 +49176,27 @@ const char *Txt_The_name_of_the_type_of_group_X_has_not_changed =	// Warning: it
 	"O nome do tipo de grupo <strong>%s</strong> n&atilde;o foi alterado.";
 #endif
 
+const char *Txt_The_new_application_key_is_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"La nova clau d'aplicaci&oacute; &eacute;s <strong>%s</strong>.";
+#elif L==2	// de
+	"Der neue Anwendungsschl&uuml;ssel ist <strong>%s</strong>.";
+#elif L==3	// en
+	"The new application key is <strong>%s</strong>.";
+#elif L==4	// es
+	"La nueva clave de aplicaci&oacute;n es <strong>%s</strong>.";
+#elif L==5	// fr
+	"La nouvelle cl&eacute; d'application est <strong>%s</strong>.";
+#elif L==6	// gn
+	"La nueva clave de aplicaci&oacute;n es <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7	// it
+	"La nuova chiave dell'applicazione &egrave; <strong>%s</strong>.";
+#elif L==8	// pl
+	"Nowy klucz aplikacji to <strong>%s</strong>.";
+#elif L==9	// pt
+	"A nova chave do aplicativo &eacute; <strong>%s</strong>.";
+#endif
+
 const char *Txt_The_new_IP_address_is_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La nueva direcci&oacute;n IP es <strong>%s</strong>.";	// Necessita traduccio

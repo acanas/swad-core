@@ -46,6 +46,7 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_plugin.h"
+#include "swad_plugin_database.h"
 #include "swad_session.h"
 
 /*****************************************************************************/
@@ -79,8 +80,6 @@ static void Plg_PutParamPlgCod (void *PlgCod);
 static void Plg_GetListPlugins (void);
 static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
-static bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod);
-static void Plg_DB_CreatePlugin (struct Plugin *Plg);
 
 static void Plg_EditingPluginConstructor (void);
 static void Plg_EditingPluginDestructor (void);
@@ -230,20 +229,7 @@ static void Plg_GetListPlugins (void)
    struct Plugin *Plg;
 
    /***** Get plugins from database *****/
-   Gbl.Plugins.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get plugins",
-		   "SELECT PlgCod,"		// row[0]
-			  "Name,"		// row[1]
-			  "Description,"	// row[2]
-			  "Logo,"		// row[3]
-			  "AppKey,"		// row[4]
-			  "URL,"		// row[5]
-			  "IP"			// row[6]
-		    " FROM plg_plugins"
-		   " ORDER BY Name");
-
-   /***** Count number of rows in result *****/
-   if (Gbl.Plugins.Num) // Plugins found...
+   if ((Gbl.Plugins.Num = Plg_DB_GetListPlugins (&mysql_res))) // Plugins found...
      {
       /***** Create list with plugins *****/
       if ((Gbl.Plugins.Lst = calloc ((size_t) Gbl.Plugins.Num,
@@ -302,16 +288,7 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
    // Plg->PlgCod > 0
 
    /***** Get data of a plugin from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a plugin",
-		       "SELECT Name,"		// row[0]
-			      "Description,"	// row[1]
-			      "Logo,"		// row[2]
-			      "AppKey,"		// row[3]
-			      "URL,"		// row[4]
-			      "IP"		// row[5]
-			" FROM plg_plugins"
-		       " WHERE PlgCod=%ld",
-		       Plg->PlgCod)) // Plugin found...
+   if (Plg_DB_GetDataOfPluginByCod (&mysql_res,Plg->PlgCod)) // Plugin found...
      {
       PluginFound = true;
 
@@ -502,10 +479,7 @@ void Plg_RemovePlugin (void)
    Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Remove plugin *****/
-   DB_QueryDELETE ("can not remove a plugin",
-		   "DELETE FROM plg_plugins"
-		   " WHERE PlgCod=%ld",
-		   Plg_EditingPlg->PlgCod);
+   Plg_DB_RemovePlugin (Plg_EditingPlg->PlgCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -553,14 +527,9 @@ void Plg_RenamePlugin (void)
          else
            {
             /* Update the table changing old name by new name */
-            DB_QueryUPDATE ("can not update the name of a plugin",
-        		    "UPDATE plg_plugins"
-        		      " SET Name='%s'"
-        		    " WHERE PlgCod=%ld",
-                            NewPlgName,
-                            Plg_EditingPlg->PlgCod);
+            Plg_DB_ChangeName (Plg_EditingPlg->PlgCod,NewPlgName);
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             Ale_CreateAlert (Ale_SUCCESS,NULL,
         	             Txt_The_plugin_X_has_been_renamed_as_Y,
                              Plg_EditingPlg->Name,NewPlgName);
@@ -576,22 +545,6 @@ void Plg_RenamePlugin (void)
 
    /***** Update name *****/
    Str_Copy (Plg_EditingPlg->Name,NewPlgName,sizeof (Plg_EditingPlg->Name) - 1);
-  }
-
-/*****************************************************************************/
-/******************** Check if the name of plugin exists *********************/
-/*****************************************************************************/
-
-static bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod)
-  {
-   /***** Get number of plugins with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a plugin"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM plg_plugins"
-			  " WHERE Name='%s'"
-			    " AND PlgCod<>%ld",
-			  Name,PlgCod) != 0);
   }
 
 /*****************************************************************************/
@@ -621,14 +574,9 @@ void Plg_ChangePlgDescription (void)
    if (NewDescription[0])
      {
       /* Update the table changing old description by new description */
-      DB_QueryUPDATE ("can not update the description of a plugin",
-		      "UPDATE plg_plugins"
-		        " SET Description='%s'"
-		      " WHERE PlgCod=%ld",
-                      NewDescription,
-                      Plg_EditingPlg->PlgCod);
+      Plg_DB_ChangeDescription (Plg_EditingPlg->PlgCod,NewDescription);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_description_is_X,
                        NewDescription);
@@ -668,14 +616,9 @@ void Plg_ChangePlgLogo (void)
    if (NewLogo[0])
      {
       /* Update the table changing old logo by new logo */
-      DB_QueryUPDATE ("can not update the logo of a plugin",
-		      "UPDATE plg_plugins"
-		        " SET Logo='%s'"
-		      " WHERE PlgCod=%ld",
-                      NewLogo,
-                      Plg_EditingPlg->PlgCod);
+      Plg_DB_ChangeLogo (Plg_EditingPlg->PlgCod,NewLogo);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_logo_is_X,
                        NewLogo);
@@ -693,7 +636,7 @@ void Plg_ChangePlgLogo (void)
 
 void Plg_ChangePlgAppKey (void)
   {
-   extern const char *Txt_The_new_logo_is_X;			// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   extern const char *Txt_The_new_application_key_is_X;
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
 
    /***** Plugin constructor *****/
@@ -714,16 +657,11 @@ void Plg_ChangePlgAppKey (void)
    if (NewAppKey[0])
      {
       /* Update the table changing old application key by new application key */
-      DB_QueryUPDATE ("can not update the application key of a plugin",
-		      "UPDATE plg_plugins"
-		        " SET AppKey='%s'"
-		      " WHERE PlgCod=%ld",
-                      NewAppKey,
-                      Plg_EditingPlg->PlgCod);
+      Plg_DB_ChangeAppKey (Plg_EditingPlg->PlgCod,NewAppKey);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
-		       Txt_The_new_logo_is_X,			// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		       Txt_The_new_application_key_is_X,
                        NewAppKey);
      }
    else
@@ -760,14 +698,9 @@ void Plg_ChangePlgURL (void)
    if (NewURL[0])
      {
       /* Update the table changing old WWW by new WWW */
-      DB_QueryUPDATE ("can not update the URL of a plugin",
-		      "UPDATE plg_plugins"
-		        " SET URL='%s'"
-		      " WHERE PlgCod=%ld",
-                      NewURL,
-                      Plg_EditingPlg->PlgCod);
+      Plg_DB_ChangeURL (Plg_EditingPlg->PlgCod,NewURL);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_URL_is_X,
                        NewURL);
@@ -806,14 +739,9 @@ void Plg_ChangePlgIP (void)
    if (NewIP[0])
      {
       /* Update the table changing old IP by new IP */
-      DB_QueryUPDATE ("can not update the IP address of a plugin",
-		      "UPDATE plg_plugins"
-		        " SET IP='%s'"
-		      " WHERE PlgCod=%ld",
-                      NewIP,
-                      Plg_EditingPlg->PlgCod);
+      Plg_DB_ChangeIP (Plg_EditingPlg->PlgCod,NewIP);
 
-      /***** Write message to show the change made *****/
+      /* Write message to show the change made */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_IP_address_is_X,
                        NewIP);
@@ -1016,26 +944,6 @@ void Plg_ReceiveFormNewPlg (void)
    else	// If there is not a plugin name
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin);
-  }
-
-/*****************************************************************************/
-/***************************** Create a new plugin ***************************/
-/*****************************************************************************/
-
-static void Plg_DB_CreatePlugin (struct Plugin *Plg)
-  {
-   /***** Create a new plugin *****/
-   DB_QueryINSERT ("can not create plugin",
-		   "INSERT INTO plg_plugins"
-		   " (Name,Description,Logo,AppKey,URL,IP)"
-		   " VALUES"
-		   " ('%s','%s','%s','%s','%s','%s')",
-                   Plg->Name,
-                   Plg->Description,
-                   Plg->Logo,
-                   Plg->AppKey,
-                   Plg->URL,
-                   Plg->IP);
   }
 
 /*****************************************************************************/
