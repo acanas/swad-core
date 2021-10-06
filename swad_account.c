@@ -62,6 +62,7 @@
 #include "swad_parameter.h"
 #include "swad_photo_database.h"
 #include "swad_profile.h"
+#include "swad_profile_database.h"
 #include "swad_project.h"
 #include "swad_report.h"
 #include "swad_setting.h"

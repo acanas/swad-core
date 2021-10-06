@@ -33,6 +33,7 @@
 #include "swad_follow_database.h"
 #include "swad_global.h"
 #include "swad_profile.h"
+#include "swad_profile_database.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_note.h"
@@ -564,5 +565,5 @@ void Tml_Pub_PublishPubInTimeline (struct Tml_Pub_Publication *Pub)
    Pub->PubCod = Tml_DB_CreateNewPub (Pub);
 
    /***** Increment number of publications in user's figures *****/
-   Prf_DB_IncrementNumPubsUsr (Pub->PublisherCod);
+   Prf_DB_IncrementNumTimelinePubsUsr (Pub->PublisherCod);
   }

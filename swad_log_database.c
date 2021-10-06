@@ -198,6 +198,34 @@ unsigned Log_DB_GetLastClicks (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/*** Get first click of a user from log table and store in user's figures ****/
+/*****************************************************************************/
+
+unsigned Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's first click",
+		   "SELECT UNIX_TIMESTAMP((SELECT MIN(ClickTime)"
+					   " FROM log"
+					  " WHERE UsrCod=%ld))",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/********************** Get number of clicks of a user ***********************/
+/*****************************************************************************/
+
+unsigned Log_DB_GetUsrNumClicks (long UsrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of clicks",
+		  "SELECT COUNT(*)"
+		   " FROM log"
+		  " WHERE UsrCod=%ld",
+		  UsrCod);
+  }
+
+/*****************************************************************************/
 /************ Sometimes, we delete old entries in recent log table ***********/
 /*****************************************************************************/
 

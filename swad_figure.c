@@ -548,7 +548,7 @@ static void Fig_GetAndShowUsersRanking (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LT\"");
-	    Prf_GetAndShowRankingSocPub ();
+	    Prf_GetAndShowRankingTimelinePubs ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LT\"");
@@ -560,11 +560,11 @@ static void Fig_GetAndShowUsersRanking (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LT\"");
-	    Prf_GetAndShowRankingForPst ();
+	    Prf_GetAndShowRankingForPsts ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LT\"");
-	    Prf_GetAndShowRankingMsgSnt ();
+	    Prf_GetAndShowRankingMsgsSnt ();
 	 HTM_TD_End ();
 
       HTM_TR_End ();

@@ -1,7 +1,7 @@
-// swad_log_database.h: access log, operations with database
+// swad_profile_database.h: user's public profile, operations with database
 
-#ifndef _SWAD_LOG_DB
-#define _SWAD_LOG_DB
+#ifndef _SWAD_PRF_DB
+#define _SWAD_PRF_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,32 +24,40 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/********************************** Headers **********************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/******************************** Public types *******************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-long Log_DB_LogAccessInHistoricalLog (long ActCod,Rol_Role_t RoleToStore);
-void Log_DB_LogAccessInRecentLog (long LogCod,long ActCod,Rol_Role_t RoleToStore);
-void Log_DB_LogComments (long LogCod,const char *CommentsDB);
-void Log_DB_LogSearchString (long LogCod);
-void Log_DB_LogAPI (long LogCod);
-void Log_DB_LogBanner (long LogCod,long BanCodClicked);
+void Prf_DB_UpdateFirstClickTimeUsr (long UsrCod,time_t FirstClickTimeUTC);
+void Prf_DB_UpdateNumClicksUsr (long UsrCod,int NumClicks);
+void Prf_DB_UpdateNumTimelinePubsUsr (long UsrCod,int NumTimelinePubs);
+void Prf_DB_UpdateNumFileViewsUsr (long UsrCod,int NumFileViews);
+void Prf_DB_UpdateNumForumPostsUsr (long UsrCod,int NumForumPosts);
+void Prf_DB_UpdateNumMessagesSentUsr (long UsrCod,int NumMessagesSent);
+void Prf_DB_IncrementNumClicksUsr (long UsrCod);
+void Prf_DB_IncrementNumTimelinePubsUsr (long UsrCod);
+void Prf_DB_IncrementNumFileViewsUsr (long UsrCod);
+void Prf_DB_IncrementNumForPstUsr (long UsrCod);
+void Prf_DB_IncrementNumMsgSntUsr (long UsrCod);
 
-unsigned Log_DB_GetLastClicks (MYSQL_RES **mysql_res);
-unsigned Log_DB_GetUsrFirstClick (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Log_DB_GetUsrNumClicks (long UsrCod);
+unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName);
+unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName);
+unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
+unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
+bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod);
+unsigned Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod);
 
-void Log_DB_RemoveOldEntriesRecentLog (void);
+void Prf_DB_RemoveUsrFigures (long UsrCod);
 
 #endif

@@ -44,6 +44,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_language.h"
+#include "swad_log_database.h"
 #include "swad_message.h"
 #include "swad_message_database.h"
 #include "swad_network.h"
@@ -54,6 +55,7 @@
 #include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
+#include "swad_profile_database.h"
 #include "swad_role.h"
 #include "swad_role_type.h"
 #include "swad_setting.h"
@@ -97,8 +99,8 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
                                const struct UsrFigures *UsrFigures);
 static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
                                   const struct UsrFigures *UsrFigures);
-static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
-                                           const struct UsrFigures *UsrFigures);
+static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
+                                     const struct UsrFigures *UsrFigures);
 static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
                                    const struct UsrFigures *UsrFigures);
 static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
@@ -107,15 +109,11 @@ static void Prf_BeginListItem (const char *Title,const char *Icon);
 static void Prf_EndListItem (void);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
 
-static unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName);
-static unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName);
-static unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
-static unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
 static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs);
 
 static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod);
-static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod);
+static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
@@ -123,7 +121,6 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
                                   bool CreatingMyOwnAccount);
-static bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe);
@@ -243,7 +240,6 @@ void Prf_RequestUserProfile (void)
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
    struct Tml_Timeline Timeline;
-   bool ItsMe;
    bool ProfileShown = false;
 
    /***** Get user's data *****/
@@ -282,11 +278,10 @@ void Prf_GetUsrDatAndShowUserProfile (void)
      }
 
    /***** If it's not me, mark possible notification as seen *****/
-   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-   if (!ItsMe)	// Not me
+   if (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))	// Not me
       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
-                           Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
-			   Gbl.Usrs.Me.UsrDat.UsrCod);
+                              Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
+			      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -364,20 +359,12 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 
 void Prf_ChangeBasicProfileVis (void)
   {
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParamVisibility ("VisBasPrf",
 	                                                        Pri_BASIC_PROFILE_ALLOWED_VIS);
 
-   /***** Store public/private photo in database *****/
-   DB_QueryUPDATE ("can not update your setting"
-		   " about public profile visibility",
-		   "UPDATE usr_data"
-		     " SET BaPrfVisibility='%s'"
-		   " WHERE UsrCod=%ld",
-                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.BaPrfVisibility],
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
+   /***** Store public/private basic profile visibility in database *****/
+   Set_DB_UpdateMySettingsAboutBasicProfile ();
 
    /***** Show form again *****/
    Set_EditSettings ();
@@ -385,20 +372,12 @@ void Prf_ChangeBasicProfileVis (void)
 
 void Prf_ChangeExtendedProfileVis (void)
   {
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-
    /***** Get param with public/private photo *****/
    Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParamVisibility ("VisExtPrf",
 	                                                        Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
-   /***** Store public/private photo in database *****/
-   DB_QueryUPDATE ("can not update your setting"
-		   " about public profile visibility",
-		   "UPDATE usr_data"
-		     " SET ExPrfVisibility='%s'"
-		   " WHERE UsrCod=%ld",
-                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ExPrfVisibility],
-                   Gbl.Usrs.Me.UsrDat.UsrCod);
+   /***** Store public/private extended profile visibility in database *****/
+   Set_DB_UpdateMySettingsAboutExtendedProfile ();
 
    /***** Show form again *****/
    Set_EditSettings ();
@@ -453,8 +432,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    /* Number of file views */
 	    Prf_ShowNumFileViews (UsrDat,&UsrFigures);
 
-	    /* Number of social publications */
-	    Prf_ShowNumSocialPublications (UsrDat,&UsrFigures);
+	    /* Number of timeline publications */
+	    Prf_ShowNumTimelinePubs (UsrDat,&UsrFigures);
 
 	    /* Number of posts in forums */
 	    Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
@@ -674,36 +653,36 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/*********** Show number of social publications in user's profile ************/
+/********* Show number of timeline publications in user's profile ************/
 /*****************************************************************************/
 
-static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
-                                           const struct UsrFigures *UsrFigures)
+static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
+                                     const struct UsrFigures *UsrFigures)
   {
    extern const char *Txt_Timeline;
    extern const char *Txt_TIMELINE_post;
    extern const char *Txt_TIMELINE_posts;
    extern const char *Txt_day;
 
-   /***** Number of social publications *****/
+   /***** Number of timeline publications *****/
    Prf_BeginListItem (Txt_Timeline,"comment-dots.svg");
 
-      if (UsrFigures->NumSocPub >= 0)
+      if (UsrFigures->NumTimelinePubs >= 0)
 	{
-	 HTM_Int (UsrFigures->NumSocPub);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumSocPub == 1 ? Txt_TIMELINE_post :
+	 HTM_Int (UsrFigures->NumTimelinePubs);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumTimelinePubs == 1 ? Txt_TIMELINE_post :
 								 Txt_TIMELINE_posts);
 	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumSocPub"));
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumSocPub /
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumTimelinePubs /
 				 (double) UsrFigures->NumDays);
 	    HTM_TxtF ("/%s)",Txt_day);
 	   }
 	}
-      else	// Number of social publications is unknown
+      else	// Number of timeline publications is unknown
 	 /***** Button to fetch and store user's figures *****/
 	 Prf_PutLinkCalculateFigures (UsrDat->EnUsrCod);
 
@@ -711,7 +690,7 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/*********** Show number of social publications in user's profile ************/
+/********** Show number of timeline publications in user's profile ***********/
 /*****************************************************************************/
 
 static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
@@ -725,17 +704,17 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
    /***** Number of posts in forums *****/
    Prf_BeginListItem (Txt_Forums,"comments.svg");
 
-      if (UsrFigures->NumForPst >= 0)
+      if (UsrFigures->NumForumPosts >= 0)
 	{
-	 HTM_Long (UsrFigures->NumForPst);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForPst == 1 ? Txt_FORUM_post :
+	 HTM_Long (UsrFigures->NumForumPosts);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForumPosts == 1 ? Txt_FORUM_post :
 								 Txt_FORUM_posts);
 	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumForPst"));
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumForPst /
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumForumPosts /
 				 (double) UsrFigures->NumDays);
 	    HTM_TxtF ("/%s)",Txt_day);
 	   }
@@ -762,17 +741,17 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
    /***** Number of messages sent *****/
    Prf_BeginListItem (Txt_Messages,"envelope.svg");
 
-      if (UsrFigures->NumMsgSnt >= 0)
+      if (UsrFigures->NumMessagesSent >= 0)
 	{
-	 HTM_Long (UsrFigures->NumMsgSnt);
-	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMsgSnt == 1 ? Txt_message :
+	 HTM_Long (UsrFigures->NumMessagesSent);
+	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMessagesSent == 1 ? Txt_message :
 								 Txt_messages);
 	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumMsgSnt"));
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_TxtF ("&nbsp;%s","(");
-	    HTM_DoubleFewDigits ((double) UsrFigures->NumMsgSnt /
+	    HTM_DoubleFewDigits ((double) UsrFigures->NumMessagesSent /
 				 (double) UsrFigures->NumDays);
 	    HTM_TxtF ("/%s)",Txt_day);
 	   }
@@ -828,22 +807,9 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
 
    /***** Get user's figures from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's figures",
-		   "SELECT UNIX_TIMESTAMP(FirstClickTime),"	// row[0]
-			  "DATEDIFF(NOW(),FirstClickTime)+1,"	// row[1]
-			  "NumClicks,"				// row[2]
-			  "NumSocPub,"				// row[3]
-			  "NumFileViews,"			// row[4]
-			  "NumForPst,"				// row[5]
-			  "NumMsgSnt"				// row[6]
-		    " FROM usr_figures"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-   if (NumRows)
+   if (Prf_DB_GetUsrFigures (&mysql_res,UsrCod))
      {
       /***** Get user's figures *****/
       row = mysql_fetch_row (mysql_res);
@@ -864,21 +830,21 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       if (sscanf (row[2],"%d",&UsrFigures->NumClicks) != 1)
 	 UsrFigures->NumClicks = -1;
 
-      /* Get number of social publications (row[3]) */
-      if (sscanf (row[3],"%d",&UsrFigures->NumSocPub) != 1)
-	 UsrFigures->NumSocPub = -1;
+      /* Get number of timeline publications (row[3]) */
+      if (sscanf (row[3],"%d",&UsrFigures->NumTimelinePubs) != 1)
+	 UsrFigures->NumTimelinePubs = -1;
 
       /* Get number of file views (row[4]) */
       if (sscanf (row[4],"%d",&UsrFigures->NumFileViews) != 1)
 	 UsrFigures->NumFileViews = -1;
 
       /* Get number of forum posts (row[5]) */
-      if (sscanf (row[5],"%d",&UsrFigures->NumForPst) != 1)
-	 UsrFigures->NumForPst = -1;
+      if (sscanf (row[5],"%d",&UsrFigures->NumForumPosts) != 1)
+	 UsrFigures->NumForumPosts = -1;
 
       /* Get number of messages sent (row[6]) */
-      if (sscanf (row[6],"%d",&UsrFigures->NumMsgSnt) != 1)
-	 UsrFigures->NumMsgSnt = -1;
+      if (sscanf (row[6],"%d",&UsrFigures->NumMessagesSent) != 1)
+	 UsrFigures->NumMessagesSent = -1;
      }
    else
       /***** Return special user's figures indicating "not present" *****/
@@ -886,84 +852,6 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********** Get ranking of a user according to the number of clicks **********/
-/*****************************************************************************/
-
-static unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName)
-  {
-   /***** Select number of rows with figure
-          greater than the figure of this user *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get ranking using a figure",
-		  "SELECT COUNT(*)+1"
-		   " FROM usr_figures"
-		  " WHERE UsrCod<>%ld"	// Really not necessary here
-		    " AND %s>(SELECT %s"
-			      " FROM usr_figures"
-			     " WHERE UsrCod=%ld)",
-		  UsrCod,
-		  FieldName,
-		  FieldName,
-		  UsrCod);
-  }
-
-/*****************************************************************************/
-/********************* Get number of users with a figure *********************/
-/*****************************************************************************/
-
-static unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName)
-  {
-   /***** Select number of rows with values already calculated *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users with a figure",
-		  "SELECT COUNT(*)"
-		   " FROM usr_figures"
-		  " WHERE %s>=0",
-		  FieldName);
-  }
-
-/*****************************************************************************/
-/****** Get ranking of a user according to the number of clicks per day ******/
-/*****************************************************************************/
-
-static unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod)
-  {
-   /***** Select number of rows with number of clicks per day
-          greater than the clicks per day of this user *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get ranking using number of clicks per day",
-		  "SELECT COUNT(*)+1"
-		   " FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
-			   " FROM usr_figures"
-			  " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
-			    " AND NumClicks>0"
-			    " AND FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
-		  " WHERE NumClicksPerDay>"
-		         "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-			   " FROM usr_figures"
-			  " WHERE UsrCod=%ld"
-			    " AND NumClicks>0"
-			    " AND FirstClickTime>FROM_UNIXTIME(0))",
-		  UsrCod,
-		  UsrCod);
-  }
-
-/*****************************************************************************/
-/************** Get number of users with number of clicks per day ************/
-/*****************************************************************************/
-
-static unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void)
-  {
-   /***** Select number of rows with values already calculated *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users with number of clicks per day",
-		  "SELECT COUNT(*)"
-		   " FROM usr_figures"
-		  " WHERE NumClicks>0"
-		    " AND FirstClickTime>FROM_UNIXTIME(0)");
   }
 
 /*****************************************************************************/
@@ -1030,10 +918,10 @@ bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       Prf_GetNumClicksAndStoreAsUsrFigure (UsrCod);
       UsrFiguresModified = true;
      }
-   if (UsrFigures->NumSocPub < 0)
+   if (UsrFigures->NumTimelinePubs < 0)
      {
-      /***** Get number of social publications and store as user's figure *****/
-      Prf_GetNumSocialPubsAndStoreAsUsrFigure (UsrCod);
+      /***** Get number of timeline publications and store as user's figure *****/
+      Prf_GetNumTimelinePubsAndStoreAsUsrFigure (UsrCod);
       UsrFiguresModified = true;
      }
    if (UsrFigures->NumFileViews < 0)
@@ -1042,13 +930,13 @@ bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
       Prf_GetNumFileViewsAndStoreAsUsrFigure (UsrCod);
       UsrFiguresModified = true;
      }
-   if (UsrFigures->NumForPst < 0)
+   if (UsrFigures->NumForumPosts < 0)
      {
       /***** Get number of forum posts and store as user's figure *****/
       Prf_GetNumForumPostsAndStoreAsUsrFigure (UsrCod);
       UsrFiguresModified = true;
      }
-    if (UsrFigures->NumMsgSnt < 0)
+    if (UsrFigures->NumMessagesSent < 0)
      {
       /***** Get number of messages sent and store as user's figure *****/
       Prf_GetNumMessagesSentAndStoreAsUsrFigure (UsrCod);
@@ -1074,11 +962,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get first click from log table *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get user's first click",
-			  "SELECT UNIX_TIMESTAMP((SELECT MIN(ClickTime)"
-					          " FROM log"
-						 " WHERE UsrCod=%ld))",
-			  UsrCod))
+      if (Log_DB_GetUsrFirstClick (&mysql_res,UsrCod))
 	{
 	 /* Get first click */
 	 row = mysql_fetch_row (mysql_res);
@@ -1092,12 +976,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update first click time in user's figures *****/
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures"
-			   " SET FirstClickTime=FROM_UNIXTIME(%ld)"
-			 " WHERE UsrCod=%ld",
-		         (long) UsrFigures.FirstClickTimeUTC,
-		         UsrCod);
+	 Prf_DB_UpdateFirstClickTimeUsr (UsrCod,UsrFigures.FirstClickTimeUTC);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1117,31 +996,21 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of clicks from database *****/
-      UsrFigures.NumClicks = (int)
-      DB_QueryCOUNT ("can not get number of clicks",
-		     "SELECT COUNT(*)"
-		      " FROM log"
-		     " WHERE UsrCod=%ld",
-		     UsrCod);
+      UsrFigures.NumClicks = (int) Log_DB_GetUsrNumClicks (UsrCod);
 
       /***** Update number of clicks in user's figures *****/
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures"
-			   " SET NumClicks=%ld"
-			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumClicks,
-		         UsrCod);
+	 Prf_DB_UpdateNumClicksUsr (UsrCod,UsrFigures.NumClicks);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
 /*****************************************************************************/
-/* Get number of social publications from a user and store in user's figures */
+/**** Get number of timeline pubs. from a user and store in user's figures ***/
 /*****************************************************************************/
 
-static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
+static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
   {
    struct UsrFigures UsrFigures;
 
@@ -1151,16 +1020,11 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumSocPub = (int) Tml_DB_GetNumPubsUsr (UsrCod);
+      UsrFigures.NumTimelinePubs = (int) Tml_DB_GetNumPubsUsr (UsrCod);
 
-      /***** Update number of forum posts in user's figures *****/
+      /***** Update number of timeline publications in user's figures *****/
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures"
-			   " SET NumSocPub=%d"
-			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumSocPub,
-		         UsrCod);
+	 Prf_DB_UpdateNumTimelinePubsUsr (UsrCod,UsrFigures.NumTimelinePubs);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1184,12 +1048,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
 
       /***** Update number of file views in user's figures *****/
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures"
-			   " SET NumFileViews=%d"
-			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumFileViews,
-		         UsrCod);
+	 Prf_DB_UpdateNumFileViewsUsr (UsrCod,UsrFigures.NumFileViews);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1209,16 +1068,11 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumForPst = For_DB_GetNumPostsUsr (UsrCod);
+      UsrFigures.NumForumPosts = For_DB_GetNumPostsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures"
-			   " SET NumForPst=%d"
-			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumForPst,
-		         UsrCod);
+	 Prf_DB_UpdateNumForumPostsUsr (UsrCod,UsrFigures.NumForumPosts);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1238,16 +1092,11 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of messages sent from database *****/
-      UsrFigures.NumMsgSnt = (int) Msg_DB_GetNumMsgsSentByUsr (UsrCod);
+      UsrFigures.NumMessagesSent = (int) Msg_DB_GetNumMsgsSentByUsr (UsrCod);
 
       /***** Update number of messages sent in user's figures *****/
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
-	 DB_QueryUPDATE ("can not update user's figures",
-			 "UPDATE usr_figures"
-			   " SET NumMsgSnt=%d"
-			 " WHERE UsrCod=%ld",
-		         UsrFigures.NumMsgSnt,
-		         UsrCod);
+	 Prf_DB_UpdateNumMessagesSentUsr (UsrCod,UsrFigures.NumMessagesSent);
       else			// User entry does not exist
 	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
@@ -1263,11 +1112,11 @@ void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
 
    /***** Reset user's figures *****/
    Prf_ResetUsrFigures (&UsrFigures);
-   UsrFigures.NumClicks    = 0;	// set number of clicks to 0
-   UsrFigures.NumSocPub    = 0;	// set number of social publications to 0
-   UsrFigures.NumFileViews = 0;	// set number of file views to 0
-   UsrFigures.NumForPst    = 0;	// set number of forum posts to 0
-   UsrFigures.NumMsgSnt    = 0;	// set number of messages sent to 0
+   UsrFigures.NumClicks       = 0;	// set number of clicks to 0
+   UsrFigures.NumTimelinePubs = 0;	// set number of timeline publications to 0
+   UsrFigures.NumFileViews    = 0;	// set number of file views to 0
+   UsrFigures.NumForumPosts   = 0;	// set number of forum posts to 0
+   UsrFigures.NumMessagesSent = 0;	// set number of messages sent to 0
 
    /***** Create user's figures *****/
    Prf_CreateUsrFigures (UsrCod,&UsrFigures,CreatingMyOwnAccount);
@@ -1280,12 +1129,12 @@ void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
   {
    UsrFigures->FirstClickTimeUTC = (time_t) 0;	// unknown first click time or user never logged
-   UsrFigures->NumDays      = -1;	// not applicable
-   UsrFigures->NumClicks    = -1;	// unknown number of clicks
-   UsrFigures->NumSocPub    = -1;	// unknown number of social publications
-   UsrFigures->NumFileViews = -1;	// unknown number of file views
-   UsrFigures->NumForPst    = -1;	// unknown number of forum posts
-   UsrFigures->NumMsgSnt    = -1;	// unknown number of messages sent
+   UsrFigures->NumDays         = -1;	// not applicable
+   UsrFigures->NumClicks       = -1;	// unknown number of clicks
+   UsrFigures->NumTimelinePubs = -1;	// unknown number of timeline publications
+   UsrFigures->NumFileViews    = -1;	// unknown number of file views
+   UsrFigures->NumForumPosts   = -1;	// unknown number of forum posts
+   UsrFigures->NumMessagesSent = -1;	// unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -1316,116 +1165,11 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 		     "%d,%d,%d,%d,%d)",
 		   UsrCod,
 		   SubQueryFirstClickTime,
-		   UsrFigures->NumClicks,	// -1 ==> unknown number of clicks
-		   UsrFigures->NumSocPub,	// -1 ==> unknown number of social publications
-		   UsrFigures->NumFileViews,	// -1 ==> unknown number of file views
-		   UsrFigures->NumForPst,	// -1 ==> unknown number of forum posts
-		   UsrFigures->NumMsgSnt);	// -1 ==> unknown number of messages sent
-  }
-
-/*****************************************************************************/
-/**************************** Remove user's figures **************************/
-/*****************************************************************************/
-
-void Prf_DB_RemoveUsrFigures (long UsrCod)
-  {
-   DB_QueryDELETE ("can not delete user's figures",
-		   "DELETE FROM usr_figures"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/*** Check if it exists an entry for this user in table of user's figures ****/
-/*****************************************************************************/
-
-static bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod)
-  {
-   return (DB_QueryCOUNT ("can not get user's first click",
-			  "SELECT COUNT(*)"
-			   " FROM usr_figures"
-			  " WHERE UsrCod=%ld",
-			  UsrCod) != 0);
-  }
-
-/*****************************************************************************/
-/*************** Increment number of clicks made by a user *******************/
-/*****************************************************************************/
-
-void Prf_DB_IncrementNumClicksUsr (long UsrCod)
-  {
-   /***** Increment number of clicks *****/
-   // If NumClicks < 0 ==> not yet calculated, so do nothing
-   DB_QueryUPDATE ("can not increment user's clicks",
-		   "UPDATE IGNORE usr_figures"
-		     " SET NumClicks=NumClicks+1"
-		   " WHERE UsrCod=%ld"
-		     " AND NumClicks>=0",
-	           UsrCod);
-  }
-
-/*****************************************************************************/
-/********* Increment number of social publications sent by a user ************/
-/*****************************************************************************/
-
-void Prf_DB_IncrementNumPubsUsr (long UsrCod)
-  {
-   /***** Increment number of social publications *****/
-   // If NumSocPub < 0 ==> not yet calculated, so do nothing
-   DB_QueryUPDATE ("can not increment user's social publications",
-		   "UPDATE IGNORE usr_figures"
-		     " SET NumSocPub=NumSocPub+1"
-		   " WHERE UsrCod=%ld"
-		     " AND NumSocPub>=0",
-	           UsrCod);
-  }
-
-/*****************************************************************************/
-/************** Increment number of file views sent by a user ****************/
-/*****************************************************************************/
-
-void Prf_DB_IncrementNumFileViewsUsr (long UsrCod)
-  {
-   /***** Increment number of file views *****/
-   // If NumFileViews < 0 ==> not yet calculated, so do nothing
-   DB_QueryUPDATE ("can not increment user's file views",
-		   "UPDATE IGNORE usr_figures"
-		     " SET NumFileViews=NumFileViews+1"
-		   " WHERE UsrCod=%ld"
-		     " AND NumFileViews>=0",
-	           UsrCod);
-  }
-
-/*****************************************************************************/
-/************* Increment number of forum posts sent by a user ****************/
-/*****************************************************************************/
-
-void Prf_DB_IncrementNumForPstUsr (long UsrCod)
-  {
-   /***** Increment number of forum posts *****/
-   // If NumForPst < 0 ==> not yet calculated, so do nothing
-   DB_QueryUPDATE ("can not increment user's forum posts",
-		   "UPDATE IGNORE usr_figures"
-		     " SET NumForPst=NumForPst+1"
-		   " WHERE UsrCod=%ld"
-		     " AND NumForPst>=0",
-	           UsrCod);
-  }
-
-/*****************************************************************************/
-/*************** Increment number of messages sent by a user *****************/
-/*****************************************************************************/
-
-void Prf_DB_IncrementNumMsgSntUsr (long UsrCod)
-  {
-   /***** Increment number of messages sent *****/
-   // If NumMsgSnt < 0 ==> not yet calculated, so do nothing
-   DB_QueryUPDATE ("can not increment user's messages sent",
-		   "UPDATE IGNORE usr_figures"
-		     " SET NumMsgSnt=NumMsgSnt+1"
-		   " WHERE UsrCod=%ld"
-		     " AND NumMsgSnt>=0",
-	           UsrCod);
+		   UsrFigures->NumClicks,		// -1 ==> unknown number of clicks
+		   UsrFigures->NumTimelinePubs,		// -1 ==> unknown number of timeline publications
+		   UsrFigures->NumFileViews,		// -1 ==> unknown number of file views
+		   UsrFigures->NumForumPosts,		// -1 ==> unknown number of forum posts
+		   UsrFigures->NumMessagesSent);	// -1 ==> unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -1437,7 +1181,7 @@ void Prf_GetAndShowRankingClicks (void)
    Prf_GetAndShowRankingFigure ("NumClicks");
   }
 
-void Prf_GetAndShowRankingSocPub (void)
+void Prf_GetAndShowRankingTimelinePubs (void)
   {
    Prf_GetAndShowRankingFigure ("NumSocPub");
   }
@@ -1447,12 +1191,12 @@ void Prf_GetAndShowRankingFileViews (void)
    Prf_GetAndShowRankingFigure ("NumFileViews");
   }
 
-void Prf_GetAndShowRankingForPst (void)
+void Prf_GetAndShowRankingForPsts (void)
   {
    Prf_GetAndShowRankingFigure ("NumForPst");
   }
 
-void Prf_GetAndShowRankingMsgSnt (void)
+void Prf_GetAndShowRankingMsgsSnt (void)
   {
    Prf_GetAndShowRankingFigure ("NumMsgSnt");
   }

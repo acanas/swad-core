@@ -428,6 +428,36 @@ void Set_DB_UpdateMySettingsAboutPhoto (void)
   }
 
 /*****************************************************************************/
+/************ Update my settings about public profile visibility *************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutBasicProfile (void)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+
+   DB_QueryUPDATE ("can not update your setting"
+		   " about public profile visibility",
+		   "UPDATE usr_data"
+		     " SET BaPrfVisibility='%s'"
+		   " WHERE UsrCod=%ld",
+                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.BaPrfVisibility],
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+void Set_DB_UpdateMySettingsAboutExtendedProfile (void)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+
+   DB_QueryUPDATE ("can not update your setting"
+		   " about public profile visibility",
+		   "UPDATE usr_data"
+		     " SET ExPrfVisibility='%s'"
+		   " WHERE UsrCod=%ld",
+                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ExPrfVisibility],
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /******************* Update my settings about notify events ******************/
 /*****************************************************************************/
 

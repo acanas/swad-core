@@ -691,16 +691,16 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
 
    /***** Number of posts in forums *****/
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Forum_posts);
-   if (Report->UsrFigures.NumForPst >= 0)
+   if (Report->UsrFigures.NumForumPosts >= 0)
      {
       fprintf (Gbl.F.Rep,"%d %s",
-	       Report->UsrFigures.NumForPst,
-	       (Report->UsrFigures.NumForPst == 1) ? Txt_FORUM_post :
+	       Report->UsrFigures.NumForumPosts,
+	       (Report->UsrFigures.NumForumPosts == 1) ? Txt_FORUM_post :
 					             Txt_FORUM_posts);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Rep_WriteDouble ((double) Report->UsrFigures.NumForPst /
+	 Rep_WriteDouble ((double) Report->UsrFigures.NumForumPosts /
 			  (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}
@@ -711,16 +711,16 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
 
    /***** Number of messages sent *****/
    fprintf (Gbl.F.Rep,"<li>%s: ",Txt_Messages_sent);
-   if (Report->UsrFigures.NumMsgSnt >= 0)
+   if (Report->UsrFigures.NumMessagesSent >= 0)
      {
       fprintf (Gbl.F.Rep,"%d %s",
-	       Report->UsrFigures.NumMsgSnt,
-	       (Report->UsrFigures.NumMsgSnt == 1) ? Txt_message :
+	       Report->UsrFigures.NumMessagesSent,
+	       (Report->UsrFigures.NumMessagesSent == 1) ? Txt_message :
 					             Txt_messages);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Rep_WriteDouble ((double) Report->UsrFigures.NumMsgSnt /
+	 Rep_WriteDouble ((double) Report->UsrFigures.NumMessagesSent /
 			  (double) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
 	}

@@ -53,6 +53,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_profile_database.h"
 #include "swad_role.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"

@@ -3518,10 +3518,10 @@ mysql> DESCRIBE usr_figures;
 			"UsrCod INT NOT NULL,"
 			"FirstClickTime DATETIME NOT NULL,"
 			"NumClicks INT NOT NULL DEFAULT -1,"
-			"NumSocPub INT NOT NULL DEFAULT -1,"
+			"NumSocPub INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumTimelinePubs
 			"NumFileViews INT NOT NULL DEFAULT -1,"
-			"NumForPst INT NOT NULL DEFAULT -1,"
-			"NumMsgSnt INT NOT NULL DEFAULT -1,"
+			"NumForPst INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumForumPosts
+			"NumMsgSnt INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumMessagesSent
 		   "PRIMARY KEY(UsrCod),"
 		   "INDEX(FirstClickTime),"
 		   "INDEX(NumClicks))");

@@ -56,6 +56,8 @@ void Set_DB_UpdateMySettingsAboutFirstDayOfWeek (unsigned FirstDayOfWeek);
 void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId);
 void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
 void Set_DB_UpdateMySettingsAboutPhoto (void);
+void Set_DB_UpdateMySettingsAboutBasicProfile (void);
+void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
 void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 
 void Set_BeginSettingsHead (void);

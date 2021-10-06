@@ -42,6 +42,7 @@
 #include "swad_log.h"
 #include "swad_log_database.h"
 #include "swad_profile.h"
+#include "swad_profile_database.h"
 #include "swad_role.h"
 #include "swad_statistic.h"
 

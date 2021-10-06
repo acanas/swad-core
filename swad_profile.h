@@ -40,10 +40,10 @@ struct UsrFigures
    time_t FirstClickTimeUTC;	//  0 ==> unknown first click time of user never logged
    int NumDays;			// -1 ==> not applicable
    int NumClicks;		// -1 ==> unknown number of clicks
-   int NumSocPub;		// -1 ==> unknown number of social publications
+   int NumTimelinePubs;		// -1 ==> unknown number of timeline publications
    int NumFileViews;		// -1 ==> unknown number of file views
-   int NumForPst;		// -1 ==> unknown number of forum posts
-   int NumMsgSnt;		// -1 ==> unknown number of messages sent
+   int NumForumPosts;		// -1 ==> unknown number of forum posts
+   int NumMessagesSent;		// -1 ==> unknown number of messages sent
   };
 
 /*****************************************************************************/
@@ -69,18 +69,12 @@ void Prf_CalculateFigures (void);
 bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
 void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount);
-void Prf_DB_RemoveUsrFigures (long UsrCod);
-void Prf_DB_IncrementNumClicksUsr (long UsrCod);
-void Prf_DB_IncrementNumPubsUsr (long UsrCod);
-void Prf_DB_IncrementNumFileViewsUsr (long UsrCod);
-void Prf_DB_IncrementNumForPstUsr (long UsrCod);
-void Prf_DB_IncrementNumMsgSntUsr (long UsrCod);
 
 void Prf_GetAndShowRankingClicks (void);
-void Prf_GetAndShowRankingSocPub (void);
+void Prf_GetAndShowRankingTimelinePubs (void);
 void Prf_GetAndShowRankingFileViews (void);
-void Prf_GetAndShowRankingForPst (void);
-void Prf_GetAndShowRankingMsgSnt (void);
+void Prf_GetAndShowRankingForPsts (void);
+void Prf_GetAndShowRankingMsgsSnt (void);
 void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs);
 void Prf_GetAndShowRankingClicksPerDay (void);
 
