@@ -119,8 +119,6 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
-static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
-                                  bool CreatingMyOwnAccount);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe);
@@ -595,7 +593,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
 	{
 	 HTM_Long (UsrFigures->NumClicks);
 	 HTM_TxtF ("&nbsp;%s&nbsp;",Txt_clicks);
-	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
+	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumClicks"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumClicks"));
 	 if (UsrFigures->NumDays > 0)
 	   {
@@ -635,7 +633,7 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
 	 HTM_Long (UsrFigures->NumFileViews);
 	 HTM_TxtF ("&nbsp;%s&nbsp;",(UsrFigures->NumFileViews == 1) ? Txt_download :
 								      Txt_downloads);
-	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
+	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumFileViews"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumFileViews"));
 	 if (UsrFigures->NumDays > 0)
 	   {
@@ -672,7 +670,7 @@ static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
 	 HTM_Int (UsrFigures->NumTimelinePubs);
 	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumTimelinePubs == 1 ? Txt_TIMELINE_post :
 								 Txt_TIMELINE_posts);
-	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
+	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumSocPub"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumSocPub"));
 	 if (UsrFigures->NumDays > 0)
 	   {
@@ -709,7 +707,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
 	 HTM_Long (UsrFigures->NumForumPosts);
 	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumForumPosts == 1 ? Txt_FORUM_post :
 								 Txt_FORUM_posts);
-	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
+	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumForPst"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumForPst"));
 	 if (UsrFigures->NumDays > 0)
 	   {
@@ -746,7 +744,7 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
 	 HTM_Long (UsrFigures->NumMessagesSent);
 	 HTM_TxtF ("&nbsp;%s&nbsp;",UsrFigures->NumMessagesSent == 1 ? Txt_message :
 								 Txt_messages);
-	 Prf_ShowRanking (Prf_DB_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
+	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
 			  Prf_DB_GetNumUsrsWithFigure ("NumMsgSnt"));
 	 if (UsrFigures->NumDays > 0)
 	   {
@@ -978,7 +976,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateFirstClickTimeUsr (UsrCod,UsrFigures.FirstClickTimeUTC);
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -1002,7 +1000,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumClicksUsr (UsrCod,UsrFigures.NumClicks);
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -1026,7 +1024,7 @@ static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumTimelinePubsUsr (UsrCod,UsrFigures.NumTimelinePubs);
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -1050,7 +1048,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumFileViewsUsr (UsrCod,UsrFigures.NumFileViews);
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -1074,7 +1072,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumForumPostsUsr (UsrCod,UsrFigures.NumForumPosts);
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -1098,7 +1096,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
       if (Prf_DB_CheckIfUsrFiguresExists (UsrCod))
 	 Prf_DB_UpdateNumMessagesSentUsr (UsrCod,UsrFigures.NumMessagesSent);
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
+	 Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -1119,7 +1117,7 @@ void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
    UsrFigures.NumMessagesSent = 0;	// set number of messages sent to 0
 
    /***** Create user's figures *****/
-   Prf_CreateUsrFigures (UsrCod,&UsrFigures,CreatingMyOwnAccount);
+   Prf_DB_CreateUsrFigures (UsrCod,&UsrFigures,CreatingMyOwnAccount);
   }
 
 /*****************************************************************************/
@@ -1135,41 +1133,6 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
    UsrFigures->NumFileViews    = -1;	// unknown number of file views
    UsrFigures->NumForumPosts   = -1;	// unknown number of forum posts
    UsrFigures->NumMessagesSent = -1;	// unknown number of messages sent
-  }
-
-/*****************************************************************************/
-/***** Get number of messages sent by a user and store in user's figures *****/
-/*****************************************************************************/
-
-#define Prf_MAX_BYTES_SUBQUERY_FIRST_CLICK_TIME (64 - 1)
-
-static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
-                                  bool CreatingMyOwnAccount)
-  {
-   char SubQueryFirstClickTime[Prf_MAX_BYTES_SUBQUERY_FIRST_CLICK_TIME + 1];
-
-   if (CreatingMyOwnAccount)
-      // This is the first click
-      Str_Copy (SubQueryFirstClickTime,"NOW()",sizeof (SubQueryFirstClickTime) - 1);
-   else
-      sprintf (SubQueryFirstClickTime,"FROM_UNIXTIME(%ld)",
-	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
-
-   /***** Create user's figures *****/
-   DB_QueryINSERT ("can not create user's figures",
-		   "INSERT INTO usr_figures"
-		   " (UsrCod,FirstClickTime,"
-		     "NumClicks,NumSocPub,NumFileViews,NumForPst,NumMsgSnt)"
-		   " VALUES"
-		   " (%ld,%s,"
-		     "%d,%d,%d,%d,%d)",
-		   UsrCod,
-		   SubQueryFirstClickTime,
-		   UsrFigures->NumClicks,		// -1 ==> unknown number of clicks
-		   UsrFigures->NumTimelinePubs,		// -1 ==> unknown number of timeline publications
-		   UsrFigures->NumFileViews,		// -1 ==> unknown number of file views
-		   UsrFigures->NumForumPosts,		// -1 ==> unknown number of forum posts
-		   UsrFigures->NumMessagesSent);	// -1 ==> unknown number of messages sent
   }
 
 /*****************************************************************************/
@@ -1204,159 +1167,10 @@ void Prf_GetAndShowRankingMsgsSnt (void)
 static void Prf_GetAndShowRankingFigure (const char *FieldName)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumUsrs = 0;	// Initialized to avoid warning
+   unsigned NumUsrs;
 
    /***** Get ranking from database *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumUsrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT UsrCod,"		// row[0]
-			        "%s"			// row[1]
-			  " FROM usr_figures"
-			 " WHERE %s>0"
-			   " AND UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY %s DESC,"
-			           "UsrCod"
-			 " LIMIT 100",
-			 FieldName,
-			 FieldName,
-			 FieldName);
-         break;
-      case HieLvl_CTY:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"	// row[0]
-			        "usr_figures.%s"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.%s>0"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 FieldName,
-			 Gbl.Hierarchy.Cty.CtyCod,
-			 FieldName,
-			 FieldName);
-         break;
-      case HieLvl_INS:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"	// row[0]
-			        "usr_figures.%s"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.%s>0"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 FieldName,
-			 Gbl.Hierarchy.Ins.InsCod,
-			 FieldName,
-			 FieldName);
-         break;
-      case HieLvl_CTR:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"	// row[0]
-			        "usr_figures.%s"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.%s>0"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 FieldName,
-			 Gbl.Hierarchy.Ctr.CtrCod,
-			 FieldName,FieldName);
-         break;
-      case HieLvl_DEG:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"	// row[0]
-			        "usr_figures.%s"	// row[1]
-			  " FROM crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.%s>0"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 FieldName,
-			 Gbl.Hierarchy.Deg.DegCod,
-			 FieldName,FieldName);
-         break;
-      case HieLvl_CRS:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"	// row[0]
-			        "usr_figures.%s"	// row[1]
-			  " FROM crs_users,"
-			        "usr_figures"
-			 " WHERE crs_users.CrsCod=%ld"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.%s>0"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY usr_figures.%s DESC,"
-			           "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 FieldName,
-			 Gbl.Hierarchy.Crs.CrsCod,
-			 FieldName,FieldName);
-         break;
-      default:
-         Err_WrongScopeExit ();
-         break;
-     }
+   NumUsrs = Prf_DB_GetRankingFigure (&mysql_res,FieldName);
 
    Prf_ShowRankingFigure (&mysql_res,NumUsrs);
   }
@@ -1441,160 +1255,14 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    double NumClicksPerDay;
 
    /***** Get ranking from database *****/
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 NumUsrs = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT UsrCod,"						// row[0]
-			        "NumClicks/(DATEDIFF(NOW(),"
-			                   "FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
-			  " FROM usr_figures"
-			 " WHERE NumClicks>0"
-			   " AND FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-			           "UsrCod"
-			 " LIMIT 100");
-         break;
-      case HieLvl_CTY:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"					// row[0]
-			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.NumClicks>0"
-			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"					// row[0]
-			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.NumClicks>0"
-			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case HieLvl_CTR:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"					// row[0]
-			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.NumClicks>0"
-			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case HieLvl_DEG:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"					// row[0]
-			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
-			  " FROM crs_courses,"
-			        "crs_users,"
-			        "usr_figures"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=crs_users.CrsCod"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.NumClicks>0"
-			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND usr_figures.UsrCod NOT IN"
-			       " (SELECT UsrCod"
-			          " FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case HieLvl_CRS:
-         NumUsrs = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
-			        "usr_figures.UsrCod,"					// row[0]
-			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
-			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
-			  " FROM crs_users,"
-			        "usr_figures"
-			 " WHERE crs_users.CrsCod=%ld"
-			   " AND crs_users.UsrCod=usr_figures.UsrCod"
-			   " AND usr_figures.NumClicks>0"
-			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
-			 " ORDER BY NumClicksPerDay DESC,"
-				   "usr_figures.UsrCod"
-			 " LIMIT 100",
-			 Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-         Err_WrongScopeExit ();
-         break;
-     }
-
-   if (NumUsrs)
+   if ((NumUsrs = Prf_DB_GetRankingClicksPerDay (&mysql_res)))
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
       HTM_TABLE_Begin (NULL);
 
-	 for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
+	 for (NumUsr  = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {

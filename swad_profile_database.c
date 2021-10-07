@@ -26,6 +26,8 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_error.h"
+#include "swad_global.h"
 #include "swad_profile_database.h"
 
 /*****************************************************************************/
@@ -44,7 +46,7 @@
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
-// extern struct Globals Gbl;
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /************************* Private global variables **************************/
@@ -53,6 +55,39 @@
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/**************************** Create user's figures **************************/
+/*****************************************************************************/
+
+void Prf_DB_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
+                              bool CreatingMyOwnAccount)
+  {
+   char SubQueryFirstClickTime[64];
+
+   if (CreatingMyOwnAccount)
+      // This is the first click
+      Str_Copy (SubQueryFirstClickTime,"NOW()",sizeof (SubQueryFirstClickTime) - 1);
+   else
+      snprintf (SubQueryFirstClickTime,sizeof (SubQueryFirstClickTime),
+                "FROM_UNIXTIME(%ld)",
+	        (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
+
+   DB_QueryINSERT ("can not create user's figures",
+		   "INSERT INTO usr_figures"
+		   " (UsrCod,FirstClickTime,"
+		     "NumClicks,NumSocPub,NumFileViews,NumForPst,NumMsgSnt)"
+		   " VALUES"
+		   " (%ld,%s,"
+		     "%d,%d,%d,%d,%d)",
+		   UsrCod,
+		   SubQueryFirstClickTime,
+		   UsrFigures->NumClicks,		// -1 ==> unknown number of clicks
+		   UsrFigures->NumTimelinePubs,		// -1 ==> unknown number of timeline publications
+		   UsrFigures->NumFileViews,		// -1 ==> unknown number of file views
+		   UsrFigures->NumForumPosts,		// -1 ==> unknown number of forum posts
+		   UsrFigures->NumMessagesSent);	// -1 ==> unknown number of messages sent
+  }
 
 /*****************************************************************************/
 /****************** Update first click time in user's figures ****************/
@@ -219,10 +254,10 @@ void Prf_DB_IncrementNumMsgSntUsr (long UsrCod)
   }
 
 /*****************************************************************************/
-/********** Get ranking of a user according to the number of clicks **********/
+/***************** Get ranking of a user according to a figure ***************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName)
+unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FieldName)
   {
    /***** Select number of rows with figure
           greater than the figure of this user *****/
@@ -238,6 +273,308 @@ unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName)
 		  FieldName,
 		  FieldName,
 		  UsrCod);
+  }
+
+/*****************************************************************************/
+/************************** Get ranking of a figure **************************/
+/*****************************************************************************/
+
+unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT UsrCod,"		// row[0]
+			        "%s"			// row[1]
+			  " FROM usr_figures"
+			 " WHERE %s>0"
+			   " AND UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY %s DESC,"
+			           "UsrCod"
+			 " LIMIT 100",
+			 FieldName,
+			 FieldName,
+			 FieldName);
+      case HieLvl_CTY:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY usr_figures.%s DESC,"
+			           "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 FieldName,
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 FieldName,
+			 FieldName);
+      case HieLvl_INS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY usr_figures.%s DESC,"
+			           "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 FieldName,
+			 Gbl.Hierarchy.Ins.InsCod,
+			 FieldName,
+			 FieldName);
+      case HieLvl_CTR:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY usr_figures.%s DESC,"
+			           "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 FieldName,
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 FieldName,
+			 FieldName);
+      case HieLvl_DEG:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE crs_courses.DegCod=%ld"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY usr_figures.%s DESC,"
+			           "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 FieldName,
+			 Gbl.Hierarchy.Deg.DegCod,
+			 FieldName,
+			 FieldName);
+      case HieLvl_CRS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"	// row[0]
+			        "usr_figures.%s"	// row[1]
+			  " FROM crs_users,"
+			        "usr_figures"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.%s>0"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY usr_figures.%s DESC,"
+			           "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 FieldName,
+			 Gbl.Hierarchy.Crs.CrsCod,
+			 FieldName,
+			 FieldName);
+      default:
+         Err_WrongScopeExit ();
+         return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/********* Get ranking of users attending to number of clicks per day ********/
+/*****************************************************************************/
+
+unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
+  {
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT UsrCod,"						// row[0]
+			        "NumClicks/(DATEDIFF(NOW(),"
+			                   "FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM usr_figures"
+			 " WHERE NumClicks>0"
+			   " AND FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+			           "UsrCod"
+			 " LIMIT 100");
+      case HieLvl_CTY:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"					// row[0]
+			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM ins_instits,"
+			        "ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE ins_instits.CtyCod=%ld"
+			   " AND ins_instits.InsCod=ctr_centers.InsCod"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+				   "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Cty.CtyCod);
+      case HieLvl_INS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"					// row[0]
+			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM ctr_centers,"
+			        "deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE ctr_centers.InsCod=%ld"
+			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+				   "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Ins.InsCod);
+      case HieLvl_CTR:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"					// row[0]
+			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM deg_degrees,"
+			        "crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE deg_degrees.CtrCod=%ld"
+			   " AND deg_degrees.DegCod=crs_courses.DegCod"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+				   "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Ctr.CtrCod);
+      case HieLvl_DEG:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"					// row[0]
+			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM crs_courses,"
+			        "crs_users,"
+			        "usr_figures"
+			 " WHERE crs_courses.DegCod=%ld"
+			   " AND crs_courses.CrsCod=crs_users.CrsCod"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+				   "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Deg.DegCod);
+      case HieLvl_CRS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get ranking",
+			 "SELECT DISTINCTROW "
+			        "usr_figures.UsrCod,"					// row[0]
+			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
+			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
+			  " FROM crs_users,"
+			        "usr_figures"
+			 " WHERE crs_users.CrsCod=%ld"
+			   " AND crs_users.UsrCod=usr_figures.UsrCod"
+			   " AND usr_figures.NumClicks>0"
+			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
+			   " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			 " ORDER BY NumClicksPerDay DESC,"
+				   "usr_figures.UsrCod"
+			 " LIMIT 100",
+			 Gbl.Hierarchy.Crs.CrsCod);
+      default:
+         Err_WrongScopeExit ();
+         return 0;	// Not reached
+     }
   }
 
 /*****************************************************************************/

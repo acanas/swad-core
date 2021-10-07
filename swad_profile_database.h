@@ -27,6 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_profile.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -39,6 +41,8 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Prf_DB_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
+                              bool CreatingMyOwnAccount);
 void Prf_DB_UpdateFirstClickTimeUsr (long UsrCod,time_t FirstClickTimeUTC);
 void Prf_DB_UpdateNumClicksUsr (long UsrCod,int NumClicks);
 void Prf_DB_UpdateNumTimelinePubsUsr (long UsrCod,int NumTimelinePubs);
@@ -51,7 +55,9 @@ void Prf_DB_IncrementNumFileViewsUsr (long UsrCod);
 void Prf_DB_IncrementNumForPstUsr (long UsrCod);
 void Prf_DB_IncrementNumMsgSntUsr (long UsrCod);
 
-unsigned Prf_DB_GetRankingFigure (long UsrCod,const char *FieldName);
+unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FieldName);
+unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName);
+unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res);
 unsigned Prf_DB_GetNumUsrsWithFigure (const char *FieldName);
 unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
 unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
