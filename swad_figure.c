@@ -61,6 +61,7 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_program.h"
+#include "swad_program_database.h"
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_survey.h"

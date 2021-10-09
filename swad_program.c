@@ -44,6 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_program.h"
+#include "swad_program_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -58,30 +59,9 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
-#define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
-
-struct ProgramItemHierarchy
-  {
-   long ItmCod;
-   unsigned Index;
-   unsigned Level;
-   bool Hidden;
-  };
-
-struct ProgramItem
-  {
-   struct ProgramItemHierarchy Hierarchy;
-   unsigned NumItem;
-   long UsrCod;
-   time_t TimeUTC[Dat_NUM_START_END_TIME];
-   bool Open;
-   char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
-  };
 
 #define Prg_NUM_TYPES_FORMS 3
 typedef enum
@@ -97,19 +77,6 @@ typedef enum
    Prg_MOVE_UP,
    Prg_MOVE_DOWN,
   } Prg_MoveUpDown_t;
-
-#define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
-typedef enum
-  {
-   Prg_MOVE_LEFT,
-   Prg_MOVE_RIGHT,
-  } Prg_MoveLeftRight_t;
-
-struct ItemRange
-  {
-   unsigned Begin;	// Index of the first item in the subtree
-   unsigned End;	// Index of the last item in the subtree
-  };
 
 struct Level
   {
@@ -128,7 +95,7 @@ static struct
       bool IsRead;		// Is the list already read from database...
 			        // ...or it needs to be read?
       unsigned NumItems;	// Number of items
-      struct ProgramItemHierarchy *Items;	// List of items
+      struct Prg_ItemHierarchy *Items;	// List of items
      } List;
    unsigned MaxLevel;		// Maximum level of items
    struct Level *Levels;	// Numbers and hidden for each level from 1 to maximum level
@@ -148,16 +115,16 @@ static struct
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_ShowCourseProgramHighlightingItem (const struct ItemRange *ToHighlight);
+static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight);
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      const struct ItemRange *ToHighlight,
+			      const struct Prg_ItemRange *ToHighlight,
 			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel);
 static bool Prg_CheckIfICanCreateItems (void);
 static void Prg_PutIconsListItems (__attribute__((unused)) void *Args);
 static void Prg_PutIconToCreateNewItem (void);
 static void Prg_PutButtonToCreateNewItem (void);
 
-static void Prg_WriteRowItem (unsigned NumItem,struct ProgramItem *Item,
+static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 			      bool PrintView);
 static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 			              long ItmCod,unsigned FormLevel);
@@ -179,7 +146,7 @@ static bool Prg_GetHiddenLevel (unsigned Level);
 static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel);
 
 static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
-					  struct ProgramItem *Item);
+					  struct Prg_Item *Item);
 static bool Prg_CheckIfMoveUpIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveDownIsAllowed (unsigned NumItem);
 static bool Prg_CheckIfMoveLeftIsAllowed (unsigned NumItem);
@@ -188,13 +155,12 @@ static bool Prg_CheckIfMoveRightIsAllowed (unsigned NumItem);
 static void Prg_PutParams (void *ItmCod);
 
 static void Prg_GetListItems (void);
-static void Prg_GetDataOfItemByCod (struct ProgramItem *Item);
-static void Prg_GetDataOfItem (struct ProgramItem *Item,
+static void Prg_GetDataOfItemByCod (struct Prg_Item *Item);
+static void Prg_GetDataOfItem (struct Prg_Item *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned NumRows);
-static void Prg_ResetItem (struct ProgramItem *Item);
+static void Prg_ResetItem (struct Prg_Item *Item);
 static void Prg_FreeListItems (void);
-static void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Prg_PutParamItmCod (long ItmCod);
 static long Prg_GetParamItmCod (void);
 
@@ -209,20 +175,18 @@ static int Prg_GetNextBrother (int NumItem);
 
 static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight);
 
-static void Prg_SetItemRangeEmpty (struct ItemRange *ItemRange);
-static void Prg_SetItemRangeOnlyItem (unsigned Index,struct ItemRange *ItemRange);
-static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct ItemRange *ItemRange);
+static void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange);
+static void Prg_SetItemRangeOnlyItem (unsigned Index,struct Prg_ItemRange *ItemRange);
+static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange);
 static unsigned Prg_GetLastChild (int NumItem);
 
 static void Prg_ShowFormToCreateItem (long ParentItmCod);
 static void Prg_ShowFormToChangeItem (long ItmCod);
-static void Prg_ShowFormItem (const struct ProgramItem *Item,
+static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 			      const char *Txt);
-static void Prg_InsertItem (const struct ProgramItem *ParentItem,
-		            struct ProgramItem *Item,const char *Txt);
-static long Prg_DB_InsertItem (struct ProgramItem *Item,const char *Txt);
-static void Prg_DB_UpdateItem (struct ProgramItem *Item,const char *Txt);
+static void Prg_InsertItem (const struct Prg_Item *ParentItem,
+		            struct Prg_Item *Item,const char *Txt);
 
 /*****************************************************************************/
 /************************ List all the program items *************************/
@@ -230,7 +194,7 @@ static void Prg_DB_UpdateItem (struct ProgramItem *Item,const char *Txt);
 
 void Prg_ShowCourseProgram (void)
   {
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -243,7 +207,7 @@ void Prg_ShowCourseProgram (void)
    Prg_FreeListItems ();
   }
 
-static void Prg_ShowCourseProgramHighlightingItem (const struct ItemRange *ToHighlight)
+static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
   {
    /***** Show all the program items *****/
    Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,ToHighlight,-1L,-1L,0);
@@ -254,13 +218,13 @@ static void Prg_ShowCourseProgramHighlightingItem (const struct ItemRange *ToHig
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
-			      const struct ItemRange *ToHighlight,
+			      const struct Prg_ItemRange *ToHighlight,
 			      long ParentItmCod,long ItmCodBeforeForm,unsigned FormLevel)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_Course_program;
    unsigned NumItem;
-   struct ProgramItem Item;
+   struct Prg_Item Item;
    static bool FirstTBodyOpen = false;
 
    /***** Create numbers and hidden levels *****/
@@ -409,7 +373,7 @@ static void Prg_PutButtonToCreateNewItem (void)
 /************************** Show one program item ****************************/
 /*****************************************************************************/
 
-static void Prg_WriteRowItem (unsigned NumItem,struct ProgramItem *Item,
+static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 			      bool PrintView)
   {
    static unsigned UniqueId = 0;
@@ -769,7 +733,7 @@ static bool Prg_CheckIfAnyHigherLevelIsHidden (unsigned CurrentLevel)
 /*****************************************************************************/
 
 static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
-					  struct ProgramItem *Item)
+					  struct Prg_Item *Item)
   {
    extern const char *Txt_New_item;
    extern const char *Txt_Move_up_X;
@@ -956,19 +920,6 @@ static void Prg_PutParams (void *ItmCod)
 
 static void Prg_GetListItems (void)
   {
-   static const char *HiddenSubQuery[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK    ] = " AND Hidden='N'",
-      [Rol_GST    ] = " AND Hidden='N'",
-      [Rol_USR    ] = " AND Hidden='N'",
-      [Rol_STD    ] = " AND Hidden='N'",
-      [Rol_NET    ] = " AND Hidden='N'",
-      [Rol_TCH    ] = "",
-      [Rol_DEG_ADM] = " AND Hidden='N'",
-      [Rol_CTR_ADM] = " AND Hidden='N'",
-      [Rol_INS_ADM] = " AND Hidden='N'",
-      [Rol_SYS_ADM] = "",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumItem;
@@ -977,20 +928,7 @@ static void Prg_GetListItems (void)
       Prg_FreeListItems ();
 
    /***** Get list of program items from database *****/
-   Prg_Gbl.List.NumItems = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get program items",
-		   "SELECT ItmCod,"	// row[0]
-			  "ItmInd,"	// row[1]
-			  "Level,"	// row[2]
-			  "Hidden"	// row[3]
-		    " FROM prg_items"
-		   " WHERE CrsCod=%ld"
-		     "%s"
-		   " ORDER BY ItmInd",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   HiddenSubQuery[Gbl.Usrs.Me.Role.Logged]);
-
-   if (Prg_Gbl.List.NumItems) // Items found...
+   if ((Prg_Gbl.List.NumItems = Prg_DB_GetListItems (&mysql_res))) // Items found...
      {
       /***** Create list of program items *****/
       if ((Prg_Gbl.List.Items = calloc (Prg_Gbl.List.NumItems,
@@ -1009,10 +947,9 @@ static void Prg_GetListItems (void)
          if ((Prg_Gbl.List.Items[NumItem].ItmCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Err_WrongItemExit ();
 
-         /* Get index of the program item (row[1]) */
+         /* Get index of the program item (row[1])
+            and level of the program item (row[2]) */
          Prg_Gbl.List.Items[NumItem].Index = Str_ConvertStrToUnsigned (row[1]);
-
-         /* Get level of the program item (row[2]) */
          Prg_Gbl.List.Items[NumItem].Level = Str_ConvertStrToUnsigned (row[2]);
 
 	 /* Get whether the program item is hidden or not (row[3]) */
@@ -1030,7 +967,7 @@ static void Prg_GetListItems (void)
 /****************** Get program item data using its code *********************/
 /*****************************************************************************/
 
-static void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
+static void Prg_GetDataOfItemByCod (struct Prg_Item *Item)
   {
    MYSQL_RES *mysql_res;
    unsigned NumRows;
@@ -1038,22 +975,7 @@ static void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
    if (Item->Hierarchy.ItmCod > 0)
      {
       /***** Build query *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get program item data",
-		      "SELECT ItmCod,"					// row[0]
-			     "ItmInd,"					// row[1]
-			     "Level,"					// row[2]
-			     "Hidden,"					// row[3]
-			     "UsrCod,"					// row[4]
-			     "UNIX_TIMESTAMP(StartTime),"		// row[5]
-			     "UNIX_TIMESTAMP(EndTime),"			// row[6]
-			     "NOW() BETWEEN StartTime AND EndTime,"	// row[7]
-			     "Title"					// row[8]
-		       " FROM prg_items"
-		      " WHERE ItmCod=%ld"
-		        " AND CrsCod=%ld",	// Extra check
-		      Item->Hierarchy.ItmCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
+      NumRows = Prg_DB_GetDataOfItemByCod (&mysql_res,Item->Hierarchy.ItmCod);
 
       /***** Get data of program item *****/
       Prg_GetDataOfItem (Item,&mysql_res,NumRows);
@@ -1067,7 +989,7 @@ static void Prg_GetDataOfItemByCod (struct ProgramItem *Item)
 /************************* Get program item data *****************************/
 /*****************************************************************************/
 
-static void Prg_GetDataOfItem (struct ProgramItem *Item,
+static void Prg_GetDataOfItem (struct Prg_Item *Item,
                                MYSQL_RES **mysql_res,
 			       unsigned NumRows)
   {
@@ -1127,7 +1049,7 @@ static void Prg_GetDataOfItem (struct ProgramItem *Item,
 /************************ Clear all program item data ************************/
 /*****************************************************************************/
 
-static void Prg_ResetItem (struct ProgramItem *Item)
+static void Prg_ResetItem (struct Prg_Item *Item)
   {
    Item->Hierarchy.ItmCod = -1L;
    Item->Hierarchy.Index  = 0;
@@ -1154,22 +1076,6 @@ static void Prg_FreeListItems (void)
       Prg_Gbl.List.NumItems = 0;
       Prg_Gbl.List.IsRead = false;
      }
-  }
-
-/*****************************************************************************/
-/******************* Get program item text from database *********************/
-/*****************************************************************************/
-
-static void Prg_DB_GetItemTxt (long ItmCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
-  {
-   /***** Get text of program item from database *****/
-   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get program item text",
-		         "SELECT Txt"
-			  " FROM prg_items"
-		         " WHERE ItmCod=%ld"
-			   " AND CrsCod=%ld",	// Extra check
-		         ItmCod,
-		         Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1223,8 +1129,8 @@ void Prg_ReqRemItem (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_item_X;
    extern const char *Txt_Remove_item;
-   struct ProgramItem Item;
-   struct ItemRange ToHighlight;
+   struct Prg_Item Item;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1244,7 +1150,7 @@ void Prg_ReqRemItem (void)
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
-				  &ToHighlight);
+				    &ToHighlight);
    Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
@@ -1258,9 +1164,9 @@ void Prg_ReqRemItem (void)
 void Prg_RemoveItem (void)
   {
    extern const char *Txt_Item_X_removed;
-   struct ProgramItem Item;
-   struct ItemRange ToRemove;
-   struct ItemRange ToHighlight;
+   struct Prg_Item Item;
+   struct Prg_ItemRange ToRemove;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1273,17 +1179,10 @@ void Prg_RemoveItem (void)
 
    /***** Indexes of items *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
-				  &ToRemove);
+				    &ToRemove);
 
    /***** Remove program items *****/
-   DB_QueryDELETE ("can not remove program item",
-		   "DELETE FROM prg_items"
-		   " WHERE CrsCod=%ld"
-		     " AND ItmInd>=%u"
-		     " AND ItmInd<=%u",
-                   Gbl.Hierarchy.Crs.CrsCod,
-		   ToRemove.Begin,
-		   ToRemove.End);
+   Prg_DB_RemoveItemRange (&ToRemove);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Item_X_removed,Item.Title);
@@ -1316,8 +1215,8 @@ void Prg_UnhideItem (void)
 
 static void Prg_HideUnhideItem (char YN)
   {
-   struct ProgramItem Item;
-   struct ItemRange ToHighlight;
+   struct Prg_Item Item;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1329,18 +1228,11 @@ static void Prg_HideUnhideItem (char YN)
       Err_WrongItemExit ();
 
    /***** Hide/unhide program item *****/
-   DB_QueryUPDATE ("can not change program item",
-		   "UPDATE prg_items"
-		     " SET Hidden='%c'"
-		   " WHERE ItmCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-		   YN,
-                   Item.Hierarchy.ItmCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
+   Prg_DB_HideUnhideItem (Item.Hierarchy.ItmCod,YN);
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
-				  &ToHighlight);
+				    &ToHighlight);
    Prg_ShowCourseProgramHighlightingItem (&ToHighlight);
 
    /***** Free list of program items *****/
@@ -1364,10 +1256,10 @@ void Prg_MoveDownItem (void)
 static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct ProgramItem Item;
+   struct Prg_Item Item;
    unsigned NumItem;
    bool Success = false;
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToHighlight;
    static bool (*CheckIfAllowed[Prg_NUM_MOVEMENTS_UP_DOWN])(unsigned NumItem) =
      {
       [Prg_MOVE_UP  ] = Prg_CheckIfMoveUpIsAllowed,
@@ -1404,7 +1296,7 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
       Prg_FreeListItems ();
       Prg_GetListItems ();
       Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
-				     &ToHighlight);
+				       &ToHighlight);
      }
    else
      {
@@ -1426,8 +1318,8 @@ static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown)
 
 static bool Prg_ExchangeItemRanges (int NumItemTop,int NumItemBottom)
   {
-   struct ItemRange Top;
-   struct ItemRange Bottom;
+   struct Prg_ItemRange Top;
+   struct Prg_ItemRange Bottom;
    unsigned DiffBegin;
    unsigned DiffEnd;
 
@@ -1440,9 +1332,7 @@ static bool Prg_ExchangeItemRanges (int NumItemTop,int NumItemBottom)
       DiffEnd   = Bottom.End   - Top.End;
 
       /***** Lock table to make the move atomic *****/
-      DB_Query ("can not lock tables to move program item",
-		"LOCK TABLES prg_items WRITE");
-      Gbl.DB.LockedTables = true;
+      Prg_DB_LockTable ();
 
       /***** Exchange indexes of items *****/
       // This implementation works with non continuous indexes
@@ -1470,6 +1360,10 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
       */
       /* Step 1: Change all indexes involved to negative,
 		 necessary to preserve unique index (CrsCod,ItmInd) */
+      Prg_DB_UpdateIndexRange (  (long) 0          ,
+                                 (long) Top.Begin  ,
+                                 (long) Bottom.End );	// All indexes in both parts
+/*
       DB_QueryUPDATE ("can not exchange indexes of items",
 		      "UPDATE prg_items"
 		        " SET ItmInd=-ItmInd"
@@ -1478,9 +1372,13 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
 		        " AND ItmInd<=%u",
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Top.Begin,
-		      Bottom.End);		// All indexes in both parts
+		      Bottom.End);		// All indexes in both parts */
 
       /* Step 2: Increase top indexes */
+      Prg_DB_UpdateIndexRange (  (long) DiffEnd   ,
+                               -((long) Top.End  ),
+                               -((long) Top.Begin));	// All indexes in top part
+/*
       DB_QueryUPDATE ("can not exchange indexes of items",
 		      "UPDATE prg_items"
 		        " SET ItmInd=-ItmInd+%u"
@@ -1490,9 +1388,13 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
 		      DiffEnd,
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Top.End,
-		      Top.Begin);		// All indexes in top part
+		      Top.Begin);		// All indexes in top part */
 
       /* Step 3: Decrease bottom indexes */
+      Prg_DB_UpdateIndexRange (-((long) DiffBegin   ),
+                               -((long) Bottom.End  ),
+                               -((long) Bottom.Begin));	// All indexes in bottom part
+/*
       DB_QueryUPDATE ("can not exchange indexes of items",
 		      "UPDATE prg_items"
 		        " SET ItmInd=-ItmInd-%u"
@@ -1502,13 +1404,10 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
 		      DiffBegin,
 		      Gbl.Hierarchy.Crs.CrsCod,
 		      Bottom.End,
-		      Bottom.Begin);		// All indexes in bottom part
+		      Bottom.Begin);		// All indexes in bottom part */
 
       /***** Unlock table *****/
-      Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				   // ...to not retry the unlock if error in unlocking
-      DB_Query ("can not unlock tables after moving items",
-		"UNLOCK TABLES");
+      Prg_DB_UnlockTable ();
 
       return true;	// Success
      }
@@ -1593,19 +1492,14 @@ void Prg_MoveRightItem (void)
 static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
   {
    extern const char *Txt_Movement_not_allowed;
-   struct ProgramItem Item;
+   struct Prg_Item Item;
    unsigned NumItem;
-   struct ItemRange ToMove;
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToMove;
+   struct Prg_ItemRange ToHighlight;
    static bool (*CheckIfAllowed[Prg_NUM_MOVEMENTS_LEFT_RIGHT])(unsigned NumItem) =
      {
       [Prg_MOVE_LEFT ] = Prg_CheckIfMoveLeftIsAllowed,
       [Prg_MOVE_RIGHT] = Prg_CheckIfMoveRightIsAllowed,
-     };
-   static const char IncDec[Prg_NUM_MOVEMENTS_LEFT_RIGHT] =
-     {
-      [Prg_MOVE_LEFT ] = '-',
-      [Prg_MOVE_RIGHT] = '+',
      };
 
    /***** Get list of program items *****/
@@ -1625,22 +1519,13 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
       Prg_SetItemRangeWithAllChildren (NumItem,&ToMove);
 
       /* Move item and its children to left or right */
-      DB_QueryUPDATE ("can not move items",
-		      "UPDATE prg_items"
-		        " SET Level=Level%c1"
-		      " WHERE CrsCod=%ld"
-		        " AND ItmInd>=%u"
-		        " AND ItmInd<=%u",
-		      IncDec[LeftRight],
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      ToMove.Begin,
-		      ToMove.End);
+      Prg_DB_MoveLeftRightItemRange (&ToMove,LeftRight);
 
       /* Update list of program items */
       Prg_FreeListItems ();
       Prg_GetListItems ();
       Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),
-				     &ToHighlight);
+				       &ToHighlight);
      }
    else
      {
@@ -1659,7 +1544,7 @@ static void Prg_MoveLeftRightItem (Prg_MoveLeftRight_t LeftRight)
 /****** Set subtree begin and end from number of item in course program ******/
 /*****************************************************************************/
 
-static void Prg_SetItemRangeEmpty (struct ItemRange *ItemRange)
+static void Prg_SetItemRangeEmpty (struct Prg_ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
@@ -1674,7 +1559,7 @@ static void Prg_SetItemRangeEmpty (struct ItemRange *ItemRange)
       ItemRange->End   = 1;
   }
 
-static void Prg_SetItemRangeOnlyItem (unsigned Index,struct ItemRange *ItemRange)
+static void Prg_SetItemRangeOnlyItem (unsigned Index,struct Prg_ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
@@ -1685,7 +1570,7 @@ static void Prg_SetItemRangeOnlyItem (unsigned Index,struct ItemRange *ItemRange
    ItemRange->End   = Index;
   }
 
-static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct ItemRange *ItemRange)
+static void Prg_SetItemRangeWithAllChildren (unsigned NumItem,struct Prg_ItemRange *ItemRange)
   {
    /***** List of items must be filled *****/
    if (!Prg_Gbl.List.IsRead)
@@ -1737,7 +1622,7 @@ void Prg_RequestCreateItem (void)
    unsigned NumItem;
    long ItmCodBeforeForm;
    unsigned FormLevel;
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1773,7 +1658,7 @@ void Prg_RequestChangeItem (void)
   {
    long ItmCodBeforeForm;
    unsigned FormLevel;
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -1804,8 +1689,8 @@ static void Prg_ShowFormToCreateItem (long ParentItmCod)
    extern const char *Hlp_COURSE_Program_new_item;
    extern const char *Txt_New_item;
    extern const char *Txt_Create_item;
-   struct ProgramItem ParentItem;	// Parent item
-   struct ProgramItem Item;
+   struct Prg_Item ParentItem;	// Parent item
+   struct Prg_Item Item;
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
@@ -1853,7 +1738,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
    extern const char *Hlp_COURSE_Program_edit_item;
    extern const char *Txt_Edit_item;
    extern const char *Txt_Save_changes;
-   struct ProgramItem Item;
+   struct Prg_Item Item;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
    static const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
@@ -1894,7 +1779,7 @@ static void Prg_ShowFormToChangeItem (long ItmCod)
 /***************** Put a form to create a new program item *******************/
 /*****************************************************************************/
 
-static void Prg_ShowFormItem (const struct ProgramItem *Item,
+static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 		              const char *Txt)
   {
@@ -1947,10 +1832,10 @@ static void Prg_ShowFormItem (const struct ProgramItem *Item,
 
 void Prg_ReceiveFormNewItem (void)
   {
-   struct ProgramItem ParentItem;	// Parent item
-   struct ProgramItem NewItem;		// Item data received from form
+   struct Prg_Item ParentItem;	// Parent item
+   struct Prg_Item NewItem;		// Item data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -2001,10 +1886,10 @@ void Prg_ReceiveFormNewItem (void)
 
 void Prg_ReceiveFormChgItem (void)
   {
-   struct ProgramItem OldItem;	// Current program item data in database
-   struct ProgramItem NewItem;	// Item data received from form
+   struct Prg_Item OldItem;	// Current program item data in database
+   struct Prg_Item NewItem;	// Item data received from form
    char Description[Cns_MAX_BYTES_TEXT + 1];
-   struct ItemRange ToHighlight;
+   struct Prg_ItemRange ToHighlight;
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -2050,15 +1935,13 @@ void Prg_ReceiveFormChgItem (void)
 /*********** Insert a new program item as a child of a parent item ***********/
 /*****************************************************************************/
 
-static void Prg_InsertItem (const struct ProgramItem *ParentItem,
-		            struct ProgramItem *Item,const char *Txt)
+static void Prg_InsertItem (const struct Prg_Item *ParentItem,
+		            struct Prg_Item *Item,const char *Txt)
   {
    unsigned NumItemLastChild;
 
    /***** Lock table to create program item *****/
-   DB_Query ("can not lock tables to create program item",
-	     "LOCK TABLES prg_items WRITE");
-   Gbl.DB.LockedTables = true;
+   Prg_DB_LockTable ();
 
    /***** Get list of program items *****/
    Prg_GetListItems ();
@@ -2074,14 +1957,7 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
 	    Item->Hierarchy.Index = Prg_Gbl.List.Items[NumItemLastChild + 1].Index;
 
 	    /***** Move down all indexes of after last child of parent *****/
-	    DB_QueryUPDATE ("can not move down items",
-			    "UPDATE prg_items"
-			      " SET ItmInd=ItmInd+1"
-			    " WHERE CrsCod=%ld"
-			      " AND ItmInd>=%u"
-			    " ORDER BY ItmInd DESC",	// Necessary to not create duplicate key (CrsCod,ItmInd)
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    Item->Hierarchy.Index);
+	    Prg_DB_MoveDownItems (Item->Hierarchy.Index);
 	   }
 	 else
 	    /***** New program item will be inserted at the end *****/
@@ -2112,232 +1988,8 @@ static void Prg_InsertItem (const struct ProgramItem *ParentItem,
    Item->Hierarchy.ItmCod = Prg_DB_InsertItem (Item,Txt);
 
    /***** Unlock table *****/
-   Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
-				// ...to not retry the unlock if error in unlocking
-   DB_Query ("can not unlock tables after moving items",
-	     "UNLOCK TABLES");
+   Prg_DB_UnlockTable ();
 
    /***** Free list items *****/
    Prg_FreeListItems ();
-  }
-
-/*****************************************************************************/
-/***************** Create a new program item into database *******************/
-/*****************************************************************************/
-
-static long Prg_DB_InsertItem (struct ProgramItem *Item,const char *Txt)
-  {
-   return
-   DB_QueryINSERTandReturnCode ("can not create new program item",
-			        "INSERT INTO prg_items"
-			        " (CrsCod,ItmInd,Level,UsrCod,"
-				  "StartTime,EndTime,"
-				  "Title,Txt)"
-			        " VALUES"
-			        " (%ld,%u,%u,%ld,"
-				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				  "'%s','%s')",
-			        Gbl.Hierarchy.Crs.CrsCod,
-			        Item->Hierarchy.Index,
-			        Item->Hierarchy.Level,
-			        Gbl.Usrs.Me.UsrDat.UsrCod,
-			        Item->TimeUTC[Dat_STR_TIME],
-			        Item->TimeUTC[Dat_END_TIME],
-			        Item->Title,
-			        Txt);
-  }
-
-/*****************************************************************************/
-/******************** Update an existing program item ************************/
-/*****************************************************************************/
-
-static void Prg_DB_UpdateItem (struct ProgramItem *Item,const char *Txt)
-  {
-   /***** Update the data of the program item *****/
-   DB_QueryUPDATE ("can not update program item",
-		   "UPDATE prg_items"
-		     " SET StartTime=FROM_UNIXTIME(%ld),"
-		          "EndTime=FROM_UNIXTIME(%ld),"
-		          "Title='%s',"
-		          "Txt='%s'"
-		   " WHERE ItmCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-                   Item->TimeUTC[Dat_STR_TIME],
-                   Item->TimeUTC[Dat_END_TIME],
-                   Item->Title,
-                   Txt,
-                   Item->Hierarchy.ItmCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/***************** Remove all the program items of a course ******************/
-/*****************************************************************************/
-
-void Prg_DB_RemoveCrsItems (long CrsCod)
-  {
-   /***** Remove program items *****/
-   DB_QueryDELETE ("can not remove all the program items of a course",
-		   "DELETE FROM prg_items"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/****************** Get number of courses with program items *****************/
-/*****************************************************************************/
-// Returns the number of courses with program items
-// in this location (all the platform, current degree or current course)
-
-unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope)
-  {
-   /***** Get number of courses with program items from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with program items",
-                        "SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM prg_items"
-			" WHERE CrsCod>0");
-       case HieLvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with program items",
-                         "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "prg_items"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
-       case HieLvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with program items",
-                         "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "prg_items"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with program items",
-                         "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "prg_items"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with program items",
-                         "SELECT COUNT(DISTINCT prg_items.CrsCod)"
-			  " FROM crs_courses,"
-			        "prg_items"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with program items",
-                         "SELECT COUNT(DISTINCT CrsCod)"
-			  " FROM prg_items"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 return 0;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Get number of program items ************************/
-/*****************************************************************************/
-// Returns the number of program items in a hierarchy scope
-
-unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope)
-  {
-   /***** Get number of program items from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of program items",
-                         "SELECT COUNT(*)"
-			  " FROM prg_items"
-			 " WHERE CrsCod>0");
-         break;
-      case HieLvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of program items",
-                         "SELECT COUNT(*)"
-			  " FROM ins_instits,"
-			        "ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "prg_items"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of program items",
-                         "SELECT COUNT(*)"
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "prg_items"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of program items",
-                         "SELECT COUNT(*)"
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "prg_items"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of program items",
-                         "SELECT COUNT(*)"
-			  " FROM crs_courses,"
-			        "prg_items"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=prg_items.CrsCod",
-                         Gbl.Hierarchy.Deg.DegCod);
-         break;
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of program items",
-                         "SELECT COUNT(*)"
-			  " FROM prg_items"
-			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
-      default:
-	 return 0;
-     }
   }

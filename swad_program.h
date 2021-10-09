@@ -27,11 +27,49 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_hierarchy_level.h"
+#include <stdbool.h>		// For boolean type
+#include <time.h>		// For time
+
+#include "swad_database.h"
+#include "swad_date.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
+
+#define Prg_MAX_CHARS_PROGRAM_ITEM_TITLE	(128 - 1)	// 127
+#define Prg_MAX_BYTES_PROGRAM_ITEM_TITLE	((Prg_MAX_CHARS_PROGRAM_ITEM_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+struct Prg_ItemHierarchy
+  {
+   long ItmCod;
+   unsigned Index;
+   unsigned Level;
+   bool Hidden;
+  };
+
+struct Prg_Item
+  {
+   struct Prg_ItemHierarchy Hierarchy;
+   unsigned NumItem;
+   long UsrCod;
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   bool Open;
+   char Title[Prg_MAX_BYTES_PROGRAM_ITEM_TITLE + 1];
+  };
+
+struct Prg_ItemRange
+  {
+   unsigned Begin;	// Index of the first item in the subtree
+   unsigned End;	// Index of the last item in the subtree
+  };
+
+#define Prg_NUM_MOVEMENTS_LEFT_RIGHT 2
+typedef enum
+  {
+   Prg_MOVE_LEFT,
+   Prg_MOVE_RIGHT,
+  } Prg_MoveLeftRight_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -53,10 +91,5 @@ void Prg_MoveUpItem (void);
 void Prg_MoveDownItem (void);
 void Prg_MoveLeftItem (void);
 void Prg_MoveRightItem (void);
-
-void Prg_DB_RemoveCrsItems (long CrsCod);
-
-unsigned Prg_DB_GetNumCoursesWithItems (HieLvl_Level_t Scope);
-unsigned Prg_DB_GetNumItems (HieLvl_Level_t Scope);
 
 #endif
