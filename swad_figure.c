@@ -1928,8 +1928,8 @@ static void Fig_GetAndShowProjectsStats (void)
    double NumProjectsPerCourse = 0.0;
 
    /***** Get the number of projects from this location *****/
-   if ((NumProjects = Prj_GetNumProjects (Gbl.Scope.Current)))
-      if ((NumCoursesWithProjects = Prj_GetNumCoursesWithProjects (Gbl.Scope.Current)) != 0)
+   if ((NumProjects = Prj_DB_GetNumProjects (Gbl.Scope.Current)))
+      if ((NumCoursesWithProjects = Prj_DB_GetNumCoursesWithProjects (Gbl.Scope.Current)) != 0)
          NumProjectsPerCourse = (double) NumProjects /
 	                        (double) NumCoursesWithProjects;
 

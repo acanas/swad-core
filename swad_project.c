@@ -275,8 +275,8 @@ static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects);
 static void Prj_FormLockUnlock (const struct Prj_Project *Prj);
 static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
 
-static void Prj_LockProjectEditionInDB (long PrjCod);
-static void Prj_UnlockProjectEditionInDB (long PrjCod);
+static void Prj_DB_LockProjectEdition (long PrjCod);
+static void Prj_DB_UnlockProjectEdition (long PrjCod);
 
 
 /*****************************************************************************/
@@ -427,18 +427,20 @@ void Prj_ShowTableSelectedPrjs (void)
       /***** Allocate memory for the project *****/
       Prj_AllocMemProject (&Prj);
 
-      /***** Table head *****/
+      /***** Begin table *****/
       HTM_TABLE_BeginWidePadding (2);
-      Prj_ShowTableAllProjectsHead ();
 
-      /***** Write all the projects *****/
-      for (NumPrj = 0;
-	   NumPrj < Projects.Num;
-	   NumPrj++)
-	{
-	 Prj.PrjCod = Projects.LstPrjCods[NumPrj];
-	 Prj_ShowTableAllProjectsOneRow (&Prj);
-	}
+         /***** Table head *****/
+	 Prj_ShowTableAllProjectsHead ();
+
+	 /***** Write all the projects *****/
+	 for (NumPrj = 0;
+	      NumPrj < Projects.Num;
+	      NumPrj++)
+	   {
+	    Prj.PrjCod = Projects.LstPrjCods[NumPrj];
+	    Prj_ShowTableAllProjectsOneRow (&Prj);
+	   }
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -483,84 +485,86 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 		    Prj_PutIconsListProjects,Projects,
 		    Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-      /***** Put forms to choice which projects to show *****/
-      /* 1st. row */
-      Set_BeginSettingsHead ();
-      Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
-      Prj_ShowFormToFilterByAssign ((struct Prj_Projects *) Projects);
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
-	    break;
-	 default:	// Students will see only visible projects
-	    break;
-	}
-      Prj_ShowFormToFilterByWarning ((struct Prj_Projects *) Projects);
-      Set_EndSettingsHead ();
-
-      /* 2nd. row */
-      Prj_ShowFormToFilterByDpt ((struct Prj_Projects *) Projects);
-
-      if (((struct Prj_Projects *) Projects)->Num)
-	{
-	 /***** Write links to pages *****/
-	 Pag_WriteLinksToPagesCentered (Pag_PROJECTS,&Pagination,
-					(struct Prj_Projects *) Projects,-1L);
-
-	 /***** Allocate memory for the project *****/
-	 Prj_AllocMemProject (&Prj);
-
-	 /***** Table head *****/
-	 HTM_TABLE_BeginWideMarginPadding (2);
-	 Prj_ShowProjectsHead ((struct Prj_Projects *) Projects,Prj_LIST_PROJECTS);
-
-	 /***** Write all the projects *****/
-	 for (NumPrj = Pagination.FirstItemVisible;
-	      NumPrj <= Pagination.LastItemVisible;
-	      NumPrj++)
+	 /***** Put forms to choice which projects to show *****/
+	 /* 1st. row */
+	 Set_BeginSettingsHead ();
+	 Prj_ShowFormToFilterByMy_All ((struct Prj_Projects *) Projects);
+	 Prj_ShowFormToFilterByAssign ((struct Prj_Projects *) Projects);
+	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
-	    /* Get project data */
-	    Prj.PrjCod = ((struct Prj_Projects *) Projects)->LstPrjCods[NumPrj - 1];
-	    Prj_GetDataOfProjectByCod (&Prj);
-
-	    /* Number of index */
-	    switch (((struct Prj_Projects *) Projects)->SelectedOrder)
-	      {
-	       case Prj_ORDER_START_TIME:
-	       case Prj_ORDER_END_TIME:
-		  // NumPrj: 1, 2, 3 ==> NumIndex = 3, 2, 1
-		  NumIndex = ((struct Prj_Projects *) Projects)->Num + 1 - NumPrj;
-		  break;
-	       default:
-		  // NumPrj: 1, 2, 3 ==> NumIndex = 1, 2, 3
-		  NumIndex = NumPrj;
-		  break;
-	      }
-
-	    /* Show project */
-	    Prj_ShowOneProject ((struct Prj_Projects *) Projects,
-	                        NumIndex,&Prj,Prj_LIST_PROJECTS);
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       Prj_ShowFormToFilterByHidden ((struct Prj_Projects *) Projects);
+	       break;
+	    default:	// Students will see only visible projects
+	       break;
 	   }
+	 Prj_ShowFormToFilterByWarning ((struct Prj_Projects *) Projects);
+	 Set_EndSettingsHead ();
 
-	 /***** End table *****/
-	 HTM_TABLE_End ();
+	 /* 2nd. row */
+	 Prj_ShowFormToFilterByDpt ((struct Prj_Projects *) Projects);
 
-	 /***** Free memory of the project *****/
-	 Prj_FreeMemProject (&Prj);
+	 if (((struct Prj_Projects *) Projects)->Num)
+	   {
+	    /***** Write links to pages *****/
+	    Pag_WriteLinksToPagesCentered (Pag_PROJECTS,&Pagination,
+					   (struct Prj_Projects *) Projects,-1L);
 
-	 /***** Write again links to pages *****/
-	 Pag_WriteLinksToPagesCentered (Pag_PROJECTS,&Pagination,
-					(struct Prj_Projects *) Projects,-1L);
-	}
-      else	// No projects created
-	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+	    /***** Allocate memory for the project *****/
+	    Prj_AllocMemProject (&Prj);
 
-      /***** Button to create a new project *****/
-      if (Prj_CheckIfICanCreateProjects ())
-	 Prj_PutButtonToCreateNewPrj ((struct Prj_Projects *) Projects);
+	    /***** Begin table *****/
+	    HTM_TABLE_BeginWideMarginPadding (2);
+
+	       /***** Table head *****/
+	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects,Prj_LIST_PROJECTS);
+
+	       /***** Write all the projects *****/
+	       for (NumPrj = Pagination.FirstItemVisible;
+		    NumPrj <= Pagination.LastItemVisible;
+		    NumPrj++)
+		 {
+		  /* Get project data */
+		  Prj.PrjCod = ((struct Prj_Projects *) Projects)->LstPrjCods[NumPrj - 1];
+		  Prj_GetDataOfProjectByCod (&Prj);
+
+		  /* Number of index */
+		  switch (((struct Prj_Projects *) Projects)->SelectedOrder)
+		    {
+		     case Prj_ORDER_START_TIME:
+		     case Prj_ORDER_END_TIME:
+			// NumPrj: 1, 2, 3 ==> NumIndex = 3, 2, 1
+			NumIndex = ((struct Prj_Projects *) Projects)->Num + 1 - NumPrj;
+			break;
+		     default:
+			// NumPrj: 1, 2, 3 ==> NumIndex = 1, 2, 3
+			NumIndex = NumPrj;
+			break;
+		    }
+
+		  /* Show project */
+		  Prj_ShowOneProject ((struct Prj_Projects *) Projects,
+				      NumIndex,&Prj,Prj_LIST_PROJECTS);
+		 }
+
+	    /***** End table *****/
+	    HTM_TABLE_End ();
+
+	    /***** Free memory of the project *****/
+	    Prj_FreeMemProject (&Prj);
+
+	    /***** Write again links to pages *****/
+	    Pag_WriteLinksToPagesCentered (Pag_PROJECTS,&Pagination,
+					   (struct Prj_Projects *) Projects,-1L);
+	   }
+	 else	// No projects created
+	    Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+
+	 /***** Button to create a new project *****/
+	 if (Prj_CheckIfICanCreateProjects ())
+	    Prj_PutButtonToCreateNewPrj ((struct Prj_Projects *) Projects);
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -591,19 +595,19 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	 HTM_DIV_Begin ("class=\"%s\"",
 			(Projects->Filter.Who == Who) ? "PREF_ON" :
 						        "PREF_OFF");
-	 Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
-	                                          ActSeePrj);
-	 Filter.Who    = Who;
-	 Filter.Assign = Projects->Filter.Assign;
-	 Filter.Hidden = Projects->Filter.Hidden;
-	 Filter.Faulti = Projects->Filter.Faulti;
-	 Filter.DptCod = Projects->Filter.DptCod;
-	 Prj_PutParams (&Filter,
-			Projects->SelectedOrder,
-			Projects->CurrentPage,
-			-1L);
-	 Usr_PutWhoIcon (Who);
-	 Frm_EndForm ();
+	    Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
+						     ActSeePrj);
+	    Filter.Who    = Who;
+	    Filter.Assign = Projects->Filter.Assign;
+	    Filter.Hidden = Projects->Filter.Hidden;
+	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.DptCod = Projects->Filter.DptCod;
+	    Prj_PutParams (&Filter,
+			   Projects->SelectedOrder,
+			   Projects->CurrentPage,
+			   -1L);
+	       Usr_PutWhoIcon (Who);
+	    Frm_EndForm ();
 	 HTM_DIV_End ();
 	}
    Set_EndOneSettingSelector ();
@@ -627,19 +631,19 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Projects->Filter.Assign & (1 << Assign)) ? "PREF_ON" :
 								 "PREF_OFF");
-      Frm_BeginForm (ActSeePrj);
-      Filter.Who    = Projects->Filter.Who;
-      Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
-      Filter.Hidden = Projects->Filter.Hidden;
-      Filter.Faulti = Projects->Filter.Faulti;
-      Filter.DptCod = Projects->Filter.DptCod;
-      Prj_PutParams (&Filter,
-                     Projects->SelectedOrder,
-                     Projects->CurrentPage,
-                     -1L);
-      Ico_PutSettingIconLink (AssignedNonassigImage[Assign],
-	                      Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeePrj);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
+	 Filter.Hidden = Projects->Filter.Hidden;
+	 Filter.Faulti = Projects->Filter.Faulti;
+	 Filter.DptCod = Projects->Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
+	    Ico_PutSettingIconLink (AssignedNonassigImage[Assign],
+				    Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -668,19 +672,19 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Projects->Filter.Hidden & (1 << HidVis)) ? "PREF_ON" :
 								 "PREF_OFF");
-      Frm_BeginForm (ActSeePrj);
-      Filter.Who    = Projects->Filter.Who;
-      Filter.Assign = Projects->Filter.Assign;
-      Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
-      Filter.Faulti = Projects->Filter.Faulti;
-      Filter.DptCod = Projects->Filter.DptCod;
-      Prj_PutParams (&Filter,
-                     Projects->SelectedOrder,
-                     Projects->CurrentPage,
-                     -1L);
-      Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
-	                      Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeePrj);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign;
+	 Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
+	 Filter.Faulti = Projects->Filter.Faulti;
+	 Filter.DptCod = Projects->Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
+	    Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
+				    Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -709,19 +713,19 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
       HTM_DIV_Begin ("class=\"%s\"",
 		     (Projects->Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
 								     "PREF_OFF");
-      Frm_BeginForm (ActSeePrj);
-      Filter.Who    = Projects->Filter.Who;
-      Filter.Assign = Projects->Filter.Assign;
-      Filter.Hidden = Projects->Filter.Hidden;
-      Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
-      Filter.DptCod = Projects->Filter.DptCod;
-      Prj_PutParams (&Filter,
-                     Projects->SelectedOrder,
-                     Projects->CurrentPage,
-                     -1L);
-      Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
-	                      Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
-      Frm_EndForm ();
+	 Frm_BeginForm (ActSeePrj);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign;
+	 Filter.Hidden = Projects->Filter.Hidden;
+	 Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
+	 Filter.DptCod = Projects->Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
+	    Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
+				    Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
+	 Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -738,27 +742,27 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 
    /***** Begin form *****/
    HTM_DIV_Begin (NULL);
-   Frm_BeginForm (ActSeePrj);
-   Filter.Who    = Projects->Filter.Who;
-   Filter.Assign = Projects->Filter.Assign;
-   Filter.Hidden = Projects->Filter.Hidden;
-   Filter.Faulti = Projects->Filter.Faulti;
-   Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
-   Prj_PutParams (&Filter,
-		  Projects->SelectedOrder,
-		  Projects->CurrentPage,
-		  -1L);
+      Frm_BeginForm (ActSeePrj);
+      Filter.Who    = Projects->Filter.Who;
+      Filter.Assign = Projects->Filter.Assign;
+      Filter.Hidden = Projects->Filter.Hidden;
+      Filter.Faulti = Projects->Filter.Faulti;
+      Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
+      Prj_PutParams (&Filter,
+		     Projects->SelectedOrder,
+		     Projects->CurrentPage,
+		     -1L);
 
-   /***** Write selector with departments *****/
-   Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
-                                Projects->Filter.DptCod,	// Selected department
-                                "TITLE_DESCRIPTION_WIDTH",	// Selector class
-                                -1L,				// First option
-                                Txt_Any_department,		// Text when no department selected
-                                true);				// Submit on change
+	 /***** Write selector with departments *****/
+	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
+				      Projects->Filter.DptCod,		// Selected department
+				      "TITLE_DESCRIPTION_WIDTH",	// Selector class
+				      -1L,				// First option
+				      Txt_Any_department,		// Text when no department selected
+				      true);				// Submit on change
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
    HTM_DIV_End ();
   }
 
@@ -991,13 +995,13 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 			   Order,
 			   Projects->CurrentPage,
 			   -1L);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
-	    if (Order == Projects->SelectedOrder)
-	       HTM_U_Begin ();
-            HTM_Txt (Txt_PROJECT_ORDER[Order]);
-	    if (Order == Projects->SelectedOrder)
-	       HTM_U_End ();
-	    HTM_BUTTON_End ();
+	       HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+		  if (Order == Projects->SelectedOrder)
+		     HTM_U_Begin ();
+		  HTM_Txt (Txt_PROJECT_ORDER[Order]);
+		  if (Order == Projects->SelectedOrder)
+		     HTM_U_End ();
+	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	    break;
 	 default:
@@ -1025,21 +1029,21 @@ static void Prj_ShowTableAllProjectsHead (void)
 
    HTM_TR_Begin (NULL);
 
-   for (Order  = (Prj_Order_t) 0;
-	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
-	Order++)
-      HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
-   HTM_TH (1,1,"LT DAT_N",Txt_Assigned_QUESTION);
-   HTM_TH (1,1,"LT DAT_N",Txt_Number_of_students);
-   for (NumRoleToShow = 0;
-	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
-	NumRoleToShow++)
-      HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
-   HTM_TH (1,1,"LT DAT_N",Txt_Proposal);
-   HTM_TH (1,1,"LT DAT_N",Txt_Description);
-   HTM_TH (1,1,"LT DAT_N",Txt_Required_knowledge);
-   HTM_TH (1,1,"LT DAT_N",Txt_Required_materials);
-   HTM_TH (1,1,"LT DAT_N",Txt_URL);
+      for (Order  = (Prj_Order_t) 0;
+	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
+	   Order++)
+	 HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
+      HTM_TH (1,1,"LT DAT_N",Txt_Assigned_QUESTION);
+      HTM_TH (1,1,"LT DAT_N",Txt_Number_of_students);
+      for (NumRoleToShow = 0;
+	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
+	   NumRoleToShow++)
+	 HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
+      HTM_TH (1,1,"LT DAT_N",Txt_Proposal);
+      HTM_TH (1,1,"LT DAT_N",Txt_Description);
+      HTM_TH (1,1,"LT DAT_N",Txt_Required_knowledge);
+      HTM_TH (1,1,"LT DAT_N",Txt_Required_materials);
+      HTM_TH (1,1,"LT DAT_N",Txt_URL);
 
    HTM_TR_End ();
   }
@@ -1162,11 +1166,11 @@ void Prj_ShowOneUniqueProject (struct Prj_Project *Prj)
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** Write project head *****/
-   Prj_ShowProjectsHead (&Projects,Prj_FILE_BROWSER_PROJECT);
+      /***** Write project head *****/
+      Prj_ShowProjectsHead (&Projects,Prj_FILE_BROWSER_PROJECT);
 
-   /***** Show project *****/
-   Prj_ShowOneProject (&Projects,0,Prj,Prj_FILE_BROWSER_PROJECT);
+      /***** Show project *****/
+      Prj_ShowOneProject (&Projects,0,Prj,Prj_FILE_BROWSER_PROJECT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1197,12 +1201,14 @@ void Prj_PrintOneProject (void)
 			      Gbl.Hierarchy.Deg.DegCod,
 			      Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Table head *****/
+   /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (2);
-   Prj_ShowProjectsHead (&Projects,Prj_PRINT_ONE_PROJECT);
 
-   /***** Write project *****/
-   Prj_ShowOneProject (&Projects,0,&Prj,Prj_PRINT_ONE_PROJECT);
+      /***** Table head *****/
+      Prj_ShowProjectsHead (&Projects,Prj_PRINT_ONE_PROJECT);
+
+      /***** Write project *****/
+      Prj_ShowOneProject (&Projects,0,&Prj,Prj_PRINT_ONE_PROJECT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1266,190 +1272,188 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    /***** Write first row of data of this project *****/
    HTM_TR_Begin (NULL);
 
-   /* Number of project */
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RT COLOR%u\"",
-		       Gbl.RowEvenOdd);
-	 HTM_Unsigned (NumIndex);
-
-	 if (PrjIsFaulty)
-	   {
-	    HTM_BR ();
-	    Prj_PutWarningIcon ();
-	   }
-
-	 HTM_TD_End ();
-	 break;
-      default:
-	 break;
-     }
-
-   /* Forms to remove/edit this project */
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-         HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-         Prj_PutFormsToRemEditOnePrj (Projects,Prj,Anchor,ICanViewProjectFiles);
-         HTM_TD_End ();
-	 break;
-      case Prj_FILE_BROWSER_PROJECT:
-         HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL\"");
-         Prj_PutFormsToRemEditOnePrj (Projects,Prj,Anchor,ICanViewProjectFiles);
-         HTM_TD_End ();
-	 break;
-      default:
-	 break;
-     }
-
-   /* Creation date/time */
-   UniqueId++;
-   if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		       Id,ClassDate,Gbl.RowEvenOdd);
-	 break;
-      default:
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,ClassDate);
-	 break;
-     }
-   Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,true,0x7);
-   HTM_TD_End ();
-   free (Id);
-
-   /* Modification date/time */
-   UniqueId++;
-   if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		       Id,ClassDate,Gbl.RowEvenOdd);
-	 break;
-      default:
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		       Id,ClassDate);
-	 break;
-     }
-   Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,true,0x7);
-   HTM_TD_End ();
-   free (Id);
-
-   /* Project title */
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",ClassTitle,Gbl.RowEvenOdd);
-	 break;
-      default:
-	 HTM_TD_Begin ("class=\"%s LT\"",ClassTitle);
-	 break;
-     }
-   HTM_ARTICLE_Begin (Anchor);
-   if (Prj->Title[0])
-     {
-      if (ICanViewProjectFiles)
+      /* Number of project */
+      switch (ProjectView)
 	{
-	 Frm_BeginForm (ActAdmDocPrj);
-	 Prj_PutCurrentParams (Projects);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
-	 HTM_Txt (Prj->Title);
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RT COLOR%u\"",
+			  Gbl.RowEvenOdd);
+	       HTM_Unsigned (NumIndex);
+	       if (PrjIsFaulty)
+		 {
+		  HTM_BR ();
+		  Prj_PutWarningIcon ();
+		 }
+	    HTM_TD_End ();
+	    break;
+	 default:
+	    break;
 	}
-      else
-	 HTM_Txt (Prj->Title);
-     }
-   if (Faults.WrongTitle)
-      Prj_PutWarningIcon ();
-   HTM_ARTICLE_End ();
-   HTM_TD_End ();
 
-   /* Department */
-   Prj_ShowOneProjectDepartment (Prj,ProjectView);
+      /* Forms to remove/edit this project */
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	       Prj_PutFormsToRemEditOnePrj (Projects,Prj,Anchor,ICanViewProjectFiles);
+	    HTM_TD_End ();
+	    break;
+	 case Prj_FILE_BROWSER_PROJECT:
+	    HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL\"");
+	       Prj_PutFormsToRemEditOnePrj (Projects,Prj,Anchor,ICanViewProjectFiles);
+	    HTM_TD_End ();
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Assigned? *****/
-   HTM_TR_Begin (NULL);
+      /* Creation date/time */
+      UniqueId++;
+      if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+			  Id,ClassDate,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+			  Id,ClassDate);
+	    break;
+	}
+	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x7);
+      HTM_TD_End ();
+      free (Id);
 
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
-		       ClassLabel,Gbl.RowEvenOdd);
-	 break;
-      default:
-         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
-		       ClassLabel);
-         break;
-     }
-   HTM_TxtColon (Txt_Assigned_QUESTION);
-   HTM_TD_End ();
+      /* Modification date/time */
+      UniqueId++;
+      if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+			  Id,ClassDate,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+			  Id,ClassDate);
+	    break;
+	}
+	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       true,true,true,0x7);
+      HTM_TD_End ();
+      free (Id);
 
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
-		       ClassData,Gbl.RowEvenOdd);
-         break;
-      default:
-         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-		       ClassData);
-         break;
-     }
-   HTM_TxtF ("%s&nbsp;",Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
-        	                                        Txt_No);
-   Ico_PutIconOff (AssignedNonassigImage[Prj->Assigned],
-		   Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj->Assigned]);
+      /* Project title */
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("class=\"%s LT COLOR%u\"",ClassTitle,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("class=\"%s LT\"",ClassTitle);
+	    break;
+	}
+	 HTM_ARTICLE_Begin (Anchor);
+	    if (Prj->Title[0])
+	      {
+	       if (ICanViewProjectFiles)
+		 {
+		  Frm_BeginForm (ActAdmDocPrj);
+		  Prj_PutCurrentParams (Projects);
+		     HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
+			HTM_Txt (Prj->Title);
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		 }
+	       else
+		  HTM_Txt (Prj->Title);
+	      }
+	    if (Faults.WrongTitle)
+	       Prj_PutWarningIcon ();
+	 HTM_ARTICLE_End ();
+      HTM_TD_End ();
 
-   if (Faults.WrongAssigned)
-      Prj_PutWarningIcon ();
+      /* Department */
+      Prj_ShowOneProjectDepartment (Prj,ProjectView);
 
-   HTM_TD_End ();
+      /***** Assigned? *****/
+      HTM_TR_Begin (NULL);
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
+			  ClassLabel,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
+			  ClassLabel);
+	    break;
+	}
+	 HTM_TxtColon (Txt_Assigned_QUESTION);
+      HTM_TD_End ();
+
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+			  ClassData,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+			  ClassData);
+	    break;
+	}
+	 HTM_TxtF ("%s&nbsp;",Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
+							      Txt_No);
+	 Ico_PutIconOff (AssignedNonassigImage[Prj->Assigned],
+			 Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj->Assigned]);
+
+	 if (Faults.WrongAssigned)
+	    Prj_PutWarningIcon ();
+
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Number of students *****/
    HTM_TR_Begin (NULL);
 
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
-		       ClassLabel,Gbl.RowEvenOdd);
-         break;
-      default:
-         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
-		       ClassLabel);
-         break;
-     }
-   HTM_TxtColon (Txt_Number_of_students);
-   HTM_TD_End ();
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
+			  ClassLabel,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
+			  ClassLabel);
+	    break;
+	}
+	 HTM_TxtColon (Txt_Number_of_students);
+      HTM_TD_End ();
 
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
-		       ClassData,Gbl.RowEvenOdd);
-         break;
-      default:
-         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-		       ClassData);
-         break;
-     }
-   HTM_Unsigned (Prj->NumStds);
-   if (Faults.WrongNumStds)
-      Prj_PutWarningIcon ();
-   HTM_TD_End ();
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+			  ClassData,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+			  ClassData);
+	    break;
+	}
+	 HTM_Unsigned (Prj->NumStds);
+	 if (Faults.WrongNumStds)
+	    Prj_PutWarningIcon ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -1461,28 +1465,28 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	 HTM_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
-	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
+	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
+	    HTM_TD_End ();
 	 HTM_TR_End ();
 
 	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	 HTM_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
-	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
+	       Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
+	    HTM_TD_End ();
 	 HTM_TR_End ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	 HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
+	       Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
+	    HTM_TD_End ();
 	 HTM_TR_End ();
 
 	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	 HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
+	       Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
+	    HTM_TD_End ();
 	 HTM_TR_End ();
 	 break;
       default:
@@ -1494,35 +1498,35 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	 HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
-		       ClassLabel,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
+			  ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	 HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	 break;
       default:
 	 HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
      }
-   HTM_TxtColon (Txt_Proposal);
-   HTM_TD_End ();
+	 HTM_TxtColon (Txt_Proposal);
+      HTM_TD_End ();
 
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
-		       ClassData,
-		       Gbl.RowEvenOdd);
-	 break;
-      default:
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-		       ClassData);
-	 break;
-     }
-   HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
-   HTM_TD_End ();
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+			  ClassData,
+			  Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+			  ClassData);
+	    break;
+	}
+	 HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -1657,7 +1661,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
                 " onclick=\"toggleProject('%u');return false;\"",
                Text,The_ClassFormInBox[Gbl.Prefs.Theme],
                UniqueId);
-   Ico_PutIconTextLink (Icon,Text);
+      Ico_PutIconTextLink (Icon,Text);
    HTM_A_End ();
   }
 
@@ -1796,13 +1800,13 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
 	 HTM_TD_Begin ("class=\"LT %s\"",ClassData);
 	 break;
      }
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
-	           Dpt.WWW,ClassData);
-   HTM_Txt (Dpt.FullName);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_TD_End ();
+	 if (PutLink)
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			 Dpt.WWW,ClassData);
+	 HTM_Txt (Dpt.FullName);
+	 if (PutLink)
+	    HTM_A_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
   }
 
@@ -1821,7 +1825,7 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
 
    /***** Show department *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_Txt (Dpt.FullName);
+      HTM_Txt (Dpt.FullName);
    HTM_TD_End ();
   }
 
@@ -1849,52 +1853,52 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
 	 HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
       default:
 	 // Not applicable
 	 break;
      }
-   HTM_TxtColon (Label);
-   HTM_TD_End ();
+	 HTM_TxtColon (Label);
+      HTM_TD_End ();
 
-   /***** Change text format *****/
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-      case Prj_FILE_BROWSER_PROJECT:
-         Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
-	 break;
-      default:
-	 break;
-     }
+      /***** Change text format *****/
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	 case Prj_FILE_BROWSER_PROJECT:
+	    Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Text *****/
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
-		       ClassData,Gbl.RowEvenOdd);
-	 break;
-      default:
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-		       ClassData);
-	 break;
-     }
-   HTM_Txt (TxtField);
-   if (Warning)
-      Prj_PutWarningIcon ();
-   HTM_TD_End ();
+      /***** Text *****/
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+			  ClassData,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+			  ClassData);
+	    break;
+	}
+	 HTM_Txt (TxtField);
+	 if (Warning)
+	    Prj_PutWarningIcon ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1914,7 +1918,7 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
 
    /***** Write text *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_Txt (TxtField);
+      HTM_Txt (TxtField);
    HTM_TD_End ();
   }
 
@@ -1944,40 +1948,40 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
 	 HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
       default:
 	 // Not applicable
 	 break;
      }
-   HTM_TxtColon (Txt_URL);
-   HTM_TD_End ();
+	 HTM_TxtColon (Txt_URL);
+      HTM_TD_End ();
 
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
-		       ClassData,Gbl.RowEvenOdd);
-	 break;
-      default:
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-		       ClassData);
-	 break;
-     }
-   if (PutLink)
-      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Prj->URL);
-   HTM_Txt (Prj->URL);
-   if (PutLink)
-      HTM_A_End ();
-   HTM_TD_End ();
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+			  ClassData,Gbl.RowEvenOdd);
+	    break;
+	 default:
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+			  ClassData);
+	    break;
+	}
+	 if (PutLink)
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Prj->URL);
+	 HTM_Txt (Prj->URL);
+	 if (PutLink)
+	    HTM_A_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1992,7 +1996,7 @@ static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
 
    /***** Show URL *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   HTM_Txt (Prj->URL);
+      HTM_Txt (Prj->URL);
    HTM_TD_End ();
   }
 
@@ -2501,7 +2505,6 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
    struct Prj_Projects Projects;
    struct Prj_Project Prj;
    const char *Ptr;
-   bool ItsMe;
 
    /***** Reset projects *****/
    Prj_ResetProjects (&Projects);
@@ -2536,8 +2539,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 			  Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Flush cache */
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 if (ItsMe)
+	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	    Prj_FlushCacheMyRolesInProject ();
 
 	 /* Show success alert */
@@ -2630,17 +2632,17 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex],
 				  Prj.Title);
 
-	 /* Show user's record */
-	 Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+	    /* Show user's record */
+	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-	 /* Show form to request confirmation */
-	 Frm_BeginForm (ActionRemUsr[RoleInProject]);
-	 Projects->PrjCod = Prj.PrjCod;
-	 Prj_PutCurrentParams (Projects);
-	 Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
-					          Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]));
-	 Str_FreeString ();
-	 Frm_EndForm ();
+	    /* Show form to request confirmation */
+	    Frm_BeginForm (ActionRemUsr[RoleInProject]);
+	    Projects->PrjCod = Prj.PrjCod;
+	    Prj_PutCurrentParams (Projects);
+	       Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
+							Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]));
+	       Str_FreeString ();
+	    Frm_EndForm ();
 
 	 /* End alert */
 	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
@@ -2802,7 +2804,7 @@ static void Prj_PutFormsToRemEditOnePrj (struct Prj_Projects *Projects,
      {
       /* Put form to lock/unlock project edition */
       HTM_DIV_Begin ("id=\"prj_lck_%ld\"",Prj->PrjCod);
-      Prj_FormLockUnlock (Prj);
+	 Prj_FormLockUnlock (Prj);
       HTM_DIV_End ();
      }
    else
@@ -3211,24 +3213,20 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get code of the project (row[0]) */
+	 /* Get code of the project (row[0]),
+	        code of the course (row[1])
+	    and code of the department (row[2]) */
 	 Prj->PrjCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /* Get code of the course (row[1]) */
 	 Prj->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
-
-	 /* Get code of the department (row[2]) */
 	 Prj->DptCod = Str_ConvertStrCodToLongCod (row[2]);
 
-	 /* Get whether the project is locked or not (row[3]) */
-	 Prj->Locked = (row[3][0] == 'Y') ? Prj_LOCKED :
-					    Prj_UNLOCKED;
-
-	 /* Get whether the project is hidden or not (row[4]) */
-	 Prj->Hidden = (row[4][0] == 'Y') ? Prj_HIDDEN :
-					    Prj_VISIBL;
-
-	 /* Get if project is assigned or not (row[5]) */
+	 /* Get whether the project is locked or not (row[3]),
+	        whether the project is hidden or not (row[4])
+	    and whether the project is assigned or not (row[5]) */
+	 Prj->Locked   = (row[3][0] == 'Y') ? Prj_LOCKED :
+					      Prj_UNLOCKED;
+	 Prj->Hidden   = (row[4][0] == 'Y') ? Prj_HIDDEN :
+					      Prj_VISIBL;
 	 Prj->Assigned = (row[5][0] == 'Y') ? Prj_ASSIGNED :
 					      Prj_NONASSIG;
 
@@ -3246,10 +3244,9 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
 	       break;
 	      }
 
-	 /* Get creation date/time (row[8] holds the creation UTC time) */
+	 /* Get creation date/time (row[8] holds the creation UTC time)
+	    and modification date/time (row[9] holds the modification UTC time) */
 	 Prj->CreatTime = Dat_GetUNIXTimeFromStr (row[8]);
-
-	 /* Get modification date/time (row[9] holds the modification UTC time) */
 	 Prj->ModifTime = Dat_GetUNIXTimeFromStr (row[9]);
 
 	 /* Get title (row[10]), description (row[11]), required knowledge (row[12]),
@@ -3818,18 +3815,18 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    /***** Description *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",Id,Label);
+      /* Label */
+      Frm_LabelColumn ("RT",Id,Label);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"",
-                       Id,Id,NumRows,Required ? " required=\"required\"" :
-                	                        "");
-   HTM_Txt (TxtField);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
+			     " class=\"TITLE_DESCRIPTION_WIDTH\"",
+			     Id,Id,NumRows,Required ? " required=\"required\"" :
+						      "");
+	    HTM_Txt (TxtField);
+	 HTM_TEXTAREA_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -4122,34 +4119,33 @@ void Prj_ShowFormConfig (void)
                  Prj_PutIconsListProjects,&Projects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActRcvCfgPrj);
+      /***** Begin form *****/
+      Frm_BeginForm (ActRcvCfgPrj);
 
-   /***** Projects are editable by non-editing teachers? *****/
-   HTM_TABLE_BeginCenterPadding (2);
-   HTM_TR_Begin (NULL);
+	 /***** Projects are editable by non-editing teachers? *****/
+	 HTM_TABLE_BeginCenterPadding (2);
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Editable",Txt_Editable);
+	       /* Label */
+	       Frm_LabelColumn ("RT","Editable",Txt_Editable);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "id=\"Editable\" value=\"Y\"%s",
-		       Projects.Config.Editable ? " checked=\"checked\"" :
-			                          "");
-   HTM_Txt (Txt_Editable_by_non_editing_teachers);
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_INPUT_CHECKBOX ("Editable",HTM_DONT_SUBMIT_ON_CHANGE,
+				      "id=\"Editable\" value=\"Y\"%s",
+				      Projects.Config.Editable ? " checked=\"checked\"" :
+								 "");
+		  HTM_Txt (Txt_Editable_by_non_editing_teachers);
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
+	 HTM_TABLE_End ();
 
-   HTM_TABLE_End ();
+	 /***** Send button *****/
+	 Btn_PutConfirmButton (Txt_Save_changes);
 
-   /***** Send button *****/
-   Btn_PutConfirmButton (Txt_Save_changes);
-
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -4364,7 +4360,7 @@ void Prj_LockSelectedPrjsEdition (void)
 	 for (NumPrj = 0;
 	      NumPrj < Projects.Num;
 	      NumPrj++)
-            Prj_LockProjectEditionInDB (Projects.LstPrjCods[NumPrj]);
+            Prj_DB_LockProjectEdition (Projects.LstPrjCods[NumPrj]);
       else	// No projects found
 	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
@@ -4401,7 +4397,7 @@ void Prj_UnloSelectedPrjsEdition (void)
 	 for (NumPrj = 0;
 	      NumPrj < Projects.Num;
 	      NumPrj++)
-            Prj_UnlockProjectEditionInDB (Projects.LstPrjCods[NumPrj]);
+            Prj_DB_UnlockProjectEdition (Projects.LstPrjCods[NumPrj]);
       else	// No projects found
 	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
 
@@ -4490,7 +4486,7 @@ void Prj_LockProjectEdition (void)
    if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Lock project edition *****/
-      Prj_LockProjectEditionInDB (Prj.PrjCod);
+      Prj_DB_LockProjectEdition (Prj.PrjCod);
       Prj.Locked = Prj_LOCKED;
 
       /***** Show updated form and icon *****/
@@ -4503,7 +4499,7 @@ void Prj_LockProjectEdition (void)
    Prj_FreeMemProject (&Prj);
   }
 
-static void Prj_LockProjectEditionInDB (long PrjCod)
+static void Prj_DB_LockProjectEdition (long PrjCod)
   {
    DB_QueryUPDATE ("can not lock project edition",
 		   "UPDATE prj_projects"
@@ -4540,7 +4536,7 @@ void Prj_UnloProjectEdition (void)
    if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Unlock project edition *****/
-      Prj_UnlockProjectEditionInDB (Prj.PrjCod);
+      Prj_DB_UnlockProjectEdition (Prj.PrjCod);
       Prj.Locked = Prj_UNLOCKED;
 
       /***** Show updated form and icon *****/
@@ -4553,7 +4549,7 @@ void Prj_UnloProjectEdition (void)
    Prj_FreeMemProject (&Prj);
   }
 
-static void Prj_UnlockProjectEditionInDB (long PrjCod)
+static void Prj_DB_UnlockProjectEdition (long PrjCod)
   {
    DB_QueryUPDATE ("can not lock project edition",
 		   "UPDATE prj_projects"
@@ -4601,8 +4597,6 @@ void Prj_RemoveCrsProjects (long CrsCod)
 
 void Prj_RemoveUsrFromProjects (long UsrCod)
   {
-   bool ItsMe;
-
    /***** Remove user from projects *****/
    DB_QueryDELETE ("can not remove user from projects",
 		   "DELETE FROM prj_users"
@@ -4610,8 +4604,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 		   UsrCod);
 
    /***** Flush cache *****/
-   ItsMe = Usr_ItsMe (UsrCod);
-   if (ItsMe)
+   if (Usr_ItsMe (UsrCod))
       Prj_FlushCacheMyRolesInProject ();
   }
 
@@ -4621,7 +4614,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 // Returns the number of courses with projects
 // in this location (all the platform, current degree or current course)
 
-unsigned Prj_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
+unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with projects from database *****/
    switch (Scope)
@@ -4680,7 +4673,6 @@ unsigned Prj_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Deg.DegCod);
-         break;
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with projects",
@@ -4688,9 +4680,9 @@ unsigned Prj_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
 			 " FROM prj_projects"
 			" WHERE CrsCod=%ld",
 			Gbl.Hierarchy.Crs.CrsCod);
-         break;
       default:
-	 return 0;
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
      }
   }
 
@@ -4699,7 +4691,7 @@ unsigned Prj_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
 /*****************************************************************************/
 // Returns the number of projects in this location
 
-unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
+unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope)
   {
    /***** Get number of projects from database *****/
    switch (Scope)
@@ -4710,7 +4702,6 @@ unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
 			"SELECT COUNT(*)"
                          " FROM prj_projects"
                         " WHERE CrsCod>0");
-         break;
       case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -4726,7 +4717,6 @@ unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Cty.CtyCod);
-         break;
       case HieLvl_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -4740,7 +4730,6 @@ unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Ins.InsCod);
-         break;
       case HieLvl_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -4752,7 +4741,6 @@ unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Ctr.CtrCod);
-         break;
       case HieLvl_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -4762,7 +4750,6 @@ unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
                         Gbl.Hierarchy.Deg.DegCod);
-         break;
       case HieLvl_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of projects",
@@ -4770,8 +4757,8 @@ unsigned Prj_GetNumProjects (HieLvl_Level_t Scope)
 			 " FROM prj_projects"
 			" WHERE CrsCod=%ld",
                         Gbl.Hierarchy.Crs.CrsCod);
-         break;
       default:
-	 return 0;
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
      }
   }

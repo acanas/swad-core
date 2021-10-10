@@ -1360,51 +1360,19 @@ Bottom.End:   |    49|   222|-->|-->-49|   222|   |   -49|   222|-->|--> 26|   2
       */
       /* Step 1: Change all indexes involved to negative,
 		 necessary to preserve unique index (CrsCod,ItmInd) */
-      Prg_DB_UpdateIndexRange (  (long) 0          ,
-                                 (long) Top.Begin  ,
-                                 (long) Bottom.End );	// All indexes in both parts
-/*
-      DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items"
-		        " SET ItmInd=-ItmInd"
-		      " WHERE CrsCod=%ld"
-		        " AND ItmInd>=%u"
-		        " AND ItmInd<=%u",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Top.Begin,
-		      Bottom.End);		// All indexes in both parts */
+      Prg_DB_UpdateIndexRange (  (long) 0            ,	// ItmInd=-ItmInd
+                                 (long) Top.Begin    ,
+                                 (long) Bottom.End   );	// All indexes in both parts
 
       /* Step 2: Increase top indexes */
-      Prg_DB_UpdateIndexRange (  (long) DiffEnd   ,
-                               -((long) Top.End  ),
-                               -((long) Top.Begin));	// All indexes in top part
-/*
-      DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items"
-		        " SET ItmInd=-ItmInd+%u"
-		      " WHERE CrsCod=%ld"
-		        " AND ItmInd>=-%u"
-		        " AND ItmInd<=-%u",
-		      DiffEnd,
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Top.End,
-		      Top.Begin);		// All indexes in top part */
+      Prg_DB_UpdateIndexRange (  (long) DiffEnd      ,	// ItmInd=-ItmInd+DiffEnd
+                               -((long) Top.End     ),
+                               -((long) Top.Begin   ));	// All indexes in top part
 
       /* Step 3: Decrease bottom indexes */
-      Prg_DB_UpdateIndexRange (-((long) DiffBegin   ),
+      Prg_DB_UpdateIndexRange (-((long) DiffBegin   ),	// ItmInd=-ItmInd-DiffBegin
                                -((long) Bottom.End  ),
                                -((long) Bottom.Begin));	// All indexes in bottom part
-/*
-      DB_QueryUPDATE ("can not exchange indexes of items",
-		      "UPDATE prg_items"
-		        " SET ItmInd=-ItmInd-%u"
-		      " WHERE CrsCod=%ld"
-		        " AND ItmInd>=-%u"
-		        " AND ItmInd<=-%u",
-		      DiffBegin,
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      Bottom.End,
-		      Bottom.Begin);		// All indexes in bottom part */
 
       /***** Unlock table *****/
       Prg_DB_UnlockTable ();
