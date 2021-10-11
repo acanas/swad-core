@@ -6317,7 +6317,7 @@ void Usr_FreeListSelectedUsrCods (long *LstSelectedUsrCods)
 
 void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 				unsigned NumUsrsInList,
-				char **SubQueryUsrs)
+				char **UsrsSubQuery)
   {
    char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    unsigned NumUsr;
@@ -6325,9 +6325,9 @@ void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 
    /***** Allocate space for subquery *****/
    MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
-   if ((*SubQueryUsrs = malloc (MaxLength + 1)) == NULL)
+   if ((*UsrsSubQuery = malloc (MaxLength + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
-   (*SubQueryUsrs)[0] = '\0';
+   (*UsrsSubQuery)[0] = '\0';
 
    /***** Build subquery *****/
    for (NumUsr = 0;
@@ -6337,10 +6337,10 @@ void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
 	{
 	 snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),",%ld",
 		   LstSelectedUsrCods[NumUsr]);
-	 Str_Concat (*SubQueryUsrs,SubQueryOneUsr,MaxLength);
+	 Str_Concat (*UsrsSubQuery,SubQueryOneUsr,MaxLength);
 	}
       else
-	 snprintf (*SubQueryUsrs,sizeof (SubQueryOneUsr),"%ld",
+	 snprintf (*UsrsSubQuery,sizeof (SubQueryOneUsr),"%ld",
 		   LstSelectedUsrCods[NumUsr]);
   }
 

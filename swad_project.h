@@ -214,7 +214,6 @@ void Prj_AllocMemProject (struct Prj_Project *Prj);
 void Prj_FreeMemProject (struct Prj_Project *Prj);
 
 void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj);
-long Prj_GetCourseOfProject (long PrjCod);
 void Prj_FreeListProjects (struct Prj_Projects *Projects);
 
 void Prj_PutParamPrjCod (long PrjCod);
@@ -237,8 +236,5 @@ void Prj_UnloProjectEdition (void);
 
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
-
-unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope);
-unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope);
 
 #endif

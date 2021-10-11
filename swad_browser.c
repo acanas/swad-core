@@ -65,6 +65,7 @@
 #include "swad_profile.h"
 #include "swad_profile_database.h"
 #include "swad_project.h"
+#include "swad_project_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -6436,7 +6437,7 @@ static void Brw_PasteClipboard (void)
          case Brw_ADMI_DOC_PRJ:
          case Brw_ADMI_ASS_PRJ:
             PrjCod = Gbl.FileBrowser.Clipboard.Cod;
-	    Hie.Crs.CrsCod = Prj_GetCourseOfProject (PrjCod);
+	    Hie.Crs.CrsCod = Prj_DB_GetCrsOfPrj (PrjCod);
 	    if (Crs_GetDataOfCourseByCod (&Hie.Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),"%s/%ld/%s/%02u/%ld/%s",
 			Cfg_PATH_CRS_PRIVATE,Hie.Crs.CrsCod,Cfg_FOLDER_PRJ,
@@ -9226,7 +9227,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_FileBrowser_t FileBrowser,long Cod,
       case Brw_ADMI_ASS_PRJ:
 	 /* Cod stores the project code */
 	 *GrpCod = -1L;
-	 *CrsCod = Crs.CrsCod = Prj_GetCourseOfProject (Cod);
+	 *CrsCod = Crs.CrsCod = Prj_DB_GetCrsOfPrj (Cod);
 	 Crs_GetDataOfCourseByCod (&Crs);
 	 *DegCod = Deg.DegCod = Crs.DegCod;
 	 Deg_GetDataOfDegreeByCod (&Deg);

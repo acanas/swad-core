@@ -48,6 +48,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_project.h"
+#include "swad_project_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
@@ -85,14 +86,6 @@ static const Prj_RoleInProject_t Prj_RolesToShow[] =
   };
 static const unsigned Brw_NUM_ROLES_TO_SHOW = sizeof (Prj_RolesToShow) /
                                               sizeof (Prj_RolesToShow[0]);
-
-/***** Enum field in database for types of proposal *****/
-static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
-  {
-   [Prj_PROPOSAL_NEW       ] = "new",
-   [Prj_PROPOSAL_MODIFIED  ] = "modified",
-   [Prj_PROPOSAL_UNMODIFIED] = "unmodified",
-  };
 
 /***** Assigned/non-assigned project *****/
 static const char *AssignedNonassigImage[Prj_NUM_ASSIGNED_NONASSIG] =
@@ -219,13 +212,9 @@ static void Prj_ShowOneProjectMembers (struct Prj_Projects *Projects,
 static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
                                                 const struct Prj_Project *Prj,
                                                 Prj_ProjectView_t ProjectView,
-                                                Prj_RoleInProject_t RoleInProject);
+                                                Prj_RoleInProject_t RoleInPrj);
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
-                                                      Prj_RoleInProject_t RoleInProject);
-
-static unsigned Prj_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject);
-static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
-                                  MYSQL_RES **mysql_res);
+                                                      Prj_RoleInProject_t RoleInPrj);
 
 static Prj_RoleInProject_t Prj_ConvertUnsignedStrToRoleInProject (const char *UnsignedStr);
 
@@ -233,14 +222,14 @@ static void Prj_FormToSelectStds (void *Projects);
 static void Prj_FormToSelectTuts (void *Projects);
 static void Prj_FormToSelectEvls (void *Projects);
 static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
-                                  Prj_RoleInProject_t RoleInProject);
+                                  Prj_RoleInProject_t RoleInPrj);
 static void Prj_AddStds (__attribute__((unused)) void *Args);
 static void Prj_AddTuts (__attribute__((unused)) void *Args);
 static void Prj_AddEvls (__attribute__((unused)) void *Args);
-static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject);
+static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj);
 static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
-                                  Prj_RoleInProject_t RoleInProject);
-static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
+                                  Prj_RoleInProject_t RoleInPrj);
+static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj);
 
 static Prj_Order_t Prj_GetParamPrjOrder (void);
 
@@ -267,17 +256,13 @@ static void Prj_CreateProject (struct Prj_Project *Prj);
 static void Prj_UpdateProject (struct Prj_Project *Prj);
 
 static bool Prj_CheckIfICanConfigAllProjects (void);
-static void Prj_GetConfigPrjFromDB (struct Prj_Projects *Projects);
+static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects);
 static void Prj_GetConfigFromRow (struct Prj_Projects *Projects,MYSQL_ROW row);
 static bool Prj_GetEditableFromForm (void);
 static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects);
 
 static void Prj_FormLockUnlock (const struct Prj_Project *Prj);
 static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj);
-
-static void Prj_DB_LockProjectEdition (long PrjCod);
-static void Prj_DB_UnlockProjectEdition (long PrjCod);
-
 
 /*****************************************************************************/
 /******* Set/get project code (used to pass parameter to file browser) *******/
@@ -876,12 +861,12 @@ static Prj_HiddenVisibl_t Prj_GetHiddenParamHidVis (void)
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return (Prj_HiddenVisibl_t)
-		Par_GetParToUnsignedLong (Prj_PARAM_HID_VIS_NAME,
-					  0,
-					  (1 << Prj_HIDDEN) |
-					  (1 << Prj_VISIBL),
-					  (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
-					  (unsigned) Prj_FILTER_VISIBL_DEFAULT);
+         Par_GetParToUnsignedLong (Prj_PARAM_HID_VIS_NAME,
+				   0,
+				   (1 << Prj_HIDDEN) |
+				   (1 << Prj_VISIBL),
+				   (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
+				   (unsigned) Prj_FILTER_VISIBL_DEFAULT);
       default:
 	 Err_WrongRoleExit ();
          return Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;	// Not reached
@@ -958,59 +943,61 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 
    HTM_TR_Begin (NULL);
 
-   /***** Column for number of project *****/
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TH (1,1,"CM",Txt_No_INDEX);
-	 break;
-      default:
-	 break;
-     }
+      /***** Column for number of project *****/
+      switch (ProjectView)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TH (1,1,"CM",Txt_No_INDEX);
+	    break;
+	 default:
+	    break;
+	}
 
-   /***** Column for contextual icons *****/
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-      case Prj_FILE_BROWSER_PROJECT:
-	 HTM_TH (1,1,"CONTEXT_COL",NULL);
-	 break;
-      default:
-	 break;
-     }
-
-   /***** Rest of columns *****/
-   for (Order  = (Prj_Order_t) 0;
-	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LM");
-
+      /***** Column for contextual icons *****/
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
 	 case Prj_FILE_BROWSER_PROJECT:
-	    Frm_BeginForm (ActSeePrj);
-	    Prj_PutParams (&Projects->Filter,
-			   Order,
-			   Projects->CurrentPage,
-			   -1L);
-	       HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
-		  if (Order == Projects->SelectedOrder)
-		     HTM_U_Begin ();
-		  HTM_Txt (Txt_PROJECT_ORDER[Order]);
-		  if (Order == Projects->SelectedOrder)
-		     HTM_U_End ();
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
+	    HTM_TH (1,1,"CONTEXT_COL",NULL);
 	    break;
 	 default:
-            HTM_Txt (Txt_PROJECT_ORDER[Order]);
 	    break;
 	}
 
-      HTM_TH_End ();
-     }
+      /***** Rest of columns *****/
+      for (Order  = (Prj_Order_t) 0;
+	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
+	   Order++)
+	{
+	 HTM_TH_Begin (1,1,"LM");
+
+	    switch (ProjectView)
+	      {
+	       case Prj_LIST_PROJECTS:
+	       case Prj_FILE_BROWSER_PROJECT:
+		  Frm_BeginForm (ActSeePrj);
+		  Prj_PutParams (&Projects->Filter,
+				 Order,
+				 Projects->CurrentPage,
+				 -1L);
+		     HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			if (Order == Projects->SelectedOrder)
+			   HTM_U_Begin ();
+			HTM_Txt (Txt_PROJECT_ORDER[Order]);
+			if (Order == Projects->SelectedOrder)
+			   HTM_U_End ();
+		     HTM_BUTTON_End ();
+		  Frm_EndForm ();
+		  break;
+	       default:
+		  HTM_Txt (Txt_PROJECT_ORDER[Order]);
+		  break;
+	      }
+
+	 HTM_TH_End ();
+	}
+
+   HTM_TR_End ();
   }
 
 static void Prj_ShowTableAllProjectsHead (void)
@@ -1134,7 +1121,7 @@ static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
    Projects->PrjCod = -1L;
    Frm_BeginForm (ActFrmNewPrj);
    Prj_PutCurrentParams (Projects);
-   Btn_PutConfirmButton (Txt_New_project);
+      Btn_PutConfirmButton (Txt_New_project);
    Frm_EndForm ();
   }
 
@@ -1579,14 +1566,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
    if (PrjCod > 0)
      {
       /***** Query database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get project data",
-			  "SELECT Assigned='Y',"		// row[0] = 0 / 1
-				 "NumStds,"			// row[1] =
-				 "Title<>'',"			// row[2] = 0 / 1
-				 "Description<>''"		// row[3] = 0 / 1
-			   " FROM prj_projects"
-			  " WHERE PrjCod=%ld",
-			  PrjCod))	// Project found...
+      if (Prj_DB_GetPrjDataToCheckFaults (&mysql_res,PrjCod))	// Project found...
 	{
          /***** Get some data of project *****/
 	 /* Get row */
@@ -1595,13 +1575,12 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 	 /* Get if project is assigned or not (row[0]) */
 	 IsAssigned = (row[0][0] != '0');
 
-	 /* Get if project is assigned or not (row[1]) */
+	 /* Get number of proposed students (row[1]) */
 	 NumProposedStds = Str_ConvertStrToUnsigned (row[1]);
 
-	 /* Get the title of the project (row[2]) */
-	 HasTitle = (row[2][0] != '0');
-
-	 /* Get the description of the project (row[3]) */
+	 /* Get if title is not empty (row[2])
+	    and if description is not empty (row[3]) */
+	 HasTitle       = (row[2][0] != '0');
 	 HasDescription = (row[3][0] != '0');
 
 	 /***** Check faults *****/
@@ -1617,7 +1596,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 	    Faults->WrongNumStds = true;
 	 else
 	   {
-	    NumStdsRegisteredInPrj = Prj_GetNumUsrsInPrj (PrjCod,Prj_ROLE_STD);
+	    NumStdsRegisteredInPrj = Prj_DB_GetNumUsrsInPrj (PrjCod,Prj_ROLE_STD);
 	    if (IsAssigned)		// Assigned
 	       // In an assigned project the number of proposed students...
 	       // ...should match the number of students registered in it
@@ -1845,15 +1824,16 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					      "DAT";
 
    /***** Label *****/
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
+	                  ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
@@ -1940,15 +1920,16 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					      "DAT";
 
    /***** Write row with label and text *****/
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
+	                  ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
@@ -2025,7 +2006,7 @@ static void Prj_ShowOneProjectMembers (struct Prj_Projects *Projects,
 static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
                                                 const struct Prj_Project *Prj,
                                                 Prj_ProjectView_t ProjectView,
-                                                Prj_RoleInProject_t RoleInProject)
+                                                Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
@@ -2057,11 +2038,11 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+					      "DAT";
 
    /***** Get users in project from database *****/
-   NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
+   NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Prj->PrjCod,RoleInPrj);
    WriteRow = (NumUsrs != 0 ||
 	       ProjectView == Prj_EDIT_ONE_PROJECT);
 
@@ -2076,22 +2057,22 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 	    case Prj_LIST_PROJECTS:
 	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
 			     ClassLabel,Gbl.RowEvenOdd);
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 	       break;
 	    case Prj_FILE_BROWSER_PROJECT:
 	       HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 	       break;
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
-		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
-					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+		  HTM_TxtColon (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
+					       Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 	       break;
 	    case Prj_EDIT_ONE_PROJECT:
 	       HTM_TD_Begin ("class=\"RT ASG_LABEL\"");
-		  HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+		  HTM_TxtColon (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 	       break;
 	   }
 	 HTM_TD_End ();
@@ -2113,80 +2094,80 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 	       break;
 	   }
 
-	 /***** Begin table with all members with this role *****/
-	 HTM_TABLE_BeginPadding (2);
+	    /***** Begin table with all members with this role *****/
+	    HTM_TABLE_BeginPadding (2);
 
-	    /***** Write users *****/
-	    for (NumUsr = 0;
-		 NumUsr < NumUsrs;
-		 NumUsr++)
-	      {
-	       /* Get user's code */
-	       row = mysql_fetch_row (mysql_res);
-	       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	       /* Get user's data */
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-							    Usr_DONT_GET_PREFS,
-							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	       /***** Write users *****/
+	       for (NumUsr = 0;
+		    NumUsr < NumUsrs;
+		    NumUsr++)
 		 {
-		  /* Begin row for this user */
-		  HTM_TR_Begin (NULL);
+		  /* Get user's code */
+		  row = mysql_fetch_row (mysql_res);
+		  Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-		     /* Icon to remove user */
-		     if (ProjectView == Prj_EDIT_ONE_PROJECT)
-		       {
-			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
-			   Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
-							  Prj_PutCurrentParams,Projects,
-							  "trash.svg",
-							  Txt_Remove);
+		  /* Get user's data */
+		  if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							       Usr_DONT_GET_PREFS,
+							       Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		    {
+		     /* Begin row for this user */
+		     HTM_TR_Begin (NULL);
+
+			/* Icon to remove user */
+			if (ProjectView == Prj_EDIT_ONE_PROJECT)
+			  {
+			   HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
+							     Prj_PutCurrentParams,Projects,
+							     "trash.svg",
+							     Txt_Remove);
+			   HTM_TD_End ();
+			  }
+
+			/* Put user's photo */
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
+			   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
 			HTM_TD_End ();
-		       }
 
-		     /* Put user's photo */
-		     HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
-			Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
-		     HTM_TD_End ();
+			/* Write user's name */
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
+			   HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
+			HTM_TD_End ();
 
-		     /* Write user's name */
-		     HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
-			HTM_Txt (Gbl.Usrs.Other.UsrDat.FullName);
-		     HTM_TD_End ();
-
-		  /* End row for this user */
-		  HTM_TR_End ();
+		     /* End row for this user */
+		     HTM_TR_End ();
+		    }
 		 }
-	      }
 
-	    /***** Row to add a new user *****/
-	    switch (ProjectView)
-	      {
-	       case Prj_EDIT_ONE_PROJECT:
-		  HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
-		  Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
-		  Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
-					      Prj_PutCurrentParams,Projects,
-					      Str_BuildStringStr (Txt_Add_USERS,
-								  Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]));
-		  Str_FreeString ();
-		  HTM_TD_End ();
+	       /***** Row to add a new user *****/
+	       switch (ProjectView)
+		 {
+		  case Prj_EDIT_ONE_PROJECT:
+		     HTM_TR_Begin (NULL);
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+			   Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
+			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
+						       Prj_PutCurrentParams,Projects,
+						       Str_BuildStringStr (Txt_Add_USERS,
+									   Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]));
+			   Str_FreeString ();
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
+			HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
-		  HTM_TD_End ();
+			HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
+			HTM_TD_End ();
 
-		  HTM_TR_End ();
-		  break;
-	       default:
-		  break;
-	      }
+		     HTM_TR_End ();
+		     break;
+		  default:
+		     break;
+		 }
 
-	 /***** End table with all members with this role *****/
-	 HTM_TABLE_End ();
+	    /***** End table with all members with this role *****/
+	    HTM_TABLE_End ();
 
 	 /***** End row with label and listing of users *****/
 	 HTM_TD_End ();
@@ -2198,7 +2179,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
   }
 
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
-                                                      Prj_RoleInProject_t RoleInProject)
+                                                      Prj_RoleInProject_t RoleInPrj)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2211,7 +2192,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 					     "DAT";
 
    /***** Get users in project from database *****/
-   NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
+   NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Prj->PrjCod,RoleInPrj);
 
    /***** Begin column with list of all members with this role *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
@@ -2255,48 +2236,6 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
   }
 
 /*****************************************************************************/
-/*************** Get number of users with a role in a project ****************/
-/*****************************************************************************/
-
-static unsigned Prj_GetNumUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject)
-  {
-   /***** Get users in project from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of users in project",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM prj_users"
-		  " WHERE PrjCod=%ld"
-		    " AND RoleInProject=%u",
-		  PrjCod,
-		  (unsigned) RoleInProject);
-  }
-
-/*****************************************************************************/
-/*************** Get number of users with a role in a project ****************/
-/*****************************************************************************/
-
-static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
-                                  MYSQL_RES **mysql_res)
-  {
-   /***** Get users in project from database *****/
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get users in project",
-		   "SELECT prj_users.UsrCod,"		// row[0]
-			  "usr_data.Surname1 AS S1,"	// row[1]
-			  "usr_data.Surname2 AS S2,"	// row[2]
-			  "usr_data.FirstName AS FN"	// row[3]
-		    " FROM prj_users,"
-			  "usr_data"
-		   " WHERE prj_users.PrjCod=%ld"
-		     " AND prj_users.RoleInProject=%u"
-		     " AND prj_users.UsrCod=usr_data.UsrCod"
-		   " ORDER BY S1,"
-			     "S2,"
-			     "FN",
-		   PrjCod,(unsigned) RoleInProject);
-  }
-
-/*****************************************************************************/
 /************************** Get my role in a project *************************/
 /*****************************************************************************/
 
@@ -2310,9 +2249,9 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
-   unsigned NumRow;
-   Prj_RoleInProject_t RoleInProject;
+   unsigned NumRoles;
+   unsigned NumRole;
+   Prj_RoleInProject_t RoleInPrj;
 
    /***** 1. Fast check: trivial cases *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||
@@ -2324,25 +2263,18 @@ unsigned Prj_GetMyRolesInProject (long PrjCod)
       return Gbl.Cache.MyRolesInProject.RolesInProject;
 
    /***** 3. Slow check: Get my role in project from database.
-			 The result of the query will have one row or none *****/
+			 The result of the query should have one row or none *****/
    Gbl.Cache.MyRolesInProject.PrjCod         = PrjCod;
    Gbl.Cache.MyRolesInProject.RolesInProject = 0;
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get my roles in project",
-		   "SELECT RoleInProject"	// row[0]
-		    " FROM prj_users"
-		   " WHERE PrjCod=%ld"
-		     " AND UsrCod=%ld",
-		   PrjCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   NumRoles = Prj_DB_GetMyRolesInPrj (&mysql_res,PrjCod);
+   for (NumRole = 0;
+	NumRole < NumRoles;
+	NumRole++)
      {
       row = mysql_fetch_row (mysql_res);
-      RoleInProject = Prj_ConvertUnsignedStrToRoleInProject (row[0]);
-      if (RoleInProject != Prj_ROLE_UNK)
-	 Gbl.Cache.MyRolesInProject.RolesInProject |= (1 << RoleInProject);
+      RoleInPrj = Prj_ConvertUnsignedStrToRoleInProject (row[0]);
+      if (RoleInPrj != Prj_ROLE_UNK)
+	 Gbl.Cache.MyRolesInProject.RolesInProject |= (1 << RoleInPrj);
      }
    DB_FreeMySQLResult (&mysql_res);
 
@@ -2417,7 +2349,7 @@ static void Prj_FormToSelectEvls (void *Projects)
   }
 
 static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
-                                  Prj_RoleInProject_t RoleInProject)
+                                  Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *Hlp_ASSESSMENT_Projects_add_user;
    extern const char *Txt_Add_USERS;
@@ -2439,10 +2371,10 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Projects,
 
    /***** Put form to select users *****/
    if (asprintf (&TxtButton,Txt_Add_USERS,
-	         Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]) < 0)
+	         Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]) < 0)
       Err_NotEnoughMemoryExit ();
    Usr_PutFormToSelectUsrsToGoToAct (&Prj_MembersToAdd,
-				     ActionAddUsr[RoleInProject],
+				     ActionAddUsr[RoleInPrj],
 				     Prj_PutCurrentParams,Projects,
 				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
@@ -2498,7 +2430,7 @@ static void Prj_AddEvls (__attribute__((unused)) void *Args)
    Prj_AddUsrsToProject (Prj_ROLE_EVL);
   }
 
-static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
+static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
@@ -2529,14 +2461,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
         {
 	 /* Add user to project */
-	 DB_QueryREPLACE ("can not add user to project",
-			  "REPLACE INTO prj_users"
-			  " (PrjCod,RoleInProject,UsrCod)"
-			  " VALUES"
-			  " (%ld,%u,%ld)",
-			  Projects.PrjCod,
-			  (unsigned) RoleInProject,
-			  Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Prj_DB_AddUsrToPrj (Projects.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /* Flush cache */
 	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
@@ -2545,7 +2470,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 	 /* Show success alert */
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
 			Gbl.Usrs.Other.UsrDat.FullName,
-			Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]);
+			Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]);
         }
      }
 
@@ -2591,7 +2516,7 @@ void Prj_ReqRemEvl (void)
   }
 
 static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
-                                  Prj_RoleInProject_t RoleInProject)
+                                  Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y;
@@ -2629,18 +2554,18 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	 /* Begin alert */
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
 			                               Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
-				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex],
+				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 				  Prj.Title);
 
 	    /* Show user's record */
 	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	    /* Show form to request confirmation */
-	    Frm_BeginForm (ActionRemUsr[RoleInProject]);
+	    Frm_BeginForm (ActionRemUsr[RoleInPrj]);
 	    Projects->PrjCod = Prj.PrjCod;
 	    Prj_PutCurrentParams (Projects);
 	       Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
-							Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]));
+							Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
 	       Str_FreeString ();
 	    Frm_EndForm ();
 
@@ -2681,13 +2606,12 @@ void Prj_RemEvl (void)
    Prj_RemUsrFromPrj (Prj_ROLE_EVL);
   }
 
-static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
+static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z;
    extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
    struct Prj_Projects Projects;
    struct Prj_Project Prj;
-   bool ItsMe;
 
    /***** Reset projects *****/
    Prj_ResetProjects (&Projects);
@@ -2709,24 +2633,16 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
       if (Prj_CheckIfICanEditProject (&Prj))
 	{
 	 /***** Remove user from the table of project-users *****/
-	 DB_QueryDELETE ("can not remove a user from a project",
-			 "DELETE FROM prj_users"
-			 " WHERE PrjCod=%ld"
-			   " AND RoleInProject=%u"
-			   " AND UsrCod=%ld",
-		         Prj.PrjCod,
-		         (unsigned) RoleInProject,
-		         Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Prj_DB_RemoveUsrFromPrj (Prj.PrjCod,RoleInPrj,Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	 /***** Flush cache *****/
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 if (ItsMe)
+	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	    Prj_FlushCacheMyRolesInProject ();
 
 	 /***** Show success alert *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
 		        Gbl.Usrs.Other.UsrDat.FullName,
-		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex],
+		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 		        Prj.Title);
 	}
       else
@@ -2839,30 +2755,11 @@ static bool Prj_CheckIfICanEditProject (const struct Prj_Project *Prj)
 
 static void Prj_GetListProjects (struct Prj_Projects *Projects)
   {
-   char *PreNonSubQuery;
-   char *HidVisSubQuery;
-   char *DptCodSubQuery;
-   static const char *OrderBySubQuery[Prj_NUM_ORDERS] =
-     {
-      [Prj_ORDER_START_TIME] = "prj_projects.CreatTime DESC,"
-			       "prj_projects.ModifTime DESC,"
-			       "prj_projects.Title",
-      [Prj_ORDER_END_TIME  ] = "prj_projects.ModifTime DESC,"
-			       "prj_projects.CreatTime DESC,"
-			       "prj_projects.Title",
-      [Prj_ORDER_TITLE     ] = "prj_projects.Title,"
-			       "prj_projects.CreatTime DESC,"
-			       "prj_projects.ModifTime DESC",
-      [Prj_ORDER_DEPARTMENT] = "dpt_departments.FullName,"
-			       "prj_projects.CreatTime DESC,"
-			       "prj_projects.ModifTime DESC,"
-			       "prj_projects.Title",
-     };
    MYSQL_RES *mysql_res = NULL;	// Initialized to avoid freeing when not assigned
-   unsigned NumUsrsInList;
-   long *LstSelectedUsrCods;
-   char *SubQueryUsrs;
-   unsigned NumPrjsFromDB = 0;
+   unsigned NumUsrsInList = 0;
+   long *LstSelectedUsrCods = NULL;
+   char *UsrsSubQuery = NULL;
+   unsigned NumPrjsFromDB;
    unsigned NumPrjsAfterFilter = 0;
    unsigned NumPrj;
    struct Prj_Faults Faults;
@@ -2876,241 +2773,37 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
        Projects->Filter.Hidden &&	// Any selector is on
        Projects->Filter.Faulti)		// Any selector is on
      {
-      /* Assigned subquery */
-      switch (Projects->Filter.Assign)
+      /****** Get users selected *****/
+      if (Projects->Filter.Who == Usr_WHO_SELECTED)
 	{
-	 case (1 << Prj_ASSIGNED):	// Assigned projects
-	    if (asprintf (&PreNonSubQuery," AND prj_projects.Assigned='Y'") < 0)
-	       Err_NotEnoughMemoryExit ();
-	    break;
-	 case (1 << Prj_NONASSIG):	// Non-assigned projects
-	    if (asprintf (&PreNonSubQuery," AND prj_projects.Assigned='N'") < 0)
-	       Err_NotEnoughMemoryExit ();
-	    break;
-	 default:			// All projects
-	    if (asprintf (&PreNonSubQuery,"%s","") < 0)
-	       Err_NotEnoughMemoryExit ();
-	    break;
+	 /* Count number of valid users in list of encrypted user codes */
+	 NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+
+	 if (NumUsrsInList)
+	   {
+	    /* Get list of users selected to show their projects */
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
+
+	    /* Create subquery string */
+	    Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
+				       &UsrsSubQuery);
+	   }
 	}
 
-      /* Hidden subquery */
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:	// Students can view only visible projects
-	    if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
-	       Err_NotEnoughMemoryExit ();
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    switch (Projects->Filter.Hidden)
-	      {
-	       case (1 << Prj_HIDDEN):	// Hidden projects
-		  if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='Y'") < 0)
-	             Err_NotEnoughMemoryExit ();
-		  break;
-	       case (1 << Prj_VISIBL):	// Visible projects
-		  if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
-	             Err_NotEnoughMemoryExit ();
-		  break;
-	       default:			// All projects
-		  if (asprintf (&HidVisSubQuery,"%s","") < 0)
-	             Err_NotEnoughMemoryExit ();
-		  break;
-	      }
-	    break;
-	 default:
-	    Err_WrongRoleExit ();
-	    break;
-	}
+      /***** Query database *****/
+      NumPrjsFromDB = Prj_DB_GetListProjects (&mysql_res,Projects,
+                                              UsrsSubQuery);
 
-      /* Department subquery */
-      if (Projects->Filter.DptCod >= 0)
-        {
-	 if (asprintf (&DptCodSubQuery," AND prj_projects.DptCod=%ld",
-	               Projects->Filter.DptCod) < 0)
-	    Err_NotEnoughMemoryExit ();
-        }
-      else	// Any department
-	{
-	 if (asprintf (&DptCodSubQuery,"%s","") < 0)
-	    Err_NotEnoughMemoryExit ();
-	}
+      /****** Free users selected *****/
+      if (Projects->Filter.Who == Usr_WHO_SELECTED)
+	 if (NumUsrsInList)
+           {
+	    /* Free memory for subquery string */
+	    Usr_FreeSubqueryUsrCods (UsrsSubQuery);
 
-      /* Query */
-      switch (Projects->Filter.Who)
-        {
-	 case Usr_WHO_ME:
-	    /* Get list of projects */
-	    switch (Projects->SelectedOrder)
-	      {
-	       case Prj_ORDER_START_TIME:
-	       case Prj_ORDER_END_TIME:
-	       case Prj_ORDER_TITLE:
-		  NumPrjsFromDB = (unsigned)
-		  DB_QuerySELECT (&mysql_res,"can not get projects",
-				  "SELECT prj_projects.PrjCod"
-				   " FROM prj_projects,"
-				         "prj_users"
-				  " WHERE prj_projects.CrsCod=%ld"
-				    "%s"
-				    "%s"
-				    "%s"
-				    " AND prj_projects.PrjCod=prj_users.PrjCod"
-				    " AND prj_users.UsrCod=%ld"
-				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-				  " ORDER BY %s",
-				  Gbl.Hierarchy.Crs.CrsCod,
-				  PreNonSubQuery,
-				  HidVisSubQuery,
-				  DptCodSubQuery,
-				  Gbl.Usrs.Me.UsrDat.UsrCod,
-				  OrderBySubQuery[Projects->SelectedOrder]);
-		  break;
-	       case Prj_ORDER_DEPARTMENT:
-		  NumPrjsFromDB = (unsigned)
-		  DB_QuerySELECT (&mysql_res,"can not get projects",
-				  "SELECT prj_projects.PrjCod"
-				   " FROM prj_projects LEFT JOIN dpt_departments,"
-				         "prj_users"
-				     " ON prj_projects.DptCod=dpt_departments.DptCod"
-				  " WHERE prj_projects.CrsCod=%ld"
-				    "%s"
-				    "%s"
-				    "%s"
-				    " AND prj_projects.PrjCod=prj_users.PrjCod"
-				    " AND prj_users.UsrCod=%ld"
-				  " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-				  " ORDER BY %s",
-				  Gbl.Hierarchy.Crs.CrsCod,
-				  PreNonSubQuery,
-				  HidVisSubQuery,
-				  DptCodSubQuery,
-				  Gbl.Usrs.Me.UsrDat.UsrCod,
-				  OrderBySubQuery[Projects->SelectedOrder]);
-		  break;
-	      }
-	    break;
-         case Usr_WHO_SELECTED:
-            /* Count number of valid users in list of encrypted user codes */
-	    NumUsrsInList = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
-
-	    if (NumUsrsInList)
-	      {
-	       /* Get list of users selected to show their projects */
-	       Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,NumUsrsInList,&LstSelectedUsrCods);
-
-	       /* Create subquery string */
-	       Usr_CreateSubqueryUsrCods (LstSelectedUsrCods,NumUsrsInList,
-					  &SubQueryUsrs);
-
-	       /* Get list of projects */
-	       switch (Projects->SelectedOrder)
-		 {
-		  case Prj_ORDER_START_TIME:
-		  case Prj_ORDER_END_TIME:
-		  case Prj_ORDER_TITLE:
-		     NumPrjsFromDB = (unsigned)
-		     DB_QuerySELECT (&mysql_res,"can not get projects",
-				     "SELECT prj_projects.PrjCod"
-				      " FROM prj_projects,"
-					    "prj_users"
-				     " WHERE prj_projects.CrsCod=%ld"
-				       "%s"
-				       "%s"
-				       "%s"
-				       " AND prj_projects.PrjCod=prj_users.PrjCod"
-				       " AND prj_users.UsrCod IN (%s)"
-				     " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-				     " ORDER BY %s",
-				     Gbl.Hierarchy.Crs.CrsCod,
-				     PreNonSubQuery,
-				     HidVisSubQuery,
-				     DptCodSubQuery,
-				     SubQueryUsrs,
-				     OrderBySubQuery[Projects->SelectedOrder]);
-		     break;
-		  case Prj_ORDER_DEPARTMENT:
-		     NumPrjsFromDB = (unsigned)
-		     DB_QuerySELECT (&mysql_res,"can not get projects",
-				     "SELECT prj_projects.PrjCod"
-				      " FROM prj_projects LEFT JOIN dpt_departments,"
-					    "prj_users"
-				        " ON prj_projects.DptCod=dpt_departments.DptCod"
-				     " WHERE prj_projects.CrsCod=%ld"
-				       "%s"
-				       "%s"
-				       "%s"
-				       " AND prj_projects.PrjCod=prj_users.PrjCod"
-				       " AND prj_users.UsrCod IN (%s)"
-				     " GROUP BY prj_projects.PrjCod"	// To not repeat projects (DISTINCT can not be used)
-				     " ORDER BY %s",
-				     Gbl.Hierarchy.Crs.CrsCod,
-				     PreNonSubQuery,
-				     HidVisSubQuery,
-				     DptCodSubQuery,
-				     SubQueryUsrs,
-				     OrderBySubQuery[Projects->SelectedOrder]);
-		     break;
-		 }
-
-	       /* Free memory for subquery string */
-	       Usr_FreeSubqueryUsrCods (SubQueryUsrs);
-
-	       /* Free list of user codes */
-	       Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
-	      }
-	    break;
-         case Usr_WHO_ALL:
-	    /* Get list of projects */
-	    switch (Projects->SelectedOrder)
-	      {
-	       case Prj_ORDER_START_TIME:
-	       case Prj_ORDER_END_TIME:
-	       case Prj_ORDER_TITLE:
-		  NumPrjsFromDB = (unsigned)
-		  DB_QuerySELECT (&mysql_res,"can not get projects",
-				  "SELECT prj_projects.PrjCod"
-				   " FROM prj_projects"
-				  " WHERE prj_projects.CrsCod=%ld"
-				    "%s"
-				    "%s"
-				    "%s"
-				  " ORDER BY %s",
-				  Gbl.Hierarchy.Crs.CrsCod,
-				  PreNonSubQuery,
-				  HidVisSubQuery,
-				  DptCodSubQuery,
-				  OrderBySubQuery[Projects->SelectedOrder]);
-		  break;
-	       case Prj_ORDER_DEPARTMENT:
-		  NumPrjsFromDB = (unsigned)
-		  DB_QuerySELECT (&mysql_res,"can not get projects",
-				  "SELECT prj_projects.PrjCod"
-				   " FROM prj_projects LEFT JOIN dpt_departments"
-				     " ON prj_projects.DptCod=dpt_departments.DptCod"
-				  " WHERE prj_projects.CrsCod=%ld"
-				    "%s"
-				    "%s"
-				    "%s"
-				  " ORDER BY %s",
-				  Gbl.Hierarchy.Crs.CrsCod,
-				  PreNonSubQuery,
-				  HidVisSubQuery,
-				  DptCodSubQuery,
-				  OrderBySubQuery[Projects->SelectedOrder]);
-		  break;
-	      }
-	    break;
-	 default:
-	    Err_WrongWhoExit ();
-	    break;
-        }
-
-      /* Free allocated memory for subqueries */
-      free (PreNonSubQuery);
-      free (HidVisSubQuery);
-      free (DptCodSubQuery);
+	    /* Free list of user codes */
+	    Usr_FreeListSelectedUsrCods (LstSelectedUsrCods);
+	   }
 
       if (NumPrjsFromDB) // Projects found...
 	{
@@ -3155,29 +2848,12 @@ static void Prj_GetListProjects (struct Prj_Projects *Projects)
   }
 
 /*****************************************************************************/
-/****************** Check if a project exists in a course ********************/
-/*****************************************************************************/
-
-long Prj_GetCourseOfProject (long PrjCod)
-  {
-   /***** Trivial check: project code should be > 0 *****/
-   if (PrjCod <= 0)
-      return -1L;
-
-   /***** Get course code from database *****/
-   return DB_QuerySELECTCode ("can not get project course",
-			      "SELECT CrsCod"		// row[0]
-			       " FROM prj_projects"
-			      " WHERE PrjCod=%ld",
-			      PrjCod); // Project found...
-  }
-
-/*****************************************************************************/
 /********************* Get project data using its code ***********************/
 /*****************************************************************************/
 
 void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
   {
+   extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Prj_Proposal_t Proposal;
@@ -3188,27 +2864,7 @@ void Prj_GetDataOfProjectByCod (struct Prj_Project *Prj)
       Prj_ResetProject (Prj);
 
       /***** Get data of project *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get project data",
-			  "SELECT PrjCod,"			// row[ 0]
-				 "CrsCod,"			// row[ 1]
-				 "DptCod,"			// row[ 2]
-				 "Locked,"			// row[ 3]
-				 "Hidden,"			// row[ 4]
-				 "Assigned,"			// row[ 5]
-				 "NumStds,"			// row[ 6]
-				 "Proposal,"			// row[ 7]
-				 "UNIX_TIMESTAMP(CreatTime),"	// row[ 8]
-				 "UNIX_TIMESTAMP(ModifTime),"	// row[ 9]
-				 "Title,"			// row[10]
-				 "Description,"			// row[11]
-				 "Knowledge,"			// row[12]
-				 "Materials,"			// row[13]
-				 "URL"				// row[14]
-			   " FROM prj_projects"
-			  " WHERE PrjCod=%ld"
-			    " AND CrsCod=%ld",
-			  Prj->PrjCod,
-			  Gbl.Hierarchy.Crs.CrsCod))	// Project found...
+      if (Prj_DB_GetDataOfProjectByCod (&mysql_res,Prj->PrjCod))	// Project found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -3401,26 +3057,13 @@ void Prj_RemoveProject (void)
    if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Remove users in project *****/
-      DB_QueryDELETE ("can not remove project",
-		      "DELETE FROM prj_users"
-		      " USING prj_projects,"
-		             "prj_users"
-		      " WHERE prj_projects.PrjCod=%ld"
-		        " AND prj_projects.CrsCod=%ld"
-		        " AND prj_projects.PrjCod=prj_users.PrjCod",
-	              Prj.PrjCod,
-	              Gbl.Hierarchy.Crs.CrsCod);
+      Prj_DB_RemoveUsrsFromPrj (Prj.PrjCod);
 
       /***** Flush cache *****/
       Prj_FlushCacheMyRolesInProject ();
 
       /***** Remove project *****/
-      DB_QueryDELETE ("can not remove project",
-		      "DELETE FROM prj_projects"
-		      " WHERE PrjCod=%ld"
-		        " AND CrsCod=%ld",
-	              Prj.PrjCod,
-	              Gbl.Hierarchy.Crs.CrsCod);
+      Prj_DB_RemovePrj (Prj.PrjCod);
 
       /***** Remove information related to files in project *****/
       Brw_DB_RemovePrjFiles (Prj.PrjCod);
@@ -3468,15 +3111,9 @@ void Prj_HideProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
+   /***** Hide project *****/
    if (Prj_CheckIfICanEditProject (&Prj))
-      /***** Hide project *****/
-      DB_QueryUPDATE ("can not hide project",
-		      "UPDATE prj_projects"
-		        " SET Hidden='Y'"
-		      " WHERE PrjCod=%ld"
-		        " AND CrsCod=%ld",
-	              Prj.PrjCod,
-	              Gbl.Hierarchy.Crs.CrsCod);
+      Prj_DB_HideUnhideProject (Prj.PrjCod,'Y');
    else
       Err_NoPermissionExit ();
 
@@ -3510,15 +3147,9 @@ void Prj_UnhideProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
+   /***** Unhide project *****/
    if (Prj_CheckIfICanEditProject (&Prj))
-      /***** Show project *****/
-      DB_QueryUPDATE ("can not show project",
-		      "UPDATE prj_projects"
-		        " SET Hidden='N'"
-		      " WHERE PrjCod=%ld"
-		        " AND CrsCod=%ld",
-	              Prj.PrjCod,
-	              Gbl.Hierarchy.Crs.CrsCod);
+      Prj_DB_HideUnhideProject (Prj.PrjCod,'N');
    else
       Err_NoPermissionExit ();
 
@@ -3991,46 +3622,17 @@ void Prj_ReceiveFormProject (void)
 
 static void Prj_CreateProject (struct Prj_Project *Prj)
   {
+   extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
+
    /***** Set dates to now *****/
    Prj->CreatTime =
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 
    /***** Create a new project *****/
-   Prj->PrjCod =
-   DB_QueryINSERTandReturnCode ("can not create new project",
-				"INSERT INTO prj_projects"
-				" (CrsCod,DptCod,Hidden,Assigned,NumStds,Proposal,"
-				  "CreatTime,ModifTime,"
-				  "Title,Description,Knowledge,Materials,URL)"
-				" VALUES"
-				" (%ld,%ld,'%c','%c',%u,'%s',"
-				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				  "'%s','%s','%s','%s','%s')",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Prj->DptCod,
-				Prj->Hidden == Prj_HIDDEN ? 'Y' :
-							    'N',
-				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
-								'N',
-				Prj->NumStds,
-				Prj_Proposal_DB[Prj->Proposal],
-				Prj->CreatTime,
-				Prj->ModifTime,
-				Prj->Title,
-				Prj->Description,
-				Prj->Knowledge,
-				Prj->Materials,
-				Prj->URL);
+   Prj->PrjCod = Prj_DB_CreateProject (Prj);
 
    /***** Insert creator as first tutor *****/
-   DB_QueryINSERT ("can not add tutor",
-		   "INSERT INTO prj_users"
-		   " (PrjCod,RoleInProject,UsrCod)"
-		   " VALUES"
-		   " (%ld,%u,%ld)",
-	           Prj->PrjCod,
-	           (unsigned) Prj_ROLE_TUT,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+   Prj_DB_AddUsrToPrj (Prj->PrjCod,Prj_ROLE_TUT,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Flush cache *****/
    Prj_FlushCacheMyRolesInProject ();
@@ -4042,40 +3644,13 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
 
 static void Prj_UpdateProject (struct Prj_Project *Prj)
   {
+   extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
+
    /***** Adjust date of last edition to now *****/
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 
    /***** Update the data of the project *****/
-   DB_QueryUPDATE ("can not update project",
-		   "UPDATE prj_projects"
-		     " SET DptCod=%ld,"
-		          "Hidden='%c',"
-		          "Assigned='%c',"
-		          "NumStds=%u,"
-		          "Proposal='%s',"
-		          "ModifTime=FROM_UNIXTIME(%ld),"
-		          "Title='%s',"
-		          "Description='%s',"
-		          "Knowledge='%s',"
-		          "Materials='%s',"
-		          "URL='%s'"
-		   " WHERE PrjCod=%ld"
-		     " AND CrsCod=%ld",
-	           Prj->DptCod,
-	           Prj->Hidden == Prj_HIDDEN ? 'Y' :
-					       'N',
-	           Prj->Assigned == Prj_ASSIGNED ? 'Y' :
-						   'N',
-	           Prj->NumStds,
-	           Prj_Proposal_DB[Prj->Proposal],
-	           Prj->ModifTime,
-	           Prj->Title,
-	           Prj->Description,
-	           Prj->Knowledge,
-	           Prj->Materials,
-	           Prj->URL,
-	           Prj->PrjCod,
-	           Gbl.Hierarchy.Crs.CrsCod);
+   Prj_DB_UpdateProject (Prj);
   }
 
 /*****************************************************************************/
@@ -4112,7 +3687,7 @@ void Prj_ShowFormConfig (void)
    Prj_ResetProjects (&Projects);
 
    /***** Read projects configuration from database *****/
-   Prj_GetConfigPrjFromDB (&Projects);
+   Prj_GetCrsPrjsConfig (&Projects);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_projects,
@@ -4155,24 +3730,19 @@ void Prj_ShowFormConfig (void)
 /************** Get configuration of projects for current course *************/
 /*****************************************************************************/
 
-static void Prj_GetConfigPrjFromDB (struct Prj_Projects *Projects)
+static void Prj_GetCrsPrjsConfig (struct Prj_Projects *Projects)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    /***** Get configuration of projects for current course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get configuration of test",
-		       "SELECT Editable"		// row[0]
-			" FROM prj_config"
-		       " WHERE CrsCod=%ld",
-		       Gbl.Hierarchy.Crs.CrsCod) == 0)
-      Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
-   else // NumRows == 1
+   if (Prj_DB_GetCrsPrjsConfig (&mysql_res))
      {
-      /***** Get configuration *****/
       row = mysql_fetch_row (mysql_res);
       Prj_GetConfigFromRow (Projects,row);
      }
+   else
+      Projects->Config.Editable = Prj_EDITABLE_DEFAULT;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4204,14 +3774,7 @@ void Prj_ReceiveConfigPrj (void)
    Projects.Config.Editable = Prj_GetEditableFromForm ();
 
    /***** Update database *****/
-   DB_QueryREPLACE ("can not save configuration of projects",
-		    "REPLACE INTO prj_config"
-	            " (CrsCod,Editable)"
-                    " VALUES"
-                    " (%ld,'%c')",
-		    Gbl.Hierarchy.Crs.CrsCod,
-		    Projects.Config.Editable ? 'Y' :
-			                       'N');
+   Prj_DB_UpdateCrsPrjsConfig (Projects.Config.Editable);
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_configuration_of_the_projects_has_been_updated);
@@ -4499,17 +4062,6 @@ void Prj_LockProjectEdition (void)
    Prj_FreeMemProject (&Prj);
   }
 
-static void Prj_DB_LockProjectEdition (long PrjCod)
-  {
-   DB_QueryUPDATE ("can not lock project edition",
-		   "UPDATE prj_projects"
-		     " SET Locked='Y'"
-		   " WHERE PrjCod=%ld"
-		     " AND CrsCod=%ld",
-		   PrjCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
 /*****************************************************************************/
 /************************* Unlock edition of a project ***********************/
 /*****************************************************************************/
@@ -4549,17 +4101,6 @@ void Prj_UnloProjectEdition (void)
    Prj_FreeMemProject (&Prj);
   }
 
-static void Prj_DB_UnlockProjectEdition (long PrjCod)
-  {
-   DB_QueryUPDATE ("can not lock project edition",
-		   "UPDATE prj_projects"
-		     " SET Locked='N'"
-		   " WHERE PrjCod=%ld"
-		     " AND CrsCod=%ld",
-		   PrjCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
 /*****************************************************************************/
 /******************** Remove all the projects in a course ********************/
 /*****************************************************************************/
@@ -4567,28 +4108,16 @@ static void Prj_DB_UnlockProjectEdition (long PrjCod)
 void Prj_RemoveCrsProjects (long CrsCod)
   {
    /***** Remove users in projects of the course *****/
-   DB_QueryDELETE ("can not remove all the projects of a course",
-		   "DELETE FROM prj_users"
-		   " USING prj_projects,"
-		          "prj_users"
-		   " WHERE prj_projects.CrsCod=%ld"
-		     " AND prj_projects.PrjCod=prj_users.PrjCod",
-                   CrsCod);
+   Prj_DB_RemoveUsrsFromCrsPrjs (CrsCod);
 
    /***** Flush cache *****/
    Prj_FlushCacheMyRolesInProject ();
 
    /***** Remove configuration of projects in the course *****/
-   DB_QueryDELETE ("can not remove configuration of projects of a course",
-		   "DELETE FROM prj_config"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Prj_DB_RemoveConfigOfCrsPrjs (CrsCod);
 
    /***** Remove projects *****/
-   DB_QueryDELETE ("can not remove all the projects of a course",
-		   "DELETE FROM prj_projects"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Prj_DB_RemoveCrsPrjs (CrsCod);
   }
 
 /*****************************************************************************/
@@ -4598,167 +4127,9 @@ void Prj_RemoveCrsProjects (long CrsCod)
 void Prj_RemoveUsrFromProjects (long UsrCod)
   {
    /***** Remove user from projects *****/
-   DB_QueryDELETE ("can not remove user from projects",
-		   "DELETE FROM prj_users"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   Prj_DB_RemoveUsrFromProjects (UsrCod);
 
    /***** Flush cache *****/
    if (Usr_ItsMe (UsrCod))
       Prj_FlushCacheMyRolesInProject ();
-  }
-
-/*****************************************************************************/
-/******************** Get number of courses with projects ********************/
-/*****************************************************************************/
-// Returns the number of courses with projects
-// in this location (all the platform, current degree or current course)
-
-unsigned Prj_DB_GetNumCoursesWithProjects (HieLvl_Level_t Scope)
-  {
-   /***** Get number of courses with projects from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-	 return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM prj_projects"
-			" WHERE CrsCod>0");
-      case HieLvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "prj_projects"
-			" WHERE ins_instits.CtyCod=%ld"
-			  " AND ins_instits.InsCod=ctr_centers.InsCod"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Cty.CtyCod);
-      case HieLvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "prj_projects"
-			" WHERE ctr_centers.InsCod=%ld"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			      "prj_projects"
-			" WHERE deg_degrees.CtrCod=%ld"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ctr.CtrCod);
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT prj_projects.CrsCod)"
-			 " FROM crs_courses,"
-			       "prj_projects"
-			" WHERE crs_courses.DegCod=%ld"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Deg.DegCod);
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of courses with projects",
-			"SELECT COUNT(DISTINCT CrsCod)"
-			 " FROM prj_projects"
-			" WHERE CrsCod=%ld",
-			Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
-     }
-  }
-
-/*****************************************************************************/
-/************************** Get number of projects ***************************/
-/*****************************************************************************/
-// Returns the number of projects in this location
-
-unsigned Prj_DB_GetNumProjects (HieLvl_Level_t Scope)
-  {
-   /***** Get number of projects from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of projects",
-			"SELECT COUNT(*)"
-                         " FROM prj_projects"
-                        " WHERE CrsCod>0");
-      case HieLvl_CTY:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of projects",
-			"SELECT COUNT(*)"
-			 " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "prj_projects"
-			" WHERE ins_instits.CtyCod=%ld"
-			  " AND ins_instits.InsCod=ctr_centers.InsCod"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Cty.CtyCod);
-      case HieLvl_INS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of projects",
-			"SELECT COUNT(*)"
-			 " FROM ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "prj_projects"
-			" WHERE ctr_centers.InsCod=%ld"
-			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ins.InsCod);
-      case HieLvl_CTR:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of projects",
-			"SELECT COUNT(*)"
-			 " FROM deg_degrees,"
-			       "crs_courses,"
-			       "prj_projects"
-			" WHERE deg_degrees.CtrCod=%ld"
-			  " AND deg_degrees.DegCod=crs_courses.DegCod"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Ctr.CtrCod);
-      case HieLvl_DEG:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of projects",
-			"SELECT COUNT(*)"
-			 " FROM crs_courses,"
-			       "prj_projects"
-			" WHERE crs_courses.DegCod=%ld"
-			  " AND crs_courses.CrsCod=prj_projects.CrsCod",
-                        Gbl.Hierarchy.Deg.DegCod);
-      case HieLvl_CRS:
-         return (unsigned)
-         DB_QueryCOUNT ("can not get number of projects",
-			"SELECT COUNT(*)"
-			 " FROM prj_projects"
-			" WHERE CrsCod=%ld",
-                        Gbl.Hierarchy.Crs.CrsCod);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
-     }
   }
