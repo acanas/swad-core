@@ -1,0 +1,63 @@
+// swad_record_database.h: users' record cards, operations with database
+
+#ifndef _SWAD_REC_DB
+#define _SWAD_REC_DB
+/*
+    SWAD (Shared Workspace At a Distance in Spanish),
+    is a web platform developed at the University of Granada (Spain),
+    and used to support university teaching.
+
+    This file is part of SWAD core.
+    Copyright (C) 1999-2021 Antonio Cañas Vargas
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+// #include <mysql/mysql.h>	// To access MySQL databases
+
+#include "swad_record.h"
+// #include "swad_user.h"
+
+/*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/******************************* Public types ********************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/***************************** Public prototypes *****************************/
+/*****************************************************************************/
+
+void Rec_DB_CreateCrsRecordField (long FieldCod,long UsrCod,const char *Text);
+void Rec_DB_UpdateCrsRecordField (long FieldCod,long UsrCod,const char *Text);
+void Rec_DB_UpdateCrsRecordFieldName (long FieldCod,const char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1]);
+void Rec_DB_UpdateCrsRecordFieldNumLines (long FieldCod,unsigned NewNumLines);
+void Rec_DB_UpdateCrsRecordFieldVisibility (long FieldCod,Rec_VisibilityRecordFields_t NewVisibility);
+
+unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FieldCod);
+unsigned Rec_DB_GetFieldFromCrsRecord (MYSQL_RES **mysql_res,
+                                       long FieldCod,long UsrCod);
+
+void Rec_DB_RemoveCrsRecordField (long FieldCod,long UsrCod);
+void Rec_DB_RemoveFieldsCrsRecordInCrs (long UsrCod,long CrsCod);
+void Rec_DB_RemoveFieldsCrsRecordAll (long UsrCod);
+void Rec_DB_RemoveCrsRecordContents (long CrsCod);
+void Rec_DB_RemoveCrsRecordFields (long CrsCod);
+
+#endif

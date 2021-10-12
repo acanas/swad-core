@@ -3622,8 +3622,6 @@ void Prj_ReceiveFormProject (void)
 
 static void Prj_CreateProject (struct Prj_Project *Prj)
   {
-   extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
-
    /***** Set dates to now *****/
    Prj->CreatTime =
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
@@ -3644,8 +3642,6 @@ static void Prj_CreateProject (struct Prj_Project *Prj)
 
 static void Prj_UpdateProject (struct Prj_Project *Prj)
   {
-   extern const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES];
-
    /***** Adjust date of last edition to now *****/
    Prj->ModifTime = Gbl.StartExecutionTimeUTC;
 

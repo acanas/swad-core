@@ -117,13 +117,13 @@ void QR_ImageQRCode (const char *QRString)
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:0 auto; width:%upx;\"",
 		  QR_CODE_SIZE);
 
-   if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s",
-		 QR_CODE_SIZE,QR_CODE_SIZE,QRString) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_IMG (URL,NULL,QRString,
-	    "style=\"width:%upx;height:%upx;border:1px dashed silver;\"",
-	    QR_CODE_SIZE,QR_CODE_SIZE);
-   free (URL);
+      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s",
+		    QR_CODE_SIZE,QR_CODE_SIZE,QRString) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_IMG (URL,NULL,QRString,
+	       "style=\"width:%upx;height:%upx;border:1px dashed silver;\"",
+	       QR_CODE_SIZE,QR_CODE_SIZE);
+      free (URL);
 
    HTM_DIV_End ();
   }
@@ -167,14 +167,14 @@ void QR_ExamAnnnouncement (void)
    /***** Show QR code with direct link to the exam announcement *****/
    HTM_DIV_Begin ("class=\"CM\"");
 
-   if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld",
-		 300,300,
-                 Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,
-		 Act_GetActCod (ActSeeAllExaAnn)) < 0)
-      Err_NotEnoughMemoryExit ();
-   HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,
-	    "style=\"width:250px;height:250px;\"");
-   free (URL);
+      if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld",
+		    300,300,
+		    Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,
+		    Act_GetActCod (ActSeeAllExaAnn)) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,
+	       "style=\"width:250px;height:250px;\"");
+      free (URL);
 
    HTM_DIV_End ();
   }

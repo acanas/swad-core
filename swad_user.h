@@ -558,4 +558,7 @@ unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
 
+void Usr_DB_UpdateMyOffice (void);
+void Usr_DB_UpdateMyOfficePhone (void);
+
 #endif

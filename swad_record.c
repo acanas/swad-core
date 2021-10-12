@@ -56,6 +56,7 @@
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
+#include "swad_record_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_timetable.h"
@@ -690,14 +691,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get a field of a record in a course",
-		       "SELECT FieldName,"	// row[0]
-			      "NumLines,"	// row[1]
-			      "Visibility"	// row[2]
-			" FROM crs_record_fields"
-		       " WHERE CrsCod=%ld"
-			 " AND FieldCod=%ld",
-		       Gbl.Hierarchy.Crs.CrsCod,FieldCod) != 1)
+   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Crs.CrsCod,FieldCod) != 1)
       Err_WrongRecordFieldExit ();
 
    /***** Get the field *****/
@@ -772,12 +766,7 @@ void Rec_RenameField (void)
          else
            {
             /* Update the table of fields changing then old name by the new one */
-            DB_QueryUPDATE ("can not update name of field of record",
-        		    "UPDATE crs_record_fields"
-        		      " SET FieldName='%s'"
-			    " WHERE FieldCod=%ld",
-                            NewFieldName,
-                            Gbl.Crs.Records.Field.FieldCod);
+            Rec_DB_UpdateCrsRecordFieldName (Gbl.Crs.Records.Field.FieldCod,NewFieldName);
 
             /***** Write message to show the change made *****/
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_record_field_X_has_been_renamed_as_Y,
@@ -829,13 +818,8 @@ void Rec_ChangeLinesField (void)
                      Gbl.Crs.Records.Field.Name);
    else
      {
-      /***** Update of the table of fields changing the old maximum of students by the new one *****/
-      DB_QueryUPDATE ("can not update the number of lines of a record field",
-		      "UPDATE crs_record_fields"
-		        " SET NumLines=%u"
-		      " WHERE FieldCod=%ld",
-                      NewNumLines,
-                      Gbl.Crs.Records.Field.FieldCod);
+      /***** Update of the table of fields changing the old number of lines by the new one *****/
+      Rec_DB_UpdateCrsRecordFieldNumLines (Gbl.Crs.Records.Field.FieldCod,NewNumLines);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
@@ -879,13 +863,8 @@ void Rec_ChangeVisibilityField (void)
                      Gbl.Crs.Records.Field.Name);
    else
      {
-      /***** Update of the table of fields changing the old visibility by the new *****/
-      DB_QueryUPDATE ("can not update the visibility of a record field",
-		      "UPDATE crs_record_fields"
-		        " SET Visibility=%u"
-		      " WHERE FieldCod=%ld",
-                      (unsigned) NewVisibility,
-		      Gbl.Crs.Records.Field.FieldCod);
+      /***** Update the table of fields changing the old visibility by the new *****/
+      Rec_DB_UpdateCrsRecordFieldVisibility (Gbl.Crs.Records.Field.FieldCod,NewVisibility);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
@@ -1812,8 +1791,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_End ();
 
 	       /* Get the text of the field */
-	       if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
-						 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
+	       if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,
+						 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+						 UsrDat->UsrCod))
 		 {
 		  ThisFieldHasText = true;
 		  row = mysql_fetch_row (mysql_res);
@@ -1870,22 +1850,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
   }
 
 /*****************************************************************************/
-/************** Get the text of a field of a record of course ****************/
-/*****************************************************************************/
-
-unsigned Rec_DB_GetFieldFromCrsRecord (MYSQL_RES **mysql_res,long UsrCod,long FieldCod)
-  {
-   return DB_QuerySELECT (mysql_res,"can not get the text"
-				    " of a field of a record",
-			  "SELECT Txt"		// row[0]
-			   " FROM crs_records"
-			  " WHERE FieldCod=%ld"
-			    " AND UsrCod=%ld",
-			  FieldCod,
-			  UsrCod);
-  }
-
-/*****************************************************************************/
 /****************** Get the fields of the record from form *******************/
 /*****************************************************************************/
 
@@ -1922,69 +1886,28 @@ void Rec_UpdateCrsRecord (long UsrCod)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /***** Check if already exists this field for this user in database *****/
-         FieldAlreadyExists = (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrCod,
-                                                             Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod) != 0);
+         FieldAlreadyExists = (Rec_DB_GetFieldFromCrsRecord (&mysql_res,
+                                                             Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                                                             UsrCod) != 0);
          DB_FreeMySQLResult (&mysql_res);
          if (FieldAlreadyExists)
            {
             if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
-               /***** Update text of the field of record course *****/
-               DB_QueryUPDATE ("can not update field of record",
-        		       "UPDATE crs_records"
-        		         " SET Txt='%s'"
-			       " WHERE UsrCod=%ld"
-			         " AND FieldCod=%ld",
-			       Gbl.Crs.Records.LstFields.Lst[NumField].Text,
-			       UsrCod,
-			       Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+               /***** Update text of the field of course record *****/
+               Rec_DB_UpdateCrsRecordField (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                                            UsrCod,
+                                            Gbl.Crs.Records.LstFields.Lst[NumField].Text);
             else
-               /***** Remove text of the field of record course *****/
-               DB_QueryDELETE ("can not remove field of record",
-        		       "DELETE FROM crs_records"
-			       " WHERE UsrCod=%ld"
-			         " AND FieldCod=%ld",
-                               UsrCod,
-			       Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+               /***** Remove text of the field of course record *****/
+               Rec_DB_RemoveCrsRecordField (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                                            UsrCod);
            }
          else if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
-	    /***** Insert text field of record course *****/
-	    DB_QueryINSERT ("can not create field of record",
-			    "INSERT INTO crs_records"
-			    " (FieldCod,UsrCod,Txt)"
-			    " VALUES"
-			    " (%ld,%ld,'%s')",
-			    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-			    UsrCod,
-			    Gbl.Crs.Records.LstFields.Lst[NumField].Text);
+	    /***** Insert text field of course record *****/
+            Rec_DB_CreateCrsRecordField (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+			                 UsrCod,
+			                 Gbl.Crs.Records.LstFields.Lst[NumField].Text);
        }
-  }
-
-/*****************************************************************************/
-/************ Remove fields of record of a user in current course ************/
-/*****************************************************************************/
-
-void Rec_DB_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs)
-  {
-   DB_QueryDELETE ("can not remove user's record in a course",
-		   "DELETE FROM crs_records"
-		   " WHERE UsrCod=%ld"
-		     " AND FieldCod IN"
-		         " (SELECT FieldCod"
-		            " FROM crs_record_fields"
-		           " WHERE CrsCod=%ld)",
-                   UsrCod,Crs->CrsCod);
-  }
-
-/*****************************************************************************/
-/************* Remove fields of record of a user in all courses **************/
-/*****************************************************************************/
-
-void Rec_DB_RemoveFieldsCrsRecordAll (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's records in all courses",
-		   "DELETE FROM crs_records"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -2622,8 +2545,8 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 				  Rec_PutParamUsrCodEncrypted,NULL);
 
 	 /***** Button to send a message *****/
-	 RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
-							Gbl.Record.UsrDat->UsrCod);	// To:
+	 RecipientHasBannedMe = Msg_DB_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,	// From:
+							   Gbl.Record.UsrDat->UsrCod);	// To:
 	 if (!RecipientHasBannedMe)
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
 					   Rec_PutParamsMsgUsr,NULL,
@@ -2936,12 +2859,12 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
 	    switch (TypeOfView)
 	      {
-	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
+	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:		// I want to apply for enrolment
 		  /***** Set default role *****/
 		  if (UsrDat->UsrCod == Gbl.Hierarchy.Crs.RequesterUsrCod ||	// Creator of the course
-		      (UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
+		      (UsrDat->Roles.InCrss & (1 << Rol_TCH)))			// Teacher in other courses
 		     DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
-		  else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
+		  else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))		// Non-editing teacher in other courses
 		     DefaultRoleInForm = Rol_NET;	// Request sign up as a non-editing teacher
 		  else
 		     DefaultRoleInForm = Rol_STD;	// Request sign up as a student
@@ -2960,7 +2883,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		       }
 		  HTM_SELECT_End ();
 		  break;
-	       case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
+	       case Rec_SHA_OTHER_EXISTING_USR_FORM:		// The other user already exists in the platform
 		  if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 		    {
 		     /***** Set default role *****/
@@ -3046,7 +2969,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		     DefaultRoleInForm = (UsrDat->Roles.InCrss & ((1 << Rol_STD) |
 								  (1 << Rol_NET) |
 								  (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
-										     Rol_GST;		// If user don't belong to any course
+										     Rol_GST;	// If user don't belong to any course
 
 		     /***** Selector of role *****/
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -3597,7 +3520,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
   }
 
 /*****************************************************************************/
-/*************************** Show user's office phone ******************************/
+/************************ Show user's office phone ***************************/
 /*****************************************************************************/
 
 static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
@@ -4209,12 +4132,7 @@ void Rec_UpdateMyOffice (void)
    Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
-   DB_QueryUPDATE ("can not update office",
-		   "UPDATE usr_data"
-		     " SET Office='%s'"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Tch.Office,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Usr_DB_UpdateMyOffice ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -4230,40 +4148,8 @@ void Rec_UpdateMyOfficePhone (void)
    Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
-   DB_QueryUPDATE ("can not update office phone",
-		   "UPDATE usr_data"
-		     " SET OfficePhone='%s'"
-		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
+   Usr_DB_UpdateMyOfficePhone ();
 
    /***** Show form again *****/
    Rec_ShowMySharedRecordAndMore ();
-  }
-
-/*****************************************************************************/
-/******************** Remove content of course record cards ******************/
-/*****************************************************************************/
-
-void Rec_DB_RemoveCrsRecordContents (long CrsCod)
-  {
-   DB_QueryDELETE ("can not remove content of cards in a course",
-		   "DELETE FROM crs_records"
-		   " USING crs_record_fields,"
-			  "crs_records"
-		   " WHERE crs_record_fields.CrsCod=%ld"
-		     " AND crs_record_fields.FieldCod=crs_records.FieldCod",
-		   CrsCod);
-  }
-
-/*****************************************************************************/
-/************ Remove definition of fields in course record cards *************/
-/*****************************************************************************/
-
-void Rec_DB_RemoveCrsRecordFields (long CrsCod)
-  {
-   DB_QueryDELETE ("can not remove fields of cards in a course",
-		   "DELETE FROM crs_record_fields"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
   }

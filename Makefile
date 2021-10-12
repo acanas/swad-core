@@ -75,7 +75,8 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_privacy.o swad_profile.o swad_profile_database.o swad_program.o \
        swad_program_database.o swad_project.o swad_project_database.o \
        swad_QR.o \
-       swad_record.o swad_report.o swad_role.o swad_room.o swad_RSS.o \
+       swad_record.o swad_record_database.o swad_report.o swad_role.o \
+       swad_room.o swad_RSS.o \
        swad_scope.o swad_search.o swad_session.o swad_setting.o \
        swad_statistic.o swad_string.o swad_survey.o swad_syllabus.o \
        swad_system_config.o \

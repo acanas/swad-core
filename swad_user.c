@@ -73,6 +73,7 @@
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
+#include "swad_record_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_tab.h"
@@ -3914,8 +3915,9 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	      NumField++)
 	   {
 	    /* Get the text of the field */
-	    if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,UsrDat->UsrCod,
-					      Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod))
+	    if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,
+					      Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					      UsrDat->UsrCod))
 	      {
 	       row = mysql_fetch_row (mysql_res);
 	       Str_Copy (Text,row[0],sizeof (Text) - 1);
@@ -10505,4 +10507,32 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 			  Str,
 			  Str,
 			  Str) != 0);
+  }
+
+/*****************************************************************************/
+/******************************* Update my office ****************************/
+/*****************************************************************************/
+
+void Usr_DB_UpdateMyOffice (void)
+  {
+   DB_QueryUPDATE ("can not update office",
+		   "UPDATE usr_data"
+		     " SET Office='%s'"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.Tch.Office,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/***************************** Update my office phone ************************/
+/*****************************************************************************/
+
+void Usr_DB_UpdateMyOfficePhone (void)
+  {
+   DB_QueryUPDATE ("can not update office phone",
+		   "UPDATE usr_data"
+		     " SET OfficePhone='%s'"
+		   " WHERE UsrCod=%ld",
+	           Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
+	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }

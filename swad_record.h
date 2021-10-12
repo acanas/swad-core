@@ -150,11 +150,8 @@ void Rec_ListRecordsTchsPrint (void);
 
 void Rec_UpdateAndShowMyCrsRecord (void);
 void Rec_UpdateAndShowOtherCrsRecord (void);
-unsigned Rec_DB_GetFieldFromCrsRecord (MYSQL_RES **mysql_res,long UsrCod,long FieldCod);
 void Rec_GetFieldsCrsRecordFromForm (void);
 void Rec_UpdateCrsRecord (long UsrCod);
-void Rec_DB_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Crs_Course *Crs);
-void Rec_DB_RemoveFieldsCrsRecordAll (long UsrCod);
 void Rec_AllocMemFieldsRecordsCrs (void);
 void Rec_FreeMemFieldsRecordsCrs (void);
 
@@ -179,8 +176,5 @@ void Rec_UpdateMyCenter (void);
 void Rec_UpdateMyDepartment (void);
 void Rec_UpdateMyOffice (void);
 void Rec_UpdateMyOfficePhone (void);
-
-void Rec_DB_RemoveCrsRecordContents (long CrsCod);
-void Rec_DB_RemoveCrsRecordFields (long CrsCod);
 
 #endif
