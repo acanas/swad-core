@@ -125,8 +125,7 @@ void Roo_SeeRooms (void);
 void Roo_ChangeMAC (void);
 void Roo_EditRooms (void);
 void Roo_PutIconToViewRooms (void);
-void Roo_GetListRooms (struct Roo_Rooms *Rooms,
-                       Roo_WhichData_t WhichData);
+void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData);
 void Roo_FreeListRooms (struct Roo_Rooms *Rooms);
 
 void Roo_GetListRoomsInThisCtr (void);
@@ -134,7 +133,6 @@ void Roo_GetListRoomsInThisCtr (void);
 long Roo_GetParamRooCod (void);
 
 void Roo_RemoveRoom (void);
-void Roo_DB_RemoveAllRoomsInCtr (long CtrCod);
 void Roo_ChangeBuilding (void);
 void Roo_ChangeFloor (void);
 void Roo_ChangeType (void);
@@ -144,7 +142,5 @@ void Roo_ChangeCapacity (void);
 void Roo_ContEditAfterChgRoom (void);
 
 void Roo_ReceiveFormNewRoom (void);
-
-void Roo_DB_RemoveBuildingFromRooms (long BldCod);
 
 #endif

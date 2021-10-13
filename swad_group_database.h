@@ -103,6 +103,7 @@ void Grp_DB_EnableFileZonesGrp (long GrpCod);
 void Grp_DB_DisableFileZonesGrp (long GrpCod);
 void Grp_DB_ChangeGrpTypOfGrp (long GrpCod,long NewGrpTypCod);
 void Grp_DB_ChangeRoomOfGrp (long GrpCod,long NewRooCod);
+void Grp_DB_ResetRoomInGrps (long RooCod);
 void Grp_DB_ChangeMaxStdsOfGrp (long GrpCod,unsigned NewMaxStds);
 
 bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod);

@@ -35,9 +35,11 @@
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_group_database.h"
 #include "swad_HTML.h"
 #include "swad_MAC.h"
 #include "swad_room.h"
+#include "swad_room_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -48,35 +50,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
-
-static const char *Roo_TypesDB[Roo_NUM_TYPES] =
-  {
-   [Roo_NO_TYPE       ] = "no_type",
-   [Roo_ADMINISTRATION] = "administration",
-   [Roo_AUDITORIUM    ] = "auditorium",
-   [Roo_CAFETERIA     ] = "cafeteria",
-   [Roo_CANTEEN       ] = "canteen",
-   [Roo_CLASSROOM     ] = "classroom",
-   [Roo_CONCIERGE     ] = "concierge",
-   [Roo_CORRIDOR      ] = "corridor",
-   [Roo_GYM           ] = "gym",
-   [Roo_HALL          ] = "hall",
-   [Roo_KINDERGARTEN  ] = "kindergarten",
-   [Roo_LABORATORY    ] = "laboratory",
-   [Roo_LIBRARY       ] = "library",
-   [Roo_OFFICE        ] = "office",
-   [Roo_OUTDOORS      ] = "outdoors",
-   [Roo_PARKING       ] = "parking",
-   [Roo_PAVILION      ] = "pavilion",
-   [Roo_ROOM          ] = "room",
-   [Roo_SECRETARIAT   ] = "secretariat",
-   [Roo_SEMINAR       ] = "seminar",
-   [Roo_SHOP          ] = "shop",
-   [Roo_STORE         ] = "store",
-   [Roo_TOILETS       ] = "toilets",
-   [Roo_VIRTUAL       ] = "virtual",
-   [Roo_YARD          ] = "yard",
-  };
 
 static const char *Roo_TypesIcons[Roo_NUM_TYPES] =
   {
@@ -123,7 +96,6 @@ static struct Roo_Room *Roo_EditingRoom = NULL;	// Static variable to keep the r
 
 static void Roo_GetAndListMACAddresses (long RooCod);
 static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
-static unsigned Roo_DB_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res);
 
 static Roo_Order_t Roo_GetParamRoomOrder (void);
 static bool Roo_CheckIfICanCreateRooms (void);
@@ -149,10 +121,6 @@ static int Roo_GetParamFloor (void);
 static Roo_RoomType_t Roo_GetParamType (void);
 
 static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Roo_DB_CheckIfRoomNameExists (long RooCod,
-                                          const char *FieldName,const char *Name);
-static void Roo_DB_UpdateRoomName (long RooCod,
-                                   const char *FieldName,const char *NewRoomName);
 
 static void Roo_WriteCapacity (char Str[Cns_MAX_DECIMAL_DIGITS_UINT + 1],unsigned Capacity);
 
@@ -331,7 +299,7 @@ static void Roo_GetAndListMACAddresses (long RooCod)
    unsigned NumMACs;
 
    /***** Get MAC addresses from database *****/
-   NumMACs = Roo_DB_GetMACAddresses (RooCod,&mysql_res);
+   NumMACs = Roo_DB_GetMACAddresses (&mysql_res,RooCod);
 
    /***** Write the MAC addresses *****/
    MAC_ListMACAddresses (NumMACs,&mysql_res);
@@ -347,26 +315,10 @@ static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor)
    unsigned NumMACs;
 
    /***** Get MAC addresses from database *****/
-   NumMACs = Roo_DB_GetMACAddresses (RooCod,&mysql_res);
+   NumMACs = Roo_DB_GetMACAddresses (&mysql_res,RooCod);
 
    /***** Write the MAC addresses *****/
    MAC_EditMACAddresses (RooCod,Anchor,NumMACs,&mysql_res);
-  }
-
-/*****************************************************************************/
-/***************** Get the MAC addresses associated to a room ****************/
-/*****************************************************************************/
-
-static unsigned Roo_DB_GetMACAddresses (long RooCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get MAC addresses from database *****/
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get MAC addresses",
-		   "SELECT MAC"	// row[0]
-		    " FROM roo_macs"
-		   " WHERE RooCod=%ld"
-		   " ORDER BY MAC",
-		   RooCod);
   }
 
 /*****************************************************************************/
@@ -397,21 +349,10 @@ void Roo_ChangeMAC (void)
 
    /***** Check if the new MAC is different from the old MAC *****/
    if (OldMACnum)
-      DB_QueryDELETE ("can not remove MAC address",
-		      "DELETE FROM roo_macs"
-		      " WHERE RooCod=%ld"
-		        " AND MAC=%llu",
-		      Roo_EditingRoom->RooCod,
-		      OldMACnum);
+      Roo_DB_RemoveMACAddress (Roo_EditingRoom->RooCod,OldMACnum);
    if (NewMACnum)
       /***** Update the table of rooms-MACs changing the old MAC for the new one *****/
-      DB_QueryREPLACE ("can not change MAC address",
-		       "REPLACE INTO roo_macs"
-		       " (RooCod,MAC)"
-		       " VALUES"
-		       " (%ld,%llu)",
-		       Roo_EditingRoom->RooCod,
-		       NewMACnum);
+      Roo_DB_UpdateMACAddress (Roo_EditingRoom->RooCod,NewMACnum);
 
    Roo_EditingRoom->MACnum = NewMACnum;
   }
@@ -537,74 +478,16 @@ void Roo_PutIconToViewRooms (void)
 /**************************** List all the rooms *****************************/
 /*****************************************************************************/
 
-void Roo_GetListRooms (struct Roo_Rooms *Rooms,
-                       Roo_WhichData_t WhichData)
+void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
   {
-   static const char *OrderBySubQuery[Roo_NUM_ORDERS] =
-     {
-      [Roo_ORDER_BY_BUILDING ] = "bld_buildings.ShortName,"
-	                         "roo_rooms.Floor,"
-	                         "roo_rooms.ShortName",
-      [Roo_ORDER_BY_FLOOR    ] = "roo_rooms.Floor,"
-	                         "bld_buildings.ShortName,"
-	                         "roo_rooms.ShortName",
-      [Roo_ORDER_BY_TYPE     ] = "roo_rooms.Type,"
-	                         "bld_buildings.ShortName,"
-	                         "roo_rooms.Floor,"
-	                         "roo_rooms.ShortName",
-      [Roo_ORDER_BY_SHRT_NAME] = "roo_rooms.ShortName,"
-	                         "roo_rooms.FullName",
-      [Roo_ORDER_BY_FULL_NAME] = "roo_rooms.FullName,"
-	                         "roo_rooms.ShortName",
-      [Roo_ORDER_BY_CAPACITY ] = "roo_rooms.Capacity DESC,"
-	                         "bld_buildings.ShortName,"
-	                         "roo_rooms.Floor,"
-	                         "roo_rooms.ShortName",
-     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRoom;
    struct Roo_Room *Room;
 
    /***** Get rooms from database *****/
-   switch (WhichData)
-     {
-      case Roo_ALL_DATA:
-	 Rooms->Num = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get rooms",
-		         "SELECT roo_rooms.RooCod,"		// row[0]
-			        "roo_rooms.BldCod,"		// row[1]
-			        "bld_buildings.ShortName,"	// row[2]
-			        "roo_rooms.Floor,"		// row[3]
-			        "roo_rooms.Type,"		// row[4]
-			        "roo_rooms.ShortName,"		// row[5]
-			        "roo_rooms.FullName,"		// row[6]
-			        "roo_rooms.Capacity"		// row[7]
-			  " FROM roo_rooms"
-			  " LEFT JOIN bld_buildings"
-			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
-		         " WHERE roo_rooms.CtrCod=%ld"
-		         " ORDER BY %s",
-		         Gbl.Hierarchy.Ctr.CtrCod,
-		         OrderBySubQuery[Rooms->SelectedOrder]);
-	 break;
-      case Roo_ONLY_SHRT_NAME:
-      default:
-	 Rooms->Num = (unsigned)
-	 DB_QuerySELECT (&mysql_res,"can not get rooms",
-		         "SELECT roo_rooms.RooCod,"		// row[0]
-			        "roo_rooms.ShortName"		// row[1]
-			  " FROM roo_rooms LEFT JOIN bld_buildings"
-			    " ON roo_rooms.BldCod=bld_buildings.BldCod"
-		         " WHERE roo_rooms.CtrCod=%ld"
-		         " ORDER BY %s",
-		         Gbl.Hierarchy.Ctr.CtrCod,
-		         OrderBySubQuery[Roo_ORDER_DEFAULT]);
-	 break;
-     }
-
-   /***** Count number of rows in result *****/
-   if (Rooms->Num) // Rooms found...
+   if ((Rooms->Num = Roo_DB_GetListRooms (&mysql_res,Gbl.Hierarchy.Ctr.CtrCod,
+                                          WhichData,Rooms->SelectedOrder))) // Rooms found...
      {
       /***** Create list with courses in center *****/
       if ((Rooms->Lst = calloc ((size_t) Rooms->Num,
@@ -675,18 +558,7 @@ static void Roo_GetDataOfRoomByCod (struct Roo_Room *Room)
       return;
 
    /***** Get data of a room from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a room",
-		       "SELECT roo_rooms.BldCod,"		// row[0]
-			      "bld_buildings.ShortName,"	// row[1]
-			      "roo_rooms.Floor,"		// row[2]
-			      "roo_rooms.Type,"		// row[3]
-			      "roo_rooms.ShortName,"	// row[4]
-			      "roo_rooms.FullName,"	// row[5]
-			      "roo_rooms.Capacity"	// row[6]
-			" FROM roo_rooms LEFT JOIN bld_buildings"
-			  " ON roo_rooms.BldCod=bld_buildings.BldCod"
-		       " WHERE roo_rooms.RooCod=%ld",
-		       Room->RooCod)) // Room found...
+   if (Roo_DB_GetDataOfRoomByCod (&mysql_res,Room->RooCod)) // Room found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -746,6 +618,7 @@ static void Roo_GetBldShrtName (struct Roo_Room *Room,const char *BldShrtNameFro
 
 static Roo_RoomType_t Roo_GetTypeFromString (const char *Str)
   {
+   extern const char *Roo_TypesDB[Roo_NUM_TYPES];
    Roo_RoomType_t Type;
 
    /***** Compare string with all string types *****/
@@ -1016,35 +889,15 @@ void Roo_RemoveRoom (void)
    Roo_GetDataOfRoomByCod (Roo_EditingRoom);
 
    /***** Update groups assigned to this room *****/
-   DB_QueryUPDATE ("can not update room in groups",
-		   "UPDATE grp_groups"
-		     " SET RooCod=0"	// 0 means another room
-		   " WHERE RooCod=%ld",
-		   Roo_EditingRoom->RooCod);
+   Grp_DB_ResetRoomInGrps (Roo_EditingRoom->RooCod);
 
    /***** Remove room *****/
-   DB_QueryDELETE ("can not remove a room",
-		   "DELETE FROM roo_rooms"
-		   " WHERE RooCod=%ld",
-		   Roo_EditingRoom->RooCod);
+   Roo_DB_RemoveRoom (Roo_EditingRoom->RooCod);
 
    /***** Create message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Room_X_removed,
 	            Roo_EditingRoom->FullName);
-  }
-
-/*****************************************************************************/
-/********************** Remove all rooms in a center *************************/
-/*****************************************************************************/
-
-void Roo_DB_RemoveAllRoomsInCtr (long CtrCod)
-  {
-   /***** Remove all rooms in center *****/
-   DB_QueryDELETE ("can not remove rooms",
-		   "DELETE FROM roo_rooms"
-                   " WHERE CtrCod=%ld",
-		   CtrCod);
   }
 
 /*****************************************************************************/
@@ -1083,12 +936,7 @@ void Roo_ChangeBuilding (void)
    else
      {
       /***** Update the table of rooms changing the old building for the new one *****/
-      DB_QueryUPDATE ("can not update the building of a room",
-		      "UPDATE roo_rooms"
-		        " SET BldCod=%ld"
-		      " WHERE RooCod=%ld",
-                      NewBldCod,
-                      Roo_EditingRoom->RooCod);
+      Roo_DB_UpdateRoomBuilding (Roo_EditingRoom->RooCod,NewBldCod);
 
       /***** Get updated data of the room from database *****/
       Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1134,12 +982,7 @@ void Roo_ChangeFloor (void)
    else
      {
       /***** Update the table of rooms changing the old floor for the new one *****/
-      DB_QueryUPDATE ("can not update the capacity of a room",
-		      "UPDATE roo_rooms"
-		        " SET Floor=%d"
-		      " WHERE RooCod=%ld",
-                      NewFloor,
-                      Roo_EditingRoom->RooCod);
+      Roo_DB_UpdateRoomFloor (Roo_EditingRoom->RooCod,NewFloor);
 
       /***** Get updated data of the room from database *****/
       Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1188,12 +1031,7 @@ void Roo_ChangeType (void)
    else
      {
       /***** Update the table of rooms changing the old type for the new one *****/
-      DB_QueryUPDATE ("can not update the type of a room",
-		      "UPDATE roo_rooms"
-		        " SET Type='%s'"
-		      " WHERE RooCod=%ld",
-                      Roo_TypesDB[NewType],
-                      Roo_EditingRoom->RooCod);
+      Roo_DB_UpdateRoomType (Roo_EditingRoom->RooCod,NewType);
 
       /***** Get updated data of the room from database *****/
       Roo_GetDataOfRoomByCod (Roo_EditingRoom);
@@ -1281,7 +1119,9 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If room was in database... *****/
-         if (Roo_DB_CheckIfRoomNameExists (Roo_EditingRoom->RooCod,ParamName,NewClaName))
+         if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Ctr.CtrCod,
+                                           Roo_EditingRoom->RooCod,
+                                           ParamName,NewClaName))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_room_X_already_exists,
                              NewClaName);
@@ -1306,42 +1146,6 @@ static void Roo_RenameRoom (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Update room name *****/
    Str_Copy (CurrentClaName,NewClaName,MaxBytes);
-  }
-
-/*****************************************************************************/
-/********************** Check if the name of room exists *********************/
-/*****************************************************************************/
-
-static bool Roo_DB_CheckIfRoomNameExists (long RooCod,
-                                          const char *FieldName,const char *Name)
-  {
-   /***** Get number of rooms with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a room"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM roo_rooms"
-			  " WHERE CtrCod=%ld"
-			    " AND %s='%s'"
-			    " AND RooCod<>%ld",
-			  Gbl.Hierarchy.Ctr.CtrCod,
-			  FieldName,Name,
-			  RooCod) != 0);
-  }
-
-/*****************************************************************************/
-/******************** Update room name in table of rooms *********************/
-/*****************************************************************************/
-
-static void Roo_DB_UpdateRoomName (long RooCod,
-                                   const char *FieldName,const char *NewRoomName)
-  {
-   /***** Update room changing old name by new name */
-   DB_QueryUPDATE ("can not update the name of a room",
-		   "UPDATE roo_rooms"
-		     " SET %s='%s'"
-		   " WHERE RooCod=%ld",
-		   FieldName,NewRoomName,
-		   RooCod);
   }
 
 /*****************************************************************************/
@@ -1383,12 +1187,7 @@ void Roo_ChangeCapacity (void)
    else
      {
       /***** Update the table of rooms changing the old capacity for the new one *****/
-      DB_QueryUPDATE ("can not update the capacity of a room",
-		      "UPDATE roo_rooms"
-		        " SET Capacity=%u"
-		      " WHERE RooCod=%ld",
-                      NewCapacity,
-                      Roo_EditingRoom->RooCod);
+      Roo_DB_UpdateRoomCapacity (Roo_EditingRoom->RooCod,NewCapacity);
       Roo_EditingRoom->Capacity = NewCapacity;
 
       /***** Message to show the change made *****/
@@ -1563,20 +1362,14 @@ void Roo_ReceiveFormNewRoom (void)
    Roo_EditingRoomConstructor ();
 
    /***** Get parameters from form *****/
-   /* Get room building */
+   /* Get room building, floor and type */
    Roo_EditingRoom->BldCod = Bld_GetParamBldCod ();
+   Roo_EditingRoom->Floor  = Roo_GetParamFloor ();
+   Roo_EditingRoom->Type   = Roo_GetParamType ();
 
-   /* Get room floor */
-   Roo_EditingRoom->Floor = Roo_GetParamFloor ();
-
-   /* Get room type */
-   Roo_EditingRoom->Type = Roo_GetParamType ();
-
-   /* Get room short name */
+   /* Get room short name and full name */
    Par_GetParToText ("ShortName",Roo_EditingRoom->ShrtName,Roo_MAX_BYTES_SHRT_NAME);
-
-   /* Get room full name */
-   Par_GetParToText ("FullName",Roo_EditingRoom->FullName,Roo_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName" ,Roo_EditingRoom->FullName,Roo_MAX_BYTES_FULL_NAME);
 
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)
@@ -1588,16 +1381,17 @@ void Roo_ReceiveFormNewRoom (void)
    /* Get MAC address */
    Roo_EditingRoom->MACnum = MAC_GetMACnumFromForm ("MAC");
 
-
    if (Roo_EditingRoom->ShrtName[0] &&
        Roo_EditingRoom->FullName[0])	// If there's a room name
      {
       /***** If name of room was in database... *****/
-      if (Roo_DB_CheckIfRoomNameExists (-1L,"ShortName",Roo_EditingRoom->ShrtName))
+      if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Ctr.CtrCod,-1L,
+                                        "ShortName",Roo_EditingRoom->ShrtName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_room_X_already_exists,
                           Roo_EditingRoom->ShrtName);
-      else if (Roo_DB_CheckIfRoomNameExists (-1L,"FullName",Roo_EditingRoom->FullName))
+      else if (Roo_DB_CheckIfRoomNameExists (Gbl.Hierarchy.Ctr.CtrCod,-1L,
+                                             "FullName",Roo_EditingRoom->FullName))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_room_X_already_exists,
                           Roo_EditingRoom->FullName);
@@ -1625,31 +1419,11 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
       Room->Type = Roo_NO_TYPE;
 
    /***** Create a new room *****/
-   Room->RooCod =
-   DB_QueryINSERTandReturnCode ("can not create room",
-			        "INSERT INTO roo_rooms"
-			        " (CtrCod,BldCod,Floor,Type,"
-			          "ShortName,FullName,Capacity)"
-			        " VALUES"
-			        " (%ld,%ld,%d,'%s',"
-			          "'%s','%s',%u)",
-			        Gbl.Hierarchy.Ctr.CtrCod,
-			        Room->BldCod,
-			        Room->Floor,
-			        Roo_TypesDB[Room->Type],
-			        Room->ShrtName,
-			        Room->FullName,
-			        Room->Capacity);
+   Room->RooCod = Roo_DB_CreateRoom (Gbl.Hierarchy.Ctr.CtrCod,Room);
 
    /***** Create MAC address *****/
    if (Room->MACnum)
-      DB_QueryINSERT ("can not create MAC address",
-		      "INSERT INTO roo_macs"
-		      " (RooCod,MAC)"
-		      " VALUES"
-		      " (%ld,%llu)",
-		      Room->RooCod,
-		      Room->MACnum);
+      Roo_DB_CreateMACAddress (Room->RooCod,Room->MACnum);
   }
 
 /*****************************************************************************/
@@ -1686,17 +1460,4 @@ static void Roo_EditingRoomDestructor (void)
       free (Roo_EditingRoom);
       Roo_EditingRoom = NULL;
      }
-  }
-
-/*****************************************************************************/
-/********************* Update rooms assigned to a building *******************/
-/*****************************************************************************/
-
-void Roo_DB_RemoveBuildingFromRooms (long BldCod)
-  {
-   DB_QueryUPDATE ("can not update building of rooms",
-		   "UPDATE roo_rooms"
-		     " SET BldCod=0"	// 0 means another building
-		   " WHERE BldCod=%ld",
-		   BldCod);
   }

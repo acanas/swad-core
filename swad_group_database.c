@@ -851,6 +851,19 @@ void Grp_DB_ChangeRoomOfGrp (long GrpCod,long NewRooCod)
   }
 
 /*****************************************************************************/
+/********************* Update groups assigned to a room **********************/
+/*****************************************************************************/
+
+void Grp_DB_ResetRoomInGrps (long RooCod)
+  {
+   DB_QueryUPDATE ("can not update room in groups",
+		   "UPDATE grp_groups"
+		     " SET RooCod=0"	// 0 means another room
+		   " WHERE RooCod=%ld",
+		   RooCod);
+  }
+
+/*****************************************************************************/
 /******************* Change maximum of students in a group *******************/
 /*****************************************************************************/
 

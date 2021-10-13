@@ -49,6 +49,7 @@
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_place.h"
+#include "swad_room_database.h"
 #include "swad_survey.h"
 
 /*****************************************************************************/

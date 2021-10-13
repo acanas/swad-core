@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
+#include "swad_room_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
