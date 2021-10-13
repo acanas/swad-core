@@ -323,8 +323,8 @@ unsigned Log_DB_GetMyCrssAndHitsPerCrs (MYSQL_RES **mysql_res,Rol_Role_t Role)
 /************************** Get my historic courses **************************/
 /*****************************************************************************/
 
-unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,Rol_Role_t Role,
-                                   unsigned MinClicksCrs)
+unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
+                                   Rol_Role_t Role,unsigned MinClicksCrs)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get courses of a user",
@@ -340,6 +340,44 @@ unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,Rol_Role_t Role,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Role,
 		   MinClicksCrs);
+  }
+
+/*****************************************************************************/
+/********************** Write my hits grouped by years ***********************/
+/*****************************************************************************/
+
+unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
+                                  bool AnyCourse,long CrsCod,Rol_Role_t Role,
+                                  time_t FirstClickTimeUTC)
+  {
+   char SubQueryCrs[128];
+   char SubQueryRol[128];
+
+   if (AnyCourse)
+      SubQueryCrs[0] = '\0';
+   else
+      sprintf (SubQueryCrs," AND CrsCod=%ld",CrsCod);
+
+   if (Role == Rol_UNK)	// Here Rol_UNK means any role
+      SubQueryRol[0] = '\0';
+   else
+      sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get clicks",
+		   "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"	// row[0]
+				       "COUNT(*)"							// row[1]
+		    " FROM log"
+		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+		     " AND UsrCod=%ld"
+		     "%s"
+		     "%s"
+		   " GROUP BY Year"
+		   " ORDER BY Year DESC",
+		   (long) FirstClickTimeUTC,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   SubQueryCrs,
+		   SubQueryRol);
   }
 
 /*****************************************************************************/

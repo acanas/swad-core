@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.31.1 (2021-10-13)"
+#define Log_PLATFORM_VERSION	"SWAD 21.31.2 (2021-10-13)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.69.1.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.31.2:  Oct 13, 2021  Queries moved to module swad_log_database. (319542 lines)
 	Version 21.31.1:  Oct 13, 2021  Queries moved to module swad_log_database. (319520 lines)
 	Version 21.31:    Oct 13, 2021  New module swad_report_database for database queries related to user reports. (319475 lines)
 	Version 21.30.1:  Oct 13, 2021  Queries moved to module swad_record_database. (319411 lines)

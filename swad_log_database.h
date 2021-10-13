@@ -55,8 +55,11 @@ unsigned Log_DB_GetMyClicksGroupedByAction (MYSQL_RES **mysql_res,
 unsigned Log_DB_GetMyMaxHitsPerYear (MYSQL_RES **mysql_res,
                                      time_t FirstClickTimeUTC);
 unsigned Log_DB_GetMyCrssAndHitsPerCrs (MYSQL_RES **mysql_res,Rol_Role_t Role);
-unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,Rol_Role_t Role,
-                                   unsigned MinClicksCrs);
+unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
+                                   Rol_Role_t Role,unsigned MinClicksCrs);
+unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
+                                  bool AnyCourse,long CrsCod,Rol_Role_t Role,
+                                  time_t FirstClickTimeUTC);
 
 void Log_DB_RemoveOldEntriesRecentLog (void);
 

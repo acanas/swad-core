@@ -1094,8 +1094,6 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report)
   {
-   char SubQueryCrs[128];
-   char SubQueryRol[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumHits;
@@ -1106,31 +1104,8 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    unsigned Year;
 
    /***** Make the query *****/
-   if (AnyCourse)
-      SubQueryCrs[0] = '\0';
-   else
-      sprintf (SubQueryCrs," AND CrsCod=%ld",CrsCod);
-
-   if (Role == Rol_UNK)	// Here Rol_UNK means any role
-      SubQueryRol[0] = '\0';
-   else
-      sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
-
-   NumHits = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get clicks",
-		   "SELECT SQL_NO_CACHE YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"	// row[0]
-				       "COUNT(*)"								// row[1]
-		    " FROM log"
-		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-		     " AND UsrCod=%ld"
-		     "%s"
-		     "%s"
-		   " GROUP BY Year"
-		   " ORDER BY Year DESC",
-		   (long) Report->UsrFigures.FirstClickTimeUTC,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   SubQueryCrs,
-		   SubQueryRol);
+   NumHits = Log_DB_GetMyHitsPerYear (&mysql_res,AnyCourse,CrsCod,Role,
+                                      Report->UsrFigures.FirstClickTimeUTC);
 
    /***** Initialize first year *****/
    FirstYear = 1900 + Report->tm_FirstClickTime.tm_year;
@@ -1150,7 +1125,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
      }
 
    /***** Write rows *****/
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -1209,7 +1184,7 @@ static void Rep_ComputeMaxAndTotalHits (struct Rep_Hits *Hits,
    MYSQL_ROW row;
 
    /***** For each row... *****/
-   for (NumHit = 1, Hits->Max = 0;
+   for (NumHit  = 1, Hits->Max = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -1302,13 +1277,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
    char PathUniqueDirReport[PATH_MAX + 1];
 
    /***** Get directories for the reports *****/
-   NumReports = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's usage reports",
-		   "SELECT UniqueDirL,"	// row[0]
-			  "UniqueDirR"	// row[1]
-		    " FROM usr_reports"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   NumReports = Rep_DB_GetUsrReportsFiles (&mysql_res,UsrCod);
 
    /***** Remove the reports *****/
    for (NumReport = 0;

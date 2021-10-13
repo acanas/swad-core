@@ -99,6 +99,21 @@ void Rep_DB_CreateNewReport (long UsrCod,const struct Rep_Report *Report,
   }
 
 /*****************************************************************************/
+/********************** Get directories for the reports **********************/
+/*****************************************************************************/
+
+unsigned Rep_DB_GetUsrReportsFiles (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's usage reports",
+		   "SELECT UniqueDirL,"	// row[0]
+			  "UniqueDirR"	// row[1]
+		    " FROM usr_reports"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
 /********** Remove all user's usage reports of a user from database **********/
 /*****************************************************************************/
 

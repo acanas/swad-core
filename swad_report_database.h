@@ -45,6 +45,8 @@
 void Rep_DB_CreateNewReport (long UsrCod,const struct Rep_Report *Report,
                              const char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 
+unsigned Rep_DB_GetUsrReportsFiles (MYSQL_RES **mysql_res,long UsrCod);
+
 void Rep_DB_RemoveUsrReports (long UsrCod);
 
 #endif
