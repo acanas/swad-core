@@ -172,20 +172,20 @@ unsigned Not_DB_GetAllNotices (MYSQL_RES **mysql_res)
 /***************************** Get active notices ****************************/
 /*****************************************************************************/
 
-unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res)
+unsigned Not_DB_GetActiveNotices (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get notices from database",
-		   "SELECT NotCod,"				// row[0]
-			  "UNIX_TIMESTAMP(CreatTime) AS F,"	// row[1]
-			  "UsrCod,"				// row[2]
-			  "Content,"				// row[3]
-			  "Status"				// row[4]
+		   "SELECT NotCod,"			// row[0]
+			  "UNIX_TIMESTAMP(CreatTime),"	// row[1]
+			  "UsrCod,"			// row[2]
+			  "Content,"			// row[3]
+			  "Status"			// row[4]
 		    " FROM not_notices"
 		   " WHERE CrsCod=%ld"
 		     " AND Status=%u"
 		   " ORDER BY CreatTime DESC",
-		   Gbl.Hierarchy.Crs.CrsCod,
+		   CrsCod,
 		   (unsigned) Not_ACTIVE_NOTICE);
   }
 

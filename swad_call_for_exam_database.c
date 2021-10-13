@@ -144,6 +144,29 @@ unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/******* Get exam announcements (only future exams) in current course ********/
+/*****************************************************************************/
+
+unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
+  {
+   /***** Get exam dates (ordered from older to more recent)
+	  of future visible calls for exams
+	  in current course from database *****/
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get calls for exams",
+		   "SELECT ExaCod,"					// row[0]
+			  "UNIX_TIMESTAMP(CallDate),"			// row[1]
+			  "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"	// row[2]
+		    " FROM cfe_exams"
+		   " WHERE CrsCod=%ld"
+		     " AND Status=%u"
+		     " AND ExamDate>=NOW()"
+		   " ORDER BY ExamDate",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
+  }
+
+/*****************************************************************************/
 /***************** Get data of a call for exam from database *****************/
 /*****************************************************************************/
 

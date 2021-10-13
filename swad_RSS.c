@@ -29,12 +29,13 @@
 #include <stddef.h>		// For NULL
 #include <string.h>
 
-#include "swad_call_for_exam.h"
+#include "swad_call_for_exam_database.h"
 #include "swad_changelog.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_notice.h"
+#include "swad_notice_database.h"
 #include "swad_RSS.h"
 
 /*****************************************************************************/
@@ -78,8 +79,8 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
       Err_ShowErrorAndExit ("Can not create RSS file.");
 
    /***** Write RSS header *****/
-   fprintf (FileRSS,"<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
-   fprintf (FileRSS,"<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n");
+   fprintf (FileRSS,"<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n"
+                    "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n");
 
    /***** Write channel header *****/
    fprintf (FileRSS,"<channel>\n");
@@ -107,9 +108,9 @@ void RSS_UpdateRSSFileForACrs (struct Crs_Course *Crs)
             Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
             Cfg_URL_SWAD_CGI,Crs->CrsCod);
-   fprintf (FileRSS,"<width>112</width>\n");
-   fprintf (FileRSS,"<height>32</height>\n");
-   fprintf (FileRSS,"</image>\n");
+   fprintf (FileRSS,"<width>112</width>\n"
+                    "<height>32</height>\n"
+                    "</image>\n");
 
    // All date-times in RSS conform to the Date and Time Specification of RFC 822, with the exception that the year may be expressed with two characters or four characters (four preferred)
    fprintf (FileRSS,"<pubDate>");	
@@ -159,22 +160,8 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
    unsigned NumNot;
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get active notices in course *****/
-   NumNotices = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get notices from database",
-		   "SELECT NotCod,"				// row[0]
-			  "UNIX_TIMESTAMP(CreatTime) AS T,"	// row[1]
-			  "UsrCod,"				// row[2]
-			  "Content"				// row[3]
-		    " FROM not_notices"
-		   " WHERE CrsCod=%ld"
-		     " AND Status=%u"
-		   " ORDER BY T DESC",
-		   Crs->CrsCod,
-		   (unsigned) Not_ACTIVE_NOTICE);
-
-   /***** Write items with notices *****/
-   if (NumNotices)
+   /***** Write items with active notices *****/
+   if ((NumNotices = Not_DB_GetActiveNotices (&mysql_res,Crs->CrsCod)))
      {
       Usr_UsrDataConstructor (&UsrDat);
 
@@ -185,16 +172,16 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
          /***** Get data of the notice *****/
          row = mysql_fetch_row (mysql_res);
 
-         /* Get notice code */
+         /* Get notice code (row[0]) */
          if (sscanf (row[0],"%ld",&NotCod) != 1)
             Err_WrongNoticeExit ();
 
-         /* Get UTC date-time of publication */
+         /* Get UTC date-time of publication (row[1]) */
          CreatTimeUTC = 0L;
          if (row[1])
             sscanf (row[1],"%ld",&CreatTimeUTC);
 
-         /* Get author */
+         /* Get author (row[2]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
          Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database
                                                   Usr_DONT_GET_PREFS,
@@ -263,22 +250,8 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 
    if (Gbl.DB.DatabaseIsOpen)
      {
-      /***** Get exam announcements (only future exams) in current course from database *****/
-      NumExams = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get calls for exams",
-		      "SELECT ExaCod,"						// row[0]
-			     "UNIX_TIMESTAMP(CallDate) AS T,"			// row[1]
-			     "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"	// row[2]
-		       " FROM cfe_exams"
-		      " WHERE CrsCod=%ld"
-		        " AND Status=%u"
-		        " AND ExamDate>=NOW()"
-		      " ORDER BY T",
-		      Gbl.Hierarchy.Crs.CrsCod,
-		      (unsigned) Cfe_VISIBLE_CALL_FOR_EXAM);
-
-      /***** Write items with notices *****/
-      if (NumExams)
+      /***** Write exam announcements (only future exams) in current course *****/
+      if ((NumExams = Cfe_DB_GetFutureCallsForExamsInCurrentCrs (&mysql_res)))
 	{
 	 Usr_UsrDataConstructor (&UsrDat);
 
@@ -289,11 +262,11 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 	    /***** Get data of the call for exam *****/
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Get call for exam code */
+	    /* Get call for exam code (row[0]) */
 	    if (sscanf (row[0],"%ld",&ExaCod) != 1)
 	       Err_WrongCallForExamExit ();
 
-	    /* Get UTC date-time of publication */
+	    /* Get UTC date-time of publication (row[1]) */
 	    CallTimeUTC = 0L;
 	    if (row[1])
 	       sscanf (row[1],"%ld",&CallTimeUTC);
@@ -308,8 +281,8 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Crs_Course *Crs)
 	    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
 		     Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
-	    /* Write full content of the exam announcement */
-	    fprintf (FileRSS,"<description><![CDATA[<p><em>Fecha examen: %s</em></p>]]></description>\n",
+	    /* Write full content of the exam announcement (row[2]) */
+	    fprintf (FileRSS,"<description><![CDATA[<p><em>Fecha examen: %s</em></p>]]></description>\n",	// TODO: Need translation!
 		     row[2]);
 
 	    /* Write unique string for this item */

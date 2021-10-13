@@ -333,7 +333,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    switch (TypeNoticesListing)
      {
       case Not_LIST_BRIEF_NOTICES:
-	 NumNotices = Not_DB_GetActiveNotices (&mysql_res);
+	 NumNotices = Not_DB_GetActiveNotices (&mysql_res,Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 NumNotices = Not_DB_GetAllNotices (&mysql_res);
