@@ -1,7 +1,7 @@
-// swad_role.h: user's roles
+// swad_role_database.h: user's roles, operations with database
 
-#ifndef _SWAD_ROL
-#define _SWAD_ROL
+#ifndef _SWAD_ROL_DB
+#define _SWAD_ROL_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,8 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_HTML.h"
-#include "swad_user.h"
+#include "swad_role_type.h"
 
 /*****************************************************************************/
 /************************** Public constant and types ************************/
@@ -38,28 +37,10 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Rol_SetMyRoles (void);
+void Rol_DB_UpdateUsrRoleInCrs (long CrsCod,long UsrCod,Rol_Role_t NewRole);
 
-unsigned Rol_GetNumAvailableRoles (void);
-Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles);
-Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);
-Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod);
-Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod);
-void Rol_FlushCacheMyRoleInCurrentCrs (void);
-Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod);
-void Rol_FlushCacheRoleUsrInCrs (void);
-Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod);
-void Rol_GetRolesInAllCrss (struct UsrData *UsrDat);
-
-Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);
-unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr);
-
-void Rol_PutFormToChangeMyRole (const char *ClassSelect);
-void Rol_ChangeMyRole (void);
-
-void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool Disabled,HTM_SubmitOnChange_t SubmitOnChange);
-void Rol_PutHiddenParamRoles (unsigned Roles);
-unsigned Rol_GetSelectedRoles (void);
+Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long CrsCod);
+unsigned Rol_DB_GetRolesInAllCrss (MYSQL_RES **mysql_res,long UsrCod);
+Rol_Role_t Rol_DB_GetRequestedRole (long CrsCod,long UsrCod);
 
 #endif

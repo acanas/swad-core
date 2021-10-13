@@ -33,6 +33,7 @@
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
+#include "swad_role_database.h"
 #include "swad_role_type.h"
 
 /*****************************************************************************/
@@ -410,14 +411,7 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
       Gbl.Cache.RoleUsrInCrs.Role = Rol_GetMyRoleInCrs (CrsCod);
    else
       /* Get role of the user in course from database */
-      Gbl.Cache.RoleUsrInCrs.Role =
-      DB_QuerySELECTRole ("can not get the role of a user in a course",
-			  "SELECT Role"
-			   " FROM crs_users"
-			  " WHERE CrsCod=%ld"
-			    " AND UsrCod=%ld",
-			  CrsCod,
-			  UsrCod);
+      Gbl.Cache.RoleUsrInCrs.Role = Rol_DB_GetRoleUsrInCrs (UsrCod,CrsCod);
    return Gbl.Cache.RoleUsrInCrs.Role;
   }
 
@@ -439,12 +433,7 @@ void Rol_GetRolesInAllCrss (struct UsrData *UsrDat)
       return;
 
    /***** Get distinct roles in all courses of the user from database *****/
-   NumRoles = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's roles in all courses",
-		   "SELECT DISTINCT(Role)"	// row[0]
-		    " FROM crs_users"
-		   " WHERE UsrCod=%ld",
-		   UsrDat->UsrCod);
+   NumRoles = Rol_DB_GetRolesInAllCrss (&mysql_res,UsrDat->UsrCod);
    for (NumRole = 0, UsrDat->Roles.InCrss = 0;
 	NumRole < NumRoles;
 	NumRole++)
@@ -631,52 +620,4 @@ unsigned Rol_GetSelectedRoles (void)
      }
 
    return Roles;
-  }
-
-/*****************************************************************************/
-/************ Get requested role of a user in current course *****************/
-/*****************************************************************************/
-
-Rol_Role_t Rol_DB_GetRequestedRole (long UsrCod)
-  {
-   /***** Get requested role from database *****/
-   return DB_QuerySELECTRole ("can not get requested role",
-			      "SELECT Role"
-			       " FROM crs_requests"
-			      " WHERE CrsCod=%ld"
-			        " AND UsrCod=%ld",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      UsrCod);
-  }
-
-/*****************************************************************************/
-/******************* Get user's role in course from database *****************/
-/*****************************************************************************/
-
-unsigned Rol_DB_GetUsrRoleInCrs (MYSQL_RES **mysql_res,long CrsCod,long UsrCod)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get user's role in course",
-		   "SELECT Role"		// row[0]
-		    " FROM crs_users"
-		   " WHERE CrsCod=%ld"
-		     " AND UsrCod=%ld",
-		   CrsCod,
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/************* Update the role of a user in the current course ***************/
-/*****************************************************************************/
-
-void Rol_DB_UpdateUsrRoleInCurrentCrs (long UsrCod,Rol_Role_t NewRole)
-  {
-   DB_QueryUPDATE ("can not modify user's role in course",
-		   "UPDATE crs_users"
-		     " SET Role=%u"
-		   " WHERE CrsCod=%ld"
-		     " AND UsrCod=%ld",
-	           (unsigned) NewRole,
-	           Gbl.Hierarchy.Crs.CrsCod,
-	           UsrCod);
   }

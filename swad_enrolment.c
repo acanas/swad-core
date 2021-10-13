@@ -59,6 +59,7 @@
 #include "swad_photo.h"
 #include "swad_record_database.h"
 #include "swad_role.h"
+#include "swad_role_database.h"
 #include "swad_setting.h"
 #include "swad_test_print.h"
 #include "swad_user.h"
@@ -225,7 +226,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   Rol_DB_UpdateUsrRoleInCurrentCrs (UsrDat->UsrCod,NewRole);
+   Rol_DB_UpdateUsrRoleInCrs (Gbl.Hierarchy.Crs.CrsCod,UsrDat->UsrCod,NewRole);
 
    /***** Flush caches *****/
    Usr_FlushCachesUsr ();
@@ -460,39 +461,28 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                             long CrsCod,long UsrCod)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    struct UsrData UsrDat;
    Rol_Role_t Role;
 
-   SummaryStr[0] = '\0';        // Return nothing on error
-
    /***** Get user's role in course from database *****/
-   if (Rol_DB_GetUsrRoleInCrs (&mysql_res,CrsCod,UsrCod) == 1)	// Result should have a unique row
-     {
-      /***** Get user's role in course *****/
-      row = mysql_fetch_row (mysql_res);
+   Role = Rol_GetRoleUsrInCrs (UsrCod,CrsCod);
 
-      /* Initialize structure with user's data */
-      Usr_UsrDataConstructor (&UsrDat);
+   /***** Set summary string *****/
+   /* Initialize structure with user's data */
+   Usr_UsrDataConstructor (&UsrDat);
 
-      /* Get user's data */
-      UsrDat.UsrCod = UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-                                               Usr_DONT_GET_PREFS,
-                                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+   /* Get user's data */
+   UsrDat.UsrCod = UsrCod;
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+					    Usr_DONT_GET_PREFS,
+					    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
-      /* Role (row[0]) */
-      Role = Rol_ConvertUnsignedStrToRole (row[0]);
-      Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
-		Ntf_MAX_BYTES_SUMMARY);
+   /* Set summary string depending on role and sex */
+   Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
+	     Ntf_MAX_BYTES_SUMMARY);
 
-      /* Free memory used for user's data */
-      Usr_UsrDataDestructor (&UsrDat);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   /* Free memory used for user's data */
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
@@ -2002,7 +1992,8 @@ void Enr_AskIfRejectSignUp (void)
         }
       else        // User does not belong to this course
         {
-         Role = Rol_DB_GetRequestedRole (Gbl.Usrs.Other.UsrDat.UsrCod);
+         Role = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Crs.CrsCod,
+                                         Gbl.Usrs.Other.UsrDat.UsrCod);
          if (Role == Rol_STD ||
              Role == Rol_NET ||
              Role == Rol_TCH)

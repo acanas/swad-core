@@ -58,6 +58,7 @@
 #include "swad_record.h"
 #include "swad_record_database.h"
 #include "swad_role.h"
+#include "swad_role_database.h"
 #include "swad_setting.h"
 #include "swad_timetable.h"
 #include "swad_user.h"
@@ -2833,7 +2834,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			   break;
 			default:	// User does not belong to current course
 			   /* If there is a request of this user, default role is the requested role */
-			   DefaultRoleInForm = Rol_DB_GetRequestedRole (UsrDat->UsrCod);
+			   DefaultRoleInForm = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Crs.CrsCod,
+			                                                UsrDat->UsrCod);
 
 			   switch (DefaultRoleInForm)
 			     {
