@@ -38,6 +38,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_log_database.h"
 #include "swad_profile.h"
 #include "swad_report_database.h"
 #include "swad_tab.h"
@@ -402,11 +403,11 @@ static void Rep_WriteHeader (const struct Rep_Report *Report)
    extern const char *Txt_Permalink;
 
    /***** Begin header *****/
-   fprintf (Gbl.F.Rep,"<header>");
-   fprintf (Gbl.F.Rep,"<h1>");
+   fprintf (Gbl.F.Rep,"<header>"
+                      "<h1>");
    fprintf (Gbl.F.Rep,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Rep,"</h1>");
-   fprintf (Gbl.F.Rep,"<ul>");
+   fprintf (Gbl.F.Rep,"</h1>"
+                      "<ul>");
 
    /***** User *****/
    fprintf (Gbl.F.Rep,"<li>%s: <strong>%s</strong></li>",
@@ -728,19 +729,9 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	    Txt_Hits_per_action);
 
    /***** Make the query *****/
-   NumHits = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get clicks",
-		   "SELECT SQL_NO_CACHE ActCod,"		// row[0]
-				       "COUNT(*) AS N"	// row[1]
-		    " FROM log"
-		   " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-		     " AND UsrCod=%ld"
-		   " GROUP BY ActCod"
-		   " ORDER BY N DESC"
-		   " LIMIT %u",
-		   (long) Report->UsrFigures.FirstClickTimeUTC,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Rep_MAX_ACTIONS);
+   NumHits = Log_DB_GetMyClicksGroupedByAction (&mysql_res,
+					        Report->UsrFigures.FirstClickTimeUTC,
+					        Rep_MAX_ACTIONS);
 
    /***** Compute maximum number of hits per action *****/
    Rep_ComputeMaxAndTotalHits (&Report->Hits,NumHits,mysql_res,1);
@@ -865,55 +856,22 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
 /*****************************************************************************/
 /************ Get the maximum number of hits per course-year-role ************/
 /*****************************************************************************/
-// Return the maximum number of hits per year
 
 static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   DB_QuerySELECT (&mysql_res,"can not get last question index",
-		   "SELECT MAX(N) FROM ("
-		   // Clicks without course selected --------------------------
-	           "SELECT -1 AS CrsCod,"
-	                  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	                  "%u AS Role,"
-	                  "COUNT(*) AS N"
-	            " FROM log"
-	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	             " AND UsrCod=%ld"
-	             " AND CrsCod<=0"
-	           " GROUP BY Year"
-		   // ---------------------------------------------------------
-	           " UNION "
-		   // Clicks as student, non-editing teacher or teacher in courses
-	           "SELECT CrsCod,"
-	                  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	                  "Role,"
-	                  "COUNT(*) AS N"
-	            " FROM log"
-	           " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
-	             " AND UsrCod=%ld"
-	             " AND Role>=%u"	// Student
-	             " AND Role<=%u"	// Teacher
-	             " AND CrsCod>0"
-	           " GROUP BY CrsCod,Year,Role"
-		   // ---------------------------------------------------------
-	           ") AS hits_per_crs_year",
-		   (unsigned) Rol_UNK,
-		   (long) Report->UsrFigures.FirstClickTimeUTC,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (long) Report->UsrFigures.FirstClickTimeUTC,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Rol_STD,
-		   (unsigned) Rol_TCH);
-
-   /***** Get number of users *****/
    Report->MaxHitsPerYear = 0;
-   row = mysql_fetch_row (mysql_res);
-   if (row[0])	// There are questions
-      if (sscanf (row[0],"%lu",&Report->MaxHitsPerYear) != 1)
-         Err_ShowErrorAndExit ("Error when getting maximum hits.");
+
+   /***** Get the maximum number of hits per year *****/
+   if (Log_DB_GetMyMaxHitsPerYear (&mysql_res,Report->UsrFigures.FirstClickTimeUTC))
+     {
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])	// There are questions
+	 if (sscanf (row[0],"%lu",&Report->MaxHitsPerYear) != 1)
+	    Err_ShowErrorAndExit ("Error when getting maximum hits.");
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -958,33 +916,14 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 					   (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
 
-      /***** Get courses of a user from database *****/
-      NumCrss = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-		      "SELECT my_courses.CrsCod,"		// row[0]
-			     "COUNT(*) AS N"			// row[1]
-		       " FROM (SELECT CrsCod"
-			       " FROM crs_users"
-			      " WHERE UsrCod=%ld"
-			        " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
-		       " LEFT JOIN log"
-			 " ON (my_courses.CrsCod=log.CrsCod)"
-		      " WHERE log.UsrCod=%ld"
-		        " AND log.Role=%u"
-		      " GROUP BY my_courses.CrsCod"
-		      " ORDER BY N DESC,"
-			        "my_courses.CrsCod DESC",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
-		      Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
-
-      /***** List the courses (one row per course) *****/
-      if (NumCrss)
+      /***** Get and list my courses (one row per course) *****/
+      if ((NumCrss = Log_DB_GetMyCrssAndHitsPerCrs (&mysql_res,Role)))
 	{
 	 /* Heading row */
 	 fprintf (Gbl.F.Rep,"<ol>");
 
 	 /* Write courses */
-	 for (NumCrs = 1;
+	 for (NumCrs  = 1;
 	      NumCrs <= NumCrss;
 	      NumCrs++)
 	   {
@@ -1049,23 +988,8 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    unsigned NumCrs;
    long CrsCod;
 
-   /***** Get historic courses of a user from log *****/
-   NumCrss = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get courses of a user",
-		   "SELECT CrsCod,"		// row[0]
-			  "COUNT(*) AS N"	// row[1]
-		    " FROM log"
-		   " WHERE UsrCod=%ld"
-		     " AND Role=%u"
-		     " AND CrsCod>0"
-		   " GROUP BY CrsCod"
-		   " HAVING N>%u"
-		   " ORDER BY N DESC",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
-		   Rep_MIN_CLICKS_CRS);
-
-   /***** List the courses (one row per course) *****/
-   if (NumCrss)
+   /***** Get and list historic courses of a user from log (one row per course) *****/
+   if ((NumCrss = Log_DB_GetMyHistoricCrss (&mysql_res,Role,Rep_MIN_CLICKS_CRS)))
      {
       /* Heading row */
       fprintf (Gbl.F.Rep,"<li>");
@@ -1074,7 +998,7 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
       fprintf (Gbl.F.Rep,":<ol>");
 
       /* Write courses */
-      for (NumCrs = 1;
+      for (NumCrs  = 1;
 	   NumCrs <= NumCrss;
 	   NumCrs++)
         {
