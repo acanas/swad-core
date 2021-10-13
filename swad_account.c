@@ -980,7 +980,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Brw_RemoveUsrWorksInAllCrss (UsrDat);        // Make this before of removing the user from the courses
 
    /***** Remove the fields of course record in all courses *****/
-   Rec_DB_RemoveFieldsCrsRecordAll (UsrDat->UsrCod);
+   Rec_DB_RemoveAllFieldContentsFromUsrRecords (UsrDat->UsrCod);
 
    /***** Remove user from all his/her projects *****/
    Prj_RemoveUsrFromProjects (UsrDat->UsrCod);

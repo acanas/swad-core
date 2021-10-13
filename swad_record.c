@@ -88,8 +88,6 @@ extern struct Globals Gbl;
 
 static void Rec_WriteHeadingRecordFields (void);
 
-static unsigned Rec_DB_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res);
-
 static void Rec_PutParamFieldCod (void *FieldCod);
 static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
@@ -206,20 +204,8 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    if (++Gbl.Crs.Records.LstFields.NestedCalls > 1) // If the list is already created, don't do anything
       return;
 
-   /***** Get fields of records in a course from database *****/
-   Gbl.Crs.Records.LstFields.Num = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get fields of records in a course",
-		   "SELECT FieldCod,"		// row[0]
-			  "FieldName,"		// row[1]
-			  "NumLines,"		// row[2]
-			  "Visibility"		// row[3]
-		    " FROM crs_record_fields"
-		   " WHERE CrsCod=%ld"
-		   " ORDER BY FieldName",
-		   Gbl.Hierarchy.Crs.CrsCod);
-
    /***** Get the fields of records *****/
-   if (Gbl.Crs.Records.LstFields.Num)
+   if ((Gbl.Crs.Records.LstFields.Num = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Crs.CrsCod)))
      {
       /***** Create a list of fields *****/
       if ((Gbl.Crs.Records.LstFields.Lst = calloc (Gbl.Crs.Records.LstFields.Num,
@@ -498,13 +484,12 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
    unsigned NumRow;
 
    /* Query database */
-   if ((NumRows = Rec_DB_GetAllFieldsInCurrCrs (&mysql_res)) > 0)	// If se han encontrado groups...
-      /* Compare with all the tipos of group from the database */
+   if ((NumRows = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Crs.CrsCod)) > 0)	// If fields found...
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
         {
-	 /* Get next type of group */
+	 /* Get next field */
 	 row = mysql_fetch_row (mysql_res);
 
          /* The name of the field is in row[1] */
@@ -522,24 +507,6 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName)
   }
 
 /*****************************************************************************/
-/******* Get the fields of records already present in current course *********/
-/*****************************************************************************/
-
-static unsigned Rec_DB_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
-  {
-   /***** Get fields of records in current course from database *****/
-   return DB_QuerySELECT (mysql_res,"can not get fields of records"
-				    " in a course",
-			  "SELECT FieldCod,"	// row[0]
-			         "FieldName,"	// row[1]
-			         "Visibility"	// row[2]
-			   " FROM crs_record_fields"
-			  " WHERE CrsCod=%ld"
-			  " ORDER BY FieldName",
-			  Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /************************* Create a field of record **************************/
 /*****************************************************************************/
 
@@ -548,15 +515,7 @@ void Rec_CreateRecordField (void)
    extern const char *Txt_Created_new_record_field_X;
 
    /***** Create the new field *****/
-   DB_QueryINSERT ("can not create field of record",
-		   "INSERT INTO crs_record_fields"
-		   " (CrsCod,FieldName,NumLines,Visibility)"
-		   " VALUES"
-		   " (%ld,'%s',%u,%u)",
-	           Gbl.Hierarchy.Crs.CrsCod,
-	           Gbl.Crs.Records.Field.Name,
-	           Gbl.Crs.Records.Field.NumLines,
-	           (unsigned) Gbl.Crs.Records.Field.Visibility);
+   Rec_DB_CreateField (Gbl.Hierarchy.Crs.CrsCod,&Gbl.Crs.Records.Field);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_record_field_X,
@@ -576,7 +535,7 @@ void Rec_ReqRemField (void)
       Err_WrongRecordFieldExit ();
 
    /***** Check if exists any record with that field filled *****/
-   if ((NumRecords = Rec_DB_CountNumRecordsInCurrCrsWithField (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
+   if ((NumRecords = Rec_DB_CountNumRecordsWithFieldContent (Gbl.Crs.Records.Field.FieldCod)))	// There are records with that field filled
       Rec_AskConfirmRemFieldWithRecords (NumRecords);
    else			// There are no records with that field filled
       Rec_RemoveFieldFromDB ();
@@ -590,22 +549,6 @@ long Rec_GetFieldCod (void)
   {
    /***** Get the code of the field *****/
    return Par_GetParToLong ("FieldCod");
-  }
-
-/*****************************************************************************/
-/*************** Get the number of records with a field filled ***************/
-/*****************************************************************************/
-
-unsigned Rec_DB_CountNumRecordsInCurrCrsWithField (long FieldCod)
-  {
-   /***** Get number of cards with a given field in a course from database *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of records"
-		  " with a given field not empty in a course",
-		  "SELECT COUNT(*)"
-		   " FROM crs_records"
-		  " WHERE FieldCod=%ld",
-		  FieldCod);
   }
 
 /*****************************************************************************/
@@ -650,16 +593,10 @@ void Rec_RemoveFieldFromDB (void)
                       &Gbl.Crs.Records.Field.Visibility);
 
    /***** Remove field from all records *****/
-   DB_QueryDELETE ("can not remove field from all students' records",
-		   "DELETE FROM crs_records"
-		   " WHERE FieldCod=%ld",
-                   Gbl.Crs.Records.Field.FieldCod);
+   Rec_DB_RemoveFieldContentFromAllUsrsRecords (Gbl.Crs.Records.Field.FieldCod);
 
    /***** Remove the field *****/
-   DB_QueryDELETE ("can not remove field of record",
-		   "DELETE FROM crs_record_fields"
-		   " WHERE FieldCod=%ld",
-                   Gbl.Crs.Records.Field.FieldCod);
+   Rec_DB_RemoveField (Gbl.Crs.Records.Field.FieldCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Record_field_X_removed,
@@ -766,7 +703,7 @@ void Rec_RenameField (void)
          else
            {
             /* Update the table of fields changing then old name by the new one */
-            Rec_DB_UpdateCrsRecordFieldName (Gbl.Crs.Records.Field.FieldCod,NewFieldName);
+            Rec_DB_UpdateFieldName (Gbl.Crs.Records.Field.FieldCod,NewFieldName);
 
             /***** Write message to show the change made *****/
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_record_field_X_has_been_renamed_as_Y,
@@ -819,7 +756,7 @@ void Rec_ChangeLinesField (void)
    else
      {
       /***** Update of the table of fields changing the old number of lines by the new one *****/
-      Rec_DB_UpdateCrsRecordFieldNumLines (Gbl.Crs.Records.Field.FieldCod,NewNumLines);
+      Rec_DB_UpdateFieldNumLines (Gbl.Crs.Records.Field.FieldCod,NewNumLines);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
@@ -864,7 +801,7 @@ void Rec_ChangeVisibilityField (void)
    else
      {
       /***** Update the table of fields changing the old visibility by the new *****/
-      Rec_DB_UpdateCrsRecordFieldVisibility (Gbl.Crs.Records.Field.FieldCod,NewVisibility);
+      Rec_DB_UpdateFieldVisibility (Gbl.Crs.Records.Field.FieldCod,NewVisibility);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
@@ -1791,9 +1728,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_End ();
 
 	       /* Get the text of the field */
-	       if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,
-						 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-						 UsrDat->UsrCod))
+	       if (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
+						    Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+						    UsrDat->UsrCod))
 		 {
 		  ThisFieldHasText = true;
 		  row = mysql_fetch_row (mysql_res);
@@ -1886,25 +1823,25 @@ void Rec_UpdateCrsRecord (long UsrCod)
       if (Rec_CheckIfICanEditField (Gbl.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /***** Check if already exists this field for this user in database *****/
-         FieldAlreadyExists = (Rec_DB_GetFieldFromCrsRecord (&mysql_res,
-                                                             Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-                                                             UsrCod) != 0);
+         FieldAlreadyExists = (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
+                                                                Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                                                                UsrCod) != 0);
          DB_FreeMySQLResult (&mysql_res);
          if (FieldAlreadyExists)
            {
             if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
                /***** Update text of the field of course record *****/
-               Rec_DB_UpdateCrsRecordField (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+               Rec_DB_UpdateFieldTxt (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
                                             UsrCod,
                                             Gbl.Crs.Records.LstFields.Lst[NumField].Text);
             else
                /***** Remove text of the field of course record *****/
-               Rec_DB_RemoveCrsRecordField (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+               Rec_DB_RemoveFieldContentFromUsrRecord (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
                                             UsrCod);
            }
          else if (Gbl.Crs.Records.LstFields.Lst[NumField].Text[0])
 	    /***** Insert text field of course record *****/
-            Rec_DB_CreateCrsRecordField (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+            Rec_DB_CreateFieldContent (Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
 			                 UsrCod,
 			                 Gbl.Crs.Records.LstFields.Lst[NumField].Text);
        }

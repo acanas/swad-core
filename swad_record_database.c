@@ -77,10 +77,27 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
+/************************* Create a field of record **************************/
+/*****************************************************************************/
+
+void Rec_DB_CreateField (long CrsCod,const struct RecordField *Field)
+  {
+   DB_QueryINSERT ("can not create field of record",
+		   "INSERT INTO crs_record_fields"
+		   " (CrsCod,FieldName,NumLines,Visibility)"
+		   " VALUES"
+		   " (%ld,'%s',%u,%u)",
+	           CrsCod,
+	           Field->Name,
+	           Field->NumLines,
+	           (unsigned) Field->Visibility);
+  }
+
+/*****************************************************************************/
 /********************* Insert text field of course record ********************/
 /*****************************************************************************/
 
-void Rec_DB_CreateCrsRecordField (long FieldCod,long UsrCod,const char *Text)
+void Rec_DB_CreateFieldContent (long FieldCod,long UsrCod,const char *Text)
   {
    DB_QueryINSERT ("can not create field of record",
 		   "INSERT INTO crs_records"
@@ -96,7 +113,7 @@ void Rec_DB_CreateCrsRecordField (long FieldCod,long UsrCod,const char *Text)
 /********************* Update text field of course record ********************/
 /*****************************************************************************/
 
-void Rec_DB_UpdateCrsRecordField (long FieldCod,long UsrCod,const char *Text)
+void Rec_DB_UpdateFieldTxt (long FieldCod,long UsrCod,const char *Text)
   {
    DB_QueryUPDATE ("can not update field of record",
 		   "UPDATE crs_records"
@@ -112,7 +129,7 @@ void Rec_DB_UpdateCrsRecordField (long FieldCod,long UsrCod,const char *Text)
 /******** Update course record field changing the old name by the new ********/
 /*****************************************************************************/
 
-void Rec_DB_UpdateCrsRecordFieldName (long FieldCod,const char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1])
+void Rec_DB_UpdateFieldName (long FieldCod,const char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1])
   {
    DB_QueryUPDATE ("can not update name of field of record",
 		   "UPDATE crs_record_fields"
@@ -126,7 +143,7 @@ void Rec_DB_UpdateCrsRecordFieldName (long FieldCod,const char NewFieldName[Rec_
 /*** Update course record field changing the old number of lines by the new **/
 /*****************************************************************************/
 
-void Rec_DB_UpdateCrsRecordFieldNumLines (long FieldCod,unsigned NewNumLines)
+void Rec_DB_UpdateFieldNumLines (long FieldCod,unsigned NewNumLines)
   {
    DB_QueryUPDATE ("can not update the number of lines of a record field",
 		   "UPDATE crs_record_fields"
@@ -140,7 +157,7 @@ void Rec_DB_UpdateCrsRecordFieldNumLines (long FieldCod,unsigned NewNumLines)
 /***** Update course record field changing the old visibility by the new *****/
 /*****************************************************************************/
 
-void Rec_DB_UpdateCrsRecordFieldVisibility (long FieldCod,Rec_VisibilityRecordFields_t NewVisibility)
+void Rec_DB_UpdateFieldVisibility (long FieldCod,Rec_VisibilityRecordFields_t NewVisibility)
   {
    DB_QueryUPDATE ("can not update the visibility of a record field",
 		   "UPDATE crs_record_fields"
@@ -148,6 +165,39 @@ void Rec_DB_UpdateCrsRecordFieldVisibility (long FieldCod,Rec_VisibilityRecordFi
 		   " WHERE FieldCod=%ld",
 		   (unsigned) NewVisibility,
 		   FieldCod);
+  }
+
+/*****************************************************************************/
+/*************** Get the number of records with a field filled ***************/
+/*****************************************************************************/
+
+unsigned Rec_DB_CountNumRecordsWithFieldContent (long FieldCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of records with a given field not empty",
+		  "SELECT COUNT(*)"
+		   " FROM crs_records"
+		  " WHERE FieldCod=%ld",
+		  FieldCod);
+  }
+
+
+/*****************************************************************************/
+/******* Get the fields of records already present in current course *********/
+/*****************************************************************************/
+
+unsigned Rec_DB_GetAllFieldsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get fields of records in a course",
+		   "SELECT FieldCod,"	// row[0]
+			  "FieldName,"	// row[1]
+			  "NumLines,"	// row[2]
+			  "Visibility"	// row[3]
+		    " FROM crs_record_fields"
+		   " WHERE CrsCod=%ld"
+		   " ORDER BY FieldName",
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -172,8 +222,8 @@ unsigned Rec_DB_GetFieldByCod (MYSQL_RES **mysql_res,long CrsCod,long FieldCod)
 /************** Get the text of a field of a record of course ****************/
 /*****************************************************************************/
 
-unsigned Rec_DB_GetFieldFromCrsRecord (MYSQL_RES **mysql_res,
-                                       long FieldCod,long UsrCod)
+unsigned Rec_DB_GetFieldTxtFromUsrRecord (MYSQL_RES **mysql_res,
+                                          long FieldCod,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the text"
@@ -187,10 +237,22 @@ unsigned Rec_DB_GetFieldFromCrsRecord (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/******************* Remove field from all students' records *****************/
+/*****************************************************************************/
+
+void Rec_DB_RemoveFieldContentFromAllUsrsRecords (long FieldCod)
+  {
+   DB_QueryDELETE ("can not remove field from all students' records",
+		   "DELETE FROM crs_records"
+		   " WHERE FieldCod=%ld",
+                   FieldCod);
+  }
+
+/*****************************************************************************/
 /******************* Remove text of field of course record *******************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveCrsRecordField (long FieldCod,long UsrCod)
+void Rec_DB_RemoveFieldContentFromUsrRecord (long FieldCod,long UsrCod)
   {
    DB_QueryDELETE ("can not remove field of record",
 		   "DELETE FROM crs_records"
@@ -204,7 +266,7 @@ void Rec_DB_RemoveCrsRecordField (long FieldCod,long UsrCod)
 /************ Remove fields of record of a user in current course ************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveFieldsCrsRecordInCrs (long UsrCod,long CrsCod)
+void Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (long UsrCod,long CrsCod)
   {
    DB_QueryDELETE ("can not remove user's record in a course",
 		   "DELETE FROM crs_records"
@@ -221,7 +283,7 @@ void Rec_DB_RemoveFieldsCrsRecordInCrs (long UsrCod,long CrsCod)
 /************* Remove fields of record of a user in all courses **************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveFieldsCrsRecordAll (long UsrCod)
+void Rec_DB_RemoveAllFieldContentsFromUsrRecords (long UsrCod)
   {
    DB_QueryDELETE ("can not remove user's records in all courses",
 		   "DELETE FROM crs_records"
@@ -233,7 +295,7 @@ void Rec_DB_RemoveFieldsCrsRecordAll (long UsrCod)
 /******************** Remove content of course record cards ******************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveCrsRecordContents (long CrsCod)
+void Rec_DB_RemoveAllFieldContentsInCrs (long CrsCod)
   {
    DB_QueryDELETE ("can not remove content of cards in a course",
 		   "DELETE FROM crs_records"
@@ -245,10 +307,22 @@ void Rec_DB_RemoveCrsRecordContents (long CrsCod)
   }
 
 /*****************************************************************************/
+/*************************** Remove record field *****************************/
+/*****************************************************************************/
+
+void Rec_DB_RemoveField (long FieldCod)
+  {
+   DB_QueryDELETE ("can not remove field of record",
+		   "DELETE FROM crs_record_fields"
+		   " WHERE FieldCod=%ld",
+                   FieldCod);
+  }
+
+/*****************************************************************************/
 /************ Remove definition of fields in course record cards *************/
 /*****************************************************************************/
 
-void Rec_DB_RemoveCrsRecordFields (long CrsCod)
+void Rec_DB_RemoveAllFieldsInCrs (long CrsCod)
   {
    DB_QueryDELETE ("can not remove fields of cards in a course",
 		   "DELETE FROM crs_record_fields"

@@ -1802,10 +1802,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove course cards of the course *****/
       /* Remove content of course cards */
-      Rec_DB_RemoveCrsRecordContents (CrsCod);
+      Rec_DB_RemoveAllFieldContentsInCrs (CrsCod);
 
       /* Remove definition of fields in course cards */
-      Rec_DB_RemoveCrsRecordFields (CrsCod);
+      Rec_DB_RemoveAllFieldsInCrs (CrsCod);
 
       /***** Remove information related to files in course,
              including groups and projects,

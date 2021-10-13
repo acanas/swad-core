@@ -126,7 +126,6 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FieldName);
 void Rec_CreateRecordField (void);
 void Rec_ReqRemField (void);
 long Rec_GetFieldCod (void);
-unsigned Rec_DB_CountNumRecordsInCurrCrsWithField (long FieldCod);
 void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords);
 void Rec_RemoveFieldFromDB (void);
 void Rec_RemoveField (void);

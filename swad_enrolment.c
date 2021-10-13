@@ -3225,7 +3225,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 	}
 
       /***** Remove fields of this user in its course record *****/
-      Rec_DB_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs->CrsCod);
+      Rec_DB_RemoveAllFieldContentsFromUsrRecordInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove some information about files in course and groups *****/
       Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->CrsCod);

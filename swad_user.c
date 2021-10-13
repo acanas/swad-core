@@ -3915,9 +3915,9 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	      NumField++)
 	   {
 	    /* Get the text of the field */
-	    if (Rec_DB_GetFieldFromCrsRecord (&mysql_res,
-					      Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-					      UsrDat->UsrCod))
+	    if (Rec_DB_GetFieldTxtFromUsrRecord (&mysql_res,
+					         Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+					         UsrDat->UsrCod))
 	      {
 	       row = mysql_fetch_row (mysql_res);
 	       Str_Copy (Text,row[0],sizeof (Text) - 1);
