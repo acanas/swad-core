@@ -27,6 +27,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_constant.h"
+#include "swad_profile.h"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -34,6 +37,32 @@
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
+
+struct Rep_CurrentTimeUTC
+  {
+   char StrDate[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 2016-10-02
+   char StrTime[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 19:03:49
+   unsigned Date;		// Example: 20161002
+   unsigned Time;		// Example: 190349
+  };
+
+struct Rep_Hits
+  {
+   unsigned long Num;
+   unsigned long Max;
+  };
+
+struct Rep_Report
+  {
+   struct Prf_UsrFigures UsrFigures;
+   struct tm tm_FirstClickTime;
+   struct tm tm_CurrentTime;
+   struct Rep_CurrentTimeUTC CurrentTimeUTC;
+   struct Rep_Hits Hits;
+   unsigned long MaxHitsPerYear;
+   char FilenameReport[NAME_MAX + 1];
+   char Permalink[Cns_MAX_BYTES_WWW + 1];
+  };
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/

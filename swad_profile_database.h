@@ -41,7 +41,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Prf_DB_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
+void Prf_DB_CreateUsrFigures (long UsrCod,const struct Prf_UsrFigures *UsrFigures,
                               bool CreatingMyOwnAccount);
 void Prf_DB_UpdateFirstClickTimeUsr (long UsrCod,time_t FirstClickTimeUTC);
 void Prf_DB_UpdateNumClicksUsr (long UsrCod,int NumClicks);

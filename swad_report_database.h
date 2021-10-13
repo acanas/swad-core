@@ -1,7 +1,7 @@
-// swad_profile.h: user's public profile
+// swad_report_database.h: report on my use of the platform, operations with database
 
-#ifndef _SWAD_PRF
-#define _SWAD_PRF
+#ifndef _SWAD_REP_DB
+#define _SWAD_REP_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,9 +27,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include <time.h>		// For time
-
-#include "swad_user.h"
+#include "swad_cryptography.h"
+#include "swad_report.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -39,47 +38,13 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct Prf_UsrFigures
-  {
-   time_t FirstClickTimeUTC;	//  0 ==> unknown first click time of user never logged
-   int NumDays;			// -1 ==> not applicable
-   int NumClicks;		// -1 ==> unknown number of clicks
-   int NumTimelinePubs;		// -1 ==> unknown number of timeline publications
-   int NumFileViews;		// -1 ==> unknown number of file views
-   int NumForumPosts;		// -1 ==> unknown number of forum posts
-   int NumMessagesSent;		// -1 ==> unknown number of messages sent
-  };
-
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Prf_SeeSocialProfiles (void);
+void Rep_DB_CreateNewReport (long UsrCod,const struct Rep_Report *Report,
+                             const char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 
-char *Prf_GetURLPublicProfile (char URL[Cns_MAX_BYTES_WWW + 1],
-                               const char *NickWithoutArr);
-void Prf_PutLinkMyPublicProfile (void);
-void Prf_PutLinkRequestAnotherUserProfile (void);
-void Prf_RequestUserProfile (void);
-void Prf_GetUsrDatAndShowUserProfile (void);
-
-bool Prf_ShowUserProfile (struct UsrData *UsrDat);
-void Prf_ChangeBasicProfileVis (void);
-void Prf_ChangeExtendedProfileVis (void);
-
-void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
-void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures);
-void Prf_CalculateFigures (void);
-bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures);
-
-void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount);
-
-void Prf_GetAndShowRankingClicks (void);
-void Prf_GetAndShowRankingTimelinePubs (void);
-void Prf_GetAndShowRankingFileViews (void);
-void Prf_GetAndShowRankingForPsts (void);
-void Prf_GetAndShowRankingMsgsSnt (void);
-void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs);
-void Prf_GetAndShowRankingClicksPerDay (void);
+void Rep_DB_RemoveUsrReports (long UsrCod);
 
 #endif

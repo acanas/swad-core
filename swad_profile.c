@@ -91,20 +91,20 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
-                                         const struct UsrFigures *UsrFigures);
+                                         const struct Prf_UsrFigures *UsrFigures);
 static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 				     Rol_Role_t Role);
 static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat);
 static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
-                               const struct UsrFigures *UsrFigures);
+                               const struct Prf_UsrFigures *UsrFigures);
 static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
-                                  const struct UsrFigures *UsrFigures);
+                                  const struct Prf_UsrFigures *UsrFigures);
 static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
-                                     const struct UsrFigures *UsrFigures);
+                                     const struct Prf_UsrFigures *UsrFigures);
 static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
-                                   const struct UsrFigures *UsrFigures);
+                                   const struct Prf_UsrFigures *UsrFigures);
 static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
-                                     const struct UsrFigures *UsrFigures);
+                                     const struct Prf_UsrFigures *UsrFigures);
 static void Prf_BeginListItem (const char *Title,const char *Icon);
 static void Prf_EndListItem (void);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
@@ -118,7 +118,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod);
 
-static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
+static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe);
@@ -388,7 +388,7 @@ void Prf_ChangeExtendedProfileVis (void)
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
    bool UsrIsBannedFromRanking;
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
    Rol_Role_t Role;
 
    /***** Get figures *****/
@@ -451,7 +451,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 /*****************************************************************************/
 
 static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
-                                         const struct UsrFigures *UsrFigures)
+                                         const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_TIME_Since;
    extern const char *Txt_year;
@@ -580,7 +580,7 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
 /*****************************************************************************/
 
 static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
-                               const struct UsrFigures *UsrFigures)
+                               const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Clicks;
    extern const char *Txt_clicks;
@@ -618,7 +618,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
-                                  const struct UsrFigures *UsrFigures)
+                                  const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Downloads;
    extern const char *Txt_download;
@@ -655,7 +655,7 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
-                                     const struct UsrFigures *UsrFigures)
+                                     const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Timeline;
    extern const char *Txt_TIMELINE_post;
@@ -692,7 +692,7 @@ static void Prf_ShowNumTimelinePubs (const struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
-                                   const struct UsrFigures *UsrFigures)
+                                   const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Forums;
    extern const char *Txt_FORUM_post;
@@ -729,7 +729,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
-                                     const struct UsrFigures *UsrFigures)
+                                     const struct Prf_UsrFigures *UsrFigures)
   {
    extern const char *Txt_Messages;
    extern const char *Txt_message;
@@ -801,7 +801,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
 /********************** Select values on user's figures **********************/
 /*****************************************************************************/
 
-void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
+void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -882,7 +882,7 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
 
 void Prf_CalculateFigures (void)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -900,7 +900,7 @@ void Prf_CalculateFigures (void)
 /*****************************************************************************/
 // Return true if any figure has been calculated and stored
 
-bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures)
+bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures)
   {
    bool UsrFiguresModified = false;
 
@@ -952,7 +952,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
@@ -986,7 +986,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
@@ -1010,7 +1010,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
@@ -1034,7 +1034,7 @@ static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
@@ -1058,7 +1058,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
@@ -1082,7 +1082,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
 
 static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    if (Usr_ChkIfUsrCodExists (UsrCod))
      {
@@ -1106,7 +1106,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
 
 void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
   {
-   struct UsrFigures UsrFigures;
+   struct Prf_UsrFigures UsrFigures;
 
    /***** Reset user's figures *****/
    Prf_ResetUsrFigures (&UsrFigures);
@@ -1124,7 +1124,7 @@ void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
 /********************** Reset values of user's figures ***********************/
 /*****************************************************************************/
 
-static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
+static void Prf_ResetUsrFigures (struct Prf_UsrFigures *UsrFigures)
   {
    UsrFigures->FirstClickTimeUTC = (time_t) 0;	// unknown first click time or user never logged
    UsrFigures->NumDays         = -1;	// not applicable

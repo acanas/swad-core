@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /**************************** Create user's figures **************************/
 /*****************************************************************************/
 
-void Prf_DB_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
+void Prf_DB_CreateUsrFigures (long UsrCod,const struct Prf_UsrFigures *UsrFigures,
                               bool CreatingMyOwnAccount)
   {
    char SubQueryFirstClickTime[64];

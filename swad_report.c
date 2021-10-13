@@ -39,6 +39,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_profile.h"
+#include "swad_report_database.h"
 #include "swad_tab.h"
 
 /*****************************************************************************/
@@ -67,32 +68,6 @@
 /****************************** Private types ********************************/
 /*****************************************************************************/
 
-struct Rep_CurrentTimeUTC
-  {
-   char StrDate[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 2016-10-02
-   char StrTime[3 * (Cns_MAX_DECIMAL_DIGITS_INT + 1)];	// Example: 19:03:49
-   unsigned Date;		// Example: 20161002
-   unsigned Time;		// Example: 190349
-  };
-
-struct Rep_Hits
-  {
-   unsigned long Num;
-   unsigned long Max;
-  };
-
-struct Rep_Report
-  {
-   struct UsrFigures UsrFigures;
-   struct tm tm_FirstClickTime;
-   struct tm tm_CurrentTime;
-   struct Rep_CurrentTimeUTC CurrentTimeUTC;
-   struct Rep_Hits Hits;
-   unsigned long MaxHitsPerYear;
-   char FilenameReport[NAME_MAX + 1];
-   char Permalink[Cns_MAX_BYTES_WWW + 1];
-  };
-
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -114,7 +89,6 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
 static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report);
 
 static void Rep_CreateNewReportFile (struct Rep_Report *Report);
-static void Rep_DB_CreateNewReport (const struct Rep_Report *Report);
 static void Rep_WriteHeader (const struct Rep_Report *Report);
 static void Rep_WriteSectionPlatform (void);
 static void Rep_WriteSectionUsrInfo (void);
@@ -145,7 +119,6 @@ static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
 static void Rep_WriteDouble (double Num);
 
 static void Rep_RemoveUsrReportsFiles (long UsrCod);
-static void Rep_DB_RemoveUsrReports (long UsrCod);
 
 /*****************************************************************************/
 /******* Request my usage report (report on my use of the platform) **********/
@@ -207,7 +180,8 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
    Rep_CreateNewReportFile (Report);
 
    /***** Store report entry into database *****/
-   Rep_DB_CreateNewReport (Report);
+   Rep_DB_CreateNewReport (Gbl.Usrs.Me.UsrDat.UsrCod,Report,
+                           Gbl.UniqueNameEncrypted);
 
    /***** Begin file *****/
    Lay_BeginHTMLFile (Gbl.F.Rep,Report->FilenameReport);
@@ -414,34 +388,6 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
              &Gbl.UniqueNameEncrypted[2],
              Report->FilenameReport);
    Str_Copy (Report->Permalink,Permalink,sizeof (Report->Permalink) - 1);
-  }
-
-/*****************************************************************************/
-/************** Insert a new user's usage report into database ***************/
-/*****************************************************************************/
-
-static void Rep_DB_CreateNewReport (const struct Rep_Report *Report)
-  {
-   /***** Insert a new user's usage report into database *****/
-   DB_QueryINSERT ("can not create new user's usage report",
-		   "INSERT INTO usr_reports"
-	           " (UsrCod,ReportTimeUTC,"
-	             "UniqueDirL,UniqueDirR,Filename,Permalink)"
-                   " VALUES"
-                   " (%ld,'%04d-%02d-%02d %02d:%02d:%02d',"
-                     "'%c%c','%s','%s','%s')",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   1900 + Report->tm_CurrentTime.tm_year,	// year
-		   1 +  Report->tm_CurrentTime.tm_mon,		// month
-		   Report->tm_CurrentTime.tm_mday,		// day of the month
-		   Report->tm_CurrentTime.tm_hour,		// hours
-		   Report->tm_CurrentTime.tm_min,		// minutes
-		   Report->tm_CurrentTime.tm_sec,		// seconds
-		   Gbl.UniqueNameEncrypted[0],		//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-		   Gbl.UniqueNameEncrypted[1],
-		   &Gbl.UniqueNameEncrypted[2],		// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-		   Report->FilenameReport,
-		   Report->Permalink);
   }
 
 /*****************************************************************************/
@@ -1456,16 +1402,4 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********** Remove all user's usage reports of a user from database **********/
-/*****************************************************************************/
-
-static void Rep_DB_RemoveUsrReports (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's usage reports",
-		   "DELETE FROM usr_reports"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
