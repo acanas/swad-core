@@ -596,3 +596,19 @@ unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
 				     Field[WhatPaginate],
 				     Gbl.Session.Id);
   }
+
+/*****************************************************************************/
+/********************** Save last search into session ************************/
+/*****************************************************************************/
+
+void Ses_DB_SaveLastSearchIntoSession (void)
+  {
+   DB_QueryUPDATE ("can not update last search in session",
+		   "UPDATE ses_sessions"
+		     " SET WhatToSearch=%u,"
+			  "SearchStr='%s'"
+		   " WHERE SessionId='%s'",
+		   (unsigned) Gbl.Search.WhatToSearch,
+		   Gbl.Search.Str,
+		   Gbl.Session.Id);
+  }

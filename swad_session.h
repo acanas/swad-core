@@ -64,4 +64,6 @@ void Ses_RemovePublicDirsFromExpiredSessions (void);
 void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);
 
+void Ses_DB_SaveLastSearchIntoSession (void);
+
 #endif

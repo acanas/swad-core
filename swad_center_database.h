@@ -32,6 +32,7 @@
 #include "swad_center.h"
 #include "swad_constant.h"
 #include "swad_media.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -54,6 +55,11 @@ void Ctr_DB_GetShortNameOfCenterByCod (long CtrCod,char ShrtName[Cns_HIERARCHY_M
 unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod);
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 				       long CtrCod,long InsCod);
+
+unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery);
+
 unsigned Ctr_DB_GetNumCtrsInCty (long CtyCod);
 unsigned Ctr_DB_GetNumCtrsInIns (long InsCod);
 unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod);

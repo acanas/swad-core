@@ -32,6 +32,7 @@
 #include "swad_country.h"
 #include "swad_map.h"
 #include "swad_media.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -60,6 +61,10 @@ unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
 bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
 bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
+
+unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery);
 
 void Cty_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);

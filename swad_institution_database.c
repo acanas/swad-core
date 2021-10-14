@@ -620,6 +620,32 @@ unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql
   }
 
 /*****************************************************************************/
+/********************** Search institutions in database **********************/
+/*****************************************************************************/
+// Returns number of institutions found
+
+unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get institutions",
+		   "SELECT ins_instits.InsCod"
+		    " FROM ins_instits,"
+			  "cty_countrs"
+		   " WHERE %s"
+		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		     "%s"
+		   " ORDER BY ins_instits.FullName,"
+			     "cty_countrs.Name_%s",
+		   SearchQuery,
+		   RangeQuery,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+  }
+
+/*****************************************************************************/
 /**************** Get number of institutions in a country ********************/
 /*****************************************************************************/
 

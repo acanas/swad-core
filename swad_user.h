@@ -407,6 +407,7 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
                                               Usr_GetPrefs_t GetPrefs,
                                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 void Usr_UpdateMyLastData (void);
+void Usr_DB_UpdateMyLastWhatToSearch (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
 void Usr_DB_RemoveUsrLastData (long UsrCod);

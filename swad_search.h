@@ -1,4 +1,4 @@
-// swad_search.c: edition of courses
+// swad_search.c: search for courses and teachers
 
 #ifndef _SWAD_SCH
 #define _SWAD_SCH

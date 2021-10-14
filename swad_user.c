@@ -3618,6 +3618,22 @@ void Usr_UpdateMyLastData (void)
   }
 
 /*****************************************************************************/
+/********************** Update my last type of search ************************/
+/*****************************************************************************/
+
+void Usr_DB_UpdateMyLastWhatToSearch (void)
+  {
+   // WhatToSearch is stored in usr_last for next time I log in
+   // In other existing sessions distinct to this, WhatToSearch will remain unchanged
+   DB_QueryUPDATE ("can not update type of search in user's last data",
+		   "UPDATE usr_last"
+		     " SET WhatToSearch=%u"
+		   " WHERE UsrCod=%ld",
+		   (unsigned) Gbl.Search.WhatToSearch,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /*************** Create new entry for my last data in database ***************/
 /*****************************************************************************/
 

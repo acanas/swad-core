@@ -34,6 +34,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -414,6 +415,29 @@ bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,l
 			    " AND CtyCod<>'%03ld'",
 			  Lan_STR_LANG_ID[Language],Name,
 			  CtyCod) != 0);
+  }
+
+/*****************************************************************************/
+/************************ Search countries in database ***********************/
+/*****************************************************************************/
+// Returns number of countries found
+
+unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get countries",
+		   "SELECT CtyCod"
+		    " FROM cty_countrs"
+		   " WHERE %s"
+		      "%s"
+		   " ORDER BY Name_%s",
+		   SearchQuery,
+		   RangeQuery,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
 
 /*****************************************************************************/

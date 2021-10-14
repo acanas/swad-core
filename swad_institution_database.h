@@ -31,6 +31,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_map.h"
 #include "swad_role_type.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /************************ Public types and constants *************************/
@@ -66,6 +67,10 @@ unsigned Ins_DB_GetInssOrderedByNumDegs (MYSQL_RES **mysql_res);
 unsigned Ins_DB_GetInssOrderedByNumCrss (MYSQL_RES **mysql_res);
 unsigned Ins_DB_GetInssOrderedByNumUsrsInCrss (MYSQL_RES **mysql_res);
 unsigned Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (MYSQL_RES **mysql_res);
+
+unsigned Ins_DB_SearchInss (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery);
 
 unsigned Ins_DB_GetNumInssInCty (long CtyCod);
 

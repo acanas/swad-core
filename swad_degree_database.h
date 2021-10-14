@@ -31,6 +31,7 @@
 
 #include "swad_degree.h"
 #include "swad_degree_type.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -63,6 +64,10 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
 bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
                                        long DegCod,long CtrCod);
+
+unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery);
 
 unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod);
 unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,

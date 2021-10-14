@@ -57,6 +57,10 @@ bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *N
 unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role);
 unsigned Crs_DB_GetOldCrss (MYSQL_RES **mysql_res,unsigned long SecondsWithoutAccess);
 
+unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery);
+
 unsigned Crs_DB_GetNumCrssInCty (long CtyCod);
 unsigned Crs_DB_GetNumCrssInIns (long InsCod);
 unsigned Crs_DB_GetNumCrssInCtr (long CtrCod);

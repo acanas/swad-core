@@ -31,6 +31,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -314,6 +315,31 @@ bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 			  FieldName,
 			  Name,
 			  CtrCod) != 0);
+  }
+
+/*****************************************************************************/
+/************************* Search centers in database ************************/
+/*****************************************************************************/
+// Returns number of centers found
+
+unsigned Ctr_DB_SearchCtrs (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get centers",
+		   "SELECT ctr_centers.CtrCod"
+		    " FROM ctr_centers,"
+			  "ins_instits,"
+			  "cty_countrs"
+		   " WHERE %s"
+		     " AND ctr_centers.InsCod=ins_instits.InsCod"
+		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		     "%s"
+		   " ORDER BY ctr_centers.FullName,"
+			     "ins_instits.FullName",
+		   SearchQuery,
+		   RangeQuery);
   }
 
 /*****************************************************************************/

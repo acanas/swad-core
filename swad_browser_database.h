@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_browser.h"
+#include "swad_search.h"
 
 /*****************************************************************************/
 /************************ Public types and constants *************************/
@@ -77,6 +78,15 @@ void Brw_DB_ChangeFilePublic (const struct FileMetadata *FileMetadata,
 bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,Brw_License_t License);
+unsigned Brw_DB_SearchPublicFiles (MYSQL_RES **mysql_res,
+                                   const char *RangeQuery,
+                                   const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
+unsigned Brw_DB_SearchFilesInMyCrss (MYSQL_RES **mysql_res,
+                                     const char *RangeQuery,
+                                     const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
+unsigned Brw_DB_SearchMyFiles (MYSQL_RES **mysql_res,
+                               const char *RangeQuery,
+                               const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
 
 //------------------------------- Assignments ---------------------------------
 unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod);

@@ -474,6 +474,33 @@ bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
   }
 
 /*****************************************************************************/
+/************************* Search degrees in database ************************/
+/*****************************************************************************/
+// Returns number of degrees found
+
+unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get degrees",
+		   "SELECT deg_degrees.DegCod"
+		    " FROM deg_degrees,"
+			  "ctr_centers,"
+			  "ins_instits,"
+			  "cty_countrs"
+		   " WHERE %s"
+		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		     " AND ctr_centers.InsCod=ins_instits.InsCod"
+		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		     "%s"
+		   " ORDER BY deg_degrees.FullName,"
+			     "ins_instits.FullName",
+		   SearchQuery,
+		   RangeQuery);
+  }
+
+/*****************************************************************************/
 /***************** Get current number of degrees with courses ****************/
 /*****************************************************************************/
 

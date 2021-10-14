@@ -285,6 +285,43 @@ unsigned Crs_DB_GetOldCrss (MYSQL_RES **mysql_res,unsigned long SecondsWithoutAc
   }
 
 /*****************************************************************************/
+/************************* Search courses in database ************************/
+/*****************************************************************************/
+// Returns number of courses found
+
+unsigned Crs_DB_SearchCrss (MYSQL_RES **mysql_res,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
+                            const char *RangeQuery)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get courses",
+		   "SELECT deg_degrees.DegCod,"		// row[0]
+			  "crs_courses.CrsCod,"		// row[1]
+			  "deg_degrees.ShortName,"	// row[2]
+			  "deg_degrees.FullName,"	// row[3]
+			  "crs_courses.Year,"		// row[4]
+			  "crs_courses.FullName,"	// row[5]
+			  "ctr_centers.ShortName"	// row[6]
+		    " FROM crs_courses,"
+			  "deg_degrees,"
+			  "ctr_centers,"
+			  "ins_instits,"
+			  "cty_countrs"
+		   " WHERE %s"
+		     " AND crs_courses.DegCod=deg_degrees.DegCod"
+		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		     " AND ctr_centers.InsCod=ins_instits.InsCod"
+		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		     "%s"
+		   " ORDER BY crs_courses.FullName,"
+			     "ins_instits.FullName,"
+			     "deg_degrees.FullName,"
+			     "crs_courses.Year",
+		   SearchQuery,
+		   RangeQuery);
+  }
+
+/*****************************************************************************/
 /******************** Get number of courses in a country *********************/
 /*****************************************************************************/
 
