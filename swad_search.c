@@ -1376,4 +1376,3 @@ void Sch_PutLinkToSearchCoursesParams (__attribute__((unused)) void *Args)
    Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
    Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
   }
-

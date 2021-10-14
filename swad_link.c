@@ -348,13 +348,18 @@ static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Link *Lnk)
 
    /***** Get row *****/
    row = mysql_fetch_row (mysql_res);
-
-   /***** Get the short name (row[0]),
-	      the full name (row[1])
-          and the URL (row[2]) of the link *****/
-   Str_Copy (Lnk->ShrtName,row[0],sizeof (Lnk->ShrtName) - 1);
-   Str_Copy (Lnk->FullName,row[1],sizeof (Lnk->FullName) - 1);
-   Str_Copy (Lnk->WWW     ,row[2],sizeof (Lnk->WWW     ) - 1);
+   /*
+   row[0]	LnkCod
+   row[1]	ShortName
+   row[2]	FullName
+   row[3]	WWW
+   */
+   /***** Get the short name (row[1]),
+	      the full name (row[2])
+          and the URL (row[3]) of the link *****/
+   Str_Copy (Lnk->ShrtName,row[1],sizeof (Lnk->ShrtName) - 1);
+   Str_Copy (Lnk->FullName,row[2],sizeof (Lnk->FullName) - 1);
+   Str_Copy (Lnk->WWW     ,row[3],sizeof (Lnk->WWW     ) - 1);
   }
 
 /*****************************************************************************/

@@ -18641,7 +18641,7 @@ const char *Txt_Links =
 #elif L==5	// fr
 	"Liens";
 #elif L==6	// gn
-	"Enlaces";	// Okoteve traducción
+	"Ambu&eacute;re joaju";
 #elif L==7	// it
 	"Link";
 #elif L==8	// pl
