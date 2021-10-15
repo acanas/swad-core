@@ -503,105 +503,105 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
-   /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,
-                      NULL,NULL,
-                      Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      Box_BoxTableBegin (NULL,Txt_Statistics_of_all_visits,
+			 NULL,NULL,
+			 Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
-   /***** Start and end dates for the search *****/
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+	 /***** Start and end dates for the search *****/
+	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
-   /***** Users' roles whose accesses we want to see *****/
-   HTM_TR_Begin (NULL);
+	 /***** Users' roles whose accesses we want to see *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Role",Txt_Users);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Role",Txt_Users);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
-   for (RoleStat  = (Sta_Role_t) 0;
-	RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
-	RoleStat++)
-     {
-      RoleStatUnsigned = (unsigned) RoleStat;
-      HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
-		  RoleStat == Stats->Role,false,
-		  "%s",Txt_ROLE_STATS[RoleStat]);
-     }
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "id=\"Role\" name=\"Role\" class=\"STAT_SEL\"");
+		  for (RoleStat  = (Sta_Role_t) 0;
+		       RoleStat <= (Sta_Role_t) (Sta_NUM_ROLES_STAT - 1);
+		       RoleStat++)
+		    {
+		     RoleStatUnsigned = (unsigned) RoleStat;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&RoleStatUnsigned,
+				 RoleStat == Stats->Role,false,
+				 "%s",Txt_ROLE_STATS[RoleStat]);
+		    }
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Selection of action *****/
-   Sta_WriteSelectorAction (Stats);
+	 /***** Selection of action *****/
+	 Sta_WriteSelectorAction (Stats);
 
-   /***** Clicks made from anywhere, current center, current degree or current course *****/
-   HTM_TR_Begin (NULL);
+	 /***** Clicks made from anywhere, current center, current degree or current course *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","ScopeSta",Txt_Scope);
+	    /* Label */
+	    Frm_LabelColumn ("RT","ScopeSta",Txt_Scope);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-	               1 << HieLvl_CTY |
-		       1 << HieLvl_INS |
-		       1 << HieLvl_CTR |
-		       1 << HieLvl_DEG |
-		       1 << HieLvl_CRS;
-   Gbl.Scope.Default = HieLvl_SYS;
-   Sco_GetScope ("ScopeSta");
-   Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
-   HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+				   1 << HieLvl_CTY |
+				   1 << HieLvl_INS |
+				   1 << HieLvl_CTR |
+				   1 << HieLvl_DEG |
+				   1 << HieLvl_CRS;
+	       Gbl.Scope.Default = HieLvl_SYS;
+	       Sco_GetScope ("ScopeSta");
+	       Sco_PutSelectorScope ("ScopeSta",HTM_DONT_SUBMIT_ON_CHANGE);
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Count type for the statistic *****/
-   HTM_TR_Begin (NULL);
+	 /***** Count type for the statistic *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","CountType",Txt_Show);
+	    /* Label */
+	    Frm_LabelColumn ("RT","CountType",Txt_Show);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Sta_WriteSelectorCountType (Stats);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Sta_WriteSelectorCountType (Stats);
 
-   /***** Type of statistic *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
+	       /***** Type of statistic *****/
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtF ("&nbsp;%s&nbsp;",Txt_distributed_by);
 
-   if (Stats->ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
-       Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
-      Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
+		  if (Stats->ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
+		      Stats->ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
+		     Stats->ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
 
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"GroupedBy\"");
-   for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
-	ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
-	ClicksGroupedBy++)
-     {
-      ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
-      HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-		  ClicksGroupedBy == Stats->ClicksGroupedBy,false,
-		  "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
-     }
-   HTM_SELECT_End ();
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				    "name=\"GroupedBy\"");
+		     for (ClicksGroupedBy = Sta_CLICKS_GBL_PER_DAY;
+			  ClicksGroupedBy <= Sta_CLICKS_GBL_PER_COURSE;
+			  ClicksGroupedBy++)
+		       {
+			ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
+			HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
+				    ClicksGroupedBy == Stats->ClicksGroupedBy,false,
+				    "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
+		       }
+		  HTM_SELECT_End ();
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** Hidden param used to get client time zone *****/
-   Dat_PutHiddenParBrowserTZDiff ();
+	 /***** Hidden param used to get client time zone *****/
+	 Dat_PutHiddenParBrowserTZDiff ();
 
-   /***** Send button and end box *****/
-   Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_hits);
+      /***** Send button and end box *****/
+      Box_BoxWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Show_hits);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -658,15 +658,15 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
    /**** Count type *****/
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 		     "id=\"CountType\" name=\"CountType\"");
-   for (StatCountType  = (Sta_CountType_t) 0;
-	StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
-	StatCountType++)
-     {
-      StatCountTypeUnsigned = (unsigned) StatCountType;
-      HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
-		  StatCountType == Stats->CountType,false,
-		  "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
-     }
+      for (StatCountType  = (Sta_CountType_t) 0;
+	   StatCountType <= (Sta_CountType_t) (Sta_NUM_COUNT_TYPES - 1);
+	   StatCountType++)
+	{
+	 StatCountTypeUnsigned = (unsigned) StatCountType;
+	 HTM_OPTION (HTM_Type_UNSIGNED,&StatCountTypeUnsigned,
+		     StatCountType == Stats->CountType,false,
+		     "%s",Txt_STAT_TYPE_COUNT_SMALL[StatCountType]);
+	}
    HTM_SELECT_End ();
   }
 
@@ -687,27 +687,27 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
    /***** Action *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","StatAct",Txt_Action);
+      /* Label */
+      Frm_LabelColumn ("RT","StatAct",Txt_Action);
 
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
-   HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
-	       "%s",Txt_Any_action);
-   for (Action  = (Act_Action_t) 1;
-	Action <= (Act_Action_t) (Act_NUM_ACTIONS - 1);
-	Action++)
-     {
-      Tab = Act_GetTab (Act_GetSuperAction (Action));
-      ActionUnsigned = (unsigned) Action;
-      HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
-		  Action == Stats->NumAction,false,
-		  "%u: %s &gt; %s",
-		  (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
-     }
-   HTM_SELECT_End ();
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			   "id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\"");
+	    HTM_OPTION (HTM_Type_STRING,"0",Stats->NumAction == 0,false,
+			"%s",Txt_Any_action);
+	    for (Action  = (Act_Action_t) 1;
+		 Action <= (Act_Action_t) (Act_NUM_ACTIONS - 1);
+		 Action++)
+	      {
+	       Tab = Act_GetTab (Act_GetSuperAction (Action));
+	       ActionUnsigned = (unsigned) Action;
+	       HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
+			   Action == Stats->NumAction,false,
+			   "%u: %s &gt; %s",
+			   (unsigned) Action,Txt_TABS_TXT[Tab],Act_GetActionText (Action));
+	      }
+	 HTM_SELECT_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1444,71 +1444,71 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	               NULL,Box_NOT_CLOSABLE);
 
       HTM_TABLE_BeginPadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
-      switch (Stats.ClicksGroupedBy)
-	{
-	 case Sta_CLICKS_CRS_DETAILED_LIST:
-	    Sta_ShowDetailedAccessesList (&Stats,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_USR:
-	    Sta_ShowNumHitsPerUsr (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_DAY:
-	 case Sta_CLICKS_GBL_PER_DAY:
-	    Sta_ShowNumHitsPerDay (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
-	 case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
-	    Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_WEEK:
-	 case Sta_CLICKS_GBL_PER_WEEK:
-	    Sta_ShowNumHitsPerWeek (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_MONTH:
-	 case Sta_CLICKS_GBL_PER_MONTH:
-	    Sta_ShowNumHitsPerMonth (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_YEAR:
-	 case Sta_CLICKS_GBL_PER_YEAR:
-	    Sta_ShowNumHitsPerYear (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_HOUR:
-	 case Sta_CLICKS_GBL_PER_HOUR:
-	    Sta_ShowNumHitsPerHour (NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_MINUTE:
-	 case Sta_CLICKS_GBL_PER_MINUTE:
-	    Sta_ShowAverageAccessesPerMinute (NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_CRS_PER_ACTION:
-	 case Sta_CLICKS_GBL_PER_ACTION:
-	    Sta_ShowNumHitsPerAction (Stats.CountType,NumHits,mysql_res);
-	    break;
-         case Sta_CLICKS_GBL_PER_PLUGIN:
-            Sta_ShowNumHitsPerPlugin (Stats.CountType,NumHits,mysql_res);
-            break;
-         case Sta_CLICKS_GBL_PER_API_FUNCTION:
-            Sta_ShowNumHitsPerWSFunction (Stats.CountType,NumHits,mysql_res);
-            break;
-         case Sta_CLICKS_GBL_PER_BANNER:
-            Sta_ShowNumHitsPerBanner (Stats.CountType,NumHits,mysql_res);
-            break;
-         case Sta_CLICKS_GBL_PER_COUNTRY:
-	    Sta_ShowNumHitsPerCountry (Stats.CountType,NumHits,mysql_res);
-	    break;
-         case Sta_CLICKS_GBL_PER_INSTITUTION:
-	    Sta_ShowNumHitsPerInstitution (Stats.CountType,NumHits,mysql_res);
-	    break;
-         case Sta_CLICKS_GBL_PER_CENTER:
-	    Sta_ShowNumHitsPerCenter (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_GBL_PER_DEGREE:
-	    Sta_ShowNumHitsPerDegree (Stats.CountType,NumHits,mysql_res);
-	    break;
-	 case Sta_CLICKS_GBL_PER_COURSE:
-	    Sta_ShowNumHitsPerCourse (Stats.CountType,NumHits,mysql_res);
-	    break;
-	}
+	 switch (Stats.ClicksGroupedBy)
+	   {
+	    case Sta_CLICKS_CRS_DETAILED_LIST:
+	       Sta_ShowDetailedAccessesList (&Stats,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_USR:
+	       Sta_ShowNumHitsPerUsr (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_DAY:
+	    case Sta_CLICKS_GBL_PER_DAY:
+	       Sta_ShowNumHitsPerDay (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_DAY_AND_HOUR:
+	    case Sta_CLICKS_GBL_PER_DAY_AND_HOUR:
+	       Sta_ShowDistrAccessesPerDayAndHour (&Stats,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_WEEK:
+	    case Sta_CLICKS_GBL_PER_WEEK:
+	       Sta_ShowNumHitsPerWeek (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_MONTH:
+	    case Sta_CLICKS_GBL_PER_MONTH:
+	       Sta_ShowNumHitsPerMonth (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_YEAR:
+	    case Sta_CLICKS_GBL_PER_YEAR:
+	       Sta_ShowNumHitsPerYear (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_HOUR:
+	    case Sta_CLICKS_GBL_PER_HOUR:
+	       Sta_ShowNumHitsPerHour (NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_MINUTE:
+	    case Sta_CLICKS_GBL_PER_MINUTE:
+	       Sta_ShowAverageAccessesPerMinute (NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_CRS_PER_ACTION:
+	    case Sta_CLICKS_GBL_PER_ACTION:
+	       Sta_ShowNumHitsPerAction (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_PLUGIN:
+	       Sta_ShowNumHitsPerPlugin (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_API_FUNCTION:
+	       Sta_ShowNumHitsPerWSFunction (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_BANNER:
+	       Sta_ShowNumHitsPerBanner (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_COUNTRY:
+	       Sta_ShowNumHitsPerCountry (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_INSTITUTION:
+	       Sta_ShowNumHitsPerInstitution (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_CENTER:
+	       Sta_ShowNumHitsPerCenter (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_DEGREE:
+	       Sta_ShowNumHitsPerDegree (Stats.CountType,NumHits,mysql_res);
+	       break;
+	    case Sta_CLICKS_GBL_PER_COURSE:
+	       Sta_ShowNumHitsPerCourse (Stats.CountType,NumHits,mysql_res);
+	       break;
+	   }
       HTM_TABLE_End ();
 
       /* End box and section */
@@ -1623,92 +1623,90 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    /***** Put heading with backward and forward buttons *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("colspan=\"7\" class=\"LM\"");
-   HTM_TABLE_BeginWidePadding (2);
-   HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("colspan=\"7\" class=\"LM\"");
+	 HTM_TABLE_BeginWidePadding (2);
+	    HTM_TR_Begin (NULL);
 
-   /* Put link to jump to previous page (older clicks) */
-   if (FirstRow > 1)
-     {
-      Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
-      Dat_WriteParamsIniEndDates ();
-      Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-      Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
-      Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
-      Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-     }
-   HTM_TD_Begin ("class=\"LM\"");
-   if (FirstRow > 1)
-     {
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_previous_X_clicks,
-						    (long) Stats->RowsPerPage),
-			       "BT_LINK TIT_TBL",NULL);
-      Str_FreeString ();
-      HTM_STRONG_Begin ();
-      HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
-      HTM_STRONG_End ();
-      HTM_BUTTON_End ();
-     }
-   HTM_TD_End ();
-   if (FirstRow > 1)
-      Frm_EndForm ();
+	       /* Put link to jump to previous page (older clicks) */
+	       if (FirstRow > 1)
+		 {
+		  Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+		  Dat_WriteParamsIniEndDates ();
+		  Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+		  Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+		  Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
+		  Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
+		  Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
+		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+		 }
+	       HTM_TD_Begin ("class=\"LM\"");
+		  if (FirstRow > 1)
+		    {
+		     HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_previous_X_clicks,
+								   (long) Stats->RowsPerPage),
+					      "BT_LINK TIT_TBL",NULL);
+		     Str_FreeString ();
+			HTM_STRONG_Begin ();
+			   HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
+			HTM_STRONG_End ();
+		     HTM_BUTTON_End ();
+		    }
+	       HTM_TD_End ();
+	       if (FirstRow > 1)
+		  Frm_EndForm ();
 
-   /* Write number of current page */
-   HTM_TD_Begin ("class=\"DAT_N CM\"");
-   HTM_STRONG_Begin ();
-   HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
-             Txt_Clicks,
-             FirstRow,LastRow,Txt_of_PART_OF_A_TOTAL,NumHits,
-             Txt_page,NumPagesBefore + 1,Txt_of_PART_OF_A_TOTAL,NumPagsTotal);
-   HTM_STRONG_End ();
-   HTM_TD_End ();
+	       /* Write number of current page */
+	       HTM_TD_Begin ("class=\"DAT_N CM\"");
+		  HTM_STRONG_Begin ();
+		     HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
+			       Txt_Clicks,
+			       FirstRow,LastRow,Txt_of_PART_OF_A_TOTAL,NumHits,
+			       Txt_page,NumPagesBefore + 1,Txt_of_PART_OF_A_TOTAL,NumPagsTotal);
+		  HTM_STRONG_End ();
+	       HTM_TD_End ();
 
-   /* Put link to jump to next page (more recent clicks) */
-   if (LastRow < NumHits)
-     {
-      Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
-      Dat_WriteParamsIniEndDates ();
-      Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-      Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
-      Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
-      Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-     }
-   HTM_TD_Begin ("class=\"RM\"");
-   if (LastRow < NumHits)
-     {
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_next_X_clicks,
-						    (long) Stats->RowsPerPage),
-			       "BT_LINK TIT_TBL",NULL);
-      Str_FreeString ();
-      HTM_STRONG_Begin ();
-      HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
-      HTM_STRONG_End ();
-      HTM_BUTTON_End ();
-     }
-   HTM_TD_End ();
-   if (LastRow < NumHits)
-      Frm_EndForm ();
+	       /* Put link to jump to next page (more recent clicks) */
+	       if (LastRow < NumHits)
+		 {
+		  Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
+		  Dat_WriteParamsIniEndDates ();
+		  Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+		  Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+		  Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
+		  Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
+		  Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
+		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+		 }
+	       HTM_TD_Begin ("class=\"RM\"");
+		  if (LastRow < NumHits)
+		    {
+		     HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_next_X_clicks,
+								   (long) Stats->RowsPerPage),
+					      "BT_LINK TIT_TBL",NULL);
+		     Str_FreeString ();
+			HTM_STRONG_Begin ();
+			   HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
+			HTM_STRONG_End ();
+		     HTM_BUTTON_End ();
+		    }
+	       HTM_TD_End ();
+	       if (LastRow < NumHits)
+		  Frm_EndForm ();
 
-   HTM_TR_End ();
-   HTM_TABLE_End ();
-   HTM_TD_End ();
+	    HTM_TR_End ();
+	 HTM_TABLE_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"RT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_User_ID);
-   HTM_TH (1,1,"LT",Txt_Name);
-   HTM_TH (1,1,"CT",Txt_Role);
-   HTM_TH (1,1,"CT",Txt_Date);
-   HTM_TH (1,1,"LT",Txt_Action);
-   HTM_TH (1,1,"LT",Txt_LOG_More_info);
-
+      HTM_TH (1,1,"RT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_User_ID);
+      HTM_TH (1,1,"LT",Txt_Name);
+      HTM_TH (1,1,"CT",Txt_Role);
+      HTM_TH (1,1,"CT",Txt_Date);
+      HTM_TH (1,1,"LT",Txt_Action);
+      HTM_TH (1,1,"LT",Txt_LOG_More_info);
    HTM_TR_End ();
 
    /***** Write rows back *****/
@@ -1734,52 +1732,52 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the number of row */
-      HTM_TD_Begin ("class=\"LOG RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%u&nbsp;",NumRow);
-      HTM_TD_End ();
+	 /* Write the number of row */
+	 HTM_TD_Begin ("class=\"LOG RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%u&nbsp;",NumRow);
+	 HTM_TD_End ();
 
-      /* Write the user's ID if user is a student */
-      HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
-      ID_WriteUsrIDs (&UsrDat,NULL);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write the user's ID if user is a student */
+	 HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
+	    ID_WriteUsrIDs (&UsrDat,NULL);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write the first name and the surnames */
-      HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
-      HTM_TD_End ();
+	 /* Write the first name and the surnames */
+	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
+	 HTM_TD_End ();
 
-      /* Write the user's role */
-      HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
-		                                         "?");
-      HTM_TD_End ();
+	 /* Write the user's role */
+	 HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%s&nbsp;",RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
+							       "?");
+	 HTM_TD_End ();
 
-      /* Write the date-time (row[3]) */
-      if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-				    true,true,false,0x7);
-      HTM_TD_End ();
-      free (Id);
+	 /* Write the date-time (row[3]) */
+	 if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					  true,true,false,0x7);
+	 HTM_TD_End ();
+	 free (Id);
 
-      /* Write the action */
-      if (sscanf (row[4],"%ld",&ActCod) != 1)
-	 Err_WrongActionExit ();
-      HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      if (ActCod >= 0)
-         HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
-      else
-         HTM_TxtF ("?&nbsp;");
-      HTM_TD_End ();
+	 /* Write the action */
+	 if (sscanf (row[4],"%ld",&ActCod) != 1)
+	    Err_WrongActionExit ();
+	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	    if (ActCod >= 0)
+	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
+	    else
+	       HTM_TxtF ("?&nbsp;");
+	 HTM_TD_End ();
 
-      /* Write the comments of the access */
-      HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      Sta_WriteLogComments (LogCod);
-      HTM_TD_End ();
+	 /* Write the comments of the access */
+	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	    Sta_WriteLogComments (LogCod);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -1835,18 +1833,16 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"RT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Photo);
-   HTM_TH (1,1,"LT",Txt_ID);
-   HTM_TH (1,1,"LT",Txt_Name);
-   HTM_TH (1,1,"CT",Txt_Role);
-   HTM_TH (1,2,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"RT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Photo);
+      HTM_TH (1,1,"LT",Txt_ID);
+      HTM_TH (1,1,"LT",Txt_Name);
+      HTM_TH (1,1,"CT",Txt_Role);
+      HTM_TH (1,2,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumHit = 1, Hits.Max = 0.0, Gbl.RowEvenOdd = 0;
+   for (NumHit  = 1, Hits.Max = 0.0, Gbl.RowEvenOdd = 0;
 	NumHit <= NumHits;
 	NumHit++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
@@ -1860,58 +1856,58 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the number of row */
-      HTM_TD_Begin ("class=\"LOG RT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%u&nbsp;",NumHit);
-      HTM_TD_End ();
+	 /* Write the number of row */
+	 HTM_TD_Begin ("class=\"LOG RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%u&nbsp;",NumHit);
+	 HTM_TD_End ();
 
-      /* Show the photo */
-      HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-      Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20",Pho_ZOOM,false);
-      HTM_TD_End ();
+	 /* Show the photo */
+	 HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20",Pho_ZOOM,false);
+	 HTM_TD_End ();
 
-      /* Write the user's ID if user is a student in current course */
-      HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      ID_WriteUsrIDs (&UsrDat,NULL);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write the user's ID if user is a student in current course */
+	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	    ID_WriteUsrIDs (&UsrDat,NULL);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write the name and the surnames */
-      HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
-      HTM_TD_End ();
+	 /* Write the name and the surnames */
+	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
+	 HTM_TD_End ();
 
-      /* Write user's role */
-      HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
-      HTM_TD_End ();
+	 /* Write user's role */
+	 HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
+	 HTM_TD_End ();
 
-      /* Write the number of clicks */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      if (NumHits == 1)
-	 Hits.Max = Hits.Num;
-      if (Hits.Max > 0.0)
-        {
-         BarWidth = (unsigned) (((Hits.Num * 375.0) / Hits.Max) + 0.5);
-         if (BarWidth == 0)
-            BarWidth = 1;
-        }
-      else
-         BarWidth = 0;
+	 /* Write the number of clicks */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 if (NumHits == 1)
+	    Hits.Max = Hits.Num;
+	 if (Hits.Max > 0.0)
+	   {
+	    BarWidth = (unsigned) (((Hits.Num * 375.0) / Hits.Max) + 0.5);
+	    if (BarWidth == 0)
+	       BarWidth = 1;
+	   }
+	 else
+	    BarWidth = 0;
 
-      HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
-      if (BarWidth)
-	{
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,
-		  UsrDat.Roles.InCurrentCrs == Rol_STD ? "o1x1.png" :	// Student
-			                                 "r1x1.png",	// Non-editing teacher or teacher
-		  NULL,
-	          "class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
-		  BarWidth);
-	 HTM_NBSP ();
-	}
-      HTM_DoubleFewDigits (Hits.Num);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	    if (BarWidth)
+	      {
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,
+			UsrDat.Roles.InCurrentCrs == Rol_STD ? "o1x1.png" :	// Student
+							       "r1x1.png",	// Non-editing teacher or teacher
+			NULL,
+			"class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
+			BarWidth);
+	       HTM_NBSP ();
+	      }
+	    HTM_DoubleFewDigits (Hits.Num);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -1948,11 +1944,9 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_Date);
-   HTM_TH (1,1,"LT",Txt_Day);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_Date);
+      HTM_TH (1,1,"LT",Txt_Day);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -1977,7 +1971,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
       NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&ReadDate,&LastDate);
       /* In the next loop (NumDaysFromLastDateToCurrDate-1) días (the more recent) with 0 clicks are shown
          and a last day (the oldest) with Hits.Num */
-      for (D = 1;
+      for (D  = 1;
 	   D <= NumDaysFromLastDateToCurrDate;
 	   D++)
         {
@@ -1985,25 +1979,25 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
          HTM_TR_Begin (NULL);
 
-         /* Write the date */
-	 Dat_ConvDateToDateStr (&Date,StrDate);
-         HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-					                   "LOG");
-         HTM_TxtF ("%s&nbsp;",StrDate);
-         HTM_TD_End ();
+	    /* Write the date */
+	    Dat_ConvDateToDateStr (&Date,StrDate);
+	    HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
+							      "LOG");
+	       HTM_TxtF ("%s&nbsp;",StrDate);
+	    HTM_TD_End ();
 
-         /* Write the day of the week */
-         HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-					                   "LOG");
-         HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
-         HTM_TD_End ();
+	    /* Write the day of the week */
+	    HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
+							      "LOG");
+	       HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	    HTM_TD_End ();
 
-         /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :	// red background
-                                               'o',	// orange background
-                             D == NumDaysFromLastDateToCurrDate ? Hits.Num :
-                        	                                  0.0,
-                             Hits.Max,Hits.Total,500);
+	    /* Draw bar proportional to number of hits */
+	    Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :	// red background
+						  'o',	// orange background
+				D == NumDaysFromLastDateToCurrDate ? Hits.Num :
+								     0.0,
+				Hits.Max,Hits.Total,500);
 
          HTM_TR_End ();
 
@@ -2016,7 +2010,7 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
    /***** Finally NumDaysFromLastDateToCurrDate days are shown with 0 clicks
           (the oldest days from the requested initial day until the first with clicks) *****/
-   for (D = 1;
+   for (D  = 1;
 	D <= NumDaysFromLastDateToCurrDate;
 	D++)
      {
@@ -2024,23 +2018,23 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the date */
-      Dat_ConvDateToDateStr (&Date,StrDate);
-      HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-					                "LOG");
-      HTM_TxtF ("%s&nbsp;",StrDate);
-      HTM_TD_End ();
+	 /* Write the date */
+	 Dat_ConvDateToDateStr (&Date,StrDate);
+	 HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
+							   "LOG");
+	    HTM_TxtF ("%s&nbsp;",StrDate);
+	 HTM_TD_End ();
 
-      /* Write the day of the week */
-      HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-					                "LOG");
-      HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
-      HTM_TD_End ();
+	 /* Write the day of the week */
+	 HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
+							   "LOG");
+	    HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	 HTM_TD_End ();
 
-      /* Draw bar proportional to number of hits */
-      Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :	// red background
-	                                    'o',	// orange background
-	                  0.0,Hits.Max,Hits.Total,500);
+	 /* Draw bar proportional to number of hits */
+	 Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :	// red background
+					       'o',	// orange background
+			     0.0,Hits.Max,Hits.Total,500);
 
       HTM_TR_End ();
 
@@ -2092,38 +2086,38 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
    /***** Put a selector for the type of color *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("colspan=\"26\" class=\"CM\"");
+      HTM_TD_Begin ("colspan=\"26\" class=\"CM\"");
 
-   Frm_BeginFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
-   Dat_WriteParamsIniEndDates ();
-   Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
-   Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
-   Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-   if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   else // Gbl.Action.Act == ActSeeAccGbl
-     {
-      Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Stats->Role);
-      Sta_PutHiddenParamScopeSta ();
-     }
+	 Frm_BeginFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
+	 Dat_WriteParamsIniEndDates ();
+	 Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
+	 Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
+	 Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+	 if (Gbl.Action.Act == ActSeeAccCrs)
+	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 else // Gbl.Action.Act == ActSeeAccGbl
+	   {
+	    Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Stats->Role);
+	    Sta_PutHiddenParamScopeSta ();
+	   }
 
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
-   HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "name=\"ColorType\"");
-   for (ColorType  = (Sta_ColorType_t) 0;
-	ColorType <= (Sta_ColorType_t) (Sta_NUM_COLOR_TYPES - 1);
-	ColorType++)
-     {
-      ColorTypeUnsigned = (unsigned) ColorType;
-      HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
-		  ColorType == SelectedColorType,false,
-		  "%s",Txt_STAT_COLOR_TYPES[ColorType]);
-     }
-   HTM_SELECT_End ();
-   HTM_LABEL_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				 "name=\"ColorType\"");
+		  for (ColorType  = (Sta_ColorType_t) 0;
+		       ColorType <= (Sta_ColorType_t) (Sta_NUM_COLOR_TYPES - 1);
+		       ColorType++)
+		    {
+		     ColorTypeUnsigned = (unsigned) ColorType;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ColorTypeUnsigned,
+				 ColorType == SelectedColorType,false,
+				 "%s",Txt_STAT_COLOR_TYPES[ColorType]);
+		    }
+	       HTM_SELECT_End ();
+	    HTM_LABEL_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day-hour *****/
@@ -2140,35 +2134,33 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (3,1,"CT",Txt_Date);
-   HTM_TH (3,1,"LT",Txt_Day);
-   HTM_TH (1,24,"LT",Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType]);
-
+      HTM_TH (3,1,"CT",Txt_Date);
+      HTM_TH (3,1,"LT",Txt_Day);
+      HTM_TH (1,24,"LT",Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType]);
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"24\" class=\"LT\"");
-   Sta_DrawBarColors (SelectedColorType,Hits.Max);
-   HTM_TD_End ();
-   HTM_TR_End ();
-
-   HTM_TR_Begin (NULL);
-   for (Hour = 0;
-	Hour < 24;
-	Hour++)
-     {
-      HTM_TD_Begin ("class=\"LOG CT\" style=\"width:%upx;\"",
-	            GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
-      HTM_TxtF ("%02uh",Hour);
+      HTM_TD_Begin ("colspan=\"24\" class=\"LT\"");
+	 Sta_DrawBarColors (SelectedColorType,Hits.Max);
       HTM_TD_End ();
-     }
+   HTM_TR_End ();
+
+   HTM_TR_Begin (NULL);
+      for (Hour = 0;
+	   Hour < 24;
+	   Hour++)
+	{
+	 HTM_TD_Begin ("class=\"LOG CT\" style=\"width:%upx;\"",
+		       GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
+	    HTM_TxtF ("%02uh",Hour);
+	 HTM_TD_End ();
+	}
    HTM_TR_End ();
 
    /***** Write rows beginning by the most recent day and ending by the oldest one *****/
    mysql_data_seek (mysql_res,0);
 
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -2198,7 +2190,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
             and a last day (older) with Hits.Num */
          Dat_AssignDate (&Date,&LastDate);
          NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&PreviousReadDate,&LastDate);
-         for (D = 1;
+         for (D  = 1;
               D <= NumDaysFromLastDateToCurrDate;
               D++)
            {
@@ -2206,24 +2198,25 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
             HTM_TR_Begin (NULL);
 
-            /* Write the date */
-            Dat_ConvDateToDateStr (&Date,StrDate);
-            HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-						              "LOG");
-            HTM_TxtF ("%s&nbsp;",StrDate);
-            HTM_TD_End ();
+	       /* Write the date */
+	       Dat_ConvDateToDateStr (&Date,StrDate);
+	       HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
+								 "LOG");
+		  HTM_TxtF ("%s&nbsp;",StrDate);
+	       HTM_TD_End ();
 
-            /* Write the day of the week */
-            HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-						              "LOG");
-            HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
-            HTM_TD_End ();
+	       /* Write the day of the week */
+	       HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
+								 "LOG");
+		  HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	       HTM_TD_End ();
 
-            /* Draw a cell with the color proportional to the number of clicks */
-            if (D == NumDaysFromLastDateToCurrDate)
-               Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
-            else	// D < NumDaysFromLastDateToCurrDate
-               Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
+	       /* Draw a cell with the color proportional to the number of clicks */
+	       if (D == NumDaysFromLastDateToCurrDate)
+		  Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
+	       else	// D < NumDaysFromLastDateToCurrDate
+		  Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
+
             HTM_TR_End ();
 
             /* Decrease day */
@@ -2246,7 +2239,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
       and a last day (older) with Hits.Num clicks */
    Dat_AssignDate (&Date,&LastDate);
    NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&PreviousReadDate,&LastDate);
-   for (D = 1;
+   for (D  = 1;
 	D <= NumDaysFromLastDateToCurrDate;
 	D++)
      {
@@ -2254,24 +2247,25 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the date */
-      Dat_ConvDateToDateStr (&Date,StrDate);
-      HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-					                "LOG");
-      HTM_TxtF ("%s&nbsp;",StrDate);
-      HTM_TD_End ();
+	 /* Write the date */
+	 Dat_ConvDateToDateStr (&Date,StrDate);
+	 HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
+							   "LOG");
+	    HTM_TxtF ("%s&nbsp;",StrDate);
+	 HTM_TD_End ();
 
-      /* Write the day of the week */
-      HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-					                "LOG");
-      HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
-      HTM_TD_End ();
+	 /* Write the day of the week */
+	 HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
+							   "LOG");
+	    HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	 HTM_TD_End ();
 
-      /* Draw the color proporcional al number of clicks */
-      if (D == NumDaysFromLastDateToCurrDate)
-         Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
-      else	// D < NumDaysFromLastDateToCurrDate
-         Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
+	 /* Draw the color proporcional al number of clicks */
+	 if (D == NumDaysFromLastDateToCurrDate)
+	    Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
+	 else	// D < NumDaysFromLastDateToCurrDate
+	    Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
+
       HTM_TR_End ();
 
       /* Decrease day */
@@ -2282,7 +2276,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
           (the oldest days since the initial day requested by the user until the first with clicks) *****/
    Dat_AssignDate (&LastDate,&Date);
    NumDaysFromLastDateToCurrDate = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&LastDate);
-   for (D = 1;
+   for (D  = 1;
 	D <= NumDaysFromLastDateToCurrDate;
 	D++)
      {
@@ -2290,21 +2284,21 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the date */
-      Dat_ConvDateToDateStr (&Date,StrDate);
-      HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
-					                "LOG");
-      HTM_TxtF ("%s&nbsp;",StrDate);
-      HTM_TD_End ();
+	 /* Write the date */
+	 Dat_ConvDateToDateStr (&Date,StrDate);
+	 HTM_TD_Begin ("class=\"%s RT\"",NumDayWeek == 6 ? "LOG_R" :
+							   "LOG");
+	    HTM_TxtF ("%s&nbsp;",StrDate);
+	 HTM_TD_End ();
 
-      /* Write the day of the week */
-      HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
-					                "LOG");
-      HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
-      HTM_TD_End ();
+	 /* Write the day of the week */
+	 HTM_TD_Begin ("class=\"%s LT\"",NumDayWeek == 6 ? "LOG_R" :
+							   "LOG");
+	    HTM_TxtF ("%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
+	 HTM_TD_End ();
 
-      /* Draw the color proportional to number of clicks */
-      Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
+	 /* Draw the color proportional to number of clicks */
+	 Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
 
       HTM_TR_End ();
 
@@ -2349,47 +2343,48 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
 
    /***** Write numbers from 0 to Hits.Max *****/
    HTM_TABLE_BeginWide ();
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("colspan=\"%u\" class=\"LOG LB\" style=\"width:%upx;\"",
-		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
-		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   HTM_Unsigned (0);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"LOG LB\" style=\"width:%upx;\"",
+		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
+		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
+	    HTM_Unsigned (0);
+	 HTM_TD_End ();
 
-   for (Interval = 1;
-	Interval <= 4;
-	Interval++)
-     {
-      HTM_TD_Begin ("colspan=\"%u\" class=\"LOG CB\" style=\"width:%upx;\"",
-		    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
-		    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      HTM_DoubleFewDigits ((double) Interval * HitsMax / 5.0);
-      HTM_TD_End ();
-     }
+	 for (Interval = 1;
+	      Interval <= 4;
+	      Interval++)
+	   {
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"LOG CB\" style=\"width:%upx;\"",
+			  GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
+			  GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
+	       HTM_DoubleFewDigits ((double) Interval * HitsMax / 5.0);
+	    HTM_TD_End ();
+	   }
 
-   HTM_TD_Begin ("colspan=\"%u\" class=\"LOG RB\" style=\"width:%upx;\"",
-		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
-		 (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   HTM_DoubleFewDigits (HitsMax);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"LOG RB\" style=\"width:%upx;\"",
+		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
+		       (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
+	    HTM_DoubleFewDigits (HitsMax);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   HTM_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-   /***** Draw colors *****/
-   for (NumColor = 0;
-	NumColor < GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH;
-	NumColor++)
-     {
-      Sta_SetColor (ColorType,(double) NumColor,(double) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
-      HTM_TD_Begin ("class=\"LM\" style=\"width:1px; background-color:#%02X%02X%02X;\"",
-	            R,G,B);
-      Ico_PutIcon ("tr1x14.gif","","");
-      HTM_TD_End ();
-     }
-   HTM_TR_End ();
+	 /***** Draw colors *****/
+	 for (NumColor = 0;
+	      NumColor < GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH;
+	      NumColor++)
+	   {
+	    Sta_SetColor (ColorType,(double) NumColor,(double) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
+	    HTM_TD_Begin ("class=\"LM\" style=\"width:1px; background-color:#%02X%02X%02X;\"",
+			  R,G,B);
+	       Ico_PutIcon ("tr1x14.gif","","");
+	    HTM_TD_End ();
+	   }
+
+      HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -2527,10 +2522,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LT",Txt_Week);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"LT",Txt_Week);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per week *****/
@@ -2538,7 +2531,7 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -2553,22 +2546,22 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
       Dat_AssignDate (&Date,&LastDate);
       NumWeeksBetweenLastDateAndCurDate = Dat_GetNumWeeksBetweenDates (&ReadDate,&LastDate);
-      for (W = 1;
+      for (W  = 1;
 	   W <= NumWeeksBetweenLastDateAndCurDate;
 	   W++)
         {
          HTM_TR_Begin (NULL);
 
-         /* Write week */
-         HTM_TD_Begin ("class=\"LOG LT\"");
-         HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Week);
-         HTM_TD_End ();
+	    /* Write week */
+	    HTM_TD_Begin ("class=\"LOG LT\"");
+	       HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Week);
+	    HTM_TD_End ();
 
-         /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits ('o',	// orange background
-                             W == NumWeeksBetweenLastDateAndCurDate ? Hits.Num :
-                        	                                      0.0,
-                             Hits.Max,Hits.Total,500);
+	    /* Draw bar proportional to number of hits */
+	    Sta_DrawBarNumHits ('o',	// orange background
+				W == NumWeeksBetweenLastDateAndCurDate ? Hits.Num :
+									 0.0,
+				Hits.Max,Hits.Total,500);
 
          HTM_TR_End ();
 
@@ -2582,20 +2575,20 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
   Dat_CalculateWeekOfYear (&Gbl.DateRange.DateIni.Date);	// Changes Week and Year
   NumWeeksBetweenLastDateAndCurDate = Dat_GetNumWeeksBetweenDates (&Gbl.DateRange.DateIni.Date,
                                                                    &LastDate);
-  for (W = 1;
+  for (W  = 1;
        W <= NumWeeksBetweenLastDateAndCurDate;
        W++)
     {
      HTM_TR_Begin (NULL);
 
-     /* Write week */
-     HTM_TD_Begin ("class=\"LOG LT\"");
-     HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Week);
-     HTM_TD_End ();
+	/* Write week */
+	HTM_TD_Begin ("class=\"LOG LT\"");
+	   HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Week);
+	HTM_TD_End ();
 
-     /* Draw bar proportional to number of hits */
-     Sta_DrawBarNumHits ('o',	// orange background
-                         0.0,Hits.Max,Hits.Total,500);
+	/* Draw bar proportional to number of hits */
+	Sta_DrawBarNumHits ('o',	// orange background
+			    0.0,Hits.Max,Hits.Total,500);
 
      HTM_TR_End ();
 
@@ -2628,10 +2621,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LT",Txt_Month);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"LT",Txt_Month);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per month *****/
@@ -2639,7 +2630,7 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -2655,22 +2646,22 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
       Dat_AssignDate (&Date,&LastDate);
       NumMonthsBetweenLastDateAndCurDate = Dat_GetNumMonthsBetweenDates (&ReadDate,
                                                                          &LastDate);
-      for (M = 1;
+      for (M  = 1;
 	   M <= NumMonthsBetweenLastDateAndCurDate;
 	   M++)
         {
          HTM_TR_Begin (NULL);
 
-         /* Write the month */
-         HTM_TD_Begin ("class=\"LOG LT\"");
-         HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Month);
-         HTM_TD_End ();
+	    /* Write the month */
+	    HTM_TD_Begin ("class=\"LOG LT\"");
+	       HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Month);
+	    HTM_TD_End ();
 
-         /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits ('o',	// orange background
-                             M == NumMonthsBetweenLastDateAndCurDate ? Hits.Num :
-                        	                                       0.0,
-                             Hits.Max,Hits.Total,500);
+	    /* Draw bar proportional to number of hits */
+	    Sta_DrawBarNumHits ('o',	// orange background
+				M == NumMonthsBetweenLastDateAndCurDate ? Hits.Num :
+									  0.0,
+				Hits.Max,Hits.Total,500);
 
          HTM_TR_End ();
 
@@ -2683,20 +2674,20 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
   /***** Finally, show the oldest months without clicks *****/
   NumMonthsBetweenLastDateAndCurDate = Dat_GetNumMonthsBetweenDates (&Gbl.DateRange.DateIni.Date,
                                                                      &LastDate);
-  for (M = 1;
+  for (M  = 1;
        M <= NumMonthsBetweenLastDateAndCurDate;
        M++)
     {
      HTM_TR_Begin (NULL);
 
-     /* Write the month */
-     HTM_TD_Begin ("class=\"LOG LT\"");
-     HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Month);
-     HTM_TD_End ();
+	/* Write the month */
+	HTM_TD_Begin ("class=\"LOG LT\"");
+	   HTM_TxtF ("%04u-%02u&nbsp;",Date.Year,Date.Month);
+	HTM_TD_End ();
 
-     /* Draw bar proportional to number of hits */
-     Sta_DrawBarNumHits ('o',	// orange background
-                         0.0,Hits.Max,Hits.Total,500);
+	/* Draw bar proportional to number of hits */
+	Sta_DrawBarNumHits ('o',	// orange background
+			    0.0,Hits.Max,Hits.Total,500);
 
      HTM_TR_End ();
 
@@ -2729,10 +2720,8 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LT",Txt_Year);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"LT",Txt_Year);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per year *****/
@@ -2740,7 +2729,7 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -2756,22 +2745,22 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
       Dat_AssignDate (&Date,&LastDate);
       NumYearsBetweenLastDateAndCurDate = Dat_GetNumYearsBetweenDates (&ReadDate,
                                                                        &LastDate);
-      for (Y = 1;
+      for (Y  = 1;
 	   Y <= NumYearsBetweenLastDateAndCurDate;
 	   Y++)
         {
          HTM_TR_Begin (NULL);
 
-         /* Write the year */
-         HTM_TD_Begin ("class=\"LOG LT\"");
-         HTM_TxtF ("%04u&nbsp;",Date.Year);
-         HTM_TD_End ();
+	    /* Write the year */
+	    HTM_TD_Begin ("class=\"LOG LT\"");
+	       HTM_TxtF ("%04u&nbsp;",Date.Year);
+	    HTM_TD_End ();
 
-         /* Draw bar proportional to number of hits */
-         Sta_DrawBarNumHits ('o',	// orange background
-                             Y == NumYearsBetweenLastDateAndCurDate ? Hits.Num :
-                        	                                      0.0,
-                             Hits.Max,Hits.Total,500);
+	    /* Draw bar proportional to number of hits */
+	    Sta_DrawBarNumHits ('o',	// orange background
+				Y == NumYearsBetweenLastDateAndCurDate ? Hits.Num :
+									 0.0,
+				Hits.Max,Hits.Total,500);
 
          HTM_TR_End ();
 
@@ -2784,20 +2773,20 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
   /***** Finally, show the oldest years without clicks *****/
   NumYearsBetweenLastDateAndCurDate = Dat_GetNumYearsBetweenDates (&Gbl.DateRange.DateIni.Date,
                                                                    &LastDate);
-  for (Y = 1;
+  for (Y  = 1;
        Y <= NumYearsBetweenLastDateAndCurDate;
        Y++)
     {
      HTM_TR_Begin (NULL);
 
-     /* Write the year */
-     HTM_TD_Begin ("class=\"LOG LT\"");
-     HTM_TxtF ("%04u&nbsp;",Date.Year);
-     HTM_TD_End ();
+	/* Write the year */
+	HTM_TD_Begin ("class=\"LOG LT\"");
+	   HTM_TxtF ("%04u&nbsp;",Date.Year);
+	HTM_TD_End ();
 
-     /* Draw bar proportional to number of hits */
-     Sta_DrawBarNumHits ('o',	// orange background
-                         0.0,Hits.Max,Hits.Total,500);
+	/* Draw bar proportional to number of hits */
+	Sta_DrawBarNumHits ('o',	// orange background
+			    0.0,Hits.Max,Hits.Total,500);
 
      HTM_TR_End ();
 
@@ -2880,30 +2869,31 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 
    HTM_TD_Begin ("class=\"DAT_SMALL CB\" style=\"width:%upx;\"",ColumnWidth);
 
-   /* Draw bar with a height porportional to the number of clicks */
-   if (Hits->Num > 0.0)
-     {
-      HTM_TxtF ("%u%%",(unsigned) (((Hits->Num * 100.0) /
-		                     Hits->Total) + 0.5));
-      HTM_BR ();
-      HTM_DoubleFewDigits (Hits->Num);
-      HTM_BR ();
-      BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
-      if (BarHeight == 0)
-         BarHeight = 1;
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",NULL,	// Orange background
-	       "style=\"width:10px;height:%upx;\"",BarHeight);
-     }
-   else
-     {
-      HTM_Txt ("0%");
-      HTM_BR ();
-      HTM_Unsigned (0);
-     }
+      /* Draw bar with a height porportional to the number of clicks */
+      if (Hits->Num > 0.0)
+	{
+	 HTM_TxtF ("%u%%",(unsigned) (((Hits->Num * 100.0) /
+					Hits->Total) + 0.5));
+	 HTM_BR ();
+	 HTM_DoubleFewDigits (Hits->Num);
+	 HTM_BR ();
+	 BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
+	 if (BarHeight == 0)
+	    BarHeight = 1;
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",NULL,	// Orange background
+		  "style=\"width:10px;height:%upx;\"",BarHeight);
+	}
+      else
+	{
+	 HTM_Txt ("0%");
+	 HTM_BR ();
+	 HTM_Unsigned (0);
+	}
 
-   /* Write the hour */
-   HTM_BR ();
-   HTM_TxtF ("%uh",Hour);
+      /* Write the hour */
+      HTM_BR ();
+      HTM_TxtF ("%uh",Hour);
+
    HTM_TD_End ();
   }
 
@@ -3043,15 +3033,15 @@ static void Sta_WriteLabelsXAxisAccMin (double IncX,const char *Format)
    double NumX;
 
    HTM_TR_Begin (NULL);
-   for (i = 0, NumX = 0;
-	i <= Sta_NUM_DIVISIONS_X;
-	i++, NumX += IncX)
-     {
-      HTM_TD_Begin ("colspan=\"2\" class=\"LOG CB\" style=\"width:%upx;\"",
-                    Sta_WIDTH_DIVISION_GRAPHIC);
-      HTM_TxtF (Format,NumX);
-      HTM_TD_End ();
-     }
+      for (i  = 0, NumX = 0;
+	   i <= Sta_NUM_DIVISIONS_X;
+	   i++, NumX += IncX)
+	{
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LOG CB\" style=\"width:%upx;\"",
+		       Sta_WIDTH_DIVISION_GRAPHIC);
+	    HTM_TxtF (Format,NumX);
+	 HTM_TD_End ();
+	}
    HTM_TR_End ();
   }
 
@@ -3149,10 +3139,8 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"RT",Txt_Action);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"RT",Txt_Action);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -3160,7 +3148,7 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3171,17 +3159,17 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"LOG RT\"");
-      if (ActCod >= 0)
-	 HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
-      else
-         HTM_Txt ("?&nbsp;");
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LOG RT\"");
+	    if (ActCod >= 0)
+	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
+	    else
+	       HTM_Txt ("?&nbsp;");
+	 HTM_TD_End ();
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-                          Hits.Num,Hits.Max,Hits.Total,500);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,500);
 
       HTM_TR_End ();
      }
@@ -3204,10 +3192,8 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"RT",Txt_Plugin);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"RT",Txt_Plugin);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per plugin *****/
@@ -3215,7 +3201,7 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3223,21 +3209,21 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the plugin */
-      if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
-	 Err_WrongPluginExit ();
-      HTM_TD_Begin ("class=\"LOG RT\"");
-      if (Plg_GetDataOfPluginByCod (&Plg))
-         HTM_Txt (Plg.Name);
-      else
-         HTM_Txt ("?");
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write the plugin */
+	 if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
+	    Err_WrongPluginExit ();
+	 HTM_TD_Begin ("class=\"LOG RT\"");
+	    if (Plg_GetDataOfPluginByCod (&Plg))
+	       HTM_Txt (Plg.Name);
+	    else
+	       HTM_Txt ("?");
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-                          Hits.Num,Hits.Max,Hits.Total,500);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,500);
 
       HTM_TR_End ();
      }
@@ -3260,10 +3246,8 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"LT",Txt_Function);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"LT",Txt_Function);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per function *****/
@@ -3271,7 +3255,7 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3279,18 +3263,18 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the plugin */
-      if (sscanf (row[0],"%ld",&FunCod) != 1)
-	 Err_ShowErrorAndExit ("Wrong function code.");
+	 /* Write the plugin */
+	 if (sscanf (row[0],"%ld",&FunCod) != 1)
+	    Err_ShowErrorAndExit ("Wrong function code.");
 
-      HTM_TD_Begin ("class=\"LOG LT\"");
-      HTM_TxtF ("%s&nbsp;",API_GetFunctionNameFromFunCod (FunCod));
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"LOG LT\"");
+	    HTM_TxtF ("%s&nbsp;",API_GetFunctionNameFromFunCod (FunCod));
+	 HTM_TD_End ();
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-                          Hits.Num,Hits.Max,Hits.Total,500);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,500);
 
       HTM_TR_End ();
      }
@@ -3315,14 +3299,12 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_Banner);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_Banner);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of clicks per banner *****/
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3337,7 +3319,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1;
+   for (NumHit  = 1;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3345,22 +3327,23 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write the banner */
-      if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
-	 Err_WrongBannerExit ();
-      Ban_GetDataOfBannerByCod (&Ban);
-      HTM_TD_Begin ("class=\"LOG LT\"");
-      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-                   Ban.WWW,
-                   Ban.FullName);
-      HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
-	       "style=\"margin:0 10px 5px 0;\"");
-      HTM_A_End ();
+	 /* Write the banner */
+	 if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
+	    Err_WrongBannerExit ();
+	 Ban_GetDataOfBannerByCod (&Ban);
+	 HTM_TD_Begin ("class=\"LOG LT\"");
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+			 Ban.WWW,
+			 Ban.FullName);
+	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
+			"style=\"margin:0 10px 5px 0;\"");
+	    HTM_A_End ();
+   	 HTM_TD_End ();
 
-      /* Draw bar proportional to number of clicks */
-      NumClicks = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-		      	  NumClicks,MaxClicks,TotalClicks,500);
+	 /* Draw bar proportional to number of clicks */
+	 NumClicks = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     NumClicks,MaxClicks,TotalClicks,500);
 
       HTM_TR_End ();
      }
@@ -3385,11 +3368,9 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Country);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Country);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per country *****/
@@ -3397,7 +3378,7 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1, Ranking = 0;
+   for (NumHit  = 1, Ranking = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3407,20 +3388,20 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write ranking of this country */
-      HTM_TD_Begin ("class=\"LOG RM\"");
-      if (CtyCod > 0)
-         HTM_Unsigned (++Ranking);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write ranking of this country */
+	 HTM_TD_Begin ("class=\"LOG RM\"");
+	    if (CtyCod > 0)
+	       HTM_Unsigned (++Ranking);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write country */
-      Sta_WriteCountry (CtyCod);
+	 /* Write country */
+	 Sta_WriteCountry (CtyCod);
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-                          Hits.Num,Hits.Max,Hits.Total,375);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,375);
 
       HTM_TR_End ();
      }
@@ -3476,11 +3457,9 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Institution);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Institution);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per institution *****/
@@ -3488,7 +3467,7 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1, Ranking = 0;
+   for (NumHit  = 1, Ranking = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3498,20 +3477,20 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write ranking of this institution */
-      HTM_TD_Begin ("class=\"LOG RT\"");
-      if (InsCod > 0)
-         HTM_Unsigned (++Ranking);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write ranking of this institution */
+	 HTM_TD_Begin ("class=\"LOG RT\"");
+	    if (InsCod > 0)
+	       HTM_Unsigned (++Ranking);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write institution */
-      Sta_WriteInstit (InsCod);
+	 /* Write institution */
+	 Sta_WriteInstit (InsCod);
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-		      	  Hits.Num,Hits.Max,Hits.Total,375);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,375);
 
       HTM_TR_End ();
      }
@@ -3569,11 +3548,9 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Center);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Center);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per center *****/
@@ -3581,7 +3558,7 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1, Ranking = 0;
+   for (NumHit  = 1, Ranking = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3591,20 +3568,20 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write ranking of this center */
-      HTM_TD_Begin ("class=\"LOG RT\"");
-      if (CtrCod > 0)
-         HTM_Unsigned (++Ranking);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write ranking of this center */
+	 HTM_TD_Begin ("class=\"LOG RT\"");
+	    if (CtrCod > 0)
+	       HTM_Unsigned (++Ranking);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write center */
-      Sta_WriteCenter (CtrCod);
+	 /* Write center */
+	 Sta_WriteCenter (CtrCod);
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-		      	  Hits.Num,Hits.Max,Hits.Total,375);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,375);
 
       HTM_TR_End ();
      }
@@ -3662,11 +3639,9 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Degree);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Degree);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per degree *****/
@@ -3674,7 +3649,7 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1, Ranking = 0;
+   for (NumHit  = 1, Ranking = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3684,20 +3659,20 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write ranking of this degree */
-      HTM_TD_Begin ("class=\"LOG RT\"");
-      if (DegCod > 0)
-         HTM_Unsigned (++Ranking);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write ranking of this degree */
+	 HTM_TD_Begin ("class=\"LOG RT\"");
+	    if (DegCod > 0)
+	       HTM_Unsigned (++Ranking);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write degree */
-      Sta_WriteDegree (DegCod);
+	 /* Write degree */
+	 Sta_WriteDegree (DegCod);
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-		      	  Hits.Num,Hits.Max,Hits.Total,375);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,375);
 
       HTM_TR_End ();
      }
@@ -3759,13 +3734,11 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Degree);
-   HTM_TH (1,1,"CT",Txt_Year_OF_A_DEGREE);
-   HTM_TH (1,1,"CT",Txt_Course);
-   HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
-
+      HTM_TH (1,1,"CT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Degree);
+      HTM_TH (1,1,"CT",Txt_Year_OF_A_DEGREE);
+      HTM_TH (1,1,"CT",Txt_Course);
+      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per course *****/
@@ -3773,7 +3746,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
    /***** Write rows *****/
    mysql_data_seek (mysql_res,0);
-   for (NumHit = 1, Ranking = 0;
+   for (NumHit  = 1, Ranking = 0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3788,47 +3761,47 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
       HTM_TR_Begin (NULL);
 
-      /* Write ranking of this course */
-      HTM_TD_Begin ("class=\"LOG RT\"");
-      if (CrsOK)
-         HTM_Unsigned (++Ranking);
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write ranking of this course */
+	 HTM_TD_Begin ("class=\"LOG RT\"");
+	    if (CrsOK)
+	       HTM_Unsigned (++Ranking);
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write degree */
-      Sta_WriteDegree (Crs.DegCod);
+	 /* Write degree */
+	 Sta_WriteDegree (Crs.DegCod);
 
-      /* Write degree year */
-      HTM_TD_Begin ("class=\"LOG CT\"");
-      if (CrsOK)
-         HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Year]);
-      else
-	 HTM_Hyphen ();
-      HTM_NBSP ();
-      HTM_TD_End ();
+	 /* Write degree year */
+	 HTM_TD_Begin ("class=\"LOG CT\"");
+	    if (CrsOK)
+	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs.Year]);
+	    else
+	       HTM_Hyphen ();
+	    HTM_NBSP ();
+	 HTM_TD_End ();
 
-      /* Write course, including link */
-      HTM_TD_Begin ("class=\"LOG LT\"");
-      if (CrsOK)
-        {
-         Frm_BeginFormGoTo (ActSeeCrsInf);
-         Crs_PutParamCrsCod (Crs.CrsCod);
-         HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
-         Hie_FreeGoToMsg ();
-         HTM_Txt (Crs.ShrtName);
-         HTM_BUTTON_End ();
-        }
-      else
-         HTM_Hyphen ();
-      HTM_NBSP ();
-      if (CrsOK)
-         Frm_EndForm ();
-      HTM_TD_End ();
+	 /* Write course, including link */
+	 HTM_TD_Begin ("class=\"LOG LT\"");
+	    if (CrsOK)
+	      {
+	       Frm_BeginFormGoTo (ActSeeCrsInf);
+	       Crs_PutParamCrsCod (Crs.CrsCod);
+		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
+		  Hie_FreeGoToMsg ();
+		     HTM_Txt (Crs.ShrtName);
+		  HTM_BUTTON_End ();
+	      }
+	    else
+	       HTM_Hyphen ();
+	    HTM_NBSP ();
+	    if (CrsOK)
+	       Frm_EndForm ();
+	 HTM_TD_End ();
 
-      /* Draw bar proportional to number of hits */
-      Hits.Num = Str_GetDoubleFromStr (row[1]);
-      Sta_DrawBarNumHits ('o',	// orange background
-		      	  Hits.Num,Hits.Max,Hits.Total,375);
+	 /* Draw bar proportional to number of hits */
+	 Hits.Num = Str_GetDoubleFromStr (row[1]);
+	 Sta_DrawBarNumHits ('o',	// orange background
+			     Hits.Num,Hits.Max,Hits.Total,375);
 
       HTM_TR_End ();
      }
@@ -3847,7 +3820,7 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
    MYSQL_ROW row;
 
    /***** For each row... *****/
-   for (NumHit = 1, Hits->Max = Hits->Total = 0.0;
+   for (NumHit  = 1, Hits->Max = Hits->Total = 0.0;
 	NumHit <= NumHits;
 	NumHit++)
      {
@@ -3881,29 +3854,29 @@ static void Sta_DrawBarNumHits (char Color,
 
    HTM_TD_Begin ("class=\"LOG LM\"");
 
-   if (HitsNum != 0.0)
-     {
-      /***** Draw bar with a with proportional to the number of hits *****/
-      BarWidth = (unsigned) (((HitsNum * (double) MaxBarWidth) / HitsMax) + 0.5);
-      if (BarWidth == 0)
-         BarWidth = 1;
-      if (asprintf (&Icon,"%c1x1.png",Color) < 0)	// Background
-	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,NULL,
-	       "style=\"width:%upx;height:10px;\"",BarWidth);
-      free (Icon);
+      if (HitsNum != 0.0)
+	{
+	 /***** Draw bar with a with proportional to the number of hits *****/
+	 BarWidth = (unsigned) (((HitsNum * (double) MaxBarWidth) / HitsMax) + 0.5);
+	 if (BarWidth == 0)
+	    BarWidth = 1;
+	 if (asprintf (&Icon,"%c1x1.png",Color) < 0)	// Background
+	    Err_NotEnoughMemoryExit ();
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,NULL,
+		  "style=\"width:%upx;height:10px;\"",BarWidth);
+	 free (Icon);
 
-      /***** Write the number of hits *****/
-      HTM_NBSP ();
-      HTM_DoubleFewDigits (HitsNum);
-      HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
-        	                          HitsTotal) + 0.5));
-     }
-   else
-      /***** Write the number of clicks *****/
-      HTM_Txt ("0&nbsp;(0");
+	 /***** Write the number of hits *****/
+	 HTM_NBSP ();
+	 HTM_DoubleFewDigits (HitsNum);
+	 HTM_TxtF ("&nbsp;(%u",(unsigned) (((HitsNum * 100.0) /
+					     HitsTotal) + 0.5));
+	}
+      else
+	 /***** Write the number of clicks *****/
+	 HTM_Txt ("0&nbsp;(0");
 
-   HTM_Txt ("%)&nbsp;");
+      HTM_Txt ("%)&nbsp;");
 
    HTM_TD_End ();
   }

@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.33 (2021-10-15)"
+#define Log_PLATFORM_VERSION	"SWAD 21.33.1 (2021-10-15)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.69.1.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.33.1:  Oct 15, 2021  Number of users/courses to show big-list warning increased from 500 to 1000. (319944 lines)
 	Version 21.33:    Oct 15, 2021  Queries moved from search to other modules. (319942 lines)
 	Version 21.32.3:  Oct 14, 2021  Fixed bug in institutional links. (319792 lines)
 	Version 21.32.2:  Oct 13, 2021  Queries moved from RSS to other modules. (319785 lines)

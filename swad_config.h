@@ -251,13 +251,13 @@
 
 /* Users */
 #define Cfg_MAX_USRS_IN_LIST			       20000	// If the number of users in a list is greater than this, don't show the list
-#define Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST       500	// If the number of users in a list is greater than this, ask me for confirmation before showing the list
+#define Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST      1000	// If the number of users in a list is greater than this, ask me for confirmation before showing the list
 #define Cfg_MIN_PHOTOS_TO_SHOW_AVERAGE			  10	// If the number of students with photo in a degree is less than this, don't show average photo of the degree
 #define Cfg_MAX_RECIPIENTS				 250	// A student can not send a message to more than this number of recipients
 #define Cfg_MAX_CONNECTED_SHOWN				  10	// Show (in right column) only these connected users with more recent activity
 
 /* Courses */
-#define Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST     500	// If the number of courses in a list is greater than this, ask me for confirmation before showing the list
+#define Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST    1000	// If the number of courses in a list is greater than this, ask me for confirmation before showing the list
 
 /* Layout */
 #define Cfg_DEFAULT_COLUMNS		Lay_HIDE_BOTH_COLUMNS
