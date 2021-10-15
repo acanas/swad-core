@@ -36,6 +36,7 @@
 #include "swad_global.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_session_database.h"
 #include "swad_timeline_database.h"
 
 /*****************************************************************************/
@@ -56,7 +57,7 @@ static void Ses_RemoveSessionFromDB (void);
 
 static bool Ses_CheckIfParamIsAlreadyInDB (const char *ParamName);
 
-static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv);
+static void Brw_DB_DeletePublicDirFromCache (const char *FullPathMediaPriv);
 
 /*****************************************************************************/
 /************************** Get number of open sessions **********************/
@@ -85,33 +86,17 @@ void Ses_CreateSession (void)
    Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,sizeof (Gbl.Session.Id) - 1);
 
    /***** Check that session is not open *****/
-   if (Ses_CheckIfSessionExists (Gbl.Session.Id))
+   if (Ses_DB_CheckIfSessionExists (Gbl.Session.Id))
       Err_ShowErrorAndExit ("Can not create session.");
 
    /***** Add session to database *****/
-   Ses_InsertSessionInDB ();
+   Ses_DB_InsertSession ();
 
    /***** Update time and course in connected list *****/
    Con_DB_UpdateMeInConnectedList ();
 
    /***** Update number of open sessions in order to show them properly *****/
    Ses_GetNumSessions ();
-  }
-
-/*****************************************************************************/
-/*********** Check if the session already exists in the database *************/
-/*****************************************************************************/
-// Return true if session exists
-// Return false if session does not exist or error
-
-bool Ses_CheckIfSessionExists (const char *IdSes)
-  {
-   /***** Get if session already exists in database *****/
-   return (DB_QueryCOUNT ("can not check if a session already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ses_sessions"
-			  " WHERE SessionId='%s'",
-			  IdSes) != 0);
   }
 
 /*****************************************************************************/
@@ -123,7 +108,7 @@ void Ses_CloseSession (void)
    if (Gbl.Usrs.Me.Logged)
      {
       /***** Remove links to private files from cache *****/
-      Ses_RemovePublicDirsCache ();
+      Brw_DB_RemovePublicDirsCache ();
 
       /***** Remove session from database *****/
       Ses_RemoveSessionFromDB ();
@@ -136,7 +121,7 @@ void Ses_CloseSession (void)
 
       /***** Remove unused data associated to expired sessions *****/
       Ses_RemoveParamsFromExpiredSessions ();
-      Ses_RemovePublicDirsFromExpiredSessions ();
+      Brw_DB_RemovePublicDirsFromExpiredSessions ();
 
       /***** Now, user is not logged in *****/
       Gbl.Usrs.Me.Role.LoggedBeforeCloseSession = Gbl.Usrs.Me.Role.Logged;
@@ -155,127 +140,17 @@ void Ses_CloseSession (void)
   }
 
 /*****************************************************************************/
-/******************** Insert new session in the database *********************/
-/*****************************************************************************/
-
-void Ses_InsertSessionInDB (void)
-  {
-   /***** Insert session in the database *****/
-   if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
-      Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
-
-   DB_QueryINSERT ("can not create session",
-		   "INSERT INTO ses_sessions"
-	           " (SessionId,UsrCod,Password,Role,"
-                     "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
-                   " VALUES"
-                   " ('%s',%ld,'%s',%u,"
-                     "%ld,%ld,%ld,%ld,%ld,NOW(),NOW(),%u)",
-		   Gbl.Session.Id,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Usrs.Me.UsrDat.Password,
-		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.Hierarchy.Cty.CtyCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ctr.CtrCod,
-		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Search.WhatToSearch);
-  }
-
-/*****************************************************************************/
-/***************** Modify data of session in the database ********************/
-/*****************************************************************************/
-
-void Ses_UpdateSessionDataInDB (void)
-  {
-   /***** Update session in database *****/
-   DB_QueryUPDATE ("can not update session",
-		   "UPDATE ses_sessions"
-		     " SET UsrCod=%ld,"
-		          "Password='%s',"
-		          "Role=%u,"
-                          "CtyCod=%ld,"
-                          "InsCod=%ld,"
-                          "CtrCod=%ld,"
-                          "DegCod=%ld,"
-                          "CrsCod=%ld,"
-                          "LastTime=NOW(),"
-                          "LastRefresh=NOW()"
-                   " WHERE SessionId='%s'",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Usrs.Me.UsrDat.Password,
-		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.Hierarchy.Cty.CtyCod,
-		   Gbl.Hierarchy.Ins.InsCod,
-		   Gbl.Hierarchy.Ctr.CtrCod,
-		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
-/******************** Update session last refresh in database ****************/
-/*****************************************************************************/
-
-void Ses_DB_UpdateSessionLastRefresh (void)
-  {
-   DB_QueryUPDATE ("can not update session",
-		   "UPDATE ses_sessions"
-		     " SET LastRefresh=NOW()"
-		   " WHERE SessionId='%s'",
-		   Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
 /********************** Remove session from the database *********************/
 /*****************************************************************************/
 
 static void Ses_RemoveSessionFromDB (void)
   {
    /***** Remove current session *****/
-   DB_QueryDELETE ("can not remove a session",
-		   "DELETE FROM ses_sessions"
-		   " WHERE SessionId='%s'",
-		   Gbl.Session.Id);
+   Ses_SB_RemoveCurrentSession ();
 
    /***** Clear old unused social timelines in database *****/
    // This is necessary to prevent the table growing and growing
    Tml_DB_ClearOldTimelinesNotesFromDB ();
-  }
-
-/*****************************************************************************/
-/*************************** Remove expired sessions *************************/
-/*****************************************************************************/
-
-void Ses_DB_RemoveExpiredSessions (void)
-  {
-   /***** Remove expired sessions *****/
-   /* A session expire
-      when last click (LastTime) is too old,
-      or (when there was at least one refresh (navigator supports AJAX)
-          and last refresh is too old (browser probably was closed)) */
-   DB_QueryDELETE ("can not remove expired sessions",
-		   "DELETE LOW_PRIORITY FROM ses_sessions"
-		   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
-                      " OR "
-                         "(LastRefresh>LastTime+INTERVAL 1 SECOND"
-                         " AND"
-                         " LastRefresh<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu))",
-                   Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK,
-                   Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH);
-  }
-
-/*****************************************************************************/
-/******************* Remove all sessions of a given user *********************/
-/*****************************************************************************/
-
-void Ses_DB_RemoveUsrSessions (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove sessions of a user",
-		   "DELETE FROM ses_sessions"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -290,20 +165,7 @@ bool Ses_GetSessionData (void)
    bool Result = false;
 
    /***** Check if the session existed in the database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of session",
-		       "SELECT UsrCod,"		// row[0]
-			      "Password,"	// row[1]
-			      "Role,"		// row[2]
-			      "CtyCod,"		// row[3]
-			      "InsCod,"		// row[4]
-			      "CtrCod,"		// row[5]
-			      "DegCod,"		// row[6]
-			      "CrsCod,"		// row[7]
-			      "WhatToSearch,"	// row[8]
-			      "SearchStr"	// row[9]
-		        " FROM ses_sessions"
-		       " WHERE SessionId='%s'",
-		       Gbl.Session.Id))
+   if (Ses_DB_GetSessionData (&mysql_res))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -318,19 +180,15 @@ bool Ses_GetSessionData (void)
       if (sscanf (row[2],"%u",&Gbl.Usrs.Me.Role.FromSession) != 1)
          Gbl.Usrs.Me.Role.FromSession = Rol_UNK;
 
-      /***** Get country code (row[3]) *****/
+      /***** Get country code (row[3]),
+                 institution code (row[4]),
+                 center code (row[5]),
+                 degree code (row[6]),
+             and course code (row[7]) *****/
       Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
-
-      /***** Get institution code (row[4]) *****/
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
-
-      /***** Get center code (row[5]) *****/
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
-
-      /***** Get degree code (row[6]) *****/
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
-
-      /***** Get course code (row[7]) *****/
       Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
 
       /***** Get last search *****/
@@ -374,15 +232,7 @@ void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue)
          if (!Ses_CheckIfParamIsAlreadyInDB (ParamName))
 	   {
 	    /***** Insert session parameter in the database *****/
-	    DB_QueryINSERT ("can not create session parameter",
-			    "INSERT INTO ses_params"
-			    " (SessionId,ParamName,ParamValue)"
-			    " VALUES"
-			    " ('%s','%s','%s')",
-			    Gbl.Session.Id,
-			    ParamName,
-			    ParamValue ? ParamValue :
-					 "");
+	    Ses_DB_InsertParam (ParamName,ParamValue);
 	    Gbl.Session.ParamsInsertedIntoDB = true;
 	   }
   }
@@ -456,7 +306,7 @@ void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize)
 /******** Get public directory used to link private path from cache **********/
 /*****************************************************************************/
 
-bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
+bool Brw_GetPublicDirFromCache (const char *FullPathMediaPriv,
                                 char TmpPubDir[PATH_MAX + 1])
   {
    bool Cached;
@@ -468,13 +318,7 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
    if (Gbl.Session.IsOpen)
      {
       /***** Get temporary directory from cache *****/
-      DB_QuerySELECTString (TmpPubDir,PATH_MAX,"can not get check if file is cached",
-			    "SELECT TmpPubDir"
-			     " FROM brw_caches"
-			    " WHERE SessionId='%s'"
-			      " AND PrivPath='%s'",
-			    Gbl.Session.Id,
-			    FullPathMediaPriv);
+      Brw_DB_GetPublicDirFromCache (FullPathMediaPriv,TmpPubDir);
       Cached = (TmpPubDir[0] != '\0');
 
       /***** Check if temporary public directory exists *****/
@@ -484,7 +328,7 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
 	    ==> remove from cache */
          TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
          if (!TmpPubDirExists)
-            Ses_DeletePublicDirFromCache (FullPathMediaPriv);
+            Brw_DB_DeletePublicDirFromCache (FullPathMediaPriv);
          return TmpPubDirExists;
 	}
      }
@@ -493,10 +337,26 @@ bool Ses_GetPublicDirFromCache (const char *FullPathMediaPriv,
   }
 
 /*****************************************************************************/
+/******** Get public directory used to link private path from cache **********/
+/*****************************************************************************/
+
+void Brw_DB_GetPublicDirFromCache (const char *FullPathMediaPriv,
+                                   char TmpPubDir[PATH_MAX + 1])
+  {
+   DB_QuerySELECTString (TmpPubDir,PATH_MAX,"can not get check if file is cached",
+			 "SELECT TmpPubDir"
+			  " FROM brw_caches"
+			 " WHERE SessionId='%s'"
+			   " AND PrivPath='%s'",
+			 Gbl.Session.Id,
+			 FullPathMediaPriv);
+  }
+
+/*****************************************************************************/
 /********* Add public directory used to link private path to cache ***********/
 /*****************************************************************************/
 
-static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv)
+static void Brw_DB_DeletePublicDirFromCache (const char *FullPathMediaPriv)
   {
    /***** Delete possible entry *****/
    if (Gbl.Session.IsOpen)
@@ -511,32 +371,42 @@ static void Ses_DeletePublicDirFromCache (const char *FullPathMediaPriv)
 /********* Add public directory used to link private path to cache ***********/
 /*****************************************************************************/
 
-void Ses_AddPublicDirToCache (const char *FullPathMediaPriv,
+void Brw_AddPublicDirToCache (const char *FullPathMediaPriv,
                               const char TmpPubDir[PATH_MAX + 1])
   {
-   /***** Insert into cache *****/
    if (Gbl.Session.IsOpen)
      {
       /* Delete possible old entry */
-      Ses_DeletePublicDirFromCache (FullPathMediaPriv);
+      Brw_DB_DeletePublicDirFromCache (FullPathMediaPriv);
 
       /* Insert new entry */
-      DB_QueryINSERT ("can not cache file",
-		      "INSERT INTO brw_caches"
-		      " (SessionId,PrivPath,TmpPubDir)"
-		      " VALUES"
-		      " ('%s','%s','%s')",
-		      Gbl.Session.Id,
-		      FullPathMediaPriv,
-		      TmpPubDir);
+      Brw_DB_AddPublicDirToCache (FullPathMediaPriv,TmpPubDir);
      }
+  }
+
+/*****************************************************************************/
+/********* Add public directory used to link private path to cache ***********/
+/*****************************************************************************/
+
+void Brw_DB_AddPublicDirToCache (const char *FullPathMediaPriv,
+                                 const char TmpPubDir[PATH_MAX + 1])
+  {
+   /* Insert new entry */
+   DB_QueryINSERT ("can not cache file",
+		   "INSERT INTO brw_caches"
+		   " (SessionId,PrivPath,TmpPubDir)"
+		   " VALUES"
+		   " ('%s','%s','%s')",
+		   Gbl.Session.Id,
+		   FullPathMediaPriv,
+		   TmpPubDir);
   }
 
 /*****************************************************************************/
 /****** Remove public directories used to link private paths from cache ******/
 /*****************************************************************************/
 
-void Ses_RemovePublicDirsCache (void)
+void Brw_DB_RemovePublicDirsCache (void)
   {
    /***** Insert into cache *****/
    if (Gbl.Session.IsOpen)
@@ -551,7 +421,7 @@ void Ses_RemovePublicDirsCache (void)
 /****** (from expired sessions)                                         ******/
 /*****************************************************************************/
 
-void Ses_RemovePublicDirsFromExpiredSessions (void)
+void Brw_DB_RemovePublicDirsFromExpiredSessions (void)
   {
    /***** Remove public directories in expired sessions *****/
    DB_QueryDELETE ("can not remove public directories in expired sessions",
@@ -559,56 +429,4 @@ void Ses_RemovePublicDirsFromExpiredSessions (void)
                    " WHERE SessionId NOT IN"
                          " (SELECT SessionId"
                           " FROM ses_sessions)");
-  }
-
-/*****************************************************************************/
-/********* Save last page of received/sent messages into session *************/
-/*****************************************************************************/
-
-void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
-  {
-   /***** Save last page of received/sent messages *****/
-   DB_QueryUPDATE ("can not update last page of messages",
-		   "UPDATE ses_sessions"
-		     " SET %s=%u"
-		   " WHERE SessionId='%s'",
-                   WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
-        	                                           "LastPageMsgSnt",
-                   NumPage,Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
-/********* Get last page of received/sent messages stored in session *********/
-/*****************************************************************************/
-
-unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
-  {
-   static const char *Field[Pag_NUM_WHAT_PAGINATE] =
-     {
-      [Pag_MESSAGES_RECEIVED] = "LastPageMsgRcv",
-      [Pag_MESSAGES_SENT    ] = "LastPageMsgSnt",
-     };
-
-   return DB_QuerySELECTUnsigned ("can not get last page of messages",
-				     "SELECT %s"
-				      " FROM ses_sessions"
-				     " WHERE SessionId='%s'",
-				     Field[WhatPaginate],
-				     Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
-/********************** Save last search into session ************************/
-/*****************************************************************************/
-
-void Ses_DB_SaveLastSearchIntoSession (void)
-  {
-   DB_QueryUPDATE ("can not update last search in session",
-		   "UPDATE ses_sessions"
-		     " SET WhatToSearch=%u,"
-			  "SearchStr='%s'"
-		   " WHERE SessionId='%s'",
-		   (unsigned) Gbl.Search.WhatToSearch,
-		   Gbl.Search.Str,
-		   Gbl.Session.Id);
   }

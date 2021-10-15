@@ -46,6 +46,7 @@
 #include "swad_parameter.h"
 #include "swad_program.h"
 #include "swad_project.h"
+#include "swad_session_database.h"
 #include "swad_survey.h"
 
 /*****************************************************************************/

@@ -1506,7 +1506,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
    if (Fil_CheckIfPathExists (FullPathJPGPriv))
      {
       /***** Get cached public link to private file *****/
-      Cached = Ses_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir);
+      Cached = Brw_GetPublicDirFromCache (FullPathJPGPriv,TmpPubDir);
 
       if (!Cached)
 	{
@@ -1517,7 +1517,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 
 	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
 	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
-	 Ses_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
+	 Brw_AddPublicDirToCache (FullPathJPGPriv,TmpPubDir);
 	}
 
       /***** Show media *****/
@@ -1570,7 +1570,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
    if (Fil_CheckIfPathExists (FullPathGIFPriv))		// The animated GIF image
      {
       /***** Get cached public link to private file *****/
-      Cached = Ses_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir);
+      Cached = Brw_GetPublicDirFromCache (FullPathGIFPriv,TmpPubDir);
 
       if (!Cached)
 	{
@@ -1582,7 +1582,7 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 
 	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
 	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
-	 Ses_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
+	 Brw_AddPublicDirToCache (FullPathGIFPriv,TmpPubDir);
 	}
 
       /***** Create URLs pointing to symbolic links *****/
@@ -1658,7 +1658,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
    if (Fil_CheckIfPathExists (FullPathVideoPriv))
      {
       /***** Get cached public link to private file *****/
-      Cached = Ses_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir);
+      Cached = Brw_GetPublicDirFromCache (FullPathVideoPriv,TmpPubDir);
 
       if (!Cached)
 	{
@@ -1669,7 +1669,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 
 	 snprintf (TmpPubDir,sizeof (TmpPubDir),"%s/%s",
 	           Gbl.FileBrowser.TmpPubDir.L,Gbl.FileBrowser.TmpPubDir.R);
-	 Ses_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
+	 Brw_AddPublicDirToCache (FullPathVideoPriv,TmpPubDir);
 	}
 
       /***** Create URL pointing to symbolic link *****/

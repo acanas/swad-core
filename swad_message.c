@@ -58,6 +58,7 @@
 #include "swad_photo.h"
 #include "swad_profile.h"
 #include "swad_profile_database.h"
+#include "swad_session_database.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

@@ -45,6 +45,7 @@
 #include "swad_password.h"
 #include "swad_password_database.h"
 #include "swad_parameter.h"
+#include "swad_session_database.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -217,7 +218,7 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
          /* Update user's data */
 	 Str_Copy (UsrDat->Password,NewEncryptedPassword,
 		   sizeof (UsrDat->Password) - 1);
-	 Ses_UpdateSessionDataInDB ();
+	 Ses_DB_UpdateSession ();
 	 Enr_UpdateUsrData (UsrDat);
 
 	 Ale_CreateAlert (Ale_SUCCESS,Pwd_PASSWORD_SECTION_ID,

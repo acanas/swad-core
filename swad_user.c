@@ -75,6 +75,7 @@
 #include "swad_record.h"
 #include "swad_record_database.h"
 #include "swad_role.h"
+#include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_tab.h"
 #include "swad_user.h"
@@ -3110,7 +3111,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       else
 		 {
 		  Act_AdjustCurrentAction ();
-		  Ses_UpdateSessionDataInDB ();
+		  Ses_DB_UpdateSession ();
 		  Con_DB_UpdateMeInConnectedList ();
 		 }
 	      }

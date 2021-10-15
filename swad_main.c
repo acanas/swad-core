@@ -44,6 +44,7 @@
 #include "swad_MFU.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_user.h"
 

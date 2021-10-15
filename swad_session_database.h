@@ -1,7 +1,7 @@
-// swad_session.h: sessions
+// swad_session_database.h: sessions operations with database
 
-#ifndef _SWAD_SES
-#define _SWAD_SES
+#ifndef _SWAD_SES_DB
+#define _SWAD_SES_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,7 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
+// #include "swad_action.h"
 #include "swad_pagination.h"
 
 /*****************************************************************************/
@@ -38,26 +38,22 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Ses_GetNumSessions (void);
-void Ses_CreateSession (void);
-void Ses_CloseSession (void);
+void Ses_DB_InsertSession (void);
+void Ses_DB_UpdateSession (void);
+void Ses_DB_SaveLastSearchIntoSession (void);
+void Ses_DB_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
+void Ses_DB_UpdateSessionLastRefresh (void);
 
-bool Ses_GetSessionData (void);
+bool Ses_DB_CheckIfSessionExists (const char *IdSes);
+unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res);
+unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);
 
-void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue);
-void Ses_RemoveParamFromThisSession (void);
-void Ses_RemoveParamsFromExpiredSessions (void);
-void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize);
+void Ses_DB_RemoveExpiredSessions (void);
+void Ses_DB_RemoveUsrSessions (long UsrCod);
+void Ses_SB_RemoveCurrentSession (void);
 
-bool Brw_GetPublicDirFromCache (const char *FullPathMediaPriv,
-                                char TmpPubDir[PATH_MAX + 1]);
-void Brw_DB_GetPublicDirFromCache (const char *FullPathMediaPriv,
-                                   char TmpPubDir[PATH_MAX + 1]);
-void Brw_AddPublicDirToCache (const char *FullPathMediaPriv,
-                              const char TmpPubDir[PATH_MAX + 1]);
-void Brw_DB_AddPublicDirToCache (const char *FullPathMediaPriv,
-                                 const char TmpPubDir[PATH_MAX + 1]);
-void Brw_DB_RemovePublicDirsCache (void);
-void Brw_DB_RemovePublicDirsFromExpiredSessions (void);
+//---------------------------- Session parameters -----------------------------
+
+void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue);
 
 #endif

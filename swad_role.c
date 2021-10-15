@@ -35,6 +35,7 @@
 #include "swad_role.h"
 #include "swad_role_database.h"
 #include "swad_role_type.h"
+#include "swad_session_database.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -543,7 +544,7 @@ void Rol_ChangeMyRole (void)
 	 Gbl.Usrs.Me.Role.HasChanged = true;
 
 	 /* ...update logged role in session... */
-	 Ses_UpdateSessionDataInDB ();
+	 Ses_DB_UpdateSession ();
 
 	 /* ...and update logged role in list of connected */
 	 Con_DB_UpdateMeInConnectedList ();
