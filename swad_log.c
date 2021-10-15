@@ -203,17 +203,17 @@ void Log_GetAndShowLastClicks (void)
 
    /***** Write list of connected users *****/
    HTM_TABLE_BeginCenterPadding (1);
-      HTM_TR_Begin (NULL);
 
+      /* Heading row */
+      HTM_TR_Begin (NULL);
 	 HTM_TH (1,1,"LC_CLK",Txt_Click);		// Click
 	 HTM_TH (1,1,"LC_TIM",Txt_ELAPSED_TIME);	// Elapsed time
 	 HTM_TH (1,1,"LC_ROL",Txt_Role);		// Role
 	 HTM_TH (1,1,"LC_CTY",Txt_Country);		// Country
-	 HTM_TH (1,1,"LC_INS",Txt_Institution);	// Institution
+	 HTM_TH (1,1,"LC_INS",Txt_Institution);		// Institution
 	 HTM_TH (1,1,"LC_CTR",Txt_Center);		// Center
 	 HTM_TH (1,1,"LC_DEG",Txt_Degree);		// Degree
 	 HTM_TH (1,1,"LC_ACT",Txt_Action);		// Action
-
       HTM_TR_End ();
 
       for (NumClick = 0;
@@ -243,16 +243,14 @@ void Log_GetAndShowLastClicks (void)
 	 Cty_GetCountryName (Hie.Cty.CtyCod,Gbl.Prefs.Language,
 			     Hie.Cty.Name[Gbl.Prefs.Language]);
 
-	 /* Get institution code (row[5]) */
+	 /* Get institution code (row[5]),
+	        center      code (row[6])
+	    and degree      code (row[7]) */
 	 Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[5]);
-	 Ins_DB_GetShortNameOfInstitution (Hie.Ins.InsCod,Hie.Ins.ShrtName);
-
-	 /* Get center code (row[6]) */
 	 Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[6]);
-	 Ctr_DB_GetShortNameOfCenterByCod (Hie.Ctr.CtrCod,Hie.Ctr.ShrtName);
-
-	 /* Get degree code (row[7]) */
 	 Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[7]);
+	 Ins_DB_GetShortNameOfInstitution (Hie.Ins.InsCod,Hie.Ins.ShrtName);
+	 Ctr_DB_GetShortNameOfCenterByCod (Hie.Ctr.CtrCod,Hie.Ctr.ShrtName);
 	 Deg_DB_GetShortNameOfDegreeByCod (Hie.Deg.DegCod,Hie.Deg.ShrtName);
 
 	 /* Print table row */
@@ -283,7 +281,7 @@ void Log_GetAndShowLastClicks (void)
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
-	       HTM_Txt (Hie.Deg.ShrtName);				// Degree
+	       HTM_Txt (Hie.Deg.ShrtName);			// Degree
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
@@ -292,6 +290,7 @@ void Log_GetAndShowLastClicks (void)
 
 	 HTM_TR_End ();
 	}
+
    HTM_TABLE_End ();
 
    /***** Free structure that stores the query result *****/

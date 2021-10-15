@@ -284,7 +284,7 @@ long Deg_DB_GetCtrCodOfDegreeByCod (long DegCod)
 void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
    /***** Trivial check: degree code should be > 0 *****/
-   if (DegCod > 0)
+   if (DegCod <= 0)
      {
       ShrtName[0] = '\0';
       return;
