@@ -59,6 +59,7 @@
 #include "swad_role.h"
 #include "swad_role_type.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"

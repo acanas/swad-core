@@ -61,6 +61,7 @@
 #include "swad_role.h"
 #include "swad_role_database.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_test_print.h"
 #include "swad_user.h"
 

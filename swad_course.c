@@ -60,6 +60,7 @@
 #include "swad_record_database.h"
 #include "swad_search.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_survey.h"
 #include "swad_test.h"
 

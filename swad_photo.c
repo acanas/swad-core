@@ -55,6 +55,7 @@
 #include "swad_photo_database.h"
 #include "swad_privacy.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_statistic.h"
 #include "swad_theme.h"
 #include "swad_user.h"

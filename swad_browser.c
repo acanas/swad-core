@@ -68,6 +68,7 @@
 #include "swad_project_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_string.h"
 #include "swad_timeline.h"
 #include "swad_timeline_note.h"

@@ -25,24 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <ctype.h>		// For isprint, isspace, etc.
-// #include <dirent.h>		// For scandir, etc.
-// #include <errno.h>		// For errno
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For FILE,fprintf
-// #include <stdlib.h>		// For exit, system, free, etc.
-// #include <string.h>		// For string functions
-// #include <sys/stat.h>		// For mkdir
-// #include <sys/types.h>		// For mkdir
-// #include <unistd.h>		// For unlink
-
-// #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_file_database.h"
-// #include "swad_string.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

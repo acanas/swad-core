@@ -28,9 +28,6 @@
 /*****************************************************************************/
 
 #include <linux/limits.h>	// For PATH_MAX
-// #include <stdbool.h>		// For boolean type
-// #include <stdio.h>		// For FILE
-// #include <time.h>		// For time_t
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/

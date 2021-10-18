@@ -1,7 +1,7 @@
-// swad_setting.h: user's settings / preferences
+// swad_setting_database.h: user's settings / preferences, operations with database
 
-#ifndef _SWAD_SET
-#define _SWAD_SET
+#ifndef _SWAD_SET_DB
+#define _SWAD_SET_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,8 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_date.h"
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -41,17 +39,33 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Set_EditSettings (void);
+//--------------------------- Global user settings ----------------------------
+void Set_DB_UpdateMySettingsAboutLanguage (void);
+void Set_DB_UpdateMySettingsAboutSideCols (void);
+void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
+void Set_DB_UpdateMySettingsAboutFirstDayOfWeek (unsigned FirstDayOfWeek);
+void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId);
+void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
+void Set_DB_UpdateMySettingsAboutPhoto (void);
+void Set_DB_UpdateMySettingsAboutBasicProfile (void);
+void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
+void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 
-void Set_GetSettingsFromIP (void);
-void Set_SetSettingsFromIP (void);
+//-------------------- User settings in the current course --------------------
+void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
 
-void Set_ChangeSideCols (void);
-unsigned Set_GetParamSideCols (void);
+void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
 
-void Set_BeginSettingsHead (void);
-void Set_EndSettingsHead (void);
-void Set_BeginOneSettingSelector (void);
-void Set_EndOneSettingSelector (void);
+void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
+void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
+void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
+
+//------------------- IP settings (when no user logged) -----------------------
+void Set_DB_UpdateSettingsFromIP (void);
+void Set_DB_UpdateMySettingsFromIP (void);
+
+unsigned Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res);
+
+void Set_DB_RemoveOldSettingsFromIP (void);
 
 #endif

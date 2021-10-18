@@ -25,20 +25,10 @@
 /************************************ Headers ********************************/
 /*****************************************************************************/
 
-// #include <mysql/mysql.h>	// To access MySQL databases
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For sprintf
-// #include <string.h>		// For string functions
-
 #include "swad_config.h"
-// #include "swad_connected_database.h"
 #include "swad_database.h"
-// #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_pagination.h"
-// #include "swad_parameter.h"
-// #include "swad_session_database.h"
-// #include "swad_timeline_database.h"
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/

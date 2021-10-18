@@ -43,6 +43,7 @@
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

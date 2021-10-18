@@ -35,6 +35,7 @@
 #include "swad_menu.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_tab.h"
 
 /*****************************************************************************/
