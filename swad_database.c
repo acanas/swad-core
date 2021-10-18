@@ -387,7 +387,7 @@ mysql> DESCRIBE brw_caches;
 3 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_caches ("
-			"SessionId CHAR(43) NOT NULL,"			// Cns_BYTES_SESSION_ID
+			"SessionId CHAR(43) NOT NULL,"				// Cns_BYTES_SESSION_ID
 			"PrivPath VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"TmpPubDir VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 		   "UNIQUE INDEX(SessionId))");

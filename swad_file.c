@@ -42,6 +42,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_file.h"
+#include "swad_file_database.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -636,4 +637,55 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
    else
       snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,"%.1f&nbsp;TiB",
 		SizeInBytes / Ti);
+  }
+
+/*****************************************************************************/
+/********* Add public directory used to link private path to cache ***********/
+/*****************************************************************************/
+
+void Fil_AddPublicDirToCache (const char *FullPathPriv,
+                              const char TmpPubDir[PATH_MAX + 1])
+  {
+   if (Gbl.Session.IsOpen)
+     {
+      /* Delete possible old entry */
+      Fil_DB_RemovePublicDirFromCache (FullPathPriv);
+
+      /* Insert new entry */
+      Fil_DB_AddPublicDirToCache (FullPathPriv,TmpPubDir);
+     }
+  }
+
+/*****************************************************************************/
+/******** Get public directory used to link private path from cache **********/
+/*****************************************************************************/
+
+bool Fil_GetPublicDirFromCache (const char *FullPathPriv,
+                                char TmpPubDir[PATH_MAX + 1])
+  {
+   bool Cached;
+   bool TmpPubDirExists;
+
+   /***** Reset temporary directory *****/
+   TmpPubDir[0] = '\0';
+
+   if (Gbl.Session.IsOpen)
+     {
+      /***** Get temporary directory from cache *****/
+      Fil_DB_GetPublicDirFromCache (FullPathPriv,TmpPubDir);
+      Cached = (TmpPubDir[0] != '\0');
+
+      /***** Check if temporary public directory exists *****/
+      if (Cached)
+	{
+	 /* If not exists (it could be deleted if its lifetime has expired)
+	    ==> remove from cache */
+         TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
+         if (!TmpPubDirExists)
+            Fil_DB_RemovePublicDirFromCache (FullPathPriv);
+         return TmpPubDirExists;
+	}
+     }
+
+   return false;
   }

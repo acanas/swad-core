@@ -1,7 +1,7 @@
-// swad_session.h: sessions
+// swad_file_database.h: files, operations with database
 
-#ifndef _SWAD_SES
-#define _SWAD_SES
+#ifndef _SWAD_FIL_DB
+#define _SWAD_FIL_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,26 +27,26 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
-#include "swad_pagination.h"
+#include <linux/limits.h>	// For PATH_MAX
+// #include <stdbool.h>		// For boolean type
+// #include <stdio.h>		// For FILE
+// #include <time.h>		// For time_t
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
+/************************** Public types and constants ***********************/
 /*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Ses_GetNumSessions (void);
-void Ses_CreateSession (void);
-void Ses_CloseSession (void);
-
-bool Ses_GetSessionData (void);
-
-void Ses_InsertParamInDB (const char *ParamName,const char *ParamValue);
-void Ses_RemoveParamFromThisSession (void);
-void Ses_RemoveParamsFromExpiredSessions (void);
-void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize);
+//------------------------------- File caches ---------------------------------
+void Fil_DB_AddPublicDirToCache (const char *FullPathPriv,
+                                 const char TmpPubDir[PATH_MAX + 1]);
+void Fil_DB_GetPublicDirFromCache (const char *FullPathPriv,
+                                   char TmpPubDir[PATH_MAX + 1]);
+void Fil_DB_RemovePublicDirFromCache (const char *FullPathPriv);
+void Fil_DB_RemovePublicDirsCache (void);
+void Fil_DB_RemovePublicDirsFromExpiredSessions (void);
 
 #endif

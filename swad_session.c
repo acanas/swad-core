@@ -33,6 +33,7 @@
 #include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
+#include "swad_file_database.h"
 #include "swad_global.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -56,8 +57,6 @@ extern struct Globals Gbl;
 static void Ses_RemoveSessionFromDB (void);
 
 static bool Ses_CheckIfParamIsAlreadyInDB (const char *ParamName);
-
-static void Brw_DB_DeletePublicDirFromCache (const char *FullPathMediaPriv);
 
 /*****************************************************************************/
 /************************** Get number of open sessions **********************/
@@ -108,7 +107,7 @@ void Ses_CloseSession (void)
    if (Gbl.Usrs.Me.Logged)
      {
       /***** Remove links to private files from cache *****/
-      Brw_DB_RemovePublicDirsCache ();
+      Fil_DB_RemovePublicDirsCache ();
 
       /***** Remove session from database *****/
       Ses_RemoveSessionFromDB ();
@@ -121,7 +120,7 @@ void Ses_CloseSession (void)
 
       /***** Remove unused data associated to expired sessions *****/
       Ses_RemoveParamsFromExpiredSessions ();
-      Brw_DB_RemovePublicDirsFromExpiredSessions ();
+      Fil_DB_RemovePublicDirsFromExpiredSessions ();
 
       /***** Now, user is not logged in *****/
       Gbl.Usrs.Me.Role.LoggedBeforeCloseSession = Gbl.Usrs.Me.Role.Logged;
@@ -300,133 +299,4 @@ void Ses_GetParamFromDB (const char *ParamName,char *ParamValue,size_t StrSize)
 			      " AND ParamName='%s'",
 			    Gbl.Session.Id,
 			    ParamName);
-  }
-
-/*****************************************************************************/
-/******** Get public directory used to link private path from cache **********/
-/*****************************************************************************/
-
-bool Brw_GetPublicDirFromCache (const char *FullPathMediaPriv,
-                                char TmpPubDir[PATH_MAX + 1])
-  {
-   bool Cached;
-   bool TmpPubDirExists;
-
-   /***** Reset temporary directory *****/
-   TmpPubDir[0] = '\0';
-
-   if (Gbl.Session.IsOpen)
-     {
-      /***** Get temporary directory from cache *****/
-      Brw_DB_GetPublicDirFromCache (FullPathMediaPriv,TmpPubDir);
-      Cached = (TmpPubDir[0] != '\0');
-
-      /***** Check if temporary public directory exists *****/
-      if (Cached)
-	{
-	 /* If not exists (it could be deleted if its lifetime has expired)
-	    ==> remove from cache */
-         TmpPubDirExists = Fil_CheckIfPathExists (TmpPubDir);
-         if (!TmpPubDirExists)
-            Brw_DB_DeletePublicDirFromCache (FullPathMediaPriv);
-         return TmpPubDirExists;
-	}
-     }
-
-   return false;
-  }
-
-/*****************************************************************************/
-/******** Get public directory used to link private path from cache **********/
-/*****************************************************************************/
-
-void Brw_DB_GetPublicDirFromCache (const char *FullPathMediaPriv,
-                                   char TmpPubDir[PATH_MAX + 1])
-  {
-   DB_QuerySELECTString (TmpPubDir,PATH_MAX,"can not get check if file is cached",
-			 "SELECT TmpPubDir"
-			  " FROM brw_caches"
-			 " WHERE SessionId='%s'"
-			   " AND PrivPath='%s'",
-			 Gbl.Session.Id,
-			 FullPathMediaPriv);
-  }
-
-/*****************************************************************************/
-/********* Add public directory used to link private path to cache ***********/
-/*****************************************************************************/
-
-static void Brw_DB_DeletePublicDirFromCache (const char *FullPathMediaPriv)
-  {
-   /***** Delete possible entry *****/
-   if (Gbl.Session.IsOpen)
-      DB_QueryDELETE ("can not remove cached file",
-		      "DELETE FROM brw_caches"
-		      " WHERE SessionId='%s'"
-		        " AND PrivPath='%s'",
-		      Gbl.Session.Id,FullPathMediaPriv);
-  }
-
-/*****************************************************************************/
-/********* Add public directory used to link private path to cache ***********/
-/*****************************************************************************/
-
-void Brw_AddPublicDirToCache (const char *FullPathMediaPriv,
-                              const char TmpPubDir[PATH_MAX + 1])
-  {
-   if (Gbl.Session.IsOpen)
-     {
-      /* Delete possible old entry */
-      Brw_DB_DeletePublicDirFromCache (FullPathMediaPriv);
-
-      /* Insert new entry */
-      Brw_DB_AddPublicDirToCache (FullPathMediaPriv,TmpPubDir);
-     }
-  }
-
-/*****************************************************************************/
-/********* Add public directory used to link private path to cache ***********/
-/*****************************************************************************/
-
-void Brw_DB_AddPublicDirToCache (const char *FullPathMediaPriv,
-                                 const char TmpPubDir[PATH_MAX + 1])
-  {
-   /* Insert new entry */
-   DB_QueryINSERT ("can not cache file",
-		   "INSERT INTO brw_caches"
-		   " (SessionId,PrivPath,TmpPubDir)"
-		   " VALUES"
-		   " ('%s','%s','%s')",
-		   Gbl.Session.Id,
-		   FullPathMediaPriv,
-		   TmpPubDir);
-  }
-
-/*****************************************************************************/
-/****** Remove public directories used to link private paths from cache ******/
-/*****************************************************************************/
-
-void Brw_DB_RemovePublicDirsCache (void)
-  {
-   /***** Insert into cache *****/
-   if (Gbl.Session.IsOpen)
-      DB_QueryDELETE ("can not cache file",
-		      "DELETE FROM brw_caches"
-		      " WHERE SessionId='%s'",
-		      Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
-/****** Remove public directories used to link private paths from cache ******/
-/****** (from expired sessions)                                         ******/
-/*****************************************************************************/
-
-void Brw_DB_RemovePublicDirsFromExpiredSessions (void)
-  {
-   /***** Remove public directories in expired sessions *****/
-   DB_QueryDELETE ("can not remove public directories in expired sessions",
-		   "DELETE FROM brw_caches"
-                   " WHERE SessionId NOT IN"
-                         " (SELECT SessionId"
-                          " FROM ses_sessions)");
   }
