@@ -5923,7 +5923,7 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct SelectedUsrs *SelectedUsrs)
       Usr_AllocateListSelectedEncryptedUsrCods (SelectedUsrs,Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
-	 Ses_GetParamFromDB (ParamName,SelectedUsrs->List[Rol_UNK],
+	 Ses_DB_GetParam (ParamName,SelectedUsrs->List[Rol_UNK],
 			     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,SelectedUsrs->List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);

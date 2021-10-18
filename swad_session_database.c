@@ -279,3 +279,68 @@ void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue)
 		   ParamValue ? ParamValue :
 				"");
   }
+
+/*****************************************************************************/
+/************** Check if a session parameter existed in database *************/
+/*****************************************************************************/
+// Return true if the parameter already existed in database
+
+bool Ses_DB_CheckIfParamIsAlreadyStored (const char *ParamName)
+  {
+   return (DB_QueryCOUNT ("can not check if a session parameter"
+			  " is already in database",
+			  "SELECT COUNT(*)"
+			   " FROM ses_params"
+			  " WHERE SessionId='%s'"
+			    " AND ParamName='%s'",
+			  Gbl.Session.Id,
+			  ParamName) != 0);
+  }
+
+/*****************************************************************************/
+/***************** Get session parameter from the database *******************/
+/*****************************************************************************/
+// StrSize is the size of the parameter value, not including the ending '\0'
+
+void Ses_DB_GetParam (const char *ParamName,char *ParamValue,size_t StrSize)
+  {
+   ParamValue[0] = '\0';
+   if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
+      /***** Get a session parameter from database *****/
+      DB_QuerySELECTString (ParamValue,StrSize,"can not get a session parameter",
+			    "SELECT ParamValue"	// row[0]
+			     " FROM ses_params"
+			    " WHERE SessionId='%s'"
+			      " AND ParamName='%s'",
+			    Gbl.Session.Id,
+			    ParamName);
+  }
+
+/*****************************************************************************/
+/************ Remove session parameters of a session from database ***********/
+/*****************************************************************************/
+
+void Ses_DB_RemoveParam (void)
+  {
+   if (Gbl.Session.IsOpen &&			// There is an open session
+       !Gbl.Session.ParamsInsertedIntoDB)		// No params just inserted
+      /***** Remove session parameters of this session *****/
+      DB_QueryDELETE ("can not remove session parameters of current session",
+		      "DELETE FROM ses_params"
+		      " WHERE SessionId='%s'",
+		      Gbl.Session.Id);
+  }
+
+/*****************************************************************************/
+/********* Remove expired hidden parameters (from expired sessions) **********/
+/*****************************************************************************/
+
+void Ses_DB_RemoveParamsFromExpiredSessions (void)
+  {
+   /***** Remove session parameters from expired sessions *****/
+   DB_QueryDELETE ("can not remove session parameters of expired sessions",
+		   "DELETE FROM ses_params"
+                   " WHERE SessionId NOT IN"
+                         " (SELECT SessionId"
+                            " FROM ses_sessions)");
+  }

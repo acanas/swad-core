@@ -51,6 +51,7 @@
 #include "swad_project.h"
 #include "swad_role.h"
 #include "swad_room.h"
+#include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_statistic.h"
 #include "swad_theme.h"
@@ -357,7 +358,7 @@ void Gbl_Cleanup (void)
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-      Ses_RemoveParamFromThisSession ();
+      Ses_DB_RemoveParam ();
    Usr_FreeMyCourses ();
    Usr_FreeMyDegrees ();
    Usr_FreeMyCenters ();

@@ -37,7 +37,7 @@
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
-
+//---------------------------------- Sessions ---------------------------------
 void Ses_DB_InsertSession (void);
 void Ses_DB_UpdateSession (void);
 void Ses_DB_SaveLastSearchIntoSession (void);
@@ -53,7 +53,12 @@ void Ses_DB_RemoveUsrSessions (long UsrCod);
 void Ses_SB_RemoveCurrentSession (void);
 
 //---------------------------- Session parameters -----------------------------
-
 void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue);
+
+bool Ses_DB_CheckIfParamIsAlreadyStored (const char *ParamName);
+void Ses_DB_GetParam (const char *ParamName,char *ParamValue,size_t StrSize);
+
+void Ses_DB_RemoveParam (void);
+void Ses_DB_RemoveParamsFromExpiredSessions (void);
 
 #endif
