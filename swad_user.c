@@ -6343,7 +6343,7 @@ void Usr_CreateSubqueryUsrCods (long LstSelectedUsrCods[],
    size_t MaxLength;
 
    /***** Allocate space for subquery *****/
-   MaxLength = NumUsrsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
+   MaxLength = (size_t) NumUsrsInList * (size_t) (1 + Cns_MAX_DECIMAL_DIGITS_LONG);
    if ((*UsrsSubQuery = malloc (MaxLength + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
    (*UsrsSubQuery)[0] = '\0';
@@ -7221,7 +7221,7 @@ void Usr_ListAllDataStds (void)
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == HieLvl_CRS)
 	{
-	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
+	 Length = (size_t) (Grp_MAX_BYTES_GROUP_NAME + 2) * (size_t) Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = malloc (Length + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
 	}

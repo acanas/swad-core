@@ -79,8 +79,9 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_report_database.o swad_role.o swad_role_database.o swad_room.o \
        swad_room_database.o swad_RSS.o \
        swad_scope.o swad_search.o swad_session.o swad_session_database.o \
-       swad_setting.o swad_setting_database.o swad_statistic.o swad_string.o \
-       swad_survey.o swad_syllabus.o swad_system_config.o \
+       swad_setting.o swad_setting_database.o swad_statistic.o \
+       swad_statistic_database.o swad_string.o swad_survey.o swad_syllabus.o \
+       swad_system_config.o \
        swad_tab.o swad_tag.o swad_test.o swad_test_config.o \
        swad_test_import.o swad_test_print.o swad_test_visibility.o \
        swad_theme.o \

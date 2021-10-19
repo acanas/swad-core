@@ -131,8 +131,8 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
 				 const char *Class);
 static void Att_PutParamsCodGrps (long AttCod);
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
-							 long LstSelectedUsrCods[],
-							 unsigned NumUsrsInList);
+						         long LstSelectedUsrCods[],
+						         unsigned NumUsrsInList);
 static bool Att_CheckIfUsrIsPresentInAttEvent (long AttCod,long UsrCod);
 static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,
                                                              char CommentStd[Cns_MAX_BYTES_TEXT + 1],
@@ -2085,8 +2085,8 @@ void Att_RegisterStudentsInAttEvent (void)
 /*****************************************************************************/
 
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
-							 long LstSelectedUsrCods[],
-							 unsigned NumUsrsInList)
+						         long LstSelectedUsrCods[],
+						         unsigned NumUsrsInList)
   {
    char *SubQueryUsrs;
    unsigned NumUsrsInAttEvent;

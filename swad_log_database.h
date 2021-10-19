@@ -60,6 +60,7 @@ unsigned Log_DB_GetMyHistoricCrss (MYSQL_RES **mysql_res,
 unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
                                   bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                   time_t FirstClickTimeUTC);
+void Log_DB_GetLogComments (long LogCod,char Comments[Cns_MAX_BYTES_TEXT + 1]);
 
 void Log_DB_RemoveOldEntriesRecentLog (void);
 

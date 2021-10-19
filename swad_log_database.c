@@ -381,6 +381,20 @@ unsigned Log_DB_GetMyHitsPerYear (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/********************* Get the comments of a hit from log ********************/
+/*****************************************************************************/
+
+void Log_DB_GetLogComments (long LogCod,char Comments[Cns_MAX_BYTES_TEXT + 1])
+  {
+   DB_QuerySELECTString (Comments,Cns_MAX_BYTES_TEXT,
+                         "can not get log comments",
+			 "SELECT Comments"
+			  " FROM log_comments"
+			 " WHERE LogCod=%ld",
+			 LogCod);
+  }
+
+/*****************************************************************************/
 /************ Sometimes, we delete old entries in recent log table ***********/
 /*****************************************************************************/
 

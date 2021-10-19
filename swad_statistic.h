@@ -128,8 +128,15 @@ struct Sta_Hits
    double Total;
   };
 
+typedef enum
+  {
+   Sta_SHOW_GLOBAL_ACCESSES,
+   Sta_SHOW_COURSE_ACCESSES,
+  } Sta_GlobalOrCourseAccesses_t;
+
 struct Sta_Stats
   {
+   Sta_GlobalOrCourseAccesses_t GlobalOrCourse;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    Sta_Role_t Role;
    Sta_CountType_t CountType;
