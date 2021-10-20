@@ -86,7 +86,7 @@ typedef enum
 typedef enum
   {
    Dat_STR_TIME = 0,
-   Dat_END_TIME   = 1,
+   Dat_END_TIME = 1,
   } Dat_StartEndTime_t;
 
 #define Dat_NUM_FORM_SECONDS 2

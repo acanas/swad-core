@@ -742,8 +742,8 @@ bool Att_GetDataOfAttEventByCod (struct Att_Event *Event)
 	 Event->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
 	 /* Get start date (row[4]) and end date (row[5]) in UTC time */
-	 Event->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
-	 Event->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+	 Event->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+	 Event->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[5]);
 
 	 /* Get whether the attendance event is open or closed (row(6)) */
 	 Event->Open = (row[6][0] == '1');
@@ -778,8 +778,8 @@ static void Att_ResetAttendanceEvent (struct Att_Event *Event)
    Event->CrsCod = -1L;
    Event->Hidden = false;
    Event->UsrCod = -1L;
-   Event->TimeUTC[Att_START_TIME] =
-   Event->TimeUTC[Att_END_TIME  ] = (time_t) 0;
+   Event->TimeUTC[Dat_STR_TIME] =
+   Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
    Event->Open = false;
    Event->Title[0] = '\0';
    Event->CommentTchVisible = false;
@@ -1010,8 +1010,8 @@ void Att_RequestCreatOrEditAttEvent (void)
       /* Initialize some fields */
       Event.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
       Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Event.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Event.TimeUTC[Att_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Event.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+      Event.TimeUTC[Dat_END_TIME] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Event.Open = true;
      }
    else
@@ -1213,8 +1213,8 @@ void Att_ReceiveFormAttEvent (void)
      }
 
    /***** Get start/end date-times *****/
-   ReceivedAtt.TimeUTC[Att_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   ReceivedAtt.TimeUTC[Att_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   ReceivedAtt.TimeUTC[Dat_STR_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   ReceivedAtt.TimeUTC[Dat_END_TIME] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
    ReceivedAtt.CommentTchVisible = Par_GetParToBool ("ComTchVisible");
@@ -1226,10 +1226,10 @@ void Att_ReceiveFormAttEvent (void)
    Par_GetParToHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (ReceivedAtt.TimeUTC[Att_START_TIME] == 0)
-      ReceivedAtt.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (ReceivedAtt.TimeUTC[Att_END_TIME] == 0)
-      ReceivedAtt.TimeUTC[Att_END_TIME] = ReceivedAtt.TimeUTC[Att_START_TIME] + 2 * 60 * 60;	// +2 hours // TODO: 2 * 60 * 60 should be in a #define in swad_config.h
+   if (ReceivedAtt.TimeUTC[Dat_STR_TIME] == 0)
+      ReceivedAtt.TimeUTC[Dat_STR_TIME] = Gbl.StartExecutionTimeUTC;
+   if (ReceivedAtt.TimeUTC[Dat_END_TIME] == 0)
+      ReceivedAtt.TimeUTC[Dat_END_TIME] = ReceivedAtt.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours // TODO: 2 * 60 * 60 should be in a #define in swad_config.h
 
    /***** Check if title is correct *****/
    if (ReceivedAtt.Title[0])	// If there's an attendance event title
@@ -2733,7 +2733,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 		     HTM_SPAN_Begin ("id=\"%s\"",Id);
 		     HTM_SPAN_End ();
 		  HTM_LABEL_End ();
-		  Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+		  Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Dat_STR_TIME],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						true,true,true,0x7);
 		  free (Id);
@@ -3180,7 +3180,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	       HTM_SPAN_End ();
 	       HTM_BR ();
 	       HTM_Txt (Events->Lst[NumAttEvent].Title);
-	       Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+	       Dat_WriteLocalDateHMSFromUTC (Id,Events->Lst[NumAttEvent].TimeUTC[Dat_STR_TIME],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					     true,true,true,0x7);
 	       free (Id);

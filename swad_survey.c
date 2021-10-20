@@ -249,76 +249,76 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
                  Svy_PutIconsListSurveys,Surveys,
                  Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
-     {
-      Set_BeginSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,
-                                  Svy_ParamsWhichGroupsToShow,Surveys);
-      Set_EndSettingsHead ();
-     }
-
-   /***** Write links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
-				  Surveys,-1L);
-
-   if (Surveys->Num)
-     {
-      /***** Table head *****/
-      HTM_TABLE_BeginWideMarginPadding (5);
-      HTM_TR_Begin (NULL);
-
-      HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-
-      for (Order  = Dat_STR_TIME;
-	   Order <= Dat_END_TIME;
-	   Order++)
+      /***** Select whether show only my groups or all groups *****/
+      if (Gbl.Crs.Grps.NumGrps)
 	{
-	 HTM_TH_Begin (1,1,"LM");
-
-	 /* Form to change order */
-	 Frm_BeginForm (ActSeeAllSvy);
-         WhichGroups = Grp_GetParamWhichGroups ();
-	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	 Dat_PutHiddenParamOrder (Order);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
-				  "BT_LINK TIT_TBL",NULL);
-	 if (Order == Surveys->SelectedOrder)
-	    HTM_U_Begin ();
-	 HTM_Txt (Txt_START_END_TIME[Order]);
-	 if (Order == Surveys->SelectedOrder)
-	    HTM_U_End ();
-	 HTM_BUTTON_End ();
-	 Frm_EndForm ();
-
-	 HTM_TH_End ();
+	 Set_BeginSettingsHead ();
+	    Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,
+					Svy_ParamsWhichGroupsToShow,Surveys);
+	 Set_EndSettingsHead ();
 	}
 
-      HTM_TH (1,1,"LM",Txt_Survey);
-      HTM_TH (1,1,"CM",Txt_Status);
+      /***** Write links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
+				     Surveys,-1L);
 
-      HTM_TR_End ();
+      if (Surveys->Num)
+	{
+	 /***** Table head *****/
+	 HTM_TABLE_BeginWideMarginPadding (5);
+	    HTM_TR_Begin (NULL);
 
-      /***** Write all surveys *****/
-      for (NumSvy = Pagination.FirstItemVisible;
-	   NumSvy <= Pagination.LastItemVisible;
-	   NumSvy++)
-	 Svy_ShowOneSurvey (Surveys,Surveys->LstSvyCods[NumSvy - 1],false);
+	       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
 
-      /***** End table *****/
-      HTM_TABLE_End ();
-     }
-   else	// No surveys created
-      Ale_ShowAlert (Ale_INFO,Txt_No_surveys);
+	       for (Order  = Dat_STR_TIME;
+		    Order <= Dat_END_TIME;
+		    Order++)
+		 {
+		  HTM_TH_Begin (1,1,"LM");
 
-   /***** Write again links to pages *****/
-   Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
-				  Surveys,-1L);
+		     /* Form to change order */
+		     Frm_BeginForm (ActSeeAllSvy);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+		     Dat_PutHiddenParamOrder (Order);
+			HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
+						 "BT_LINK TIT_TBL",NULL);
+			   if (Order == Surveys->SelectedOrder)
+			      HTM_U_Begin ();
+			   HTM_Txt (Txt_START_END_TIME[Order]);
+			   if (Order == Surveys->SelectedOrder)
+			      HTM_U_End ();
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
 
-   /***** Button to create a new survey *****/
-   if (Svy_CheckIfICanCreateSvy ())
-      Svy_PutButtonToCreateNewSvy (Surveys);
+		  HTM_TH_End ();
+		 }
+
+	       HTM_TH (1,1,"LM",Txt_Survey);
+	       HTM_TH (1,1,"CM",Txt_Status);
+
+	    HTM_TR_End ();
+
+	    /***** Write all surveys *****/
+	    for (NumSvy = Pagination.FirstItemVisible;
+		 NumSvy <= Pagination.LastItemVisible;
+		 NumSvy++)
+	       Svy_ShowOneSurvey (Surveys,Surveys->LstSvyCods[NumSvy - 1],false);
+
+	 /***** End table *****/
+	 HTM_TABLE_End ();
+	}
+      else	// No surveys created
+	 Ale_ShowAlert (Ale_INFO,Txt_No_surveys);
+
+      /***** Write again links to pages *****/
+      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
+				     Surveys,-1L);
+
+      /***** Button to create a new survey *****/
+      if (Svy_CheckIfICanCreateSvy ())
+	 Svy_PutButtonToCreateNewSvy (Surveys);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -384,7 +384,7 @@ static void Svy_PutButtonToCreateNewSvy (struct Svy_Surveys *Surveys)
 
    Frm_BeginForm (ActFrmNewSvy);
    Svy_PutParamsToCreateNewSvy (Surveys);
-   Btn_PutConfirmButton (Txt_New_survey);
+      Btn_PutConfirmButton (Txt_New_survey);
    Frm_EndForm ();
   }
 
@@ -491,218 +491,218 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    /***** Write first row of data of this assignment *****/
    HTM_TR_Begin (NULL);
 
-   /* Forms to remove/edit this assignment */
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-   else
-      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
-   if (Svy.Status.ICanEdit)
-      Svy_PutFormsToRemEditOneSvy (Surveys,&Svy,Anchor);
-   HTM_TD_End ();
+      /* Forms to remove/edit this assignment */
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+      else
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+      if (Svy.Status.ICanEdit)
+	 Svy_PutFormsToRemEditOneSvy (Surveys,&Svy,Anchor);
+      HTM_TD_End ();
 
-   /* Start date/time */
-   UniqueId++;
-   if (asprintf (&Id,"svy_date_start_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		    Id,
-		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-							    "DATE_RED") :
-				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-							    "DATE_RED_LIGHT"));
-   else
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		    Id,
-		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-							    "DATE_RED") :
-				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-							    "DATE_RED_LIGHT"),
-		    Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_START_TIME],
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,true,true,0x7);
-   HTM_TD_End ();
-   free (Id);
+      /* Start date/time */
+      UniqueId++;
+      if (asprintf (&Id,"svy_date_start_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		       Id,
+		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+							       "DATE_RED") :
+					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+							       "DATE_RED_LIGHT"));
+      else
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		       Id,
+		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+							       "DATE_RED") :
+					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+							       "DATE_RED_LIGHT"),
+		       Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_START_TIME],
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				    true,true,true,0x7);
+      HTM_TD_End ();
+      free (Id);
 
-   /* End date/time */
-   if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
-      Err_NotEnoughMemoryExit ();
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
-		    Id,
-		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-							    "DATE_RED") :
-				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-							    "DATE_RED_LIGHT"));
-   else
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		    Id,
-		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-							    "DATE_RED") :
-				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-							    "DATE_RED_LIGHT"),
-		    Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_END_TIME],
-				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				 true,false,true,0x7);
-   HTM_TD_End ();
-   free (Id);
+      /* End date/time */
+      if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		       Id,
+		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+							       "DATE_RED") :
+					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+							       "DATE_RED_LIGHT"));
+      else
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		       Id,
+		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+							       "DATE_RED") :
+					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+							       "DATE_RED_LIGHT"),
+		       Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_END_TIME],
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				    true,false,true,0x7);
+      HTM_TD_End ();
+      free (Id);
 
-   /* Survey title */
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("class=\"LT\"");
-   else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   HTM_ARTICLE_Begin (Anchor);
-   Frm_BeginForm (ActSeeSvy);
-   Svy_PutParamSvyCod (SvyCod);
-   Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
-   WhichGroups = Grp_GetParamWhichGroups ();
-   Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-   HTM_BUTTON_SUBMIT_Begin (Txt_View_survey,
-			    Svy.Status.Visible ? "BT_LINK LT ASG_TITLE" :
-						 "BT_LINK LT ASG_TITLE_LIGHT",
-			    NULL);
-   HTM_Txt (Svy.Title);
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_ARTICLE_End ();
-
-   /* Number of questions and number of distinct users who have already answered this survey */
-   HTM_DIV_Begin ("class=\"%s\"",
-                  Svy.Status.Visible ? "ASG_GRP" :
-        	                       "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (Txt_Number_of_questions);
-   HTM_Unsigned (Svy.NumQsts);
-   HTM_Txt ("; ");
-   HTM_TxtColonNBSP (Txt_Number_of_users);
-   HTM_Unsigned (Svy.NumUsrs);
-   HTM_DIV_End ();
-
-   HTM_TD_End ();
-
-   /* Status of the survey */
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("rowspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Svy_WriteStatus (&Svy);
-
-   if (!ShowOnlyThisSvyComplete)
-     {
-      /* Possible button to answer this survey */
-      if (Svy.Status.ICanAnswer)
-	{
-	 HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
-
+      /* Survey title */
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("class=\"LT\"");
+      else
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
-	 Svy_PutParamSvyCod (Svy.SvyCod);
+	 Svy_PutParamSvyCod (SvyCod);
 	 Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
-         WhichGroups = Grp_GetParamWhichGroups ();
+	 WhichGroups = Grp_GetParamWhichGroups ();
 	 Grp_PutParamWhichGroups (&WhichGroups);
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	 Btn_PutCreateButtonInline (Txt_Answer_survey);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_View_survey,
+				     Svy.Status.Visible ? "BT_LINK LT ASG_TITLE" :
+							  "BT_LINK LT ASG_TITLE_LIGHT",
+				     NULL);
+	       HTM_Txt (Svy.Title);
+	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
+      HTM_ARTICLE_End ();
 
-	 HTM_DIV_End ();
-	}
-      /* Possible button to see the result of the survey */
-      else if (Svy.Status.ICanViewResults)
+      /* Number of questions and number of distinct users who have already answered this survey */
+      HTM_DIV_Begin ("class=\"%s\"",
+		     Svy.Status.Visible ? "ASG_GRP" :
+					  "ASG_GRP_LIGHT");
+	 HTM_TxtColonNBSP (Txt_Number_of_questions);
+	 HTM_Unsigned (Svy.NumQsts);
+	 HTM_Txt ("; ");
+	 HTM_TxtColonNBSP (Txt_Number_of_users);
+	 HTM_Unsigned (Svy.NumUsrs);
+      HTM_DIV_End ();
+
+      HTM_TD_End ();
+
+      /* Status of the survey */
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Svy_WriteStatus (&Svy);
+
+      if (!ShowOnlyThisSvyComplete)
 	{
-	 HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
+	 /* Possible button to answer this survey */
+	 if (Svy.Status.ICanAnswer)
+	   {
+	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
-	 Frm_BeginForm (ActSeeSvy);
-	 Svy_PutParamSvyCod (Svy.SvyCod);
-	 Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
-         WhichGroups = Grp_GetParamWhichGroups ();
-	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	 Btn_PutConfirmButtonInline (Txt_View_results);
-	 Frm_EndForm ();
+	       Frm_BeginForm (ActSeeSvy);
+	       Svy_PutParamSvyCod (Svy.SvyCod);
+	       Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
+	       WhichGroups = Grp_GetParamWhichGroups ();
+	       Grp_PutParamWhichGroups (&WhichGroups);
+	       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+		  Btn_PutCreateButtonInline (Txt_Answer_survey);
+	       Frm_EndForm ();
 
-	 HTM_DIV_End ();
+	    HTM_DIV_End ();
+	   }
+	 /* Possible button to see the result of the survey */
+	 else if (Svy.Status.ICanViewResults)
+	   {
+	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
+
+	       Frm_BeginForm (ActSeeSvy);
+	       Svy_PutParamSvyCod (Svy.SvyCod);
+	       Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
+	       WhichGroups = Grp_GetParamWhichGroups ();
+	       Grp_PutParamWhichGroups (&WhichGroups);
+	       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+		  Btn_PutConfirmButtonInline (Txt_View_results);
+	       Frm_EndForm ();
+
+	    HTM_DIV_End ();
+	   }
 	}
-     }
 
-   HTM_TD_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
 
    /***** Write second row of data of this survey *****/
    HTM_TR_Begin (NULL);
 
-   /* 1st column: Author of the survey */
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-   else
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Svy_WriteAuthor (&Svy);
-   HTM_TD_End ();
+      /* 1st column: Author of the survey */
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      else
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      Svy_WriteAuthor (&Svy);
+      HTM_TD_End ();
 
-   /* 2nd column: Scope, Users, Groups and Text */
-   if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("class=\"LT\"");
-   else
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      /* 2nd column: Scope, Users, Groups and Text */
+      if (ShowOnlyThisSvyComplete)
+	 HTM_TD_Begin ("class=\"LT\"");
+      else
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
-   /* Scope of the survey */
-   HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
-        	                                      "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (Txt_Scope);
-   switch (Svy.Scope)
-     {
-      case HieLvl_UNK:	// Unknown
-         Err_WrongScopeExit ();
-         break;
-      case HieLvl_SYS:	// System
-         HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
-	 break;
-      case HieLvl_CTY:	// Country
-         HTM_TxtF ("%s&nbsp;%s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-	 break;
-      case HieLvl_INS:	// Institution
-         HTM_TxtF ("%s&nbsp;%s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
-	 break;
-      case HieLvl_CTR:	// Center
-         HTM_TxtF ("%s&nbsp;%s",Txt_Center,Gbl.Hierarchy.Ctr.ShrtName);
-	 break;
-      case HieLvl_DEG:	// Degree
-         HTM_TxtF ("%s&nbsp;%s",Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
- 	 break;
-      case HieLvl_CRS:	// Course
-	 HTM_TxtF ("%s&nbsp;%s",Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
-	 break;
-     }
-   HTM_DIV_End ();
+      /* Scope of the survey */
+      HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
+							 "ASG_GRP_LIGHT");
+	 HTM_TxtColonNBSP (Txt_Scope);
+	 switch (Svy.Scope)
+	   {
+	    case HieLvl_UNK:	// Unknown
+	       Err_WrongScopeExit ();
+	       break;
+	    case HieLvl_SYS:	// System
+	       HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
+	       break;
+	    case HieLvl_CTY:	// Country
+	       HTM_TxtF ("%s&nbsp;%s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+	       break;
+	    case HieLvl_INS:	// Institution
+	       HTM_TxtF ("%s&nbsp;%s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
+	       break;
+	    case HieLvl_CTR:	// Center
+	       HTM_TxtF ("%s&nbsp;%s",Txt_Center,Gbl.Hierarchy.Ctr.ShrtName);
+	       break;
+	    case HieLvl_DEG:	// Degree
+	       HTM_TxtF ("%s&nbsp;%s",Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
+	       break;
+	    case HieLvl_CRS:	// Course
+	       HTM_TxtF ("%s&nbsp;%s",Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
+	       break;
+	   }
+      HTM_DIV_End ();
 
-   /* Users' roles who can answer the survey */
-   HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
-        	                                      "ASG_GRP_LIGHT");
-   HTM_TxtColon (Txt_Users);
-   HTM_BR ();
-   Rol_WriteSelectorRoles (1 << Rol_STD |
-                           1 << Rol_NET |
-			   1 << Rol_TCH,
-			   Svy.Roles,
-			   true,false);
-   HTM_DIV_End ();
+      /* Users' roles who can answer the survey */
+      HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
+							 "ASG_GRP_LIGHT");
+	 HTM_TxtColon (Txt_Users);
+	 HTM_BR ();
+	 Rol_WriteSelectorRoles (1 << Rol_STD |
+				 1 << Rol_NET |
+				 1 << Rol_TCH,
+				 Svy.Roles,
+				 true,false);
+      HTM_DIV_End ();
 
-   /* Groups whose users can answer this survey */
-   if (Svy.Scope == HieLvl_CRS)
-      if (Gbl.Crs.Grps.NumGrps)
-         Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (&Svy);
+      /* Groups whose users can answer this survey */
+      if (Svy.Scope == HieLvl_CRS)
+	 if (Gbl.Crs.Grps.NumGrps)
+	    Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (&Svy);
 
-   /* Text of the survey */
-   Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
-        	                                          "DAT_LIGHT");
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
-   HTM_TD_End ();
+      /* Text of the survey */
+      Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
+							     "DAT_LIGHT");
+      HTM_Txt (Txt);
+      HTM_DIV_End ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -710,9 +710,9 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
    if (ShowOnlyThisSvyComplete)
      {
       HTM_TR_Begin (NULL);
-      HTM_TD_Begin ("colspan=\"5\"");
-      Svy_ListSvyQuestions (Surveys,&Svy);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("colspan=\"5\"");
+	    Svy_ListSvyQuestions (Surveys,&Svy);
+	 HTM_TD_End ();
       HTM_TR_End ();
      }
 
@@ -936,8 +936,12 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
    char *SubQuery[HieLvl_NUM_LEVELS];
    static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
      {
-      [Dat_STR_TIME] = "StartTime DESC,EndTime DESC,Title DESC",
-      [Dat_END_TIME] = "EndTime DESC,StartTime DESC,Title DESC",
+      [Dat_STR_TIME] = "StartTime DESC,"
+	               "EndTime DESC,"
+	               "Title DESC",
+      [Dat_END_TIME] = "EndTime DESC,"
+	               "StartTime DESC,"
+	               "Title DESC",
      };
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -1223,7 +1227,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    *HiddenAllowed |= 1 << HieLvl_CTY;		// A system admin can view hidden country surveys
+	    *HiddenAllowed |= 1 << HieLvl_CTY;			// A system admin can view hidden country surveys
 	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
@@ -1235,7 +1239,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
-	             *HiddenAllowed |= 1 << HieLvl_DEG;	// A system admin can view hidden degree surveys
+	             *HiddenAllowed |= 1 << HieLvl_DEG;		// A system admin can view hidden degree surveys
 		     if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 		       {
 			*ScopesAllowed |= 1 << HieLvl_CRS;
@@ -1300,11 +1304,10 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       /* Get author of the survey (row[5]) */
       Svy->UsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
-      /* Get start date (row[6] holds the start UTC time) */
-      Svy->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
-
-      /* Get end   date (row[7] holds the end   UTC time) */
-      Svy->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[7]);
+      /* Get start date (row[6] holds the start UTC time)
+         and   end date (row[7] holds the end   UTC time) */
+      Svy->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
+      Svy->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[7]);
 
       /* Get whether the survey is open or closed (row(8)) */
       Svy->Status.Open = (row[8][0] == '1');

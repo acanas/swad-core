@@ -37,13 +37,6 @@
 #define Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE	(128 - 1)	// 127
 #define Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE	((Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Att_NUM_DATES 2
-typedef enum
-  {
-   Att_START_TIME = 0,
-   Att_END_TIME   = 1,
-  } Att_StartOrEndTime_t;
-
 #define Att_NUM_ORDERS_NEWEST_OLDEST 2
 typedef enum
   {
@@ -60,7 +53,7 @@ struct Att_Event
    long CrsCod;
    bool Hidden;
    long UsrCod;
-   time_t TimeUTC[Att_NUM_DATES];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
    bool CommentTchVisible;

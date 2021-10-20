@@ -2715,11 +2715,9 @@ int swad__sendAttendanceEvent (struct soap *soap,
    /* User's code (really not used) */
    Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 
-   /* startTime */
-   Event.TimeUTC[Att_START_TIME] = (time_t) startTime;
-
-   /* endTime */
-   Event.TimeUTC[Att_END_TIME  ] = (time_t) endTime;
+   /* startTime and endTime */
+   Event.TimeUTC[Dat_STR_TIME] = (time_t) startTime;
+   Event.TimeUTC[Dat_END_TIME] = (time_t) endTime;
 
    /* Are teacher's comments visible? */
    Event.CommentTchVisible = (commentsTeachersVisible ? true :

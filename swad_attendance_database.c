@@ -221,8 +221,8 @@ long Att_DB_CreateAttEvent (const struct Att_Event *Event,const char *Descriptio
 				Event->Hidden ? 'Y' :
 					        'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Event->TimeUTC[Att_START_TIME],
-				Event->TimeUTC[Att_END_TIME  ],
+				Event->TimeUTC[Dat_STR_TIME],
+				Event->TimeUTC[Dat_END_TIME],
 				Event->CommentTchVisible ? 'Y' :
 							   'N',
 				Event->Title,
@@ -247,8 +247,8 @@ void Att_DB_UpdateAttEvent (const struct Att_Event *Event,const char *Descriptio
 		     " AND CrsCod=%ld",	// Extra check
                    Event->Hidden ? 'Y' :
         	                   'N',
-                   Event->TimeUTC[Att_START_TIME],
-                   Event->TimeUTC[Att_END_TIME  ],
+                   Event->TimeUTC[Dat_STR_TIME],
+                   Event->TimeUTC[Dat_END_TIME],
                    Event->CommentTchVisible ? 'Y' :
         	                              'N',
                    Event->Title,
