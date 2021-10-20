@@ -25,17 +25,17 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
+#define _GNU_SOURCE 		// For asprintf
 // #include <linux/limits.h>	// For PATH_MAX
 // #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
+#include <stdio.h>		// For asprintf
 // #include <stdlib.h>		// For calloc
 // #include <string.h>		// For string functions
 
 // #include "swad_attendance.h"
 // #include "swad_box.h"
 #include "swad_database.h"
-// #include "swad_error.h"
+#include "swad_error.h"
 // #include "swad_figure.h"
 // #include "swad_form.h"
 #include "swad_global.h"
@@ -48,7 +48,7 @@
 // #include "swad_parameter.h"
 // #include "swad_role.h"
 // #include "swad_setting.h"
-// #include "swad_survey.h"
+#include "swad_survey.h"
 #include "swad_survey_database.h"
 
 /*****************************************************************************/
@@ -72,6 +72,471 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/*********** Update number of users notified in table of surveys *************/
+/*****************************************************************************/
+
+void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
+                                                     unsigned NumUsrsToBeNotifiedByEMail)
+  {
+   DB_QueryUPDATE ("can not update the number of notifications of a survey",
+		   "UPDATE svy_surveys"
+		     " SET NumNotif=NumNotif+%u"
+                   " WHERE SvyCod=%ld",
+		   NumUsrsToBeNotifiedByEMail,
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get list of all the surveys *************************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
+                                unsigned ScopesAllowed,
+                                unsigned HiddenAllowed,
+                                Dat_StartEndTime_t SelectedOrder)
+  {
+   char *SubQuery[HieLvl_NUM_LEVELS];
+   static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
+     {
+      [Dat_STR_TIME] = "StartTime DESC,"
+	               "EndTime DESC,"
+	               "Title DESC",
+      [Dat_END_TIME] = "EndTime DESC,"
+	               "StartTime DESC,"
+	               "Title DESC",
+     };
+   unsigned NumSvys;
+   long Cods[HieLvl_NUM_LEVELS];
+   HieLvl_Level_t Scope;
+   bool SubQueryFilled = false;
+
+   /***** Set hierarchy codes *****/
+   Cods[HieLvl_SYS] = -1L;			// System
+   Cods[HieLvl_CTY] = Gbl.Hierarchy.Cty.CtyCod;	// Country
+   Cods[HieLvl_INS] = Gbl.Hierarchy.Ins.InsCod;	// Institution
+   Cods[HieLvl_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Center
+   Cods[HieLvl_DEG] = Gbl.Hierarchy.Deg.DegCod;	// Degree
+   Cods[HieLvl_CRS] = Gbl.Hierarchy.Crs.CrsCod;	// Course
+
+   /***** Fill subqueries for system, country, institution, center and degree *****/
+   for (Scope  = HieLvl_SYS;
+	Scope <= HieLvl_DEG;
+	Scope++)
+      if (ScopesAllowed & 1 << Scope)
+	{
+	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_GetDBStrFromScope (Scope),Cods[Scope],
+		       (HiddenAllowed & 1 << Scope) ? "" :
+						      " AND Hidden='N'") < 0)
+	    Err_NotEnoughMemoryExit ();
+	 SubQueryFilled = true;
+	}
+      else
+        {
+	 if (asprintf (&SubQuery[Scope],"%s","") < 0)
+	    Err_NotEnoughMemoryExit ();
+        }
+
+   /***** Fill subquery for course *****/
+   if (ScopesAllowed & 1 << HieLvl_CRS)
+     {
+      if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
+        {
+	 if (asprintf (&SubQuery[HieLvl_CRS],"%s("
+						"Scope='%s'"
+						" AND Cod=%ld%s"
+						" AND "
+						"(SvyCod NOT IN"
+						" (SELECT SvyCod"
+						   " FROM svy_groups)"
+						" OR"
+						" SvyCod IN"
+						" (SELECT svy_groups.SvyCod"
+						   " FROM grp_users,"
+						         "svy_groups"
+						  " WHERE grp_users.UsrCod=%ld"
+						    " AND grp_users.GrpCod=svy_groups.GrpCod))"
+						")",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_GetDBStrFromScope (HieLvl_CRS),Cods[HieLvl_CRS],
+		       (HiddenAllowed & 1 << HieLvl_CRS) ? "" :
+							      " AND Hidden='N'",
+		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	    Err_NotEnoughMemoryExit ();
+        }
+      else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+        {
+	 if (asprintf (&SubQuery[HieLvl_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
+		       SubQueryFilled ? " OR " :
+					"",
+		       Sco_GetDBStrFromScope (HieLvl_CRS),Cods[HieLvl_CRS],
+		       (HiddenAllowed & 1 << HieLvl_CRS) ? "" :
+							      " AND Hidden='N'") < 0)
+	    Err_NotEnoughMemoryExit ();
+        }
+      SubQueryFilled = true;
+     }
+   else
+     {
+      if (asprintf (&SubQuery[HieLvl_CRS],"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+
+   /***** Make query *****/
+   if (SubQueryFilled)
+      NumSvys = (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get surveys",
+		      "SELECT SvyCod"
+		       " FROM svy_surveys"
+		      " WHERE %s%s%s%s%s%s"
+		      " ORDER BY %s",
+		      SubQuery[HieLvl_SYS],
+		      SubQuery[HieLvl_CTY],
+		      SubQuery[HieLvl_INS],
+		      SubQuery[HieLvl_CTR],
+		      SubQuery[HieLvl_DEG],
+		      SubQuery[HieLvl_CRS],
+		      OrderBySubQuery[SelectedOrder]);
+   else
+     {
+      Err_ShowErrorAndExit ("Can not get list of surveys.");
+      NumSvys = 0;	// Not reached. Initialized to avoid warning
+     }
+
+   /***** Free allocated memory for subqueries *****/
+   for (Scope  = HieLvl_SYS;
+	Scope <= HieLvl_CRS;
+	Scope++)
+      free (SubQuery[Scope]);
+
+   return NumSvys;
+  }
+
+/*****************************************************************************/
+/********************** Get survey text from database ************************/
+/*****************************************************************************/
+
+void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+  {
+   DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get survey text",
+		         "SELECT Txt"
+			  " FROM svy_surveys"
+		         " WHERE SvyCod=%ld",
+		         SvyCod);
+  }
+
+/*****************************************************************************/
+/******************* Check if the title of a survey exists *******************/
+/*****************************************************************************/
+
+bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
+  {
+   /***** Get number of surveys with a field value from database *****/
+   return (DB_QueryCOUNT ("can not get similar surveys",
+			  "SELECT COUNT(*)"
+			   " FROM svy_surveys"
+			  " WHERE Scope='%s'"
+			    " AND Cod=%ld"
+			    " AND Title='%s'"
+			    " AND SvyCod<>%ld",
+			  Sco_GetDBStrFromScope (Svy->Scope),
+			  Svy->Cod,
+			  Svy->Title,
+			  Svy->SvyCod) != 0);
+  }
+
+/*****************************************************************************/
+/******************** Get number of courses with surveys *********************/
+/*****************************************************************************/
+// Returns the number of courses with surveys for courses
+// in this location (all the platform, current degree or current course)
+
+unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope)
+  {
+   /***** Get number of courses with surveys from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			 "SELECT COUNT(DISTINCT Cod)"
+                          " FROM svy_surveys"
+                         " WHERE Scope='%s'",
+			 Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CTY:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
+                         " FROM ins_instits,"
+                               "ctr_centers,"
+                               "deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys"
+			" WHERE ins_instits.CtyCod=%ld"
+			  " AND ins_instits.InsCod=ctr_centers.InsCod"
+                          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+                          " AND deg_degrees.DegCod=crs_courses.DegCod"
+                          " AND crs_courses.CrsCod=svy_surveys.Cod"
+                          " AND svy_surveys.Scope='%s'",
+			Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_INS:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+		        "SELECT COUNT(DISTINCT svy_surveys.Cod)"
+		         " FROM ctr_centers,"
+			       "deg_degrees,"
+			       "crs_courses,"
+			       "svy_surveys"
+		        " WHERE ctr_centers.InsCod=%ld"
+		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+		          " AND deg_degrees.DegCod=crs_courses.DegCod"
+		          " AND crs_courses.CrsCod=svy_surveys.Cod"
+		          " AND svy_surveys.Scope='%s'",
+		        Gbl.Hierarchy.Ins.InsCod,
+		        Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CTR:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
+                         " FROM deg_degrees,"
+                               "crs_courses,"
+                               "svy_surveys"
+                        " WHERE deg_degrees.CtrCod=%ld"
+                          " AND deg_degrees.DegCod=crs_courses.DegCod"
+                          " AND crs_courses.CrsCod=svy_surveys.Cod"
+                          " AND svy_surveys.Scope='%s'",
+			Gbl.Hierarchy.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_DEG:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT svy_surveys.Cod)"
+                        " FROM crs_courses,"
+                              "svy_surveys"
+                        " WHERE crs_courses.DegCod=%ld"
+                        " AND crs_courses.CrsCod=svy_surveys.Cod"
+                        " AND svy_surveys.Scope='%s'",
+		 	Gbl.Hierarchy.Deg.DegCod,
+			Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CRS:
+         return (unsigned)
+         DB_QueryCOUNT ("can not get number of courses with surveys",
+			"SELECT COUNT(DISTINCT Cod)"
+			 " FROM svy_surveys"
+			" WHERE Scope='%s'"
+			  " AND Cod=%ld",
+			Sco_GetDBStrFromScope (HieLvl_CRS),
+			Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/******************** Get number of surveys for courses **********************/
+/*****************************************************************************/
+// Returns the number of surveys for courses
+// in this location (all the platform, current degree or current course)
+
+unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
+  {
+   /***** Get number of surveys from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of surveys",
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
+                          " FROM svy_surveys"
+                         " WHERE Scope='%s'",
+			 Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CTY:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of surveys",
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
+                          " FROM ins_instits,"
+                                "ctr_centers,"
+                                "deg_degrees,"
+                                "crs_courses,"
+                                "svy_surveys"
+                         " WHERE ins_instits.CtyCod=%ld"
+                           " AND ins_instits.InsCod=ctr_centers.InsCod"
+                           " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+                           " AND deg_degrees.DegCod=crs_courses.DegCod"
+                           " AND crs_courses.CrsCod=svy_surveys.Cod"
+                           " AND svy_surveys.Scope='%s'",
+			 Gbl.Hierarchy.Cty.CtyCod,
+			 Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_INS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of surveys",
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
+                          " FROM ctr_centers,"
+                                "deg_degrees,"
+                                "crs_courses,"
+                                "svy_surveys"
+                         " WHERE ctr_centers.InsCod=%ld"
+                           " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+                           " AND deg_degrees.DegCod=crs_courses.DegCod"
+                           " AND crs_courses.CrsCod=svy_surveys.Cod"
+                           " AND svy_surveys.Scope='%s'",
+			 Gbl.Hierarchy.Ins.InsCod,
+			 Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CTR:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of surveys",
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
+                          " FROM deg_degrees,"
+                                "crs_courses,"
+                                "svy_surveys"
+                         " WHERE deg_degrees.CtrCod=%ld"
+                           " AND deg_degrees.DegCod=crs_courses.DegCod"
+                           " AND crs_courses.CrsCod=svy_surveys.Cod"
+                           " AND svy_surveys.Scope='%s'",
+			 Gbl.Hierarchy.Ctr.CtrCod,
+			 Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_DEG:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of surveys",
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(svy_surveys.NumNotif)"	// row[1]
+                          " FROM crs_courses,"
+                                "svy_surveys"
+                         " WHERE crs_courses.DegCod=%ld"
+                           " AND crs_courses.CrsCod=svy_surveys.Cod"
+                           " AND svy_surveys.Scope='%s'",
+			 Gbl.Hierarchy.Deg.DegCod,
+			 Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CRS:
+	 return (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get number of surveys",
+			 "SELECT COUNT(*),"			// row[0]
+			        "SUM(NumNotif)"			// row[1]
+                          " FROM svy_surveys"
+                         " WHERE svy_surveys.Scope='%s'"
+                           " AND CrsCod=%ld",
+			 Sco_GetDBStrFromScope (HieLvl_CRS),
+			 Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/************ Get average number of questions per course survey **************/
+/*****************************************************************************/
+
+double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
+  {
+   /***** Get number of questions per survey from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+         return DB_QuerySELECTDouble ("can not get number of questions per survey",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+					       " FROM svy_surveys,"
+						     "svy_questions"
+					      " WHERE svy_surveys.Scope='%s'"
+					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+				      Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CTY:
+         return DB_QuerySELECTDouble ("can not get number of questions per survey",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+					       " FROM ins_instits,"
+						     "ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "svy_surveys,"
+						     "svy_questions"
+					      " WHERE ins_instits.CtyCod=%ld"
+					        " AND ins_instits.InsCod=ctr_centers.InsCod"
+					        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=svy_surveys.Cod"
+					        " AND svy_surveys.Scope='%s'"
+					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Cty.CtyCod,
+				      Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_INS:
+         return DB_QuerySELECTDouble ("can not get number of questions per survey",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+					       " FROM ctr_centers,"
+						     "deg_degrees,"
+						     "crs_courses,"
+						     "svy_surveys,"
+						     "svy_questions"
+					      " WHERE ctr_centers.InsCod=%ld"
+					        " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=svy_surveys.Cod"
+					        " AND svy_surveys.Scope='%s'"
+					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Ins.InsCod,
+				      Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CTR:
+         return DB_QuerySELECTDouble ("can not get number of questions per survey",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+					       " FROM deg_degrees,"
+						     "crs_courses,"
+						     "svy_surveys,"
+						     "svy_questions"
+					      " WHERE deg_degrees.CtrCod=%ld"
+					        " AND deg_degrees.DegCod=crs_courses.DegCod"
+					        " AND crs_courses.CrsCod=svy_surveys.Cod"
+					        " AND svy_surveys.Scope='%s'"
+					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Ctr.CtrCod,
+				      Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_DEG:
+         return DB_QuerySELECTDouble ("can not get number of questions per survey",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+					       " FROM crs_courses,"
+						     "svy_surveys,"
+						     "svy_questions"
+					      " WHERE crs_courses.DegCod=%ld"
+					        " AND crs_courses.CrsCod=svy_surveys.Cod"
+					        " AND svy_surveys.Scope='%s'"
+					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+					      " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+				      Gbl.Hierarchy.Deg.DegCod,
+				      Sco_GetDBStrFromScope (HieLvl_CRS));
+      case HieLvl_CRS:
+         return DB_QuerySELECTDouble ("can not get number of questions per survey",
+				      "SELECT AVG(NumQsts)"
+				       " FROM (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
+					       " FROM svy_surveys,"
+						     "svy_questions"
+					      " WHERE svy_surveys.Scope='%s'"
+					        " AND svy_surveys.Cod=%ld"
+					        " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+					       " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
+				      Sco_GetDBStrFromScope (HieLvl_CRS),Gbl.Hierarchy.Crs.CrsCod);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0.0;	// Not reached
+     }
+  }
 
 /*****************************************************************************/
 /************ Get all user codes belonging to a survey, except me ************/
@@ -117,4 +582,234 @@ unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod)
 		   SvyCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Sco_GetDBStrFromScope (HieLvl_CRS));
+  }
+
+/*****************************************************************************/
+/************************* Remove groups of a survey *************************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove the groups associated to a survey",
+		   "DELETE FROM svy_groups"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove groups of one type from all the surveys **************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveGroupsOfType (long GrpTypCod)
+  {
+   /***** Remove group from all the surveys *****/
+   DB_QueryDELETE ("can not remove groups of a type"
+	           " from the associations between surveys and groups",
+		   "DELETE FROM svy_groups"
+		   " USING grp_groups,"
+		          "svy_groups"
+                   " WHERE grp_groups.GrpTypCod=%ld"
+                     " AND grp_groups.GrpCod=svy_groups.GrpCod",
+		   GrpTypCod);
+  }
+
+/*****************************************************************************/
+/******************* Remove one group from all the surveys *******************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveGroup (long GrpCod)
+  {
+   /***** Remove group from all the surveys *****/
+   DB_QueryDELETE ("can not remove group from the associations"
+		   " between surveys and groups",
+		   "DELETE FROM svy_groups"
+		   " WHERE GrpCod=%ld",
+		   GrpCod);
+  }
+
+/*****************************************************************************/
+/*********** Change indexes of questions greater than a given one ************/
+/*****************************************************************************/
+
+void Svy_DB_ChangeIndexesQsts (long SvyCod,unsigned QstInd)
+  {
+   DB_QueryUPDATE ("can not update indexes of questions",
+		   "UPDATE svy_questions"
+		     " SET QstInd=QstInd-1"
+                   " WHERE SvyCod=%ld"
+                     " AND QstInd>%u",
+		   SvyCod,
+		   QstInd);
+  }
+
+/*****************************************************************************/
+/******************* Get number of questions of a survey *********************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetNumQstsSvy (long SvyCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of questions of a survey",
+		  "SELECT COUNT(*)"
+		   " FROM svy_questions"
+		  " WHERE SvyCod=%ld",
+		  SvyCod);
+  }
+
+/*****************************************************************************/
+/***************** Get questions of a survey from database *******************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetSurveyQstsCodes (MYSQL_RES **mysql_res,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions of a survey",
+		   "SELECT QstCod"
+		    " FROM svy_questions"
+		   " WHERE SvyCod=%ld"
+		   " ORDER BY QstCod",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/***************** Get questions of a survey from database *******************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of questions of a survey",
+		   "SELECT QstCod,"	// row[0]
+		          "QstInd,"	// row[1]
+		          "AnsType,"	// row[2]
+		          "Stem"	// row[3]
+		   " FROM svy_questions"
+		   " WHERE SvyCod=%ld"
+		   " ORDER BY QstInd",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/************ Get question index from question code in a survey **************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetQstIndFromQstCod (long QstCod)
+  {
+   return DB_QuerySELECTUnsigned ("can not get question index",
+				  "SELECT QstInd"
+				   " FROM svy_questions"
+				  " WHERE QstCod=%ld",
+				  QstCod);
+  }
+
+/*****************************************************************************/
+/****************************** Remove a question ****************************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveQst (long QstCod)
+  {
+   DB_QueryDELETE ("can not remove a question",
+		   "DELETE FROM svy_questions"
+		   " WHERE QstCod=%ld",
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/************ Increase number of users who have marked one answer ************/
+/*****************************************************************************/
+
+void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd)
+  {
+   /***** Increase number of users who have selected
+          the answer AnsInd in the question QstCod *****/
+   DB_QueryUPDATE ("can not register your answer to the survey",
+		   "UPDATE svy_answers"
+		     " SET NumUsrs=NumUsrs+1"
+                   " WHERE QstCod=%ld"
+                     " AND AnsInd=%u",
+		   QstCod,
+		   AnsInd);
+  }
+
+/*****************************************************************************/
+/*********** Check if an answer of a question exists in database *************/
+/*****************************************************************************/
+
+bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
+  {
+   return (DB_QueryCOUNT ("can not check if an answer exists",
+			  "SELECT COUNT(*)"
+			   " FROM svy_answers"
+			  " WHERE QstCod=%ld"
+			    " AND AnsInd=%u",
+			  QstCod,
+			  AnsInd) != 0);
+  }
+
+/*****************************************************************************/
+/************** Get answers of a survey question from database ***************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
+  {
+   unsigned NumAnswers;
+
+   /***** Get answers of a question from database *****/
+   NumAnswers = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get answers of a question",
+		   "SELECT AnsInd,"	// row[0]
+			  "NumUsrs,"	// row[1]
+			  "Answer"	// row[2]
+		    " FROM svy_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY AnsInd",
+		   QstCod);
+   if (!NumAnswers)
+      Err_WrongAnswerExit ();
+
+   return NumAnswers;
+  }
+
+/*****************************************************************************/
+/***************** Register that I have answered this survey *****************/
+/*****************************************************************************/
+
+void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod)
+  {
+   DB_QueryINSERT ("can not register that you have answered the survey",
+		   "INSERT INTO svy_users"
+	           " (SvyCod,UsrCod)"
+                   " VALUES"
+                   " (%ld,%ld)",
+		   SvyCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Check if I have answered a given survey ********************/
+/*****************************************************************************/
+
+bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod)
+  {
+   return (DB_QueryCOUNT ("can not check if you have answered a survey",
+			  "SELECT COUNT(*)"
+			   " FROM svy_users"
+			  " WHERE SvyCod=%ld"
+			    " AND UsrCod=%ld",
+			  SvyCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+  }
+
+/*****************************************************************************/
+/************** Get number of users who have answered a survey ***************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users who have answered a survey",
+		  "SELECT COUNT(*)"
+		   " FROM svy_users"
+		  " WHERE SvyCod=%ld",
+		  SvyCod);
   }

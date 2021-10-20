@@ -51,6 +51,7 @@
 #include "swad_project.h"
 #include "swad_setting.h"
 #include "swad_survey.h"
+#include "swad_survey_database.h"
 #include "swad_timetable.h"
 
 /*****************************************************************************/

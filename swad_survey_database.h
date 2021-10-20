@@ -29,7 +29,8 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-// #include "swad_date.h"
+#include "swad_constant.h"
+#include "swad_date.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -39,6 +40,45 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//-------------------------------- Surveys ------------------------------------
+void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
+                                                     unsigned NumUsrsToBeNotifiedByEMail);
+unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
+                                unsigned ScopesAllowed,
+                                unsigned HiddenAllowed,
+                                Dat_StartEndTime_t SelectedOrder);
+void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
+unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope);
+unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope);
+double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
 unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod);
+
+//---------------------------- Surveys groups ---------------------------------
+void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod);
+void Svy_DB_RemoveGroupsOfType (long GrpTypCod);
+void Svy_DB_RemoveGroup (long GrpCod);
+
+//--------------------------- Surveys questions -------------------------------
+void Svy_DB_ChangeIndexesQsts (long SvyCod,unsigned QstInd);
+
+unsigned Svy_DB_GetNumQstsSvy (long SvyCod);
+unsigned Svy_DB_GetSurveyQstsCodes (MYSQL_RES **mysql_res,long SvyCod);
+unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod);
+unsigned Svy_DB_GetQstIndFromQstCod (long QstCod);
+
+void Svy_DB_RemoveQst (long QstCod);
+
+//---------------------------- Surveys answers --------------------------------
+void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd);
+
+bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
+unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod);
+
+//--------------------- Users who have answered surveys -----------------------
+void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod);
+
+bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod);
+unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
 
 #endif

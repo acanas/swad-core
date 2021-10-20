@@ -66,6 +66,7 @@
 #include "swad_project_database.h"
 #include "swad_role.h"
 #include "swad_survey.h"
+#include "swad_survey_database.h"
 #include "swad_test.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
@@ -3223,7 +3224,7 @@ static void Fig_GetAndShowSurveysStats (void)
    /***** Get the number of surveys and the average number of questions per survey from this location *****/
    if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
      {
-      if ((NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSvys (Gbl.Scope.Current)) != 0)
+      if ((NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSurveys (Gbl.Scope.Current)) != 0)
          NumSurveysPerCourse = (double) NumSurveys /
 	                       (double) NumCoursesWithSurveys;
       NumQstsPerSurvey = Svy_DB_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);

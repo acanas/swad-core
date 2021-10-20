@@ -108,8 +108,6 @@ void Svy_ResetSurvey (void);
 void Svy_HideSurvey (void);
 void Svy_UnhideSurvey (void);
 void Svy_ReceiveFormSurvey (void);
-void Svy_DB_RemoveGroupsOfType (long GrpTypCod);
-void Svy_DB_RemoveGroup (long GrpCod);
 void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod);
 
 void Svy_RequestEditQuestion (void);
@@ -120,8 +118,6 @@ void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);
 
-unsigned Svy_DB_GetNumCrssWithCrsSvys (HieLvl_Level_t Scope);
 unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
-double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
 
 #endif
