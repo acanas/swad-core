@@ -63,6 +63,7 @@
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_survey.h"
+#include "swad_survey_database.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_notification.h"

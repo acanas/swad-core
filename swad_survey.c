@@ -49,6 +49,7 @@
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_survey.h"
+#include "swad_survey_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -123,17 +124,17 @@ static void Svy_GetListSurveys (struct Svy_Surveys *Surveys);
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
-static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+static void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_PutParamSvyCod (long SvyCod);
 static long Svy_GetParamSvyCod (void);
 
 static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys);
 
-static bool Svy_CheckIfSimilarSurveyExists (struct Svy_Survey *Svy);
+static bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
 static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy);
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod);
-static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
-                                                         unsigned NumUsrsToBeNotifiedByEMail);
+static void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
+                                                            unsigned NumUsrsToBeNotifiedByEMail);
 static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod);
@@ -141,22 +142,22 @@ static void Svy_CreateGrps (long SvyCod);
 static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy);
 static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
 
-static unsigned Svy_GetNumQstsSvy (long SvyCod);
+static unsigned Svy_DB_GetNumQstsSvy (long SvyCod);
 static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                                     long SvyCod,struct Svy_Question *SvyQst,
                                     char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_InitQst (struct Svy_Question *SvyQst);
 static void Svy_PutParamQstCod (long QstCod);
 static long Svy_GetParamQstCod (void);
-static void Svy_RemAnswersOfAQuestion (long QstCod);
+static void Svy_DB_RemAnswersOfAQuestion (long QstCod);
 static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
-static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
-static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res);
+static bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
+static unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod);
 static bool Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAns);
 static void Svy_FreeTextChoiceAnswers (struct Svy_Question *SvyQst,unsigned NumAnswers);
 static void Svy_FreeTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAns);
 
-static unsigned Svy_GetQstIndFromQstCod (long QstCod);
+static unsigned Svy_DB_GetQstIndFromQstCod (long QstCod);
 static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod);
 static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
                                   struct Svy_Survey *Svy);
@@ -173,10 +174,10 @@ static void Svy_PutIconToRemoveOneQst (void *Surveys);
 static void Svy_PutParamsRemoveOneQst (void *Surveys);
 
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
-static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
-static void Svy_RegisterIHaveAnsweredSvy (long SvyCod);
-static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod);
-static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
+static void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd);
+static void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod);
+static bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod);
+static unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
 
 /*****************************************************************************/
 /*************************** Reset surveys context ***************************/
@@ -694,7 +695,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (&Svy);
 
       /* Text of the survey */
-      Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
+      Svy_DB_GetSurveyTxt (Svy.SvyCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -1316,8 +1317,8 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
       Str_Copy (Svy->Title,row[9],sizeof (Svy->Title) - 1);
 
       /* Get number of questions and number of users who have already answer this survey */
-      Svy->NumQsts = Svy_GetNumQstsSvy (Svy->SvyCod);
-      Svy->NumUsrs = Svy_GetNumUsrsWhoHaveAnsweredSvy (Svy->SvyCod);
+      Svy->NumQsts = Svy_DB_GetNumQstsSvy (Svy->SvyCod);
+      Svy->NumUsrs = Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (Svy->SvyCod);
 
       /* Am I logged with a valid role to answer this survey? */
       Svy->Status.IAmLoggedWithAValidRoleToAnswer = (Svy->Roles & (1 << Gbl.Usrs.Me.Role.Logged));
@@ -1350,7 +1351,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
         }
 
       /* Have I answered this survey? */
-      Svy->Status.IHaveAnswered = Svy_CheckIfIHaveAnsweredSvy (Svy->SvyCod);
+      Svy->Status.IHaveAnswered = Svy_DB_CheckIfIHaveAnsweredSvy (Svy->SvyCod);
 
       /* Can I answer survey? */
       Svy->Status.ICanAnswer = (Svy->NumQsts != 0) &&
@@ -1488,7 +1489,7 @@ void Svy_FreeListSurveys (struct Svy_Surveys *Surveys)
 /********************** Get survey text from database ************************/
 /*****************************************************************************/
 
-static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
+static void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    /***** Get text of survey from database *****/
    DB_QuerySELECTString (Txt,Cns_MAX_BYTES_TEXT,"can not get survey text",
@@ -1716,7 +1717,7 @@ static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys)
 
    Frm_BeginForm (ActRstSvy);
    Svy_PutParams (Surveys);
-   Btn_PutRemoveButton (Txt_Reset_survey);
+      Btn_PutRemoveButton (Txt_Reset_survey);
    Frm_EndForm ();
   }
 
@@ -1848,7 +1849,7 @@ void Svy_UnhideSurvey (void)
 /******************* Check if the title of a survey exists *******************/
 /*****************************************************************************/
 
-static bool Svy_CheckIfSimilarSurveyExists (struct Svy_Survey *Svy)
+static bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
   {
    /***** Get number of surveys with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar surveys",
@@ -1935,7 +1936,7 @@ void Svy_RequestCreatOrEditSvy (void)
          Err_NoPermissionExit ();
 
       /* Get text of the survey from database */
-      Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
+      Svy_DB_GetSurveyTxt (Svy.SvyCod,Txt);
      }
 
    /***** Begin form *****/
@@ -1944,96 +1945,96 @@ void Svy_RequestCreatOrEditSvy (void)
 	                          ActChgSvy);
    Svy_PutParams (&Surveys);
 
-   /***** Begin box and table *****/
-   if (ItsANewSurvey)
-      Box_BoxTableBegin (NULL,Txt_New_survey,
-                         NULL,NULL,
-                         Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,
-                         Svy.Title[0] ? Svy.Title :
-                	                Txt_Edit_survey,
-                         NULL,NULL,
-                         Hlp_ASSESSMENT_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      if (ItsANewSurvey)
+	 Box_BoxTableBegin (NULL,Txt_New_survey,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
+      else
+	 Box_BoxTableBegin (NULL,
+			    Svy.Title[0] ? Svy.Title :
+					   Txt_Edit_survey,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Surveys_edit_survey,Box_NOT_CLOSABLE,2);
 
-   /***** Scope of the survey *****/
-   HTM_TR_Begin (NULL);
+      /***** Scope of the survey *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","ScopeSvy",Txt_Scope);
+	 /* Label */
+	 Frm_LabelColumn ("RT","ScopeSvy",Txt_Scope);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   Svy_SetDefaultAndAllowedScope (&Svy);
-   Sco_GetScope ("ScopeSvy");
-   Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    Svy_SetDefaultAndAllowedScope (&Svy);
+	    Sco_GetScope ("ScopeSvy");
+	    Sco_PutSelectorScope ("ScopeSvy",HTM_DONT_SUBMIT_ON_CHANGE);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Survey title *****/
-   HTM_TR_Begin (NULL);
+      /***** Survey title *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Title",Txt_Title);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Survey start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,
-					    Dat_FORM_SECONDS_ON,
-					    SetHMS);
+      /***** Survey start and end dates *****/
+      Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,
+					       Dat_FORM_SECONDS_ON,
+					       SetHMS);
 
-   /***** Survey text *****/
-   HTM_TR_Begin (NULL);
+      /***** Survey text *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Description);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewSurvey)
-      HTM_Txt (Txt);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
+				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+	       if (!ItsANewSurvey)
+		  HTM_Txt (Txt);
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Users' roles who can answer the survey *****/
-   HTM_TR_Begin (NULL);
+      /***** Users' roles who can answer the survey *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Users);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Users);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   Rol_WriteSelectorRoles (1 << Rol_STD |
-                           1 << Rol_NET |
-                           1 << Rol_TCH,
-                           Svy.Roles,
-                           false,false);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    Rol_WriteSelectorRoles (1 << Rol_STD |
+				    1 << Rol_NET |
+				    1 << Rol_TCH,
+				    Svy.Roles,
+				    false,false);
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Groups *****/
-   Svy_ShowLstGrpsToEditSurvey (Svy.SvyCod);
+      /***** Groups *****/
+      Svy_ShowLstGrpsToEditSurvey (Svy.SvyCod);
 
-   /***** End table, send button and end box *****/
-   if (ItsANewSurvey)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_survey);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewSurvey)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_survey);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2144,41 +2145,41 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColon (Txt_Groups);
-      HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Groups);
+	 HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LT\"");
-      Box_BoxTableBegin ("95%",NULL,
-                         NULL,NULL,
-                         NULL,Box_NOT_CLOSABLE,0);
+	 HTM_TD_Begin ("class=\"LT\"");
+	    Box_BoxTableBegin ("95%",NULL,
+			       NULL,NULL,
+			       NULL,Box_NOT_CLOSABLE,0);
 
-      /***** First row: checkbox to select the whole course *****/
-      HTM_TR_Begin (NULL);
+	    /***** First row: checkbox to select the whole course *****/
+	    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
-			  Grp_DB_CheckIfAssociatedToGrps ("svy_groups","SvyCod",SvyCod) ? "" :
-				                                                       " checked=\"checked\"");
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
+					 "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
+					 Grp_DB_CheckIfAssociatedToGrps ("svy_groups","SvyCod",SvyCod) ? "" :
+												      " checked=\"checked\"");
+		     HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+		  HTM_LABEL_End ();
+	       HTM_TD_End ();
 
-      HTM_TR_End ();
+	    HTM_TR_End ();
 
-      /***** List the groups for each group type *****/
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	   NumGrpTyp++)
-         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               Grp_SURVEY,SvyCod);
+	    /***** List the groups for each group type *****/
+	    for (NumGrpTyp = 0;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+		 NumGrpTyp++)
+	       if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+		  Grp_ListGrpsToEditAsgAttSvyEvtMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+						     Grp_SURVEY,SvyCod);
 
-      /***** End table and box *****/
-      Box_BoxTableEnd ();
-      HTM_TD_End ();
+	    /***** End table and box *****/
+	    Box_BoxTableEnd ();
+	 HTM_TD_End ();
       HTM_TR_End ();
      }
 
@@ -2298,7 +2299,7 @@ void Svy_ReceiveFormSurvey (void)
    if (NewSvy.Title[0])	// If there's a survey title
      {
       /* If title of survey was in database... */
-      if (Svy_CheckIfSimilarSurveyExists (&NewSvy))
+      if (Svy_DB_CheckIfSimilarSurveyExists (&NewSvy))
         {
          NewSurveyIsCorrect = false;
          Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_survey_with_the_title_X,
@@ -2331,7 +2332,7 @@ void Svy_ReceiveFormSurvey (void)
    /***** Notify by email about the new survey *****/
    if (NewSvy.Scope == HieLvl_CRS)	// Notify only the surveys for a course, not for a degree or global
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewSvy.SvyCod)))
-         Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (NewSvy.SvyCod,NumUsrsToBeNotifiedByEMail);
+         Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (NewSvy.SvyCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&Surveys);
@@ -2341,8 +2342,8 @@ void Svy_ReceiveFormSurvey (void)
 /*********** Update number of users notified in table of surveys *************/
 /*****************************************************************************/
 
-static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
-                                                         unsigned NumUsrsToBeNotifiedByEMail)
+static void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
+                                                            unsigned NumUsrsToBeNotifiedByEMail)
   {
    /***** Update number of users notified *****/
    DB_QueryUPDATE ("can not update the number of notifications of a survey",
@@ -2528,35 +2529,35 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
    /***** Write heading *****/
    HTM_DIV_Begin ("class=\"%s\"",Svy->Status.Visible ? "ASG_GRP" :
         	                                       "ASG_GRP_LIGHT");
-   HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
-                                    Txt_Groups);
+      HTM_TxtColonNBSP (NumRows == 1 ? Txt_Group  :
+				       Txt_Groups);
 
-   /***** Write groups *****/
-   if (NumRows) // Groups found...
-     {
-      /* Get and write the group types and names */
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
-        {
-         /* Get next group */
-         row = mysql_fetch_row (mysql_res);
+      /***** Write groups *****/
+      if (NumRows) // Groups found...
+	{
+	 /* Get and write the group types and names */
+	 for (NumRow = 0;
+	      NumRow < NumRows;
+	      NumRow++)
+	   {
+	    /* Get next group */
+	    row = mysql_fetch_row (mysql_res);
 
-         /* Write group type name and group name */
-         HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
+	    /* Write group type name and group name */
+	    HTM_TxtF ("%s&nbsp;%s",row[0],row[1]);
 
-         if (NumRows >= 2)
-           {
-            if (NumRow == NumRows-2)
-               HTM_TxtF (" %s ",Txt_and);
-            if (NumRows >= 3)
-              if (NumRow < NumRows-2)
-                  HTM_Txt (", ");
-           }
-        }
-     }
-   else
-      HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+	    if (NumRows >= 2)
+	      {
+	       if (NumRow == NumRows-2)
+		  HTM_TxtF (" %s ",Txt_and);
+	       if (NumRows >= 3)
+		 if (NumRow < NumRows-2)
+		     HTM_Txt (", ");
+	      }
+	   }
+	}
+      else
+	 HTM_TxtF ("%s&nbsp;%s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    HTM_DIV_End ();
 
@@ -2659,7 +2660,7 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 /******************* Get number of questions of a survey *********************/
 /*****************************************************************************/
 
-static unsigned Svy_GetNumQstsSvy (long SvyCod)
+static unsigned Svy_DB_GetNumQstsSvy (long SvyCod)
   {
    /***** Get data of questions from database *****/
    return (unsigned)
@@ -2764,7 +2765,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 	 DB_FreeMySQLResult (&mysql_res);
 
          /***** Get the answers from the database *****/
-         NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
+         NumAnswers = Svy_DB_GetAnswersQst (&mysql_res,SvyQst->QstCod);	// Result: AnsInd,NumUsrs,Answer
          for (NumAns = 0;
               NumAns < NumAnswers;
               NumAns++)
@@ -2812,83 +2813,83 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
 
-   /***** Stem *****/
-   HTM_TR_Begin (NULL);
-
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Wording);
-
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
-   HTM_Txt (Txt);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Type of answer *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Type);
-   HTM_TD_End ();
-
-   HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   for (AnsType  = (Svy_AnswerType_t) 0;
-	AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
-	AnsType++)
-     {
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("AnswerType",false,
-		       "value=\"%u\"%s",
-		       (unsigned) AnsType,
-		       AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
-      HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Answers *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Empty (1);
-
-   /* Unique or multiple choice answers */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TABLE_BeginPadding (2);
-   for (NumAns = 0;
-	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
-	NumAns++)
-     {
+      /***** Stem *****/
       HTM_TR_Begin (NULL);
 
-      /* Label with the number of the answer */
-      HTM_TD_Begin ("class=\"RT\"");
-      HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\"",
-                       NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%u)",NumAns + 1);
-      HTM_LABEL_End ();
-      HTM_TD_End ();
+	 /* Label */
+	 Frm_LabelColumn ("RT","Txt",Txt_Wording);
 
-      /* Answer text */
-      HTM_TD_Begin ("class=\"RT\"");
-      HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
-                          NumAns,NumAns);
-      if (SvyQst->AnsChoice[NumAns].Text)
-         HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
-      HTM_TEXTAREA_End ();
-      HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
+	       HTM_Txt (Txt);
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
       HTM_TR_End ();
-     }
-   HTM_TABLE_End ();
-   HTM_TD_End ();
 
-   HTM_TR_End ();
+      /***** Type of answer *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Type);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    for (AnsType  = (Svy_AnswerType_t) 0;
+		 AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
+		 AnsType++)
+	      {
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_RADIO ("AnswerType",false,
+				   "value=\"%u\"%s",
+				   (unsigned) AnsType,
+				   AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
+		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
+	       HTM_LABEL_End ();
+	       HTM_BR ();
+	      }
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+      /***** Answers *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Empty (1);
+
+	 /* Unique or multiple choice answers */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TABLE_BeginPadding (2);
+	       for (NumAns = 0;
+		    NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
+		    NumAns++)
+		 {
+		  HTM_TR_Begin (NULL);
+
+		     /* Label with the number of the answer */
+		     HTM_TD_Begin ("class=\"RT\"");
+			HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\"",
+					 NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
+			   HTM_TxtF ("%u)",NumAns + 1);
+			HTM_LABEL_End ();
+		     HTM_TD_End ();
+
+		     /* Answer text */
+		     HTM_TD_Begin ("class=\"RT\"");
+			HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
+					    NumAns,NumAns);
+			   if (SvyQst->AnsChoice[NumAns].Text)
+			      HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
+			HTM_TEXTAREA_End ();
+		     HTM_TD_End ();
+
+		  HTM_TR_End ();
+		 }
+	    HTM_TABLE_End ();
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -2949,7 +2950,7 @@ static long Svy_GetParamQstCod (void)
 /********************* Remove answers of a survey question *******************/
 /*****************************************************************************/
 
-static void Svy_RemAnswersOfAQuestion (long QstCod)
+static void Svy_DB_RemAnswersOfAQuestion (long QstCod)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
@@ -2979,7 +2980,7 @@ static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
 /*********** Check if an answer of a question exists in database *************/
 /*****************************************************************************/
 
-static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
+static bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
   {
    /***** Get answers of a question from database *****/
    return (DB_QueryCOUNT ("can not check if an answer exists",
@@ -2994,7 +2995,7 @@ static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
 /************** Get answers of a survey question from database ***************/
 /*****************************************************************************/
 
-static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
+static unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
   {
    unsigned NumAnswers;
 
@@ -3193,7 +3194,7 @@ void Svy_ReceiveQst (void)
       for (NumAns = 0;
 	   NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	   NumAns++)
-         if (Svy_CheckIfAnswerExists (SvyQst.QstCod,NumAns))	// If this answer exists...
+         if (Svy_DB_CheckIfAnswerExists (SvyQst.QstCod,NumAns))	// If this answer exists...
            {
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
                /* Update answer text */
@@ -3242,7 +3243,7 @@ void Svy_ReceiveQst (void)
 /************ Get question index from question code in a survey **************/
 /*****************************************************************************/
 
-static unsigned Svy_GetQstIndFromQstCod (long QstCod)
+static unsigned Svy_DB_GetQstIndFromQstCod (long QstCod)
   {
    /***** Get question index from database *****/
    return DB_QuerySELECTUnsigned ("can not get question index",
@@ -3343,73 +3344,73 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
       /***** Write the heading *****/
       HTM_TABLE_BeginWideMarginPadding (5);
-      HTM_TR_Begin (NULL);
-
-      if (Svy->Status.ICanEdit)
-         HTM_TH_Empty (1);
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Type);
-      HTM_TH (1,1,"LT",Txt_Question);
-
-      HTM_TR_End ();
-
-      /***** Write questions one by one *****/
-      for (NumQst = 0;
-	   NumQst < NumQsts;
-	   NumQst++)
-        {
-         Gbl.RowEvenOdd = (int) (NumQst % 2);
-
-         row = mysql_fetch_row (mysql_res);
-
-	 /* Initialize question to zero */
-	 Svy_InitQst (&SvyQst);
-
-         /* row[0] holds the code of the question */
-         if (sscanf (row[0],"%ld",&(SvyQst.QstCod)) != 1)
-            Err_WrongQuestionExit ();
-
-         HTM_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
 	    if (Svy->Status.ICanEdit)
-	      {
-	       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	       HTM_TH_Empty (1);
+	    HTM_TH (1,1,"CT",Txt_No_INDEX);
+	    HTM_TH (1,1,"CT",Txt_Type);
+	    HTM_TH (1,1,"LT",Txt_Question);
 
-		  /* Initialize context */
-		  Surveys->SvyCod = Svy->SvyCod;
-		  Surveys->QstCod = SvyQst.QstCod;
+	 HTM_TR_End ();
 
-		  /* Write icon to remove the question */
-		  Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
-						 Svy_PutParamsToEditQuestion,Surveys);
+	 /***** Write questions one by one *****/
+	 for (NumQst = 0;
+	      NumQst < NumQsts;
+	      NumQst++)
+	   {
+	    Gbl.RowEvenOdd = (int) (NumQst % 2);
 
-		  /* Write icon to edit the question */
-		  Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
-					       Svy_PutParamsToEditQuestion,Surveys);
+	    row = mysql_fetch_row (mysql_res);
 
+	    /* Initialize question to zero */
+	    Svy_InitQst (&SvyQst);
+
+	    /* row[0] holds the code of the question */
+	    if (sscanf (row[0],"%ld",&(SvyQst.QstCod)) != 1)
+	       Err_WrongQuestionExit ();
+
+	    HTM_TR_Begin (NULL);
+
+	       if (Svy->Status.ICanEdit)
+		 {
+		  HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+
+		     /* Initialize context */
+		     Surveys->SvyCod = Svy->SvyCod;
+		     Surveys->QstCod = SvyQst.QstCod;
+
+		     /* Write icon to remove the question */
+		     Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
+						    Svy_PutParamsToEditQuestion,Surveys);
+
+		     /* Write icon to edit the question */
+		     Ico_PutContextualIconToEdit (ActEdiOneSvyQst,NULL,
+						  Svy_PutParamsToEditQuestion,Surveys);
+
+		  HTM_TD_End ();
+		 }
+
+	       /* Write index of question inside survey (row[1]) */
+	       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+		  SvyQst.QstInd = Str_ConvertStrToUnsigned (row[1]);
+		  HTM_Unsigned (SvyQst.QstInd + 1);
 	       HTM_TD_End ();
-	      }
 
-	    /* Write index of question inside survey (row[1]) */
-	    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-               SvyQst.QstInd = Str_ConvertStrToUnsigned (row[1]);
-	       HTM_Unsigned (SvyQst.QstInd + 1);
-	    HTM_TD_End ();
+	       /* Write the question type (row[2]) */
+	       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+		  SvyQst.AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
+	       HTM_TD_End ();
 
-	    /* Write the question type (row[2]) */
-	    HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-	       SvyQst.AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-	       HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
-	    HTM_TD_End ();
+	       /* Write the stem (row[3]) and the answers of this question */
+	       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+		  Svy_WriteQstStem (row[3]);
+		  Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
+	       HTM_TD_End ();
 
-	    /* Write the stem (row[3]) and the answers of this question */
-	    HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	       Svy_WriteQstStem (row[3]);
-	       Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
-	    HTM_TD_End ();
-
-         HTM_TR_End ();
-        }
+	    HTM_TR_End ();
+	   }
 
       HTM_TABLE_End ();
 
@@ -3519,7 +3520,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
    char StrAns[32];
 
    /***** Get answers of this question *****/
-   NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
+   NumAnswers = Svy_DB_GetAnswersQst (&mysql_res,SvyQst->QstCod);	// Result: AnsInd,NumUsrs,Answer
 
    /***** Write the answers *****/
    if (NumAnswers)
@@ -3553,46 +3554,46 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 	 /* Selectors and label with the letter of the answer */
 	 HTM_TR_Begin (NULL);
 
-	 if (PutFormAnswerSurvey)
-	   {
-	    /* Write selector to choice this answer */
-	    HTM_TD_Begin ("class=\"LT\"");
-	    snprintf (StrAns,sizeof (StrAns),"Ans%010u",
-	              (unsigned) SvyQst->QstCod);
-	    if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
-	       HTM_INPUT_RADIO (StrAns,false,
-				"id=\"Ans%010u_%010u\" value=\"%u\""
-				" onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
-				(unsigned) SvyQst->QstCod,NumAns,NumAns,
-				NumAns,
-			        (unsigned) SvyQst->QstCod,NumAnswers);
-	    else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
-	       HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
-				   "id=\"Ans%010u_%010u\" value=\"%u\"",
-			           (unsigned) SvyQst->QstCod,NumAns,NumAns,
-				   NumAns);
+	    if (PutFormAnswerSurvey)
+	      {
+	       /* Write selector to choice this answer */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  snprintf (StrAns,sizeof (StrAns),"Ans%010u",
+			    (unsigned) SvyQst->QstCod);
+		  if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
+		     HTM_INPUT_RADIO (StrAns,false,
+				      "id=\"Ans%010u_%010u\" value=\"%u\""
+				      " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
+				      (unsigned) SvyQst->QstCod,NumAns,NumAns,
+				      NumAns,
+				      (unsigned) SvyQst->QstCod,NumAnswers);
+		  else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
+		     HTM_INPUT_CHECKBOX (StrAns,HTM_DONT_SUBMIT_ON_CHANGE,
+					 "id=\"Ans%010u_%010u\" value=\"%u\"",
+					 (unsigned) SvyQst->QstCod,NumAns,NumAns,
+					 NumAns);
+	       HTM_TD_End ();
+	      }
+
+	    /* Write the number of option */
+	    HTM_TD_Begin ("class=\"SVY_OPT LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
+				(unsigned) SvyQst->QstCod,NumAns);
+		  HTM_TxtF ("%u)",NumAns + 1);
+	       HTM_LABEL_End ();
 	    HTM_TD_End ();
-	   }
 
-	 /* Write the number of option */
-	 HTM_TD_Begin ("class=\"SVY_OPT LT\"");
-	 HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
-		          (unsigned) SvyQst->QstCod,NumAns);
-	 HTM_TxtF ("%u)",NumAns + 1);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
+	    /* Write the text of the answer */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
+				(unsigned) SvyQst->QstCod,NumAns);
+		  HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-	 /* Write the text of the answer */
-	 HTM_TD_Begin ("class=\"LT\"");
-	 HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
-		          (unsigned) SvyQst->QstCod,NumAns);
-	 HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
-	 HTM_LABEL_End ();
-	 HTM_TD_End ();
-
-	 /* Show stats of this answer */
-	 if (Svy->Status.ICanViewResults)
-	    Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
+	    /* Show stats of this answer */
+	    if (Svy->Status.ICanViewResults)
+	       Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
 
 	 HTM_TR_End ();
 
@@ -3637,20 +3638,20 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
    HTM_TD_Begin ("class=\"DAT LT\" style=\"width:%upx;\"",Svy_MAX_BAR_WIDTH + 125);
 
-   /***** Draw bar with a with proportional to the number of clicks *****/
-   if (NumUsrs && MaxUsrs)
-      BarWidth = (unsigned) ((((double) NumUsrs * (double) Svy_MAX_BAR_WIDTH) /
-	                       (double) MaxUsrs) + 0.5);
-   if (BarWidth < 2)
-      BarWidth = 2;
-   HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",Title,
-	    "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
+      /***** Draw bar with a with proportional to the number of clicks *****/
+      if (NumUsrs && MaxUsrs)
+	 BarWidth = (unsigned) ((((double) NumUsrs * (double) Svy_MAX_BAR_WIDTH) /
+				  (double) MaxUsrs) + 0.5);
+      if (BarWidth < 2)
+	 BarWidth = 2;
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",Title,
+	       "class=\"LT\" style=\"width:%upx; height:20px;\"",BarWidth);
 
-   /***** Write the number of users *****/
-   HTM_TxtF ("&nbsp;%s",Title);
+      /***** Write the number of users *****/
+      HTM_TxtF ("&nbsp;%s",Title);
 
-   /***** Free string with the number of users *****/
-   free (Title);
+      /***** Free string with the number of users *****/
+      free (Title);
 
    HTM_TD_End ();
   }
@@ -3706,7 +3707,7 @@ void Svy_RequestRemoveQst (void)
       Err_WrongQuestionExit ();
 
    /* Get question index */
-   SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
+   SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Show question and button to remove question *****/
    Surveys.SvyCod = SvyCod;
@@ -3748,11 +3749,11 @@ void Svy_RemoveQst (void)
       Err_WrongQuestionExit ();
 
    /* Get question index */
-   SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
+   SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Svy_RemAnswersOfAQuestion (SvyQst.QstCod);
+   Svy_DB_RemAnswersOfAQuestion (SvyQst.QstCod);
 
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
@@ -3859,7 +3860,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
             if (sscanf (UnsignedStr,"%u",&AnsInd) == 1)
                // Parameter exists ==> user has checked this answer
                // 		   ==> store it in database
-               Svy_IncreaseAnswerInDB (QstCod,AnsInd);
+               Svy_DB_IncreaseAnswer (QstCod,AnsInd);
            }
         }
      }
@@ -3870,14 +3871,14 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Register that you have answered this survey *****/
-   Svy_RegisterIHaveAnsweredSvy (SvyCod);
+   Svy_DB_RegisterIHaveAnsweredSvy (SvyCod);
   }
 
 /*****************************************************************************/
 /************ Increase number of users who have marked one answer ************/
 /*****************************************************************************/
 
-static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
+static void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd)
   {
    /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
    DB_QueryUPDATE ("can not register your answer to the survey",
@@ -3893,7 +3894,7 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 /***************** Register that I have answered this survey *****************/
 /*****************************************************************************/
 
-static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
+static void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod)
   {
    DB_QueryINSERT ("can not register that you have answered the survey",
 		   "INSERT INTO svy_users"
@@ -3908,7 +3909,7 @@ static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
 /************** Register that you have answered this survey ******************/
 /*****************************************************************************/
 
-static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
+static bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod)
   {
    /***** Get number of surveys with a field value from database *****/
    return (DB_QueryCOUNT ("can not check if you have answered a survey",
@@ -3924,7 +3925,7 @@ static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
 /*************** Register that you have answered this survey *****************/
 /*****************************************************************************/
 
-static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
+static unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
   {
    /***** Get number of surveys with a field value from database *****/
    return (unsigned)
@@ -3941,7 +3942,7 @@ static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
 // Returns the number of courses with surveys for courses
 // in this location (all the platform, current degree or current course)
 
-unsigned Svy_GetNumCoursesWithCrsSurveys (HieLvl_Level_t Scope)
+unsigned Svy_DB_GetNumCrssWithCrsSvys (HieLvl_Level_t Scope)
   {
    /***** Get number of courses with surveys from database *****/
    switch (Scope)
@@ -4145,7 +4146,7 @@ unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif)
 /************ Get average number of questions per course survey **************/
 /*****************************************************************************/
 
-double Svy_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
+double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
   {
    /***** Get number of questions per survey from database *****/
    switch (Scope)
@@ -4243,50 +4244,4 @@ double Svy_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope)
 	 Err_WrongScopeExit ();
 	 return 0.0;	// Not reached
      }
-  }
-
-/*****************************************************************************/
-/************ Get all user codes belonging to a survey, except me ************/
-/*****************************************************************************/
-
-unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod)
-  {
-   // 1. If the survey is available for the whole course ==> get users enroled in the course whose role is available in survey, except me
-   // 2. If the survey is available only for some groups ==> get users who belong to any of the groups and whose role is available in survey, except me
-   // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get users to be notified",
-		   "(SELECT crs_users.UsrCod"
-		     " FROM svy_surveys,"
-			   "crs_users"
-		    " WHERE svy_surveys.SvyCod=%ld"
-		      " AND svy_surveys.SvyCod NOT IN"
-			  " (SELECT SvyCod"
-			     " FROM svy_groups"
-			    " WHERE SvyCod=%ld)"
-		      " AND svy_surveys.Scope='%s'"
-		      " AND svy_surveys.Cod=crs_users.CrsCod"
-		      " AND crs_users.UsrCod<>%ld"
-		      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)"
-		   " UNION "
-		   "(SELECT DISTINCT grp_users.UsrCod"
-		     " FROM svy_groups,"
-			   "grp_users,"
-			   "svy_surveys,"
-			   "crs_users"
-		    " WHERE svy_groups.SvyCod=%ld"
-		      " AND svy_groups.GrpCod=grp_users.GrpCod"
-		      " AND grp_users.UsrCod=crs_users.UsrCod"
-		      " AND grp_users.UsrCod<>%ld"
-		      " AND svy_groups.SvyCod=svy_surveys.SvyCod"
-		      " AND svy_surveys.Scope='%s'"
-		      " AND svy_surveys.Cod=crs_users.CrsCod"
-		      " AND (svy_surveys.Roles&(1<<crs_users.Role))<>0)",
-		   SvyCod,
-		   SvyCod,
-		   Sco_GetDBStrFromScope (HieLvl_CRS),
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   SvyCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Sco_GetDBStrFromScope (HieLvl_CRS));
   }

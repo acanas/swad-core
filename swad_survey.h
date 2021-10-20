@@ -120,10 +120,8 @@ void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);
 
-unsigned Svy_GetNumCoursesWithCrsSurveys (HieLvl_Level_t Scope);
+unsigned Svy_DB_GetNumCrssWithCrsSvys (HieLvl_Level_t Scope);
 unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
-double Svy_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
-
-unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod);
+double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
 
 #endif

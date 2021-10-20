@@ -3223,10 +3223,10 @@ static void Fig_GetAndShowSurveysStats (void)
    /***** Get the number of surveys and the average number of questions per survey from this location *****/
    if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
      {
-      if ((NumCoursesWithSurveys = Svy_GetNumCoursesWithCrsSurveys (Gbl.Scope.Current)) != 0)
+      if ((NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSvys (Gbl.Scope.Current)) != 0)
          NumSurveysPerCourse = (double) NumSurveys /
 	                       (double) NumCoursesWithSurveys;
-      NumQstsPerSurvey = Svy_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
+      NumQstsPerSurvey = Svy_DB_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
      }
 
    /***** Begin box and table *****/
