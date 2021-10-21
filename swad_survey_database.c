@@ -218,6 +218,44 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/********************* Get survey data using its code ************************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetDataOfSurveyByCod (MYSQL_RES **mysql_res,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get survey data",
+		   "SELECT SvyCod,"					// row[0]
+			  "Scope,"					// row[1]
+			  "Cod,"					// row[2]
+			  "Hidden,"					// row[3]
+			  "Roles,"					// row[4]
+			  "UsrCod,"					// row[5]
+			  "UNIX_TIMESTAMP(StartTime),"			// row[6]
+			  "UNIX_TIMESTAMP(EndTime),"			// row[7]
+			  "NOW() BETWEEN StartTime AND EndTime,"	// row[8]
+			  "Title"
+		    " FROM svy_surveys"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/********************* Get survey data using its code ************************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of a survey",
+		   "SELECT Title,"	// row[0]
+			  "Txt"		// row[1]
+		    " FROM svy_surveys"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
 /********************** Get survey text from database ************************/
 /*****************************************************************************/
 
@@ -585,10 +623,46 @@ unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod)
   }
 
 /*****************************************************************************/
+/****************************** Remove a survey ******************************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveSvy (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove survey",
+		   "DELETE FROM svy_surveys"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/************ Check if I belong to any of the groups of a survey *************/
+/*****************************************************************************/
+
+bool Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
+  {
+   return (DB_QueryCOUNT ("can not check if I can do a survey",
+			  "SELECT COUNT(*)"
+			   " FROM svy_surveys"
+			  " WHERE SvyCod=%ld"
+			    " AND (SvyCod NOT IN"
+				 " (SELECT SvyCod"
+				    " FROM svy_groups)"
+				 " OR"
+				 " SvyCod IN"
+				 " (SELECT svy_groups.SvyCod"
+				    " FROM grp_users,"
+					  "svy_groups"
+				   " WHERE grp_users.UsrCod=%ld"
+				     " AND grp_users.GrpCod=svy_groups.GrpCod))",
+			  SvyCod,
+			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+  }
+
+/*****************************************************************************/
 /************************* Remove groups of a survey *************************/
 /*****************************************************************************/
 
-void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod)
+void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod)
   {
    DB_QueryDELETE ("can not remove the groups associated to a survey",
 		   "DELETE FROM svy_groups"
@@ -715,6 +789,33 @@ void Svy_DB_RemoveQst (long QstCod)
   }
 
 /*****************************************************************************/
+/********************* Remove all questions in a survey **********************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveQstsSvy (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove questions of a survey",
+		   "DELETE FROM svy_questions"
+                   " WHERE SvyCod=%ld",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/********************** Reset all answers in a survey ************************/
+/*****************************************************************************/
+
+void Svy_DB_ResetAnswersSvy (long SvyCod)
+  {
+   DB_QueryUPDATE ("can not reset answers of a survey",
+		   "UPDATE svy_answers,"
+		          "svy_questions"
+		     " SET svy_answers.NumUsrs=0"
+                   " WHERE svy_questions.SvyCod=%ld"
+                     " AND svy_questions.QstCod=svy_answers.QstCod",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
 /************ Increase number of users who have marked one answer ************/
 /*****************************************************************************/
 
@@ -771,6 +872,33 @@ unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
   }
 
 /*****************************************************************************/
+/********************* Remove answers of a survey question *******************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveAnswersQst (long QstCod)
+  {
+   DB_QueryDELETE ("can not remove the answers of a question",
+		   "DELETE FROM svy_answers"
+		   " WHERE QstCod=%ld",
+		   QstCod);
+  }
+
+/*****************************************************************************/
+/*********************** Remove all answers in a survey **********************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveAnswersSvy (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove answers of a survey",
+		   "DELETE FROM svy_answers"
+		   " USING svy_questions,"
+		          "svy_answers"
+                   " WHERE svy_questions.SvyCod=%ld"
+                   " AND svy_questions.QstCod=svy_answers.QstCod",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
 /***************** Register that I have answered this survey *****************/
 /*****************************************************************************/
 
@@ -812,4 +940,16 @@ unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
 		   " FROM svy_users"
 		  " WHERE SvyCod=%ld",
 		  SvyCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove all the users in this survey ********************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove users who are answered a survey",
+		   "DELETE FROM svy_users"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
   }

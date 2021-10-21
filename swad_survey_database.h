@@ -47,6 +47,8 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
                                 unsigned ScopesAllowed,
                                 unsigned HiddenAllowed,
                                 Dat_StartEndTime_t SelectedOrder);
+unsigned Svy_DB_GetDataOfSurveyByCod (MYSQL_RES **mysql_res,long SvyCod);
+unsigned Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy);
 unsigned Svy_DB_GetNumCrssWithCrsSurveys (HieLvl_Level_t Scope);
@@ -54,8 +56,12 @@ unsigned Svy_DB_GetNumCrsSurveys (MYSQL_RES **mysql_res,HieLvl_Level_t Scope);
 double Svy_DB_GetNumQstsPerCrsSurvey (HieLvl_Level_t Scope);
 unsigned Svy_DB_GetUsrsFromSurveyExceptMe (MYSQL_RES **mysql_res,long SvyCod);
 
+void Svy_DB_RemoveSvy (long SvyCod);
+
 //---------------------------- Surveys groups ---------------------------------
-void Svy_DB_RemoveAllGrpsAssociatedToSurvey (long SvyCod);
+bool Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
+
+void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod);
 void Svy_DB_RemoveGroupsOfType (long GrpTypCod);
 void Svy_DB_RemoveGroup (long GrpCod);
 
@@ -68,17 +74,24 @@ unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod);
 unsigned Svy_DB_GetQstIndFromQstCod (long QstCod);
 
 void Svy_DB_RemoveQst (long QstCod);
+void Svy_DB_RemoveQstsSvy (long SvyCod);
 
 //---------------------------- Surveys answers --------------------------------
+void Svy_DB_ResetAnswersSvy (long SvyCod);
 void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd);
 
 bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
 unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod);
+
+void Svy_DB_RemoveAnswersQst (long QstCod);
+void Svy_DB_RemoveAnswersSvy (long SvyCod);
 
 //--------------------- Users who have answered surveys -----------------------
 void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod);
 
 bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod);
 unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
+
+void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod);
 
 #endif

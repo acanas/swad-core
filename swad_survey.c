@@ -135,7 +135,6 @@ static void Svy_CreateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt);
 static void Svy_CreateGrps (long SvyCod);
 static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy);
-static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
 
 static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
                                     long SvyCod,struct Svy_Question *SvyQst,
@@ -143,7 +142,6 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 static void Svy_InitQst (struct Svy_Question *SvyQst);
 static void Svy_PutParamQstCod (long QstCod);
 static long Svy_GetParamQstCod (void);
-static void Svy_DB_RemAnswersOfAQuestion (long QstCod);
 static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
 static bool Svy_AllocateTextChoiceAnswer (struct Svy_Question *SvyQst,unsigned NumAns);
 static void Svy_FreeTextChoiceAnswers (struct Svy_Question *SvyQst,unsigned NumAnswers);
@@ -1134,25 +1132,9 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get data of survey from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get survey data",
-			     "SELECT SvyCod,"					// row[0]
-			            "Scope,"					// row[1]
-			            "Cod,"					// row[2]
-			            "Hidden,"					// row[3]
-			            "Roles,"					// row[4]
-			            "UsrCod,"					// row[5]
-			            "UNIX_TIMESTAMP(StartTime),"		// row[6]
-			            "UNIX_TIMESTAMP(EndTime),"			// row[7]
-			            "NOW() BETWEEN StartTime AND EndTime,"	// row[8]
-			            "Title"
-			      " FROM svy_surveys"
-			     " WHERE SvyCod=%ld",
-			     Svy->SvyCod);
-
-   if (NumRows) // Survey found...
+   if (Svy_DB_GetDataOfSurveyByCod (&mysql_res,Svy->SvyCod)) // Survey found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1218,7 +1200,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
 	    break;
 	 case HieLvl_CRS:	// Course
 	    Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Svy->Cod) &&
-					 Svy_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
+					 Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
 	    break;
         }
 
@@ -1371,13 +1353,8 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
-   /***** Build query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get groups of a survey",
-	               "SELECT Title,"	// row[0]
-	                      "Txt"	// row[1]
-	                " FROM svy_surveys"
-	               " WHERE SvyCod=%ld",
-                       SvyCod) == 1)
+   /***** Get title and text *****/
+   if (Svy_DB_GetSurveyTitleAndText (&mysql_res,SvyCod))
      {
       /***** Get row *****/
       row = mysql_fetch_row (mysql_res);
@@ -1485,35 +1462,20 @@ void Svy_RemoveSurvey (void)
    if (!Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
-   /***** Remove all the users in this survey *****/
-   DB_QueryDELETE ("can not remove users who are answered a survey",
-		   "DELETE FROM svy_users"
-		   " WHERE SvyCod=%ld",
-		   Svy.SvyCod);
+   /***** Remove all users in this survey *****/
+   Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (Svy.SvyCod);
 
-   /***** Remove all the answers in this survey *****/
-   DB_QueryDELETE ("can not remove answers of a survey",
-		   "DELETE FROM svy_answers"
-		   " USING svy_questions,"
-		          "svy_answers"
-                   " WHERE svy_questions.SvyCod=%ld"
-                   " AND svy_questions.QstCod=svy_answers.QstCod",
-		   Svy.SvyCod);
+   /***** Remove all answers in this survey *****/
+   Svy_DB_RemoveAnswersSvy (Svy.SvyCod);
 
-   /***** Remove all the questions in this survey *****/
-   DB_QueryDELETE ("can not remove questions of a survey",
-		   "DELETE FROM svy_questions"
-                   " WHERE SvyCod=%ld",
-		   Svy.SvyCod);
+   /***** Remove all questions in this survey *****/
+   Svy_DB_RemoveQstsSvy (Svy.SvyCod);
 
-   /***** Remove all the groups of this survey *****/
-   Svy_DB_RemoveAllGrpsAssociatedToSurvey (Svy.SvyCod);
+   /***** Remove all groups of this survey *****/
+   Svy_DB_RemoveGrpsAssociatedToSurvey (Svy.SvyCod);
 
    /***** Remove survey *****/
-   DB_QueryDELETE ("can not remove survey",
-		   "DELETE FROM svy_surveys"
-		   " WHERE SvyCod=%ld",
-		   Svy.SvyCod);
+   Svy_DB_RemoveSvy (Svy.SvyCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
@@ -1606,20 +1568,11 @@ void Svy_ResetSurvey (void)
    if (!Svy.Status.ICanEdit)
       Err_NoPermissionExit ();
 
-   /***** Remove all the users in this survey *****/
-   DB_QueryDELETE ("can not remove users who are answered a survey",
-		   "DELETE FROM svy_users"
-		   " WHERE SvyCod=%ld",
-		   Svy.SvyCod);
+   /***** Remove all users in this survey *****/
+   Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (Svy.SvyCod);
 
-   /***** Reset all the answers in this survey *****/
-   DB_QueryUPDATE ("can not reset answers of a survey",
-		   "UPDATE svy_answers,"
-		          "svy_questions"
-		     " SET svy_answers.NumUsrs=0"
-                   " WHERE svy_questions.SvyCod=%ld"
-                     " AND svy_questions.QstCod=svy_answers.QstCod",
-		   Svy.SvyCod);
+   /***** Reset all answers in this survey *****/
+   Svy_DB_ResetAnswersSvy (Svy.SvyCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_reset,
@@ -2243,7 +2196,7 @@ static void Svy_UpdateSurvey (struct Svy_Survey *Svy,const char *Txt)
 
    /***** Update groups *****/
    /* Remove old groups */
-   Svy_DB_RemoveAllGrpsAssociatedToSurvey (Svy->SvyCod);
+   Svy_DB_RemoveGrpsAssociatedToSurvey (Svy->SvyCod);
 
    /* Create new groups */
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -2326,10 +2279,10 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
 
 	    if (NumRows >= 2)
 	      {
-	       if (NumRow == NumRows-2)
+	       if (NumRow == NumRows - 2)
 		  HTM_TxtF (" %s ",Txt_and);
 	       if (NumRows >= 3)
-		 if (NumRow < NumRows-2)
+		 if (NumRow < NumRows - 2)
 		     HTM_Txt (", ");
 	      }
 	   }
@@ -2408,30 +2361,6 @@ void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod)
 	             " AND Cod=%ld",
 		   Sco_GetDBStrFromScope (Scope),
 		   Cod);
-  }
-
-/*****************************************************************************/
-/************ Check if I belong to any of the groups of a survey *************/
-/*****************************************************************************/
-
-static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
-  {
-   /***** Get if I can do a survey from database *****/
-   return (DB_QueryCOUNT ("can not check if I can do a survey",
-			  "SELECT COUNT(*)"
-			   " FROM svy_surveys"
-			  " WHERE SvyCod=%ld"
-			    " AND (SvyCod NOT IN"
-				 " (SELECT SvyCod"
-				    " FROM svy_groups)"
-				 " OR"
-				 " SvyCod IN"
-				 " (SELECT svy_groups.SvyCod"
-				    " FROM grp_users,"
-					  "svy_groups"
-				   " WHERE grp_users.UsrCod=%ld"
-				     " AND grp_users.GrpCod=svy_groups.GrpCod))",
-			  SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -2707,19 +2636,6 @@ static long Svy_GetParamQstCod (void)
   {
    /***** Get code of question *****/
    return Par_GetParToLong ("QstCod");
-  }
-
-/*****************************************************************************/
-/********************* Remove answers of a survey question *******************/
-/*****************************************************************************/
-
-static void Svy_DB_RemAnswersOfAQuestion (long QstCod)
-  {
-   /***** Remove answers *****/
-   DB_QueryDELETE ("can not remove the answers of a question",
-		   "DELETE FROM svy_answers"
-		   " WHERE QstCod=%ld",
-		   QstCod);
   }
 
 /*****************************************************************************/
@@ -3452,7 +3368,7 @@ void Svy_RemoveQst (void)
 
    /***** Remove the question from all the tables *****/
    /* Remove answers from this test question */
-   Svy_DB_RemAnswersOfAQuestion (SvyQst.QstCod);
+   Svy_DB_RemoveAnswersQst (SvyQst.QstCod);
 
    /* Remove the question itself */
    Svy_DB_RemoveQst (SvyQst.QstCod);
