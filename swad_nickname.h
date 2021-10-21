@@ -32,11 +32,12 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define Nck_MIN_CHARS_NICK_WITHOUT_ARROBA	 3
-#define Nck_MIN_BYTES_NICK_WITHOUT_ARROBA	Nck_MIN_CHARS_NICK_WITHOUT_ARROBA
+#define Nck_MIN_CHARS_NICK_WITHOUT_ARROBA	 3	// Example: jim
+#define Nck_MAX_CHARS_NICK_WITHOUT_ARROBA	16	// Example: juancarlos_aroja
 
-#define Nck_MAX_CHARS_NICK_WITHOUT_ARROBA	16
 #define Nck_MAX_BYTES_NICK_WITHOUT_ARROBA	Nck_MAX_CHARS_NICK_WITHOUT_ARROBA
+// Several bytes for leading @ because it may come from form
+#define Nck_MAX_BYTES_NICK_WITH_ARROBA	(Str_MAX_BYTES_PER_CHAR + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -44,7 +45,7 @@
 
 bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr);
 
-long Nck_GetUsrCodFromNickname (const char Nickname[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1]);
+long Nck_GetUsrCodFromNickname (const char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1]);
 
 void Nck_ShowFormChangeMyNickname (bool IMustFillNickname);
 void Nck_ShowFormChangeOtherUsrNickname (void);

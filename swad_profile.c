@@ -192,7 +192,7 @@ void Prf_RequestUserProfile (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
-   char NickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    if (Gbl.Usrs.Me.Logged)
      {

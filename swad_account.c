@@ -377,7 +377,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char NewNickWithoutAr
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   char NewNickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    /***** Begin form to enter some data of the new user *****/
    Frm_BeginForm (ActCreUsrAcc);
@@ -654,41 +654,39 @@ static bool Acc_GetParamsNewAccount (char NewNickWithoutArr[Nck_MAX_BYTES_NICK_W
                                      char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                      char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])
   {
-   extern const char *Txt_The_nickname_X_had_been_registered_by_another_user;
-   extern const char *Txt_The_nickname_entered_X_is_not_valid_;
+   extern const char *Txt_The_nickname_had_been_registered_by_another_user;
+   extern const char *Txt_The_nickname_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char NewNickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NewNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNickWithArr,sizeof (NewNickWithArr) - 1);
+   Par_GetParToText ("NewNick",NewNick,sizeof (NewNick) - 1);
 
    /* Remove arrobas at the beginning */
-   Str_Copy (NewNickWithoutArr,NewNickWithArr,sizeof (NewNickWithArr) - 1);
-   Str_RemoveLeadingArrobas (NewNickWithoutArr);
+   Str_RemoveLeadingArrobas (NewNick);
+   Str_Copy (NewNickWithoutArr,NewNick,sizeof (NewNick) - 1);
 
    /* Create a new version of the nickname with arroba */
-   snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
+   snprintf (NewNick,sizeof (NewNick),"@%s",
 	     NewNickWithoutArr);
 
-   if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))        // If new nickname is valid
+   if (Nck_CheckIfNickWithArrIsValid (NewNick))        // If new nickname is valid
      {
       /* Check if the new nickname
          matches any of the nicknames of other users */
       if (Acc_DB_CheckIfNicknameAlreadyExists (NewNickWithoutArr))
 	{
 	 Error = true;
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_X_had_been_registered_by_another_user,
-		        NewNickWithoutArr);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_had_been_registered_by_another_user);
 	}
      }
    else        // New nickname is not valid
      {
       Error = true;
-      Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_entered_X_is_not_valid_,
-		     NewNickWithArr,
+      Ale_ShowAlert (Ale_WARNING,Txt_The_nickname_is_not_valid_,
 		     Nck_MIN_CHARS_NICK_WITHOUT_ARROBA,
 		     Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
      }

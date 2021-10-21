@@ -230,11 +230,11 @@ static int API_RemoveOldWSKeys (struct soap *soap);
 static int API_GetCurrentDegCodFromCurrentCrsCod (void);
 static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 
-static int API_CheckParamsNewAccount (char *NewNickWithArr,	// Input
+static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
                                       char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
                                       char *NewEmail,			// Input-output
                                       char *NewPlainPassword,		// Input
-                                      char *NewEncryptedPassword);	// Output
+                                      char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);	// Output
 
 static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
                                             struct Syl_Syllabus *Syllabus,
@@ -755,23 +755,28 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
                                       char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1],	// Output
                                       char *NewEmail,			// Input-output
                                       char *NewPlainPassword,		// Input
-                                      char *NewEncryptedPassword)	// Output
+                                      char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1])	// Output
   {
+   char CopyOfNewNick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
+
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
-   Str_Copy (NewNickWithoutArr,NewNickWithArr,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
    if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))        // If new nickname is valid
      {
-      /***** Remove arrobas at the beginning *****/
-      Str_RemoveLeadingArrobas (NewNickWithoutArr);
+      /***** Remove leading arrobas *****/
+      Str_Copy (CopyOfNewNick,NewNickWithArr,sizeof (CopyOfNewNick) - 1);
+      Str_RemoveLeadingArrobas (CopyOfNewNick);
 
       /***** Check if the new nickname matches any of the nicknames of other users *****/
       if (DB_QueryCOUNT ("can not check if nickname already existed",
 			 "SELECT COUNT(*)"
 			  " FROM usr_nicknames"
-			 " WHERE Nickname='%s'",
-			 NewNickWithoutArr))	// A nickname of another user is the same that this nickname
+			 " WHERE Nickname='%s'",	// A nickname of another user is the same that this nickname
+			 CopyOfNewNick))		// Already without leading arrobas
 	 return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
+
+      /***** Output value of nickname without leading arrobas *****/
+      Str_Copy (NewNickWithoutArr,CopyOfNewNick,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA);
      }
    else        // New nickname is not valid
       return API_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID;
@@ -3567,7 +3572,7 @@ int swad__sendMessage (struct soap *soap,
   {
    int ReturnCode;
    long ReplyUsrCod = -1L;
-   char Nickname[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3656,12 +3661,12 @@ int swad__sendMessage (struct soap *soap,
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,Nickname,sizeof (Nickname) - 1);
+      Str_GetNextStringUntilComma (&Ptr,Nick,sizeof (Nick) - 1);	// With leading arrobas
 
       /* Check if string is a valid nickname */
-      if (Nck_CheckIfNickWithArrIsValid (Nickname))	// String is a nickname?
+      if (Nck_CheckIfNickWithArrIsValid (Nick))	// String is a nickname (with leading arrobas)?
 	{
-         Str_RemoveLeadingArrobas (Nickname);
+         Str_RemoveLeadingArrobas (Nick);
 
 	 /* Check for overflow in query */
 	 if (strlen (Query) + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 32 >
@@ -3684,7 +3689,7 @@ int swad__sendMessage (struct soap *soap,
 	   }
 	 else
 	    Str_Concat (Query,",'",API_MAX_BYTES_QUERY_RECIPIENTS);
-	 Str_Concat (Query,Nickname,API_MAX_BYTES_QUERY_RECIPIENTS);
+	 Str_Concat (Query,Nick,API_MAX_BYTES_QUERY_RECIPIENTS);	// Leading arrobas already removed
 	 Str_Concat (Query,"'",API_MAX_BYTES_QUERY_RECIPIENTS);
 	}
      }

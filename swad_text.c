@@ -49239,79 +49239,70 @@ const char *Txt_The_new_logo_is_X =	// Warning: it is very important to include 
 	"O novo logotipo &eacute; <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_nickname_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_nickname_has_been_registered_successfully =
 #if   L==1	// ca
-	"El apodo <strong>@%s</strong>"
-	" se ha registrado correctamente.";		// Necessita traduccio
+	"El apodo se ha registrado correctamente.";		// Necessita traduccio
 #elif L==2	// de
-	"The nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Need Übersetzung
+	"The nickname has been registered successfully.";	// Need Übersetzung
 #elif L==3	// en
-	"The nickname <strong>@%s</strong>"
-	" has been registered successfully.";
+	"The nickname has been registered successfully.";
 #elif L==4	// es
-	"El apodo <strong>@%s</strong>"
-	" se ha registrado correctamente.";
+	"El apodo se ha registrado correctamente.";
 #elif L==5	// fr
-	"The nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Besoin de traduction
+	"The nickname has been registered successfully.";	// Besoin de traduction
 #elif L==6	// gn
-	"El apodo <strong>@%s</strong>"
-	" se ha registrado correctamente.";		// Okoteve traducción
+	"El apodo se ha registrado correctamente.";		// Okoteve traducción
 #elif L==7	// it
-	"Il nome utente <strong>@%s</strong>"
-	" &egrave; stato registrato con successo.";
+	"Il nome utente &egrave; stato registrato con successo.";
 #elif L==8	// pl
-	"The nickname <strong>@%s</strong>"
-	" has been registered successfully.";		// Potrzebujesz tlumaczenie
+	"The nickname has been registered successfully.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A alcunha <strong>@%s</strong>"
-	" foi registrada com sucesso.";
+	"A alcunha foi registrada com sucesso.";
 #endif
 
-const char *Txt_The_nickname_entered_X_is_not_valid_ =	// Warning: it is very important to include %s and two %u in the following sentences
+const char *Txt_The_nickname_is_not_valid_ =
 #if   L==1	// ca
-	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
+	"El apodo no es v&aacute;lido.<br />"
 	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
 	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";	// Necessita traduccio
 #elif L==2	// de
-	"The nickname <strong>%s</strong> is not valid.<br />"
+	"The nickname is not valid.<br />"
 	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Need Übersetzung
 #elif L==3	// en
-	"The nickname <strong>%s</strong> is not valid.<br />"
+	"The nickname is not valid.<br />"
 	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";
 #elif L==4	// es
-	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
+	"El apodo no es v&aacute;lido.<br />"
 	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
 	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";
 #elif L==5	// fr
-	"The nickname <strong>%s</strong> is not valid.<br />"
+	"The nickname is not valid.<br />"
 	"Your nickname must have a length between %u and %u characters (not including initial the @).<br />"
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Besoin de traduction
 #elif L==6	// gn
-	"El apodo <strong>%s</strong> no es v&aacute;lido.<br />"
+	"El apodo no es v&aacute;lido.<br />"
 	"El apodo debe tener una longitud entre %u y %u caracteres (sin contar la @ inicial).<br />"
 	"Cada car&aacute;cter posterior a la @ inicial puede ser una letra (a-z, A-Z),"
 	" un d&iacute;gito (0-9) o &quot;_&quot;.";	// Okoteve traducción
 #elif L==7	// it
-	"Il nome utente <strong>%s</strong> non &egrave; valido.<br />"
+	"Il nome utente non &egrave; valido.<br />"
 	"Your nickname must have a length between %u and %u characters (not including the initial @).<br /> "
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Bisogno di traduzione
 #elif L==8	// pl
-	"The nickname <strong>%s</strong> is not valid.<br />"
+	"The nickname is not valid.<br />"
 	"Your nickname must have a length between %u and %u characters (not including the initial @).<br />"
 	"Each character after initial @ can be a letter (a-z, A-Z),"
 	" a digit (0-9) or &quot;_&quot;.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A alcunha <strong>%s</strong> n&atilde;o &eacute; v&aacute;lido.<br />"
+	"A alcunha n&atilde;o &eacute; v&aacute;lido.<br />"
 	"Sua alcunha deve ter um tamanho entre %u e %u caracteres (sem incluir o inicial @).<br />"
 	"Cada caractere ap&oacute;s inicial @ pode ser uma letra (a-z, A-Z),"
 	" um dígito (0-9) ou &quot;_&quot;.";
@@ -49503,64 +49494,46 @@ const char *Txt_The_new_URL_is_X =	// Warning: it is very important to include %
 	"O novo URL &eacute; <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_nickname_X_had_been_registered_by_another_user =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_nickname_had_been_registered_by_another_user =
 #if   L==1	// ca
-	"El apodo <strong>@%s</strong>"
-	" ya hab&iacute;a sido registrado por otro usuario.";	// Necessita traduccio
+	"El apodo ya hab&iacute;a sido registrado por otro usuario.";	// Necessita traduccio
 #elif L==2	// de
-	"The nickname <strong>@%s</strong>"
-	" had been registered by another user.";		// Need Übersetzung
+	"The nickname had been registered by another user.";		// Need Übersetzung
 #elif L==3	// en
-	"The nickname <strong>@%s</strong>"
-	" had been registered by another user.";
+	"The nickname had been registered by another user.";
 #elif L==4	// es
-	"El apodo <strong>@%s</strong>"
-	" ya hab&iacute;a sido registrado por otro usuario.";
+	"El apodo ya hab&iacute;a sido registrado por otro usuario.";
 #elif L==5	// fr
-	"The nickname <strong>@%s</strong>"
-	" had been enroled by another user.";			// Besoin de traduction
+	"The nickname had been enroled by another user.";		// Besoin de traduction
 #elif L==6	// gn
-	"El apodo <strong>@%s</strong>"
-	" ya hab&iacute;a sido registrado por otro usuario.";	// Okoteve traducción
+	"El apodo ya hab&iacute;a sido registrado por otro usuario.";	// Okoteve traducción
 #elif L==7	// it
-	"Il nome utente <strong>@%s</strong>"
-	" &egrave; stato registrato da un altro utente.";
+	"Il nome utente &egrave; stato registrato da un altro utente.";
 #elif L==8	// pl
-	"The nickname <strong>@%s</strong>"
-	" had been registered by another user.";		// Potrzebujesz tlumaczenie
+	"The nickname had been registered by another user.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A alcunha <strong>@%s</strong>"
-	" foi registrada por outro usu&aacute;rio.";
+	"A alcunha foi registrada por outro usu&aacute;rio.";
 #endif
 
-const char *Txt_The_nickname_X_matches_the_one_you_had_previously_registered =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_nickname_matches_the_one_you_had_previously_registered =
 #if   L==1	// ca
-	"El apodo <strong>@%s</strong>"
-	" coincide con el que ya ten&iacute;a registrado previamente.";	// Necessita traduccio
+	"El apodo coincide con el que ya ten&iacute;a registrado previamente.";	// Necessita traduccio
 #elif L==2	// de
-	"The nickname <strong>@%s</strong>"
-	" matches the one you had previously registered.";		// Need Übersetzung
+	"The nickname matches the one you had previously registered.";		// Need Übersetzung
 #elif L==3	// en
-	"The nickname <strong>@%s</strong>"
-	" matches the one you had previously registered.";
+	"The nickname matches the one you had previously registered.";
 #elif L==4	// es
-	"El apodo <strong>@%s</strong>"
-	" coincide con el que ya ten&iacute;a registrado previamente.";
+	"El apodo coincide con el que ya ten&iacute;a registrado previamente.";
 #elif L==5	// fr
-	"The nickname <strong>@%s</strong>"
-	" matches the one you had previously registered.";		// Besoin de traduction
+	"The nickname matches the one you had previously registered.";		// Besoin de traduction
 #elif L==6	// gn
-	"El apodo <strong>@%s</strong>"
-	" coincide con el que ya ten&iacute;a registrado previamente.";	// Okoteve traducción
+	"El apodo coincide con el que ya ten&iacute;a registrado previamente.";	// Okoteve traducción
 #elif L==7	// it
-	"Il nome utente <strong>@%s</strong>"
-	" coincide con quello che hai precedentemente registrato.";
+	"Il nome utente coincide con quello che hai precedentemente registrato.";
 #elif L==8	// pl
-	"The nickname <strong>@%s</strong>"
-	" matches the one you had previously registered.";		// Potrzebujesz tlumaczenie
+	"The nickname matches the one you had previously registered.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"A alcunha <strong>@%s</strong>"
-	" corresponde &agrave;quela que voc&ecirc; registrou anteriormente.";
+	"A alcunha corresponde &agrave;quela que voc&ecirc; registrou anteriormente.";
 #endif
 
 const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences

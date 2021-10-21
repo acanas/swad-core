@@ -10190,7 +10190,7 @@ void Usr_DB_RemoveUsrFromBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   char NewNickWithArr[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {

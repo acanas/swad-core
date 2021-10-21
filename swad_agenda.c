@@ -156,10 +156,10 @@ void Agd_PutFormLogInToShowUsrAgenda (void)
 
 void Agd_PutParamAgd (void)
   {
-   char Nickname[1 + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
 
-   snprintf (Nickname,sizeof (Nickname),"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
-   Par_PutHiddenParamString (NULL,"agd",Nickname);
+   snprintf (NickWithArr,sizeof (NickWithArr),"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
+   Par_PutHiddenParamString (NULL,"agd",NickWithArr);
   }
 
 /*****************************************************************************/
