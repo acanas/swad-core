@@ -29,7 +29,7 @@
 // #include <linux/limits.h>	// For PATH_MAX
 // #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For calloc
+#include <stdlib.h>		// For free
 // #include <string.h>		// For string functions
 
 // #include "swad_attendance.h"

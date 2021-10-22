@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <stddef.h>		// For NULL
+#include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
 #include "swad_database.h"

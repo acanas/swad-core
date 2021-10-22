@@ -144,35 +144,37 @@ void Set_GetSettingsFromIP (void)
    if (Gbl.IP[0])
      {
       /***** Get settings from database *****/
-      if (Set_DB_GetSettingsFromIP (&mysql_res) != 1)
-	 Err_ShowErrorAndExit ("Internal error while getting settings.");
-
-      /***** Get settings from database *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get first day of week (row[0]) */
-      Gbl.Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[0]);
-
-      /* Get date format (row[1]) */
-      Gbl.Prefs.DateFormat = Dat_GetDateFormatFromStr (row[1]);
-
-      /* Get theme (row[2]) */
-      Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
-
-      /* Get icon set (row[3]) */
-      Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);
-
-      /* Get menu (row[4]) */
-      Gbl.Prefs.Menu = Mnu_GetMenuFromStr (row[4]);
-
-      /* Get if user wants to show side columns (row[5]) */
-      if (sscanf (row[5],"%u",&Gbl.Prefs.SideCols) == 1)
+      if (Set_DB_GetSettingsFromIP (&mysql_res))
 	{
-	 if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get first day of week (row[0]) */
+	 Gbl.Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[0]);
+
+	 /* Get date format (row[1]) */
+	 Gbl.Prefs.DateFormat = Dat_GetDateFormatFromStr (row[1]);
+
+	 /* Get theme (row[2]) */
+	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
+
+	 /* Get icon set (row[3]) */
+	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);
+
+	 /* Get menu (row[4]) */
+	 Gbl.Prefs.Menu = Mnu_GetMenuFromStr (row[4]);
+
+	 /* Get if user wants to show side columns (row[5]) */
+	 if (sscanf (row[5],"%u",&Gbl.Prefs.SideCols) == 1)
+	   {
+	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
+	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+	   }
+	 else
 	    Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 	}
-      else
-	 Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
   }
 
