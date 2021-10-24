@@ -31,7 +31,6 @@
 
 #include "swad_cryptography.h"
 #include "swad_photo.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /************************* Public types and constants ************************/

@@ -80,10 +80,6 @@ unsigned Ins_DB_GetNumInssWithCrss (HieLvl_Level_t Scope,long Cod);
 unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
-bool Ins_DB_GetIfMapIsAvailable (long InsCod);
-void Ins_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
-unsigned Ins_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
-
 void Ins_DB_RemoveInstitution (long InsCod);
 
 #endif

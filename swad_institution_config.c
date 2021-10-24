@@ -31,6 +31,7 @@
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 
+#include "swad_center_database.h"
 #include "swad_database.h"
 #include "swad_department_database.h"
 #include "swad_error.h"
@@ -273,14 +274,14 @@ static void InsCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map with pretty Mapbox Streets tiles */
-   Ins_DB_GetCoordAndZoom (&InsAvgCoord,&Zoom);
+   Ctr_DB_GetCoordAndZoomInCurrentIns (&InsAvgCoord,&Zoom);
    Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord,Zoom);
 
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();
 
    /* Get centers with coordinates */
-   NumCtrs = Ins_DB_GetCtrsWithCoordsInCurrentIns (&mysql_res);
+   NumCtrs = Ctr_DB_GetCtrsWithCoordsInCurrentIns (&mysql_res);
 
    /* Add a marker and a popup for each center */
    for (NumCtr = 0;

@@ -106,8 +106,7 @@ struct LstItemsSyllabus Syl_LstItemsSyllabus;
 static unsigned Syl_GetParamItemNumber (void);
 
 static void Syl_SetSyllabusTypeFromAction (struct Syl_Syllabus *Syllabus);
-static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus,
-                              bool PutIconToEdit);
+static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus);
 static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
@@ -159,26 +158,26 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 
    /***** Form to select which syllabus I want to see (lectures/practicals) *****/
    Frm_BeginForm (ActSeeSyl);
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_UL_Begin ("class=\"LIST_LEFT\"");
+      HTM_DIV_Begin ("class=\"CM\"");
+	 HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   for (WhichSyl  = (Syl_WhichSyllabus_t) 0;
-	WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
-	WhichSyl++)
-     {
-      HTM_LI_Begin ("class=\"DAT LM\"");
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("WhichSyllabus",true,
-		       "value=\"%u\"%s",
-		       (unsigned) WhichSyl,
-		       WhichSyl == SyllabusSelected ? " checked=\"checked\"" :
-			                              "");
-      HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
-      HTM_LABEL_End ();
-      HTM_LI_End ();
-     }
-   HTM_UL_End ();
-   HTM_DIV_End ();
+	 for (WhichSyl  = (Syl_WhichSyllabus_t) 0;
+	      WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
+	      WhichSyl++)
+	   {
+	    HTM_LI_Begin ("class=\"DAT LM\"");
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_RADIO ("WhichSyllabus",true,
+				   "value=\"%u\"%s",
+				   (unsigned) WhichSyl,
+				   WhichSyl == SyllabusSelected ? " checked=\"checked\"" :
+								  "");
+		  HTM_Txt (Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyl]);
+	       HTM_LABEL_End ();
+	    HTM_LI_End ();
+	   }
+	 HTM_UL_End ();
+      HTM_DIV_End ();
    Frm_EndForm ();
   }
 
@@ -222,11 +221,6 @@ bool Syl_CheckSyllabus (struct Syl_Syllabus *Syllabus,long CrsCod)
 
 bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
   {
-   extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_TYPES];
-   extern const char *Txt_Done;
-   bool ICanEdit;
-   bool PutIconToEdit;
-
    /***** Set syllabus type depending on current action *****/
    Syl_SetSyllabusTypeFromAction (Syllabus);
 
@@ -252,24 +246,8 @@ bool Syl_CheckAndEditSyllabus (struct Syl_Syllabus *Syllabus)
 
    if (Syllabus->EditionIsActive || Syl_LstItemsSyllabus.NumItems)
      {
-      ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-		 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-      PutIconToEdit = ICanEdit && !Syllabus->EditionIsActive;
-
       /***** Write the current syllabus *****/
-      Syl_ShowSyllabus (Syllabus,PutIconToEdit);
-
-      if (Syllabus->EditionIsActive)
-	{
-	 /***** Button to view *****/
-         Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
-	    Btn_PutConfirmButton (Txt_Done);
-	 Frm_EndForm ();
-	}
-
-      /***** End box *****/
-      Box_BoxEnd ();
-
+      Syl_ShowSyllabus (Syllabus);
       return true;
      }
 
@@ -440,11 +418,11 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
 
 	 /* Set the code (number) of the item */
 	 CodItem[Syl_LstItemsSyllabus.Lst[NumItem].Level]++;
-	 for (N = Syl_LstItemsSyllabus.Lst[NumItem].Level + 1;
+	 for (N  = Syl_LstItemsSyllabus.Lst[NumItem].Level + 1;
 	      N <= Syl_MAX_LEVELS_SYLLABUS;
 	      N++)
 	    CodItem[N] = 0;
-	 for (N = 1;
+	 for (N  = 1;
 	      N <= Syl_MAX_LEVELS_SYLLABUS;
 	      N++)
 	    Syl_LstItemsSyllabus.Lst[NumItem].CodItem[N] = CodItem[N];
@@ -527,12 +505,13 @@ int Syl_ReadLevelItemSyllabus (void)
 /***************** Show a syllabus of lectures or practicals *****************/
 /*****************************************************************************/
 
-static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus,
-                              bool PutIconToEdit)
+static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus)
   {
+   extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_TYPES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Hlp_COURSE_Syllabus_edit;
    extern const char *Hlp_COURSE_Syllabus;
+   extern const char *Txt_Done;
    unsigned NumItem;
    int i;
    int NumButtons = Syllabus->EditionIsActive ? 5 :
@@ -541,6 +520,9 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus,
                                 Gbl.Action.Act == ActModIteSylLec || Gbl.Action.Act == ActModIteSylPra ||
 				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
+   bool ICanEdit = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
+   bool PutIconToEdit = ICanEdit && !Syllabus->EditionIsActive;
 
    /***** Begin box and table *****/
    if (PutIconToEdit)
@@ -562,7 +544,7 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus,
 	i < NumButtons;
 	i++)
       HTM_Txt ("<col width=\"12\" />");
-   for (i = 1;
+   for (i  = 1;
 	i <= Syl_LstItemsSyllabus.NumLevels;
 	i++)
       HTM_TxtF ("<col width=\"%d\" />",i * Syl_WIDTH_NUM_SYLLABUS);
@@ -593,6 +575,17 @@ static void Syl_ShowSyllabus (struct Syl_Syllabus *Syllabus,
 
    /***** End table *****/
    HTM_TABLE_End ();
+
+   if (Syllabus->EditionIsActive)
+     {
+      /***** Button to view *****/
+      Frm_BeginForm (Inf_ActionsSeeInfo[Gbl.Crs.Info.Type]);
+	 Btn_PutConfirmButton (Txt_Done);
+      Frm_EndForm ();
+     }
+
+   /***** End box *****/
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -655,7 +648,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
 						 "arrow-up.svg",
 						 Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-														 Txt_Move_up_X,
+														     Txt_Move_up_X,
 								     StrItemCod));
 		  Str_FreeString ();
 		 }
@@ -674,7 +667,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
 						 "arrow-down.svg",
 						 Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-														 Txt_Move_down_X,
+														     Txt_Move_down_X,
 								     StrItemCod));
 		  Str_FreeString ();
 		 }
@@ -1048,11 +1041,11 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
 	      NumItem < Subtree.ToGetDown.Ini;
 	      NumItem++)
 	    Syl_WriteItemFileSyllabus (NewFile,Syl_LstItemsSyllabus.Lst[NumItem].Level,Syl_LstItemsSyllabus.Lst[NumItem].Text);
-	 for (NumItem = Subtree.ToGetUp.Ini;
+	 for (NumItem  = Subtree.ToGetUp.Ini;
 	      NumItem <= Subtree.ToGetUp.End;
 	      NumItem++)
 	    Syl_WriteItemFileSyllabus (NewFile,Syl_LstItemsSyllabus.Lst[NumItem].Level,Syl_LstItemsSyllabus.Lst[NumItem].Text);
-	 for (NumItem = Subtree.ToGetDown.Ini;
+	 for (NumItem  = Subtree.ToGetDown.Ini;
 	      NumItem <= Subtree.ToGetDown.End;
 	      NumItem++)
 	    Syl_WriteItemFileSyllabus (NewFile,Syl_LstItemsSyllabus.Lst[NumItem].Level,Syl_LstItemsSyllabus.Lst[NumItem].Text);
@@ -1312,7 +1305,7 @@ void Syl_InsertItemSyllabus (void)
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
    Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
-   	                                                 Inf_NONE);
+   	                                              Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();
@@ -1364,7 +1357,7 @@ void Syl_ModifyItemSyllabus (void)
    /***** We are editing a syllabus with the internal editor,
           so change info source to internal editor in database *****/
    Inf_DB_SetInfoSrc (Syl_LstItemsSyllabus.NumItems ? Inf_EDITOR :
-   	                                                 Inf_NONE);
+   	                                              Inf_NONE);
 
    /***** Show the updated syllabus to continue editing it *****/
    Syl_FreeListItemsSyllabus ();

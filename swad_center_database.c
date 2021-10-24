@@ -25,6 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_center.h"
 #include "swad_center_config.h"
 #include "swad_database.h"
@@ -613,6 +616,118 @@ void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus)
 		   " WHERE CtrCod=%ld",
 	           (unsigned) NewStatus,
 	           CtrCod);
+  }
+
+/*****************************************************************************/
+/********** Check if any of the centers in an institution has map ************/
+/*****************************************************************************/
+
+bool Ctr_DB_GetIfMapIsAvailableInIns (long InsCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool MapIsAvailable = false;
+
+   /***** Get if any center in current institution has a coordinate set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
+		       "SELECT EXISTS"	// row[0]
+		       "(SELECT *"
+		         " FROM ctr_centers"
+		        " WHERE InsCod=%ld"
+		          " AND (Latitude<>0"
+		               " OR"
+		               " Longitude<>0))",
+		       InsCod))
+     {
+      /* Get if map is available */
+      row = mysql_fetch_row (mysql_res);
+      MapIsAvailable = (row[0][0] == '1');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   return MapIsAvailable;
+  }
+
+/*****************************************************************************/
+/********* Get average coordinates of centers in current institution *********/
+/*****************************************************************************/
+
+void Ctr_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
+  {
+   char *Query;
+
+   /***** Get average coordinates of centers with both coordinates set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (asprintf (&Query,
+		 "SELECT AVG(Latitude),"				// row[0]
+			"AVG(Longitude),"				// row[1]
+			"GREATEST(MAX(Latitude)-MIN(Latitude),"
+				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
+		  " FROM ctr_centers"
+		 " WHERE Latitude<>0"
+		   " AND Longitude<>0") < 0)
+      Err_NotEnoughMemoryExit ();
+   Map_GetCoordAndZoom (Coord,Zoom,Query);
+   free (Query);
+  }
+
+/*****************************************************************************/
+/********* Get average coordinates of centers in current institution *********/
+/*****************************************************************************/
+
+void Ctr_DB_GetCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom)
+  {
+   char *Query;
+
+   /***** Get average coordinates of centers of current institution
+          with both coordinates set
+          (coordinates 0, 0 means not set ==> don't show map) *****/
+   if (asprintf (&Query,
+		 "SELECT AVG(Latitude),"				// row[0]
+			"AVG(Longitude),"				// row[1]
+			"GREATEST(MAX(Latitude)-MIN(Latitude),"
+				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
+		  " FROM ctr_centers"
+		 " WHERE InsCod=%ld"
+		   " AND Latitude<>0"
+		   " AND Longitude<>0",
+		 Gbl.Hierarchy.Ins.InsCod) < 0)
+      Err_NotEnoughMemoryExit ();
+   Map_GetCoordAndZoom (Coord,Zoom,Query);
+   free (Query);
+  }
+
+/*****************************************************************************/
+/******************* Get centres which have coordinates **********************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get centers with coordinates",
+		   "SELECT CtrCod"
+		    " FROM ctr_centers"
+		   " WHERE ctr_centers.Latitude<>0"
+		     " AND ctr_centers.Longitude<>0");
+  }
+
+/*****************************************************************************/
+/******** Get centres which have coordinates in current institution **********/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get centers with coordinates",
+		   "SELECT CtrCod"	// row[0]
+		    " FROM ctr_centers"
+		   " WHERE InsCod=%ld"
+		     " AND Latitude<>0"
+		     " AND Longitude<>0",
+		   Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/

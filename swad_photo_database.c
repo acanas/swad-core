@@ -25,39 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <math.h>		// For log10, floor, ceil, modf, sqrt...
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For system, getenv, etc.
-// #include <string.h>		// For string functions
-// #include <sys/wait.h>	// For the macro WEXITSTATUS
-// #include <unistd.h>		// For unlink
-
-// #include "swad_action.h"
-// #include "swad_box.h"
-// #include "swad_browser.h"
-// #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_enrolment.h"
-// #include "swad_error.h"
-// #include "swad_file.h"
-// #include "swad_follow.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_logo.h"
-// #include "swad_parameter.h"
-// #include "swad_photo.h"
 #include "swad_photo_database.h"
-// #include "swad_privacy.h"
-// #include "swad_setting.h"
-// #include "swad_statistic.h"
-// #include "swad_theme.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

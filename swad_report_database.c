@@ -25,23 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <stdlib.h>		// For free
-// #include <sys/stat.h>		// For mkdir
-// #include <sys/types.h>		// For mkdir
-
-// #include "swad_box.h"
-// #include "swad_browser_database.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
-// #include "swad_global.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_profile.h"
 #include "swad_report.h"
 #include "swad_report_database.h"
-// #include "swad_tab.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

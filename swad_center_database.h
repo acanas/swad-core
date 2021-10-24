@@ -80,6 +80,13 @@ void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
 				 const char *CoordField,double NewCoord);
 void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus);
 
+
+bool Ctr_DB_GetIfMapIsAvailableInIns (long InsCod);
+void Ctr_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
+void Ctr_DB_GetCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom);
+unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);
+unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
+
 void Ctr_DB_RemoveCenter (long CtrCod);
 
 #endif

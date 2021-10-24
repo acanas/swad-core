@@ -52,12 +52,13 @@
 #include "swad_match.h"
 #include "swad_media.h"
 #include "swad_parameter.h"
-#include "swad_theme.h"
+#include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_test_config.h"
 #include "swad_test_import.h"
 #include "swad_test_print.h"
 #include "swad_test_visibility.h"
+#include "swad_theme.h"
 #include "swad_user.h"
 #include "swad_xml.h"
 
@@ -304,7 +305,7 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Get tags *****/
-   if ((Test->Tags.Num = Tag_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
+   if ((Test->Tags.Num = Tag_DB_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
      {
       /***** Check if minimum date-time of next access to test is older than now *****/
       if (Tst_CheckIfNextTstAllowed ())
@@ -1013,7 +1014,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
                  Hlp_ASSESSMENT_Questions_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_BeginForm (ActLstTstQst);
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_DEFAULT_ORDER);
@@ -1111,7 +1112,7 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
                  Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_BeginForm (ActLstTstQstForSet);
       ExaSet_PutParamsOneSet (Exams);
@@ -1173,7 +1174,7 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_BeginForm (ActGamLstTstQst);
       Gam_PutParams (Games);
@@ -1391,7 +1392,7 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 
    /***** Get if current course has tests from database *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_UNKNOWN)
-      return Tag_CheckIfCurrentCrsHasTestTags ();	// Return true if course has tests
+      return Tag_DB_CheckIfCurrentCrsHasTestTags ();	// Return true if course has tests
 
    return false;	// Pluggable is not unknown
   }
@@ -3262,7 +3263,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    HTM_TR_End ();
 
    /***** Get tags already existing for questions in current course *****/
-   NumTags = Tag_GetAllTagsFromCurrentCrs (&mysql_res);
+   NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res);
 
    /***** Write the tags *****/
    HTM_TR_Begin (NULL);
@@ -4852,8 +4853,8 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
    Tst_RemAnsFromQst (QstCod);
-   Tag_RemTagsFromQst (QstCod);
-   Tag_RemoveUnusedTagsFromCrs (CrsCod);
+   Tag_DB_RemTagsFromQst (QstCod);
+   Tag_DB_RemoveUnusedTagsFromCrs (CrsCod);
 
    /* Remove the question itself */
    DB_QueryDELETE ("can not remove a question",
@@ -4953,7 +4954,7 @@ void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
       Tag_InsertTagsIntoDB (Question->QstCod,&Question->Tags);
 
       /***** Remove unused tags in current course *****/
-      Tag_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
+      Tag_DB_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Insert answers in the answers table *****/
       Tst_InsertAnswersIntoDB (Question);
@@ -5026,7 +5027,7 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst (Question->QstCod);
-      Tag_RemTagsFromQst (Question->QstCod);
+      Tag_DB_RemTagsFromQst (Question->QstCod);
      }
   }
 

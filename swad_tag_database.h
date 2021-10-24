@@ -1,7 +1,7 @@
-// swad_statistic_database.h: statistics, operations with database
+// swad_tag_database.h: tags for questions, operations with database
 
-#ifndef _SWAD_STA_DB
-#define _SWAD_STA_DB
+#ifndef _SWAD_TAG_DB
+#define _SWAD_TAG_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -28,22 +28,32 @@
 /*****************************************************************************/
 
 #include <mysql/mysql.h>	// To access MySQL databases
-
-#include "swad_statistic.h"
+#include <stdbool.h>		// For boolean type
+// #include "swad_string.h"
 
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/******************************* Public types ********************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
-                         const struct Sta_Stats *Stats,
-                         const char *LogTable,
-                         const char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1],
-                         unsigned NumUsrsInList,
-			 const long LstSelectedUsrCods[]);
+long Tag_DB_CreateNewTag (long CrsCod,const char *TagTxt);
+void Tag_DB_AddTagToQst (long QstCod,long TagCod,unsigned TagInd);
+
+void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden);
+
+unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Tag_DB_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
+bool Tag_DB_CheckIfCurrentCrsHasTestTags (void);
+long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
+
+void Tag_DB_RemTagsFromQst (long QstCod);
+void Tag_DB_RemoveUnusedTagsFromCrs (long CrsCod);
 
 #endif

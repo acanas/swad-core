@@ -61,10 +61,6 @@ void Tag_FreeTagsList (struct Tag_Tags *Tags);
 
 void Tag_PutIconToEditTags (void);
 
-bool Tag_CheckIfCurrentCrsHasTestTags (void);
-unsigned Tag_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
-unsigned Tag_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
-
 void Tag_EnableTag (void);
 void Tag_DisableTag (void);
 void Tag_RenameTag (void);
@@ -75,8 +71,5 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           MYSQL_RES *mysql_res,
                           bool ShowOnlyEnabledTags);
 void Tag_ShowFormEditTags (void);
-
-void Tag_RemTagsFromQst (long QstCod);
-void Tag_RemoveUnusedTagsFromCrs (long CrsCod);
 
 #endif

@@ -32,6 +32,7 @@
 
 #include "swad_admin_database.h"
 #include "swad_browser_database.h"
+#include "swad_center_database.h"
 #include "swad_database.h"
 #include "swad_department.h"
 #include "swad_enrolment_database.h"
@@ -1972,7 +1973,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
   {
    extern const char *Txt_Map;
 
-   if (Ins_DB_GetIfMapIsAvailable (Ins->InsCod))
+   if (Ctr_DB_GetIfMapIsAvailableInIns (Ins->InsCod))
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,

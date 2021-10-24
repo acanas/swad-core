@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_center_database.h"
 #include "swad_config.h"
 #include "swad_course.h"
 #include "swad_database.h"
@@ -68,7 +69,6 @@
 
 static void SysCfg_Configuration (bool PrintView);
 static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void SysCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
 static void SysCfg_Shortcut (bool PrintView);
@@ -122,48 +122,48 @@ static void SysCfg_Configuration (bool PrintView)
    /**************************** Left part ***********************************/
    HTM_DIV_Begin ("class=\"HIE_CFG_LEFT HIE_CFG_WIDTH\"");
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-   /***** Platform *****/
-   SysCfg_Platform ();
+	 /***** Platform *****/
+	 SysCfg_Platform ();
 
-   /***** Shortcut to the country *****/
-   SysCfg_Shortcut (PrintView);
+	 /***** Shortcut to the country *****/
+	 SysCfg_Shortcut (PrintView);
 
-   /***** Get number of centers with map *****/
-   NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
+	 /***** Get number of centers with map *****/
+	 NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInSys ();
 
-   if (PrintView)
-      /***** QR code with link to the country *****/
-      SysCfg_QR ();
-   else
-     {
-      /***** Get number of centers *****/
-      NumCtrs = Ctr_GetCachedNumCtrsInSys ();
+	 if (PrintView)
+	    /***** QR code with link to the country *****/
+	    SysCfg_QR ();
+	 else
+	   {
+	    /***** Get number of centers *****/
+	    NumCtrs = Ctr_GetCachedNumCtrsInSys ();
 
-      /***** Number of countries,
-             number of institutions,
-             number of centers,
-             number of degrees,
-             number of courses *****/
-      SysCfg_NumCtys ();
-      SysCfg_NumInss ();
-      HieCfg_NumCtrs (NumCtrs,
-		      false);	// Don't put form
-      HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
-      SysCfg_NumDegs ();
-      SysCfg_NumCrss ();
+	    /***** Number of countries,
+		   number of institutions,
+		   number of centers,
+		   number of degrees,
+		   number of courses *****/
+	    SysCfg_NumCtys ();
+	    SysCfg_NumInss ();
+	    HieCfg_NumCtrs (NumCtrs,
+			    false);	// Don't put form
+	    HieCfg_NumCtrsWithMap (NumCtrs,NumCtrsWithMap);
+	    SysCfg_NumDegs ();
+	    SysCfg_NumCrss ();
 
-      /***** Number of users in courses of this country *****/
-      HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_TCH);
-      HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_NET);
-      HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_STD);
-      HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_UNK);
-     }
+	    /***** Number of users in courses of this country *****/
+	    HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_TCH);
+	    HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_NET);
+	    HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_STD);
+	    HieCfg_NumUsrsInCrss (HieLvl_SYS,-1L,Rol_UNK);
+	   }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
    /***** End of left part *****/
    HTM_DIV_End ();
@@ -173,8 +173,8 @@ static void SysCfg_Configuration (bool PrintView)
      {
       HTM_DIV_Begin ("class=\"HIE_CFG_RIGHT HIE_CFG_WIDTH\"");
 
-      /***** Country map *****/
-      SysCfg_Map ();
+	 /***** Country map *****/
+	 SysCfg_Map ();
 
       HTM_DIV_End ();
      }
@@ -191,29 +191,6 @@ static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
   {
    Ico_PutContextualIconToPrint (ActPrnSysInf,
 				 NULL,NULL);
-  }
-
-/*****************************************************************************/
-/********* Get average coordinates of centers in current institution *********/
-/*****************************************************************************/
-
-static void SysCfg_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
-  {
-   char *Query;
-
-   /***** Get average coordinates of centers with both coordinates set
-          (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (asprintf (&Query,
-		 "SELECT AVG(Latitude),"				// row[0]
-			"AVG(Longitude),"				// row[1]
-			"GREATEST(MAX(Latitude)-MIN(Latitude),"
-				 "MAX(Longitude)-MIN(Longitude))"	// row[2]
-		  " FROM ctr_centers"
-		 " WHERE Latitude<>0"
-		   " AND Longitude<>0") < 0)
-      Err_NotEnoughMemoryExit ();
-   Map_GetCoordAndZoom (Coord,Zoom,Query);
-   free (Query);
   }
 
 /*****************************************************************************/
@@ -245,46 +222,41 @@ static void SysCfg_Map (void)
    /***** Script to draw the map *****/
    HTM_SCRIPT_Begin (NULL,NULL);
 
-   /* Let's create a map with pretty Mapbox Streets tiles */
-   SysCfg_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
-   Map_CreateMap (SysCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
+      /* Let's create a map with pretty Mapbox Streets tiles */
+      Ctr_DB_GetCoordAndZoom (&CtyAvgCoord,&Zoom);
+      Map_CreateMap (SysCfg_MAP_CONTAINER_ID,&CtyAvgCoord,Zoom);
 
-   /* Add Mapbox Streets tile layer to our map */
-   Map_AddTileLayer ();
+      /* Add Mapbox Streets tile layer to our map */
+      Map_AddTileLayer ();
 
-   /* Get centers with coordinates */
-   NumCtrs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get centers with coordinates",
-		   "SELECT CtrCod"
-		    " FROM ctr_centers"
-		   " WHERE ctr_centers.Latitude<>0"
-		     " AND ctr_centers.Longitude<>0");
+      /* Get centers with coordinates */
+      NumCtrs = Ctr_DB_GetCtrsWithCoords (&mysql_res);
 
-   /* Add a marker and a popup for each center */
-   for (NumCtr = 0;
-	NumCtr < NumCtrs;
-	NumCtr++)
-     {
-      /* Get next center */
-      Ctr.CtrCod = DB_GetNextCode (mysql_res);
+      /* Add a marker and a popup for each center */
+      for (NumCtr = 0;
+	   NumCtr < NumCtrs;
+	   NumCtr++)
+	{
+	 /* Get next center */
+	 Ctr.CtrCod = DB_GetNextCode (mysql_res);
 
-      /* Get data of center */
-      Ctr_GetDataOfCenterByCod (&Ctr);
+	 /* Get data of center */
+	 Ctr_GetDataOfCenterByCod (&Ctr);
 
-      /* Get data of institution */
-      Ins.InsCod = Ctr.InsCod;
-      Ins_GetDataOfInstitByCod (&Ins);
+	 /* Get data of institution */
+	 Ins.InsCod = Ctr.InsCod;
+	 Ins_GetDataOfInstitByCod (&Ins);
 
-      /* Add marker */
-      Map_AddMarker (&Ctr.Coord);
+	 /* Add marker */
+	 Map_AddMarker (&Ctr.Coord);
 
-      /* Add popup */
-      Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,
-		    false);	// Closed
-     }
+	 /* Add popup */
+	 Map_AddPopup (Ctr.ShrtName,Ins.ShrtName,
+		       false);	// Closed
+	}
 
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
 
    HTM_SCRIPT_End ();
   }
@@ -340,17 +312,17 @@ static void SysCfg_NumCtys (void)
    /***** Number of countries ******/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Countries);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Countries);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   Frm_BeginFormGoTo (ActSeeCty);
-   HTM_BUTTON_SUBMIT_Begin (Txt_Countries,"BT_LINK DAT",NULL);
-   HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
-   HTM_BUTTON_End ();
-   Frm_EndForm ();
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"LB\"");
+	 Frm_BeginFormGoTo (ActSeeCty);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,"BT_LINK DAT",NULL);
+	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -366,13 +338,13 @@ static void SysCfg_NumInss (void)
    /***** Number of institutions ******/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Institutions);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Institutions);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Ins_GetCachedNumInssInSys ());
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Ins_GetCachedNumInssInSys ());
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -388,13 +360,13 @@ static void SysCfg_NumDegs (void)
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Degrees);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Deg_GetCachedNumDegsInSys ());
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Deg_GetCachedNumDegsInSys ());
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -410,13 +382,13 @@ static void SysCfg_NumCrss (void)
    /***** Number of courses *****/
    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT",NULL,Txt_Courses);
+      /* Label */
+      Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"DAT LB\"");
-   HTM_Unsigned (Crs_GetCachedNumCrssInSys ());
-   HTM_TD_End ();
+      /* Data */
+      HTM_TD_Begin ("class=\"DAT LB\"");
+	 HTM_Unsigned (Crs_GetCachedNumCrssInSys ());
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }

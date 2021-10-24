@@ -36,6 +36,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_tag.h"
+#include "swad_tag_database.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -64,12 +65,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tag_EnableOrDisableTag (long TagCod,bool TagHidden);
-
 static long Tag_GetParamTagCode (void);
-
-static long Tag_GetTagCodFromTagTxt (const char *TagTxt);
-static long Tag_CreateNewTag (long CrsCod,const char *TagTxt);
 
 static void Tag_PutIconEnable (long TagCod,const char *TagTxt);
 static void Tag_PutIconDisable (long TagCod,const char *TagTxt);
@@ -122,57 +118,6 @@ void Tag_PutIconToEditTags (void)
   }
 
 /*****************************************************************************/
-/******************* Check if current course has test tags *******************/
-/*****************************************************************************/
-// Return the number of rows of the result
-
-bool Tag_CheckIfCurrentCrsHasTestTags (void)
-  {
-   /***** Get available tags from database *****/
-   return (DB_QueryCOUNT ("can not check if course has tags",
-			  "SELECT COUNT(*)"
-			   " FROM tst_tags"
-			  " WHERE CrsCod=%ld",
-			  Gbl.Hierarchy.Crs.CrsCod) != 0);
-  }
-
-/*****************************************************************************/
-/********* Get all (enabled or disabled) test tags for this course ***********/
-/*****************************************************************************/
-// Return the number of rows of the result
-
-unsigned Tag_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
-  {
-   /***** Get available tags from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get available tags",
-				     "SELECT TagCod,"	// row[0]
-					    "TagTxt,"	// row[1]
-					    "TagHidden"	// row[2]
-				      " FROM tst_tags"
-				     " WHERE CrsCod=%ld"
-				     " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/********************** Get enabled test tags for this course ****************/
-/*****************************************************************************/
-// Return the number of rows of the result
-
-unsigned Tag_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
-  {
-   /***** Get available not hidden tags from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-				     "SELECT TagCod,"	// row[0]
-					    "TagTxt"	// row[1]
-				      " FROM tst_tags"
-				     " WHERE CrsCod=%ld"
-				       " AND TagHidden='N'"
-				     " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /******************************* Enable a test tag ***************************/
 /*****************************************************************************/
 
@@ -181,7 +126,7 @@ void Tag_EnableTag (void)
    long TagCod = Tag_GetParamTagCode ();
 
    /***** Change tag status to enabled *****/
-   Tag_EnableOrDisableTag (TagCod,false);
+   Tag_DB_EnableOrDisableTag (TagCod,false);
 
    /***** Show again the form to edit tags *****/
    Tag_ShowFormEditTags ();
@@ -196,29 +141,10 @@ void Tag_DisableTag (void)
    long TagCod = Tag_GetParamTagCode ();
 
    /***** Change tag status to disabled *****/
-   Tag_EnableOrDisableTag (TagCod,true);
+   Tag_DB_EnableOrDisableTag (TagCod,true);
 
    /***** Show again the form to edit tags *****/
    Tag_ShowFormEditTags ();
-  }
-
-/*****************************************************************************/
-/********** Change visibility of an existing tag into tst_tags table *********/
-/*****************************************************************************/
-
-static void Tag_EnableOrDisableTag (long TagCod,bool TagHidden)
-  {
-   /***** Insert new tag into tst_tags table *****/
-   DB_QueryUPDATE ("can not update the visibility of a tag",
-		   "UPDATE tst_tags"
-		     " SET TagHidden='%c',"
-		          "ChangeTime=NOW()"
-                   " WHERE TagCod=%ld"
-                     " AND CrsCod=%ld",
-		   TagHidden ? 'Y' :
-			       'N',
-		   TagCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -273,7 +199,7 @@ void Tag_RenameTag (void)
 						// are not the same (case insensitively)
 	    /* Check if the new tag text is equal to any of the tags
 	       already present in the database */
-	    if ((ExistingTagCod = Tag_GetTagCodFromTagTxt (NewTagTxt)) > 0)
+	    if ((ExistingTagCod = Tag_DB_GetTagCodFromTagTxt (NewTagTxt)) > 0)
 	       // The new tag was already in database
 	       ComplexRenaming = true;
 
@@ -286,7 +212,7 @@ void Tag_RenameTag (void)
 		   - If the new tag did not exist for a question ==>
 		     change old tag to new tag in tst_question_tags *****/
 	    /* Get tag code of the old tag */
-	    if ((OldTagCod = Tag_GetTagCodFromTagTxt (OldTagTxt)) <= 0)
+	    if ((OldTagCod = Tag_DB_GetTagCodFromTagTxt (OldTagTxt)) <= 0)
 	       Err_WrongTagExit ();
 
 	    /* Create a temporary table with all the question codes
@@ -362,71 +288,31 @@ void Tag_RenameTag (void)
   }
 
 /*****************************************************************************/
-/***************** Check if this tag exists for current course ***************/
-/*****************************************************************************/
-
-static long Tag_GetTagCodFromTagTxt (const char *TagTxt)
-  {
-   /***** Get tag code from database *****/
-   return DB_QuerySELECTCode ("can not get tag",
-			      "SELECT TagCod"
-			       " FROM tst_tags"
-			      " WHERE CrsCod=%ld"
-			        " AND TagTxt='%s'",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      TagTxt);
-  }
-
-/*****************************************************************************/
 /*********************** Insert tags in the tags table ***********************/
 /*****************************************************************************/
 
 void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags)
   {
    unsigned NumTag;
-   unsigned TagIdx;
+   unsigned TagInd;
    long TagCod;
 
    /***** For each tag... *****/
-   for (NumTag = 0, TagIdx = 0;
-        TagIdx < Tags->Num;
+   for (NumTag = 0, TagInd = 0;
+        TagInd < Tags->Num;
         NumTag++)
       if (Tags->Txt[NumTag][0])
         {
          /***** Check if this tag exists for current course *****/
-         if ((TagCod = Tag_GetTagCodFromTagTxt (Tags->Txt[NumTag])) < 0)
+         if ((TagCod = Tag_DB_GetTagCodFromTagTxt (Tags->Txt[NumTag])) < 0)
             /* This tag is new for current course. Add it to tags table */
-            TagCod = Tag_CreateNewTag (Gbl.Hierarchy.Crs.CrsCod,Tags->Txt[NumTag]);
+            TagCod = Tag_DB_CreateNewTag (Gbl.Hierarchy.Crs.CrsCod,Tags->Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
-         DB_QueryINSERT ("can not create tag",
-			 "INSERT INTO tst_question_tags"
-                         " (QstCod,TagCod,TagInd)"
-                         " VALUES"
-                         " (%ld,%ld,%u)",
-			 QstCod,
-			 TagCod,
-			 TagIdx);
+         Tag_DB_AddTagToQst (QstCod,TagCod,TagInd);
 
-         TagIdx++;
+         TagInd++;
         }
-  }
-
-/*****************************************************************************/
-/********************* Insert new tag into tst_tags table ********************/
-/*****************************************************************************/
-
-static long Tag_CreateNewTag (long CrsCod,const char *TagTxt)
-  {
-   /***** Insert new tag into tst_tags table *****/
-   return
-   DB_QueryINSERTandReturnCode ("can not create new tag",
-				"INSERT INTO tst_tags"
-				" (CrsCod,ChangeTime,TagTxt,TagHidden)"
-				" VALUES"
-				" (%ld,NOW(),'%s','Y')",	// Hidden by default
-				CrsCod,
-				TagTxt);
   }
 
 /*****************************************************************************/
@@ -455,81 +341,84 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
    */
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Tags);
-   HTM_TD_End ();
-
-   /***** Select all tags *****/
-   HTM_TD_Begin ("class=\"LT\"");
-
-   HTM_TABLE_BeginPadding (2);
-   HTM_TR_Begin (NULL);
-   if (!ShowOnlyEnabledTags)
-      HTM_TD_Empty (1);
-
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
-		       Tags->All ? " checked=\"checked\"" :
-			           "");
-   HTM_TxtF ("&nbsp;%s",Txt_All_tags);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Select tags one by one *****/
-   for (NumTag = 1;
-	NumTag <= Tags->Num;
-	NumTag++)
-     {
-      row = mysql_fetch_row (mysql_res);
-      HTM_TR_Begin (NULL);
-
-      if (!ShowOnlyEnabledTags)
-        {
-         TagHidden = (row[2][0] == 'Y');
-         HTM_TD_Begin ("class=\"LM\"");
-         Ico_PutIconOff (TagHidden ? "eye-slash-red.svg" :
-                                     "eye-green.svg",
-			 TagHidden ? Txt_Tag_not_allowed :
-			             Txt_Tag_allowed);
-         HTM_TD_End ();
-        }
-
-      Checked = false;
-      if (Tags->List)
-        {
-         Ptr = Tags->List;
-         while (*Ptr)
-           {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
-            if (!strcmp (row[1],TagText))
-              {
-               Checked = true;
-               break;
-              }
-           }
-        }
-
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
-			  row[1],
-			  Checked ? " checked=\"checked\"" :
-				    "");
-      HTM_TxtF ("&nbsp;%s",row[1]);
-      HTM_LABEL_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TxtColon (Txt_Tags);
       HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+      /***** Select all tags *****/
+      HTM_TD_Begin ("class=\"LT\"");
 
-   HTM_TABLE_End ();
-   HTM_TD_End ();
+      HTM_TABLE_BeginPadding (2);
+
+	 HTM_TR_Begin (NULL);
+
+	    if (!ShowOnlyEnabledTags)
+	       HTM_TD_Empty (1);
+
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_INPUT_CHECKBOX ("AllTags",HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
+				      Tags->All ? " checked=\"checked\"" :
+						  "");
+		  HTM_TxtF ("&nbsp;%s",Txt_All_tags);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Select tags one by one *****/
+	 for (NumTag = 1;
+	      NumTag <= Tags->Num;
+	      NumTag++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
+	    HTM_TR_Begin (NULL);
+
+	       if (!ShowOnlyEnabledTags)
+		 {
+		  TagHidden = (row[2][0] == 'Y');
+		  HTM_TD_Begin ("class=\"LM\"");
+		     Ico_PutIconOff (TagHidden ? "eye-slash-red.svg" :
+						 "eye-green.svg",
+				     TagHidden ? Txt_Tag_not_allowed :
+						 Txt_Tag_allowed);
+		  HTM_TD_End ();
+		 }
+
+	       Checked = false;
+	       if (Tags->List)
+		 {
+		  Ptr = Tags->List;
+		  while (*Ptr)
+		    {
+		     Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+		     if (!strcmp (row[1],TagText))
+		       {
+			Checked = true;
+			break;
+		       }
+		    }
+		 }
+
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_LABEL_Begin ("class=\"DAT\"");
+		     HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
+					 "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
+					 row[1],
+					 Checked ? " checked=\"checked\"" :
+						   "");
+		     HTM_TxtF ("&nbsp;%s",row[1]);
+		  HTM_LABEL_End ();
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+	   }
+
+	 HTM_TABLE_End ();
+      HTM_TD_End ();
+
    HTM_TR_End ();
   }
 
@@ -549,47 +438,47 @@ void Tag_ShowFormEditTags (void)
    long TagCod;
 
    /***** Get current tags in current course *****/
-   if ((NumTags = Tag_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_Tags,
                          NULL,NULL,
                          Hlp_ASSESSMENT_Questions_editing_tags,Box_NOT_CLOSABLE,2);
 
-      /***** Show tags *****/
-      for (NumTag = 0;
-	   NumTag < NumTags;
-	   NumTag++)
-        {
-         row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] TagCod
-	 row[1] TagTxt
-	 row[2] TagHidden
-	 */
-         if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Err_WrongTagExit ();
+	 /***** Show tags *****/
+	 for (NumTag = 0;
+	      NumTag < NumTags;
+	      NumTag++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
+	    /*
+	    row[0] TagCod
+	    row[1] TagTxt
+	    row[2] TagHidden
+	    */
+	    if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongTagExit ();
 
-         HTM_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-         /* Form to enable / disable this tag */
-         if (row[2][0] == 'Y')	// Tag disabled
-            Tag_PutIconEnable (TagCod,row[1]);
-         else
-            Tag_PutIconDisable (TagCod,row[1]);
+	       /* Form to enable / disable this tag */
+	       if (row[2][0] == 'Y')	// Tag disabled
+		  Tag_PutIconEnable (TagCod,row[1]);
+	       else
+		  Tag_PutIconDisable (TagCod,row[1]);
 
-         /* Form to rename this tag */
-         HTM_TD_Begin ("class=\"LM\"");
-         Frm_BeginForm (ActRenTag);
-         Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
-	 HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
-	                 HTM_SUBMIT_ON_CHANGE,
-			 "size=\"36\" required=\"required\"");
-         Frm_EndForm ();
-         HTM_TD_End ();
+	       /* Form to rename this tag */
+	       HTM_TD_Begin ("class=\"LM\"");
+		  Frm_BeginForm (ActRenTag);
+		  Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
+		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
+				     HTM_SUBMIT_ON_CHANGE,
+				     "size=\"36\" required=\"required\"");
+		  Frm_EndForm ();
+	       HTM_TD_End ();
 
-         HTM_TR_End ();
-        }
+	    HTM_TR_End ();
+	   }
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -610,13 +499,13 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
    extern const char *Txt_Tag_X_not_allowed_Click_to_allow_it;
 
    HTM_TD_Begin ("class=\"BM\"");
-   Frm_BeginForm (ActEnaTag);
-   Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   Ico_PutIconLink ("eye-slash-red.svg",
-		    Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
-				        TagTxt));
-   Str_FreeString ();
-   Frm_EndForm ();
+      Frm_BeginForm (ActEnaTag);
+      Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
+	 Ico_PutIconLink ("eye-slash-red.svg",
+			  Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
+					      TagTxt));
+	 Str_FreeString ();
+      Frm_EndForm ();
    HTM_TD_End ();
   }
 
@@ -629,45 +518,12 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
    extern const char *Txt_Tag_X_allowed_Click_to_disable_it;
 
    HTM_TD_Begin ("class=\"BM\"");
-   Frm_BeginForm (ActDisTag);
-   Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-   Ico_PutIconLink ("eye-green.svg",
-		    Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
-				        TagTxt));
-   Str_FreeString ();
-   Frm_EndForm ();
+      Frm_BeginForm (ActDisTag);
+      Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
+	 Ico_PutIconLink ("eye-green.svg",
+			  Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
+					      TagTxt));
+	 Str_FreeString ();
+      Frm_EndForm ();
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/************************** Remove tags from a question **********************/
-/*****************************************************************************/
-
-void Tag_RemTagsFromQst (long QstCod)
-  {
-   /***** Remove tags *****/
-   DB_QueryDELETE ("can not remove the tags of a question",
-		   "DELETE FROM tst_question_tags"
-		   " WHERE QstCod=%ld",
-		   QstCod);
-  }
-
-/*****************************************************************************/
-/********************** Remove unused tags in a course ***********************/
-/*****************************************************************************/
-
-void Tag_RemoveUnusedTagsFromCrs (long CrsCod)
-  {
-   /***** Remove unused tags from tst_tags *****/
-   DB_QueryDELETE ("can not remove unused tags",
-		   "DELETE FROM tst_tags"
-	           " WHERE CrsCod=%ld"
-	             " AND TagCod NOT IN"
-			 " (SELECT DISTINCT tst_question_tags.TagCod"
-			    " FROM tst_questions,"
-			          "tst_question_tags"
-			   " WHERE tst_questions.CrsCod=%ld"
-			     " AND tst_questions.QstCod=tst_question_tags.QstCod)",
-		   CrsCod,
-		   CrsCod);
   }
