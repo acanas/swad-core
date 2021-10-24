@@ -36,12 +36,6 @@
 #define Svy_MAX_CHARS_SURVEY_TITLE	(128 - 1)	// 127
 #define Svy_MAX_BYTES_SURVEY_TITLE	((Svy_MAX_CHARS_SURVEY_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Svy_NUM_DATES 2
-typedef enum
-  {
-   Svy_START_TIME = 0,
-   Svy_END_TIME   = 1,
-  } Svy_StartOrEndTime_t;
 #define Svy_ORDER_DEFAULT Dat_STR_TIME
 
 struct Svy_Surveys
@@ -63,7 +57,7 @@ struct Svy_Survey
    unsigned Roles;	// Example: if survey can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
-   time_t TimeUTC[Svy_NUM_DATES];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;	// Number of questions in the survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey
    struct

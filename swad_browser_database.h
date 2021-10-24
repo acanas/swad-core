@@ -104,7 +104,7 @@ unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod);
 unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 
 //------------------------------- Hidden files --------------------------------
-void Brw_DB_ChangeFileOrFolderHidden (const char Path[PATH_MAX + 1],bool IsHidden);
+void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],bool Hide);
 unsigned Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingPath (MYSQL_RES **mysql_res,
                                                            const char *Path);
 bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct FileMetadata *FileMetadata);

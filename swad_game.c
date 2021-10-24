@@ -1187,7 +1187,7 @@ void Gam_HideGame (void)
       Err_NoPermissionExit ();
 
    /***** Hide game *****/
-   Gam_DB_HideGame (Game.GamCod);
+   Gam_DB_HideOrUnhideGame (Game.GamCod,true);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);
@@ -1218,7 +1218,7 @@ void Gam_UnhideGame (void)
       Err_NoPermissionExit ();
 
    /***** Unhide game *****/
-   Gam_DB_UnhideGame (Game.GamCod);
+   Gam_DB_HideOrUnhideGame (Game.GamCod,false);
 
    /***** Show games again *****/
    Gam_ListAllGames (&Games);

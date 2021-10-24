@@ -613,7 +613,7 @@ static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,bool Hide)
 
    /***** Mark file as hidden/visible in database *****/
    if (Ban->Hidden != Hide)
-      Ban_DB_ShowOrHideBanner (Ban->BanCod,Hide);
+      Ban_DB_HideOrUnhideBanner (Ban->BanCod,Hide);
   }
 
 /*****************************************************************************/

@@ -40,8 +40,7 @@
 //--------------------------------- Games -------------------------------------
 long Gam_DB_CreateGame (const struct Gam_Game *Game,const char *Txt);
 void Gam_DB_UpdateGame (const struct Gam_Game *Game,const char *Txt);
-void Gam_DB_HideGame (long GamCod);
-void Gam_DB_UnhideGame (long GamCod);
+void Gam_DB_HideOrUnhideGame (long GamCod,bool Hide);
 
 unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder);
 unsigned Gam_DB_GetDataOfGameByCod (MYSQL_RES **mysql_res,long GamCod);

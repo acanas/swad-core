@@ -40,7 +40,7 @@
 
 long Prg_DB_InsertItem (const struct Prg_Item *Item,const char *Txt);
 void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt);
-void Prg_DB_HideUnhideItem (long ItmCod,char YN);
+void Prg_DB_HideOrUnhideItem (long ItmCod,bool Hide);
 void Prg_DB_UpdateIndexRange (long Diff,long Begin,long End);
 void Prg_DB_LockTable (void);
 void Prg_DB_UnlockTable (void);

@@ -1269,8 +1269,8 @@ void Agd_HideEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Set event private *****/
-   Agd_DB_HideEvent (&AgdEvent);
+   /***** Hide event *****/
+   Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,true);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);
@@ -1299,8 +1299,8 @@ void Agd_UnhideEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Set event public *****/
-   Agd_DB_UnhideEvent (&AgdEvent);
+   /***** Unhide event *****/
+   Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,false);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda (&Agenda);

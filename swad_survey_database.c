@@ -30,7 +30,7 @@
 // #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
-// #include <string.h>		// For string functions
+#include <string.h>		// For string functions
 
 // #include "swad_attendance.h"
 // #include "swad_box.h"
@@ -61,6 +61,12 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+const char *Svy_DB_StrAnswerTypes[Svy_NUM_ANS_TYPES] =
+  {
+   [Svy_ANS_UNIQUE_CHOICE  ] = "unique_choice",
+   [Svy_ANS_MULTIPLE_CHOICE] = "multiple_choice",
+  };
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -72,6 +78,73 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
+/*****************************************************************************/
+/*************************** Create a new survey *****************************/
+/*****************************************************************************/
+
+long Svy_DB_CreateSurvey (const struct Svy_Survey *Svy,const char *Txt)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create new survey",
+				"INSERT INTO svy_surveys"
+				" (Scope,Cod,Hidden,Roles,UsrCod,"
+				  "StartTime,EndTime,"
+				  "Title,Txt)"
+				" VALUES"
+				" ('%s',%ld,'N',%u,%ld,"
+				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
+				  "'%s','%s')",
+				Sco_GetDBStrFromScope (Svy->Scope),
+				Svy->Cod,
+				Svy->Roles,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				Svy->TimeUTC[Dat_STR_TIME],
+				Svy->TimeUTC[Dat_END_TIME],
+				Svy->Title,
+				Txt);
+  }
+
+/*****************************************************************************/
+/************************* Update an existing survey *************************/
+/*****************************************************************************/
+
+void Svy_DB_UpdateSurvey (const struct Svy_Survey *Svy,const char *Txt)
+  {
+   DB_QueryUPDATE ("can not update survey",
+		   "UPDATE svy_surveys"
+	             " SET Scope='%s',"
+	                  "Cod=%ld,"
+	                  "Roles=%u,"
+	                  "StartTime=FROM_UNIXTIME(%ld),"
+	                  "EndTime=FROM_UNIXTIME(%ld),"
+	                  "Title='%s',"
+	                  "Txt='%s'"
+                   " WHERE SvyCod=%ld",
+		   Sco_GetDBStrFromScope (Svy->Scope),
+		   Svy->Cod,
+		   Svy->Roles,
+		   Svy->TimeUTC[Dat_STR_TIME],
+		   Svy->TimeUTC[Dat_END_TIME],
+		   Svy->Title,
+		   Txt,
+		   Svy->SvyCod);
+  }
+
+/*****************************************************************************/
+/****************************** Hide a project *******************************/
+/*****************************************************************************/
+
+void Svy_DB_HideOrUnhideSurvey (long SvyCod,bool Hide)
+  {
+   DB_QueryUPDATE ("can not hide/unhide survey",
+		   "UPDATE svy_surveys"
+		     " SET Hidden='%c'"
+		   " WHERE SvyCod=%ld",
+		   Hide ? 'Y' :
+			  'N',
+		   SvyCod);
+  }
 
 /*****************************************************************************/
 /*********** Update number of users notified in table of surveys *************/
@@ -635,6 +708,58 @@ void Svy_DB_RemoveSvy (long SvyCod)
   }
 
 /*****************************************************************************/
+/************* Remove all surveys of a place on the hierarchy   **************/
+/************* (country, institution, center, degree or course) **************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveSvysIn (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove all the surveys"
+		   " in a place on the hierarchy",
+		   "DELETE FROM svy_surveys"
+	           " WHERE Scope='%s'"
+	             " AND Cod=%ld",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
+  }
+
+/*****************************************************************************/
+/************************ Create groups of a survey **************************/
+/*****************************************************************************/
+
+void Svy_DB_CreateGrp (long SvyCod,long GrpCod)
+  {
+   DB_QueryINSERT ("can not associate a group to a survey",
+		   "INSERT INTO svy_groups"
+		   " (SvyCod,GrpCod)"
+		   " VALUES"
+		   " (%ld,%ld)",
+		   SvyCod,
+		   GrpCod);
+  }
+
+/*****************************************************************************/
+/****************** Get group names associated to a survey *******************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetGrpNamesAssociatedToSvy (MYSQL_RES **mysql_res,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of a survey",
+		   "SELECT grp_types.GrpTypName,"	// row[0]
+			  "grp_groups.GrpName"		// row[1]
+		    " FROM svy_groups,"
+			  "grp_groups,"
+			  "grp_types"
+		   " WHERE svy_groups.SvyCod=%ld"
+		     " AND svy_groups.GrpCod=grp_groups.GrpCod"
+		     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
 /************ Check if I belong to any of the groups of a survey *************/
 /*****************************************************************************/
 
@@ -656,18 +781,6 @@ bool Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 				     " AND grp_users.GrpCod=svy_groups.GrpCod))",
 			  SvyCod,
 			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
-  }
-
-/*****************************************************************************/
-/************************* Remove groups of a survey *************************/
-/*****************************************************************************/
-
-void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod)
-  {
-   DB_QueryDELETE ("can not remove the groups associated to a survey",
-		   "DELETE FROM svy_groups"
-		   " WHERE SvyCod=%ld",
-		   SvyCod);
   }
 
 /*****************************************************************************/
@@ -699,6 +812,77 @@ void Svy_DB_RemoveGroup (long GrpCod)
 		   "DELETE FROM svy_groups"
 		   " WHERE GrpCod=%ld",
 		   GrpCod);
+  }
+
+/*****************************************************************************/
+/************************* Remove groups of a survey *************************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod)
+  {
+   DB_QueryDELETE ("can not remove the groups associated to a survey",
+		   "DELETE FROM svy_groups"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
+  }
+
+/*****************************************************************************/
+/********** Remove groups of all surveys of a place on the hierarchy *********/
+/********** (country, institution, center, degree or course)         *********/
+/*****************************************************************************/
+
+void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove all the groups"
+	           " associated to surveys of a course",
+		   "DELETE FROM svy_groups"
+	           " USING svy_surveys,"
+	                  "svy_groups"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_groups.SvyCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
+  }
+
+/*****************************************************************************/
+/*************************** Create a new question ***************************/
+/*****************************************************************************/
+
+long Svy_DB_CreateQuestion (long SvyCod,unsigned QstInd,
+                            Svy_AnswerType_t AnswerType,
+                            const char Stem[Cns_MAX_BYTES_TEXT + 1])
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create question",
+				"INSERT INTO svy_questions"
+				" (SvyCod,QstInd,AnsType,Stem)"
+				" VALUES"
+				" (%ld,%u,'%s','%s')",
+				SvyCod,
+				QstInd,
+				Svy_DB_StrAnswerTypes[AnswerType],
+				Stem);
+  }
+
+/*****************************************************************************/
+/************************ Create an existing question ************************/
+/*****************************************************************************/
+
+void Svy_DB_UpdateQuestion (long SvyCod,long QstCod,
+                            Svy_AnswerType_t AnswerType,
+                            const char Stem[Cns_MAX_BYTES_TEXT + 1])
+  {
+   DB_QueryUPDATE ("can not update question",
+		   "UPDATE svy_questions"
+		     " SET Stem='%s',"
+			  "AnsType='%s'"
+		   " WHERE QstCod=%ld"
+		     " AND SvyCod=%ld",	// Extra check
+		   Stem,
+		   Svy_DB_StrAnswerTypes[AnswerType],
+		   QstCod,
+		   SvyCod);
   }
 
 /*****************************************************************************/
@@ -764,6 +948,24 @@ unsigned Svy_DB_GetSurveyQsts (MYSQL_RES **mysql_res,long SvyCod)
   }
 
 /*****************************************************************************/
+/************ Get question data from question code in a survey ***************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetQstDataByCod (MYSQL_RES **mysql_res,long QstCod,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get a question",
+		   "SELECT QstInd,"	// row[0]
+			  "AnsType,"	// row[1]
+			  "Stem"	// row[2]
+		    " FROM svy_questions"
+		   " WHERE QstCod=%ld"
+		     " AND SvyCod=%ld",	// Extra check
+		   QstCod,
+		   SvyCod);
+   }
+
+/*****************************************************************************/
 /************ Get question index from question code in a survey **************/
 /*****************************************************************************/
 
@@ -774,6 +976,20 @@ unsigned Svy_DB_GetQstIndFromQstCod (long QstCod)
 				   " FROM svy_questions"
 				  " WHERE QstCod=%ld",
 				  QstCod);
+  }
+
+/*****************************************************************************/
+/*********************** Get last question index *****************************/
+/*****************************************************************************/
+
+unsigned Svy_DB_GetLastQstInd (MYSQL_RES **mysql_res,long SvyCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get last question index",
+		   "SELECT MAX(QstInd)"		// row[0]
+		    " FROM svy_questions"
+		   " WHERE SvyCod=%ld",
+		   SvyCod);
   }
 
 /*****************************************************************************/
@@ -798,6 +1014,57 @@ void Svy_DB_RemoveQstsSvy (long SvyCod)
 		   "DELETE FROM svy_questions"
                    " WHERE SvyCod=%ld",
 		   SvyCod);
+  }
+
+/*****************************************************************************/
+/******** Remove questions in all surveys of a place on the hierarchy ********/
+/******** (country, institution, center, degree or course)            ********/
+/*****************************************************************************/
+
+void Svy_DB_RemoveQstsSvysIn (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove questions of surveys"
+		   " in a place on the hierarchy",
+		   "DELETE FROM svy_questions"
+	           " USING svy_surveys,"
+	                  "svy_questions"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_questions.SvyCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
+  }
+
+/*****************************************************************************/
+/******************************* Create answer *******************************/
+/*****************************************************************************/
+
+void Svy_DB_CreateAnswer (long QstCod,unsigned AnsInd,const char *Text)
+  {
+   DB_QueryINSERT ("can not create answer",
+		   "INSERT INTO svy_answers"
+		   " (QstCod,AnsInd,NumUsrs,Answer)"
+		   " VALUES"
+		   " (%ld,%u,0,'%s')",
+		   QstCod,
+		   AnsInd,
+		   Text);
+  }
+
+/*****************************************************************************/
+/**************************** Update answer text *****************************/
+/*****************************************************************************/
+
+void Svy_DB_UpdateAnswerText (long QstCod,unsigned AnsInd,const char *Text)
+  {
+   DB_QueryUPDATE ("can not update answer",
+		   "UPDATE svy_answers"
+		     " SET Answer='%s'"
+		   " WHERE QstCod=%ld"
+		     " AND AnsInd=%u",
+		   Text,
+		   QstCod,
+		   AnsInd);
   }
 
 /*****************************************************************************/
@@ -872,6 +1139,37 @@ unsigned Svy_DB_GetAnswersQst (MYSQL_RES **mysql_res,long QstCod)
   }
 
 /*****************************************************************************/
+/*********** Convert a string with the answer type to answer type ************/
+/*****************************************************************************/
+
+Svy_AnswerType_t Svy_DB_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB)
+  {
+   Svy_AnswerType_t AnsType;
+
+   for (AnsType  = (Svy_AnswerType_t) 0;
+	AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
+	AnsType++)
+      if (!strcmp (StrAnsTypeDB,Svy_DB_StrAnswerTypes[AnsType]))
+         return AnsType;
+
+   return (Svy_AnswerType_t) 0;
+  }
+
+/*****************************************************************************/
+/********************** Remove an answer from a question *********************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveAnswerQst (long QstCod,unsigned AnsInd)
+  {
+   DB_QueryDELETE ("can not delete answer",
+		   "DELETE FROM svy_answers"
+		   " WHERE QstCod=%ld"
+		     " AND AnsInd=%u",
+		   QstCod,
+		   AnsInd);
+  }
+
+/*****************************************************************************/
 /********************* Remove answers of a survey question *******************/
 /*****************************************************************************/
 
@@ -896,6 +1194,27 @@ void Svy_DB_RemoveAnswersSvy (long SvyCod)
                    " WHERE svy_questions.SvyCod=%ld"
                    " AND svy_questions.QstCod=svy_answers.QstCod",
 		   SvyCod);
+  }
+
+/*****************************************************************************/
+/********* Remove answers to all surveys of a place on the hierarchy *********/
+/********* (country, institution, center, degree or course)          *********/
+/*****************************************************************************/
+
+void Svy_DB_RemoveAnswersSvysIn (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove answers of surveys"
+		   " in a place on the hierarchy",
+		   "DELETE FROM svy_answers"
+	           " USING svy_surveys,"
+	                  "svy_questions,"
+	                  "svy_answers"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_questions.SvyCod"
+                     " AND svy_questions.QstCod=svy_answers.QstCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
   }
 
 /*****************************************************************************/
@@ -943,7 +1262,7 @@ unsigned Svy_DB_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
   }
 
 /*****************************************************************************/
-/******************** Remove all the users in this survey ********************/
+/********************** Remove all users in this survey **********************/
 /*****************************************************************************/
 
 void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod)
@@ -952,4 +1271,23 @@ void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod)
 		   "DELETE FROM svy_users"
 		   " WHERE SvyCod=%ld",
 		   SvyCod);
+  }
+
+/*****************************************************************************/
+/************ Remove all the surveys of a place on the hierarchy *************/
+/************ (country, institution, center, degree or course)   *************/
+/*****************************************************************************/
+
+void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl_Level_t Scope,long Cod)
+  {
+   DB_QueryDELETE ("can not remove users"
+	           " who had answered surveys in a place on the hierarchy",
+		   "DELETE FROM svy_users"
+	           " USING svy_surveys,"
+	                  "svy_users"
+                   " WHERE svy_surveys.Scope='%s'"
+                     " AND svy_surveys.Cod=%ld"
+                     " AND svy_surveys.SvyCod=svy_users.SvyCod",
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
   }

@@ -278,27 +278,18 @@ void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
   }
 
 /*****************************************************************************/
-/************************** Hide/unhide an assignment ************************/
+/************************* Hide/unhide an assignment *************************/
 /*****************************************************************************/
 
-void Asg_DB_HideAssignment (long AsgCod)
+void Asg_DB_HideOrUnhideAssignment (long AsgCod,bool Hide)
   {
-   DB_QueryUPDATE ("can not hide assignment",
+   DB_QueryUPDATE ("can not hide/unhide assignment",
 		   "UPDATE asg_assignments"
-		     " SET Hidden='Y'"
-		   " WHERE AsgCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-                   AsgCod,
-                   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-void Asg_DB_UnhideAssignment (long AsgCod)
-  {
-   DB_QueryUPDATE ("can not unhide assignment",
-		   "UPDATE asg_assignments"
-		     " SET Hidden='N'"
+		     " SET Hidden='%c'"
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",
+		   Hide ? 'Y' :
+			  'N',
                    AsgCod,
                    Gbl.Hierarchy.Crs.CrsCod);
   }

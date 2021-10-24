@@ -932,7 +932,7 @@ void Att_HideAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Hide attendance event *****/
-   Att_DB_HideAttEvent (Event.AttCod);
+   Att_DB_HideOrUnhideAttEvent (Event.AttCod,true);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -954,7 +954,7 @@ void Att_UnhideAttEvent (void)
    Att_GetDataOfAttEventByCodAndCheckCrs (&Event);
 
    /***** Unhide attendance event *****/
-   Att_DB_UnhideAttEvent (Event.AttCod);
+   Att_DB_HideOrUnhideAttEvent (Event.AttCod,false);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();

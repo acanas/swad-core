@@ -7741,7 +7741,7 @@ void Brw_SetDocumentAsVisible (void)
    /***** Change file to visible *****/
    if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
                                                  Gbl.FileBrowser.FilFolLnk.Full))
-      Brw_DB_ChangeFileOrFolderHidden (Gbl.FileBrowser.FilFolLnk.Full,false);
+      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,false);
 
    /***** Remove the affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,
@@ -7765,7 +7765,7 @@ void Brw_SetDocumentAsHidden (void)
           set it as hidden *****/
    if (!Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Gbl.FileBrowser.FilFolLnk.Type,
                                                   Gbl.FileBrowser.FilFolLnk.Full))
-      Brw_DB_ChangeFileOrFolderHidden (Gbl.FileBrowser.FilFolLnk.Full,true);
+      Brw_DB_HideOrUnhideFileOrFolder (Gbl.FileBrowser.FilFolLnk.Full,true);
 
    /***** Remove the affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (Gbl.FileBrowser.Type,

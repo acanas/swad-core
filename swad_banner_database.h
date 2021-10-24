@@ -46,7 +46,7 @@ unsigned Ban_DB_GetDataOfBannerByCod (MYSQL_RES **mysql_res,long BanCod);
 bool Ban_DB_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod);
 
 void Ban_DB_CreateBanner (const struct Ban_Banner *Ban);
-void Ban_DB_ShowOrHideBanner (long BanCod,bool Hide);
+void Ban_DB_HideOrUnhideBanner (long BanCod,bool Hide);
 void Ban_DB_UpdateBanName (long BanCod,const char *FieldName,
 			   const char *NewBanName);
 void Ban_DB_UpdateBanImg (long BanCod,

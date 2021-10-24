@@ -100,18 +100,19 @@ void Prg_DB_UpdateItem (const struct Prg_Item *Item,const char *Txt)
   }
 
 /*****************************************************************************/
-/************************* Hide/unhide program item **************************/
+/************************* Hide/unhide a program item *************************/
 /*****************************************************************************/
 
-void Prg_DB_HideUnhideItem (long ItmCod,char YN)
+void Prg_DB_HideOrUnhideItem (long ItmCod,bool Hide)
   {
-   DB_QueryUPDATE ("can not change program item",
+   DB_QueryUPDATE ("can not hide/unhide program item",
 		   "UPDATE prg_items"
 		     " SET Hidden='%c'"
 		   " WHERE ItmCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
-		   YN,
-                   ItmCod,
+		   Hide ? 'Y' :
+			  'N',
+		   ItmCod,
                    Gbl.Hierarchy.Crs.CrsCod);
   }
 

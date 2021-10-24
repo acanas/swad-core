@@ -115,12 +115,12 @@ void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt)
   }
 
 /*****************************************************************************/
-/***************************** Hide/unhide exam ******************************/
+/*************************** Hide/unhide an exam *****************************/
 /*****************************************************************************/
 
-void Exa_DB_HideUnhideExam (long ExaCod,bool Hide)
+void Exa_DB_HideOrUnhideExam (long ExaCod,bool Hide)
   {
-   DB_QueryUPDATE ("can not hide exam",
+   DB_QueryUPDATE ("can not hide/unhide exam",
 		   "UPDATE exa_exams"
 		     " SET Hidden='%c'"
 		   " WHERE ExaCod=%ld",
@@ -767,7 +767,6 @@ long Exa_DB_GetSetCodFromSetInd (long ExaCod,unsigned SetInd)
 
 unsigned Exa_DB_GetMaxSetIndexInExam (long ExaCod)
   {
-   /***** Get maximum set index in an exam from database *****/
    return DB_QuerySELECTUnsigned ("can not get max set index",
 				  "SELECT MAX(SetInd)"
 				   " FROM exa_sets"

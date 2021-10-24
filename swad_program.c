@@ -166,7 +166,7 @@ static long Prg_GetParamItmCod (void);
 
 static unsigned Prg_GetNumItemFromItmCod (long ItmCod);
 
-static void Prg_HideUnhideItem (char YN);
+static void Prg_HideOrUnhideItem (bool Hide);
 
 static void Prg_MoveUpDownItem (Prg_MoveUpDown_t UpDown);
 static bool Prg_ExchangeItemRanges (int NumItemTop,int NumItemBottom);
@@ -1205,15 +1205,15 @@ void Prg_RemoveItem (void)
 
 void Prg_HideItem (void)
   {
-   Prg_HideUnhideItem ('Y');
+   Prg_HideOrUnhideItem (true);
   }
 
 void Prg_UnhideItem (void)
   {
-   Prg_HideUnhideItem ('N');
+   Prg_HideOrUnhideItem (false);
   }
 
-static void Prg_HideUnhideItem (char YN)
+static void Prg_HideOrUnhideItem (bool Hide)
   {
    struct Prg_Item Item;
    struct Prg_ItemRange ToHighlight;
@@ -1228,7 +1228,7 @@ static void Prg_HideUnhideItem (char YN)
       Err_WrongItemExit ();
 
    /***** Hide/unhide program item *****/
-   Prg_DB_HideUnhideItem (Item.Hierarchy.ItmCod,YN);
+   Prg_DB_HideOrUnhideItem (Item.Hierarchy.ItmCod,Hide);
 
    /***** Show program items highlighting subtree *****/
    Prg_SetItemRangeWithAllChildren (Prg_GetNumItemFromItmCod (Item.Hierarchy.ItmCod),

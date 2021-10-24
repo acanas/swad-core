@@ -2264,24 +2264,24 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod)
   }
 
 /*****************************************************************************/
-/***************** Change hiddeness of file in the database ******************/
+/************************ Hide/unhide file or folder *************************/
 /*****************************************************************************/
 
-void Brw_DB_ChangeFileOrFolderHidden (const char Path[PATH_MAX + 1],bool IsHidden)
+void Brw_DB_HideOrUnhideFileOrFolder (const char Path[PATH_MAX + 1],bool Hide)
   {
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
    /***** Mark file as hidden/unhidden in database *****/
-   DB_QueryUPDATE ("can not change status of a file in database",
+   DB_QueryUPDATE ("can not hide/unhide file/folder",
 		   "UPDATE brw_files"
 		     " SET Hidden='%c'"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
-	           IsHidden ? 'Y' :
-			      'N',
+	           Hide ? 'Y' :
+			  'N',
 	           (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 	           Cod,
 	           ZoneUsrCod,

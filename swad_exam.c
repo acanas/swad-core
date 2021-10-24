@@ -1255,7 +1255,7 @@ static void Exa_HideUnhideExam (bool Hide)
    Exams.ExaCod = Exam.ExaCod;
 
    /***** Unhide exam *****/
-   Exa_DB_HideUnhideExam (Exam.ExaCod,Hide);
+   Exa_DB_HideOrUnhideExam (Exam.ExaCod,Hide);
 
    /***** Show exams again *****/
    Exa_ListAllExams (&Exams);

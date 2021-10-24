@@ -54,8 +54,7 @@ bool Att_DB_CheckIfSimilarAttEventExists (const char *Field,const char *Value,lo
 
 long Att_DB_CreateAttEvent (const struct Att_Event *Event,const char *Description);
 void Att_DB_UpdateAttEvent (const struct Att_Event *Event,const char *Description);
-void Att_DB_HideAttEvent (long AttCod);
-void Att_DB_UnhideAttEvent (long AttCod);
+void Att_DB_HideOrUnhideAttEvent (long AttCod,bool Hide);
 
 void Att_DB_CreateGroup (long AttCod,long GrpCod);
 unsigned Att_DB_GetGrpCodsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod);

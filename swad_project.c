@@ -3113,7 +3113,7 @@ void Prj_HideProject (void)
 
    /***** Hide project *****/
    if (Prj_CheckIfICanEditProject (&Prj))
-      Prj_DB_HideUnhideProject (Prj.PrjCod,'Y');
+      Prj_DB_HideOrUnhideProject (Prj.PrjCod,true);
    else
       Err_NoPermissionExit ();
 
@@ -3149,7 +3149,7 @@ void Prj_UnhideProject (void)
 
    /***** Unhide project *****/
    if (Prj_CheckIfICanEditProject (&Prj))
-      Prj_DB_HideUnhideProject (Prj.PrjCod,'N');
+      Prj_DB_HideOrUnhideProject (Prj.PrjCod,false);
    else
       Err_NoPermissionExit ();
 

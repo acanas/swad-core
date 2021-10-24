@@ -1029,7 +1029,7 @@ void Asg_HideAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Hide assignment *****/
-   Asg_DB_HideAssignment (Asg.AsgCod);
+   Asg_DB_HideOrUnhideAssignment (Asg.AsgCod,true);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -1060,7 +1060,7 @@ void Asg_UnhideAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Unhide assignment *****/
-   Asg_DB_UnhideAssignment (Asg.AsgCod);
+   Asg_DB_HideOrUnhideAssignment (Asg.AsgCod,false);
 
    /***** Show all assignments again *****/
    Asg_ShowAllAssignments (&Assignments);
