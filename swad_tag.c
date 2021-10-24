@@ -172,8 +172,8 @@ void Tag_RenameTag (void)
    extern const char *Txt_The_tag_X_has_not_changed;
    char OldTagTxt[Tag_MAX_BYTES_TAG + 1];
    char NewTagTxt[Tag_MAX_BYTES_TAG + 1];
-   long ExistingTagCod;
-   long OldTagCod;
+   long ExistingTagCodNewTxt;
+   long TagCodOldTxt;
    bool ComplexRenaming;
 
    /***** Get old and new tags from the form *****/
@@ -199,81 +199,43 @@ void Tag_RenameTag (void)
 						// are not the same (case insensitively)
 	    /* Check if the new tag text is equal to any of the tags
 	       already present in the database */
-	    if ((ExistingTagCod = Tag_DB_GetTagCodFromTagTxt (NewTagTxt)) > 0)
+	    if ((ExistingTagCodNewTxt = Tag_DB_GetTagCodFromTagTxt (NewTagTxt)) > 0)
 	       // The new tag was already in database
 	       ComplexRenaming = true;
 
 	 if (ComplexRenaming)	// Renaming is not easy
 	   {
-	    /***** Complex update made to not repeat tags:
+	    /***** Complex renaming made to not repeat tags:
 		   - If the new tag existed for a question ==>
 		     delete old tag from tst_question_tags;
 		     the new tag will remain
 		   - If the new tag did not exist for a question ==>
 		     change old tag to new tag in tst_question_tags *****/
 	    /* Get tag code of the old tag */
-	    if ((OldTagCod = Tag_DB_GetTagCodFromTagTxt (OldTagTxt)) <= 0)
+	    if ((TagCodOldTxt = Tag_DB_GetTagCodFromTagTxt (OldTagTxt)) <= 0)
 	       Err_WrongTagExit ();
 
 	    /* Create a temporary table with all the question codes
 	       that had the new tag as one of their tags */
-	    DB_Query ("can not remove temporary table",
-		      "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
-
-	    DB_Query ("can not create temporary table",
-		      "CREATE TEMPORARY TABLE tst_question_tags_tmp"
-		      " ENGINE=MEMORY"
-		      " SELECT QstCod"
-		        " FROM tst_question_tags"
-	   	       " WHERE TagCod=%ld",
-		      ExistingTagCod);
+            Tag_DB_DropTmpTableQuestionsWithTag ();
+	    Tag_DB_CreateTmpTableQuestionsWithTag (ExistingTagCodNewTxt);
 
 	    /* Remove old tag in questions where it would be repeated */
-	    // New tag existed for a question ==> delete old tag
-	    DB_QueryDELETE ("can not remove a tag from some questions",
-			    "DELETE FROM tst_question_tags"
-			    " WHERE TagCod=%ld"
-			      " AND QstCod IN"
-			          " (SELECT QstCod"
-			             " FROM tst_question_tags_tmp)",
-			    OldTagCod);
-
 	    /* Change old tag to new tag in questions where it would not be repeated */
+	    // New tag existed for a question ==> delete old tag
 	    // New tag did not exist for a question ==> change old tag to new tag
-	    DB_QueryUPDATE ("can not update a tag in some questions",
-			    "UPDATE tst_question_tags"
-			      " SET TagCod=%ld"
-			    " WHERE TagCod=%ld"
-			      " AND QstCod NOT IN"
-			          " (SELECT QstCod"
-			             " FROM tst_question_tags_tmp)",
-			    ExistingTagCod,
-			    OldTagCod);
+	    Tag_DB_ComplexRenameTag (TagCodOldTxt,ExistingTagCodNewTxt);
 
 	    /* Drop temporary table, no longer necessary */
-	    DB_Query ("can not remove temporary table",
-		      "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+            Tag_DB_DropTmpTableQuestionsWithTag ();
 
 	    /***** Delete old tag from tst_tags
 		   because it is not longer used *****/
-	    DB_QueryDELETE ("can not remove old tag",
-			    "DELETE FROM tst_tags"
-			    " WHERE TagCod=%ld",
-			    OldTagCod);
+	    Tag_DB_RemoveTag (TagCodOldTxt);
 	   }
 	 else			// Renaming is easy
-	   {
 	    /***** Simple update replacing each instance of the old tag by the new tag *****/
-	    DB_QueryUPDATE ("can not update tag",
-			    "UPDATE tst_tags"
-			      " SET TagTxt='%s',"
-			           "ChangeTime=NOW()"
-			    " WHERE tst_tags.CrsCod=%ld"
-			      " AND tst_tags.TagTxt='%s'",
-			    NewTagTxt,
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    OldTagTxt);
-	   }
+	    Tag_DB_SimplexRenameTag (OldTagTxt,NewTagTxt);
 
 	 /***** Write message to show the change made *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_tag_X_has_been_renamed_as_Y,

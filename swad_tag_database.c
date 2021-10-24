@@ -35,7 +35,7 @@
 // #include "swad_error.h"
 // #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_tag.h"
+#include "swad_tag.h"
 #include "swad_tag_database.h"
 // #include "swad_theme.h"
 
@@ -96,6 +96,81 @@ void Tag_DB_AddTagToQst (long QstCod,long TagCod,unsigned TagInd)
 		   QstCod,
 		   TagCod,
 		   TagInd);
+  }
+
+/*****************************************************************************/
+/********** Create a temporary table with all the question codes *************/
+/********** that had the new tag as one of their tags            *************/
+/*****************************************************************************/
+
+void Tag_DB_CreateTmpTableQuestionsWithTag (long TagCod)
+  {
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE tst_question_tags_tmp"
+	     " ENGINE=MEMORY"
+	     " SELECT QstCod"
+	       " FROM tst_question_tags"
+	      " WHERE TagCod=%ld",
+	     TagCod);
+  }
+
+/*****************************************************************************/
+/************* Drop temporary table with all the question codes **************/
+/************* that had the new tag as one of their tags        **************/
+/*****************************************************************************/
+
+void Tag_DB_DropTmpTableQuestionsWithTag (void)
+  {
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+  }
+
+/*****************************************************************************/
+/************************* Complex renaming of tag ***************************/
+/*****************************************************************************/
+
+void Tag_DB_ComplexRenameTag (long TagCodOldTxt,long ExistingTagCodNewTxt)
+  {
+   /***** Remove old tag in questions where it would be repeated *****/
+   // New tag existed for a question ==> delete old tag
+   DB_QueryDELETE ("can not remove a tag from some questions",
+		   "DELETE FROM tst_question_tags"
+		   " WHERE TagCod=%ld"
+		     " AND QstCod IN"
+			   // Questions that already have a tag with the new name
+			 " (SELECT QstCod"
+			    " FROM tst_question_tags_tmp)",
+		   TagCodOldTxt);
+
+   /***** Change old tag to new tag in questions where it would not be repeated *****/
+   // New tag did not exist for a question ==> change old tag to new tag
+   DB_QueryUPDATE ("can not update a tag in some questions",
+		   "UPDATE tst_question_tags"
+		     " SET TagCod=%ld"
+		   " WHERE TagCod=%ld"
+		     " AND QstCod NOT IN"
+			 " (SELECT QstCod"
+			    " FROM tst_question_tags_tmp)",
+		   ExistingTagCodNewTxt,
+		   TagCodOldTxt);
+  }
+
+/*****************************************************************************/
+/**** Simple update replacing each instance of the old tag by the new tag ****/
+/*****************************************************************************/
+
+void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
+                              const char NewTagTxt[Tag_MAX_BYTES_TAG + 1])
+  {
+   DB_QueryUPDATE ("can not update tag",
+		   "UPDATE tst_tags"
+		     " SET TagTxt='%s',"
+			  "ChangeTime=NOW()"
+		   " WHERE tst_tags.CrsCod=%ld"
+		     " AND tst_tags.TagTxt='%s'",
+		   NewTagTxt,
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   OldTagTxt);
   }
 
 /*****************************************************************************/
@@ -190,11 +265,22 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
 
 void Tag_DB_RemTagsFromQst (long QstCod)
   {
-   /***** Remove tags *****/
    DB_QueryDELETE ("can not remove the tags of a question",
 		   "DELETE FROM tst_question_tags"
 		   " WHERE QstCod=%ld",
 		   QstCod);
+  }
+
+/*****************************************************************************/
+/******************************** Remove a tag *******************************/
+/*****************************************************************************/
+
+void Tag_DB_RemoveTag (long TagCod)
+  {
+   DB_QueryDELETE ("can not remove tag",
+		   "DELETE FROM tst_tags"
+		   " WHERE TagCod=%ld",
+		   TagCod);
   }
 
 /*****************************************************************************/

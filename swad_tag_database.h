@@ -45,7 +45,11 @@
 
 long Tag_DB_CreateNewTag (long CrsCod,const char *TagTxt);
 void Tag_DB_AddTagToQst (long QstCod,long TagCod,unsigned TagInd);
-
+void Tag_DB_CreateTmpTableQuestionsWithTag (long TagCod);
+void Tag_DB_DropTmpTableQuestionsWithTag (void);
+void Tag_DB_ComplexRenameTag (long TagCodOldTxt,long ExistingTagCodNewTxt);
+void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
+                              const char NewTagTxt[Tag_MAX_BYTES_TAG + 1]);
 void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden);
 
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
@@ -54,6 +58,7 @@ bool Tag_DB_CheckIfCurrentCrsHasTestTags (void);
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
 
 void Tag_DB_RemTagsFromQst (long QstCod);
+void Tag_DB_RemoveTag (long TagCod);
 void Tag_DB_RemoveUnusedTagsFromCrs (long CrsCod);
 
 #endif
