@@ -58,20 +58,6 @@ void Set_DB_UpdateMySettingsAboutLanguage (void)
   }
 
 /*****************************************************************************/
-/************** Update layout of side colums on user data table **************/
-/*****************************************************************************/
-
-void Set_DB_UpdateMySettingsAboutSideCols (void)
-  {
-   DB_QueryUPDATE ("can not update your setting about side columns",
-		   "UPDATE usr_data"
-		     " SET SideCols=%u"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Prefs.SideCols,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /******************** Update my settings about date format *******************/
 /*****************************************************************************/
 
@@ -124,6 +110,34 @@ void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu)
 		     " SET Menu=%u"
 		   " WHERE UsrCod=%ld",
 		   (unsigned) Menu,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/*********************** Update my settings about theme **********************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutTheme (const char *ThemeId)
+  {
+   DB_QueryUPDATE ("can not update your setting about theme",
+		   "UPDATE usr_data"
+		     " SET Theme='%s'"
+		   " WHERE UsrCod=%ld",
+		   ThemeId,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************** Update layout of side colums on user data table **************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutSideCols (void)
+  {
+   DB_QueryUPDATE ("can not update your setting about side columns",
+		   "UPDATE usr_data"
+		     " SET SideCols=%u"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Prefs.SideCols,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

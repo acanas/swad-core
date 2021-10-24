@@ -37,6 +37,7 @@
 #include "swad_layout.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
+#include "swad_setting_database.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -321,24 +322,24 @@ void The_PutIconsToSelectTheme (void)
    Box_BoxBegin (NULL,Txt_Theme_SKIN,
                  The_PutIconsTheme,NULL,
                  Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
-   Set_BeginSettingsHead ();
-   Set_BeginOneSettingSelector ();
-   for (Theme  = (The_Theme_t) 0;
-	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
-	Theme++)
-     {
-      HTM_DIV_Begin ("class=\"%s\"",Theme == Gbl.Prefs.Theme ? "PREF_ON" :
-        	                                               "PREF_OFF");
-      Frm_BeginForm (ActChgThe);
-      Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
-      snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
-                Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
-      Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
-      Frm_EndForm ();
-      HTM_DIV_End ();
-     }
-   Set_EndOneSettingSelector ();
-   Set_EndSettingsHead ();
+      Set_BeginSettingsHead ();
+	 Set_BeginOneSettingSelector ();
+	    for (Theme  = (The_Theme_t) 0;
+		 Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
+		 Theme++)
+	      {
+	       HTM_DIV_Begin ("class=\"%s\"",Theme == Gbl.Prefs.Theme ? "PREF_ON" :
+									"PREF_OFF");
+		  Frm_BeginForm (ActChgThe);
+		  Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
+		     snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
+			       Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
+		     Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
+		  Frm_EndForm ();
+	       HTM_DIV_End ();
+	      }
+	 Set_EndOneSettingSelector ();
+      Set_EndSettingsHead ();
    Box_BoxEnd ();
   }
 
@@ -370,12 +371,7 @@ void The_ChangeTheme (void)
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your setting about theme",
-		      "UPDATE usr_data"
-		        " SET Theme='%s'"
-		      " WHERE UsrCod=%ld",
-                      The_ThemeId[Gbl.Prefs.Theme],
-		      Gbl.Usrs.Me.UsrDat.UsrCod);
+      Set_DB_UpdateMySettingsAboutTheme (The_ThemeId[Gbl.Prefs.Theme]);
 
    /***** Set settings from current IP *****/
    Set_SetSettingsFromIP ();

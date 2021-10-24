@@ -41,11 +41,12 @@
 
 //--------------------------- Global user settings ----------------------------
 void Set_DB_UpdateMySettingsAboutLanguage (void);
-void Set_DB_UpdateMySettingsAboutSideCols (void);
 void Set_DB_UpdateMySettingsAboutDateFormat (Dat_Format_t DateFormat);
 void Set_DB_UpdateMySettingsAboutFirstDayOfWeek (unsigned FirstDayOfWeek);
 void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId);
 void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
+void Set_DB_UpdateMySettingsAboutTheme (const char *ThemeId);
+void Set_DB_UpdateMySettingsAboutSideCols (void);
 void Set_DB_UpdateMySettingsAboutPhoto (void);
 void Set_DB_UpdateMySettingsAboutBasicProfile (void);
 void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
