@@ -1582,7 +1582,7 @@ void Gam_ReqSelectQstsToAddToGame (void)
 
    /***** Show form to create a new question in this game *****/
    Games.GamCod = Game.GamCod;
-   Tst_RequestSelectTestsForGame (&Games);
+   Qst_RequestSelectQstsForGame (&Games);
 
    /***** Show current game *****/
    Gam_ShowOnlyOneGame (&Games,&Game,
@@ -1704,7 +1704,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumQst;
    MYSQL_ROW row;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    unsigned QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -1739,7 +1739,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 Gbl.RowEvenOdd = NumQst % 2;
 
 	 /***** Create test question *****/
-	 Tst_QstConstructor (&Question);
+	 Qst_QstConstructor (&Question);
 
 	 /***** Get question data *****/
 	 row = mysql_fetch_row (mysql_res);
@@ -1803,13 +1803,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	       /* Put icon to edit the question */
 	       if (ICanEditQuestions)
 		  Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-					       Tst_PutParamQstCod,&Question.QstCod);
+					       Qst_PutParamQstCod,&Question.QstCod);
 
 	    HTM_TD_End ();
 
 	    /***** Question *****/
-	    QuestionExists = Tst_GetQstDataFromDB (&Question);
-	    Tst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
+	    QuestionExists = Qst_GetQstDataFromDB (&Question);
+	    Qst_ListQuestionForEdition (&Question,QstInd,QuestionExists,Anchor);
 
 	 /***** End row *****/
 	 HTM_TR_End ();
@@ -1818,7 +1818,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 Frm_FreeAnchorStr (Anchor);
 
 	 /***** Destroy test question *****/
-	 Tst_QstDestructor (&Question);
+	 Qst_QstDestructor (&Question);
 	}
 
    /***** End table *****/
@@ -2277,7 +2277,7 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
 
    /***** Get all tags of questions in this game *****/
    NumTags = Gam_DB_GetTstTagsPresentInAGame (&mysql_res,GamCod);
-   Tst_ShowTagList (NumTags,mysql_res);
+   Tag_ShowTagList (NumTags,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

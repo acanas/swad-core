@@ -4240,12 +4240,12 @@ static int API_GetTstQuestions (struct soap *soap,
 				long CrsCod,long BeginTime,
 				struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;
    unsigned NumRows;
-   Tst_AnswerType_t AnswerType;
+   Qst_AnswerType_t AnswerType;
 
    /***** Get recent test questions from database *****/
    // DISTINCTROW is necessary to not repeat questions
@@ -4301,7 +4301,7 @@ static int API_GetTstQuestions (struct soap *soap,
 	 getTestsOut->questionsArray.__ptr[NumRow].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get answer type (row[1]) */
-         AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+         AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
          getTestsOut->questionsArray.__ptr[NumRow].answerType =
             soap_malloc (soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
 	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
@@ -4340,7 +4340,7 @@ static int API_GetTstAnswers (struct soap *soap,
 		              long CrsCod,long BeginTime,
 			      struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
@@ -4440,7 +4440,7 @@ static int API_GetTstQuestionTags (struct soap *soap,
 		                   long CrsCod,long BeginTime,
 				   struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
@@ -4527,7 +4527,7 @@ int swad__getTrivialQuestion (struct soap *soap,
                               char *wsKey,char *degrees,float lowerScore,float upperScore,	// input
                               struct swad__getTrivialQuestionOutput *getTrivialQuestionOut)	// output
   {
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    int ReturnCode;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -4541,7 +4541,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    unsigned NumRow;
    unsigned NumRows;
    long QstCod = -1L;
-   Tst_AnswerType_t AnswerType;
+   Qst_AnswerType_t AnswerType;
    unsigned Index;
 
    /***** Initializations *****/
@@ -4649,7 +4649,7 @@ int swad__getTrivialQuestion (struct soap *soap,
       getTrivialQuestionOut->question.questionCode = (int) QstCod;
 
       /* Get answer type (row[1]) */
-      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       getTrivialQuestionOut->question.answerType =
          soap_malloc (soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
       Str_Copy (getTrivialQuestionOut->question.answerType,
@@ -5223,7 +5223,7 @@ int swad__getMatchStatus (struct soap *soap,
       case Mch_STEM:	// Showing only the question stem
       case Mch_ANSWERS:	// Showing the question stem and the answers
       case Mch_RESULTS:	// Showing the results
-	 getMatchStatusOut->numAnswers = (int) Tst_GetNumAnswersQst (Match.Status.QstCod);
+	 getMatchStatusOut->numAnswers = (int) Qst_GetNumAnswersQst (Match.Status.QstCod);
 	 Mch_GetQstAnsFromDB (Match.MchCod,
 			      Gbl.Usrs.Me.UsrDat.UsrCod,
 			      Match.Status.QstInd,

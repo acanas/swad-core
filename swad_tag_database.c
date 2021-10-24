@@ -193,6 +193,25 @@ void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden)
   }
 
 /*****************************************************************************/
+/************************* Get tags of a test question ***********************/
+/*****************************************************************************/
+
+unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the tags of a question",
+		   "SELECT tst_tags.TagTxt"	// row[0]
+		    " FROM tst_question_tags,"
+			  "tst_tags"
+		   " WHERE tst_question_tags.QstCod=%ld"
+		     " AND tst_question_tags.TagCod=tst_tags.TagCod"
+		     " AND tst_tags.CrsCod=%ld"
+		   " ORDER BY tst_question_tags.TagInd",
+		   QstCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /********* Get all (enabled or disabled) test tags for this course ***********/
 /*****************************************************************************/
 // Return the number of rows of the result

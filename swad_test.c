@@ -67,24 +67,24 @@
 /*****************************************************************************/
 
 // strings are limited to Tst_MAX_BYTES_ANSWER_TYPE characters
-const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
+const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES] =
   {
-   [Tst_ANS_INT            ] = "int",
-   [Tst_ANS_FLOAT          ] = "float",
-   [Tst_ANS_TRUE_FALSE     ] = "TF",
-   [Tst_ANS_UNIQUE_CHOICE  ] = "uniqueChoice",
-   [Tst_ANS_MULTIPLE_CHOICE] = "multipleChoice",
-   [Tst_ANS_TEXT           ] = "text",
+   [Qst_ANS_INT            ] = "int",
+   [Qst_ANS_FLOAT          ] = "float",
+   [Qst_ANS_TRUE_FALSE     ] = "TF",
+   [Qst_ANS_UNIQUE_CHOICE  ] = "uniqueChoice",
+   [Qst_ANS_MULTIPLE_CHOICE] = "multipleChoice",
+   [Qst_ANS_TEXT           ] = "text",
   };
 
-const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES] =
+const char *Tst_StrAnswerTypesDB[Qst_NUM_ANS_TYPES] =
   {
-   [Tst_ANS_INT            ] = "int",
-   [Tst_ANS_FLOAT          ] = "float",
-   [Tst_ANS_TRUE_FALSE     ] = "true_false",
-   [Tst_ANS_UNIQUE_CHOICE  ] = "unique_choice",
-   [Tst_ANS_MULTIPLE_CHOICE] = "multiple_choice",
-   [Tst_ANS_TEXT           ] = "text",
+   [Qst_ANS_INT            ] = "int",
+   [Qst_ANS_FLOAT          ] = "float",
+   [Qst_ANS_TRUE_FALSE     ] = "true_false",
+   [Qst_ANS_UNIQUE_CHOICE  ] = "unique_choice",
+   [Qst_ANS_MULTIPLE_CHOICE] = "multiple_choice",
+   [Qst_ANS_TEXT           ] = "text",
   };
 
 /*****************************************************************************/
@@ -132,14 +132,14 @@ static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 static void Tst_IncreaseMyNumAccessTst (void);
 static void Tst_UpdateLastAccTst (unsigned NumQsts);
 
-static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test);
+static void Qst_ShowFormRequestEditQsts (struct Tst_Test *Test);
 static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
                                                   struct Tst_Test *Test);
 static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                                                    struct Tst_Test *Test);
-static bool Tst_CheckIfICanEditTests (void);
-static void Tst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
-static void Tst_PutIconsEditBankQsts (void *Test);
+static bool Qst_CheckIfICanEditQsts (void);
+static void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
+static void Qst_PutIconsEditBankQsts (void *Test);
 static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 static void Tst_PutButtonToAddQuestion (void);
 
@@ -149,7 +149,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
                                      unsigned Value);
 
 static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes);
-static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res);
+static void Qst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res);
 static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
                                               struct TstPrn_Print *Print);
 
@@ -166,20 +166,20 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
                                                            MYSQL_RES *mysql_res);
 static void Tst_PutCheckboxToSelectAllQuestions (void);
 static void Tst_WriteQuestionRowForSelection (unsigned QstInd,
-                                              struct Tst_Question *Question);
+                                              struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
-static void Tst_WriteIntAnsBank (struct Tst_Question *Question,
+static void Tst_WriteIntAnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  __attribute__((unused)) const char *ClassFeedback);
-static void Tst_WriteFltAnsBank (struct Tst_Question *Question,
+static void Tst_WriteFltAnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  __attribute__((unused)) const char *ClassFeedback);
-static void Tst_WriteTF_AnsBank (struct Tst_Question *Question,
+static void Tst_WriteTF_AnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  __attribute__((unused)) const char *ClassFeedback);
-static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
+static void Tst_WriteChoAnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  const char *ClassFeedback);
 
@@ -192,45 +192,45 @@ static unsigned Tst_GetParamNumQsts (void);
 static unsigned Tst_CountNumTagsInList (const struct Tag_Tags *Tags);
 static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTypes);
 
-static void Tst_PutFormEditOneQst (struct Tst_Question *Question);
-static void Tst_PutFloatInputField (const char *Label,const char *Field,
-                                    const struct Tst_Question *Question,
+static void Qst_PutFormEditOneQst (struct Qst_Question *Question);
+static void Qst_PutFloatInputField (const char *Label,const char *Field,
+                                    const struct Qst_Question *Question,
                                     unsigned Index);
-static void Tst_PutTFInputField (const struct Tst_Question *Question,
+static void Qst_PutTFInputField (const struct Qst_Question *Question,
                                  const char *Label,char Value);
 
-static void Tst_FreeTextChoiceAnswers (struct Tst_Question *Question);
-static void Tst_FreeTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
+static void Qst_FreeTextChoiceAnswers (struct Qst_Question *Question);
+static void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 
-static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question);
-static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question);
+static void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
+static void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 
-static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
+static long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                                 struct Med_Media *Media);
 
-static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
-static void Tst_GetQstFromForm (struct Tst_Question *Question);
-static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question);
+static Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
+static void Qst_GetQstFromForm (struct Qst_Question *Question);
+static void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question);
 
-static void Tst_PutIconToRemoveOneQst (void *QstCod);
-static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod);
-static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod);
+static void Qst_PutIconToRemoveOneQst (void *QstCod);
+static void Qst_PutParamsRemoveOnlyThisQst (void *QstCod);
+static void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod);
 
-static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question);
-static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question);
+static void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question);
+static void Qst_InsertAnswersIntoDB (struct Qst_Question *Question);
 
-static void Tst_RemAnsFromQst (long QstCod);
+static void Qst_RemAnsFromQst (long QstCod);
 
-static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
-static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
+static void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
+static void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 
-static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
-static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
+static void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
+static void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
-static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
-static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t AnsType);
-static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t AnsType);
+static unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,struct Tst_Stats *Stats);
+static unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
+static unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
 
 /*****************************************************************************/
 /********************* Request a self-assessment test ************************/
@@ -267,7 +267,7 @@ static void Tst_TstConstructor (struct Tst_Test *Test)
    Test->SelectedOrder = Tst_DEFAULT_ORDER;
 
    /***** Question constructor *****/
-   Tst_QstConstructor (&Test->Question);
+   Qst_QstConstructor (&Test->Question);
   }
 
 /*****************************************************************************/
@@ -277,7 +277,7 @@ static void Tst_TstConstructor (struct Tst_Test *Test)
 static void Tst_TstDestructor (struct Tst_Test *Test)
   {
    /***** Question destructor *****/
-   Tst_QstDestructor (&Test->Question);
+   Qst_QstDestructor (&Test->Question);
 
    /***** Free tag list *****/
    Tag_FreeTagsList (&Test->Tags);
@@ -304,57 +304,57 @@ static void Tst_ShowFormRequestTest (struct Tst_Test *Test)
                  Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
-   /***** Get tags *****/
-   if ((Test->Tags.Num = Tag_DB_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
-     {
-      /***** Check if minimum date-time of next access to test is older than now *****/
-      if (Tst_CheckIfNextTstAllowed ())
-        {
-         Frm_BeginForm (ActSeeTst);
+      /***** Get tags *****/
+      if ((Test->Tags.Num = Tag_DB_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
+	{
+	 /***** Check if minimum date-time of next access to test is older than now *****/
+	 if (Tst_CheckIfNextTstAllowed ())
+	   {
+	    Frm_BeginForm (ActSeeTst);
 
-         HTM_TABLE_BeginPadding (2);
+	       HTM_TABLE_BeginPadding (2);
 
-         /***** Selection of tags *****/
-         Tag_ShowFormSelTags (&Test->Tags,mysql_res,true);
+		  /***** Selection of tags *****/
+		  Tag_ShowFormSelTags (&Test->Tags,mysql_res,true);
 
-         /***** Selection of types of answers *****/
-         Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
+		  /***** Selection of types of answers *****/
+		  Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
 
-         /***** Number of questions to generate ****/
-         HTM_TR_Begin (NULL);
+		  /***** Number of questions to generate ****/
+		  HTM_TR_Begin (NULL);
 
-         /* Label */
-         Frm_LabelColumn ("RT","NumQst",Txt_Number_of_questions);
+		     /* Label */
+		     Frm_LabelColumn ("RT","NumQst",Txt_Number_of_questions);
 
-         /* Data */
-         HTM_TD_Begin ("class=\"LT\"");
-         HTM_INPUT_LONG ("NumQst",
-			 (long) TstCfg_GetConfigMin (),
-			 (long) TstCfg_GetConfigMax (),
-			 (long) TstCfg_GetConfigDef (),
-			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
-			 "id=\"NumQst\"");
-         HTM_TD_End ();
+		     /* Data */
+		     HTM_TD_Begin ("class=\"LT\"");
+			HTM_INPUT_LONG ("NumQst",
+					(long) TstCfg_GetConfigMin (),
+					(long) TstCfg_GetConfigMax (),
+					(long) TstCfg_GetConfigDef (),
+					HTM_DONT_SUBMIT_ON_CHANGE,
+					TstCfg_GetConfigMin () == TstCfg_GetConfigMax (),
+					"id=\"NumQst\"");
+		     HTM_TD_End ();
 
-         HTM_TR_End ();
+		  HTM_TR_End ();
 
-         HTM_TABLE_End ();
+	       HTM_TABLE_End ();
 
-         /***** Send button *****/
-         Btn_PutConfirmButton (Txt_Generate_test);
-         Frm_EndForm ();
-        }
-     }
-   else
-     {
-      /***** Warning message *****/
-      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+	       /***** Send button *****/
+	       Btn_PutConfirmButton (Txt_Generate_test);
+	    Frm_EndForm ();
+	   }
+	}
+      else
+	{
+	 /***** Warning message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
 
-      /***** Button to create a new question *****/
-      if (Tst_CheckIfICanEditTests ())
-         Tst_PutButtonToAddQuestion ();
-     }
+	 /***** Button to create a new question *****/
+	 if (Qst_CheckIfICanEditQsts ())
+	    Tst_PutButtonToAddQuestion ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -527,33 +527,33 @@ void Tst_AssessTest (void)
       Box_BoxBegin (NULL,Txt_Result,
 		    NULL,NULL,
 		    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.Hierarchy.Ins.InsCod,
-				 Gbl.Hierarchy.Deg.DegCod,
-				 Gbl.Hierarchy.Crs.CrsCod);
+	 Lay_WriteHeaderClassPhoto (false,false,
+				    Gbl.Hierarchy.Ins.InsCod,
+				    Gbl.Hierarchy.Deg.DegCod,
+				    Gbl.Hierarchy.Crs.CrsCod);
 
-      /***** Header *****/
-      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-	{
-	 HTM_DIV_Begin ("class=\"TEST_SUBTITLE\"");
-	 HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);
-	 HTM_DIV_End ();
-	}
+	 /***** Header *****/
+	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	   {
+	    HTM_DIV_Begin ("class=\"TEST_SUBTITLE\"");
+	       HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);
+	    HTM_DIV_End ();
+	   }
 
-      /***** Write answers and solutions *****/
-      TstPrn_ShowPrintAfterAssess (&Print);
+	 /***** Write answers and solutions *****/
+	 TstPrn_ShowPrintAfterAssess (&Print);
 
-      /***** Write total score and grade *****/
-      if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
-	{
-	 HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
-	 HTM_TxtColonNBSP (Txt_Score);
-	 HTM_Double2Decimals (Print.Score);
-	 HTM_BR ();
-	 HTM_TxtColonNBSP (Txt_Grade);
-	 TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
-	 HTM_DIV_End ();
-	}
+	 /***** Write total score and grade *****/
+	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
+	   {
+	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
+	       HTM_TxtColonNBSP (Txt_Score);
+	       HTM_Double2Decimals (Print.Score);
+	       HTM_BR ();
+	       HTM_TxtColonNBSP (Txt_Grade);
+	       TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
+	    HTM_DIV_End ();
+	   }
 
       /***** End box *****/
       Box_BoxEnd ();
@@ -577,7 +577,7 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
       /* Get answers selected by user for this question */
       snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
       Par_GetParMultiToText (StrAns,Print->PrintedQuestions[QstInd].StrAnswers,
-                             Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+                             Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
       Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[QstInd].StrAnswers);
      }
   }
@@ -690,39 +690,10 @@ static unsigned Tst_GetNumExamsGeneratedByMe (void)
   }
 
 /*****************************************************************************/
-/************************** Show list of test tags ***************************/
-/*****************************************************************************/
-
-void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
-  {
-   extern const char *Txt_no_tags;
-   MYSQL_ROW row;
-   unsigned NumTag;
-
-   if (NumTags)
-     {
-      /***** Write the tags *****/
-      HTM_UL_Begin (NULL);
-      for (NumTag = 0;
-	   NumTag < NumTags;
-	   NumTag++)
-        {
-         row = mysql_fetch_row (mysql_res);
-         HTM_LI_Begin (NULL);
-         HTM_Txt (row[0]);
-         HTM_LI_End ();
-        }
-      HTM_UL_End ();
-     }
-   else
-      HTM_Txt (Txt_no_tags);
-  }
-
-/*****************************************************************************/
 /********************* List game question for edition ************************/
 /*****************************************************************************/
 
-void Tst_ListQuestionForEdition (struct Tst_Question *Question,
+void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor)
   {
@@ -730,9 +701,9 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteNumQst (QstInd,"BIG_INDEX");
+      Qst_WriteNumQst (QstInd,"BIG_INDEX");
       if (QuestionExists)
-	 Tst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Write question code *****/
@@ -743,7 +714,7 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
    /***** Write the question tags *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       if (QuestionExists)
-	 Tst_GetAndWriteTagsQst (Question->QstCod);
+	 Tag_GetAndWriteTagsQst (Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
@@ -752,7 +723,7 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 	 if (QuestionExists)
 	   {
 	    /* Write stem */
-	    Tst_WriteQstStem (Question->Stem,"TEST_TXT",
+	    Qst_WriteQstStem (Question->Stem,"TEST_TXT",
 			      true);	// Visible
 
 	    /* Show media */
@@ -761,10 +732,10 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 			   "TEST_MED_EDIT_LIST");
 
 	    /* Show feedback */
-	    Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
+	    Qst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
 
 	    /* Show answers */
-	    Tst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
+	    Qst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
 	   }
 	 else
 	   {
@@ -781,10 +752,10 @@ void Tst_ListQuestionForEdition (struct Tst_Question *Question,
 /*****************************************************************************/
 // Number of question should be 1, 2, 3...
 
-void Tst_WriteNumQst (unsigned NumQst,const char *Class)
+void Qst_WriteNumQst (unsigned NumQst,const char *Class)
   {
    HTM_DIV_Begin ("class=\"%s\"",Class);
-   HTM_Unsigned (NumQst);
+      HTM_Unsigned (NumQst);
    HTM_DIV_End ();
   }
 
@@ -792,12 +763,12 @@ void Tst_WriteNumQst (unsigned NumQst,const char *Class)
 /************************** Write the type of answer *************************/
 /*****************************************************************************/
 
-void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType,const char *Class)
+void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class)
   {
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
 
    HTM_DIV_Begin ("class=\"%s\"",Class);
-   HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
+      HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
    HTM_DIV_End ();
   }
 
@@ -805,7 +776,7 @@ void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType,const char *Class)
 /********************* Write the stem of a test question *********************/
 /*****************************************************************************/
 
-void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
+void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
   {
    unsigned long StemLength;
    char *StemRigorousHTML;
@@ -813,29 +784,29 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
    /***** DIV begin *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassStem);
 
-   /***** Write stem *****/
-   if (Stem && Visible)
-     {
-      if (Stem[0])
+      /***** Write stem *****/
+      if (Stem && Visible)
 	{
-	 /* Convert the stem, that is in HTML, to rigorous HTML */
-	 StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
-	 if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
-	    Err_NotEnoughMemoryExit ();
-	 Str_Copy (StemRigorousHTML,Stem,StemLength);
+	 if (Stem[0])
+	   {
+	    /* Convert the stem, that is in HTML, to rigorous HTML */
+	    StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
+	    if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
+	       Err_NotEnoughMemoryExit ();
+	    Str_Copy (StemRigorousHTML,Stem,StemLength);
 
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   StemRigorousHTML,StemLength,false);
+	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			      StemRigorousHTML,StemLength,false);
 
-	 /* Write stem text */
-	 HTM_Txt (StemRigorousHTML);
+	    /* Write stem text */
+	    HTM_Txt (StemRigorousHTML);
 
-	 /* Free memory allocated for the stem */
-	 free (StemRigorousHTML);
+	    /* Free memory allocated for the stem */
+	    free (StemRigorousHTML);
+	   }
 	}
-     }
-   else
-      Ico_PutIconNotVisible ();
+      else
+	 Ico_PutIconNotVisible ();
 
    /***** DIV end *****/
    HTM_DIV_End ();
@@ -863,39 +834,39 @@ static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"TEST_MED_EDIT_FORM\"");
 
-      /***** Choice 1: No media *****/
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
-		       "value=\"%u\"%s",
-		       (unsigned) Med_ACTION_NO_MEDIA,
-		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      HTM_Txt (Txt_No_image_video);
-      HTM_LABEL_End ();
-      HTM_BR ();
+	 /***** Choice 1: No media *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+			     "value=\"%u\"%s",
+			     (unsigned) Med_ACTION_NO_MEDIA,
+			     OptionsDisabled ? " disabled=\"disabled\"" : "");
+	    HTM_Txt (Txt_No_image_video);
+	 HTM_LABEL_End ();
+	 HTM_BR ();
 
-      /***** Choice 2: Current media *****/
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
-		       "value=\"%u\"%s checked=\"checked\"",
-		       (unsigned) Med_ACTION_KEEP_MEDIA,
-		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      HTM_Txt (Txt_Current_image_video);
-      HTM_LABEL_End ();
-      Med_ShowMedia (Media,
-	             "TEST_MED_EDIT_ONE_CONT",
-		     "TEST_MED_EDIT_ONE");
+	 /***** Choice 2: Current media *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+			     "value=\"%u\"%s checked=\"checked\"",
+			     (unsigned) Med_ACTION_KEEP_MEDIA,
+			     OptionsDisabled ? " disabled=\"disabled\"" : "");
+	    HTM_Txt (Txt_Current_image_video);
+	 HTM_LABEL_End ();
+	 Med_ShowMedia (Media,
+			"TEST_MED_EDIT_ONE_CONT",
+			"TEST_MED_EDIT_ONE");
 
-      /***** Choice 3: Change media *****/
-      UniqueId++;
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
-		       "id=\"chg_img_%u\" value=\"%u\"%s",
-		       UniqueId,
-		       (unsigned) Med_ACTION_NEW_MEDIA,
-		       OptionsDisabled ? " disabled=\"disabled\"" : "");
-      HTM_TxtColonNBSP (Txt_Change_image_video);
-      HTM_LABEL_End ();
-      Med_PutMediaUploader (NumMedia,"TEST_MED_INPUT");
+	 /***** Choice 3: Change media *****/
+	 UniqueId++;
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+			     "id=\"chg_img_%u\" value=\"%u\"%s",
+			     UniqueId,
+			     (unsigned) Med_ACTION_NEW_MEDIA,
+			     OptionsDisabled ? " disabled=\"disabled\"" : "");
+	    HTM_TxtColonNBSP (Txt_Change_image_video);
+	 HTM_LABEL_End ();
+	 Med_PutMediaUploader (NumMedia,"TEST_MED_INPUT");
 
       /***** End container *****/
       HTM_DIV_End ();
@@ -909,7 +880,7 @@ static void Tst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedi
 /******************* Write the feedback of a test question *******************/
 /*****************************************************************************/
 
-void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
+void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
   {
    unsigned long FeedbackLength;
    char *FeedbackRigorousHTML;
@@ -927,7 +898,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 
 	 /***** Write the feedback *****/
 	 HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
-	 HTM_Txt (FeedbackRigorousHTML);
+	    HTM_Txt (FeedbackRigorousHTML);
 	 HTM_DIV_End ();
 
 	 /***** Free memory allocated for the feedback *****/
@@ -977,7 +948,7 @@ static void Tst_UpdateLastAccTst (unsigned NumQsts)
 /*********************** Request the edition of tests ************************/
 /*****************************************************************************/
 
-void Tst_RequestEditTests (void)
+void Qst_RequestEditQsts (void)
   {
    struct Tst_Test Test;
 
@@ -985,7 +956,7 @@ void Tst_RequestEditTests (void)
    Tst_TstConstructor (&Test);
 
    /***** Show form to generate a self-assessment test *****/
-   Tst_ShowFormRequestEditTests (&Test);
+   Qst_ShowFormRequestEditQsts (&Test);
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -995,7 +966,7 @@ void Tst_RequestEditTests (void)
 /******* Select tags and dates for edition of the self-assessment test *******/
 /*****************************************************************************/
 
-static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
+static void Qst_ShowFormRequestEditQsts (struct Tst_Test *Test)
   {
    extern const char *Hlp_ASSESSMENT_Questions_editing_questions;
    extern const char *Txt_No_test_questions;
@@ -1010,40 +981,41 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Question_bank,
-                 Tst_PutIconsRequestBankQsts,NULL,
+                 Qst_PutIconsRequestBankQsts,NULL,
                  Hlp_ASSESSMENT_Questions_editing_questions,Box_NOT_CLOSABLE);
 
-   /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
-     {
-      Frm_BeginForm (ActLstTstQst);
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_DEFAULT_ORDER);
+      /***** Get tags already present in the table of questions *****/
+      if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+	{
+	 Frm_BeginForm (ActLstTstQst);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_DEFAULT_ORDER);
 
-      HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginPadding (2);
 
-      /***** Selection of tags *****/
-      Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
+	       /***** Selection of tags *****/
+	       Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
-      /***** Selection of types of answers *****/
-      Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
+	       /***** Selection of types of answers *****/
+	       Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
 
-      /***** Starting and ending dates in the search *****/
-      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+	       /***** Starting and ending dates in the search *****/
+	       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
-      HTM_TABLE_End ();
+	    HTM_TABLE_End ();
 
-      /***** Send button *****/
-      Btn_PutConfirmButton (Txt_Show_questions);
-      Frm_EndForm ();
-     }
-   else	// No test questions
-     {
-      /***** Warning message *****/
-      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+	    /***** Send button *****/
+	    Btn_PutConfirmButton (Txt_Show_questions);
 
-      /***** Button to create a new question *****/
-      Tst_PutButtonToAddQuestion ();
-     }
+	 Frm_EndForm ();
+	}
+      else	// No test questions
+	{
+	 /***** Warning message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+
+	 /***** Button to create a new question *****/
+	 Tst_PutButtonToAddQuestion ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1056,7 +1028,7 @@ static void Tst_ShowFormRequestEditTests (struct Tst_Test *Test)
 /******************* Select test questions for a game ************************/
 /*****************************************************************************/
 
-void Tst_RequestSelectTestsForSet (struct Exa_Exams *Exams)
+void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams)
   {
    struct Tst_Test Test;
 
@@ -1074,7 +1046,7 @@ void Tst_RequestSelectTestsForSet (struct Exa_Exams *Exams)
 /******************* Select test questions for a game ************************/
 /*****************************************************************************/
 
-void Tst_RequestSelectTestsForGame (struct Gam_Games *Games)
+void Qst_RequestSelectQstsForGame (struct Gam_Games *Games)
   {
    struct Tst_Test Test;
 
@@ -1111,37 +1083,38 @@ static void Tst_ShowFormRequestSelectTestsForSet (struct Exa_Exams *Exams,
                  NULL,NULL,
                  Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
-   /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
-     {
-      Frm_BeginForm (ActLstTstQstForSet);
-      ExaSet_PutParamsOneSet (Exams);
+      /***** Get tags already present in the table of questions *****/
+      if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+	{
+	 Frm_BeginForm (ActLstTstQstForSet);
+	 ExaSet_PutParamsOneSet (Exams);
 
-      HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginPadding (2);
 
-      /***** Selection of tags *****/
-      Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
+	       /***** Selection of tags *****/
+	       Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
-      /***** Selection of types of answers *****/
-      Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
+	       /***** Selection of types of answers *****/
+	       Tst_ShowFormAnswerTypes (&Test->AnswerTypes);
 
-      /***** Starting and ending dates in the search *****/
-      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+	       /***** Starting and ending dates in the search *****/
+	       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
-      HTM_TABLE_End ();
+	    HTM_TABLE_End ();
 
-      /***** Send button *****/
-      Btn_PutConfirmButton (Txt_Show_questions);
-      Frm_EndForm ();
-     }
-   else	// No test questions
-     {
-      /***** Warning message *****/
-      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+	    /***** Send button *****/
+	    Btn_PutConfirmButton (Txt_Show_questions);
 
-      /***** Button to create a new question *****/
-      Tst_PutButtonToAddQuestion ();
-     }
+	 Frm_EndForm ();
+	}
+      else	// No test questions
+	{
+	 /***** Warning message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+
+	 /***** Button to create a new question *****/
+	 Tst_PutButtonToAddQuestion ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1173,34 +1146,35 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
                  NULL,NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
-   /***** Get tags already present in the table of questions *****/
-   if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
-     {
-      Frm_BeginForm (ActGamLstTstQst);
-      Gam_PutParams (Games);
+      /***** Get tags already present in the table of questions *****/
+      if ((Test->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+	{
+	 Frm_BeginForm (ActGamLstTstQst);
+	 Gam_PutParams (Games);
 
-      HTM_TABLE_BeginPadding (2);
+	    HTM_TABLE_BeginPadding (2);
 
-      /***** Selection of tags *****/
-      Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
+	       /***** Selection of tags *****/
+	       Tag_ShowFormSelTags (&Test->Tags,mysql_res,false);
 
-      /***** Starting and ending dates in the search *****/
-      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+	       /***** Starting and ending dates in the search *****/
+	       Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
-      HTM_TABLE_End ();
+	    HTM_TABLE_End ();
 
-      /***** Send button *****/
-      Btn_PutConfirmButton (Txt_Show_questions);
-      Frm_EndForm ();
-     }
-   else	// No test questions
-     {
-      /***** Warning message *****/
-      Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+	    /***** Send button *****/
+	    Btn_PutConfirmButton (Txt_Show_questions);
 
-      /***** Button to create a new question *****/
-      Tst_PutButtonToAddQuestion ();
-     }
+	 Frm_EndForm ();
+	}
+      else	// No test questions
+	{
+	 /***** Warning message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_No_test_questions);
+
+	 /***** Button to create a new question *****/
+	 Tst_PutButtonToAddQuestion ();
+	}
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1210,10 +1184,10 @@ static void Tst_ShowFormRequestSelectTestsForGame (struct Gam_Games *Games,
   }
 
 /*****************************************************************************/
-/************************* Check if I can edit tests *************************/
+/*********************** Check if I can edit questions ***********************/
 /*****************************************************************************/
 
-static bool Tst_CheckIfICanEditTests (void)
+static bool Qst_CheckIfICanEditQsts (void)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                   Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
@@ -1223,7 +1197,7 @@ static bool Tst_CheckIfICanEditTests (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
+static void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_New_question;
 
@@ -1246,7 +1220,7 @@ static void Tst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsEditBankQsts (void *Test)
+static void Qst_PutIconsEditBankQsts (void *Test)
   {
    extern const char *Txt_New_question;
 
@@ -1259,7 +1233,7 @@ static void Tst_PutIconsEditBankQsts (void *Test)
       case ActRemOneTstQst:	// Remove a question
       case ActChgShfTstQst:	// Change shuffle of a question
 	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,NULL,
-					Tst_PutParamsEditQst,Test);
+					Qst_PutParamsEditQst,Test);
 	 break;
       default:
 	 break;
@@ -1327,7 +1301,7 @@ static void Tst_PutButtonToAddQuestion (void)
    extern const char *Txt_New_question;
 
    Frm_BeginForm (ActEdiOneTstQst);
-   Btn_PutConfirmButton (Txt_New_question);
+      Btn_PutConfirmButton (Txt_New_question);
    Frm_EndForm ();
   }
 
@@ -1430,94 +1404,94 @@ static void Tst_ShowFormConfigTst (void)
                  Tst_PutIconsTests,NULL,
                  Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActRcvCfgTst);
+      /***** Begin form *****/
+      Frm_BeginForm (ActRcvCfgTst);
 
-   /***** Tests are visible from plugins? *****/
-   HTM_TABLE_BeginCenterPadding (2);
-   HTM_TR_Begin (NULL);
+	 /***** Tests are visible from plugins? *****/
+	 HTM_TABLE_BeginCenterPadding (2);
+	    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Plugins);
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Plugins);
+	       HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LB\"");
-   for (Pluggable  = TstCfg_PLUGGABLE_NO;
-	Pluggable <= TstCfg_PLUGGABLE_YES;
-	Pluggable++)
-     {
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_RADIO ("Pluggable",false,
-		       "value=\"%u\"%s",
-		       (unsigned) Pluggable,
-		       Pluggable == TstCfg_GetConfigPluggable () ? " checked=\"checked\"" :
-				                                   "");
-      HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LB\"");
+		  for (Pluggable  = TstCfg_PLUGGABLE_NO;
+		       Pluggable <= TstCfg_PLUGGABLE_YES;
+		       Pluggable++)
+		    {
+		     HTM_LABEL_Begin ("class=\"DAT\"");
+			HTM_INPUT_RADIO ("Pluggable",false,
+					 "value=\"%u\"%s",
+					 (unsigned) Pluggable,
+					 Pluggable == TstCfg_GetConfigPluggable () ? " checked=\"checked\"" :
+										     "");
+			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
+		     HTM_LABEL_End ();
+		     HTM_BR ();
+		    }
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Number of questions *****/
-   HTM_TR_Begin (NULL);
+	    /***** Number of questions *****/
+	    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Number_of_questions);
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Number_of_questions);
+	       HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LB\"");
-   HTM_TABLE_BeginPadding (2);
-   Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
-                            TstCfg_GetConfigMin ());	// Minimum number of questions
-   Tst_PutInputFieldNumQst ("NumQstDef",Txt_default,
-                            TstCfg_GetConfigDef ());	// Default number of questions
-   Tst_PutInputFieldNumQst ("NumQstMax",Txt_maximum,
-                            TstCfg_GetConfigMax ());	// Maximum number of questions
-   HTM_TABLE_End ();
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LB\"");
+		  HTM_TABLE_BeginPadding (2);
+		     Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
+					      TstCfg_GetConfigMin ());	// Minimum number of questions
+		     Tst_PutInputFieldNumQst ("NumQstDef",Txt_default,
+					      TstCfg_GetConfigDef ());	// Default number of questions
+		     Tst_PutInputFieldNumQst ("NumQstMax",Txt_maximum,
+					      TstCfg_GetConfigMax ());	// Maximum number of questions
+		  HTM_TABLE_End ();
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Minimum time between consecutive tests, per question *****/
-   HTM_TR_Begin (NULL);
+	    /***** Minimum time between consecutive tests, per question *****/
+	    HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","MinTimeNxtTstPerQst",
-		    Txt_Minimum_time_seconds_per_question_between_two_tests);
+	       /* Label */
+	       Frm_LabelColumn ("RT","MinTimeNxtTstPerQst",
+				Txt_Minimum_time_seconds_per_question_between_two_tests);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LB\"");
-   snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
-             TstCfg_GetConfigMinTimeNxtTstPerQst ());
-   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
-   HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LB\"");
+		  snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
+			    TstCfg_GetConfigMinTimeNxtTstPerQst ());
+		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Visibility of test exams *****/
-   HTM_TR_Begin (NULL);
+	    /***** Visibility of test exams *****/
+	    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Result_visibility);
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Result_visibility);
+	       HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LB\"");
-   TstVis_PutVisibilityCheckboxes (TstCfg_GetConfigVisibility ());
-   HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LB\"");
+		  TstVis_PutVisibilityCheckboxes (TstCfg_GetConfigVisibility ());
+	       HTM_TD_End ();
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   HTM_TABLE_End ();
+	 HTM_TABLE_End ();
 
-   /***** Send button *****/
-   Btn_PutConfirmButton (Txt_Save_changes);
+	 /***** Send button *****/
+	 Btn_PutConfirmButton (Txt_Save_changes);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1537,18 +1511,18 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RM\"");
-   HTM_LABEL_Begin ("for=\"%s\" class=\"DAT\"",Field);
-   HTM_Txt (Label);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"RM\"");
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT\"",Field);
+	    HTM_Txt (Label);
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LM\"");
-   snprintf (StrValue,sizeof (StrValue),"%u",Value);
-   HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"%s\" size=\"3\" required=\"required\"",Field);
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"LM\"");
+	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
+	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
+			 "id=\"%s\" size=\"3\" required=\"required\"",Field);
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1562,71 +1536,71 @@ static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
-   Tst_AnswerType_t AnsType;
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
+   Qst_AnswerType_t AnsType;
    bool Checked;
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    const char *Ptr;
 
    HTM_TR_Begin (NULL);
 
-   /***** Label *****/
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Types_of_answers);
-   HTM_TD_End ();
-
-   /***** Select all types of answers *****/
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TABLE_BeginPadding (2);
-
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllAnsTypes",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
-		       AnswerTypes->All ? " checked=\"checked\"" :
-			                  "");
-   HTM_TxtF ("&nbsp;%s",Txt_All_types_of_answers);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Type of answer *****/
-   for (AnsType  = (Tst_AnswerType_t) 0;
-	AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
-	AnsType++)
-     {
-      HTM_TR_Begin (NULL);
-
-      Checked = false;
-      Ptr = AnswerTypes->List;
-      while (*Ptr)
-        {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
-         if (Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
-           {
-            Checked = true;
-            break;
-           }
-        }
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
-			  (unsigned) AnsType,
-			  Checked ? " checked=\"checked\"" :
-				    "");
-      HTM_TxtF ("&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
-      HTM_LABEL_End ();
+      /***** Label *****/
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TxtColon (Txt_Types_of_answers);
       HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+      /***** Select all types of answers *****/
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TABLE_BeginPadding (2);
 
-   HTM_TABLE_End ();
-   HTM_TD_End ();
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"LM\"");
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_INPUT_CHECKBOX ("AllAnsTypes",HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
+				      AnswerTypes->All ? " checked=\"checked\"" :
+							 "");
+		  HTM_TxtF ("&nbsp;%s",Txt_All_types_of_answers);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+	 /***** Type of answer *****/
+	 for (AnsType  = (Qst_AnswerType_t) 0;
+	      AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
+	      AnsType++)
+	   {
+	    HTM_TR_Begin (NULL);
+
+	       Checked = false;
+	       Ptr = AnswerTypes->List;
+	       while (*Ptr)
+		 {
+		  Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+		  if (Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
+		    {
+		     Checked = true;
+		     break;
+		    }
+		 }
+	       HTM_TD_Begin ("class=\"LM\"");
+		  HTM_LABEL_Begin ("class=\"DAT\"");
+		     HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
+					 "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
+					 (unsigned) AnsType,
+					 Checked ? " checked=\"checked\"" :
+						   "");
+		     HTM_TxtF ("&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+		  HTM_LABEL_End ();
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+	   }
+
+	 HTM_TABLE_End ();
+      HTM_TD_End ();
    HTM_TR_End ();
   }
 
@@ -1634,7 +1608,7 @@ static void Tst_ShowFormAnswerTypes (const struct Tst_AnswerTypes *AnswerTypes)
 /***************** List several test questions for edition *******************/
 /*****************************************************************************/
 
-void Tst_ListQuestionsToEdit (void)
+void Qst_ListQuestionsToEdit (void)
   {
    struct Tst_Test Test;
    MYSQL_RES *mysql_res;
@@ -1646,7 +1620,7 @@ void Tst_ListQuestionsToEdit (void)
    if (Tst_GetParamsTst (&Test,Tst_EDIT_TEST))	// Get parameters from the form
      {
       /***** Get question codes from database *****/
-      Tst_GetQuestions (&Test,&mysql_res);	// Query database
+      Qst_GetQuestions (&Test,&mysql_res);	// Query database
       if (Test.NumQsts)
         {
 	 /* Contextual menu */
@@ -1667,7 +1641,7 @@ void Tst_ListQuestionsToEdit (void)
      }
    else
       /* Show the form again */
-      Tst_ShowFormRequestEditTests (&Test);
+      Qst_ShowFormRequestEditQsts (&Test);
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -1688,7 +1662,7 @@ void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams)
    /***** Get parameters, query the database and list the questions *****/
    if (Tst_GetParamsTst (&Test,Tst_SELECT_QUESTIONS_FOR_EXAM))	// Get parameters from the form
      {
-      Tst_GetQuestions (&Test,&mysql_res);	// Query database
+      Qst_GetQuestions (&Test,&mysql_res);	// Query database
       if (Test.NumQsts)
 	 /* Show the table with the questions */
          Tst_ListOneOrMoreQuestionsForSelectionForSet (Exams,Test.NumQsts,mysql_res);
@@ -1719,7 +1693,7 @@ void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games)
    /***** Get parameters, query the database and list the questions *****/
    if (Tst_GetParamsTst (&Test,Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
      {
-      Tst_GetQuestions (&Test,&mysql_res);	// Query database
+      Qst_GetQuestions (&Test,&mysql_res);	// Query database
       if (Test.NumQsts)
 	 /* Show the table with the questions */
          Tst_ListOneOrMoreQuestionsForSelectionForGame (Games,Test.NumQsts,mysql_res);
@@ -1741,7 +1715,7 @@ void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games)
 
 #define Tst_MAX_BYTES_QUERY_TEST (16 * 1024 - 1)
 
-static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
+static void Qst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    char *Query = NULL;
@@ -1751,7 +1725,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
    char TagText[Tag_MAX_BYTES_TAG + 1];
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   Tst_AnswerType_t AnsType;
+   Qst_AnswerType_t AnsType;
    char CrsCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Allocate space for query *****/
@@ -1818,7 +1792,7 @@ static void Tst_GetQuestions (struct Tst_Test *Test,MYSQL_RES **mysql_res)
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
-	 AnsType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+	 AnsType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Err_ShowErrorAndExit ("Query size exceed.");
@@ -1889,7 +1863,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
    const char *Ptr;
    char TagText[Tag_MAX_BYTES_TAG + 1];
    char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   Tst_AnswerType_t AnswerType;
+   Qst_AnswerType_t AnswerType;
    bool Shuffle;
    char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned QstInd;
@@ -1959,7 +1933,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
-	 AnswerType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+	 AnswerType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnswerType]) + 1;
          if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Err_ShowErrorAndExit ("Query size exceed.");
@@ -2006,7 +1980,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 	 Err_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get answer type (row[1]) */
-      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
       Shuffle = (row[2][0] == 'Y');
@@ -2014,14 +1988,14 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
       /* Set indexes of answers */
       switch (AnswerType)
 	{
-	 case Tst_ANS_INT:
-	 case Tst_ANS_FLOAT:
-	 case Tst_ANS_TRUE_FALSE:
-	 case Tst_ANS_TEXT:
+	 case Qst_ANS_INT:
+	 case Qst_ANS_FLOAT:
+	 case Qst_ANS_TRUE_FALSE:
+	 case Qst_ANS_TEXT:
 	    Print->PrintedQuestions[QstInd].StrIndexes[0] = '\0';
 	    break;
-	 case Tst_ANS_UNIQUE_CHOICE:
-	 case Tst_ANS_MULTIPLE_CHOICE:
+	 case Qst_ANS_UNIQUE_CHOICE:
+	 case Qst_ANS_MULTIPLE_CHOICE:
             /* If answer type is unique or multiple option,
                generate indexes of answers depending on shuffle */
 	    Tst_GenerateChoiceIndexes (&Print->PrintedQuestions[QstInd],Shuffle);
@@ -2048,7 +2022,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Tst_Test *Test,
 void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				bool Shuffle)
   {
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2057,11 +2031,11 @@ void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
    char StrInd[1 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Create test question *****/
-   Tst_QstConstructor (&Question);
+   Qst_QstConstructor (&Question);
    Question.QstCod = PrintedQuestion->QstCod;
 
    /***** Get answers of question from database *****/
-   Tst_GetAnswersQst (&Question,&mysql_res,Shuffle);
+   Qst_GetAnswersQst (&Question,&mysql_res,Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -2083,7 +2057,7 @@ void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
       ErrorInIndex = false;
       if (sscanf (row[0],"%u",&Index) == 1)
         {
-         if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
+         if (Index >= Qst_MAX_OPTIONS_PER_QUESTION)
             ErrorInIndex = true;
         }
       else
@@ -2101,7 +2075,7 @@ void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+   Qst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -2118,21 +2092,23 @@ static void Tst_ListOneQstToEdit (struct Tst_Test *Test)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsEditBankQsts,Test,
+                 Qst_PutIconsEditBankQsts,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
-   /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
-   Tst_WriteHeadingRowQuestionsForEdition (Test);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (5);
 
-   /***** Write question row *****/
-   Tst_WriteQuestionListing (Test,0);
+         /***** Write the heading *****/
+	 Tst_WriteHeadingRowQuestionsForEdition (Test);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /***** Write question row *****/
+	 Tst_WriteQuestionListing (Test,0);
 
-   /***** Button to add a new question *****/
-   Tst_PutButtonToAddQuestion ();
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Button to add a new question *****/
+      Tst_PutButtonToAddQuestion ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2152,40 +2128,42 @@ static void Tst_ListOneOrMoreQuestionsForEdition (struct Tst_Test *Test,
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,
-                 Tst_PutIconsEditBankQsts,Test,
+                 Qst_PutIconsEditBankQsts,Test,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
-   /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
-   Tst_WriteHeadingRowQuestionsForEdition (Test);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWideMarginPadding (5);
 
-   /***** Write rows *****/
-   for (QstInd = 0;
-	QstInd < Test->NumQsts;
-	QstInd++)
-     {
-      Gbl.RowEvenOdd = QstInd % 2;
+         /***** Write the heading *****/
+	 Tst_WriteHeadingRowQuestionsForEdition (Test);
 
-      /***** Create test question *****/
-      Tst_QstConstructor (&Test->Question);
+	 /***** Write rows *****/
+	 for (QstInd = 0;
+	      QstInd < Test->NumQsts;
+	      QstInd++)
+	   {
+	    Gbl.RowEvenOdd = QstInd % 2;
 
-      /***** Get question code (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-      if ((Test->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-         Err_WrongQuestionExit ();
+	    /***** Create test question *****/
+	    Qst_QstConstructor (&Test->Question);
 
-      /***** Write question row *****/
-      Tst_WriteQuestionListing (Test,QstInd);
+	    /***** Get question code (row[0]) *****/
+	    row = mysql_fetch_row (mysql_res);
+	    if ((Test->Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongQuestionExit ();
 
-      /***** Destroy test question *****/
-      Tst_QstDestructor (&Test->Question);
-     }
+	    /***** Write question row *****/
+	    Tst_WriteQuestionListing (Test,QstInd);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	    /***** Destroy test question *****/
+	    Qst_QstDestructor (&Test->Question);
+	   }
 
-   /***** Button to add a new question *****/
-   Tst_PutButtonToAddQuestion ();
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Button to add a new question *****/
+      Tst_PutButtonToAddQuestion ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2209,44 +2187,44 @@ static void Tst_WriteHeadingRowQuestionsForEdition (struct Tst_Test *Test)
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
-   /***** First columns *****/
-   HTM_TH_Empty (1);
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Code);
-   HTM_TH (1,1,"CT",Txt_Date);
-   HTM_TH (1,1,"CT",Txt_Tags);
-   HTM_TH (1,1,"CT",Txt_Shuffle);
+      /***** First columns *****/
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"CT",Txt_No_INDEX);
+      HTM_TH (1,1,"CT",Txt_Code);
+      HTM_TH (1,1,"CT",Txt_Date);
+      HTM_TH (1,1,"CT",Txt_Tags);
+      HTM_TH (1,1,"CT",Txt_Shuffle);
 
-   /***** Columns which data can be ordered *****/
-   /* Stem and answers of question */
-   /* Number of times that the question has been answered */
-   /* Average score */
-   for (Order  = (Tst_QuestionsOrder_t) 0;
-	Order <= (Tst_QuestionsOrder_t) (Tst_NUM_TYPES_ORDER_QST - 1);
-	Order++)
-     {
-      HTM_TH_Begin (1,1,"LT");
+      /***** Columns which data can be ordered *****/
+      /* Stem and answers of question */
+      /* Number of times that the question has been answered */
+      /* Average score */
+      for (Order  = (Tst_QuestionsOrder_t) 0;
+	   Order <= (Tst_QuestionsOrder_t) (Tst_NUM_TYPES_ORDER_QST - 1);
+	   Order++)
+	{
+	 HTM_TH_Begin (1,1,"LT");
 
-      if (Test->NumQsts > 1)
-        {
-         Frm_BeginForm (ActLstTstQst);
-         Tst_PutParamsEditQst (Test);
-         Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-         HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
-         if (Order == Test->SelectedOrder)
-            HTM_U_Begin ();
-        }
-      HTM_Txt (Txt_TST_STR_ORDER_SHORT[Order]);
-      if (Test->NumQsts > 1)
-        {
-         if (Order == Test->SelectedOrder)
-            HTM_U_End ();
-         HTM_BUTTON_End ();
-         Frm_EndForm ();
-        }
+	    if (Test->NumQsts > 1)
+	      {
+	       Frm_BeginForm (ActLstTstQst);
+	       Qst_PutParamsEditQst (Test);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
+		     if (Order == Test->SelectedOrder)
+			HTM_U_Begin ();
+	      }
+	    HTM_Txt (Txt_TST_STR_ORDER_SHORT[Order]);
+	    if (Test->NumQsts > 1)
+	      {
+		     if (Order == Test->SelectedOrder)
+			HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
 
-      HTM_TH_End ();
-     }
+	 HTM_TH_End ();
+	}
 
    /***** End row *****/
    HTM_TR_End ();
@@ -2262,109 +2240,109 @@ static void Tst_WriteQuestionListing (struct Tst_Test *Test,unsigned QstInd)
    char *Id;
 
    /***** Get and show question data *****/
-   if (Tst_GetQstDataFromDB (&Test->Question))
+   if (Qst_GetQstDataFromDB (&Test->Question))
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
 
-      /***** Icons *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 /***** Icons *****/
+	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
-      /* Write icon to remove the question */
-      Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
-				     Tst_PutParamsEditQst,Test);
+	    /* Write icon to remove the question */
+	    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
+					   Qst_PutParamsEditQst,Test);
 
-      /* Write icon to edit the question */
-      Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
-                                   Tst_PutParamQstCod,&Test->Question.QstCod);
+	    /* Write icon to edit the question */
+	    Ico_PutContextualIconToEdit (ActEdiOneTstQst,NULL,
+					 Qst_PutParamQstCod,&Test->Question.QstCod);
 
-      HTM_TD_End ();
+	 HTM_TD_End ();
 
-      /* Number of question and answer type */
-      HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-      Tst_WriteAnswerType (Test->Question.Answer.Type,"DAT_SMALL");
-      HTM_TD_End ();
+	 /* Number of question and answer type */
+	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	    Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
+	    Qst_WriteAnswerType (Test->Question.Answer.Type,"DAT_SMALL");
+	 HTM_TD_End ();
 
-      /* Question code */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",Test->Question.QstCod);
-      HTM_TD_End ();
+	 /* Question code */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%ld&nbsp;",Test->Question.QstCod);
+	 HTM_TD_End ();
 
-      /* Date (row[0] has the UTC date-time) */
-      if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
-		    Id,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Test->Question.EditTime,
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,false,0x7);
-      HTM_TD_End ();
-      free (Id);
+	 /* Date (row[0] has the UTC date-time) */
+	 if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
+		       Id,Gbl.RowEvenOdd);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Test->Question.EditTime,
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,false,0x7);
+	 HTM_TD_End ();
+	 free (Id);
 
-      /* Question tags */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (Test->Question.QstCod);
-      HTM_TD_End ();
+	 /* Question tags */
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    Tag_GetAndWriteTagsQst (Test->Question.QstCod);
+	 HTM_TD_End ();
 
-      /* Shuffle (row[2]) */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      if (Test->Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-	  Test->Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
-	{
-	 Frm_BeginForm (ActChgShfTstQst);
-	 Tst_PutParamsEditQst (Test);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test->SelectedOrder);
-	 HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
-			     "value=\"Y\"%s",
-			     Test->Question.Answer.Shuffle ? " checked=\"checked\"" :
-						             "");
-	 Frm_EndForm ();
-	}
-      HTM_TD_End ();
+	 /* Shuffle (row[2]) */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    if (Test->Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
+		Test->Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
+	      {
+	       Frm_BeginForm (ActChgShfTstQst);
+	       Qst_PutParamsEditQst (Test);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Test->SelectedOrder);
+		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s",
+				      Test->Question.Answer.Shuffle ? " checked=\"checked\"" :
+								      "");
+	       Frm_EndForm ();
+	      }
+	 HTM_TD_End ();
 
-      /* Stem (row[3]) */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (Test->Question.Stem,"TEST_TXT",
-			true);	// Visible
+	 /* Stem (row[3]) */
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    Qst_WriteQstStem (Test->Question.Stem,"TEST_TXT",
+			      true);	// Visible
 
-      /***** Get and show media (row[5]) *****/
-      Med_ShowMedia (&Test->Question.Media,
-		     "TEST_MED_EDIT_LIST_CONT",
-		     "TEST_MED_EDIT_LIST");
+	    /***** Get and show media (row[5]) *****/
+	    Med_ShowMedia (&Test->Question.Media,
+			   "TEST_MED_EDIT_LIST_CONT",
+			   "TEST_MED_EDIT_LIST");
 
-      /* Feedback (row[4]) and answers */
-      Tst_WriteQstFeedback (Test->Question.Feedback,"TEST_TXT_LIGHT");
-      Tst_WriteAnswersBank (&Test->Question,"TEST_TXT","TEST_TXT_LIGHT");
-      HTM_TD_End ();
+	    /* Feedback (row[4]) and answers */
+	    Qst_WriteQstFeedback (Test->Question.Feedback,"TEST_TXT_LIGHT");
+	    Qst_WriteAnswersBank (&Test->Question,"TEST_TXT","TEST_TXT_LIGHT");
+	 HTM_TD_End ();
 
-      /* Number of times this question has been answered */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_UnsignedLong (Test->Question.NumHits);
-      HTM_TD_End ();
+	 /* Number of times this question has been answered */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_UnsignedLong (Test->Question.NumHits);
+	 HTM_TD_End ();
 
-      /* Average score */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      if (Test->Question.NumHits)
-	 HTM_Double2Decimals (Test->Question.Score /
-	                      (double) Test->Question.NumHits);
-      else
-	 HTM_Txt ("N.A.");
-      HTM_TD_End ();
+	 /* Average score */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    if (Test->Question.NumHits)
+	       HTM_Double2Decimals (Test->Question.Score /
+				    (double) Test->Question.NumHits);
+	    else
+	       HTM_Txt ("N.A.");
+	 HTM_TD_End ();
 
-      /* Number of times this question has been answered (not blank) */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_UnsignedLong (Test->Question.NumHitsNotBlank);
-      HTM_TD_End ();
+	 /* Number of times this question has been answered (not blank) */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_UnsignedLong (Test->Question.NumHitsNotBlank);
+	 HTM_TD_End ();
 
-      /* Average score (not blank) */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      if (Test->Question.NumHitsNotBlank)
-	 HTM_Double2Decimals (Test->Question.Score /
-	                      (double) Test->Question.NumHitsNotBlank);
-      else
-	 HTM_Txt ("N.A.");
-      HTM_TD_End ();
+	 /* Average score (not blank) */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    if (Test->Question.NumHitsNotBlank)
+	       HTM_Double2Decimals (Test->Question.Score /
+				    (double) Test->Question.NumHitsNotBlank);
+	    else
+	       HTM_Txt ("N.A.");
+	 HTM_TD_End ();
 
       /***** End table row *****/
       HTM_TR_End ();
@@ -2391,7 +2369,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
    extern const char *Txt_Question;
    extern const char *Txt_Add_questions;
    unsigned QstInd;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    MYSQL_ROW row;
 
    /***** Begin box *****/
@@ -2399,59 +2377,61 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForSet (struct Exa_Exams *Exam
                  NULL,NULL,
 		 Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActAddQstToExa);
-   ExaSet_PutParamsOneSet (Exams);
+      /***** Begin form *****/
+      Frm_BeginForm (ActAddQstToExa);
+      ExaSet_PutParamsOneSet (Exams);
 
-   /***** Select all questions *****/
-   Tst_PutCheckboxToSelectAllQuestions ();
+	 /***** Select all questions *****/
+	 Tst_PutCheckboxToSelectAllQuestions ();
 
-   /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
-   HTM_TR_Begin (NULL);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (5);
 
-   HTM_TH_Empty (1);
+	    /***** Write the heading *****/
+	    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Code);
-   HTM_TH (1,1,"CT",Txt_Date);
-   HTM_TH (1,1,"LT",Txt_Tags);
-   HTM_TH (1,1,"CT",Txt_Type);
-   HTM_TH (1,1,"CT",Txt_Shuffle);
-   HTM_TH (1,1,"CT",Txt_Question);
+	       HTM_TH_Empty (1);
 
-   HTM_TR_End ();
+	       HTM_TH (1,1,"CT",Txt_No_INDEX);
+	       HTM_TH (1,1,"CT",Txt_Code);
+	       HTM_TH (1,1,"CT",Txt_Date);
+	       HTM_TH (1,1,"LT",Txt_Tags);
+	       HTM_TH (1,1,"CT",Txt_Type);
+	       HTM_TH (1,1,"CT",Txt_Shuffle);
+	       HTM_TH (1,1,"CT",Txt_Question);
 
-   /***** Write rows *****/
-   for (QstInd = 0;
-	QstInd < NumQsts;
-	QstInd++)
-     {
-      Gbl.RowEvenOdd = QstInd % 2;
+	    HTM_TR_End ();
 
-      /* Create test question */
-      Tst_QstConstructor (&Question);
+	    /***** Write rows *****/
+	    for (QstInd = 0;
+		 QstInd < NumQsts;
+		 QstInd++)
+	      {
+	       Gbl.RowEvenOdd = QstInd % 2;
 
-      /* Get question code (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-         Err_WrongQuestionExit ();
+	       /* Create test question */
+	       Qst_QstConstructor (&Question);
 
-      /* Write question row */
-      Tst_WriteQuestionRowForSelection (QstInd,&Question);
+	       /* Get question code (row[0]) */
+	       row = mysql_fetch_row (mysql_res);
+	       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+		  Err_WrongQuestionExit ();
 
-      /* Destroy test question */
-      Tst_QstDestructor (&Question);
-     }
+	       /* Write question row */
+	       Tst_WriteQuestionRowForSelection (QstInd,&Question);
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	       /* Destroy test question */
+	       Qst_QstDestructor (&Question);
+	      }
 
-   /***** Button to add questions *****/
-   Btn_PutCreateButton (Txt_Add_questions);
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** End form *****/
-   Frm_EndForm ();
+	 /***** Button to add questions *****/
+	 Btn_PutCreateButton (Txt_Add_questions);
+
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2476,7 +2456,7 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
    extern const char *Txt_Question;
    extern const char *Txt_Add_questions;
    unsigned QstInd;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    MYSQL_ROW row;
 
    /***** Begin box *****/
@@ -2484,59 +2464,60 @@ static void Tst_ListOneOrMoreQuestionsForSelectionForGame (struct Gam_Games *Gam
                  NULL,NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActAddTstQstToGam);
-   Gam_PutParams (Games);
+      /***** Begin form *****/
+      Frm_BeginForm (ActAddTstQstToGam);
+      Gam_PutParams (Games);
 
-   /***** Select all questions *****/
-   Tst_PutCheckboxToSelectAllQuestions ();
+	 /***** Select all questions *****/
+	 Tst_PutCheckboxToSelectAllQuestions ();
 
-   /***** Write the heading *****/
-   HTM_TABLE_BeginWideMarginPadding (5);
-   HTM_TR_Begin (NULL);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginWideMarginPadding (5);
 
-   HTM_TH_Empty (1);
+	    /***** Write the heading *****/
+	    HTM_TR_Begin (NULL);
 
-   HTM_TH (1,1,"CT",Txt_No_INDEX);
-   HTM_TH (1,1,"CT",Txt_Code);
-   HTM_TH (1,1,"CT",Txt_Date);
-   HTM_TH (1,1,"LT",Txt_Tags);
-   HTM_TH (1,1,"CT",Txt_Type);
-   HTM_TH (1,1,"CT",Txt_Shuffle);
-   HTM_TH (1,1,"CT",Txt_Question);
+	       HTM_TH_Empty (1);
+	       HTM_TH (1,1,"CT",Txt_No_INDEX);
+	       HTM_TH (1,1,"CT",Txt_Code);
+	       HTM_TH (1,1,"CT",Txt_Date);
+	       HTM_TH (1,1,"LT",Txt_Tags);
+	       HTM_TH (1,1,"CT",Txt_Type);
+	       HTM_TH (1,1,"CT",Txt_Shuffle);
+	       HTM_TH (1,1,"CT",Txt_Question);
 
-   HTM_TR_End ();
+	    HTM_TR_End ();
 
-   /***** Write rows *****/
-   for (QstInd = 0;
-	QstInd < NumQsts;
-	QstInd++)
-     {
-      Gbl.RowEvenOdd = QstInd % 2;
+	    /***** Write rows *****/
+	    for (QstInd = 0;
+		 QstInd < NumQsts;
+		 QstInd++)
+	      {
+	       Gbl.RowEvenOdd = QstInd % 2;
 
-      /* Create test question */
-      Tst_QstConstructor (&Question);
+	       /* Create test question */
+	       Qst_QstConstructor (&Question);
 
-      /* Get question code (row[0]) */
-      row = mysql_fetch_row (mysql_res);
-      if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-         Err_WrongQuestionExit ();
+	       /* Get question code (row[0]) */
+	       row = mysql_fetch_row (mysql_res);
+	       if ((Question.QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+		  Err_WrongQuestionExit ();
 
-      /* Write question row */
-      Tst_WriteQuestionRowForSelection (QstInd,&Question);
+	       /* Write question row */
+	       Tst_WriteQuestionRowForSelection (QstInd,&Question);
 
-      /* Destroy test question */
-      Tst_QstDestructor (&Question);
-     }
+	       /* Destroy test question */
+	       Qst_QstDestructor (&Question);
+	      }
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-   /***** Button to add questions *****/
-   Btn_PutCreateButton (Txt_Add_questions);
+	 /***** Button to add questions *****/
+	 Btn_PutCreateButton (Txt_Add_questions);
 
-   /***** End form *****/
-   Frm_EndForm ();
+      /***** End form *****/
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2553,9 +2534,9 @@ static void Tst_PutCheckboxToSelectAllQuestions (void)
 
    /***** Checkbox to select all listed questions *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
-   HTM_TxtF ("&nbsp;%s",Txt_All_questions);
+      HTM_INPUT_CHECKBOX ("AllQsts",HTM_DONT_SUBMIT_ON_CHANGE,
+			  "value=\"Y\" onclick=\"togglecheckChildren(this,'QstCods');\"");
+      HTM_TxtF ("&nbsp;%s",Txt_All_questions);
    HTM_LABEL_End ();
   }
 
@@ -2564,81 +2545,80 @@ static void Tst_PutCheckboxToSelectAllQuestions (void)
 /*****************************************************************************/
 
 static void Tst_WriteQuestionRowForSelection (unsigned QstInd,
-                                              struct Tst_Question *Question)
+                                              struct Qst_Question *Question)
   {
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    static unsigned UniqueId = 0;
    char *Id;
 
    /***** Get and show questvoidion data *****/
-   if (Tst_GetQstDataFromDB (Question))
+   if (Qst_GetQstDataFromDB (Question))
      {
       /***** Begin table row *****/
       HTM_TR_Begin (NULL);
 
-      /***** Icons *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 /* Write checkbox to select the question */
+	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	    HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
+				"value=\"%ld\" onclick=\"checkParent(this,'AllQsts');\"",
+				Question->QstCod);
+   	 HTM_TD_End ();
 
-      /* Write checkbox to select the question */
-      HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%ld\" onclick=\"checkParent(this,'AllQsts');\"",
-			  Question->QstCod);
+	 /* Write number of question */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%u&nbsp;",QstInd + 1);
+	 HTM_TD_End ();
 
-      /* Write number of question */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%u&nbsp;",QstInd + 1);
-      HTM_TD_End ();
+	 /* Write question code */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%ld&nbsp;",Question->QstCod);
+	 HTM_TD_End ();
 
-      /* Write question code */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%ld&nbsp;",Question->QstCod);
-      HTM_TD_End ();
+	 /* Write the date (row[0] has the UTC date-time) */
+	 if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
+		       Id,Gbl.RowEvenOdd);
+	    Dat_WriteLocalDateHMSFromUTC (Id,Question->EditTime,
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  true,true,false,0x7);
+	 HTM_TD_End ();
+	 free (Id);
 
-      /* Write the date (row[0] has the UTC date-time) */
-      if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
-		    Id,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC (Id,Question->EditTime,
-				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				    true,true,false,0x7);
-      HTM_TD_End ();
-      free (Id);
+	 /* Write the question tags */
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    Tag_GetAndWriteTagsQst (Question->QstCod);
+	 HTM_TD_End ();
 
-      /* Write the question tags */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_GetAndWriteTagsQst (Question->QstCod);
-      HTM_TD_End ();
+	 /* Write the question type */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
+	 HTM_TD_End ();
 
-      /* Write the question type */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
-      HTM_TD_End ();
+	 /* Write if shuffle is enabled */
+	 HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
+				"value=\"Y\"%s  disabled=\"disabled\"",
+				Question->Answer.Shuffle ? " checked=\"checked\"" :
+							   "");
+	 HTM_TD_End ();
 
-      /* Write if shuffle is enabled */
-      HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"Y\"%s  disabled=\"disabled\"",
-			  Question->Answer.Shuffle ? " checked=\"checked\"" :
-					             "");
-      HTM_TD_End ();
+	 /* Write stem */
+	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    Qst_WriteQstStem (Question->Stem,"TEST_TXT",
+			      true);	// Visible
 
-      /* Write stem */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-      Tst_WriteQstStem (Question->Stem,"TEST_TXT",
-			true);	// Visible
+	    /***** Get and show media *****/
+	    Med_ShowMedia (&Question->Media,
+			   "TEST_MED_EDIT_LIST_CONT",
+			   "TEST_MED_EDIT_LIST");
 
-      /***** Get and show media *****/
-      Med_ShowMedia (&Question->Media,
-		     "TEST_MED_EDIT_LIST_CONT",
-		     "TEST_MED_EDIT_LIST");
+	    /* Write feedback */
+	    Qst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
 
-      /* Write feedback */
-      Tst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
-
-      /* Write answers */
-      Tst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
-      HTM_TD_End ();
+	    /* Write answers */
+	    Qst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
+	 HTM_TD_End ();
 
       /***** End table row *****/
       HTM_TR_End ();
@@ -2649,7 +2629,7 @@ static void Tst_WriteQuestionRowForSelection (unsigned QstInd,
 /************ Put hidden parameters for edition of test questions ************/
 /*****************************************************************************/
 
-void Tst_PutParamsEditQst (void *Test)
+void Qst_PutParamsEditQst (void *Test)
   {
    if (Test)
      {
@@ -2661,7 +2641,7 @@ void Tst_PutParamsEditQst (void *Test)
 								                            'N');
       Par_PutHiddenParamString (NULL,"AnswerType",((struct Tst_Test *) Test)->AnswerTypes.List);
 
-      Tst_PutParamQstCod (&((struct Tst_Test *) Test)->Question.QstCod);
+      Qst_PutParamQstCod (&((struct Tst_Test *) Test)->Question.QstCod);
       // if (Test->NumQsts == 1)
       //    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParamsIniEndDates ();
@@ -2672,7 +2652,7 @@ void Tst_PutParamsEditQst (void *Test)
 /*************** Get answers of a test question from database ****************/
 /*****************************************************************************/
 
-unsigned Tst_GetNumAnswersQst (long QstCod)
+unsigned Qst_GetNumAnswersQst (long QstCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of answers of a question",
@@ -2682,7 +2662,7 @@ unsigned Tst_GetNumAnswersQst (long QstCod)
 		  QstCod);
   }
 
-void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
+void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle)
   {
    /***** Get answers of a question from database *****/
@@ -2707,7 +2687,7 @@ void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
 /***************** Change format of answers text / feedback ******************/
 /*****************************************************************************/
 
-void Tst_ChangeFormatAnswersText (struct Tst_Question *Question)
+void Qst_ChangeFormatAnswersText (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
@@ -2722,7 +2702,7 @@ void Tst_ChangeFormatAnswersText (struct Tst_Question *Question)
 			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
   }
 
-void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question)
+void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
@@ -2742,20 +2722,20 @@ void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersBank (struct Tst_Question *Question,
+void Qst_WriteAnswersBank (struct Qst_Question *Question,
                            const char *ClassTxt,
                            const char *ClassFeedback)
   {
-   void (*Tst_WriteAnsBank[Tst_NUM_ANS_TYPES]) (struct Tst_Question *Question,
+   void (*Tst_WriteAnsBank[Qst_NUM_ANS_TYPES]) (struct Qst_Question *Question,
                                                 const char *ClassTxt,
                                                 const char *ClassFeedback) =
     {
-     [Tst_ANS_INT            ] = Tst_WriteIntAnsBank,
-     [Tst_ANS_FLOAT          ] = Tst_WriteFltAnsBank,
-     [Tst_ANS_TRUE_FALSE     ] = Tst_WriteTF_AnsBank,
-     [Tst_ANS_UNIQUE_CHOICE  ] = Tst_WriteChoAnsBank,
-     [Tst_ANS_MULTIPLE_CHOICE] = Tst_WriteChoAnsBank,
-     [Tst_ANS_TEXT           ] = Tst_WriteChoAnsBank,
+     [Qst_ANS_INT            ] = Tst_WriteIntAnsBank,
+     [Qst_ANS_FLOAT          ] = Tst_WriteFltAnsBank,
+     [Qst_ANS_TRUE_FALSE     ] = Tst_WriteTF_AnsBank,
+     [Qst_ANS_UNIQUE_CHOICE  ] = Tst_WriteChoAnsBank,
+     [Qst_ANS_MULTIPLE_CHOICE] = Tst_WriteChoAnsBank,
+     [Qst_ANS_TEXT           ] = Tst_WriteChoAnsBank,
     };
 
    /***** Write answers *****/
@@ -2766,7 +2746,7 @@ void Tst_WriteAnswersBank (struct Tst_Question *Question,
 /****************** Write integer answer when editing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsBank (struct Tst_Question *Question,
+static void Tst_WriteIntAnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  __attribute__((unused)) const char *ClassFeedback)
   {
@@ -2779,7 +2759,7 @@ static void Tst_WriteIntAnsBank (struct Tst_Question *Question,
 /****************** Write float answer when editing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteFltAnsBank (struct Tst_Question *Question,
+static void Tst_WriteFltAnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  __attribute__((unused)) const char *ClassFeedback)
   {
@@ -2796,14 +2776,14 @@ static void Tst_WriteFltAnsBank (struct Tst_Question *Question,
 /*********** Write false / true answer when listing test questions ***********/
 /*****************************************************************************/
 
-static void Tst_WriteTF_AnsBank (struct Tst_Question *Question,
+static void Tst_WriteTF_AnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  __attribute__((unused)) const char *ClassFeedback)
   {
    /***** Write answer *****/
    HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
       HTM_Txt ("(");
-      Tst_WriteAnsTF (Question->Answer.TF);
+      Qst_WriteAnsTF (Question->Answer.TF);
       HTM_Txt (")");
    HTM_SPAN_End ();
   }
@@ -2812,7 +2792,7 @@ static void Tst_WriteTF_AnsBank (struct Tst_Question *Question,
 /**** Write single or multiple choice answer when listing test questions *****/
 /*****************************************************************************/
 
-static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
+static void Tst_WriteChoAnsBank (struct Qst_Question *Question,
                                  const char *ClassTxt,
                                  const char *ClassFeedback)
   {
@@ -2820,10 +2800,10 @@ static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
    unsigned NumOpt;
 
    /***** Change format of answers text *****/
-   Tst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatAnswersText (Question);
 
    /***** Change format of answers feedback *****/
-   Tst_ChangeFormatAnswersFeedback (Question);
+   Qst_ChangeFormatAnswersFeedback (Question);
 
    HTM_TABLE_BeginPadding (2);
       for (NumOpt = 0;
@@ -2869,7 +2849,7 @@ static void Tst_WriteChoAnsBank (struct Tst_Question *Question,
 /************** Write false / true answer when seeing a test *****************/
 /*****************************************************************************/
 
-void Tst_WriteAnsTF (char AnsTF)
+void Qst_WriteAnsTF (char AnsTF)
   {
    extern const char *Txt_TF_QST[2];
 
@@ -2891,7 +2871,7 @@ void Tst_WriteAnsTF (char AnsTF)
 /*************** Write parameter with the code of a question *****************/
 /*****************************************************************************/
 
-void Tst_WriteParamQstCod (unsigned QstInd,long QstCod)
+void Qst_WriteParamQstCod (unsigned QstInd,long QstCod)
   {
    char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
@@ -2903,68 +2883,10 @@ void Tst_WriteParamQstCod (unsigned QstInd,long QstCod)
 /********************* Check if number of answers is one *********************/
 /*****************************************************************************/
 
-void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question)
+void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question)
   {
    if (Question->Answer.NumOptions != 1)
       Err_WrongAnswerExit ();
-  }
-
-/*****************************************************************************/
-/************************* Get tags of a test question ***********************/
-/*****************************************************************************/
-
-unsigned Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get the tags of a question from database *****/
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get the tags of a question",
-		   "SELECT tst_tags.TagTxt"	// row[0]
-		    " FROM tst_question_tags,"
-			  "tst_tags"
-		   " WHERE tst_question_tags.QstCod=%ld"
-		     " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		     " AND tst_tags.CrsCod=%ld"
-		   " ORDER BY tst_question_tags.TagInd",
-		   QstCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/******************** Get and write tags of a test question ******************/
-/*****************************************************************************/
-
-void Tst_GetAndWriteTagsQst (long QstCod)
-  {
-   extern const char *Txt_no_tags;
-   unsigned NumTags;
-   unsigned NumTag;
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   if ((NumTags = Tst_GetTagsQst (QstCod,&mysql_res)))
-     {
-      /***** Write the tags *****/
-      HTM_UL_Begin ("class=\"TEST_TAG_LIST DAT_SMALL\"");
-      for (NumTag = 0;
-	   NumTag < NumTags;
-	   NumTag++)
-        {
-         row = mysql_fetch_row (mysql_res);
-         HTM_LI_Begin (NULL);
-         HTM_Txt (row[0]);
-         HTM_LI_End ();
-        }
-      HTM_UL_End ();
-     }
-   else
-     {
-      HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-      HTM_TxtF ("(%s)",Txt_no_tags);
-      HTM_SPAN_End ();
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -3008,7 +2930,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
 	 Test->AnswerTypes.All = Par_GetParToBool ("AllAnsTypes");
 
 	 /* Get types of answer */
-	 Par_GetParMultiToText ("AnswerType",Test->AnswerTypes.List,Tst_MAX_BYTES_LIST_ANSWER_TYPES);
+	 Par_GetParMultiToText ("AnswerType",Test->AnswerTypes.List,Qst_MAX_BYTES_LIST_ANSWER_TYPES);
 
 	 /* Check number of types of answer */
 	 if (Tst_CountNumAnswerTypesInList (&Test->AnswerTypes) == 0)	// If no types of answer selected...
@@ -3021,7 +2943,7 @@ static bool Tst_GetParamsTst (struct Tst_Test *Test,
 	 /* The unique allowed type of answer in a game is unique choice */
 	 Test->AnswerTypes.All = false;
 	 snprintf (Test->AnswerTypes.List,sizeof (Test->AnswerTypes.List),"%u",
-		   (unsigned) Tst_ANS_UNIQUE_CHOICE);
+		   (unsigned) Qst_ANS_UNIQUE_CHOICE);
 	 break;
       default:
 	 break;
@@ -3128,7 +3050,7 @@ static int Tst_CountNumAnswerTypesInList (const struct Tst_AnswerTypes *AnswerTy
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
-      Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+      Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
       NumAnsTypes++;
      }
    return NumAnsTypes;
@@ -3161,30 +3083,30 @@ unsigned Tst_CountNumQuestionsInList (const char *ListQuestions)
 /******************** Show form to edit one test question ********************/
 /*****************************************************************************/
 
-void Tst_ShowFormEditOneQst (void)
+void Qst_ShowFormEditOneQst (void)
   {
    extern const char *Txt_Question_removed;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    bool PutFormToEditQuestion;
 
    /***** Create test question *****/
-   Tst_QstConstructor (&Question);
+   Qst_QstConstructor (&Question);
 
    /***** Get question data *****/
-   Question.QstCod = Tst_GetParamQstCod ();
+   Question.QstCod = Qst_GetParamQstCod ();
    if (Question.QstCod > 0)	// Question already exists in the database
-      PutFormToEditQuestion = Tst_GetQstDataFromDB (&Question);
+      PutFormToEditQuestion = Qst_GetQstDataFromDB (&Question);
    else				// New question
       PutFormToEditQuestion = true;
 
    /***** Put form to edit question *****/
    if (PutFormToEditQuestion)
-      Tst_PutFormEditOneQst (&Question);
+      Qst_PutFormEditOneQst (&Question);
    else
       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
    /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+   Qst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -3196,7 +3118,7 @@ void Tst_ShowFormEditOneQst (void)
 // 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
-static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
+static void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -3208,7 +3130,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    extern const char *Txt_Feedback;
    extern const char *Txt_optional;
    extern const char *Txt_Type;
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    extern const char *Txt_Answers;
    extern const char *Txt_Integer_number;
    extern const char *Txt_Real_number_between_A_and_B_1;
@@ -3225,7 +3147,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    unsigned IndTag;
    unsigned NumTag;
    unsigned NumOpt;
-   Tst_AnswerType_t AnsType;
+   Qst_AnswerType_t AnsType;
    bool IsThisTag;
    bool TagFound;
    bool OptionsDisabled;
@@ -3239,7 +3161,7 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
    if (Question->QstCod > 0)	// The question already has assigned a code
      {
       Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
-		    Tst_PutIconToRemoveOneQst,&Question->QstCod,
+		    Qst_PutIconToRemoveOneQst,&Question->QstCod,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeString ();
      }
@@ -3250,349 +3172,349 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvTstQst);
-   Tst_PutParamQstCod (&Question->QstCod);
+   Qst_PutParamQstCod (&Question->QstCod);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginPadding (2);	// Table for this question
+      /***** Begin table *****/
+      HTM_TABLE_BeginPadding (2);	// Table for this question
 
-   /***** Help for text editor *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\"");
-   Lay_HelpPlainEditor ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 /***** Help for text editor *****/
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("colspan=\"2\"");
+	       Lay_HelpPlainEditor ();
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /***** Get tags already existing for questions in current course *****/
-   NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res);
+	 /***** Get tags already existing for questions in current course *****/
+	 NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res);
 
-   /***** Write the tags *****/
-   HTM_TR_Begin (NULL);
+	 /***** Write the tags *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Tags);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Tags);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TABLE_BeginPadding (2);	// Table for tags
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TABLE_BeginPadding (2);	// Table for tags
 
-   for (IndTag = 0;
-	IndTag < Tag_MAX_TAGS_PER_QUESTION;
-	IndTag++)
-     {
-      HTM_TR_Begin (NULL);
+		  for (IndTag = 0;
+		       IndTag < Tag_MAX_TAGS_PER_QUESTION;
+		       IndTag++)
+		    {
+		     HTM_TR_Begin (NULL);
 
-      /***** Write the tags already existing in a selector *****/
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			"id=\"SelTag%u\" name=\"SelTag%u\""
-	                " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\"",
-                        IndTag,IndTag,IndTag);
-      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
-      mysql_data_seek (mysql_res,0);
-      TagFound = false;
-      for (NumTag  = 1;
-	   NumTag <= NumTags;
-	   NumTag++)
-        {
-         row = mysql_fetch_row (mysql_res);
-	 /*
-	 row[0] TagCod
-	 row[1] TagTxt
-	 row[2] TagHidden
-	 */
-         IsThisTag = false;
-         if (!strcasecmp (Question->Tags.Txt[IndTag],row[1]))
-           {
-  	    HTM_Txt (" selected=\"selected\"");
-  	    IsThisTag = true;
-            TagFound = true;
-           }
-         HTM_OPTION (HTM_Type_STRING,row[1],
-		     IsThisTag,false,
-		     "%s",row[1]);
-        }
-      /* If it's a new tag received from the form */
-      if (!TagFound && Question->Tags.Txt[IndTag][0])
-         HTM_OPTION (HTM_Type_STRING,Question->Tags.Txt[IndTag],
-		     true,false,
-		     "%s",Question->Tags.Txt[IndTag]);
-      HTM_OPTION (HTM_Type_STRING,"",
-		  false,false,
-		  "[%s]",Txt_new_tag);
-      HTM_SELECT_End ();
-      HTM_TD_End ();
+			/***** Write the tags already existing in a selector *****/
+			HTM_TD_Begin ("class=\"LM\"");
+			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+					     "id=\"SelTag%u\" name=\"SelTag%u\""
+					     " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\"",
+					     IndTag,IndTag,IndTag);
+			      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
+			      mysql_data_seek (mysql_res,0);
+			      TagFound = false;
+			      for (NumTag  = 1;
+				   NumTag <= NumTags;
+				   NumTag++)
+				{
+				 row = mysql_fetch_row (mysql_res);
+				 /*
+				 row[0] TagCod
+				 row[1] TagTxt
+				 row[2] TagHidden
+				 */
+				 IsThisTag = false;
+				 if (!strcasecmp (Question->Tags.Txt[IndTag],row[1]))
+				   {
+				    HTM_Txt (" selected=\"selected\"");
+				    IsThisTag = true;
+				    TagFound = true;
+				   }
+				 HTM_OPTION (HTM_Type_STRING,row[1],
+					     IsThisTag,false,
+					     "%s",row[1]);
+				}
+			      /* If it's a new tag received from the form */
+			      if (!TagFound && Question->Tags.Txt[IndTag][0])
+				 HTM_OPTION (HTM_Type_STRING,Question->Tags.Txt[IndTag],
+					     true,false,
+					     "%s",Question->Tags.Txt[IndTag]);
+			      HTM_OPTION (HTM_Type_STRING,"",
+					  false,false,
+					  "[%s]",Txt_new_tag);
+			   HTM_SELECT_End ();
+			HTM_TD_End ();
 
-      /***** Input of a new tag *****/
-      HTM_TD_Begin ("class=\"RM\"");
-      snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
-      HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
-                      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
-	              StrTagTxt,IndTag);
-      HTM_TD_End ();
+			/***** Input of a new tag *****/
+			HTM_TD_Begin ("class=\"RM\"");
+			   snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
+			   HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
+					   HTM_DONT_SUBMIT_ON_CHANGE,
+					   "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
+					   StrTagTxt,IndTag);
+			HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
+		     HTM_TR_End ();
+		    }
 
-   HTM_TABLE_End ();	// Table for tags
-   HTM_TD_End ();
+	       HTM_TABLE_End ();	// Table for tags
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
+	 /* Free structure that stores the query result */
+	 DB_FreeMySQLResult (&mysql_res);
 
-   /***** Stem and image *****/
-   HTM_TR_Begin (NULL);
+	 /***** Stem and image *****/
+	 HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Stem",Txt_Wording);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Stem",Txt_Wording);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
-	               " rows=\"5\" required=\"required\"");
-   HTM_Txt (Question->Stem);
-   HTM_TEXTAREA_End ();
-   HTM_BR ();
-   Tst_PutFormToEditQstMedia (&Question->Media,-1,
-                              false);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
+				   " rows=\"5\" required=\"required\"");
+		  HTM_Txt (Question->Stem);
+	       HTM_TEXTAREA_End ();
+	       HTM_BR ();
+	       Tst_PutFormToEditQstMedia (&Question->Media,-1,
+					  false);
 
-   /***** Feedback *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
-   HTM_BR ();
-   HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
-   if (Question->Feedback[0])
-      HTM_Txt (Question->Feedback);
-   HTM_TEXTAREA_End ();
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+	       /***** Feedback *****/
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
+		  HTM_BR ();
+		  HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
+		     if (Question->Feedback[0])
+			HTM_Txt (Question->Feedback);
+		  HTM_TEXTAREA_End ();
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Type of answer *****/
-   HTM_TR_Begin (NULL);
+	 /***** Type of answer *****/
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Type);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Type);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   for (AnsType  = (Tst_AnswerType_t) 0;
-	AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
-	AnsType++)
-     {
-      HTM_LABEL_Begin (NULL);
-      HTM_INPUT_RADIO ("AnswerType",false,
-		       "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
-		       (unsigned) AnsType,
-		       AnsType == Question->Answer.Type ? " checked=\"checked\"" :
-				                          "");
-      HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
-      HTM_LABEL_End ();
-      HTM_BR ();
-     }
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    for (AnsType  = (Qst_AnswerType_t) 0;
+		 AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
+		 AnsType++)
+	      {
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_RADIO ("AnswerType",false,
+				   "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
+				   (unsigned) AnsType,
+				   AnsType == Question->Answer.Type ? " checked=\"checked\"" :
+								      "");
+		  HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
+	       HTM_LABEL_End ();
+	       HTM_BR ();
+	      }
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** Answers *****/
-   /* Integer answer */
-   HTM_TR_Begin (NULL);
+	 /***** Answers *****/
+	 /* Integer answer */
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Answers);
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Answers);
+	    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Integer_number);
-   snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
-   HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\" required=\"required\"%s",
-                   Question->Answer.Type == Tst_ANS_INT ? "" :
-                                                          " disabled=\"disabled\"");
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColonNBSP (Txt_Integer_number);
+		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
+		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "size=\"11\" required=\"required\"%s",
+				  Question->Answer.Type == Qst_ANS_INT ? "" :
+									 " disabled=\"disabled\"");
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Floating point answer */
-   HTM_TR_Begin (NULL);
-   HTM_TD_Empty (1);
-   HTM_TD_Begin ("class=\"LT\"");
-   Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
-                           Question,0);
-   Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
-                           Question,1);
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 /* Floating point answer */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Empty (1);
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Qst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
+				       Question,0);
+	       Qst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
+				       Question,1);
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /* T/F answer */
-   HTM_TR_Begin (NULL);
-   HTM_TD_Empty (1);
-   HTM_TD_Begin ("class=\"LT\"");
-   Tst_PutTFInputField (Question,Txt_TF_QST[0],'T');
-   Tst_PutTFInputField (Question,Txt_TF_QST[1],'F');
-   HTM_TD_End ();
-   HTM_TR_End ();
+	 /* T/F answer */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Empty (1);
+	    HTM_TD_Begin ("class=\"LT\"");
+	       Qst_PutTFInputField (Question,Txt_TF_QST[0],'T');
+	       Qst_PutTFInputField (Question,Txt_TF_QST[1],'F');
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /* Questions can be shuffled? */
-   HTM_TR_Begin (NULL);
+	 /* Questions can be shuffled? */
+	 HTM_TR_Begin (NULL);
 
-   HTM_TD_Empty (1);
+	    HTM_TD_Empty (1);
 
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
-		       "value=\"Y\"%s%s",
-		       Question->Answer.Shuffle ? " checked=\"checked\"" :
-				                  "",
-   		       Question->Answer.Type != Tst_ANS_UNIQUE_CHOICE &&
-                       Question->Answer.Type != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" :
-                	                                                  "");
-   HTM_Txt (Txt_Shuffle);
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
+				      "value=\"Y\"%s%s",
+				      Question->Answer.Shuffle ? " checked=\"checked\"" :
+								 "",
+				      Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
+				      Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" :
+											 "");
+		  HTM_Txt (Txt_Shuffle);
+	       HTM_LABEL_End ();
+	    HTM_TD_End ();
 
-   HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /* Simple or multiple choice answers */
-   HTM_TR_Begin (NULL);
-   HTM_TD_Empty (1);
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TABLE_BeginPadding (2);	// Table with choice answers
+	 /* Simple or multiple choice answers */
+	 HTM_TR_Begin (NULL);
+	    HTM_TD_Empty (1);
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TABLE_BeginPadding (2);	// Table with choice answers
 
-   OptionsDisabled = Question->Answer.Type != Tst_ANS_UNIQUE_CHOICE &&
-                     Question->Answer.Type != Tst_ANS_MULTIPLE_CHOICE &&
-	             Question->Answer.Type != Tst_ANS_TEXT;
-   for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-     {
-      Gbl.RowEvenOdd = NumOpt % 2;
+	       OptionsDisabled = Question->Answer.Type != Qst_ANS_UNIQUE_CHOICE &&
+				 Question->Answer.Type != Qst_ANS_MULTIPLE_CHOICE &&
+				 Question->Answer.Type != Qst_ANS_TEXT;
+	       for (NumOpt = 0;
+		    NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
+		    NumOpt++)
+		 {
+		  Gbl.RowEvenOdd = NumOpt % 2;
 
-      AnswerHasContent = false;
-      if (Question->Answer.Options[NumOpt].Text)
-	 if (Question->Answer.Options[NumOpt].Text[0] ||			// Text
-	     Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
-	    AnswerHasContent = true;
-      DisplayRightColumn = NumOpt < 2 ||	// Display at least the two first options
-	                   AnswerHasContent;
+		  AnswerHasContent = false;
+		  if (Question->Answer.Options[NumOpt].Text)
+		     if (Question->Answer.Options[NumOpt].Text[0] ||			// Text
+			 Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+			AnswerHasContent = true;
+		  DisplayRightColumn = NumOpt < 2 ||	// Display at least the two first options
+				       AnswerHasContent;
 
-      HTM_TR_Begin (NULL);
+		  HTM_TR_Begin (NULL);
 
-      /***** Left column: selectors *****/
-      HTM_TD_Begin ("class=\"TEST_EDI_ANS_LEFT_COL COLOR%u\"",Gbl.RowEvenOdd);
+		     /***** Left column: selectors *****/
+		     HTM_TD_Begin ("class=\"TEST_EDI_ANS_LEFT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
-      /* Radio selector for unique choice answers */
-      HTM_INPUT_RADIO ("AnsUni",false,
-		       "value=\"%u\"%s%s%s onclick=\"enableDisableAns(this.form);\"",
-		       NumOpt,
-		       Question->Answer.Options[NumOpt].Correct ? " checked=\"checked\"" :
-			                                          "",
-		       NumOpt < 2 ? " required=\"required\"" :	// First or second options required
-				    "",
-		       Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ? "" :
-				                                        " disabled=\"disabled\"");
+			/* Radio selector for unique choice answers */
+			HTM_INPUT_RADIO ("AnsUni",false,
+					 "value=\"%u\"%s%s%s onclick=\"enableDisableAns(this.form);\"",
+					 NumOpt,
+					 Question->Answer.Options[NumOpt].Correct ? " checked=\"checked\"" :
+										    "",
+					 NumOpt < 2 ? " required=\"required\"" :	// First or second options required
+						      "",
+					 Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ? "" :
+											  " disabled=\"disabled\"");
 
-      /* Checkbox for multiple choice answers */
-      HTM_INPUT_CHECKBOX ("AnsMulti",HTM_DONT_SUBMIT_ON_CHANGE,
-			  "value=\"%u\"%s%s",
-			  NumOpt,
-			  Question->Answer.Options[NumOpt].Correct ? " checked=\"checked\"" :
-				                                     "",
-			  Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE ? "" :
-				                                             " disabled=\"disabled\"");
+			/* Checkbox for multiple choice answers */
+			HTM_INPUT_CHECKBOX ("AnsMulti",HTM_DONT_SUBMIT_ON_CHANGE,
+					    "value=\"%u\"%s%s",
+					    NumOpt,
+					    Question->Answer.Options[NumOpt].Correct ? " checked=\"checked\"" :
+										       "",
+					    Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE ? "" :
+											       " disabled=\"disabled\"");
 
-      HTM_TD_End ();
+		     HTM_TD_End ();
 
-      /***** Center column: letter of the answer and expand / contract icon *****/
-      HTM_TD_Begin ("class=\"%s TEST_EDI_ANS_CENTER_COL COLOR%u\"",
-	            The_ClassFormInBox[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
-      HTM_TxtF ("%c)",'a' + (char) NumOpt);
+		     /***** Center column: letter of the answer and expand / contract icon *****/
+		     HTM_TD_Begin ("class=\"%s TEST_EDI_ANS_CENTER_COL COLOR%u\"",
+				   The_ClassFormInBox[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+			HTM_TxtF ("%c)",'a' + (char) NumOpt);
 
-      /* Icon to expand (show the answer) */
-      HTM_A_Begin ("href=\"\" id=\"exp_%u\"%s"
-	           " onclick=\"toggleAnswer('%u');return false;\"",
-                   NumOpt,
-		   DisplayRightColumn ?	" style=\"display:none;\"" :	// Answer does have content ==> Hide icon
-	                                "",
-	           NumOpt);
-      if (asprintf (&Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Ico_PutIcon ("caret-right.svg",Title,"ICO16x16");
-      free (Title);
-      HTM_A_End ();
+			/* Icon to expand (show the answer) */
+			HTM_A_Begin ("href=\"\" id=\"exp_%u\"%s"
+				     " onclick=\"toggleAnswer('%u');return false;\"",
+				     NumOpt,
+				     DisplayRightColumn ?	" style=\"display:none;\"" :	// Answer does have content ==> Hide icon
+							  "",
+				     NumOpt);
+			   if (asprintf (&Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt) < 0)
+			      Err_NotEnoughMemoryExit ();
+			   Ico_PutIcon ("caret-right.svg",Title,"ICO16x16");
+			   free (Title);
+			HTM_A_End ();
 
-      /* Icon to contract (hide the answer) */
-      HTM_A_Begin ("href=\"\" id=\"con_%u\"%s"
-	           " onclick=\"toggleAnswer(%u);return false;\"",
-		   NumOpt,
-                   DisplayRightColumn ? "" :
-	                                " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
-                   NumOpt);
-      if (asprintf (&Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Ico_PutIcon ("caret-down.svg",Title,"ICO16x16");
-      free (Title);
-      HTM_A_End ();
+			/* Icon to contract (hide the answer) */
+			HTM_A_Begin ("href=\"\" id=\"con_%u\"%s"
+				     " onclick=\"toggleAnswer(%u);return false;\"",
+				     NumOpt,
+				     DisplayRightColumn ? "" :
+							  " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
+				     NumOpt);
+			   if (asprintf (&Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt) < 0)
+			      Err_NotEnoughMemoryExit ();
+			   Ico_PutIcon ("caret-down.svg",Title,"ICO16x16");
+			   free (Title);
+			HTM_A_End ();
 
-      HTM_TD_End ();
+		     HTM_TD_End ();
 
-      /***** Right column: content of the answer *****/
-      HTM_TD_Begin ("class=\"TEST_EDI_ANS_RIGHT_COL COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_DIV_Begin ("id=\"ans_%u\"%s",
-		     NumOpt,
-		     DisplayRightColumn ? "" :
-	                                  " style=\"display:none;\"");	// Answer does not have content ==> Hide column
+		     /***** Right column: content of the answer *****/
+		     HTM_TD_Begin ("class=\"TEST_EDI_ANS_RIGHT_COL COLOR%u\"",Gbl.RowEvenOdd);
+			HTM_DIV_Begin ("id=\"ans_%u\"%s",
+				       NumOpt,
+				       DisplayRightColumn ? "" :
+							    " style=\"display:none;\"");	// Answer does not have content ==> Hide column
 
-      /* Answer text */
-      HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"5\"%s",
-	                  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
-	                	                   "");
-      if (AnswerHasContent)
-         HTM_Txt (Question->Answer.Options[NumOpt].Text);
-      HTM_TEXTAREA_End ();
+			   /* Answer text */
+			   HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"5\"%s",
+					       NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
+									"");
+			      if (AnswerHasContent)
+				 HTM_Txt (Question->Answer.Options[NumOpt].Text);
+			   HTM_TEXTAREA_End ();
 
-      /* Media */
-      Tst_PutFormToEditQstMedia (&Question->Answer.Options[NumOpt].Media,
-                                 (int) NumOpt,
-                                 OptionsDisabled);
+			   /* Media */
+			   Tst_PutFormToEditQstMedia (&Question->Answer.Options[NumOpt].Media,
+						      (int) NumOpt,
+						      OptionsDisabled);
 
-      /* Feedback */
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
-      HTM_BR ();
-      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
-			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
-				                   "");
-      if (Question->Answer.Options[NumOpt].Feedback)
-         if (Question->Answer.Options[NumOpt].Feedback[0])
-            HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
-      HTM_TEXTAREA_End ();
-      HTM_LABEL_End ();
+			   /* Feedback */
+			   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
+			      HTM_BR ();
+			      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
+						  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
+									   "");
+				 if (Question->Answer.Options[NumOpt].Feedback)
+				    if (Question->Answer.Options[NumOpt].Feedback[0])
+				       HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
+			      HTM_TEXTAREA_End ();
+			   HTM_LABEL_End ();
 
-      /* End of right column */
-      HTM_DIV_End ();
-      HTM_TD_End ();
+			/* End of right column */
+			HTM_DIV_End ();
+		     HTM_TD_End ();
 
-      HTM_TR_End ();
-     }
-   HTM_TABLE_End ();	// Table with choice answers
-   HTM_TD_End ();
-   HTM_TR_End ();
+		  HTM_TR_End ();
+		 }
+	       HTM_TABLE_End ();	// Table with choice answers
+	    HTM_TD_End ();
+	 HTM_TR_End ();
 
-   /***** End table *****/
-   HTM_TABLE_End ();	// Table for this question
+      /***** End table *****/
+      HTM_TABLE_End ();	// Table for this question
 
-   /***** Send button *****/
-   if (Question->QstCod > 0)	// The question already has assigned a code
-      Btn_PutConfirmButton (Txt_Save_changes);
-   else
-      Btn_PutCreateButton (Txt_Create_question);
+      /***** Send button *****/
+      if (Question->QstCod > 0)	// The question already has assigned a code
+	 Btn_PutConfirmButton (Txt_Save_changes);
+      else
+	 Btn_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -3605,22 +3527,22 @@ static void Tst_PutFormEditOneQst (struct Tst_Question *Question)
 /********************* Put input field for floating answer *******************/
 /*****************************************************************************/
 
-static void Tst_PutFloatInputField (const char *Label,const char *Field,
-                                    const struct Tst_Question *Question,
+static void Qst_PutFloatInputField (const char *Label,const char *Field,
+                                    const struct Qst_Question *Question,
                                     unsigned Index)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    char StrDouble[32];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF ("%s&nbsp;",Label);
-   snprintf (StrDouble,sizeof (StrDouble),"%.15lg",
-	     Question->Answer.FloatingPoint[Index]);
-   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "size=\"11\" required=\"required\"%s",
-                   Question->Answer.Type == Tst_ANS_FLOAT ? "" :
-                                                            " disabled=\"disabled\"");
+      HTM_TxtF ("%s&nbsp;",Label);
+      snprintf (StrDouble,sizeof (StrDouble),"%.15lg",
+		Question->Answer.FloatingPoint[Index]);
+      HTM_INPUT_TEXT (Field,Qst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
+		      HTM_DONT_SUBMIT_ON_CHANGE,
+		      "size=\"11\" required=\"required\"%s",
+		      Question->Answer.Type == Qst_ANS_FLOAT ? "" :
+							       " disabled=\"disabled\"");
    HTM_LABEL_End ();
   }
 
@@ -3628,20 +3550,20 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
 /*********************** Put input field for T/F answer **********************/
 /*****************************************************************************/
 
-static void Tst_PutTFInputField (const struct Tst_Question *Question,
+static void Qst_PutTFInputField (const struct Qst_Question *Question,
                                  const char *Label,char Value)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_INPUT_RADIO ("AnsTF",false,
-		    "value=\"%c\"%s%s required=\"required\"",
-		    Value,
-		    Question->Answer.TF == Value ? " checked=\"checked\"" :
-			                           "",
-		    Question->Answer.Type == Tst_ANS_TRUE_FALSE ? "" :
-			                                          " disabled=\"disabled\"");
-   HTM_Txt (Label);
+      HTM_INPUT_RADIO ("AnsTF",false,
+		       "value=\"%c\"%s%s required=\"required\"",
+		       Value,
+		       Question->Answer.TF == Value ? " checked=\"checked\"" :
+						      "",
+		       Question->Answer.Type == Qst_ANS_TRUE_FALSE ? "" :
+								     " disabled=\"disabled\"");
+      HTM_Txt (Label);
    HTM_LABEL_End ();
   }
 
@@ -3649,7 +3571,7 @@ static void Tst_PutTFInputField (const struct Tst_Question *Question,
 /********************* Initialize a new question to zero *********************/
 /*****************************************************************************/
 
-void Tst_QstConstructor (struct Tst_Question *Question)
+void Qst_QstConstructor (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
@@ -3669,7 +3591,7 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    Question->Feedback[0] = '\0';
 
    /***** Initialize answers *****/
-   Question->Answer.Type       = Tst_ANS_UNIQUE_CHOICE;
+   Question->Answer.Type       = Qst_ANS_UNIQUE_CHOICE;
    Question->Answer.NumOptions = 0;
    Question->Answer.Shuffle    = false;
    Question->Answer.TF         = ' ';
@@ -3679,7 +3601,7 @@ void Tst_QstConstructor (struct Tst_Question *Question)
 
    /* Initialize options */
    for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
       Question->Answer.Options[NumOpt].Correct  = false;
@@ -3699,17 +3621,17 @@ void Tst_QstConstructor (struct Tst_Question *Question)
    Question->Score = 0.0;
 
    /***** Mark question as valid *****/
-   Question->Validity = Tst_VALID_QUESTION;
+   Question->Validity = Qst_VALID_QUESTION;
   }
 
 /*****************************************************************************/
 /***************** Free memory allocated for test question *******************/
 /*****************************************************************************/
 
-void Tst_QstDestructor (struct Tst_Question *Question)
+void Qst_QstDestructor (struct Qst_Question *Question)
   {
-   Tst_FreeTextChoiceAnswers (Question);
-   Tst_FreeMediaOfQuestion (Question);
+   Qst_FreeTextChoiceAnswers (Question);
+   Qst_FreeMediaOfQuestion (Question);
    if (Question->Feedback)
      {
       free (Question->Feedback);
@@ -3727,7 +3649,7 @@ void Tst_QstDestructor (struct Tst_Question *Question)
 /*****************************************************************************/
 // Return false on error
 
-bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
+bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt)
   {
    if ((Question->Answer.Options[NumOpt].Text =
 	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
@@ -3753,21 +3675,21 @@ bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt
 /******************** Free memory of all choice answers **********************/
 /*****************************************************************************/
 
-static void Tst_FreeTextChoiceAnswers (struct Tst_Question *Question)
+static void Qst_FreeTextChoiceAnswers (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
    for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Tst_FreeTextChoiceAnswer (Question,NumOpt);
+      Qst_FreeTextChoiceAnswer (Question,NumOpt);
   }
 
 /*****************************************************************************/
 /********************** Free memory of a choice answer ***********************/
 /*****************************************************************************/
 
-static void Tst_FreeTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt)
+static void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt)
   {
    if (Question->Answer.Options[NumOpt].Text)
      {
@@ -3785,7 +3707,7 @@ static void Tst_FreeTextChoiceAnswer (struct Tst_Question *Question,unsigned Num
 /***************** Initialize images of a question to zero *******************/
 /*****************************************************************************/
 
-static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question)
+static void Qst_ResetMediaOfQuestion (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
@@ -3794,7 +3716,7 @@ static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question)
 
    /***** Reset media for every answer option *****/
    for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
       Med_ResetMedia (&Question->Answer.Options[NumOpt].Media);
   }
@@ -3803,13 +3725,13 @@ static void Tst_ResetMediaOfQuestion (struct Tst_Question *Question)
 /*********************** Free images of a question ***************************/
 /*****************************************************************************/
 
-static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
+static void Qst_FreeMediaOfQuestion (struct Qst_Question *Question)
   {
    unsigned NumOpt;
 
    Med_MediaDestructor (&Question->Media);
    for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
       Med_MediaDestructor (&Question->Answer.Options[NumOpt].Media);
   }
@@ -3818,7 +3740,7 @@ static void Tst_FreeMediaOfQuestion (struct Tst_Question *Question)
 /*************** Get answer type of a question from database *****************/
 /*****************************************************************************/
 
-Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod)
+Qst_AnswerType_t Qst_GetQstAnswerTypeFromDB (long QstCod)
   {
    char StrAnsTypeDB[256];
 
@@ -3829,14 +3751,14 @@ Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod)
 		          " FROM tst_questions"
 		         " WHERE QstCod=%ld",
 		         QstCod);
-   return Tst_ConvertFromStrAnsTypDBToAnsTyp (StrAnsTypeDB);
+   return Qst_ConvertFromStrAnsTypDBToAnsTyp (StrAnsTypeDB);
   }
 
 /*****************************************************************************/
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
+bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3870,7 +3792,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       Question->EditTime = Dat_GetUNIXTimeFromStr (row[0]);
 
       /* Get the type of answer (row[1]) */
-      Question->Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+      Question->Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Get shuffle (row[2]) */
       Question->Answer.Shuffle = (row[2][0] == 'Y');
@@ -3911,7 +3833,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the tags from the database *****/
-      NumTags = Tst_GetTagsQst (Question->QstCod,&mysql_res);
+      NumTags = Tag_DB_GetTagsQst (&mysql_res,Question->QstCod);
       for (NumTag = 0;
 	   NumTag < NumTags;
 	   NumTag++)
@@ -3925,7 +3847,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the answers from the database *****/
-      Tst_GetAnswersQst (Question,&mysql_res,
+      Qst_GetAnswersQst (Question,&mysql_res,
 			 false);	// Don't shuffle
       /*
       row[0] AnsInd
@@ -3941,28 +3863,28 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 	 row = mysql_fetch_row (mysql_res);
 	 switch (Question->Answer.Type)
 	   {
-	    case Tst_ANS_INT:
-	       Tst_CheckIfNumberOfAnswersIsOne (Question);
-	       Question->Answer.Integer = Tst_GetIntAnsFromStr (row[1]);
+	    case Qst_ANS_INT:
+	       Qst_CheckIfNumberOfAnswersIsOne (Question);
+	       Question->Answer.Integer = Qst_GetIntAnsFromStr (row[1]);
 	       break;
-	    case Tst_ANS_FLOAT:
+	    case Qst_ANS_FLOAT:
 	       if (Question->Answer.NumOptions != 2)
 		  Err_WrongAnswerExit ();
 	       Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[1]);
 	       break;
-	    case Tst_ANS_TRUE_FALSE:
-	       Tst_CheckIfNumberOfAnswersIsOne (Question);
+	    case Qst_ANS_TRUE_FALSE:
+	       Qst_CheckIfNumberOfAnswersIsOne (Question);
 	       Question->Answer.TF = row[1][0];
 	       break;
-	    case Tst_ANS_UNIQUE_CHOICE:
-	    case Tst_ANS_MULTIPLE_CHOICE:
-	    case Tst_ANS_TEXT:
+	    case Qst_ANS_UNIQUE_CHOICE:
+	    case Qst_ANS_MULTIPLE_CHOICE:
+	    case Qst_ANS_TEXT:
 	       /* Check number of options */
-	       if (Question->Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
+	       if (Question->Answer.NumOptions > Qst_MAX_OPTIONS_PER_QUESTION)
 		  Err_WrongAnswerExit ();
 
 	       /*  Allocate space for text and feedback */
-	       if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+	       if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 
@@ -4003,7 +3925,7 @@ bool Tst_GetQstDataFromDB (struct Tst_Question *Question)
 // NumOpt <  0 ==> media associated to stem
 // NumOpt >= 0 ==> media associated to answer
 
-static long Tst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
+static long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
   {
    /***** Trivial check: question code should be > 0 *****/
    if (QstCod <= 0)
@@ -4038,7 +3960,7 @@ static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
                                 struct Med_Media *Media)
   {
    /***** Get media *****/
-   Media->MedCod = Tst_GetMedCodFromDB (CrsCod,QstCod,NumOpt);
+   Media->MedCod = Qst_GetMedCodFromDB (CrsCod,QstCod,NumOpt);
    Med_GetMediaDataByCod (Media);
   }
 
@@ -4046,41 +3968,41 @@ static void Tst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
 /** Convert a string with the type of answer in database to type of answer ***/
 /*****************************************************************************/
 
-Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB)
+Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB)
   {
-   Tst_AnswerType_t AnsType;
+   Qst_AnswerType_t AnsType;
 
    if (StrAnsTypeDB != NULL)
       if (StrAnsTypeDB[0])
-	 for (AnsType  = (Tst_AnswerType_t) 0;
-	      AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
+	 for (AnsType  = (Qst_AnswerType_t) 0;
+	      AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
 	      AnsType++)
 	    if (!strcmp (StrAnsTypeDB,Tst_StrAnswerTypesDB[AnsType]))
 	       return AnsType;
 
-   return Tst_ANS_UNKNOWN;
+   return Qst_ANS_UNKNOWN;
   }
 
 /*****************************************************************************/
 /************ Convert a string with an unsigned to answer type ***************/
 /*****************************************************************************/
 
-static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr)
+static Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr)
   {
    unsigned AnsType;
 
    if (sscanf (UnsignedStr,"%u",&AnsType) != 1)
       Err_WrongAnswerExit ();
-   if (AnsType >= Tst_NUM_ANS_TYPES)
+   if (AnsType >= Qst_NUM_ANS_TYPES)
       Err_WrongAnswerExit ();
-   return (Tst_AnswerType_t) AnsType;
+   return (Qst_AnswerType_t) AnsType;
   }
 
 /*****************************************************************************/
-/*************** Receive a question of the self-assessment test **************/
+/***************************** Receive a question ****************************/
 /*****************************************************************************/
 
-void Tst_ReceiveQst (void)
+void Qst_ReceiveQst (void)
   {
    struct Tst_Test Test;
 
@@ -4088,16 +4010,16 @@ void Tst_ReceiveQst (void)
    Tst_TstConstructor (&Test);
 
    /***** Get parameters of the question from form *****/
-   Tst_GetQstFromForm (&Test.Question);
+   Qst_GetQstFromForm (&Test.Question);
 
    /***** Make sure that tags, text and answer are not empty *****/
-   if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Test.Question))
+   if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Test.Question))
      {
       /***** Move images to definitive directories *****/
-      Tst_MoveMediaToDefinitiveDirectories (&Test.Question);
+      Qst_MoveMediaToDefinitiveDirectories (&Test.Question);
 
       /***** Insert or update question, tags and answer in the database *****/
-      Tst_InsertOrUpdateQstTagsAnsIntoDB (&Test.Question);
+      Qst_InsertOrUpdateQstTagsAnsIntoDB (&Test.Question);
 
       /***** Show the question just inserted in the database *****/
       snprintf (Test.AnswerTypes.List,sizeof (Test.AnswerTypes.List),"%u",
@@ -4107,10 +4029,10 @@ void Tst_ReceiveQst (void)
    else	// Question is wrong
      {
       /***** Whether images has been received or not, reset images *****/
-      Tst_ResetMediaOfQuestion (&Test.Question);
+      Qst_ResetMediaOfQuestion (&Test.Question);
 
       /***** Put form to edit question again *****/
-      Tst_PutFormEditOneQst (&Test.Question);
+      Qst_PutFormEditOneQst (&Test.Question);
      }
 
    /***** Destroy test *****/
@@ -4121,7 +4043,7 @@ void Tst_ReceiveQst (void)
 /**************** Get parameters of a test question from form ****************/
 /*****************************************************************************/
 
-static void Tst_GetQstFromForm (struct Tst_Question *Question)
+static void Qst_GetQstFromForm (struct Qst_Question *Question)
   {
    unsigned NumTag;
    unsigned NumTagRead;
@@ -4130,21 +4052,21 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
    char TagStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char AnsStr[6 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FbStr[5 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrMultiAns[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrMultiAns[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
    unsigned NumCorrectAns;
 
    /***** Get question code *****/
-   Question->QstCod = Tst_GetParamQstCod ();
+   Question->QstCod = Qst_GetParamQstCod ();
 
    /***** Get answer type *****/
-   Question->Answer.Type = (Tst_AnswerType_t)
+   Question->Answer.Type = (Qst_AnswerType_t)
 			   Par_GetParToUnsignedLong ("AnswerType",
 						     0,
-						     Tst_NUM_ANS_TYPES - 1,
-						     (unsigned long) Tst_ANS_UNKNOWN);
-   if (Question->Answer.Type == Tst_ANS_UNKNOWN)
+						     Qst_NUM_ANS_TYPES - 1,
+						     (unsigned long) Qst_ANS_UNKNOWN);
+   if (Question->Answer.Type == Qst_ANS_UNKNOWN)
       Err_WrongAnswerExit ();
 
    /***** Get question tags *****/
@@ -4192,46 +4114,46 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
    Question->Answer.Shuffle = false;
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
-         if (!Tst_AllocateTextChoiceAnswer (Question,0))
+      case Qst_ANS_INT:
+         if (!Qst_AllocateTextChoiceAnswer (Question,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParToText ("AnsInt",Question->Answer.Options[0].Text,
 			   Cns_MAX_DECIMAL_DIGITS_LONG);
 	 break;
-      case Tst_ANS_FLOAT:
-         if (!Tst_AllocateTextChoiceAnswer (Question,0))
+      case Qst_ANS_FLOAT:
+         if (!Qst_AllocateTextChoiceAnswer (Question,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParToText ("AnsFloatMin",Question->Answer.Options[0].Text,
-	                   Tst_MAX_BYTES_FLOAT_ANSWER);
+	                   Qst_MAX_BYTES_FLOAT_ANSWER);
 
-         if (!Tst_AllocateTextChoiceAnswer (Question,1))
+         if (!Qst_AllocateTextChoiceAnswer (Question,1))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParToText ("AnsFloatMax",Question->Answer.Options[1].Text,
-	                   Tst_MAX_BYTES_FLOAT_ANSWER);
+	                   Qst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
-      case Tst_ANS_TRUE_FALSE:
+      case Qst_ANS_TRUE_FALSE:
 	 Par_GetParToText ("AnsTF",TF,1);
 	 Question->Answer.TF = TF[0];
 	 break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
          Question->Answer.Shuffle = Par_GetParToBool ("Shuffle");
 	 /* falls through */
 	 /* no break */
-      case Tst_ANS_TEXT:
+      case Qst_ANS_TEXT:
          /* Get the texts of the answers */
          for (NumOpt = 0;
-              NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+              NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
            {
-            if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+            if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
 	       /* Abort on error */
 	       Ale_ShowAlertsAndExit ();
 
@@ -4239,7 +4161,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
             snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumOpt);
 	    Par_GetParToHTML (AnsStr,Question->Answer.Options[NumOpt].Text,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	    if (Question->Answer.Type == Tst_ANS_TEXT)
+	    if (Question->Answer.Type == Qst_ANS_TEXT)
 	       /* In order to compare student answer to stored answer,
 	          the text answers are stored avoiding two or more consecurive spaces */
                Str_ReplaceSeveralSpacesForOne (Question->Answer.Options[NumOpt].Text);
@@ -4250,8 +4172,8 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Get media associated to the answer (action, file and title) */
-	    if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-		Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+	    if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
+		Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	      {
 	       Question->Answer.Options[NumOpt].Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
 	       Question->Answer.Options[NumOpt].Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
@@ -4266,31 +4188,31 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
            }
 
          /* Get the numbers of correct answers */
-         if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
+         if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
            {
 	    NumCorrectAns = (unsigned) Par_GetParToUnsignedLong ("AnsUni",
 	                                                         0,
-	                                                         Tst_MAX_OPTIONS_PER_QUESTION - 1,
+	                                                         Qst_MAX_OPTIONS_PER_QUESTION - 1,
 	                                                         0);
             Question->Answer.Options[NumCorrectAns].Correct = true;
            }
-      	 else if (Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+      	 else if (Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
            {
-	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,Tst_MAX_BYTES_ANSWERS_ONE_QST);
+	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,Qst_MAX_BYTES_ANSWERS_ONE_QST);
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {
   	       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	       if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
 	          Err_WrongAnswerExit ();
-               if (NumCorrectAns >= Tst_MAX_OPTIONS_PER_QUESTION)
+               if (NumCorrectAns >= Qst_MAX_OPTIONS_PER_QUESTION)
 	          Err_WrongAnswerExit ();
                Question->Answer.Options[NumCorrectAns].Correct = true;
               }
            }
          else // Tst_ANS_TEXT
             for (NumOpt = 0;
-        	 NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+        	 NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
         	 NumOpt++)
                if (Question->Answer.Options[NumOpt].Text[0])
                   Question->Answer.Options[NumOpt].Correct = true;	// All the answers are correct
@@ -4314,7 +4236,7 @@ static void Tst_GetQstFromForm (struct Tst_Question *Question)
 // Counts Question->Answer.NumOptions
 // Computes Question->Answer.Integer and Question->Answer.FloatingPoint[0..1]
 
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question)
+bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question)
   {
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_stem_of_the_question;
@@ -4351,7 +4273,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
    /***** Check answer *****/
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
+      case Qst_ANS_INT:
 	 /* First option should be filled */
          if (!Question->Answer.Options[0].Text)
            {
@@ -4364,10 +4286,10 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
             return false;
            }
 
-         Question->Answer.Integer = Tst_GetIntAnsFromStr (Question->Answer.Options[0].Text);
+         Question->Answer.Integer = Qst_GetIntAnsFromStr (Question->Answer.Options[0].Text);
          Question->Answer.NumOptions = 1;
          break;
-      case Tst_ANS_FLOAT:
+      case Qst_ANS_FLOAT:
 	 /* First two options should be filled */
          if (!Question->Answer.Options[0].Text ||
              !Question->Answer.Options[1].Text)
@@ -4396,7 +4318,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
 
          Question->Answer.NumOptions = 2;
          break;
-      case Tst_ANS_TRUE_FALSE:
+      case Qst_ANS_TRUE_FALSE:
 	 /* Answer should be 'T' or 'F' */
          if (Question->Answer.TF != 'T' &&
              Question->Answer.TF != 'F')
@@ -4407,11 +4329,11 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
 
          Question->Answer.NumOptions = 1;
          break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
 	 /* No option should be empty before a non-empty option */
          for (NumOpt = 0, NumLastOpt = 0, ThereIsEndOfAnswers = false;
-              NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+              NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
             if (Question->Answer.Options[NumOpt].Text)
               {
@@ -4451,7 +4373,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
             return false;
            }
          break;
-      case Tst_ANS_TEXT:
+      case Qst_ANS_TEXT:
 	 /* First option should be filled */
          if (!Question->Answer.Options[0].Text)		// If the first answer is empty
            {
@@ -4466,7 +4388,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
 
 	 /* No option should be empty before a non-empty option */
          for (NumOpt=0, ThereIsEndOfAnswers=false;
-              NumOpt<Tst_MAX_OPTIONS_PER_QUESTION;
+              NumOpt<Qst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
             if (Question->Answer.Options[NumOpt].Text)
               {
@@ -4496,9 +4418,9 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Quest
 /*********** Check if a test question already exists in database *************/
 /*****************************************************************************/
 
-bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
+bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
   {
-   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
+   extern const char *Tst_StrAnswerTypesDB[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res_qst;
    MYSQL_RES *mysql_res_ans;
    MYSQL_ROW row;
@@ -4547,11 +4469,11 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
 
          switch (Question->Answer.Type)
            {
-            case Tst_ANS_INT:
+            case Qst_ANS_INT:
                row = mysql_fetch_row (mysql_res_ans);
-               IdenticalQuestionFound = (Tst_GetIntAnsFromStr (row[0]) == Question->Answer.Integer);
+               IdenticalQuestionFound = (Qst_GetIntAnsFromStr (row[0]) == Question->Answer.Integer);
                break;
-            case Tst_ANS_FLOAT:
+            case Qst_ANS_FLOAT:
                for (IdenticalAnswers = true, i = 0;
                     IdenticalAnswers && i < 2;
                     i++)
@@ -4561,13 +4483,13 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
                  }
                IdenticalQuestionFound = IdenticalAnswers;
                break;
-            case Tst_ANS_TRUE_FALSE:
+            case Qst_ANS_TRUE_FALSE:
                row = mysql_fetch_row (mysql_res_ans);
                IdenticalQuestionFound = (Str_ConvertToUpperLetter (row[0][0]) == Question->Answer.TF);
                break;
-            case Tst_ANS_UNIQUE_CHOICE:
-            case Tst_ANS_MULTIPLE_CHOICE:
-            case Tst_ANS_TEXT:
+            case Qst_ANS_UNIQUE_CHOICE:
+            case Qst_ANS_MULTIPLE_CHOICE:
+            case Qst_ANS_TEXT:
                if (NumOptsExistingQstInDB == Question->Answer.NumOptions)
                  {
                   for (IdenticalAnswers = true, NumOpt = 0;
@@ -4605,26 +4527,26 @@ bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question)
 /* Move images associates to a test question to their definitive directories */
 /*****************************************************************************/
 
-static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question)
+static void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question)
   {
    unsigned NumOpt;
    long CurrentMedCodInDB;
 
    /***** Media associated to question stem *****/
-   CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
+   CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
                                             -1L);	// Get current media code associated to stem
    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Question->Media);
 
    /****** Move media associated to answers *****/
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
 	 for (NumOpt = 0;
 	      NumOpt < Question->Answer.NumOptions;
 	      NumOpt++)
 	   {
-	    CurrentMedCodInDB = Tst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
+	    CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Crs.CrsCod,Question->QstCod,
 						     NumOpt);	// Get current media code associated to this option
 	    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Question->Answer.Options[NumOpt].Media);
 	   }
@@ -4638,7 +4560,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (struct Tst_Question *Question)
 /******************** Get a integer number from a string *********************/
 /*****************************************************************************/
 
-long Tst_GetIntAnsFromStr (char *Str)
+long Qst_GetIntAnsFromStr (char *Str)
   {
    long LongNum;
 
@@ -4659,7 +4581,7 @@ long Tst_GetIntAnsFromStr (char *Str)
 /***************** Request the removal of selected questions *****************/
 /*****************************************************************************/
 
-void Tst_RequestRemoveSelectedQsts (void)
+void Qst_RequestRemoveSelectedQsts (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_selected_questions;
    extern const char *Txt_Remove_questions;
@@ -4673,7 +4595,7 @@ void Tst_RequestRemoveSelectedQsts (void)
      {
       /***** Show question and button to remove question *****/
       Ale_ShowAlertAndButton (ActRemSevTstQst,NULL,NULL,
-			      Tst_PutParamsEditQst,&Test,
+			      Qst_PutParamsEditQst,&Test,
 			      Btn_REMOVE_BUTTON,Txt_Remove_questions,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_selected_questions);
      }
@@ -4681,7 +4603,7 @@ void Tst_RequestRemoveSelectedQsts (void)
       Ale_ShowAlert (Ale_ERROR,"Wrong parameters.");
 
    /***** Continue editing questions *****/
-   Tst_ListQuestionsToEdit ();
+   Qst_ListQuestionsToEdit ();
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -4691,7 +4613,7 @@ void Tst_RequestRemoveSelectedQsts (void)
 /************************** Remove several questions *************************/
 /*****************************************************************************/
 
-void Tst_RemoveSelectedQsts (void)
+void Qst_RemoveSelectedQsts (void)
   {
    extern const char *Txt_Questions_removed_X;
    struct Tst_Test Test;
@@ -4707,7 +4629,7 @@ void Tst_RemoveSelectedQsts (void)
    if (Tst_GetParamsTst (&Test,Tst_EDIT_TEST))	// Get parameters
      {
       /***** Get question codes *****/
-      Tst_GetQuestions (&Test,&mysql_res);	// Query database
+      Qst_GetQuestions (&Test,&mysql_res);	// Query database
 
       /***** Remove questions one by one *****/
       for (NumQst = 0;
@@ -4720,7 +4642,7 @@ void Tst_RemoveSelectedQsts (void)
 	    Err_WrongQuestionExit ();
 
 	 /* Remove test question from database */
-	 Tst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
+	 Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -4738,17 +4660,17 @@ void Tst_RemoveSelectedQsts (void)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-static void Tst_PutIconToRemoveOneQst (void *QstCod)
+static void Qst_PutIconToRemoveOneQst (void *QstCod)
   {
    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
-                                  Tst_PutParamsRemoveOnlyThisQst,QstCod);
+                                  Qst_PutParamsRemoveOnlyThisQst,QstCod);
   }
 
 /*****************************************************************************/
 /******************** Request the removal of a question **********************/
 /*****************************************************************************/
 
-void Tst_RequestRemoveOneQst (void)
+void Qst_RequestRemoveOneQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
@@ -4760,7 +4682,7 @@ void Tst_RequestRemoveOneQst (void)
 
    /***** Get main parameters from form *****/
    /* Get the question code */
-   Test.Question.QstCod = Tst_GetParamQstCod ();
+   Test.Question.QstCod = Qst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
       Err_WrongQuestionExit ();
 
@@ -4776,13 +4698,13 @@ void Tst_RequestRemoveOneQst (void)
    /***** Show question and button to remove question *****/
    if (EditingOnlyThisQst)
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Tst_PutParamsRemoveOnlyThisQst,&Test.Question.QstCod,
+			      Qst_PutParamsRemoveOnlyThisQst,&Test.Question.QstCod,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Test.Question.QstCod);
    else
       Ale_ShowAlertAndButton (ActRemOneTstQst,NULL,NULL,
-			      Tst_PutParamsEditQst,&Test,
+			      Qst_PutParamsEditQst,&Test,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      Test.Question.QstCod);
@@ -4791,7 +4713,7 @@ void Tst_RequestRemoveOneQst (void)
    if (EditingOnlyThisQst)
       Tst_ListOneQstToEdit (&Test);
    else
-      Tst_ListQuestionsToEdit ();
+      Qst_ListQuestionsToEdit ();
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -4801,11 +4723,11 @@ void Tst_RequestRemoveOneQst (void)
 /***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
+static void Qst_PutParamsRemoveOnlyThisQst (void *QstCod)
   {
    if (QstCod)
      {
-      Tst_PutParamQstCod (QstCod);
+      Qst_PutParamQstCod (QstCod);
       Par_PutHiddenParamChar ("OnlyThisQst",'Y');
      }
   }
@@ -4814,14 +4736,14 @@ static void Tst_PutParamsRemoveOnlyThisQst (void *QstCod)
 /***************************** Remove a question *****************************/
 /*****************************************************************************/
 
-void Tst_RemoveOneQst (void)
+void Qst_RemoveOneQst (void)
   {
    extern const char *Txt_Question_removed;
    long QstCod;
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
-   QstCod = Tst_GetParamQstCod ();
+   QstCod = Qst_GetParamQstCod ();
    if (QstCod <= 0)
       Err_WrongQuestionExit ();
 
@@ -4830,29 +4752,29 @@ void Tst_RemoveOneQst (void)
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
    /***** Remove test question from database *****/
-   Tst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
+   Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Crs.CrsCod,QstCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
 
    /***** Continue editing questions *****/
    if (!EditingOnlyThisQst)
-      Tst_ListQuestionsToEdit ();
+      Qst_ListQuestionsToEdit ();
   }
 
 /*****************************************************************************/
 /********************** Remove a question from database **********************/
 /*****************************************************************************/
 
-static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
+static void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod)
   {
    /***** Remove media associated to question *****/
-   Tst_RemoveMediaFromStemOfQst (CrsCod,QstCod);
-   Tst_RemoveMediaFromAllAnsOfQst (CrsCod,QstCod);
+   Qst_RemoveMediaFromStemOfQst (CrsCod,QstCod);
+   Qst_RemoveMediaFromAllAnsOfQst (CrsCod,QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
-   Tst_RemAnsFromQst (QstCod);
+   Qst_RemAnsFromQst (QstCod);
    Tag_DB_RemTagsFromQst (QstCod);
    Tag_DB_RemoveUnusedTagsFromCrs (CrsCod);
 
@@ -4869,7 +4791,7 @@ static void Tst_RemoveOneQstFromDB (long CrsCod,long QstCod)
 /*********************** Change the shuffle of a question ********************/
 /*****************************************************************************/
 
-void Tst_ChangeShuffleQst (void)
+void Qst_ChangeShuffleQst (void)
   {
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
@@ -4881,7 +4803,7 @@ void Tst_ChangeShuffleQst (void)
    Tst_TstConstructor (&Test);
 
    /***** Get the question code *****/
-   Test.Question.QstCod = Tst_GetParamQstCod ();
+   Test.Question.QstCod = Qst_GetParamQstCod ();
    if (Test.Question.QstCod <= 0)
       Err_WrongQuestionExit ();
 
@@ -4912,7 +4834,7 @@ void Tst_ChangeShuffleQst (void)
    if (EditingOnlyThisQst)
       Tst_ListOneQstToEdit (&Test);
    else
-      Tst_ListQuestionsToEdit ();
+      Qst_ListQuestionsToEdit ();
 
    /***** Destroy test *****/
    Tst_TstDestructor (&Test);
@@ -4922,7 +4844,7 @@ void Tst_ChangeShuffleQst (void)
 /************ Get the parameter with the code of a test question *************/
 /*****************************************************************************/
 
-long Tst_GetParamQstCod (void)
+long Qst_GetParamQstCod (void)
   {
    /***** Get code of test question *****/
    return Par_GetParToLong ("QstCod");
@@ -4932,7 +4854,7 @@ long Tst_GetParamQstCod (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-void Tst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
+void Qst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
   {
    if (QstCod)
       if (*((long *) QstCod) > 0)	// If question exists
@@ -4943,10 +4865,10 @@ void Tst_PutParamQstCod (void *QstCod)	// Should be a pointer to long
 /******** Insert or update question, tags and answer in the database *********/
 /*****************************************************************************/
 
-void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
+void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question)
   {
    /***** Insert or update question in the table of questions *****/
-   Tst_InsertOrUpdateQstIntoDB (Question);
+   Qst_InsertOrUpdateQstIntoDB (Question);
 
    if (Question->QstCod > 0)
      {
@@ -4957,7 +4879,7 @@ void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
       Tag_DB_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Insert answers in the answers table *****/
-      Tst_InsertAnswersIntoDB (Question);
+      Qst_InsertAnswersIntoDB (Question);
      }
   }
 
@@ -4965,7 +4887,7 @@ void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question)
 /*********** Insert or update question in the table of questions *************/
 /*****************************************************************************/
 
-static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
+static void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question)
   {
    if (Question->QstCod < 0)	// It's a new question
      {
@@ -5026,7 +4948,7 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 		      Gbl.Hierarchy.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */
-      Tst_RemAnsFromQst (Question->QstCod);
+      Qst_RemAnsFromQst (Question->QstCod);
       Tag_DB_RemTagsFromQst (Question->QstCod);
      }
   }
@@ -5035,7 +4957,7 @@ static void Tst_InsertOrUpdateQstIntoDB (struct Tst_Question *Question)
 /******************* Insert answers in the answers table *********************/
 /*****************************************************************************/
 
-static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
+static void Qst_InsertAnswersIntoDB (struct Qst_Question *Question)
   {
    unsigned NumOpt;
    unsigned i;
@@ -5043,7 +4965,7 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
    /***** Insert answers in the answers table *****/
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
+      case Qst_ANS_INT:
          DB_QueryINSERT ("can not create answer",
 			 "INSERT INTO tst_answers"
                          " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
@@ -5052,7 +4974,7 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
 			 Question->QstCod,
 			 Question->Answer.Integer);
          break;
-      case Tst_ANS_FLOAT:
+      case Qst_ANS_FLOAT:
 	 Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    	 for (i = 0;
    	      i < 2;
@@ -5067,7 +4989,7 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
 			    Question->Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
-      case Tst_ANS_TRUE_FALSE:
+      case Qst_ANS_TRUE_FALSE:
          DB_QueryINSERT ("can not create answer",
 			 "INSERT INTO tst_answers"
                          " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
@@ -5076,9 +4998,9 @@ static void Tst_InsertAnswersIntoDB (struct Tst_Question *Question)
 			 Question->QstCod,
 			 Question->Answer.TF);
          break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-      case Tst_ANS_TEXT:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_TEXT:
          for (NumOpt = 0;
               NumOpt < Question->Answer.NumOptions;
               NumOpt++)
@@ -5135,7 +5057,7 @@ void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
   }
 
 /*****************************************************************************/
-/******************* Remove all test questions in a course *******************/
+/**************** Remove all tests and questions in a course *****************/
 /*****************************************************************************/
 
 void Tst_RemoveCrsTests (long CrsCod)
@@ -5167,8 +5089,8 @@ void Tst_RemoveCrsTests (long CrsCod)
 		   CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
-   Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
-   Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
+   Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
+   Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
 
    /***** Remove test answers in the course *****/
    DB_QueryDELETE ("can not remove answers of tests of a course",
@@ -5190,7 +5112,7 @@ void Tst_RemoveCrsTests (long CrsCod)
 /******************** Remove answers from a test question ********************/
 /*****************************************************************************/
 
-static void Tst_RemAnsFromQst (long QstCod)
+static void Qst_RemAnsFromQst (long QstCod)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
@@ -5203,7 +5125,7 @@ static void Tst_RemAnsFromQst (long QstCod)
 /************ Remove media associated to stem of a test question *************/
 /*****************************************************************************/
 
-static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
+static void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -5228,7 +5150,7 @@ static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
 /******* Remove all media associated to all answers of a test question *******/
 /*****************************************************************************/
 
-static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
+static void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -5258,7 +5180,7 @@ static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
 /** Remove all media associated to stems of all test questions in a course ***/
 /*****************************************************************************/
 
-static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
+static void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -5282,7 +5204,7 @@ static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
 /* Remove media associated to all answers of all test questions in a course **/
 /*****************************************************************************/
 
-static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
+static void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -5308,7 +5230,7 @@ static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
 /*********************** Get stats about test questions **********************/
 /*****************************************************************************/
 
-void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
+void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Tst_Stats *Stats)
   {
    Stats->NumQsts = 0;
    Stats->NumCoursesWithQuestions = Stats->NumCoursesWithPluggableQuestions = 0;
@@ -5319,11 +5241,11 @@ void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
    Stats->TotalScore = 0.0;
    Stats->AvgScorePerQuestion = 0.0;
 
-   if (Tst_GetNumTstQuestions (Gbl.Scope.Current,AnsType,Stats))
+   if (Qst_GetNumQuestions (Gbl.Scope.Current,AnsType,Stats))
      {
-      if ((Stats->NumCoursesWithQuestions = Tst_GetNumCoursesWithTstQuestions (Gbl.Scope.Current,AnsType)) != 0)
+      if ((Stats->NumCoursesWithQuestions = Qst_GetNumCoursesWithQuestions (Gbl.Scope.Current,AnsType)) != 0)
         {
-         Stats->NumCoursesWithPluggableQuestions = Tst_GetNumCoursesWithPluggableTstQuestions (Gbl.Scope.Current,AnsType);
+         Stats->NumCoursesWithPluggableQuestions = Qst_GetNumCoursesWithPluggableQuestions (Gbl.Scope.Current,AnsType);
          Stats->AvgQstsPerCourse = (double) Stats->NumQsts / (double) Stats->NumCoursesWithQuestions;
          Stats->AvgHitsPerCourse = (double) Stats->NumHits / (double) Stats->NumCoursesWithQuestions;
         }
@@ -5339,7 +5261,7 @@ void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
 // Returns the number of test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
+static unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,struct Tst_Stats *Stats)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5348,7 +5270,7 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
    switch (Scope)
      {
       case HieLvl_SYS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),"		// row[0]
         		           "SUM(NumHits),"	// row[1]
@@ -5364,7 +5286,7 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case HieLvl_CTY:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),"		// row[0]
         		           "SUM(NumHits),"	// row[1]
@@ -5400,7 +5322,7 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case HieLvl_INS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),"		// row[0]
         		           "SUM(NumHits),"	// row[1]
@@ -5432,7 +5354,7 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case HieLvl_CTR:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),"		// row[0]
         		           "SUM(NumHits),"	// row[1]
@@ -5460,7 +5382,7 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case HieLvl_DEG:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),"		// row[0]
         		           "SUM(NumHits),"	// row[1]
@@ -5484,7 +5406,7 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       case HieLvl_CRS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),"		// row[0]
         		           "SUM(NumHits),"	// row[1]
@@ -5541,13 +5463,13 @@ static unsigned Tst_GetNumTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t An
 // Returns the number of courses with test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t AnsType)
+static unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType)
   {
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
       case HieLvl_SYS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNT(DISTINCT CrsCod)"
@@ -5560,7 +5482,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_Answ
 			 " WHERE AnsType='%s'",
 			 Tst_StrAnswerTypesDB[AnsType]);
       case HieLvl_CTY:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5593,7 +5515,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_Answ
 			 Gbl.Hierarchy.Cty.CtyCod,
 			 Tst_StrAnswerTypesDB[AnsType]);
       case HieLvl_INS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5622,7 +5544,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_Answ
 			 Gbl.Hierarchy.Ins.InsCod,
 			 Tst_StrAnswerTypesDB[AnsType]);
       case HieLvl_CTR:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5647,7 +5569,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_Answ
 			 Gbl.Hierarchy.Ctr.CtrCod,
 			 Tst_StrAnswerTypesDB[AnsType]);
       case HieLvl_DEG:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNTDISTINCT (tst_questions.CrsCod)"
@@ -5668,7 +5590,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_Answ
 			 Gbl.Hierarchy.Deg.DegCod,
 			 Tst_StrAnswerTypesDB[AnsType]);
       case HieLvl_CRS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
             DB_QueryCOUNT ("can not get number of courses with test questions",
         		    "SELECT COUNT(DISTINCT CrsCod)"
@@ -5695,7 +5617,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (HieLvl_Level_t Scope,Tst_Answ
 // Returns the number of courses with pluggable test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope,Tst_AnswerType_t AnsType)
+static unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType)
   {
    extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
 
@@ -5703,7 +5625,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
    switch (Scope)
      {
       case HieLvl_SYS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
 			   "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5724,7 +5646,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
 			Tst_StrAnswerTypesDB[AnsType],
 			TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
       case HieLvl_CTY:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5765,7 +5687,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
       case HieLvl_INS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5802,7 +5724,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
       case HieLvl_CTR:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5835,7 +5757,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
       case HieLvl_DEG:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5864,7 +5786,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
 			    Tst_StrAnswerTypesDB[AnsType],
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
       case HieLvl_CRS:
-         if (AnsType == Tst_ANS_UNKNOWN)	// Any type
+         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
 	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
 			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
@@ -5897,8 +5819,8 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (HieLvl_Level_t Scope
 /*********** Get suffled/not-shuffled answers indexes of question ************/
 /*****************************************************************************/
 
-unsigned Tst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
-                                            const struct Tst_Question *Question)
+unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get questions of a game",

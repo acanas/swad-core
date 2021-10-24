@@ -34,14 +34,14 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Tst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
+#define Qst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
 
-#define Tst_MAX_OPTIONS_PER_QUESTION	10
+#define Qst_MAX_OPTIONS_PER_QUESTION	10
 
-#define Tst_MAX_BYTES_INDEXES_ONE_QST	(Tst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
+#define Qst_MAX_BYTES_INDEXES_ONE_QST	(Qst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
 
-#define Tst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
-#define Tst_MAX_BYTES_ANSWERS_ONE_QST	((Tst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Qst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
+#define Qst_MAX_BYTES_ANSWERS_ONE_QST	((Qst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Tst_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
@@ -49,27 +49,27 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-#define Tst_NUM_VALIDITIES 2
+#define Qst_NUM_VALIDITIES 2
 typedef enum
   {
-   Tst_INVALID_QUESTION,
-   Tst_VALID_QUESTION,
-  } Tst_Validity_t;
+   Qst_INVALID_QUESTION,
+   Qst_VALID_QUESTION,
+  } Qst_Validity_t;
 
-#define Tst_NUM_ANS_TYPES	6
-#define Tst_MAX_BYTES_LIST_ANSWER_TYPES	(Tst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
+#define Qst_NUM_ANS_TYPES	6
+#define Qst_MAX_BYTES_LIST_ANSWER_TYPES	(Qst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
 typedef enum
   {
-   Tst_ANS_INT             = 0,
-   Tst_ANS_FLOAT           = 1,
-   Tst_ANS_TRUE_FALSE      = 2,
-   Tst_ANS_UNIQUE_CHOICE   = 3,
-   Tst_ANS_MULTIPLE_CHOICE = 4,
-   Tst_ANS_TEXT            = 5,
-   Tst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
-  } Tst_AnswerType_t;
+   Qst_ANS_INT             = 0,
+   Qst_ANS_FLOAT           = 1,
+   Qst_ANS_TRUE_FALSE      = 2,
+   Qst_ANS_UNIQUE_CHOICE   = 3,
+   Qst_ANS_MULTIPLE_CHOICE = 4,
+   Qst_ANS_TEXT            = 5,
+   Qst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
+  } Qst_AnswerType_t;
 
-struct Tst_Question
+struct Qst_Question
   {
    long QstCod;
    struct Tag_Tags Tags;
@@ -79,7 +79,7 @@ struct Tst_Question
    struct Med_Media Media;
    struct
      {
-      Tst_AnswerType_t Type;
+      Qst_AnswerType_t Type;
       unsigned NumOptions;
       bool Shuffle;
       char TF;
@@ -89,14 +89,14 @@ struct Tst_Question
 	 char *Text;
 	 char *Feedback;
 	 struct Med_Media Media;
-	} Options[Tst_MAX_OPTIONS_PER_QUESTION];
+	} Options[Qst_MAX_OPTIONS_PER_QUESTION];
       long Integer;
       double FloatingPoint[2];
      } Answer;
    unsigned long NumHits;
    unsigned long NumHitsNotBlank;
    double Score;
-   Tst_Validity_t Validity;	// If a question in an exam has been marked as invalid
+   Qst_Validity_t Validity;	// If a question in an exam has been marked as invalid
   };
 
 /*****************************************************************************/

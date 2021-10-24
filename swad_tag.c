@@ -489,3 +489,70 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
       Frm_EndForm ();
    HTM_TD_End ();
   }
+
+/*****************************************************************************/
+/******************** Get and write tags of a test question ******************/
+/*****************************************************************************/
+
+void Tag_GetAndWriteTagsQst (long QstCod)
+  {
+   extern const char *Txt_no_tags;
+   unsigned NumTags;
+   unsigned NumTag;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   if ((NumTags = Tag_DB_GetTagsQst (&mysql_res,QstCod)))
+     {
+      /***** Write the tags *****/
+      HTM_UL_Begin ("class=\"TEST_TAG_LIST DAT_SMALL\"");
+	 for (NumTag = 0;
+	      NumTag < NumTags;
+	      NumTag++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
+	    HTM_LI_Begin (NULL);
+	       HTM_Txt (row[0]);
+	    HTM_LI_End ();
+	   }
+      HTM_UL_End ();
+     }
+   else
+     {
+      HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+	 HTM_TxtF ("(%s)",Txt_no_tags);
+      HTM_SPAN_End ();
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************************ Show list of question tags *************************/
+/*****************************************************************************/
+
+void Tag_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_no_tags;
+   MYSQL_ROW row;
+   unsigned NumTag;
+
+   if (NumTags)
+     {
+      /***** Write the tags *****/
+      HTM_UL_Begin (NULL);
+	 for (NumTag = 0;
+	      NumTag < NumTags;
+	      NumTag++)
+	   {
+	    row = mysql_fetch_row (mysql_res);
+	    HTM_LI_Begin (NULL);
+	       HTM_Txt (row[0]);
+	    HTM_LI_End ();
+	   }
+      HTM_UL_End ();
+     }
+   else
+      HTM_Txt (Txt_no_tags);
+  }

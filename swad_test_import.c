@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
+#include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_xml.h"
 
@@ -69,20 +70,20 @@ extern struct Globals Gbl;
 static void TsI_PutParamsExportQsts (void *Test);
 static void TsI_PutCreateXMLParam (void);
 
-static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML);
+static void TsI_ExportQuestion (struct Qst_Question *Question,FILE *FileXML);
 
 static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML);
-static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
+static void TsI_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
                                        FILE *FileXML);
 static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML);
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer);
-static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
+static Qst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML);
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
-                                  struct Tst_Question *Question);
+                                  struct Qst_Question *Question);
 static void TsI_WriteHeadingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
-                                     const struct Tst_Question *Question,
+                                     const struct Qst_Question *Question,
                                      bool QuestionExists);
 
 /*****************************************************************************/
@@ -108,7 +109,7 @@ static void TsI_PutParamsExportQsts (void *Test)
   {
    if (Test)
      {
-      Tst_PutParamsEditQst (Test);
+      Qst_PutParamsEditQst (Test);
       Par_PutHiddenParamChar ("OnlyThisQst",'N');
       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) (((struct Tst_Test *) Test)->SelectedOrder));
       TsI_PutCreateXMLParam ();
@@ -190,7 +191,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    char PathPubFile[PATH_MAX + 1];
    FILE *FileXML;
    unsigned NumQst;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    MYSQL_ROW row;
 
    /***** Create a temporary public directory
@@ -215,7 +216,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 	NumQst++)
      {
       /* Create test question */
-      Tst_QstConstructor (&Question);
+      Qst_QstConstructor (&Question);
 
       /* Get question code (row[0]) */
       row = mysql_fetch_row (mysql_res);
@@ -225,7 +226,7 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
       TsI_ExportQuestion (&Question,FileXML);
 
       /* Destroy test question */
-      Tst_QstDestructor (&Question);
+      Qst_QstDestructor (&Question);
      }
 
    /***** End XML file *****/
@@ -252,12 +253,12 @@ void TsI_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 /****************** Write one question into the XML file *********************/
 /*****************************************************************************/
 
-static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
+static void TsI_ExportQuestion (struct Qst_Question *Question,FILE *FileXML)
   {
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
+   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
 
-   if (Tst_GetQstDataFromDB (Question))
+   if (Qst_GetQstDataFromDB (Question))
      {
       /***** Write the answer type *****/
       fprintf (FileXML,"<question type=\"%s\">%s",
@@ -280,8 +281,8 @@ static void TsI_ExportQuestion (struct Tst_Question *Question,FILE *FileXML)
       /***** Write the answers of this question.
              Shuffle can be enabled or disabled *****/
       fprintf (FileXML,"<answer");
-      if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-          Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+      if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
+          Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
          fprintf (FileXML," shuffle=\"%s\"",
                   Question->Answer.Shuffle ? "yes" :
                 	                     "no");
@@ -307,7 +308,7 @@ static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   if ((NumTags = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
+   if ((NumTags = Tag_DB_GetTagsQst (&mysql_res,QstCod)))	// Result: TagTxt
       /***** Write the tags *****/
       for (NumTag = 1;
 	   NumTag <= NumTags;
@@ -326,7 +327,7 @@ static void TsI_GetAndWriteTagsXML (long QstCod,FILE *FileXML)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
+static void TsI_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
                                        FILE *FileXML)
   {
    extern const char *Txt_NEW_LINE;
@@ -335,10 +336,10 @@ static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
    /***** Write answers *****/
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
+      case Qst_ANS_INT:
          fprintf (FileXML,"%ld",Question->Answer.Integer);
          break;
-      case Tst_ANS_FLOAT:
+      case Qst_ANS_FLOAT:
          fprintf (FileXML,"%s"
                           "<lower>%.15lg</lower>%s"
                           "<upper>%.15lg</upper>%s",
@@ -346,14 +347,14 @@ static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
                   Question->Answer.FloatingPoint[0],Txt_NEW_LINE,
                   Question->Answer.FloatingPoint[1],Txt_NEW_LINE);
          break;
-      case Tst_ANS_TRUE_FALSE:
+      case Qst_ANS_TRUE_FALSE:
          fprintf (FileXML,"%s",
                   Question->Answer.TF == 'T' ? "true" :
                 	                       "false");
          break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-      case Tst_ANS_TEXT:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_TEXT:
          fprintf (FileXML,"%s",Txt_NEW_LINE);
          for (NumOpt = 0;
               NumOpt < Question->Answer.NumOptions;
@@ -363,7 +364,7 @@ static void TsI_WriteAnswersOfAQstXML (const struct Tst_Question *Question,
             fprintf (FileXML,"<option");
 
             /* Write whether the answer is correct or not */
-            if (Question->Answer.Type != Tst_ANS_TEXT)
+            if (Question->Answer.Type != Qst_ANS_TEXT)
                fprintf (FileXML," correct=\"%s\"",
                         Question->Answer.Options[NumOpt].Correct ? "yes" :
                                                                    "no");
@@ -492,7 +493,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLElement *FeedbackElem;
    struct XMLElement *AnswerElem;
    struct XMLAttribute *Attribute;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    bool QuestionExists;
    bool AnswerTypeFound;
 
@@ -537,7 +538,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	 if (!strcmp (QuestionElem->TagName,"question"))
 	   {
 	    /***** Create test question *****/
-	    Tst_QstConstructor (&Question);
+	    Qst_QstConstructor (&Question);
 
 	    /* Get answer type (in mandatory attribute "type") */
 	    AnswerTypeFound = false;
@@ -614,8 +615,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		    AnswerElem = AnswerElem->NextBrother)
 		  if (!strcmp (AnswerElem->TagName,"answer"))
 		    {
-		     if (Question.Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-			 Question.Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+		     if (Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
+			 Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 			/* Get whether shuffle answers (in attribute "shuffle") */
 			for (Attribute = AnswerElem->FirstAttribute;
 			     Attribute != NULL;
@@ -632,10 +633,10 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	       TsI_GetAnswerFromXML (AnswerElem,&Question);
 
 	       /* Make sure that tags, text and answer are not empty */
-	       if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
+	       if (Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (&Question))
 		 {
 		  /* Check if question already exists in database */
-		  QuestionExists = Tst_CheckIfQuestionExistsInDB (&Question);
+		  QuestionExists = Qst_CheckIfQuestionExistsInDB (&Question);
 
 		  /* Write row with this imported question */
 		  TsI_WriteRowImportedQst (StemElem,FeedbackElem,
@@ -645,7 +646,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		  if (!QuestionExists)
 		    {
 		     Question.QstCod = -1L;
-		     Tst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
+		     Qst_InsertOrUpdateQstTagsAnsIntoDB (&Question);
 		     if (Question.QstCod <= 0)
 			Err_ShowErrorAndExit ("Can not create question.");
 		    }
@@ -655,7 +656,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	       Err_WrongAnswerExit ();
 
 	    /***** Destroy test question *****/
-	    Tst_QstDestructor (&Question);
+	    Qst_QstDestructor (&Question);
 	   }
 	}
 
@@ -675,21 +676,21 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 /***** Convert a string with the type of answer in XML to type of answer *****/
 /*****************************************************************************/
 
-static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML)
+static Qst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML)
   {
-   extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
-   Tst_AnswerType_t AnsType;
+   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   Qst_AnswerType_t AnsType;
 
    if (StrAnsTypeXML != NULL)
-      for (AnsType  = (Tst_AnswerType_t) 0;
-	   AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
+      for (AnsType  = (Qst_AnswerType_t) 0;
+	   AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
 	   AnsType++)
 	 // comparison must be case insensitive, because users can edit XML
          if (!strcasecmp (StrAnsTypeXML,Tst_StrAnswerTypesXML[AnsType]))
             return AnsType;
 
    Err_WrongAnswerExit ();
-   return (Tst_AnswerType_t) 0;	// Not reached
+   return (Qst_AnswerType_t) 0;	// Not reached
   }
 
 /*****************************************************************************/
@@ -698,7 +699,7 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
 // Answer is mandatory
 
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
-                                  struct Tst_Question *Question)
+                                  struct Qst_Question *Question)
   {
    struct XMLElement *OptionElem;
    struct XMLElement *TextElem;
@@ -709,8 +710,8 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
 
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
-         if (!Tst_AllocateTextChoiceAnswer (Question,0))
+      case Qst_ANS_INT:
+         if (!Qst_AllocateTextChoiceAnswer (Question,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -718,11 +719,11 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
             Str_Copy (Question->Answer.Options[0].Text,AnswerElem->Content,
                       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
          break;
-      case Tst_ANS_FLOAT:
-         if (!Tst_AllocateTextChoiceAnswer (Question,0))
+      case Qst_ANS_FLOAT:
+         if (!Qst_AllocateTextChoiceAnswer (Question,0))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
-         if (!Tst_AllocateTextChoiceAnswer (Question,1))
+         if (!Qst_AllocateTextChoiceAnswer (Question,1))
 	    /* Abort on error */
 	    Ale_ShowAlertsAndExit ();
 
@@ -749,7 +750,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
                break;	// Only first element "upper"
               }
          break;
-      case Tst_ANS_TRUE_FALSE:
+      case Qst_ANS_TRUE_FALSE:
 	 // Comparisons must be case insensitive, because users can edit XML
          if (!AnswerElem->Content)
             Question->Answer.TF = ' ';
@@ -766,16 +767,16 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
          else
             Question->Answer.TF = ' ';
          break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-      case Tst_ANS_TEXT:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_TEXT:
          /* Get options */
          for (OptionElem = AnswerElem->FirstChild, NumOpt = 0;
-              OptionElem != NULL && NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+              OptionElem != NULL && NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
               OptionElem = OptionElem->NextBrother, NumOpt++)
             if (!strcmp (OptionElem->TagName,"option"))
               {
-               if (!Tst_AllocateTextChoiceAnswer (Question,NumOpt))
+               if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
 		  /* Abort on error */
 		  Ale_ShowAlertsAndExit ();
 
@@ -817,7 +818,7 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		     break;	// Only first element "feedback"
 		    }
 
-	       if (Question->Answer.Type == Tst_ANS_TEXT)
+	       if (Question->Answer.Type == Qst_ANS_TEXT)
 		  Question->Answer.Options[NumOpt].Correct = true;
 	       else
 		  /* Check if option is correct or wrong */
@@ -868,13 +869,13 @@ static void TsI_WriteHeadingListImportedQst (void)
 
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
-                                     const struct Tst_Question *Question,
+                                     const struct Qst_Question *Question,
                                      bool QuestionExists)
   {
    extern const char *Txt_Existing_question;
    extern const char *Txt_New_question;
    extern const char *Txt_no_tags;
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    static unsigned NumQst = 0;
    static unsigned NumNonExistingQst = 0;
@@ -953,8 +954,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write if shuffle is enabled *****/
    HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-   if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE ||
-       Question->Answer.Type == Tst_ANS_MULTIPLE_CHOICE)
+   if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
+       Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
       if (Question->Answer.Shuffle)
 	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
@@ -964,17 +965,17 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the stem and the answers *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Tst_WriteQstStem (Stem,ClassStem,
+   Qst_WriteQstStem (Stem,ClassStem,
 		     true);	// Visible
-   Tst_WriteQstFeedback (Feedback,"TEST_TXT_LIGHT");
+   Qst_WriteQstFeedback (Feedback,"TEST_TXT_LIGHT");
    switch (Question->Answer.Type)
      {
-      case Tst_ANS_INT:
+      case Qst_ANS_INT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
          HTM_TxtF ("(%ld)",Question->Answer.Integer);
          HTM_SPAN_End ();
          break;
-      case Tst_ANS_FLOAT:
+      case Qst_ANS_FLOAT:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
          HTM_Txt ("([");
          HTM_Double (Question->Answer.FloatingPoint[0]);
@@ -983,16 +984,16 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          HTM_Txt ("])");
          HTM_SPAN_End ();
          break;
-      case Tst_ANS_TRUE_FALSE:
+      case Qst_ANS_TRUE_FALSE:
          HTM_SPAN_Begin ("class=\"%s\"",ClassStem);
          HTM_Txt ("(");
-         Tst_WriteAnsTF (Question->Answer.TF);
+         Qst_WriteAnsTF (Question->Answer.TF);
          HTM_Txt (")");
          HTM_SPAN_End ();
          break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-      case Tst_ANS_TEXT:
+      case Qst_ANS_UNIQUE_CHOICE:
+      case Qst_ANS_MULTIPLE_CHOICE:
+      case Qst_ANS_TEXT:
          HTM_TABLE_Begin (NULL);
          for (NumOpt = 0;
               NumOpt < Question->Answer.NumOptions;

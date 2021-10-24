@@ -121,7 +121,7 @@ void Mch_CreateNewMatch (void);
 void Mch_ChangeMatch (void);
 void Mch_ResumeMatch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
-		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
+		     unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);
 
 void Mch_PlayPauseMatch (void);
 void Mch_ChangeNumColsMch (void);

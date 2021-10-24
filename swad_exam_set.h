@@ -58,8 +58,8 @@ void ExaSet_ListExamSets (struct Exa_Exams *Exams,
 
 void ExaSet_ResetSet (struct ExaSet_Set *Set);
 
-Tst_AnswerType_t ExaSet_GetAnswerType (long QstCod);
-void ExaSet_GetQstDataFromDB (struct Tst_Question *Question);
+Qst_AnswerType_t ExaSet_GetAnswerType (long QstCod);
+void ExaSet_GetQstDataFromDB (struct Qst_Question *Question);
 
 void ExaSet_AddQstsToSet (void);
 

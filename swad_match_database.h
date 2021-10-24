@@ -87,9 +87,9 @@ void Mch_DB_RemUsrAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
 //----------------------------- Answers indexes -------------------------------
 void Mch_DB_CreateQstIndexes (long MchCod,unsigned QstInd,
-                              const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
+                              const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
 void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
-		        char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1]);
+		        char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1]);
 
 //-------------------------- Matches being played -----------------------------
 void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);

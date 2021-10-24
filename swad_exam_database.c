@@ -859,13 +859,13 @@ void Exa_DB_RemoveAllSetsFromCrs (long CrsCod)
 /******************* Insert question in table of questions *******************/
 /*****************************************************************************/
 
-long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,long MedCod)
+long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod)
   {
-   extern const char *Tst_StrAnswerTypesDB[Tst_NUM_ANS_TYPES];
-   static char CharInvalid[Tst_NUM_VALIDITIES] =
+   extern const char *Tst_StrAnswerTypesDB[Qst_NUM_ANS_TYPES];
+   static char CharInvalid[Qst_NUM_VALIDITIES] =
      {
-      [Tst_INVALID_QUESTION] = 'Y',
-      [Tst_VALID_QUESTION  ] = 'N'
+      [Qst_INVALID_QUESTION] = 'Y',
+      [Qst_VALID_QUESTION  ] = 'N'
      };
 
    return
@@ -891,12 +891,12 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,lo
 /*****************************************************************************/
 
 void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
-                               Tst_Validity_t Validity)
+                               Qst_Validity_t Validity)
   {
-   static char CharInvalid[Tst_NUM_VALIDITIES] =
+   static char CharInvalid[Qst_NUM_VALIDITIES] =
      {
-      [Tst_INVALID_QUESTION] = 'Y',
-      [Tst_VALID_QUESTION  ] = 'N'
+      [Qst_INVALID_QUESTION] = 'Y',
+      [Qst_VALID_QUESTION  ] = 'N'
      };
 
    DB_QueryUPDATE ("can not validate question",
@@ -1974,9 +1974,9 @@ unsigned Exa_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod)
 /*****************************************************************************/
 
 void Exa_DB_GetAnswersFromQstInPrint (long PrnCod,long QstCod,
-                                      char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1])
+                                      char StrAnswers[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1])
   {
-   DB_QuerySELECTString (StrAnswers,Tst_MAX_BYTES_ANSWERS_ONE_QST,
+   DB_QuerySELECTString (StrAnswers,Qst_MAX_BYTES_ANSWERS_ONE_QST,
                          "can not get answer in an exam print",
 			 "SELECT Answers"
 			  " FROM exa_print_questions"

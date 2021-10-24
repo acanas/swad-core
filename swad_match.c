@@ -141,7 +141,7 @@ static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match);
 static long Mch_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1]);
 static void Mch_CreateIndexes (long GamCod,long MchCod);
 static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
-			       const struct Tst_Question *Question);
+			       const struct Qst_Question *Question);
 static void Mch_CreateGrps (long MchCod);
 static void Mch_UpdateMatchStatusInDB (const struct Mch_Match *Match);
 
@@ -193,10 +193,10 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered);
 static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
-                                         struct Tst_Question *Question,
+                                         struct Qst_Question *Question,
                                          const char *Class,bool ShowResult);
 static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
-                                         struct Tst_Question *Question,
+                                         struct Qst_Question *Question,
                                          const char *Class,bool ShowResult);
 static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 					   const struct Mch_UsrAnswer *UsrAnswer,
@@ -1560,7 +1560,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
    MYSQL_ROW row;
    unsigned NumQsts;
    unsigned NumQst;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
    unsigned QstInd;
 
    /***** Get questions of the game *****/
@@ -1572,7 +1572,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	NumQst++)
      {
       /***** Create test question *****/
-      Tst_QstConstructor (&Question);
+      Qst_QstConstructor (&Question);
 
       /***** Get question data *****/
       row = mysql_fetch_row (mysql_res);
@@ -1591,8 +1591,8 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
       QstInd = Str_ConvertStrToUnsigned (row[1]);
 
       /* Get answer type (row[2]) */
-      Question.Answer.Type = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
+      Question.Answer.Type = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      if (Question.Answer.Type != Qst_ANS_UNIQUE_CHOICE)
 	 Err_WrongAnswerExit ();
 
       /* Get shuffle (row[3]) */
@@ -1602,7 +1602,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
       Mch_ReorderAnswer (MchCod,QstInd,&Question);
 
       /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
+      Qst_QstDestructor (&Question);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1614,7 +1614,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 /*****************************************************************************/
 
 static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
-			       const struct Tst_Question *Question)
+			       const struct Qst_Question *Question)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1622,13 +1622,13 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
    unsigned NumAns;
    unsigned AnsInd;
    char StrOneAnswer[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Initialize list of answers to empty string *****/
    StrAnswersOneQst[0] = '\0';
 
    /***** Get suffled/not-shuffled answers indexes of question *****/
-   NumAnss = Tst_DB_GetShuffledAnswersIndexes (&mysql_res,Question);
+   NumAnss = Qst_DB_GetShuffledAnswersIndexes (&mysql_res,Question);
 
    /***** For each answer in question... *****/
    for (NumAns = 0;
@@ -1659,9 +1659,9 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 /*****************************************************************************/
 
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
-		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION])
+		     unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION])
   {
-   char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1];
 
    /***** Get indexes for a question from database *****/
    Mch_DB_GetIndexes (MchCod,QstInd,StrIndexesOneQst);
@@ -2829,10 +2829,10 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
   {
    extern const char *Txt_MATCH_Paused;
    extern const char *Txt_Question_removed;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
 
    /***** Create test question *****/
-   Tst_QstConstructor (&Question);
+   Qst_QstConstructor (&Question);
    Question.QstCod = Match->Status.QstCod;
 
    /***** Trivial check: do not show anything on match start and end *****/
@@ -2846,18 +2846,18 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
      }
 
    /***** Get data of question from database *****/
-   if (Tst_GetQstDataFromDB (&Question))
+   if (Qst_GetQstDataFromDB (&Question))
      {
       /***** Show question *****/
       /* Check answer type */
-      if (Question.Answer.Type != Tst_ANS_UNIQUE_CHOICE)
+      if (Question.Answer.Type != Qst_ANS_UNIQUE_CHOICE)
 	 Err_WrongAnswerExit ();
 
       /* Begin container */
       HTM_DIV_Begin ("class=\"MCH_BOTTOM\"");	// Bottom
 
 	 /* Write stem */
-	 Tst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
+	 Qst_WriteQstStem (Question.Stem,"MCH_TCH_STEM",
 			   true);		// Visible
 
 	 /* Show media */
@@ -2897,7 +2897,7 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
       Ale_ShowAlert (Ale_WARNING,Txt_Question_removed);
 
    /***** Destroy test question *****/
-   Tst_QstDestructor (&Question);
+   Qst_QstDestructor (&Question);
   }
 
 /*****************************************************************************/
@@ -2905,11 +2905,11 @@ static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match)
 /*****************************************************************************/
 
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
-                                         struct Tst_Question *Question,
+                                         struct Qst_Question *Question,
                                          const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
-   if (Question->Answer.Type == Tst_ANS_UNIQUE_CHOICE)
+   if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
       Mch_WriteChoiceAnsViewMatch (Match,
 				   Question,
 				   Class,ShowResult);
@@ -2922,20 +2922,20 @@ static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
 /*****************************************************************************/
 
 static void Mch_WriteChoiceAnsViewMatch (const struct Mch_Match *Match,
-                                         struct Tst_Question *Question,
+                                         struct Qst_Question *Question,
                                          const char *Class,bool ShowResult)
   {
    unsigned NumOpt;
    bool RowIsOpen = false;
    unsigned NumRespondersQst;
    unsigned NumRespondersAns;
-   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
    /***** Get number of users who have answered this question from database *****/
    NumRespondersQst = Mch_DB_GetNumUsrsWhoAnsweredQst (Match->MchCod,Match->Status.QstInd);
 
    /***** Change format of answers text *****/
-   Tst_ChangeFormatAnswersText (Question);
+   Qst_ChangeFormatAnswersText (Question);
 
    /***** Get indexes for this question in match *****/
    Mch_GetIndexes (Match->MchCod,Match->Status.QstInd,Indexes);
@@ -3018,7 +3018,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
    char *Class;
 
    /***** Get number of options in this question *****/
-   NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
+   NumOptions = Qst_GetNumAnswersQst (Match->Status.QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (8);
@@ -3658,7 +3658,7 @@ void Mch_ReceiveQuestionAnswer (void)
 void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
                               struct Mch_UsrAnswer *UsrAnswer)
   {
-   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
+   unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];
    struct Mch_UsrAnswer PreviousUsrAnswer;
 
    /***** Check that teacher's screen is showing answers
@@ -3763,16 +3763,16 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 void Mch_ComputeScore (struct MchPrn_Print *Print)
   {
    unsigned NumQst;
-   struct Tst_Question Question;
+   struct Qst_Question Question;
 
    for (NumQst = 0, Print->Score = 0.0;
 	NumQst < Print->NumQsts.All;
 	NumQst++)
      {
       /***** Create test question *****/
-      Tst_QstConstructor (&Question);
+      Qst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-      Question.Answer.Type = Tst_ANS_UNIQUE_CHOICE;
+      Question.Answer.Type = Qst_ANS_UNIQUE_CHOICE;
 
       /***** Compute score for this answer ******/
       TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
@@ -3781,7 +3781,7 @@ void Mch_ComputeScore (struct MchPrn_Print *Print)
       Print->Score += Print->PrintedQuestions[NumQst].Score;
 
       /***** Destroy test question *****/
-      Tst_QstDestructor (&Question);
+      Qst_QstDestructor (&Question);
      }
   }
 

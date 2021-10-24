@@ -88,6 +88,6 @@ void ExaPrn_GetPrintQuestionsFromDB (struct ExaPrn_Print *Print);
 void ExaPrn_ReceivePrintAnswer (void);
 
 void ExaPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				struct Tst_Question *Question);
+				struct Qst_Question *Question);
 
 #endif

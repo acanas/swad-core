@@ -29,7 +29,8 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
-// #include "swad_string.h"
+
+#include "swad_tag.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -52,6 +53,7 @@ void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
                               const char NewTagTxt[Tag_MAX_BYTES_TAG + 1]);
 void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden);
 
+unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod);
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Tag_DB_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
 bool Tag_DB_CheckIfCurrentCrsHasTestTags (void);

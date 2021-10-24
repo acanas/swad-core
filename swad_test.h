@@ -50,7 +50,7 @@
 struct Tst_AnswerTypes
   {
    bool All;
-   char List[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
+   char List[Qst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
   };
 
 #define Tst_NUM_TYPES_ORDER_QST	5
@@ -70,7 +70,7 @@ struct Tst_Test
    struct Tst_AnswerTypes AnswerTypes;	// Selected answer types
    Tst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
    unsigned NumQsts;			// Number of questions
-   struct Tst_Question Question;	// Selected / editing question
+   struct Qst_Question Question;	// Selected / editing question
   };
 
 typedef enum
@@ -104,47 +104,42 @@ void Tst_ShowNewTest (void);
 void Tst_ReceiveTestDraft (void);
 void Tst_AssessTest (void);
 
-void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
-
-void Tst_ListQuestionForEdition (struct Tst_Question *Question,
+void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor);
-void Tst_WriteNumQst (unsigned NumQst,const char *Class);
-void Tst_WriteAnswerType (Tst_AnswerType_t AnswerType,const char *Class);
-void Tst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
-void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
+void Qst_WriteNumQst (unsigned NumQst,const char *Class);
+void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class);
+void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
+void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
-void Tst_RequestEditTests (void);
-void Tst_RequestSelectTestsForSet (struct Exa_Exams *Exams);
-void Tst_RequestSelectTestsForGame (struct Gam_Games *Games);
+void Qst_RequestEditQsts (void);
+void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
+void Qst_RequestSelectQstsForGame (struct Gam_Games *Games);
 
-void Tst_ListQuestionsToEdit (void);
+void Qst_ListQuestionsToEdit (void);
 void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams);
 void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 
 void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				bool Shuffle);
 
-void Tst_PutParamsEditQst (void *Test);
+void Qst_PutParamsEditQst (void *Test);
 
-unsigned Tst_GetNumAnswersQst (long QstCod);
-void Tst_GetAnswersQst (struct Tst_Question *Question,MYSQL_RES **mysql_res,
+unsigned Qst_GetNumAnswersQst (long QstCod);
+void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
 
-void Tst_ChangeFormatAnswersText (struct Tst_Question *Question);
-void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question);
+void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
+void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
 
-void Tst_WriteAnswersBank (struct Tst_Question *Question,
+void Qst_WriteAnswersBank (struct Qst_Question *Question,
                            const char *ClassTxt,
                            const char *ClassFeedback);
-void Tst_WriteAnsTF (char AnsTF);
+void Qst_WriteAnsTF (char AnsTF);
 
-void Tst_WriteParamQstCod (unsigned NumQst,long QstCod);
+void Qst_WriteParamQstCod (unsigned NumQst,long QstCod);
 
-void Tst_CheckIfNumberOfAnswersIsOne (const struct Tst_Question *Question);
-
-unsigned Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);
-void Tst_GetAndWriteTagsQst (long QstCod);
+void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
 void Tst_ShowFormConfig (void);
 
@@ -152,42 +147,42 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 
 unsigned Tst_CountNumQuestionsInList (const char *ListQuestions);
 
-void Tst_ShowFormEditOneQst (void);
+void Qst_ShowFormEditOneQst (void);
 
-void Tst_QstConstructor (struct Tst_Question *Question);
-void Tst_QstDestructor (struct Tst_Question *Question);
+void Qst_QstConstructor (struct Qst_Question *Question);
+void Qst_QstDestructor (struct Qst_Question *Question);
 
-bool Tst_AllocateTextChoiceAnswer (struct Tst_Question *Question,unsigned NumOpt);
+bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 
-Tst_AnswerType_t Tst_GetQstAnswerTypeFromDB (long QstCod);
-bool Tst_GetQstDataFromDB (struct Tst_Question *Question);
-Tst_AnswerType_t Tst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
-void Tst_ReceiveQst (void);
-bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Tst_Question *Question);
+Qst_AnswerType_t Qst_GetQstAnswerTypeFromDB (long QstCod);
+bool Qst_GetQstDataFromDB (struct Qst_Question *Question);
+Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
+void Qst_ReceiveQst (void);
+bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
 
-bool Tst_CheckIfQuestionExistsInDB (struct Tst_Question *Question);
+bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
 
-long Tst_GetIntAnsFromStr (char *Str);
+long Qst_GetIntAnsFromStr (char *Str);
 
-void Tst_RequestRemoveSelectedQsts (void);
-void Tst_RemoveSelectedQsts (void);
-void Tst_RequestRemoveOneQst (void);
-void Tst_RemoveOneQst (void);
+void Qst_RequestRemoveSelectedQsts (void);
+void Qst_RemoveSelectedQsts (void);
+void Qst_RequestRemoveOneQst (void);
+void Qst_RemoveOneQst (void);
 
-void Tst_ChangeShuffleQst (void);
+void Qst_ChangeShuffleQst (void);
 
-long Tst_GetParamQstCod (void);
-void Tst_PutParamQstCod (void *QstCod);
+long Qst_GetParamQstCod (void);
+void Qst_PutParamQstCod (void *QstCod);
 
-void Tst_InsertOrUpdateQstTagsAnsIntoDB (struct Tst_Question *Question);
+void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
 
 void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion);
 
 void Tst_RemoveCrsTests (long CrsCod);
 
-void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
+void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
-unsigned Tst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
-                                            const struct Tst_Question *Question);
+unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question);
 
 #endif

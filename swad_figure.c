@@ -1985,9 +1985,9 @@ static void Fig_GetAndShowTestsStats (void)
    extern const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course;
    extern const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded;
    extern const char *Txt_Average_BR_score_BR_per_question;
-   extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    extern const char *Txt_Total;
-   Tst_AnswerType_t AnsType;
+   Qst_AnswerType_t AnsType;
    struct Tst_Stats Stats;
 
    /***** Begin box and table *****/
@@ -2008,8 +2008,8 @@ static void Fig_GetAndShowTestsStats (void)
 	 HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question);
       HTM_TR_End ();
 
-      for (AnsType  = (Tst_AnswerType_t) 0;
-	   AnsType <= (Tst_AnswerType_t) (Tst_NUM_ANS_TYPES - 1);
+      for (AnsType  = (Qst_AnswerType_t) 0;
+	   AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
 	   AnsType++)
 	{
 	 /***** Get the stats about test questions from this location *****/
@@ -2062,7 +2062,7 @@ static void Fig_GetAndShowTestsStats (void)
 	}
 
       /***** Get the stats about test questions from this location *****/
-      Tst_GetTestStats (Tst_ANS_UNKNOWN,&Stats);
+      Tst_GetTestStats (Qst_ANS_UNKNOWN,&Stats);
 
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);

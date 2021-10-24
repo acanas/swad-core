@@ -82,9 +82,9 @@ void Exa_DB_RemoveAllSetsFromExam (long ExaCod);
 void Exa_DB_RemoveAllSetsFromCrs (long CrsCod);
 
 //------------------------------ Set questions --------------------------------
-long Exa_DB_AddQuestionToSet (long SetCod,const struct Tst_Question *Question,long MedCod);
+long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod);
 void Exa_DB_ChangeValidityQst (long QstCod,long SetCod,long ExaCod,long CrsCod,
-                               Tst_Validity_t Validity);
+                               Qst_Validity_t Validity);
 unsigned Exa_DB_GetNumQstsInSet (long SetCod);
 unsigned Exa_DB_GetQstsFromSet (MYSQL_RES **mysql_res,long SetCod);
 unsigned Exa_DB_GetSomeQstsFromSetToPrint (MYSQL_RES **mysql_res,
@@ -154,7 +154,7 @@ void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,
                                 unsigned QstInd);
 unsigned Exa_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);
 void Exa_DB_GetAnswersFromQstInPrint (long PrnCod,long QstCod,
-                                      char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
+                                      char StrAnswers[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1]);
 unsigned Exa_DB_GetNumQstsNotBlankInPrint (long PrnCod);
 double Exa_DB_ComputeTotalScoreOfPrint (long PrnCod);
 void Exa_DB_RemovePrintQstsMadeByUsrInAllCrss (long UsrCod);

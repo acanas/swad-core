@@ -53822,9 +53822,9 @@ const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE] =
 #endif
 	};
 
-const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
+const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 	{
-	[Tst_ANS_INT] =
+	[Qst_ANS_INT] =
 #if   L==1	// ca
 	"Nombre enter"
 #elif L==2	// de
@@ -53845,7 +53845,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"N.&ordm; inteiro"
 #endif
 	,
-	[Tst_ANS_FLOAT] =
+	[Qst_ANS_FLOAT] =
 #if   L==1	// ca
 	"Nombre real"
 #elif L==2	// de
@@ -53866,7 +53866,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"N.&ordm; real"
 #endif
 	,
-	[Tst_ANS_TRUE_FALSE] =
+	[Qst_ANS_TRUE_FALSE] =
 #if   L==1	// ca
 	"V/F"
 #elif L==2	// de
@@ -53887,7 +53887,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"V/F"
 #endif
 	,
-	[Tst_ANS_UNIQUE_CHOICE] =
+	[Qst_ANS_UNIQUE_CHOICE] =
 #if   L==1	// ca
 	"Elecci&oacute; &uacute;nica"
 #elif L==2	// de
@@ -53908,7 +53908,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"&Uacute;nica escolha"
 #endif
 	,
-	[Tst_ANS_MULTIPLE_CHOICE] =
+	[Qst_ANS_MULTIPLE_CHOICE] =
 #if   L==1	// ca
 	"Elecci&oacute; m&uacute;ltiple"
 #elif L==2	// de
@@ -53929,7 +53929,7 @@ const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES] =
 	"M&uacute;ltipla escolha"
 #endif
 	,
-	[Tst_ANS_TEXT] =
+	[Qst_ANS_TEXT] =
 #if   L==1	// ca
 	"Text"
 #elif L==2	// de

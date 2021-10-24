@@ -691,7 +691,7 @@ void Mch_DB_RemUsrAnswersOfAQuestion (long GamCod,unsigned QstInd)
 /*****************************************************************************/
 
 void Mch_DB_CreateQstIndexes (long MchCod,unsigned QstInd,
-                              const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1])
+                              const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1])
   {
    DB_QueryINSERT ("can not create indexes of a question",
 		   "INSERT INTO mch_indexes"
@@ -708,9 +708,9 @@ void Mch_DB_CreateQstIndexes (long MchCod,unsigned QstInd,
 /*****************************************************************************/
 
 void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
-		        char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1])
+		        char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1])
   {
-   DB_QuerySELECTString (StrIndexesOneQst,Tst_MAX_BYTES_INDEXES_ONE_QST,
+   DB_QuerySELECTString (StrIndexesOneQst,Qst_MAX_BYTES_INDEXES_ONE_QST,
                          "can not get indexes of a question",
 			 "SELECT Indexes"	// row[0]
 			  " FROM mch_indexes"

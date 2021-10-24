@@ -59,8 +59,8 @@ struct TstPrn_PrintedQuestion
   {
    long QstCod;		// Question code
    long SetCod;		// Only for exams
-   char StrIndexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
-   char StrAnswers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
+   char StrIndexes[Qst_MAX_BYTES_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+   char StrAnswers[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];	// Answers selected by user
    TstPrn_Correct_t AnswerIsCorrect;	// Is question wrong, medium or correct?
    double Score;			// Question score
   };
@@ -101,29 +101,29 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
 void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
                                                    bool UpdateQstScore);
 void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				struct Tst_Question *Question);
+				struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
 void TstPrn_ComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-		                const struct Tst_Question *Question);
+		                const struct Qst_Question *Question);
 void TstPrn_ComputeFltAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				const struct Tst_Question *Question);
+				const struct Qst_Question *Question);
 void TstPrn_ComputeTF_AnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-			        const struct Tst_Question *Question);
+			        const struct Qst_Question *Question);
 void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-	                        const struct Tst_Question *Question);
+	                        const struct Qst_Question *Question);
 void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				const struct Tst_Question *Question);
+				const struct Qst_Question *Question);
 //-----------------------------------------------------------------------------
 
-void Tst_ChangeFormatAnswersText (struct Tst_Question *Question);
-void Tst_ChangeFormatAnswersFeedback (struct Tst_Question *Question);
+void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
+void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
 
-void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
-			       unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
-void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
-			       bool UsrAnswers[Tst_MAX_OPTIONS_PER_QUESTION]);
+void TstPrn_GetIndexesFromStr (const char StrIndexesOneQst[Qst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+			       unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION]);
+void TstPrn_GetAnswersFromStr (const char StrAnswersOneQst[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1],
+			       bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION]);
 
 void TstPrn_ComputeAndShowGrade (unsigned NumQsts,double Score,double MaxGrade);
 double TstPrn_ComputeGrade (unsigned NumQsts,double Score,double MaxGrade);
@@ -131,7 +131,7 @@ void TstPrn_ShowGrade (double Grade,double MaxGrade);
 
 void TstPrn_WriteAnswersExam (struct UsrData *UsrDat,
                               const struct TstPrn_PrintedQuestion *PrintedQuestion,
-			      struct Tst_Question *Question,
+			      struct Qst_Question *Question,
 			      bool ICanView[TstVis_NUM_ITEMS_VISIBILITY],
 			      const char *ClassTxt,
 			      const char *ClassFeedback);
