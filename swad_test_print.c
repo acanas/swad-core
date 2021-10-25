@@ -263,7 +263,7 @@ void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
 /*****************************************************************************/
 
 void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
-                                   unsigned NumExamsGeneratedByMe,
+                                   unsigned NumTstExamsGeneratedByMe,
                                    TstPrn_RequestOrConfirm_t RequestOrConfirm)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
@@ -292,7 +292,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
       /***** Begin form *****/
       Frm_BeginForm (Action[RequestOrConfirm]);
       TstPrn_PutParamPrnCod (Print->PrnCod);
-      Par_PutHiddenParamUnsigned (NULL,"NumTst",NumExamsGeneratedByMe);
+      Par_PutHiddenParamUnsigned (NULL,"NumTst",NumTstExamsGeneratedByMe);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (10);

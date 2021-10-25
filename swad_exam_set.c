@@ -607,7 +607,7 @@ void ExaSet_ListQstsToAddToSet (void)
    Exams.SetCod = Set.SetCod;
 
    /***** List several test questions for selection *****/
-   Tst_ListQuestionsToSelectForSet (&Exams);
+   Qst_ListQuestionsToSelectForExamSet (&Exams);
 
    /***** Show current exam and its sets *****/
    Exa_PutFormsOneExam (&Exams,&Exam,&Set,

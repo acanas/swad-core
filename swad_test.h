@@ -117,11 +117,8 @@ void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
 void Qst_RequestSelectQstsForGame (struct Gam_Games *Games);
 
 void Qst_ListQuestionsToEdit (void);
-void Tst_ListQuestionsToSelectForSet (struct Exa_Exams *Exams);
-void Tst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
-
-void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
-				bool Shuffle);
+void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams);
+void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
 
 void Qst_PutParamsEditQst (void *Test);
 

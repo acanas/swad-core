@@ -1,7 +1,7 @@
-// swad_test_import.h: import and export self-assessment tests using XML files
+// swad_question_import.h: import and export questions using XML files
 
-#ifndef _SWAD_TSI
-#define _SWAD_TSI
+#ifndef _SWAD_QST_IMP
+#define _SWAD_QST_IMP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -39,11 +39,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void TsI_PutIconToExportQuestions (struct Tst_Test *Test);
-bool TsI_GetCreateXMLParamFromForm (void);
-void TsI_PutIconToImportQuestions (void);
-void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);
-void TsI_ShowFormImportQstsFromXML (void);
-void TsI_ImportQstsFromXML (void);
+void QstImp_PutIconToExportQuestions (struct Tst_Test *Test);
+bool QstImp_GetCreateXMLParamFromForm (void);
+void QstImp_PutIconToImportQuestions (void);
+void QstImp_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);
+void QstImp_ShowFormImportQstsFromXML (void);
+void QstImp_ImportQstsFromXML (void);
 
 #endif

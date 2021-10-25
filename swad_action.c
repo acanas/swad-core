@@ -87,6 +87,7 @@
 #include "swad_profile.h"
 #include "swad_program.h"
 #include "swad_project.h"
+#include "swad_question_import.h"
 #include "swad_QR.h"
 #include "swad_report.h"
 #include "swad_role.h"
@@ -96,7 +97,6 @@
 #include "swad_system_config.h"
 #include "swad_tab.h"
 #include "swad_tag.h"
-#include "swad_test_import.h"
 #include "swad_timeline.h"
 #include "swad_timeline_comment.h"
 #include "swad_timeline_favourite.h"
@@ -669,8 +669,8 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActUnhCfe		] = {1621,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cfe_UnhideCallForExam		,Cfe_ListCallsForExamsEdit	,NULL},
 
    [ActEdiOneTstQst	] = { 105,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ShowFormEditOneQst		,NULL},
-   [ActReqImpTstQst	] = {1007,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TsI_ShowFormImportQstsFromXML	,NULL},
-   [ActImpTstQst	] = {1008,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TsI_ImportQstsFromXML		,NULL},
+   [ActReqImpTstQst	] = {1007,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,QstImp_ShowFormImportQstsFromXML	,NULL},
+   [ActImpTstQst	] = {1008,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,QstImp_ImportQstsFromXML		,NULL},
    [ActLstTstQst	] = { 132,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_ListQuestionsToEdit	,NULL},
    [ActRcvTstQst	] = { 126,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,Qst_ReceiveQst			,NULL},
    [ActReqRemSevTstQst	] = {1835,-1,TabUnk,ActEdiTstQst	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Qst_RequestRemoveSelectedQsts	,NULL},

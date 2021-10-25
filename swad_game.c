@@ -1616,7 +1616,7 @@ void Gam_ListQstsToAddToGame (void)
 
    /***** List several test questions for selection *****/
    Games.GamCod = Game.GamCod;
-   Tst_ListQuestionsToSelectForGame (&Games);
+   Qst_ListQuestionsToSelectForGame (&Games);
   }
 
 /*****************************************************************************/

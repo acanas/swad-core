@@ -93,7 +93,7 @@ void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
 void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print);
 
 void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
-                                   unsigned NumExamsGeneratedByMe,
+                                   unsigned NumTstExamsGeneratedByMe,
                                    TstPrn_RequestOrConfirm_t RequestOrConfirm);
 
 void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
@@ -115,6 +115,7 @@ void TstPrn_ComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 	                        const struct Qst_Question *Question);
 void TstPrn_ComputeTxtAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				const struct Qst_Question *Question);
+
 //-----------------------------------------------------------------------------
 
 void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
