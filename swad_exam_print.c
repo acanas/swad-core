@@ -1312,7 +1312,7 @@ static void ExaPrn_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
 
       /***** Copy answer text (row[0]) ******/
       Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+                Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
      }
 
    /***** Change format of answers text *****/

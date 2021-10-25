@@ -40,6 +40,7 @@
 #include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_photo.h"
+#include "swad_question.h"
 #include "swad_test.h"
 #include "swad_test_print.h"
 #include "swad_test_visibility.h"
@@ -1021,7 +1022,7 @@ static void TstPrn_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
 
       /***** Copy answer text (row[0]) ******/
       Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
-                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+                Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
      }
 
    /***** Change format of answers text *****/

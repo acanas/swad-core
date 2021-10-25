@@ -1151,14 +1151,14 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 	       if (row[1])
 		  if (row[1][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
-			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get feedback (row[2]) */
 	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
 	       if (row[2])
 		  if (row[2][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get media (row[3]) */
 	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);

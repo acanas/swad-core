@@ -1307,8 +1307,8 @@ mysql> DESCRIBE exa_set_answers;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS exa_set_answers ("
 			"QstCod INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
-			"Answer TEXT NOT NULL,"		// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
-			"Feedback TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Answer TEXT NOT NULL,"		// Qst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Feedback TEXT NOT NULL,"	// Qst_MAX_BYTES_ANSWER_OR_FEEDBACK
 			"MedCod INT NOT NULL DEFAULT -1,"
 			"Correct ENUM('N','Y') NOT NULL,"
 		   "UNIQUE INDEX(QstCod,AnsInd),"
@@ -3101,8 +3101,8 @@ mysql> DESCRIBE tst_answers;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
 			"QstCod INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
-			"Answer TEXT NOT NULL,"				// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
-			"Feedback TEXT NOT NULL,"			// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Answer TEXT NOT NULL,"				// Qst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Feedback TEXT NOT NULL,"			// Qst_MAX_BYTES_ANSWER_OR_FEEDBACK
 			"MedCod INT NOT NULL DEFAULT -1,"
 			"Correct ENUM('N','Y') NOT NULL,"
 		   "INDEX(QstCod),"

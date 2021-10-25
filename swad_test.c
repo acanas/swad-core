@@ -52,6 +52,7 @@
 #include "swad_match.h"
 #include "swad_media.h"
 #include "swad_parameter.h"
+#include "swad_question.h"
 #include "swad_question_import.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
@@ -2686,41 +2687,6 @@ void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
-/***************** Change format of answers text / feedback ******************/
-/*****************************************************************************/
-
-void Qst_ChangeFormatAnswersText (struct Qst_Question *Question)
-  {
-   unsigned NumOpt;
-
-   /***** Change format of answers text *****/
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-      /* Convert answer text, that is in HTML, to rigorous HTML */
-      if (Question->Answer.Options[NumOpt].Text[0])
-	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			   Question->Answer.Options[NumOpt].Text,
-			   Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-  }
-
-void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question)
-  {
-   unsigned NumOpt;
-
-   /***** Change format of answers text and feedback *****/
-   for (NumOpt = 0;
-	NumOpt < Question->Answer.NumOptions;
-	NumOpt++)
-      /* Convert answer feedback, that is in HTML, to rigorous HTML */
-      if (Question->Answer.Options[NumOpt].Feedback)
-	 if (Question->Answer.Options[NumOpt].Feedback[0])
-	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			      Question->Answer.Options[NumOpt].Feedback,
-			      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
-  }
-
-/*****************************************************************************/
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
@@ -3654,14 +3620,14 @@ void Qst_QstDestructor (struct Qst_Question *Question)
 bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt)
   {
    if ((Question->Answer.Options[NumOpt].Text =
-	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+	malloc (Qst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store answer.");
       return false;
      }
    if ((Question->Answer.Options[NumOpt].Feedback =
-	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
+	malloc (Qst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
       Ale_CreateAlert (Ale_ERROR,NULL,
 		       "Not enough memory to store feedback.");
@@ -3895,12 +3861,12 @@ bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
 	       if (row[1])
 		  if (row[1][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Text    ,row[1],
-			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	       Question->Answer.Options[NumOpt].Feedback[0] = '\0';
 	       if (row[2])
 		  if (row[2][0])
 		     Str_Copy (Question->Answer.Options[NumOpt].Feedback,row[2],
-			       Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			       Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	       /* Get media (row[3]) */
 	       Question->Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -4162,7 +4128,7 @@ static void Qst_GetQstFromForm (struct Qst_Question *Question)
             /* Get answer */
             snprintf (AnsStr,sizeof (AnsStr),"AnsStr%u",NumOpt);
 	    Par_GetParToHTML (AnsStr,Question->Answer.Options[NumOpt].Text,
-	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	                      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	    if (Question->Answer.Type == Qst_ANS_TEXT)
 	       /* In order to compare student answer to stored answer,
 	          the text answers are stored avoiding two or more consecurive spaces */
@@ -4171,7 +4137,7 @@ static void Qst_GetQstFromForm (struct Qst_Question *Question)
             /* Get feedback */
             snprintf (FbStr,sizeof (FbStr),"FbStr%u",NumOpt);
 	    Par_GetParToHTML (FbStr,Question->Answer.Options[NumOpt].Feedback,
-	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	                      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Get media associated to the answer (action, file and title) */
 	    if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||

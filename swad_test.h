@@ -30,6 +30,7 @@
 #include "swad_exam.h"
 #include "swad_game.h"
 #include "swad_media.h"
+#include "swad_question.h"
 #include "swad_question_type.h"
 #include "swad_test_config.h"
 #include "swad_test_print.h"
@@ -37,11 +38,6 @@
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-#define Tst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
-#define Tst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Tst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
-
-#define Qst_MAX_BYTES_ANSWER_TYPE		  32
 
 #define Tst_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
@@ -127,9 +123,6 @@ void Qst_PutParamsEditQst (void *Test);
 unsigned Qst_GetNumAnswersQst (long QstCod);
 void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
-
-void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
-void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
 
 void Qst_WriteAnswersBank (struct Qst_Question *Question,
                            const char *ClassTxt,

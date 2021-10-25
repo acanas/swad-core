@@ -719,7 +719,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 
          if (AnswerElem->Content)
             Str_Copy (Question->Answer.Options[0].Text,AnswerElem->Content,
-                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+                      Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
          break;
       case Qst_ANS_FLOAT:
          if (!Qst_AllocateTextChoiceAnswer (Question,0))
@@ -737,7 +737,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
                if (LowerUpperElem->Content)
                   Str_Copy (Question->Answer.Options[0].Text,
                             LowerUpperElem->Content,
-                            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+                            Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "lower"
               }
          for (LowerUpperElem = AnswerElem->FirstChild;
@@ -748,7 +748,7 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
                if (LowerUpperElem->Content)
                   Str_Copy (Question->Answer.Options[1].Text,
                             LowerUpperElem->Content,
-                            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+                            Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "upper"
               }
          break;
@@ -791,12 +791,12 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		       {
 			Str_Copy (Question->Answer.Options[NumOpt].Text,
 			          TextElem->Content,
-			          Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			          Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 			/* Convert answer from text to HTML (in database answer text is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 			                  Question->Answer.Options[NumOpt].Text,
-			                  Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
+			                  Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
 		       }
 		     break;	// Only first element "text"
 		    }
@@ -810,12 +810,12 @@ static void QstImp_GetAnswerFromXML (struct XMLElement *AnswerElem,
 		       {
 			Str_Copy (Question->Answer.Options[NumOpt].Feedback,
 			          FeedbackElem->Content,
-			          Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+			          Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 			/* Convert feedback from text to HTML (in database answer feedback is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 			                  Question->Answer.Options[NumOpt].Feedback,
-			                  Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
+			                  Qst_MAX_BYTES_ANSWER_OR_FEEDBACK,true);
 		       }
 		     break;	// Only first element "feedback"
 		    }
