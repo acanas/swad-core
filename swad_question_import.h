@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_test.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -39,7 +41,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QstImp_PutIconToExportQuestions (struct Tst_Test *Test);
+void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions);
 bool QstImp_GetCreateXMLParamFromForm (void);
 void QstImp_PutIconToImportQuestions (void);
 void QstImp_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);

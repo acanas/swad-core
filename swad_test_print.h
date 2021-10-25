@@ -29,6 +29,7 @@
 
 #include "swad_question.h"
 #include "swad_question_type.h"
+#include "swad_test.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"

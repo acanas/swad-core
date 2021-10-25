@@ -861,7 +861,7 @@ void Exa_DB_RemoveAllSetsFromCrs (long CrsCod)
 
 long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,long MedCod)
   {
-   extern const char *Tst_StrAnswerTypesDB[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    static char CharInvalid[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = 'Y',
@@ -878,7 +878,7 @@ long Exa_DB_AddQuestionToSet (long SetCod,const struct Qst_Question *Question,lo
 				 "'%s','%s',%ld)",
 				SetCod,
 				CharInvalid[Question->Validity],
-				Tst_StrAnswerTypesDB[Question->Answer.Type],
+				Qst_DB_StrAnswerTypes[Question->Answer.Type],
 				Question->Answer.Shuffle ? 'Y' :
 							   'N',
 				Question->Stem,

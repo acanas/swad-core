@@ -115,6 +115,8 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       bool QuestionExists,
 				       unsigned Visibility);
 
+static void TstPrn_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion);
+
 //-----------------------------------------------------------------------------
 static void TstPrn_GetCorrectAndComputeIntAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				                    struct Qst_Question *Question);
@@ -634,7 +636,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 
       /***** Update the number of accesses and the score of this question *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	 Qst_UpdateQstScoreInDB (&Print->PrintedQuestions[QstInd]);
+	 TstPrn_UpdateQstScoreInDB (&Print->PrintedQuestions[QstInd]);
 
       /***** Destroy test question *****/
       Qst_QstDestructor (&Question);
@@ -796,7 +798,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
-	 Qst_UpdateQstScoreInDB (&Print->PrintedQuestions[QstInd]);
+	 TstPrn_UpdateQstScoreInDB (&Print->PrintedQuestions[QstInd]);
      }
   }
 
@@ -820,6 +822,32 @@ void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
 
    /***** Get correct answer and compute answer score depending on type *****/
    TstPrn_GetCorrectAndComputeAnsScore[Question->Answer.Type] (PrintedQuestion,Question);
+  }
+
+/*****************************************************************************/
+/*********************** Update the score of a question **********************/
+/*****************************************************************************/
+
+static void TstPrn_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion)
+  {
+   /***** Update number of clicks and score of the question *****/
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   if (PrintedQuestion->StrAnswers[0])	// User's answer is not blank
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	                " SET NumHits=NumHits+1,"
+	                     "NumHitsNotBlank=NumHitsNotBlank+1,"
+	                     "Score=Score+(%.15lg)"
+                      " WHERE QstCod=%ld",
+		      PrintedQuestion->Score,
+		      PrintedQuestion->QstCod);
+   else					// User's answer is blank
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	                " SET NumHits=NumHits+1"
+                      " WHERE QstCod=%ld",
+		      PrintedQuestion->QstCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/

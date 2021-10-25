@@ -45,32 +45,6 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct Qst_AnswerTypes
-  {
-   bool All;
-   char List[Qst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
-  };
-
-#define Qst_NUM_TYPES_ORDER_QST	5
-typedef enum
-  {
-   Qst_ORDER_STEM                    = 0,
-   Qst_ORDER_NUM_HITS                = 1,
-   Qst_ORDER_AVERAGE_SCORE           = 2,
-   Qst_ORDER_NUM_HITS_NOT_BLANK      = 3,
-   Qst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
-  } Qst_QuestionsOrder_t;
-#define Qst_DEFAULT_ORDER Qst_ORDER_STEM
-
-struct Tst_Test
-  {
-   struct Tag_Tags Tags;		// Selected tags
-   struct Qst_AnswerTypes AnswerTypes;	// Selected answer types
-   Qst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
-   unsigned NumQsts;			// Number of questions
-   struct Qst_Question Question;	// Selected / editing question
-  };
-
 typedef enum
   {
    Tst_SHOW_TEST_TO_ANSWER,		// Showing a test to a student
@@ -98,6 +72,10 @@ struct Tst_Stats
 /*****************************************************************************/
 
 void Tst_RequestTest (void);
+
+void Qst_Constructor (struct Qst_Questions *Questions);
+void Qst_Destructor (struct Qst_Questions *Questions);
+
 void Tst_ShowNewTest (void);
 void Tst_ReceiveTestDraft (void);
 void Tst_AssessTest (void);
@@ -111,14 +89,24 @@ void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
 void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Qst_RequestEditQsts (void);
+void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions);
 void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
 void Qst_RequestSelectQstsForGame (struct Gam_Games *Games);
+void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
+                                              struct Qst_Questions *Questions);
+void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
+                                           struct Qst_Questions *Questions);
 
-void Qst_ListQuestionsToEdit (void);
-void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams);
-void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
+void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
+                                      MYSQL_RES *mysql_res);
+void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
+						  unsigned NumQsts,
+                                                  MYSQL_RES *mysql_res);
+void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
+					       unsigned NumQsts,
+                                               MYSQL_RES *mysql_res);
 
-void Qst_PutParamsEditQst (void *Test);
+void Qst_PutParamsEditQst (void *Questions);
 
 unsigned Qst_GetNumAnswersQst (long QstCod);
 void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
@@ -133,6 +121,8 @@ void Qst_WriteParamQstCod (unsigned NumQst,long QstCod);
 
 void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
+bool Tst_GetParamsTst (struct Qst_Questions *Questions,
+                       Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 void Tst_ShowFormConfig (void);
 
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
@@ -148,7 +138,6 @@ bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt
 
 Qst_AnswerType_t Qst_GetQstAnswerTypeFromDB (long QstCod);
 bool Qst_GetQstDataFromDB (struct Qst_Question *Question);
-Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
 void Qst_ReceiveQst (void);
 bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
 
@@ -167,8 +156,6 @@ long Qst_GetParamQstCod (void);
 void Qst_PutParamQstCod (void *QstCod);
 
 void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
-
-void Qst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion);
 
 void Tst_RemoveCrsTests (long CrsCod);
 void Qst_RemoveCrsQsts (long CrsCod);

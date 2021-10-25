@@ -4240,7 +4240,7 @@ static int API_GetTstQuestions (struct soap *soap,
 				long CrsCod,long BeginTime,
 				struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow;
@@ -4305,7 +4305,7 @@ static int API_GetTstQuestions (struct soap *soap,
          getTestsOut->questionsArray.__ptr[NumRow].answerType =
             soap_malloc (soap,Qst_MAX_BYTES_ANSWER_TYPE + 1);
 	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
-	           Tst_StrAnswerTypesXML[AnswerType],
+	           Qst_StrAnswerTypesXML[AnswerType],
 	           Qst_MAX_BYTES_ANSWER_TYPE);
 
          /* Get shuffle (row[2]) */
@@ -4340,7 +4340,7 @@ static int API_GetTstAnswers (struct soap *soap,
 		              long CrsCod,long BeginTime,
 			      struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
@@ -4440,7 +4440,7 @@ static int API_GetTstQuestionTags (struct soap *soap,
 		                   long CrsCod,long BeginTime,
 				   struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
@@ -4527,7 +4527,7 @@ int swad__getTrivialQuestion (struct soap *soap,
                               char *wsKey,char *degrees,float lowerScore,float upperScore,	// input
                               struct swad__getTrivialQuestionOutput *getTrivialQuestionOut)	// output
   {
-   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    int ReturnCode;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -4653,7 +4653,7 @@ int swad__getTrivialQuestion (struct soap *soap,
       getTrivialQuestionOut->question.answerType =
          soap_malloc (soap,Qst_MAX_BYTES_ANSWER_TYPE + 1);
       Str_Copy (getTrivialQuestionOut->question.answerType,
-                Tst_StrAnswerTypesXML[AnswerType],Qst_MAX_BYTES_ANSWER_TYPE);
+                Qst_StrAnswerTypesXML[AnswerType],Qst_MAX_BYTES_ANSWER_TYPE);
 
       /* Get shuffle (row[2]) */
       getTrivialQuestionOut->question.shuffle = (row[2][0] == 'Y') ? 1 :

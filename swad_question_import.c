@@ -67,7 +67,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void QstImp_PutParamsExportQsts (void *Test);
+static void QstImp_PutParamsExportQsts (void *Questions);
 static void QstImp_PutCreateXMLParam (void);
 
 static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML);
@@ -90,13 +90,13 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 /**************** Put a link (form) to export test questions *****************/
 /*****************************************************************************/
 
-void QstImp_PutIconToExportQuestions (struct Tst_Test *Test)
+void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
   {
    extern const char *Txt_Export_questions;
 
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
-                                  QstImp_PutParamsExportQsts,Test,
+                                  QstImp_PutParamsExportQsts,Questions,
 				  "file-import.svg",
 				  Txt_Export_questions);
   }
@@ -105,13 +105,13 @@ void QstImp_PutIconToExportQuestions (struct Tst_Test *Test)
 /****************** Put params to export test questions **********************/
 /*****************************************************************************/
 
-static void QstImp_PutParamsExportQsts (void *Test)
+static void QstImp_PutParamsExportQsts (void *Questions)
   {
-   if (Test)
+   if (Questions)
      {
-      Qst_PutParamsEditQst (Test);
+      Qst_PutParamsEditQst (Questions);
       Par_PutHiddenParamChar ("OnlyThisQst",'N');
-      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) (((struct Tst_Test *) Test)->SelectedOrder));
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) (((struct Qst_Questions *) Questions)->SelectedOrder));
       QstImp_PutCreateXMLParam ();
      }
   }
@@ -255,14 +255,14 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 
 static void QstImp_ExportQuestion (struct Qst_Question *Question,FILE *FileXML)
   {
-   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
 
    if (Qst_GetQstDataFromDB (Question))
      {
       /***** Write the answer type *****/
       fprintf (FileXML,"<question type=\"%s\">%s",
-               Tst_StrAnswerTypesXML[Question->Answer.Type],Txt_NEW_LINE);
+               Qst_StrAnswerTypesXML[Question->Answer.Type],Txt_NEW_LINE);
 
       /***** Write the question tags *****/
       fprintf (FileXML,"<tags>%s",Txt_NEW_LINE);
@@ -680,7 +680,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 
 static Qst_AnswerType_t QstImp_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsTypeXML)
   {
-   extern const char *Tst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
+   extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    Qst_AnswerType_t AnsType;
 
    if (StrAnsTypeXML != NULL)
@@ -688,7 +688,7 @@ static Qst_AnswerType_t QstImp_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrA
 	   AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
 	   AnsType++)
 	 // comparison must be case insensitive, because users can edit XML
-         if (!strcasecmp (StrAnsTypeXML,Tst_StrAnswerTypesXML[AnsType]))
+         if (!strcasecmp (StrAnsTypeXML,Qst_StrAnswerTypesXML[AnsType]))
             return AnsType;
 
    Err_WrongAnswerExit ();

@@ -30,10 +30,13 @@
 #include <stdbool.h>		// For boolean type
 #include <time.h>		// For time_t
 
-// #include "swad_question_type.h"
+#include "swad_exam.h"
+#include "swad_game.h"
+#include "swad_question_type.h"
 #include "swad_media.h"
 #include "swad_string.h"
 #include "swad_tag.h"
+// #include "swad_test.h"
 // #include "swad_test_config.h"
 // #include "swad_test_visibility.h"
 // #include "swad_user.h"
@@ -42,23 +45,29 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Qst_MAX_BYTES_ANSWER_TYPE	32
-
-#define Qst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
-
-#define Qst_MAX_OPTIONS_PER_QUESTION	10
-
-#define Qst_MAX_BYTES_INDEXES_ONE_QST	(Qst_MAX_OPTIONS_PER_QUESTION * (3 + 1))
-
 #define Qst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
 #define Qst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Qst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
-
-#define Qst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
-#define Qst_MAX_BYTES_ANSWERS_ONE_QST	((Qst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
+
+struct Qst_AnswerTypes
+  {
+   bool All;
+   char List[Qst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
+  };
+
+#define Qst_NUM_TYPES_ORDER_QST	5
+typedef enum
+  {
+   Qst_ORDER_STEM                    = 0,
+   Qst_ORDER_NUM_HITS                = 1,
+   Qst_ORDER_AVERAGE_SCORE           = 2,
+   Qst_ORDER_NUM_HITS_NOT_BLANK      = 3,
+   Qst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
+  } Qst_QuestionsOrder_t;
+#define Qst_DEFAULT_ORDER Qst_ORDER_STEM
 
 #define Qst_NUM_VALIDITIES 2
 typedef enum
@@ -66,19 +75,6 @@ typedef enum
    Qst_INVALID_QUESTION,
    Qst_VALID_QUESTION,
   } Qst_Validity_t;
-
-#define Qst_NUM_ANS_TYPES	6
-#define Qst_MAX_BYTES_LIST_ANSWER_TYPES	(Qst_NUM_ANS_TYPES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
-typedef enum
-  {
-   Qst_ANS_INT             = 0,
-   Qst_ANS_FLOAT           = 1,
-   Qst_ANS_TRUE_FALSE      = 2,
-   Qst_ANS_UNIQUE_CHOICE   = 3,
-   Qst_ANS_MULTIPLE_CHOICE = 4,
-   Qst_ANS_TEXT            = 5,
-   Qst_ANS_UNKNOWN         = 6,	// Unknown/all/any type of answer
-  } Qst_AnswerType_t;
 
 struct Qst_Question
   {
@@ -110,11 +106,29 @@ struct Qst_Question
    Qst_Validity_t Validity;	// If a question in an exam has been marked as invalid
   };
 
+struct Qst_Questions
+  {
+   struct Tag_Tags Tags;		// Selected tags
+   struct Qst_AnswerTypes AnswerTypes;	// Selected answer types
+   Qst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
+   unsigned NumQsts;			// Number of questions
+   struct Qst_Question Question;	// Selected / editing question
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Qst_ListQuestionsToEdit (void);
+void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams);
+void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
+
+void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res);
+
 void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
 void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
+
+Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
+Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 
 #endif
