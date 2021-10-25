@@ -74,9 +74,4 @@ unsigned Tst_CountNumQuestionsInList (const char *ListQuestions);
 
 void Tst_RemoveCrsTests (long CrsCod);
 
-void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
-
-unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
-                                           const struct Qst_Question *Question);
-
 #endif

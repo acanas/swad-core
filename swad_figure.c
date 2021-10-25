@@ -2013,7 +2013,7 @@ static void Fig_GetAndShowTestsStats (void)
 	   AnsType++)
 	{
 	 /***** Get the stats about test questions from this location *****/
-	 Tst_GetTestStats (AnsType,&Stats);
+	 Qst_GetTestStats (AnsType,&Stats);
 
 	 /***** Write number of assignments *****/
 	 HTM_TR_Begin (NULL);
@@ -2062,7 +2062,7 @@ static void Fig_GetAndShowTestsStats (void)
 	}
 
       /***** Get the stats about test questions from this location *****/
-      Tst_GetTestStats (Qst_ANS_UNKNOWN,&Stats);
+      Qst_GetTestStats (Qst_ANS_UNKNOWN,&Stats);
 
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);

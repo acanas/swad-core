@@ -1408,10 +1408,10 @@ void Qst_PutParamsEditQst (void *Questions)
   }
 
 /*****************************************************************************/
-/*************** Get answers of a test question from database ****************/
+/************ Get number of answers of a question from database **************/
 /*****************************************************************************/
 
-unsigned Qst_GetNumAnswersQst (long QstCod)
+unsigned Qst_DB_GetNumAnswersQst (long QstCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of answers of a question",
@@ -1420,6 +1420,10 @@ unsigned Qst_GetNumAnswersQst (long QstCod)
 		  " WHERE QstCod=%ld",
 		  QstCod);
   }
+
+/*****************************************************************************/
+/***************** Get answers of a question from database *******************/
+/*****************************************************************************/
 
 void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle)
@@ -3518,7 +3522,7 @@ void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod)
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
-   Qst_RemAnsFromQst (QstCod);
+   Qst_DB_RemAnsFromQst (QstCod);
    Tag_DB_RemTagsFromQst (QstCod);
    Tag_DB_RemoveUnusedTagsFromCrs (CrsCod);
 
@@ -3694,7 +3698,7 @@ void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question)
 		      Gbl.Hierarchy.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */
-      Qst_RemAnsFromQst (Question->QstCod);
+      Qst_DB_RemAnsFromQst (Question->QstCod);
       Tag_DB_RemTagsFromQst (Question->QstCod);
      }
   }
@@ -3823,7 +3827,7 @@ void Qst_RemoveCrsQsts (long CrsCod)
 /******************** Remove answers from a test question ********************/
 /*****************************************************************************/
 
-void Qst_RemAnsFromQst (long QstCod)
+void Qst_DB_RemAnsFromQst (long QstCod)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
@@ -4517,5 +4521,34 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
 			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
       default:
 	 return 0;
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Get stats about test questions **********************/
+/*****************************************************************************/
+
+void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
+  {
+   Stats->NumQsts = 0;
+   Stats->NumCoursesWithQuestions = Stats->NumCoursesWithPluggableQuestions = 0;
+   Stats->AvgQstsPerCourse = 0.0;
+   Stats->NumHits = 0L;
+   Stats->AvgHitsPerCourse = 0.0;
+   Stats->AvgHitsPerQuestion = 0.0;
+   Stats->TotalScore = 0.0;
+   Stats->AvgScorePerQuestion = 0.0;
+
+   if (Qst_GetNumQuestions (Gbl.Scope.Current,AnsType,Stats))
+     {
+      if ((Stats->NumCoursesWithQuestions = Qst_GetNumCoursesWithQuestions (Gbl.Scope.Current,AnsType)) != 0)
+        {
+         Stats->NumCoursesWithPluggableQuestions = Qst_GetNumCoursesWithPluggableQuestions (Gbl.Scope.Current,AnsType);
+         Stats->AvgQstsPerCourse = (double) Stats->NumQsts / (double) Stats->NumCoursesWithQuestions;
+         Stats->AvgHitsPerCourse = (double) Stats->NumHits / (double) Stats->NumCoursesWithQuestions;
+        }
+      Stats->AvgHitsPerQuestion = (double) Stats->NumHits / (double) Stats->NumQsts;
+      if (Stats->NumHits)
+         Stats->AvgScorePerQuestion = Stats->TotalScore / (double) Stats->NumHits;
      }
   }

@@ -3018,7 +3018,7 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
    char *Class;
 
    /***** Get number of options in this question *****/
-   NumOptions = Qst_GetNumAnswersQst (Match->Status.QstCod);
+   NumOptions = Qst_DB_GetNumAnswersQst (Match->Status.QstCod);
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (8);

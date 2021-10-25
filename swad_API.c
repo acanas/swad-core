@@ -5223,7 +5223,7 @@ int swad__getMatchStatus (struct soap *soap,
       case Mch_STEM:	// Showing only the question stem
       case Mch_ANSWERS:	// Showing the question stem and the answers
       case Mch_RESULTS:	// Showing the results
-	 getMatchStatusOut->numAnswers = (int) Qst_GetNumAnswersQst (Match.Status.QstCod);
+	 getMatchStatusOut->numAnswers = (int) Qst_DB_GetNumAnswersQst (Match.Status.QstCod);
 	 Mch_GetQstAnsFromDB (Match.MchCod,
 			      Gbl.Usrs.Me.UsrDat.UsrCod,
 			      Match.Status.QstInd,

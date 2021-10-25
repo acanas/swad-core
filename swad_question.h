@@ -181,7 +181,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 void Qst_PutParamsEditQst (void *Questions);
 
-unsigned Qst_GetNumAnswersQst (long QstCod);
+unsigned Qst_DB_GetNumAnswersQst (long QstCod);
 void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
                         bool Shuffle);
 
@@ -273,7 +273,7 @@ void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question);
 void Qst_InsertAnswersIntoDB (struct Qst_Question *Question);
 
 void Qst_RemoveCrsQsts (long CrsCod);
-void Qst_RemAnsFromQst (long QstCod);
+void Qst_DB_RemAnsFromQst (long QstCod);
 void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
 void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
@@ -285,5 +285,7 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
 unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
 unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
+
+void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
 
 #endif

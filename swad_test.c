@@ -96,8 +96,8 @@ static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 static bool Tst_CheckIfNextTstAllowed (void);
 static unsigned Tst_GetNumTstExamsGeneratedByMe (void);
 
-static void Tst_IncreaseMyNumTstExams (void);
-static void Tst_UpdateLastAccTst (unsigned NumQsts);
+static void Tst_DB_IncreaseMyNumTstExams (void);
+static void Tst_DB_UpdateLastAccTst (unsigned NumQsts);
 
 static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 
@@ -242,7 +242,7 @@ void Tst_ShowNewTest (void)
          if (Print.NumQsts.All)
            {
             /***** Increase number of exams generated (answered or not) by me *****/
-            Tst_IncreaseMyNumTstExams ();
+            Tst_DB_IncreaseMyNumTstExams ();
             NumTstExamsGeneratedByMe = Tst_GetNumTstExamsGeneratedByMe ();
 
 	    /***** Create new test exam in database *****/
@@ -255,7 +255,7 @@ void Tst_ShowNewTest (void)
 
             /***** Update date-time of my next allowed access to test *****/
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-               Tst_UpdateLastAccTst (Questions.NumQsts);
+               Tst_DB_UpdateLastAccTst (Questions.NumQsts);
            }
          else	// No questions found
            {
@@ -544,7 +544,7 @@ static unsigned Tst_GetNumTstExamsGeneratedByMe (void)
 /*********** Update my number of accesses to test in this course *************/
 /*****************************************************************************/
 
-static void Tst_IncreaseMyNumTstExams (void)
+static void Tst_DB_IncreaseMyNumTstExams (void)
   {
    /***** Trivial check *****/
    if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -564,7 +564,7 @@ static void Tst_IncreaseMyNumTstExams (void)
 /************ Update date-time of my next allowed access to test *************/
 /*****************************************************************************/
 
-static void Tst_UpdateLastAccTst (unsigned NumQsts)
+static void Tst_DB_UpdateLastAccTst (unsigned NumQsts)
   {
    /***** Update date-time and number of questions of this test *****/
    DB_QueryUPDATE ("can not update time and number of questions of this test",
@@ -1272,33 +1272,4 @@ void Tst_RemoveCrsTests (long CrsCod)
 		   "DELETE FROM tst_config"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);
-  }
-
-/*****************************************************************************/
-/*********************** Get stats about test questions **********************/
-/*****************************************************************************/
-
-void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
-  {
-   Stats->NumQsts = 0;
-   Stats->NumCoursesWithQuestions = Stats->NumCoursesWithPluggableQuestions = 0;
-   Stats->AvgQstsPerCourse = 0.0;
-   Stats->NumHits = 0L;
-   Stats->AvgHitsPerCourse = 0.0;
-   Stats->AvgHitsPerQuestion = 0.0;
-   Stats->TotalScore = 0.0;
-   Stats->AvgScorePerQuestion = 0.0;
-
-   if (Qst_GetNumQuestions (Gbl.Scope.Current,AnsType,Stats))
-     {
-      if ((Stats->NumCoursesWithQuestions = Qst_GetNumCoursesWithQuestions (Gbl.Scope.Current,AnsType)) != 0)
-        {
-         Stats->NumCoursesWithPluggableQuestions = Qst_GetNumCoursesWithPluggableQuestions (Gbl.Scope.Current,AnsType);
-         Stats->AvgQstsPerCourse = (double) Stats->NumQsts / (double) Stats->NumCoursesWithQuestions;
-         Stats->AvgHitsPerCourse = (double) Stats->NumHits / (double) Stats->NumCoursesWithQuestions;
-        }
-      Stats->AvgHitsPerQuestion = (double) Stats->NumHits / (double) Stats->NumQsts;
-      if (Stats->NumHits)
-         Stats->AvgScorePerQuestion = Stats->TotalScore / (double) Stats->NumHits;
-     }
   }
