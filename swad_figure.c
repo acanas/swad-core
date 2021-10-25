@@ -1988,7 +1988,7 @@ static void Fig_GetAndShowTestsStats (void)
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    extern const char *Txt_Total;
    Qst_AnswerType_t AnsType;
-   struct Tst_Stats Stats;
+   struct Qst_Stats Stats;
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_TESTS],

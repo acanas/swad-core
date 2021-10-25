@@ -115,13 +115,104 @@ struct Qst_Questions
    struct Qst_Question Question;	// Selected / editing question
   };
 
+struct Qst_Stats
+  {
+   unsigned NumCoursesWithQuestions;
+   unsigned NumCoursesWithPluggableQuestions;
+   unsigned NumQsts;
+   double AvgQstsPerCourse;
+   unsigned long NumHits;
+   double AvgHitsPerCourse;
+   double AvgHitsPerQuestion;
+   double TotalScore;
+   double AvgScorePerQuestion;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Qst_Constructor (struct Qst_Questions *Questions);
+void Qst_Destructor (struct Qst_Questions *Questions);
+
+void Qst_RequestEditQsts (void);
+void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions);
+void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes);
+void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
+void Qst_RequestSelectQstsForGame (struct Gam_Games *Games);
+void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
+                                              struct Qst_Questions *Questions);
+void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
+                                           struct Qst_Questions *Questions);
+
+bool Qst_CheckIfICanEditQsts (void);
+void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
+void Qst_PutIconsEditBankQsts (void *Questions);
+void Qst_PutButtonToAddQuestion (void);
+
+void Qst_ListQuestionForEdition (struct Qst_Question *Question,
+                                 unsigned QstInd,bool QuestionExists,
+                                 const char *Anchor);
+void Qst_WriteNumQst (unsigned NumQst,const char *Class);
+void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class);
+void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
+void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
+                                bool OptionsDisabled);
+void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
+
 void Qst_ListQuestionsToEdit (void);
 void Qst_ListQuestionsToSelectForExamSet (struct Exa_Exams *Exams);
 void Qst_ListQuestionsToSelectForGame (struct Gam_Games *Games);
+
+void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
+                                      MYSQL_RES *mysql_res);
+void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions);
+void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd);
+
+void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
+						  unsigned NumQsts,
+                                                  MYSQL_RES *mysql_res);
+void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
+					       unsigned NumQsts,
+                                               MYSQL_RES *mysql_res);
+void Qst_PutCheckboxToSelectAllQuestions (void);
+void Qst_WriteQuestionRowForSelection (unsigned QstInd,
+                                       struct Qst_Question *Question);
+
+void Qst_PutParamsEditQst (void *Questions);
+
+unsigned Qst_GetNumAnswersQst (long QstCod);
+void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
+                        bool Shuffle);
+
+void Qst_WriteAnswersBank (struct Qst_Question *Question,
+                           const char *ClassTxt,
+                           const char *ClassFeedback);
+
+void Qst_ListOneQstToEdit (struct Qst_Questions *Questions);
+
+//-----------------------------------------------------------------------------
+
+void Qst_WriteIntAnsBank (struct Qst_Question *Question,
+                          const char *ClassTxt,
+                          __attribute__((unused)) const char *ClassFeedback);
+void Qst_WriteFltAnsBank (struct Qst_Question *Question,
+                          const char *ClassTxt,
+                          __attribute__((unused)) const char *ClassFeedback);
+void Qst_WriteTF_AnsBank (struct Qst_Question *Question,
+                          const char *ClassTxt,
+                          __attribute__((unused)) const char *ClassFeedback);
+void Qst_WriteChoAnsBank (struct Qst_Question *Question,
+                          const char *ClassTxt,
+                          const char *ClassFeedback);
+
+//-----------------------------------------------------------------------------
+
+void Qst_WriteAnsTF (char AnsTF);
+
+void Qst_WriteParamQstCod (unsigned NumQst,long QstCod);
+
+void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
 void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res);
 
@@ -130,5 +221,69 @@ void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
 
 Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB);
 Qst_AnswerType_t Qst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
+
+void Qst_ShowFormEditOneQst (void);
+void Qst_PutFormEditOneQst (struct Qst_Question *Question);
+void Qst_PutFloatInputField (const char *Label,const char *Field,
+                             const struct Qst_Question *Question,
+                             unsigned Index);
+void Qst_PutTFInputField (const struct Qst_Question *Question,
+                          const char *Label,char Value);
+
+void Qst_QstConstructor (struct Qst_Question *Question);
+void Qst_QstDestructor (struct Qst_Question *Question);
+
+bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
+void Qst_FreeTextChoiceAnswers (struct Qst_Question *Question);
+void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
+
+void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
+void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
+
+Qst_AnswerType_t Qst_GetQstAnswerTypeFromDB (long QstCod);
+bool Qst_GetQstDataFromDB (struct Qst_Question *Question);
+long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
+void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
+                         struct Med_Media *Media);
+void Qst_ReceiveQst (void);
+void Qst_GetQstFromForm (struct Qst_Question *Question);
+bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
+
+bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
+
+void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Question);
+
+long Qst_GetIntAnsFromStr (char *Str);
+
+void Qst_RequestRemoveSelectedQsts (void);
+void Qst_RemoveSelectedQsts (void);
+void Qst_PutIconToRemoveOneQst (void *QstCod);
+void Qst_RequestRemoveOneQst (void);
+void Qst_PutParamsRemoveOnlyThisQst (void *QstCod);
+void Qst_RemoveOneQst (void);
+void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod);
+
+void Qst_ChangeShuffleQst (void);
+
+long Qst_GetParamQstCod (void);
+void Qst_PutParamQstCod (void *QstCod);
+
+void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
+void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question);
+void Qst_InsertAnswersIntoDB (struct Qst_Question *Question);
+
+void Qst_RemoveCrsQsts (long CrsCod);
+void Qst_RemAnsFromQst (long QstCod);
+void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
+void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
+void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
+void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
+
+unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question);
+
+unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
+unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
+unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
 
 #endif

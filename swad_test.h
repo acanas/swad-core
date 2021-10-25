@@ -54,72 +54,15 @@ typedef enum
    Tst_SELECT_QUESTIONS_FOR_GAME,	// Selecting test questions for a game
   } Tst_ActionToDoWithQuestions_t;
 
-struct Tst_Stats
-  {
-   unsigned NumCoursesWithQuestions;
-   unsigned NumCoursesWithPluggableQuestions;
-   unsigned NumQsts;
-   double AvgQstsPerCourse;
-   unsigned long NumHits;
-   double AvgHitsPerCourse;
-   double AvgHitsPerQuestion;
-   double TotalScore;
-   double AvgScorePerQuestion;
-  };
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Tst_RequestTest (void);
 
-void Qst_Constructor (struct Qst_Questions *Questions);
-void Qst_Destructor (struct Qst_Questions *Questions);
-
 void Tst_ShowNewTest (void);
 void Tst_ReceiveTestDraft (void);
 void Tst_AssessTest (void);
-
-void Qst_ListQuestionForEdition (struct Qst_Question *Question,
-                                 unsigned QstInd,bool QuestionExists,
-                                 const char *Anchor);
-void Qst_WriteNumQst (unsigned NumQst,const char *Class);
-void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class);
-void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible);
-void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
-
-void Qst_RequestEditQsts (void);
-void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions);
-void Qst_RequestSelectQstsForExamSet (struct Exa_Exams *Exams);
-void Qst_RequestSelectQstsForGame (struct Gam_Games *Games);
-void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
-                                              struct Qst_Questions *Questions);
-void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
-                                           struct Qst_Questions *Questions);
-
-void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
-                                      MYSQL_RES *mysql_res);
-void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
-						  unsigned NumQsts,
-                                                  MYSQL_RES *mysql_res);
-void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
-					       unsigned NumQsts,
-                                               MYSQL_RES *mysql_res);
-
-void Qst_PutParamsEditQst (void *Questions);
-
-unsigned Qst_GetNumAnswersQst (long QstCod);
-void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
-                        bool Shuffle);
-
-void Qst_WriteAnswersBank (struct Qst_Question *Question,
-                           const char *ClassTxt,
-                           const char *ClassFeedback);
-void Qst_WriteAnsTF (char AnsTF);
-
-void Qst_WriteParamQstCod (unsigned NumQst,long QstCod);
-
-void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
 bool Tst_GetParamsTst (struct Qst_Questions *Questions,
                        Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
@@ -129,38 +72,9 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 
 unsigned Tst_CountNumQuestionsInList (const char *ListQuestions);
 
-void Qst_ShowFormEditOneQst (void);
-
-void Qst_QstConstructor (struct Qst_Question *Question);
-void Qst_QstDestructor (struct Qst_Question *Question);
-
-bool Qst_AllocateTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
-
-Qst_AnswerType_t Qst_GetQstAnswerTypeFromDB (long QstCod);
-bool Qst_GetQstDataFromDB (struct Qst_Question *Question);
-void Qst_ReceiveQst (void);
-bool Qst_CheckIfQstFormatIsCorrectAndCountNumOptions (struct Qst_Question *Question);
-
-bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question);
-
-long Qst_GetIntAnsFromStr (char *Str);
-
-void Qst_RequestRemoveSelectedQsts (void);
-void Qst_RemoveSelectedQsts (void);
-void Qst_RequestRemoveOneQst (void);
-void Qst_RemoveOneQst (void);
-
-void Qst_ChangeShuffleQst (void);
-
-long Qst_GetParamQstCod (void);
-void Qst_PutParamQstCod (void *QstCod);
-
-void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
-
 void Tst_RemoveCrsTests (long CrsCod);
-void Qst_RemoveCrsQsts (long CrsCod);
 
-void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Tst_Stats *Stats);
+void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
 
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
                                            const struct Qst_Question *Question);
