@@ -1841,6 +1841,9 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove all tests in the course *****/
       Tst_RemoveCrsTests (CrsCod);
 
+      /***** Remove all questions in the course *****/
+      Qst_RemoveCrsQsts (CrsCod);
+
       /***** Remove groups in the course *****/
       Grp_DB_RemoveCrsGrps (CrsCod);
 

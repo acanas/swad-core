@@ -27,8 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_question_type.h"
 #include "swad_test_config.h"
-#include "swad_test_type.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
 

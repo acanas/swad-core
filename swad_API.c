@@ -4303,10 +4303,10 @@ static int API_GetTstQuestions (struct soap *soap,
          /* Get answer type (row[1]) */
          AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
          getTestsOut->questionsArray.__ptr[NumRow].answerType =
-            soap_malloc (soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
+            soap_malloc (soap,Qst_MAX_BYTES_ANSWER_TYPE + 1);
 	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
 	           Tst_StrAnswerTypesXML[AnswerType],
-	           Tst_MAX_BYTES_ANSWER_TYPE);
+	           Qst_MAX_BYTES_ANSWER_TYPE);
 
          /* Get shuffle (row[2]) */
          getTestsOut->questionsArray.__ptr[NumRow].shuffle = (row[2][0] == 'Y') ? 1 :
@@ -4651,9 +4651,9 @@ int swad__getTrivialQuestion (struct soap *soap,
       /* Get answer type (row[1]) */
       AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
       getTrivialQuestionOut->question.answerType =
-         soap_malloc (soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
+         soap_malloc (soap,Qst_MAX_BYTES_ANSWER_TYPE + 1);
       Str_Copy (getTrivialQuestionOut->question.answerType,
-                Tst_StrAnswerTypesXML[AnswerType],Tst_MAX_BYTES_ANSWER_TYPE);
+                Tst_StrAnswerTypesXML[AnswerType],Qst_MAX_BYTES_ANSWER_TYPE);
 
       /* Get shuffle (row[2]) */
       getTrivialQuestionOut->question.shuffle = (row[2][0] == 'Y') ? 1 :

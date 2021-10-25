@@ -53951,9 +53951,9 @@ const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES] =
 #endif
 	};
 
-const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
+const char *Txt_TST_STR_ORDER_FULL[Qst_NUM_TYPES_ORDER_QST] =
 	{
-	[Tst_ORDER_STEM] =
+	[Qst_ORDER_STEM] =
 #if   L==1	// ca
 	"Ordenar por enunciado de la pregunta"	// Necessita traduccio
 #elif L==2	// de
@@ -53974,7 +53974,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Classificar por formula&ccedil;&atilde;o da pergunta"
 #endif
 	,
-	[Tst_ORDER_NUM_HITS] =
+	[Qst_ORDER_NUM_HITS] =
 #if   L==1	// ca
 	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Necessita traduccio
 #elif L==2	// de
@@ -53995,7 +53995,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Classificar por n&ordm; de vezes que a pergunta foi respondida"
 #endif
 	,
-	[Tst_ORDER_AVERAGE_SCORE] =
+	[Qst_ORDER_AVERAGE_SCORE] =
 #if   L==1	// ca
 	"Ordenar por puntuaci&oacute;n media"	// Necessita traduccio
 #elif L==2	// de
@@ -54016,7 +54016,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	"Classificar por pontua&ccedil;&atilde;o m&eacute;dia"
 #endif
 	,
-	[Tst_ORDER_NUM_HITS_NOT_BLANK] =
+	[Qst_ORDER_NUM_HITS_NOT_BLANK] =
 #if   L==1	// ca
 	"Ordenar por n&ordm; de veces que se ha respondido"
 	" la pregunta (excluyendo respuestas en blanco)"	// Necessita traduccio
@@ -54046,7 +54046,7 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 	" que a pergunta foi respondida (n&atilde;o em branco)"
 #endif
 	,
-	[Tst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
+	[Qst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
 #if   L==1	// ca
 	"Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"	// Necessita traduccio
 #elif L==2	// de
@@ -54068,9 +54068,9 @@ const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
 #endif
 	};
 
-const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
+const char *Txt_TST_STR_ORDER_SHORT[Qst_NUM_TYPES_ORDER_QST] =
 	{
-	[Tst_ORDER_STEM] =
+	[Qst_ORDER_STEM] =
 #if   L==1	// ca
 	"Pregunta"
 #elif L==2	// de
@@ -54091,7 +54091,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"Pergunta"
 #endif
 	,
-	[Tst_ORDER_NUM_HITS] =
+	[Qst_ORDER_NUM_HITS] =
 #if   L==1	// ca
 	"N.&ordm;<br />resp."			// Necessita traduccio
 #elif L==2	// de
@@ -54112,7 +54112,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"N.&ordm;<br />resp."
 #endif
 	,
-	[Tst_ORDER_AVERAGE_SCORE] =
+	[Qst_ORDER_AVERAGE_SCORE] =
 #if   L==1	// ca
 	"Puntuaci&oacute;n<br />media"	// Necessita traduccio
 #elif L==2	// de
@@ -54133,7 +54133,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"Pontua&ccedil;&atilde;o<br />m&eacute;dia"
 #endif
 	,
-	[Tst_ORDER_NUM_HITS_NOT_BLANK] =
+	[Qst_ORDER_NUM_HITS_NOT_BLANK] =
 #if   L==1	// ca
 	"N.&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traduccio
 #elif L==2	// de
@@ -54154,7 +54154,7 @@ const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
 	"N.&ordm;<br />resp.<br />n&atilde;o em<br />branco"
 #endif
 	,
-	[Tst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
+	[Qst_ORDER_AVERAGE_SCORE_NOT_BLANK] =
 #if   L==1	// ca
 	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Necessita traduccio
 #elif L==2	// de

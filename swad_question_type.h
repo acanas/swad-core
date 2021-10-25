@@ -1,7 +1,7 @@
-// swad_test_type.h: definition of types for tests
+// swad_question_type.h: definition of types for questions
 
-#ifndef _SWAD_TST_TYP
-#define _SWAD_TST_TYP
+#ifndef _SWAD_QST_TYP
+#define _SWAD_QST_TYP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -42,8 +42,6 @@
 
 #define Qst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
 #define Qst_MAX_BYTES_ANSWERS_ONE_QST	((Qst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Tst_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

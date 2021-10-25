@@ -31,7 +31,7 @@
 #include "swad_exam_print.h"
 #include "swad_exam_session.h"
 #include "swad_exam_set.h"
-#include "swad_test_type.h"
+#include "swad_question_type.h"
 
 /*****************************************************************************/
 /************************* Public types and constants ************************/

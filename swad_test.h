@@ -30,9 +30,9 @@
 #include "swad_exam.h"
 #include "swad_game.h"
 #include "swad_media.h"
+#include "swad_question_type.h"
 #include "swad_test_config.h"
 #include "swad_test_print.h"
-#include "swad_test_type.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -41,34 +41,36 @@
 #define Tst_MAX_CHARS_ANSWER_OR_FEEDBACK	(1024 - 1)	// 1023
 #define Tst_MAX_BYTES_ANSWER_OR_FEEDBACK	((Tst_MAX_CHARS_ANSWER_OR_FEEDBACK + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
-#define Tst_MAX_BYTES_ANSWER_TYPE		  32
+#define Qst_MAX_BYTES_ANSWER_TYPE		  32
+
+#define Tst_SCORE_MAX	10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-struct Tst_AnswerTypes
+struct Qst_AnswerTypes
   {
    bool All;
    char List[Qst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
   };
 
-#define Tst_NUM_TYPES_ORDER_QST	5
+#define Qst_NUM_TYPES_ORDER_QST	5
 typedef enum
   {
-   Tst_ORDER_STEM                    = 0,
-   Tst_ORDER_NUM_HITS                = 1,
-   Tst_ORDER_AVERAGE_SCORE           = 2,
-   Tst_ORDER_NUM_HITS_NOT_BLANK      = 3,
-   Tst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
-  } Tst_QuestionsOrder_t;
-#define Tst_DEFAULT_ORDER Tst_ORDER_STEM
+   Qst_ORDER_STEM                    = 0,
+   Qst_ORDER_NUM_HITS                = 1,
+   Qst_ORDER_AVERAGE_SCORE           = 2,
+   Qst_ORDER_NUM_HITS_NOT_BLANK      = 3,
+   Qst_ORDER_AVERAGE_SCORE_NOT_BLANK = 4,
+  } Qst_QuestionsOrder_t;
+#define Qst_DEFAULT_ORDER Qst_ORDER_STEM
 
 struct Tst_Test
   {
    struct Tag_Tags Tags;		// Selected tags
-   struct Tst_AnswerTypes AnswerTypes;	// Selected answer types
-   Tst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
+   struct Qst_AnswerTypes AnswerTypes;	// Selected answer types
+   Qst_QuestionsOrder_t SelectedOrder;	// Order for listing questions
    unsigned NumQsts;			// Number of questions
    struct Qst_Question Question;	// Selected / editing question
   };
@@ -77,7 +79,7 @@ typedef enum
   {
    Tst_SHOW_TEST_TO_ANSWER,		// Showing a test to a student
    Tst_SHOW_TEST_RESULT,		// Showing the assessment of a test
-   Tst_EDIT_TEST,			// Editing test questions
+   Tst_EDIT_QUESTIONS,			// Editing test questions
    Tst_SELECT_QUESTIONS_FOR_EXAM,	// Selecting test questions for a set of questions in an exam
    Tst_SELECT_QUESTIONS_FOR_GAME,	// Selecting test questions for a game
   } Tst_ActionToDoWithQuestions_t;
@@ -173,9 +175,10 @@ void Qst_PutParamQstCod (void *QstCod);
 
 void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
 
-void Tst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion);
+void Qst_UpdateQstScoreInDB (struct TstPrn_PrintedQuestion *PrintedQuestion);
 
 void Tst_RemoveCrsTests (long CrsCod);
+void Qst_RemoveCrsQsts (long CrsCod);
 
 void Tst_GetTestStats (Qst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
