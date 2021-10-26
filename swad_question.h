@@ -268,6 +268,9 @@ void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Question);
 void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question);
 void Qst_InsertAnswersIntoDB (struct Qst_Question *Question);
 
+unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes);
+unsigned Qst_CountNumQuestionsInList (const char *ListQuestions);
+
 void Qst_RemoveCrsQsts (long CrsCod);
 void Qst_DB_RemAnsFromQst (long QstCod);
 void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);

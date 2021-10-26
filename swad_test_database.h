@@ -54,4 +54,9 @@ void Tst_DB_UpdateLastAccTst (unsigned NumQsts);
 unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res);
 unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res);
 
+unsigned Tst_DB_GetQuestionsForNewTest (MYSQL_RES **mysql_res,
+                                        const struct Qst_Questions *Questions);
+
+void Tst_DB_RemoveTstConfig (long CrsCod);
+
 #endif

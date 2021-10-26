@@ -179,7 +179,7 @@ static void TstCfg_ShowFormConfig (void)
    Qst_Constructor (&Questions);
 
    /***** Read test configuration from database *****/
-   TstCfg_GetConfigFromDB ();
+   TstCfg_GetConfig ();
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_tests,
@@ -313,7 +313,7 @@ static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
 /*************** Get configuration of test for current course ****************/
 /*****************************************************************************/
 
-void TstCfg_GetConfigFromDB (void)
+void TstCfg_GetConfig (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

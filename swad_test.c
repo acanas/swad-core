@@ -92,19 +92,15 @@ extern struct Globals Gbl;
 
 static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions);
 
-static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
-
 static bool Tst_CheckIfNextTstAllowed (void);
 
-static void Tst_GetQuestionsForNewTestFromDB (struct Qst_Questions *Questions,
+static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
                                               struct TstPrn_Print *Print);
 static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQuestion,
 				       bool Shuffle);
 
 static unsigned Tst_GetParamNumTst (void);
 static unsigned Tst_GetParamNumQsts (void);
-static unsigned Tst_CountNumTagsInList (const struct Tag_Tags *Tags);
-static int Tst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes);
 
 /*****************************************************************************/
 /********************* Request a self-assessment test ************************/
@@ -114,13 +110,13 @@ void Tst_RequestTest (void)
   {
    struct Qst_Questions Questions;
 
-   /***** Create test *****/
+   /***** Create questions *****/
    Qst_Constructor (&Questions);
 
    /***** Show form to generate a self-assessment test *****/
    Tst_ShowFormRequestTest (&Questions);
 
-   /***** Destroy test *****/
+   /***** Destroy questions *****/
    Qst_Destructor (&Questions);
   }
 
@@ -138,7 +134,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
    MYSQL_RES *mysql_res;
 
    /***** Read test configuration from database *****/
-   TstCfg_GetConfigFromDB ();
+   TstCfg_GetConfig ();
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Test,
@@ -219,7 +215,7 @@ void Tst_ShowNewTest (void)
    Qst_Constructor (&Questions);
 
    /***** Read test configuration from database *****/
-   TstCfg_GetConfigFromDB ();
+   TstCfg_GetConfig ();
 
    if (Tst_CheckIfNextTstAllowed ())
      {
@@ -228,7 +224,7 @@ void Tst_ShowNewTest (void)
         {
          /***** Get questions *****/
 	 TstPrn_ResetPrint (&Print);
-	 Tst_GetQuestionsForNewTestFromDB (&Questions,&Print);
+	 Tst_GetQuestionsForNewTest (&Questions,&Print);
          if (Print.NumQsts.All)
            {
             /***** Increase number of exams generated (answered or not) by me *****/
@@ -273,7 +269,7 @@ void Tst_ReceiveTestDraft (void)
    struct TstPrn_Print Print;
 
    /***** Read test configuration from database *****/
-   TstCfg_GetConfigFromDB ();
+   TstCfg_GetConfig ();
 
    /***** Get basic parameters of the exam *****/
    /* Get test print code from form */
@@ -329,7 +325,7 @@ void Tst_AssessTest (void)
    struct TstPrn_Print Print;
 
    /***** Read test configuration from database *****/
-   TstCfg_GetConfigFromDB ();
+   TstCfg_GetConfig ();
 
    /***** Get basic parameters of the exam *****/
    /* Get test print code from form */
@@ -398,28 +394,6 @@ void Tst_AssessTest (void)
 
       /***** End box *****/
       Box_BoxEnd ();
-     }
-  }
-
-/*****************************************************************************/
-/******** Get questions and answers from form to assess a test print *********/
-/*****************************************************************************/
-
-static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
-  {
-   unsigned QstInd;
-   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
-
-   /***** Loop for every question getting user's answers *****/
-   for (QstInd = 0;
-	QstInd < Print->NumQsts.All;
-	QstInd++)
-     {
-      /* Get answers selected by user for this question */
-      snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
-      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[QstInd].StrAnswers,
-                             Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
-      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[QstInd].StrAnswers);
      }
   }
 
@@ -518,21 +492,13 @@ void Tst_PutIconsTests (__attribute__((unused)) void *Args)
 
 #define Tst_MAX_BYTES_QUERY_QUESTIONS (16 * 1024 - 1)
 
-static void Tst_GetQuestionsForNewTestFromDB (struct Qst_Questions *Questions,
-                                              struct TstPrn_Print *Print)
+static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
+                                        struct TstPrn_Print *Print)
   {
-   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char *Query = NULL;
-   long LengthQuery;
-   unsigned NumItemInList;
-   const char *Ptr;
-   char TagText[Tag_MAX_BYTES_TAG + 1];
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    Qst_AnswerType_t AnswerType;
    bool Shuffle;
-   char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    unsigned QstInd;
 
    /***** Trivial check: number of questions *****/
@@ -540,96 +506,10 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Qst_Questions *Questions,
        Questions->NumQsts > TstCfg_MAX_QUESTIONS_PER_TEST)
       Err_ShowErrorAndExit ("Wrong number of questions.");
 
-   /***** Allocate space for query *****/
-   if ((Query = malloc (Tst_MAX_BYTES_QUERY_QUESTIONS + 1)) == NULL)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Select questions without hidden tags *****/
-   /* Begin query */
-   // Reject questions with any tag hidden
-   // Select only questions with tags
-   // DISTINCTROW is necessary to not repeat questions
-   snprintf (Query,Tst_MAX_BYTES_QUERY_QUESTIONS + 1,
-	     "SELECT DISTINCTROW tst_questions.QstCod,"		// row[0]
-                                "tst_questions.AnsType,"	// row[1]
-                                "tst_questions.Shuffle"		// row[2]
-	      " FROM tst_questions,tst_question_tags,tst_tags"
-	     " WHERE tst_questions.CrsCod=%ld"
-	       " AND tst_questions.QstCod NOT IN"
-		   " (SELECT tst_question_tags.QstCod"
-		      " FROM tst_tags,tst_question_tags"
-		     " WHERE tst_tags.CrsCod=%ld"
-		       " AND tst_tags.TagHidden='Y'"
-		       " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-	       " AND tst_questions.QstCod=tst_question_tags.QstCod"
-	       " AND tst_question_tags.TagCod=tst_tags.TagCod"
-	       " AND tst_tags.CrsCod=%ld",
-	     Gbl.Hierarchy.Crs.CrsCod,
-	     Gbl.Hierarchy.Crs.CrsCod,
-	     Gbl.Hierarchy.Crs.CrsCod);
-
-   if (!Questions->Tags.All) // User has not selected all the tags
-     {
-      /* Add selected tags */
-      LengthQuery = strlen (Query);
-      NumItemInList = 0;
-      Ptr = Questions->Tags.List;
-      while (*Ptr)
-        {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
-         LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
-         if (LengthQuery > Tst_MAX_BYTES_QUERY_QUESTIONS - 128)
-            Err_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Query,
-                     NumItemInList ? " OR tst_tags.TagTxt='" :
-                                     " AND (tst_tags.TagTxt='",
-                     Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,TagText,Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_QUESTIONS);
-         NumItemInList++;
-        }
-      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_QUESTIONS);
-     }
-
-   /* Add answer types selected */
-   if (!Questions->AnswerTypes.All)
-     {
-      LengthQuery = strlen (Query);
-      NumItemInList = 0;
-      Ptr = Questions->AnswerTypes.List;
-      while (*Ptr)
-        {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
-	 AnswerType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
-         LengthQuery = LengthQuery + 35 + strlen (Qst_DB_StrAnswerTypes[AnswerType]) + 1;
-         if (LengthQuery > Tst_MAX_BYTES_QUERY_QUESTIONS - 128)
-            Err_ShowErrorAndExit ("Query size exceed.");
-         Str_Concat (Query,
-                     NumItemInList ? " OR tst_questions.AnsType='" :
-                                     " AND (tst_questions.AnsType='",
-                     Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,Qst_DB_StrAnswerTypes[AnswerType],Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_QUESTIONS);
-         NumItemInList++;
-        }
-      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_QUESTIONS);
-     }
-
-   /* End query */
-   Str_Concat (Query," ORDER BY RAND() LIMIT ",Tst_MAX_BYTES_QUERY_QUESTIONS);
-   snprintf (StrNumQsts,sizeof (StrNumQsts),"%u",Questions->NumQsts);
-   Str_Concat (Query,StrNumQsts,Tst_MAX_BYTES_QUERY_QUESTIONS);
-/*
-   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
-      Lay_ShowAlert (Lay_INFO,Query);
-*/
-   /* Make the query */
-   Print->NumQsts.All =
-   Questions->NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions",
-			                           "%s",
-			                           Query);
-
    /***** Get questions and answers from database *****/
+   Print->NumQsts.All =
+   Questions->NumQsts = Tst_DB_GetQuestionsForNewTest (&mysql_res,Questions);
+
    for (QstInd = 0;
 	QstInd < Print->NumQsts.All;
 	QstInd++)
@@ -770,7 +650,7 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
    Par_GetParMultiToText ("ChkTag",Questions->Tags.List,Tag_MAX_BYTES_TAGS_LIST);
 
    /* Check number of tags selected */
-   if (Tst_CountNumTagsInList (&Questions->Tags) == 0)	// If no tags selected...
+   if (Tag_CountNumTagsInList (&Questions->Tags) == 0)	// If no tags selected...
      {						// ...write alert
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_tags);
       Error = true;
@@ -789,8 +669,8 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
 	 Par_GetParMultiToText ("AnswerType",Questions->AnswerTypes.List,Qst_MAX_BYTES_LIST_ANSWER_TYPES);
 
 	 /* Check number of types of answer */
-	 if (Tst_CountNumAnswerTypesInList (&Questions->AnswerTypes) == 0)	// If no types of answer selected...
-	   {								// ...write warning alert
+	 if (Qst_CountNumAnswerTypesInList (&Questions->AnswerTypes) == 0)	// If no types of answer selected...
+	   {									// ...write warning alert
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_types_of_answer);
 	    Error = true;
 	   }
@@ -868,85 +748,4 @@ static unsigned Tst_GetParamNumQsts (void)
 	                                       (unsigned long) TstCfg_GetConfigMin (),
 	                                       (unsigned long) TstCfg_GetConfigMax (),
 	                                       (unsigned long) TstCfg_GetConfigDef ());
-  }
-
-/*****************************************************************************/
-/***************** Count number of tags in the list of tags ******************/
-/*****************************************************************************/
-
-static unsigned Tst_CountNumTagsInList (const struct Tag_Tags *Tags)
-  {
-   const char *Ptr;
-   unsigned NumTags = 0;
-   char TagText[Tag_MAX_BYTES_TAG + 1];
-
-   /***** Go over the list of tags counting the number of tags *****/
-   Ptr = Tags->List;
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
-      NumTags++;
-     }
-
-   return NumTags;
-  }
-
-/*****************************************************************************/
-/**** Count the number of types of answers in the list of types of answers ***/
-/*****************************************************************************/
-
-static int Tst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes)
-  {
-   const char *Ptr;
-   int NumAnsTypes = 0;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-
-   /***** Go over the list of answer types counting the number of types of answer *****/
-   Ptr = AnswerTypes->List;
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
-      Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
-      NumAnsTypes++;
-     }
-   return NumAnsTypes;
-  }
-
-/*****************************************************************************/
-/**** Count the number of questions in the list of selected question codes ***/
-/*****************************************************************************/
-
-unsigned Tst_CountNumQuestionsInList (const char *ListQuestions)
-  {
-   const char *Ptr;
-   unsigned NumQuestions = 0;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   long QstCod;
-
-   /***** Go over list of questions counting the number of questions *****/
-   Ptr = ListQuestions;
-   while (*Ptr)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-      if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Err_WrongQuestionExit ();
-      NumQuestions++;
-     }
-   return NumQuestions;
-  }
-
-/*****************************************************************************/
-/************************* Remove all tests in a course **********************/
-/*****************************************************************************/
-
-void Tst_RemoveCrsTests (long CrsCod)
-  {
-   /***** Remove all test prints made in the course *****/
-   TstPrn_RemoveCrsPrints (CrsCod);
-
-   /***** Remove test configuration of the course *****/
-   DB_QueryDELETE ("can not remove configuration of tests of a course",
-		   "DELETE FROM tst_config"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
   }

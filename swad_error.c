@@ -66,6 +66,15 @@ void Err_NotEnoughMemoryExit (void)
   }
 
 /*****************************************************************************/
+/********** Write error message and exit when not space for query ************/
+/*****************************************************************************/
+
+void Err_QuerySizeExceededExit (void)
+  {
+   Err_ShowErrorAndExit ("Query size exceeded.");
+  }
+
+/*****************************************************************************/
 /************* Write error message and exit when wrong action ****************/
 /*****************************************************************************/
 

@@ -63,6 +63,7 @@
 #include "swad_setting_database.h"
 #include "swad_survey.h"
 #include "swad_test.h"
+#include "swad_test_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1838,8 +1839,11 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove all exams in the course *****/
       Exa_RemoveCrsExams (CrsCod);
 
-      /***** Remove all tests in the course *****/
-      Tst_RemoveCrsTests (CrsCod);
+      /***** Remove all test prints made in the course *****/
+      TstPrn_RemoveCrsPrints (CrsCod);
+
+      /***** Remove test configuration of the course *****/
+      Tst_DB_RemoveTstConfig (CrsCod);
 
       /***** Remove all questions in the course *****/
       Qst_RemoveCrsQsts (CrsCod);

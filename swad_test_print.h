@@ -100,6 +100,8 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 
 void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
 
+void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
+
 void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
                                                    bool UpdateQstScore);
 void TstPrn_ComputeAnswerScore (struct TstPrn_PrintedQuestion *PrintedQuestion,

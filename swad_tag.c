@@ -278,6 +278,27 @@ void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags)
   }
 
 /*****************************************************************************/
+/***************** Count number of tags in the list of tags ******************/
+/*****************************************************************************/
+
+unsigned Tag_CountNumTagsInList (const struct Tag_Tags *Tags)
+  {
+   const char *Ptr;
+   unsigned NumTags = 0;
+   char TagText[Tag_MAX_BYTES_TAG + 1];
+
+   /***** Go over the list of tags counting the number of tags *****/
+   Ptr = Tags->List;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+      NumTags++;
+     }
+
+   return NumTags;
+  }
+
+/*****************************************************************************/
 /********************* Show a form to select test tags ***********************/
 /*****************************************************************************/
 

@@ -69,8 +69,4 @@ void Tst_PutIconsTests (__attribute__((unused)) void *Args);
 bool Tst_GetParamsTst (struct Qst_Questions *Questions,
                        Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions);
 
-unsigned Tst_CountNumQuestionsInList (const char *ListQuestions);
-
-void Tst_RemoveCrsTests (long CrsCod);
-
 #endif

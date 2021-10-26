@@ -430,7 +430,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	      {
 	       LengthQuery = LengthQuery + 25 + 10 + 1;
 	       if (LengthQuery > Sta_DB_MAX_BYTES_QUERY - 128)
-		  Err_ShowErrorAndExit ("Query is too large.");
+                  Err_QuerySizeExceededExit ();
 	       sprintf (SubQuery,
 			NumUsr ? " OR %s.UsrCod=%ld" :
 				 " AND (%s.UsrCod=%ld",

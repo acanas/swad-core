@@ -763,6 +763,28 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
+/******** Get questions and answers from form to assess a test print *********/
+/*****************************************************************************/
+
+void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
+  {
+   unsigned QstInd;
+   char StrAns[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
+
+   /***** Loop for every question getting user's answers *****/
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
+     {
+      /* Get answers selected by user for this question */
+      snprintf (StrAns,sizeof (StrAns),"Ans%010u",QstInd);
+      Par_GetParMultiToText (StrAns,Print->PrintedQuestions[QstInd].StrAnswers,
+                             Qst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+      Par_ReplaceSeparatorMultipleByComma (Print->PrintedQuestions[QstInd].StrAnswers);
+     }
+  }
+
+/*****************************************************************************/
 /*********** Compute score of each question and store in database ************/
 /*****************************************************************************/
 
@@ -1956,7 +1978,7 @@ void TstPrn_ShowMyPrints (void)
    TstPrn_ShowHeaderPrints (Usr_ME);
 
    /***** List my tests *****/
-   TstCfg_GetConfigFromDB ();	// To get visibility
+   TstCfg_GetConfig ();	// To get visibility
    TstPrn_ShowUsrPrints (&Gbl.Usrs.Me.UsrDat);
 
    /***** End table and box *****/
@@ -2435,7 +2457,7 @@ void TstPrn_ShowOnePrint (void)
 
    /***** Get if I can see print result and score *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-      TstCfg_GetConfigFromDB ();	// To get visibility
+      TstCfg_GetConfig ();	// To get visibility
    TstRes_CheckIfICanSeePrintResult (&Print,Gbl.Usrs.Other.UsrDat.UsrCod,&ICanView);
 
    if (ICanView.Result)	// I am allowed to view this test print result

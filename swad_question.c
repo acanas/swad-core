@@ -1692,7 +1692,7 @@ void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res)
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
-            Err_ShowErrorAndExit ("Query size exceed.");
+            Err_QuerySizeExceededExit ();
          Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
@@ -1716,7 +1716,7 @@ void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res)
 	 AnsType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Qst_DB_StrAnswerTypes[AnsType]) + 1;
          if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
-            Err_ShowErrorAndExit ("Query size exceed.");
+            Err_QuerySizeExceededExit ();
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
@@ -3755,6 +3755,50 @@ void Qst_InsertAnswersIntoDB (struct Qst_Question *Question)
       default:
          break;
      }
+  }
+
+/*****************************************************************************/
+/**** Count the number of types of answers in the list of types of answers ***/
+/*****************************************************************************/
+
+unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerTypes)
+  {
+   const char *Ptr;
+   unsigned NumAnsTypes = 0;
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+
+   /***** Go over the list of answer types counting the number of types of answer *****/
+   Ptr = AnswerTypes->List;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
+      Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+      NumAnsTypes++;
+     }
+   return NumAnsTypes;
+  }
+
+/*****************************************************************************/
+/**** Count the number of questions in the list of selected question codes ***/
+/*****************************************************************************/
+
+unsigned Qst_CountNumQuestionsInList (const char *ListQuestions)
+  {
+   const char *Ptr;
+   unsigned NumQuestions = 0;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   long QstCod;
+
+   /***** Go over list of questions counting the number of questions *****/
+   Ptr = ListQuestions;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      if (sscanf (LongStr,"%ld",&QstCod) != 1)
+         Err_WrongQuestionExit ();
+      NumQuestions++;
+     }
+   return NumQuestions;
   }
 
 /*****************************************************************************/

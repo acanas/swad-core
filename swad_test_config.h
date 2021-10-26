@@ -59,7 +59,7 @@ typedef enum
 void TstCfg_CheckAndShowFormConfig (void);
 bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void);
 
-void TstCfg_GetConfigFromDB (void);
+void TstCfg_GetConfig (void);
 
 void TstCfg_GetConfigFromRow (MYSQL_ROW row);
 void TstCfg_ReceiveConfigTst (void);

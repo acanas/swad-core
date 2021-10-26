@@ -1897,7 +1897,7 @@ void Gam_AddQstsToGame (void)
 
    /* Check number of questions */
    NumQstsAdded = 0;
-   if (Tst_CountNumQuestionsInList (Games.ListQuestions))	// If questions selected...
+   if (Qst_CountNumQuestionsInList (Games.ListQuestions))	// If questions selected...
      {
       /***** Insert questions in database *****/
       Ptr = Games.ListQuestions;

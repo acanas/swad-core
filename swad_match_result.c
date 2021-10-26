@@ -147,7 +147,7 @@ static void MchRes_ListMyMchResultsInCrs (struct Gam_Games *Games)
    MchRes_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in the current course *****/
-   TstCfg_GetConfigFromDB ();	// Get feedback type
+   TstCfg_GetConfig ();	// Get feedback type
    MchRes_BuildGamesSelectedCommas (Games,&GamesSelectedCommas);
    MchRes_ShowMchResults (Games,Usr_ME,-1L,-1L,GamesSelectedCommas);
    free (GamesSelectedCommas);
@@ -197,7 +197,7 @@ static void MchRes_ListMyMchResultsInGam (struct Gam_Games *Games,long GamCod)
    MchRes_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
-   TstCfg_GetConfigFromDB ();	// Get feedback type
+   TstCfg_GetConfig ();	// Get feedback type
    MchRes_ShowMchResults (Games,Usr_ME,-1L,GamCod,NULL);
   }
 
@@ -249,7 +249,7 @@ static void MchRes_ListMyMchResultsInMch (struct Gam_Games *Games,long MchCod)
    MchRes_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results in game *****/
-   TstCfg_GetConfigFromDB ();	// Get feedback type
+   TstCfg_GetConfig ();	// Get feedback type
    MchRes_ShowMchResults (Games,Usr_ME,MchCod,-1L,NULL);
   }
 

@@ -181,7 +181,7 @@ static void ExaRes_ListMyResultsInCrs (struct Exa_Exams *Exams)
    ExaRes_ShowHeaderResults (Usr_ME);
 
    /***** List my sessions results in the current course *****/
-   TstCfg_GetConfigFromDB ();	// Get feedback type
+   TstCfg_GetConfig ();	// Get feedback type
    ExaRes_BuildExamsSelectedCommas (Exams,&ExamsSelectedCommas);
    ExaRes_ShowResults (Exams,Usr_ME,-1L,-1L,ExamsSelectedCommas);
    free (ExamsSelectedCommas);
@@ -235,7 +235,7 @@ static void ExaRes_ListMyResultsInExa (struct Exa_Exams *Exams,long ExaCod)
    ExaRes_ShowHeaderResults (Usr_ME);
 
    /***** List my sessions results in exam *****/
-   TstCfg_GetConfigFromDB ();	// Get feedback type
+   TstCfg_GetConfig ();	// Get feedback type
    ExaRes_ShowResults (Exams,Usr_ME,-1L,ExaCod,NULL);
   }
 
@@ -287,7 +287,7 @@ static void ExaRes_ListMyResultsInSes (struct Exa_Exams *Exams,long SesCod)
    ExaRes_ShowHeaderResults (Usr_ME);
 
    /***** List my sessions results in exam *****/
-   TstCfg_GetConfigFromDB ();	// Get feedback type
+   TstCfg_GetConfig ();	// Get feedback type
    ExaRes_ShowResults (Exams,Usr_ME,SesCod,-1L,NULL);
   }
 
