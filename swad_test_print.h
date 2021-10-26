@@ -91,8 +91,6 @@ typedef enum
 /*****************************************************************************/
 
 void TstPrn_ResetPrint (struct TstPrn_Print *Print);
-void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
-void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print);
 
 void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
                                    unsigned NumPrintsGeneratedByMe,

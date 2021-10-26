@@ -170,6 +170,32 @@ unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/*********************** Update the score of a question **********************/
+/*****************************************************************************/
+
+void Tst_DB_UpdateQstScore (const struct TstPrn_PrintedQuestion *PrintedQuestion)
+  {
+   /***** Update number of clicks and score of the question *****/
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   if (PrintedQuestion->StrAnswers[0])	// User's answer is not blank
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	                " SET NumHits=NumHits+1,"
+	                     "NumHitsNotBlank=NumHitsNotBlank+1,"
+	                     "Score=Score+(%.15lg)"
+                      " WHERE QstCod=%ld",
+		      PrintedQuestion->Score,
+		      PrintedQuestion->QstCod);
+   else					// User's answer is blank
+      DB_QueryUPDATE ("can not update the score of a question",
+		      "UPDATE tst_questions"
+	                " SET NumHits=NumHits+1"
+                      " WHERE QstCod=%ld",
+		      PrintedQuestion->QstCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
 /************** Get questions for a new test from the database ***************/
 /*****************************************************************************/
 
@@ -343,4 +369,54 @@ void Tst_DB_RemoveTstConfig (long CrsCod)
 		   "DELETE FROM tst_config"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);
+  }
+
+/*****************************************************************************/
+/**************** Create new blank test print in database ********************/
+/*****************************************************************************/
+
+long Tst_DB_CreatePrint (unsigned NumQsts)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create new test print",
+				"INSERT INTO tst_exams"
+				" (CrsCod,UsrCod,StartTime,EndTime,"
+				  "NumQsts,NumQstsNotBlank,"
+				  "Sent,AllowTeachers,Score)"
+				" VALUES"
+				" (%ld,%ld,NOW(),NOW(),"
+				  "%u,0,"
+				  "'N','N',0)",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				NumQsts);
+  }
+
+/*****************************************************************************/
+/*********************** Update test print in database ***********************/
+/*****************************************************************************/
+
+void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
+  {
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   DB_QueryUPDATE ("can not update test",
+		   "UPDATE tst_exams"
+	             " SET EndTime=NOW(),"
+	                  "NumQstsNotBlank=%u,"
+		          "Sent='%c',"
+		          "AllowTeachers='%c',"
+	                  "Score='%.15lg'"
+	           " WHERE ExaCod=%ld"
+	             " AND CrsCod=%ld"	// Extra check
+	             " AND UsrCod=%ld",	// Extra check
+		   Print->NumQsts.NotBlank,
+		   Print->Sent ? 'Y' :
+			         'N',
+		   Print->AllowTeachers ? 'Y' :
+			                  'N',
+		   Print->Score,
+		   Print->PrnCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Str_SetDecimalPointToLocal ();	// Return to local system
   }

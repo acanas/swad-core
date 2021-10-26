@@ -1591,6 +1591,167 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
   }
 
 /*****************************************************************************/
+/**************** Get correct answer for each type of answer *****************/
+/*****************************************************************************/
+
+void Qst_GetCorrectIntAnswerFromDB (struct Qst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   Qst_CheckIfNumberOfAnswersIsOne (Question);
+
+   /***** Get correct answer *****/
+   row = mysql_fetch_row (mysql_res);
+   if (sscanf (row[0],"%ld",&Question->Answer.Integer) != 1)
+      Err_WrongAnswerExit ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+   double Tmp;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   if (Question->Answer.NumOptions != 2)
+      Err_WrongAnswerExit ();
+
+   /***** Get float range *****/
+   for (NumOpt = 0;
+	NumOpt < 2;
+	NumOpt++)
+     {
+      row = mysql_fetch_row (mysql_res);
+      Question->Answer.FloatingPoint[NumOpt] = Str_GetDoubleFromStr (row[0]);
+     }
+   if (Question->Answer.FloatingPoint[0] >
+       Question->Answer.FloatingPoint[1]) 	// The maximum and the minimum are swapped
+    {
+      /* Swap maximum and minimum */
+      Tmp = Question->Answer.FloatingPoint[0];
+      Question->Answer.FloatingPoint[0] = Question->Answer.FloatingPoint[1];
+      Question->Answer.FloatingPoint[1] = Tmp;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+void Qst_GetCorrectTF_AnswerFromDB (struct Qst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
+
+   /***** Check if number of rows is correct *****/
+   Qst_CheckIfNumberOfAnswersIsOne (Question);
+
+   /***** Get answer *****/
+   row = mysql_fetch_row (mysql_res);
+   Question->Answer.TF = row[0][0];
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Correct"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY AnsInd",
+		   Question->QstCod);
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /* Get next answer */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Assign correctness (row[0]) of this answer (this option) */
+      Question->Answer.Options[NumOpt].Correct = (row[0][0] == 'Y');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Question->Answer.NumOptions = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+		   "SELECT Answer"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   Question->QstCod);
+
+   /***** Get text and correctness of answers for this question from database (one row per answer) *****/
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+     {
+      /***** Get next answer *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /***** Allocate memory for text in this choice answer *****/
+      if (!Qst_AllocateTextChoiceAnswer (Question,NumOpt))
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
+
+      /***** Copy answer text (row[0]) ******/
+      Str_Copy (Question->Answer.Options[NumOpt].Text,row[0],
+                Qst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+     }
+
+   /***** Change format of answers text *****/
+   Qst_ChangeFormatAnswersText (Question);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /************** Write false / true answer when seeing a test *****************/
 /*****************************************************************************/
 

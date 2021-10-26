@@ -57,6 +57,8 @@ unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res);
 unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res);
 
 //---------------------------- Test questions ---------------------------------
+void Tst_DB_UpdateQstScore (const struct TstPrn_PrintedQuestion *PrintedQuestion);
+
 unsigned Tst_DB_GetQuestionsForNewTest (MYSQL_RES **mysql_res,
                                         const struct Qst_Questions *Questions);
 
@@ -66,5 +68,9 @@ unsigned Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res);
 
 void Tst_DB_RemoveTstConfig (long CrsCod);
+
+//------------------------------- Test prints ---------------------------------
+long Tst_DB_CreatePrint (unsigned NumQsts);
+void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print);
 
 #endif

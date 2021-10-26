@@ -232,7 +232,7 @@ void Tst_ShowNewTest (void)
             NumPrintsGeneratedByMe = TstPrn_GetNumPrintsGeneratedByMe ();
 
 	    /***** Create new test print in database *****/
-	    TstPrn_CreatePrintInDB (&Print);
+	    Print.PrnCod = Tst_DB_CreatePrint (Print.NumQsts.All);
 	    TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 	                                                  false);	// Don't update question score
 
@@ -298,7 +298,7 @@ void Tst_ReceiveTestDraft (void)
       /***** Update test print in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						    false);	// Don't update question score
-      TstPrn_UpdatePrintInDB (&Print);
+      Tst_DB_UpdatePrint (&Print);
 
       /***** Show question and button to send the test *****/
       /* Begin alert */
@@ -358,7 +358,7 @@ void Tst_AssessTest (void)
       /***** Update test print in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						    Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
-      TstPrn_UpdatePrintInDB (&Print);
+      Tst_DB_UpdatePrint (&Print);
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Result,

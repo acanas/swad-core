@@ -202,6 +202,13 @@ void Qst_WriteTF_AnsBank (struct Qst_Question *Question,
 void Qst_WriteChoAnsBank (struct Qst_Question *Question,
                           const char *ClassTxt,
                           const char *ClassFeedback);
+//-----------------------------------------------------------------------------
+
+void Qst_GetCorrectIntAnswerFromDB (struct Qst_Question *Question);
+void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question);
+void Qst_GetCorrectTF_AnswerFromDB (struct Qst_Question *Question);
+void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question);
+void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question);
 
 //-----------------------------------------------------------------------------
 
