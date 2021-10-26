@@ -67,6 +67,13 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE] =
+  {
+   [TstCfg_PLUGGABLE_UNKNOWN] = "unknown",
+   [TstCfg_PLUGGABLE_NO     ] = "N",
+   [TstCfg_PLUGGABLE_YES    ] = "Y",
+  };
+
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -269,6 +276,61 @@ unsigned Tst_DB_GetQuestionsForNewTest (MYSQL_RES **mysql_res,
    DB_QuerySELECT (mysql_res,"can not get questions",
 		   "%s",
 		   Query);
+  }
+
+/*****************************************************************************/
+/************** Save configuration of test for current course ****************/
+/*****************************************************************************/
+
+void Tst_DB_SaveConfig (void)
+  {
+   DB_QueryREPLACE ("can not save configuration of tests",
+		    "REPLACE INTO tst_config"
+	            " (CrsCod,Pluggable,Min,Def,Max,"
+	              "MinTimeNxtTstPerQst,Visibility)"
+                    " VALUES"
+                    " (%ld,'%s',%u,%u,%u,"
+                      "'%lu',%u)",
+		    Gbl.Hierarchy.Crs.CrsCod,
+		    Tst_DB_Pluggable[TstCfg_GetConfigPluggable ()],
+		    TstCfg_GetConfigMin (),
+		    TstCfg_GetConfigDef (),
+		    TstCfg_GetConfigMax (),
+		    TstCfg_GetConfigMinTimeNxtTstPerQst (),
+		    TstCfg_GetConfigVisibility ());
+  }
+
+/*****************************************************************************/
+/***************** Get configuration of test in a course *********************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get configuration of test",
+		   "SELECT Pluggable,"			// row[0]
+			  "Min,"			// row[1]
+			  "Def,"			// row[2]
+			  "Max,"			// row[3]
+			  "MinTimeNxtTstPerQst,"	// row[4]
+			  "Visibility"			// row[5]
+		    " FROM tst_config"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Get pluggability of tests for current course from database ********/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get configuration of test",
+		   "SELECT Pluggable"		// row[0]
+		    " FROM tst_config"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

@@ -61,7 +61,6 @@ bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void);
 
 void TstCfg_GetConfig (void);
 
-void TstCfg_GetConfigFromRow (MYSQL_ROW row);
 void TstCfg_ReceiveConfigTst (void);
 
 void TstCfg_SetConfigPluggable (TstCfg_Pluggable_t Pluggable);

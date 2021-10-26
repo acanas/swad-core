@@ -27,24 +27,21 @@
 
 #include <string.h>		// For string functions
 
+#include "swad_alert.h"
+#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_parameter.h"
+#include "swad_question.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_test_config.h"
-#include "swad_test_visibility.h"
+#include "swad_test_database.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
-
-const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE] =
-  {
-   [TstCfg_PLUGGABLE_UNKNOWN] = "unknown",
-   [TstCfg_PLUGGABLE_NO     ] = "N",
-   [TstCfg_PLUGGABLE_YES    ] = "Y",
-  };
 
 /*****************************************************************************/
 /**************************** Private constants ******************************/
@@ -84,6 +81,8 @@ static void TstCfg_ShowFormConfig (void);
 static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
                                          unsigned Value);
 
+static void TstCfg_GetConfigFromRow (MYSQL_ROW row);
+
 static TstCfg_Pluggable_t TstCfg_GetPluggableFromForm (void);
 static void TstCfg_CheckAndCorrectMinDefMax (void);
 
@@ -111,19 +110,14 @@ void TstCfg_CheckAndShowFormConfig (void)
 
 bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
   {
-   extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
+   extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
    TstCfg_Pluggable_t Pluggable;
 
    /***** Get pluggability of tests for current course from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get configuration of test",
-		   "SELECT Pluggable"		// row[0]
-		    " FROM tst_config"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
+   NumRows = Tst_DB_GetPluggableFromConfig (&mysql_res);
 
    if (NumRows == 0)
       TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
@@ -136,7 +130,7 @@ bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
       for (Pluggable  = TstCfg_PLUGGABLE_NO;
 	   Pluggable <= TstCfg_PLUGGABLE_YES;
 	   Pluggable++)
-         if (!strcmp (row[0],TstCfg_PluggableDB[Pluggable]))
+         if (!strcmp (row[0],Tst_DB_Pluggable[Pluggable]))
            {
             TstCfg_SetConfigPluggable (Pluggable);
             break;
@@ -317,34 +311,21 @@ void TstCfg_GetConfig (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Get configuration of test for current course from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get configuration of test",
-			     "SELECT Pluggable,"		// row[0]
-				    "Min,"			// row[1]
-				    "Def,"			// row[2]
-				    "Max,"			// row[3]
-				    "MinTimeNxtTstPerQst,"	// row[4]
-				    "Visibility"		// row[5]
-			      " FROM tst_config"
-			     " WHERE CrsCod=%ld",
-			     Gbl.Hierarchy.Crs.CrsCod);
-
-   TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
-   TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
-   if (NumRows == 0)
+   if (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Crs.CrsCod))
+     {
+      row = mysql_fetch_row (mysql_res);
+      TstCfg_GetConfigFromRow (row);
+     }
+   else
      {
       TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
       TstCfg_SetConfigMin (TstCfg_DEFAULT_MIN_QUESTIONS);
       TstCfg_SetConfigDef (TstCfg_DEFAULT_DEF_QUESTIONS);
       TstCfg_SetConfigMax (TstCfg_DEFAULT_MAX_QUESTIONS);
-     }
-   else // NumRows == 1
-     {
-      /***** Get minimun, default and maximum *****/
-      row = mysql_fetch_row (mysql_res);
-      TstCfg_GetConfigFromRow (row);
+      TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
+      TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
      }
 
    /***** Free structure that stores the query result *****/
@@ -355,8 +336,9 @@ void TstCfg_GetConfig (void)
 /************ Get configuration values from a database table row *************/
 /*****************************************************************************/
 
-void TstCfg_GetConfigFromRow (MYSQL_ROW row)
+static void TstCfg_GetConfigFromRow (MYSQL_ROW row)
   {
+   extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
    int IntNum;
    long LongNum;
    TstCfg_Pluggable_t Pluggable;
@@ -366,7 +348,7 @@ void TstCfg_GetConfigFromRow (MYSQL_ROW row)
    for (Pluggable  = TstCfg_PLUGGABLE_NO;
 	Pluggable <= TstCfg_PLUGGABLE_YES;
 	Pluggable++)
-      if (!strcmp (row[0],TstCfg_PluggableDB[Pluggable]))
+      if (!strcmp (row[0],Tst_DB_Pluggable[Pluggable]))
         {
          TstCfg_SetConfigPluggable (Pluggable);
          break;
@@ -375,19 +357,19 @@ void TstCfg_GetConfigFromRow (MYSQL_ROW row)
    /***** Get number of questions *****/
    if (sscanf (row[1],"%d",&IntNum) == 1)
       TstCfg_SetConfigMin ((IntNum < 1) ? 1 :
-	                               (unsigned) IntNum);
+	                                  (unsigned) IntNum);
    else
       TstCfg_SetConfigMin (TstCfg_DEFAULT_MIN_QUESTIONS);
 
    if (sscanf (row[2],"%d",&IntNum) == 1)
       TstCfg_SetConfigDef ((IntNum < 1) ? 1 :
-	                               (unsigned) IntNum);
+	                                  (unsigned) IntNum);
    else
       TstCfg_SetConfigDef (TstCfg_DEFAULT_DEF_QUESTIONS);
 
    if (sscanf (row[3],"%d",&IntNum) == 1)
       TstCfg_SetConfigMax ((IntNum < 1) ? 1 :
-	                               (unsigned) IntNum);
+	                                  (unsigned) IntNum);
    else
       TstCfg_SetConfigMax (TstCfg_DEFAULT_MAX_QUESTIONS);
 
@@ -397,7 +379,7 @@ void TstCfg_GetConfigFromRow (MYSQL_ROW row)
    /***** Get minimum time between consecutive tests, per question (row[4]) *****/
    if (sscanf (row[4],"%ld",&LongNum) == 1)
       TstCfg_SetConfigMinTimeNxtTstPerQst ((LongNum < 1L) ? 0UL :
-	                                                 (unsigned long) LongNum);
+	                                                    (unsigned long) LongNum);
    else
       TstCfg_SetConfigMinTimeNxtTstPerQst (0UL);
 
@@ -451,20 +433,7 @@ void TstCfg_ReceiveConfigTst (void)
    TstCfg_SetConfigVisibility (TstVis_GetVisibilityFromForm ());
 
    /***** Update database *****/
-   DB_QueryREPLACE ("can not save configuration of tests",
-		    "REPLACE INTO tst_config"
-	            " (CrsCod,Pluggable,Min,Def,Max,"
-	              "MinTimeNxtTstPerQst,Visibility)"
-                    " VALUES"
-                    " (%ld,'%s',%u,%u,%u,"
-                      "'%lu',%u)",
-		    Gbl.Hierarchy.Crs.CrsCod,
-		    TstCfg_PluggableDB[TstCfg_GetConfigPluggable ()],
-		    TstCfg_GetConfigMin (),
-		    TstCfg_GetConfigDef (),
-		    TstCfg_GetConfigMax (),
-		    TstCfg_GetConfigMinTimeNxtTstPerQst (),
-		    TstCfg_GetConfigVisibility ());
+   Tst_DB_SaveConfig ();
 
    /***** Show confirmation message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);

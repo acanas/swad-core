@@ -259,7 +259,6 @@ static int API_GetMyLanguage (struct soap *soap);
 
 static int API_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
-static int API_GetTstConfig (long CrsCod);
 static unsigned API_GetNumTestQuestionsInCrs (long CrsCod);
 static int API_GetTstTags (struct soap *soap,
 			   long CrsCod,struct swad__getTestsOutput *getTestsOut);
@@ -3979,8 +3978,7 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->feedback[0] = '\0';
 
    /***** Get test configuration *****/
-   if ((ReturnCode = API_GetTstConfig ((long) courseCode)) != SOAP_OK)
-      return ReturnCode;
+   TstCfg_GetConfig ();
    getTestConfigOut->pluggable = (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES) ? 1 :
 	                                                                                  0;
    getTestConfigOut->minQuestions = (int) TstCfg_GetConfigMin ();
@@ -4010,46 +4008,6 @@ int swad__getTestConfig (struct soap *soap,
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES &&
        TstCfg_GetConfigMax () > 0)
       getTestConfigOut->numQuestions = (int) API_GetNumTestQuestionsInCrs ((long) courseCode);
-
-   return SOAP_OK;
-  }
-
-/*****************************************************************************/
-/****** Get configuration of tests from database giving a course code ********/
-/*****************************************************************************/
-
-static int API_GetTstConfig (long CrsCod)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Query database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get test configuration",
-		       "SELECT Pluggable,"		// row[0]
-		              "Min,"			// row[1]
-		              "Def,"			// row[2]
-		              "Max,"			// row[3]
-		              "MinTimeNxtTstPerQst,"	// row[4]
-		              "Visibility"		// row[5]
-		        " FROM tst_config"
-		       " WHERE CrsCod=%ld",
-		       CrsCod))
-     {
-      /***** Get minimun, default and maximum *****/
-      row = mysql_fetch_row (mysql_res);
-      TstCfg_GetConfigFromRow (row);
-     }
-   else // NumRows == 0
-     {
-      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-      TstCfg_SetConfigMin (0);
-      TstCfg_SetConfigDef (0);
-      TstCfg_SetConfigMax (0);
-      TstCfg_SetConfigVisibility (TstVis_VISIBILITY_DEFAULT);
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    return SOAP_OK;
   }
@@ -4145,10 +4103,7 @@ int swad__getTests (struct soap *soap,
    getTestsOut->questionTagsArray.__ptr  = NULL;
 
    /***** Get test configuration *****/
-   if ((ReturnCode = API_GetTstConfig ((long) courseCode)) != SOAP_OK)
-      return ReturnCode;
-
-   if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES)
+   if (TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests ())
      {
       /***** Get tags *****/
       if ((ReturnCode = API_GetTstTags (soap,

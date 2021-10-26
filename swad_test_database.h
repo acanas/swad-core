@@ -49,13 +49,21 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//----------------------- User's settings in course ---------------------------
 void Tst_DB_IncreaseNumMyPrints (void);
 void Tst_DB_UpdateLastAccTst (unsigned NumQsts);
+
 unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res);
 unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res);
 
+//---------------------------- Test questions ---------------------------------
 unsigned Tst_DB_GetQuestionsForNewTest (MYSQL_RES **mysql_res,
                                         const struct Qst_Questions *Questions);
+
+//--------------------------- Test configuration ------------------------------
+void Tst_DB_SaveConfig (void);
+unsigned Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res);
 
 void Tst_DB_RemoveTstConfig (long CrsCod);
 

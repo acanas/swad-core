@@ -4353,7 +4353,7 @@ unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t A
 unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
-   extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
+   extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
 
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
@@ -4367,7 +4367,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
         	                  "tst_config"
                            " WHERE tst_questions.CrsCod=tst_config.CrsCod"
                              " AND tst_config.pluggable='%s'",
-			   TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			   Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -4378,7 +4378,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
 			  " AND tst_questions.CrsCod=tst_config.CrsCod"
 			  " AND tst_config.pluggable='%s'",
 			Qst_DB_StrAnswerTypes[AnsType],
-			TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       case HieLvl_CTY:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
@@ -4398,7 +4398,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Cty.CtyCod,
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -4419,7 +4419,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Cty.CtyCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       case HieLvl_INS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
@@ -4437,7 +4437,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Ins.InsCod,
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -4456,7 +4456,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Ins.InsCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       case HieLvl_CTR:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
@@ -4472,7 +4472,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Ctr.CtrCod,
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -4489,7 +4489,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       case HieLvl_DEG:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
@@ -4503,7 +4503,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Deg.DegCod,
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -4518,7 +4518,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Deg.DegCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       case HieLvl_CRS:
          if (AnsType == Qst_ANS_UNKNOWN)	// Any type
             return (unsigned)
@@ -4530,7 +4530,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_questions.CrsCod=tst_config.CrsCod"
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Crs.CrsCod,
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
 
 	 return (unsigned)
 	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
@@ -4543,7 +4543,7 @@ unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_Answe
                               " AND tst_config.pluggable='%s'",
 			    Gbl.Hierarchy.Crs.CrsCod,
 			    Qst_DB_StrAnswerTypes[AnsType],
-			    TstCfg_PluggableDB[TstCfg_PLUGGABLE_YES]);
+			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
       default:
 	 return 0;
      }
