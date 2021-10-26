@@ -25,19 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #include <mysql/mysql.h>	// To access MySQL databases
-// #include <stdbool.h>		// For boolean type
-// #include <stdlib.h>		// For free
-// #include <string.h>		// For string functions
-
-// #include "swad_action.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_tag.h"
 #include "swad_tag_database.h"
-// #include "swad_theme.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/

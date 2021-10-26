@@ -1,4 +1,4 @@
-// swad_test_visibility.c: visibility of test exams
+// swad_test_visibility.c: visibility of test prints
 
 /*
     SWAD (Shared Workspace At a Distance),

@@ -36,10 +36,6 @@
 #include "swad_media.h"
 #include "swad_string.h"
 #include "swad_tag.h"
-// #include "swad_test.h"
-// #include "swad_test_config.h"
-// #include "swad_test_visibility.h"
-// #include "swad_user.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/

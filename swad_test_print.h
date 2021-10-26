@@ -1,4 +1,4 @@
-// swad_test_print.h: test exam prints made by users
+// swad_test_print.h: test prints made by users
 
 #ifndef _SWAD_TST_PRN
 #define _SWAD_TST_PRN
@@ -95,7 +95,7 @@ void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print);
 void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print);
 
 void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
-                                   unsigned NumTstExamsGeneratedByMe,
+                                   unsigned NumPrintsGeneratedByMe,
                                    TstPrn_RequestOrConfirm_t RequestOrConfirm);
 
 void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print);
@@ -159,5 +159,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
 void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
 void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TstPrn_RemoveCrsPrints (long CrsCod);
+
+unsigned TstPrn_GetNumPrintsGeneratedByMe (void);
 
 #endif

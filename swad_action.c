@@ -688,7 +688,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActReqAssTst	] = {1837,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ReceiveTestDraft		,NULL},
    [ActAssTst		] = {  98,-1,TabUnk,ActReqTst		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_AssessTest			,NULL},
 
-   [ActCfgTst		] = { 451,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowFormConfig		,NULL},
+   [ActCfgTst		] = { 451,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstCfg_CheckAndShowFormConfig		,NULL},
    [ActRcvCfgTst	] = { 454,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstCfg_ReceiveConfigTst	,NULL},
 
    [ActReqSeeMyTstRes	] = {1083,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,TstPrn_SelDatesToSeeMyPrints	,NULL},
@@ -4152,7 +4152,7 @@ void Act_AdjustCurrentAction (void)
 		   -------------
 		   If current course has tests and pluggable is unknown,
 		   the only action possible is configure tests *****/
-	    if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
+	    if (TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests ())
 	      {
 	       Gbl.Action.Act = ActCfgTst;
 	       Tab_SetCurrentTab ();

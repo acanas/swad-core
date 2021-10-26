@@ -230,7 +230,7 @@ void ExaPrn_ShowExamPrint (void)
 	 ExaLog_SetIfCanAnswer (true);
 	}
 
-      /***** Show test exam to be answered *****/
+      /***** Show test to be answered *****/
       ExaPrn_ShowExamPrintToFillIt (&Exams,&Exam,&Print);
      }
    else	// Session not open or accessible
@@ -1111,7 +1111,7 @@ static void ExaPrn_ComputeScoreAndStoreQuestionOfPrint (struct ExaPrn_Print *Pri
 	}
      }
 
-   /***** Store test exam question in database *****/
+   /***** Store test question in database *****/
    Exa_DB_StoreOneQstOfPrint (Print,
 			      QstInd);	// 0, 1, 2, 3...
   }

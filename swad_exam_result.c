@@ -1755,7 +1755,7 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
   }
 
 /*****************************************************************************/
-/************** Show user's and correct answers of a test exam ***************/
+/**************** Show user's and correct answers of a test ******************/
 /*****************************************************************************/
 
 static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,

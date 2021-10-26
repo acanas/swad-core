@@ -26,42 +26,19 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-// #include <limits.h>		// For UINT_MAX
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <mysql/mysql.h>	// To access MySQL databases
-// #include <stdbool.h>		// For boolean type
-// #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
-// #include <sys/stat.h>		// For mkdir
-// #include <sys/types.h>		// For mkdir
 
-// #include "swad_action.h"
-// #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_set.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_language.h"
-// #include "swad_match.h"
-// #include "swad_media.h"
-// #include "swad_parameter.h"
 #include "swad_question.h"
 #include "swad_question_import.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
-// #include "swad_test_config.h"
-// #include "swad_test_print.h"
-// #include "swad_test_visibility.h"
-// #include "swad_theme.h"
-// #include "swad_user.h"
-// #include "swad_xml.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/

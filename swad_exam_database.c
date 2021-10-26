@@ -1928,7 +1928,7 @@ void Exa_DB_RemoveAllPrintsFromCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/************* Store user's answers of an test exam into database ************/
+/*************** Store user's answers of a test into database ****************/
 /*****************************************************************************/
 
 void Exa_DB_StoreOneQstOfPrint (const struct ExaPrn_Print *Print,

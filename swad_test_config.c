@@ -28,7 +28,9 @@
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
+#include "swad_form.h"
 #include "swad_global.h"
+#include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
@@ -78,8 +80,234 @@ struct TstCfg_Config TstCfg_Config;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void TstCfg_ShowFormConfig (void);
+static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
+                                         unsigned Value);
+
 static TstCfg_Pluggable_t TstCfg_GetPluggableFromForm (void);
 static void TstCfg_CheckAndCorrectMinDefMax (void);
+
+/*****************************************************************************/
+/***************************** Form to rename tags ***************************/
+/*****************************************************************************/
+
+void TstCfg_CheckAndShowFormConfig (void)
+  {
+   extern const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications;
+
+   /***** If current course has tests and pluggable is unknown... *****/
+   if (TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests ())
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications);
+
+   /***** Form to configure test *****/
+   TstCfg_ShowFormConfig ();
+  }
+
+/*****************************************************************************/
+/*************** Get configuration of test for current course ****************/
+/*****************************************************************************/
+// Returns true if course has test tags and pluggable is unknown
+// Return false if course has no test tags or pluggable is known
+
+bool TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests (void)
+  {
+   extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   TstCfg_Pluggable_t Pluggable;
+
+   /***** Get pluggability of tests for current course from database *****/
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get configuration of test",
+		   "SELECT Pluggable"		// row[0]
+		    " FROM tst_config"
+		   " WHERE CrsCod=%ld",
+		   Gbl.Hierarchy.Crs.CrsCod);
+
+   if (NumRows == 0)
+      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+   else // NumRows == 1
+     {
+      /***** Get whether test are visible via plugins or not *****/
+      row = mysql_fetch_row (mysql_res);
+
+      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
+      for (Pluggable  = TstCfg_PLUGGABLE_NO;
+	   Pluggable <= TstCfg_PLUGGABLE_YES;
+	   Pluggable++)
+         if (!strcmp (row[0],TstCfg_PluggableDB[Pluggable]))
+           {
+            TstCfg_SetConfigPluggable (Pluggable);
+            break;
+           }
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get if current course has tests from database *****/
+   if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_UNKNOWN)
+      return Tag_DB_CheckIfCurrentCrsHasTestTags ();	// Return true if course has test tags
+
+   return false;	// Pluggable is not unknown
+  }
+
+/*****************************************************************************/
+/********************* Show a form to to configure test **********************/
+/*****************************************************************************/
+
+static void TstCfg_ShowFormConfig (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Configure_tests;
+   extern const char *Txt_Plugins;
+   extern const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE];
+   extern const char *Txt_Number_of_questions;
+   extern const char *Txt_minimum;
+   extern const char *Txt_default;
+   extern const char *Txt_maximum;
+   extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
+   extern const char *Txt_Result_visibility;
+   extern const char *Txt_Save_changes;
+   struct Qst_Questions Questions;
+   TstCfg_Pluggable_t Pluggable;
+   char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
+
+   /***** Create test *****/
+   Qst_Constructor (&Questions);
+
+   /***** Read test configuration from database *****/
+   TstCfg_GetConfigFromDB ();
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Configure_tests,
+                 Tst_PutIconsTests,NULL,
+                 Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
+
+      /***** Begin form *****/
+      Frm_BeginForm (ActRcvCfgTst);
+
+	 /***** Tests are visible from plugins? *****/
+	 HTM_TABLE_BeginCenterPadding (2);
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Plugins);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"LB\"");
+		  for (Pluggable  = TstCfg_PLUGGABLE_NO;
+		       Pluggable <= TstCfg_PLUGGABLE_YES;
+		       Pluggable++)
+		    {
+		     HTM_LABEL_Begin ("class=\"DAT\"");
+			HTM_INPUT_RADIO ("Pluggable",false,
+					 "value=\"%u\"%s",
+					 (unsigned) Pluggable,
+					 Pluggable == TstCfg_GetConfigPluggable () ? " checked=\"checked\"" :
+										     "");
+			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
+		     HTM_LABEL_End ();
+		     HTM_BR ();
+		    }
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Number of questions *****/
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Number_of_questions);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"LB\"");
+		  HTM_TABLE_BeginPadding (2);
+		     TstCfg_PutInputFieldNumQsts ("NumQstMin",Txt_minimum,
+					          TstCfg_GetConfigMin ());	// Minimum number of questions
+		     TstCfg_PutInputFieldNumQsts ("NumQstDef",Txt_default,
+					          TstCfg_GetConfigDef ());	// Default number of questions
+		     TstCfg_PutInputFieldNumQsts ("NumQstMax",Txt_maximum,
+					          TstCfg_GetConfigMax ());	// Maximum number of questions
+		  HTM_TABLE_End ();
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Minimum time between consecutive tests, per question *****/
+	    HTM_TR_Begin (NULL);
+
+	       /* Label */
+	       Frm_LabelColumn ("RT","MinTimeNxtTstPerQst",
+				Txt_Minimum_time_seconds_per_question_between_two_tests);
+
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LB\"");
+		  snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
+			    TstCfg_GetConfigMinTimeNxtTstPerQst ());
+		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	    /***** Visibility of test prints *****/
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_Result_visibility);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"LB\"");
+		  TstVis_PutVisibilityCheckboxes (TstCfg_GetConfigVisibility ());
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+
+	 HTM_TABLE_End ();
+
+	 /***** Send button *****/
+	 Btn_PutConfirmButton (Txt_Save_changes);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+
+   /***** Destroy test *****/
+   Qst_Destructor (&Questions);
+  }
+
+/*****************************************************************************/
+/*************** Get configuration of test for current course ****************/
+/*****************************************************************************/
+
+static void TstCfg_PutInputFieldNumQsts (const char *Field,const char *Label,
+                                         unsigned Value)
+  {
+   char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"RM\"");
+	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT\"",Field);
+	    HTM_Txt (Label);
+	 HTM_LABEL_End ();
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"LM\"");
+	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
+	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
+			 HTM_DONT_SUBMIT_ON_CHANGE,
+			 "id=\"%s\" size=\"3\" required=\"required\"",Field);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
 
 /*****************************************************************************/
 /*************** Get configuration of test for current course ****************/
@@ -242,7 +470,7 @@ void TstCfg_ReceiveConfigTst (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_test_configuration_has_been_updated);
 
    /***** Show again the form to configure test *****/
-   Tst_ShowFormConfig ();
+   TstCfg_CheckAndShowFormConfig ();
   }
 
 /*****************************************************************************/

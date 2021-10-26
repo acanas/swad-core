@@ -1,4 +1,4 @@
-// swad_test_print.c: test exam prints made by users
+// swad_test_print.c: test prints made by users
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -42,6 +42,7 @@
 #include "swad_photo.h"
 #include "swad_question.h"
 #include "swad_test.h"
+#include "swad_test_database.h"
 #include "swad_test_print.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
@@ -210,14 +211,14 @@ static void TstPrn_ResetPrintExceptPrnCod (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/************** Create new blank test exam print in database *****************/
+/**************** Create new blank test print in database ********************/
 /*****************************************************************************/
 
 void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print)
   {
-   /***** Insert new test exam print into table *****/
+   /***** Insert new test  print into table *****/
    Print->PrnCod =
-   DB_QueryINSERTandReturnCode ("can not create new test exam print",
+   DB_QueryINSERTandReturnCode ("can not create new test print",
 				"INSERT INTO tst_exams"
 				" (CrsCod,UsrCod,StartTime,EndTime,"
 				  "NumQsts,NumQstsNotBlank,"
@@ -232,14 +233,14 @@ void TstPrn_CreatePrintInDB (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/******************** Update test exam print in database *********************/
+/*********************** Update test print in database ***********************/
 /*****************************************************************************/
 
 void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
   {
-   /***** Update test exam print in database *****/
+   /***** Update test print in database *****/
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   DB_QueryUPDATE ("can not update test exam",
+   DB_QueryUPDATE ("can not update test",
 		   "UPDATE tst_exams"
 	             " SET EndTime=NOW(),"
 	                  "NumQstsNotBlank=%u,"
@@ -262,11 +263,11 @@ void TstPrn_UpdatePrintInDB (const struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/****************** Show a test exam print to be answered ********************/
+/********************* Show a test print to be answered **********************/
 /*****************************************************************************/
 
 void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
-                                   unsigned NumTstExamsGeneratedByMe,
+                                   unsigned NumPrintsGeneratedByMe,
                                    TstPrn_RequestOrConfirm_t RequestOrConfirm)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
@@ -295,7 +296,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
       /***** Begin form *****/
       Frm_BeginForm (Action[RequestOrConfirm]);
       TstPrn_PutParamPrnCod (Print->PrnCod);
-      Par_PutHiddenParamUnsigned (NULL,"NumTst",NumTstExamsGeneratedByMe);
+      Par_PutHiddenParamUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (10);
@@ -333,7 +334,7 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	       Btn_PutConfirmButton (Txt_Continue);
 	       break;
 	    case TstPrn_CONFIRM:
-	       /* Will the test exam be visible by teachers? */
+	       /* Will the test be visible by teachers? */
 	       TstPrn_PutCheckBoxAllowTeachers (true);
 
 	       /* Send button */
@@ -569,7 +570,7 @@ static void TstPrn_WriteTxtAnsToFill (const struct TstPrn_PrintedQuestion *Print
   }
 
 /*****************************************************************************/
-/************* Put checkbox to allow teachers to see test exam ***************/
+/**************** Put checkbox to allow teachers to see test *****************/
 /*****************************************************************************/
 
 static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
@@ -590,7 +591,7 @@ static void TstPrn_PutCheckBoxAllowTeachers (bool AllowTeachers)
   }
 
 /*****************************************************************************/
-/********************* Show test exam after assessing it *********************/
+/************************ Show test after assessing it ***********************/
 /*****************************************************************************/
 
 void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
@@ -626,7 +627,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 				 &Question,QuestionExists,
 				 TstCfg_GetConfigVisibility ());
 
-      /***** Store test exam question in database *****/
+      /***** Store test question in database *****/
       TstPrn_StoreOneQstOfPrintInDB (Print,QstInd);
 
       /***** Compute total score *****/
@@ -787,7 +788,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
       TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
       Qst_QstDestructor (&Question);
 
-      /* Store test exam question in database */
+      /* Store test question in database */
       TstPrn_StoreOneQstOfPrintInDB (Print,
 				     QstInd);	// 0, 1, 2, 3...
 
@@ -1865,7 +1866,7 @@ static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
   {
    /***** Insert question and user's answers into database *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryREPLACE ("can not update a question of a test exam",
+   DB_QueryREPLACE ("can not update a question of a test",
 		    "REPLACE INTO tst_exam_questions"
 		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
 		    " VALUES"
@@ -1880,7 +1881,7 @@ static void TstPrn_StoreOneQstOfPrintInDB (const struct TstPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/************* Select users and dates to show their test exams ***************/
+/*************** Select users and dates to show their tests ******************/
 /*****************************************************************************/
 
 void TstPrn_SelUsrsToViewUsrsPrints (void)
@@ -1904,7 +1905,7 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) 
   }
 
 /*****************************************************************************/
-/******************** Select dates to show my test exams *********************/
+/*********************** Select dates to show my tests ***********************/
 /*****************************************************************************/
 
 void TstPrn_SelDatesToSeeMyPrints (void)
@@ -1935,7 +1936,7 @@ void TstPrn_SelDatesToSeeMyPrints (void)
   }
 
 /*****************************************************************************/
-/***************************** Show my test exams ****************************/
+/******************************* Show my tests *******************************/
 /*****************************************************************************/
 
 void TstPrn_ShowMyPrints (void)
@@ -1954,7 +1955,7 @@ void TstPrn_ShowMyPrints (void)
    /***** Header of the table with the list of users *****/
    TstPrn_ShowHeaderPrints (Usr_ME);
 
-   /***** List my test exams *****/
+   /***** List my tests *****/
    TstCfg_GetConfigFromDB ();	// To get visibility
    TstPrn_ShowUsrPrints (&Gbl.Usrs.Me.UsrDat);
 
@@ -1963,7 +1964,7 @@ void TstPrn_ShowMyPrints (void)
   }
 
 /*****************************************************************************/
-/******************** Get users and show their test exams ********************/
+/********************** Get users and show their test ************************/
 /*****************************************************************************/
 
 void TstPrn_GetUsrsAndShowPrints (void)
@@ -1994,7 +1995,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
    /***** Header of the table with the list of users *****/
    TstPrn_ShowHeaderPrints (Usr_OTHER);
 
-   /***** List the test exams of the selected users *****/
+   /***** List the tests of the selected users *****/
    Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
@@ -2006,7 +2007,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    /***** Show test exams *****/
+	    /***** Show tests *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	    TstPrn_ShowUsrPrints (&Gbl.Usrs.Other.UsrDat);
 	   }
@@ -2017,7 +2018,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
-/************************ Show header of my test exams ***********************/
+/************************** Show header of my tests **************************/
 /*****************************************************************************/
 
 static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
@@ -2104,7 +2105,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
       Start         |    End              Start   |          End
    */
    NumPrints = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
+   DB_QuerySELECT (&mysql_res,"can not get tests of a user",
 		   "SELECT ExaCod"			// row[0]
 		    " FROM tst_exams"
 		   " WHERE CrsCod=%ld"
@@ -2121,7 +2122,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    HTM_TR_Begin (NULL);
    Usr_ShowTableCellWithUsrData (UsrDat,NumPrints);
 
-   /***** Get and print test exams *****/
+   /***** Get and print tests *****/
    if (NumPrints)
      {
       for (NumPrint = 0;
@@ -2235,7 +2236,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
             Ico_PutIconNotVisible ();
 	 HTM_TD_End ();
 
-	 /* Link to show this test exam */
+	 /* Link to show this test */
 	 HTM_TD_Begin ("class=\"RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanView.Result)
 	   {
@@ -2294,7 +2295,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*************** Write parameter with code of test exam print ****************/
+/***************** Write parameter with code of test print ******************/
 /*****************************************************************************/
 
 void TstPrn_PutParamPrnCod (long ExaCod)
@@ -2303,17 +2304,17 @@ void TstPrn_PutParamPrnCod (long ExaCod)
   }
 
 /*****************************************************************************/
-/*************** Get parameter with code of test exam print ******************/
+/***************** Get parameter with code of test print *********************/
 /*****************************************************************************/
 
 long TstPrn_GetParamPrnCod (void)
   {
-   /***** Get code of test exam print *****/
+   /***** Get code of test print *****/
    return Par_GetParToLong ("PrnCod");
   }
 
 /*****************************************************************************/
-/**************** Show row with summary of user's test exams *****************/
+/****************** Show row with summary of user's tess *********************/
 /*****************************************************************************/
 
 static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
@@ -2405,7 +2406,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
   }
 
 /*****************************************************************************/
-/******************** Show one test exam of another user *********************/
+/*********************** Show one test of another user ***********************/
 /*****************************************************************************/
 
 void TstPrn_ShowOnePrint (void)
@@ -2429,7 +2430,7 @@ void TstPrn_ShowOnePrint (void)
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
       Err_WrongTestExit ();
 
-   /***** Get test exam data *****/
+   /***** Get test data *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
 
    /***** Get if I can see print result and score *****/
@@ -2439,7 +2440,7 @@ void TstPrn_ShowOnePrint (void)
 
    if (ICanView.Result)	// I am allowed to view this test print result
      {
-      /***** Get questions and user's answers of the test exam from database *****/
+      /***** Get questions and user's answers of the test from database *****/
       TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Begin box *****/
@@ -2600,7 +2601,7 @@ void TstPrn_ShowOnePrint (void)
       /***** End box *****/
       Box_BoxEnd ();
      }
-   else	// I am not allowed to view this test exam
+   else	// I am not allowed to view this test
       Err_NoPermissionExit ();
   }
 
@@ -2649,7 +2650,7 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
   }
 
 /*****************************************************************************/
-/********************* Show test tags in this test exam **********************/
+/************************ Show test tags in this test ************************/
 /*****************************************************************************/
 
 static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
@@ -2659,8 +2660,7 @@ static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
 
    /***** Get all tags of questions in this test *****/
    NumTags = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get tags"
-			      " present in a test exam",
+   DB_QuerySELECT (&mysql_res,"can not get tags present in a test",
 		   "SELECT tst_tags.TagTxt"	// row[0]
 		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
 			    " FROM tst_question_tags,"
@@ -2678,7 +2678,7 @@ static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
   }
 
 /*****************************************************************************/
-/************** Show user's and correct answers of a test exam ***************/
+/**************** Show user's and correct answers of a test ******************/
 /*****************************************************************************/
 
 void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
@@ -2717,7 +2717,7 @@ void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/************ Get data of a test exam using its test exam code ***************/
+/**************** Get data of a test using its test code *********************/
 /*****************************************************************************/
 
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
@@ -2726,7 +2726,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
    MYSQL_ROW row;
 
    /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a test exam",
+   if (DB_QuerySELECT (&mysql_res,"can not get data of a test",
 		       "SELECT UsrCod,"				// row[0]
 			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
 			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
@@ -2761,7 +2761,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
       /* Get if exam has been sent (row[5]) */
       Print->Sent = (row[5][0] == 'Y');
 
-      /* Get if teachers are allowed to see this test exam (row[6]) */
+      /* Get if teachers are allowed to see this test (row[6]) */
       Print->AllowTeachers = (row[6][0] == 'Y');
 
       /* Get score (row[7]) */
@@ -2778,7 +2778,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/*********** Get the questions of a test exam print from database ************/
+/************* Get the questions of a test print from database ***************/
 /*****************************************************************************/
 
 void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
@@ -2788,9 +2788,9 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    unsigned NumQsts;
    unsigned QstInd;
 
-   /***** Get questions of a test exam print from database *****/
+   /***** Get questions of a test print from database *****/
    NumQsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions of a test exam",
+   DB_QuerySELECT (&mysql_res,"can not get questions of a test",
 		   "SELECT QstCod,"	// row[0]
 			  "Score,"	// row[1]
 			  "Indexes,"	// row[2]
@@ -2835,13 +2835,13 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/******************* Remove test exam prints made by a user ******************/
+/********************** Remove test prints made by a user ********************/
 /*****************************************************************************/
 
 void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   {
    /***** Remove test prints questions for the given user *****/
-   DB_QueryDELETE ("can not remove test exams made by a user",
+   DB_QueryDELETE ("can not remove tests made by a user",
 		   "DELETE FROM tst_exam_questions"
 	           " USING tst_exams,"
 	                  "tst_exam_questions"
@@ -2850,20 +2850,20 @@ void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
 		   UsrCod);
 
    /***** Remove test prints made by the given user *****/
-   DB_QueryDELETE ("can not remove test exams made by a user",
+   DB_QueryDELETE ("can not remove tests made by a user",
 		   "DELETE FROM tst_exams"
 	           " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
 /*****************************************************************************/
-/************ Remove test exam prints made by a user in a course *************/
+/************** Remove test prints made by a user in a course ****************/
 /*****************************************************************************/
 
 void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
-   /***** Remove test exams made by the given user *****/
-   DB_QueryDELETE ("can not remove test exams made by a user in a course",
+   /***** Remove tests made by the given user *****/
+   DB_QueryDELETE ("can not remove tests made by a user in a course",
 		   "DELETE FROM tst_exam_questions"
 	           " USING tst_exams,"
 	                  "tst_exam_questions"
@@ -2873,7 +2873,7 @@ void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
 		   CrsCod,
 		   UsrCod);
 
-   DB_QueryDELETE ("can not remove test exams made by a user in a course",
+   DB_QueryDELETE ("can not remove tests made by a user in a course",
 		   "DELETE FROM tst_exams"
 	           " WHERE CrsCod=%ld"
 	             " AND UsrCod=%ld",
@@ -2882,13 +2882,13 @@ void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/**************** Remove all test exam prints made in a course ***************/
+/****************** Remove all test prints made in a course ******************/
 /*****************************************************************************/
 
 void TstPrn_RemoveCrsPrints (long CrsCod)
   {
-   /***** Remove questions of test exams made in the course *****/
-   DB_QueryDELETE ("can not remove test exams made in a course",
+   /***** Remove questions of tests made in the course *****/
+   DB_QueryDELETE ("can not remove tests made in a course",
 		   "DELETE FROM tst_exam_questions"
 	           " USING tst_exams,"
 	                  "tst_exam_questions"
@@ -2896,9 +2896,46 @@ void TstPrn_RemoveCrsPrints (long CrsCod)
                      " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
 		   CrsCod);
 
-   /***** Remove test exams made in the course *****/
-   DB_QueryDELETE ("can not remove test exams made in a course",
+   /***** Remove tests made in the course *****/
+   DB_QueryDELETE ("can not remove tests made in a course",
 		   "DELETE FROM tst_exams"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);
+  }
+
+/*****************************************************************************/
+/***************** Get number of test prints generated by me *****************/
+/*****************************************************************************/
+
+unsigned TstPrn_GetNumPrintsGeneratedByMe (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   unsigned NumPrintsGeneratedByMe = 0;
+
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+     {
+      /***** Get number of test prints generated by me from database *****/
+      NumRows = Tst_DB_GetNumPrintsGeneratedByMe (&mysql_res);
+
+      if (NumRows == 0)
+         NumPrintsGeneratedByMe = 0;
+      else if (NumRows == 1)
+        {
+         /* Get number of hits */
+         row = mysql_fetch_row (mysql_res);
+         if (row[0] == NULL)
+            NumPrintsGeneratedByMe = 0;
+         else if (sscanf (row[0],"%u",&NumPrintsGeneratedByMe) != 1)
+            NumPrintsGeneratedByMe = 0;
+        }
+      else
+         Err_ShowErrorAndExit ("Error when getting number of tests.");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return NumPrintsGeneratedByMe;
   }

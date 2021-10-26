@@ -83,10 +83,11 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_statistic_database.o swad_string.o swad_survey.o \
        swad_survey_database.o swad_syllabus.o swad_system_config.o \
        swad_tab.o swad_tag.o swad_tag_database.o swad_test.o \
-       swad_test_config.o swad_test_print.o swad_test_visibility.o \
-       swad_theme.o swad_timeline.o swad_timeline_comment.o \
-       swad_timeline_database.o swad_timeline_favourite.o swad_timeline_form.o \
-       swad_timeline_note.o swad_timeline_notification.o swad_timeline_post.o \
+       swad_test_database.o swad_test_config.o swad_test_print.o \
+       swad_test_visibility.o swad_theme.o swad_timeline.o \
+       swad_timeline_comment.o swad_timeline_database.o \
+       swad_timeline_favourite.o swad_timeline_form.o swad_timeline_note.o \
+       swad_timeline_notification.o swad_timeline_post.o \
        swad_timeline_publication.o swad_timeline_share.o swad_timeline_user.o \
        swad_timeline_who.o swad_timetable.o \
        swad_user.o \

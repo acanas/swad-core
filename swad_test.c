@@ -57,6 +57,7 @@
 #include "swad_tag_database.h"
 #include "swad_test.h"
 #include "swad_test_config.h"
+#include "swad_test_database.h"
 #include "swad_test_print.h"
 #include "swad_test_visibility.h"
 #include "swad_theme.h"
@@ -94,17 +95,6 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions);
 static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print);
 
 static bool Tst_CheckIfNextTstAllowed (void);
-static unsigned Tst_GetNumTstExamsGeneratedByMe (void);
-
-static void Tst_DB_IncreaseMyNumTstExams (void);
-static void Tst_DB_UpdateLastAccTst (unsigned NumQsts);
-
-static void Tst_PutIconsTests (__attribute__((unused)) void *Args);
-
-static void Tst_ShowFormConfigTst (void);
-
-static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
-                                     unsigned Value);
 
 static void Tst_GetQuestionsForNewTestFromDB (struct Qst_Questions *Questions,
                                               struct TstPrn_Print *Print);
@@ -223,7 +213,7 @@ void Tst_ShowNewTest (void)
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    struct Qst_Questions Questions;
    struct TstPrn_Print Print;
-   unsigned NumTstExamsGeneratedByMe;
+   unsigned NumPrintsGeneratedByMe;
 
    /***** Create test *****/
    Qst_Constructor (&Questions);
@@ -242,16 +232,16 @@ void Tst_ShowNewTest (void)
          if (Print.NumQsts.All)
            {
             /***** Increase number of exams generated (answered or not) by me *****/
-            Tst_DB_IncreaseMyNumTstExams ();
-            NumTstExamsGeneratedByMe = Tst_GetNumTstExamsGeneratedByMe ();
+            Tst_DB_IncreaseNumMyPrints ();
+            NumPrintsGeneratedByMe = TstPrn_GetNumPrintsGeneratedByMe ();
 
-	    /***** Create new test exam in database *****/
+	    /***** Create new test print in database *****/
 	    TstPrn_CreatePrintInDB (&Print);
 	    TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 	                                                  false);	// Don't update question score
 
-            /***** Show test exam to be answered *****/
-            TstPrn_ShowTestPrintToFillIt (&Print,NumTstExamsGeneratedByMe,TstPrn_REQUEST);
+            /***** Show test print to be answered *****/
+            TstPrn_ShowTestPrintToFillIt (&Print,NumPrintsGeneratedByMe,TstPrn_REQUEST);
 
             /***** Update date-time of my next allowed access to test *****/
             if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -272,7 +262,7 @@ void Tst_ShowNewTest (void)
   }
 
 /*****************************************************************************/
-/** Receive the draft of a test exam already (total or partially) answered ***/
+/** Receive the draft of a test print already (total or partially) answered **/
 /*****************************************************************************/
 
 void Tst_ReceiveTestDraft (void)
@@ -286,7 +276,7 @@ void Tst_ReceiveTestDraft (void)
    TstCfg_GetConfigFromDB ();
 
    /***** Get basic parameters of the exam *****/
-   /* Get test exam code from form */
+   /* Get test print code from form */
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
       Err_WrongTestExit ();
@@ -294,7 +284,7 @@ void Tst_ReceiveTestDraft (void)
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
-   /***** Get test exam print from database *****/
+   /***** Get test print from database *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
 
    /****** Get test status in database for this session-course-num.test *****/
@@ -303,13 +293,13 @@ void Tst_ReceiveTestDraft (void)
 	             NumTst);
    else // Print not yet sent
      {
-      /***** Get test exam print questions from database *****/
+      /***** Get test print questions from database *****/
       TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
       TstPrn_GetAnswersFromForm (&Print);
 
-      /***** Update test exam in database *****/
+      /***** Update test print in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						    false);	// Don't update question score
       TstPrn_UpdatePrintInDB (&Print);
@@ -318,7 +308,7 @@ void Tst_ReceiveTestDraft (void)
       /* Begin alert */
       Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_answers_before_submitting_the_exam);
 
-      /* Show the same test exam to be answered */
+      /* Show the same test print to be answered */
       TstPrn_ShowTestPrintToFillIt (&Print,NumTst,TstPrn_CONFIRM);
      }
   }
@@ -342,7 +332,7 @@ void Tst_AssessTest (void)
    TstCfg_GetConfigFromDB ();
 
    /***** Get basic parameters of the exam *****/
-   /* Get test exam code from form */
+   /* Get test print code from form */
    TstPrn_ResetPrint (&Print);
    if ((Print.PrnCod = TstPrn_GetParamPrnCod ()) <= 0)
       Err_WrongTestExit ();
@@ -350,7 +340,7 @@ void Tst_AssessTest (void)
    /* Get number of this test from form */
    NumTst = Tst_GetParamNumTst ();
 
-   /***** Get test exam from database *****/
+   /***** Get test print from database *****/
    TstPrn_GetPrintDataByPrnCod (&Print);
 
    /****** Get test status in database for this session-course-num.test *****/
@@ -359,17 +349,17 @@ void Tst_AssessTest (void)
 		     NumTst);
    else	// Print not yet sent
      {
-      /***** Get test exam questions from database *****/
+      /***** Get test print questions from database *****/
       TstPrn_GetPrintQuestionsFromDB (&Print);
 
       /***** Get answers from form to assess a test *****/
       TstPrn_GetAnswersFromForm (&Print);
 
-      /***** Get if test exam will be visible by teachers *****/
+      /***** Get if test print will be visible by teachers *****/
       Print.Sent          = true;	// The exam has been finished and sent by student
       Print.AllowTeachers = Par_GetParToBool ("AllowTchs");
 
-      /***** Update test exam in database *****/
+      /***** Update test print in database *****/
       TstPrn_ComputeScoresAndStoreQuestionsOfPrint (&Print,
 						    Gbl.Usrs.Me.Role.Logged == Rol_STD);	// Update question score?
       TstPrn_UpdatePrintInDB (&Print);
@@ -412,7 +402,7 @@ void Tst_AssessTest (void)
   }
 
 /*****************************************************************************/
-/****** Get questions and answers from form to assess a test exam print ******/
+/******** Get questions and answers from form to assess a test print *********/
 /*****************************************************************************/
 
 static void TstPrn_GetAnswersFromForm (struct TstPrn_Print *Print)
@@ -453,19 +443,9 @@ static bool Tst_CheckIfNextTstAllowed (void)
       return true;
 
    /***** Get date of next allowed access to test from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get last access to test",
-		       "SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-"
-			      "UNIX_TIMESTAMP(),"						// row[0]
-			      "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"	// row[1]
-		        " FROM crs_user_settings"
-		       " WHERE UsrCod=%ld"
-		         " AND CrsCod=%ld",
-		       TstCfg_GetConfigMinTimeNxtTstPerQst (),
-		       TstCfg_GetConfigMinTimeNxtTstPerQst (),
-		       Gbl.Usrs.Me.UsrDat.UsrCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
+   if (Tst_DB_GetDateNextTstAllowed (&mysql_res))
      {
-      /* Get seconds from now to next access to test */
+      /* Get seconds from now to next access to test (row[0]) */
       row = mysql_fetch_row (mysql_res);
       if (row[0])
          if (sscanf (row[0],"%ld",&NumSecondsFromNowToNextAccTst) == 1)
@@ -473,7 +453,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
             TimeNextTestUTC = Dat_GetUNIXTimeFromStr (row[1]);
      }
    else
-      Err_ShowErrorAndExit ("Error when reading date of next allowed access to test.");
+      Err_WrongDateExit ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -482,107 +462,26 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Write warning *****/
-      Ale_ShowAlert (Ale_WARNING,"%s:<br /><span id=\"date_next_test\"></span>."
-		     "<script type=\"text/javascript\">"
-		     "writeLocalDateHMSFromUTC('date_next_test',%ld,"
-		     "%u,',&nbsp;',%u,true,true,true,0x7);"
-		     "</script>",
+      Ale_ShowAlert (Ale_WARNING,"%s:<br />"
+	                         "<span id=\"date_next_test\"></span>."
+				 "<script type=\"text/javascript\">"
+				 "writeLocalDateHMSFromUTC('date_next_test',%ld,"
+				 "%u,',&nbsp;',%u,true,true,true,0x7);"
+				 "</script>",
 		     Txt_You_can_not_take_a_new_test_until,
 		     (long) TimeNextTestUTC,
 		     (unsigned) Gbl.Prefs.DateFormat,
 		     (unsigned) Gbl.Prefs.Language);
-
       return false;
      }
    return true;
   }
 
 /*****************************************************************************/
-/***************** Get number of test exams generated by me ******************/
-/*****************************************************************************/
-
-static unsigned Tst_GetNumTstExamsGeneratedByMe (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned NumTstExamsGeneratedByMe = 0;
-
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-     {
-      /***** Get number of test exams generated by me from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get number of test exams generated",
-				"SELECT NumAccTst"	// row[0]
-				 " FROM crs_user_settings"
-				" WHERE UsrCod=%ld"
-				  " AND CrsCod=%ld",
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Hierarchy.Crs.CrsCod);
-
-      if (NumRows == 0)
-         NumTstExamsGeneratedByMe = 0;
-      else if (NumRows == 1)
-        {
-         /* Get number of hits */
-         row = mysql_fetch_row (mysql_res);
-         if (row[0] == NULL)
-            NumTstExamsGeneratedByMe = 0;
-         else if (sscanf (row[0],"%u",&NumTstExamsGeneratedByMe) != 1)
-            NumTstExamsGeneratedByMe = 0;
-        }
-      else
-         Err_ShowErrorAndExit ("Error when getting number of hits to test.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-
-   return NumTstExamsGeneratedByMe;
-  }
-
-/*****************************************************************************/
-/*********** Update my number of accesses to test in this course *************/
-/*****************************************************************************/
-
-static void Tst_DB_IncreaseMyNumTstExams (void)
-  {
-   /***** Trivial check *****/
-   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
-      return;
-
-   /***** Update my number of accesses to test in this course *****/
-   DB_QueryUPDATE ("can not update the number of accesses to test",
-		   "UPDATE crs_user_settings"
-		     " SET NumAccTst=NumAccTst+1"
-                   " WHERE UsrCod=%ld"
-                     " AND CrsCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/************ Update date-time of my next allowed access to test *************/
-/*****************************************************************************/
-
-static void Tst_DB_UpdateLastAccTst (unsigned NumQsts)
-  {
-   /***** Update date-time and number of questions of this test *****/
-   DB_QueryUPDATE ("can not update time and number of questions of this test",
-		   "UPDATE crs_user_settings"
-		     " SET LastAccTst=NOW(),"
-		          "NumQstsLastTst=%u"
-                   " WHERE UsrCod=%ld"
-                     " AND CrsCod=%ld",
-		   NumQsts,
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsTests (__attribute__((unused)) void *Args)
+void Tst_PutIconsTests (__attribute__((unused)) void *Args)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -611,228 +510,6 @@ static void Tst_PutIconsTests (__attribute__((unused)) void *Args)
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);
-  }
-
-/*****************************************************************************/
-/***************************** Form to rename tags ***************************/
-/*****************************************************************************/
-
-void Tst_ShowFormConfig (void)
-  {
-   extern const char *Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications;
-
-   /***** If current course has tests and pluggable is unknown... *****/
-   if (Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown ())
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_specify_if_you_allow_downloading_the_question_bank_from_other_applications);
-
-   /***** Form to configure test *****/
-   Tst_ShowFormConfigTst ();
-  }
-
-/*****************************************************************************/
-/*************** Get configuration of test for current course ****************/
-/*****************************************************************************/
-// Returns true if course has test tags and pluggable is unknown
-// Return false if course has no test tags or pluggable is known
-
-bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
-  {
-   extern const char *TstCfg_PluggableDB[TstCfg_NUM_OPTIONS_PLUGGABLE];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
-   TstCfg_Pluggable_t Pluggable;
-
-   /***** Get pluggability of tests for current course from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get configuration of test",
-		   "SELECT Pluggable"		// row[0]
-		    " FROM tst_config"
-		   " WHERE CrsCod=%ld",
-		   Gbl.Hierarchy.Crs.CrsCod);
-
-   if (NumRows == 0)
-      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-   else // NumRows == 1
-     {
-      /***** Get whether test are visible via plugins or not *****/
-      row = mysql_fetch_row (mysql_res);
-
-      TstCfg_SetConfigPluggable (TstCfg_PLUGGABLE_UNKNOWN);
-      for (Pluggable  = TstCfg_PLUGGABLE_NO;
-	   Pluggable <= TstCfg_PLUGGABLE_YES;
-	   Pluggable++)
-         if (!strcmp (row[0],TstCfg_PluggableDB[Pluggable]))
-           {
-            TstCfg_SetConfigPluggable (Pluggable);
-            break;
-           }
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Get if current course has tests from database *****/
-   if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_UNKNOWN)
-      return Tag_DB_CheckIfCurrentCrsHasTestTags ();	// Return true if course has tests
-
-   return false;	// Pluggable is not unknown
-  }
-
-/*****************************************************************************/
-/********************* Show a form to to configure test **********************/
-/*****************************************************************************/
-
-static void Tst_ShowFormConfigTst (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_configuring_tests;
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Configure_tests;
-   extern const char *Txt_Plugins;
-   extern const char *Txt_TST_PLUGGABLE[TstCfg_NUM_OPTIONS_PLUGGABLE];
-   extern const char *Txt_Number_of_questions;
-   extern const char *Txt_minimum;
-   extern const char *Txt_default;
-   extern const char *Txt_maximum;
-   extern const char *Txt_Minimum_time_seconds_per_question_between_two_tests;
-   extern const char *Txt_Result_visibility;
-   extern const char *Txt_Save_changes;
-   struct Qst_Questions Questions;
-   TstCfg_Pluggable_t Pluggable;
-   char StrMinTimeNxtTstPerQst[Cns_MAX_DECIMAL_DIGITS_ULONG + 1];
-
-   /***** Create test *****/
-   Qst_Constructor (&Questions);
-
-   /***** Read test configuration from database *****/
-   TstCfg_GetConfigFromDB ();
-
-   /***** Begin box *****/
-   Box_BoxBegin (NULL,Txt_Configure_tests,
-                 Tst_PutIconsTests,NULL,
-                 Hlp_ASSESSMENT_Tests_configuring_tests,Box_NOT_CLOSABLE);
-
-      /***** Begin form *****/
-      Frm_BeginForm (ActRcvCfgTst);
-
-	 /***** Tests are visible from plugins? *****/
-	 HTM_TABLE_BeginCenterPadding (2);
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Plugins);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB\"");
-		  for (Pluggable  = TstCfg_PLUGGABLE_NO;
-		       Pluggable <= TstCfg_PLUGGABLE_YES;
-		       Pluggable++)
-		    {
-		     HTM_LABEL_Begin ("class=\"DAT\"");
-			HTM_INPUT_RADIO ("Pluggable",false,
-					 "value=\"%u\"%s",
-					 (unsigned) Pluggable,
-					 Pluggable == TstCfg_GetConfigPluggable () ? " checked=\"checked\"" :
-										     "");
-			HTM_Txt (Txt_TST_PLUGGABLE[Pluggable]);
-		     HTM_LABEL_End ();
-		     HTM_BR ();
-		    }
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Number of questions *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Number_of_questions);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB\"");
-		  HTM_TABLE_BeginPadding (2);
-		     Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
-					      TstCfg_GetConfigMin ());	// Minimum number of questions
-		     Tst_PutInputFieldNumQst ("NumQstDef",Txt_default,
-					      TstCfg_GetConfigDef ());	// Default number of questions
-		     Tst_PutInputFieldNumQst ("NumQstMax",Txt_maximum,
-					      TstCfg_GetConfigMax ());	// Maximum number of questions
-		  HTM_TABLE_End ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Minimum time between consecutive tests, per question *****/
-	    HTM_TR_Begin (NULL);
-
-	       /* Label */
-	       Frm_LabelColumn ("RT","MinTimeNxtTstPerQst",
-				Txt_Minimum_time_seconds_per_question_between_two_tests);
-
-	       /* Data */
-	       HTM_TD_Begin ("class=\"LB\"");
-		  snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),"%lu",
-			    TstCfg_GetConfigMinTimeNxtTstPerQst ());
-		  HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",Cns_MAX_DECIMAL_DIGITS_ULONG,StrMinTimeNxtTstPerQst,
-				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"MinTimeNxtTstPerQst\" size=\"7\" required=\"required\"");
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	    /***** Visibility of test exams *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Result_visibility);
-	       HTM_TD_End ();
-
-	       HTM_TD_Begin ("class=\"LB\"");
-		  TstVis_PutVisibilityCheckboxes (TstCfg_GetConfigVisibility ());
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
-	 HTM_TABLE_End ();
-
-	 /***** Send button *****/
-	 Btn_PutConfirmButton (Txt_Save_changes);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-   /***** End box *****/
-   Box_BoxEnd ();
-
-   /***** Destroy test *****/
-   Qst_Destructor (&Questions);
-  }
-
-/*****************************************************************************/
-/*************** Get configuration of test for current course ****************/
-/*****************************************************************************/
-
-static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
-                                     unsigned Value)
-  {
-   char StrValue[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-
-   HTM_TR_Begin (NULL);
-
-      HTM_TD_Begin ("class=\"RM\"");
-	 HTM_LABEL_Begin ("for=\"%s\" class=\"DAT\"",Field);
-	    HTM_Txt (Label);
-	 HTM_LABEL_End ();
-      HTM_TD_End ();
-
-      HTM_TD_Begin ("class=\"LM\"");
-	 snprintf (StrValue,sizeof (StrValue),"%u",Value);
-	 HTM_INPUT_TEXT (Field,Cns_MAX_DECIMAL_DIGITS_UINT,StrValue,
-			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"%s\" size=\"3\" required=\"required\"",Field);
-      HTM_TD_End ();
-
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1001,7 +678,7 @@ static void Tst_GetQuestionsForNewTestFromDB (struct Qst_Questions *Questions,
       Print->PrintedQuestions[QstInd].StrAnswers[0] = '\0';
      }
 
-   /***** Get if test exam will be visible by teachers *****/
+   /***** Get if test print will be visible by teachers *****/
    Print->AllowTeachers = Par_GetParToBool ("AllowTchs");
   }
 
@@ -1170,7 +847,7 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
   }
 
 /*****************************************************************************/
-/******** Get parameter with the number of test exam generated by me *********/
+/******** Get parameter with the number of test prints generated by me *******/
 /*****************************************************************************/
 
 static unsigned Tst_GetParamNumTst (void)
@@ -1264,7 +941,7 @@ unsigned Tst_CountNumQuestionsInList (const char *ListQuestions)
 
 void Tst_RemoveCrsTests (long CrsCod)
   {
-   /***** Remove all test exam prints made in the course *****/
+   /***** Remove all test prints made in the course *****/
    TstPrn_RemoveCrsPrints (CrsCod);
 
    /***** Remove test configuration of the course *****/
