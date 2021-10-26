@@ -193,11 +193,11 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
 	    Qst_PutButtonToAddQuestion ();
 	}
 
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -250,7 +250,7 @@ void Tst_ShowNewTest (void)
            }
         }
       else
-         Tst_ShowFormRequestTest (&Questions);	// Show the form again
+         Tst_ShowFormRequestTest (&Questions);		// Show the form again
      }
 
    /***** Destroy test *****/
@@ -582,7 +582,7 @@ static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQue
    Question.QstCod = PrintedQuestion->QstCod;
 
    /***** Get answers of question from database *****/
-   Qst_GetAnswersQst (&Question,&mysql_res,Shuffle);
+   Question.Answer.NumOptions = Qst_DB_GetAnswersQst (&mysql_res,&Question,Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer
@@ -706,8 +706,8 @@ bool Tst_GetParamsTst (struct Qst_Questions *Questions,
 	 Par_GetParMultiToText ("Order",UnsignedStr,Cns_MAX_DECIMAL_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	    Questions->SelectedOrder = (Qst_QuestionsOrder_t)
-	                          ((UnsignedNum < Qst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
-									     0);
+				       ((UnsignedNum < Qst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
+										  0);
 	 else
 	    Questions->SelectedOrder = (Qst_QuestionsOrder_t) 0;
 	 break;

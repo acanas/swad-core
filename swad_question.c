@@ -1402,25 +1402,29 @@ unsigned Qst_DB_GetNumAnswersQst (long QstCod)
 /***************** Get answers of a question from database *******************/
 /*****************************************************************************/
 
-void Qst_GetAnswersQst (struct Qst_Question *Question,MYSQL_RES **mysql_res,
-                        bool Shuffle)
+unsigned Qst_DB_GetAnswersQst (MYSQL_RES **mysql_res,
+                               const struct Qst_Question *Question,
+                               bool Shuffle)
   {
+   unsigned NumOptions;
+
    /***** Get answers of a question from database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get answers of a question",
-		   "SELECT AnsInd,"		// row[0]
-			  "Answer,"		// row[1]
-			  "Feedback,"		// row[2]
-			  "MedCod,"		// row[3]
-			  "Correct"		// row[4]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld"
-		   " ORDER BY %s",
-		   Question->QstCod,
-		   Shuffle ? "RAND()" :
-		             "AnsInd");
-   if (!Question->Answer.NumOptions)
+   if (!(NumOptions = (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get answers of a question",
+			 "SELECT AnsInd,"	// row[0]
+				"Answer,"	// row[1]
+				"Feedback,"	// row[2]
+				"MedCod,"	// row[3]
+				"Correct"	// row[4]
+			  " FROM tst_answers"
+			 " WHERE QstCod=%ld"
+			 " ORDER BY %s",
+			 Question->QstCod,
+			 Shuffle ? "RAND()" :
+				   "AnsInd")))
       Err_WrongAnswerExit ();
+
+   return NumOptions;
   }
 
 /*****************************************************************************/
@@ -2606,8 +2610,8 @@ bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the answers from the database *****/
-      Qst_GetAnswersQst (Question,&mysql_res,
-			 false);	// Don't shuffle
+      Question->Answer.NumOptions = Qst_DB_GetAnswersQst (&mysql_res,Question,
+			                                  false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer

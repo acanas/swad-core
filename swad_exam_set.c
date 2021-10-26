@@ -1354,8 +1354,8 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
       QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
 
       /***** Get the answers from the database *****/
-      Qst_GetAnswersQst (&Question,&mysql_res,
-			 false);	// Don't shuffle
+      Question.Answer.NumOptions = Qst_DB_GetAnswersQst (&mysql_res,&Question,
+			                                 false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer
