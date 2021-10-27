@@ -41,6 +41,7 @@
 #include "swad_ID.h"
 #include "swad_photo.h"
 #include "swad_question.h"
+#include "swad_question_database.h"
 #include "swad_test.h"
 #include "swad_test_database.h"
 #include "swad_test_print.h"
@@ -574,7 +575,9 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 
 	 /***** Update the number of accesses and the score of this question *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
-	    Tst_DB_UpdateQstScore (&Print->PrintedQuestions[QstInd]);
+	    Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
+	                           Print->PrintedQuestions[QstInd].StrAnswers[0] != '\0',
+	                           Print->PrintedQuestions[QstInd].Score);
 
 	 /***** Destroy test question *****/
 	 Qst_QstDestructor (&Question);
@@ -758,7 +761,9 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 
       /* Update the number of hits and the score of this question in tests database */
       if (UpdateQstScore)
-	 Tst_DB_UpdateQstScore (&Print->PrintedQuestions[QstInd]);
+	 Qst_DB_UpdateQstScore (Print->PrintedQuestions[QstInd].QstCod,
+				Print->PrintedQuestions[QstInd].StrAnswers[0] != '\0',
+				Print->PrintedQuestions[QstInd].Score);
      }
   }
 

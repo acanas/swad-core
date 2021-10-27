@@ -36,6 +36,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_question.h"
+#include "swad_question_database.h"
 #include "swad_question_import.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
@@ -52,16 +53,6 @@ const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES] =
    [Qst_ANS_TRUE_FALSE     ] = "TF",
    [Qst_ANS_UNIQUE_CHOICE  ] = "uniqueChoice",
    [Qst_ANS_MULTIPLE_CHOICE] = "multipleChoice",
-   [Qst_ANS_TEXT           ] = "text",
-  };
-
-const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES] =
-  {
-   [Qst_ANS_INT            ] = "int",
-   [Qst_ANS_FLOAT          ] = "float",
-   [Qst_ANS_TRUE_FALSE     ] = "true_false",
-   [Qst_ANS_UNIQUE_CHOICE  ] = "unique_choice",
-   [Qst_ANS_MULTIPLE_CHOICE] = "multiple_choice",
    [Qst_ANS_TEXT           ] = "text",
   };
 
@@ -1803,6 +1794,7 @@ void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question)
 
 void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res)
   {
+   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    char *Query = NULL;
    long LengthQuery;
@@ -1975,6 +1967,7 @@ void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question)
 
 Qst_AnswerType_t Qst_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeDB)
   {
+   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    Qst_AnswerType_t AnsType;
 
    if (StrAnsTypeDB != NULL)
@@ -4152,562 +4145,42 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
 // Returns the number of test questions
 // in this location (all the platform, current degree or current course)
 
-unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
+unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,
+                              struct Qst_Stats *Stats)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Get number of test questions from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM tst_questions");
-         else
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM tst_questions"
-                            " WHERE AnsType='%s'",
-			    Qst_DB_StrAnswerTypes[AnsType]);
-         break;
-      case HieLvl_CTY:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM ins_instits,"
-        	                   "ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE ins_instits.CtyCod=%ld"
-                              " AND ins_instits.InsCod=ctr_centers.InsCod"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Cty.CtyCod);
-         else
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM ins_instits,"
-        	                   "ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE ins_instits.CtyCod=%ld"
-                              " AND ins_instits.InsCod=ctr_centers.InsCod"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'",
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    Qst_DB_StrAnswerTypes[AnsType]);
-         break;
-      case HieLvl_INS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE ctr_centers.InsCod=%ld"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Ins.InsCod);
-         else
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE ctr_centers.InsCod=%ld"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'",
-			    Gbl.Hierarchy.Ins.InsCod,
-			    Qst_DB_StrAnswerTypes[AnsType]);
-         break;
-      case HieLvl_CTR:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE deg_degrees.CtrCod=%ld"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Ctr.CtrCod);
-         else
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE deg_degrees.CtrCod=%ld"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'",
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    Qst_DB_StrAnswerTypes[AnsType]);
-         break;
-      case HieLvl_DEG:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM crs_courses,"
-        	                   "tst_questions"
-                            " WHERE crs_courses.DegCod=%ld"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Deg.DegCod);
-         else
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM crs_courses,"
-        	                   "tst_questions"
-                            " WHERE crs_courses.DegCod=%ld"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'",
-			    Gbl.Hierarchy.Deg.DegCod,
-			    Qst_DB_StrAnswerTypes[AnsType]);
-         break;
-      case HieLvl_CRS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM tst_questions"
-                            " WHERE CrsCod=%ld",
-			    Gbl.Hierarchy.Crs.CrsCod);
-         else
-            DB_QuerySELECT (&mysql_res,"can not get number of test questions",
-        		    "SELECT COUNT(*),"		// row[0]
-        		           "SUM(NumHits),"	// row[1]
-        		           "SUM(Score)"		// row[2]
-        	             " FROM tst_questions"
-                            " WHERE CrsCod=%ld"
-                              " AND AnsType='%s'",
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    Qst_DB_StrAnswerTypes[AnsType]);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 break;
-     }
+   /***** Reset default stats *****/
+   Stats->NumQsts = 0;
+   Stats->NumHits = 0L;
+   Stats->TotalScore = 0.0;
 
-   /***** Get number of questions *****/
-   row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&(Stats->NumQsts)) != 1)
-      Err_ShowErrorAndExit ("Error when getting number of test questions.");
-
-   if (Stats->NumQsts)
+   /***** Get number of questions from database *****/
+   if (Qst_DB_GetNumQsts (&mysql_res,Scope,AnsType))
      {
-      if (sscanf (row[1],"%lu",&(Stats->NumHits)) != 1)
-         Err_ShowErrorAndExit ("Error when getting total number of hits in test questions.");
+      /***** Get number of questions *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%u",&(Stats->NumQsts)) != 1)
+	 Err_ShowErrorAndExit ("Error when getting number of test questions.");
 
-      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[2],"%lf",&(Stats->TotalScore)) != 1)
-         Err_ShowErrorAndExit ("Error when getting total score in test questions.");
-      Str_SetDecimalPointToLocal ();	// Return to local system
-     }
-   else
-     {
-      Stats->NumHits = 0L;
-      Stats->TotalScore = 0.0;
+      if (Stats->NumQsts)
+	{
+	 if (sscanf (row[1],"%lu",&(Stats->NumHits)) != 1)
+	    Err_ShowErrorAndExit ("Error when getting total number of hits in test questions.");
+
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[2],"%lf",&(Stats->TotalScore)) != 1)
+	    Err_ShowErrorAndExit ("Error when getting total score in test questions.");
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+	}
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    return Stats->NumQsts;
-  }
-
-/*****************************************************************************/
-/**************** Get number of courses with test questions ******************/
-/*****************************************************************************/
-// Returns the number of courses with test questions
-// in this location (all the platform, current degree or current course)
-
-unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType)
-  {
-   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
-
-   /***** Get number of courses with test questions from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-            DB_QueryCOUNT ("can not get number of courses with test questions",
-        		    "SELECT COUNT(DISTINCT CrsCod)"
-        	             " FROM tst_questions");
-
-         return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with test questions",
-			 "SELECT COUNT(DISTINCT CrsCod)"
-			  " FROM tst_questions"
-			 " WHERE AnsType='%s'",
-			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CTY:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-            DB_QueryCOUNT ("can not get number of courses with test questions",
-        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM ins_instits,"
-        	                   "ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE ins_instits.CtyCod=%ld"
-                              " AND ins_instits.InsCod=ctr_centers.InsCod"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Cty.CtyCod);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with test questions",
-			 "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-			  " FROM ins_instits,"
-			         "ctr_centers,"
-			         "deg_degrees,"
-			         "crs_courses,"
-			         "tst_questions"
-			 " WHERE ins_instits.CtyCod=%ld"
-			   " AND ins_instits.InsCod=ctr_centers.InsCod"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
-			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Cty.CtyCod,
-			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_INS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-            DB_QueryCOUNT ("can not get number of courses with test questions",
-        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE ctr_centers.InsCod=%ld"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Ins.InsCod);
-
-         return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with test questions",
-			 "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-			  " FROM ctr_centers,"
-			        "deg_degrees,"
-			        "crs_courses,"
-			        "tst_questions"
-			 " WHERE ctr_centers.InsCod=%ld"
-			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
-			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Ins.InsCod,
-			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CTR:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-            DB_QueryCOUNT ("can not get number of courses with test questions",
-        		    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions"
-                            " WHERE deg_degrees.CtrCod=%ld"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Ctr.CtrCod);
-
-         return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with test questions",
-			 "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-			  " FROM deg_degrees,"
-			        "crs_courses,"
-			        "tst_questions"
-			 " WHERE deg_degrees.CtrCod=%ld"
-			   " AND deg_degrees.DegCod=crs_courses.DegCod"
-			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
-			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Ctr.CtrCod,
-			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_DEG:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-            DB_QueryCOUNT ("can not get number of courses with test questions",
-        		    "SELECT COUNTDISTINCT (tst_questions.CrsCod)"
-        	             " FROM crs_courses,"
-        	                   "tst_questions"
-                            " WHERE crs_courses.DegCod=%ld"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.Hierarchy.Deg.DegCod);
-
-         return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with test questions",
-			 "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-			  " FROM crs_courses,"
-			        "tst_questions"
-			 " WHERE crs_courses.DegCod=%ld"
-			   " AND crs_courses.CrsCod=tst_questions.CrsCod"
-			   " AND tst_questions.AnsType='%s'",
-			 Gbl.Hierarchy.Deg.DegCod,
-			 Qst_DB_StrAnswerTypes[AnsType]);
-      case HieLvl_CRS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-            DB_QueryCOUNT ("can not get number of courses with test questions",
-        		    "SELECT COUNT(DISTINCT CrsCod)"
-        	             " FROM tst_questions"
-                            " WHERE CrsCod=%ld",
-			    Gbl.Hierarchy.Crs.CrsCod);
-
-         return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with test questions",
-			 "SELECT COUNT(DISTINCT CrsCod)"
-			  " FROM tst_questions"
-			 " WHERE CrsCod=%ld"
-			   " AND AnsType='%s'",
-			 Gbl.Hierarchy.Crs.CrsCod,
-			 Qst_DB_StrAnswerTypes[AnsType]);
-      default:
-	 return 0;
-     }
-  }
-
-/*****************************************************************************/
-/*********** Get number of courses with pluggable test questions *************/
-/*****************************************************************************/
-// Returns the number of courses with pluggable test questions
-// in this location (all the platform, current degree or current course)
-
-unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType)
-  {
-   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
-   extern const char *Tst_DB_Pluggable[TstCfg_NUM_OPTIONS_PLUGGABLE];
-
-   /***** Get number of courses with test questions from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			   "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	            " FROM tst_questions,"
-        	                  "tst_config"
-                           " WHERE tst_questions.CrsCod=tst_config.CrsCod"
-                             " AND tst_config.pluggable='%s'",
-			   Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-			 " FROM tst_questions,"
-			       "tst_config"
-			" WHERE tst_questions.AnsType='%s'"
-			  " AND tst_questions.CrsCod=tst_config.CrsCod"
-			  " AND tst_config.pluggable='%s'",
-			Qst_DB_StrAnswerTypes[AnsType],
-			Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_CTY:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM ins_instits,"
-        	                   "ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE ins_instits.CtyCod=%ld"
-                              " AND ins_instits.InsCod=ctr_centers.InsCod"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM ins_instits,"
-        	                   "ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE ins_instits.CtyCod=%ld"
-                              " AND ins_instits.InsCod=ctr_centers.InsCod"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Cty.CtyCod,
-			    Qst_DB_StrAnswerTypes[AnsType],
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_INS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE ctr_centers.InsCod=%ld"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Ins.InsCod,
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM ctr_centers,"
-        	                   "deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE ctr_centers.InsCod=%ld"
-                              " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Ins.InsCod,
-			    Qst_DB_StrAnswerTypes[AnsType],
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_CTR:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE deg_degrees.CtrCod=%ld"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM deg_degrees,"
-        	                   "crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE deg_degrees.CtrCod=%ld"
-                              " AND deg_degrees.DegCod=crs_courses.DegCod"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Ctr.CtrCod,
-			    Qst_DB_StrAnswerTypes[AnsType],
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_DEG:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE crs_courses.DegCod=%ld"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Deg.DegCod,
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM crs_courses,"
-        	                   "tst_questions,"
-        	                   "tst_config"
-                            " WHERE crs_courses.DegCod=%ld"
-                              " AND crs_courses.CrsCod=tst_questions.CrsCod"
-                              " AND tst_questions.AnsType='%s'"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Deg.DegCod,
-			    Qst_DB_StrAnswerTypes[AnsType],
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      case HieLvl_CRS:
-         if (AnsType == Qst_ANS_UNKNOWN)	// Any type
-            return (unsigned)
-	    DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM tst_questions,"
-        	                   "tst_config"
-                            " WHERE tst_questions.CrsCod=%ld"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get number of courses with pluggable test questions",
-			    "SELECT COUNT(DISTINCT tst_questions.CrsCod)"
-        	             " FROM tst_questions,"
-        	                   "tst_config"
-                            " WHERE tst_questions.CrsCod=%ld"
-                              " AND tst_questions.AnsType='%s'"
-                              " AND tst_questions.CrsCod=tst_config.CrsCod"
-                              " AND tst_config.pluggable='%s'",
-			    Gbl.Hierarchy.Crs.CrsCod,
-			    Qst_DB_StrAnswerTypes[AnsType],
-			    Tst_DB_Pluggable[TstCfg_PLUGGABLE_YES]);
-      default:
-	 return 0;
-     }
   }
 
 /*****************************************************************************/
@@ -4727,9 +4200,9 @@ void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats)
 
    if (Qst_GetNumQuestions (Gbl.Scope.Current,AnsType,Stats))
      {
-      if ((Stats->NumCoursesWithQuestions = Qst_GetNumCoursesWithQuestions (Gbl.Scope.Current,AnsType)) != 0)
+      if ((Stats->NumCoursesWithQuestions = Qst_DB_GetNumCrssWithQsts (Gbl.Scope.Current,AnsType)) != 0)
         {
-         Stats->NumCoursesWithPluggableQuestions = Qst_GetNumCoursesWithPluggableQuestions (Gbl.Scope.Current,AnsType);
+         Stats->NumCoursesWithPluggableQuestions = Qst_DB_GetNumCrssWithPluggableQsts (Gbl.Scope.Current,AnsType);
          Stats->AvgQstsPerCourse = (double) Stats->NumQsts / (double) Stats->NumCoursesWithQuestions;
          Stats->AvgHitsPerCourse = (double) Stats->NumHits / (double) Stats->NumCoursesWithQuestions;
         }

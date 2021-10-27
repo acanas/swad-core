@@ -289,9 +289,8 @@ void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
                                            const struct Qst_Question *Question);
 
-unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
-unsigned Qst_GetNumCoursesWithQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
-unsigned Qst_GetNumCoursesWithPluggableQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
+unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,
+                              struct Qst_Stats *Stats);
 
 void Qst_GetTestStats (Qst_AnswerType_t AnsType,struct Qst_Stats *Stats);
 

@@ -1,7 +1,7 @@
-// swad_test_database.h: self-assessment tests, operations with database
+// swad_question_database.h: test/exam/game questions, operations with database
 
-#ifndef _SWAD_TST_DB
-#define _SWAD_TST_DB
+#ifndef _SWAD_QST_DB
+#define _SWAD_QST_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,15 +27,15 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
+// #include <stdbool.h>		// For boolean type
+// #include <time.h>		// For time_t
 
 // #include "swad_exam.h"
 // #include "swad_game.h"
-// #include "swad_media.h"
-// #include "swad_question.h"
 // #include "swad_question_type.h"
-// #include "swad_test_config.h"
-// #include "swad_test_print.h"
+// #include "swad_media.h"
+// #include "swad_string.h"
+// #include "swad_tag.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -49,39 +49,15 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-//----------------------- User's settings in course ---------------------------
-void Tst_DB_IncreaseNumMyPrints (void);
-void Tst_DB_UpdateLastAccTst (unsigned NumQsts);
+void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score);
 
-unsigned Tst_DB_GetDateNextTstAllowed (MYSQL_RES **mysql_res);
-unsigned Tst_DB_GetNumPrintsGeneratedByMe (MYSQL_RES **mysql_res);
-
-//--------------------------- Test configuration ------------------------------
-void Tst_DB_SaveConfig (void);
-unsigned Tst_DB_GetConfig (MYSQL_RES **mysql_res,long CrsCod);
-unsigned Tst_DB_GetPluggableFromConfig (MYSQL_RES **mysql_res);
-
-void Tst_DB_RemoveTstConfig (long CrsCod);
-
-//------------------------------- Test prints ---------------------------------
-long Tst_DB_CreatePrint (unsigned NumQsts);
-void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print);
-
-unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
-
-void Tst_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
-void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Tst_DB_RemovePrintsMadeByInCrs (long CrsCod);
-
-//-------------------------- Test print questions -----------------------------
-void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd);
-
-unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod);
-unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);
-
-void Tst_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod);
-void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Tst_DB_RemovePrintQuestionsMadeInCrs (long CrsCod);
+unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
+                                        const struct Qst_Questions *Questions);
+unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
+                            HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
+unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
+                                    Qst_AnswerType_t AnsType);
+unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
+                                             Qst_AnswerType_t AnsType);
 
 #endif

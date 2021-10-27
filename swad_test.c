@@ -53,6 +53,7 @@
 #include "swad_media.h"
 #include "swad_parameter.h"
 #include "swad_question.h"
+#include "swad_question_database.h"
 #include "swad_question_import.h"
 #include "swad_tag_database.h"
 #include "swad_test.h"
@@ -508,7 +509,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 
    /***** Get questions and answers from database *****/
    Print->NumQsts.All =
-   Questions->NumQsts = Tst_DB_GetQuestionsForNewTest (&mysql_res,Questions);
+   Questions->NumQsts = Qst_DB_GetQuestionsForNewTestPrint (&mysql_res,Questions);
 
    for (QstInd = 0;
 	QstInd < Print->NumQsts.All;
