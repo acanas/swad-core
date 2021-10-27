@@ -420,3 +420,198 @@ void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
   }
+
+/*****************************************************************************/
+/************ Get the test prints of a user in the current course ************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   /***** Make database query *****/
+   /*           From here...                 ...to here
+         ___________|_____                   _____|___________
+   -----|______Exam_|_____|-----------------|_____|_Exam______|-----> time
+      Start         |    End              Start   |          End
+   */
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get tests of a user",
+		   "SELECT ExaCod"			// row[0]
+		    " FROM tst_exams"
+		   " WHERE CrsCod=%ld"
+		     " AND UsrCod=%ld"
+		     " AND EndTime>=FROM_UNIXTIME(%ld)"
+		     " AND StartTime<=FROM_UNIXTIME(%ld)"
+		   " ORDER BY ExaCod",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   UsrCod,
+		   (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME],
+		   (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+  }
+
+/*****************************************************************************/
+/**************** Get data of a test using its test code *********************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get data of a test print",
+		   "SELECT UsrCod,"			// row[0]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[1]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[2]
+			  "NumQsts,"			// row[3]
+			  "NumQstsNotBlank,"		// row[4]
+			  "Sent,"			// row[5]
+			  "AllowTeachers,"		// row[6]
+			  "Score"			// row[7]
+		    " FROM tst_exams"
+		   " WHERE ExaCod=%ld"
+		     " AND CrsCod=%ld",		// Extra check
+		   PrnCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/****************** Remove test prints made by a given user ******************/
+/*****************************************************************************/
+
+void Tst_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove tests made by a user",
+		   "DELETE FROM tst_exams"
+	           " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/************** Remove test prints made by a user in a course ****************/
+/*****************************************************************************/
+
+void Tst_DB_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove tests made by a user in a course",
+		   "DELETE FROM tst_exams"
+	           " WHERE CrsCod=%ld"
+	             " AND UsrCod=%ld",
+		   CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/****************** Remove all test prints made in a course ******************/
+/*****************************************************************************/
+
+void Tst_DB_RemovePrintsMadeByInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove tests made in a course",
+		   "DELETE FROM tst_exams"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************ Store user's answers of an test print into database ************/
+/*****************************************************************************/
+
+void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd)
+  {
+   /***** Insert question and user's answers into database *****/
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   DB_QueryREPLACE ("can not update a question of a test",
+		    "REPLACE INTO tst_exam_questions"
+		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
+		    " VALUES"
+		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
+		    Print->PrnCod,
+		    Print->PrintedQuestions[QstInd].QstCod,
+		    QstInd,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].StrIndexes,
+		    Print->PrintedQuestions[QstInd].StrAnswers);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/**************** Get all tags of questions in a test print ******************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get tags present in a test",
+		   "SELECT tst_tags.TagTxt"	// row[0]
+		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
+			    " FROM tst_question_tags,"
+				  "tst_exam_questions"
+			   " WHERE tst_exam_questions.ExaCod=%ld"
+			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
+			  "tst_tags"
+		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
+		   " ORDER BY tst_tags.TagTxt",
+		   PrnCod);
+  }
+
+/*****************************************************************************/
+/************* Get the questions of a test print from database ***************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions of a test",
+		   "SELECT QstCod,"	// row[0]
+			  "Score,"	// row[1]
+			  "Indexes,"	// row[2]
+			  "Answers"	// row[3]
+		    " FROM tst_exam_questions"
+		   " WHERE ExaCod=%ld"
+		   " ORDER BY QstInd",
+		   PrnCod);
+  }
+
+/*****************************************************************************/
+/*************** Remove test prints questions for a given user ***************/
+/*****************************************************************************/
+
+void Tst_DB_RemovePrintQuestionsMadeByUsrInAllCrss (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove tests made by a user",
+		   "DELETE FROM tst_exam_questions"
+	           " USING tst_exams,"
+	                  "tst_exam_questions"
+                   " WHERE tst_exams.UsrCod=%ld"
+                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/********* Remove test prints questions made by a user in a course ***********/
+/*****************************************************************************/
+
+void Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (long UsrCod,long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove tests made by a user in a course",
+		   "DELETE FROM tst_exam_questions"
+	           " USING tst_exams,"
+	                  "tst_exam_questions"
+                   " WHERE tst_exams.CrsCod=%ld"
+                     " AND tst_exams.UsrCod=%ld"
+                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
+		   CrsCod,
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/******* Remove all test prints questions made by any user in a course *******/
+/*****************************************************************************/
+
+void Tst_DB_RemovePrintQuestionsMadeInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove tests made in a course",
+		   "DELETE FROM tst_exam_questions"
+	           " USING tst_exams,"
+	                  "tst_exam_questions"
+                   " WHERE tst_exams.CrsCod=%ld"
+                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
+		   CrsCod);
+  }

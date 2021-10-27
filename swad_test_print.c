@@ -162,9 +162,6 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 
 static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat);
 
-static void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,
-                                           unsigned QstInd);
-
 static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) void *Args);
 
 static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args);
@@ -179,7 +176,7 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
                                               long UsrCod,
                                               struct TstRes_ICanView *ICanView);
 
-static void TstPrn_ShowTagsPresentInAPrint (long ResCod);
+static void TstPrn_ShowTagsPresentInAPrint (long PrnCod);
 
 /*****************************************************************************/
 /***************************** Reset test print ******************************/
@@ -752,7 +749,7 @@ void TstPrn_ComputeScoresAndStoreQuestionsOfPrint (struct TstPrn_Print *Print,
 
       /* Store test question in database */
       Tst_DB_StoreOneQstOfPrint (Print,
-				     QstInd);	// 0, 1, 2, 3...
+				 QstInd);	// 0, 1, 2, 3...
 
       /* Accumulate total score */
       Print->Score += Print->PrintedQuestions[QstInd].Score;
@@ -1287,10 +1284,10 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 										   "ANS_BAD") :
 			     "ANS_0");
 	       HTM_Double (FloatAnsUsr);
+	    HTM_TD_End ();
 	   }
 	 else					// If user has omitted the answer
-	    HTM_TD_Begin (NULL);
-	 HTM_TD_End ();
+	    HTM_TD_Empty (1);
 
 	 /***** Write the correct answer *****/
 	 HTM_TD_Begin ("class=\"ANS_0 CM\"");
@@ -1487,7 +1484,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 		     if (Question->Answer.Options[Indexes[NumOpt]].Feedback[0])
 		       {
 			HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
-			HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Feedback);
+			   HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Feedback);
 			HTM_DIV_End ();
 		       }
 
@@ -1562,13 +1559,13 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 	      }
 	    HTM_TD_Begin ("class=\"%s CT\"",
 			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ? (Correct ? "ANS_OK" :
-							   "ANS_BAD") :
-						"ANS_0");
+							                       "ANS_BAD") :
+						                    "ANS_0");
 	       HTM_Txt (PrintedQuestion->StrAnswers);
+	    HTM_TD_End ();
 	   }
 	 else						// If user has omitted the answer
-	    HTM_TD_Begin (NULL);
-	 HTM_TD_End ();
+            HTM_TD_Empty (1);
 
 	 /***** Write the correct answers *****/
 	 if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
@@ -1639,29 +1636,6 @@ static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat)
    HTM_TD_Begin ("class=\"DAT_SMALL CM\"");
       HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/************ Store user's answers of an test print into database ************/
-/*****************************************************************************/
-
-static void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,
-                                       unsigned QstInd)
-  {
-   /***** Insert question and user's answers into database *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryREPLACE ("can not update a question of a test",
-		    "REPLACE INTO tst_exam_questions"
-		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
-		    " VALUES"
-		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		    Print->PrnCod,
-		    Print->PrintedQuestions[QstInd].QstCod,
-		    QstInd,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[QstInd].Score,
-		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].StrAnswers);
-   Str_SetDecimalPointToLocal ();	// Return to local system
   }
 
 /*****************************************************************************/
@@ -1863,7 +1837,6 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumPrints;
    unsigned NumPrint;
    static unsigned UniqueId = 0;
@@ -1884,24 +1857,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    TotalScore = 0.0;
 
    /***** Make database query *****/
-   /*           From here...                 ...to here
-         ___________|_____                   _____|___________
-   -----|______Exam_|_____|-----------------|_____|_Exam______|-----> time
-      Start         |    End              Start   |          End
-   */
-   NumPrints = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get tests of a user",
-		   "SELECT ExaCod"			// row[0]
-		    " FROM tst_exams"
-		   " WHERE CrsCod=%ld"
-		     " AND UsrCod=%ld"
-		     " AND EndTime>=FROM_UNIXTIME(%ld)"
-		     " AND StartTime<=FROM_UNIXTIME(%ld)"
-		   " ORDER BY ExaCod",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   UsrDat->UsrCod,
-		   (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME],
-		   (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+   NumPrints = Tst_DB_GetUsrPrintsInCurrentCrs (&mysql_res,UsrDat->UsrCod);
 
    /***** Show user's data *****/
    HTM_TR_Begin (NULL);
@@ -1915,10 +1871,8 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	      NumPrint < NumPrints;
 	      NumPrint++)
 	   {
-	    row = mysql_fetch_row (mysql_res);
-
 	    /* Get print code (row[0]) */
-	    if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	    if ((Print.PrnCod = DB_GetNextCode (mysql_res)) <= 0)
 	       Err_WrongTestExit ();
 
 	    /* Get print data */
@@ -2029,7 +1983,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
 		  TstPrn_PutParamPrnCod (Print.PrnCod);
-		  Ico_PutIconLink ("tasks.svg",Txt_View_test);
+		     Ico_PutIconLink ("tasks.svg",Txt_View_test);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -2442,24 +2396,13 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
 /************************ Show test tags in this test ************************/
 /*****************************************************************************/
 
-static void TstPrn_ShowTagsPresentInAPrint (long ResCod)
+static void TstPrn_ShowTagsPresentInAPrint (long PrnCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumTags;
 
-   /***** Get all tags of questions in this test *****/
-   NumTags = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get tags present in a test",
-		   "SELECT tst_tags.TagTxt"	// row[0]
-		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
-			    " FROM tst_question_tags,"
-				  "tst_exam_questions"
-			   " WHERE tst_exam_questions.ExaCod=%ld"
-			     " AND tst_exam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"
-			  "tst_tags"
-		   " WHERE TagsCods.TagCod=tst_tags.TagCod"
-		   " ORDER BY tst_tags.TagTxt",
-		   ResCod);
+   /***** Get all tags of questions in this test print *****/
+   NumTags = Tst_DB_GetTagsPresentInAPrint (&mysql_res,PrnCod);
    Tag_ShowTagList (NumTags,mysql_res);
 
    /***** Free structure that stores the query result *****/
@@ -2515,20 +2458,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
    MYSQL_ROW row;
 
    /***** Make database query *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of a test",
-		       "SELECT UsrCod,"				// row[0]
-			      "UNIX_TIMESTAMP(StartTime),"	// row[1]
-			      "UNIX_TIMESTAMP(EndTime),"	// row[2]
-		              "NumQsts,"			// row[3]
-		              "NumQstsNotBlank,"		// row[4]
-			      "Sent,"				// row[5]
-		              "AllowTeachers,"			// row[6]
-		              "Score"				// row[7]
-		        " FROM tst_exams"
-		       " WHERE ExaCod=%ld"
-		         " AND CrsCod=%ld",
-		       Print->PrnCod,
-		       Gbl.Hierarchy.Crs.CrsCod) == 1)
+   if (Tst_DB_GetPrintDataByPrnCod (&mysql_res,Print->PrnCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -2539,18 +2469,16 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
       Print->TimeUTC[Dat_STR_TIME] = Dat_GetUNIXTimeFromStr (row[1]);
       Print->TimeUTC[Dat_END_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
 
-      /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",&Print->NumQsts.All) != 1)
-	 Print->NumQsts.All = 0;
-
-      /* Get number of questions not blank (row[4]) */
+      /* Get number of questions (row[3])
+         and number of questions not blank (row[4]) */
+      if (sscanf (row[3],"%u",&Print->NumQsts.All     ) != 1)
+	 Print->NumQsts.All      = 0;
       if (sscanf (row[4],"%u",&Print->NumQsts.NotBlank) != 1)
 	 Print->NumQsts.NotBlank = 0;
 
-      /* Get if exam has been sent (row[5]) */
-      Print->Sent = (row[5][0] == 'Y');
-
-      /* Get if teachers are allowed to see this test (row[6]) */
+      /* Get if print has been sent (row[5])
+         and if teachers are allowed to see this test print (row[6]) */
+      Print->Sent          = (row[5][0] == 'Y');
       Print->AllowTeachers = (row[6][0] == 'Y');
 
       /* Get score (row[7]) */
@@ -2578,16 +2506,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    unsigned QstInd;
 
    /***** Get questions of a test print from database *****/
-   NumQsts = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get questions of a test",
-		   "SELECT QstCod,"	// row[0]
-			  "Score,"	// row[1]
-			  "Indexes,"	// row[2]
-			  "Answers"	// row[3]
-		    " FROM tst_exam_questions"
-		   " WHERE ExaCod=%ld"
-		   " ORDER BY QstInd",
-		   Print->PrnCod);
+   NumQsts = Tst_DB_GetPrintQuestions (&mysql_res,Print->PrnCod);
 
    /***** Get questions *****/
    if (NumQsts == Print->NumQsts.All)
@@ -2607,11 +2526,10 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
             Err_ShowErrorAndExit ("Wrong question score.");
          Str_SetDecimalPointToLocal ();	// Return to local system
 
-	 /* Get indexes for this question (row[2]) */
+	 /* Get indexes for this question (row[2])
+	    and answers selected by user for this question (row[3]) */
 	 Str_Copy (Print->PrintedQuestions[QstInd].StrIndexes,row[2],
 		   sizeof (Print->PrintedQuestions[QstInd].StrIndexes) - 1);
-
-	 /* Get answers selected by user for this question (row[3]) */
 	 Str_Copy (Print->PrintedQuestions[QstInd].StrAnswers,row[3],
 		   sizeof (Print->PrintedQuestions[QstInd].StrAnswers) - 1);
 	}
@@ -2630,19 +2548,10 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
 void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
   {
    /***** Remove test prints questions for the given user *****/
-   DB_QueryDELETE ("can not remove tests made by a user",
-		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,"
-	                  "tst_exam_questions"
-                   " WHERE tst_exams.UsrCod=%ld"
-                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
-		   UsrCod);
+   Tst_DB_RemovePrintQuestionsMadeByUsrInAllCrss (UsrCod);
 
    /***** Remove test prints made by the given user *****/
-   DB_QueryDELETE ("can not remove tests made by a user",
-		   "DELETE FROM tst_exams"
-	           " WHERE UsrCod=%ld",
-		   UsrCod);
+   Tst_DB_RemovePrintsMadeByUsrInAllCrss (UsrCod);
   }
 
 /*****************************************************************************/
@@ -2651,23 +2560,11 @@ void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod)
 
 void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
-   /***** Remove tests made by the given user *****/
-   DB_QueryDELETE ("can not remove tests made by a user in a course",
-		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,"
-	                  "tst_exam_questions"
-                   " WHERE tst_exams.CrsCod=%ld"
-                     " AND tst_exams.UsrCod=%ld"
-                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
-		   CrsCod,
-		   UsrCod);
+   /***** Remove test prints questions for the given user *****/
+   Tst_DB_RemovePrintQuestionsMadeByUsrInCrs (UsrCod,CrsCod);
 
-   DB_QueryDELETE ("can not remove tests made by a user in a course",
-		   "DELETE FROM tst_exams"
-	           " WHERE CrsCod=%ld"
-	             " AND UsrCod=%ld",
-		   CrsCod,
-		   UsrCod);
+   /***** Remove test prints made by the given user *****/
+   Tst_DB_RemovePrintsMadeByUsrInCrs (UsrCod,CrsCod);
   }
 
 /*****************************************************************************/
@@ -2677,19 +2574,10 @@ void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod)
 void TstPrn_RemoveCrsPrints (long CrsCod)
   {
    /***** Remove questions of tests made in the course *****/
-   DB_QueryDELETE ("can not remove tests made in a course",
-		   "DELETE FROM tst_exam_questions"
-	           " USING tst_exams,"
-	                  "tst_exam_questions"
-                   " WHERE tst_exams.CrsCod=%ld"
-                     " AND tst_exams.ExaCod=tst_exam_questions.ExaCod",
-		   CrsCod);
+   Tst_DB_RemovePrintQuestionsMadeInCrs (CrsCod);
 
    /***** Remove tests made in the course *****/
-   DB_QueryDELETE ("can not remove tests made in a course",
-		   "DELETE FROM tst_exams"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Tst_DB_RemovePrintsMadeByInCrs (CrsCod);
   }
 
 /*****************************************************************************/
