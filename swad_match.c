@@ -44,6 +44,7 @@
 #include "swad_match.h"
 #include "swad_match_database.h"
 #include "swad_match_result.h"
+#include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_test.h"

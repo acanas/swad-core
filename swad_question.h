@@ -177,11 +177,6 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 void Qst_PutParamsEditQst (void *Questions);
 
-unsigned Qst_DB_GetNumAnswersQst (long QstCod);
-unsigned Qst_DB_GetAnswersQst (MYSQL_RES **mysql_res,
-                               const struct Qst_Question *Question,
-                               bool Shuffle);
-
 void Qst_WriteAnswersBank (struct Qst_Question *Question,
                            const char *ClassTxt,
                            const char *ClassFeedback);

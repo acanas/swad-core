@@ -755,3 +755,63 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
 	 return 0;	// Not reached
      }
   }
+
+/*****************************************************************************/
+/************ Get number of answers of a question from database **************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetNumAnswersQst (long QstCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of answers of a question",
+		  "SELECT COUNT(*)"
+		   " FROM tst_answers"
+		  " WHERE QstCod=%ld",
+		  QstCod);
+  }
+
+/*****************************************************************************/
+/***************** Get answers of a question from database *******************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle)
+  {
+   unsigned NumOptions;
+
+   if (!(NumOptions = (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get answers of a question",
+			 "SELECT AnsInd,"	// row[0]
+				"Answer,"	// row[1]
+				"Feedback,"	// row[2]
+				"MedCod,"	// row[3]
+				"Correct"	// row[4]
+			  " FROM tst_answers"
+			 " WHERE QstCod=%ld"
+			 " ORDER BY %s",
+			 QstCod,
+			 Shuffle ? "RAND()" :
+				   "AnsInd")))
+      Err_WrongAnswerExit ();
+
+   return NumOptions;
+  }
+
+/*****************************************************************************/
+/***************** Get answers of a question from database *******************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
+  {
+   unsigned NumOptions;
+
+   if (!(NumOptions = (unsigned)
+         DB_QuerySELECT (mysql_res,"can not get answers of a question",
+			 "SELECT Answer"		// row[0]
+			  " FROM tst_answers"
+			 " WHERE QstCod=%ld"
+		         " ORDER BY AnsInd",
+			 QstCod)))
+      Err_WrongAnswerExit ();
+
+   return NumOptions;
+  }

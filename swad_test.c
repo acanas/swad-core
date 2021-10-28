@@ -583,7 +583,7 @@ static void Tst_GenerateChoiceIndexes (struct TstPrn_PrintedQuestion *PrintedQue
    Question.QstCod = PrintedQuestion->QstCod;
 
    /***** Get answers of question from database *****/
-   Question.Answer.NumOptions = Qst_DB_GetAnswersQst (&mysql_res,&Question,Shuffle);
+   Question.Answer.NumOptions = Qst_DB_GetDataOfAnswers (&mysql_res,Question.QstCod,Shuffle);
    /*
    row[0] AnsInd
    row[1] Answer

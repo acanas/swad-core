@@ -49,6 +49,7 @@
 #include "swad_match.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
+#include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_test.h"
 #include "swad_test_visibility.h"
@@ -1354,8 +1355,8 @@ static void ExaSet_CopyQstFromBankToExamSet (const struct ExaSet_Set *Set,long Q
       QstCodInSet = Exa_DB_AddQuestionToSet (Set->SetCod,&Question,CloneMedCod);
 
       /***** Get the answers from the database *****/
-      Question.Answer.NumOptions = Qst_DB_GetAnswersQst (&mysql_res,&Question,
-			                                 false);	// Don't shuffle
+      Question.Answer.NumOptions = Qst_DB_GetDataOfAnswers (&mysql_res,Question.QstCod,
+			                                    false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer

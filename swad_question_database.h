@@ -60,4 +60,8 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
 unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
                                              Qst_AnswerType_t AnsType);
 
+unsigned Qst_DB_GetNumAnswersQst (long QstCod);
+unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
+unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod);
+
 #endif

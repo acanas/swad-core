@@ -761,7 +761,7 @@ void Qst_ListQuestionsToEdit (void)
 	   {
             Mnu_ContextMenuBegin ();
             QstImp_CreateXML (Questions.NumQsts,mysql_res);	// Create XML file with exported questions...
-							// ...and put a link to download it
+								// ...and put a link to download it
             Mnu_ContextMenuEnd ();
 	   }
 
@@ -1376,49 +1376,6 @@ void Qst_PutParamsEditQst (void *Questions)
   }
 
 /*****************************************************************************/
-/************ Get number of answers of a question from database **************/
-/*****************************************************************************/
-
-unsigned Qst_DB_GetNumAnswersQst (long QstCod)
-  {
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of answers of a question",
-		  "SELECT COUNT(*)"
-		   " FROM tst_answers"
-		  " WHERE QstCod=%ld",
-		  QstCod);
-  }
-
-/*****************************************************************************/
-/***************** Get answers of a question from database *******************/
-/*****************************************************************************/
-
-unsigned Qst_DB_GetAnswersQst (MYSQL_RES **mysql_res,
-                               const struct Qst_Question *Question,
-                               bool Shuffle)
-  {
-   unsigned NumOptions;
-
-   /***** Get answers of a question from database *****/
-   if (!(NumOptions = (unsigned)
-	 DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			 "SELECT AnsInd,"	// row[0]
-				"Answer,"	// row[1]
-				"Feedback,"	// row[2]
-				"MedCod,"	// row[3]
-				"Correct"	// row[4]
-			  " FROM tst_answers"
-			 " WHERE QstCod=%ld"
-			 " ORDER BY %s",
-			 Question->QstCod,
-			 Shuffle ? "RAND()" :
-				   "AnsInd")))
-      Err_WrongAnswerExit ();
-
-   return NumOptions;
-  }
-
-/*****************************************************************************/
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
@@ -1591,12 +1548,7 @@ void Qst_GetCorrectIntAnswerFromDB (struct Qst_Question *Question)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
@@ -1618,12 +1570,7 @@ void Qst_GetCorrectFltAnswerFromDB (struct Qst_Question *Question)
    double Tmp;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    if (Question->Answer.NumOptions != 2)
@@ -1656,12 +1603,7 @@ void Qst_GetCorrectTF_AnswerFromDB (struct Qst_Question *Question)
    MYSQL_ROW row;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,Question->QstCod);
 
    /***** Check if number of rows is correct *****/
    Qst_CheckIfNumberOfAnswersIsOne (Question);
@@ -1681,13 +1623,9 @@ void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Correct"		// row[0]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld"
-		   " ORDER BY AnsInd",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,Question->QstCod);
+
+   /***** Get options *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
@@ -1710,14 +1648,10 @@ void Qst_GetCorrectTxtAnswerFromDB (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   Question->Answer.NumOptions = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get answers of a question",
-		   "SELECT Answer"		// row[0]
-		    " FROM tst_answers"
-		   " WHERE QstCod=%ld",
-		   Question->QstCod);
+   Question->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,Question->QstCod);
 
-   /***** Get text and correctness of answers for this question from database (one row per answer) *****/
+   /***** Get text and correctness of answers for this question
+          from database (one row per answer) *****/
    for (NumOpt = 0;
 	NumOpt < Question->Answer.NumOptions;
 	NumOpt++)
@@ -1815,7 +1749,10 @@ void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res)
    Str_Copy (Query,"SELECT tst_questions.QstCod"	// row[0]
 		    " FROM tst_questions",Qst_MAX_BYTES_QUERY_QUESTIONS);
    if (!Questions->Tags.All)
-      Str_Concat (Query,",tst_question_tags,tst_tags",Qst_MAX_BYTES_QUERY_QUESTIONS);
+      Str_Concat (Query,","
+	                "tst_question_tags,"
+	                "tst_tags",
+	          Qst_MAX_BYTES_QUERY_QUESTIONS);
 
    Str_Concat (Query," WHERE tst_questions.CrsCod='",Qst_MAX_BYTES_QUERY_QUESTIONS);
    snprintf (CrsCodStr,sizeof (CrsCodStr),"%ld",Gbl.Hierarchy.Crs.CrsCod);
@@ -2764,8 +2701,8 @@ bool Qst_GetQstDataFromDB (struct Qst_Question *Question)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Get the answers from the database *****/
-      Question->Answer.NumOptions = Qst_DB_GetAnswersQst (&mysql_res,Question,
-			                                  false);	// Don't shuffle
+      Question->Answer.NumOptions = Qst_DB_GetDataOfAnswers (&mysql_res,Question->QstCod,
+			                                     false);	// Don't shuffle
       /*
       row[0] AnsInd
       row[1] Answer

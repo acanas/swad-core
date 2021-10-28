@@ -119,6 +119,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_password.h"
+#include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_search.h"
 #include "swad_test_config.h"
