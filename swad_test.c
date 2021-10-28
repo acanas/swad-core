@@ -491,7 +491,7 @@ void Tst_PutIconsTests (__attribute__((unused)) void *Args)
 /************** Get questions for a new test from the database ***************/
 /*****************************************************************************/
 
-#define Tst_MAX_BYTES_QUERY_QUESTIONS (16 * 1024 - 1)
+#define Qst_MAX_BYTES_QUERY_QUESTIONS (16 * 1024 - 1)
 
 static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
                                         struct TstPrn_Print *Print)
@@ -509,7 +509,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 
    /***** Get questions and answers from database *****/
    Print->NumQsts.All =
-   Questions->NumQsts = Qst_DB_GetQuestionsForNewTestPrint (&mysql_res,Questions);
+   Questions->NumQsts = Qst_DB_GetQstsForNewTestPrint (&mysql_res,Questions);
 
    for (QstInd = 0;
 	QstInd < Print->NumQsts.All;

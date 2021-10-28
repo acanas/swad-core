@@ -492,8 +492,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Sta_PutLinkToCourseHits ();	// Course hits
-   Log_PutLinkToLastClicks ();	// Last clicks in real time
+      Sta_PutLinkToCourseHits ();	// Course hits
+      Log_PutLinkToLastClicks ();	// Last clicks in real time
    Mnu_ContextMenuEnd ();
 
    /***** Begin form *****/

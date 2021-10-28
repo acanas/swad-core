@@ -109,7 +109,7 @@ void CrsCfg_Configuration (bool PrintView)
 	  Gbl.Usrs.Me.Role.Logged == Rol_USR)
 	{
          Mnu_ContextMenuBegin ();
-         Enr_PutLinkToRequestSignUp ();	// Request enrolment in the current course
+	    Enr_PutLinkToRequestSignUp ();	// Request enrolment in the current course
          Mnu_ContextMenuEnd ();
 	}
 

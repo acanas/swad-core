@@ -526,7 +526,7 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
    unsigned NumCrss;
 
    /***** Number of courses in which the user has a given role *****/
-   NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
+   NumCrss = Usr_DB_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
 
    Prf_BeginListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
 
@@ -955,7 +955,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
    MYSQL_ROW row;
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_ChkIfUsrCodExists (UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrCod))
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -989,7 +989,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_ChkIfUsrCodExists (UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrCod))
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1013,7 +1013,7 @@ static void Prf_GetNumTimelinePubsAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_ChkIfUsrCodExists (UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrCod))
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1037,7 +1037,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_ChkIfUsrCodExists (UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrCod))
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1061,7 +1061,7 @@ static void Prf_GetNumForumPostsAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_ChkIfUsrCodExists (UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrCod))
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);
@@ -1085,7 +1085,7 @@ static void Prf_GetNumMessagesSentAndStoreAsUsrFigure (long UsrCod)
   {
    struct Prf_UsrFigures UsrFigures;
 
-   if (Usr_ChkIfUsrCodExists (UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (UsrCod))
      {
       /***** Reset user's figures *****/
       Prf_ResetUsrFigures (&UsrFigures);

@@ -213,8 +213,6 @@ void Qst_WriteParamQstCod (unsigned NumQst,long QstCod);
 
 void Qst_CheckIfNumberOfAnswersIsOne (const struct Qst_Question *Question);
 
-void Qst_GetQuestions (struct Qst_Questions *Questions,MYSQL_RES **mysql_res);
-
 void Qst_ChangeFormatAnswersText (struct Qst_Question *Question);
 void Qst_ChangeFormatAnswersFeedback (struct Qst_Question *Question);
 
@@ -239,7 +237,6 @@ void Qst_FreeTextChoiceAnswer (struct Qst_Question *Question,unsigned NumOpt);
 void Qst_ResetMediaOfQuestion (struct Qst_Question *Question);
 void Qst_FreeMediaOfQuestion (struct Qst_Question *Question);
 
-Qst_AnswerType_t Qst_GetQstAnswerTypeFromDB (long QstCod);
 bool Qst_GetQstDataFromDB (struct Qst_Question *Question);
 long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt);
 void Qst_GetMediaFromDB (long CrsCod,long QstCod,int NumOpt,
@@ -275,14 +272,10 @@ unsigned Qst_CountNumAnswerTypesInList (const struct Qst_AnswerTypes *AnswerType
 unsigned Qst_CountNumQuestionsInList (const char *ListQuestions);
 
 void Qst_RemoveCrsQsts (long CrsCod);
-void Qst_DB_RemAnsFromQst (long QstCod);
 void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
 void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
-
-unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
-                                           const struct Qst_Question *Question);
 
 unsigned Qst_GetNumQuestions (HieLvl_Level_t Scope,Qst_AnswerType_t AnsType,
                               struct Qst_Stats *Stats);

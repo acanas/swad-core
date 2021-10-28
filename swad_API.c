@@ -3145,7 +3145,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
       /* Find next string in text until comma (leading and trailing spaces are removed) */
       Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
       if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
-	 if (Usr_ChkIfUsrCodExists (UsrDat.UsrCod))
+	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
 	    // The user must belong to course,
 	    // but it's not necessary he/she belongs to groups associated to the event
 	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))

@@ -196,7 +196,7 @@ void Dpt_SeeDepts (void)
       HTM_TR_End ();
 
       /***** Write teachers of this institution with other department *****/
-      NumTchsInsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
+      NumTchsInsInOtherDpts = Usr_DB_GetNumTchsCurrentInsInDepartment (0);
 
       HTM_TR_Begin (NULL);
 
@@ -211,7 +211,7 @@ void Dpt_SeeDepts (void)
       HTM_TR_End ();
 
       /***** Write teachers with no department *****/
-      NumTchsInsWithNoDpt = Usr_GetNumTchsCurrentInsInDepartment (-1L);
+      NumTchsInsWithNoDpt = Usr_DB_GetNumTchsCurrentInsInDepartment (-1L);
 
       HTM_TR_Begin (NULL);
 

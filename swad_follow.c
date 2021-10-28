@@ -133,8 +133,8 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Prf_PutLinkMyPublicProfile ();		// My public profile
-   Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
+      Prf_PutLinkMyPublicProfile ();		// My public profile
+      Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
    Mnu_ContextMenuEnd ();
 
    /***** Get users *****/

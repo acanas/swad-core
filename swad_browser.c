@@ -6407,7 +6407,7 @@ static void Brw_PasteClipboard (void)
             if (Crs_GetDataOfCourseByCod (&Hie.Crs))
               {
                Usr_UsrDataConstructor (&UsrDat);
-               if (Usr_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
+               if (Usr_DB_ChkIfUsrCodExists (Gbl.FileBrowser.Clipboard.WorksUsrCod))
 
 	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
 	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,

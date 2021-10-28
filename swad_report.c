@@ -896,7 +896,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    unsigned NumCrs;
    long CrsCod;
 
-   NumCrss = Usr_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
+   NumCrss = Usr_DB_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
    fprintf (Gbl.F.Rep,"<li>");
    fprintf (Gbl.F.Rep,Txt_USER_in_COURSE,
 	    Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);

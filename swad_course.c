@@ -213,7 +213,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 HTM_LI_End ();
 
 	 /***** Get my countries *****/
-	 NumCtys = Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_resCty);
+	 NumCtys = Usr_DB_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_resCty);
 	 for (NumCty = 0;
 	      NumCty < NumCtys;
 	      NumCty++)

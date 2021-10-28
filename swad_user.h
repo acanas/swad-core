@@ -305,17 +305,17 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
 void Usr_FlushCachesUsr (void);
 
-bool Usr_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod);
+bool Usr_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
 bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat);
 bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat);
 
-unsigned Usr_GetNumCrssOfUsr (long UsrCod);
-unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod);
-unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
-unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
+unsigned Usr_DB_GetNumCrssOfUsr (long UsrCod);
+unsigned Usr_DB_GetNumCrssOfUsrNotAccepted (long UsrCod);
+unsigned Usr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
+unsigned Usr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      unsigned OthersRoles);
@@ -364,7 +364,7 @@ bool Usr_CheckIfIBelongToCtr (long CtrCod);
 bool Usr_CheckIfIBelongToDeg (long DegCod);
 bool Usr_CheckIfIBelongToCrs (long CrsCod);
 
-unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res);
+unsigned Usr_DB_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res);
 unsigned Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res);
 unsigned Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res);
 unsigned Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
@@ -373,7 +373,7 @@ void Usr_GetMainDeg (long UsrCod,
 		     char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
 		     Rol_Role_t *MaxRole);
 
-bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
+bool Usr_DB_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
@@ -417,10 +417,10 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs);
 
-long Usr_GetRamdomStdFromCrs (long CrsCod);
-long Usr_GetRamdomStdFromGrp (long GrpCod);
+long Usr_DB_GetRamdomStdFromCrs (long CrsCod);
+long Usr_DB_GetRamdomStdFromGrp (long GrpCod);
 
-unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod);
+unsigned Usr_DB_GetNumTchsCurrentInsInDepartment (long DptCod);
 
 void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
@@ -527,7 +527,7 @@ void Usr_SeeTchClassPhotoPrn (void);
 void Usr_PutSelectorNumColsClassPhoto (void);
 
 void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1]);
-bool Usr_ChkIfUsrCodExists (long UsrCod);
+bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 

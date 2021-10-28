@@ -95,7 +95,7 @@ void Con_ShowConnectedUsrs (void)
    if (Gbl.Usrs.Me.Logged)
      {
       Mnu_ContextMenuBegin ();
-      Log_PutLinkToLastClicks ();	// Show last clicks in real time
+	 Log_PutLinkToLastClicks ();	// Show last clicks in real time
       Mnu_ContextMenuEnd ();
      }
 

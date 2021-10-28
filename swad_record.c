@@ -981,17 +981,17 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
 
-   /* Edit record fields */
-   if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
-      Rec_PutLinkToEditRecordFields ();
+      /* Edit record fields */
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
+	 Rec_PutLinkToEditRecordFields ();
 
-   /* Print view */
-   Frm_BeginForm (ActPrnRecSevStd);
-   Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-      Rec_ShowLinkToPrintPreviewOfRecords ();
-   Frm_EndForm ();
+      /* Print view */
+      Frm_BeginForm (ActPrnRecSevStd);
+      Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+	 Rec_ShowLinkToPrintPreviewOfRecords ();
+      Frm_EndForm ();
 
    Mnu_ContextMenuEnd ();
 

@@ -1914,51 +1914,51 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
 
-      /* Begin form */
-      Frm_BeginForm (ActCalPhoDeg);
-      Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-      Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-      Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-      Usr_PutParamsPrefsAboutUsrList ();
+	 /* Begin form */
+	 Frm_BeginForm (ActCalPhoDeg);
+	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
+	 Usr_PutParamsPrefsAboutUsrList ();
 
-	 HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
-				    The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-				    NULL);
-	    Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
-	 HTM_BUTTON_End ();
+	    HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
+				       The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				       NULL);
+	       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
+	    HTM_BUTTON_End ();
 
-	 /* Selector with all the degrees with students */
-	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "name=\"OthDegCod\"");
-	    for (NumDeg = 0;
-		 NumDeg < Degs.Num;
-		 NumDeg++)
-	      {
-	       /* Get time to compute average photo of this degree */
-	       EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
-	       if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
-		  Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
-			    sizeof (StrEstimatedTimeToComputeAvgPhoto) - 1);
-	       else
-		  Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
-				 EstimatedTimeToComputeAvgPhotoInMicroseconds);
+	    /* Selector with all the degrees with students */
+	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+			      "name=\"OthDegCod\"");
+	       for (NumDeg = 0;
+		    NumDeg < Degs.Num;
+		    NumDeg++)
+		 {
+		  /* Get time to compute average photo of this degree */
+		  EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
+		  if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
+		     Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
+			       sizeof (StrEstimatedTimeToComputeAvgPhoto) - 1);
+		  else
+		     Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
+				    EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
-	       Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
-	       if (Selected)
-		  Disabled = false;
-	       else
-		  // Too recently computed ?
-		  Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
-			     Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
-	       HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,Selected,Disabled,
-			   "%s (%s: %s)",
-			   Degs.Lst[NumDeg].ShrtName,
-			   Txt_time,StrEstimatedTimeToComputeAvgPhoto);
-	      }
-	 HTM_SELECT_End ();
+		  Selected = (Degs.Lst[NumDeg].DegCod == Deg.DegCod);
+		  if (Selected)
+		     Disabled = false;
+		  else
+		     // Too recently computed ?
+		     Disabled = Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
+				Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO;
+		  HTM_OPTION (HTM_Type_LONG,&Degs.Lst[NumDeg].DegCod,Selected,Disabled,
+			      "%s (%s: %s)",
+			      Degs.Lst[NumDeg].ShrtName,
+			      Txt_time,StrEstimatedTimeToComputeAvgPhoto);
+		 }
+	    HTM_SELECT_End ();
 
-      /* End form and contextual menu */
-      Frm_EndForm ();
+	 /* End form and contextual menu */
+	 Frm_EndForm ();
       Mnu_ContextMenuEnd ();
 
       /***** Free list of all the degrees with students *****/

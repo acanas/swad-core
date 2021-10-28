@@ -142,9 +142,9 @@ void Acc_ShowFormMyAccount (void)
      {
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
-      Usr_PutLinkToLogin ();
-      Pwd_PutLinkToSendNewPasswd ();
-      Lan_PutLinkToChangeLanguage ();
+	 Usr_PutLinkToLogin ();
+	 Pwd_PutLinkToSendNewPasswd ();
+	 Lan_PutLinkToChangeLanguage ();
       Mnu_ContextMenuEnd ();
 
       /**** Show form to check if I have an account *****/
@@ -786,7 +786,7 @@ static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
      {
       Str_CreateRandomAlphanumStr (RandomStr,LENGTH_RANDOM_STR);
       Cry_EncryptSHA256Base64 (RandomStr,UsrDat->EnUsrCod);
-      if (!Usr_ChkIfEncryptedUsrCodExists (UsrDat->EnUsrCod))
+      if (!Usr_DB_ChkIfEncryptedUsrCodExists (UsrDat->EnUsrCod))
           break;
      }
    if (NumTry == MAX_TRY)
@@ -923,7 +923,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user;
    extern const char *Txt_Eliminate_user_account;
 
-   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show question and button to remove user account *****/
       /* Begin alert */

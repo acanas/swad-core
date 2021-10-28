@@ -886,18 +886,18 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
       /***** Contextual menu *****/
       Mnu_ContextMenuBegin ();
 
-      /* Open the client email program */
-      HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
-		   " title=\"%s\" class=\"%s\"",
-		   Gbl.Usrs.Me.UsrDat.Email,
-		   Gbl.Hierarchy.Crs.FullName,
-		   Gbl.Usrs.Me.UsrDat.Email,
-		   StrAddresses,
-		   Txt_Create_email_message,
-		   The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-	 Ico_PutIconTextLink ("marker.svg",
-			      Txt_Create_email_message);
-      HTM_A_End ();
+	 /* Open the client email program */
+	 HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
+		      " title=\"%s\" class=\"%s\"",
+		      Gbl.Usrs.Me.UsrDat.Email,
+		      Gbl.Hierarchy.Crs.FullName,
+		      Gbl.Usrs.Me.UsrDat.Email,
+		      StrAddresses,
+		      Txt_Create_email_message,
+		      The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+	    Ico_PutIconTextLink ("marker.svg",
+				 Txt_Create_email_message);
+	 HTM_A_End ();
 
       Mnu_ContextMenuEnd ();
 

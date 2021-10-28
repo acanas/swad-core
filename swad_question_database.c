@@ -59,6 +59,8 @@ const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES] =
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
+#define Qst_MAX_BYTES_QUERY_QUESTIONS (16 * 1024 - 1)
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -104,13 +106,157 @@ void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
   }
 
 /*****************************************************************************/
+/***************** Get several test questions from database ******************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
+                         const struct Qst_Questions *Questions)
+  {
+   extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
+   extern const char *Txt_No_questions_found_matching_your_search_criteria;
+   char *Query = NULL;
+   long LengthQuery;
+   unsigned NumItemInList;
+   const char *Ptr;
+   char TagText[Tag_MAX_BYTES_TAG + 1];
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   Qst_AnswerType_t AnsType;
+   char CrsCodStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   unsigned NumQsts;
+
+   /***** Allocate space for query *****/
+   if ((Query = malloc (Qst_MAX_BYTES_QUERY_QUESTIONS + 1)) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Select questions *****/
+   /* Begin query */
+   Str_Copy (Query,"SELECT tst_questions.QstCod"	// row[0]
+		    " FROM tst_questions",Qst_MAX_BYTES_QUERY_QUESTIONS);
+   if (!Questions->Tags.All)
+      Str_Concat (Query,","
+	                "tst_question_tags,"
+	                "tst_tags",
+	          Qst_MAX_BYTES_QUERY_QUESTIONS);
+
+   Str_Concat (Query," WHERE tst_questions.CrsCod='",
+               Qst_MAX_BYTES_QUERY_QUESTIONS);
+   snprintf (CrsCodStr,sizeof (CrsCodStr),"%ld",Gbl.Hierarchy.Crs.CrsCod);
+   Str_Concat (Query,CrsCodStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
+   Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
+               Qst_MAX_BYTES_QUERY_QUESTIONS);
+   snprintf (LongStr,sizeof (LongStr),"%ld",
+             (long) Gbl.DateRange.TimeUTC[Dat_STR_TIME]);
+   Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
+   Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
+               Qst_MAX_BYTES_QUERY_QUESTIONS);
+   snprintf (LongStr,sizeof (LongStr),"%ld",
+	     (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
+   Str_Concat (Query,LongStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
+   Str_Concat (Query,"')",Qst_MAX_BYTES_QUERY_QUESTIONS);
+
+   /* Add the tags selected */
+   if (!Questions->Tags.All)
+     {
+      Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
+	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
+                        " AND tst_tags.CrsCod='",
+                  Qst_MAX_BYTES_QUERY_QUESTIONS);
+      Str_Concat (Query,CrsCodStr,Qst_MAX_BYTES_QUERY_QUESTIONS);
+      Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
+      LengthQuery = strlen (Query);
+      NumItemInList = 0;
+      Ptr = Questions->Tags.List;
+      while (*Ptr)
+        {
+         Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
+         LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
+         if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
+            Err_QuerySizeExceededExit ();
+         Str_Concat (Query,
+                     NumItemInList ? " OR tst_tags.TagTxt='" :
+                                     " AND (tst_tags.TagTxt='",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,TagText,Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
+         NumItemInList++;
+        }
+      Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
+     }
+
+   /* Add the types of answer selected */
+   if (!Questions->AnswerTypes.All)
+     {
+      LengthQuery = strlen (Query);
+      NumItemInList = 0;
+      Ptr = Questions->AnswerTypes.List;
+      while (*Ptr)
+        {
+         Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
+	 AnsType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+         LengthQuery = LengthQuery + 35 + strlen (Qst_DB_StrAnswerTypes[AnsType]) + 1;
+         if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 256)
+            Err_QuerySizeExceededExit ();
+         Str_Concat (Query,
+                     NumItemInList ? " OR tst_questions.AnsType='" :
+                                     " AND (tst_questions.AnsType='",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,Qst_DB_StrAnswerTypes[AnsType],Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
+         NumItemInList++;
+        }
+      Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
+     }
+
+   /* End the query */
+   Str_Concat (Query," GROUP BY tst_questions.QstCod",Qst_MAX_BYTES_QUERY_QUESTIONS);
+
+   switch (Questions->SelectedOrder)
+     {
+      case Qst_ORDER_STEM:
+         Str_Concat (Query," ORDER BY tst_questions.Stem",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         break;
+      case Qst_ORDER_NUM_HITS:
+         Str_Concat (Query," ORDER BY tst_questions.NumHits DESC,"
+				     "tst_questions.Stem",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         break;
+      case Qst_ORDER_AVERAGE_SCORE:
+         Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
+				     "tst_questions.NumHits DESC,"
+				     "tst_questions.Stem",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         break;
+      case Qst_ORDER_NUM_HITS_NOT_BLANK:
+         Str_Concat (Query," ORDER BY tst_questions.NumHitsNotBlank DESC,"
+				     "tst_questions.Stem",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         break;
+      case Qst_ORDER_AVERAGE_SCORE_NOT_BLANK:
+         Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
+				     "tst_questions.NumHitsNotBlank DESC,"
+				     "tst_questions.Stem",
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         break;
+     }
+
+   /* Make the query */
+   if ((NumQsts = (unsigned)
+        DB_QuerySELECT (mysql_res,"can not get questions",
+		        "%s",
+		        Query)) == 0)
+      Ale_ShowAlert (Ale_INFO,Txt_No_questions_found_matching_your_search_criteria);
+
+   return NumQsts;
+  }
+
+/*****************************************************************************/
 /******************* Get questions for a new test print **********************/
 /*****************************************************************************/
 
-#define Tst_MAX_BYTES_QUERY_QUESTIONS (16 * 1024 - 1)
-
-unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
-                                             const struct Qst_Questions *Questions)
+unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
+                                        const struct Qst_Questions *Questions)
   {
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
    char *Query = NULL;
@@ -123,7 +269,7 @@ unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
    char StrNumQsts[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (Tst_MAX_BYTES_QUERY_QUESTIONS + 1)) == NULL)
+   if ((Query = malloc (Qst_MAX_BYTES_QUERY_QUESTIONS + 1)) == NULL)
       Err_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
@@ -131,7 +277,7 @@ unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
    // Reject questions with any tag hidden
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions
-   snprintf (Query,Tst_MAX_BYTES_QUERY_QUESTIONS + 1,
+   snprintf (Query,Qst_MAX_BYTES_QUERY_QUESTIONS + 1,
 	     "SELECT DISTINCTROW tst_questions.QstCod,"		// row[0]
                                 "tst_questions.AnsType,"	// row[1]
                                 "tst_questions.Shuffle"		// row[2]
@@ -160,17 +306,17 @@ unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tag_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
-         if (LengthQuery > Tst_MAX_BYTES_QUERY_QUESTIONS - 128)
+         if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)
             Err_QuerySizeExceededExit ();
          Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
-                     Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,TagText,Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_QUESTIONS);
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,TagText,Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
          NumItemInList++;
         }
-      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_QUESTIONS);
+      Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
      }
 
    /* Add answer types selected */
@@ -184,23 +330,23 @@ unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tag_MAX_BYTES_TAG);
 	 AnswerType = Qst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Qst_DB_StrAnswerTypes[AnswerType]) + 1;
-         if (LengthQuery > Tst_MAX_BYTES_QUERY_QUESTIONS - 128)
+         if (LengthQuery > Qst_MAX_BYTES_QUERY_QUESTIONS - 128)
             Err_QuerySizeExceededExit ();
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
-                     Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,Qst_DB_StrAnswerTypes[AnswerType],Tst_MAX_BYTES_QUERY_QUESTIONS);
-         Str_Concat (Query,"'",Tst_MAX_BYTES_QUERY_QUESTIONS);
+                     Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,Qst_DB_StrAnswerTypes[AnswerType],Qst_MAX_BYTES_QUERY_QUESTIONS);
+         Str_Concat (Query,"'",Qst_MAX_BYTES_QUERY_QUESTIONS);
          NumItemInList++;
         }
-      Str_Concat (Query,")",Tst_MAX_BYTES_QUERY_QUESTIONS);
+      Str_Concat (Query,")",Qst_MAX_BYTES_QUERY_QUESTIONS);
      }
 
    /* End query */
-   Str_Concat (Query," ORDER BY RAND() LIMIT ",Tst_MAX_BYTES_QUERY_QUESTIONS);
+   Str_Concat (Query," ORDER BY RAND() LIMIT ",Qst_MAX_BYTES_QUERY_QUESTIONS);
    snprintf (StrNumQsts,sizeof (StrNumQsts),"%u",Questions->NumQsts);
-   Str_Concat (Query,StrNumQsts,Tst_MAX_BYTES_QUERY_QUESTIONS);
+   Str_Concat (Query,StrNumQsts,Qst_MAX_BYTES_QUERY_QUESTIONS);
 /*
    if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
@@ -757,6 +903,63 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
   }
 
 /*****************************************************************************/
+/****************** Get data of a question from database *********************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetQstData (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get a question",
+		   "SELECT UNIX_TIMESTAMP(EditTime),"	// row[0]
+			  "AnsType,"			// row[1]
+			  "Shuffle,"			// row[2]
+			  "Stem,"			// row[3]
+			  "Feedback,"			// row[4]
+			  "MedCod,"			// row[5]
+			  "NumHits,"			// row[6]
+			  "NumHitsNotBlank,"		// row[7]
+			  "Score"			// row[8]
+		    " FROM tst_questions"
+		   " WHERE QstCod=%ld"
+		     " AND CrsCod=%ld",	// Extra check
+		   QstCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*************** Get answer type of a question from database *****************/
+/*****************************************************************************/
+
+Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod)
+  {
+   char StrAnsTypeDB[256];
+
+   /***** Get type of answer from database *****/
+   DB_QuerySELECTString (StrAnsTypeDB,sizeof (StrAnsTypeDB) - 1,
+                         "can not get the type of a question",
+		         "SELECT AnsType"
+		          " FROM tst_questions"
+		         " WHERE QstCod=%ld",
+		         QstCod);
+   return Qst_ConvertFromStrAnsTypDBToAnsTyp (StrAnsTypeDB);
+  }
+
+/*****************************************************************************/
+/******** Get media code associated with the stem of a test question *********/
+/*****************************************************************************/
+
+long Qst_DB_GetQstMedCod (long CrsCod,long QstCod)
+  {
+   return DB_QuerySELECTCode ("can not get media",
+			      "SELECT MedCod"
+			       " FROM tst_questions"
+			      " WHERE QstCod=%ld"
+				" AND CrsCod=%ld",	// Extra check
+			      QstCod,
+			      CrsCod);
+  }
+
+/*****************************************************************************/
 /************ Get number of answers of a question from database **************/
 /*****************************************************************************/
 
@@ -814,4 +1017,64 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
       Err_WrongAnswerExit ();
 
    return NumOptions;
+  }
+
+/*****************************************************************************/
+/*********** Get suffled/not-shuffled answers indexes of question ************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get questions of a game",
+		   "SELECT AnsInd"	// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY %s",
+		   Question->QstCod,
+		   Question->Answer.Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
+					      "AnsInd");
+  }
+
+/*****************************************************************************/
+/********* Get media code associated to an answer of a test question *********/
+/*****************************************************************************/
+
+long Qst_DB_GetAnswerMedCod (long QstCod,unsigned AnsInd)
+  {
+   return DB_QuerySELECTCode ("can not get media",
+			      "SELECT MedCod"
+			       " FROM tst_answers"
+			      " WHERE QstCod=%ld"
+				" AND AnsInd=%u",
+			      QstCod,
+			      AnsInd);
+  }
+
+/*****************************************************************************/
+/********************** Remove a question from database **********************/
+/*****************************************************************************/
+
+void Qst_DB_RemoveQst (long CrsCod,long QstCod)
+  {
+   DB_QueryDELETE ("can not remove a question",
+		   "DELETE FROM tst_questions"
+		   " WHERE QstCod=%ld"
+		     " AND CrsCod=%ld",
+		   QstCod,
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove answers from a test question ********************/
+/*****************************************************************************/
+
+void Qst_DB_RemAnsFromQst (long QstCod)
+  {
+   /***** Remove answers *****/
+   DB_QueryDELETE ("can not remove the answers of a question",
+		   "DELETE FROM tst_answers"
+		   " WHERE QstCod=%ld",
+		   QstCod);
   }

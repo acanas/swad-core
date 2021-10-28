@@ -413,11 +413,11 @@ static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages 
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-   Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
-					  Msg_PutParamsShowMorePotentialRecipients,Messages,
-					  "users.svg",
-					  Txt_Show_more_recipients,
-					  "CopyMessageToHiddenFields();");	// Shor more potential recipients
+      Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
+					     Msg_PutParamsShowMorePotentialRecipients,Messages,
+					     "users.svg",
+					     Txt_Show_more_recipients,
+					     "CopyMessageToHiddenFields();");	// Shor more potential recipients
    Mnu_ContextMenuEnd ();
   }
 

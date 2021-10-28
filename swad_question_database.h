@@ -51,7 +51,9 @@
 
 void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score);
 
-unsigned Qst_DB_GetQuestionsForNewTestPrint (MYSQL_RES **mysql_res,
+unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
+                         const struct Qst_Questions *Questions);
+unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
                                         const struct Qst_Questions *Questions);
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                             HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
@@ -60,8 +62,18 @@ unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
 unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
                                              Qst_AnswerType_t AnsType);
 
+unsigned Qst_DB_GetQstData (MYSQL_RES **mysql_res,long QstCod);
+Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);
+long Qst_DB_GetQstMedCod (long CrsCod,long QstCod);
+
 unsigned Qst_DB_GetNumAnswersQst (long QstCod);
 unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);
 unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod);
+unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
+                                           const struct Qst_Question *Question);
+long Qst_DB_GetAnswerMedCod (long QstCod,unsigned AnsInd);
+
+void Qst_DB_RemoveQst (long CrsCod,long QstCod);
+void Qst_DB_RemAnsFromQst (long QstCod);
 
 #endif

@@ -580,31 +580,31 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      {
       Mnu_ContextMenuBegin ();
 
-      switch (Role)
-	{
-	 case Rol_STD:
-            /* Put link to go to admin student */
-            Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+	 switch (Role)
+	   {
+	    case Rol_STD:
+	       /* Put link to go to admin student */
+	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
-            /* Put link to remove all the students in the current course */
-            if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
-				      1 << Rol_STD))	// This course has students
-               Enr_PutLinkToRemAllStdsThisCrs ();
-	    break;
-	 case Rol_NET:
-            /* Put link to go to admin teacher */
-            Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
-	    break;
-	 case Rol_TCH:
-            /* Put link to go to admin teacher */
-            Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
-	    break;
-	 default:
-	    NextAction = ActUnk;
-	    Title = NULL;
-	    Err_WrongRoleExit ();
-	    break;
-	}
+	       /* Put link to remove all the students in the current course */
+	       if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+					 1 << Rol_STD))	// This course has students
+		  Enr_PutLinkToRemAllStdsThisCrs ();
+	       break;
+	    case Rol_NET:
+	       /* Put link to go to admin teacher */
+	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+	       break;
+	    case Rol_TCH:
+	       /* Put link to go to admin teacher */
+	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+	       break;
+	    default:
+	       NextAction = ActUnk;
+	       Title = NULL;
+	       Err_WrongRoleExit ();
+	       break;
+	   }
 
       Mnu_ContextMenuEnd ();
      }
@@ -1368,20 +1368,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /***** Check if the other user is administrator of the current institution *****/
-      UsrIsInsAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+      UsrIsInsAdmin = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 					   HieLvl_INS,
 					   Gbl.Hierarchy.Ins.InsCod);
 
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
 	 /***** Check if the other user is administrator of the current center *****/
-	 UsrIsCtrAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	 UsrIsCtrAdmin = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 					      HieLvl_CTR,
 					      Gbl.Hierarchy.Ctr.CtrCod);
 
 	 if (Gbl.Hierarchy.Deg.DegCod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
-	    UsrIsDegAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	    UsrIsDegAdmin = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 						 HieLvl_DEG,
 						 Gbl.Hierarchy.Deg.DegCod);
 	}
@@ -2651,7 +2651,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    extern const char *Txt_THE_USER_X_already_exists_in_Y;
 
    /***** If user exists... *****/
-   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+   if (Usr_DB_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       /***** Show form to edit user *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
