@@ -270,6 +270,34 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
   }
 
 /*****************************************************************************/
+/******** Remove associations between questions and tags in a course *********/
+/*****************************************************************************/
+
+void Tag_DB_RemTagsInQstsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove tags associated"
+		   " to questions in a course",
+		   "DELETE FROM tst_question_tags"
+	           " USING tst_questions,"
+	                  "tst_question_tags"
+                   " WHERE tst_questions.CrsCod=%ld"
+                     " AND tst_questions.QstCod=tst_question_tags.QstCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/**************************** Remove tags in a course ************************/
+/*****************************************************************************/
+
+void Tag_DB_RemTagsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove tags of questions in a course",
+		   "DELETE FROM tst_tags"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /************************** Remove tags from a question **********************/
 /*****************************************************************************/
 

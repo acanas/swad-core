@@ -25,20 +25,12 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_database.h"
 #include "swad_error.h"
-// #include "swad_exam_set.h"
-// #include "swad_figure.h"
-// #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_question.h"
-// #include "swad_question_import.h"
-// #include "swad_tag_database.h"
-// #include "swad_test.h"
 #include "swad_test_print.h"
 
 /*****************************************************************************/
@@ -1038,10 +1030,76 @@ unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/****** Get media codes associated to stems of test questions in course ******/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT MedCod"	// row[0]
+		    " FROM tst_questions"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/***** Get media codes associated to answers of test questions in course *****/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT tst_answers.MedCod"
+		    " FROM tst_questions,"
+			  "tst_answers"
+		   " WHERE tst_questions.CrsCod=%ld"
+		     " AND tst_questions.QstCod=tst_answers.QstCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************** Get media code associated to stem of a question **************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT MedCod"
+		    " FROM tst_questions"
+		   " WHERE QstCod=%ld"
+		     " AND CrsCod=%ld",	// Extra check
+		   QstCod,
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************** Get media code associated to stem of a question **************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get media",
+		   "SELECT tst_answers.MedCod"
+		    " FROM tst_answers,"
+			  "tst_questions"
+		   " WHERE tst_answers.QstCod=%ld"
+		     " AND tst_answers.QstCod=tst_questions.QstCod"
+		     " AND tst_questions.CrsCod=%ld"	// Extra check
+		     " AND tst_questions.QstCod=%ld",	// Extra check
+		   QstCod,
+		   CrsCod,
+		   QstCod);
+  }
+
+/*****************************************************************************/
 /********* Get media code associated to an answer of a test question *********/
 /*****************************************************************************/
 
-long Qst_DB_GetAnswerMedCod (long QstCod,unsigned AnsInd)
+long Qst_DB_GetMedCodFromAnsOfQst (long QstCod,unsigned AnsInd)
   {
    return DB_QuerySELECTCode ("can not get media",
 			      "SELECT MedCod"
@@ -1050,6 +1108,18 @@ long Qst_DB_GetAnswerMedCod (long QstCod,unsigned AnsInd)
 				" AND AnsInd=%u",
 			      QstCod,
 			      AnsInd);
+  }
+
+/*****************************************************************************/
+/********************* Remove all questions in a course **********************/
+/*****************************************************************************/
+
+void Qst_DB_RemoveQstsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove questions in a course",
+		   "DELETE FROM tst_questions"
+		   " WHERE CrsCod=%ld",
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -1067,12 +1137,26 @@ void Qst_DB_RemoveQst (long CrsCod,long QstCod)
   }
 
 /*****************************************************************************/
+/*************** Remove answers from all questions in a course ****************/
+/*****************************************************************************/
+
+void Qst_DB_RemAnssFromQstsInCrs (long CrsCod)
+  {
+   DB_QueryDELETE ("can not remove answers of tests of a course",
+		   "DELETE FROM tst_answers"
+		   " USING tst_questions,"
+		          "tst_answers"
+                   " WHERE tst_questions.CrsCod=%ld"
+                     " AND tst_questions.QstCod=tst_answers.QstCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /******************** Remove answers from a test question ********************/
 /*****************************************************************************/
 
 void Qst_DB_RemAnsFromQst (long QstCod)
   {
-   /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM tst_answers"
 		   " WHERE QstCod=%ld",

@@ -27,16 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stdbool.h>		// For boolean type
-// #include <time.h>		// For time_t
-
-// #include "swad_exam.h"
-// #include "swad_game.h"
-// #include "swad_question_type.h"
-// #include "swad_media.h"
-// #include "swad_string.h"
-// #include "swad_tag.h"
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -71,9 +61,15 @@ unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle
 unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod);
 unsigned Qst_DB_GetShuffledAnswersIndexes (MYSQL_RES **mysql_res,
                                            const struct Qst_Question *Question);
-long Qst_DB_GetAnswerMedCod (long QstCod,unsigned AnsInd);
+unsigned Qst_DB_GetMedCodsFromStemsOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Qst_DB_GetMedCodsFromAnssOfQstsInCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Qst_DB_GetMedCodFromStemOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod);
+unsigned Qst_DB_GetMedCodsFromAnssOfQst (MYSQL_RES **mysql_res,long CrsCod,long QstCod);
+long Qst_DB_GetMedCodFromAnsOfQst (long QstCod,unsigned AnsInd);
 
+void Qst_DB_RemoveQstsInCrs (long CrsCod);
 void Qst_DB_RemoveQst (long CrsCod,long QstCod);
+void Qst_DB_RemAnssFromQstsInCrs (long CrsCod);
 void Qst_DB_RemAnsFromQst (long QstCod);
 
 #endif

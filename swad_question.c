@@ -2610,7 +2610,7 @@ long Qst_GetMedCodFromDB (long CrsCod,long QstCod,int NumOpt)
       return Qst_DB_GetQstMedCod (CrsCod,QstCod);
    else
       // Get media associated to answer
-      return Qst_DB_GetAnswerMedCod (QstCod,(unsigned) NumOpt);
+      return Qst_DB_GetMedCodFromAnsOfQst (QstCod,(unsigned) NumOpt);
   }
 
 /*****************************************************************************/
@@ -3698,41 +3698,21 @@ unsigned Qst_CountNumQuestionsInList (const char *ListQuestions)
 
 void Qst_RemoveCrsQsts (long CrsCod)
   {
-   /***** Remove associations between test questions
-          and test tags in the course *****/
-   DB_QueryDELETE ("can not remove tags associated"
-		   " to questions of tests of a course",
-		   "DELETE FROM tst_question_tags"
-	           " USING tst_questions,"
-	                  "tst_question_tags"
-                   " WHERE tst_questions.CrsCod=%ld"
-                     " AND tst_questions.QstCod=tst_question_tags.QstCod",
-		   CrsCod);
+   /***** Remove associations between questions and tags in the course *****/
+   Tag_DB_RemTagsInQstsInCrs (CrsCod);
 
    /***** Remove test tags in the course *****/
-   DB_QueryDELETE ("can not remove tags of test of a course",
-		   "DELETE FROM tst_tags"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Tag_DB_RemTagsInCrs (CrsCod);
 
    /***** Remove media associated to test questions in the course *****/
    Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
    Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
 
    /***** Remove test answers in the course *****/
-   DB_QueryDELETE ("can not remove answers of tests of a course",
-		   "DELETE FROM tst_answers"
-		   " USING tst_questions,"
-		          "tst_answers"
-                   " WHERE tst_questions.CrsCod=%ld"
-                     " AND tst_questions.QstCod=tst_answers.QstCod",
-		   CrsCod);
+   Qst_DB_RemAnssFromQstsInCrs (CrsCod);
 
    /***** Remove test questions in the course *****/
-   DB_QueryDELETE ("can not remove test questions of a course",
-		   "DELETE FROM tst_questions"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Qst_DB_RemoveQstsInCrs (CrsCod);
   }
 
 /*****************************************************************************/
@@ -3745,14 +3725,7 @@ void Qst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
    unsigned NumMedia;
 
    /***** Get media code associated to stem of test question from database *****/
-   NumMedia = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT MedCod"
-		    " FROM tst_questions"
-		   " WHERE QstCod=%ld"
-		     " AND CrsCod=%ld",	// Extra check
-		   QstCod,
-		   CrsCod);
+   NumMedia = Qst_DB_GetMedCodFromStemOfQst (&mysql_res,CrsCod,QstCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -3771,18 +3744,7 @@ void Qst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
    unsigned NumMedia;
 
    /***** Get media codes associated to answers of test questions from database *****/
-   NumMedia = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT tst_answers.MedCod"
-		    " FROM tst_answers,"
-			  "tst_questions"
-		   " WHERE tst_answers.QstCod=%ld"
-		     " AND tst_answers.QstCod=tst_questions.QstCod"
-		     " AND tst_questions.CrsCod=%ld"	// Extra check
-		     " AND tst_questions.QstCod=%ld",	// Extra check
-		   QstCod,
-		   CrsCod,
-		   QstCod);
+   NumMedia = Qst_DB_GetMedCodsFromAnssOfQst (&mysql_res,CrsCod,QstCod);
 
    /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -3801,12 +3763,7 @@ void Qst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
    unsigned NumMedia;
 
    /***** Get media codes associated to stems of test questions from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT MedCod"	// row[0]
-			       " FROM tst_questions"
-			      " WHERE CrsCod=%ld",
-			      CrsCod);
+   NumMedia = Qst_DB_GetMedCodsFromStemsOfQstsInCrs (&mysql_res,CrsCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
@@ -3825,14 +3782,7 @@ void Qst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
    unsigned NumMedia;
 
    /***** Get names of media files associated to answers of test questions from database *****/
-   NumMedia = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get media",
-		   "SELECT tst_answers.MedCod"
-		    " FROM tst_questions,"
-			  "tst_answers"
-		   " WHERE tst_questions.CrsCod=%ld"
-		     " AND tst_questions.QstCod=tst_answers.QstCod",
-		   CrsCod);
+   NumMedia = Qst_DB_GetMedCodsFromAnssOfQstsInCrs (&mysql_res,CrsCod);
 
    /***** Go over result removing media files *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);

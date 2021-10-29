@@ -29,14 +29,6 @@
 
 #include <mysql/mysql.h>	// To access MySQL databases
 
-// #include "swad_exam.h"
-// #include "swad_game.h"
-// #include "swad_media.h"
-// #include "swad_question.h"
-// #include "swad_question_type.h"
-// #include "swad_test_config.h"
-// #include "swad_test_print.h"
-
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
