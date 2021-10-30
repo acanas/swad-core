@@ -1013,7 +1013,7 @@ void Deg_PutIconToViewDegrees (void)
   }
 
 /*****************************************************************************/
-/********** Create a list with all the degrees that have students ************/
+/************ Create a list with all degrees that have students **************/
 /*****************************************************************************/
 
 void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
@@ -1350,7 +1350,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Remove all the threads and posts in forums of the degree *****/
+   /***** Remove all threads and posts in forums of the degree *****/
    For_DB_RemoveForums (HieLvl_DEG,DegCod);
 
    /***** Remove surveys of the degree *****/
@@ -1375,7 +1375,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /***** Flush caches *****/
    Crs_FlushCacheNumCrssInDeg ();
 
-   /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
+   /***** Delete all degrees in stats table not present in degrees table *****/
    Pho_DB_RemoveObsoleteStatDegrees ();
   }
 

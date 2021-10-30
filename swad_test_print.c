@@ -397,7 +397,7 @@ static void TstPrn_WriteTF_AnsToFill (const struct TstPrn_PrintedQuestion *Print
    extern const char *Txt_TF_QST[2];
 
    /***** Write selector for the answer *****/
-   /* Initially user has not answered the question ==> initially all the answers will be blank.
+   /* Initially user has not answered the question ==> initially all answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -442,7 +442,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	 HTM_TR_Begin (NULL);
 
 	    /***** Write selectors and letter of this option *****/
-	    /* Initially user has not answered the question ==> initially all the answers will be blank.
+	    /* Initially user has not answered the question ==> initially all answers will be blank.
 	       If the user does not confirm the submission of their exam ==>
 	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
 	    HTM_TD_Begin ("class=\"LT\"");

@@ -79,7 +79,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			125
 #define Cfg_ABOUT_LOGO_HEIGHT			40
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -116,7 +116,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
 
 /* Google Analytics without cookies.
  * This code comes from http://stackoverflow.com/a/19995629
@@ -174,7 +174,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -229,7 +229,7 @@
 #define Cfg_ABOUT_LOGO_WIDTH			32
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -406,10 +406,10 @@
 #define Cfg_PATH_ICON_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_PUBLIC_ICON
 #define Cfg_URL_ICON_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_PUBLIC_ICON
 
-#define Cfg_ICON_FOLDER_THEMES			"theme"		// Directory with all the images for each theme
+#define Cfg_ICON_FOLDER_THEMES			"theme"		// Directory with all images for each theme
 #define Cfg_URL_ICON_THEMES_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_THEMES
 
-#define Cfg_ICON_FOLDER_SETS			"iconset"	// Directory with all the icons for each icon set
+#define Cfg_ICON_FOLDER_SETS			"iconset"	// Directory with all icons for each icon set
 #define Cfg_PATH_ICON_SETS_PUBLIC		Cfg_PATH_ICON_PUBLIC "/" Cfg_ICON_FOLDER_SETS
 #define Cfg_URL_ICON_SETS_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_SETS
 

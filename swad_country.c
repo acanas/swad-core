@@ -187,7 +187,7 @@ void Cty_SeeCtyWithPendingInss (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the countries **************************/
+/****************************** List all countries ***************************/
 /*****************************************************************************/
 
 void Cty_ListCountries (void)
@@ -197,7 +197,7 @@ void Cty_ListCountries (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the countries **************************/
+/****************************** List all countries ***************************/
 /*****************************************************************************/
 
 void Cty_ListCountries1 (void)
@@ -228,7 +228,7 @@ void Cty_ListCountries2 (void)
       /***** Write heading *****/
       Cty_PutHeadCountriesForSeeing (true);	// Order selectable
 
-      /***** Write all the countries and their number of users and institutions *****/
+      /***** Write all countries and their number of users and institutions *****/
       for (NumCty = 0;
 	   NumCty < Gbl.Hierarchy.Ctys.Num;
 	   NumCty++)
@@ -610,7 +610,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 		Txt_Users_NO_HTML,
 		Txt_Institutions_NO_HTML);
 
-      /***** Write all the countries and their number of users and institutions *****/
+      /***** Write all countries and their number of users and institutions *****/
       for (NumCty = 0;
 	   NumCty < Gbl.Hierarchy.Ctys.Num;
 	   NumCty++)
@@ -1043,7 +1043,7 @@ void Cty_FreeListCountries (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the countries **************************/
+/***************************** List all countries ****************************/
 /*****************************************************************************/
 
 static void Cty_ListCountriesForEdition (void)

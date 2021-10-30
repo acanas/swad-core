@@ -409,7 +409,7 @@ void Usr_UsrDataDestructor (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/************* Get all the user's data from a given user's code **************/
+/*************** Get all user's data from a given user's code ****************/
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold user's code
 
@@ -2407,7 +2407,7 @@ unsigned Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
-/************** Get all the courses of a user from database ******************/
+/**************** Get all courses of a user from database ********************/
 /*****************************************************************************/
 // Returns the number of rows of the result
 
@@ -4642,7 +4642,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                Str_Concat (*Query," OR ",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             else
                Str_Concat (*Query," AND (",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
-            /* Select all the students of the course who don't belong to any group of type GrpTypCod */
+            /* Select all students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (*Query,"crs_users.UsrCod NOT IN"
 			       " (SELECT DISTINCT grp_users.UsrCod"
 			          " FROM grp_groups,"
@@ -5528,7 +5528,7 @@ static void Usr_GetGstsLst (HieLvl_Level_t Scope)
   }
 
 /*****************************************************************************/
-/*********** Get the user's codes of all the students of a degree ************/
+/************** Get the user's codes of all students of a degree *************/
 /*****************************************************************************/
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
@@ -7593,7 +7593,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	    Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role,
 				     &Gbl.Usrs.Selected);
 
-	    /* Write all the courses this user belongs to */
+	    /* Write all courses this user belongs to */
 	    if (Role != Rol_GST &&				// Guests do not belong to any course
 		Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
 	      {

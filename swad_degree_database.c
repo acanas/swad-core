@@ -89,7 +89,7 @@ void Deg_DB_CreateDegree (struct Deg_Degree *Deg,unsigned Status)
   }
 
 /*****************************************************************************/
-/**************** Create a list with all the degree types ********************/
+/****************** Create a list with all degree types **********************/
 /*****************************************************************************/
 
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,

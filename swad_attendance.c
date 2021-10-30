@@ -186,7 +186,7 @@ static void Att_ResetEvents (struct Att_Events *Events)
   }
 
 /*****************************************************************************/
-/********************** List all the attendance events ***********************/
+/************************ List all attendance events *************************/
 /*****************************************************************************/
 
 void Att_SeeAttEvents (void)
@@ -204,12 +204,12 @@ void Att_SeeAttEvents (void)
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (&Events,Att_NEWEST_FIRST);
 
-   /***** Show all the attendance events *****/
+   /***** Show all attendance events *****/
    Att_ShowAllAttEvents (&Events);
   }
 
 /*****************************************************************************/
-/********************** Show all the attendance events ***********************/
+/************************* Show all attendance events ************************/
 /*****************************************************************************/
 
 static void Att_ShowAllAttEvents (struct Att_Events *Events)
@@ -292,7 +292,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 
 	    HTM_TR_End ();
 
-	    /***** Write all the attendance events *****/
+	    /***** Write all attendance events *****/
 	    for (NumAttEvent  = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
 		 NumAttEvent <= Pagination.LastItemVisible;
 		 NumAttEvent++)
@@ -909,7 +909,7 @@ void Att_RemoveAttEventFromDB (long AttCod)
    /***** Remove users registered in the attendance event *****/
    Att_DB_RemoveAllUsrsFromAnAttEvent (AttCod);
 
-   /***** Remove all the groups of this attendance event *****/
+   /***** Remove all groups of this attendance event *****/
    Att_DB_RemoveGrpsAssociatedToAnAttEvent (AttCod);
 
    /***** Remove attendance event *****/
@@ -1397,7 +1397,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct Att_Event *Ev
   }
 
 /*****************************************************************************/
-/*************** Remove all the attendance events of a course ****************/
+/***************** Remove all attendance events of a course ******************/
 /*****************************************************************************/
 
 void Att_RemoveCrsAttEvents (long CrsCod)
@@ -1416,7 +1416,7 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 /********************* Get number of attendance events ***********************/
 /*****************************************************************************/
 // Returns the number of attendance events
-// in this location (all the platform, current degree or current course)
+// in this location (all the platform, the current degree or the current course)
 
 unsigned Att_GetNumAttEvents (HieLvl_Level_t Scope,unsigned *NumNotif)
   {
@@ -1885,7 +1885,8 @@ static void Att_PutParamsCodGrps (long AttCod)
       free (GrpCods);
      }
    else
-      /***** Write the boolean parameter that indicates if all the groups must be listed *****/
+      /***** Write the boolean parameter that indicates
+             if all groups should be listed *****/
       Par_PutHiddenParamChar ("AllGroups",'Y');
 
    /***** Free structure that stores the query result *****/

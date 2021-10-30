@@ -2846,7 +2846,7 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #elif L==2	// de
 	"Median aller Fotos"
 #elif L==3	// en
-	"median of all the photos"
+	"median of all photos"
 #elif L==4	// es
 	"mediana de todas las fotos"
 #elif L==5	// fr
@@ -2867,7 +2867,7 @@ const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES] =
 #elif L==2	// de
 	"arithmetischer Mittelwert aller Fotos"
 #elif L==3	// en
-	"arithmetic mean of all the photos"
+	"arithmetic mean of all photos"
 #elif L==4	// es
 	"media aritm&eacute;tica de todas las fotos"
 #elif L==5	// fr
@@ -9292,14 +9292,14 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
-	" and also <strong>all the works submitted by them in this course,"
+	" and also <strong>all works submitted by them in this course,"
 	" their record cards for this course,"
 	" and their enrolment in groups of this course will be removed.</strong>.";	// Need Übersetzung
 #elif L==3	// en
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
-	" and also <strong>all the works submitted by them in this course,"
+	" and also <strong>all works submitted by them in this course,"
 	" their record cards for this course,"
 	" and their enrolment in groups of this course will be removed.</strong>.";
 #elif L==4	// es
@@ -9313,7 +9313,7 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
 	" they will no longer enroled in this course,"
-	" and also <strong>all the works submitted by them in this course,"
+	" and also <strong>all works submitted by them in this course,"
 	" their record cards for this course,"
 	" and their enrolment in groups of this course will be removed.</strong>.";	// Besoin de traduction
 #elif L==6	// gn

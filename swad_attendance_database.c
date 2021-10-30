@@ -328,12 +328,12 @@ unsigned Att_DB_GetGroupsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod)
   }
 
 /*****************************************************************************/
-/************* Remove one group from all the attendance events ***************/
+/*************** Remove one group from all attendance events *****************/
 /*****************************************************************************/
 
 void Att_DB_RemoveGroup (long GrpCod)
   {
-   /***** Remove group from all the attendance events *****/
+   /***** Remove group from all attendance events *****/
    DB_QueryDELETE ("can not remove group from the associations"
 	           " between attendance events and groups",
 		   "DELETE FROM att_groups"
@@ -342,12 +342,12 @@ void Att_DB_RemoveGroup (long GrpCod)
   }
 
 /*****************************************************************************/
-/******** Remove groups of one type from all the attendance events ***********/
+/********** Remove groups of one type from all attendance events *************/
 /*****************************************************************************/
 
 void Att_DB_RemoveGroupsOfType (long GrpTypCod)
   {
-   /***** Remove group from all the attendance events *****/
+   /***** Remove group from all attendance events *****/
    DB_QueryDELETE ("can not remove groups of a type from the associations"
 		   " between attendance events and groups",
 		   "DELETE FROM att_groups"
@@ -530,7 +530,7 @@ void Att_DB_RemoveAllUsrsFromAnAttEvent (long AttCod)
   }
 
 /*****************************************************************************/
-/* Remove one user from all the attendance events where he/she is registered */
+/*** Remove one user from all attendance events where he/she is registered ***/
 /*****************************************************************************/
 
 void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod)
@@ -542,7 +542,7 @@ void Att_DB_RemoveUsrFromAllAttEvents (long UsrCod)
   }
 
 /*****************************************************************************/
-/*********** Remove one student from all the attendance events ***************/
+/************* Remove one student from all attendance events *****************/
 /*****************************************************************************/
 
 void Att_DB_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
@@ -632,7 +632,7 @@ unsigned Att_DB_GetNumAttEventsInCrs (long CrsCod)
 /*************** Get number of courses with attendance events ****************/
 /*****************************************************************************/
 // Returns the number of courses with attendance events
-// in this location (all the platform, current degree or current course)
+// in this location (all the platform, the current degree or the current course)
 
 unsigned Att_DB_GetNumCoursesWithAttEvents (HieLvl_Level_t Scope)
   {

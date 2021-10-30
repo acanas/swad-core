@@ -409,7 +409,7 @@ void Agd_ShowUsrAgenda (void)
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
 
-	    /***** Show all the visible events in the user's agenda *****/
+	    /***** Show all visible events in the user's agenda *****/
 	    Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
 
 	 /***** End box *****/
@@ -463,7 +463,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	       /***** Show the current events in the user's agenda *****/
 	       Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
 
-	       /***** Show all the visible events in the user's agenda *****/
+	       /***** Show all visible events in the user's agenda *****/
 	       Agd_ShowEvents (&Agenda,Agd_ANOTHER_AGENDA);
 
 	    /***** End box *****/
@@ -524,8 +524,8 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
 	 /***** Table head *****/
 	 Agd_WriteHeaderListEvents (Agenda,AgendaType);
 
-	 /***** Write all the events *****/
-	 for (NumEvent = Pagination.FirstItemVisible;
+	 /***** Write all events *****/
+	 for (NumEvent  = Pagination.FirstItemVisible;
 	      NumEvent <= Pagination.LastItemVisible;
 	      NumEvent++)
 	    Agd_ShowOneEvent (Agenda,AgendaType,Agenda->LstAgdCods[NumEvent - 1]);
@@ -593,7 +593,7 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 	 /***** Table head *****/
 	 Agd_WriteHeaderListEvents (Agenda,AgendaType);
 
-	 /***** Write all the events *****/
+	 /***** Write all events *****/
 	 for (NumEvent = 0;
 	      NumEvent < Agenda->Num;
 	      NumEvent++)

@@ -177,7 +177,7 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
    /***** List start *****/
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   /***** Write all the banners *****/
+   /***** Write all banners *****/
    for (NumBan = 0;
 	NumBan < Banners->Num;
 	NumBan++)
@@ -271,7 +271,7 @@ static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
   }
 
 /*****************************************************************************/
-/**************************** List all the banners ***************************/
+/****************************** List all banners *****************************/
 /*****************************************************************************/
 
 static void Ban_GetListBanners (struct Ban_Banners *Banners,
@@ -399,7 +399,7 @@ void Ban_PutIconToViewBanners (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the banners ****************************/
+/***************************** List all banners ******************************/
 /*****************************************************************************/
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
@@ -414,7 +414,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
       /***** Table head *****/
       Ban_PutHeadBanners ();
 
-      /***** Write all the banners *****/
+      /***** Write all banners *****/
       for (NumBan = 0;
 	   NumBan < Banners->Num;
 	   NumBan++)

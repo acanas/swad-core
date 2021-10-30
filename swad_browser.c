@@ -2619,7 +2619,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
   }
 
 /*****************************************************************************/
-/**** Update folders of assignments if exist for all the users in course *****/
+/****** Update folders of assignments if exist for all users in course *******/
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
@@ -2741,7 +2741,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
   }
 
 /*****************************************************************************/
-/**** Remove folders of assignments if exist for all the users in course *****/
+/******* Remove folders of assignments if exist for all users in course ******/
 /*****************************************************************************/
 // Folders are in level 1, just under root folder
 
@@ -5663,7 +5663,8 @@ void Brw_RemSubtreeInFileBrowser (void)
       Fil_RemoveTree (Path);
 
       /* If a folder is removed,
-         it is necessary to remove it from the database and all the files o folders under that folder */
+         it is necessary to remove it from the database
+         and all files or folders under that folder */
       Brw_RemoveOneFileOrFolderFromDB (Gbl.FileBrowser.FilFolLnk.Full);
       Brw_RemoveChildrenOfFolderFromDB (Gbl.FileBrowser.FilFolLnk.Full);
 
@@ -6292,7 +6293,7 @@ void Brw_PasteIntoFileBrowser (void)
   }
 
 /*****************************************************************************/
-/****** Paste all the content of the clipboard in the current location *******/
+/************* Paste all clipboard content at current location ***************/
 /*****************************************************************************/
 // Source:
 //	Type of file browser:		Gbl.FileBrowser.Clipboard.FileBrowser
@@ -7226,7 +7227,7 @@ void Brw_RenFolderFileBrowser (void)
             else				// Success
               {
 	       /* If a folder is renamed,
-                  it is necessary to rename all the entries in the tables of files
+                  it is necessary to rename all entries in the tables of files
                   that belong to the subtree starting at that folder */
                Brw_DB_RenameOneFolder (OldPathInTree,
         	                       NewPathInTree);
@@ -9444,7 +9445,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 /*****************************************************************************/
 // Returns true if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full, and false if I have not permission
 // I can remove or rename a file if I am the publisher
-// I can remove or rename a folder if I am the unique publisher of all the files and folders in the subtree starting there
+// I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
   {
@@ -9559,7 +9560,7 @@ static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod)
 /*****************************************************************************/
 // Returns true if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full, and false if I have not permission
 // I can remove or rename a file if I am the publisher
-// I can remove or rename a folder if I am the unique publisher of all the files and folders in the subtree starting there
+// I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
 static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
   {
@@ -9588,7 +9589,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
 /*****************************************************************************/
 // Returns true if I can remove or rename Gbl.FileBrowser.FilFolLnk.Full, and false if I have not permission
 // I can remove or rename a file if I am the publisher
-// I can remove or rename a folder if I am the unique publisher of all the files and folders in the subtree starting there
+// I can remove or rename a folder if I am the unique publisher of all files and folders in the subtree starting there
 
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
   {
@@ -9613,7 +9614,7 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
   }
 
 /*****************************************************************************/
-/************* Remove common zones of all the groups of a type ***************/
+/************* Remove common zones of all groups of a type ***************/
 /*****************************************************************************/
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)

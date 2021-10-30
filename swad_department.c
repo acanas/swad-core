@@ -99,7 +99,7 @@ static void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
   }
 
 /*****************************************************************************/
-/************************* List all the departments **************************/
+/*************************** List all departments ****************************/
 /*****************************************************************************/
 
 void Dpt_SeeDepts (void)
@@ -166,7 +166,7 @@ void Dpt_SeeDepts (void)
 	   }
       HTM_TR_End ();
 
-      /***** Write all the Dpt_GetListDepartmentsdepartments and their nuber of teachers *****/
+      /***** Write all departments and their number of teachers *****/
       for (NumDpt = 0;
 	   NumDpt < Departments.Num;
 	   NumDpt++)
@@ -439,7 +439,7 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
   }
 
 /*****************************************************************************/
-/************************** List all the departments *************************/
+/***************************** List all departments **************************/
 /*****************************************************************************/
 
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
@@ -456,7 +456,7 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
       /***** Write heading *****/
       Dpt_PutHeadDepartments ();
 
-      /***** Write all the departments *****/
+      /***** Write all departments *****/
       for (NumDpt = 0;
 	   NumDpt < Departments->Num;
 	   NumDpt++)

@@ -303,7 +303,7 @@ static void Dup_ListSimilarUsrs (void)
 				Gbl.RowEvenOdd);
 		     /* Show details of user's profile */
 		     Prf_ShowDetailsUserProfile (&UsrDat);
-		     /* Write all the courses this user belongs to */
+		     /* Write all courses this user belongs to */
 		     Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
 		     Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
 		     Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);

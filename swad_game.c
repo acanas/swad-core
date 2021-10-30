@@ -226,7 +226,7 @@ void Gam_SeeAllGames (void)
   }
 
 /*****************************************************************************/
-/**************************** Show all the games *****************************/
+/******************************* Show all games ******************************/
 /*****************************************************************************/
 
 static void Gam_ListAllGames (struct Gam_Games *Games)
@@ -855,7 +855,7 @@ static Gam_Order_t Gam_GetParamOrder (void)
   }
 
 /*****************************************************************************/
-/*********************** Get list of all the games *************************/
+/************************** Get list of all games ****************************/
 /*****************************************************************************/
 
 void Gam_GetListGames (struct Gam_Games *Games,Gam_Order_t SelectedOrder)
@@ -1147,7 +1147,7 @@ static void Gam_RemoveGameFromAllTables (long GamCod)
   }
 
 /*****************************************************************************/
-/******************** Remove all the games of a course ***********************/
+/*********************** Remove all games of a course ************************/
 /*****************************************************************************/
 
 void Gam_RemoveCrsGames (long CrsCod)
@@ -2040,7 +2040,7 @@ void Gam_RemoveQstFromGame (void)
    /***** Get question index *****/
    QstInd = Gam_GetParamQstInd ();
 
-   /***** Remove the question from all the tables *****/
+   /***** Remove the question from all tables *****/
    /* Remove answers from this test question */
    Mch_DB_RemUsrAnswersOfAQuestion (Game.GamCod,QstInd);
 

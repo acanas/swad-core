@@ -864,7 +864,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 
       /***** Parameters related with expanding/contracting folders in file browsers *****/
       if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
-	 /* In all the actions related to file browsers ==>
+	 /* In all actions related to file browsers ==>
 	    put parameters used by AJAX */
 	 // Refresh parameters
 	 HTM_TxtF ("var RefreshParamExpand = \"act=%ld\";\n"
@@ -883,7 +883,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 case ActRemPubGblTL:
 	 case ActReqRemComGblTL:
 	 case ActRemComGblTL:
-	    /* In all the actions related to view or editing global timeline ==>
+	    /* In all actions related to view or editing global timeline ==>
 	       put parameters used by AJAX */
 	    // Refresh parameters
 	    HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
@@ -901,7 +901,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 case ActRemPubUsrTL:
 	 case ActReqRemComUsrTL:
 	 case ActRemComUsrTL:
-	    /* In all the actions related to view or editing user's timeline ==>
+	    /* In all actions related to view or editing user's timeline ==>
 	       put parameters used by AJAX */
 	    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
 	       Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);

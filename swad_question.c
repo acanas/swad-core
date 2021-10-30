@@ -3393,7 +3393,7 @@ void Qst_RemoveOneQstFromDB (long CrsCod,long QstCod)
    Qst_RemoveMediaFromStemOfQst (CrsCod,QstCod);
    Qst_RemoveMediaFromAllAnsOfQst (CrsCod,QstCod);
 
-   /***** Remove the question from all the tables *****/
+   /***** Remove the question from all tables *****/
    /* Remove answers and tags from this test question */
    Qst_DB_RemAnsFromQst (QstCod);
    Tag_DB_RemTagsFromQst (QstCod);
@@ -3429,7 +3429,7 @@ void Qst_ChangeShuffleQst (void)
    /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
    Shuffle = Par_GetParToBool ("Shuffle");
 
-   /***** Remove the question from all the tables *****/
+   /***** Remove the question from all tables *****/
    /* Update the question changing the current shuffle */
    DB_QueryUPDATE ("can not update the shuffle type of a question",
 		   "UPDATE tst_questions"

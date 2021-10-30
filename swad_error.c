@@ -579,7 +579,7 @@ void Err_ShowErrorAndExit (const char *Txt)
       Lay_WriteEndOfPage ();
      }
 
-   /***** Free memory and close all the open files *****/
+   /***** Free memory and close all open files *****/
    Gbl_Cleanup ();
 
    /***** Page is generated (except </body> and </html>).

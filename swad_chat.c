@@ -139,7 +139,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
 	 HTM_LI_End ();
 
-	 /***** Link to chat available for all the users *****/
+	 /***** Link to chat available for all users *****/
 	 IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
 				 !Gbl.Usrs.Me.MyDegs.Num);
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",

@@ -39,7 +39,7 @@ typedef enum
    Pri_VISIBILITY_USER    = 1,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
    Pri_VISIBILITY_COURSE  = 2,	// Visible by users sharing courses with me
    Pri_VISIBILITY_SYSTEM  = 3,	// Visible by any user logged in platform
-   Pri_VISIBILITY_WORLD   = 4,	// Public, visible by all the people, even unlogged visitors
+   Pri_VISIBILITY_WORLD   = 4,	// Public, visible to all people, even unlogged visitors
   } Pri_Visibility_t;
 
 /*****************************************************************************/

@@ -553,7 +553,7 @@ static void Tst_GetQuestionsForNewTest (struct Qst_Questions *Questions,
 	}
 
       /* Reset user's answers.
-         Initially user has not answered the question ==> initially all the answers will be blank.
+         Initially user has not answered the question ==> initially all answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       Print->PrintedQuestions[QstInd].StrAnswers[0] = '\0';

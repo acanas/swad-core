@@ -136,7 +136,7 @@ void Hld_DB_ChangeName (long HldCod,char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME +
   }
 
 /*****************************************************************************/
-/*************************** List all the holidays ***************************/
+/***************************** List all holidays *****************************/
 /*****************************************************************************/
 
 unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder)

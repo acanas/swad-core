@@ -948,7 +948,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    bool ThisYearHasCourses = false;
    unsigned NumUsrs[Rol_NUM_ROLES];
 
-   /***** Write all the courses of this year *****/
+   /***** Write all courses of this year *****/
    for (NumCrs = 0;
 	NumCrs < Gbl.Hierarchy.Crss.Num;
 	NumCrs++)
@@ -1784,10 +1784,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       Crs.CrsCod = CrsCod;
       Crs_GetDataOfCourseByCod (&Crs);
 
-      /***** Remove all the students in the course *****/
+      /***** Remove all students in the course *****/
       Enr_RemAllStdsInCrs (&Crs);
 
-      /***** Set all the notifications from the course as removed,
+      /***** Set all notifications from the course as removed,
 	     except notifications about new messages *****/
       Ntf_DB_MarkNotifInCrsAsRemoved (-1L,CrsCod);
 
@@ -1827,7 +1827,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove notices in the course *****/
       Not_DB_RemoveCrsNotices (CrsCod);
 
-      /***** Remove all the threads and posts in forums of the course *****/
+      /***** Remove all threads and posts in forums of the course *****/
       For_DB_RemoveForums (HieLvl_CRS,CrsCod);
 
       /***** Remove all surveys in the course *****/

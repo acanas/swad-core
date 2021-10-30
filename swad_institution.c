@@ -308,7 +308,7 @@ static void Ins_ListInstitutions (void)
 	 HTM_TABLE_BeginWideMarginPadding (2);
 	 Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
-	    /***** Write all the institutions and their nuber of users *****/
+	    /***** Write all institutions and their nuber of users *****/
 	    for (NumIns = 0;
 		 NumIns < Gbl.Hierarchy.Inss.Num;
 		 NumIns++)
@@ -926,7 +926,7 @@ void Ins_WriteSelectorOfInstitution (void)
   }
 
 /*****************************************************************************/
-/************************* List all the institutions *************************/
+/*************************** List all institutions ***************************/
 /*****************************************************************************/
 
 static void Ins_ListInstitutionsForEdition (void)
@@ -952,7 +952,7 @@ static void Ins_ListInstitutionsForEdition (void)
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForEdition ();
 
-      /***** Write all the institutions *****/
+      /***** Write all institutions *****/
       for (NumIns = 0;
 	   NumIns < Gbl.Hierarchy.Inss.Num;
 	   NumIns++)
@@ -1243,7 +1243,7 @@ void Ins_RemoveInstitution (void)
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
-      /***** Remove all the threads and posts in forums of the institution *****/
+      /***** Remove all threads and posts in forums of the institution *****/
       For_DB_RemoveForums (HieLvl_INS,Ins_EditingIns->InsCod);
 
       /***** Remove surveys of the institution *****/

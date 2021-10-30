@@ -325,7 +325,7 @@ unsigned Pho_DB_GetTimeToComputeAvgPhoto (MYSQL_RES **mysql_res,long DegCod)
   }
 
 /*****************************************************************************/
-/* Delete all the degrees in sta_degrees table not present in degrees table **/
+/*** Delete all degrees in sta_degrees table not present in degrees table ****/
 /*****************************************************************************/
 
 void Pho_DB_RemoveObsoleteStatDegrees (void)

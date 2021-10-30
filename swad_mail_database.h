@@ -1,4 +1,4 @@
-// swad_mail_database.h: all the stuff related to email, operations with database
+// swad_mail_database.h: everything related to email, operations with database
 
 #ifndef _SWAD_MAI_DB
 #define _SWAD_MAI_DB

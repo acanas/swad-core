@@ -189,7 +189,7 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
 		            struct Prg_Item *Item,const char *Txt);
 
 /*****************************************************************************/
-/************************ List all the program items *************************/
+/************************** List all program items ***************************/
 /*****************************************************************************/
 
 void Prg_ShowCourseProgram (void)
@@ -209,12 +209,12 @@ void Prg_ShowCourseProgram (void)
 
 static void Prg_ShowCourseProgramHighlightingItem (const struct Prg_ItemRange *ToHighlight)
   {
-   /***** Show all the program items *****/
+   /***** Show all program items *****/
    Prg_ShowAllItems (Prg_DONT_PUT_FORM_ITEM,ToHighlight,-1L,-1L,0);
   }
 
 /*****************************************************************************/
-/*********************** Show all the program items **************************/
+/************************* Show all program items ****************************/
 /*****************************************************************************/
 
 static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
@@ -246,7 +246,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 	 HTM_TBODY_Begin (NULL);		// 1st tbody start
 	 FirstTBodyOpen = true;
 
-	 /***** Write all the program items *****/
+	 /***** Write all program items *****/
 	 for (NumItem = 0;
 	      NumItem < Prg_Gbl.List.NumItems;
 	      NumItem++)
@@ -915,7 +915,7 @@ static void Prg_PutParams (void *ItmCod)
   }
 
 /*****************************************************************************/
-/*********************** List all the program items **************************/
+/************************** List all program items ***************************/
 /*****************************************************************************/
 
 static void Prg_GetListItems (void)

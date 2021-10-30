@@ -1,4 +1,4 @@
-// swad_mail.h: all the stuff related to email
+// swad_mail.h: everything related to email
 
 #ifndef _SWAD_MAI
 #define _SWAD_MAI

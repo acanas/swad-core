@@ -2636,7 +2636,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	 /***** If any recipients are unknown *****/
 	 if ((NumRecipients.Unknown = NumRecipients.Total - NumRecipients.Known))
 	   {
-	    /***** Begin form to show all the users *****/
+	    /***** Begin form to show all users *****/
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
@@ -2652,7 +2652,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	 /***** If any known recipient is not listed *****/
 	 if (NumRecipients.ToShow < NumRecipients.Known)
 	   {
-	    /***** Begin form to show all the users *****/
+	    /***** Begin form to show all users *****/
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");

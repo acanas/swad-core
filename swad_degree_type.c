@@ -580,7 +580,7 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
   }
 
 /*****************************************************************************/
-/**************** Create a list with all the degree types ********************/
+/****************** Create a list with all degree types **********************/
 /*****************************************************************************/
 
 void DegTyp_GetListDegreeTypes (HieLvl_Level_t Scope,DegTyp_Order_t Order)

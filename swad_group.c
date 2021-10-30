@@ -484,7 +484,7 @@ void Grp_PutParamsCodGrps (void)
    char *GrpCods;
    char GrpCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
-   /***** Write the boolean parameter that indicates if all the groups must be listed *****/
+   /***** Write the boolean parameter that indicates if all groups must be listed *****/
    Par_PutHiddenParamChar ("AllGroups",
                            Gbl.Usrs.ClassPhoto.AllGroups ? 'Y' :
                         	                           'N');
@@ -1183,7 +1183,7 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
   }
 
 /*****************************************************************************/
-/*************** Remove a user of all the groups of a course *****************/
+/***************** Remove a user of all groups of a course *******************/
 /*****************************************************************************/
 
 void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
@@ -1198,7 +1198,7 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/******* Remove a user from all the groups of all the user's courses *********/
+/********* Remove a user from all groups of all the user's courses ***********/
 /*****************************************************************************/
 
 void Grp_RemUsrFromAllGrps (long UsrCod)
@@ -2740,7 +2740,7 @@ void Grp_OpenGroupsAutomatically (void)
       /* Get next group type */
       if ((GrpTypCod = DB_GetNextCode (mysql_res)) > 0)
         {
-         /***** Open all the closed groups of this type that are closed ****/
+         /***** Open all closed groups of this type that are closed ****/
          Grp_DB_OpenGrpsOfType (GrpTypCod);
 
          /***** To not try to open groups again, set MustBeOpened to false *****/
@@ -3498,7 +3498,7 @@ static void Grp_RemoveGroupTypeCompletely (void)
    /***** Get name and type of the group from database *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
-   /***** Remove file zones of all the groups of this type *****/
+   /***** Remove file zones of all groups of this type *****/
    Brw_RemoveZonesOfGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of assignments to groups of this type *****/
@@ -3522,7 +3522,7 @@ static void Grp_RemoveGroupTypeCompletely (void)
    /***** Remove all users from groups of this type *****/
    Grp_DB_RemoveUsrsFromGrpsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
-   /***** Remove all the groups of this type *****/
+   /***** Remove all groups of this type *****/
    Grp_DB_RemoveGrpsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the group type *****/
@@ -4266,7 +4266,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
       }
 
    /***** Create the list (argument passed to this function)
-          with all the groups selected (of all the types) *****/
+          with all groups selected (of all the types) *****/
    if (LstGrpsWanted->NumGrps)
      {
       if ((LstGrpsWanted->GrpCods = calloc (LstGrpsWanted->NumGrps,

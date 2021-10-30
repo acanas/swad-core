@@ -447,7 +447,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 	}
 
       /* Reset user's answers.
-         Initially user has not answered the question ==> initially all the answers will be blank.
+         Initially user has not answered the question ==> initially all answers will be blank.
          If the user does not confirm the submission of their exam ==>
          ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
       Print->PrintedQuestions[*NumQstsInPrint].StrAnswers[0] = '\0';
@@ -834,7 +834,7 @@ static void ExaPrn_WriteTF_AnsToFill (const struct ExaPrn_Print *Print,
    char Id[3 + Cns_MAX_DECIMAL_DIGITS_UINT + 1];	// "Ansxx...x"
 
    /***** Write selector for the answer *****/
-   /* Initially user has not answered the question ==> initially all the answers will be blank.
+   /* Initially user has not answered the question ==> initially all answers will be blank.
       If the user does not confirm the submission of their exam ==>
       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
    snprintf (Id,sizeof (Id),"Ans%010u",QstInd);
@@ -881,7 +881,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Write selectors and letter of this option *****/
-	    /* Initially user has not answered the question ==> initially all the answers will be blank.
+	    /* Initially user has not answered the question ==> initially all answers will be blank.
 	       If the user does not confirm the submission of their exam ==>
 	       ==> the exam may be half filled ==> the answers displayed will be those selected by the user. */
 	    HTM_TD_Begin ("class=\"LT\"");

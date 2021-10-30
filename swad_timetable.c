@@ -1010,7 +1010,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 	    if (FirstFreeColumn < Tmt_MAX_COLUMNS_PER_CELL)
 	       // If there's place for another column in this cell
 	      {
-	       /* Check if there's place for all the rows of this class */
+	       /* Check if there's place for all rows of this class */
 	       TimeTableHasSpaceForThisClass = true;
 	       for (i = Interval + 1;
 		    i < Interval + DurationNumIntervals &&

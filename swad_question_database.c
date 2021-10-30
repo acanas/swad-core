@@ -288,7 +288,7 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 	     Gbl.Hierarchy.Crs.CrsCod,
 	     Gbl.Hierarchy.Crs.CrsCod);
 
-   if (!Questions->Tags.All) // User has not selected all the tags
+   if (!Questions->Tags.All) // User has not selected all tags
      {
       /* Add selected tags */
       LengthQuery = strlen (Query);

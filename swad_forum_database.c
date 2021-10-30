@@ -135,7 +135,7 @@ unsigned For_DB_GetNumPstsOfUsrInForum (const struct For_Forum *Forum,
   }
 
 /*****************************************************************************/
-/*********** Remove all the threads and posts in forums of a scope ***********/
+/************* Remove all threads and posts in forums of a scope *************/
 /*****************************************************************************/
 
 void For_DB_RemoveForums (HieLvl_Level_t Scope,long ForumLocation)
@@ -786,7 +786,7 @@ void For_DB_RemoveThrFromReadThrs (long ThrCod)
 void For_DB_RemoveUsrFromReadThrs (long UsrCod)
   {
    DB_QueryDELETE ("can not remove the status of reading by a user"
-		   " of all the threads of a forum",
+		   " of all threads in a forum",
 		   "DELETE FROM for_read"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);

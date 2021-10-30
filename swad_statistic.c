@@ -2320,7 +2320,7 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
       while (Hour < 24)
 	{
 	 Hits.Num = 0.0;
-	 if (NumHit <= NumHits)	// If not read yet all the results of the query
+	 if (NumHit <= NumHits)	// If all the query results have not been read yet
 	   {
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumHit++;
@@ -2416,7 +2416,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned NumHits,MYSQL_RES *mysql_
       Hits.Max = 0.0;
       while (MinuteDay < Sta_NUM_MINUTES_PER_DAY)
 	{
-	 if (NumHit <= NumHits)	// If not all the result of the query are yet read
+	 if (NumHit <= NumHits)	// If all the query results have not been read yet
 	   {
 	    row = mysql_fetch_row (mysql_res); // Get next result
 	    NumHit++;

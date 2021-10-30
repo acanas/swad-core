@@ -808,7 +808,7 @@ void Prj_DB_RemoveUsrsFromPrj (long PrjCod)
 
 void Prj_DB_RemoveUsrsFromCrsPrjs (long CrsCod)
   {
-   DB_QueryDELETE ("can not remove all the projects in a course",
+   DB_QueryDELETE ("can not remove all projects in a course",
 		   "DELETE FROM prj_users"
 		   " USING prj_projects,"
 		          "prj_users"
@@ -849,7 +849,7 @@ void Prj_DB_RemovePrj (long PrjCod)
 
 void Prj_DB_RemoveCrsPrjs (long CrsCod)
   {
-   DB_QueryDELETE ("can not remove all the projects of a course",
+   DB_QueryDELETE ("can not remove all projects of a course",
 		   "DELETE FROM prj_projects"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);

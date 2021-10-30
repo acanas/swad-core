@@ -143,7 +143,7 @@ void Roo_ResetRooms (struct Roo_Rooms *Rooms)
   }
 
 /*****************************************************************************/
-/**************************** List all the rooms *****************************/
+/****************************** List all rooms *******************************/
 /*****************************************************************************/
 
 void Roo_SeeRooms (void)
@@ -475,7 +475,7 @@ void Roo_PutIconToViewRooms (void)
   }
 
 /*****************************************************************************/
-/**************************** List all the rooms *****************************/
+/****************************** List all rooms *******************************/
 /*****************************************************************************/
 
 void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
@@ -647,7 +647,7 @@ void Roo_FreeListRooms (struct Roo_Rooms *Rooms)
   }
 
 /*****************************************************************************/
-/*************************** List all the rooms ******************************/
+/***************************** List all rooms ********************************/
 /*****************************************************************************/
 
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
@@ -663,7 +663,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
       /***** Write heading *****/
       Roo_PutHeadRooms ();
 
-      /***** Write all the rooms *****/
+      /***** Write all rooms *****/
       for (NumRoom = 0;
 	   NumRoom < Rooms->Num;
 	   NumRoom++)

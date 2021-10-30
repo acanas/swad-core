@@ -1455,7 +1455,7 @@ void ExaSet_RemoveSet (void)
    if (!Exa_CheckIfEditable (&Exam))
       Err_NoPermissionExit ();
 
-   /***** Remove the set from all the tables *****/
+   /***** Remove the set from all tables *****/
    /* Remove questions associated to set */
    Exa_DB_RemoveAllSetQuestionsFromSet (Set.SetCod,Set.ExaCod);
 

@@ -97,7 +97,7 @@ void Hld_ResetHolidays (struct Hld_Holidays *Holidays)
   }
 
 /*****************************************************************************/
-/*************************** List all the holidays ***************************/
+/****************************** List all holidays ****************************/
 /*****************************************************************************/
 
 void Hld_SeeHolidays (void)
@@ -163,7 +163,7 @@ void Hld_SeeHolidays (void)
 
 	       HTM_TR_End ();
 
-	       /***** Write all the holidays *****/
+	       /***** Write all holidays *****/
 	       for (NumHld = 0;
 		    NumHld < Holidays.Num;
 		    NumHld++)
@@ -311,7 +311,7 @@ static void Hld_EditHolidaysInternal (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the holidays ***************************/
+/***************************** List all holidays *****************************/
 /*****************************************************************************/
 
 void Hld_GetListHolidays (struct Hld_Holidays *Holidays)
@@ -504,7 +504,7 @@ void Hld_FreeListHolidays (struct Hld_Holidays *Holidays)
   }
 
 /*****************************************************************************/
-/********************* List all the holidays for edition *********************/
+/*********************** List all holidays for edition ***********************/
 /*****************************************************************************/
 
 static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
@@ -528,7 +528,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
       /***** Write heading *****/
       Hld_PutHeadHolidays ();
 
-      /***** Write all the holidays *****/
+      /***** Write all holidays *****/
       for (NumHld = 0;
 	   NumHld < Holidays->Num;
 	   NumHld++)

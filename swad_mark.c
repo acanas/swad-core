@@ -420,7 +420,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
 	    if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
 	       // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
-	       // Compare UsrIDFromTable with all the confirmed user's IDs in list
+	       // Compare UsrIDFromTable with all confirmed user's IDs in list
 	       for (NumID = 0;
 		    NumID < UsrDat->IDs.Num && !UsrIDFound;
 		    NumID++)
@@ -469,7 +469,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 	       Str_ConvertToUpperText (UsrIDFromTable);
 	       if (ID_CheckIfUsrIDIsValid (UsrIDFromTable))
 		  // A valid user's ID is found in the first column of table, and stored in UsrIDFromTable.
-		  // Compare UsrIDFromTable with all the confirmed user's IDs in list
+		  // Compare UsrIDFromTable with all confirmed user's IDs in list
 		  for (NumID = 0;
 		       NumID < UsrDat->IDs.Num && !UsrIDFound;
 		       NumID++)

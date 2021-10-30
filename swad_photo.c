@@ -1378,13 +1378,13 @@ void Pho_CalcPhotoDegree (void)
 /*****************************************************************************/
 /******** Get degree code with average photo least recently updated **********/
 /*****************************************************************************/
-// Returns -1 when error or when all the degrees have been updated too recently
+// Returns -1 when error or when all degrees have been updated too recently
 
 static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
   {
    long DegCod;
 
-   /***** Delete all the degrees in sta_degrees table not present in degrees table *****/
+   /***** Delete all degrees in sta_degrees table not present in degrees table *****/
    Pho_DB_RemoveObsoleteStatDegrees ();
 
    /***** 1. If a degree is not in table of computed degrees,
@@ -1392,7 +1392,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
    if ((DegCod = Pho_DB_GetADegWithStdsNotInTableOfComputedDegs ()) > 0)
       return DegCod;
 
-   /***** 2. If all the degrees are in table,
+   /***** 2. If all degrees are in table,
 	     choose the least recently updated that has students *****/
    return Pho_DB_GetDegWithAvgPhotoLeastRecentlyUpdated ();
   }
@@ -1905,7 +1905,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
-      /***** Get list of all the degrees *****/
+      /***** Get list of all degrees *****/
       Deg_GetListAllDegsWithStds (&Degs);
 
       /***** Get data of the degree from database *****/
@@ -1927,7 +1927,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
 	    HTM_BUTTON_End ();
 
-	    /* Selector with all the degrees with students */
+	    /* Selector with all degrees with students */
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			      "name=\"OthDegCod\"");
 	       for (NumDeg = 0;
@@ -1961,7 +1961,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	 Frm_EndForm ();
       Mnu_ContextMenuEnd ();
 
-      /***** Free list of all the degrees with students *****/
+      /***** Free list of all degrees with students *****/
       Deg_FreeListDegs (&Degs);
      }
   }

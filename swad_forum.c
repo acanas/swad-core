@@ -1092,7 +1092,7 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
   }
 
 /*****************************************************************************/
-/************ Put all the hidden parameters related to forums ****************/
+/************** Put all hidden parameters related to forums ******************/
 /*****************************************************************************/
 
 static void For_PutParamsForum (void *Forums)
@@ -1884,7 +1884,7 @@ static unsigned For_GetNumThrsWithNewPstsInForum (const struct For_Forum *Forum,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumThrsWithNewPosts = NumThreads;	// By default, all the threads are new to me
+   unsigned NumThrsWithNewPosts = NumThreads;	// By default, all threads are new to me
 
    /***** Get last time I read this forum from database *****/
    if (For_DB_GetLastTimeIReadForum (&mysql_res,Forum))
@@ -1908,7 +1908,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumUnreadPosts = NumPostsInThr;	// By default, all the posts are unread by me
+   unsigned NumUnreadPosts = NumPostsInThr;	// By default, all posts are unread by me
 
    /***** Get last time I read this thread from database *****/
    if (For_DB_GetLastTimeIReadThread (&mysql_res,ThrCod))
@@ -2027,7 +2027,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	 /***** List the threads *****/
 	 if (NumThrs)
 	   {
-	    /***** Write links to all the pages in the listing of threads *****/
+	    /***** Write links to all pages in the listing of threads *****/
 	    Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
 					   Forums,-1L);
 
@@ -2079,7 +2079,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	    /***** End table *****/
 	    HTM_TABLE_End ();
 
-	    /***** Write links to all the pages in the listing of threads *****/
+	    /***** Write links to all pages in the listing of threads *****/
 	    Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,&PaginationThrs,
 					   Forums,-1L);
 	   }

@@ -196,7 +196,7 @@ void Svy_SeeAllSurveys (void)
   }
 
 /*****************************************************************************/
-/*************************** Show all the surveys ****************************/
+/***************************** Show all surveys ******************************/
 /*****************************************************************************/
 
 static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
@@ -910,7 +910,7 @@ static void Svy_PutParams (void *Surveys)
   }
 
 /*****************************************************************************/
-/*********************** Get list of all the surveys *************************/
+/************************** Get list of all surveys **************************/
 /*****************************************************************************/
 
 static void Svy_GetListSurveys (struct Svy_Surveys *Surveys)
@@ -2233,8 +2233,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Svy_Survey *Svy)
   }
 
 /*****************************************************************************/
-/************ Remove all the surveys of a place on the hierarchy *************/
-/************ (country, institution, center, degree or course)   *************/
+/************* Remove all surveys in a place on the hierarchy   **************/
+/************* (country, institution, center, degree or course) **************/
 /*****************************************************************************/
 
 void Svy_RemoveSurveys (HieLvl_Level_t Scope,long Cod)
@@ -3208,7 +3208,7 @@ void Svy_RemoveQst (void)
    /* Get question index */
    SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
 
-   /***** Remove the question from all the tables *****/
+   /***** Remove the question from all tables *****/
    /* Remove answers from this test question */
    Svy_DB_RemoveAnswersQst (SvyQst.QstCod);
 

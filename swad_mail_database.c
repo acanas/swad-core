@@ -1,4 +1,4 @@
-// swad_mail_database.c: all the stuff related to email, operations with database
+// swad_mail_database.c: everything related to email, operations with database
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -300,7 +300,7 @@ void Mai_DB_RemoveExpiredPendingEmails (void)
   }
 
 /*****************************************************************************/
-/* Create temporary tables with all the mail domains in users' emails table **/
+/*** Create temporary tables with all mail domains in users' emails table ****/
 /*****************************************************************************/
 
 void Mai_DB_CreateTmpTables (void)
@@ -450,7 +450,7 @@ void Mai_DB_RemoveMailDomain (long MaiCod)
   }
 
 /*****************************************************************************/
-/* Remove temporary tables with all the mail domains in users' emails table **/
+/*** Remove temporary tables with all mail domains in users' emails table ****/
 /*****************************************************************************/
 
 void Mai_DB_RemoveTmpTables (void)

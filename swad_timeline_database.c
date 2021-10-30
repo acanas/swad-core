@@ -84,7 +84,6 @@ static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod);
 
 unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res)
   {
-   /***** Get which users from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get which timeline users",
 		   "SELECT TimelineUsrs"	// row[0]
@@ -99,7 +98,6 @@ unsigned Tml_DB_GetWho (MYSQL_RES **mysql_res)
 
 void Tml_DB_UpdateWho (Usr_Who_t Who)
   {
-   /***** Update which users in database *****/
    DB_QueryUPDATE ("can not update which timeline users",
 		   "UPDATE usr_last"
 		     " SET TimelineUsrs=%u"
@@ -140,7 +138,6 @@ unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res)
 
 long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
   {
-   /***** Get code of publication of the original note *****/
    return DB_QuerySELECTCode ("can not get code of publication",
 			      "SELECT PubCod"
 			       " FROM tml_pubs"
@@ -178,7 +175,6 @@ long Tml_DB_CreateNewNote (Tml_Not_NoteType_t NoteType,long Cod,
 
 void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod)
   {
-   /***** Mark note as unavailable *****/
    DB_QueryUPDATE ("can not mark note as unavailable",
 		   "UPDATE tml_notes"
 		     " SET Unavailable='Y'"
@@ -196,7 +192,6 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
                                                     Brw_FileBrowser_t FileBrowser,
                                                     long Cod,const char *Path)
   {
-   /***** Mark notes as unavailable *****/
    DB_QueryUPDATE ("can not mark notes as unavailable",
 		   "UPDATE tml_notes"
 		     " SET Unavailable='Y'"
@@ -412,7 +407,6 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 
 void Tml_DB_CreateTmpTableJustRetrievedNotes (void)
   {
-   /***** Create temporary table with notes just retrieved *****/
    DB_Query ("can not create temporary table",
 	     "CREATE TEMPORARY TABLE tml_tmp_just_retrieved_notes "
 	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
@@ -421,7 +415,6 @@ void Tml_DB_CreateTmpTableJustRetrievedNotes (void)
 
 void Tml_DB_CreateTmpTableVisibleTimeline (void)
   {
-   /***** Create temporary table with all notes visible in timeline *****/
    DB_Query ("can not create temporary table",
 	     "CREATE TEMPORARY TABLE tml_tmp_visible_timeline "
 	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
@@ -513,7 +506,6 @@ void Tml_DB_DropTmpTableVisibleTimeline (void)
 
 void Tml_DB_ClearOldTimelinesNotesFromDB (void)
   {
-   /***** Remove timelines for expired sessions *****/
    DB_QueryDELETE ("can not remove old timelines",
 		   "DELETE LOW_PRIORITY FROM tml_timelines"
                    " WHERE SessionId NOT IN"
@@ -527,7 +519,6 @@ void Tml_DB_ClearOldTimelinesNotesFromDB (void)
 
 void Tml_DB_ClearTimelineNotesOfSessionFromDB (void)
   {
-   /***** Remove timeline for a session *****/
    DB_QueryDELETE ("can not remove timeline",
 		   "DELETE FROM tml_timelines"
 		   " WHERE SessionId='%s'",
@@ -540,7 +531,6 @@ void Tml_DB_ClearTimelineNotesOfSessionFromDB (void)
 
 void Tml_DB_RemoveNoteFavs (long NotCod)
   {
-   /***** Remove favs for note *****/
    DB_QueryDELETE ("can not remove favs for note",
 		   "DELETE FROM tml_notes_fav"
 		   " WHERE NotCod=%ld",
@@ -553,7 +543,6 @@ void Tml_DB_RemoveNoteFavs (long NotCod)
 
 void Tml_DB_RemoveNotePubs (long NotCod)
   {
-   /***** Remove all publications of this note *****/
    DB_QueryDELETE ("can not remove a publication",
 		   "DELETE FROM tml_pubs"
 		   " WHERE NotCod=%ld",
@@ -566,7 +555,6 @@ void Tml_DB_RemoveNotePubs (long NotCod)
 
 void Tml_DB_RemoveNote (long NotCod)
   {
-   /***** Remove note *****/
    DB_QueryDELETE ("can not remove a note",
 		   "DELETE FROM tml_notes"
 	           " WHERE NotCod=%ld"
@@ -581,7 +569,6 @@ void Tml_DB_RemoveNote (long NotCod)
 
 void Tml_DB_RemoveAllNotesUsr (long UsrCod)
   {
-   /***** Remove all notes created by user *****/
    DB_QueryDELETE ("can not remove notes",
 		   "DELETE FROM tml_notes"
 		   " WHERE UsrCod=%ld",
@@ -626,7 +613,6 @@ long Tml_DB_GetMedCodFromPost (long PstCod)
 
 long Tml_DB_CreateNewPost (const struct Tml_Pst_Content *Content)
   {
-   /***** Insert post content in the database *****/
    return
    DB_QueryINSERTandReturnCode ("can not create post",
 				"INSERT INTO tml_posts"
@@ -643,7 +629,6 @@ long Tml_DB_CreateNewPost (const struct Tml_Pst_Content *Content)
 
 void Tml_DB_RemovePost (long PstCod)
   {
-   /***** Remove post *****/
    DB_QueryDELETE ("can not remove a post",
 		   "DELETE FROM tml_posts"
 		   " WHERE PstCod=%ld",
@@ -656,7 +641,6 @@ void Tml_DB_RemovePost (long PstCod)
 
 void Tml_DB_RemoveAllPostsUsr (long UsrCod)
   {
-   /***** Remove all posts of the user *****/
    DB_QueryDELETE ("can not remove posts",
 		   "DELETE FROM tml_posts"
 		   " WHERE PstCod IN"
@@ -732,7 +716,6 @@ unsigned Tml_DB_GetInitialComms (long NotCod,unsigned NumInitialCommsToGet,
 unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 			       MYSQL_RES **mysql_res)
   {
-   /***** Get final comments of a note from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get comments",
 		   "SELECT *"
@@ -787,7 +770,6 @@ unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 void Tml_DB_InsertCommContent (long PubCod,
 			       const struct Tml_Pst_Content *Content)
   {
-   /***** Insert comment content in database *****/
    DB_QueryINSERT ("can not store comment content",
 		   "INSERT INTO tml_comments"
 		   " (PubCod,Txt,MedCod)"
@@ -813,7 +795,6 @@ long Tml_DB_GetMedCodFromComm (long PubCod)
 
 void Tml_DB_RemoveCommFavs (long PubCod)
   {
-   /***** Remove favs for comment *****/
    DB_QueryDELETE ("can not remove favs for comment",
 		   "DELETE FROM tml_comments_fav"
 		   " WHERE PubCod=%ld",
@@ -826,7 +807,6 @@ void Tml_DB_RemoveCommFavs (long PubCod)
 
 void Tml_DB_RemoveCommContent (long PubCod)
   {
-   /***** Remove content of comment *****/
    DB_QueryDELETE ("can not remove comment content",
 		   "DELETE FROM tml_comments"
 		   " WHERE PubCod=%ld",
@@ -839,7 +819,6 @@ void Tml_DB_RemoveCommContent (long PubCod)
 
 void Tml_DB_RemoveCommPub (long PubCod)
   {
-   /***** Remove comment publication *****/
    DB_QueryDELETE ("can not remove comment",
 		   "DELETE FROM tml_pubs"
 	           " WHERE PubCod=%ld"
@@ -851,12 +830,11 @@ void Tml_DB_RemoveCommPub (long PubCod)
   }
 
 /*****************************************************************************/
-/*********** Remove all comments in all the notes of a given user ************/
+/************* Remove all comments in all notes for a given user *************/
 /*****************************************************************************/
 
 void Tml_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
   {
-   /***** Remove all comments in all notes of the user *****/
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tml_comments"
 	           " USING tml_notes,"
@@ -875,7 +853,6 @@ void Tml_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
 
 void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
   {
-   /***** Remove all comments made by this user in any note *****/
    DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM tml_comments"
 	           " USING tml_pubs,"
@@ -893,7 +870,6 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
 
 static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
   {
-   /***** Get code of media associated to comment *****/
    return DB_QuerySELECTCode ("can not get media code",
 			      "SELECT MedCod"	// row[0]
 			       " FROM %s"
@@ -909,7 +885,6 @@ static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
 void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
                                       struct Tml_Pub_SubQueries *SubQueries)
   {
-   /***** Create temporary table and subquery with potential publishers *****/
    switch (Timeline->UsrOrGbl)
      {
       case Tml_Usr_TIMELINE_USR:		// Show the timeline of a user
@@ -1040,7 +1015,6 @@ unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res)
 
 long Tml_DB_GetNotCodFromPubCod (long PubCod)
   {
-   /***** Get code of note from database *****/
    return DB_QuerySELECTCode ("can not get code of note",
 			      "SELECT NotCod"
 			       " FROM tml_pubs"
@@ -1088,7 +1062,6 @@ long Tml_DB_GetPubCodFromSession (const char *FieldName)
 
 unsigned Tml_DB_GetNumPubsUsr (long UsrCod)
   {
-   /***** Get number of posts from a user from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of publications from a user",
 		  "SELECT COUNT(*)"
@@ -1122,7 +1095,6 @@ unsigned Tml_DB_GetPublishersInNoteExceptMe (MYSQL_RES **mysql_res,long PubCod)
 
 long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub)
   {
-   /***** Insert new publication in database *****/
    return
    DB_QueryINSERTandReturnCode ("can not publish note/comment",
 				"INSERT INTO tml_pubs"
@@ -1187,9 +1159,6 @@ void Tml_DB_UpdateFirstLastPubCodsInSession (long FirstPubCod)
 
 void Tml_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
   {
-   /***** Remove all publications (original notes, shared notes, comments)
-          published by any user
-          and related to notes authored by this user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tml_pubs"
                    " USING tml_notes,"
@@ -1205,7 +1174,6 @@ void Tml_DB_RemoveAllPubsPublishedByAnyUsrOfNotesAuthoredBy (long UsrCod)
 
 void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
   {
-   /***** Remove all publications published by the user *****/
    DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM tml_pubs"
 		   " WHERE PublisherCod=%ld",
@@ -1218,7 +1186,6 @@ void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
 
 bool Tml_DB_CheckIfFavedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
-   /***** Check if a user has favourited a note/comment from database *****/
    return (DB_QueryCOUNT ("can not check if a user has favourited",
 			  "SELECT COUNT(*)"
 			   " FROM %s"
@@ -1234,7 +1201,6 @@ bool Tml_DB_CheckIfFavedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
 
 unsigned Tml_DB_GetNumFavers (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
   {
-   /***** Get number of times (users) a note/comment has been favourited *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of times has been favourited",
 		  "SELECT COUNT(*)"
@@ -1254,7 +1220,6 @@ unsigned Tml_DB_GetFavers (Tml_Usr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned MaxUsrs,
                            MYSQL_RES **mysql_res)
   {
-   /***** Get list of users who have marked a note/comment as favourite from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get favers",
 		   "SELECT UsrCod"	// row[0]
@@ -1275,7 +1240,6 @@ unsigned Tml_DB_GetFavers (Tml_Usr_FavSha_t FavSha,
 
 void Tml_DB_MarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
   {
-   /***** Insert in favourited in database *****/
    DB_QueryINSERT ("can not favourite comment",
 		   "INSERT IGNORE INTO %s"
 		   " (%s,UsrCod,TimeFav)"
@@ -1292,7 +1256,6 @@ void Tml_DB_MarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
 
 void Tml_DB_UnmarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
   {
-   /***** Delete the mark as favourite from database *****/
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
 		   " WHERE %s=%ld"
@@ -1308,7 +1271,6 @@ void Tml_DB_UnmarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
 
 void Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FavSha_t FavSha,long UsrCod)
   {
-   /* Remove all favs made by this user to any note/comment */
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s"
 		   " WHERE UsrCod=%ld",
@@ -1322,7 +1284,6 @@ void Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FavSha_t FavSha,long UsrCod)
 
 void Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FavSha_t FavSha,long UsrCod)
   {
-   /***** Remove all favs to notes/comments of this user *****/
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s"
 	           " USING tml_pubs,"
@@ -1345,8 +1306,6 @@ void Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FavSha_t FavSha,long UsrCod)
 
 void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
   {
-   /***** Remove all favs to all comments
-          in all notes authored by this user *****/
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM tml_comments_fav"
 	           " USING tml_notes,"
@@ -1383,7 +1342,6 @@ bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
 
 unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod)
   {
-   /***** Get number of times (users) this note has been shared *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of times a note has been shared",
 		  "SELECT COUNT(*)"
@@ -1403,7 +1361,6 @@ unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod)
 unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
                             MYSQL_RES **mysql_res)
   {
-   /***** Get list of users who have shared a note from database *****/
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users",
 		   "SELECT PublisherCod"	// row[0]
@@ -1425,7 +1382,6 @@ unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
 
 void Tml_DB_RemoveSharedPub (long NotCod)
   {
-   /***** Remove shared publication *****/
    DB_QueryDELETE ("can not remove a publication",
 		   "DELETE FROM tml_pubs"
 		   " WHERE NotCod=%ld"

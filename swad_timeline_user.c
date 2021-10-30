@@ -76,7 +76,7 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
                                            unsigned NumUsrs);
 
 /*****************************************************************************/
-/************* Remove all the content of a user from database ****************/
+/*************** Remove all content of a user from database ******************/
 /*****************************************************************************/
 
 void Tml_Usr_RemoveUsrContent (long UsrCod)
@@ -99,7 +99,7 @@ void Tml_Usr_RemoveUsrContent (long UsrCod)
    Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FAV_UNF_NOTE,UsrCod);
 
    /***** Remove comments *****/
-   /* Remove all comments in all the notes of this user */
+   /* Remove all comments in all notes of this user */
    Tml_DB_RemoveAllCommsInAllNotesOf (UsrCod);
 
    /* Remove all comments made by this user in any note */

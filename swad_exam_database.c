@@ -130,7 +130,7 @@ void Exa_DB_HideOrUnhideExam (long ExaCod,bool Hide)
   }
 
 /*****************************************************************************/
-/*********************** Get list of all the exams *************************/
+/**************************** Get list of all exams **************************/
 /*****************************************************************************/
 
 unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
@@ -1751,7 +1751,7 @@ void Exa_DB_RemoveAllGrpsOfType (long GrpTypCod)
 
 void Exa_DB_RemoveGroup (long GrpCod)
   {
-   /***** Remove group from all the sessions *****/
+   /***** Remove group from all sessions *****/
    DB_QueryDELETE ("can not remove group"
 	           " from the associations between sessions and groups",
 		   "DELETE FROM exa_groups"

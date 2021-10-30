@@ -147,7 +147,7 @@ void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
   }
 
 /*****************************************************************************/
-/*********************** Get list of all the surveys *************************/
+/************************* Get list of all surveys ***************************/
 /*****************************************************************************/
 
 unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
@@ -699,8 +699,7 @@ void Svy_DB_RemoveSvy (long SvyCod)
 
 void Svy_DB_RemoveSvysIn (HieLvl_Level_t Scope,long Cod)
   {
-   DB_QueryDELETE ("can not remove all the surveys"
-		   " in a place on the hierarchy",
+   DB_QueryDELETE ("can not remove all surveys in a place on the hierarchy",
 		   "DELETE FROM svy_surveys"
 	           " WHERE Scope='%s'"
 	             " AND Cod=%ld",
@@ -769,12 +768,11 @@ bool Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
   }
 
 /*****************************************************************************/
-/*************** Remove groups of one type from all the surveys **************/
+/***************** Remove groups of one type from all surveys ****************/
 /*****************************************************************************/
 
 void Svy_DB_RemoveGroupsOfType (long GrpTypCod)
   {
-   /***** Remove group from all the surveys *****/
    DB_QueryDELETE ("can not remove groups of a type"
 	           " from the associations between surveys and groups",
 		   "DELETE FROM svy_groups"
@@ -786,12 +784,11 @@ void Svy_DB_RemoveGroupsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/******************* Remove one group from all the surveys *******************/
+/********************* Remove one group from all surveys *********************/
 /*****************************************************************************/
 
 void Svy_DB_RemoveGroup (long GrpCod)
   {
-   /***** Remove group from all the surveys *****/
    DB_QueryDELETE ("can not remove group from the associations"
 		   " between surveys and groups",
 		   "DELETE FROM svy_groups"
@@ -818,7 +815,7 @@ void Svy_DB_RemoveGrpsAssociatedToSurvey (long SvyCod)
 
 void Svy_DB_RemoveGrpsSvysIn (HieLvl_Level_t Scope,long Cod)
   {
-   DB_QueryDELETE ("can not remove all the groups"
+   DB_QueryDELETE ("can not remove all groups"
 	           " associated to surveys of a course",
 		   "DELETE FROM svy_groups"
 	           " USING svy_surveys,"
@@ -1259,8 +1256,8 @@ void Svy_DB_RemoveUsrsWhoHaveAnsweredSvy (long SvyCod)
   }
 
 /*****************************************************************************/
-/************ Remove all the surveys of a place on the hierarchy *************/
-/************ (country, institution, center, degree or course)   *************/
+/************* Remove all surveys in a place on the hierarchy   **************/
+/************* (country, institution, center, degree or course) **************/
 /*****************************************************************************/
 
 void Svy_DB_RemoveUsrsWhoHaveAnsweredSvysIn (HieLvl_Level_t Scope,long Cod)

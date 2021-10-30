@@ -375,12 +375,11 @@ void Asg_DB_CreateGroup (long AsgCod,long GrpCod)
   }
 
 /*****************************************************************************/
-/**************** Remove one group from all the assignments ******************/
+/******************* Remove one group from all assignments *******************/
 /*****************************************************************************/
 
 void Asg_DB_RemoveGroup (long GrpCod)
   {
-   /***** Remove group from all the assignments *****/
    DB_QueryDELETE ("can not remove group from the associations"
 	           " between assignments and groups",
 		   "DELETE FROM asg_groups"
@@ -389,12 +388,12 @@ void Asg_DB_RemoveGroup (long GrpCod)
   }
 
 /*****************************************************************************/
-/*********** Remove groups of one type from all the assignments **************/
+/************* Remove groups of one type from all assignments ****************/
 /*****************************************************************************/
 
 void Asg_DB_RemoveGroupsOfType (long GrpTypCod)
   {
-   /***** Remove group from all the assignments *****/
+   /***** Remove group from all assignments *****/
    DB_QueryDELETE ("can not remove groups of a type from the associations"
 	           " between assignments and groups",
 		   "DELETE FROM asg_groups"
@@ -434,7 +433,7 @@ void Asg_DB_RemoveGrpsAssociatedToAsgsInCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/****************** Remove all the assignments in a course *******************/
+/******************** Remove all assignments in a course *********************/
 /*****************************************************************************/
 
 void Asg_DB_RemoveCrsAssignments (long CrsCod)
@@ -499,7 +498,7 @@ unsigned Asg_DB_GetUsrsFromAssignmentExceptMe (MYSQL_RES **mysql_res,long AsgCod
 /****************** Get number of courses with assignments *******************/
 /*****************************************************************************/
 // Returns the number of courses with assignments
-// in this location (all the platform, current degree or current course)
+// in this location (all the platform, the current degree or the current course)
 
 unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
   {
@@ -577,7 +576,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
 /************************ Get number of assignments **************************/
 /*****************************************************************************/
 // Returns the number of assignments
-// in this location (all the platform, current degree or current course)
+// in this location (all the platform, the current degree or the current course)
 
 unsigned Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,HieLvl_Level_t Scope)
   {

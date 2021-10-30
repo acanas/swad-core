@@ -270,7 +270,7 @@ static void Ctr_ListCenters (void)
 	    /***** Write heading *****/
 	    Ctr_PutHeadCentersForSeeing (true);	// Order selectable
 
-	    /***** Write all the centers and their nuber of teachers *****/
+	    /***** Write all centers and their nuber of teachers *****/
 	    for (NumCtr = 0;
 		 NumCtr < Gbl.Hierarchy.Ctrs.Num;
 		 NumCtr++)
@@ -752,7 +752,7 @@ void Ctr_WriteSelectorOfCenter (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the centers ****************************/
+/***************************** List all centers ******************************/
 /*****************************************************************************/
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
@@ -780,7 +780,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
       /***** Write heading *****/
       Ctr_PutHeadCentersForEdition ();
 
-      /***** Write all the centers *****/
+      /***** Write all centers *****/
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ctrs.Num;
 	   NumCtr++)
@@ -1080,7 +1080,7 @@ void Ctr_RemoveCenter (void)
 		     Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center);
    else	// Center has no degrees or users ==> remove it
      {
-      /***** Remove all the threads and posts in forums of the center *****/
+      /***** Remove all threads and posts in forums of the center *****/
       For_DB_RemoveForums (HieLvl_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove surveys of the center *****/

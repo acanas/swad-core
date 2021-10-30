@@ -1,4 +1,4 @@
-// swad_mail.c: all the stuff related to email
+// swad_mail.c: everything related to email
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -103,7 +103,7 @@ static void Mai_EditingMailDomainConstructor (void);
 static void Mai_EditingMailDomainDestructor (void);
 
 /*****************************************************************************/
-/************************* List all the mail domains *************************/
+/*************************** List all mail domains ***************************/
 /*****************************************************************************/
 
 void Mai_SeeMailDomains (void)
@@ -154,7 +154,7 @@ void Mai_SeeMailDomains (void)
 	}
    HTM_TR_End ();
 
-   /***** Write all the mail domains *****/
+   /***** Write all mail domains *****/
    for (NumMai = 0;
 	NumMai < Gbl.Mails.Num;
 	NumMai++)
@@ -240,7 +240,7 @@ static void Mai_EditMailDomainsInternal (void)
   }
 
 /*****************************************************************************/
-/************************* List all the mail domains *************************/
+/*************************** List all mail domains ***************************/
 /*****************************************************************************/
 
 static void Mai_GetListMailDomainsAllowedForNotif (void)
@@ -254,7 +254,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
    // Query uses two identical temporary tables...
    // ...because a unique temporary table can not be used twice in the same query
 
-   /***** Create temporary table with all the mail domains present in users' emails table *****/
+   /***** Create temporary table with all mail domains present in users' emails table *****/
    Mai_DB_RemoveTmpTables ();
 
    Mai_DB_CreateTmpTables ();
@@ -403,7 +403,7 @@ void Mai_FreeListMailDomains (void)
   }
 
 /*****************************************************************************/
-/************************ List all the mail domains **************************/
+/************************** List all mail domains ****************************/
 /*****************************************************************************/
 
 static void Mai_ListMailDomainsForEdition (void)
@@ -421,7 +421,7 @@ static void Mai_ListMailDomainsForEdition (void)
       /***** Write heading *****/
       Mai_PutHeadMailDomains ();
 
-      /***** Write all the mail domains *****/
+      /***** Write all mail domains *****/
       for (NumMai = 0;
 	   NumMai < Gbl.Mails.Num;
 	   NumMai++)
@@ -791,7 +791,7 @@ void Mai_GetSelUsrsAndListEmails (void)
   }
 
 /*****************************************************************************/
-/****** List the emails of all the students to creates an email message ******/
+/******** List the emails of all students to creates an email message ********/
 /*****************************************************************************/
 
 #define Mai_MAX_BYTES_STR_ADDR (256 * 1024 - 1)

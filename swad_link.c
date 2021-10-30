@@ -87,7 +87,7 @@ static void Lnk_EditingLinkConstructor (void);
 static void Lnk_EditingLinkDestructor (void);
 
 /*****************************************************************************/
-/*************************** List all the links ******************************/
+/****************************** List all links *******************************/
 /*****************************************************************************/
 
 void Lnk_SeeLinks (void)
@@ -161,7 +161,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Write all the links *****/
+   /***** Write all links *****/
    if (Gbl.Links.Num)
      {
       HTM_DIV_Begin ("id=\"institutional_links\"");
@@ -282,7 +282,7 @@ void Lnk_PutIconToViewLinks (void)
   }
 
 /*****************************************************************************/
-/**************************** List all the links *****************************/
+/****************************** List all links *******************************/
 /*****************************************************************************/
 
 void Lnk_GetListLinks (void)
@@ -378,7 +378,7 @@ void Lnk_FreeListLinks (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the links ******************************/
+/****************************** List all links *******************************/
 /*****************************************************************************/
 
 static void Lnk_ListLinksForEdition (void)
@@ -392,7 +392,7 @@ static void Lnk_ListLinksForEdition (void)
       /***** Table head *****/
       Lnk_PutHeadLinks ();
 
-      /***** Write all the links *****/
+      /***** Write all links *****/
       for (NumLnk = 0;
 	   NumLnk < Gbl.Links.Num;
 	   NumLnk++)

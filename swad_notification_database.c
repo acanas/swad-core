@@ -103,7 +103,7 @@ void Ntf_DB_MarkAllMyNotifAsSeen (void)
   }
 
 /*****************************************************************************/
-/********** Mark all the pending notifications of a user as 'sent' ***********/
+/************ Mark all pending notifications of a user as 'sent' *************/
 /*****************************************************************************/
 
 void Ntf_DB_MarkPendingNtfsAsSent (long ToUsrCod)

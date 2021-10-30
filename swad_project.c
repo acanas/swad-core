@@ -418,7 +418,7 @@ void Prj_ShowTableSelectedPrjs (void)
          /***** Table head *****/
 	 Prj_ShowTableAllProjectsHead ();
 
-	 /***** Write all the projects *****/
+	 /***** Write all projects *****/
 	 for (NumPrj = 0;
 	      NumPrj < Projects.Num;
 	      NumPrj++)
@@ -506,7 +506,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	       /***** Table head *****/
 	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects,Prj_LIST_PROJECTS);
 
-	       /***** Write all the projects *****/
+	       /***** Write all projects *****/
 	       for (NumPrj = Pagination.FirstItemVisible;
 		    NumPrj <= Pagination.LastItemVisible;
 		    NumPrj++)
@@ -4098,7 +4098,7 @@ void Prj_UnloProjectEdition (void)
   }
 
 /*****************************************************************************/
-/******************** Remove all the projects in a course ********************/
+/********************** Remove all projects in a course **********************/
 /*****************************************************************************/
 
 void Prj_RemoveCrsProjects (long CrsCod)

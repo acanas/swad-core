@@ -124,7 +124,7 @@ void Gam_DB_HideOrUnhideGame (long GamCod,bool Hide)
   }
 
 /*****************************************************************************/
-/************* Get list of all the games in the current course ***************/
+/*************** Get list of all games in the current course *****************/
 /*****************************************************************************/
 
 unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder)

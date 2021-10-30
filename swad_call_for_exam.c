@@ -537,7 +537,7 @@ void Cfe_UnhideCallForExam (void)
   }
 
 /*****************************************************************************/
-/**************** List all the calls for exams to see them *******************/
+/****************** List all calls for exams to see them *********************/
 /*****************************************************************************/
 
 void Cfe_ListCallsForExamsSee (void)
@@ -557,7 +557,7 @@ void Cfe_ListCallsForExamsSee (void)
   }
 
 /*****************************************************************************/
-/************ List all the calls for exams to edit or remove them ************/
+/************** List all calls for exams to edit or remove them **************/
 /*****************************************************************************/
 
 void Cfe_ListCallsForExamsEdit (void)
@@ -626,7 +626,7 @@ static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams)
   }
 
 /*****************************************************************************/
-/********************* List all the calls for exams **************************/
+/*********************** List all calls for exams ****************************/
 /*****************************************************************************/
 
 static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
@@ -731,7 +731,7 @@ static void Cfe_PutButtonToCreateNewCallForExam (void)
   }
 
 /*****************************************************************************/
-/******** Create a list with the dates of all the calls for exams ************/
+/********** Create a list with the dates of all calls for exams **************/
 /*****************************************************************************/
 
 void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)

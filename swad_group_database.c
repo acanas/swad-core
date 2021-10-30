@@ -753,7 +753,7 @@ void Grp_DB_ClearMustBeOpened (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/******************** Open all the closed groups of a tyoe *******************/
+/********************** Open all closed groups of a type *********************/
 /*****************************************************************************/
 
 void Grp_DB_OpenGrpsOfType (long GrpTypCod)
@@ -1035,7 +1035,7 @@ void Grp_DB_RemoveUsrFromGrp (long UsrCod,long GrpCod)
   }
 
 /*****************************************************************************/
-/*************** Remove a user of all the groups of a course *****************/
+/***************** Remove a user of all groups of a course *******************/
 /*****************************************************************************/
 
 void Grp_DB_RemUsrFromAllGrpsInCrs (long UsrCod,long CrsCod)

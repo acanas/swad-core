@@ -25014,44 +25014,44 @@ const char *Txt_Actions[Act_NUM_ACTIONS] =
 	,
 	[ActReqRemAllStdCrs] =
 #if   L==1	// ca
-	"Request removal of all the students from a course"			// Necessita traducció
+	"Request removal of all students from a course"			// Necessita traducció
 #elif L==2	// de
-	"Request removal of all the students from a course"			// Need Übersetzung
+	"Request removal of all students from a course"			// Need Übersetzung
 #elif L==3	// en
-	"Request removal of all the students from a course"
+	"Request removal of all students from a course"
 #elif L==4	// es
 	"Solicitar eliminaci&oacute;n de todos los estudiantes de asignatura"
 #elif L==5	// fr
-	"Request removal of all the students from a course"			// Besoin de traduction
+	"Request removal of all students from a course"			// Besoin de traduction
 #elif L==6	// gn
 	"Solicitar eliminaci&oacute;n de todos los estudiantes de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Request removal of all the students from a course"			// Bisogno di traduzione
+	"Request removal of all students from a course"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Request removal of all the students from a course"			// Potrzebujesz tlumaczenie
+	"Request removal of all students from a course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Request removal of all the students from a course"			// Precisa de tradução
+	"Request removal of all students from a course"			// Precisa de tradução
 #endif
 	,
 	[ActRemAllStdCrs] =
 #if   L==1	// ca
-	"Remove all the students from a course"		// Necessita traducció
+	"Remove all students from a course"		// Necessita traducció
 #elif L==2	// de
-	"Remove all the students from a course"		// Need Übersetzung
+	"Remove all students from a course"		// Need Übersetzung
 #elif L==3	// en
-	"Remove all the students from a course"
+	"Remove all students from a course"
 #elif L==4	// es
 	"Eliminar todos los estudiantes de asignatura"
 #elif L==5	// fr
-	"Remove all the students from a course"		// Besoin de traduction
+	"Remove all students from a course"		// Besoin de traduction
 #elif L==6	// gn
 	"Eliminar todos los estudiantes de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove all the students from a course"		// Bisogno di traduzione
+	"Remove all students from a course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove all the students from a course"		// Potrzebujesz tlumaczenie
+	"Remove all students from a course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove all the students from a course"		// Precisa de tradução
+	"Remove all students from a course"		// Precisa de tradução
 #endif
 	,
 	[ActReqRemOldUsr] =

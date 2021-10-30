@@ -1448,7 +1448,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    Ntf_UpdateNumNotifSent (Hie.Deg.DegCod,Hie.Crs.CrsCod,NotifyEvent,*NumNotif,*NumMails);
 	   }
 
-	 /***** Mark all the pending notifications of this user as 'sent' *****/
+	 /***** Mark all pending notifications of this user as 'sent' *****/
 	 Ntf_DB_MarkPendingNtfsAsSent (ToUsrDat->UsrCod);
 	}
 

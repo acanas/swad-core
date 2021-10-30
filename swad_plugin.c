@@ -124,7 +124,7 @@ void Plg_ListPlugins (void)
 
    HTM_TR_End ();
 
-   /***** Write all the plugins *****/
+   /***** Write all plugins *****/
    for (NumPlg = 0;
 	NumPlg < Gbl.Plugins.Num;
 	NumPlg++)
@@ -329,7 +329,7 @@ void Plg_FreeListPlugins (void)
   }
 
 /*****************************************************************************/
-/**************************** List all the plugins ***************************/
+/****************************** List all plugins *****************************/
 /*****************************************************************************/
 
 static void Plg_ListPluginsForEdition (void)
@@ -343,7 +343,7 @@ static void Plg_ListPluginsForEdition (void)
       /***** Write heading *****/
       Plg_PutHeadPlugins ();
 
-      /***** Write all the plugins *****/
+      /***** Write all plugins *****/
       for (NumPlg = 0;
 	   NumPlg < Gbl.Plugins.Num;
 	   NumPlg++)

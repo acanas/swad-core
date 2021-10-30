@@ -332,12 +332,12 @@ void Agd_DB_MakeEventPrivate (const struct Agd_Event *AgdEvent)
   }
 
 /*****************************************************************************/
-/********************** Remove all the events of a user **********************/
+/************************ Remove all events of a user ************************/
 /*****************************************************************************/
 
 void Agd_DB_RemoveUsrEvents (long UsrCod)
   {
-   DB_QueryDELETE ("can not remove all the events of a user",
+   DB_QueryDELETE ("can not remove all events of a user",
 		   "DELETE FROM agd_agendas"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);

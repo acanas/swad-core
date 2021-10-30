@@ -97,8 +97,7 @@ void Hie_WriteMenuHierarchy (void)
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
 
-      /***** Write a 1st selector
-	     with all the countries *****/
+      /***** Write a 1st selector with all countries *****/
       HTM_TR_Begin (NULL);
 
 	 /* Label */
@@ -146,7 +145,7 @@ void Hie_WriteMenuHierarchy (void)
 	    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	      {
 	       /***** Write a 4th selector
-		      with all the degrees of selected center *****/
+		      with all degrees of selected center *****/
 	       HTM_TR_Begin (NULL);
 
 		  /* Label */
@@ -162,7 +161,7 @@ void Hie_WriteMenuHierarchy (void)
 	       if (Gbl.Hierarchy.Deg.DegCod > 0)
 		 {
 		  /***** Write a 5th selector
-			 with all the courses of selected degree *****/
+			 with all courses of selected degree *****/
 		  HTM_TR_Begin (NULL);
 
 		     /* Label */

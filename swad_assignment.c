@@ -119,7 +119,7 @@ static void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
   }
 
 /*****************************************************************************/
-/************************ List all the assignments ***************************/
+/**************************** List all assignments ***************************/
 /*****************************************************************************/
 
 void Asg_SeeAssignments (void)
@@ -139,7 +139,7 @@ void Asg_SeeAssignments (void)
   }
 
 /*****************************************************************************/
-/************************ Show all the assignments ***************************/
+/**************************** Show all assignments ***************************/
 /*****************************************************************************/
 
 static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
@@ -185,8 +185,8 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 	 /***** Table head *****/
 	 Asg_PutHeadForSeeing (Assignments,false);	// Not print view
 
-	 /***** Write all the assignments *****/
-	 for (NumAsg = Pagination.FirstItemVisible;
+	 /***** Write all assignments *****/
+	 for (NumAsg  = Pagination.FirstItemVisible;
 	      NumAsg <= Pagination.LastItemVisible;
 	      NumAsg++)
 	    Asg_ShowOneAssignment (Assignments,
@@ -983,11 +983,11 @@ void Asg_RemoveAssignment (void)
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);	// Inside this function, the course is checked to be the current one
 
-   /***** Remove all the folders associated to this assignment *****/
+   /***** Remove all folders associated to this assignment *****/
    if (Asg.Folder[0])
       Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Asg.Folder);
 
-   /***** Remove all the groups of this assignment *****/
+   /***** Remove all groups of this assignment *****/
    Asg_DB_RemoveGrpsAssociatedToAnAssignment (Asg.AsgCod);
 
    /***** Remove assignment *****/
@@ -1557,7 +1557,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Asg_Assignment *As
   }
 
 /*****************************************************************************/
-/****************** Remove all the assignments of a course *******************/
+/******************** Remove all assignments from a course *******************/
 /*****************************************************************************/
 
 void Asg_RemoveCrsAssignments (long CrsCod)
@@ -1594,7 +1594,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
 /************************ Get number of assignments **************************/
 /*****************************************************************************/
 // Returns the number of assignments
-// in this location (all the platform, current degree or current course)
+// in this location (all the platform, the current degree or the current course)
 
 unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif)
   {

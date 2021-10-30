@@ -164,7 +164,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
   }
 
 /*****************************************************************************/
-/********** End the reading of all the characters coming from stdin **********/
+/************ End the reading of all characters coming from stdin ************/
 /*****************************************************************************/
 
 void Fil_EndOfReadingStdin (void)
@@ -432,7 +432,7 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
 	       /* Scan the directory */
 	       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)
 		 {
-		  /* Remove recursively all the directories and files */
+		  /* Remove recursively all directories and files */
 		  for (NumFile = 0;
 		       NumFile < NumFiles;
 		       NumFile++)

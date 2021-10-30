@@ -96,7 +96,7 @@ void Plc_ResetPlaces (struct Plc_Places *Places)
   }
 
 /*****************************************************************************/
-/*************************** List all the places *****************************/
+/***************************** List all places *******************************/
 /*****************************************************************************/
 
 void Plc_SeePlaces (void)
@@ -347,7 +347,7 @@ void Plc_PutIconToViewPlaces (void)
   }
 
 /*****************************************************************************/
-/**************************** List all the places ****************************/
+/******************************* List all places *****************************/
 /*****************************************************************************/
 
 void Plc_GetListPlaces (struct Plc_Places *Places)
@@ -458,7 +458,7 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
   }
 
 /*****************************************************************************/
-/*************************** List all the places *****************************/
+/***************************** List all places *******************************/
 /*****************************************************************************/
 
 static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
@@ -472,7 +472,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
       /***** Write heading *****/
       Plc_PutHeadPlaces ();
 
-      /***** Write all the places *****/
+      /***** Write all places *****/
       for (NumPlc = 0;
 	   NumPlc < Places->Num;
 	   NumPlc++)

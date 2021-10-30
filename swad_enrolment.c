@@ -586,7 +586,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	       /* Put link to go to admin student */
 	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
-	       /* Put link to remove all the students in the current course */
+	       /* Put link to remove all students in the current course */
 	       if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 					 1 << Rol_STD))	// This course has students
 		  Enr_PutLinkToRemAllStdsThisCrs ();
@@ -1144,7 +1144,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		     if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod == ListUsrCods.Lst[0])	// User found
 			Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove = true;	// Mark as removable
 	      }
-	    else	// Remove all the users (of the role) except these specified
+	    else	// Remove all users (of the role) except these specified
 	      {
 	       for (NumCurrentUsr = 0;
 		    NumCurrentUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
@@ -1713,14 +1713,14 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
   }
 
 /*****************************************************************************/
-/**** Put a link (form) to remove all the students in the current course *****/
+/****** Put a link (form) to remove all students in the current course *******/
 /*****************************************************************************/
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void)
   {
    extern const char *Txt_Remove_all_students;
 
-   /***** Put form to remove all the students in the current course *****/
+   /***** Put form to remove all students in the current course *****/
    Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,
                                   NULL,NULL,
 				  "trash.svg",
@@ -1728,7 +1728,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
   }
 
 /*****************************************************************************/
-/********** Ask for removing all the students from current course ************/
+/************ Ask for removing all students from current course **************/
 /*****************************************************************************/
 
 void Enr_AskRemAllStdsThisCrs (void)
@@ -1773,7 +1773,7 @@ void Enr_AskRemAllStdsThisCrs (void)
   }
 
 /*****************************************************************************/
-/***************** Remove all the students from current course ***************/
+/******************* Remove all students from current course *****************/
 /*****************************************************************************/
 
 void Enr_RemAllStdsThisCrs (void)
@@ -1793,7 +1793,7 @@ void Enr_RemAllStdsThisCrs (void)
   }
 
 /*****************************************************************************/
-/***************** Remove all the students from a given course ***************/
+/******************* Remove all students from a given course *****************/
 /*****************************************************************************/
 // Returns the numbers of students in list
 
@@ -1803,11 +1803,11 @@ unsigned Enr_RemAllStdsInCrs (struct Crs_Course *Crs)
    unsigned NumUsr;
 
    /***** Get list of students in current course *****/
-   Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all the students of the current course
+   Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all students of the current course
    Usr_GetListUsrs (HieLvl_CRS,Rol_STD);
    NumStdsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 
-   /***** Remove all the students *****/
+   /***** Remove all students *****/
    for (NumUsr = 0;
 	NumUsr < NumStdsInCrs;
 	NumUsr++)
@@ -3194,10 +3194,10 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
-      /***** Remove user from all the attendance events in course *****/
+      /***** Remove user from all attendance events in course *****/
       Att_DB_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
 
-      /***** Remove user from all the groups in course *****/
+      /***** Remove user from all groups in course *****/
       Grp_RemUsrFromAllGrpsInCrs (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user's status about reading of course information *****/
@@ -3222,7 +3222,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       /***** Remove some information about files in course and groups *****/
       Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (UsrDat->UsrCod,Crs->CrsCod);
 
-      /***** Set all the notifications for this user in this course as removed,
+      /***** Set all notifications for this user in this course as removed,
              except notifications about new messages *****/
       Ntf_DB_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 

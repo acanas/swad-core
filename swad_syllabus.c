@@ -402,7 +402,7 @@ void Syl_LoadListItemsSyllabusIntoMemory (struct Syl_Syllabus *Syllabus,
       Syl_LstItemsSyllabus.Lst[0].Text[0] = '\0';
      }
    else
-      /***** Loop to read and store all the items of the syllabus *****/
+      /***** Loop to read and store all items of the syllabus *****/
       for (NumItem = 0;
 	   NumItem < Syl_LstItemsSyllabus.NumItems;
 	   NumItem++)

@@ -94,7 +94,7 @@ void Bld_ResetBuildings (struct Bld_Buildings *Buildings)
   }
 
 /*****************************************************************************/
-/************************** List all the buildings ***************************/
+/****************************** List all buildings ***************************/
 /*****************************************************************************/
 
 void Bld_SeeBuildings (void)
@@ -305,7 +305,7 @@ void Bld_PutIconToViewBuildings (void)
   }
 
 /*****************************************************************************/
-/************************** List all the buildings ***************************/
+/***************************** List all buildings ***************************/
 /*****************************************************************************/
 
 void Bld_GetListBuildings (struct Bld_Buildings *Buildings,
@@ -407,7 +407,7 @@ void Bld_FreeListBuildings (struct Bld_Buildings *Buildings)
   }
 
 /*****************************************************************************/
-/************************* List all the buildings ****************************/
+/**************************** List all buildings *****************************/
 /*****************************************************************************/
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
@@ -422,7 +422,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
       /***** Write heading *****/
       Bld_PutHeadBuildings ();
 
-      /***** Write all the buildings *****/
+      /***** Write all buildings *****/
       for (NumBld = 0;
 	   NumBld < Buildings->Num;
 	   NumBld++)

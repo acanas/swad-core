@@ -357,7 +357,7 @@ static void Sch_SearchInDB (void)
 
    Gbl.Search.LogSearch = true;
 
-   /***** Select courses in all the degrees or in current degree *****/
+   /***** Select courses in all degrees or in current degree *****/
    switch (Gbl.Scope.Current)
      {
       case HieLvl_UNK:

@@ -522,7 +522,7 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (HieLvl_CTR),
 			       Gbl.Hierarchy.Ins.InsCod,
 			       RolesSelected);
-	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this institution
+	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this institution
 	    case Rol_SYS_ADM:
 	       // Requests in any course of this institution
 	       return (unsigned)
@@ -602,8 +602,8 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       Sco_GetDBStrFromScope (HieLvl_DEG),
 			       Gbl.Hierarchy.Ctr.CtrCod,
 			       RolesSelected);
-	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all the requesters from this center
-	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this center
+	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this center
+	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this center
 	    case Rol_SYS_ADM:
 	       // Request in any course of this center
 	       return (unsigned)
@@ -654,9 +654,9 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
 			       (unsigned) Rol_TCH,
 			       Gbl.Hierarchy.Deg.DegCod,
 			       RolesSelected);
-	    case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this degree
-	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all the requesters from this degree
-	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this degree
+	    case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all requesters from this degree
+	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this degree
+	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this degree
 	    case Rol_SYS_ADM:
 	       // Requests in any course of this degree
 	       return (unsigned)
@@ -682,10 +682,10 @@ unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelect
       case HieLvl_CRS:        // Show requesters for the current course
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
-	    case Rol_TCH:	// If I am logged as teacher of this course   , I can view all the requesters from this course
-	    case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all the requesters from this course
-	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all the requesters from this course
-	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all the requesters from this course
+	    case Rol_TCH:	// If I am logged as teacher of this course   , I can view all requesters from this course
+	    case Rol_DEG_ADM:	// If I am logged as admin of this degree     , I can view all requesters from this course
+	    case Rol_CTR_ADM:	// If I am logged as admin of this center     , I can view all requesters from this course
+	    case Rol_INS_ADM:	// If I am logged as admin of this institution, I can view all requesters from this course
 	    case Rol_SYS_ADM:
 	       // Requests in this course
 	       return (unsigned)
