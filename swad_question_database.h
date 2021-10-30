@@ -39,7 +39,16 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+long Qst_DB_CreateQst (const struct Qst_Question *Question);
+void Qst_DB_UpdateQst (const struct Qst_Question *Question);
 void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score);
+void Qst_DB_UpdateQstShuffle (long QstCod,bool Shuffle);
+//-----------------------------------------------------------------------------
+void Qst_DB_CreateIntAnswer (struct Qst_Question *Question);
+void Qst_DB_CreateFltAnswer (struct Qst_Question *Question);
+void Qst_DB_CreateTF_Answer (struct Qst_Question *Question);
+void Qst_DB_CreateChoAnswer (struct Qst_Question *Question);
+//-----------------------------------------------------------------------------
 
 unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
                          const struct Qst_Questions *Questions);
@@ -55,6 +64,8 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
 unsigned Qst_DB_GetQstData (MYSQL_RES **mysql_res,long QstCod);
 Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);
 long Qst_DB_GetQstMedCod (long CrsCod,long QstCod);
+unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
+                                          const struct Qst_Question *Question);
 
 unsigned Qst_DB_GetNumAnswersQst (long QstCod);
 unsigned Qst_DB_GetDataOfAnswers (MYSQL_RES **mysql_res,long QstCod,bool Shuffle);

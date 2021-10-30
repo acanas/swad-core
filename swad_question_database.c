@@ -72,12 +72,76 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/*********** Insert or update question in the table of questions *************/
+/*****************************************************************************/
+
+long Qst_DB_CreateQst (const struct Qst_Question *Question)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not create question",
+				"INSERT INTO tst_questions"
+					   " (CrsCod,"
+					     "EditTime,"
+					     "AnsType,"
+					     "Shuffle,"
+					     "Stem,"
+					     "Feedback,"
+					     "MedCod,"
+					     "NumHits,"
+					     "Score)"
+			            " VALUES"
+					  " (%ld,"	// CrsCod
+					     "NOW(),"	// EditTime
+					     "'%s',"	// AnsType
+					     "'%c',"	// Shuffle
+					     "'%s',"	// Stem
+					     "'%s',"	// Feedback
+					     "%ld,"	// MedCod
+					     "0,"	// NumHits
+					     "0)",	// Score
+				Gbl.Hierarchy.Crs.CrsCod,
+				Qst_DB_StrAnswerTypes[Question->Answer.Type],
+				Question->Answer.Shuffle ? 'Y' :
+							   'N',
+				Question->Stem,
+				Question->Feedback ? Question->Feedback :
+						     "",
+				Question->Media.MedCod);
+  }
+
+/*****************************************************************************/
+/************ Update existing question in the table of questions *************/
+/*****************************************************************************/
+
+void Qst_DB_UpdateQst (const struct Qst_Question *Question)
+  {
+   DB_QueryUPDATE ("can not update question",
+		   "UPDATE tst_questions"
+		     " SET EditTime=NOW(),"
+			  "AnsType='%s',"
+			  "Shuffle='%c',"
+			  "Stem='%s',"
+			  "Feedback='%s',"
+			  "MedCod=%ld"
+		   " WHERE QstCod=%ld"
+		     " AND CrsCod=%ld",	// Extra check
+		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
+		   Question->Answer.Shuffle ? 'Y' :
+					      'N',
+		   Question->Stem,
+		   Question->Feedback ? Question->Feedback :
+					"",
+		   Question->Media.MedCod,
+		   Question->QstCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /*********************** Update the score of a question **********************/
 /*****************************************************************************/
 
 void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
   {
-   /***** Update number of clicks and score of the question *****/
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
    if (AnswerIsNotBlank)	// User's answer is not blank
       DB_QueryUPDATE ("can not update the score of a question",
@@ -95,6 +159,109 @@ void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
                       " WHERE QstCod=%ld",
 		      QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/*********************** Change the shuffle of a question ********************/
+/*****************************************************************************/
+
+void Qst_DB_UpdateQstShuffle (long QstCod,bool Shuffle)
+  {
+   DB_QueryUPDATE ("can not update the shuffle type of a question",
+		   "UPDATE tst_questions"
+		     " SET Shuffle='%c'"
+                   " WHERE QstCod=%ld"
+                     " AND CrsCod=%ld",	// Extra check
+		   Shuffle ? 'Y' :
+			     'N',
+		   QstCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*************************** Create integer answer ***************************/
+/*****************************************************************************/
+
+void Qst_DB_CreateIntAnswer (const struct Qst_Question *Question)
+  {
+   DB_QueryINSERT ("can not create answer",
+		   "INSERT INTO tst_answers"
+		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
+		   " VALUES"
+		   " (%ld,0,%ld,'',-1,'Y')",
+		   Question->QstCod,
+		   Question->Answer.Integer);
+  }
+
+/*****************************************************************************/
+/**************************** Create float answer ****************************/
+/*****************************************************************************/
+
+void Qst_DB_CreateFltAnswer (const struct Qst_Question *Question)
+  {
+   unsigned i;
+
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   for (i = 0;
+	i < 2;
+	i++)
+      DB_QueryINSERT ("can not create answer",
+		      "INSERT INTO tst_answers"
+		      " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
+		      " VALUES"
+		      " (%ld,%u,'%.15lg','',-1,'Y')",
+		      Question->QstCod,
+		      i,
+		      Question->Answer.FloatingPoint[i]);
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/***************************** Create T/F answer *****************************/
+/*****************************************************************************/
+
+void Qst_DB_CreateTF_Answer (const struct Qst_Question *Question)
+  {
+   DB_QueryINSERT ("can not create answer",
+		   "INSERT INTO tst_answers"
+		   " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
+		   " VALUES"
+		   " (%ld,0,'%c','',-1,'Y')",
+		   Question->QstCod,
+		   Question->Answer.TF);
+  }
+
+/*****************************************************************************/
+/***************************** Create T/F answer *****************************/
+/*****************************************************************************/
+
+void Qst_DB_CreateChoAnswer (struct Qst_Question *Question)
+  {
+   unsigned NumOpt;
+
+   for (NumOpt = 0;
+	NumOpt < Question->Answer.NumOptions;
+	NumOpt++)
+      if (Question->Answer.Options[NumOpt].Text[0] ||			// Text
+	  Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
+	{
+	 DB_QueryINSERT ("can not create answer",
+			 "INSERT INTO tst_answers"
+			 " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
+			 " VALUES"
+			 " (%ld,%u,'%s','%s',%ld,'%c')",
+			 Question->QstCod,NumOpt,
+			 Question->Answer.Options[NumOpt].Text,
+			 Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
+								     "",
+			 Question->Answer.Options[NumOpt].Media.MedCod,
+			 Question->Answer.Options[NumOpt].Correct ? 'Y' :
+								    'N');
+
+	 /* Update image status */
+	 if (Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
+	    Question->Answer.Options[NumOpt].Media.Status = Med_STORED_IN_DB;
+	}
   }
 
 /*****************************************************************************/
@@ -949,6 +1116,25 @@ long Qst_DB_GetQstMedCod (long CrsCod,long QstCod)
 				" AND CrsCod=%ld",	// Extra check
 			      QstCod,
 			      CrsCod);
+  }
+
+/*****************************************************************************/
+/****************** Get question code from type and stem *********************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetQstCodFromTypeAnsStem (MYSQL_RES **mysql_res,
+                                          const struct Qst_Question *Question)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not check if a question exists",
+		   "SELECT QstCod"
+		    " FROM tst_questions"
+		   " WHERE CrsCod=%ld"
+		     " AND AnsType='%s'"
+		     " AND Stem='%s'",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Qst_DB_StrAnswerTypes[Question->Answer.Type],
+		   Question->Stem);
   }
 
 /*****************************************************************************/

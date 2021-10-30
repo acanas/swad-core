@@ -3061,19 +3061,9 @@ bool Qst_CheckIfQuestionExistsInDB (struct Qst_Question *Question)
    unsigned NumOptsExistingQstInDB;
    unsigned i;
 
-   /***** Check if stem exists *****/
-   NumQstsWithThisStem =
-   (unsigned) DB_QuerySELECT (&mysql_res_qst,"can not check if a question exists",
-			      "SELECT QstCod"
-			       " FROM tst_questions"
-			      " WHERE CrsCod=%ld"
-			        " AND AnsType='%s'"
-			        " AND Stem='%s'",
-			      Gbl.Hierarchy.Crs.CrsCod,
-			      Qst_DB_StrAnswerTypes[Question->Answer.Type],
-			      Question->Stem);
-
-   if (NumQstsWithThisStem)	// There are questions in database with the same stem that the one of this question
+   /***** Check if there are existing questions in database
+          with the same stem that the one of this question *****/
+   if ((NumQstsWithThisStem = Qst_DB_GetQstCodFromTypeAnsStem (&mysql_res_qst,Question)))
      {
       /***** Check if the answer exists in any of the questions with the same stem *****/
       /* For each question with the same stem */
@@ -3429,17 +3419,8 @@ void Qst_ChangeShuffleQst (void)
    /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
    Shuffle = Par_GetParToBool ("Shuffle");
 
-   /***** Remove the question from all tables *****/
-   /* Update the question changing the current shuffle */
-   DB_QueryUPDATE ("can not update the shuffle type of a question",
-		   "UPDATE tst_questions"
-		     " SET Shuffle='%c'"
-                   " WHERE QstCod=%ld"
-                     " AND CrsCod=%ld",
-		   Shuffle ? 'Y' :
-			     'N',
-		   Questions.Question.QstCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Update the question changing the current shuffle *****/
+   Qst_DB_UpdateQstShuffle (Questions.Question.QstCod,Shuffle);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
@@ -3508,64 +3489,14 @@ void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question)
    extern const char *Qst_DB_StrAnswerTypes[Qst_NUM_ANS_TYPES];
 
    if (Question->QstCod < 0)	// It's a new question
-     {
       /***** Insert question in the table of questions *****/
-      Question->QstCod =
-      DB_QueryINSERTandReturnCode ("can not create question",
-				   "INSERT INTO tst_questions"
-				   " (CrsCod,"
-				     "EditTime,"
-				     "AnsType,"
-				     "Shuffle,"
-				     "Stem,"
-				     "Feedback,"
-				     "MedCod,"
-				     "NumHits,"
-				     "Score)"
-				   " VALUES"
-				   " (%ld,"	// CrsCod
-				     "NOW(),"	// EditTime
-				     "'%s',"	// AnsType
-				     "'%c',"	// Shuffle
-				     "'%s',"	// Stem
-				     "'%s',"	// Feedback
-				     "%ld,"	// MedCod
-				     "0,"	// NumHits
-				     "0)",	// Score
-				   Gbl.Hierarchy.Crs.CrsCod,
-				   Qst_DB_StrAnswerTypes[Question->Answer.Type],
-				   Question->Answer.Shuffle ? 'Y' :
-						              'N',
-				   Question->Stem,
-				   Question->Feedback ? Question->Feedback :
-					                "",
-				   Question->Media.MedCod);
-     }
+      Question->QstCod = Qst_DB_CreateQst (Question);
    else			// It's an existing question
      {
       /***** Update existing question *****/
-      /* Update question in database */
-      DB_QueryUPDATE ("can not update question",
-		      "UPDATE tst_questions"
-		        " SET EditTime=NOW(),"
-		             "AnsType='%s',"
-		             "Shuffle='%c',"
-		             "Stem='%s',"
-		             "Feedback='%s',"
-		             "MedCod=%ld"
-		      " WHERE QstCod=%ld"
-		        " AND CrsCod=%ld",
-		      Qst_DB_StrAnswerTypes[Question->Answer.Type],
-		      Question->Answer.Shuffle ? 'Y' :
-					         'N',
-		      Question->Stem,
-		      Question->Feedback ? Question->Feedback :
-			                   "",
-		      Question->Media.MedCod,
-		      Question->QstCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
+      Qst_DB_UpdateQst (Question);
 
-      /* Remove answers and tags from this test question */
+      /***** Remove answers and tags from this test question *****/
       Qst_DB_RemAnsFromQst (Question->QstCod);
       Tag_DB_RemTagsFromQst (Question->QstCod);
      }
@@ -3577,75 +3508,18 @@ void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Question)
 
 void Qst_InsertAnswersIntoDB (struct Qst_Question *Question)
   {
-   unsigned NumOpt;
-   unsigned i;
+   void (*Qst_DB_CreateAnswer[Qst_NUM_ANS_TYPES]) (struct Qst_Question *Question) =
+    {
+     [Qst_ANS_INT            ] = Qst_DB_CreateIntAnswer,
+     [Qst_ANS_FLOAT          ] = Qst_DB_CreateFltAnswer,
+     [Qst_ANS_TRUE_FALSE     ] = Qst_DB_CreateTF_Answer,
+     [Qst_ANS_UNIQUE_CHOICE  ] = Qst_DB_CreateChoAnswer,
+     [Qst_ANS_MULTIPLE_CHOICE] = Qst_DB_CreateChoAnswer,
+     [Qst_ANS_TEXT           ] = Qst_DB_CreateChoAnswer,
+    };
 
-   /***** Insert answers in the answers table *****/
-   switch (Question->Answer.Type)
-     {
-      case Qst_ANS_INT:
-         DB_QueryINSERT ("can not create answer",
-			 "INSERT INTO tst_answers"
-                         " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
-                         " VALUES"
-                         " (%ld,0,%ld,'',-1,'Y')",
-			 Question->QstCod,
-			 Question->Answer.Integer);
-         break;
-      case Qst_ANS_FLOAT:
-	 Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   	 for (i = 0;
-   	      i < 2;
-   	      i++)
-            DB_QueryINSERT ("can not create answer",
-        		    "INSERT INTO tst_answers"
-                            " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
-                            " VALUES"
-                            " (%ld,%u,'%.15lg','',-1,'Y')",
-			    Question->QstCod,
-			    i,
-			    Question->Answer.FloatingPoint[i]);
-         Str_SetDecimalPointToLocal ();	// Return to local system
-         break;
-      case Qst_ANS_TRUE_FALSE:
-         DB_QueryINSERT ("can not create answer",
-			 "INSERT INTO tst_answers"
-                         " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
-                         " VALUES"
-                         " (%ld,0,'%c','',-1,'Y')",
-			 Question->QstCod,
-			 Question->Answer.TF);
-         break;
-      case Qst_ANS_UNIQUE_CHOICE:
-      case Qst_ANS_MULTIPLE_CHOICE:
-      case Qst_ANS_TEXT:
-         for (NumOpt = 0;
-              NumOpt < Question->Answer.NumOptions;
-              NumOpt++)
-            if (Question->Answer.Options[NumOpt].Text[0] ||			// Text
-        	Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
-              {
-               DB_QueryINSERT ("can not create answer",
-        		       "INSERT INTO tst_answers"
-                               " (QstCod,AnsInd,Answer,Feedback,MedCod,Correct)"
-                               " VALUES"
-                               " (%ld,%u,'%s','%s',%ld,'%c')",
-			       Question->QstCod,NumOpt,
-			       Question->Answer.Options[NumOpt].Text,
-			       Question->Answer.Options[NumOpt].Feedback ? Question->Answer.Options[NumOpt].Feedback :
-					                                   "",
-			       Question->Answer.Options[NumOpt].Media.MedCod,
-			       Question->Answer.Options[NumOpt].Correct ? 'Y' :
-								          'N');
-
-               /* Update image status */
-	       if (Question->Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
-		  Question->Answer.Options[NumOpt].Media.Status = Med_STORED_IN_DB;
-              }
-	 break;
-      default:
-         break;
-     }
+   /***** Create answer *****/
+   Qst_DB_CreateAnswer[Question->Answer.Type] (Question);
   }
 
 /*****************************************************************************/
