@@ -754,6 +754,53 @@ unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
+/************** Get the institutions of a user from database *****************/
+/*****************************************************************************/
+// Returns the number of rows of the result
+
+unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
+  {
+   if (CtyCod > 0)
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
+		      "SELECT ins_instits.InsCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers,"
+			     "ins_instits"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		        " AND ctr_centers.InsCod=ins_instits.InsCod"
+		        " AND ins_instits.CtyCod=%ld"
+		      " GROUP BY ins_instits.InsCod"
+		      " ORDER BY ins_instits.ShortName",
+		      UsrCod,
+		      CtyCod);
+   else
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
+		      "SELECT ins_instits.InsCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers,"
+			     "ins_instits"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		        " AND ctr_centers.InsCod=ins_instits.InsCod"
+		      " GROUP BY ins_instits.InsCod"
+		      " ORDER BY ins_instits.ShortName",
+		      UsrCod);
+  }
+
+/*****************************************************************************/
 /***************************** Remove institution ****************************/
 /*****************************************************************************/
 

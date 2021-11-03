@@ -974,16 +974,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
    	   	   	// ...but not belonging to the current course *********
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
+	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
+	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
+	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		 }
 	      }
@@ -992,16 +992,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_STD:	// Student in current course **************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
+	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
+	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
+	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1015,16 +1015,16 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
       case Rol_TCH:	// Teacher in current course **************************
 	 *ScopesAllowed = 1 << HieLvl_SYS;
 	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
+	 if (Cty_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
 	   {
 	    *ScopesAllowed |= 1 << HieLvl_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
+	    if (Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
 	      {
 	       *ScopesAllowed |= 1 << HieLvl_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
+	       if (Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
 		 {
 		  *ScopesAllowed |= 1 << HieLvl_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		  if (Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
 		    {
 		     *ScopesAllowed |= 1 << HieLvl_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -1183,19 +1183,19 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
             Svy->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
 	    break;
 	 case HieLvl_CTY:	// Country
-            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCty (Svy->Cod);
+            Svy->Status.IBelongToScope = Cty_CheckIfIBelongToCty (Svy->Cod);
 	    break;
 	 case HieLvl_INS:	// Institution
-            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToIns (Svy->Cod);
+            Svy->Status.IBelongToScope = Ins_CheckIfIBelongToIns (Svy->Cod);
 	    break;
 	 case HieLvl_CTR:	// Center
-            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCtr (Svy->Cod);
+            Svy->Status.IBelongToScope = Ctr_CheckIfIBelongToCtr (Svy->Cod);
 	    break;
 	 case HieLvl_DEG:	// Degree
-            Svy->Status.IBelongToScope = Usr_CheckIfIBelongToDeg (Svy->Cod);
+            Svy->Status.IBelongToScope = Deg_CheckIfIBelongToDeg (Svy->Cod);
 	    break;
 	 case HieLvl_CRS:	// Course
-	    Svy->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Svy->Cod) &&
+	    Svy->Status.IBelongToScope = Crs_CheckIfIBelongToCrs (Svy->Cod) &&
 					 Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
 	    break;
         }

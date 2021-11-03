@@ -307,6 +307,26 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
   }
 
 /*****************************************************************************/
+/*********** Get the user's code of a random student from a group ************/
+/*****************************************************************************/
+// Returns user's code or -1 if no user found
+
+long Grp_DB_GetRamdomStdFromGrp (long GrpCod)
+  {
+   return DB_QuerySELECTCode ("can not get a random student from a group",
+			      "SELECT grp_users.UsrCod"
+			       " FROM grp_users,"
+				     "crs_users"
+			      " WHERE grp_users.GrpCod=%ld"
+			        " AND grp_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.Role=%u"
+			      " ORDER BY RAND()"
+			      " LIMIT 1",
+			      GrpCod,
+			      (unsigned) Rol_STD);
+  }
+
+/*****************************************************************************/
 /******** Get all user codes belonging to the current group, except me *******/
 /*****************************************************************************/
 

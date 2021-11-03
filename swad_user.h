@@ -336,44 +336,36 @@ void Usr_FlushCacheUsrSharesAnyOfMyCrs (void);
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 
-void Usr_GetMyCountrs (void);
-void Usr_GetMyInstits (void);
-void Usr_GetMyCenters (void);
-void Usr_GetMyDegrees (void);
-void Usr_GetMyCourses (void);
+void Cty_GetMyCountrs (void);
+void Ins_GetMyInstits (void);
+void Ctr_GetMyCenters (void);
+void Deg_GetMyDegrees (void);
+void Deg_GetUsrMainDeg (long UsrCod,
+		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		        Rol_Role_t *MaxRole);
+void Crs_GetMyCourses (void);
 
-void Usr_FreeMyCountrs (void);
-void Usr_FreeMyInstits (void);
-void Usr_FreeMyCenters (void);
-void Usr_FreeMyDegrees (void);
-void Usr_FreeMyCourses (void);
+void Cty_FreeMyCountrs (void);
+void Ins_FreeMyInstits (void);
+void Ctr_FreeMyCenters (void);
+void Deg_FreeMyDegrees (void);
+void Crs_FreeMyCourses (void);
 
-void Usr_FlushCacheUsrBelongsToIns (void);
-bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
-void Usr_FlushCacheUsrBelongsToCtr (void);
-bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
-void Usr_FlushCacheUsrBelongsToDeg (void);
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
-void Usr_FlushCacheUsrBelongsToCrs (void);
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+void Ins_FlushCacheUsrBelongsToIns (void);
+bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
+void Ctr_FlushCacheUsrBelongsToCtr (void);
+bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
+void Deg_FlushCacheUsrBelongsToDeg (void);
+bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
+void Crs_FlushCacheUsrBelongsToCrs (void);
+bool Crs_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses);
 
-bool Usr_CheckIfIBelongToCty (long CtyCod);
-bool Usr_CheckIfIBelongToIns (long InsCod);
-bool Usr_CheckIfIBelongToCtr (long CtrCod);
-bool Usr_CheckIfIBelongToDeg (long DegCod);
-bool Usr_CheckIfIBelongToCrs (long CrsCod);
-
-unsigned Usr_DB_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res);
-unsigned Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res);
-unsigned Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res);
-unsigned Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
-unsigned Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
-void Usr_GetMainDeg (long UsrCod,
-		     char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-		     Rol_Role_t *MaxRole);
-
-bool Usr_DB_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
+bool Cty_CheckIfIBelongToCty (long CtyCod);
+bool Ins_CheckIfIBelongToIns (long InsCod);
+bool Ctr_CheckIfIBelongToCtr (long CtrCod);
+bool Deg_CheckIfIBelongToDeg (long DegCod);
+bool Crs_CheckIfIBelongToCrs (long CrsCod);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
@@ -407,20 +399,11 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
                                               Usr_GetPrefs_t GetPrefs,
                                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
 void Usr_UpdateMyLastData (void);
-void Usr_DB_UpdateMyLastWhatToSearch (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
-
-void Usr_DB_RemoveUsrLastData (long UsrCod);
-void Usr_DB_RemoveUsrData (long UsrCod);
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs);
-
-long Usr_DB_GetRamdomStdFromCrs (long CrsCod);
-long Usr_DB_GetRamdomStdFromGrp (long GrpCod);
-
-unsigned Usr_DB_GetNumTchsCurrentInsInDepartment (long DptCod);
 
 void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
 unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
@@ -527,7 +510,6 @@ void Usr_SeeTchClassPhotoPrn (void);
 void Usr_PutSelectorNumColsClassPhoto (void);
 
 void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1]);
-bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
@@ -552,14 +534,5 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
 void Usr_PutWhoIcon (Usr_Who_t Who);
 void Usr_PutHiddenParamWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetHiddenParamWho (void);
-
-unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
-
-unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
-
-bool Usr_DB_FindStrInUsrsNames (const char *Str);
-
-void Usr_DB_UpdateMyOffice (void);
-void Usr_DB_UpdateMyOfficePhone (void);
 
 #endif

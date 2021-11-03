@@ -71,6 +71,7 @@
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_timeline_note.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

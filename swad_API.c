@@ -125,6 +125,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
+#include "swad_user_database.h"
 #include "swad_xml.h"
 
 /*****************************************************************************/

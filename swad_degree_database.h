@@ -72,6 +72,9 @@ unsigned Deg_DB_SearchDegs (MYSQL_RES **mysql_res,
 unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod);
 unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
+
+unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod);
+
 unsigned Deg_DB_GetNumDegsInCty (long CtyCod);
 unsigned Deg_DB_GetNumDegsInIns (long InsCod);
 unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);

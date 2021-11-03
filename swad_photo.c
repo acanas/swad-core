@@ -1129,7 +1129,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	   }
 
 	 /* Main degree (in which the user has more courses) short name */
-	 Usr_GetMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
+	 Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
 	 if (MainDegreeShrtName[0])
 	   {
 	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");

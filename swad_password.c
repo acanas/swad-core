@@ -47,6 +47,7 @@
 #include "swad_parameter.h"
 #include "swad_session_database.h"
 #include "swad_user.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

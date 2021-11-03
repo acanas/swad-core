@@ -1681,17 +1681,17 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
+	 return Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
 	                                    Gbl.Hierarchy.Deg.DegCod);
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can see the user's email of users from current center */
-	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
+	 return Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
 	                                    Gbl.Hierarchy.Ctr.CtrCod);
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
-	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
+	 return Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
 	                                    Gbl.Hierarchy.Ins.InsCod);
       case Rol_SYS_ADM:
 	 return true;

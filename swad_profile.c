@@ -64,6 +64,7 @@
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
 #include "swad_user.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

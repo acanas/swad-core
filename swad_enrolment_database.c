@@ -93,6 +93,24 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
+/******** Get the user's code of a random student from current course ********/
+/*****************************************************************************/
+// Returns user's code or -1 if no user found
+
+long Enr_DB_GetRamdomStdFromCrs (long CrsCod)
+  {
+   return DB_QuerySELECTCode ("can not get a random student from a course",
+			      "SELECT UsrCod"
+			       " FROM crs_users"
+			      " WHERE CrsCod=%ld"
+			        " AND Role=%u"
+			      " ORDER BY RAND()"
+			      " LIMIT 1",
+			      CrsCod,
+			      (unsigned) Rol_STD);
+  }
+
+/*****************************************************************************/
 /*********** Get all user codes belonging to the current course **************/
 /*****************************************************************************/
 

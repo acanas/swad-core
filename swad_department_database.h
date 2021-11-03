@@ -47,6 +47,7 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod);
 bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
 unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod);
+unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod);
 
 void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod);
 void Dpt_DB_UpdateDptName (long DptCod,const char *FieldName,const char *NewDptName);

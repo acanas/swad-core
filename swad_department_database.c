@@ -190,6 +190,35 @@ unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod)
   }
 
 /*****************************************************************************/
+/* Get number of teachers in courses of the current instit. in a department **/
+/*****************************************************************************/
+
+unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod)
+  {
+   /***** Get the number of teachers
+          from the current institution in a department *****/
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of teachers in a department",
+		  "SELECT COUNT(DISTINCT usr_data.UsrCod)"
+		   " FROM usr_data,"
+		         "crs_users,"
+		         "crs_courses,"
+		         "deg_degrees,"
+		         "ctr_centers"
+		  " WHERE usr_data.InsCod=%ld"				// User in the current institution...
+		    " AND usr_data.DptCod=%ld"				// ...and the specified department...
+		    " AND usr_data.UsrCod=crs_users.UsrCod"		// ...who is...
+		    " AND crs_users.Role IN (%u,%u)"			// ...a teacher...
+		    " AND crs_users.CrsCod=crs_courses.CrsCod"		// ...in a course...
+		    " AND crs_courses.DegCod=deg_degrees.DegCod"	// ...of a degree...
+		    " AND deg_degrees.CtrCod=ctr_centers.InsCod"	// ...of a center...
+		    " AND ctr_centers.InsCod=%ld",			// ...of the current institution
+		  Gbl.Hierarchy.Ins.InsCod,DptCod,
+		  (unsigned) Rol_NET,(unsigned) Rol_TCH,
+		  Gbl.Hierarchy.Ins.InsCod);
+  }
+
+/*****************************************************************************/
 /****************** Update institution in table of departments ***************/
 /*****************************************************************************/
 

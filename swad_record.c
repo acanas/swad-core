@@ -62,6 +62,7 @@
 #include "swad_setting.h"
 #include "swad_timetable.h"
 #include "swad_user.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

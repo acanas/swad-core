@@ -157,7 +157,7 @@ void Rol_SetMyRoles (void)
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	 Gbl.Usrs.Me.IBelongToCurrentDeg = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentDeg = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
@@ -168,7 +168,7 @@ void Rol_SetMyRoles (void)
       if (Gbl.Usrs.Me.IBelongToCurrentDeg)
          Gbl.Usrs.Me.IBelongToCurrentCtr = true;
       else
-         Gbl.Usrs.Me.IBelongToCurrentCtr = Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
+         Gbl.Usrs.Me.IBelongToCurrentCtr = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentCtr = false;
@@ -179,7 +179,7 @@ void Rol_SetMyRoles (void)
       if (Gbl.Usrs.Me.IBelongToCurrentCtr)
 	 Gbl.Usrs.Me.IBelongToCurrentIns = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentIns = Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
+	 Gbl.Usrs.Me.IBelongToCurrentIns = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentIns = false;
@@ -271,7 +271,7 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
    if (InsCod > 0)
      {
       /***** Fill the list with the institutions I belong to (if not already filled) *****/
-      Usr_GetMyInstits ();
+      Ins_GetMyInstits ();
 
       /***** Check if the institution passed as parameter is any of my institutions *****/
       for (NumMyIns = 0;
@@ -295,7 +295,7 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Fill the list with the centers I belong to (if not already filled) *****/
-      Usr_GetMyCenters ();
+      Ctr_GetMyCenters ();
 
       /***** Check if the center passed as parameter is any of my centers *****/
       for (NumMyCtr = 0;
@@ -321,7 +321,7 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
       return Rol_UNK;
 
    /***** Fill the list with the degrees I belong to (if not already filled) *****/
-   Usr_GetMyDegrees ();
+   Deg_GetMyDegrees ();
 
    /***** Check if the degree passed as parameter is any of my degrees *****/
    for (NumMyDeg = 0;
@@ -358,7 +358,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 
    /***** 3. Slow check: get my role from list of my courses *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   Usr_GetMyCourses ();
+   Crs_GetMyCourses ();
 
    /* Check if the current course is any of my courses */
    for (NumMyCrs = 0, Role = Rol_UNK;

@@ -68,6 +68,8 @@ unsigned Crs_DB_GetNumCrssInDeg (long DegCod);
 unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
+unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod);
+
 void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
 void Crs_DB_UpdateCrsStatus (long CrsCod,Crs_Status_t Status);
 void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear);

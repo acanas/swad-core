@@ -34,10 +34,13 @@
 #include "swad_attendance.h"
 #include "swad_browser_database.h"
 #include "swad_call_for_exam_database.h"
+#include "swad_center_database.h"
+#include "swad_country_database.h"
 #include "swad_course.h"
 #include "swad_course_config.h"
 #include "swad_course_database.h"
 #include "swad_database.h"
+#include "swad_degree_database.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
@@ -51,6 +54,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_info.h"
+#include "swad_institution_database.h"
 #include "swad_logo.h"
 #include "swad_message.h"
 #include "swad_notice.h"
@@ -213,7 +217,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 HTM_LI_End ();
 
 	 /***** Get my countries *****/
-	 NumCtys = Usr_DB_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_resCty);
+	 NumCtys = Cty_DB_GetCtysFromUsr (&mysql_resCty,Gbl.Usrs.Me.UsrDat.UsrCod);
 	 for (NumCty = 0;
 	      NumCty < NumCtys;
 	      NumCty++)
@@ -246,8 +250,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    HTM_LI_End ();
 
 	    /***** Get my institutions in this country *****/
-	    NumInss = Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-					  Hie.Cty.CtyCod,&mysql_resIns);
+	    NumInss = Ins_DB_GetInssFromUsr (&mysql_resIns,
+	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
+					     Hie.Cty.CtyCod);
 	    for (NumIns = 0;
 		 NumIns < NumInss;
 		 NumIns++)
@@ -280,8 +285,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       HTM_LI_End ();
 
 	       /***** Get my centers in this institution *****/
-	       NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-					     Hie.Ins.InsCod,&mysql_resCtr);
+	       NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_resCtr,
+	                                        Gbl.Usrs.Me.UsrDat.UsrCod,
+					        Hie.Ins.InsCod);
 	       for (NumCtr = 0;
 		    NumCtr < NumCtrs;
 		    NumCtr++)
@@ -314,8 +320,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  HTM_LI_End ();
 
 		  /***** Get my degrees in this center *****/
-		  NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-						Hie.Ctr.CtrCod,&mysql_resDeg);
+		  NumDegs = Deg_DB_GetDegsFromUsr (&mysql_resDeg,
+		                                   Gbl.Usrs.Me.UsrDat.UsrCod,
+						   Hie.Ctr.CtrCod);
 		  for (NumDeg = 0;
 		       NumDeg < NumDegs;
 		       NumDeg++)
@@ -348,8 +355,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     HTM_LI_End ();
 
 		     /***** Get my courses in this degree *****/
-		     NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-						   Hie.Deg.DegCod,&mysql_resCrs);
+		     NumCrss = Crs_DB_GetCrssFromUsr (&mysql_resCrs,
+		                                      Gbl.Usrs.Me.UsrDat.UsrCod,
+						      Hie.Deg.DegCod);
 		     for (NumCrs = 0;
 			  NumCrs < NumCrss;
 			  NumCrs++)
@@ -782,7 +790,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
-      Usr_GetMyCourses ();
+      Crs_GetMyCourses ();
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
@@ -969,7 +977,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = (Usr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
+	 BgColor = (Crs_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
 				                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	 HTM_TR_Begin (NULL);
@@ -2182,7 +2190,7 @@ void Crs_ContEditAfterChgCrs (void)
 	    PutButtonToRequestRegistration = true;
 	    break;
 	 case Rol_USR:
-	    PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+	    PutButtonToRequestRegistration = !Crs_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 					                                  Crs_EditingCrs->CrsCod,
 					                                  false);
             break;
@@ -2190,7 +2198,7 @@ void Crs_ContEditAfterChgCrs (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+	       PutButtonToRequestRegistration = !Crs_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 									     Crs_EditingCrs->CrsCod,
 									     false);
 	    break;
@@ -2261,7 +2269,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
 void Crs_ReqSelectOneOfMyCourses (void)
   {
    /***** Fill the list with the courses I belong to, if not filled *****/
-   Usr_GetMyCourses ();
+   Crs_GetMyCourses ();
 
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.MyCrss.Num)

@@ -419,6 +419,44 @@ unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
+/**************** Get all courses of a user from database ********************/
+/*****************************************************************************/
+// Returns the number of rows of the result
+
+unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod)
+  {
+   if (DegCod > 0)	// Courses in a degree
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
+		      "SELECT crs_users.CrsCod,"	// row[0]
+			     "crs_users.Role,"		// row[1]
+			     "crs_courses.DegCod"	// row[2]
+		       " FROM crs_users,"
+			     "crs_courses"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=%ld"
+		      " ORDER BY crs_courses.ShortName",
+		      UsrCod,
+		      DegCod);
+   else			// All the courses
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
+		      "SELECT crs_users.CrsCod,"	// row[0]
+			     "crs_users.Role,"		// row[1]
+			     "crs_courses.DegCod"	// row[2]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		      " ORDER BY deg_degrees.ShortName,"
+			        "crs_courses.ShortName",
+		      UsrCod);
+  }
+
+/*****************************************************************************/
 /************* Change the institutional course code of a course **************/
 /*****************************************************************************/
 

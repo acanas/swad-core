@@ -35,8 +35,11 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_center_database.h"
 #include "swad_config.h"
+#include "swad_course_database.h"
 #include "swad_database.h"
+#include "swad_degree_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
@@ -1199,7 +1202,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
       Forums->Thread.ToMove = For_DB_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
-   Usr_GetMyInstits ();
+   Ins_GetMyInstits ();
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forums,
@@ -1222,7 +1225,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeInsForum = true;
 		  else
-		     ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
+		     ICanSeeInsForum = Ins_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
 		 }
 	       else
 		  ICanSeeInsForum = false;
@@ -1235,7 +1238,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeCtrForum = true;
 		  else
-		     ICanSeeCtrForum = Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
+		     ICanSeeCtrForum = Ctr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
 
 		  /***** Links to forums of current institution *****/
 		  if (For_WriteLinksToInsForums (Forums,Gbl.Hierarchy.Ins.InsCod,
@@ -1246,7 +1249,7 @@ static void For_ShowForumList (struct For_Forums *Forums)
 			if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 			   ICanSeeDegForum = true;
 			else
-			   ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
+			   ICanSeeDegForum = Deg_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,
@@ -1287,8 +1290,9 @@ static void For_ShowForumList (struct For_Forums *Forums)
 					     IsLastItemInLevel);
 
 		  /* Get my centers in this institution from database */
-		  NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-						InsCod,&mysql_resCtr);
+		  NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_resCtr,
+		                                   Gbl.Usrs.Me.UsrDat.UsrCod,
+						   InsCod);
 		  for (NumCtr = 0;
 		       NumCtr < NumCtrs;
 		       NumCtr++)
@@ -1304,46 +1308,46 @@ static void For_ShowForumList (struct For_Forums *Forums)
 						    IsLastItemInLevel) > 0)
 		       {
 			/* Get my degrees in this institution from database */
-			if ((NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-							   CtrCod,
-							   &mysql_resDeg)) > 0) // Degrees found in this center
-			   for (NumDeg = 0;
-				NumDeg < NumDegs;
-				NumDeg++)
+			NumDegs = Deg_DB_GetDegsFromUsr (&mysql_resDeg,
+			                                 Gbl.Usrs.Me.UsrDat.UsrCod,
+							 CtrCod);
+			for (NumDeg = 0;
+			     NumDeg < NumDegs;
+			     NumDeg++)
+			  {
+			   /* Get next degree */
+			   row = mysql_fetch_row (mysql_resDeg);
+			   DegCod = Str_ConvertStrCodToLongCod (row[0]);
+
+			   /* Links to forums of this degree */
+			   if (For_WriteLinksToDegForums (Forums,
+							  DegCod,
+							  (NumDeg == NumDegs - 1),
+							  IsLastItemInLevel) > 0)
 			     {
-			      /* Get next degree */
-			      row = mysql_fetch_row (mysql_resDeg);
-			      DegCod = Str_ConvertStrCodToLongCod (row[0]);
-
-			      /* Links to forums of this degree */
-			      if (For_WriteLinksToDegForums (Forums,
-							     DegCod,
-							     (NumDeg == NumDegs - 1),
-							     IsLastItemInLevel) > 0)
+			      /* Get my courses in this degree from database */
+			      NumCrss = Crs_DB_GetCrssFromUsr (&mysql_resCrs,
+							       Gbl.Usrs.Me.UsrDat.UsrCod,
+							       DegCod);
+			      for (NumCrs = 0;
+				   NumCrs < NumCrss;
+				   NumCrs++)
 				{
-				 /* Get my courses in this degree from database */
-				 NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
-							       DegCod,
-							       &mysql_resCrs);
-				 for (NumCrs = 0;
-				      NumCrs < NumCrss;
-				      NumCrs++)
-				   {
-				    /* Get next course */
-				    row = mysql_fetch_row (mysql_resCrs);
-				    CrsCod = Str_ConvertStrCodToLongCod (row[0]);
+				 /* Get next course */
+				 row = mysql_fetch_row (mysql_resCrs);
+				 CrsCod = Str_ConvertStrCodToLongCod (row[0]);
 
-				    /* Links to forums of this course */
-				    For_WriteLinksToCrsForums (Forums,
-							       CrsCod,
-							       (NumCrs == NumCrss - 1),
-							       IsLastItemInLevel);
-				   }
-
-				 /* Free structure that stores the query result */
-				 DB_FreeMySQLResult (&mysql_resCrs);
+				 /* Links to forums of this course */
+				 For_WriteLinksToCrsForums (Forums,
+							    CrsCod,
+							    (NumCrs == NumCrss - 1),
+							    IsLastItemInLevel);
 				}
+
+			      /* Free structure that stores the query result */
+			      DB_FreeMySQLResult (&mysql_resCrs);
 			     }
+			  }
 
 			/* Free structure that stores the query result */
 			DB_FreeMySQLResult (&mysql_resDeg);

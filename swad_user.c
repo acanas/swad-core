@@ -41,10 +41,13 @@
 #include "swad_announcement.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
+#include "swad_center_database.h"
 #include "swad_config.h"
 #include "swad_connected_database.h"
+#include "swad_country_database.h"
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_degree_database.h"
 #include "swad_department.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
@@ -60,6 +63,7 @@
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_ID.h"
+#include "swad_institution_database.h"
 #include "swad_language.h"
 #include "swad_mail_database.h"
 #include "swad_message.h"
@@ -79,6 +83,7 @@
 #include "swad_setting.h"
 #include "swad_tab.h"
 #include "swad_user.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -904,10 +909,10 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
 
 void Usr_FlushCachesUsr (void)
   {
-   Usr_FlushCacheUsrBelongsToIns ();
-   Usr_FlushCacheUsrBelongsToCtr ();
-   Usr_FlushCacheUsrBelongsToDeg ();
-   Usr_FlushCacheUsrBelongsToCrs ();
+   Ins_FlushCacheUsrBelongsToIns ();
+   Ctr_FlushCacheUsrBelongsToCtr ();
+   Deg_FlushCacheUsrBelongsToDeg ();
+   Crs_FlushCacheUsrBelongsToCrs ();
    Usr_FlushCacheUsrBelongsToCurrentCrs ();
    Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Usr_FlushCacheUsrSharesAnyOfMyCrs ();
@@ -1019,7 +1024,7 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can edit users from current degree who have accepted */
-	 if (Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.Hierarchy.Deg.DegCod))
+	 if (Deg_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.Hierarchy.Deg.DegCod))
 	    // Degree admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -1027,7 +1032,7 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current center,
 	    I only can edit from current center who have accepted */
-	 if (Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.Hierarchy.Ctr.CtrCod))
+	 if (Ctr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.Hierarchy.Ctr.CtrCod))
 	    // Center admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -1035,7 +1040,7 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can edit from current institution who have accepted */
-	 if (Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.Hierarchy.Ins.InsCod))
+	 if (Ins_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.Hierarchy.Ins.InsCod))
 	    // Institution admins can't edit superusers' data
 	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
 	       return true;
@@ -1486,7 +1491,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   Usr_GetMyCourses ();
+   Crs_GetMyCourses ();
 
    /* Check if user shares any course with me */
    Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
@@ -1517,7 +1522,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    /***** 2. Slow check: Get if user shares any course with me
                          with a different role, from database *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   Usr_GetMyCourses ();
+   Crs_GetMyCourses ();
 
    /* Remove temporary table if exists */
    DB_Query ("can not remove temporary tables",
@@ -1554,7 +1559,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 /**** Get all my countries (those of my courses) and store them in a list ****/
 /*****************************************************************************/
 
-void Usr_GetMyCountrs (void)
+void Cty_GetMyCountrs (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1568,7 +1573,7 @@ void Usr_GetMyCountrs (void)
       Gbl.Usrs.Me.MyCtys.Num = 0;
 
       /***** Get my institutions from database *****/
-      NumCtys = Usr_DB_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_res);
+      NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod);
       for (NumCty = 0;
 	   NumCty < NumCtys;
 	   NumCty++)
@@ -1601,7 +1606,7 @@ void Usr_GetMyCountrs (void)
 /** Get all my institutions (those of my courses) and store them in a list ***/
 /*****************************************************************************/
 
-void Usr_GetMyInstits (void)
+void Ins_GetMyInstits (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1615,7 +1620,8 @@ void Usr_GetMyInstits (void)
       Gbl.Usrs.Me.MyInss.Num = 0;
 
       /***** Get my institutions from database *****/
-      NumInss = Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res);
+      NumInss = Ins_DB_GetInssFromUsr (&mysql_res,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
       for (NumIns = 0;
 	   NumIns < NumInss;
 	   NumIns++)
@@ -1648,7 +1654,7 @@ void Usr_GetMyInstits (void)
 /***** Get all my centers (those of my courses) and store them in a list *****/
 /*****************************************************************************/
 
-void Usr_GetMyCenters (void)
+void Ctr_GetMyCenters (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1662,7 +1668,8 @@ void Usr_GetMyCenters (void)
       Gbl.Usrs.Me.MyCtrs.Num = 0;
 
       /***** Get my centers from database *****/
-      NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res);
+      NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_res,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
       for (NumCtr = 0;
 	   NumCtr < NumCtrs;
 	   NumCtr++)
@@ -1695,7 +1702,7 @@ void Usr_GetMyCenters (void)
 /***** Get all my degrees (those of my courses) and store them in a list *****/
 /*****************************************************************************/
 
-void Usr_GetMyDegrees (void)
+void Deg_GetMyDegrees (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1709,7 +1716,8 @@ void Usr_GetMyDegrees (void)
       Gbl.Usrs.Me.MyDegs.Num = 0;
 
       /***** Get my degrees from database *****/
-      NumDegs = Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res);
+      NumDegs = Deg_DB_GetDegsFromUsr (&mysql_res,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
       for (NumDeg = 0;
 	   NumDeg < NumDegs;
 	   NumDeg++)
@@ -1739,10 +1747,61 @@ void Usr_GetMyDegrees (void)
   }
 
 /*****************************************************************************/
+/********* Get the degree in which a user is enroled in more courses *********/
+/*****************************************************************************/
+
+void Deg_GetUsrMainDeg (long UsrCod,
+		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		        Rol_Role_t *MaxRole)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get a random student from current course from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get user's main degree",
+		       "SELECT deg_degrees.ShortName,"	// row[0]
+		              "main_degree.MaxRole"	// row[1]
+		       " FROM deg_degrees,"
+
+		       // The second table contain only one row with the main degree
+		       " (SELECT crs_courses.DegCod AS DegCod,"
+		                "MAX(crs_users.Role) AS MaxRole,"
+		                "COUNT(*) AS N"
+		         " FROM crs_users,"
+		               "crs_courses"
+		        " WHERE crs_users.UsrCod=%ld"
+		          " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " GROUP BY crs_courses.DegCod"
+		        " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
+		        " LIMIT 1)"		// We need only the main degree
+		       " AS main_degree"
+
+		       " WHERE deg_degrees.DegCod=main_degree.DegCod",
+		       UsrCod))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get degree name (row[0]) */
+      Str_Copy (ShrtName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+
+      /* Get maximum role (row[1]) */
+      *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+     }
+   else	// User is not enroled in any course
+     {
+      ShrtName[0] = '\0';
+      *MaxRole = Rol_UNK;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /*************** Get all my courses and store them in a list *****************/
 /*****************************************************************************/
 
-void Usr_GetMyCourses (void)
+void Crs_GetMyCourses (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1819,7 +1878,7 @@ void Usr_GetMyCourses (void)
 /************************ Free the list of my countries ************************/
 /*****************************************************************************/
 
-void Usr_FreeMyCountrs (void)
+void Cty_FreeMyCountrs (void)
   {
    if (Gbl.Usrs.Me.MyCtys.Filled)
      {
@@ -1833,7 +1892,7 @@ void Usr_FreeMyCountrs (void)
 /********************* Free the list of my institutions **********************/
 /*****************************************************************************/
 
-void Usr_FreeMyInstits (void)
+void Ins_FreeMyInstits (void)
   {
    if (Gbl.Usrs.Me.MyInss.Filled)
      {
@@ -1847,7 +1906,7 @@ void Usr_FreeMyInstits (void)
 /************************ Free the list of my centers ************************/
 /*****************************************************************************/
 
-void Usr_FreeMyCenters (void)
+void Ctr_FreeMyCenters (void)
   {
    if (Gbl.Usrs.Me.MyCtrs.Filled)
      {
@@ -1861,7 +1920,7 @@ void Usr_FreeMyCenters (void)
 /************************ Free the list of my degrees ************************/
 /*****************************************************************************/
 
-void Usr_FreeMyDegrees (void)
+void Deg_FreeMyDegrees (void)
   {
    if (Gbl.Usrs.Me.MyDegs.Filled)
      {
@@ -1875,7 +1934,7 @@ void Usr_FreeMyDegrees (void)
 /************************ Free the list of my courses ************************/
 /*****************************************************************************/
 
-void Usr_FreeMyCourses (void)
+void Crs_FreeMyCourses (void)
   {
    if (Gbl.Usrs.Me.MyCrss.Filled)
      {
@@ -1906,14 +1965,14 @@ static void Usr_RemoveTemporaryTableMyCourses (void)
 /**************** Check if a user belongs to an institution ******************/
 /*****************************************************************************/
 
-void Usr_FlushCacheUsrBelongsToIns (void)
+void Ins_FlushCacheUsrBelongsToIns (void)
   {
    Gbl.Cache.UsrBelongsToIns.UsrCod = -1L;
    Gbl.Cache.UsrBelongsToIns.InsCod = -1L;
    Gbl.Cache.UsrBelongsToIns.Belongs = false;
   }
 
-bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
+bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
   {
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
@@ -1949,14 +2008,14 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
 /******************* Check if a user belongs to a center *********************/
 /*****************************************************************************/
 
-void Usr_FlushCacheUsrBelongsToCtr (void)
+void Ctr_FlushCacheUsrBelongsToCtr (void)
   {
    Gbl.Cache.UsrBelongsToCtr.UsrCod = -1L;
    Gbl.Cache.UsrBelongsToCtr.CtrCod = -1L;
    Gbl.Cache.UsrBelongsToCtr.Belongs = false;
   }
 
-bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
+bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
   {
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
@@ -1991,14 +2050,14 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
-void Usr_FlushCacheUsrBelongsToDeg (void)
+void Deg_FlushCacheUsrBelongsToDeg (void)
   {
    Gbl.Cache.UsrBelongsToDeg.UsrCod = -1L;
    Gbl.Cache.UsrBelongsToDeg.DegCod = -1L;
    Gbl.Cache.UsrBelongsToDeg.Belongs = false;
   }
 
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
+bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
   {
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0 ||
@@ -2030,7 +2089,7 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-void Usr_FlushCacheUsrBelongsToCrs (void)
+void Crs_FlushCacheUsrBelongsToCrs (void)
   {
    Gbl.Cache.UsrBelongsToCrs.UsrCod = -1L;
    Gbl.Cache.UsrBelongsToCrs.CrsCod = -1L;
@@ -2038,7 +2097,7 @@ void Usr_FlushCacheUsrBelongsToCrs (void)
    Gbl.Cache.UsrBelongsToCrs.Belongs = false;
   }
 
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+bool Crs_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses)
   {
    const char *SubQuery;
@@ -2104,7 +2163,7 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
 
    /***** 4. Fast / slow check: Get if user belongs to current course *****/
    Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Crs_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
 						                          Gbl.Hierarchy.Crs.CrsCod,
 						                          false);
    return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
@@ -2135,7 +2194,7 @@ bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
    /***** 3. Fast / slow check: Get if user belongs to current course
                                 and has accepted *****/
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Crs_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
 						                               Gbl.Hierarchy.Crs.CrsCod,
 						                               true);
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
@@ -2145,12 +2204,12 @@ bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
 /********************** Check if I belong to a country **********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfIBelongToCty (long CtyCod)
+bool Cty_CheckIfIBelongToCty (long CtyCod)
   {
    unsigned NumMyCty;
 
    /***** Fill the list with the institutions I belong to *****/
-   Usr_GetMyCountrs ();
+   Cty_GetMyCountrs ();
 
    /***** Check if the country passed as parameter is any of my countries *****/
    for (NumMyCty = 0;
@@ -2165,12 +2224,12 @@ bool Usr_CheckIfIBelongToCty (long CtyCod)
 /******************** Check if I belong to an institution ********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfIBelongToIns (long InsCod)
+bool Ins_CheckIfIBelongToIns (long InsCod)
   {
    unsigned NumMyIns;
 
    /***** Fill the list with the institutions I belong to *****/
-   Usr_GetMyInstits ();
+   Ins_GetMyInstits ();
 
    /***** Check if the institution passed as parameter is any of my institutions *****/
    for (NumMyIns = 0;
@@ -2185,12 +2244,12 @@ bool Usr_CheckIfIBelongToIns (long InsCod)
 /*********************** Check if I belong to a center ***********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfIBelongToCtr (long CtrCod)
+bool Ctr_CheckIfIBelongToCtr (long CtrCod)
   {
    unsigned NumMyCtr;
 
    /***** Fill the list with the centers I belong to *****/
-   Usr_GetMyCenters ();
+   Ctr_GetMyCenters ();
 
    /***** Check if the center passed as parameter is any of my centers *****/
    for (NumMyCtr = 0;
@@ -2205,12 +2264,12 @@ bool Usr_CheckIfIBelongToCtr (long CtrCod)
 /*********************** Check if I belong to a degree ***********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfIBelongToDeg (long DegCod)
+bool Deg_CheckIfIBelongToDeg (long DegCod)
   {
    unsigned NumMyDeg;
 
    /***** Fill the list with the degrees I belong to *****/
-   Usr_GetMyDegrees ();
+   Deg_GetMyDegrees ();
 
    /***** Check if the degree passed as parameter is any of my degrees *****/
    for (NumMyDeg = 0;
@@ -2225,12 +2284,12 @@ bool Usr_CheckIfIBelongToDeg (long DegCod)
 /*********************** Check if I belong to a course ***********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfIBelongToCrs (long CrsCod)
+bool Crs_CheckIfIBelongToCrs (long CrsCod)
   {
    unsigned NumMyCrs;
 
    /***** Fill the list with the courses I belong to *****/
-   Usr_GetMyCourses ();
+   Crs_GetMyCourses ();
 
    /***** Check if the course passed as parameter is any of my courses *****/
    for (NumMyCrs = 0;
@@ -2240,275 +2299,6 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
          return true;
 
    return false;
-  }
-
-/*****************************************************************************/
-/**************** Get the countries of a user from database ******************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Usr_DB_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
-   /***** Get the institutions a user belongs to from database *****/
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get the countries a user belongs to",
-		   "SELECT cty_countrs.CtyCod,"	// row[0]
-			  "MAX(crs_users.Role)"	// row[1]
-		    " FROM crs_users,"
-			  "crs_courses,"
-			  "deg_degrees,"
-			  "ctr_centers,"
-			  "ins_instits,"
-			  "cty_countrs"
-		   " WHERE crs_users.UsrCod=%ld"
-		     " AND crs_users.CrsCod=crs_courses.CrsCod"
-		     " AND crs_courses.DegCod=deg_degrees.DegCod"
-		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		   " GROUP BY cty_countrs.CtyCod"
-		   " ORDER BY cty_countrs.Name_%s",
-		   UsrCod,
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-  }
-
-/*****************************************************************************/
-/************** Get the institutions of a user from database *****************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get the institutions a user belongs to from database *****/
-   if (CtyCod > 0)
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
-		      "SELECT ins_instits.InsCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees,"
-			     "ctr_centers,"
-			     "ins_instits"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		        " AND ctr_centers.InsCod=ins_instits.InsCod"
-		        " AND ins_instits.CtyCod=%ld"
-		      " GROUP BY ins_instits.InsCod"
-		      " ORDER BY ins_instits.ShortName",
-		      UsrCod,
-		      CtyCod);
-   else
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not get the institutions a user belongs to",
-		      "SELECT ins_instits.InsCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees,"
-			     "ctr_centers,"
-			     "ins_instits"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		        " AND ctr_centers.InsCod=ins_instits.InsCod"
-		      " GROUP BY ins_instits.InsCod"
-		      " ORDER BY ins_instits.ShortName",
-		      UsrCod);
-  }
-
-/*****************************************************************************/
-/***************** Get the centers of a user from database *******************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get from database the centers a user belongs to *****/
-   if (InsCod > 0)
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
-		      "SELECT ctr_centers.CtrCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees,"
-			     "ctr_centers"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		        " AND ctr_centers.InsCod=%ld"
-		      " GROUP BY ctr_centers.CtrCod"
-		      " ORDER BY ctr_centers.ShortName",
-		      UsrCod,
-		      InsCod);
-   else
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
-		      "SELECT deg_degrees.CtrCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees,"
-			     "ctr_centers"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		      " GROUP BY ctr_centers.CtrCod"
-		      " ORDER BY ctr_centers.ShortName",
-		      UsrCod);
-  }
-
-/*****************************************************************************/
-/***************** Get the degrees of a user from database *******************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get from database the degrees a user belongs to *****/
-   if (CtrCod > 0)
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
-		      "SELECT deg_degrees.DegCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=%ld"
-		      " GROUP BY deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName",
-		      UsrCod,
-		      CtrCod);
-   else
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
-		      "SELECT deg_degrees.DegCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		      " GROUP BY deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName",
-		      UsrCod);
-  }
-
-/*****************************************************************************/
-/**************** Get all courses of a user from database ********************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
-  {
-   /***** Get from database the courses a user belongs to *****/
-   if (DegCod > 0)	// Courses in a degree
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
-		      "SELECT crs_users.CrsCod,"	// row[0]
-			     "crs_users.Role,"		// row[1]
-			     "crs_courses.DegCod"	// row[2]
-		       " FROM crs_users,"
-			     "crs_courses"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=%ld"
-		      " ORDER BY crs_courses.ShortName",
-		      UsrCod,
-		      DegCod);
-   else			// All the courses
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not get the courses a user belongs to",
-		      "SELECT crs_users.CrsCod,"	// row[0]
-			     "crs_users.Role,"		// row[1]
-			     "crs_courses.DegCod"	// row[2]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName,"
-			        "crs_courses.ShortName",
-		      UsrCod);
-  }
-
-/*****************************************************************************/
-/********* Get the degree in which a user is enroled in more courses *********/
-/*****************************************************************************/
-
-void Usr_GetMainDeg (long UsrCod,
-		     char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-		     Rol_Role_t *MaxRole)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get a random student from current course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's main degree",
-		       "SELECT deg_degrees.ShortName,"	// row[0]
-		              "main_degree.MaxRole"	// row[1]
-		       " FROM deg_degrees,"
-
-		       // The second table contain only one row with the main degree
-		       " (SELECT crs_courses.DegCod AS DegCod,"
-		                "MAX(crs_users.Role) AS MaxRole,"
-		                "COUNT(*) AS N"
-		         " FROM crs_users,"
-		               "crs_courses"
-		        " WHERE crs_users.UsrCod=%ld"
-		          " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " GROUP BY crs_courses.DegCod"
-		        " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
-		        " LIMIT 1)"		// We need only the main degree
-		       " AS main_degree"
-
-		       " WHERE deg_degrees.DegCod=main_degree.DegCod",
-		       UsrCod))
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-
-      /* Get maximum role (row[1]) */
-      *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-     }
-   else	// User is not enroled in any course
-     {
-      ShrtName[0] = '\0';
-      *MaxRole = Rol_UNK;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******** Check if a user exists with a given encrypted user's code **********/
-/*****************************************************************************/
-
-bool Usr_DB_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64])
-  {
-   /***** Get if an encrypted user's code already existed in database *****/
-   return (DB_QueryCOUNT ("can not check if an encrypted user's code"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_data"
-			  " WHERE EncryptedUsrCod='%s'",
-			  EncryptedUsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -3619,22 +3409,6 @@ void Usr_UpdateMyLastData (void)
   }
 
 /*****************************************************************************/
-/********************** Update my last type of search ************************/
-/*****************************************************************************/
-
-void Usr_DB_UpdateMyLastWhatToSearch (void)
-  {
-   // WhatToSearch is stored in usr_last for next time I log in
-   // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-   DB_QueryUPDATE ("can not update type of search in user's last data",
-		   "UPDATE usr_last"
-		     " SET WhatToSearch=%u"
-		   " WHERE UsrCod=%ld",
-		   (unsigned) Gbl.Search.WhatToSearch,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /*************** Create new entry for my last data in database ***************/
 /*****************************************************************************/
 
@@ -3655,31 +3429,6 @@ static void Usr_DB_InsertMyLastData (void)
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   (long) (time_t) 0);	// The user never accessed to notifications
-  }
-
-/*****************************************************************************/
-/*************************** Remove user's last data *************************/
-/*****************************************************************************/
-
-void Usr_DB_RemoveUsrLastData (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user's last data",
-		   "DELETE FROM usr_last"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
-  }
-
-/*****************************************************************************/
-/****************************** Remove user's data ***************************/
-/*****************************************************************************/
-
-void Usr_DB_RemoveUsrData (long UsrCod)
-  {
-   /***** Remove user's data *****/
-   DB_QueryDELETE ("can not remove user's data",
-		   "DELETE FROM usr_data"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -4163,75 +3912,6 @@ static void Usr_WriteUsrData (const char *BgColor,
 
    /***** End table cell *****/
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/******** Get the user's code of a random student from current course ********/
-/*****************************************************************************/
-// Returns user's code or -1 if no user found
-
-long Usr_DB_GetRamdomStdFromCrs (long CrsCod)
-  {
-   /***** Get a random student from current course from database *****/
-   return DB_QuerySELECTCode ("can not get a random student from a course",
-			      "SELECT UsrCod"
-			       " FROM crs_users"
-			      " WHERE CrsCod=%ld"
-			        " AND Role=%u"
-			      " ORDER BY RAND()"
-			      " LIMIT 1",
-			      CrsCod,
-			      (unsigned) Rol_STD);
-  }
-
-/*****************************************************************************/
-/*********** Get the user's code of a random student from a group ************/
-/*****************************************************************************/
-// Returns user's code or -1 if no user found
-
-long Usr_DB_GetRamdomStdFromGrp (long GrpCod)
-  {
-   /***** Get a random student from a group from database *****/
-   return DB_QuerySELECTCode ("can not get a random student from a group",
-			      "SELECT grp_users.UsrCod"
-			       " FROM grp_users,"
-				     "crs_users"
-			      " WHERE grp_users.GrpCod=%ld"
-			        " AND grp_users.UsrCod=crs_users.UsrCod"
-			        " AND crs_users.Role=%u"
-			      " ORDER BY RAND()"
-			      " LIMIT 1",
-			      GrpCod,
-			      (unsigned) Rol_STD);
-  }
-
-/*****************************************************************************/
-/* Get number of teachers in courses of the current instit. in a department **/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetNumTchsCurrentInsInDepartment (long DptCod)
-  {
-   /***** Get the number of teachers
-          from the current institution in a department *****/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of teachers in a department",
-		  "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		   " FROM usr_data,"
-		         "crs_users,"
-		         "crs_courses,"
-		         "deg_degrees,"
-		         "ctr_centers"
-		  " WHERE usr_data.InsCod=%ld"				// User in the current institution...
-		    " AND usr_data.DptCod=%ld"				// ...and the specified department...
-		    " AND usr_data.UsrCod=crs_users.UsrCod"		// ...who is...
-		    " AND crs_users.Role IN (%u,%u)"			// ...a teacher...
-		    " AND crs_users.CrsCod=crs_courses.CrsCod"		// ...in a course...
-		    " AND crs_courses.DegCod=deg_degrees.DegCod"	// ...of a degree...
-		    " AND deg_degrees.CtrCod=ctr_centers.InsCod"	// ...of a center...
-		    " AND ctr_centers.InsCod=%ld",			// ...of the current institution
-		  Gbl.Hierarchy.Ins.InsCod,DptCod,
-		  (unsigned) Rol_NET,(unsigned) Rol_TCH,
-		  Gbl.Hierarchy.Ins.InsCod);
   }
 
 /*****************************************************************************/
@@ -9423,24 +9103,6 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIM
   }
 
 /*****************************************************************************/
-/************** Check if a user exists with a given user's code **************/
-/*****************************************************************************/
-
-bool Usr_DB_ChkIfUsrCodExists (long UsrCod)
-  {
-   /***** Trivial check: user's code should be > 0 *****/
-   if (UsrCod <= 0)	// Wrong user's code
-      return false;
-
-   /***** Get if a user exists in database *****/
-   return (DB_QueryCOUNT ("can not check if a user exists",
-			  "SELECT COUNT(*)"
-			   " FROM usr_data"
-			  " WHERE UsrCod=%ld",
-			  UsrCod) != 0);
-  }
-
-/*****************************************************************************/
 /********************** Show warning "no users found" ************************/
 /*****************************************************************************/
 // Use Rol_UNK type to display "no users found"
@@ -10392,167 +10054,4 @@ Usr_Who_t Usr_GetHiddenParamWho (void)
                                                 1,
                                                 Usr_NUM_WHO - 1,
                                                 Usr_WHO_UNKNOWN);
-  }
-
-/*****************************************************************************/
-/************************* Get old users from database ***********************/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess)
-  {
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get old users",
-		   "SELECT UsrCod"
-		    " FROM (SELECT UsrCod"
-			    " FROM usr_last"
-			   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%llu)"
-			   " UNION "
-			   "SELECT UsrCod"
-			    " FROM usr_data"
-			   " WHERE UsrCod NOT IN"
-			         " (SELECT UsrCod"
-				    " FROM usr_last)"
-			  ") AS candidate_usrs"
-		   " WHERE UsrCod NOT IN"
-		         " (SELECT DISTINCT UsrCod"
-			    " FROM crs_users)",
-		   (unsigned long long) SecondsWithoutAccess);
-  }
-
-/*****************************************************************************/
-/************** Get number of users who have chosen an option ****************/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
-  {
-   switch (Gbl.Scope.Current)
-     {
-      case HieLvl_SYS:
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(*)"
-		         " FROM usr_data WHERE %s",
-		        SubQuery);
-      case HieLvl_CTY:
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM ins_instits,"
-			       "ctr_centers,"
-			       "deg_degrees,"
-			       "crs_courses,"
-			       "crs_users,"
-			       "usr_data"
-		        " WHERE ins_instits.CtyCod=%ld"
-		          " AND ins_instits.InsCod=ctr_centers.InsCod"
-		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		          " AND deg_degrees.DegCod=crs_courses.DegCod"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Cty.CtyCod,SubQuery);
-      case HieLvl_INS:
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM ctr_centers,"
-		               "deg_degrees,"
-		               "crs_courses,"
-		               "crs_users,"
-		               "usr_data"
-		        " WHERE ctr_centers.InsCod=%ld"
-		          " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-		          " AND deg_degrees.DegCod=crs_courses.DegCod"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Ins.InsCod,SubQuery);
-      case HieLvl_CTR:
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM deg_degrees,"
-		               "crs_courses,"
-		               "crs_users,"
-		               "usr_data"
-		        " WHERE deg_degrees.CtrCod=%ld"
-		          " AND deg_degrees.DegCod=crs_courses.DegCod"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Ctr.CtrCod,SubQuery);
-      case HieLvl_DEG:
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM crs_courses,"
-		               "crs_users,"
-		               "usr_data"
-		        " WHERE crs_courses.DegCod=%ld"
-		          " AND crs_courses.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Deg.DegCod,SubQuery);
-      case HieLvl_CRS:
-	 return (unsigned)
-	 DB_QueryCOUNT ("can not get the number of users who have chosen an option",
-		        "SELECT COUNT(DISTINCT usr_data.UsrCod)"
-		         " FROM crs_users,"
-		               "usr_data"
-		        " WHERE crs_users.CrsCod=%ld"
-		          " AND crs_users.UsrCod=usr_data.UsrCod"
-		          " AND %s",
-		        Gbl.Hierarchy.Crs.CrsCod,SubQuery);
-      default:
-	 Err_WrongScopeExit ();
-	 return 0;	// Not reached
-     }
-
-   return 0;	// Not reached
-  }
-
-/*****************************************************************************/
-/****** Check if a string is found in first name or surnames of anybody ******/
-/*****************************************************************************/
-
-bool Usr_DB_FindStrInUsrsNames (const char *Str)
-  {
-   return (DB_QueryCOUNT ("can not check if a string matches"
-			  " a first name or a surname",
-			  "SELECT COUNT(*)"
-			   " FROM usr_data"
-			  " WHERE FirstName='%s'"
-			     " OR Surname1='%s'"
-			     " OR Surname2='%s'",
-			  Str,
-			  Str,
-			  Str) != 0);
-  }
-
-/*****************************************************************************/
-/******************************* Update my office ****************************/
-/*****************************************************************************/
-
-void Usr_DB_UpdateMyOffice (void)
-  {
-   DB_QueryUPDATE ("can not update office",
-		   "UPDATE usr_data"
-		     " SET Office='%s'"
-		   " WHERE UsrCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.Tch.Office,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/***************************** Update my office phone ************************/
-/*****************************************************************************/
-
-void Usr_DB_UpdateMyOfficePhone (void)
-  {
-   DB_QueryUPDATE ("can not update office phone",
-		   "UPDATE usr_data"
-		     " SET OfficePhone='%s'"
-		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }

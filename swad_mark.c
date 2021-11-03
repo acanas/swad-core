@@ -34,6 +34,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_database.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -561,7 +562,7 @@ void Mrk_ShowMyMarks (void)
         {
          if (Grp_DB_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod))	// If there are students in this group
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Usr_DB_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (Gbl.Crs.Grps.GrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
@@ -572,7 +573,7 @@ void Mrk_ShowMyMarks (void)
 	 if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				   1 << Rol_STD))	// If there are students in this course
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Usr_DB_GetRamdomStdFromCrs (Gbl.Hierarchy.Crs.CrsCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Enr_DB_GetRamdomStdFromCrs (Gbl.Hierarchy.Crs.CrsCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else

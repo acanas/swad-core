@@ -71,6 +71,7 @@
 #include "swad_setting_database.h"
 #include "swad_test_print.h"
 #include "swad_timeline.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

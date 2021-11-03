@@ -58,6 +58,8 @@ unsigned Cty_DB_GetNumCtysWithCrss (void);
 unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
+unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod);
+
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
 bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
 bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);

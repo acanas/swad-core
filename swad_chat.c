@@ -33,6 +33,7 @@
 #include "swad_chat.h"
 #include "swad_chat_database.h"
 #include "swad_config.h"
+#include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
@@ -123,7 +124,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    char ThisRoomFullName[Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
 
    /***** Fill the list with the degrees I belong to *****/ 
-   Usr_GetMyDegrees ();
+   Deg_GetMyDegrees ();
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Chat_rooms,
@@ -194,7 +195,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	    Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
 	    /* Get my courses in this degree from database */
-	    NumCrss = Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Deg.DegCod,&mysql_res);
+	    NumCrss = Crs_DB_GetCrssFromUsr (&mysql_res,
+	                                     Gbl.Usrs.Me.UsrDat.UsrCod,
+	                                     Deg.DegCod);
 	    for (NumCrs = 0;
 		 NumCrs < NumCrss;
 		 NumCrs++)
@@ -402,8 +405,8 @@ void Cht_OpenChatWindow (void)
       Err_ShowErrorAndExit ("Wrong code of chat room.");
 
    /***** Fill the lists with the degrees and courses I belong to *****/ 
-   Usr_GetMyDegrees ();
-   Usr_GetMyCourses ();
+   Deg_GetMyDegrees ();
+   Crs_GetMyCourses ();
 
    /***** Build my user's name *****/
    Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,sizeof (UsrName) - 1);

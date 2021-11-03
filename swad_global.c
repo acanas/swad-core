@@ -332,10 +332,10 @@ void Gbl_InitializeGlobals (void)
    Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
    Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
    Usr_FlushCacheUsrIsSuperuser ();
-   Usr_FlushCacheUsrBelongsToIns ();
-   Usr_FlushCacheUsrBelongsToCtr ();
-   Usr_FlushCacheUsrBelongsToDeg ();
-   Usr_FlushCacheUsrBelongsToCrs ();
+   Ins_FlushCacheUsrBelongsToIns ();
+   Ctr_FlushCacheUsrBelongsToCtr ();
+   Deg_FlushCacheUsrBelongsToDeg ();
+   Crs_FlushCacheUsrBelongsToCrs ();
    Usr_FlushCacheUsrBelongsToCurrentCrs ();
    Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Usr_FlushCacheUsrSharesAnyOfMyCrs ();
@@ -359,11 +359,11 @@ void Gbl_Cleanup (void)
        !Gbl.WebService.IsWebService &&
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
       Ses_DB_RemoveParam ();
-   Usr_FreeMyCourses ();
-   Usr_FreeMyDegrees ();
-   Usr_FreeMyCenters ();
-   Usr_FreeMyInstits ();
-   Usr_FreeMyCountrs ();
+   Crs_FreeMyCourses ();
+   Deg_FreeMyDegrees ();
+   Ctr_FreeMyCenters ();
+   Ins_FreeMyInstits ();
+   Cty_FreeMyCountrs ();
    Usr_UsrDataDestructor (&Gbl.Usrs.Me.UsrDat);
    Usr_UsrDataDestructor (&Gbl.Usrs.Other.UsrDat);
    Rec_FreeListFields ();

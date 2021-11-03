@@ -515,6 +515,50 @@ unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
+/***************** Get the centers of a user from database *******************/
+/*****************************************************************************/
+// Returns the number of rows of the result
+
+unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod)
+  {
+   /***** Get from database the centers a user belongs to *****/
+   if (InsCod > 0)
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
+		      "SELECT ctr_centers.CtrCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		        " AND ctr_centers.InsCod=%ld"
+		      " GROUP BY ctr_centers.CtrCod"
+		      " ORDER BY ctr_centers.ShortName",
+		      UsrCod,
+		      InsCod);
+   else
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the centers a user belongs to",
+		      "SELECT deg_degrees.CtrCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees,"
+			     "ctr_centers"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		      " GROUP BY ctr_centers.CtrCod"
+		      " ORDER BY ctr_centers.ShortName",
+		      UsrCod);
+  }
+
+/*****************************************************************************/
 /******************* Update institution in table of centers ******************/
 /*****************************************************************************/
 

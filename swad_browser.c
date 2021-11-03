@@ -42,6 +42,7 @@
 #include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_config.h"
+#include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
@@ -72,6 +73,7 @@
 #include "swad_string.h"
 #include "swad_timeline.h"
 #include "swad_timeline_note.h"
+#include "swad_user_database.h"
 #include "swad_zip.h"
 
 /*****************************************************************************/
@@ -9694,7 +9696,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat)
    struct Crs_Course Crs;
 
    /***** Query database *****/
-   NumCrss = Usr_GetCrssFromUsr (UsrDat->UsrCod,-1L,&mysql_res);
+   NumCrss = Crs_DB_GetCrssFromUsr (&mysql_res,UsrDat->UsrCod,-1L);
 
    /***** Remove the zone of works of the user in the courses he/she belongs to *****/
    for (NumCrs = 0;

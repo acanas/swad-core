@@ -546,53 +546,53 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                             NULL,NULL,
                             NULL,2);
 
-   /***** Link to download the file *****/
-   HTM_TR_Begin (NULL);
-   HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
-   HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
-                URL,FileName);
-   HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
-	    "class=\"ICO40x40\"");
-   HTM_TxtF ("&nbsp;%s&nbsp;",FileName);
-   Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
-   HTM_A_End ();
-   HTM_TD_End ();
-   HTM_TR_End ();
+      /***** Link to download the file *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
+	    HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
+			 URL,FileName);
+	       HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
+			"class=\"ICO40x40\"");
+	       HTM_TxtF ("&nbsp;%s&nbsp;",FileName);
+	       Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
+	    HTM_A_End ();
+	 HTM_TD_End ();
+      HTM_TR_End ();
 
-   /***** Filename *****/
-   HTM_TR_Begin (NULL);
+      /***** Filename *****/
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_Filename);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_Filename);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
-	        URL,FileName);
-   HTM_Txt (FileName);
-   HTM_A_End ();
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
+			 URL,FileName);
+	       HTM_Txt (FileName);
+	    HTM_A_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Write the file size *****/
-   Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
-   HTM_TR_Begin (NULL);
+      /***** Write the file size *****/
+      Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
+      HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColon (Txt_File_size);
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColon (Txt_File_size);
+	 HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT LM\"");
-   HTM_Txt (FileSizeStr);
-   if (UncompressedSize)
-     {
-      Fil_WriteFileSizeFull ((double) UncompressedSize,FileSizeStr);
-      HTM_TxtF (" (%s %s)",FileSizeStr,Txt_FILE_uncompressed);
-     }
-   HTM_TD_End ();
+	 HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_Txt (FileSizeStr);
+	    if (UncompressedSize)
+	      {
+	       Fil_WriteFileSizeFull ((double) UncompressedSize,FileSizeStr);
+	       HTM_TxtF (" (%s %s)",FileSizeStr,Txt_FILE_uncompressed);
+	      }
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();

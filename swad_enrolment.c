@@ -64,6 +64,7 @@
 #include "swad_setting_database.h"
 #include "swad_test_print.h"
 #include "swad_user.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -2235,7 +2236,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	       DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
 	       if (UsrExists)
-		  UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+		  UsrBelongsToCrs = Crs_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
 								Crs.CrsCod,
 								false);
 	       else
@@ -3242,7 +3243,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
          /* Fill the list with the courses I belong to */
          Gbl.Usrs.Me.MyCrss.Filled = false;
-         Usr_GetMyCourses ();
+         Crs_GetMyCourses ();
 
          /* Set my roles */
 	 Gbl.Usrs.Me.Role.FromSession              =
