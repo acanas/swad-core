@@ -807,10 +807,10 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		     break;
 		  case Ind_INDICATORS_FULL:
 		     /* Get number of users */
-		     NumTchs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+		     NumTchs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
 						     1 << Rol_NET |	// Non-editing teachers
 						     1 << Rol_TCH);	// Teachers
-		     NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+		     NumStds = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
 						     1 << Rol_STD);	// Students
 
 		     HTM_TR_Begin (NULL);

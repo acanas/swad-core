@@ -346,26 +346,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs);
 
-void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
-unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
-unsigned Usr_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void);
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void);
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
-
 void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
@@ -447,15 +427,6 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1 + Cns_MAX_DECIM
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsers (void);
-unsigned Usr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
-unsigned Usr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
-
-unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
-
-double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
-double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
-
-void Usr_PrintUsrQRCode (void);
 
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 

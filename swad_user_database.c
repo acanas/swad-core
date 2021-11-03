@@ -342,3 +342,41 @@ void Usr_DB_RemoveUsrData (long UsrCod)
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
+
+/*****************************************************************************/
+/*** Insert my user's code in the table of birthdays already congratulated ***/
+/*****************************************************************************/
+
+void Usr_DB_MarkMyBirthdayAsCongratulated (void)
+  {
+   DB_QueryINSERT ("can not insert birthday",
+		   "INSERT INTO usr_birthdays_today"
+	           " (UsrCod,Today)"
+	           " VALUES"
+	           " (%ld,CURDATE())",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Check if my birthday is already congratulated ***************/
+/*****************************************************************************/
+
+bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
+  {
+   return (DB_QueryCOUNT ("can not check if my birthday has been congratulated",
+			  "SELECT COUNT(*)"
+			   " FROM usr_birthdays_today"
+			  " WHERE UsrCod=%ld",
+			  Gbl.Usrs.Me.UsrDat.UsrCod) == 0);
+  }
+
+/*****************************************************************************/
+/****************************** Delete old birthdays *************************/
+/*****************************************************************************/
+
+void Usr_DB_DeleteOldBirthdays (void)
+  {
+   DB_QueryDELETE ("can not delete old birthdays",
+		   "DELETE FROM usr_birthdays_today"
+		   " WHERE Today<>CURDATE()");
+  }

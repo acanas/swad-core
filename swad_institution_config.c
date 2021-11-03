@@ -436,7 +436,7 @@ static void InsCfg_NumUsrs (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"DAT LB\"");
-	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
+	 HTM_Unsigned (Ins_GetCachedNumUsrsWhoClaimToBelongToIns (&Gbl.Hierarchy.Ins));
       HTM_TD_End ();
 
    HTM_TR_End ();

@@ -338,7 +338,7 @@ static void Deg_ListDegreesForEdition (void)
 
 	 ICanEdit = Deg_CheckIfICanEditADegree (Deg);
 	 NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
-	 NumUsrsInCrssOfDeg = Usr_GetNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
+	 NumUsrsInCrssOfDeg = Enr_GetNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -896,7 +896,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
       /***** Number of users in courses of this degree *****/
       HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user

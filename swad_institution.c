@@ -406,7 +406,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
       /***** Number of users who claim to belong to this institution *****/
       HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
+	 HTM_Unsigned (Ins_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
       HTM_TD_End ();
 
       /***** Other stats *****/
@@ -432,7 +432,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
       /* Number of users in courses of this institution */
       HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user);
@@ -961,8 +961,8 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	 ICanEdit = Ins_CheckIfICanEdit (Ins);
 	 NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
-	 NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
-	 NumUsrsInCrssOfIns = Usr_GetNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
+	 NumUsrsIns = Ins_GetNumUsrsWhoClaimToBelongToIns (Ins);
+	 NumUsrsInCrssOfIns = Enr_GetNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -1230,11 +1230,11 @@ void Ins_RemoveInstitution (void)
       // Institution has centers ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns))
+   else if (Ins_GetNumUsrsWhoClaimToBelongToIns (Ins_EditingIns))
       // Institution has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution);
-   else if (Usr_GetNumUsrsInCrss (HieLvl_INS,Ins_EditingIns->InsCod,
+   else if (Enr_GetNumUsrsInCrss (HieLvl_INS,Ins_EditingIns->InsCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))	// Any user
@@ -1271,7 +1271,7 @@ void Ins_RemoveInstitution (void)
       Ctr_FlushCacheNumCtrsInIns ();
       Deg_FlushCacheNumDegsInIns ();
       Crs_FlushCacheNumCrssInIns ();
-      Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
+      Ins_FlushCacheNumUsrsWhoClaimToBelongToIns ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2093,4 +2093,56 @@ bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
    Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
    Gbl.Cache.UsrBelongsToIns.Belongs = Ins_DB_CheckIfUsrBelongsToIns (UsrCod,InsCod);
    return Gbl.Cache.UsrBelongsToIns.Belongs;
+  }
+
+/*****************************************************************************/
+/******** Get number of users who claim to belong to an institution **********/
+/*****************************************************************************/
+
+void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
+  }
+
+unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (Ins->InsCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If already got... *****/
+   if (Ins->NumUsrsWhoClaimToBelongToIns.Valid)
+      return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
+
+   /***** 3. Fast check: If cached... *****/
+   if (Ins->InsCod == Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod)
+     {
+      Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs;
+      Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
+      return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
+     }
+
+   /***** 4. Slow: number of users who claim to belong to an institution
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = Ins->InsCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
+   Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs = Ins_DB_GetNumUsrsWhoClaimToBelongToIns (Ins->InsCod);
+   Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs);
+   return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
+  }
+
+unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
+  {
+   unsigned NumUsrsIns;
+
+   /***** Get number of users who claim to belong to institution from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Ins->InsCod,
+                                   FigCch_UNSIGNED,&NumUsrsIns))
+      /***** Get current number of users who claim to belong to institution from database and update cache *****/
+      NumUsrsIns = Ins_GetNumUsrsWhoClaimToBelongToIns (Ins);
+
+   return NumUsrsIns;
   }

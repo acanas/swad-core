@@ -165,7 +165,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    if (Gbl.Hierarchy.Level == HieLvl_CRS &&				// Course selected
 		Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
-	       if (!Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+	       if (!Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 						1 << Rol_STD))		// Current course probably has no students
 		 {
 		  /* Request students enrolment */

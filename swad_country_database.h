@@ -58,8 +58,6 @@ unsigned Cty_DB_GetNumCtysWithCrss (void);
 unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
-unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod);
-
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod);
 bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
 bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
@@ -75,6 +73,11 @@ bool Cty_DB_GetIfMapIsAvailable (long CtyCod);
 
 void Cty_DB_UpdateCtyField (long CtyCod,const char *FieldName,const char *FieldValue);
 void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
+
+unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
+unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
+unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 
 void Cty_DB_RemoveCty (long CtyCod);
 

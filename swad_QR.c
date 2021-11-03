@@ -107,6 +107,36 @@ void QR_PrintQRCode (void)
   }
 
 /*****************************************************************************/
+/**************************** Show a user QR code ****************************/
+/*****************************************************************************/
+
+void QR_PrintUsrQRCode (void)
+  {
+   char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
+
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,
+                    NULL,NULL,
+                    NULL,Box_NOT_CLOSABLE);
+
+	 /***** Show QR code *****/
+	 if (Gbl.Usrs.Other.UsrDat.Nickname[0])
+	   {
+	    snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
+		      Gbl.Usrs.Other.UsrDat.Nickname);
+	    QR_ImageQRCode (NewNickWithArr);
+	   }
+
+      /***** End box *****/
+      Box_BoxEnd ();
+     }
+   else
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+  }
+
+/*****************************************************************************/
 /******************** Write an QR (image) based on a string ******************/
 /*****************************************************************************/
 

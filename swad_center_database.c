@@ -793,6 +793,19 @@ bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
 			  UsrCod,
 			  CtrCod) != 0);
   }
+/*****************************************************************************/
+/*********** Get number of users who claim to belong to a center *************/
+/*****************************************************************************/
+
+unsigned Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtrCod=%ld",
+		  CtrCod);
+  }
 
 /*****************************************************************************/
 /****************************** Remove a center ******************************/

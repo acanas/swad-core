@@ -439,6 +439,235 @@ unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
   }
 
 /*****************************************************************************/
+/******* Get total number of users of one or several roles in courses ********/
+/*****************************************************************************/
+
+#define Enr_DB_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
+
+unsigned Enr_DB_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles,
+                                  bool AnyUserInCourses)
+  {
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char SubQueryRoles[Enr_DB_MAX_BYTES_SUBQUERY_ROLES + 1];
+   bool FirstRole;
+   bool MoreThanOneRole;
+   Rol_Role_t Role;
+   Rol_Role_t FirstRoleRequested;
+
+   /***** Get first role requested *****/
+   FirstRoleRequested = Rol_UNK;
+   for (Role  = Rol_STD;
+        Role <= Rol_TCH;
+        Role++)
+      if (Roles & (1 << Role))
+	{
+	 FirstRoleRequested = Role;
+	 break;
+	}
+
+   /***** Check if more than one role is requested *****/
+   MoreThanOneRole = false;
+   if (FirstRoleRequested != Rol_UNK)
+      for (Role = FirstRoleRequested + 1;
+	   Role <= Rol_TCH;
+	   Role++)
+	 if (Roles & (1 << Role))
+	   {
+	    MoreThanOneRole = true;
+	    break;
+	   }
+
+   /***** Build subquery for roles *****/
+   if (MoreThanOneRole)
+     {
+      Str_Copy (SubQueryRoles," IN (",sizeof (SubQueryRoles) - 1);
+      for (Role  = Rol_STD, FirstRole = true;
+	   Role <= Rol_TCH;
+	   Role++)
+	 if (Roles & (1 << Role))
+	   {
+	    snprintf (UnsignedStr,sizeof (UnsignedStr),"%u",(unsigned) Role);
+	    if (FirstRole)	// Not the first role
+	       FirstRole = false;
+	    else
+	       Str_Concat (SubQueryRoles,",",sizeof (SubQueryRoles) - 1);
+	    Str_Concat (SubQueryRoles,UnsignedStr,sizeof (SubQueryRoles) - 1);
+	   }
+      Str_Concat (SubQueryRoles,")",sizeof (SubQueryRoles) - 1);
+     }
+   else	// Only one role
+      sprintf (SubQueryRoles,"=%u",FirstRoleRequested);
+
+   /***** Get number of users from database *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+         if (AnyUserInCourses)	// Any user
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT UsrCod)"
+			    " FROM crs_users");
+         else
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT UsrCod)"
+			    " FROM crs_users"
+			   " WHERE Role"
+			       "%s",
+			   SubQueryRoles);
+      case HieLvl_CTY:
+         if (AnyUserInCourses)	// Any user
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM ins_instits,"
+				  "ctr_centers,"
+				  "deg_degrees,"
+				  "crs_courses,"
+				  "crs_users"
+			   " WHERE ins_instits.CtyCod=%ld"
+			     " AND ins_instits.InsCod=ctr_centers.InsCod"
+			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod",
+			   Cod);
+         else
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM ins_instits,"
+				  "ctr_centers,"
+				  "deg_degrees,"
+				  "crs_courses,"
+				  "crs_users"
+			   " WHERE ins_instits.CtyCod=%ld"
+			     " AND ins_instits.InsCod=ctr_centers.InsCod"
+			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.Role"
+			       "%s",
+			   Cod,
+			   SubQueryRoles);
+      case HieLvl_INS:
+         if (AnyUserInCourses)	// Any user
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM ctr_centers,"
+				  "deg_degrees,"
+				  "crs_courses,"
+				  "crs_users"
+			   " WHERE ctr_centers.InsCod=%ld"
+			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod",
+			   Cod);
+         else
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM ctr_centers,"
+				  "deg_degrees,"
+				  "crs_courses,"
+				  "crs_users"
+			   " WHERE ctr_centers.InsCod=%ld"
+			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.Role"
+			       "%s",
+			   Cod,
+			   SubQueryRoles);
+      case HieLvl_CTR:
+         if (AnyUserInCourses)	// Any user
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM deg_degrees,"
+				  "crs_courses,"
+				  "crs_users"
+			   " WHERE deg_degrees.CtrCod=%ld"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod",
+			   Cod);
+         else
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM deg_degrees,"
+				  "crs_courses,"
+				  "crs_users"
+			   " WHERE deg_degrees.CtrCod=%ld"
+			     " AND deg_degrees.DegCod=crs_courses.DegCod"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.Role"
+			       "%s",
+			   Cod,
+			   SubQueryRoles);
+      case HieLvl_DEG:
+         if (AnyUserInCourses)	// Any user
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM crs_courses,"
+			  	  "crs_users"
+			   " WHERE crs_courses.DegCod=%ld"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod",
+			   Cod);
+         else
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+			    " FROM crs_courses,"
+				  "crs_users"
+			   " WHERE crs_courses.DegCod=%ld"
+			     " AND crs_courses.CrsCod=crs_users.CrsCod"
+			     " AND crs_users.Role"
+			       "%s",
+			  Cod,
+			  SubQueryRoles);
+      case HieLvl_CRS:
+         if (AnyUserInCourses)	// Any user
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT UsrCod)"
+			    " FROM crs_users"
+			   " WHERE CrsCod=%ld",
+			   Cod);
+         else
+            return (unsigned)
+            DB_QueryCOUNT ("can not get number of users",
+			   "SELECT COUNT(DISTINCT UsrCod)"
+			    " FROM crs_users"
+			   " WHERE CrsCod=%ld"
+			     " AND Role"
+			       "%s",
+			   Cod,
+			   SubQueryRoles);
+      default:
+	 Err_WrongScopeExit ();
+	 return 0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/******** Get total number of users who do not belong to any course **********/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetNumUsrsNotBelongingToAnyCrs (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users"
+		  " who do not belong to any course",
+		  "SELECT COUNT(*)"
+		   " FROM usr_data"
+		  " WHERE UsrCod NOT IN"
+			" (SELECT DISTINCT(UsrCod)"
+			   " FROM crs_users)");
+  }
+
+/*****************************************************************************/
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
@@ -577,7 +806,7 @@ double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t 
 					 Cod,
 					 (unsigned) Role);
       case HieLvl_CRS:
-	 return (double) Usr_GetNumUsrsInCrss (HieLvl_CRS,Cod,
+	 return (double) Enr_GetNumUsrsInCrss (HieLvl_CRS,Cod,
 				               Role == Rol_UNK ? 1 << Rol_STD |
 							         1 << Rol_NET |
 							         1 << Rol_TCH :	// Any user

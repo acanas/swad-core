@@ -44,6 +44,7 @@
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_exam_database.h"
+#include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
@@ -160,6 +161,8 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
                                           Enr_RemoveUsrProduction_t RemoveUsrWorks,
 					  Cns_QuietOrVerbose_t QuietOrVerbose);
 
+static FigCch_FigureCached_t Enr_GetFigureNumUsrsInCrss (unsigned Roles);
+
 /*****************************************************************************/
 /** Check if current course has students and show warning no students found **/
 /*****************************************************************************/
@@ -168,7 +171,7 @@ void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
   {
    /***** Put link to register students *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
-      if (!Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+      if (!Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				 1 << Rol_STD))	// No students in course
          Usr_ShowWarningNoUsersFound (Rol_STD);
   }
@@ -182,7 +185,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
    extern const char *Txt_Register_students;
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)	// Course selected and I am logged as teacher
-      if (!Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
+      if (!Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,
 				 1 << Rol_STD))	// No students in course
 	{
 	 Frm_BeginForm (ActReqEnrSevStd);
@@ -589,7 +592,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
 
 	       /* Put link to remove all students in the current course */
-	       if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+	       if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 					 1 << Rol_STD))	// This course has students
 		  Enr_PutLinkToRemAllStdsThisCrs ();
 	       break;
@@ -1738,7 +1741,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
-   unsigned NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+   unsigned NumStds = Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				            1 << Rol_STD);	// This course has students
 
    /***** Begin box *****/
@@ -1903,7 +1906,7 @@ void Enr_SignUpInCrs (void)
       if (RoleFromForm == Rol_TCH)
          Notify = true;
       else
-	 Notify = (Usr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
+	 Notify = (Enr_GetNumUsrsInCrss (HieLvl_CRS,Gbl.Hierarchy.Crs.CrsCod,
 				         1 << Rol_TCH) != 0);	// This course has teachers
       if (Notify)
          Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
@@ -2276,7 +2279,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Number of teachers in the course *****/
 		     HTM_TD_Begin ("class=\"DAT RT\"");
-			HTM_Unsigned (Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
+			HTM_Unsigned (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
 							    1 << Rol_TCH));
 		     HTM_TD_End ();
 
@@ -3524,4 +3527,155 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
    Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
    Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = Enr_DB_CheckIfUsrSharesAnyOfMyCrs (UsrDat->UsrCod);
    return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
+  }
+
+/*****************************************************************************/
+/******* Get total number of users of one or several roles in courses ********/
+/*****************************************************************************/
+
+#define Enr_DB_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
+
+unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
+  {
+   bool AnyUserInCourses;
+   unsigned NumUsrs;
+
+   /***** Reset roles that can not belong to courses.
+          Only
+          - students,
+          - non-editing teachers,
+          - teachers
+          can belong to a course *****/
+   Roles &= ((1 << Rol_STD) |
+	     (1 << Rol_NET) |
+	     (1 << Rol_TCH));
+
+   /***** Check if no roles requested *****/
+   if (Roles == 0)
+      return 0;
+
+   /***** Check if any user in courses is requested *****/
+   AnyUserInCourses = (Roles == ((1 << Rol_STD) |
+	                         (1 << Rol_NET) |
+	                         (1 << Rol_TCH)));
+
+   /***** Get number of users from database *****/
+   NumUsrs = Enr_DB_GetNumUsrsInCrss (Scope,Cod,Roles,AnyUserInCourses);
+
+   FigCch_UpdateFigureIntoCache (Enr_GetFigureNumUsrsInCrss (Roles),Scope,Cod,
+				 FigCch_UNSIGNED,&NumUsrs);
+   return NumUsrs;
+  }
+
+unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
+  {
+   unsigned NumUsrsInCrss;
+
+   /***** Get number of users in courses from cache *****/
+   if (!FigCch_GetFigureFromCache (Enr_GetFigureNumUsrsInCrss (Roles),Scope,Cod,
+                                   FigCch_UNSIGNED,&NumUsrsInCrss))
+      /***** Get current number of users in courses from database and update cache *****/
+      NumUsrsInCrss = Enr_GetNumUsrsInCrss (Scope,Cod,Roles);
+
+   return NumUsrsInCrss;
+  }
+
+static FigCch_FigureCached_t Enr_GetFigureNumUsrsInCrss (unsigned Roles)
+  {
+   switch (Roles)
+     {
+      case 1 << Rol_STD:	// Students
+	 return FigCch_NUM_STDS_IN_CRSS;
+      case 1 << Rol_NET:	// Non-editing teachers
+	 return FigCch_NUM_NETS_IN_CRSS;
+      case 1 << Rol_TCH:	// Teachers
+	 return FigCch_NUM_TCHS_IN_CRSS;
+      case 1 << Rol_NET |
+	   1 << Rol_TCH:	// Any teacher in courses
+	 return FigCch_NUM_ALLT_IN_CRSS;
+      case 1 << Rol_STD |
+	   1 << Rol_NET |
+	   1 << Rol_TCH:	// Any user in courses
+	 return FigCch_NUM_USRS_IN_CRSS;
+      default:
+	 Err_WrongRoleExit ();
+	 return FigCch_UNKNOWN;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/******** Get total number of users who do not belong to any course **********/
+/*****************************************************************************/
+
+unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
+  {
+   unsigned NumGsts;
+
+   /***** Get number of guests from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,HieLvl_SYS,-1L,
+                                   FigCch_UNSIGNED,&NumGsts))
+     {
+      /***** Get current number of guests from database and update cache *****/
+      NumGsts = Enr_DB_GetNumUsrsNotBelongingToAnyCrs ();
+      FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,HieLvl_SYS,-1L,
+                                    FigCch_UNSIGNED,&NumGsts);
+     }
+
+   return NumGsts;
+  }
+
+/*****************************************************************************/
+/************ Get average number of courses with users of a type *************/
+/*****************************************************************************/
+
+double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+  {
+   static const FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK] = FigCch_NUM_USRS_PER_CRS,	// Number of users per course
+      [Rol_STD] = FigCch_NUM_STDS_PER_CRS,	// Number of students per course
+      [Rol_NET] = FigCch_NUM_NETS_PER_CRS,	// Number of non-editing teachers per course
+      [Rol_TCH] = FigCch_NUM_TCHS_PER_CRS,	// Number of teachers per course
+     };
+   double AverageNumUsrsPerCrs;
+
+   /***** Get number of users per course from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
+                                   FigCch_DOUBLE,&AverageNumUsrsPerCrs))
+     {
+      /***** Get current number of users per course from database and update cache *****/
+      AverageNumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (Scope,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
+                                    FigCch_DOUBLE,&AverageNumUsrsPerCrs);
+     }
+
+   return AverageNumUsrsPerCrs;
+  }
+
+/*****************************************************************************/
+/************ Get average number of courses with users of a role *************/
+/*****************************************************************************/
+
+double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+  {
+   static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
+      [Rol_STD] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student
+      [Rol_NET] = FigCch_NUM_CRSS_PER_NET,	// Number of courses per non-editing teacher
+      [Rol_TCH] = FigCch_NUM_CRSS_PER_TCH,	// Number of courses per teacher
+     };
+   double AverageNumCrssPerUsr;
+
+   /***** Get number of courses per user from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Scope,Cod,
+                                   FigCch_DOUBLE,&AverageNumCrssPerUsr))
+     {
+      /***** Get current number of courses per user from database and update cache *****/
+      AverageNumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (Scope,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Scope,Cod,
+                                    FigCch_DOUBLE,&AverageNumCrssPerUsr);
+     }
+
+   return AverageNumCrssPerUsr;
   }

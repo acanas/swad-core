@@ -376,7 +376,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
       /***** Number of users who claim to belong to this center *****/
       HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (Ctr));
+	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (Ctr));
       HTM_TD_End ();
 
       /***** Place *****/
@@ -396,7 +396,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
       /***** Number of users in courses of this center *****/
       HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user
@@ -789,8 +789,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 	 ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
 	 NumDegs = Deg_GetNumDegsInCtr (Ctr->CtrCod);
-	 NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
-	 NumUsrsInCrssOfCtr = Usr_GetNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
+	 NumUsrsCtr = Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
+	 NumUsrsInCrssOfCtr = Enr_GetNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
 						    1 << Rol_STD |
 						    1 << Rol_NET |
 						    1 << Rol_TCH);	// Any user
@@ -1069,10 +1069,10 @@ void Ctr_RemoveCenter (void)
    if (Deg_GetNumDegsInCtr (Ctr_EditingCtr->CtrCod))			// Center has degrees
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center);
-   else if (Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Center has users who claim to belong to it
+   else if (Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr_EditingCtr))	// Center has users who claim to belong to it
       Ale_ShowAlert (Ale_WARNING,
 		     Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center);
-   else if (Usr_GetNumUsrsInCrss (HieLvl_CTR,Ctr_EditingCtr->CtrCod,
+   else if (Enr_GetNumUsrsInCrss (HieLvl_CTR,Ctr_EditingCtr->CtrCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Center has users
@@ -1108,7 +1108,7 @@ void Ctr_RemoveCenter (void)
       /***** Flush caches *****/
       Deg_FlushCacheNumDegsInCtr ();
       Crs_FlushCacheNumCrssInCtr ();
-      Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
+      Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2126,4 +2126,55 @@ bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
    Gbl.Cache.UsrBelongsToCtr.CtrCod = CtrCod;
    Gbl.Cache.UsrBelongsToCtr.Belongs = Ctr_DB_CheckIfUsrBelongsToCtr (UsrCod,CtrCod);
    return Gbl.Cache.UsrBelongsToCtr.Belongs;
+  }
+
+/*****************************************************************************/
+/*********** Get number of users who claim to belong to a center *************/
+/*****************************************************************************/
+
+void Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
+  }
+
+unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (Ctr->CtrCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If already got... *****/
+   if (Ctr->NumUsrsWhoClaimToBelongToCtr.Valid)
+      return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+
+   /***** 3. Fast check: If cached... *****/
+   if (Ctr->CtrCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
+     {
+      Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+      Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
+      return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+     }
+
+   /***** 4. Slow: number of users who claim to belong to a center
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = Ctr->CtrCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
+   Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs = Ctr_DB_GetNumUsrsWhoClaimToBelongToCtr (Ctr->CtrCod);
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs);
+   return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
+  }
+
+unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
+  {
+   unsigned NumUsrsCtr;
+
+   /***** Get number of users who claim to belong to center from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Ctr->CtrCod,
+                                   FigCch_UNSIGNED,&NumUsrsCtr))
+      /***** Get current number of users who claim to belong to center from database and update cache *****/
+      NumUsrsCtr = Ctr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
+
+   return NumUsrsCtr;
   }

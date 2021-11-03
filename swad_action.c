@@ -1814,7 +1814,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgCooPrf	] = {1764,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Coo_ChangeMyPrefsCookies	,NULL},
    [ActChgNtfPrf	] = { 775,-1,TabUnk,ActReqEdiSet	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Ntf_ChangeNotifyEvents		,Set_EditSettings		,NULL},
 
-   [ActPrnUsrQR		] = {1022,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Usr_PrintUsrQRCode		,NULL},
+   [ActPrnUsrQR		] = {1022,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,QR_PrintUsrQRCode		,NULL},
 
    [ActPrnMyTT		] = { 409,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Tmt_ShowClassTimeTable		,NULL},
    [ActEdiTut		] = {  65,-1,TabUnk,ActSeeMyTT		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tmt_EditMyTutTimeTable		,NULL},

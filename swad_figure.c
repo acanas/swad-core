@@ -464,15 +464,15 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 
       /* Number of users in courses */
       HTM_TD_Begin ("class=\"%s\"",Class);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);
-	 HTM_Double2Decimals (Usr_GetCachedNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
+	 HTM_Double2Decimals (Enr_GetCachedAverageNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);
-	 HTM_Double2Decimals (Usr_GetCachedNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
+	 HTM_Double2Decimals (Enr_GetCachedAverageNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -495,7 +495,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsNotBelongingToAnyCrs ());
+	 HTM_Unsigned (Enr_GetCachedNumUsrsNotBelongingToAnyCrs ());
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"%s\"",Class);

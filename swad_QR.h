@@ -44,6 +44,7 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,
 void QR_PutParamQRString (void *QRString);
 
 void QR_PrintQRCode (void);
+void QR_PrintUsrQRCode (void);
 void QR_ImageQRCode (const char *QRString);
 
 void QR_LinkTo (unsigned Size,const char *ParamName,long Cod);

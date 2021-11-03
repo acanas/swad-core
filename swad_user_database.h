@@ -74,4 +74,9 @@ unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
 void Usr_DB_RemoveUsrLastData (long UsrCod);
 void Usr_DB_RemoveUsrData (long UsrCod);
 
+//------------------------------ Birthdays today ------------------------------
+void Usr_DB_MarkMyBirthdayAsCongratulated (void);
+bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void);
+void Usr_DB_DeleteOldBirthdays (void);
+
 #endif

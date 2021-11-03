@@ -154,4 +154,10 @@ bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
 bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
 
+unsigned Enr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
+unsigned Enr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles);
+unsigned Enr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
+double Enr_GetCachedAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+double Enr_GetCachedAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+
 #endif

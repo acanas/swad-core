@@ -983,9 +983,9 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 HTM_TR_Begin (NULL);
 
 	    /* Get number of users */
-	    NumUsrs[Rol_STD] = Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
-	    NumUsrs[Rol_NET] = Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
-	    NumUsrs[Rol_TCH] = Usr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
+	    NumUsrs[Rol_STD] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
+	    NumUsrs[Rol_NET] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
+	    NumUsrs[Rol_TCH] = Enr_GetCachedNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
 	    NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 			       NumUsrs[Rol_NET] +
 			       NumUsrs[Rol_TCH];
@@ -1183,9 +1183,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
 	 /* Get number of users */
-	 NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
-	 NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
-	 NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
+	 NumUsrs[Rol_STD] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_STD);
+	 NumUsrs[Rol_NET] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_NET);
+	 NumUsrs[Rol_TCH] = Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs->CrsCod,1 << Rol_TCH);
 	 NumUsrs[Rol_UNK] = NumUsrs[Rol_STD] +
 	                    NumUsrs[Rol_NET] +
 			    NumUsrs[Rol_TCH];
@@ -1664,7 +1664,7 @@ void Crs_RemoveCourse (void)
    if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
       /***** Check if this course has users *****/
-      if (Usr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->CrsCod,
+      if (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs_EditingCrs->CrsCod,
 				1 << Rol_STD |
 				1 << Rol_NET |
 				1 << Rol_TCH))	// Course has users ==> don't remove
@@ -2543,9 +2543,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Err_WrongCourseExit ();
 
    /***** Get number of teachers and students in this course *****/
-   NumStds = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_STD);
-   NumNETs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_NET);
-   NumTchs = Usr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_TCH);
+   NumStds = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_STD);
+   NumNETs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_NET);
+   NumTchs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_TCH);
    NumUsrs = NumStds + NumNETs + NumTchs;
    if (NumUsrs)
      {

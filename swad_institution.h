@@ -141,4 +141,8 @@ bool Ins_CheckIfIBelongToIns (long InsCod);
 void Ins_FlushCacheUsrBelongsToIns (void);
 bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
 
+void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
+unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
+unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
+
 #endif

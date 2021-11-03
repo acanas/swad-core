@@ -326,11 +326,11 @@ void Gbl_InitializeGlobals (void)
 
    Crs_FlushCacheNumCrssInDeg ();
 
-   Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
-   Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
-   Usr_FlushCacheNumUsrsWhoClaimToBelongToCty ();
-   Usr_FlushCacheNumUsrsWhoClaimToBelongToIns ();
-   Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
+   Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty ();
+   Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty ();
+   Cty_FlushCacheNumUsrsWhoClaimToBelongToCty ();
+   Ins_FlushCacheNumUsrsWhoClaimToBelongToIns ();
+   Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr ();
    Usr_FlushCacheUsrIsSuperuser ();
    Ins_FlushCacheUsrBelongsToIns ();
    Ctr_FlushCacheUsrBelongsToCtr ();

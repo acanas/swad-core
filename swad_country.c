@@ -253,7 +253,7 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of users who claim to belong to another country */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
+	    HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
 	 HTM_TD_End ();
 
 	 /* Number of institutions in other countries */
@@ -278,7 +278,7 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of users in courses of other countries */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTY,0,
+	    HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,0,
 						      1 << Rol_STD |
 						      1 << Rol_NET |
 						      1 << Rol_TCH));	// Any user
@@ -298,7 +298,7 @@ void Cty_ListCountries2 (void)
 
 	 /* Number of users who do not claim to belong to any country */
 	 HTM_TD_Begin ("class=\"DAT RM\"");
-	    HTM_Unsigned (Usr_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
+	    HTM_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
 	 HTM_TD_End ();
 
 	 /* Number of institutions with unknown country */
@@ -425,7 +425,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 
       /***** Number of users who claim to belong to this country *****/
       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsWhoClaimToBelongToCty (Cty));
+	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (Cty));
       HTM_TD_End ();
 
       /***** Number of institutions *****/
@@ -450,7 +450,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 
       /***** Number of users in courses *****/
       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
 						   1 << Rol_TCH));	// Any user
@@ -615,7 +615,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 	   NumCty < Gbl.Hierarchy.Ctys.Num;
 	   NumCty++)
 	{
-	 NumUsrsCty = Usr_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Ctys.Lst[NumCty]);
+	 NumUsrsCty = Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Ctys.Lst[NumCty]);
 	 if (NumUsrsCty)
 	   {
 	    NumInss = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Ctys.Lst[NumCty].CtyCod);
@@ -1068,7 +1068,7 @@ static void Cty_ListCountriesForEdition (void)
 	{
 	 Cty = &Gbl.Hierarchy.Ctys.Lst[NumCty];
 	 NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
-	 NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
+	 NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToCty (Cty);
 
 	 HTM_TR_Begin (NULL);
 
@@ -1078,7 +1078,7 @@ static void Cty_ListCountriesForEdition (void)
 		   NumUsrsCty)					// Country has users
 		  // Deletion forbidden
 		  Ico_PutIconRemovalNotAllowed ();
-	       else if (Usr_GetNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
+	       else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
 					      1 << Rol_STD |
 					      1 << Rol_NET |
 					      1 << Rol_TCH))	// Country has users
@@ -1216,10 +1216,10 @@ void Cty_RemoveCountry (void)
    if (Ins_GetNumInssInCty (Cty_EditingCty->CtyCod))			// Country has institutions ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Usr_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
+   else if (Cty_GetNumUsrsWhoClaimToBelongToCty (Cty_EditingCty))	// Country has users ==> don't remove
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
-   else if (Usr_GetNumUsrsInCrss (HieLvl_CTY,Cty_EditingCty->CtyCod,
+   else if (Enr_GetNumUsrsInCrss (HieLvl_CTY,Cty_EditingCty->CtyCod,
 				  1 << Rol_STD |
 				  1 << Rol_NET |
 				  1 << Rol_TCH))			// Country has users
@@ -1239,7 +1239,7 @@ void Cty_RemoveCountry (void)
       Ctr_FlushCacheNumCtrsInCty ();
       Deg_FlushCacheNumDegsInCty ();
       Crs_FlushCacheNumCrssInCty ();
-      Usr_FlushCacheNumUsrsWhoClaimToBelongToCty ();
+      Cty_FlushCacheNumUsrsWhoClaimToBelongToCty ();
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1968,4 +1968,130 @@ bool Cty_CheckIfIBelongToCty (long CtyCod)
       if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].CtyCod == CtyCod)
          return true;
    return false;
+  }
+
+/*****************************************************************************/
+/******* Get number of users who don't claim to belong to any country ********/
+/*****************************************************************************/
+
+void Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void)
+  {
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = false;
+  }
+
+unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
+  {
+   /***** 1. Fast check: If cached... *****/
+   if (Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid)
+      return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
+
+   /***** 2. Slow: number of users who don't claim to belong to any country
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs = Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
+   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs);
+   return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
+  }
+
+unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
+  {
+   unsigned NumUsrs;
+
+   /***** Get number of user who don't claim to belong to any country from cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
+				   FigCch_UNSIGNED,&NumUsrs))
+      /***** Get current number of user who don't claim to belong to any country from database and update cache *****/
+      NumUsrs = Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
+
+   return NumUsrs;
+  }
+
+/*****************************************************************************/
+/******** Get number of users who claim to belong to another country *********/
+/*****************************************************************************/
+
+void Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = false;
+  }
+
+unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
+  {
+   /***** 1. Fast check: If cached... *****/
+   if (Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid)
+      return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
+
+   /***** 2. Slow: number of users who claim to belong to another country
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs = Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty ();
+   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs);
+   return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
+  }
+
+unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
+  {
+   unsigned NumUsrsCty;
+
+   /***** Get number of users who claim to belong to another country form cache *****/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
+                                   FigCch_UNSIGNED,&NumUsrsCty))
+      /***** Get current number of users who claim to belong to another country from database and update cache *****/
+      NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToAnotherCty ();
+
+   return NumUsrsCty;
+  }
+
+/*****************************************************************************/
+/*********** Get number of users who claim to belong to a country ************/
+/*****************************************************************************/
+
+void Cty_FlushCacheNumUsrsWhoClaimToBelongToCty (void)
+  {
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = -1L;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs = 0;
+  }
+
+unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (Cty->CtyCod <= 0)
+      return 0;
+
+   /***** 2. Fast check: If already got... *****/
+   if (Cty->NumUsrsWhoClaimToBelongToCty.Valid)
+      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+
+   /***** 3. Fast check: If cached... *****/
+   if (Cty->CtyCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod)
+     {
+      Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs;
+      Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
+      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+     }
+
+   /***** 4. Slow: number of users who claim to belong to an institution
+                   from database *****/
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->CtyCod;
+   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =
+   Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Cty_DB_GetNumUsrsWhoClaimToBelongToCty (Cty->CtyCod);
+   Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
+   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod,
+				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs);
+   return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
+  }
+
+unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
+  {
+   unsigned NumUsrsCty;
+
+   /***** Get number of users who claim to belong to country from cache ******/
+   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Cty->CtyCod,
+                                   FigCch_UNSIGNED,&NumUsrsCty))
+      /***** Get current number of users who claim to belong to country from database and update cache ******/
+      NumUsrsCty = Cty_GetNumUsrsWhoClaimToBelongToCty (Cty);
+
+   return NumUsrsCty;
   }

@@ -369,37 +369,6 @@ unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
-/**************** Get the countries of a user from database ******************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod)
-  {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-
-   return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get the countries a user belongs to",
-		   "SELECT cty_countrs.CtyCod,"	// row[0]
-			  "MAX(crs_users.Role)"	// row[1]
-		    " FROM crs_users,"
-			  "crs_courses,"
-			  "deg_degrees,"
-			  "ctr_centers,"
-			  "ins_instits,"
-			  "cty_countrs"
-		   " WHERE crs_users.UsrCod=%ld"
-		     " AND crs_users.CrsCod=crs_courses.CrsCod"
-		     " AND crs_courses.DegCod=deg_degrees.DegCod"
-		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
-		   " GROUP BY cty_countrs.CtyCod"
-		   " ORDER BY cty_countrs.Name_%s",
-		   UsrCod,
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
-  }
-
-/*****************************************************************************/
 /******************* Check if a numeric country code exists ******************/
 /*****************************************************************************/
 
@@ -591,6 +560,77 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
 		   " WHERE CtyCod='%03ld'",
 	           NewMapAttribution,
 	           Gbl.Hierarchy.Cty.CtyCod);
+  }
+
+/*****************************************************************************/
+/**************** Get the countries of a user from database ******************/
+/*****************************************************************************/
+// Returns the number of rows of the result
+
+unsigned Cty_DB_GetCtysFromUsr (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get the countries a user belongs to",
+		   "SELECT cty_countrs.CtyCod,"	// row[0]
+			  "MAX(crs_users.Role)"	// row[1]
+		    " FROM crs_users,"
+			  "crs_courses,"
+			  "deg_degrees,"
+			  "ctr_centers,"
+			  "ins_instits,"
+			  "cty_countrs"
+		   " WHERE crs_users.UsrCod=%ld"
+		     " AND crs_users.CrsCod=crs_courses.CrsCod"
+		     " AND crs_courses.DegCod=deg_degrees.DegCod"
+		     " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+		     " AND ctr_centers.InsCod=ins_instits.InsCod"
+		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
+		   " GROUP BY cty_countrs.CtyCod"
+		   " ORDER BY cty_countrs.Name_%s",
+		   UsrCod,
+		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+  }
+
+/*****************************************************************************/
+/******* Get number of users who don't claim to belong to any country ********/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtyCod<0");
+  }
+
+/*****************************************************************************/
+/******** Get number of users who claim to belong to another country *********/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtyCod=0");
+  }
+
+/*****************************************************************************/
+/*********** Get number of users who claim to belong to a country ************/
+/*****************************************************************************/
+
+unsigned Cty_DB_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE CtyCod=%ld",
+		  CtyCod);
   }
 
 /*****************************************************************************/

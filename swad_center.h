@@ -153,4 +153,8 @@ bool Ctr_CheckIfIBelongToCtr (long CtrCod);
 void Ctr_FlushCacheUsrBelongsToCtr (void);
 bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
 
+void Ctr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void);
+unsigned Ctr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
+unsigned Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr);
+
 #endif

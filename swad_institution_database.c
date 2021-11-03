@@ -823,6 +823,20 @@ bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
   }
 
 /*****************************************************************************/
+/******** Get number of users who claim to belong to an institution **********/
+/*****************************************************************************/
+
+unsigned Ins_DB_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(UsrCod)"
+		   " FROM usr_data"
+		  " WHERE InsCod=%ld",
+		  InsCod);
+  }
+
+/*****************************************************************************/
 /***************************** Remove institution ****************************/
 /*****************************************************************************/
 

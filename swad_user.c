@@ -165,9 +165,6 @@ static void Usr_GetMyLastData (void);
 static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat);
 static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 
-static bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void);
-static void Usr_InsertMyBirthday (void);
-
 static void Usr_GetParamOtherUsrIDNickOrEMail (void);
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
@@ -261,8 +258,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr);
-
-static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -1412,7 +1407,8 @@ void Usr_WelcomeUsr (void)
                if (Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated ())
                  {
                   /* Mark my birthday as already congratulated */
-                  Usr_InsertMyBirthday ();
+        	  Usr_DB_DeleteOldBirthdays ();
+                  Usr_DB_MarkMyBirthdayAsCongratulated ();
 
 		  /* Begin alert */
 		  Ale_ShowAlertAndButton1 (Ale_INFO,Txt_Happy_birthday_X,
@@ -1497,40 +1493,6 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
 	        UsrDat->Birthday.Year,
 	        UsrDat->Birthday.Month,
 	        UsrDat->Birthday.Day);
-  }
-
-/*****************************************************************************/
-/*************** Check if my birthday is already congratulated ***************/
-/*****************************************************************************/
-
-static bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
-  {
-   /***** Delete old birthdays *****/
-   return (DB_QueryCOUNT ("can not check if my birthday has been congratulated",
-			  "SELECT COUNT(*)"
-			   " FROM usr_birthdays_today"
-			  " WHERE UsrCod=%ld",
-			  Gbl.Usrs.Me.UsrDat.UsrCod) == 0);
-  }
-
-/*****************************************************************************/
-/*** Insert my user's code in the table of birthdays already congratulated ***/
-/*****************************************************************************/
-
-static void Usr_InsertMyBirthday (void)
-  {
-   /***** Delete old birthdays *****/
-   DB_QueryDELETE ("can not delete old birthdays",
-		   "DELETE FROM usr_birthdays_today"
-		   " WHERE Today<>CURDATE()");
-
-   /***** Insert new birthday *****/
-   DB_QueryINSERT ("can not insert birthday",
-		   "INSERT INTO usr_birthdays_today"
-	           " (UsrCod,Today)"
-	           " VALUES"
-	           " (%ld,CURDATE())",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -2872,258 +2834,6 @@ static void Usr_WriteUsrData (const char *BgColor,
 
    /***** End table cell *****/
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/******* Get number of users who don't claim to belong to any country ********/
-/*****************************************************************************/
-
-void Usr_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void)
-  {
-   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = false;
-  }
-
-unsigned Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty (void)
-  {
-   /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid)
-      return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
-
-   /***** 2. Slow: number of users who don't claim to belong to any country
-                   from database *****/
-   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of users",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM usr_data"
-		  " WHERE CtyCod<0");
-   Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs);
-   return Gbl.Cache.NumUsrsWhoDontClaimToBelongToAnyCty.NumUsrs;
-  }
-
-unsigned Usr_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void)
-  {
-   unsigned NumUsrs;
-
-   /***** Get number of user who don't claim to belong to any country from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,-1L,
-				   FigCch_UNSIGNED,&NumUsrs))
-      /***** Get current number of user who don't claim to belong to any country from database and update cache *****/
-      NumUsrs = Usr_GetNumUsrsWhoDontClaimToBelongToAnyCty ();
-
-   return NumUsrs;
-  }
-
-/*****************************************************************************/
-/******** Get number of users who claim to belong to another country *********/
-/*****************************************************************************/
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void)
-  {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = false;
-  }
-
-unsigned Usr_GetNumUsrsWhoClaimToBelongToAnotherCty (void)
-  {
-   /***** 1. Fast check: If cached... *****/
-   if (Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid)
-      return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
-
-   /***** 2. Slow: number of users who claim to belong to another country
-                   from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of users",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM usr_data"
-		  " WHERE CtyCod=0");
-   Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs);
-   return Gbl.Cache.NumUsrsWhoClaimToBelongToAnotherCty.NumUsrs;
-  }
-
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void)
-  {
-   unsigned NumUsrsCty;
-
-   /***** Get number of users who claim to belong to another country form cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,0,
-                                   FigCch_UNSIGNED,&NumUsrsCty))
-      /***** Get current number of users who claim to belong to another country from database and update cache *****/
-      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToAnotherCty ();
-
-   return NumUsrsCty;
-  }
-
-/*****************************************************************************/
-/*********** Get number of users who claim to belong to a country ************/
-/*****************************************************************************/
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToCty (void)
-  {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = -1L;
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs = 0;
-  }
-
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (Cty->CtyCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If already got... *****/
-   if (Cty->NumUsrsWhoClaimToBelongToCty.Valid)
-      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
-
-   /***** 3. Fast check: If cached... *****/
-   if (Cty->CtyCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod)
-     {
-      Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs;
-      Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
-      return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
-     }
-
-   /***** 4. Slow: number of users who claim to belong to an institution
-                   from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod  = Cty->CtyCod;
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs =
-   Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of users",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM usr_data"
-		  " WHERE CtyCod=%ld",
-		  Cty->CtyCod);
-   Cty->NumUsrsWhoClaimToBelongToCty.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Gbl.Cache.NumUsrsWhoClaimToBelongToCty.CtyCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCty.NumUsrs);
-   return Cty->NumUsrsWhoClaimToBelongToCty.NumUsrs;
-  }
-
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty)
-  {
-   unsigned NumUsrsCty;
-
-   /***** Get number of users who claim to belong to country from cache ******/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTY,HieLvl_CTY,Cty->CtyCod,
-                                   FigCch_UNSIGNED,&NumUsrsCty))
-      /***** Get current number of users who claim to belong to country from database and update cache ******/
-      NumUsrsCty = Usr_GetNumUsrsWhoClaimToBelongToCty (Cty);
-
-   return NumUsrsCty;
-  }
-
-/*****************************************************************************/
-/******** Get number of users who claim to belong to an institution **********/
-/*****************************************************************************/
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToIns (void)
-  {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = -1L;
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs = 0;
-  }
-
-unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (Ins->InsCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If already got... *****/
-   if (Ins->NumUsrsWhoClaimToBelongToIns.Valid)
-      return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
-
-   /***** 3. Fast check: If cached... *****/
-   if (Ins->InsCod == Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod)
-     {
-      Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs;
-      Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
-      return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
-     }
-
-   /***** 4. Slow: number of users who claim to belong to an institution
-                   from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod  = Ins->InsCod;
-   Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs =
-   Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of users",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM usr_data"
-		  " WHERE InsCod=%ld",
-		  Ins->InsCod);
-   Ins->NumUsrsWhoClaimToBelongToIns.Valid = true;
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Gbl.Cache.NumUsrsWhoClaimToBelongToIns.InsCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToIns.NumUsrs);
-   return Ins->NumUsrsWhoClaimToBelongToIns.NumUsrs;
-  }
-
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
-  {
-   unsigned NumUsrsIns;
-
-   /***** Get number of users who claim to belong to institution from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_INS,HieLvl_INS,Ins->InsCod,
-                                   FigCch_UNSIGNED,&NumUsrsIns))
-      /***** Get current number of users who claim to belong to institution from database and update cache *****/
-      NumUsrsIns = Usr_GetNumUsrsWhoClaimToBelongToIns (Ins);
-
-   return NumUsrsIns;
-  }
-
-/*****************************************************************************/
-/*********** Get number of users who claim to belong to a center *************/
-/*****************************************************************************/
-
-void Usr_FlushCacheNumUsrsWhoClaimToBelongToCtr (void)
-  {
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = -1L;
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs = 0;
-  }
-
-unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (Ctr->CtrCod <= 0)
-      return 0;
-
-   /***** 2. Fast check: If already got... *****/
-   if (Ctr->NumUsrsWhoClaimToBelongToCtr.Valid)
-      return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
-
-   /***** 3. Fast check: If cached... *****/
-   if (Ctr->CtrCod == Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod)
-     {
-      Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs = Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs;
-      Ctr->NumUsrsWhoClaimToBelongToCtr.Valid = true;
-      return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
-     }
-
-   /***** 4. Slow: number of users who claim to belong to a center
-                   from database *****/
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod  = Ctr->CtrCod;
-   Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs =
-   Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of users",
-		  "SELECT COUNT(UsrCod)"
-		   " FROM usr_data"
-		  " WHERE CtrCod=%ld",
-		  Ctr->CtrCod);
-   FigCch_UpdateFigureIntoCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.CtrCod,
-				 FigCch_UNSIGNED,&Gbl.Cache.NumUsrsWhoClaimToBelongToCtr.NumUsrs);
-   return Ctr->NumUsrsWhoClaimToBelongToCtr.NumUsrs;
-  }
-
-unsigned Usr_GetCachedNumUsrsWhoClaimToBelongToCtr (struct Ctr_Center *Ctr)
-  {
-   unsigned NumUsrsCtr;
-
-   /***** Get number of users who claim to belong to center from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_USRS_BELONG_CTR,HieLvl_CTR,Ctr->CtrCod,
-                                   FigCch_UNSIGNED,&NumUsrsCtr))
-      /***** Get current number of users who claim to belong to center from database and update cache *****/
-      NumUsrsCtr = Usr_GetNumUsrsWhoClaimToBelongToCtr (Ctr);
-
-   return NumUsrsCtr;
   }
 
 /*****************************************************************************/
@@ -6085,7 +5795,7 @@ void Usr_ListAllDataTchs (void)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+      NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
 				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
 				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
 				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
@@ -6810,7 +6520,7 @@ void Usr_SeeTeachers (void)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+      NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
 				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
 				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
 				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
@@ -7506,7 +7216,7 @@ void Usr_SeeTchClassPhotoPrn (void)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Usr_GetNumUsrsInCrss (Gbl.Scope.Current,
+      NumUsrs = Enr_GetNumUsrsInCrss (Gbl.Scope.Current,
 				     (Gbl.Scope.Current == HieLvl_CTY ? Gbl.Hierarchy.Cty.CtyCod :
 				     (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
 				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
@@ -7772,407 +7482,15 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 	       (Gbl.Scope.Current == HieLvl_INS ? Gbl.Hierarchy.Ins.InsCod :
 	       (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
 	       (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
-	                                           Gbl.Hierarchy.Crs.CrsCod))));
+	                                          Gbl.Hierarchy.Crs.CrsCod))));
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);
-         return Usr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);	// All users in courses
+         return Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles);	// All users in courses
       default:
 	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
-  }
-
-/*****************************************************************************/
-/******* Get total number of users of one or several roles in courses ********/
-/*****************************************************************************/
-
-#define Usr_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES * (10 + 1) - 1)
-
-unsigned Usr_GetNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
-  {
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char SubQueryRoles[Usr_MAX_BYTES_SUBQUERY_ROLES + 1];
-   bool AnyUserInCourses;
-   Rol_Role_t Role;
-   Rol_Role_t FirstRoleRequested;
-   bool MoreThanOneRole;
-   bool FirstRole;
-   unsigned NumUsrs;
-
-   /***** Reset roles that can not belong to courses.
-          Only
-          - students,
-          - non-editing teachers,
-          - teachers
-          can belong to a course *****/
-   Roles &= ((1 << Rol_STD) |
-	     (1 << Rol_NET) |
-	     (1 << Rol_TCH));
-
-   /***** Check if no roles requested *****/
-   if (Roles == 0)
-      return 0;
-
-   /***** Check if any user in courses is requested *****/
-   AnyUserInCourses = (Roles == ((1 << Rol_STD) |
-	                         (1 << Rol_NET) |
-	                         (1 << Rol_TCH)));
-
-   /***** Get first role requested *****/
-   FirstRoleRequested = Rol_UNK;
-   for (Role  = Rol_STD;
-        Role <= Rol_TCH;
-        Role++)
-      if (Roles & (1 << Role))
-	{
-	 FirstRoleRequested = Role;
-	 break;
-	}
-
-   /***** Check if more than one role is requested *****/
-   MoreThanOneRole = false;
-   if (FirstRoleRequested != Rol_UNK)
-      for (Role = FirstRoleRequested + 1;
-	   Role <= Rol_TCH;
-	   Role++)
-	 if (Roles & (1 << Role))
-	   {
-	    MoreThanOneRole = true;
-	    break;
-	   }
-
-   /***** Build subquery for roles *****/
-   if (MoreThanOneRole)
-     {
-      Str_Copy (SubQueryRoles," IN (",sizeof (SubQueryRoles) - 1);
-      for (Role  = Rol_STD, FirstRole = true;
-	   Role <= Rol_TCH;
-	   Role++)
-	 if (Roles & (1 << Role))
-	   {
-	    snprintf (UnsignedStr,sizeof (UnsignedStr),"%u",(unsigned) Role);
-	    if (FirstRole)	// Not the first role
-	       FirstRole = false;
-	    else
-	       Str_Concat (SubQueryRoles,",",sizeof (SubQueryRoles) - 1);
-	    Str_Concat (SubQueryRoles,UnsignedStr,sizeof (SubQueryRoles) - 1);
-	   }
-      Str_Concat (SubQueryRoles,")",sizeof (SubQueryRoles) - 1);
-     }
-   else	// Only one role
-      sprintf (SubQueryRoles,"=%u",FirstRoleRequested);
-
-   /***** Get number of users from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-         if (AnyUserInCourses)	// Any user
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT UsrCod)"
-			    " FROM crs_users");
-         else
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT UsrCod)"
-			    " FROM crs_users"
-			   " WHERE Role"
-			     "%s",
-			   SubQueryRoles);
-         break;
-      case HieLvl_CTY:
-         if (AnyUserInCourses)	// Any user
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM ins_instits,"
-				  "ctr_centers,"
-				  "deg_degrees,"
-				  "crs_courses,"
-				  "crs_users"
-			   " WHERE ins_instits.CtyCod=%ld"
-			     " AND ins_instits.InsCod=ctr_centers.InsCod"
-			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod",
-			   Cod);
-         else
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM ins_instits,"
-				  "ctr_centers,"
-				  "deg_degrees,"
-				  "crs_courses,"
-				  "crs_users"
-			   " WHERE ins_instits.CtyCod=%ld"
-			     " AND ins_instits.InsCod=ctr_centers.InsCod"
-			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.Role"
-			     "%s",
-			   Cod,
-			   SubQueryRoles);
-         break;
-      case HieLvl_INS:
-         if (AnyUserInCourses)	// Any user
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM ctr_centers,"
-				  "deg_degrees,"
-				  "crs_courses,"
-				  "crs_users"
-			   " WHERE ctr_centers.InsCod=%ld"
-			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod",
-			   Cod);
-         else
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM ctr_centers,"
-				  "deg_degrees,"
-				  "crs_courses,"
-				  "crs_users"
-			   " WHERE ctr_centers.InsCod=%ld"
-			     " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.Role"
-			     "%s",
-			   Cod,
-			   SubQueryRoles);
-         break;
-      case HieLvl_CTR:
-         if (AnyUserInCourses)	// Any user
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM deg_degrees,"
-				  "crs_courses,"
-				  "crs_users"
-			   " WHERE deg_degrees.CtrCod=%ld"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod",
-			   Cod);
-         else
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM deg_degrees,"
-				  "crs_courses,"
-				  "crs_users"
-			   " WHERE deg_degrees.CtrCod=%ld"
-			     " AND deg_degrees.DegCod=crs_courses.DegCod"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.Role"
-			     "%s",
-			   Cod,
-			   SubQueryRoles);
-         break;
-      case HieLvl_DEG:
-         if (AnyUserInCourses)	// Any user
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM crs_courses,"
-			  	  "crs_users"
-			   " WHERE crs_courses.DegCod=%ld"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod",
-			   Cod);
-         else
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-			    " FROM crs_courses,"
-				  "crs_users"
-			   " WHERE crs_courses.DegCod=%ld"
-			     " AND crs_courses.CrsCod=crs_users.CrsCod"
-			     " AND crs_users.Role%s",
-			  Cod,SubQueryRoles);
-         break;
-      case HieLvl_CRS:
-         if (AnyUserInCourses)	// Any user
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT UsrCod)"
-			    " FROM crs_users"
-			   " WHERE CrsCod=%ld",
-			   Cod);
-         else
-            NumUsrs = (unsigned)
-            DB_QueryCOUNT ("can not get number of users",
-			   "SELECT COUNT(DISTINCT UsrCod)"
-			    " FROM crs_users"
-			   " WHERE CrsCod=%ld"
-			     " AND Role"
-			     "%s",
-			   Cod,
-			   SubQueryRoles);
-         break;
-      default:
-	 Err_WrongScopeExit ();
-	 NumUsrs = 0;	// Not reached. Initialized to avoid warning.
-	 break;
-     }
-
-   FigCch_UpdateFigureIntoCache (Usr_GetFigureNumUsrsInCrss (Roles),Scope,Cod,
-				 FigCch_UNSIGNED,&NumUsrs);
-   return NumUsrs;
-  }
-
-unsigned Usr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Roles)
-  {
-   unsigned NumUsrsInCrss;
-
-   /***** Get number of users in courses from cache *****/
-   if (!FigCch_GetFigureFromCache (Usr_GetFigureNumUsrsInCrss (Roles),Scope,Cod,
-                                   FigCch_UNSIGNED,&NumUsrsInCrss))
-      /***** Get current number of users in courses from database and update cache *****/
-      NumUsrsInCrss = Usr_GetNumUsrsInCrss (Scope,Cod,Roles);
-
-   return NumUsrsInCrss;
-  }
-
-static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles)
-  {
-   switch (Roles)
-     {
-      case 1 << Rol_STD:	// Students
-	 return FigCch_NUM_STDS_IN_CRSS;
-      case 1 << Rol_NET:	// Non-editing teachers
-	 return FigCch_NUM_NETS_IN_CRSS;
-      case 1 << Rol_TCH:	// Teachers
-	 return FigCch_NUM_TCHS_IN_CRSS;
-      case 1 << Rol_NET |
-	   1 << Rol_TCH:	// Any teacher in courses
-	 return FigCch_NUM_ALLT_IN_CRSS;
-      case 1 << Rol_STD |
-	   1 << Rol_NET |
-	   1 << Rol_TCH:	// Any user in courses
-	 return FigCch_NUM_USRS_IN_CRSS;
-      default:
-	 Err_WrongRoleExit ();
-	 return FigCch_UNKNOWN;	// Not reached
-     }
-  }
-
-/*****************************************************************************/
-/******** Get total number of users who do not belong to any course **********/
-/*****************************************************************************/
-
-unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
-  {
-   unsigned NumGsts;
-
-   /***** Get number of guests from cache *****/
-   if (!FigCch_GetFigureFromCache (FigCch_NUM_GSTS,HieLvl_SYS,-1L,
-                                   FigCch_UNSIGNED,&NumGsts))
-     {
-      /***** Get current number of guests from database and update cache *****/
-      NumGsts = (unsigned)
-      DB_QueryCOUNT ("can not get number of users"
-		     " who do not belong to any course",
-		     "SELECT COUNT(*)"
-		      " FROM usr_data"
-		     " WHERE UsrCod NOT IN"
-			   " (SELECT DISTINCT(UsrCod)"
-			      " FROM crs_users)");
-      FigCch_UpdateFigureIntoCache (FigCch_NUM_GSTS,HieLvl_SYS,-1L,
-                                    FigCch_UNSIGNED,&NumGsts);
-     }
-
-   return NumGsts;
-  }
-
-/*****************************************************************************/
-/************ Get average number of courses with users of a type *************/
-/*****************************************************************************/
-
-double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
-  {
-   static const FigCch_FigureCached_t FigureNumUsrsPerCrs[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK] = FigCch_NUM_USRS_PER_CRS,	// Number of users per course
-      [Rol_STD] = FigCch_NUM_STDS_PER_CRS,	// Number of students per course
-      [Rol_NET] = FigCch_NUM_NETS_PER_CRS,	// Number of non-editing teachers per course
-      [Rol_TCH] = FigCch_NUM_TCHS_PER_CRS,	// Number of teachers per course
-     };
-   double NumUsrsPerCrs;
-
-   /***** Get number of users per course from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
-                                   FigCch_DOUBLE,&NumUsrsPerCrs))
-     {
-      /***** Get current number of users per course from database and update cache *****/
-      NumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (Scope,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
-                                    FigCch_DOUBLE,&NumUsrsPerCrs);
-     }
-
-   return NumUsrsPerCrs;
-  }
-
-/*****************************************************************************/
-/************ Get average number of courses with users of a role *************/
-/*****************************************************************************/
-
-double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
-  {
-   static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
-      [Rol_STD] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student
-      [Rol_NET] = FigCch_NUM_CRSS_PER_NET,	// Number of courses per non-editing teacher
-      [Rol_TCH] = FigCch_NUM_CRSS_PER_TCH,	// Number of courses per teacher
-     };
-   double NumCrssPerUsr;
-
-   /***** Get number of courses per user from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Scope,Cod,
-                                   FigCch_DOUBLE,&NumCrssPerUsr))
-     {
-      /***** Get current number of courses per user from database and update cache *****/
-      NumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (Scope,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Scope,Cod,
-                                    FigCch_DOUBLE,&NumCrssPerUsr);
-     }
-
-   return NumCrssPerUsr;
-  }
-
-/*****************************************************************************/
-/**************************** Show a user QR code ****************************/
-/*****************************************************************************/
-
-void Usr_PrintUsrQRCode (void)
-  {
-   char NewNickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      /***** Begin box *****/
-      Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,
-                    NULL,NULL,
-                    NULL,Box_NOT_CLOSABLE);
-
-	 /***** Show QR code *****/
-	 if (Gbl.Usrs.Other.UsrDat.Nickname[0])
-	   {
-	    snprintf (NewNickWithArr,sizeof (NewNickWithArr),"@%s",
-		      Gbl.Usrs.Other.UsrDat.Nickname);
-	    QR_ImageQRCode (NewNickWithArr);
-	   }
-
-      /***** End box *****/
-      Box_BoxEnd ();
-     }
-   else
-      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -8258,7 +7576,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
      }
 
    /* User's ID */
@@ -8282,7 +7600,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    else
      {
       /* End form */
-      HTM_BUTTON_End ();
+	 HTM_BUTTON_End ();
       Frm_EndForm ();
      }
 

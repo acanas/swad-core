@@ -335,7 +335,7 @@ void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
 
       /* Data */
       HTM_TD_Begin ("class=\"DAT LB\"");
-	 HTM_Unsigned (Usr_GetCachedNumUsrsInCrss (Scope,Cod,
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Scope,Cod,
 						   Role == Rol_UNK ? (1 << Rol_STD) |
 								     (1 << Rol_NET) |
 								     (1 << Rol_TCH) :	// Any user

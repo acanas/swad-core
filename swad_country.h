@@ -127,4 +127,16 @@ void Cty_GetMyCountrs (void);
 void Cty_FreeMyCountrs (void);
 bool Cty_CheckIfIBelongToCty (long CtyCod);
 
+void Cty_FlushCacheNumUsrsWhoDontClaimToBelongToAnyCty (void);
+unsigned Cty_GetNumUsrsWhoDontClaimToBelongToAnyCty (void);
+unsigned Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty (void);
+
+void Cty_FlushCacheNumUsrsWhoClaimToBelongToAnotherCty (void);
+unsigned Cty_GetNumUsrsWhoClaimToBelongToAnotherCty (void);
+unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty (void);
+
+void Cty_FlushCacheNumUsrsWhoClaimToBelongToCty (void);
+unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
+unsigned Cty_GetCachedNumUsrsWhoClaimToBelongToCty (struct Cty_Countr *Cty);
+
 #endif
