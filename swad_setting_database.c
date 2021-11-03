@@ -35,12 +35,20 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Private constants *****************************/
+/****************************** Public constants *****************************/
 /*****************************************************************************/
+
+const char *Set_DB_StringsUsrListTypes[Set_NUM_USR_LIST_TYPES] =
+  {
+   [Set_USR_LIST_UNKNOWN       ] = "",
+   [Set_USR_LIST_AS_CLASS_PHOTO] = "classphoto",
+   [Set_USR_LIST_AS_LISTING    ] = "list",
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
+
 /*****************************************************************************/
 /**************** Update my language to the current language *****************/
 /*****************************************************************************/
@@ -209,8 +217,6 @@ void Set_DB_UpdateMySettingsAboutNotifyEvents (void)
 
 void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
   {
-   extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
-
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_user_settings"
 		   " (UsrCod,CrsCod,"
@@ -225,7 +231,7 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
 	           UsrCod,
 	           CrsCod,
 	           (long) (time_t) 0,	// The user never accessed to tests in this course
-	           Usr_StringsUsrListTypeInDB[Usr_SHOW_USRS_TYPE_DEFAULT],
+	           Set_DB_StringsUsrListTypes[Set_SHOW_USRS_TYPE_DEFAULT],
 	           Usr_CLASS_PHOTO_COLS_DEF,
 	           Usr_LIST_WITH_PHOTOS_DEF ? 'Y' :
 					      'N');
@@ -235,7 +241,7 @@ void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod)
 /******** Update the group of my last access to a file browser zone **********/
 /*****************************************************************************/
 
-void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
+void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod)
   {
    DB_QueryUPDATE ("can not update the group of the last access to a file browser",
 		   "UPDATE crs_user_settings"
@@ -245,6 +251,61 @@ void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
                    FieldNameDB,GrpCod,
                    Gbl.Usrs.Me.UsrDat.UsrCod,
                    Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/***************** Save my preference about type of users' list **************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMyUsrListType (void)
+  {
+   DB_QueryUPDATE ("can not update type of listing",
+		   "UPDATE crs_user_settings"
+		     " SET UsrListType='%s'"
+                   " WHERE UsrCod=%ld"
+                     " AND CrsCod=%ld",
+		   Set_DB_StringsUsrListTypes[Gbl.Usrs.Me.ListType],
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/** Save my prefs. about number of colums in class photo for current course **/
+/*****************************************************************************/
+
+void Set_DB_UpdateMyColsClassPhoto (void)
+  {
+   if (Gbl.Usrs.Me.Logged &&
+       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+      /***** Update number of colums in class photo for current course *****/
+      DB_QueryUPDATE ("can not update number of columns in class photo",
+		      "UPDATE crs_user_settings"
+		        " SET ColsClassPhoto=%u"
+                      " WHERE UsrCod=%ld"
+                        " AND CrsCod=%ld",
+		      Gbl.Usrs.ClassPhoto.Cols,
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/**** Save my preference about photos in users' list for current course ******/
+/*****************************************************************************/
+
+void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void)
+  {
+   if (Gbl.Usrs.Me.Logged &&
+       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+      /***** Update number of colums in class photo for current course *****/
+      DB_QueryUPDATE ("can not update your preference about photos in listing",
+		      "UPDATE crs_user_settings"
+		        " SET ListWithPhotos='%c'"
+                      " WHERE UsrCod=%ld"
+                        " AND CrsCod=%ld",
+		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
+						    'N',
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

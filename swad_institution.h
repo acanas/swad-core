@@ -135,4 +135,10 @@ unsigned Ins_GetCachedNumInssWithUsrs (Rol_Role_t Role);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 
+void Ins_GetMyInstits (void);
+void Ins_FreeMyInstits (void);
+bool Ins_CheckIfIBelongToIns (long InsCod);
+void Ins_FlushCacheUsrBelongsToIns (void);
+bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
+
 #endif

@@ -166,7 +166,7 @@ bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
 
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
-         UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+         UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
          return UsrDat->Accepted;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -1604,7 +1604,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    switch (SeeOrPrint)
      {
@@ -1647,10 +1647,10 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Draw the classphoto/list *****/
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
+      case Set_USR_LIST_AS_CLASS_PHOTO:
          Pho_ShowOrPrintClassPhotoDegrees (&DegPhotos,SeeOrPrint);
          break;
-      case Usr_LIST_AS_LISTING:
+      case Set_USR_LIST_AS_LISTING:
          Pho_ShowOrPrintListDegrees (&DegPhotos,SeeOrPrint);
          break;
       default:
@@ -1698,7 +1698,7 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 	 Frm_BeginForm (ActSeePhoDeg);
 	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
 	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	 Usr_PutParamsPrefsAboutUsrList ();
+	 Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"AvgType\" name=\"AvgType\"");
 	       for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
@@ -1762,7 +1762,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 	 Frm_BeginForm (ActSeePhoDeg);
 	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
 	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	 Usr_PutParamsPrefsAboutUsrList ();
+	 Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"PhotoSize\" name=\"PhotoSize\"");
 	       for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
@@ -1826,7 +1826,7 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 	 Frm_BeginForm (ActSeePhoDeg);
 	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
 	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	 Usr_PutParamsPrefsAboutUsrList ();
+	 Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"Order\" name=\"Order\"");
 	       for (Order  = (Pho_HowOrderDegrees_t) 0;
@@ -1882,7 +1882,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos)
    Pho_PutHiddenParamTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
    Pho_PutHiddenParamPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);
    Pho_PutHiddenParamOrderDegrees (((struct Pho_DegPhotos *) DegPhotos)->HowOrderDegrees);
-   Usr_PutParamsPrefsAboutUsrList ();
+   Set_PutParamsPrefsAboutUsrList ();
   }
 
 /*****************************************************************************/
@@ -1919,7 +1919,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
 	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
 	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	 Usr_PutParamsPrefsAboutUsrList ();
+	 Set_PutParamsPrefsAboutUsrList ();
 
 	    HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
 				       The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],

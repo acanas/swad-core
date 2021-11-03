@@ -1772,7 +1772,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show tests *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       TstPrn_ShowUsrPrints (&Gbl.Usrs.Other.UsrDat);
 	      }
 	}

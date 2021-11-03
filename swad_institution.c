@@ -1982,3 +1982,115 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
 				     Txt_Map);
      }
   }
+
+/*****************************************************************************/
+/** Get all my institutions (those of my courses) and store them in a list ***/
+/*****************************************************************************/
+
+void Ins_GetMyInstits (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumIns;
+   unsigned NumInss;
+   long InsCod;
+
+   /***** If my institutions are yet filled, there's nothing to do *****/
+   if (!Gbl.Usrs.Me.MyInss.Filled)
+     {
+      Gbl.Usrs.Me.MyInss.Num = 0;
+
+      /***** Get my institutions from database *****/
+      NumInss = Ins_DB_GetInssFromUsr (&mysql_res,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
+      for (NumIns = 0;
+	   NumIns < NumInss;
+	   NumIns++)
+	{
+	 /* Get next institution */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get institution code */
+	 if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
+	       Err_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
+
+	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
+	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+
+	    Gbl.Usrs.Me.MyInss.Num++;
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Set boolean that indicates that my institutions are yet filled *****/
+      Gbl.Usrs.Me.MyInss.Filled = true;
+     }
+  }
+
+/*****************************************************************************/
+/********************* Free the list of my institutions **********************/
+/*****************************************************************************/
+
+void Ins_FreeMyInstits (void)
+  {
+   if (Gbl.Usrs.Me.MyInss.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyInss.Filled = false;
+      Gbl.Usrs.Me.MyInss.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/******************** Check if I belong to an institution ********************/
+/*****************************************************************************/
+
+bool Ins_CheckIfIBelongToIns (long InsCod)
+  {
+   unsigned NumMyIns;
+
+   /***** Fill the list with the institutions I belong to *****/
+   Ins_GetMyInstits ();
+
+   /***** Check if the institution passed as parameter is any of my institutions *****/
+   for (NumMyIns = 0;
+        NumMyIns < Gbl.Usrs.Me.MyInss.Num;
+        NumMyIns++)
+      if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
+         return true;
+   return false;
+  }
+
+/*****************************************************************************/
+/**************** Check if a user belongs to an institution ******************/
+/*****************************************************************************/
+
+void Ins_FlushCacheUsrBelongsToIns (void)
+  {
+   Gbl.Cache.UsrBelongsToIns.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToIns.InsCod = -1L;
+   Gbl.Cache.UsrBelongsToIns.Belongs = false;
+  }
+
+bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (UsrCod <= 0 ||
+       InsCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Gbl.Cache.UsrBelongsToIns.UsrCod &&
+       InsCod != Gbl.Cache.UsrBelongsToIns.InsCod)
+      return Gbl.Cache.UsrBelongsToIns.Belongs;
+
+   /***** 3. Slow check: Get is user belongs to institution from database *****/
+   Gbl.Cache.UsrBelongsToIns.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
+   Gbl.Cache.UsrBelongsToIns.Belongs = Ins_DB_CheckIfUsrBelongsToIns (UsrCod,InsCod);
+   return Gbl.Cache.UsrBelongsToIns.Belongs;
+  }

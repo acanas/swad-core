@@ -25,6 +25,7 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#include "swad_admin_database.h"
 #include "swad_connected_database.h"
 #include "swad_database.h"
 #include "swad_form.h"
@@ -119,18 +120,18 @@ void Rol_SetMyRoles (void)
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /* Check if I am and administrator of current institution */
-      ICanBeInsAdm = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+      ICanBeInsAdm = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
                                           HieLvl_INS,
                                           Gbl.Hierarchy.Ins.InsCod);
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
 	 /* Check if I am and administrator of current center */
-	 ICanBeCtrAdm = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+	 ICanBeCtrAdm = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                     HieLvl_CTR,
 	                                     Gbl.Hierarchy.Ctr.CtrCod);
 	 if (Gbl.Hierarchy.Deg.DegCod > 0)
 	    /* Check if I am and administrator of current degree */
-	    ICanBeDegAdm = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
+	    ICanBeDegAdm = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                        HieLvl_DEG,
 	                                        Gbl.Hierarchy.Deg.DegCod);
 	}
@@ -139,9 +140,9 @@ void Rol_SetMyRoles (void)
    /***** Check if I belong to current course *****/
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
      {
-      Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
+      Gbl.Usrs.Me.IBelongToCurrentCrs = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-         Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Me.UsrDat);
+         Gbl.Usrs.Me.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       else
          Gbl.Usrs.Me.UsrDat.Accepted = false;
      }
@@ -358,7 +359,7 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 
    /***** 3. Slow check: get my role from list of my courses *****/
    /* Fill the list with the courses I belong to (if not already filled) */
-   Crs_GetMyCourses ();
+   Enr_GetMyCourses ();
 
    /* Check if the current course is any of my courses */
    for (NumMyCrs = 0, Role = Rol_UNK;

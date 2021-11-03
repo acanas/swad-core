@@ -81,6 +81,7 @@ unsigned Ins_DB_GetNumInnsWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
 unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod);
+bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
 
 void Ins_DB_RemoveInstitution (long InsCod);
 

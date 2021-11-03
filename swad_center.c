@@ -2015,3 +2015,115 @@ bool Ctr_GetIfMapIsAvailable (const struct Ctr_Center *Ctr)
    return (bool) (Ctr->Coord.Latitude ||
                   Ctr->Coord.Longitude);
   }
+
+/*****************************************************************************/
+/***** Get all my centers (those of my courses) and store them in a list *****/
+/*****************************************************************************/
+
+void Ctr_GetMyCenters (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCtr;
+   unsigned NumCtrs;
+   long CtrCod;
+
+   /***** If my centers are yet filled, there's nothing to do *****/
+   if (!Gbl.Usrs.Me.MyCtrs.Filled)
+     {
+      Gbl.Usrs.Me.MyCtrs.Num = 0;
+
+      /***** Get my centers from database *****/
+      NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_res,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
+      for (NumCtr = 0;
+	   NumCtr < NumCtrs;
+	   NumCtr++)
+	{
+	 /* Get next center */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get center code */
+	 if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
+	       Err_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
+
+	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
+	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+
+	    Gbl.Usrs.Me.MyCtrs.Num++;
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Set boolean that indicates that my centers are yet filled *****/
+      Gbl.Usrs.Me.MyCtrs.Filled = true;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my centers ************************/
+/*****************************************************************************/
+
+void Ctr_FreeMyCenters (void)
+  {
+   if (Gbl.Usrs.Me.MyCtrs.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyCtrs.Filled = false;
+      Gbl.Usrs.Me.MyCtrs.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Check if I belong to a center ***********************/
+/*****************************************************************************/
+
+bool Ctr_CheckIfIBelongToCtr (long CtrCod)
+  {
+   unsigned NumMyCtr;
+
+   /***** Fill the list with the centers I belong to *****/
+   Ctr_GetMyCenters ();
+
+   /***** Check if the center passed as parameter is any of my centers *****/
+   for (NumMyCtr = 0;
+        NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
+        NumMyCtr++)
+      if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
+         return true;
+   return false;
+  }
+
+/*****************************************************************************/
+/******************* Check if a user belongs to a center *********************/
+/*****************************************************************************/
+
+void Ctr_FlushCacheUsrBelongsToCtr (void)
+  {
+   Gbl.Cache.UsrBelongsToCtr.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToCtr.CtrCod = -1L;
+   Gbl.Cache.UsrBelongsToCtr.Belongs = false;
+  }
+
+bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (UsrCod <= 0 ||
+       CtrCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Gbl.Cache.UsrBelongsToCtr.UsrCod &&
+       CtrCod == Gbl.Cache.UsrBelongsToCtr.CtrCod)
+      return Gbl.Cache.UsrBelongsToCtr.Belongs;
+
+   /***** 3. Slow check: Get is user belongs to center from database *****/
+   Gbl.Cache.UsrBelongsToCtr.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToCtr.CtrCod = CtrCod;
+   Gbl.Cache.UsrBelongsToCtr.Belongs = Ctr_DB_CheckIfUsrBelongsToCtr (UsrCod,CtrCod);
+   return Gbl.Cache.UsrBelongsToCtr.Belongs;
+  }

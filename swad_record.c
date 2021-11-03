@@ -971,7 +971,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    bool ItsMe;
 
    /***** Get if student has accepted enrolment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+   Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
@@ -1112,11 +1112,11 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CURRENT_CRS))
-         if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
-            UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+            UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Begin container for this user */
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -1206,7 +1206,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    snprintf (Width,sizeof (Width),"%upx",Rec_RECORD_WIDTH);
 
    /***** Get if teacher has accepted enrolment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+   Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
@@ -1336,11 +1336,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CURRENT_CRS))
-         if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
-            UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+            UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
             /* Begin container for this user */
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -1978,7 +1978,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
    Usr_GetAllUsrDataFromUsrCod (UsrDat,
                                 Usr_DONT_GET_PREFS,
                                 Usr_GET_ROLE_IN_CURRENT_CRS);
-   UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+   UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/
    HTM_DIV_Begin ("class=\"CM\"");

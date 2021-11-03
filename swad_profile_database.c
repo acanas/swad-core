@@ -566,7 +566,9 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
 			   " AND crs_users.UsrCod=usr_figures.UsrCod"
 			   " AND usr_figures.NumClicks>0"
 			   " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
-			   " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
+			   " AND usr_figures.UsrCod NOT IN"
+			       " (SELECT UsrCod"
+			          " FROM usr_banned)"
 			 " ORDER BY NumClicksPerDay DESC,"
 				   "usr_figures.UsrCod"
 			 " LIMIT 100",
@@ -667,6 +669,19 @@ unsigned Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod)
   }
 
 /*****************************************************************************/
+/****************** Check if a user is banned in ranking *********************/
+/*****************************************************************************/
+
+bool Prf_DB_CheckIfUsrBanned (long UsrCod)
+  {
+   return (DB_QueryCOUNT ("can not check if user is banned",
+			  "SELECT COUNT(*)"
+			   " FROM usr_banned"
+			  " WHERE UsrCod=%ld",
+			  UsrCod) != 0);
+  }
+
+/*****************************************************************************/
 /**************************** Remove user's figures **************************/
 /*****************************************************************************/
 
@@ -674,6 +689,18 @@ void Prf_DB_RemoveUsrFigures (long UsrCod)
   {
    DB_QueryDELETE ("can not delete user's figures",
 		   "DELETE FROM usr_figures"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Remove user from banned users in ranking *******************/
+/*****************************************************************************/
+
+void Prf_DB_RemoveUsrFromBanned (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user from users banned",
+		   "DELETE FROM usr_banned"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }

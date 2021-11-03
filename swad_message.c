@@ -59,6 +59,7 @@
 #include "swad_profile.h"
 #include "swad_profile_database.h"
 #include "swad_session_database.h"
+#include "swad_setting.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -258,7 +259,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
       /***** Get and update type of list,
 	     number of columns in class photo
 	     and preference about view photos *****/
-      Usr_GetAndUpdatePrefsAboutUsrList ();
+      Set_GetAndUpdatePrefsAboutUsrList ();
 
       /***** Get groups to show ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();

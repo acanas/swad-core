@@ -147,4 +147,10 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs);
 
 bool Ctr_GetIfMapIsAvailable (const struct Ctr_Center *Ctr);
 
+void Ctr_GetMyCenters (void);
+void Ctr_FreeMyCenters (void);
+bool Ctr_CheckIfIBelongToCtr (long CtrCod);
+void Ctr_FlushCacheUsrBelongsToCtr (void);
+bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
+
 #endif

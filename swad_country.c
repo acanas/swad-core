@@ -1888,3 +1888,84 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
 				     Txt_Map);
      }
   }
+
+/*****************************************************************************/
+/**** Get all my countries (those of my courses) and store them in a list ****/
+/*****************************************************************************/
+
+void Cty_GetMyCountrs (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCty;
+   unsigned NumCtys;
+   long CtyCod;
+
+   /***** If my countries are yet filled, there's nothing to do *****/
+   if (!Gbl.Usrs.Me.MyCtys.Filled)
+     {
+      Gbl.Usrs.Me.MyCtys.Num = 0;
+
+      /***** Get my institutions from database *****/
+      NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod);
+      for (NumCty = 0;
+	   NumCty < NumCtys;
+	   NumCty++)
+	{
+	 /* Get next country */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get country code */
+	 if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
+	       Err_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
+
+	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
+	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+
+	    Gbl.Usrs.Me.MyCtys.Num++;
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Set boolean that indicates that my institutions are yet filled *****/
+      Gbl.Usrs.Me.MyCtys.Filled = true;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my countries ************************/
+/*****************************************************************************/
+
+void Cty_FreeMyCountrs (void)
+  {
+   if (Gbl.Usrs.Me.MyCtys.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyCtys.Filled = false;
+      Gbl.Usrs.Me.MyCtys.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/********************** Check if I belong to a country **********************/
+/*****************************************************************************/
+
+bool Cty_CheckIfIBelongToCty (long CtyCod)
+  {
+   unsigned NumMyCty;
+
+   /***** Fill the list with the institutions I belong to *****/
+   Cty_GetMyCountrs ();
+
+   /***** Check if the country passed as parameter is any of my countries *****/
+   for (NumMyCty = 0;
+        NumMyCty < Gbl.Usrs.Me.MyCtys.Num;
+        NumMyCty++)
+      if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].CtyCod == CtyCod)
+         return true;
+   return false;
+  }

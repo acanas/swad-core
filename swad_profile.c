@@ -35,6 +35,7 @@
 #include "swad_browser_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_follow_database.h"
@@ -321,7 +322,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	                                                   Gbl.Hierarchy.Crs.CrsCod);
 
 	 /* Get if user has accepted enrolment in current course */
-	 UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 	}
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 
@@ -420,7 +421,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Right list *****/
    HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONT\"");
 
-      UsrIsBannedFromRanking = Usr_DB_CheckIfUsrBanned (UsrDat->UsrCod);
+      UsrIsBannedFromRanking = Prf_DB_CheckIfUsrBanned (UsrDat->UsrCod);
       if (!UsrIsBannedFromRanking)
 	{
 	 /* Begin right list */
@@ -527,7 +528,7 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
    unsigned NumCrss;
 
    /***** Number of courses in which the user has a given role *****/
-   NumCrss = Usr_DB_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
+   NumCrss = Enr_DB_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
 
    Prf_BeginListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
 
@@ -535,11 +536,11 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 
       if (NumCrss)
 	 HTM_TxtF ("&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-		   Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+		   Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
 					       (1 << Rol_NET) |
 					       (1 << Rol_TCH)),
 		   Txt_teachers_ABBREVIATION,
-		   Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+		   Enr_DB_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
 					       (1 << Rol_STD)),
 		   Txt_students_ABBREVIATION);
 

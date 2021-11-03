@@ -1195,7 +1195,7 @@ void Svy_GetDataOfSurveyByCod (struct Svy_Survey *Svy)
             Svy->Status.IBelongToScope = Deg_CheckIfIBelongToDeg (Svy->Cod);
 	    break;
 	 case HieLvl_CRS:	// Course
-	    Svy->Status.IBelongToScope = Crs_CheckIfIBelongToCrs (Svy->Cod) &&
+	    Svy->Status.IBelongToScope = Enr_CheckIfIBelongToCrs (Svy->Cod) &&
 					 Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (Svy->SvyCod);
 	    break;
         }

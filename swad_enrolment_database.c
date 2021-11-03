@@ -93,6 +93,145 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod)
   }
 
 /*****************************************************************************/
+/******************** Create temporary table with my courses *****************/
+/*****************************************************************************/
+
+void Enr_DB_CreateTmpTableMyCourses (void)
+  {
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
+	     " (CrsCod INT NOT NULL,"
+		 "Role TINYINT NOT NULL,"
+	       "DegCod INT NOT NULL,"
+	       "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
+	     " SELECT crs_users.CrsCod,"
+		     "crs_users.Role,"
+		     "crs_courses.DegCod"
+	       " FROM crs_users,"
+		     "crs_courses,"
+		     "deg_degrees"
+	      " WHERE crs_users.UsrCod=%ld"
+		" AND crs_users.CrsCod=crs_courses.CrsCod"
+		" AND crs_courses.DegCod=deg_degrees.DegCod"
+	      " ORDER BY deg_degrees.ShortName,"
+			"crs_courses.ShortName",
+	     Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************************* Get my courses from database **********************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetMyCourses (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get which courses you belong to",
+		   "SELECT CrsCod,"	// row[0]
+			  "Role,"	// row[1]
+			  "DegCod"	// row[2]
+		   " FROM my_courses_tmp");
+  }
+
+/*****************************************************************************/
+/********************* Drop temporary table with my courses ******************/
+/*****************************************************************************/
+
+void Enr_DB_DropTmpTableMyCourses (void)
+  {
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
+  }
+
+/*****************************************************************************/
+/******************** Check if a user belongs to a course ********************/
+/*****************************************************************************/
+
+bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+                                    bool CountOnlyAcceptedCourses)
+  {
+   const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
+	                                              "");
+
+   return (DB_QueryCOUNT ("can not check if a user belongs to a course",
+			  "SELECT COUNT(*)"
+			   " FROM crs_users"
+			  " WHERE CrsCod=%ld"
+			    " AND UsrCod=%ld"
+			      "%s",
+			  CrsCod,
+			  UsrCod,
+			  SubQuery) != 0);
+  }
+
+/*****************************************************************************/
+/*************** Check if a user belongs to any of my courses ****************/
+/*****************************************************************************/
+
+bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
+  {
+   /* Fill the list with the courses I belong to (if not already filled) */
+   Enr_GetMyCourses ();
+
+   /* Check if user shares any course with me */
+   return (DB_QueryCOUNT ("can not check if a user shares any course with you",
+			  "SELECT COUNT(*)"
+			   " FROM crs_users"
+			  " WHERE UsrCod=%ld"
+			    " AND CrsCod IN"
+			        " (SELECT CrsCod"
+				   " FROM my_courses_tmp)",
+			  UsrCod) != 0);
+  }
+
+/*****************************************************************************/
+/*** Check if a user belongs to any of my courses but has a different role ***/
+/*****************************************************************************/
+
+bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
+  {
+   bool UsrSharesAnyOfMyCrsWithDifferentRole;
+
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Slow check: Get if user shares any course with me
+                         with a different role, from database *****/
+   /* Fill the list with the courses I belong to (if not already filled) */
+   Enr_GetMyCourses ();
+
+   /* Remove temporary table if exists */
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
+
+   /* Create temporary table with all user's courses for a role */
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
+	     "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
+   	     "UNIQUE INDEX(CrsCod,Role)) ENGINE=MEMORY"
+  	     " SELECT CrsCod,"
+  	             "Role"
+  	       " FROM crs_users"
+  	      " WHERE UsrCod=%ld",
+	     UsrCod);
+
+   /* Get if a user shares any course with me from database */
+   UsrSharesAnyOfMyCrsWithDifferentRole =
+      (DB_QueryCOUNT ("can not check if a user shares any course with you",
+		      "SELECT COUNT(*)"
+		       " FROM my_courses_tmp,"
+		             "usr_courses_tmp"
+                      " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
+                        " AND my_courses_tmp.Role<>usr_courses_tmp.Role") != 0);
+
+   /* Remove temporary table if exists */
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
+
+   return UsrSharesAnyOfMyCrsWithDifferentRole;
+  }
+
+/*****************************************************************************/
 /******** Get the user's code of a random student from current course ********/
 /*****************************************************************************/
 // Returns user's code or -1 if no user found
@@ -159,6 +298,445 @@ unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/********************* Get number of courses of a user ***********************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetNumCrssOfUsr (long UsrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses of a user",
+		  "SELECT COUNT(*)"
+		   " FROM crs_users"
+		  " WHERE UsrCod=%ld",
+		  UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Get number of courses of a user not accepted ****************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetNumCrssOfUsrNotAccepted (long UsrCod)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses of a user",
+		  "SELECT COUNT(*)"
+		   " FROM crs_users"
+		  " WHERE UsrCod=%ld"
+		    " AND Accepted='N'",
+		  UsrCod);
+  }
+
+/*****************************************************************************/
+/********* Get number of courses in with a user have a given role ************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses of a user with a role",
+		  "SELECT COUNT(*)"
+		   " FROM crs_users"
+		  " WHERE UsrCod=%ld"
+		    " AND Role=%u",
+		  UsrCod,
+		  (unsigned) Role);
+  }
+
+/*****************************************************************************/
+/********* Get number of courses in with a user have a given role ************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
+  {
+   return (unsigned)
+   DB_QueryCOUNT ("can not get the number of courses of a user with a role",
+		  "SELECT COUNT(*)"
+		   " FROM crs_users"
+		  " WHERE UsrCod=%ld"
+		    " AND Role=%u"
+		    " AND Accepted='N'",
+		  UsrCod,
+		  (unsigned) Role);
+  }
+
+/*****************************************************************************/
+/****** Get number of users with some given roles in courses of a user *******/
+/*****************************************************************************/
+
+#define Enr_DB_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
+unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
+                                        unsigned OthersRoles)
+  {
+   Rol_Role_t Role;
+   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char OthersRolesStr[Enr_DB_MAX_BYTES_ROLES_STR + 1];
+   char SubQueryRole[64];
+   unsigned NumUsrs;
+   // This query can be made in a unique, but slower, query
+   // The temporary table achieves speedup from ~2s to few ms
+
+   /***** Remove temporary table if exists *****/
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
+
+   /***** Create temporary table with all user's courses
+          as student/non-editing teacher/teacher *****/
+   switch (UsrRole)
+     {
+      case Rol_STD:	// Student
+	 sprintf (SubQueryRole," AND Role=%u",
+	          (unsigned) Rol_STD);
+	 break;
+      case Rol_NET:	// Non-editing teacher
+	 sprintf (SubQueryRole," AND Role=%u",
+	          (unsigned) Rol_NET);
+	 break;
+      case Rol_TCH:	// or teacher
+	 sprintf (SubQueryRole," AND Role=%u",
+	          (unsigned) Rol_TCH);
+	 break;
+      default:
+	 SubQueryRole[0] = '\0';
+	 Err_WrongRoleExit ();
+	 break;
+     }
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
+	     " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
+	     " ENGINE=MEMORY"
+	     " SELECT CrsCod"
+	       " FROM crs_users"
+	      " WHERE UsrCod=%ld"
+	         "%s",
+	     UsrCod,SubQueryRole);
+
+   /***** Get the number of students/teachers in a course from database ******/
+   OthersRolesStr[0] = '\0';
+   for (Role =  Rol_STD;	// First possible role in a course
+	Role <= Rol_TCH;	// Last possible role in a course
+	Role++)
+      if ((OthersRoles & (1 << Role)))
+        {
+         sprintf (UnsignedStr,"%u",(unsigned) Role);
+         if (OthersRolesStr[0])	// Not empty
+	    Str_Concat (OthersRolesStr,",",sizeof (OthersRolesStr) - 1);
+	 Str_Concat (OthersRolesStr,UnsignedStr,sizeof (OthersRolesStr) - 1);
+        }
+   NumUsrs = (unsigned)
+   DB_QueryCOUNT ("can not get number of users",
+		  "SELECT COUNT(DISTINCT crs_users.UsrCod)"
+		   " FROM crs_users,"
+			 "usr_courses_tmp"
+		  " WHERE crs_users.CrsCod=usr_courses_tmp.CrsCod"
+		    " AND crs_users.Role IN (%s)",
+		  OthersRolesStr);
+
+   /***** Remove temporary table *****/
+   DB_Query ("can not remove temporary tables",
+	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
+
+   return NumUsrs;
+  }
+
+/*****************************************************************************/
+/************ Get average number of courses with users of a type *************/
+/*****************************************************************************/
+
+double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+  {
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
+						  " FROM crs_users"
+						 " GROUP BY CrsCod) AS NumUsrsTable");
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
+						  " FROM crs_users"
+						 " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
+					 (unsigned) Role);
+      case HieLvl_CTY:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM ins_instits,"
+						        "ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ins_instits.CtyCod=%ld"
+						   " AND ins_instits.InsCod=ctr_centers.InsCod"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM ins_instits,"
+						        "ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ins_instits.CtyCod=%ld"
+						   " AND ins_instits.InsCod=ctr_centers.InsCod"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_INS:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ctr_centers.InsCod=%ld"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ctr_centers.InsCod=%ld"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_CTR:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE deg_degrees.CtrCod=%ld"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE deg_degrees.CtrCod=%ld"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_DEG:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM crs_courses,"
+						        "crs_users"
+						 " WHERE crs_courses.DegCod=%ld"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of users per course",
+					 "SELECT AVG(NumUsrs)"
+					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
+						  " FROM crs_courses,"
+						        "crs_users"
+						 " WHERE crs_courses.DegCod=%ld"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_CRS:
+	 return (double) Usr_GetNumUsrsInCrss (HieLvl_CRS,Cod,
+				               Role == Rol_UNK ? 1 << Rol_STD |
+							         1 << Rol_NET |
+							         1 << Rol_TCH :	// Any user
+							         1 << Role);
+
+      default:
+         Err_WrongScopeExit ();
+         return 0.0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
+/************ Get average number of courses with users of a role *************/
+/*****************************************************************************/
+
+double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
+  {
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(CrsCod) AS NumCrss"
+						  " FROM crs_users"
+						 " GROUP BY UsrCod) AS NumCrssTable");
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(CrsCod) AS NumCrss"
+						  " FROM crs_users"
+						 " WHERE Role=%u"
+						 " GROUP BY UsrCod) AS NumCrssTable",
+					 (unsigned) Role);
+      case HieLvl_CTY:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM ins_instits,"
+						        "ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ins_instits.CtyCod=%ld"
+						   " AND ins_instits.InsCod=ctr_centers.InsCod"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM ins_instits,"
+						        "ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ins_instits.CtyCod=%ld"
+						   " AND ins_instits.InsCod=ctr_centers.InsCod"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_INS:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE ctr_centers.InsCod=%ld"
+						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM ctr_centers,"
+						        "deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						  " WHERE ctr_centers.InsCod=%ld"
+						    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
+						    " AND deg_degrees.DegCod=crs_courses.DegCod"
+						    " AND crs_courses.CrsCod=crs_users.CrsCod"
+						    " AND crs_users.Role=%u"
+						  " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_CTR:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE deg_degrees.CtrCod=%ld"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM deg_degrees,"
+						        "crs_courses,"
+						        "crs_users"
+						 " WHERE deg_degrees.CtrCod=%ld"
+						   " AND deg_degrees.DegCod=crs_courses.DegCod"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_DEG:
+	 if (Role == Rol_UNK)	// Any user
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM crs_courses,"
+						        "crs_users"
+						 " WHERE crs_courses.DegCod=%ld"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod);
+	 else
+	    return DB_QuerySELECTDouble ("can not get number of courses per user",
+					 "SELECT AVG(NumCrss)"
+					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
+						  " FROM crs_courses,"
+						        "crs_users"
+						 " WHERE crs_courses.DegCod=%ld"
+						   " AND crs_courses.CrsCod=crs_users.CrsCod"
+						   " AND crs_users.Role=%u"
+						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
+					 Cod,
+					 (unsigned) Role);
+      case HieLvl_CRS:
+         return 1.0;
+      default:
+         Err_WrongScopeExit ();
+         return 0.0;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
 /************************** Remove user from course **************************/
 /*****************************************************************************/
 
@@ -194,6 +772,42 @@ void Enr_DB_RemAllUsrsFromCrs (long CrsCod)
 		   "DELETE FROM crs_users"
 		   " WHERE CrsCod=%ld",
 		   CrsCod);
+  }
+
+/*****************************************************************************/
+/************ Create my enrolment request in the current course **************/
+/*****************************************************************************/
+
+long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
+  {
+   return
+   DB_QueryINSERTandReturnCode ("can not save enrolment request",
+				"INSERT INTO crs_requests"
+				" (CrsCod,UsrCod,Role,RequestTime)"
+				" VALUES"
+				" (%ld,%ld,%u,NOW())",
+				Gbl.Hierarchy.Crs.CrsCod,
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				(unsigned) NewRole);
+  }
+
+/*****************************************************************************/
+/************* Update my enrolment request in the current course *************/
+/*****************************************************************************/
+
+void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole)
+  {
+   DB_QueryUPDATE ("can not update enrolment request",
+		   "UPDATE crs_requests"
+		     " SET Role=%u,"
+			  "RequestTime=NOW()"
+		   " WHERE ReqCod=%ld"
+		     " AND CrsCod=%ld"
+		     " AND UsrCod=%ld",
+		   (unsigned) NewRole,
+		   ReqCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -759,42 +1373,6 @@ long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod)
 			 " AND UsrCod=%ld",
 		       CrsCod,
 		       UsrCod);
-  }
-
-/*****************************************************************************/
-/************ Create my enrolment request in the current course **************/
-/*****************************************************************************/
-
-long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
-  {
-   return
-   DB_QueryINSERTandReturnCode ("can not save enrolment request",
-				"INSERT INTO crs_requests"
-				" (CrsCod,UsrCod,Role,RequestTime)"
-				" VALUES"
-				" (%ld,%ld,%u,NOW())",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				(unsigned) NewRole);
-  }
-
-/*****************************************************************************/
-/************* Update my enrolment request in the current course *************/
-/*****************************************************************************/
-
-void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole)
-  {
-   DB_QueryUPDATE ("can not update enrolment request",
-		   "UPDATE crs_requests"
-		     " SET Role=%u,"
-			  "RequestTime=NOW()"
-		   " WHERE ReqCod=%ld"
-		     " AND CrsCod=%ld"
-		     " AND UsrCod=%ld",
-		   (unsigned) NewRole,
-		   ReqCod,
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

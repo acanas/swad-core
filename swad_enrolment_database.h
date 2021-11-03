@@ -42,24 +42,44 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+//------------------------------ Users in courses -----------------------------
 void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,long CrsCod,Rol_Role_t NewRole,
                                    Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
 
+void Enr_DB_CreateTmpTableMyCourses (void);
+unsigned Enr_DB_GetMyCourses (MYSQL_RES **mysql_res);
+void Enr_DB_DropTmpTableMyCourses (void);
+
+bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+                                    bool CountOnlyAcceptedCourses);
+bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
+bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 long Enr_DB_GetRamdomStdFromCrs (long CrsCod);
 unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res);
 unsigned Enr_DB_GetUsrsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res);
 unsigned Enr_DB_GetTchsFromCurrentCrsExceptMe (MYSQL_RES **mysql_res);
+unsigned Enr_DB_GetNumCrssOfUsr (long UsrCod);
+unsigned Enr_DB_GetNumCrssOfUsrNotAccepted (long UsrCod);
+unsigned Enr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
+unsigned Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
+unsigned Enr_DB_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
+                                        unsigned OthersRoles);
+double Enr_DB_GetAverageNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
+double Enr_DB_GetAverageNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 void Enr_DB_RemUsrFromCrs (long UsrCod,long CrsCod);
 void Enr_DB_RemUsrFromAllCrss (long UsrCod);
 void Enr_DB_RemAllUsrsFromCrs (long CrsCod);
 
+//-------------------------- Enrolment requests -------------------------------
+long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
+void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
+
 unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,unsigned RolesSelected);
 unsigned Enr_DB_GetEnrolmentRequestByCod (MYSQL_RES **mysql_res,long ReqCod);
 long Enr_DB_GetUsrEnrolmentRequestInCrs (long UsrCod,long CrsCod);
-long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
-void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
+
 void Enr_DB_RemRequest (long ReqCod);
 void Enr_DB_RemCrsRequests (long CrsCod);
 void Enr_DB_RemUsrRequests (long UsrCod);

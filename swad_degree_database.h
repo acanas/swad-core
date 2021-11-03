@@ -73,8 +73,6 @@ unsigned Deg_DB_GetNumDegsWithCrss (HieLvl_Level_t Scope,long Cod);
 unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
-unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod);
-
 unsigned Deg_DB_GetNumDegsInCty (long CtyCod);
 unsigned Deg_DB_GetNumDegsInIns (long InsCod);
 unsigned Deg_DB_GetNumDegsInCtr (long CtrCod);
@@ -87,6 +85,10 @@ void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
 void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
 void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Deg_DB_UpdateDegStatus (long DegCod,Deg_Status_t NewStatus);
+
+unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod);
+unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);
+bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
 
 void Deg_DB_RemoveDegTyp (long DegTypCod);
 void Deg_DB_RemoveDeg (long DegCod);

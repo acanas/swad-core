@@ -63,7 +63,9 @@ unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
 unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
 bool Prf_DB_CheckIfUsrFiguresExists (long UsrCod);
 unsigned Prf_DB_GetUsrFigures (MYSQL_RES **mysql_res,long UsrCod);
+bool Prf_DB_CheckIfUsrBanned (long UsrCod);
 
 void Prf_DB_RemoveUsrFigures (long UsrCod);
+void Prf_DB_RemoveUsrFromBanned (long UsrCod);
 
 #endif

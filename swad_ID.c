@@ -918,7 +918,7 @@ void ID_ConfirmOtherUsrID (void)
 	    check if he/she has accepted */
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)
 	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;

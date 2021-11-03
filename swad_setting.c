@@ -66,6 +66,15 @@ extern struct Globals Gbl;
 static void Set_PutIconsToSelectSideCols (void);
 static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args);
 
+static void Set_GetAndUpdateUsrListType (void);
+static void Set_GetUsrListTypeFromForm (void);
+static void Set_GetMyUsrListTypeFromDB (void);
+
+static void Set_GetParamColsClassPhotoFromForm (void);
+
+static void Set_GetAndUpdatePrefAboutListWithPhotos (void);
+static bool Set_GetParamListWithPhotosFromForm (void);
+
 /*****************************************************************************/
 /***************************** Edit settings ******************************/
 /*****************************************************************************/
@@ -265,6 +274,298 @@ unsigned Set_GetParamSideCols (void)
                                                0,
                                                Lay_SHOW_BOTH_COLUMNS,
                                                Cfg_DEFAULT_COLUMNS);
+  }
+
+/*****************************************************************************/
+/**************** Put hidden parameters with type of list, *******************/
+/**************** number of columns in class photo         *******************/
+/**************** and preference about viewing photos      *******************/
+/*****************************************************************************/
+
+void Set_PutParamsPrefsAboutUsrList (void)
+  {
+   Set_PutParamUsrListType (Gbl.Usrs.Me.ListType);
+   Set_PutParamColsClassPhoto ();
+   Set_PutParamListWithPhotos ();
+  }
+
+/*****************************************************************************/
+/****************** Get and update type of list,        **********************/
+/****************** number of columns in class photo    **********************/
+/****************** and preference about viewing photos **********************/
+/*****************************************************************************/
+
+void Set_GetAndUpdatePrefsAboutUsrList (void)
+  {
+   /***** Get and update type of list *****/
+   Set_GetAndUpdateUsrListType ();
+
+   /***** Get and update number of columns in class photo *****/
+   Set_GetAndUpdateColsClassPhoto ();
+
+   /***** Get and update preference about viewing photos *****/
+   Set_GetAndUpdatePrefAboutListWithPhotos ();
+  }
+
+/*****************************************************************************/
+/****************** Get from form the type of users' list ********************/
+/*****************************************************************************/
+
+static void Set_GetAndUpdateUsrListType (void)
+  {
+   /***** Get type of list used to select users from form *****/
+   Set_GetUsrListTypeFromForm ();
+
+   if (Gbl.Usrs.Me.ListType != Set_USR_LIST_UNKNOWN)
+      /* Save in the database the type of list preferred by me */
+      Set_DB_UpdateMyUsrListType ();
+   else
+      /* If parameter can't be retrieved from,
+         get my preference from database */
+      Set_GetMyUsrListTypeFromDB ();
+  }
+
+/*****************************************************************************/
+/************* Put a hidden parameter with the users' list type **************/
+/*****************************************************************************/
+
+void Set_PutParamUsrListType (Set_ShowUsrsType_t ListType)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"UsrListType",(unsigned) ListType);
+  }
+
+/*****************************************************************************/
+/****************** Get from form the type of users' list ********************/
+/*****************************************************************************/
+
+static void Set_GetUsrListTypeFromForm (void)
+  {
+   Gbl.Usrs.Me.ListType = (Set_ShowUsrsType_t)
+	                  Par_GetParToUnsignedLong ("UsrListType",
+                                                    0,
+                                                    Set_NUM_USR_LIST_TYPES - 1,
+                                                    (unsigned long) Set_USR_LIST_UNKNOWN);
+  }
+
+/*****************************************************************************/
+/************** Get my preference about type of users' list ******************/
+/*****************************************************************************/
+
+static void Set_GetMyUsrListTypeFromDB (void)
+  {
+   extern const char *Set_DB_StringsUsrListTypes[Set_NUM_USR_LIST_TYPES];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   Set_ShowUsrsType_t ListType;
+
+   /***** Get type of listing of users from database *****/
+   NumRows = (unsigned)
+   DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
+		   "SELECT UsrListType"	// row[0]
+		    " FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+   if (NumRows == 1)		// Should be one only row
+     {
+      /* Get type of users' listing used to select some of them */
+      Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
+      row = mysql_fetch_row (mysql_res);
+      if (row[0])
+         for (ListType  = (Set_ShowUsrsType_t) 0;
+              ListType <= (Set_ShowUsrsType_t) (Set_NUM_USR_LIST_TYPES - 1);
+              ListType++)
+            if (!strcasecmp (row[0],Set_DB_StringsUsrListTypes[ListType]))
+              {
+               Gbl.Usrs.Me.ListType = ListType;
+               break;
+              }
+     }
+   else if (NumRows == 0)	// If I am an administrator or superuser
+				// and I don't belong to current course,
+				// then the result will be the default
+      Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
+   else				// Error in database:
+				// more than one row for a user in course
+      Err_ShowErrorAndExit ("Error when getting type of listing of users.");
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************* Get and update number of columns in class photo ***************/
+/*****************************************************************************/
+
+void Set_GetAndUpdateColsClassPhoto (void)
+  {
+   /***** Get the number of columns in class photo from form *****/
+   Set_GetParamColsClassPhotoFromForm ();
+
+   if (Gbl.Usrs.ClassPhoto.Cols)
+      /* Save the number of columns into the database */
+      Set_DB_UpdateMyColsClassPhoto ();
+   else
+      /* If parameter can't be retrieved from form,
+         get my preference from database */
+      Set_GetMyColsClassPhotoFromDB ();
+  }
+
+/*****************************************************************************/
+/** Get my prefs. about number of colums in class photo for current course ***/
+/*****************************************************************************/
+
+void Set_GetMyColsClassPhotoFromDB (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+
+   Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
+
+   /***** If user logged and course selected... *****/
+   if (Gbl.Usrs.Me.Logged &&
+       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
+     {
+      /***** Get number of columns in class photo from database *****/
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not get number of columns in class photo",
+		      "SELECT ColsClassPhoto"	// row[0]
+		       " FROM crs_user_settings"
+		      " WHERE UsrCod=%ld"
+		        " AND CrsCod=%ld",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
+      if (NumRows == 1)		// Should be one only row
+        {
+         /* Get number of columns in class photo */
+         row = mysql_fetch_row (mysql_res);
+         if (row[0])
+            if (sscanf (row[0],"%u",&Gbl.Usrs.ClassPhoto.Cols) == 1)
+               if (Gbl.Usrs.ClassPhoto.Cols < 1 ||
+                   Gbl.Usrs.ClassPhoto.Cols > Usr_CLASS_PHOTO_COLS_MAX)
+                  Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
+        }
+      else if (NumRows > 1)	// Error in database:
+				// more than one row for a user in course
+         Err_ShowErrorAndExit ("Error when getting number of columns"
+			       " in class photo.");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+  }
+
+/*****************************************************************************/
+/****** Put a hidden parameter with the number of colums in class photo ******/
+/*****************************************************************************/
+
+void Set_PutParamColsClassPhoto (void)
+  {
+   Par_PutHiddenParamUnsigned (NULL,"ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
+  }
+
+/*****************************************************************************/
+/************* Get from form the number of colums in class photo *************/
+/*****************************************************************************/
+
+static void Set_GetParamColsClassPhotoFromForm (void)
+  {
+   Gbl.Usrs.ClassPhoto.Cols = (unsigned)
+	                      Par_GetParToUnsignedLong ("ColsClassPhoto",
+                                                        1,
+                                                        Usr_CLASS_PHOTO_COLS_MAX,
+                                                        0);
+  }
+
+/*****************************************************************************/
+/********** Get and update preference about photos in users' list ************/
+/*****************************************************************************/
+
+static void Set_GetAndUpdatePrefAboutListWithPhotos (void)
+  {
+   /***** Get my preference about photos in users' list from form *****/
+   if (Set_GetParamListWithPhotosFromForm ())
+      /* Save preference about photos in users' list into the database */
+      Set_DB_UpdateMyPrefAboutListWithPhotosPhoto ();
+   else
+      /* If parameter can't be retrieved from form,
+         get my preference from database */
+      Set_GetMyPrefAboutListWithPhotosFromDB ();
+  }
+
+/*****************************************************************************/
+/** Put a hidden parameter with the preference about photos in users' list ***/
+/*****************************************************************************/
+
+void Set_PutParamListWithPhotos (void)
+  {
+   Par_PutHiddenParamChar ("WithPhotosExists",'Y');
+   Par_PutHiddenParamChar ("WithPhotos",
+                           Gbl.Usrs.Listing.WithPhotos ? 'Y' :
+                        	                         'N');
+  }
+
+/*****************************************************************************/
+/********* Get from form the preference about photos in users' list **********/
+/*****************************************************************************/
+
+static bool Set_GetParamListWithPhotosFromForm (void)
+  {
+   /***** Get if exists parameter with preference about photos in users' list *****/
+   if (Par_GetParToBool ("WithPhotosExists"))
+     {
+      /***** Parameter with preference about photos in users' list exists, so get it *****/
+      Gbl.Usrs.Listing.WithPhotos = Par_GetParToBool ("WithPhotos");
+      return true;
+     }
+
+   Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
+   return false;
+  }
+
+/*****************************************************************************/
+/***** Get my preference about photos in users' list for current course ******/
+/*****************************************************************************/
+
+void Set_GetMyPrefAboutListWithPhotosFromDB (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+
+   Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
+
+   /***** If no user logged or not course selected... *****/
+   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Crs.CrsCod)
+     {
+      /***** Get if listing of users must show photos from database *****/
+      NumRows = (unsigned)
+      DB_QuerySELECT (&mysql_res,"can not check if listing of users"
+			         " must show photos",
+		      "SELECT ListWithPhotos"	// row[0]
+		       " FROM crs_user_settings"
+		      " WHERE UsrCod=%ld"
+		        " AND CrsCod=%ld",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Hierarchy.Crs.CrsCod);
+      if (NumRows == 1)                // Should be one only row
+        {
+         /* Get number of columns in class photo */
+         Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
+         row = mysql_fetch_row (mysql_res);
+         Gbl.Usrs.Listing.WithPhotos = (row[0][0] == 'Y');
+        }
+      else if (NumRows > 1)        // Error in database:
+				   // more than one row for a user in course
+         Err_ShowErrorAndExit ("Error when checking if listing of users"
+			       " must show photos.");
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
   }
 
 /*****************************************************************************/

@@ -3052,7 +3052,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted =
-	       Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	       /***** Show a row with the data of the owner of the works *****/
 	       HTM_TR_Begin (NULL);
@@ -3701,7 +3701,7 @@ static void Brw_UpdateLastAccess (void)
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
-            Set_DB_UpdateGrpLastAccZone ("LastDowGrpCod",-1L);
+            Set_DB_UpdateGrpMyLastAccZone ("LastDowGrpCod",-1L);
 	 break;
       case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
@@ -3709,27 +3709,27 @@ static void Brw_UpdateLastAccess (void)
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
-            Set_DB_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.Crs.Grps.GrpCod);
+            Set_DB_UpdateGrpMyLastAccZone ("LastDowGrpCod",Gbl.Crs.Grps.GrpCod);
          break;
       case Brw_ADMI_SHR_CRS:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
-            Set_DB_UpdateGrpLastAccZone ("LastComGrpCod",-1L);
+            Set_DB_UpdateGrpMyLastAccZone ("LastComGrpCod",-1L);
 	 break;
       case Brw_ADMI_SHR_GRP:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
-            Set_DB_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.Crs.Grps.GrpCod);
+            Set_DB_UpdateGrpMyLastAccZone ("LastComGrpCod",Gbl.Crs.Grps.GrpCod);
 	 break;
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
-            Set_DB_UpdateGrpLastAccZone ("LastAssGrpCod",-1L);
+            Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",-1L);
 	 break;
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
-            Set_DB_UpdateGrpLastAccZone ("LastAssGrpCod",Gbl.Crs.Grps.GrpCod);
+            Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",Gbl.Crs.Grps.GrpCod);
 	 break;
       default:
 	 break;

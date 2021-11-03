@@ -120,16 +120,6 @@ typedef enum
    Usr_CLASS_PHOTO_PRN,		// Only print users
   } Usr_ClassPhotoType_t;
 
-// Related with type of list of users
-#define Usr_NUM_USR_LIST_TYPES 3
-typedef enum
-  {
-   Usr_LIST_UNKNOWN        = 0,
-   Usr_LIST_AS_CLASS_PHOTO = 1,
-   Usr_LIST_AS_LISTING     = 2,
-  } Usr_ShowUsrsType_t;
-#define Usr_SHOW_USRS_TYPE_DEFAULT Usr_LIST_AS_CLASS_PHOTO
-
 #define Usr_LIST_USRS_NUM_OPTIONS 8
 typedef enum
   {
@@ -305,25 +295,11 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
 void Usr_FlushCachesUsr (void);
 
-bool Usr_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
 bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat);
 bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat);
-
-unsigned Usr_DB_GetNumCrssOfUsr (long UsrCod);
-unsigned Usr_DB_GetNumCrssOfUsrNotAccepted (long UsrCod);
-unsigned Usr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
-unsigned Usr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
-
-unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
-                                     unsigned OthersRoles);
-
-void Usr_FlushCacheUsrBelongsToCurrentCrs (void);
-bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
-void Usr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
-bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat);
@@ -331,41 +307,6 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat);
 bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat);
-
-void Usr_FlushCacheUsrSharesAnyOfMyCrs (void);
-bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
-bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
-
-void Cty_GetMyCountrs (void);
-void Ins_GetMyInstits (void);
-void Ctr_GetMyCenters (void);
-void Deg_GetMyDegrees (void);
-void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-		        Rol_Role_t *MaxRole);
-void Crs_GetMyCourses (void);
-
-void Cty_FreeMyCountrs (void);
-void Ins_FreeMyInstits (void);
-void Ctr_FreeMyCenters (void);
-void Deg_FreeMyDegrees (void);
-void Crs_FreeMyCourses (void);
-
-void Ins_FlushCacheUsrBelongsToIns (void);
-bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
-void Ctr_FlushCacheUsrBelongsToCtr (void);
-bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
-void Deg_FlushCacheUsrBelongsToDeg (void);
-bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
-void Crs_FlushCacheUsrBelongsToCrs (void);
-bool Crs_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
-                                 bool CountOnlyAcceptedCourses);
-
-bool Cty_CheckIfIBelongToCty (long CtyCod);
-bool Ins_CheckIfIBelongToIns (long InsCod);
-bool Ctr_CheckIfIBelongToCtr (long CtrCod);
-bool Deg_CheckIfIBelongToDeg (long DegCod);
-bool Crs_CheckIfIBelongToCrs (long CrsCod);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
@@ -489,14 +430,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY]);
 void Usr_ListDataAdms (void);
 
-void Usr_PutParamsPrefsAboutUsrList (void);
-void Usr_GetAndUpdatePrefsAboutUsrList (void);
-void Usr_PutParamUsrListType (Usr_ShowUsrsType_t ListType);
-void Usr_GetAndUpdateColsClassPhoto (void);
-void Usr_PutParamColsClassPhoto (void);
-void Usr_PutParamListWithPhotos (void);
-void Usr_GetMyPrefAboutListWithPhotosFromDB (void);
-
 void Usr_SeeGuests (void);
 void Usr_SeeStudents (void);
 void Usr_SeeTeachers (void);
@@ -519,11 +452,8 @@ unsigned Usr_GetCachedNumUsrsInCrss (HieLvl_Level_t Scope,long Cod,unsigned Role
 
 unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void);
 
-double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
-
-bool Usr_DB_CheckIfUsrBanned (long UsrCod);
-void Usr_DB_RemoveUsrFromBanned (long UsrCod);
+double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 void Usr_PrintUsrQRCode (void);
 

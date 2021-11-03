@@ -33,6 +33,16 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+// Related with type of list of users
+#define Set_NUM_USR_LIST_TYPES 3
+typedef enum
+  {
+   Set_USR_LIST_UNKNOWN        = 0,
+   Set_USR_LIST_AS_CLASS_PHOTO = 1,
+   Set_USR_LIST_AS_LISTING     = 2,
+  } Set_ShowUsrsType_t;
+#define Set_SHOW_USRS_TYPE_DEFAULT Set_USR_LIST_AS_CLASS_PHOTO
+
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/
@@ -48,6 +58,16 @@ void Set_SetSettingsFromIP (void);
 
 void Set_ChangeSideCols (void);
 unsigned Set_GetParamSideCols (void);
+
+//------------------------ My settings on users' list -------------------------
+void Set_PutParamsPrefsAboutUsrList (void);
+void Set_GetAndUpdatePrefsAboutUsrList (void);
+void Set_PutParamUsrListType (Set_ShowUsrsType_t ListType);
+void Set_GetAndUpdateColsClassPhoto (void);
+void Set_GetMyColsClassPhotoFromDB (void);
+void Set_PutParamColsClassPhoto (void);
+void Set_PutParamListWithPhotos (void);
+void Set_GetMyPrefAboutListWithPhotosFromDB (void);
 
 void Set_BeginSettingsHead (void);
 void Set_EndSettingsHead (void);

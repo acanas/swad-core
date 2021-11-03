@@ -65,6 +65,7 @@
 #include "swad_project.h"
 #include "swad_project_database.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_survey.h"
 #include "swad_survey_database.h"
 #include "swad_test.h"
@@ -978,7 +979,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
       /***** Form to select type of list used to display degree photos *****/
-      Usr_GetAndUpdatePrefsAboutUsrList ();
+      Set_GetAndUpdatePrefsAboutUsrList ();
       Figures.Scope      = Gbl.Scope.Current;
       Figures.FigureType = Fig_INSTITS;
       Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Figures);
@@ -1171,7 +1172,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
       /* Draw the classphoto/list */
       switch (Gbl.Usrs.Me.ListType)
 	{
-	 case Usr_LIST_AS_CLASS_PHOTO:
+	 case Set_USR_LIST_AS_CLASS_PHOTO:
 	    /***** Draw institutions as a class photo *****/
 	    for (NumIns = 0;
 		 NumIns < NumInss;)
@@ -1202,7 +1203,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       HTM_TR_End ();
 
 	    break;
-	 case Usr_LIST_AS_LISTING:
+	 case Set_USR_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);

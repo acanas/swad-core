@@ -801,6 +801,28 @@ unsigned Ins_DB_GetInssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtyCod)
   }
 
 /*****************************************************************************/
+/**************** Check if a user belongs to an institution ******************/
+/*****************************************************************************/
+
+bool Ins_DB_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a user belongs to an institution",
+			  "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
+			   " FROM crs_users,"
+				 "crs_courses,"
+				 "deg_degrees,"
+				 "ctr_centers"
+			  " WHERE crs_users.UsrCod=%ld"
+			    " AND crs_users.Accepted='Y'"	// Only if user accepted
+			    " AND crs_users.CrsCod=crs_courses.CrsCod"
+			    " AND crs_courses.DegCod=deg_degrees.DegCod"
+			    " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			    " AND ctr_centers.InsCod=%ld",
+			  UsrCod,
+			  InsCod) != 0);
+  }
+
+/*****************************************************************************/
 /***************************** Remove institution ****************************/
 /*****************************************************************************/
 

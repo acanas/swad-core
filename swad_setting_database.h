@@ -55,7 +55,10 @@ void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 //-------------------- User settings in the current course --------------------
 void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
 
-void Set_DB_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod);
+void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod);
+void Set_DB_UpdateMyUsrListType (void);
+void Set_DB_UpdateMyColsClassPhoto (void);
+void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void);
 
 void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
 void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);

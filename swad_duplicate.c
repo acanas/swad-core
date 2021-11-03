@@ -31,6 +31,7 @@
 #include "swad_duplicate.h"
 #include "swad_duplicate_database.h"
 #include "swad_enrolment.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -166,8 +167,8 @@ void Dup_ListDuplicateUsrs (void)
 							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 		 {
 		  /* Get if user has accepted all his/her courses */
-		  if (Usr_DB_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
-		     UsrDat.Accepted = (Usr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+		  if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
+		     UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
 		  else
 		     UsrDat.Accepted = false;
 
@@ -283,8 +284,8 @@ static void Dup_ListSimilarUsrs (void)
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	      {
 	       /* Get if user has accepted all his/her courses */
-	       if (Usr_DB_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
-		  UsrDat.Accepted = (Usr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
+	       if (Enr_DB_GetNumCrssOfUsr (UsrDat.UsrCod) != 0)
+		  UsrDat.Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrDat.UsrCod) == 0);
 	       else
 		  UsrDat.Accepted = false;
 

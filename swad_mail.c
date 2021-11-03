@@ -840,7 +840,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	       NumUsrsWithEmail++;
 
 	       /* Check if users has accepted inscription in current course */
-	       UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+	       UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 
 	       if (UsrDat.Accepted) // If student has email and has accepted
 		 {
@@ -1676,7 +1676,7 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
+         return Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) &&	// A user belonging to the current course
 	        UsrDat->Accepted;			// who accepted registration
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,

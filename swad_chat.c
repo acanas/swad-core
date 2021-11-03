@@ -406,7 +406,7 @@ void Cht_OpenChatWindow (void)
 
    /***** Fill the lists with the degrees and courses I belong to *****/ 
    Deg_GetMyDegrees ();
-   Crs_GetMyCourses ();
+   Enr_GetMyCourses ();
 
    /***** Build my user's name *****/
    Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,sizeof (UsrName) - 1);

@@ -141,4 +141,17 @@ void Enr_CreateNewUsr2 (void);
 void Enr_ModifyUsr1 (void);
 void Enr_ModifyUsr2 (void);
 
+void Enr_GetMyCourses (void);
+void Enr_FreeMyCourses (void);
+bool Enr_CheckIfIBelongToCrs (long CrsCod);
+void Enr_FlushCacheUsrBelongsToCrs (void);
+bool Enr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+                                 bool CountOnlyAcceptedCourses);;
+void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
+bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);
+void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
+bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat);
+void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
+bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat);
+
 #endif

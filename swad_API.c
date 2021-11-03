@@ -3149,7 +3149,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
 	    // The user must belong to course,
 	    // but it's not necessary he/she belongs to groups associated to the event
-	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	      {
 	       /* Mark user as present */
 	       Att_RegUsrInAttEventNotChangingComments (Event.AttCod,UsrDat.UsrCod);

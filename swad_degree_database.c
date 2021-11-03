@@ -553,45 +553,6 @@ unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
   }
 
 /*****************************************************************************/
-/***************** Get the degrees of a user from database *******************/
-/*****************************************************************************/
-// Returns the number of rows of the result
-
-unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod)
-  {
-   if (CtrCod > 0)
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
-		      "SELECT deg_degrees.DegCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=%ld"
-		      " GROUP BY deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName",
-		      UsrCod,
-		      CtrCod);
-   else
-      return (unsigned)
-      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
-		      "SELECT deg_degrees.DegCod,"	// row[0]
-			     "MAX(crs_users.Role)"	// row[1]
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		      " GROUP BY deg_degrees.DegCod"
-		      " ORDER BY deg_degrees.ShortName",
-		      UsrCod);
-  }
-
-/*****************************************************************************/
 /******************** Get number of degrees in a country *********************/
 /*****************************************************************************/
 
@@ -724,6 +685,92 @@ void Deg_DB_UpdateDegStatus (long DegCod,Deg_Status_t NewStatus)
 		   " WHERE DegCod=%ld",
                    (unsigned) NewStatus,
                    DegCod);
+  }
+
+/*****************************************************************************/
+/***************** Get the degrees of a user from database *******************/
+/*****************************************************************************/
+// Returns the number of rows of the result
+
+unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod)
+  {
+   if (CtrCod > 0)
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
+		      "SELECT deg_degrees.DegCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		        " AND deg_degrees.CtrCod=%ld"
+		      " GROUP BY deg_degrees.DegCod"
+		      " ORDER BY deg_degrees.ShortName",
+		      UsrCod,
+		      CtrCod);
+   else
+      return (unsigned)
+      DB_QuerySELECT (mysql_res,"can not check the degrees a user belongs to",
+		      "SELECT deg_degrees.DegCod,"	// row[0]
+			     "MAX(crs_users.Role)"	// row[1]
+		       " FROM crs_users,"
+			     "crs_courses,"
+			     "deg_degrees"
+		      " WHERE crs_users.UsrCod=%ld"
+		        " AND crs_users.CrsCod=crs_courses.CrsCod"
+		        " AND crs_courses.DegCod=deg_degrees.DegCod"
+		      " GROUP BY deg_degrees.DegCod"
+		      " ORDER BY deg_degrees.ShortName",
+		      UsrCod);
+  }
+
+/*****************************************************************************/
+/********* Get the degree in which a user is enroled in more courses *********/
+/*****************************************************************************/
+
+unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's main degree",
+		   "SELECT deg_degrees.ShortName,"	// row[0]
+			  "main_degree.MaxRole"		// row[1]
+		   " FROM deg_degrees,"
+
+			 // The second table contain only one row with the main degree
+			" (SELECT crs_courses.DegCod AS DegCod,"
+				 "MAX(crs_users.Role) AS MaxRole,"
+				 "COUNT(*) AS N"
+			  " FROM crs_users,"
+			        "crs_courses"
+			 " WHERE crs_users.UsrCod=%ld"
+			   " AND crs_users.CrsCod=crs_courses.CrsCod"
+			 " GROUP BY crs_courses.DegCod"
+			 " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
+			 " LIMIT 1)"		// We need only the main degree
+			" AS main_degree"
+
+		 " WHERE deg_degrees.DegCod=main_degree.DegCod",
+		 UsrCod);
+  }
+
+/*****************************************************************************/
+/******************* Check if a user belongs to a degree *********************/
+/*****************************************************************************/
+
+bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
+  {
+   return (DB_QueryCOUNT ("can not check if a user belongs to a degree",
+			  "SELECT COUNT(DISTINCT crs_courses.DegCod)"
+			   " FROM crs_users,"
+				 "crs_courses"
+			  " WHERE crs_users.UsrCod=%ld"
+			    " AND crs_users.Accepted='Y'"	// Only if user accepted
+			    " AND crs_users.CrsCod=crs_courses.CrsCod"
+			    " AND crs_courses.DegCod=%ld",
+			  UsrCod,
+			  DegCod) != 0);
   }
 
 /*****************************************************************************/

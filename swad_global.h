@@ -59,6 +59,7 @@
 #include "swad_record.h"
 #include "swad_search.h"
 #include "swad_session.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -313,7 +314,7 @@ struct Globals
                long DegCod;
               } Crss[Crs_MAX_COURSES_PER_USR];
            } MyCrss;
-	 Usr_ShowUsrsType_t ListType;	// My preference about user's list type
+	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
 	} Me;		// The user logged

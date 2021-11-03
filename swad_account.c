@@ -1041,7 +1041,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
                      UsrDat->FullName);
 
    /***** Remove user from tables of banned users *****/
-   Usr_DB_RemoveUsrFromBanned (UsrDat->UsrCod);
+   Prf_DB_RemoveUsrFromBanned (UsrDat->UsrCod);
    Msg_DB_RemoveUsrFromBanned (UsrDat->UsrCod);
 
    /***** Delete thread read status for this user *****/

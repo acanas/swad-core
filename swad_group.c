@@ -392,7 +392,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 	  depending on the groups selected *****/
    Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
-   Usr_PutParamsPrefsAboutUsrList ();
+   Set_PutParamsPrefsAboutUsrList ();
    if (FuncParams)
       FuncParams (Args);
 
@@ -3059,7 +3059,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
       return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
 
    /***** 7. Fast / slow check: Does he/she belong to the current course? *****/
-   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = false;

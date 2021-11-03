@@ -51,6 +51,7 @@
 #include "swad_department.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_figure_cache.h"
@@ -105,22 +106,15 @@ const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
    [Usr_SEX_ALL    ] = "all",
    };
 
-const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
-  {
-   [Usr_LIST_UNKNOWN       ] = "",
-   [Usr_LIST_AS_CLASS_PHOTO] = "classphoto",
-   [Usr_LIST_AS_LISTING    ] = "list",
-  };
-
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
+static const char *Usr_IconsClassPhotoOrList[Set_NUM_USR_LIST_TYPES] =
   {
-   [Usr_LIST_UNKNOWN       ] = "",
-   [Usr_LIST_AS_CLASS_PHOTO] = "th.svg",
-   [Usr_LIST_AS_LISTING    ] = "list-ol.svg",
+   [Set_USR_LIST_UNKNOWN       ] = "",
+   [Set_USR_LIST_AS_CLASS_PHOTO] = "th.svg",
+   [Set_USR_LIST_AS_LISTING    ] = "list-ol.svg",
   };
 
 static const char *Usr_NameSelUnsel[Rol_NUM_ROLES] =
@@ -174,8 +168,6 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str);
 static bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void);
 static void Usr_InsertMyBirthday (void);
 
-static void Usr_RemoveTemporaryTableMyCourses (void);
-
 static void Usr_GetParamOtherUsrIDNickOrEMail (void);
 
 static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void);
@@ -220,8 +212,8 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct SelectedUsrs *Selec
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Usr_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
-                                         Usr_ShowUsrsType_t ListType);
+static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
+                                         Set_ShowUsrsType_t ListType);
 static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
 			                     struct SelectedUsrs *SelectedUsrs);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
@@ -240,18 +232,6 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
                                      unsigned NumColumns);
-static void Usr_GetAndUpdateUsrListType (void);
-static void Usr_GetUsrListTypeFromForm (void);
-static void Usr_GetMyUsrListTypeFromDB (void);
-static void Usr_DB_UpdateMyUsrListType (void);
-
-static void Usr_GetParamColsClassPhotoFromForm (void);
-static void Usr_GetMyColsClassPhotoFromDB (void);
-static void Usr_DB_UpdateMyColsClassPhoto (void);
-
-static void Usr_GetAndUpdatePrefAboutListWithPhotos (void);
-static bool Usr_GetParamListWithPhotosFromForm (void);
-static void Usr_DB_UpdateMyPrefAboutListWithPhotosPhoto (void);
 
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
@@ -283,8 +263,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr);
 
 static FigCch_FigureCached_t Usr_GetFigureNumUsrsInCrss (unsigned Roles);
-static double Usr_GetNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
-static double Usr_GetNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -912,33 +890,15 @@ void Usr_FlushCachesUsr (void)
    Ins_FlushCacheUsrBelongsToIns ();
    Ctr_FlushCacheUsrBelongsToCtr ();
    Deg_FlushCacheUsrBelongsToDeg ();
-   Crs_FlushCacheUsrBelongsToCrs ();
-   Usr_FlushCacheUsrBelongsToCurrentCrs ();
-   Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
-   Usr_FlushCacheUsrSharesAnyOfMyCrs ();
+   Enr_FlushCacheUsrBelongsToCrs ();
+   Enr_FlushCacheUsrBelongsToCurrentCrs ();
+   Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+   Enr_FlushCacheUsrSharesAnyOfMyCrs ();
    Rol_FlushCacheMyRoleInCurrentCrs ();
    Rol_FlushCacheRoleUsrInCrs ();
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
    Grp_FlushCacheIBelongToGrp ();
    Fol_FlushCacheFollow ();
-  }
-
-/*****************************************************************************/
-/***** Check if a user is an administrator of a degree/center/institution ****/
-/*****************************************************************************/
-
-bool Usr_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
-  {
-   /***** Get if a user is administrator of a degree from database *****/
-   return (DB_QueryCOUNT ("can not check if a user is administrator",
-			  "SELECT COUNT(*)"
-			   " FROM usr_admins"
-			  " WHERE UsrCod=%ld"
-			    " AND Scope='%s'"
-			    " AND Cod=%ld",
-			  UsrCod,
-			  Sco_GetDBStrFromScope (Scope),
-			  Cod) != 0);
   }
 
 /*****************************************************************************/
@@ -1053,151 +1013,6 @@ bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/********************* Get number of courses of a user ***********************/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetNumCrssOfUsr (long UsrCod)
-  {
-   /***** Get the number of courses of a user from database ******/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of courses of a user",
-		  "SELECT COUNT(*)"
-		   " FROM crs_users"
-		  " WHERE UsrCod=%ld",
-		  UsrCod);
-  }
-
-/*****************************************************************************/
-/*************** Get number of courses of a user not accepted ****************/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetNumCrssOfUsrNotAccepted (long UsrCod)
-  {
-   /***** Get the number of courses of a user not accepted from database ******/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of courses of a user",
-		  "SELECT COUNT(*)"
-		   " FROM crs_users"
-		  " WHERE UsrCod=%ld"
-		    " AND Accepted='N'",
-		  UsrCod);
-  }
-
-/*****************************************************************************/
-/********* Get number of courses in with a user have a given role ************/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
-  {
-   /***** Get the number of courses of a user with a role from database ******/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of courses of a user with a role",
-		  "SELECT COUNT(*)"
-		   " FROM crs_users"
-		  " WHERE UsrCod=%ld"
-		    " AND Role=%u",
-		  UsrCod,
-		  (unsigned) Role);
-  }
-
-/*****************************************************************************/
-/********* Get number of courses in with a user have a given role ************/
-/*****************************************************************************/
-
-unsigned Usr_DB_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
-  {
-   /***** Get the number of courses of a user with a role from database ******/
-   return (unsigned)
-   DB_QueryCOUNT ("can not get the number of courses of a user with a role",
-		  "SELECT COUNT(*)"
-		   " FROM crs_users"
-		  " WHERE UsrCod=%ld"
-		    " AND Role=%u"
-		    " AND Accepted='N'",
-		  UsrCod,
-		  (unsigned) Role);
-  }
-
-/*****************************************************************************/
-/****** Get number of users with some given roles in courses of a user *******/
-/*****************************************************************************/
-
-#define Usr_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (Cns_MAX_DECIMAL_DIGITS_UINT + 1))
-unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
-                                     unsigned OthersRoles)
-  {
-   Rol_Role_t Role;
-   char UnsignedStr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   char OthersRolesStr[Usr_MAX_BYTES_ROLES_STR + 1];
-   char SubQueryRole[64];
-   unsigned NumUsrs;
-   // This query can be made in a unique, but slower, query
-   // The temporary table achieves speedup from ~2s to few ms
-
-   /***** Remove temporary table if exists *****/
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-
-   /***** Create temporary table with all user's courses
-          as student/non-editing teacher/teacher *****/
-   switch (UsrRole)
-     {
-      case Rol_STD:	// Student
-	 sprintf (SubQueryRole," AND Role=%u",
-	          (unsigned) Rol_STD);
-	 break;
-      case Rol_NET:	// Non-editing teacher
-	 sprintf (SubQueryRole," AND Role=%u",
-	          (unsigned) Rol_NET);
-	 break;
-      case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole," AND Role=%u",
-	          (unsigned) Rol_TCH);
-	 break;
-      default:
-	 SubQueryRole[0] = '\0';
-	 Err_WrongRoleExit ();
-	 break;
-     }
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
-	     " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT CrsCod"
-	       " FROM crs_users"
-	      " WHERE UsrCod=%ld"
-	         "%s",
-	     UsrCod,SubQueryRole);
-
-   /***** Get the number of students/teachers in a course from database ******/
-   OthersRolesStr[0] = '\0';
-   for (Role =  Rol_STD;	// First possible role in a course
-	Role <= Rol_TCH;	// Last possible role in a course
-	Role++)
-      if ((OthersRoles & (1 << Role)))
-        {
-         sprintf (UnsignedStr,"%u",(unsigned) Role);
-         if (OthersRolesStr[0])	// Not empty
-	    Str_Concat (OthersRolesStr,",",sizeof (OthersRolesStr) - 1);
-	 Str_Concat (OthersRolesStr,UnsignedStr,sizeof (OthersRolesStr) - 1);
-        }
-   NumUsrs = (unsigned)
-   DB_QueryCOUNT ("can not get number of users",
-		  "SELECT COUNT(DISTINCT crs_users.UsrCod)"
-		   " FROM crs_users,"
-			 "usr_courses_tmp"
-		  " WHERE crs_users.CrsCod=usr_courses_tmp.CrsCod"
-		    " AND crs_users.Role IN (%s)",
-		  OthersRolesStr);
-
-   /***** Remove temporary table *****/
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-
-   return NumUsrs;
-  }
-
-/*****************************************************************************/
 /************ Check if I can view the record card of a student ***************/
 /*****************************************************************************/
 
@@ -1235,7 +1050,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
       return true;
 
    /***** 8. Fast / slow check: Does he/she belong to the current course? *****/
-   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
       return false;
 
    /***** 9. Fast / slow check depending on roles *****/
@@ -1311,7 +1126,7 @@ bool Usr_CheckIfICanViewTstExaMchResult (const struct UsrData *UsrDat)
       return true;
 
    /***** 7. Fast check: Does he/she belong to the current course? *****/
-   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
       return false;
 
    /***** 8. Fast / slow check depending on roles *****/
@@ -1348,7 +1163,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
    // Only users beloging to course can have files in assignments/works
-   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (!Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
       return false;
 
    /***** 5. Fast check: Am I a system admin? *****/
@@ -1443,862 +1258,7 @@ bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
       return true;
 
    /***** 4. Slow check: Get if user shares any course with me from database *****/
-   return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
-  }
-
-/*****************************************************************************/
-/*************** Check if a user belongs to any of my courses ****************/
-/*****************************************************************************/
-
-void Usr_FlushCacheUsrSharesAnyOfMyCrs (void)
-  {
-   Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = -1L;
-   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = false;
-  }
-
-bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
-  {
-   bool ItsMe;
-
-   /***** 1. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return false;
-
-   /***** 2. Fast check: It is a valid user code? *****/
-   if (UsrDat->UsrCod <= 0)
-      return false;
-
-   /***** 3. Fast check: It's me? *****/
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   if (ItsMe)
-      return true;
-
-   /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
-   if (UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod)
-      return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
-
-   /***** 5. Fast check: Is course selected and we both belong to it? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-      if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))	// Course selected and we both belong to it
-         return true;
-
-   /***** 6. Fast/slow check: Does he/she belong to any course? *****/
-   Rol_GetRolesInAllCrss (UsrDat);
-   if (!(UsrDat->Roles.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
-	                         (1 << Rol_NET) |	// or non-editing teacher
-			         (1 << Rol_TCH))))	// or teacher?
-      return false;
-
-   /***** 7. Slow check: Get if user shares any course with me from database *****/
-   /* Fill the list with the courses I belong to (if not already filled) */
-   Crs_GetMyCourses ();
-
-   /* Check if user shares any course with me */
-   Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs =
-      (DB_QueryCOUNT ("can not check if a user shares any course with you",
-		      "SELECT COUNT(*)"
-		       " FROM crs_users"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod IN"
-		            " (SELECT CrsCod"
-		               " FROM my_courses_tmp)",
-		      UsrDat->UsrCod) != 0);
-   return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
-  }
-
-/*****************************************************************************/
-/*** Check if a user belongs to any of my courses but has a different role ***/
-/*****************************************************************************/
-
-bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
-  {
-   bool UsrSharesAnyOfMyCrsWithDifferentRole;
-
-   /***** 1. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return false;
-
-   /***** 2. Slow check: Get if user shares any course with me
-                         with a different role, from database *****/
-   /* Fill the list with the courses I belong to (if not already filled) */
-   Crs_GetMyCourses ();
-
-   /* Remove temporary table if exists */
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-
-   /* Create temporary table with all user's courses for a role */
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
-	     "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
-   	     "UNIQUE INDEX(CrsCod,Role)) ENGINE=MEMORY"
-  	     " SELECT CrsCod,"
-  	             "Role"
-  	       " FROM crs_users"
-  	      " WHERE UsrCod=%ld",
-	     UsrCod);
-
-   /* Get if a user shares any course with me from database */
-   UsrSharesAnyOfMyCrsWithDifferentRole =
-      (DB_QueryCOUNT ("can not check if a user shares any course with you",
-		      "SELECT COUNT(*)"
-		       " FROM my_courses_tmp,"
-		             "usr_courses_tmp"
-                      " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
-                        " AND my_courses_tmp.Role<>usr_courses_tmp.Role") != 0);
-
-   /* Remove temporary table if exists */
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
-
-   return UsrSharesAnyOfMyCrsWithDifferentRole;
-  }
-
-/*****************************************************************************/
-/**** Get all my countries (those of my courses) and store them in a list ****/
-/*****************************************************************************/
-
-void Cty_GetMyCountrs (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCty;
-   unsigned NumCtys;
-   long CtyCod;
-
-   /***** If my countries are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCtys.Filled)
-     {
-      Gbl.Usrs.Me.MyCtys.Num = 0;
-
-      /***** Get my institutions from database *****/
-      NumCtys = Cty_DB_GetCtysFromUsr (&mysql_res,Gbl.Usrs.Me.UsrDat.UsrCod);
-      for (NumCty = 0;
-	   NumCty < NumCtys;
-	   NumCty++)
-	{
-	 /* Get next country */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get country code */
-	 if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	   {
-	    if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
-
-	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
-	    Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	    Gbl.Usrs.Me.MyCtys.Num++;
-	   }
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Set boolean that indicates that my institutions are yet filled *****/
-      Gbl.Usrs.Me.MyCtys.Filled = true;
-     }
-  }
-
-/*****************************************************************************/
-/** Get all my institutions (those of my courses) and store them in a list ***/
-/*****************************************************************************/
-
-void Ins_GetMyInstits (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumIns;
-   unsigned NumInss;
-   long InsCod;
-
-   /***** If my institutions are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyInss.Filled)
-     {
-      Gbl.Usrs.Me.MyInss.Num = 0;
-
-      /***** Get my institutions from database *****/
-      NumInss = Ins_DB_GetInssFromUsr (&mysql_res,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      for (NumIns = 0;
-	   NumIns < NumInss;
-	   NumIns++)
-	{
-	 /* Get next institution */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get institution code */
-	 if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	   {
-	    if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
-
-	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
-	    Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	    Gbl.Usrs.Me.MyInss.Num++;
-	   }
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Set boolean that indicates that my institutions are yet filled *****/
-      Gbl.Usrs.Me.MyInss.Filled = true;
-     }
-  }
-
-/*****************************************************************************/
-/***** Get all my centers (those of my courses) and store them in a list *****/
-/*****************************************************************************/
-
-void Ctr_GetMyCenters (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCtr;
-   unsigned NumCtrs;
-   long CtrCod;
-
-   /***** If my centers are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCtrs.Filled)
-     {
-      Gbl.Usrs.Me.MyCtrs.Num = 0;
-
-      /***** Get my centers from database *****/
-      NumCtrs = Ctr_DB_GetCtrsFromUsr (&mysql_res,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      for (NumCtr = 0;
-	   NumCtr < NumCtrs;
-	   NumCtr++)
-	{
-	 /* Get next center */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get center code */
-	 if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	   {
-	    if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTERS_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of centers of a user exceeded.");
-
-	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
-	    Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	    Gbl.Usrs.Me.MyCtrs.Num++;
-	   }
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Set boolean that indicates that my centers are yet filled *****/
-      Gbl.Usrs.Me.MyCtrs.Filled = true;
-     }
-  }
-
-/*****************************************************************************/
-/***** Get all my degrees (those of my courses) and store them in a list *****/
-/*****************************************************************************/
-
-void Deg_GetMyDegrees (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumDeg;
-   unsigned NumDegs;
-   long DegCod;
-
-   /***** If my degrees are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyDegs.Filled)
-     {
-      Gbl.Usrs.Me.MyDegs.Num = 0;
-
-      /***** Get my degrees from database *****/
-      NumDegs = Deg_DB_GetDegsFromUsr (&mysql_res,
-                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
-      for (NumDeg = 0;
-	   NumDeg < NumDegs;
-	   NumDeg++)
-	{
-	 /* Get next degree */
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get degree code */
-	 if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	   {
-	    if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
-	       Err_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
-
-	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
-	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-
-	    Gbl.Usrs.Me.MyDegs.Num++;
-	   }
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Set boolean that indicates that my degrees are yet filled *****/
-      Gbl.Usrs.Me.MyDegs.Filled = true;
-     }
-  }
-
-/*****************************************************************************/
-/********* Get the degree in which a user is enroled in more courses *********/
-/*****************************************************************************/
-
-void Deg_GetUsrMainDeg (long UsrCod,
-		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
-		        Rol_Role_t *MaxRole)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   /***** Get a random student from current course from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's main degree",
-		       "SELECT deg_degrees.ShortName,"	// row[0]
-		              "main_degree.MaxRole"	// row[1]
-		       " FROM deg_degrees,"
-
-		       // The second table contain only one row with the main degree
-		       " (SELECT crs_courses.DegCod AS DegCod,"
-		                "MAX(crs_users.Role) AS MaxRole,"
-		                "COUNT(*) AS N"
-		         " FROM crs_users,"
-		               "crs_courses"
-		        " WHERE crs_users.UsrCod=%ld"
-		          " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " GROUP BY crs_courses.DegCod"
-		        " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
-		        " LIMIT 1)"		// We need only the main degree
-		       " AS main_degree"
-
-		       " WHERE deg_degrees.DegCod=main_degree.DegCod",
-		       UsrCod))
-     {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get degree name (row[0]) */
-      Str_Copy (ShrtName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-
-      /* Get maximum role (row[1]) */
-      *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
-     }
-   else	// User is not enroled in any course
-     {
-      ShrtName[0] = '\0';
-      *MaxRole = Rol_UNK;
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/*************** Get all my courses and store them in a list *****************/
-/*****************************************************************************/
-
-void Crs_GetMyCourses (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumCrss;
-   unsigned NumCrs;
-   long CrsCod;
-
-   /***** Trivial check 1: if my courses are already filled, there's nothing to do *****/
-   if (Gbl.Usrs.Me.MyCrss.Filled)
-      return;
-
-   /***** Trivial check 2: if user's code is not set, don't query database *****/
-   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0)
-      return;
-
-   /***** Remove temporary table with my courses *****/
-   Usr_RemoveTemporaryTableMyCourses ();
-
-   /***** Create temporary table with my courses *****/
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE IF NOT EXISTS my_courses_tmp"
-	     " (CrsCod INT NOT NULL,"
-		 "Role TINYINT NOT NULL,"
-	       "DegCod INT NOT NULL,"
-	       "UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
-	     " SELECT crs_users.CrsCod,"
-		     "crs_users.Role,"
-		     "crs_courses.DegCod"
-	       " FROM crs_users,"
-		     "crs_courses,"
-		     "deg_degrees"
-	      " WHERE crs_users.UsrCod=%ld"
-		" AND crs_users.CrsCod=crs_courses.CrsCod"
-		" AND crs_courses.DegCod=deg_degrees.DegCod"
-	      " ORDER BY deg_degrees.ShortName,"
-			"crs_courses.ShortName",
-	     Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Get my courses from database *****/
-   NumCrss = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get which courses you belong to",
-		   "SELECT CrsCod,"	// row[0]
-			  "Role,"		// row[1]
-			  "DegCod"	// row[2]
-		   " FROM my_courses_tmp");
-   for (NumCrs = 0;
-	NumCrs < NumCrss;
-	NumCrs++)
-     {
-      /* Get next course */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get course code */
-      if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
-	{
-	 if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
-	    Err_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
-
-	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
-	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
-	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
-	 Gbl.Usrs.Me.MyCrss.Num++;
-	}
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Set boolean that indicates that my courses are already filled *****/
-   Gbl.Usrs.Me.MyCrss.Filled = true;
-  }
-
-/*****************************************************************************/
-/************************ Free the list of my countries ************************/
-/*****************************************************************************/
-
-void Cty_FreeMyCountrs (void)
-  {
-   if (Gbl.Usrs.Me.MyCtys.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyCtys.Filled = false;
-      Gbl.Usrs.Me.MyCtys.Num    = 0;
-     }
-  }
-
-/*****************************************************************************/
-/********************* Free the list of my institutions **********************/
-/*****************************************************************************/
-
-void Ins_FreeMyInstits (void)
-  {
-   if (Gbl.Usrs.Me.MyInss.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyInss.Filled = false;
-      Gbl.Usrs.Me.MyInss.Num    = 0;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Free the list of my centers ************************/
-/*****************************************************************************/
-
-void Ctr_FreeMyCenters (void)
-  {
-   if (Gbl.Usrs.Me.MyCtrs.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyCtrs.Filled = false;
-      Gbl.Usrs.Me.MyCtrs.Num    = 0;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Free the list of my degrees ************************/
-/*****************************************************************************/
-
-void Deg_FreeMyDegrees (void)
-  {
-   if (Gbl.Usrs.Me.MyDegs.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyDegs.Filled = false;
-      Gbl.Usrs.Me.MyDegs.Num    = 0;
-     }
-  }
-
-/*****************************************************************************/
-/************************ Free the list of my courses ************************/
-/*****************************************************************************/
-
-void Crs_FreeMyCourses (void)
-  {
-   if (Gbl.Usrs.Me.MyCrss.Filled)
-     {
-      /***** Reset list *****/
-      Gbl.Usrs.Me.MyCrss.Filled = false;
-      Gbl.Usrs.Me.MyCrss.Num    = 0;
-
-      /***** Remove temporary table with my courses *****/
-      Usr_RemoveTemporaryTableMyCourses ();
-     }
-  }
-
-/*****************************************************************************/
-/************************ Free the list of my courses ************************/
-/*****************************************************************************/
-
-static void Usr_RemoveTemporaryTableMyCourses (void)
-  {
-   char Query[128];
-
-   /***** Remove temporary table with my courses *****/
-   sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS my_courses_tmp");
-   if (mysql_query (&Gbl.mysql,Query))
-      DB_ExitOnMySQLError ("can not remove temporary table");
-  }
-
-/*****************************************************************************/
-/**************** Check if a user belongs to an institution ******************/
-/*****************************************************************************/
-
-void Ins_FlushCacheUsrBelongsToIns (void)
-  {
-   Gbl.Cache.UsrBelongsToIns.UsrCod = -1L;
-   Gbl.Cache.UsrBelongsToIns.InsCod = -1L;
-   Gbl.Cache.UsrBelongsToIns.Belongs = false;
-  }
-
-bool Ins_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (UsrCod <= 0 ||
-       InsCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Gbl.Cache.UsrBelongsToIns.UsrCod &&
-       InsCod != Gbl.Cache.UsrBelongsToIns.InsCod)
-      return Gbl.Cache.UsrBelongsToIns.Belongs;
-
-   /***** 3. Slow check: Get is user belongs to institution from database *****/
-   Gbl.Cache.UsrBelongsToIns.UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsToIns.InsCod = InsCod;
-   Gbl.Cache.UsrBelongsToIns.Belongs =
-      (DB_QueryCOUNT ("can not check if a user belongs to an institution",
-		      "SELECT COUNT(DISTINCT ctr_centers.InsCod)"
-		       " FROM crs_users,"
-			     "crs_courses,"
-			     "deg_degrees,"
-			     "ctr_centers"
-		      " WHERE crs_users.UsrCod=%ld"
-			" AND crs_users.Accepted='Y'"	// Only if user accepted
-			" AND crs_users.CrsCod=crs_courses.CrsCod"
-			" AND crs_courses.DegCod=deg_degrees.DegCod"
-			" AND deg_degrees.CtrCod=ctr_centers.CtrCod"
-			" AND ctr_centers.InsCod=%ld",
-		      UsrCod,InsCod) != 0);
-   return Gbl.Cache.UsrBelongsToIns.Belongs;
-  }
-
-/*****************************************************************************/
-/******************* Check if a user belongs to a center *********************/
-/*****************************************************************************/
-
-void Ctr_FlushCacheUsrBelongsToCtr (void)
-  {
-   Gbl.Cache.UsrBelongsToCtr.UsrCod = -1L;
-   Gbl.Cache.UsrBelongsToCtr.CtrCod = -1L;
-   Gbl.Cache.UsrBelongsToCtr.Belongs = false;
-  }
-
-bool Ctr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (UsrCod <= 0 ||
-       CtrCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Gbl.Cache.UsrBelongsToCtr.UsrCod &&
-       CtrCod == Gbl.Cache.UsrBelongsToCtr.CtrCod)
-      return Gbl.Cache.UsrBelongsToCtr.Belongs;
-
-   /***** 3. Slow check: Get is user belongs to center from database *****/
-   Gbl.Cache.UsrBelongsToCtr.UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsToCtr.CtrCod = CtrCod;
-   Gbl.Cache.UsrBelongsToCtr.Belongs =
-      (DB_QueryCOUNT ("can not check if a user belongs to a center",
-		      "SELECT COUNT(DISTINCT deg_degrees.CtrCod)"
-		       " FROM crs_users,"
-		             "crs_courses,"
-		             "deg_degrees"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.Accepted='Y'"	// Only if user accepted
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=deg_degrees.DegCod"
-		        " AND deg_degrees.CtrCod=%ld",
-		      UsrCod,
-		      CtrCod) != 0);
-   return Gbl.Cache.UsrBelongsToCtr.Belongs;
-  }
-
-/*****************************************************************************/
-/******************* Check if a user belongs to a degree *********************/
-/*****************************************************************************/
-
-void Deg_FlushCacheUsrBelongsToDeg (void)
-  {
-   Gbl.Cache.UsrBelongsToDeg.UsrCod = -1L;
-   Gbl.Cache.UsrBelongsToDeg.DegCod = -1L;
-   Gbl.Cache.UsrBelongsToDeg.Belongs = false;
-  }
-
-bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
-  {
-   /***** 1. Fast check: Trivial case *****/
-   if (UsrCod <= 0 ||
-       DegCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Gbl.Cache.UsrBelongsToDeg.UsrCod &&
-       DegCod == Gbl.Cache.UsrBelongsToDeg.DegCod)
-      return Gbl.Cache.UsrBelongsToDeg.Belongs;
-
-   /***** 3. Slow check: Get if user belongs to degree from database *****/
-   Gbl.Cache.UsrBelongsToDeg.UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsToDeg.DegCod = DegCod;
-   Gbl.Cache.UsrBelongsToDeg.Belongs =
-      (DB_QueryCOUNT ("can not check if a user belongs to a degree",
-		      "SELECT COUNT(DISTINCT crs_courses.DegCod)"
-		       " FROM crs_users,"
-		             "crs_courses"
-		      " WHERE crs_users.UsrCod=%ld"
-		        " AND crs_users.Accepted='Y'"	// Only if user accepted
-		        " AND crs_users.CrsCod=crs_courses.CrsCod"
-		        " AND crs_courses.DegCod=%ld",
-		      UsrCod,DegCod) != 0);
-   return Gbl.Cache.UsrBelongsToDeg.Belongs;
-  }
-
-/*****************************************************************************/
-/******************** Check if a user belongs to a course ********************/
-/*****************************************************************************/
-
-void Crs_FlushCacheUsrBelongsToCrs (void)
-  {
-   Gbl.Cache.UsrBelongsToCrs.UsrCod = -1L;
-   Gbl.Cache.UsrBelongsToCrs.CrsCod = -1L;
-   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = false;
-   Gbl.Cache.UsrBelongsToCrs.Belongs = false;
-  }
-
-bool Crs_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
-                                 bool CountOnlyAcceptedCourses)
-  {
-   const char *SubQuery;
-
-   /***** 1. Fast check: Trivial cases *****/
-   if (UsrCod <= 0 ||
-       CrsCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrCod == Gbl.Cache.UsrBelongsToCrs.UsrCod &&
-       CrsCod == Gbl.Cache.UsrBelongsToCrs.CrsCod &&
-       CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses)
-      return Gbl.Cache.UsrBelongsToCrs.Belongs;
-
-   /***** 3. Slow check: Get if user belongs to course from database *****/
-   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
-	                                  "");
-   Gbl.Cache.UsrBelongsToCrs.UsrCod = UsrCod;
-   Gbl.Cache.UsrBelongsToCrs.CrsCod = CrsCod;
-   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
-   Gbl.Cache.UsrBelongsToCrs.Belongs =
-      (DB_QueryCOUNT ("can not check if a user belongs to a course",
-		      "SELECT COUNT(*)"
-		       " FROM crs_users"
-		      " WHERE CrsCod=%ld"
-		        " AND UsrCod=%ld%s",
-		      CrsCod,UsrCod,SubQuery) != 0);
-   return Gbl.Cache.UsrBelongsToCrs.Belongs;
-  }
-
-/*****************************************************************************/
-/***** Check if user belongs (no matter if he/she has accepted or not) *******/
-/***** to the current course                                           *******/
-/*****************************************************************************/
-
-void Usr_FlushCacheUsrBelongsToCurrentCrs (void)
-  {
-   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = -1L;
-   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = false;
-  }
-
-bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
-  {
-   /***** 1. Fast check: Trivial cases *****/
-   if (UsrDat->UsrCod <= 0 ||
-       Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrDat->UsrCod == Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod)
-      return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
-
-   /***** 3. Fast check: If we know role of user in the current course *****/
-   if (UsrDat->Roles.InCurrentCrs != Rol_UNK)
-     {
-      Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs == Rol_STD ||
-	                                         UsrDat->Roles.InCurrentCrs == Rol_NET ||
-	                                         UsrDat->Roles.InCurrentCrs == Rol_TCH;
-      return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
-     }
-
-   /***** 4. Fast / slow check: Get if user belongs to current course *****/
-   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
-   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Crs_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						                          Gbl.Hierarchy.Crs.CrsCod,
-						                          false);
-   return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
-  }
-
-/*****************************************************************************/
-/***** Check if user belongs (no matter if he/she has accepted or not) *******/
-/***** to the current course                                           *******/
-/*****************************************************************************/
-
-void Usr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
-  {
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = -1L;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = false;
-  }
-
-bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
-  {
-   /***** 1. Fast check: Trivial cases *****/
-   if (UsrDat->UsrCod <= 0 ||
-       Gbl.Hierarchy.Crs.CrsCod <= 0)
-      return false;
-
-   /***** 2. Fast check: If cached... *****/
-   if (UsrDat->UsrCod == Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod)
-      return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
-
-   /***** 3. Fast / slow check: Get if user belongs to current course
-                                and has accepted *****/
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Crs_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						                               Gbl.Hierarchy.Crs.CrsCod,
-						                               true);
-   return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
-  }
-
-/*****************************************************************************/
-/********************** Check if I belong to a country **********************/
-/*****************************************************************************/
-
-bool Cty_CheckIfIBelongToCty (long CtyCod)
-  {
-   unsigned NumMyCty;
-
-   /***** Fill the list with the institutions I belong to *****/
-   Cty_GetMyCountrs ();
-
-   /***** Check if the country passed as parameter is any of my countries *****/
-   for (NumMyCty = 0;
-        NumMyCty < Gbl.Usrs.Me.MyCtys.Num;
-        NumMyCty++)
-      if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].CtyCod == CtyCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
-/******************** Check if I belong to an institution ********************/
-/*****************************************************************************/
-
-bool Ins_CheckIfIBelongToIns (long InsCod)
-  {
-   unsigned NumMyIns;
-
-   /***** Fill the list with the institutions I belong to *****/
-   Ins_GetMyInstits ();
-
-   /***** Check if the institution passed as parameter is any of my institutions *****/
-   for (NumMyIns = 0;
-        NumMyIns < Gbl.Usrs.Me.MyInss.Num;
-        NumMyIns++)
-      if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
-/*********************** Check if I belong to a center ***********************/
-/*****************************************************************************/
-
-bool Ctr_CheckIfIBelongToCtr (long CtrCod)
-  {
-   unsigned NumMyCtr;
-
-   /***** Fill the list with the centers I belong to *****/
-   Ctr_GetMyCenters ();
-
-   /***** Check if the center passed as parameter is any of my centers *****/
-   for (NumMyCtr = 0;
-        NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
-        NumMyCtr++)
-      if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
-/*********************** Check if I belong to a degree ***********************/
-/*****************************************************************************/
-
-bool Deg_CheckIfIBelongToDeg (long DegCod)
-  {
-   unsigned NumMyDeg;
-
-   /***** Fill the list with the degrees I belong to *****/
-   Deg_GetMyDegrees ();
-
-   /***** Check if the degree passed as parameter is any of my degrees *****/
-   for (NumMyDeg = 0;
-        NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
-        NumMyDeg++)
-      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
-         return true;
-   return false;
-  }
-
-/*****************************************************************************/
-/*********************** Check if I belong to a course ***********************/
-/*****************************************************************************/
-
-bool Crs_CheckIfIBelongToCrs (long CrsCod)
-  {
-   unsigned NumMyCrs;
-
-   /***** Fill the list with the courses I belong to *****/
-   Crs_GetMyCourses ();
-
-   /***** Check if the course passed as parameter is any of my courses *****/
-   for (NumMyCrs = 0;
-        NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
-        NumMyCrs++)
-      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
-         return true;
-
-   return false;
+   return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
   }
 
 /*****************************************************************************/
@@ -5350,8 +4310,8 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t
 		     case HieLvl_SYS:	// System
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-			if (Usr_DB_GetNumCrssOfUsr (UsrInList->UsrCod))
-			   UsrInList->Accepted = (Usr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
+			if (Enr_DB_GetNumCrssOfUsr (UsrInList->UsrCod))
+			   UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			else
 			   UsrInList->Accepted = false;
 			break;
@@ -5361,7 +4321,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t
 		     case HieLvl_DEG:	// Degree
 			// Query result has not a column with the acceptation
 			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-			UsrInList->Accepted = (Usr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
+			UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			break;
 		     case HieLvl_CRS:	// Course
 			// Query result has a column with the acceptation
@@ -5392,7 +4352,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t
 		     case HieLvl_DEG:	// Degree
 			// Query result has not a column with the acceptation
 	                UsrInList->RoleInCurrentCrsDB = Rol_UNK;
-			UsrInList->Accepted = (Usr_DB_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,Role) == 0);
+			UsrInList->Accepted = (Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,Role) == 0);
 			break;
 		     case HieLvl_CRS:	// Course
 			// Query result has a column with the acceptation
@@ -5530,7 +4490,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
 static void Usr_PutParamsConfirmIWantToSeeBigList (void *Args)
   {
    Grp_PutParamsCodGrps ();
-   Usr_PutParamsPrefsAboutUsrList ();
+   Set_PutParamsPrefsAboutUsrList ();
    if (Usr_FuncParamsBigList)
       Usr_FuncParamsBigList (Args);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
@@ -6084,19 +5044,19 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
    Set_BeginSettingsHead ();
    Set_BeginOneSettingSelector ();
 
-   /***** Select Usr_LIST_AS_CLASS_PHOTO *****/
+   /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
    HTM_DIV_Begin ("class=\"%s\"",
-		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
+		  Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
 								    "PREF_OFF");
-      Usr_FormToSelectUsrListType (FuncParams,Args,
-				   Usr_LIST_AS_CLASS_PHOTO);
+      Set_FormToSelectUsrListType (FuncParams,Args,
+				   Set_USR_LIST_AS_CLASS_PHOTO);
 
       /* Number of columns in the class photo */
       Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
       Grp_PutParamsCodGrps ();
-      Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
-      Usr_PutParamListWithPhotos ();
+      Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
+      Set_PutParamListWithPhotos ();
       Usr_PutSelectorNumColsClassPhoto ();
       if (FuncParams)
 	 FuncParams (Args);
@@ -6105,16 +5065,16 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 
    /***** Select Usr_LIST_AS_LISTING *****/
    HTM_DIV_Begin ("class=\"%s\"",
-		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
+		  Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING ? "PREF_ON" :
 								"PREF_OFF");
-      Usr_FormToSelectUsrListType (FuncParams,Args,
-				   Usr_LIST_AS_LISTING);
+      Set_FormToSelectUsrListType (FuncParams,Args,
+				   Set_USR_LIST_AS_LISTING);
 
       /* See the photos in list? */
       Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
       Grp_PutParamsCodGrps ();
-      Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
+      Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
       if (FuncParams)
 	 FuncParams (Args);
       Usr_PutCheckboxListWithPhotos ();
@@ -6129,18 +5089,18 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Usr_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
-                                         Usr_ShowUsrsType_t ListType)
+static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *Args,
+                                         Set_ShowUsrsType_t ListType)
   {
    extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
-   extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
+   extern const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES];
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 	                Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
-   Usr_PutParamUsrListType (ListType);
-   Usr_PutParamListWithPhotos ();
+   Set_PutParamUsrListType (ListType);
+   Set_PutParamListWithPhotos ();
    if (FuncParams)
       FuncParams (Args);
 
@@ -6187,7 +5147,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
       /***** Get and update type of list,
 	     number of columns in class photo
 	     and preference about view photos *****/
-      Usr_GetAndUpdatePrefsAboutUsrList ();
+      Set_GetAndUpdatePrefsAboutUsrList ();
 
       /***** Get groups to show ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -6329,11 +5289,11 @@ void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs)
    /***** Draw the classphoto/list *****/
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
+      case Set_USR_LIST_AS_CLASS_PHOTO:
          Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL,
                              Role,SelectedUsrs,true);
          break;
-      case Usr_LIST_AS_LISTING:
+      case Set_USR_LIST_AS_LISTING:
          Usr_ListUsrsForSelection (Role,SelectedUsrs);
          break;
       default:
@@ -6410,7 +5370,7 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 
 unsigned Usr_GetColumnsForSelectUsrs (void)
   {
-   return (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO) ? Gbl.Usrs.ClassPhoto.Cols :
+   return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Gbl.Usrs.ClassPhoto.Cols :
                                                              (Gbl.Usrs.Listing.WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
                                                                                             Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
@@ -6751,7 +5711,7 @@ void Usr_ListAllDataGsts (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Sco_SetScopesForListingGuests ();
@@ -6862,7 +5822,7 @@ void Usr_ListAllDataStds (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
@@ -7106,7 +6066,7 @@ void Usr_ListAllDataTchs (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
@@ -7376,7 +6336,7 @@ void Usr_ListDataAdms (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about viewing photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
@@ -7398,7 +6358,7 @@ void Usr_ListDataAdms (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstOth);
-	 Usr_PutParamListWithPhotos ();
+	 Set_PutParamListWithPhotos ();
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -7467,353 +6427,6 @@ void Usr_ListDataAdms (void)
   }
 
 /*****************************************************************************/
-/**************** Put hidden parameters with type of list, *******************/
-/**************** number of columns in class photo         *******************/
-/**************** and preference about viewing photos      *******************/
-/*****************************************************************************/
-
-void Usr_PutParamsPrefsAboutUsrList (void)
-  {
-   Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-   Usr_PutParamColsClassPhoto ();
-   Usr_PutParamListWithPhotos ();
-  }
-
-/*****************************************************************************/
-/****************** Get and update type of list,        **********************/
-/****************** number of columns in class photo    **********************/
-/****************** and preference about viewing photos **********************/
-/*****************************************************************************/
-
-void Usr_GetAndUpdatePrefsAboutUsrList (void)
-  {
-   /***** Get and update type of list *****/
-   Usr_GetAndUpdateUsrListType ();
-
-   /***** Get and update number of columns in class photo *****/
-   Usr_GetAndUpdateColsClassPhoto ();
-
-   /***** Get and update preference about viewing photos *****/
-   Usr_GetAndUpdatePrefAboutListWithPhotos ();
-  }
-
-/*****************************************************************************/
-/****************** Get from form the type of users' list ********************/
-/*****************************************************************************/
-
-static void Usr_GetAndUpdateUsrListType (void)
-  {
-   /***** Get type of list used to select users from form *****/
-   Usr_GetUsrListTypeFromForm ();
-
-   if (Gbl.Usrs.Me.ListType != Usr_LIST_UNKNOWN)
-      /* Save in the database the type of list preferred by me */
-      Usr_DB_UpdateMyUsrListType ();
-   else
-      /* If parameter can't be retrieved from,
-         get my preference from database */
-      Usr_GetMyUsrListTypeFromDB ();
-  }
-
-/*****************************************************************************/
-/************* Put a hidden parameter with the users' list type **************/
-/*****************************************************************************/
-
-void Usr_PutParamUsrListType (Usr_ShowUsrsType_t ListType)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"UsrListType",(unsigned) ListType);
-  }
-
-/*****************************************************************************/
-/****************** Get from form the type of users' list ********************/
-/*****************************************************************************/
-
-static void Usr_GetUsrListTypeFromForm (void)
-  {
-   Gbl.Usrs.Me.ListType = (Usr_ShowUsrsType_t)
-	                  Par_GetParToUnsignedLong ("UsrListType",
-                                                    0,
-                                                    Usr_NUM_USR_LIST_TYPES - 1,
-                                                    (unsigned long) Usr_LIST_UNKNOWN);
-  }
-
-/*****************************************************************************/
-/************** Get my preference about type of users' list ******************/
-/*****************************************************************************/
-
-static void Usr_GetMyUsrListTypeFromDB (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
-   Usr_ShowUsrsType_t ListType;
-
-   /***** Get type of listing of users from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
-		   "SELECT UsrListType"	// row[0]
-		    " FROM crs_user_settings"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-   if (NumRows == 1)		// Should be one only row
-     {
-      /* Get type of users' listing used to select some of them */
-      Gbl.Usrs.Me.ListType = Usr_SHOW_USRS_TYPE_DEFAULT;
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])
-         for (ListType  = (Usr_ShowUsrsType_t) 0;
-              ListType <= (Usr_ShowUsrsType_t) (Usr_NUM_USR_LIST_TYPES - 1);
-              ListType++)
-            if (!strcasecmp (row[0],Usr_StringsUsrListTypeInDB[ListType]))
-              {
-               Gbl.Usrs.Me.ListType = ListType;
-               break;
-              }
-     }
-   else if (NumRows == 0)	// If I am an administrator or superuser
-				// and I don't belong to current course,
-				// then the result will be the default
-      Gbl.Usrs.Me.ListType = Usr_SHOW_USRS_TYPE_DEFAULT;
-   else				// Error in database:
-				// more than one row for a user in course
-      Err_ShowErrorAndExit ("Error when getting type of listing of users.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/***************** Save my preference about type of users' list **************/
-/*****************************************************************************/
-
-static void Usr_DB_UpdateMyUsrListType (void)
-  {
-   /***** Update type of users listing *****/
-   DB_QueryUPDATE ("can not update type of listing",
-		   "UPDATE crs_user_settings"
-		     " SET UsrListType='%s'"
-                   " WHERE UsrCod=%ld"
-                     " AND CrsCod=%ld",
-		   Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/************* Get and update number of columns in class photo ***************/
-/*****************************************************************************/
-
-void Usr_GetAndUpdateColsClassPhoto (void)
-  {
-   /***** Get the number of columns in class photo from form *****/
-   Usr_GetParamColsClassPhotoFromForm ();
-
-   if (Gbl.Usrs.ClassPhoto.Cols)
-      /* Save the number of columns into the database */
-      Usr_DB_UpdateMyColsClassPhoto ();
-   else
-      /* If parameter can't be retrieved from form,
-         get my preference from database */
-      Usr_GetMyColsClassPhotoFromDB ();
-  }
-
-/*****************************************************************************/
-/****** Put a hidden parameter with the number of colums in class photo ******/
-/*****************************************************************************/
-
-void Usr_PutParamColsClassPhoto (void)
-  {
-   Par_PutHiddenParamUnsigned (NULL,"ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
-  }
-
-/*****************************************************************************/
-/************* Get from form the number of colums in class photo *************/
-/*****************************************************************************/
-
-static void Usr_GetParamColsClassPhotoFromForm (void)
-  {
-   Gbl.Usrs.ClassPhoto.Cols = (unsigned)
-	                      Par_GetParToUnsignedLong ("ColsClassPhoto",
-                                                        1,
-                                                        Usr_CLASS_PHOTO_COLS_MAX,
-                                                        0);
-  }
-
-/*****************************************************************************/
-/** Get my prefs. about number of colums in class photo for current course ***/
-/*****************************************************************************/
-
-static void Usr_GetMyColsClassPhotoFromDB (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
-
-   Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
-
-   /***** If user logged and course selected... *****/
-   if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-     {
-      /***** Get number of columns in class photo from database *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get number of columns in class photo",
-		      "SELECT ColsClassPhoto"	// row[0]
-		       " FROM crs_user_settings"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
-      if (NumRows == 1)		// Should be one only row
-        {
-         /* Get number of columns in class photo */
-         row = mysql_fetch_row (mysql_res);
-         if (row[0])
-            if (sscanf (row[0],"%u",&Gbl.Usrs.ClassPhoto.Cols) == 1)
-               if (Gbl.Usrs.ClassPhoto.Cols < 1 ||
-                   Gbl.Usrs.ClassPhoto.Cols > Usr_CLASS_PHOTO_COLS_MAX)
-                  Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
-        }
-      else if (NumRows > 1)	// Error in database:
-				// more than one row for a user in course
-         Err_ShowErrorAndExit ("Error when getting number of columns"
-			       " in class photo.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-  }
-
-/*****************************************************************************/
-/** Save my prefs. about number of colums in class photo for current course **/
-/*****************************************************************************/
-
-static void Usr_DB_UpdateMyColsClassPhoto (void)
-  {
-   if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-      /***** Update number of colums in class photo for current course *****/
-      DB_QueryUPDATE ("can not update number of columns in class photo",
-		      "UPDATE crs_user_settings"
-		        " SET ColsClassPhoto=%u"
-                      " WHERE UsrCod=%ld"
-                        " AND CrsCod=%ld",
-		      Gbl.Usrs.ClassPhoto.Cols,
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
-/********** Get and update preference about photos in users' list ************/
-/*****************************************************************************/
-
-static void Usr_GetAndUpdatePrefAboutListWithPhotos (void)
-  {
-   /***** Get my preference about photos in users' list from form *****/
-   if (Usr_GetParamListWithPhotosFromForm ())
-      /* Save preference about photos in users' list into the database */
-      Usr_DB_UpdateMyPrefAboutListWithPhotosPhoto ();
-   else
-      /* If parameter can't be retrieved from form,
-         get my preference from database */
-      Usr_GetMyPrefAboutListWithPhotosFromDB ();
-  }
-
-/*****************************************************************************/
-/** Put a hidden parameter with the preference about photos in users' list ***/
-/*****************************************************************************/
-
-void Usr_PutParamListWithPhotos (void)
-  {
-   Par_PutHiddenParamChar ("WithPhotosExists",'Y');
-   Par_PutHiddenParamChar ("WithPhotos",
-                           Gbl.Usrs.Listing.WithPhotos ? 'Y' :
-                        	                         'N');
-  }
-
-/*****************************************************************************/
-/********* Get from form the preference about photos in users' list **********/
-/*****************************************************************************/
-
-static bool Usr_GetParamListWithPhotosFromForm (void)
-  {
-   /***** Get if exists parameter with preference about photos in users' list *****/
-   if (Par_GetParToBool ("WithPhotosExists"))
-     {
-      /***** Parameter with preference about photos in users' list exists, so get it *****/
-      Gbl.Usrs.Listing.WithPhotos = Par_GetParToBool ("WithPhotos");
-      return true;
-     }
-
-   Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
-   return false;
-  }
-
-/*****************************************************************************/
-/***** Get my preference about photos in users' list for current course ******/
-/*****************************************************************************/
-
-void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumRows;
-
-   Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
-
-   /***** If no user logged or not course selected... *****/
-   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Crs.CrsCod)
-     {
-      /***** Get if listing of users must show photos from database *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not check if listing of users"
-			         " must show photos",
-		      "SELECT ListWithPhotos"	// row[0]
-		       " FROM crs_user_settings"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
-      if (NumRows == 1)                // Should be one only row
-        {
-         /* Get number of columns in class photo */
-         Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
-         row = mysql_fetch_row (mysql_res);
-         Gbl.Usrs.Listing.WithPhotos = (row[0][0] == 'Y');
-        }
-      else if (NumRows > 1)        // Error in database:
-				   // more than one row for a user in course
-         Err_ShowErrorAndExit ("Error when checking if listing of users"
-			       " must show photos.");
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-  }
-
-/*****************************************************************************/
-/**** Save my preference about photos in users' list for current course ******/
-/*****************************************************************************/
-
-static void Usr_DB_UpdateMyPrefAboutListWithPhotosPhoto (void)
-  {
-   if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
-      /***** Update number of colums in class photo for current course *****/
-      DB_QueryUPDATE ("can not update your preference about photos in listing",
-		      "UPDATE crs_user_settings"
-		        " SET ListWithPhotos='%c'"
-                      " WHERE UsrCod=%ld"
-                        " AND CrsCod=%ld",
-		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
-						    'N',
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
-  }
-
-/*****************************************************************************/
 /********** Put a link (form) to show list or class photo of guests **********/
 /*****************************************************************************/
 
@@ -7868,7 +6481,7 @@ void Usr_SeeGuests (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Sco_SetScopesForListingGuests ();
@@ -7887,7 +6500,7 @@ void Usr_SeeGuests (void)
 	{
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActLstGst);
-	    Usr_PutParamsPrefsAboutUsrList ();
+	    Set_PutParamsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -7909,7 +6522,7 @@ void Usr_SeeGuests (void)
 	       Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
 
 	       /***** Draw a class photo with guests *****/
-	       if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
+	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
 		  Lay_WriteHeaderClassPhoto (false,true,
 					     (Gbl.Scope.Current == HieLvl_CTR ||
 					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
@@ -7930,12 +6543,12 @@ void Usr_SeeGuests (void)
 		  /* Draw the classphoto/list */
 		  switch (Gbl.Usrs.Me.ListType)
 		    {
-		     case Usr_LIST_AS_CLASS_PHOTO:
+		     case Set_USR_LIST_AS_CLASS_PHOTO:
 			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
 					    Rol_GST,&Gbl.Usrs.Selected,
 					    PutForm);	// Put checkbox to select users?
 			break;
-		     case Usr_LIST_AS_LISTING:
+		     case Set_USR_LIST_AS_LISTING:
 			Usr_ListMainDataGsts (PutForm);	// Put checkbox to select users?
 			break;
 		     default:
@@ -8007,7 +6620,7 @@ void Usr_SeeStudents (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
@@ -8034,7 +6647,7 @@ void Usr_SeeStudents (void)
 	 case Rol_SYS_ADM:
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActLstStd);
-	       Usr_PutParamsPrefsAboutUsrList ();
+	       Set_PutParamsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 		     HTM_TxtColonNBSP (Txt_Scope);
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -8064,7 +6677,7 @@ void Usr_SeeStudents (void)
 	       Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
 
 	       /***** Draw a class photo with students of the course *****/
-	       if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
+	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
 		  Lay_WriteHeaderClassPhoto (false,true,
 					     (Gbl.Scope.Current == HieLvl_CRS ||
 					      Gbl.Scope.Current == HieLvl_DEG ||
@@ -8093,12 +6706,12 @@ void Usr_SeeStudents (void)
 		  /* Draw the classphoto/list */
 		  switch (Gbl.Usrs.Me.ListType)
 		    {
-		     case Usr_LIST_AS_CLASS_PHOTO:
+		     case Set_USR_LIST_AS_CLASS_PHOTO:
 			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
 					    Rol_STD,&Gbl.Usrs.Selected,
 					    PutForm);	// Put checkbox to select users?
 			break;
-		     case Usr_LIST_AS_LISTING:
+		     case Set_USR_LIST_AS_LISTING:
 			Usr_ListMainDataStds (PutForm);	// Put checkbox to select users?
 			break;
 		     default:
@@ -8174,7 +6787,7 @@ void Usr_SeeTeachers (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
@@ -8215,7 +6828,7 @@ void Usr_SeeTeachers (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstTch);
-	 Usr_PutParamsPrefsAboutUsrList ();
+	 Set_PutParamsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -8241,7 +6854,7 @@ void Usr_SeeTeachers (void)
 	       Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope,&Gbl.Scope.Current);
 
 	       /***** Draw a class photo with teachers of the course *****/
-	       if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
+	       if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
 		  Lay_WriteHeaderClassPhoto (false,true,
 					     (Gbl.Scope.Current == HieLvl_CRS ||
 					      Gbl.Scope.Current == HieLvl_DEG ||
@@ -8270,7 +6883,7 @@ void Usr_SeeTeachers (void)
 		  /***** Draw the classphoto/list  *****/
 		  switch (Gbl.Usrs.Me.ListType)
 		    {
-		     case Usr_LIST_AS_CLASS_PHOTO:
+		     case Set_USR_LIST_AS_CLASS_PHOTO:
 			/* List teachers and non-editing teachers */
 			Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
 					    Rol_TCH,&Gbl.Usrs.Selected,
@@ -8279,7 +6892,7 @@ void Usr_SeeTeachers (void)
 					    Rol_NET,&Gbl.Usrs.Selected,
 					    PutForm);	// Put checkbox to select users?
 			break;
-		     case Usr_LIST_AS_LISTING:
+		     case Set_USR_LIST_AS_LISTING:
 			/* Initialize field names */
 			Usr_SetUsrDatMainFieldNames ();
 
@@ -8630,12 +7243,12 @@ static void Usr_PutIconsListGsts (__attribute__((unused)) void *Args)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
+      case Set_USR_LIST_AS_CLASS_PHOTO:
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	    /***** Put icon to print guests *****/
 	    Usr_PutIconToPrintGsts ();
 	 break;
-      case Usr_LIST_AS_LISTING:
+      case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of guests *****/
 	 Usr_PutIconToShowGstsAllData ();
 	 break;
@@ -8655,12 +7268,12 @@ static void Usr_PutIconsListStds (__attribute__((unused)) void *Args)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
+      case Set_USR_LIST_AS_CLASS_PHOTO:
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	    /***** Put icon to print students *****/
 	    Usr_PutIconToPrintStds ();
 	 break;
-      case Usr_LIST_AS_LISTING:
+      case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of students *****/
 	 Usr_PutIconToShowStdsAllData ();
 	 break;
@@ -8680,12 +7293,12 @@ static void Usr_PutIconsListTchs (__attribute__((unused)) void *Args)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_LIST_AS_CLASS_PHOTO:
+      case Set_USR_LIST_AS_CLASS_PHOTO:
 	 if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
 	    /***** Put icon to print teachers *****/
 	    Usr_PutIconToPrintTchs ();
 	 break;
-      case Usr_LIST_AS_LISTING:
+      case Set_USR_LIST_AS_LISTING:
 	 /***** Put icon to show all data of teachers *****/
 	 Usr_PutIconToShowTchsAllData ();
 	 break;
@@ -8755,19 +7368,19 @@ static void Usr_PutIconToShowTchsAllData (void)
 
 static void Usr_ShowGstsAllDataParams (__attribute__((unused)) void *Args)
   {
-   Usr_PutParamListWithPhotos ();
+   Set_PutParamListWithPhotos ();
   }
 
 static void Usr_ShowStdsAllDataParams (__attribute__((unused)) void *Args)
   {
    Grp_PutParamsCodGrps ();
-   Usr_PutParamListWithPhotos ();
+   Set_PutParamListWithPhotos ();
   }
 
 static void Usr_ShowTchsAllDataParams (__attribute__((unused)) void *Args)
   {
    Sco_PutParamCurrentScope (&Gbl.Scope.Current);
-   Usr_PutParamListWithPhotos ();
+   Set_PutParamListWithPhotos ();
   }
 
 /*****************************************************************************/
@@ -8779,7 +7392,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Sco_SetScopesForListingGuests ();
@@ -8818,7 +7431,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
@@ -8871,7 +7484,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << HieLvl_SYS |
@@ -9477,328 +8090,8 @@ unsigned Usr_GetCachedNumUsrsNotBelongingToAnyCrs (void)
   }
 
 /*****************************************************************************/
-/************ Get average number of courses with users of a role *************/
-/*****************************************************************************/
-
-static double Usr_GetNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
-  {
-   /***** Get number of courses per user from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(CrsCod) AS NumCrss"
-						  " FROM crs_users"
-						 " GROUP BY UsrCod) AS NumCrssTable");
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(CrsCod) AS NumCrss"
-						  " FROM crs_users"
-						 " WHERE Role=%u"
-						 " GROUP BY UsrCod) AS NumCrssTable",
-					 (unsigned) Role);
-      case HieLvl_CTY:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM ins_instits,"
-						        "ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ins_instits.CtyCod=%ld"
-						   " AND ins_instits.InsCod=ctr_centers.InsCod"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM ins_instits,"
-						        "ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ins_instits.CtyCod=%ld"
-						   " AND ins_instits.InsCod=ctr_centers.InsCod"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_INS:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ctr_centers.InsCod=%ld"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						  " WHERE ctr_centers.InsCod=%ld"
-						    " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						    " AND deg_degrees.DegCod=crs_courses.DegCod"
-						    " AND crs_courses.CrsCod=crs_users.CrsCod"
-						    " AND crs_users.Role=%u"
-						  " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_CTR:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE deg_degrees.CtrCod=%ld"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE deg_degrees.CtrCod=%ld"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_DEG:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM crs_courses,"
-						        "crs_users"
-						 " WHERE crs_courses.DegCod=%ld"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of courses per user",
-					 "SELECT AVG(NumCrss)"
-					  " FROM (SELECT COUNT(crs_users.CrsCod) AS NumCrss"
-						  " FROM crs_courses,"
-						        "crs_users"
-						 " WHERE crs_courses.DegCod=%ld"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.UsrCod) AS NumCrssTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_CRS:
-         return 1.0;
-      default:
-         Err_WrongScopeExit ();
-         return 0.0;	// Not reached
-     }
-  }
-
-double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
-  {
-   static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
-     {
-      [Rol_UNK] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
-      [Rol_STD] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student
-      [Rol_NET] = FigCch_NUM_CRSS_PER_NET,	// Number of courses per non-editing teacher
-      [Rol_TCH] = FigCch_NUM_CRSS_PER_TCH,	// Number of courses per teacher
-     };
-   double NumCrssPerUsr;
-
-   /***** Get number of courses per user from cache *****/
-   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Scope,Cod,
-                                   FigCch_DOUBLE,&NumCrssPerUsr))
-     {
-      /***** Get current number of courses per user from database and update cache *****/
-      NumCrssPerUsr = Usr_GetNumCrssPerUsr (Scope,Cod,Role);
-      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Scope,Cod,
-                                    FigCch_DOUBLE,&NumCrssPerUsr);
-     }
-
-   return NumCrssPerUsr;
-  }
-
-/*****************************************************************************/
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
-
-static double Usr_GetNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
-  {
-   /***** Get number of users per course from database *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
-						  " FROM crs_users"
-						 " GROUP BY CrsCod) AS NumUsrsTable");
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(UsrCod) AS NumUsrs"
-						  " FROM crs_users"
-						 " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
-					 (unsigned) Role);
-      case HieLvl_CTY:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM ins_instits,"
-						        "ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ins_instits.CtyCod=%ld"
-						   " AND ins_instits.InsCod=ctr_centers.InsCod"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM ins_instits,"
-						        "ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ins_instits.CtyCod=%ld"
-						   " AND ins_instits.InsCod=ctr_centers.InsCod"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_INS:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ctr_centers.InsCod=%ld"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM ctr_centers,"
-						        "deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE ctr_centers.InsCod=%ld"
-						   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_CTR:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE deg_degrees.CtrCod=%ld"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM deg_degrees,"
-						        "crs_courses,"
-						        "crs_users"
-						 " WHERE deg_degrees.CtrCod=%ld"
-						   " AND deg_degrees.DegCod=crs_courses.DegCod"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_DEG:
-	 if (Role == Rol_UNK)	// Any user
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM crs_courses,"
-						        "crs_users"
-						 " WHERE crs_courses.DegCod=%ld"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod);
-	 else
-	    return DB_QuerySELECTDouble ("can not get number of users per course",
-					 "SELECT AVG(NumUsrs)"
-					  " FROM (SELECT COUNT(crs_users.UsrCod) AS NumUsrs"
-						  " FROM crs_courses,"
-						        "crs_users"
-						 " WHERE crs_courses.DegCod=%ld"
-						   " AND crs_courses.CrsCod=crs_users.CrsCod"
-						   " AND crs_users.Role=%u"
-						 " GROUP BY crs_users.CrsCod) AS NumUsrsTable",
-					 Cod,
-					 (unsigned) Role);
-      case HieLvl_CRS:
-	 return (double) Usr_GetNumUsrsInCrss (HieLvl_CRS,Cod,
-				               Role == Rol_UNK ? 1 << Rol_STD |
-							         1 << Rol_NET |
-							         1 << Rol_TCH :	// Any user
-							         1 << Role);
-
-      default:
-         Err_WrongScopeExit ();
-         return 0.0;	// Not reached
-     }
-  }
 
 double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
@@ -9816,7 +8109,7 @@ double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role
                                    FigCch_DOUBLE,&NumUsrsPerCrs))
      {
       /***** Get current number of users per course from database and update cache *****/
-      NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Scope,Cod,Role);
+      NumUsrsPerCrs = Enr_DB_GetAverageNumUsrsPerCrs (Scope,Cod,Role);
       FigCch_UpdateFigureIntoCache (FigureNumUsrsPerCrs[Role],Scope,Cod,
                                     FigCch_DOUBLE,&NumUsrsPerCrs);
      }
@@ -9825,28 +8118,31 @@ double Usr_GetCachedNumUsrsPerCrs (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role
   }
 
 /*****************************************************************************/
-/****************** Check if a user is banned in ranking *********************/
+/************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-bool Usr_DB_CheckIfUsrBanned (long UsrCod)
+double Usr_GetCachedNumCrssPerUsr (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
-   return (DB_QueryCOUNT ("can not check if user is banned",
-			  "SELECT COUNT(*)"
-			   " FROM usr_banned"
-			  " WHERE UsrCod=%ld",
-			  UsrCod) != 0);
-  }
+   static const FigCch_FigureCached_t FigureNumCrssPerUsr[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK] = FigCch_NUM_CRSS_PER_USR,	// Number of courses per user
+      [Rol_STD] = FigCch_NUM_CRSS_PER_STD,	// Number of courses per student
+      [Rol_NET] = FigCch_NUM_CRSS_PER_NET,	// Number of courses per non-editing teacher
+      [Rol_TCH] = FigCch_NUM_CRSS_PER_TCH,	// Number of courses per teacher
+     };
+   double NumCrssPerUsr;
 
-/*****************************************************************************/
-/**************** Remove user from banned users in ranking *******************/
-/*****************************************************************************/
+   /***** Get number of courses per user from cache *****/
+   if (!FigCch_GetFigureFromCache (FigureNumCrssPerUsr[Role],Scope,Cod,
+                                   FigCch_DOUBLE,&NumCrssPerUsr))
+     {
+      /***** Get current number of courses per user from database and update cache *****/
+      NumCrssPerUsr = Enr_DB_GetAverageNumCrssPerUsr (Scope,Cod,Role);
+      FigCch_UpdateFigureIntoCache (FigureNumCrssPerUsr[Role],Scope,Cod,
+                                    FigCch_DOUBLE,&NumCrssPerUsr);
+     }
 
-void Usr_DB_RemoveUsrFromBanned (long UsrCod)
-  {
-   DB_QueryDELETE ("can not remove user from users banned",
-		   "DELETE FROM usr_banned"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   return NumCrssPerUsr;
   }
 
 /*****************************************************************************/

@@ -1521,7 +1521,7 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
    extern const char *Txt_Save_changes;
 
    /***** Get my setting about photos in users' list for current course *****/
-   Usr_GetMyPrefAboutListWithPhotosFromDB ();
+   Set_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** List students (only me) *****/
    /* Begin box */
@@ -1607,7 +1607,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    /***** Get my preference about photos in users' list for current course *****/
-	    Usr_GetMyPrefAboutListWithPhotosFromDB ();
+	    Set_GetMyPrefAboutListWithPhotosFromDB ();
 
 	    /***** Initialize structure with user's data *****/
 	    Usr_UsrDataConstructor (&UsrDat);
@@ -2297,7 +2297,7 @@ static void Att_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_ListEventsToSelect (&Events,TypeOfView);
 
 	 /***** Get my preference about photos in users' list for current course *****/
-	 Usr_GetMyPrefAboutListWithPhotosFromDB ();
+	 Set_GetMyPrefAboutListWithPhotosFromDB ();
 
 	 /***** Show table with attendances for every student in list *****/
 	 Att_ListUsrsAttendanceTable (&Events,TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2412,7 +2412,7 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *TypeOfView)
 	    Att_ListEventsToSelect (&Events,*((Att_TypeOfView_t *) TypeOfView));
 
 	    /***** Get my preference about photos in users' list for current course *****/
-	    Usr_GetMyPrefAboutListWithPhotosFromDB ();
+	    Set_GetMyPrefAboutListWithPhotosFromDB ();
 
 	    /***** Show table with attendances for every student in list *****/
 	    Att_ListUsrsAttendanceTable (&Events,*((Att_TypeOfView_t *) TypeOfView),
@@ -2839,7 +2839,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	       if (Usr_CheckIfICanViewAtt (&UsrDat))
 		 {
-		  UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat);
 		 }
 	   }
@@ -3063,7 +3063,7 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	       if (Usr_CheckIfICanViewAtt (&UsrDat))
 		 {
-		  UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
 		  Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);
 		 }
 	   }

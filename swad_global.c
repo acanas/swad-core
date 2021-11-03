@@ -335,10 +335,10 @@ void Gbl_InitializeGlobals (void)
    Ins_FlushCacheUsrBelongsToIns ();
    Ctr_FlushCacheUsrBelongsToCtr ();
    Deg_FlushCacheUsrBelongsToDeg ();
-   Crs_FlushCacheUsrBelongsToCrs ();
-   Usr_FlushCacheUsrBelongsToCurrentCrs ();
-   Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
-   Usr_FlushCacheUsrSharesAnyOfMyCrs ();
+   Enr_FlushCacheUsrBelongsToCrs ();
+   Enr_FlushCacheUsrBelongsToCurrentCrs ();
+   Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+   Enr_FlushCacheUsrSharesAnyOfMyCrs ();
    Rol_FlushCacheMyRoleInCurrentCrs ();
    Rol_FlushCacheRoleUsrInCrs ();
    Prj_FlushCacheMyRolesInProject ();
@@ -359,7 +359,7 @@ void Gbl_Cleanup (void)
        !Gbl.WebService.IsWebService &&
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
       Ses_DB_RemoveParam ();
-   Crs_FreeMyCourses ();
+   Enr_FreeMyCourses ();
    Deg_FreeMyDegrees ();
    Ctr_FreeMyCenters ();
    Ins_FreeMyInstits ();

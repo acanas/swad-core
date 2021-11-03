@@ -150,7 +150,7 @@ static void Adm_ReqAddAdm (HieLvl_Level_t Scope,long Cod,
                          (Scope == HieLvl_INS && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
          if (ICanRegister)
            {
-            if (Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/center/degree
+            if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/center/degree
               {
                Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_an_administrator_of_Y,
                               Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
@@ -254,7 +254,7 @@ static void Adm_RegisterAdmin (struct UsrData *UsrDat,
    extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
 
    /***** Check if user was and administrator of current institution/center/degree *****/
-   if (Usr_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
+   if (Adm_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_is_already_an_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
    else        // User was not administrator of current institution/center/degree
@@ -353,7 +353,7 @@ static void Adm_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,
          if (ICanRemove)
            {
             /* Check if the other user is an admin of the current institution/center/degree */
-            if (Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))
+            if (Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))
               {                // The other user is an administrator of current institution/center/degree ==> ask for removing or remove her/him
                switch (ReqDelOrDelUsr)
                  {
@@ -433,7 +433,7 @@ static void Adm_EffectivelyRemAdm (struct UsrData *UsrDat,
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
 
-   if (Usr_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/center/degree
+   if (Adm_DB_CheckIfUsrIsAdm (UsrDat->UsrCod,Scope,Cod))        // User is administrator of current institution/center/degree
      {
       /***** Remove user as administrator of institution, center or degree *****/
       Adm_DB_RemAdmin (UsrDat->UsrCod,Scope,Cod);

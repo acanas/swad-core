@@ -95,6 +95,24 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/***** Check if a user is an administrator of a degree/center/institution ****/
+/*****************************************************************************/
+
+bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
+  {
+   /***** Get if a user is administrator of a degree from database *****/
+   return (DB_QueryCOUNT ("can not check if a user is administrator",
+			  "SELECT COUNT(*)"
+			   " FROM usr_admins"
+			  " WHERE UsrCod=%ld"
+			    " AND Scope='%s'"
+			    " AND Cod=%ld",
+			  UsrCod,
+			  Sco_GetDBStrFromScope (Scope),
+			  Cod) != 0);
+  }
+
+/*****************************************************************************/
 /***** Remove user as administrator of an institution, center or degree ******/
 /*****************************************************************************/
 

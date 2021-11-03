@@ -790,7 +790,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
-      Crs_GetMyCourses ();
+      Enr_GetMyCourses ();
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
@@ -977,7 +977,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = (Crs_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
+	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
 				                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	 HTM_TR_Begin (NULL);
@@ -2190,7 +2190,7 @@ void Crs_ContEditAfterChgCrs (void)
 	    PutButtonToRequestRegistration = true;
 	    break;
 	 case Rol_USR:
-	    PutButtonToRequestRegistration = !Crs_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+	    PutButtonToRequestRegistration = !Enr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 					                                  Crs_EditingCrs->CrsCod,
 					                                  false);
             break;
@@ -2198,7 +2198,7 @@ void Crs_ContEditAfterChgCrs (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-	       PutButtonToRequestRegistration = !Crs_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+	       PutButtonToRequestRegistration = !Enr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 									     Crs_EditingCrs->CrsCod,
 									     false);
 	    break;
@@ -2269,7 +2269,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
 void Crs_ReqSelectOneOfMyCourses (void)
   {
    /***** Fill the list with the courses I belong to, if not filled *****/
-   Crs_GetMyCourses ();
+   Enr_GetMyCourses ();
 
    /***** Select one of my courses *****/
    if (Gbl.Usrs.Me.MyCrss.Num)

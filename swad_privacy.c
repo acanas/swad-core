@@ -29,6 +29,7 @@
 
 #include "swad_action.h"
 #include "swad_box.h"
+#include "swad_enrolment_database.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -259,10 +260,10 @@ bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
 					// by me and my teachers if I am a student
 					// or me and my students if I am a teacher
          // Do both users share the same course but whit different role?
-	 return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);
+	 return Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
 	 // Do both users share the same course?
-         return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
+         return Enr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
       case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
          return Gbl.Usrs.Me.Logged;
       case Pri_VISIBILITY_WORLD:	// Public, visible by everyone, even unlogged visitors

@@ -382,7 +382,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show sessions results *****/
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	    ExaRes_ShowResults (Exams,Usr_OTHER,-1L,-1L,ExamsSelectedCommas);
 	   }
      }
@@ -453,7 +453,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams,long ExaCod)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show sessions results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       ExaRes_ShowResults (Exams,Usr_OTHER,-1L,ExaCod,NULL);
 	      }
 
@@ -530,7 +530,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams,long SesCod)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show sessions results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       ExaRes_ShowResults (Exams,Usr_OTHER,SesCod,-1L,NULL);
 	      }
 

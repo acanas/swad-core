@@ -319,7 +319,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show matches results *****/
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	    MchRes_ShowMchResults (Games,Usr_OTHER,-1L,-1L,GamesSelectedCommas);
 	   }
      }
@@ -419,7 +419,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show matches results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       MchRes_ShowMchResults (Games,Usr_OTHER,-1L,GamCod,NULL);
 	      }
 
@@ -494,7 +494,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show matches results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	       MchRes_ShowMchResults (Games,Usr_OTHER,MchCod,-1L,NULL);
 	      }
 

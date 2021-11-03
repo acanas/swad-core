@@ -32,6 +32,7 @@
 #include "swad_box.h"
 #include "swad_browser_database.h"
 #include "swad_database.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -896,7 +897,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    unsigned NumCrs;
    long CrsCod;
 
-   NumCrss = Usr_DB_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
+   NumCrss = Enr_DB_GetNumCrssOfUsrWithARole (Gbl.Usrs.Me.UsrDat.UsrCod,Role);
    fprintf (Gbl.F.Rep,"<li>");
    fprintf (Gbl.F.Rep,Txt_USER_in_COURSE,
 	    Txt_ROLES_SINGUL_Abc[Role][Gbl.Usrs.Me.UsrDat.Sex]);
@@ -908,11 +909,11 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    if (NumCrss)
      {
       fprintf (Gbl.F.Rep," (%u %s / %u %s):",
-	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,
+	       Enr_DB_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,
 		                           (1 << Rol_NET) |
 		                           (1 << Rol_TCH)),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,
+	       Enr_DB_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,
 					   (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
 

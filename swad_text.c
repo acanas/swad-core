@@ -85,6 +85,7 @@
 #include "swad_record.h"
 #include "swad_role.h"
 #include "swad_room.h"
+#include "swad_setting.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
@@ -55933,12 +55934,12 @@ const char *Txt_X_users_who_have_email =	// Warning: it is very important to inc
 	"%u utilizadores que t&ecirc;m email";
 #endif
 
-const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
+const char *Txt_USR_LIST_TYPES[Set_NUM_USR_LIST_TYPES] =
 	{
-	[Usr_LIST_UNKNOWN] =
+	[Set_USR_LIST_UNKNOWN] =
 	""
 	,
-	[Usr_LIST_AS_CLASS_PHOTO] =
+	[Set_USR_LIST_AS_CLASS_PHOTO] =
 #if   L==1	// ca
 	"Orla"
 #elif L==2	// de
@@ -55959,7 +55960,7 @@ const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
 	"Foto de formatura"
 #endif
 	,
-	[Usr_LIST_AS_LISTING] =
+	[Set_USR_LIST_AS_LISTING] =
 #if   L==1	// ca
 	"Llista"
 #elif L==2	// de

@@ -33,6 +33,7 @@
 #include "swad_account.h"
 #include "swad_account_database.h"
 #include "swad_admin.h"
+#include "swad_admin_database.h"
 #include "swad_announcement.h"
 #include "swad_attendance_database.h"
 #include "swad_box.h"
@@ -1364,25 +1365,25 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Check if the other user belongs to the current course *****/
    if (Gbl.Hierarchy.Level == HieLvl_CRS)
-      UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+      UsrBelongsToCrs = Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /***** Check if the other user is administrator of the current institution *****/
-      UsrIsInsAdmin = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+      UsrIsInsAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 					   HieLvl_INS,
 					   Gbl.Hierarchy.Ins.InsCod);
 
       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
 	 /***** Check if the other user is administrator of the current center *****/
-	 UsrIsCtrAdmin = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	 UsrIsCtrAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 					      HieLvl_CTR,
 					      Gbl.Hierarchy.Ctr.CtrCod);
 
 	 if (Gbl.Hierarchy.Deg.DegCod > 0)
 	    /***** Check if the other user is administrator of the current degree *****/
-	    UsrIsDegAdmin = Usr_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+	    UsrIsDegAdmin = Adm_DB_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
 						 HieLvl_DEG,
 						 Gbl.Hierarchy.Deg.DegCod);
 	}
@@ -1694,7 +1695,7 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
    /***** Register user in current course in database *****/
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
      {
-      if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+      if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
 	{
 	 if (RegRemRole != UsrDat->Roles.InCurrentCrs)	// The role must be updated
 	    /* Modify role */
@@ -1981,7 +1982,7 @@ void Enr_AskIfRejectSignUp (void)
                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       // User's data exist...
-      if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+      if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
          Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
@@ -2040,7 +2041,7 @@ void Enr_RejectSignUp (void)
                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
      {
       // User's data exist...
-      if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+      if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
          /* User already belongs to this course */
          Ale_ShowAlert (Ale_WARNING,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
@@ -2236,7 +2237,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	       DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
 
 	       if (UsrExists)
-		  UsrBelongsToCrs = Crs_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+		  UsrBelongsToCrs = Enr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
 								Crs.CrsCod,
 								false);
 	       else
@@ -2658,9 +2659,9 @@ static void Enr_ShowFormToEditOtherUsr (void)
       if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	{
 	 /* Check if this user belongs to the current course */
-	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
-	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 	    if (Gbl.Usrs.Other.UsrDat.Accepted)
 	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
 			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.Hierarchy.Crs.FullName);
@@ -2834,7 +2835,7 @@ void Enr_CreateNewUsr1 (void)
       /***** Register user in current course in database *****/
       if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	{
-	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
 	    if (NewRole != OldRole)	// The role must be updated
@@ -2953,7 +2954,7 @@ void Enr_ModifyUsr1 (void)
 		  NewRole = Rec_GetRoleFromRecordForm ();
 
 		  /***** Register user in current course in database *****/
-		  if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+		  if (Enr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
 		    {
 		     OldRole = Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs;	// Remember old role before changing it
 		     if (NewRole != OldRole)	// The role must be updated
@@ -3135,7 +3136,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
    bool ItsMe;
    Act_Action_t NextAction;
 
-   if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -3193,7 +3194,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
       /***** Remove user from all attendance events in course *****/
       Att_DB_RemoveUsrFromCrsAttEvents (UsrDat->UsrCod,Crs->CrsCod);
@@ -3243,7 +3244,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 
          /* Fill the list with the courses I belong to */
          Gbl.Usrs.Me.MyCrss.Filled = false;
-         Crs_GetMyCourses ();
+         Enr_GetMyCourses ();
 
          /* Set my roles */
 	 Gbl.Usrs.Me.Role.FromSession              =
@@ -3272,4 +3273,255 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
    else        // User does not belong to course
       if (QuietOrVerbose == Cns_VERBOSE)
 	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
+  }
+
+/*****************************************************************************/
+/*************** Get all my courses and store them in a list *****************/
+/*****************************************************************************/
+
+void Enr_GetMyCourses (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCrss;
+   unsigned NumCrs;
+   long CrsCod;
+
+   /***** Trivial check 1: if my courses are already filled, there's nothing to do *****/
+   if (Gbl.Usrs.Me.MyCrss.Filled)
+      return;
+
+   /***** Trivial check 2: if user's code is not set, don't query database *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0)
+      return;
+
+   /***** Remove temporary table with my courses *****/
+   Enr_DB_DropTmpTableMyCourses ();
+
+   /***** Create temporary table with my courses *****/
+   Enr_DB_CreateTmpTableMyCourses ();
+
+   /***** Get my courses from database *****/
+   NumCrss = Enr_DB_GetMyCourses (&mysql_res);
+   for (NumCrs = 0;
+	NumCrs < NumCrss;
+	NumCrs++)
+     {
+      /* Get next course */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get course code (row[0]) */
+      if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	{
+	 if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
+	    Err_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
+
+	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
+
+	 /* Get role (row[1]) and degree code (row[2]) */
+	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
+	 Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
+
+	 Gbl.Usrs.Me.MyCrss.Num++;
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Set boolean that indicates that my courses are already filled *****/
+   Gbl.Usrs.Me.MyCrss.Filled = true;
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my courses ************************/
+/*****************************************************************************/
+
+void Enr_FreeMyCourses (void)
+  {
+   if (Gbl.Usrs.Me.MyCrss.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyCrss.Filled = false;
+      Gbl.Usrs.Me.MyCrss.Num    = 0;
+
+      /***** Remove temporary table with my courses *****/
+      Enr_DB_DropTmpTableMyCourses ();
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Check if I belong to a course ***********************/
+/*****************************************************************************/
+
+bool Enr_CheckIfIBelongToCrs (long CrsCod)
+  {
+   unsigned NumMyCrs;
+
+   /***** Fill the list with the courses I belong to *****/
+   Enr_GetMyCourses ();
+
+   /***** Check if the course passed as parameter is any of my courses *****/
+   for (NumMyCrs = 0;
+        NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
+        NumMyCrs++)
+      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
+         return true;
+
+   return false;
+  }
+
+/*****************************************************************************/
+/******************** Check if a user belongs to a course ********************/
+/*****************************************************************************/
+
+void Enr_FlushCacheUsrBelongsToCrs (void)
+  {
+   Gbl.Cache.UsrBelongsToCrs.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToCrs.CrsCod = -1L;
+   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = false;
+   Gbl.Cache.UsrBelongsToCrs.Belongs = false;
+  }
+
+bool Enr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
+                                 bool CountOnlyAcceptedCourses)
+  {
+   /***** 1. Fast check: Trivial cases *****/
+   if (UsrCod <= 0 ||
+       CrsCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Gbl.Cache.UsrBelongsToCrs.UsrCod &&
+       CrsCod == Gbl.Cache.UsrBelongsToCrs.CrsCod &&
+       CountOnlyAcceptedCourses == Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses)
+      return Gbl.Cache.UsrBelongsToCrs.Belongs;
+
+   /***** 3. Slow check: Get if user belongs to course from database *****/
+   Gbl.Cache.UsrBelongsToCrs.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToCrs.CrsCod = CrsCod;
+   Gbl.Cache.UsrBelongsToCrs.CountOnlyAcceptedCourses = CountOnlyAcceptedCourses;
+   Gbl.Cache.UsrBelongsToCrs.Belongs = Enr_DB_CheckIfUsrBelongsToCrs (UsrCod,CrsCod,
+                                                                      CountOnlyAcceptedCourses);
+   return Gbl.Cache.UsrBelongsToCrs.Belongs;
+  }
+
+/*****************************************************************************/
+/***** Check if user belongs (no matter if he/she has accepted or not) *******/
+/***** to the current course                                           *******/
+/*****************************************************************************/
+
+void Enr_FlushCacheUsrBelongsToCurrentCrs (void)
+  {
+   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = false;
+  }
+
+bool Enr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Trivial cases *****/
+   if (UsrDat->UsrCod <= 0 ||
+       Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrDat->UsrCod == Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod)
+      return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
+
+   /***** 3. Fast check: If we know role of user in the current course *****/
+   if (UsrDat->Roles.InCurrentCrs != Rol_UNK)
+     {
+      Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
+      Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = UsrDat->Roles.InCurrentCrs == Rol_STD ||
+	                                         UsrDat->Roles.InCurrentCrs == Rol_NET ||
+	                                         UsrDat->Roles.InCurrentCrs == Rol_TCH;
+      return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
+     }
+
+   /***** 4. Fast / slow check: Get if user belongs to current course *****/
+   Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod  = UsrDat->UsrCod;
+   Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Enr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+						                          Gbl.Hierarchy.Crs.CrsCod,
+						                          false);
+   return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
+  }
+
+/*****************************************************************************/
+/***** Check if user belongs (no matter if he/she has accepted or not) *******/
+/***** to the current course                                           *******/
+/*****************************************************************************/
+
+void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void)
+  {
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = -1L;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = false;
+  }
+
+bool Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Trivial cases *****/
+   if (UsrDat->UsrCod <= 0 ||
+       Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrDat->UsrCod == Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod)
+      return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
+
+   /***** 3. Fast / slow check: Get if user belongs to current course
+                                and has accepted *****/
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Enr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
+						                               Gbl.Hierarchy.Crs.CrsCod,
+						                               true);
+   return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
+  }
+
+/*****************************************************************************/
+/*************** Check if a user belongs to any of my courses ****************/
+/*****************************************************************************/
+
+void Enr_FlushCacheUsrSharesAnyOfMyCrs (void)
+  {
+   Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = -1L;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = false;
+  }
+
+bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
+  {
+   bool ItsMe;
+
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: It is a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: It's me? *****/
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+   if (ItsMe)
+      return true;
+
+   /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
+   if (UsrDat->UsrCod == Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod)
+      return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
+
+   /***** 5. Fast check: Is course selected and we both belong to it? *****/
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+      if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))	// Course selected and we both belong to it
+         return true;
+
+   /***** 6. Fast/slow check: Does he/she belong to any course? *****/
+   Rol_GetRolesInAllCrss (UsrDat);
+   if (!(UsrDat->Roles.InCrss & ((1 << Rol_STD) |	// Any of his/her roles is student
+	                         (1 << Rol_NET) |	// or non-editing teacher
+			         (1 << Rol_TCH))))	// or teacher?
+      return false;
+
+   /***** 7. Slow check: Get if user shares any course with me from database *****/
+   Gbl.Cache.UsrSharesAnyOfMyCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs = Enr_DB_CheckIfUsrSharesAnyOfMyCrs (UsrDat->UsrCod);
+   return Gbl.Cache.UsrSharesAnyOfMyCrs.SharesAnyOfMyCrs;
   }

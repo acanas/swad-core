@@ -265,7 +265,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
-   Usr_GetAndUpdatePrefsAboutUsrList ();
+   Set_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();

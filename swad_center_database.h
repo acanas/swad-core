@@ -71,8 +71,6 @@ unsigned Ctr_DB_GetNumCtrsWithCrss (HieLvl_Level_t Scope,long Cod);
 unsigned Ctr_DB_GetNumCtrsWithUsrs (Rol_Role_t Role,
                                     HieLvl_Level_t Scope,long Cod);
 
-unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod);
-
 void Ctr_DB_UpdateCtrIns (long CtrCod,long NewInsCod);
 void Ctr_DB_UpdateCtrPlc (long CtrCod,long NewPlcCod);
 void Ctr_DB_UpdateCtrName (long CtrCod,const char *FieldName,const char *NewCtrName);
@@ -88,6 +86,9 @@ void Ctr_DB_GetCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
 void Ctr_DB_GetCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom);
 unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
+
+unsigned Ctr_DB_GetCtrsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long InsCod);
+bool Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
 
 void Ctr_DB_RemoveCenter (long CtrCod);
 

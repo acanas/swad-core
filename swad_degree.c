@@ -1939,3 +1939,147 @@ static void Deg_EditingDegreeDestructor (void)
       Deg_EditingDeg = NULL;
      }
   }
+
+/*****************************************************************************/
+/***** Get all my degrees (those of my courses) and store them in a list *****/
+/*****************************************************************************/
+
+void Deg_GetMyDegrees (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumDeg;
+   unsigned NumDegs;
+   long DegCod;
+
+   /***** If my degrees are yet filled, there's nothing to do *****/
+   if (!Gbl.Usrs.Me.MyDegs.Filled)
+     {
+      Gbl.Usrs.Me.MyDegs.Num = 0;
+
+      /***** Get my degrees from database *****/
+      NumDegs = Deg_DB_GetDegsFromUsr (&mysql_res,
+                                       Gbl.Usrs.Me.UsrDat.UsrCod,-1L);
+      for (NumDeg = 0;
+	   NumDeg < NumDegs;
+	   NumDeg++)
+	{
+	 /* Get next degree */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get degree code */
+	 if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	   {
+	    if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
+	       Err_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
+
+	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
+	    Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+
+	    Gbl.Usrs.Me.MyDegs.Num++;
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Set boolean that indicates that my degrees are yet filled *****/
+      Gbl.Usrs.Me.MyDegs.Filled = true;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my degrees ************************/
+/*****************************************************************************/
+
+void Deg_FreeMyDegrees (void)
+  {
+   if (Gbl.Usrs.Me.MyDegs.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyDegs.Filled = false;
+      Gbl.Usrs.Me.MyDegs.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/*********************** Check if I belong to a degree ***********************/
+/*****************************************************************************/
+
+bool Deg_CheckIfIBelongToDeg (long DegCod)
+  {
+   unsigned NumMyDeg;
+
+   /***** Fill the list with the degrees I belong to *****/
+   Deg_GetMyDegrees ();
+
+   /***** Check if the degree passed as parameter is any of my degrees *****/
+   for (NumMyDeg = 0;
+        NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
+        NumMyDeg++)
+      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
+         return true;
+   return false;
+  }
+
+/*****************************************************************************/
+/********* Get the degree in which a user is enroled in more courses *********/
+/*****************************************************************************/
+
+void Deg_GetUsrMainDeg (long UsrCod,
+		        char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
+		        Rol_Role_t *MaxRole)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get the degree in which a user is enroled in more courses *****/
+   if (Deg_DB_GetUsrMainDeg (&mysql_res,UsrCod))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get degree name (row[0]) */
+      Str_Copy (ShrtName,row[0],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+
+      /* Get maximum role (row[1]) */
+      *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+     }
+   else	// User is not enroled in any course
+     {
+      ShrtName[0] = '\0';
+      *MaxRole = Rol_UNK;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************* Check if a user belongs to a degree *********************/
+/*****************************************************************************/
+
+void Deg_FlushCacheUsrBelongsToDeg (void)
+  {
+   Gbl.Cache.UsrBelongsToDeg.UsrCod = -1L;
+   Gbl.Cache.UsrBelongsToDeg.DegCod = -1L;
+   Gbl.Cache.UsrBelongsToDeg.Belongs = false;
+  }
+
+bool Deg_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
+  {
+   /***** 1. Fast check: Trivial case *****/
+   if (UsrCod <= 0 ||
+       DegCod <= 0)
+      return false;
+
+   /***** 2. Fast check: If cached... *****/
+   if (UsrCod == Gbl.Cache.UsrBelongsToDeg.UsrCod &&
+       DegCod == Gbl.Cache.UsrBelongsToDeg.DegCod)
+      return Gbl.Cache.UsrBelongsToDeg.Belongs;
+
+   /***** 3. Slow check: Get if user belongs to degree from database *****/
+   Gbl.Cache.UsrBelongsToDeg.UsrCod = UsrCod;
+   Gbl.Cache.UsrBelongsToDeg.DegCod = DegCod;
+   Gbl.Cache.UsrBelongsToDeg.Belongs = Deg_DB_CheckIfUsrBelongsToDeg (UsrCod,DegCod);
+   return Gbl.Cache.UsrBelongsToDeg.Belongs;
+  }
