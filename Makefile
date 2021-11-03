@@ -90,7 +90,7 @@ OBJS = swad_account.o swad_account_database.o swad_action.o swad_admin.o \
        swad_timeline_favourite.o swad_timeline_form.o swad_timeline_note.o \
        swad_timeline_notification.o swad_timeline_post.o \
        swad_timeline_publication.o swad_timeline_share.o swad_timeline_user.o \
-       swad_timeline_who.o swad_timetable.o \
+       swad_timeline_who.o swad_timetable.o swad_timetable_database.o \
        swad_user.o \
        swad_xml.o \
        swad_zip.o

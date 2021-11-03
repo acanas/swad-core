@@ -1,7 +1,7 @@
 // swad_timetable.h: timetables
 
-#ifndef _SWAD_TT
-#define _SWAD_TT
+#ifndef _SWAD_TMT
+#define _SWAD_TMT
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -106,6 +106,16 @@ struct Tmt_Timetable
      } ContextualIcons;
   };
 
+struct Tmt_Column
+  {
+   long CrsCod;		// Course code (-1 if no course selected)
+   long GrpCod;		// Group code (-1 if no group selected)
+   Tmt_IntervalType_t IntervalType;
+   Tmt_ClassType_t ClassType;
+   unsigned DurationIntervals;
+   char Info[Tmt_MAX_BYTES_INFO + 1];
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -114,8 +124,5 @@ void Tmt_ShowClassTimeTable (void);
 void Tmt_EditCrsTimeTable (void);
 void Tmt_EditMyTutTimeTable (void);
 void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod);
-
-void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod);
-void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod);
 
 #endif

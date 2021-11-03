@@ -42,6 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_timetable.h"
+#include "swad_timetable_database.h"
 
 /*****************************************************************************/
 /*************************** External constants ******************************/
@@ -81,16 +82,6 @@ extern struct Globals Gbl;
 #define Tmt_MAX_BYTES_STR_CLASS_TYPE		256
 #define Tmt_MAX_BYTES_STR_DURATION		 32	// "hh:mm h"
 
-struct Tmt_Column
-  {
-   long CrsCod;		// Course code (-1 if no course selected)
-   long GrpCod;		// Group code (-1 if no group selected)
-   Tmt_IntervalType_t IntervalType;
-   Tmt_ClassType_t ClassType;
-   unsigned DurationIntervals;
-   char Info[Tmt_MAX_BYTES_INFO + 1];
-  };
-
 struct Tmt_Cell
   {
    unsigned NumColumns;
@@ -100,14 +91,6 @@ struct Tmt_Cell
 /*****************************************************************************/
 /************************** Private global variables *************************/
 /*****************************************************************************/
-
-static const char *Tmt_ClassTypeDB[Tmt_NUM_CLASS_TYPES] =
-  {
-   [Tmt_FREE     ] = "free",
-   [Tmt_LECTURE  ] = "lecture",
-   [Tmt_PRACTICAL] = "practical",
-   [Tmt_TUTORING ] = "tutoring",
-  };
 
 struct Tmt_Cell *Tmt_TimeTable[Tmt_DAYS_PER_WEEK];
 
@@ -137,7 +120,7 @@ static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args);
 
 static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
                                          long CrsCod);
-static void Tmt_WriteTutTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
+static void Tmt_WriteUsrTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
                                          long UsrCod);
 static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
                                      long UsrCod);
@@ -237,15 +220,17 @@ static void Tmt_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_All_groups;
 
    HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
-   switch (Gbl.Crs.Grps.WhichGrps)
-     {
-      case Grp_MY_GROUPS:
-        HTM_TxtF (Txt_Groups_OF_A_USER,Gbl.Usrs.Me.UsrDat.FullName);
-        break;
-      case Grp_ALL_GROUPS:
-        HTM_Txt (Txt_All_groups);
-        break;
-     }
+
+      switch (Gbl.Crs.Grps.WhichGrps)
+	{
+	 case Grp_MY_GROUPS:
+	   HTM_TxtF (Txt_Groups_OF_A_USER,Gbl.Usrs.Me.UsrDat.FullName);
+	   break;
+	 case Grp_ALL_GROUPS:
+	   HTM_Txt (Txt_All_groups);
+	   break;
+	}
+
    HTM_DIV_End ();
   }
 
@@ -255,6 +240,7 @@ static void Tmt_ShowTimeTableGrpsSelected (void)
 
 static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
   {
+   extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    char StrClassType[Tmt_MAX_BYTES_STR_CLASS_TYPE + 1];
    char StrDuration[Tmt_MAX_BYTES_STR_DURATION + 1];
    unsigned Hours;
@@ -286,7 +272,7 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
    for (Timetable->ClassType  = (Tmt_ClassType_t) 0;
 	Timetable->ClassType <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
 	Timetable->ClassType++)
-      if (!strcmp (StrClassType,Tmt_ClassTypeDB[Timetable->ClassType]))
+      if (!strcmp (StrClassType,Tmt_DB_ClassType[Timetable->ClassType]))
          break;
    if (Timetable->ClassType > (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1))
       Err_ShowErrorAndExit ("Type of timetable cell is missing.");
@@ -427,7 +413,7 @@ static void Tmt_PutContextualIcons (void *Timetable)
 
       if (((struct Tmt_Timetable *) Timetable)->ContextualIcons.PutIconPrint)
 	 Ico_PutContextualIconToPrint (((struct Tmt_Timetable *) Timetable)->Type == Tmt_COURSE_TIMETABLE ? ActPrnCrsTT :
-										                          ActPrnMyTT,
+										                            ActPrnMyTT,
 				       Grp_PutParamWhichGroups,&WhichGroups);
      }
   }
@@ -464,7 +450,7 @@ void Tmt_EditCrsTimeTable (void)
    Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewCrsTT,NULL,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
-   Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
+      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
   }
 
@@ -483,7 +469,7 @@ void Tmt_EditMyTutTimeTable (void)
    Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewMyTT,NULL,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
-   Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
+      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
    Box_BoxEnd ();
   }
 
@@ -539,7 +525,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
        Timetable->View == Tmt_TUT_EDIT)
      {
       Timetable->Config.Range.Hours.Start        = Tmt_START_HOUR;		// Day starts at this hour
-      Timetable->Config.Range.Hours.End	         = Tmt_END_HOUR;			// Day  ends  at this hour
+      Timetable->Config.Range.Hours.End	         = Tmt_END_HOUR;		// Day  ends  at this hour
       Timetable->Config.Range.MinutesPerInterval = Tmt_MinutesPerInterval[0];	// The smallest interval
       Tmt_TimeTableConfigureIntervalsAndAllocateTimeTable (Timetable);
      }
@@ -566,7 +552,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
             Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hierarchy.Crs.CrsCod);
 	    break;
          case Tmt_TUTORING_TIMETABLE:
-            Tmt_WriteTutTimeTableIntoDB (Timetable,UsrCod);
+            Tmt_WriteUsrTimeTableIntoDB (Timetable,UsrCod);
             break;
          default:
             break;
@@ -600,10 +586,7 @@ static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
    unsigned Column;
 
    /***** Remove former timetable *****/
-   DB_QueryDELETE ("can not remove former timetable",
-		   "DELETE FROM tmt_courses"
-		   " WHERE CrsCod=%ld",
-		   CrsCod);
+   Tmt_DB_RemoveCrsTimeTable (CrsCod);
 
    /***** Go across the timetable inserting classes into database *****/
    for (Weekday = 0;
@@ -619,29 +602,17 @@ static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
               Column++)
 	    if (Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType == Tmt_FIRST_INTERVAL &&
                 Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals)
-               DB_QueryINSERT ("can not create course timetable",
-        		       "INSERT INTO tmt_courses"
-        	               " (CrsCod,GrpCod,Weekday,StartTime,Duration,"
-        	               "ClassType,Info)"
-                               " VALUES"
-                               " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
-                               "'%s','%s')",
-			       CrsCod,
-			       Tmt_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
-			       Weekday,
-			       Hour,
-			       Min,
-			       Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
-			       Timetable->Config.SecondsPerInterval,
-			       Tmt_ClassTypeDB[Tmt_TimeTable[Weekday][Interval].Columns[Column].ClassType],
-			       Tmt_TimeTable[Weekday][Interval].Columns[Column].Info);
+	       Tmt_DB_InsertHourInCrsTimeTable (CrsCod,
+	                                        &Tmt_TimeTable[Weekday][Interval].Columns[Column],
+                                                Weekday,Hour,Min,
+                                                Timetable->Config.SecondsPerInterval);
   }
 
 /*****************************************************************************/
 /********************* Write tutor timetable into database *******************/
 /*****************************************************************************/
 
-static void Tmt_WriteTutTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
+static void Tmt_WriteUsrTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
                                          long UsrCod)
   {
    unsigned Weekday;
@@ -651,10 +622,7 @@ static void Tmt_WriteTutTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
    unsigned Column;
 
    /***** Remove former timetable *****/
-   DB_QueryDELETE ("can not remove former timetable",
-		   "DELETE FROM tmt_tutoring"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   Tmt_DB_RemoveUsrTimeTable (UsrCod);
 
    /***** Loop over timetable *****/
    for (Weekday = 0;
@@ -670,18 +638,10 @@ static void Tmt_WriteTutTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
               Column++)
 	    if (Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType == Tmt_FIRST_INTERVAL &&
                 Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals)
-               DB_QueryINSERT ("can not create office timetable",
-        		       "INSERT INTO tmt_tutoring"
-        	               " (UsrCod,Weekday,StartTime,Duration,Info)"
-                               " VALUES"
-                               " (%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),'%s')",
-			       UsrCod,
-			       Weekday,
-			       Hour,
-			       Min,
-			       Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals *
-			       Timetable->Config.SecondsPerInterval,
-			       Tmt_TimeTable[Weekday][Interval].Columns[Column].Info);
+   	       Tmt_DB_InsertHourInUsrTimeTable (UsrCod,
+	                                        &Tmt_TimeTable[Weekday][Interval].Columns[Column],
+                                                Weekday,Hour,Min,
+                                                Timetable->Config.SecondsPerInterval);
   }
 
 /*****************************************************************************/
@@ -691,6 +651,7 @@ static void Tmt_WriteTutTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
 static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
                                      long UsrCod)
   {
+   extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Incomplete_timetable_for_lack_of_space;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -712,168 +673,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
    bool Found;
 
    /***** Get timetable from database *****/
-   switch (Timetable->Type)
-     {
-      case Tmt_MY_TIMETABLE:
-         switch (Gbl.Crs.Grps.WhichGrps)
-           {
-            case Grp_MY_GROUPS:
-               NumRows = (unsigned)
-               DB_QuerySELECT (&mysql_res,"can not get timetable",
-			       "SELECT tmt_courses.Weekday,"				// row[0]
-				      "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
-				      "TIME_TO_SEC(tmt_courses.Duration) AS D,"		// row[2]
-				      "tmt_courses.Info,"				// row[3]
-				      "tmt_courses.ClassType,"				// row[4]
-				      "tmt_courses.GrpCod,"				// row[5]
-				      "tmt_courses.CrsCod"				// row[6]
-			        " FROM tmt_courses,"
-				      "crs_users"
-			       " WHERE crs_users.UsrCod=%ld"
-			         " AND tmt_courses.GrpCod=-1"
-			         " AND tmt_courses.CrsCod=crs_users.CrsCod"
-			       " UNION DISTINCT "
-			       "SELECT tmt_courses.Weekday,"				// row[0]
-				      "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
-				      "TIME_TO_SEC(tmt_courses.Duration) AS D,"		// row[2]
-				      "tmt_courses.Info,"				// row[3]
-				      "tmt_courses.ClassType,"				// row[4]
-				      "tmt_courses.GrpCod,"				// row[5]
-				      "tmt_courses.CrsCod"				// row[6]
-			        " FROM grp_users,"
-				      "tmt_courses"
-			       " WHERE grp_users.UsrCod=%ld"
-			         " AND grp_users.GrpCod=tmt_courses.GrpCod"
-			       " UNION "
-			       "SELECT Weekday,"					// row[0]
-				      "TIME_TO_SEC(StartTime) AS S,"			// row[1]
-				      "TIME_TO_SEC(Duration) AS D,"			// row[2]
-				      "Info,"						// row[3]
-				      "'tutoring' AS ClassType,"			// row[4]
-				      "-1 AS GrpCod,"					// row[5]
-				      "-1 AS CrsCod"					// row[6]
-			        " FROM tmt_tutoring"
-			       " WHERE UsrCod=%ld"
-			       " ORDER BY Weekday,"
-			                 "S,"
-			                 "ClassType,"
-			                 "GrpCod,"
-			                 "Info,"
-			                 "D DESC,"
-			                 "CrsCod",
-			     UsrCod,
-			     UsrCod,
-			     UsrCod);
-               break;
-            case Grp_ALL_GROUPS:
-               NumRows = (unsigned)
-               DB_QuerySELECT (&mysql_res,"can not get timetable",
-			       "SELECT tmt_courses.Weekday,"				// row[0]
-				      "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
-				      "TIME_TO_SEC(tmt_courses.Duration) AS D,"		// row[2]
-				      "tmt_courses.Info,"				// row[3]
-				      "tmt_courses.ClassType,"				// row[4]
-				      "tmt_courses.GrpCod,"				// row[5]
-				      "tmt_courses.CrsCod"				// row[6]
-			        " FROM tmt_courses,"
-				      "crs_users"
-			       " WHERE crs_users.UsrCod=%ld"
-			         " AND tmt_courses.CrsCod=crs_users.CrsCod"
-			       " UNION "
-			       "SELECT Weekday,"					// row[0]
-				      "TIME_TO_SEC(StartTime) AS S,"			// row[1]
-				      "TIME_TO_SEC(Duration) AS D,"			// row[2]
-				      "Info,"						// row[3]
-				      "'tutoring' AS ClassType,"			// row[4]
-				      "-1 AS GrpCod,"					// row[5]
-				      "-1 AS CrsCod"					// row[6]
-			        " FROM tmt_tutoring"
-			       " WHERE UsrCod=%ld"
-			       " ORDER BY Weekday,"
-				         "S,"
-				         "ClassType,"
-				         "GrpCod,"
-				         "Info,"
-				         "D DESC,"
-				         "CrsCod",
-			       UsrCod,
-			       UsrCod);
-               break;
-           }
-	 break;
-      case Tmt_COURSE_TIMETABLE:
-         if (Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS ||
-             Gbl.Action.Act == ActEdiCrsTT ||
-             Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
-            NumRows = (unsigned)
-            DB_QuerySELECT (&mysql_res,"can not get timetable",
-			    "SELECT Weekday,"				// row[0]
-				   "TIME_TO_SEC(StartTime) AS S,"	// row[1]
-				   "TIME_TO_SEC(Duration) AS D,"	// row[2]
-				   "Info,"				// row[3]
-				   "ClassType,"				// row[4]
-				   "GrpCod"				// row[5]
-			     " FROM tmt_courses"
-			    " WHERE CrsCod=%ld"
-			    " ORDER BY Weekday,"
-				      "S,"
-				      "ClassType,"
-				      "GrpCod,"
-				      "Info,"
-				      "D DESC",
-			    Gbl.Hierarchy.Crs.CrsCod);
-         else
-            NumRows = (unsigned)
-            DB_QuerySELECT (&mysql_res,"can not get timetable",
-			    "SELECT tmt_courses.Weekday,"			// row[0]
-				   "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
-				   "TIME_TO_SEC(tmt_courses.Duration) AS D,"	// row[2]
-				   "tmt_courses.Info,"				// row[3]
-				   "tmt_courses.ClassType,"			// row[4]
-				   "tmt_courses.GrpCod"				// row[5]
-			     " FROM tmt_courses,"
-				   "crs_users"
-			    " WHERE tmt_courses.CrsCod=%ld"
-			      " AND tmt_courses.GrpCod=-1"
-			      " AND crs_users.UsrCod=%ld"
-			      " AND tmt_courses.CrsCod=crs_users.CrsCod"
-			    " UNION DISTINCT "
-			    "SELECT tmt_courses.Weekday,"			// row[0]
-				   "TIME_TO_SEC(tmt_courses.StartTime) AS S,"	// row[1]
-				   "TIME_TO_SEC(tmt_courses.Duration) AS D,"	// row[2]
-				   "tmt_courses.Info,"				// row[3]
-				   "tmt_courses.ClassType,"			// row[4]
-				   "tmt_courses.GrpCod"				// row[5]
-			     " FROM tmt_courses,"
-				   "grp_users"
-			    " WHERE tmt_courses.CrsCod=%ld"
-			      " AND grp_users.UsrCod=%ld"
-			      " AND tmt_courses.GrpCod=grp_users.GrpCod"
-			    " ORDER BY Weekday,"
-				      "S,"
-				      "ClassType,"
-				      "GrpCod,"
-				      "Info,"
-				      "D DESC",
-			    Gbl.Hierarchy.Crs.CrsCod,UsrCod,
-			    Gbl.Hierarchy.Crs.CrsCod,UsrCod);
-	 break;
-      case Tmt_TUTORING_TIMETABLE:
-         NumRows = (unsigned)
-         DB_QuerySELECT (&mysql_res,"can not get timetable",
-		         "SELECT Weekday,"			// row[0]
-			        "TIME_TO_SEC(StartTime) AS S,"	// row[1]
-			        "TIME_TO_SEC(Duration) AS D,"	// row[2]
-			        "Info"				// row[3]
-			  " FROM tmt_tutoring"
-		         " WHERE UsrCod=%ld"
-		         " ORDER BY Weekday,"
-				   "S,"
-				   "Info,"
-				   "D DESC",
-		         UsrCod);
-         break;
-     }
+   NumRows = Tmt_DB_GetTimeTable (&mysql_res,Timetable->Type,UsrCod);
 
    /***** If viewing (not editing) ==>
           calculate range of hours and resolution *****/
@@ -976,10 +776,10 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 	   {
 	    case Tmt_COURSE_TIMETABLE:
 	    case Tmt_MY_TIMETABLE:
-	       for (ClassType = Tmt_LECTURE, Found = false;
+	       for (ClassType  = Tmt_LECTURE, Found = false;
 		    ClassType <= Tmt_TUTORING;
 		    ClassType++)
-		  if (!strcmp (row[4],Tmt_ClassTypeDB[ClassType]))
+		  if (!strcmp (row[4],Tmt_DB_ClassType[ClassType]))
 		    {
 		     Found = true;
 		     break;
@@ -1196,140 +996,140 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
    /***** Begin table *****/
    HTM_TABLE_Begin ("TT");
 
-   /***** Top row used for column adjustement *****/
-   Tmt_TimeTableDrawAdjustRow ();
+      /***** Top row used for column adjustement *****/
+      Tmt_TimeTableDrawAdjustRow ();
 
-   /***** Row with day names *****/
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR_BIG RM\" style=\"width:%u%%;\"",
-		 Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-   HTM_TxtF ("%02u:00",Timetable->Config.Range.Hours.Start);
-   HTM_TD_End ();
-
-   Tmt_DrawCellAlignTimeTable ();
-   Tmt_TimeTableDrawDaysCells ();
-   Tmt_DrawCellAlignTimeTable ();
-
-   HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR_BIG LM\" style=\"width:%u%%;\"",
-		 Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-   HTM_TxtF ("%02u:00",Timetable->Config.Range.Hours.Start);
-   HTM_TD_End ();
-
-   HTM_TR_End ();
-
-   /***** Get list of groups types and groups in this course *****/
-   if (Gbl.Action.Act == ActEdiCrsTT ||
-       Gbl.Action.Act == ActChgCrsTT)
-      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   /***** Write the table row by row *****/
-   for (Interval = 0, Min = Timetable->Config.Range.MinutesPerInterval;
-	Interval < Timetable->Config.IntervalsPerDay;
-	Interval++,
-	Min = (Min + Timetable->Config.Range.MinutesPerInterval) %
-	      Tmt_SECONDS_PER_MINUTE)
-     {
+      /***** Row with day names *****/
       HTM_TR_Begin (NULL);
 
-      /* Left hour:minutes cell */
-      if (Interval % 2)
-	 Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
-	                           (Interval + 2) / Timetable->Config.IntervalsPerHour,
-	                           Min,
-	                           "RM");
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR_BIG RM\" style=\"width:%u%%;\"",
+		       Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
+	    HTM_TxtF ("%02u:00",Timetable->Config.Range.Hours.Start);
+	 HTM_TD_End ();
 
-      /* Empty column used to adjust height */
-      Tmt_DrawCellAlignTimeTable ();
+	 Tmt_DrawCellAlignTimeTable ();
+	 Tmt_TimeTableDrawDaysCells ();
+	 Tmt_DrawCellAlignTimeTable ();
 
-      /* Row for this hour */
-      for (DayColumn = 0;
-	   DayColumn < Tmt_DAYS_PER_WEEK;
-	   DayColumn++)
-        {
-	 /* Weekday == 0 ==> monday,
-	            ...
-	    Weekday == 6 ==> sunday */
-	 Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
-
-         /* Check how many colums are needed.
-            For each item (class) in this hour from left to right,
-            we must check the maximum of columns */
-         ColumnsToDraw = Tmt_CalculateColsToDrawInCell (Timetable,
-                                                       true,	// Top call, non recursive
-                                                       Weekday,Interval);
-         if (ColumnsToDraw == 0 &&
-             (Timetable->View == Tmt_CRS_VIEW ||
-              Timetable->View == Tmt_TUT_VIEW))
-            ColumnsToDraw = 1;
-	 // If editing and there's place for more columns,
-         // a potential new column is added at the end of each day
-         ColumnsToDrawIncludingExtraColumn = ColumnsToDraw;
-         if (ColumnsToDraw < Tmt_MAX_COLUMNS_PER_CELL &&
-             (Timetable->View == Tmt_CRS_EDIT ||
-              Timetable->View == Tmt_TUT_EDIT))
-            ColumnsToDrawIncludingExtraColumn++;
-
-         /* Draw cells */
-         for (Column = 0, ContinuousFreeMinicolumns = 0;
-              Column < ColumnsToDrawIncludingExtraColumn;
-              Column++)
-            if (Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType == Tmt_FREE_INTERVAL)
-               ContinuousFreeMinicolumns += Tmt_NUM_MINICOLUMNS_PER_DAY /
-                                            ColumnsToDrawIncludingExtraColumn;
-            else
-              {
-               if (ContinuousFreeMinicolumns)
-                 {
-                  Tmt_TimeTableDrawCell (Timetable,
-                                        Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
-                                        -1L,Tmt_FREE_INTERVAL,Tmt_FREE,0,-1L,NULL);
-                  ContinuousFreeMinicolumns = 0;
-                 }
-               Tmt_TimeTableDrawCell (Timetable,
-                                     Weekday,Interval,Column,
-                                     Tmt_NUM_MINICOLUMNS_PER_DAY /
-                                     ColumnsToDrawIncludingExtraColumn,
-	                             Tmt_TimeTable[Weekday][Interval].Columns[Column].CrsCod,
-				     Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType,
-	                             Tmt_TimeTable[Weekday][Interval].Columns[Column].ClassType,
-                                     Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals,
-	                             Tmt_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
-                                     Tmt_TimeTable[Weekday][Interval].Columns[Column].Info);
-              }
-         if (ContinuousFreeMinicolumns)
-            Tmt_TimeTableDrawCell (Timetable,
-                                  Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
-                                  -1L,Tmt_FREE_INTERVAL,Tmt_FREE,0,-1L,NULL);
-        }
-
-      /* Empty column used to adjust height */
-      Tmt_DrawCellAlignTimeTable ();
-
-      /* Right hour:minutes cell */
-      if (Interval % 2)
-	 Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
-	                           (Interval + 2) / Timetable->Config.IntervalsPerHour,
-	                           Min,
-	                           "LM");
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR_BIG LM\" style=\"width:%u%%;\"",
+		       Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
+	    HTM_TxtF ("%02u:00",Timetable->Config.Range.Hours.Start);
+	 HTM_TD_End ();
 
       HTM_TR_End ();
-     }
 
-   /***** Free list of groups types and groups in this course *****/
-   if (Gbl.Action.Act == ActEdiCrsTT ||
-       Gbl.Action.Act == ActChgCrsTT)
-      Grp_FreeListGrpTypesAndGrps ();
+      /***** Get list of groups types and groups in this course *****/
+      if (Gbl.Action.Act == ActEdiCrsTT ||
+	  Gbl.Action.Act == ActChgCrsTT)
+	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Row with day names *****/
-   HTM_TR_Begin (NULL);
-   Tmt_DrawCellAlignTimeTable ();
-   Tmt_TimeTableDrawDaysCells ();
-   Tmt_DrawCellAlignTimeTable ();
-   HTM_TR_End ();
+      /***** Write the table row by row *****/
+      for (Interval = 0, Min = Timetable->Config.Range.MinutesPerInterval;
+	   Interval < Timetable->Config.IntervalsPerDay;
+	   Interval++,
+	   Min = (Min + Timetable->Config.Range.MinutesPerInterval) %
+		 Tmt_SECONDS_PER_MINUTE)
+	{
+	 HTM_TR_Begin (NULL);
 
-   /***** Bottom row used for column adjustement *****/
-   Tmt_TimeTableDrawAdjustRow ();
+	    /* Left hour:minutes cell */
+	    if (Interval % 2)
+	       Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
+					 (Interval + 2) / Timetable->Config.IntervalsPerHour,
+					 Min,
+					 "RM");
+
+	    /* Empty column used to adjust height */
+	    Tmt_DrawCellAlignTimeTable ();
+
+	    /* Row for this hour */
+	    for (DayColumn = 0;
+		 DayColumn < Tmt_DAYS_PER_WEEK;
+		 DayColumn++)
+	      {
+	       /* Weekday == 0 ==> monday,
+			  ...
+		  Weekday == 6 ==> sunday */
+	       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
+
+	       /* Check how many colums are needed.
+		  For each item (class) in this hour from left to right,
+		  we must check the maximum of columns */
+	       ColumnsToDraw = Tmt_CalculateColsToDrawInCell (Timetable,
+							     true,	// Top call, non recursive
+							     Weekday,Interval);
+	       if (ColumnsToDraw == 0 &&
+		   (Timetable->View == Tmt_CRS_VIEW ||
+		    Timetable->View == Tmt_TUT_VIEW))
+		  ColumnsToDraw = 1;
+	       // If editing and there's place for more columns,
+	       // a potential new column is added at the end of each day
+	       ColumnsToDrawIncludingExtraColumn = ColumnsToDraw;
+	       if (ColumnsToDraw < Tmt_MAX_COLUMNS_PER_CELL &&
+		   (Timetable->View == Tmt_CRS_EDIT ||
+		    Timetable->View == Tmt_TUT_EDIT))
+		  ColumnsToDrawIncludingExtraColumn++;
+
+	       /* Draw cells */
+	       for (Column = 0, ContinuousFreeMinicolumns = 0;
+		    Column < ColumnsToDrawIncludingExtraColumn;
+		    Column++)
+		  if (Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType == Tmt_FREE_INTERVAL)
+		     ContinuousFreeMinicolumns += Tmt_NUM_MINICOLUMNS_PER_DAY /
+						  ColumnsToDrawIncludingExtraColumn;
+		  else
+		    {
+		     if (ContinuousFreeMinicolumns)
+		       {
+			Tmt_TimeTableDrawCell (Timetable,
+					      Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
+					      -1L,Tmt_FREE_INTERVAL,Tmt_FREE,0,-1L,NULL);
+			ContinuousFreeMinicolumns = 0;
+		       }
+		     Tmt_TimeTableDrawCell (Timetable,
+					   Weekday,Interval,Column,
+					   Tmt_NUM_MINICOLUMNS_PER_DAY /
+					   ColumnsToDrawIncludingExtraColumn,
+					   Tmt_TimeTable[Weekday][Interval].Columns[Column].CrsCod,
+					   Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType,
+					   Tmt_TimeTable[Weekday][Interval].Columns[Column].ClassType,
+					   Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals,
+					   Tmt_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
+					   Tmt_TimeTable[Weekday][Interval].Columns[Column].Info);
+		    }
+	       if (ContinuousFreeMinicolumns)
+		  Tmt_TimeTableDrawCell (Timetable,
+					Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
+					-1L,Tmt_FREE_INTERVAL,Tmt_FREE,0,-1L,NULL);
+	      }
+
+	    /* Empty column used to adjust height */
+	    Tmt_DrawCellAlignTimeTable ();
+
+	    /* Right hour:minutes cell */
+	    if (Interval % 2)
+	       Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
+					 (Interval + 2) / Timetable->Config.IntervalsPerHour,
+					 Min,
+					 "LM");
+
+	 HTM_TR_End ();
+	}
+
+      /***** Free list of groups types and groups in this course *****/
+      if (Gbl.Action.Act == ActEdiCrsTT ||
+	  Gbl.Action.Act == ActChgCrsTT)
+	 Grp_FreeListGrpTypesAndGrps ();
+
+      /***** Row with day names *****/
+      HTM_TR_Begin (NULL);
+	 Tmt_DrawCellAlignTimeTable ();
+	 Tmt_TimeTableDrawDaysCells ();
+	 Tmt_DrawCellAlignTimeTable ();
+      HTM_TR_End ();
+
+      /***** Bottom row used for column adjustement *****/
+      Tmt_TimeTableDrawAdjustRow ();
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -1346,24 +1146,24 @@ static void Tmt_TimeTableDrawAdjustRow (void)
 
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"Tmt_HOURCOL\"");
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"Tmt_HOURCOL\"");
+      HTM_TD_End ();
 
-   Tmt_DrawCellAlignTimeTable ();
-   for (Weekday = 0;
-	Weekday < Tmt_DAYS_PER_WEEK;
-	Weekday++)
-      for (Minicolumn = 0;
-	   Minicolumn < Tmt_NUM_MINICOLUMNS_PER_DAY;
-	   Minicolumn++)
-	{
-         HTM_TD_Begin ("class=\"Tmt_MINICOL\"");
-         HTM_TD_End ();
-	}
-   Tmt_DrawCellAlignTimeTable ();
+      Tmt_DrawCellAlignTimeTable ();
+      for (Weekday = 0;
+	   Weekday < Tmt_DAYS_PER_WEEK;
+	   Weekday++)
+	 for (Minicolumn = 0;
+	      Minicolumn < Tmt_NUM_MINICOLUMNS_PER_DAY;
+	      Minicolumn++)
+	   {
+	    HTM_TD_Begin ("class=\"Tmt_MINICOL\"");
+	    HTM_TD_End ();
+	   }
+      Tmt_DrawCellAlignTimeTable ();
 
-   HTM_TD_Begin ("class=\"Tmt_HOURCOL\"");
-   HTM_TD_End ();
+      HTM_TD_Begin ("class=\"Tmt_HOURCOL\"");
+      HTM_TD_End ();
 
    HTM_TR_End ();
   }
@@ -1388,7 +1188,7 @@ static void Tmt_TimeTableDrawDaysCells (void)
 		    Weekday == 6 ? "Tmt_SUNDAY" :	// Sunday drawn in red
 				   "Tmt_DAY",	// Monday to Saturday
 		    Tmt_PERCENT_WIDTH_OF_A_DAY);
-      HTM_Txt (Txt_DAYS_CAPS[Weekday]);
+	 HTM_Txt (Txt_DAYS_CAPS[Weekday]);
       HTM_TD_End ();
      }
   }
@@ -1403,7 +1203,7 @@ static void Tmt_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Al
 		 Min ? "Tmt_HOUR_SMALL" :
 		       "Tmt_HOUR_BIG",
 		 Align);
-   HTM_TxtF ("%02u:%02u",Hour,Min);
+      HTM_TxtF ("%02u:%02u",Hour,Min);
    HTM_TD_End ();
   }
 
@@ -1505,6 +1305,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
                                    long CrsCod,Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,long GrpCod,const char *Info)
   {
+   extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Group;
@@ -1604,251 +1405,222 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
    free (ColSpanStr);
    free (ClassStr);
 
-   /***** Form to modify this cell *****/
-   if (Timetable->View == Tmt_CRS_EDIT)
-      Frm_BeginForm (ActChgCrsTT);
-   else if (Timetable->View == Tmt_TUT_EDIT)
-      Frm_BeginForm (ActChgTut);
+      /***** Form to modify this cell *****/
+      if (Timetable->View == Tmt_CRS_EDIT)
+	 Frm_BeginForm (ActChgCrsTT);
+      else if (Timetable->View == Tmt_TUT_EDIT)
+	 Frm_BeginForm (ActChgTut);
 
-   /***** Draw cell depending on type of view *****/
-   switch (Timetable->View)
-     {
-      case Tmt_CRS_VIEW:	// View course timetable
-      case Tmt_TUT_VIEW:	// View tutoring timetable
-	 if (IntervalType != Tmt_FREE_INTERVAL) // If cell is not empty...
-	   {
-	    /***** Begin cell *****/
-	    HTM_DIV_Begin ("class=\"Tmt_CELL Tmt_TXT\"");
-
-	    /***** Course name *****/
-	    if (Timetable->Type == Tmt_MY_TIMETABLE)
-              {
-               Crs.CrsCod = CrsCod;
-               Crs_GetDataOfCourseByCod (&Crs);
-               if (ClassType == Tmt_LECTURE ||
-                   ClassType == Tmt_PRACTICAL)
-        	 {
-		  HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
-			                     Txt_unknown_removed_course);
-		  HTM_BR ();
-        	 }
-              }
-
-	    /***** Type of class and duration *****/
-	    HTM_TxtF ("%s (%u:%02u)",
-		      Txt_TIMETABLE_CLASS_TYPES[ClassType],
-	              (DurationNumIntervals / Timetable->Config.IntervalsPerHour),	// Hours
-	              (DurationNumIntervals % Timetable->Config.IntervalsPerHour) *
-	              Timetable->Config.Range.MinutesPerInterval);			// Minutes
-
-	    /***** Group *****/
-	    if (Timetable->View == Tmt_CRS_VIEW &&
-		GrpCod > 0)
+      /***** Draw cell depending on type of view *****/
+      switch (Timetable->View)
+	{
+	 case Tmt_CRS_VIEW:	// View course timetable
+	 case Tmt_TUT_VIEW:	// View tutoring timetable
+	    if (IntervalType != Tmt_FREE_INTERVAL) // If cell is not empty...
 	      {
-	       HTM_BR ();
-	       HTM_Txt (GrpDat.GrpTypName);
-	       HTM_BR ();
-	       HTM_Txt (GrpDat.GrpName);
-	       if (GrpDat.Room.RooCod > 0)
-		 {
-		  HTM_BR ();
-		  HTM_TxtF ("(%s)",GrpDat.Room.ShrtName);
-		 }
+	       /***** Begin cell *****/
+	       HTM_DIV_Begin ("class=\"Tmt_CELL Tmt_TXT\"");
+
+		  /***** Course name *****/
+		  if (Timetable->Type == Tmt_MY_TIMETABLE)
+		    {
+		     Crs.CrsCod = CrsCod;
+		     Crs_GetDataOfCourseByCod (&Crs);
+		     if (ClassType == Tmt_LECTURE ||
+			 ClassType == Tmt_PRACTICAL)
+		       {
+			HTM_Txt (Crs.ShrtName[0] ? Crs.ShrtName :
+						   Txt_unknown_removed_course);
+			HTM_BR ();
+		       }
+		    }
+
+		  /***** Type of class and duration *****/
+		  HTM_TxtF ("%s (%u:%02u)",
+			    Txt_TIMETABLE_CLASS_TYPES[ClassType],
+			    (DurationNumIntervals / Timetable->Config.IntervalsPerHour),	// Hours
+			    (DurationNumIntervals % Timetable->Config.IntervalsPerHour) *
+			    Timetable->Config.Range.MinutesPerInterval);			// Minutes
+
+		  /***** Group *****/
+		  if (Timetable->View == Tmt_CRS_VIEW &&
+		      GrpCod > 0)
+		    {
+		     HTM_BR ();
+		     HTM_Txt (GrpDat.GrpTypName);
+		     HTM_BR ();
+		     HTM_Txt (GrpDat.GrpName);
+		     if (GrpDat.Room.RooCod > 0)
+		       {
+			HTM_BR ();
+			HTM_TxtF ("(%s)",GrpDat.Room.ShrtName);
+		       }
+		    }
+
+		  /***** Info *****/
+		  if (Info)
+		     if (Info[0])
+		       {
+			HTM_BR ();
+			HTM_Txt (Info);
+		       }
+
+	       /***** End cell *****/
+	       HTM_DIV_End ();
 	      }
-
-	    /***** Info *****/
-	    if (Info)
-	       if (Info[0])
-		 {
-		  HTM_BR ();
-	          HTM_Txt (Info);
-		 }
-
-	    /***** End cell *****/
-            HTM_DIV_End ();
-	   }
-	 break;
-      case Tmt_CRS_EDIT:
-      case Tmt_TUT_EDIT:
-	 /***** Create unique string for this cell used in labels *****/
-	 if (asprintf (&CellStr,"%02u%02u%02u",
-		       Weekday,Interval,Column) < 0)
-	    Err_NotEnoughMemoryExit ();
-
-	 /***** Put hidden parameters *****/
-         Par_PutHiddenParamUnsigned (NULL,"TTDay",Weekday);
-         Par_PutHiddenParamUnsigned (NULL,"TTInt",Interval);
-         Par_PutHiddenParamUnsigned (NULL,"TTCol",Column);
-
-	 /***** Class type *****/
-	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "name=\"TTTyp\" class=\"Tmt_TYP\"");
-	 for (CT  = (Tmt_ClassType_t) 0;
-	      CT <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
-	      CT++)
-	    if ((CT == Tmt_FREE) ||
-		((Timetable->View == Tmt_CRS_EDIT) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
-		((Timetable->View == Tmt_TUT_EDIT) && (CT == Tmt_TUTORING)))
-	       HTM_OPTION (HTM_Type_STRING,Tmt_ClassTypeDB[CT],
-			   CT == ClassType,false,
-			   "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
-	 HTM_SELECT_End ();
-
-	 if (IntervalType == Tmt_FREE_INTERVAL)
-	   {
-            for (i = Interval + 1;
-        	 i < Timetable->Config.IntervalsPerDay;
-        	 i++)
-              if (Tmt_TimeTable[Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
-                  break;
-            MaxDuration = i - Interval;
-	    Dur = (MaxDuration >= Timetable->Config.IntervalsPerHour) ? Timetable->Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
-	                                                                MaxDuration;				// MaxDuration  < 1h ==> Dur = MaxDuration
-	    if (asprintf (&TTDur,"%u:%02u",
-		          (Dur / Timetable->Config.IntervalsPerHour),		// Hours
-		          (Dur % Timetable->Config.IntervalsPerHour) *
-		          Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
+	    break;
+	 case Tmt_CRS_EDIT:
+	 case Tmt_TUT_EDIT:
+	    /***** Create unique string for this cell used in labels *****/
+	    if (asprintf (&CellStr,"%02u%02u%02u",
+			  Weekday,Interval,Column) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Par_PutHiddenParamString (NULL,"TTDur",TTDur);
-	    free (TTDur);
-	   }
-	 else
-	   {
-	    /***** Class duration *****/
+
+	    /***** Put hidden parameters *****/
+	    Par_PutHiddenParamUnsigned (NULL,"TTDay",Weekday);
+	    Par_PutHiddenParamUnsigned (NULL,"TTInt",Interval);
+	    Par_PutHiddenParamUnsigned (NULL,"TTCol",Column);
+
+	    /***** Class type *****/
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			      "name=\"TTDur\" class=\"Tmt_DUR\"");
-            for (i = Interval + Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
-        	 i < Timetable->Config.IntervalsPerDay;
-        	 i++)
-               if (Tmt_TimeTable[Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
-                  break;
-            MaxDuration = i - Interval;
-            if (Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals > MaxDuration)
-               MaxDuration = Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
-	    for (Dur = 0;
-		 Dur <= MaxDuration;
-		 Dur++)
+			      "name=\"TTTyp\" class=\"Tmt_TYP\"");
+	       for (CT  = (Tmt_ClassType_t) 0;
+		    CT <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
+		    CT++)
+		  if ((CT == Tmt_FREE) ||
+		      ((Timetable->View == Tmt_CRS_EDIT) && (CT == Tmt_LECTURE || CT == Tmt_PRACTICAL)) ||
+		      ((Timetable->View == Tmt_TUT_EDIT) && (CT == Tmt_TUTORING)))
+		     HTM_OPTION (HTM_Type_STRING,Tmt_DB_ClassType[CT],
+				 CT == ClassType,false,
+				 "%s",Txt_TIMETABLE_CLASS_TYPES[CT]);
+	    HTM_SELECT_End ();
+
+	    if (IntervalType == Tmt_FREE_INTERVAL)
 	      {
+	       for (i = Interval + 1;
+		    i < Timetable->Config.IntervalsPerDay;
+		    i++)
+		 if (Tmt_TimeTable[Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
+		     break;
+	       MaxDuration = i - Interval;
+	       Dur = (MaxDuration >= Timetable->Config.IntervalsPerHour) ? Timetable->Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
+									   MaxDuration;				// MaxDuration  < 1h ==> Dur = MaxDuration
 	       if (asprintf (&TTDur,"%u:%02u",
-			     (Dur / Timetable->Config.IntervalsPerHour),	// Hours
+			     (Dur / Timetable->Config.IntervalsPerHour),		// Hours
 			     (Dur % Timetable->Config.IntervalsPerHour) *
 			     Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
 		  Err_NotEnoughMemoryExit ();
-	       HTM_OPTION (HTM_Type_STRING,TTDur,
-			   Dur == DurationNumIntervals,false,
-			   "%s",TTDur);
+	       Par_PutHiddenParamString (NULL,"TTDur",TTDur);
 	       free (TTDur);
 	      }
-	    HTM_SELECT_End ();
-
-	    if (Timetable->View == Tmt_CRS_EDIT)
+	    else
 	      {
-	       /***** Group *****/
-	       HTM_BR ();
-	       HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
-	       HTM_Txt (Txt_Group);
-	       HTM_LABEL_End ();
+	       /***** Class duration *****/
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				 "id=\"TTGrp%s\" name=\"TTGrp\""
-				 " class=\"Tmt_GRP\"",
-			         CellStr);
-	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
-			   "%s",Txt_All_groups);
-               for (NumGrpTyp = 0;
-        	    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-        	    NumGrpTyp++)
-                 {
-                  GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
-
-                  for (NumGrp = 0;
-                       NumGrp < GrpTyp->NumGrps;
-                       NumGrp++)
-                    {
-                     Grp = &GrpTyp->LstGrps[NumGrp];
-		     if (Grp->Room.RooCod > 0)
-		       {
-			if (asprintf (&Room," (%s)",Grp->Room.ShrtName) < 0)
-			   Err_NotEnoughMemoryExit ();
-		       }
-		     else
-		       {
-			if (asprintf (&Room,"%s","") < 0)
-			   Err_NotEnoughMemoryExit ();
-		       }
-		     HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
-				 GrpCod == Grp->GrpCod,false,
-				 "%s %s%s",
-				 GrpTyp->GrpTypName,Grp->GrpName,Room);
-	             free (Room);
-                    }
-                 }
+				 "name=\"TTDur\" class=\"Tmt_DUR\"");
+		  for (i = Interval + Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
+		       i < Timetable->Config.IntervalsPerDay;
+		       i++)
+		     if (Tmt_TimeTable[Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
+			break;
+		  MaxDuration = i - Interval;
+		  if (Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals > MaxDuration)
+		     MaxDuration = Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
+		  for (Dur = 0;
+		       Dur <= MaxDuration;
+		       Dur++)
+		    {
+		     if (asprintf (&TTDur,"%u:%02u",
+				   (Dur / Timetable->Config.IntervalsPerHour),	// Hours
+				   (Dur % Timetable->Config.IntervalsPerHour) *
+				   Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
+			Err_NotEnoughMemoryExit ();
+		     HTM_OPTION (HTM_Type_STRING,TTDur,
+				 Dur == DurationNumIntervals,false,
+				 "%s",TTDur);
+		     free (TTDur);
+		    }
 	       HTM_SELECT_End ();
 
-	       /***** Info *****/
-	       HTM_BR ();
-	       HTM_LABEL_Begin ("for=\"TTInf%s\"",CellStr);
-	       HTM_Txt (Txt_Info);
-	       HTM_LABEL_End ();
-	       HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info ? Info :
-			                                        "",
-			       HTM_SUBMIT_ON_CHANGE,
-	                       "id=\"TTInf%s\" size=\"1\" class=\"Tmt_INF\"",
-			       CellStr);
+	       if (Timetable->View == Tmt_CRS_EDIT)
+		 {
+		  /***** Group *****/
+		  HTM_BR ();
+		  HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
+		     HTM_Txt (Txt_Group);
+		  HTM_LABEL_End ();
+		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+				    "id=\"TTGrp%s\" name=\"TTGrp\""
+				    " class=\"Tmt_GRP\"",
+				    CellStr);
+		     HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
+				 "%s",Txt_All_groups);
+		     for (NumGrpTyp = 0;
+			  NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+			  NumGrpTyp++)
+		       {
+			GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+
+			for (NumGrp = 0;
+			     NumGrp < GrpTyp->NumGrps;
+			     NumGrp++)
+			  {
+			   Grp = &GrpTyp->LstGrps[NumGrp];
+			   if (Grp->Room.RooCod > 0)
+			     {
+			      if (asprintf (&Room," (%s)",Grp->Room.ShrtName) < 0)
+				 Err_NotEnoughMemoryExit ();
+			     }
+			   else
+			     {
+			      if (asprintf (&Room,"%s","") < 0)
+				 Err_NotEnoughMemoryExit ();
+			     }
+			   HTM_OPTION (HTM_Type_LONG,&Grp->GrpCod,
+				       GrpCod == Grp->GrpCod,false,
+				       "%s %s%s",
+				       GrpTyp->GrpTypName,Grp->GrpName,Room);
+			   free (Room);
+			  }
+		       }
+		  HTM_SELECT_End ();
+
+		  /***** Info *****/
+		  HTM_BR ();
+		  HTM_LABEL_Begin ("for=\"TTInf%s\"",CellStr);
+		     HTM_Txt (Txt_Info);
+		  HTM_LABEL_End ();
+		  HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info ? Info :
+								   "",
+				  HTM_SUBMIT_ON_CHANGE,
+				  "id=\"TTInf%s\" size=\"1\" class=\"Tmt_INF\"",
+				  CellStr);
+		 }
+	       else // TimeTableView == Tmt_TUT_EDIT
+		 {
+		  /***** Info *****/
+		  HTM_BR ();
+		  HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
+		     HTM_Txt (Txt_Info);
+		  HTM_LABEL_End ();
+		  HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "id=\"TTInf%s\" size=\"12\" class=\"Tmt_INF\"",
+				  CellStr);
+		 }
 	      }
-	    else // TimeTableView == Tmt_TUT_EDIT
-	      {
-	       /***** Info *****/
-	       HTM_BR ();
-	       HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
-	       HTM_Txt (Txt_Info);
-	       HTM_LABEL_End ();
-	       HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,
-	                       HTM_SUBMIT_ON_CHANGE,
-	                       "id=\"TTInf%s\" size=\"12\" class=\"Tmt_INF\"",
-			       CellStr);
-	      }
-	   }
 
-	 /***** Free allocated unique string for this cell used in labels *****/
-	 free (CellStr);
+	    /***** Free allocated unique string for this cell used in labels *****/
+	    free (CellStr);
 
-	 break;
-     }
+	    break;
+	}
 
-   /***** End form *****/
-   if (Timetable->View == Tmt_CRS_EDIT ||
-       Timetable->View == Tmt_TUT_EDIT)
-      Frm_EndForm ();
+      /***** End form *****/
+      if (Timetable->View == Tmt_CRS_EDIT ||
+	  Timetable->View == Tmt_TUT_EDIT)
+	 Frm_EndForm ();
 
    /***** End cell *****/
    HTM_TD_End ();
-  }
-
-/*****************************************************************************/
-/********** Orphan all groups of a given type in course timetable ************/
-/*****************************************************************************/
-
-void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod)
-  {
-   DB_QueryUPDATE ("can not update all groups of a type in course timetable",
-		   "UPDATE tmt_courses"
-		     " SET GrpCod=-1"
-		   " WHERE GrpCod IN"
-			 " (SELECT GrpCod"
-			   " FROM grp_groups"
-			  " WHERE GrpTypCod=%ld)",
-                   GrpTypCod);
-  }
-
-/*****************************************************************************/
-/********************* Orphan a group in course timetable ********************/
-/*****************************************************************************/
-
-void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod)
-  {
-   DB_QueryUPDATE ("can not update a group in course timetable",
-		   "UPDATE tmt_courses"
-		     " SET GrpCod=-1"
-		   " WHERE GrpCod=%ld",
-                   GrpCod);
   }

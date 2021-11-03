@@ -53,6 +53,7 @@
 #include "swad_survey.h"
 #include "swad_survey_database.h"
 #include "swad_timetable.h"
+#include "swad_timetable_database.h"
 
 /*****************************************************************************/
 /*************************** Private constants *******************************/
