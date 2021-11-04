@@ -59,17 +59,17 @@ typedef enum
    Msg_STATUS_NOTIFIED,
   } Msg_Status_t;
 
+struct Msg_Course
+  {
+   long CrsCod;
+   char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+  };	// Distinct courses in my messages sent or received
+
 struct Msg_Messages
   {
    Msg_TypeOfMessages_t TypeOfMessages;
    unsigned NumMsgs;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
-   unsigned NumCourses;
-   struct
-     {
-      long CrsCod;
-      char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-     } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
    long FilterCrsCod;	// Show only messages sent from this course code
    char FilterCrsShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users

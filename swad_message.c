@@ -109,7 +109,6 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 static void Msg_PutIconsListMsgs (void *Messages);
 static void Msg_PutHiddenParamsOneMsg (void *Messages);
 
-static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages);
 static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages);
 static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages);
 
@@ -180,7 +179,6 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
   {
    Messages->NumMsgs              = 0;
    Messages->Subject[0]           = '\0';
-   Messages->NumCourses           = 0;
    Messages->FilterCrsCod         = -1L;
    Messages->FilterCrsShrtName[0] = '\0';
    Messages->FilterFromTo[0]      = '\0';
@@ -1462,7 +1460,6 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    Msg_GetParamFilterFromTo (Messages);
    Msg_GetParamFilterContent (Messages);
    Msg_DB_MakeFilterFromToSubquery (Messages,FilterFromToSubquery);
-   Msg_GetDistinctCoursesInMyMessages (Messages);
 
    /***** Get number of unread messages *****/
    switch (Messages->TypeOfMessages)
@@ -1473,11 +1470,9 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
                                                   FilterFromToSubquery);
          break;
       case Msg_SENT:
+      default:
          NumUnreadMsgs = 0;
          break;
-      default:
-	 NumUnreadMsgs = 0;
-	 break;
      }
 
    /***** Get messages from database *****/
@@ -1790,18 +1785,28 @@ void Msg_PutHiddenParamsMsgsFilters (void *Messages)
   }
 
 /*****************************************************************************/
-/********************* Get dictinct courses in my messages *******************/
+/********* Show form to select course for sent or received messages **********/
 /*****************************************************************************/
 
-static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
+static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
   {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Messages_received_from_A_COURSE;
+   extern const char *Txt_Messages_sent_from_A_COURSE;
+   extern const char *Txt_any_course;
+   const char *TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      [Msg_WRITING ] = NULL,
+      [Msg_RECEIVED] = Txt_Messages_received_from_A_COURSE,
+      [Msg_SENT    ] = Txt_Messages_sent_from_A_COURSE
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss = 0;	// Initialized to avoid warning
    unsigned NumCrs;
-   struct Crs_Course Crs;
+   long CrsCod;
 
-   /***** Get distinct courses in my messages from database *****/
+   /***** Get distinct courses in my messages *****/
    switch (Messages->TypeOfMessages)
      {
       case Msg_RECEIVED:
@@ -1814,65 +1819,36 @@ static void Msg_GetDistinctCoursesInMyMessages (struct Msg_Messages *Messages)
          break;
      }
 
-   /***** Get distinct courses in messages from database *****/
-   Messages->NumCourses = 0;
-   for (NumCrs = 0;
-	NumCrs < NumCrss;
-	NumCrs++)
-     {
-      /* Get next course */
-      row = mysql_fetch_row (mysql_res);
-      Crs.CrsCod = Str_ConvertStrCodToLongCod (row[0]);
-      if (Crs.CrsCod > 0 && Messages->NumCourses < Crs_MAX_COURSES_PER_USR)
-         if (Crs_GetDataOfCourseByCod (&Crs))
-           {
-            Messages->Courses[Messages->NumCourses].CrsCod = Crs.CrsCod;
-            Str_Copy (Messages->Courses[Messages->NumCourses].ShrtName,Crs.ShrtName,
-                      sizeof (Messages->Courses[Messages->NumCourses].ShrtName) - 1);
-            Messages->NumCourses++;
-           }
-     }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/********* Show form to select course for sent or received messages **********/
-/*****************************************************************************/
-
-static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages)
-  {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Messages_received_from_A_COURSE;
-   extern const char *Txt_Messages_sent_from_A_COURSE;
-   extern const char *Txt_any_course;
-   unsigned NumOriginCrs;
-   const char *TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
-     {
-      [Msg_WRITING ] = NULL,
-      [Msg_RECEIVED] = Txt_Messages_received_from_A_COURSE,
-      [Msg_SENT    ] = Txt_Messages_sent_from_A_COURSE
-     };
-
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_TxtF ("%s&nbsp;",TxtSelector[Messages->TypeOfMessages]);
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"FilterCrsCod\"");
+
+         /* Write a first option to select any course */
 	 HTM_OPTION (HTM_Type_STRING,"",
 		     Messages->FilterCrsCod < 0,false,
 		     "%s",Txt_any_course);
 
-	 /***** Write an option for each origin course *****/
-	 for (NumOriginCrs = 0;
-	      NumOriginCrs < Messages->NumCourses;
-	      NumOriginCrs++)
-	    HTM_OPTION (HTM_Type_LONG,&Messages->Courses[NumOriginCrs].CrsCod,
-			Messages->Courses[NumOriginCrs].CrsCod == Messages->FilterCrsCod,false,
-			"%s",Messages->Courses[NumOriginCrs].ShrtName);
+	 /* Write an option for each origin course */
+	 for (NumCrs = 0;
+	      NumCrs < NumCrss;
+	      NumCrs++)
+	   {
+	    /* Get next course */
+	    row = mysql_fetch_row (mysql_res);
+
+	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
+	       HTM_OPTION (HTM_Type_LONG,&CrsCod,
+			   CrsCod == Messages->FilterCrsCod,false,
+			   "%s",row[1]);	// Course short name
+	   }
+
       HTM_SELECT_End ();
    HTM_LABEL_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

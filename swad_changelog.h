@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.50.1 (2021-11-03)"
+#define Log_PLATFORM_VERSION	"SWAD 21.51 (2021-11-04)"
 #define CSS_FILE		"swad20.45.css"
 #define JS_FILE			"swad20.69.1.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.51:    Nov 04, 2021  Eliminated the limit of origin courses in messages. (321735 lines)
 	Version 21.50.1:  Nov 03, 2021  Queries moved to module swad_user_database and other modules. (321759 lines)
 	Version 21.50:    Nov 03, 2021  Queries moved to module swad_user_database and other modules. (321696 lines)
 	Version 21.49:    Nov 03, 2021  New module swad_user_database for database queries related to users. (321615 lines)
