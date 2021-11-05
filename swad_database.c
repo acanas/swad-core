@@ -4077,6 +4077,34 @@ unsigned long DB_QueryCOUNT (const char *MsgError,const char *fmt,...)
    return NumRows;
   }
 
+bool DB_QueryEXISTS (const char *MsgError,const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool Exists = false;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+      Err_NotEnoughMemoryExit ();
+
+   /***** Make query "SELECT EXISTS (...)" *****/
+   if (DB_QuerySELECTusingQueryStr (Query,&mysql_res,MsgError))
+     {
+      row = mysql_fetch_row (mysql_res);
+      Exists = (row[0][0] == '1');
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return Exists;
+  }
+
 /*****************************************************************************/
 /******************** Make an INSERT query in database ***********************/
 /*****************************************************************************/

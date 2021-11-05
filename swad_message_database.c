@@ -773,13 +773,15 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
 
 bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
   {
-   return (DB_QueryCOUNT ("can not check if a sent message is deleted",
-			  "SELECT COUNT(*)"
-			   " FROM msg_snt"
-			  " WHERE MsgCod=%ld",
-			  MsgCod) == 0);	// The message has been deleted
-						// by its author when it is not present
-						// in table of sent messages undeleted
+   return
+   !DB_QueryEXISTS ("can not check if a sent message is deleted",
+		    "SELECT EXISTS"
+		    "(SELECT *"
+		      " FROM msg_snt"
+		     " WHERE MsgCod=%ld)",
+		    MsgCod);	// The message has been deleted
+				// by its author when it is not present
+				// in table of sent messages undeleted
   }
 
 /*****************************************************************************/
@@ -788,14 +790,15 @@ bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod)
 
 bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
   {
-   return (DB_QueryCOUNT ("can not check if a received message"
-			  " is deleted by all recipients",
-			  "SELECT COUNT(*)"
-			   " FROM msg_rcv"
-			  " WHERE MsgCod=%ld",
-			  MsgCod) == 0);	// The message has been deleted
-						// by all its recipients when it is not present
-						// in table of received messages undeleted
+   return
+   !DB_QueryEXISTS ("can not check if a received message is deleted by all recipients",
+		    "SELECT EXISTS"
+		    "(SELECT *"
+		      " FROM msg_rcv"
+		     " WHERE MsgCod=%ld)",
+		    MsgCod);	// The message has been deleted
+				// by all its recipients when it is not present
+				// in table of received messages undeleted
   }
 
 /*****************************************************************************/
@@ -1440,13 +1443,15 @@ unsigned Msg_DB_GetUsrsBannedBy (MYSQL_RES **mysql_res,long UsrCod)
 
 bool Msg_DB_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   {
-   /***** Get if FromUsrCod is banned by ToUsrCod *****/
-   return (DB_QueryCOUNT ("can not check if a user is banned",
-			  "SELECT COUNT(*)"
-			   " FROM msg_banned"
-			  " WHERE FromUsrCod=%ld"
-			    " AND ToUsrCod=%ld",
-			  FromUsrCod,ToUsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a user is banned",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM msg_banned"
+		    " WHERE FromUsrCod=%ld"
+		      " AND ToUsrCod=%ld)",
+		   FromUsrCod,
+		   ToUsrCod);
   }
 
 /*****************************************************************************/

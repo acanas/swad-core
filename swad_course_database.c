@@ -202,20 +202,20 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
 bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
                                              long DegCod,unsigned Year)
   {
-   /***** Get number of courses in a year of a degree and with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name"
-	                  " of a course already existed",
-			  "SELECT COUNT(*)"
-			   " FROM crs_courses"
-			  " WHERE DegCod=%ld"
-			   " AND Year=%u"
-			   " AND %s='%s'"
-			   " AND CrsCod<>%ld",
-			  DegCod,
-			  Year,
-			  FieldName,
-			  Name,
-			  CrsCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a course already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM crs_courses"
+		    " WHERE DegCod=%ld"
+		      " AND Year=%u"
+		      " AND %s='%s'"
+		      " AND CrsCod<>%ld)",
+		   DegCod,
+		   Year,
+		   FieldName,
+		   Name,
+		   CrsCod);
   }
 
 /*****************************************************************************/

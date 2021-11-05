@@ -95,7 +95,7 @@ void Mch_DB_GetIndexes (long MchCod,unsigned QstInd,
 void Mch_DB_UpdateMatchAsBeingPlayed (long MchCod);
 void Mch_DB_RegisterMeAsPlayerInMatch (long MchCod);
 
-bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod);
+bool Mch_DB_CheckIfMatchIsBeingPlayed (long MchCod);
 unsigned Mch_DB_GetNumPlayers (long MchCod);
 
 void Mch_DB_RemoveMatchFromBeingPlayed (long MchCod);

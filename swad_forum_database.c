@@ -257,13 +257,15 @@ void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
 /******************** Get if a forum post exists in database *****************/
 /*****************************************************************************/
 
-bool For_DB_GetIfForumPstExists (long PstCod)
+bool For_DB_CheckIfForumPstExists (long PstCod)
   {
-   return (DB_QueryCOUNT ("can not check if a post of a forum already existed",
-			  "SELECT COUNT(*)"
-			   " FROM for_posts"
-			  " WHERE PstCod=%ld",
-			  PstCod) != 0);	// Post exists if it appears in table of forum posts
+   return
+   DB_QueryEXISTS ("can not check if a post of a forum already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM for_posts"
+		    " WHERE PstCod=%ld)",
+		   PstCod);	// Post exists if it appears in table of forum posts
   }
 
 /*****************************************************************************/
@@ -542,15 +544,17 @@ bool For_DB_CheckIfThrBelongsToForum (long ThrCod,const struct For_Forum *Forum)
    else
       SubQuery[0] = '\0';
 
-   return (DB_QueryCOUNT ("can not get if a thread belong to current forum",
-			  "SELECT COUNT(*)"
-			   " FROM for_threads"
-			  " WHERE ThrCod=%ld"
-			    " AND ForumType=%u"
-			    "%s",
-			  ThrCod,
-			  (unsigned) Forum->Type,
-			  SubQuery) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a thread belong to current forum",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM for_threads"
+		    " WHERE ThrCod=%ld"
+		      " AND ForumType=%u"
+		        "%s)",
+		   ThrCod,
+		   (unsigned) Forum->Type,
+		   SubQuery);
   }
 
 /*****************************************************************************/
@@ -627,7 +631,6 @@ unsigned For_DB_GetNumPstsInThr (long ThrCod)
 
 unsigned For_DB_GetNumMyPstsInThr (long ThrCod)
   {
-   /***** Get if I have write posts in a thread from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not check if you have written posts in a thead of a forum",
 		  "SELECT COUNT(*)"
@@ -696,7 +699,6 @@ void For_DB_UpdateThrReadTime (long ThrCod,
 
 unsigned For_DB_GetNumReadersOfThr (long ThrCod)
   {
-   /***** Get number of distinct readers of a thread from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get the number of readers of a thread of a forum",
 		  "SELECT COUNT(*)"
@@ -954,11 +956,13 @@ bool For_DB_GetIfPstIsEnabled (long PstCod)
       return false;
 
    /***** Get if post is disabled from database *****/
-   return (DB_QueryCOUNT ("can not check if a post of a forum is disabled",
-			  "SELECT COUNT(*)"
-			   " FROM for_disabled"
-			  " WHERE PstCod=%ld",
-			  PstCod) == 0);	// Post is enabled if it does not appear in table of disabled posts
+   return
+   DB_QueryEXISTS ("can not check if a post of a forum is disabled",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM for_disabled"
+		    " WHERE PstCod=%ld)",
+		   PstCod);	// Post is enabled if it does not appear in table of disabled posts
   }
 
 /*****************************************************************************/

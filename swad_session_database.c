@@ -155,12 +155,13 @@ void Ses_DB_UpdateSessionLastRefresh (void)
 
 bool Ses_DB_CheckIfSessionExists (const char *IdSes)
   {
-   /***** Get if session already exists in database *****/
-   return (DB_QueryCOUNT ("can not check if a session already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ses_sessions"
-			  " WHERE SessionId='%s'",
-			  IdSes) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a session already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ses_sessions"
+		    " WHERE SessionId='%s')",
+		   IdSes);
   }
 
 /*****************************************************************************/
@@ -277,14 +278,15 @@ void Ses_DB_InsertParam (const char *ParamName,const char *ParamValue)
 
 bool Ses_DB_CheckIfParamIsAlreadyStored (const char *ParamName)
   {
-   return (DB_QueryCOUNT ("can not check if a session parameter"
-			  " is already in database",
-			  "SELECT COUNT(*)"
-			   " FROM ses_params"
-			  " WHERE SessionId='%s'"
-			    " AND ParamName='%s'",
-			  Gbl.Session.Id,
-			  ParamName) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a session parameter is already in database",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ses_params"
+		    " WHERE SessionId='%s'"
+		      " AND ParamName='%s')",
+		   Gbl.Session.Id,
+		   ParamName);
   }
 
 /*****************************************************************************/

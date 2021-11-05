@@ -117,13 +117,15 @@ unsigned Nck_DB_GetUsrNicknames (MYSQL_RES **mysql_res,long UsrCod)
 
 bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char *NickWithoutArr)
   {
-   return (DB_QueryCOUNT ("can not check if nickname already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_nicknames"
-			  " WHERE UsrCod=%ld"
-			    " AND Nickname='%s'",
-			  UsrCod,
-			  NickWithoutArr) != 0);
+   return
+   DB_QueryEXISTS ("can not check if nickname already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_nicknames"
+		    " WHERE UsrCod=%ld"
+		      " AND Nickname='%s')",
+		   UsrCod,
+		   NickWithoutArr);
   }
 
 /*****************************************************************************/
@@ -132,13 +134,15 @@ bool Nck_DB_CheckIfNickMatchesAnyUsrNick (long UsrCod,const char *NickWithoutArr
 
 bool Nck_DB_CheckIfNickMatchesAnyOtherUsrsNicks (long UsrCod,const char *NickWithoutArr)
   {
-   return (DB_QueryCOUNT ("can not check if nickname already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_nicknames"
-			  " WHERE Nickname='%s'"
-			    " AND UsrCod<>%ld",
-			  NickWithoutArr,
-			  UsrCod) != 0);	// A nickname of another user is the same that user's nickname
+   return
+   DB_QueryEXISTS ("can not check if nickname already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_nicknames"
+		    " WHERE Nickname='%s'"
+		      " AND UsrCod<>%ld)",
+		   NickWithoutArr,
+		   UsrCod);	// A nickname of another user is the same that user's nickname
   }
 
 /*****************************************************************************/

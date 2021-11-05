@@ -165,14 +165,16 @@ char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_
 
 bool Mai_DB_CheckIfEmailBelongToAnotherUsr (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   return (DB_QueryCOUNT ("can not check if email already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_emails"
-			  " WHERE E_mail='%s'"
-			    " AND Confirmed='Y'"
-			    " AND UsrCod<>%ld",
-			  Email,
-			  UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if email already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_emails"
+		    " WHERE E_mail='%s'"
+		      " AND Confirmed='Y'"
+		      " AND UsrCod<>%ld)",
+		   Email,
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -411,15 +413,15 @@ unsigned Mai_DB_GetDataOfMailDomainByCod (MYSQL_RES **mysql_res,long MaiCod)
 
 bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
   {
-   /***** Get number of mail_domains with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name"
-			  " of a mail domain already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ntf_mail_domains"
-			  " WHERE %s='%s'"
-			    " AND MaiCod<>%ld",
-			  FieldName,Name,
-			  MaiCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a mail domain already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ntf_mail_domains"
+		    " WHERE %s='%s'"
+		      " AND MaiCod<>%ld)",
+		   FieldName,Name,
+		   MaiCod);
   }
 
 /*****************************************************************************/
@@ -428,13 +430,13 @@ bool Mai_DB_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,
 
 bool Mai_DB_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   /***** Get number of mail_domains with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if a mail domain"
-			  " is allowed for notifications",
-			  "SELECT COUNT(*)"
-			   " FROM ntf_mail_domains"
-			  " WHERE Domain='%s'",
-			  MailDomain) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a mail domain is allowed for notifications",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ntf_mail_domains"
+		    " WHERE Domain='%s')",
+		   MailDomain);
   }
 
 /*****************************************************************************/

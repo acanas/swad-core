@@ -231,15 +231,17 @@ void Gam_DB_GetGameTxt (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
 bool Gam_DB_CheckIfSimilarGameExists (const struct Gam_Game *Game)
   {
-   return (DB_QueryCOUNT ("can not get similar games",
-			  "SELECT COUNT(*)"
-			   " FROM gam_games"
-			  " WHERE CrsCod=%ld"
-			    " AND Title='%s'"
-			    " AND GamCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Game->Title,
-			  Game->GamCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check similar games",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM gam_games"
+		    " WHERE CrsCod=%ld"
+		      " AND Title='%s'"
+		      " AND GamCod<>%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Game->Title,
+		   Game->GamCod);
   }
 
 /*****************************************************************************/

@@ -245,12 +245,13 @@ unsigned Tag_DB_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 
 bool Tag_DB_CheckIfCurrentCrsHasTestTags (void)
   {
-   /***** Get available tags from database *****/
-   return (DB_QueryCOUNT ("can not check if course has tags",
-			  "SELECT COUNT(*)"
-			   " FROM tst_tags"
-			  " WHERE CrsCod=%ld",
-			  Gbl.Hierarchy.Crs.CrsCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if course has tags",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM tst_tags"
+		    " WHERE CrsCod=%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

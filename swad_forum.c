@@ -451,7 +451,7 @@ void For_DisablePost (void)
    For_GetParamsForums (&Forums);
 
    /***** Check if post really exists, if it has not been removed *****/
-   if (For_DB_GetIfForumPstExists (Forums.PstCod))
+   if (For_DB_CheckIfForumPstExists (Forums.PstCod))
      {
       /***** Insert post into table of banned posts *****/
       For_DB_InsertPstIntoDisabled (Forums.PstCod);
@@ -2890,7 +2890,7 @@ void For_RemovePost (void)
 
    /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
-   if (!For_DB_GetIfForumPstExists (Forums.PstCod))
+   if (!For_DB_CheckIfForumPstExists (Forums.PstCod))
       Err_WrongPostExit ();
 
    /* Check if I am the author of the message */

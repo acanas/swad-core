@@ -100,16 +100,17 @@ unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
 
 bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
   {
-   /***** Get if a user is administrator of a degree from database *****/
-   return (DB_QueryCOUNT ("can not check if a user is administrator",
-			  "SELECT COUNT(*)"
-			   " FROM usr_admins"
-			  " WHERE UsrCod=%ld"
-			    " AND Scope='%s'"
-			    " AND Cod=%ld",
-			  UsrCod,
-			  Sco_GetDBStrFromScope (Scope),
-			  Cod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a user is administrator",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_admins"
+		    " WHERE UsrCod=%ld"
+		      " AND Scope='%s'"
+		      " AND Cod=%ld)",
+		   UsrCod,
+		   Sco_GetDBStrFromScope (Scope),
+		   Cod);
   }
 
 /*****************************************************************************/

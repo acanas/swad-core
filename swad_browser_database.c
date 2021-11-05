@@ -1426,19 +1426,20 @@ bool Brw_DB_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
    long Cod = Brw_GetCodForFileBrowser ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFileBrowser ();
 
-   /***** Get if a file or folder is public from database *****/
-   return (DB_QueryCOUNT ("can not check if a folder contains public files",
-			  "SELECT COUNT(*)"
-			   " FROM brw_files"
-			  " WHERE FileBrowser=%u"
-			    " AND Cod=%ld"
-			    " AND ZoneUsrCod=%ld"
-			    " AND Path LIKE '%s/%%'"
-			    " AND Public='Y'",
-			  (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-			  Cod,
-			  ZoneUsrCod,
-			  Path) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a folder contains public files",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM brw_files"
+		    " WHERE FileBrowser=%u"
+		      " AND Cod=%ld"
+		      " AND ZoneUsrCod=%ld"
+		      " AND Path LIKE '%s/%%'"
+		      " AND Public='Y')",
+		   (unsigned) Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+		   Cod,
+		   ZoneUsrCod,
+		   Path);
   }
 
 /*****************************************************************************/
@@ -2325,21 +2326,23 @@ bool Brw_DB_CheckIfFileOrFolderIsSetAsHiddenUsingMetadata (const struct FileMeta
          or
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
-   return (DB_QueryCOUNT ("can not check if a file or folder is hidden",
-			  "SELECT COUNT(*)"
-			   " FROM brw_files"
-			  " WHERE FileBrowser=%u"
-			    " AND Cod=%ld"
-			    " AND ZoneUsrCod=%ld"
-			    " AND Hidden='Y'"
-			    " AND (Path='%s'"
-			         " OR"
-			         " LOCATE(CONCAT(Path,'/'),'%s')=1)",
-			  FileMetadata->FileBrowser,
-			  FileMetadata->Cod,
-			  FileMetadata->ZoneUsrCod,
-			  FileMetadata->FilFolLnk.Full,
-			  FileMetadata->FilFolLnk.Full) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a file or folder is hidden",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM brw_files"
+		    " WHERE FileBrowser=%u"
+		      " AND Cod=%ld"
+		      " AND ZoneUsrCod=%ld"
+		      " AND Hidden='Y'"
+		      " AND (Path='%s'"
+			   " OR"
+			   " LOCATE(CONCAT(Path,'/'),'%s')=1))",
+		   FileMetadata->FileBrowser,
+		   FileMetadata->Cod,
+		   FileMetadata->ZoneUsrCod,
+		   FileMetadata->FilFolLnk.Full,
+		   FileMetadata->FilFolLnk.Full);
   }
 
 /*****************************************************************************/
@@ -2422,42 +2425,48 @@ bool Brw_DB_GetIfExpandedFolder (const char Path[PATH_MAX + 1])
    if (Cod > 0)
      {
       if (WorksUsrCod > 0)
-         return (DB_QueryCOUNT ("can not get check if a folder is expanded",
-			        "SELECT COUNT(*)"
-			         " FROM brw_expanded"
-			        " WHERE UsrCod=%ld"
-				  " AND FileBrowser=%u"
-				  " AND Cod=%ld"
-				  " AND WorksUsrCod=%ld"
-				  " AND Path='%s/'",
-			        Gbl.Usrs.Me.UsrDat.UsrCod,
-			        (unsigned) FileBrowserForExpandedFolders,
-			        Cod,
-			        WorksUsrCod,
-			        Path) != 0);
+	 return
+	 DB_QueryEXISTS ("can not check check if a folder is expanded",
+			 "SELECT EXISTS"
+			 "(SELECT *"
+			   " FROM brw_expanded"
+			  " WHERE UsrCod=%ld"
+			    " AND FileBrowser=%u"
+			    " AND Cod=%ld"
+			    " AND WorksUsrCod=%ld"
+			    " AND Path='%s/')",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 (unsigned) FileBrowserForExpandedFolders,
+			 Cod,
+			 WorksUsrCod,
+			 Path);
       else
-         return (DB_QueryCOUNT ("can not get check if a folder is expanded",
-				"SELECT COUNT(*)"
-				 " FROM brw_expanded"
-				" WHERE UsrCod=%ld"
-				  " AND FileBrowser=%u"
-				  " AND Cod=%ld"
-				  " AND Path='%s/'",
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				(unsigned) FileBrowserForExpandedFolders,
-				Cod,
-				Path) != 0);
+	 return
+	 DB_QueryEXISTS ("can not get check if a folder is expanded",
+			 "SELECT EXISTS"
+			 "(SELECT *"
+			   " FROM brw_expanded"
+			  " WHERE UsrCod=%ld"
+			    " AND FileBrowser=%u"
+			    " AND Cod=%ld"
+			    " AND Path='%s/')",
+			 Gbl.Usrs.Me.UsrDat.UsrCod,
+			 (unsigned) FileBrowserForExpandedFolders,
+			 Cod,
+			 Path);
      }
    else	// Briefcase
-      return (DB_QueryCOUNT ("can not get check if a folder is expanded",
-			     "SELECT COUNT(*)"
-			      " FROM brw_expanded"
-			     " WHERE UsrCod=%ld"
-			       " AND FileBrowser=%u"
-			       " AND Path='%s/'",
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     (unsigned) FileBrowserForExpandedFolders,
-			     Path) != 0);
+      return
+      DB_QueryEXISTS ("can not get check if a folder is expanded",
+		      "SELECT EXISTS"
+		      "(SELECT *"
+			" FROM brw_expanded"
+		       " WHERE UsrCod=%ld"
+			 " AND FileBrowser=%u"
+			 " AND Path='%s/')",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      (unsigned) FileBrowserForExpandedFolders,
+		      Path);
   }
 
 /*****************************************************************************/

@@ -138,14 +138,15 @@ unsigned Ban_DB_GetDataOfBannerByCod (MYSQL_RES **mysql_res,long BanCod)
 
 bool Ban_DB_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
   {
-   /***** Get number of banners with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a banner already existed",
-		          "SELECT COUNT(*)"
-		           " FROM ban_banners"
-			  " WHERE %s='%s'"
-			    " AND BanCod<>%ld",
-			  FieldName,Name,
-			  BanCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a banner already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ban_banners"
+		    " WHERE %s='%s'"
+		      " AND BanCod<>%ld)",
+		   FieldName,Name,
+		   BanCod);
   }
 
 /*****************************************************************************/

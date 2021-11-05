@@ -332,18 +332,19 @@ void Svy_DB_GetSurveyTxt (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
 bool Svy_DB_CheckIfSimilarSurveyExists (const struct Svy_Survey *Svy)
   {
-   /***** Get number of surveys with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar surveys",
-			  "SELECT COUNT(*)"
-			   " FROM svy_surveys"
-			  " WHERE Scope='%s'"
-			    " AND Cod=%ld"
-			    " AND Title='%s'"
-			    " AND SvyCod<>%ld",
-			  Sco_GetDBStrFromScope (Svy->Scope),
-			  Svy->Cod,
-			  Svy->Title,
-			  Svy->SvyCod) != 0);
+   return
+   DB_QueryEXISTS ("can not get similar surveys",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM svy_surveys"
+		    " WHERE Scope='%s'"
+		      " AND Cod=%ld"
+		      " AND Title='%s'"
+		      " AND SvyCod<>%ld)",
+		   Sco_GetDBStrFromScope (Svy->Scope),
+		   Svy->Cod,
+		   Svy->Title,
+		   Svy->SvyCod);
   }
 
 /*****************************************************************************/
@@ -749,22 +750,24 @@ unsigned Svy_DB_GetGrpNamesAssociatedToSvy (MYSQL_RES **mysql_res,long SvyCod)
 
 bool Svy_DB_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
   {
-   return (DB_QueryCOUNT ("can not check if I can do a survey",
-			  "SELECT COUNT(*)"
-			   " FROM svy_surveys"
-			  " WHERE SvyCod=%ld"
-			    " AND (SvyCod NOT IN"
-				 " (SELECT SvyCod"
-				    " FROM svy_groups)"
-				 " OR"
-				 " SvyCod IN"
-				 " (SELECT svy_groups.SvyCod"
-				    " FROM grp_users,"
-					  "svy_groups"
-				   " WHERE grp_users.UsrCod=%ld"
-				     " AND grp_users.GrpCod=svy_groups.GrpCod))",
-			  SvyCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if I can do a survey",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM svy_surveys"
+		    " WHERE SvyCod=%ld"
+		      " AND (SvyCod NOT IN"
+			   " (SELECT SvyCod"
+			      " FROM svy_groups)"
+			   " OR"
+			   " SvyCod IN"
+			   " (SELECT svy_groups.SvyCod"
+			      " FROM grp_users,"
+				    "svy_groups"
+			     " WHERE grp_users.UsrCod=%ld"
+			       " AND grp_users.GrpCod=svy_groups.GrpCod)))",
+		   SvyCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1087,13 +1090,15 @@ void Svy_DB_IncreaseAnswer (long QstCod,unsigned AnsInd)
 
 bool Svy_DB_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
   {
-   return (DB_QueryCOUNT ("can not check if an answer exists",
-			  "SELECT COUNT(*)"
-			   " FROM svy_answers"
-			  " WHERE QstCod=%ld"
-			    " AND AnsInd=%u",
-			  QstCod,
-			  AnsInd) != 0);
+   return
+   DB_QueryEXISTS ("can not check if an answer exists",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM svy_answers"
+		    " WHERE QstCod=%ld"
+		      " AND AnsInd=%u)",
+		   QstCod,
+		   AnsInd);
   }
 
 /*****************************************************************************/
@@ -1220,13 +1225,15 @@ void Svy_DB_RegisterIHaveAnsweredSvy (long SvyCod)
 
 bool Svy_DB_CheckIfIHaveAnsweredSvy (long SvyCod)
   {
-   return (DB_QueryCOUNT ("can not check if you have answered a survey",
-			  "SELECT COUNT(*)"
-			   " FROM svy_users"
-			  " WHERE SvyCod=%ld"
-			    " AND UsrCod=%ld",
-			  SvyCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if you have answered a survey",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM svy_users"
+		    " WHERE SvyCod=%ld"
+		      " AND UsrCod=%ld)",
+		   SvyCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

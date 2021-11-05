@@ -164,16 +164,17 @@ unsigned Plc_DB_GetDataOfPlaceByCod (MYSQL_RES **mysql_res,long PlcCod)
 bool Plc_DB_CheckIfPlaceNameExists (long PlcCod,
                                     const char *FieldName,const char *Name)
   {
-   return (DB_QueryCOUNT ("can not check if the name of a place"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM plc_places"
-			  " WHERE InsCod=%ld"
-			    " AND %s='%s'"
-			    " AND PlcCod<>%ld",
-			  Gbl.Hierarchy.Ins.InsCod,
-			  FieldName,Name,
-			  PlcCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a place already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM plc_places"
+		    " WHERE InsCod=%ld"
+		      " AND %s='%s'"
+		      " AND PlcCod<>%ld)",
+		   Gbl.Hierarchy.Ins.InsCod,
+		   FieldName,Name,
+		   PlcCod);
   }
 
 /*****************************************************************************/

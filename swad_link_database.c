@@ -131,14 +131,15 @@ unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod)
 
 bool Lnk_DB_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod)
   {
-   return (DB_QueryCOUNT ("can not check if the name of an institutional link"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM lnk_links"
-			  " WHERE %s='%s'"
-			    " AND LnkCod<>%ld",
-			  FieldName,Name,
-			  LnkCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of an institutional link already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM lnk_links"
+		    " WHERE %s='%s'"
+		      " AND LnkCod<>%ld)",
+		   FieldName,Name,
+		   LnkCod);
   }
 
 /*****************************************************************************/

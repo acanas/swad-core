@@ -279,17 +279,17 @@ unsigned Roo_DB_GetListRooms (MYSQL_RES **mysql_res,
 bool Roo_DB_CheckIfRoomNameExists (long CtrCod,long RooCod,
                                    const char *FieldName,const char *Name)
   {
-   /***** Get number of rooms with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a room"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM roo_rooms"
-			  " WHERE CtrCod=%ld"
-			    " AND %s='%s'"
-			    " AND RooCod<>%ld",
-			  CtrCod,
-			  FieldName,Name,
-			  RooCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a room already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM roo_rooms"
+		    " WHERE CtrCod=%ld"
+		      " AND %s='%s'"
+		      " AND RooCod<>%ld)",
+		   CtrCod,
+		   FieldName,Name,
+		   RooCod);
   }
 
 /*****************************************************************************/

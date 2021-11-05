@@ -82,13 +82,15 @@ unsigned Acc_DB_GetUsrsWithID (MYSQL_RES **mysql_res,
 
 bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1])
   {
-   return (DB_QueryCOUNT ("can not check if nickname already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_nicknames"
-			  " WHERE Nickname='%s'"
-			    " AND UsrCod<>%ld",
-			  NewNickWithoutArr,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);	// A nickname of another user is the same that this nickname
+   return
+   DB_QueryEXISTS ("can not check if nickname already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_nicknames"
+		    " WHERE Nickname='%s'"
+		      " AND UsrCod<>%ld)",
+		   NewNickWithoutArr,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);	// A nickname of another user is the same that this nickname
   }
 
 /*****************************************************************************/
@@ -97,12 +99,14 @@ bool Acc_DB_CheckIfNicknameAlreadyExists (const char NewNickWithoutArr[Nck_MAX_B
 
 bool Acc_DB_CheckIfEmailAlreadyExists (const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
   {
-   return (DB_QueryCOUNT ("can not check if email already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_emails"
-		          " WHERE E_mail='%s'"
-		            " AND Confirmed='Y'",
-	                  NewEmail) != 0);	// An email of another user is the same that my email
+   return
+   DB_QueryEXISTS ("can not check if email already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_emails"
+		    " WHERE E_mail='%s'"
+		      " AND Confirmed='Y')",
+		   NewEmail);	// An email of another user is the same that my email
   }
 
 /*****************************************************************************/

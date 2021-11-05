@@ -196,11 +196,13 @@ unsigned Grp_DB_GetDataOfGroupByCod (MYSQL_RES **mysql_res,long GrpCod)
 
 bool Grp_DB_CheckIfGrpExists (long GrpCod)
   {
-   return (DB_QueryCOUNT ("can not check if a group exists",
-			  "SELECT COUNT(*)"
-			   " FROM grp_groups"
-			  " WHERE GrpCod=%ld",
-			  GrpCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a group exists",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_groups"
+		    " WHERE GrpCod=%ld)",
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -209,15 +211,16 @@ bool Grp_DB_CheckIfGrpExists (long GrpCod)
 
 bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod)
   {
-   /***** Get if a group exists from database *****/
-   return (DB_QueryCOUNT ("can not check if a group belongs to a course",
-			  "SELECT COUNT(*)"
-			   " FROM grp_groups,"
-			         "grp_types"
-			  " WHERE grp_groups.GrpCod=%ld"
-			    " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			    " AND grp_types.CrsCod=%ld",
-			  GrpCod,CrsCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a group belongs to a course",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_groups,"
+			   "grp_types"
+		    " WHERE grp_groups.GrpCod=%ld"
+		      " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+		      " AND grp_types.CrsCod=%ld)",
+		   GrpCod,CrsCod);
   }
 
 /*****************************************************************************/
@@ -226,17 +229,17 @@ bool Grp_DB_CheckIfGrpBelongsToCrs (long GrpCod,long CrsCod)
 
 bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod)
   {
-   /***** Get number of group types with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of type of group"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM grp_types"
-			  " WHERE CrsCod=%ld"
-			    " AND GrpTypName='%s'"
-			    " AND GrpTypCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  GrpTypName,
-			  GrpTypCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of type of group already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_types"
+		    " WHERE CrsCod=%ld"
+		      " AND GrpTypName='%s'"
+		      " AND GrpTypCod<>%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   GrpTypName,
+		   GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -245,16 +248,17 @@ bool Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long Grp
 
 bool Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod)
   {
-   /***** Get number of groups with a type and a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of group already existed",
-			  "SELECT COUNT(*)"
-			   " FROM grp_groups"
-			  " WHERE GrpTypCod=%ld"
-			    " AND GrpName='%s'"
-			    " AND GrpCod<>%ld",
-			  GrpTypCod,
-			  GrpName,
-			  GrpCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of group already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_groups"
+		    " WHERE GrpTypCod=%ld"
+		      " AND GrpName='%s'"
+		      " AND GrpCod<>%ld)",
+		   GrpTypCod,
+		   GrpName,
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -372,15 +376,17 @@ unsigned Grp_DB_GetTchsFromCurrentGrpExceptMe (MYSQL_RES **mysql_res)
 
 bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
   {
-   return (DB_QueryCOUNT ("can not check if you belong to a group type",
-			  "SELECT COUNT(grp_groups.GrpCod)"
-			   " FROM grp_groups,"
-				 "grp_users"
-			  " WHERE grp_groups.GrpTypCod=%ld"
-			    " AND grp_groups.GrpCod=grp_users.GrpCod"
-			    " AND grp_users.UsrCod=%ld",	// I belong
-			  GrpTypCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if you belong to a group type",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_groups,"
+			   "grp_users"
+		    " WHERE grp_groups.GrpTypCod=%ld"
+		      " AND grp_groups.GrpCod=grp_users.GrpCod"
+		      " AND grp_users.UsrCod=%ld)",	// I belong
+		   GrpTypCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -389,39 +395,41 @@ bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod)
 
 bool Grp_DB_CheckIfIBelongToGrp (long GrpCod)
   {
-   return (DB_QueryCOUNT ("can not check if you belong to a group",
-			  "SELECT COUNT(*)"
-			   " FROM grp_users"
-			  " WHERE GrpCod=%ld"
-			    " AND UsrCod=%ld",			// I belong
-			  GrpCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if you belong to a group",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_users"
+		    " WHERE GrpCod=%ld"
+		      " AND UsrCod=%ld)",	// I belong
+		   GrpCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
 /***** Check if a user belongs to any of my groups in the current course *****/
 /*****************************************************************************/
 
-unsigned Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
+bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
   {
-   return (unsigned)
-   (DB_QueryCOUNT ("can not check if a user shares any group"
-		   " in the current course with you",
-		   "SELECT COUNT(*)"
-		    " FROM grp_users"
-		   " WHERE UsrCod=%ld"
-		     " AND GrpCod IN"
-			 " (SELECT grp_users.GrpCod"
-			    " FROM grp_users,"
-				  "grp_groups,"
-				  "grp_types"
-			   " WHERE grp_users.UsrCod=%ld"
-			     " AND grp_users.GrpCod=grp_groups.GrpCod"
-			     " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-			     " AND grp_types.CrsCod=%ld)",
+   return
+   DB_QueryEXISTS ("can not check if a user shares any group in the current course with you",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM grp_users"
+		    " WHERE UsrCod=%ld"
+		      " AND GrpCod IN"
+			  " (SELECT grp_users.GrpCod"
+			     " FROM grp_users,"
+				   "grp_groups,"
+				   "grp_types"
+			    " WHERE grp_users.UsrCod=%ld"
+			      " AND grp_users.GrpCod=grp_groups.GrpCod"
+			      " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+			      " AND grp_types.CrsCod=%ld))",
 		   UsrCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod) != 0);
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -678,14 +686,16 @@ long Grp_DB_GetGrpTypeFromGrp (long GrpCod)
 bool Grp_DB_CheckIfAssociatedToGrp (const char *Table,const char *Field,
                                     long Cod,long GrpCod)
   {
-   return (DB_QueryCOUNT ("can not check if associated to a group",
-			  "SELECT COUNT(*)"
-			   " FROM %s"
-			  " WHERE %s=%ld"
-			    " AND GrpCod=%ld",
-		  	  Table,
-		  	  Field,Cod,
-		  	  GrpCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if associated to a group",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM %s"
+		    " WHERE %s=%ld"
+		      " AND GrpCod=%ld)",
+		   Table,
+		   Field,Cod,
+		   GrpCod);
   }
 
 /*****************************************************************************/
@@ -701,12 +711,14 @@ bool Grp_DB_CheckIfAssociatedToGrps (const char *Table,const char *Field,long Co
 
    /***** Check if an assignment, attendance event, survey,
           exam session or match is associated to any group *****/
-   return (DB_QueryCOUNT ("can not check if associated to groups",
-			  "SELECT COUNT(*)"
-			   " FROM %s"
-			  " WHERE %s=%ld",
-			  Table,
-			  Field,Cod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if associated to groups",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM %s"
+		    " WHERE %s=%ld)",
+		   Table,
+		   Field,Cod);
   }
 
 /*****************************************************************************/

@@ -200,15 +200,15 @@ unsigned Plg_DB_GetDataOfPluginByCod (MYSQL_RES **mysql_res,long PlgCod)
 
 bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod)
   {
-   /***** Get number of plugins with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a plugin"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM plg_plugins"
-			  " WHERE Name='%s'"
-			    " AND PlgCod<>%ld",
-			  Name,
-			  PlgCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a plugin already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM plg_plugins"
+		    " WHERE Name='%s'"
+		      " AND PlgCod<>%ld)",
+		   Name,
+		   PlgCod);
   }
 
 /*****************************************************************************/

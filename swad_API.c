@@ -535,11 +535,12 @@ static int API_GenerateNewWSKey (struct soap *soap,
    Str_Copy (WSKey,Gbl.UniqueNameEncrypted,API_BYTES_WS_KEY);
 
    /***** Check that key does not exist in database *****/
-   if (DB_QueryCOUNT ("can not get existence of key",
-		      "SELECT COUNT(*)"
-		       " FROM api_keys"
-		      " WHERE WSKey='%s'",
-		      WSKey))
+   if (DB_QueryEXISTS ("can not get existence of key",
+		       "SELECT EXISTS"
+		       "(SELECT *"
+			 " FROM api_keys"
+		        " WHERE WSKey='%s')",
+		       WSKey))
       return soap_receiver_fault (soap,
 	                          "Error when generating key",
 	                          "Generated key already existed in database");
@@ -769,11 +770,12 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
       Str_RemoveLeadingArrobas (CopyOfNewNick);
 
       /***** Check if the new nickname matches any of the nicknames of other users *****/
-      if (DB_QueryCOUNT ("can not check if nickname already existed",
-			 "SELECT COUNT(*)"
-			  " FROM usr_nicknames"
-			 " WHERE Nickname='%s'",	// A nickname of another user is the same that this nickname
-			 CopyOfNewNick))		// Already without leading arrobas
+      if (DB_QueryEXISTS ("can not check if nickname already existed",
+			  "SELECT EXISTS"
+			  "(SELECT *"
+			    " FROM usr_nicknames"
+			   " WHERE Nickname='%s')",	// A nickname of another user is the same that this nickname
+			  CopyOfNewNick))		// Already without leading arrobas
 	 return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
 
       /***** Output value of nickname without leading arrobas *****/
@@ -786,12 +788,13 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
       /***** Check if the new email matches any of the confirmed emails of other users *****/
-      if (DB_QueryCOUNT ("can not check if email already existed",
-			 "SELECT COUNT(*)"
-			  " FROM usr_emails"
-			 " WHERE E_mail='%s'"
-			   " AND Confirmed='Y'",
-			 NewEmail))	// An email of another user is the same that my email
+      if (DB_QueryEXISTS ("can not check if email already existed",
+			  "SELECT EXISTS"
+			  "(SELECT *"
+			    " FROM usr_emails"
+			   " WHERE E_mail='%s'"
+			     " AND Confirmed='Y')",
+			  NewEmail))	// An email of another user is the same that my email
 	 return API_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
      }
    else	// New email is not valid
@@ -6052,23 +6055,24 @@ int swad__getLastLocation (struct soap *soap,
    The other user does not have to share any course with me,
    but at least some course of each one has to share center.
    */
-   if (DB_QueryCOUNT ("can not get session data",
-		       "SELECT COUNT(*) FROM "
-		       "(SELECT DISTINCT deg_degrees.CtrCod"
-		         " FROM crs_users,"
-		               "crs_courses,"
-		               "deg_degrees"
-		        " WHERE crs_users.UsrCod=%ld"
-		          " AND crs_users.CrsCod=crs_courses.CrsCod"
-		          " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
-		       "(SELECT DISTINCT deg_degrees.CtrCod"
-		         " FROM crs_users,"
-		               "crs_courses,"
-		               "deg_degrees"
-		        " WHERE crs_users.UsrCod=%d"
-		          " AND crs_users.CrsCod=crs_courses.CrsCod"
-		          " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
-		       " WHERE C1.CtrCod=C2.CtrCod",
+   if (DB_QueryEXISTS ("can not check if you can see user location",
+		       "SELECT EXISTS"
+		       "(SELECT *"
+			 " FROM (SELECT DISTINCT deg_degrees.CtrCod"
+				 " FROM crs_users,"
+				       "crs_courses,"
+				       "deg_degrees"
+				" WHERE crs_users.UsrCod=%ld"
+				  " AND crs_users.CrsCod=crs_courses.CrsCod"
+				  " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
+			       "(SELECT DISTINCT deg_degrees.CtrCod"
+				 " FROM crs_users,"
+				       "crs_courses,"
+				       "deg_degrees"
+				" WHERE crs_users.UsrCod=%d"
+				  " AND crs_users.CrsCod=crs_courses.CrsCod"
+				  " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
+			        " WHERE C1.CtrCod=C2.CtrCod)",
 	               Gbl.Usrs.Me.UsrDat.UsrCod,
 	               userCode))
      {

@@ -306,18 +306,18 @@ unsigned Ctr_DB_GetPhotoAttribution (MYSQL_RES **mysql_res,long CtrCod)
 bool Ctr_DB_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,
 				       long CtrCod,long InsCod)
   {
-   /***** Get number of centers with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a center"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ctr_centers"
-			  " WHERE InsCod=%ld"
-			    " AND %s='%s'"
-			    " AND CtrCod<>%ld",
-			  InsCod,
-			  FieldName,
-			  Name,
-			  CtrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a center already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ctr_centers"
+		    " WHERE InsCod=%ld"
+		      " AND %s='%s'"
+		      " AND CtrCod<>%ld)",
+		   InsCod,
+		   FieldName,
+		   Name,
+		   CtrCod);
   }
 
 /*****************************************************************************/
@@ -622,33 +622,20 @@ void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus)
 /********** Check if any of the centers in an institution has map ************/
 /*****************************************************************************/
 
-bool Ctr_DB_GetIfMapIsAvailableInIns (long InsCod)
+bool Ctr_DB_CheckIfMapIsAvailableInIns (long InsCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool MapIsAvailable = false;
-
    /***** Get if any center in current institution has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
-		       "SELECT EXISTS"	// row[0]
-		       "(SELECT *"
-		         " FROM ctr_centers"
-		        " WHERE InsCod=%ld"
-		          " AND (Latitude<>0"
-		               " OR"
-		               " Longitude<>0))",
-		       InsCod))
-     {
-      /* Get if map is available */
-      row = mysql_fetch_row (mysql_res);
-      MapIsAvailable = (row[0][0] == '1');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MapIsAvailable;
+   return
+   DB_QueryEXISTS ("can not check if map is available",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ctr_centers"
+		    " WHERE InsCod=%ld"
+		      " AND (Latitude<>0"
+			   " OR"
+			   " Longitude<>0))",
+		   InsCod);
   }
 
 /*****************************************************************************/

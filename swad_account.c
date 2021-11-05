@@ -787,8 +787,8 @@ static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
      {
       Str_CreateRandomAlphanumStr (RandomStr,LENGTH_RANDOM_STR);
       Cry_EncryptSHA256Base64 (RandomStr,UsrDat->EnUsrCod);
-      if (!Usr_DB_ChkIfEncryptedUsrCodExists (UsrDat->EnUsrCod))
-          break;
+      if (Usr_DB_GetUsrCodFromEncryptedUsrCod (UsrDat->EnUsrCod) <= 0)
+         break;
      }
    if (NumTry == MAX_TRY)
       Err_ShowErrorAndExit ("Can not create a new encrypted user's code.");

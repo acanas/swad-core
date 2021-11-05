@@ -305,14 +305,15 @@ void Deg_DB_GetShortNameOfDegreeByCod (long DegCod,char ShrtName[Cns_HIERARCHY_M
 
 bool Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
   {
-   /***** Get number of degree types with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a type of degree"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM deg_types"
-			  " WHERE DegTypName='%s'"
-			    " AND DegTypCod<>%ld",
-			  DegTypName,DegTypCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a type of degree already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM deg_types"
+		    " WHERE DegTypName='%s'"
+		      " AND DegTypCod<>%ld)",
+		   DegTypName,
+		   DegTypCod);
   }
 
 /*****************************************************************************/
@@ -460,17 +461,17 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
 bool Deg_DB_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,
                                        long DegCod,long CtrCod)
   {
-   /***** Get number of degrees with a type and a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a degree"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM deg_degrees"
-			  " WHERE CtrCod=%ld"
-			    " AND %s='%s'"
-			    " AND DegCod<>%ld",
-			  CtrCod,
-			  FieldName,Name,
-			  DegCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a degree already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM deg_degrees"
+		    " WHERE CtrCod=%ld"
+		      " AND %s='%s'"
+		      " AND DegCod<>%ld)",
+		   CtrCod,
+		   FieldName,Name,
+		   DegCod);
   }
 
 /*****************************************************************************/
@@ -549,7 +550,8 @@ unsigned Deg_DB_GetNumDegsWithUsrs (Rol_Role_t Role,
 		    " AND deg_degrees.DegCod=crs_courses.DegCod"
 		    " AND crs_courses.CrsCod=crs_users.CrsCod"
 		    " AND crs_users.Role=%u",
-		  SubQuery,(unsigned) Role);
+		  SubQuery,
+		  (unsigned) Role);
   }
 
 /*****************************************************************************/
@@ -761,16 +763,18 @@ unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod)
 
 bool Deg_DB_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
   {
-   return (DB_QueryCOUNT ("can not check if a user belongs to a degree",
-			  "SELECT COUNT(DISTINCT crs_courses.DegCod)"
-			   " FROM crs_users,"
-				 "crs_courses"
-			  " WHERE crs_users.UsrCod=%ld"
-			    " AND crs_users.Accepted='Y'"	// Only if user accepted
-			    " AND crs_users.CrsCod=crs_courses.CrsCod"
-			    " AND crs_courses.DegCod=%ld",
-			  UsrCod,
-			  DegCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a user belongs to a degree",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM crs_users,"
+			   "crs_courses"
+		    " WHERE crs_users.UsrCod=%ld"
+		      " AND crs_users.Accepted='Y'"	// Only if user accepted
+		      " AND crs_users.CrsCod=crs_courses.CrsCod"
+		      " AND crs_courses.DegCod=%ld)",
+		   UsrCod,
+		   DegCod);
   }
 
 /*****************************************************************************/

@@ -110,15 +110,16 @@ unsigned ID_DB_GetIDsFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
 
 bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
   {
-   /***** Get if ID is confirmed from database *****/
-   return (DB_QueryCOUNT ("can not check if ID is confirmed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_ids"
-			  " WHERE UsrCod=%ld"
-			    " AND UsrID='%s'"
-			    " AND Confirmed='Y'",
-			  UsrCod,
-			  ID) != 0);
+   return
+   DB_QueryEXISTS ("can not check if ID is confirmed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_ids"
+		    " WHERE UsrCod=%ld"
+		      " AND UsrID='%s'"
+		      " AND Confirmed='Y')",
+		   UsrCod,
+		   ID);
   }
 
 /*****************************************************************************/
@@ -127,11 +128,13 @@ bool ID_DB_CheckIfConfirmed (long UsrCod,const char ID[ID_MAX_BYTES_USR_ID + 1])
 
 bool ID_DB_FindStrInUsrsIDs (const char *Str)
   {
-   return (DB_QueryCOUNT ("can not check if a string matches any user's ID",
-			  "SELECT COUNT(*)"
-			   " FROM usr_ids"
-			  " WHERE UsrID='%s'",
-			  Str) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a string matches any user's ID",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_ids"
+		    " WHERE UsrID='%s')",
+		   Str);
   }
 
 /*****************************************************************************/

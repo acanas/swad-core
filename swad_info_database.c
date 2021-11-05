@@ -277,15 +277,17 @@ void Inf_DB_SetIHaveRead (bool IHaveRead)
 
 bool Inf_DB_CheckIfIHaveReadInfo (void)
   {
-   return (DB_QueryCOUNT ("can not get if I have read course info",
-			  "SELECT COUNT(*)"
-			   " FROM crs_info_read"
-			  " WHERE UsrCod=%ld"
-			    " AND CrsCod=%ld"
-			    " AND InfoType='%s'",
-			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]) != 0);
+   return
+   DB_QueryEXISTS ("can not check if I have read course info",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM crs_info_read"
+		    " WHERE UsrCod=%ld"
+		      " AND CrsCod=%ld"
+		      " AND InfoType='%s')",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Inf_DB_NamesForInfoType[Gbl.Crs.Info.Type]);
   }
 
 /*****************************************************************************/

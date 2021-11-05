@@ -134,16 +134,17 @@ unsigned Bld_DB_GetDataOfBuildingByCod (MYSQL_RES **mysql_res,long BldCod)
 
 bool Bld_DB_CheckIfBuildingNameExists (const char *FieldName,const char *Name,long BldCod)
   {
-   /***** Get number of buildings with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name of a building"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM bld_buildings"
-			  " WHERE CtrCod=%ld"
-			    " AND %s='%s'"
-			    " AND BldCod<>%ld",
-			  Gbl.Hierarchy.Ctr.CtrCod,
-			  FieldName,Name,BldCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a building already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM bld_buildings"
+		    " WHERE CtrCod=%ld"
+		      " AND %s='%s'"
+		      " AND BldCod<>%ld)",
+		   Gbl.Hierarchy.Ctr.CtrCod,
+		   FieldName,Name,
+		   BldCod);
   }
 
 

@@ -441,26 +441,9 @@ bool Usr_ItsMe (long UsrCod)
 
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
    if (UsrDat->EnUsrCod[0])
-     {
       /***** Get user's code from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get user's code",
-			  "SELECT UsrCod"
-			   " FROM usr_data"
-			  " WHERE EncryptedUsrCod='%s'",
-			  UsrDat->EnUsrCod) != 1)
-         Err_ShowErrorAndExit ("Error when getting user's code.");
-
-      /***** Get user's code *****/
-      row = mysql_fetch_row (mysql_res);
-      UsrDat->UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
+      UsrDat->UsrCod = Usr_DB_GetUsrCodFromEncryptedUsrCod (UsrDat->EnUsrCod);
    else
       UsrDat->UsrCod = -1L;
   }
@@ -919,13 +902,14 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
    /***** 3. Slow check: If not cached, get if a user is superuser from database *****/
    Gbl.Cache.UsrIsSuperuser.UsrCod = UsrCod;
    Gbl.Cache.UsrIsSuperuser.IsSuperuser =
-      (DB_QueryCOUNT ("can not check if a user is superuser",
-		      "SELECT COUNT(*)"
-		       " FROM usr_admins"
-		      " WHERE UsrCod=%ld"
-		        " AND Scope='%s'",
-		      UsrCod,
-		      Sco_GetDBStrFromScope (HieLvl_SYS)) != 0);
+   DB_QueryEXISTS ("can not check if a user is superuser",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_admins"
+		    " WHERE UsrCod=%ld"
+		      " AND Scope='%s')",
+		   UsrCod,
+		   Sco_GetDBStrFromScope (HieLvl_SYS));
    return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 
@@ -2306,11 +2290,12 @@ bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,
 void Usr_UpdateMyLastData (void)
   {
    /***** Check if it exists an entry for me *****/
-   if (DB_QueryCOUNT ("can not get last user's click",
-		      "SELECT COUNT(*)"
-		       " FROM usr_last"
-		      " WHERE UsrCod=%ld",
-		      Gbl.Usrs.Me.UsrDat.UsrCod))
+   if (DB_QueryEXISTS ("can not check last user's click",
+		       "SELECT EXISTS"
+		       "(SELECT *"
+			 " FROM usr_last"
+		        " WHERE UsrCod=%ld)",
+		       Gbl.Usrs.Me.UsrDat.UsrCod))
       /***** Update my last accessed course, tab and time of click in database *****/
       // WhatToSearch, LastAccNotif remain unchanged
       DB_QueryUPDATE ("can not update last user's data",

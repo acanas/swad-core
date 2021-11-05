@@ -47,12 +47,11 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/********************* Get connected users with a role ***********************/
+/**************** Get number of connected users with a role ******************/
 /*****************************************************************************/
 
 unsigned Con_DB_GetConnectedUsrsTotal (Rol_Role_t Role)
   {
-   /***** Get number of connected users with a role from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of connected users",
 		  "SELECT COUNT(*)"

@@ -1973,7 +1973,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins)
   {
    extern const char *Txt_Map;
 
-   if (Ctr_DB_GetIfMapIsAvailableInIns (Ins->InsCod))
+   if (Ctr_DB_CheckIfMapIsAvailableInIns (Ins->InsCod))
      {
       Ins_EditingIns = Ins;	// Used to pass parameter with the code of the institution
       Lay_PutContextualLinkOnlyIcon (ActSeeInsInf,NULL,

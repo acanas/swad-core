@@ -152,15 +152,17 @@ bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
    const char *SubQuery = (CountOnlyAcceptedCourses ? " AND crs_users.Accepted='Y'" :	// Only if user accepted
 	                                              "");
 
-   return (DB_QueryCOUNT ("can not check if a user belongs to a course",
-			  "SELECT COUNT(*)"
-			   " FROM crs_users"
-			  " WHERE CrsCod=%ld"
-			    " AND UsrCod=%ld"
-			      "%s",
-			  CrsCod,
-			  UsrCod,
-			  SubQuery) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a user belongs to a course",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM crs_users"
+		    " WHERE CrsCod=%ld"
+		      " AND UsrCod=%ld"
+			"%s)",
+		   CrsCod,
+		   UsrCod,
+		   SubQuery);
   }
 
 /*****************************************************************************/
@@ -173,14 +175,16 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
    Enr_GetMyCourses ();
 
    /* Check if user shares any course with me */
-   return (DB_QueryCOUNT ("can not check if a user shares any course with you",
-			  "SELECT COUNT(*)"
-			   " FROM crs_users"
-			  " WHERE UsrCod=%ld"
-			    " AND CrsCod IN"
-			        " (SELECT CrsCod"
-				   " FROM my_courses_tmp)",
-			  UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a user shares any course with you",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM crs_users"
+		    " WHERE UsrCod=%ld"
+		      " AND CrsCod IN"
+			  " (SELECT CrsCod"
+			     " FROM my_courses_tmp))",
+		   UsrCod);
   }
 
 /*****************************************************************************/
@@ -217,12 +221,13 @@ bool Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 
    /* Get if a user shares any course with me from database */
    UsrSharesAnyOfMyCrsWithDifferentRole =
-      (DB_QueryCOUNT ("can not check if a user shares any course with you",
-		      "SELECT COUNT(*)"
-		       " FROM my_courses_tmp,"
-		             "usr_courses_tmp"
-                      " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
-                        " AND my_courses_tmp.Role<>usr_courses_tmp.Role") != 0);
+   DB_QueryEXISTS ("can not check if a user shares any course with you",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM my_courses_tmp,"
+			   "usr_courses_tmp"
+		    " WHERE my_courses_tmp.CrsCod=usr_courses_tmp.CrsCod"
+		      " AND my_courses_tmp.Role<>usr_courses_tmp.Role)");
 
    /* Remove temporary table if exists */
    DB_Query ("can not remove temporary tables",

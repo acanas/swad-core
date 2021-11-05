@@ -210,14 +210,17 @@ bool Ins_DB_CheckIfInsNameExistsInCty (const char *FieldName,
 				       long InsCod,
 				       long CtyCod)
   {
-   return (DB_QueryCOUNT ("can not check if the name of an institution"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM ins_instits"
-			  " WHERE CtyCod=%ld"
-			    " AND %s='%s'"
-			    " AND InsCod<>%ld",
-			  CtyCod,FieldName,Name,InsCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of an institution already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM ins_instits"
+		    " WHERE CtyCod=%ld"
+		      " AND %s='%s'"
+		      " AND InsCod<>%ld)",
+		   CtyCod,
+		   FieldName,Name,
+		   InsCod);
   }
 
 /*****************************************************************************/

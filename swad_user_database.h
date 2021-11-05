@@ -66,7 +66,7 @@ void Usr_DB_UpdateMyOfficePhone (void);
 void Usr_DB_UpdateMyLastWhatToSearch (void);
 
 bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
-bool Usr_DB_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
+long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
 unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);

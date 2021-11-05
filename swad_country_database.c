@@ -374,13 +374,13 @@ unsigned Cty_DB_GetNumCtysWithUsrs (Rol_Role_t Role,
 
 bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
   {
-   /***** Get number of countries with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the numeric code"
-	                  " of a country already existed",
-			  "SELECT COUNT(*)"
-			   " FROM cty_countrs"
-			  " WHERE CtyCod='%03ld'",
-			  CtyCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the numeric code of a country already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM cty_countrs"
+		    " WHERE CtyCod='%03ld')",
+		   CtyCod);
   }
 
 /*****************************************************************************/
@@ -389,13 +389,13 @@ bool Cty_DB_CheckIfNumericCountryCodeExists (long CtyCod)
 
 bool Cty_DB_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
   {
-   /***** Get number of countries with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the alphabetic code"
-	                  " of a country already existed",
-			  "SELECT COUNT(*)"
-			   " FROM cty_countrs"
-			  " WHERE Alpha2='%s'",
-			  Alpha2) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the alphabetic code of a country already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM cty_countrs"
+		    " WHERE Alpha2='%s')",
+		   Alpha2);
   }
 
 /*****************************************************************************/
@@ -406,15 +406,15 @@ bool Cty_DB_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,l
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   /***** Get number of countries with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the name"
-	                  " of a country already existed",
-			  "SELECT COUNT(*)"
-			   " FROM cty_countrs"
-			  " WHERE Name_%s='%s'"
-			    " AND CtyCod<>'%03ld'",
-			  Lan_STR_LANG_ID[Language],Name,
-			  CtyCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the name of a country already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM cty_countrs"
+		    " WHERE Name_%s='%s'"
+		      " AND CtyCod<>'%03ld')",
+		   Lan_STR_LANG_ID[Language],Name,
+		   CtyCod);
   }
 
 /*****************************************************************************/
@@ -504,34 +504,21 @@ unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long CtyCod)
 /************ Check if any of the centers in a country has map ***************/
 /*****************************************************************************/
 
-bool Cty_DB_GetIfMapIsAvailable (long CtyCod)
+bool Cty_DB_CheckIfMapIsAvailable (long CtyCod)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool MapIsAvailable = false;
-
-   /***** Get if any center in current country has a coordinate set
+   /***** Check if any center in current country has a coordinate set
           (coordinates 0, 0 means not set ==> don't show map) *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get if map is available",
-		       "SELECT EXISTS"
-		       "(SELECT *"
-		        " FROM ins_instits,"
-		              "ctr_centers"
-		       " WHERE ins_instits.CtyCod=%ld"
-		         " AND ins_instits.InsCod=ctr_centers.InsCod"
-		         " AND (ctr_centers.Latitude<>0"
-		           " OR ctr_centers.Longitude<>0))",
-		       CtyCod))
-     {
-      /* Get if map is available */
-      row = mysql_fetch_row (mysql_res);
-      MapIsAvailable = (row[0][0] == '1');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
-   return MapIsAvailable;
+   return
+   DB_QueryEXISTS ("can not check if map is available",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		    " FROM ins_instits,"
+			  "ctr_centers"
+		   " WHERE ins_instits.CtyCod=%ld"
+		     " AND ins_instits.InsCod=ctr_centers.InsCod"
+		     " AND (ctr_centers.Latitude<>0"
+		       " OR ctr_centers.Longitude<>0))",
+		   CtyCod);
   }
 
 /*****************************************************************************/

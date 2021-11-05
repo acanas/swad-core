@@ -117,12 +117,13 @@ unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct UsrData *Us
 
 bool Dup_DB_CheckIfUsrIsDup (long UsrCod)
   {
-   return (DB_QueryCOUNT ("can not if user is in list"
-			  " of possible duplicate users",
-			  "SELECT COUNT(*)"
-			   " FROM usr_duplicated"
-			  " WHERE UsrCod=%ld",
-			  UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if user is in list of possible duplicate users",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_duplicated"
+		    " WHERE UsrCod=%ld)",
+		   UsrCod);
   }
 
 /*****************************************************************************/

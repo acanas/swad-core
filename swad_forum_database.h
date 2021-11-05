@@ -51,7 +51,7 @@ long For_DB_InsertForumPst (long ThrCod,long UsrCod,
                             long MedCod);
 void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
                                                    unsigned NumUsrsToBeNotifiedByEMail);
-bool For_DB_GetIfForumPstExists (long PstCod);
+bool For_DB_CheckIfForumPstExists (long PstCod);
 unsigned For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod);
 unsigned For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod);
 unsigned For_DB_GetForumTypeAndLocationOfAPost (MYSQL_RES **mysql_res,long PstCod);

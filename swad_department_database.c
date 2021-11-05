@@ -164,14 +164,15 @@ unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod)
 
 bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
   {
-   /***** Get number of departments with a name from database *****/
-   return (DB_QueryCOUNT ("can not check if the department name already existed",
-			  "SELECT COUNT(*)"
-			   " FROM dpt_departments"
-			  " WHERE %s='%s'"
-			    " AND DptCod<>%ld",
-			  FieldName,Name,
-			  DptCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if the department name already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM dpt_departments"
+		    " WHERE %s='%s'"
+		      " AND DptCod<>%ld)",
+		   FieldName,Name,
+		   DptCod);
   }
 
 /*****************************************************************************/

@@ -239,12 +239,15 @@ bool Fol_DB_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
       return false;
 
    /***** Check if a user is a follower of another user *****/
-   return (DB_QueryCOUNT ("can not get if a user is a follower of another one",
-			  "SELECT COUNT(*)"
-			   " FROM usr_follow"
-			  " WHERE FollowerCod=%ld"
-			    " AND FollowedCod=%ld",
-			  FollowerCod,FollowedCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a user is a follower of another one",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_follow"
+		    " WHERE FollowerCod=%ld"
+		      " AND FollowedCod=%ld)",
+		   FollowerCod,
+		   FollowedCod);
   }
 
 /*****************************************************************************/

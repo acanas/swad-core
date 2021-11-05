@@ -1879,7 +1879,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty)
   {
    extern const char *Txt_Map;
 
-   if (Cty_DB_GetIfMapIsAvailable (Cty->CtyCod))
+   if (Cty_DB_CheckIfMapIsAvailable (Cty->CtyCod))
      {
       Cty_EditingCty = Cty;	// Used to pass parameter with the code of the country
       Lay_PutContextualLinkOnlyIcon (ActSeeCtyInf,NULL,

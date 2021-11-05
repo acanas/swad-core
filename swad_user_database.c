@@ -161,27 +161,29 @@ bool Usr_DB_ChkIfUsrCodExists (long UsrCod)
    if (UsrCod <= 0)	// Wrong user's code
       return false;
 
-   /***** Get if a user exists in database *****/
-   return (DB_QueryCOUNT ("can not check if a user exists",
-			  "SELECT COUNT(*)"
-			   " FROM usr_data"
-			  " WHERE UsrCod=%ld",
-			  UsrCod) != 0);
+   /***** Check if a user exists in database *****/
+   return
+   DB_QueryEXISTS ("can not check if a user exists",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_data"
+		    " WHERE UsrCod=%ld)",
+		   UsrCod);
   }
 
 /*****************************************************************************/
-/******** Check if a user exists with a given encrypted user's code **********/
+/******** Get user's code from database using encrypted user's code **********/
 /*****************************************************************************/
+// Input: UsrDat->EncryptedUsrCod must hold user's encrypted code
 
-bool Usr_DB_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64])
+long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
-   /***** Get if an encrypted user's code already existed in database *****/
-   return (DB_QueryCOUNT ("can not check if an encrypted user's code"
-			  " already existed",
-			  "SELECT COUNT(*)"
-			   " FROM usr_data"
-			  " WHERE EncryptedUsrCod='%s'",
-			  EncryptedUsrCod) != 0);
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT UsrCod"
+		        " FROM usr_data"
+		       " WHERE EncryptedUsrCod='%s'",
+		       EncryptedUsrCod);
   }
 
 /*****************************************************************************/
@@ -190,16 +192,17 @@ bool Usr_DB_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENC
 
 bool Usr_DB_FindStrInUsrsNames (const char *Str)
   {
-   return (DB_QueryCOUNT ("can not check if a string matches"
-			  " a first name or a surname",
-			  "SELECT COUNT(*)"
-			   " FROM usr_data"
-			  " WHERE FirstName='%s'"
-			     " OR Surname1='%s'"
-			     " OR Surname2='%s'",
-			  Str,
-			  Str,
-			  Str) != 0);
+   return
+   DB_QueryEXISTS ("can not check if a string matches a first name or a surname",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_data"
+		    " WHERE FirstName='%s'"
+		       " OR Surname1='%s'"
+		       " OR Surname2='%s')",
+		   Str,
+		   Str,
+		   Str);
   }
 
 /*****************************************************************************/
@@ -363,11 +366,13 @@ void Usr_DB_MarkMyBirthdayAsCongratulated (void)
 
 bool Usr_DB_CheckIfMyBirthdayHasNotBeenCongratulated (void)
   {
-   return (DB_QueryCOUNT ("can not check if my birthday has been congratulated",
-			  "SELECT COUNT(*)"
-			   " FROM usr_birthdays_today"
-			  " WHERE UsrCod=%ld",
-			  Gbl.Usrs.Me.UsrDat.UsrCod) == 0);
+   return
+   DB_QueryEXISTS ("can not check if my birthday has been congratulated",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_birthdays_today"
+		    " WHERE UsrCod=%ld)",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

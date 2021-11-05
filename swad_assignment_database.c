@@ -216,15 +216,17 @@ void Asg_DB_GetAssignmentTxtByCod (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 bool Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,
                                             long AsgCod)
   {
-   /***** Get number of assignments with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar assignments",
-			  "SELECT COUNT(*)"
-			   " FROM asg_assignments"
-			  " WHERE CrsCod=%ld"
-			    " AND %s='%s'"
-			    " AND AsgCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Field,Value,AsgCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if similar assignments exist",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM asg_assignments"
+		    " WHERE CrsCod=%ld"
+		      " AND %s='%s'"
+		      " AND AsgCod<>%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Field,Value,
+		   AsgCod);
   }
 
 /*****************************************************************************/
@@ -309,33 +311,34 @@ void Asg_DB_RemoveAssignment (long AsgCod)
   }
 
 /*****************************************************************************/
-/******************* Get groups associated to an assignment ******************/
+/********************* Check if I can do an assignment ***********************/
 /*****************************************************************************/
 
 bool Asg_DB_CheckIfICanDoAssignment (long AsgCod)
   {
    // Students and teachers can do assignments depending on groups
-   /***** Get if I can do an assignment from database *****/
-   return (DB_QueryCOUNT ("can not check if I can do an assignment",
-			  "SELECT COUNT(*)"
-			   " FROM asg_assignments"
-			  " WHERE AsgCod=%ld"
-			    " AND ("
-				  // Assignment is for the whole course
-				  "AsgCod NOT IN"
-				  " (SELECT AsgCod"
-				     " FROM asg_groups)"
-				  " OR "
-				  // Assignment is for some of my groups
-				  "AsgCod IN"
-				  " (SELECT asg_groups.AsgCod"
-				     " FROM grp_users,"
-					   "asg_groups"
-				    " WHERE grp_users.UsrCod=%ld"
-				      " AND asg_groups.GrpCod=grp_users.GrpCod)"
-				 ")",
-			  AsgCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if I can do an assignment",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM asg_assignments"
+		    " WHERE AsgCod=%ld"
+		      " AND ("
+			    // Assignment is for the whole course
+			    "AsgCod NOT IN"
+			    " (SELECT AsgCod"
+			       " FROM asg_groups)"
+			    " OR "
+			    // Assignment is for some of my groups
+			    "AsgCod IN"
+			    " (SELECT asg_groups.AsgCod"
+			       " FROM grp_users,"
+				     "asg_groups"
+			      " WHERE grp_users.UsrCod=%ld"
+				" AND asg_groups.GrpCod=grp_users.GrpCod)"
+			   "))",
+		   AsgCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -568,7 +571,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
                         Gbl.Hierarchy.Crs.CrsCod);
       default:
 	 Err_WrongScopeExit ();
-	 return 0;
+	 return 0;	// Not reached
      }
   }
 

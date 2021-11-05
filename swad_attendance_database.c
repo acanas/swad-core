@@ -188,17 +188,17 @@ void Att_DB_GetAttEventDescription (long AttCod,char Description[Cns_MAX_BYTES_T
 
 bool Att_DB_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
   {
-   /***** Get number of attendance events
-          with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar attendance events",
-			  "SELECT COUNT(*)"
-			   " FROM att_events"
-			  " WHERE CrsCod=%ld"
-			    " AND %s='%s'"
-			    " AND AttCod<>%ld",
-			  Gbl.Hierarchy.Crs.CrsCod,
-			  Field,Value,
-			  AttCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check similar attendance events",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM att_events"
+		    " WHERE CrsCod=%ld"
+		      " AND %s='%s'"
+		      " AND AttCod<>%ld)",
+		   Gbl.Hierarchy.Crs.CrsCod,
+		   Field,Value,
+		   AttCod);
   }
 
 /*****************************************************************************/

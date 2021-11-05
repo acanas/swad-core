@@ -493,22 +493,24 @@ unsigned Mch_DB_GetGrpsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
 
 bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
   {
-   return (DB_QueryCOUNT ("can not check if I can play a match",
-			  "SELECT COUNT(*)"
-			   " FROM mch_matches"
-			  " WHERE MchCod=%ld"
-			    " AND (MchCod NOT IN"
-				 " (SELECT MchCod"
-				    " FROM mch_groups)"
-				 " OR"
-				 " MchCod IN"
-				 " (SELECT mch_groups.MchCod"
-				    " FROM grp_users,"
-					  "mch_groups"
-				   " WHERE grp_users.UsrCod=%ld"
-				     " AND grp_users.GrpCod=mch_groups.GrpCod))",
-			  MchCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if I can play a match",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM mch_matches"
+		    " WHERE MchCod=%ld"
+		      " AND (MchCod NOT IN"
+			   " (SELECT MchCod"
+			      " FROM mch_groups)"
+			   " OR"
+			   " MchCod IN"
+			   " (SELECT mch_groups.MchCod"
+			      " FROM grp_users,"
+				    "mch_groups"
+			     " WHERE grp_users.UsrCod=%ld"
+			       " AND grp_users.GrpCod=mch_groups.GrpCod)))",
+		   MchCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -750,16 +752,18 @@ void Mch_DB_RegisterMeAsPlayerInMatch (long MchCod)
   }
 
 /*****************************************************************************/
-/*********************** Get if match is being played ************************/
+/********************** Check if match is being played ***********************/
 /*****************************************************************************/
 
-bool Mch_DB_GetIfMatchIsBeingPlayed (long MchCod)
+bool Mch_DB_CheckIfMatchIsBeingPlayed (long MchCod)
   {
-   return (DB_QueryCOUNT ("can not get if match is being played",
-			  "SELECT COUNT(*)"
-			   " FROM mch_playing"
-			  " WHERE MchCod=%ld",
-			  MchCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if match is being played",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM mch_playing"
+		    " WHERE MchCod=%ld)",
+		   MchCod);
   }
 
 /*****************************************************************************/
@@ -923,13 +927,15 @@ void Mch_DB_UpdateMatchPrint (const struct MchPrn_Print *Print)
 
 bool Mch_DB_CheckIfMatchPrintExists (const struct MchPrn_Print *Print)
   {
-   return (DB_QueryCOUNT ("can not get if match print exists",
-			  "SELECT COUNT(*)"
-			   " FROM mch_results"
-			  " WHERE MchCod=%ld"
-			    " AND UsrCod=%ld",
-			  Print->MchCod,
-			  Print->UsrCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check if match print exists",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM mch_results"
+		    " WHERE MchCod=%ld"
+		      " AND UsrCod=%ld)",
+		   Print->MchCod,
+		   Print->UsrCod);
   }
 
 /*****************************************************************************/

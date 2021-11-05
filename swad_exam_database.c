@@ -243,15 +243,17 @@ void Exa_DB_GetExamTxt (long ExaCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
 bool Exa_DB_CheckIfSimilarExamExists (long CrsCod,long ExaCod,const char *Title)
   {
-   return (DB_QueryCOUNT ("can not get similar exams",
-			  "SELECT COUNT(*)"
-			   " FROM exa_exams"
-			  " WHERE CrsCod=%ld"
-			    " AND Title='%s'"
-			    " AND ExaCod<>%ld",
-			  CrsCod,
-			  Title,
-			  ExaCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check similar exams",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM exa_exams"
+		    " WHERE CrsCod=%ld"
+		      " AND Title='%s'"
+		      " AND ExaCod<>%ld)",
+		   CrsCod,
+		   Title,
+		   ExaCod);
   }
 
 /*****************************************************************************/
@@ -708,19 +710,20 @@ unsigned Exa_DB_GetDataOfSetByCod (MYSQL_RES **mysql_res,long SetCod)
 bool Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
                                      const char Title[ExaSet_MAX_BYTES_TITLE + 1])
   {
-   /***** Get number of set of questions with a field value from database *****/
-   return (DB_QueryCOUNT ("can not get similar sets of questions",
-			  "SELECT COUNT(*)"
-			   " FROM exa_sets,"
-			         "exa_exams"
-			  " WHERE exa_sets.ExaCod=%ld"
-			    " AND exa_sets.Title='%s'"
-			    " AND exa_sets.SetCod<>%ld"
-			    " AND exa_sets.ExaCod=exa_exams.ExaCod"
-			    " AND exa_exams.CrsCod=%ld",	// Extra check
-			  Set->ExaCod,Title,
-			  Set->SetCod,
-			  Gbl.Hierarchy.Crs.CrsCod) != 0);
+   return
+   DB_QueryEXISTS ("can not check similar sets of questions",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM exa_sets,"
+			   "exa_exams"
+		    " WHERE exa_sets.ExaCod=%ld"
+		      " AND exa_sets.Title='%s'"
+		      " AND exa_sets.SetCod<>%ld"
+		      " AND exa_sets.ExaCod=exa_exams.ExaCod"
+		      " AND exa_exams.CrsCod=%ld)",	// Extra check
+		   Set->ExaCod,Title,
+		   Set->SetCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1668,21 +1671,23 @@ unsigned Exa_DB_GetGrpsAssociatedToSes (MYSQL_RES **mysql_res,long SesCod)
 
 bool Exa_DB_CheckIfICanListThisSessionBasedOnGrps (long SesCod)
   {
-   return (DB_QueryCOUNT ("can not check if I can play an exam session",
-			  "SELECT COUNT(*)"
-			   " FROM exa_sessions"
-			  " WHERE SesCod=%ld"
-			  " AND (SesCod NOT IN"
-			       " (SELECT SesCod FROM exa_groups)"
+   return
+   DB_QueryEXISTS ("can not check if I can play an exam session",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM exa_sessions"
+		    " WHERE SesCod=%ld"
+		      " AND (SesCod NOT IN"
+			   " (SELECT SesCod FROM exa_groups)"
 			       " OR"
-			       " SesCod IN"
-			       " (SELECT exa_groups.SesCod"
-				  " FROM exa_groups,"
-					"grp_users"
-				 " WHERE grp_users.UsrCod=%ld"
-				   " AND grp_users.GrpCod=exa_groups.GrpCod))",
-			  SesCod,
-			  Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+			   " SesCod IN"
+			   " (SELECT exa_groups.SesCod"
+			      " FROM exa_groups,"
+				    "grp_users"
+			     " WHERE grp_users.UsrCod=%ld"
+			       " AND grp_users.GrpCod=exa_groups.GrpCod)))",
+		   SesCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -2106,18 +2111,18 @@ void Exa_DB_RemovePrintQstsFromCrs (long CrsCod)
 
 bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
   {
-   /***** Check if the current session id
-          is the same as the last one stored in database *****/
-   return (DB_QueryCOUNT ("can not check session",
-			  "SELECT COUNT(*)"
-			   " FROM exa_log_sessions"
-			  " WHERE LogCod="
-				 "(SELECT MAX(LogCod)"
-				   " FROM exa_log_sessions"
-				  " WHERE PrnCod=%ld)"
-			    " AND SessionId='%s'",
-			  PrnCod,
-			  Gbl.Session.Id) != 0);
+   return
+   DB_QueryEXISTS ("can not check session",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM exa_log_sessions"
+		    " WHERE LogCod="
+			   "(SELECT MAX(LogCod)"
+			     " FROM exa_log_sessions"
+			    " WHERE PrnCod=%ld)"
+		      " AND SessionId='%s')",
+		   PrnCod,
+		   Gbl.Session.Id);
   }
 
 /*****************************************************************************/
@@ -2126,18 +2131,18 @@ bool Exa_DB_CheckIfSessionIsTheSameAsTheLast (long PrnCod)
 
 bool Exa_DB_CheckIfUserAgentIsTheSameAsTheLast (long PrnCod,const char *UserAgentDB)
   {
-   /***** Get if the current user agent
-          is the same as the last stored in database *****/
-   return (DB_QueryCOUNT ("can not check user agent",
-			  "SELECT COUNT(*)"
-			   " FROM exa_log_user_agents"
-			  " WHERE LogCod="
-				 "(SELECT MAX(LogCod)"
-				   " FROM exa_log_user_agents"
-				  " WHERE PrnCod=%ld)"
-			    " AND UserAgent='%s'",
-			  PrnCod,
-			  UserAgentDB) != 0);
+   return
+   DB_QueryEXISTS ("can not check user agent",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM exa_log_user_agents"
+		    " WHERE LogCod="
+			   "(SELECT MAX(LogCod)"
+			     " FROM exa_log_user_agents"
+			    " WHERE PrnCod=%ld)"
+		      " AND UserAgent='%s')",
+		   PrnCod,
+		   UserAgentDB);
   }
 
 /*****************************************************************************/

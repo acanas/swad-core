@@ -966,7 +966,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    if (Match->Status.Showing == Mch_END)	// Match over
       Match->Status.Playing = false;
    else						// Match not over
-      Match->Status.Playing = Mch_DB_GetIfMatchIsBeingPlayed (Match->MchCod);
+      Match->Status.Playing = Mch_DB_CheckIfMatchIsBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
