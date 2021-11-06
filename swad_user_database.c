@@ -25,60 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-// #define _GNU_SOURCE 		// For asprintf
-// #include <ctype.h>		// For isalnum, isdigit, etc.
-// #include <limits.h>		// For maximum values
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
-// #include <stdio.h>		// For asprintf
-// #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
-// #include <string.h>		// For string functions
-// #include <sys/wait.h>		// For the macro WEXITSTATUS
-// #include <unistd.h>		// For access, lstat, getpid, chdir, symlink, unlink
-
-// #include "swad_account.h"
-// #include "swad_agenda.h"
-// #include "swad_announcement.h"
-// #include "swad_box.h"
-// #include "swad_calendar.h"
-// #include "swad_config.h"
-// #include "swad_connected_database.h"
-// #include "swad_course.h"
 #include "swad_database.h"
-// #include "swad_department.h"
-// #include "swad_duplicate.h"
-// #include "swad_enrolment.h"
 #include "swad_error.h"
-// #include "swad_figure.h"
-// #include "swad_figure_cache.h"
-// #include "swad_follow.h"
-// #include "swad_form.h"
 #include "swad_global.h"
-// #include "swad_group.h"
-// #include "swad_help.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_HTML.h"
-// #include "swad_ID.h"
-// #include "swad_language.h"
-// #include "swad_mail_database.h"
-// #include "swad_message.h"
-// #include "swad_MFU.h"
-// #include "swad_nickname.h"
-// #include "swad_nickname_database.h"
-// #include "swad_notification.h"
-// #include "swad_parameter.h"
-// #include "swad_password.h"
-// #include "swad_photo.h"
-// #include "swad_privacy.h"
-// #include "swad_QR.h"
-// #include "swad_record.h"
-// #include "swad_record_database.h"
-// #include "swad_role.h"
-// #include "swad_session_database.h"
-// #include "swad_setting.h"
-// #include "swad_tab.h"
-// #include "swad_user.h"
 #include "swad_user_database.h"
 
 /*****************************************************************************/

@@ -31,23 +31,8 @@
 #include <stdbool.h>		// For boolean type
 #include <sys/types.h>		// For time_t
 
-// #include "swad_action.h"
-// #include "swad_constant.h"
-// #include "swad_country.h"
 #include "swad_cryptography.h"
-// #include "swad_date.h"
-// #include "swad_degree.h"
-// #include "swad_icon.h"
-// #include "swad_layout.h"
-// #include "swad_menu.h"
-// #include "swad_nickname.h"
-// #include "swad_password.h"
-// #include "swad_privacy_visibility_type.h"
-// #include "swad_role_type.h"
-// #include "swad_scope.h"
 #include "swad_search.h"
-// #include "swad_string.h"
-// #include "swad_theme.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

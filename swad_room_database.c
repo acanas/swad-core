@@ -26,11 +26,14 @@
 /*****************************************************************************/
 
 #include "swad_database.h"
+#include "swad_global.h"
 #include "swad_room.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -327,6 +330,43 @@ unsigned Roo_DB_GetMACAddresses (MYSQL_RES **mysql_res,long RooCod)
 		   " WHERE RooCod=%ld"
 		   " ORDER BY MAC",
 		   RooCod);
+  }
+
+/*****************************************************************************/
+/********************** Check if I can see user's location *******************/
+/*****************************************************************************/
+
+bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
+  {
+   /*
+   I can only consult the location of another user
+   if the intersection of the centers of our courses is not empty.
+   The other user does not have to share any course with me,
+   but at least some course of each one has to share center.
+   */
+   return
+   DB_QueryEXISTS ("can not check if you can see user location",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM (SELECT DISTINCT "
+				   "deg_degrees.CtrCod"
+			     " FROM crs_users,"
+				   "crs_courses,"
+				   "deg_degrees"
+			    " WHERE crs_users.UsrCod=%ld"
+			      " AND crs_users.CrsCod=crs_courses.CrsCod"
+			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
+			   "(SELECT DISTINCT "
+				   "deg_degrees.CtrCod"
+			     " FROM crs_users,"
+				   "crs_courses,"
+				   "deg_degrees"
+			    " WHERE crs_users.UsrCod=%ld"
+			      " AND crs_users.CrsCod=crs_courses.CrsCod"
+			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
+			    " WHERE C1.CtrCod=C2.CtrCod)",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   UsrCod);
   }
 
 /*****************************************************************************/

@@ -121,6 +121,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_password.h"
 #include "swad_question_database.h"
 #include "swad_role.h"
+#include "swad_room_database.h"
 #include "swad_search.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
@@ -6057,28 +6058,7 @@ int swad__getLastLocation (struct soap *soap,
    The other user does not have to share any course with me,
    but at least some course of each one has to share center.
    */
-   if (DB_QueryEXISTS ("can not check if you can see user location",
-		       "SELECT EXISTS"
-		       "(SELECT *"
-			 " FROM (SELECT DISTINCT "
-			               "deg_degrees.CtrCod"
-				 " FROM crs_users,"
-				       "crs_courses,"
-				       "deg_degrees"
-				" WHERE crs_users.UsrCod=%ld"
-				  " AND crs_users.CrsCod=crs_courses.CrsCod"
-				  " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
-			       "(SELECT DISTINCT "
-			               "deg_degrees.CtrCod"
-				 " FROM crs_users,"
-				       "crs_courses,"
-				       "deg_degrees"
-				" WHERE crs_users.UsrCod=%d"
-				  " AND crs_users.CrsCod=crs_courses.CrsCod"
-				  " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
-			        " WHERE C1.CtrCod=C2.CtrCod)",
-	               Gbl.Usrs.Me.UsrDat.UsrCod,
-	               userCode))
+   if (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode))
      {
       /***** Get list of locations *****/
       NumLocs = (unsigned)
