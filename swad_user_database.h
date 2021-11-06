@@ -68,6 +68,7 @@ void Usr_DB_UpdateMyLastWhatToSearch (void);
 bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
 long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
+void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query);
 void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query);
 unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);

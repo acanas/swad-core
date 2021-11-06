@@ -3768,100 +3768,10 @@ static void Usr_GetAdmsLst (HieLvl_Level_t Scope)
 
 static void Usr_GetGstsLst (HieLvl_Level_t Scope)
   {
-   const char *QueryFields =
-      "UsrCod,"
-      "EncryptedUsrCod,"
-      "Password,"
-      "Surname1,"
-      "Surname2,"
-      "FirstName,"
-      "Sex,"
-      "Photo,"
-      "PhotoVisibility,"
-      "CtyCod,"
-      "InsCod";
-   /*
-   row[ 0]: usr_data.UsrCod
-   row[ 1]: usr_data.EncryptedUsrCod
-   row[ 2]: usr_data.Password
-   row[ 3]: usr_data.Surname1
-   row[ 4]: usr_data.Surname2
-   row[ 5]: usr_data.FirstName
-   row[ 6]: usr_data.Sex
-   row[ 7]: usr_data.Photo
-   row[ 8]: usr_data.PhotoVisibility
-   row[ 9]: usr_data.CtyCod
-   row[10]: usr_data.InsCod
-   */
    char *Query = NULL;
 
    /***** Build query *****/
-   switch (Scope)
-     {
-      case HieLvl_SYS:
-	 DB_BuildQuery (&Query,
-         		"SELECT %s"
-         	 	 " FROM usr_data"
-			" WHERE UsrCod NOT IN"
-			      " (SELECT UsrCod"
-			         " FROM crs_users)"
-			" ORDER BY Surname1,"
-			          "Surname2,"
-			          "FirstName,"
-			          "UsrCod",
-			QueryFields);
-         break;
-      case HieLvl_CTY:
-	 DB_BuildQuery (&Query,
-			"SELECT %s"
-			 " FROM usr_data"
-			" WHERE (CtyCod=%ld"
-			       " OR"
-			       " InsCtyCod=%ld)"
-			  " AND UsrCod NOT IN"
-			      " (SELECT UsrCod"
-			         " FROM crs_users)"
-			" ORDER BY Surname1,"
-			          "Surname2,"
-			          "FirstName,"
-			          "UsrCod",
-			QueryFields,
-			Gbl.Hierarchy.Cty.CtyCod,
-			Gbl.Hierarchy.Cty.CtyCod);
-         break;
-      case HieLvl_INS:
-	 DB_BuildQuery (&Query,
-			"SELECT %s"
-			 " FROM usr_data"
-			" WHERE InsCod=%ld"
-			  " AND UsrCod NOT IN"
-			      " (SELECT UsrCod"
-			         " FROM crs_users)"
-			" ORDER BY Surname1,"
-			          "Surname2,"
-			          "FirstName,"
-			          "UsrCod",
-			QueryFields,
-			Gbl.Hierarchy.Ins.InsCod);
-         break;
-      case HieLvl_CTR:
-	 DB_BuildQuery (&Query,
-			"SELECT %s"
-			 " FROM usr_data"
-			" WHERE CtrCod=%ld"
-			  " AND UsrCod NOT IN"
-			      " (SELECT UsrCod"
-			         " FROM crs_users)"
-			" ORDER BY Surname1,"
-			          "Surname2,"
-			          "FirstName,"
-			          "UsrCod",
-			QueryFields,
-			Gbl.Hierarchy.Ctr.CtrCod);
-         break;
-      default:        // not aplicable
-         return;
-     }
+   Usr_DB_BuildQueryToGetGstsLst (Scope,&Query);
 
    /***** Get list of students from database *****/
    Usr_GetListUsrsFromQuery (Query,Rol_GST,Scope);

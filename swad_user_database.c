@@ -206,6 +206,92 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
   }
 
 /*****************************************************************************/
+/************************ Get list with data of guests ***********************/
+/*****************************************************************************/
+
+void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
+  {
+   static const char *QueryFields =
+      "UsrCod,"			// row[ 0]
+      "EncryptedUsrCod,"	// row[ 1]
+      "Password,"		// row[ 2]
+      "Surname1,"		// row[ 3]
+      "Surname2,"		// row[ 4]
+      "FirstName,"		// row[ 5]
+      "Sex,"			// row[ 6]
+      "Photo,"			// row[ 7]
+      "PhotoVisibility,"	// row[ 8]
+      "CtyCod,"			// row[ 9]
+      "InsCod";			// row[10]
+   static const char *OrderBySubQuery =
+      " ORDER BY Surname1,"
+		"Surname2,"
+		"FirstName,"
+		"UsrCod";
+
+   /***** Build query *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 DB_BuildQuery (Query,
+         		"SELECT %s"
+         	 	 " FROM usr_data"
+			" WHERE UsrCod NOT IN"
+			      " (SELECT UsrCod"
+			         " FROM crs_users)"
+			    "%s",
+			QueryFields,
+			OrderBySubQuery);
+         return;
+      case HieLvl_CTY:
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data"
+			" WHERE (CtyCod=%ld"
+			       " OR"
+			       " InsCtyCod=%ld)"
+			  " AND UsrCod NOT IN"
+			      " (SELECT UsrCod"
+			         " FROM crs_users)"
+			    "%s",
+			QueryFields,
+			Gbl.Hierarchy.Cty.CtyCod,
+			Gbl.Hierarchy.Cty.CtyCod,
+			OrderBySubQuery);
+         return;
+      case HieLvl_INS:
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data"
+			" WHERE InsCod=%ld"
+			  " AND UsrCod NOT IN"
+			      " (SELECT UsrCod"
+			         " FROM crs_users)"
+			    "%s",
+			QueryFields,
+			Gbl.Hierarchy.Ins.InsCod,
+			OrderBySubQuery);
+         return;
+      case HieLvl_CTR:
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data"
+			" WHERE CtrCod=%ld"
+			  " AND UsrCod NOT IN"
+			      " (SELECT UsrCod"
+			         " FROM crs_users)"
+			    "%s",
+			QueryFields,
+			Gbl.Hierarchy.Ctr.CtrCod,
+			OrderBySubQuery);
+         return;
+      default:        // not aplicable
+	 Err_WrongScopeExit ();
+	 return;	// Not reached
+     }
+  }
+
+/*****************************************************************************/
 /****** Build query to get the user's codes of all students of a degree ******/
 /*****************************************************************************/
 
