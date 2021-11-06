@@ -302,7 +302,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
       case HieLvl_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"	// row[0]
 			        "usr_figures.%s"	// row[1]
 			  " FROM ins_instits,"
@@ -331,7 +331,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
       case HieLvl_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"	// row[0]
 			        "usr_figures.%s"	// row[1]
 			  " FROM ctr_centers,"
@@ -358,7 +358,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
       case HieLvl_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"	// row[0]
 			        "usr_figures.%s"	// row[1]
 			  " FROM deg_degrees,"
@@ -383,7 +383,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
       case HieLvl_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"	// row[0]
 			        "usr_figures.%s"	// row[1]
 			  " FROM crs_courses,"
@@ -406,7 +406,7 @@ unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,const char *FieldName)
       case HieLvl_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"	// row[0]
 			        "usr_figures.%s"	// row[1]
 			  " FROM crs_users,"
@@ -456,7 +456,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
       case HieLvl_CTY:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
 			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
@@ -484,7 +484,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
       case HieLvl_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
 			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
@@ -510,7 +510,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
       case HieLvl_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
 			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
@@ -534,7 +534,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
       case HieLvl_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
 			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]
@@ -556,7 +556,7 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res)
       case HieLvl_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
-			 "SELECT DISTINCTROW "
+			 "SELECT DISTINCT "
 			        "usr_figures.UsrCod,"					// row[0]
 			        "usr_figures.NumClicks/(DATEDIFF(NOW(),"
 			        "usr_figures.FirstClickTime)+1) AS NumClicksPerDay"	// row[1]

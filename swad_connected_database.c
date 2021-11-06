@@ -361,7 +361,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 			              "usr_connected.UsrCod,"				// row[0]
 			              "usr_connected.LastCrsCod,"			// row[1]
 			              "UNIX_TIMESTAMP()-"
@@ -376,7 +376,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 			              "usr_connected.UsrCod,"				// row[0]
 			              "usr_connected.LastCrsCod,"			// row[1]
 			              "UNIX_TIMESTAMP()-"
@@ -401,7 +401,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 			              "usr_connected.UsrCod,"				// row[0]
 			              "usr_connected.LastCrsCod,"			// row[1]
 				      "UNIX_TIMESTAMP()-"
@@ -424,7 +424,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 			              "usr_connected.UsrCod,"				// row[0]
 			              "usr_connected.LastCrsCod,"			// row[1]
 			              "UNIX_TIMESTAMP()-"
@@ -445,7 +445,7 @@ unsigned Con_DB_GetConnectedFromCurrentLocation (MYSQL_RES **mysql_res,Rol_Role_
 	       return (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get list of connected users"
 					 " who belong to this location",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 			              "usr_connected.UsrCod,"				// row[0]
 			              "usr_connected.LastCrsCod,"			// row[1]
 			              "UNIX_TIMESTAMP()-"
@@ -513,7 +513,8 @@ void Con_DB_RemoveOldConnected (void)
    DB_QueryDELETE ("can not remove old users from list of connected users",
 		   "DELETE FROM usr_connected"
 		   " WHERE UsrCod NOT IN"
-		         " (SELECT DISTINCT(UsrCod)"
+		         " (SELECT DISTINCT "
+		                  "UsrCod"
 		            " FROM ses_sessions)");
   }
 

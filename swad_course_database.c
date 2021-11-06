@@ -279,7 +279,8 @@ unsigned Crs_DB_GetOldCrss (MYSQL_RES **mysql_res,unsigned long SecondsWithoutAc
 		    " FROM crs_last"
 		   " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 		     " AND CrsCod NOT IN"
-		         " (SELECT DISTINCT CrsCod"
+		         " (SELECT DISTINCT "
+		                  "CrsCod"
 			    " FROM crs_users)",
 		   SecondsWithoutAccess);
   }

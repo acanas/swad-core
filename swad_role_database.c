@@ -93,7 +93,7 @@ unsigned Rol_DB_GetRolesInAllCrss (MYSQL_RES **mysql_res,long UsrCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get user's roles in all courses",
-		   "SELECT DISTINCT(Role)"	// row[0]
+		   "SELECT DISTINCT Role"	// row[0]
 		    " FROM crs_users"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);

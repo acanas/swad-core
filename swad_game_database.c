@@ -743,7 +743,8 @@ unsigned Gam_DB_GetTstTagsPresentInAGame (MYSQL_RES **mysql_res,long GamCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get tags present in a match result",
 		   "SELECT tst_tags.TagTxt"	// row[0]
-		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
+		    " FROM (SELECT DISTINCT "
+		                  "tst_question_tags.TagCod"
 			    " FROM tst_question_tags,gam_questions"
 			   " WHERE gam_questions.GamCod=%ld"
 			     " AND gam_questions.QstCod=tst_question_tags.QstCod) AS TagsCods,"

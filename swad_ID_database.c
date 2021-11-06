@@ -182,7 +182,8 @@ unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
       // or if password in database is empty (new user)
       NumUsrs = (unsigned)
       DB_QuerySELECT (mysql_res,"can not get user's codes",
-		      "SELECT DISTINCT(usr_ids.UsrCod)"
+		      "SELECT DISTINCT "
+		             "usr_ids.UsrCod"
 		       " FROM usr_ids,"
 			     "usr_data"
 		      " WHERE usr_ids.UsrID IN (%s)"
@@ -198,10 +199,11 @@ unsigned ID_DB_GetUsrCodsFromUsrID (MYSQL_RES **mysql_res,
    else
       NumUsrs = (unsigned)
       DB_QuerySELECT (mysql_res,"can not get user's codes",
-		      "SELECT DISTINCT(UsrCod)"
+		      "SELECT DISTINCT "
+		             "UsrCod"
 		       " FROM usr_ids"
 		      " WHERE UsrID IN (%s)"
-			 "%s",
+			  "%s",
 		      SubQueryAllUsrs,
 		      OnlyConfirmedIDs ? " AND Confirmed='Y'" :
 					 "");

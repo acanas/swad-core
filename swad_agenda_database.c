@@ -464,7 +464,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
+			 " FROM (SELECT DISTINCT "
+			               "crs_users.UsrCod"
                                  " FROM ins_instits,"
 			               "ctr_centers,"
 			               "deg_degrees,"
@@ -482,7 +483,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
+			 " FROM (SELECT DISTINCT "
+			               "crs_users.UsrCod"
                                  " FROM ctr_centers,"
 			               "deg_degrees,"
 			               "crs_courses,"
@@ -498,7 +500,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
+			 " FROM (SELECT DISTINCT "
+			               "crs_users.UsrCod"
                                  " FROM deg_degrees,"
 			               "crs_courses,"
 			               "crs_users"
@@ -512,7 +515,8 @@ unsigned Agd_DB_GetNumEvents (HieLvl_Level_t Scope)
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
                         "SELECT COUNT(*)"
-			 " FROM (SELECT DISTINCT crs_users.UsrCod"
+			 " FROM (SELECT DISTINCT "
+			               "crs_users.UsrCod"
 			         " FROM crs_courses,"
 			               "crs_users"
 			        " WHERE crs_courses.DegCod=%ld"

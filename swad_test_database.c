@@ -376,7 +376,8 @@ unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get tags present in a test",
 		   "SELECT tst_tags.TagTxt"	// row[0]
-		    " FROM (SELECT DISTINCT(tst_question_tags.TagCod)"
+		    " FROM (SELECT DISTINCT "
+		                  "tst_question_tags.TagCod"
 			    " FROM tst_question_tags,"
 				  "tst_exam_questions"
 			   " WHERE tst_exam_questions.ExaCod=%ld"

@@ -2945,7 +2945,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
          if (NumPositiveCods)
            {
             Str_Concat (*Query," AND (crs_users.UsrCod IN"
-			       " (SELECT DISTINCT UsrCod"
+			       " (SELECT DISTINCT "
+			                "UsrCod"
 			          " FROM grp_users"
 			         " WHERE",
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
@@ -2979,7 +2980,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                Str_Concat (*Query," AND (",Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             /* Select all students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (*Query,"crs_users.UsrCod NOT IN"
-			       " (SELECT DISTINCT grp_users.UsrCod"
+			       " (SELECT DISTINCT "
+			                "grp_users.UsrCod"
 			          " FROM grp_groups,"
 			                "grp_users"
 			         " WHERE grp_groups.GrpTypCod='",
@@ -3023,7 +3025,8 @@ void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role)
   {
    char *Query = NULL;
    const char *QueryFields =
-      "DISTINCT usr_data.UsrCod,"
+      "DISTINCT "
+      "usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
       "usr_data.Password,"
       "usr_data.Surname1,"
@@ -3181,7 +3184,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    char *Query = NULL;
    char SubQueryRole[64];
    const char *QueryFields =
-      "DISTINCT usr_data.UsrCod,"
+      "DISTINCT "
+      "usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
       "usr_data.Password,"
       "usr_data.Surname1,"
@@ -3581,7 +3585,8 @@ static void Usr_GetAdmsLst (HieLvl_Level_t Scope)
 			"SELECT %s"
 			 " FROM usr_data"
 			" WHERE UsrCod IN "
-			       "(SELECT DISTINCT UsrCod"
+			       "(SELECT DISTINCT "
+			               "UsrCod"
 				 " FROM usr_admins)"
 			" ORDER BY Surname1,"
 			          "Surname2,"
@@ -3870,30 +3875,10 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
   {
    char *Query = NULL;
 
-   /***** Get the students in a degree from database *****/
-   DB_BuildQuery (&Query,
-		  "SELECT DISTINCT usr_data.UsrCod,"	// row[ 0]
-			 "usr_data.EncryptedUsrCod,"	// row[ 1]
-			 "usr_data.Password,"		// row[ 2]
-			 "usr_data.Surname1,"		// row[ 3]
-			 "usr_data.Surname2,"		// row[ 4]
-			 "usr_data.FirstName,"		// row[ 5]
-			 "usr_data.Sex,"		// row[ 6]
-			 "usr_data.Photo,"		// row[ 7]
-			 "usr_data.PhotoVisibility,"	// row[ 8]
-			 "usr_data.CtyCod,"		// row[ 9]
-			 "usr_data.InsCod"		// row[10]
-		   " FROM crs_courses,"
-		         "crs_users,"
-		         "usr_data"
-		  " WHERE crs_courses.DegCod=%ld"
-		    " AND crs_courses.CrsCod=crs_users.CrsCod"
-		    " AND crs_users.Role=%u"
-		    " AND crs_users.UsrCod=usr_data.UsrCod",
-		  DegCod,
-		  (unsigned) Rol_STD);
+   /***** Build query string *****/
+   Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (DegCod,&Query);
 
-   /***** Get list of students from database *****/
+   /***** Get list of students *****/
    Usr_GetListUsrsFromQuery (Query,Rol_STD,HieLvl_DEG);
 
    /***** Free query string *****/
@@ -3986,10 +3971,9 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t
             /* Get user's photo visibility (row[8]) */
             UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[8]);
 
-            /* Get user's country code (row[9]) */
-	    UsrInList->CtyCod = Str_ConvertStrCodToLongCod (row[9]);
-
-            /* Get user's institution code (row[10]) */
+            /* Get user's country code (row[9])
+               and user's institution code (row[10]) */
+	    UsrInList->CtyCod = Str_ConvertStrCodToLongCod (row[ 9]);
 	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[10]);
 
             /* Get user's role and acceptance of enrolment in course(s)
@@ -4025,9 +4009,9 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t
 			break;
 		    }
         	  break;
-               case Rol_GST:        // Guests have no courses,...
-            	    	    	    	// ...so they have not accepted...
-                                        // ...inscription in any course
+               case Rol_GST:		// Guests have no courses,...
+					// ...so they have not accepted...
+					// ...inscription in any course
                case Rol_DEG_ADM:	// Any admin (degree, center, institution or system)
 	          UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 	          UsrInList->Accepted = false;
@@ -4462,7 +4446,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 	                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
                /* Find if encrypted user's code is already in list */
-               if (!Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
+               if (!Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (UsrDat.EnUsrCod,&Gbl.Usrs.Selected))        // If not in list ==> add it
                  {
                   LengthUsrCod = strlen (UsrDat.EnUsrCod);
 
@@ -4513,8 +4497,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 // Returns true if EncryptedUsrCodToFind is in list
 
-bool Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
-							       struct SelectedUsrs *SelectedUsrs)
+bool Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (const char *EncryptedUsrCodToFind,
+							      struct SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -4742,12 +4726,12 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
    /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
    HTM_DIV_Begin ("class=\"%s\"",
 		  Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
-								    "PREF_OFF");
+								        "PREF_OFF");
       Set_FormToSelectUsrListType (FuncParams,Args,
 				   Set_USR_LIST_AS_CLASS_PHOTO);
 
       /* Number of columns in the class photo */
-      Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
+      Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
       Grp_PutParamsCodGrps ();
       Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
@@ -4761,12 +4745,12 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
    /***** Select Usr_LIST_AS_LISTING *****/
    HTM_DIV_Begin ("class=\"%s\"",
 		  Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING ? "PREF_ON" :
-								"PREF_OFF");
+								    "PREF_OFF");
       Set_FormToSelectUsrListType (FuncParams,Args,
 				   Set_USR_LIST_AS_LISTING);
 
       /* See the photos in list? */
-      Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
+      Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
       Grp_PutParamsCodGrps ();
       Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
@@ -5066,8 +5050,8 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 unsigned Usr_GetColumnsForSelectUsrs (void)
   {
    return (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO) ? Gbl.Usrs.ClassPhoto.Cols :
-                                                             (Gbl.Usrs.Listing.WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
-                                                                                            Usr_NUM_MAIN_FIELDS_DATA_USR);
+                                                                 (Gbl.Usrs.Listing.WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
+                                                                                                Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
 
 /*****************************************************************************/
@@ -5089,7 +5073,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 CheckboxChecked = true;
       else
 	 /* Check if user is in lists of selected users */
-	 CheckboxChecked = Usr_FindEncryptedUsrCodsInListOfSelectedEncryptedUsrCods (EncryptedUsrCod,SelectedUsrs);
+	 CheckboxChecked = Usr_FindEncryptedUsrCodInListOfSelectedEncryptedUsrCods (EncryptedUsrCod,SelectedUsrs);
 
       /***** Check box *****/
       Usr_BuildParamName (&ParamName,Usr_ParamUsrCod[Role],SelectedUsrs->ParamSuffix);
@@ -5449,8 +5433,8 @@ void Usr_ListAllDataGsts (void)
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	      {
 	       UsrDat.Accepted = false;	// Guests have no courses,...
-					   // ...so they have not accepted...
-					   // ...inscription in any course
+					// ...so they have not accepted...
+					// ...inscription in any course
 	       NumUsr++;
 	       Usr_WriteRowGstAllData (&UsrDat);
 
@@ -5489,9 +5473,9 @@ void Usr_ListAllDataStds (void)
    extern const char *Txt_Date_of_birth;
    extern const char *Txt_Group;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
-   unsigned NumColumnsCommonCard;
-   unsigned NumColumnsCardAndGroups;
-   unsigned NumColumnsTotal;
+   unsigned NumColsCommonRecord;
+   unsigned NumColsRecordAndGroups;
+   unsigned NumColsTotal;
    unsigned NumCol;
    unsigned NumUsr;
    char *GroupNames;
@@ -5544,19 +5528,20 @@ void Usr_ListAllDataStds (void)
          Rec_GetListRecordFieldsInCurrentCrs ();
 
       /***** Set number of columns *****/
-      NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_STD;
+      NumColsCommonRecord = Usr_NUM_ALL_FIELDS_DATA_STD;
       if (Gbl.Scope.Current == HieLvl_CRS)
         {
-         NumColumnsCardAndGroups = NumColumnsCommonCard + Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-         NumColumnsTotal = NumColumnsCardAndGroups + Gbl.Crs.Records.LstFields.Num;
+         NumColsRecordAndGroups = NumColsCommonRecord + Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+         NumColsTotal = NumColsRecordAndGroups + Gbl.Crs.Records.LstFields.Num;
         }
       else
-         NumColumnsTotal = NumColumnsCardAndGroups = NumColumnsCommonCard;
+         NumColsTotal = NumColsRecordAndGroups = NumColsCommonRecord;
 
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == HieLvl_CRS)
 	{
-	 Length = (size_t) (Grp_MAX_BYTES_GROUP_NAME + 2) * (size_t) Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
+	 Length = (size_t) (Grp_MAX_BYTES_GROUP_NAME + 2) *
+		  (size_t) Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = malloc (Length + 1)) == NULL)
             Err_NotEnoughMemoryExit ();
 	}
@@ -5567,7 +5552,7 @@ void Usr_ListAllDataStds (void)
 	 if (!Gbl.Usrs.ClassPhoto.AllGroups)
 	   {
 	    HTM_TR_Begin (NULL);
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",NumColumnsTotal);
+	       HTM_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",NumColsTotal);
 		  Grp_WriteNamesOfSelectedGrps ();
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -5580,7 +5565,7 @@ void Usr_ListAllDataStds (void)
 	    /* 1. Columns for the data */
 	    for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 							 1);
-		 NumCol < NumColumnsCommonCard;
+		 NumCol < NumColsCommonRecord;
 		 NumCol++)
 	       HTM_TH (1,1,"LM LIGHT_BLUE",FieldNames[NumCol]);
 
@@ -5614,7 +5599,7 @@ void Usr_ListAllDataStds (void)
 		  HTM_TR_Begin (NULL);
 
 		     for (NumCol = 0;
-			  NumCol < NumColumnsCardAndGroups;
+			  NumCol < NumColsRecordAndGroups;
 			  NumCol++)
 			if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want it in listing
 			  {
@@ -5786,7 +5771,7 @@ void Usr_ListAllDataTchs (void)
 				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
 				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
 				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-								     -1L))))),
+								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -6007,12 +5992,12 @@ void Usr_ListDataAdms (void)
 	 Mnu_ContextMenuBegin ();
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	      {
-	       Usr_PutLinkToSeeGuests ();			// List guests
+	       Usr_PutLinkToSeeGuests ();		// List guests
 	       Dup_PutLinkToListDupUsrs ();		// List possible duplicate users
 	      }
 	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);	// Admin one user
 	    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	       Enr_PutLinkToRemOldUsrs ();			// Remove old users
+	       Enr_PutLinkToRemOldUsrs ();		// Remove old users
 	 Mnu_ContextMenuEnd ();
 	 break;
       default:
@@ -6170,7 +6155,7 @@ void Usr_SeeGuests (void)
       Usr_PutLinkToSeeAdmins ();			// List admins
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);	// Admin one user
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 Enr_PutLinkToRemOldUsrs ();		// Remove old users
+	 Enr_PutLinkToRemOldUsrs ();			// Remove old users
    Mnu_ContextMenuEnd ();
 
    /***** Get and update type of list,
@@ -6221,7 +6206,7 @@ void Usr_SeeGuests (void)
 		  Lay_WriteHeaderClassPhoto (false,true,
 					     (Gbl.Scope.Current == HieLvl_CTR ||
 					      Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
-										    -1L,
+										 -1L,
 					     -1L,
 					     -1L);
 
@@ -6764,7 +6749,8 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
 	 HTM_INPUT_RADIO ("ListUsrsAction",false,
 			  "value=\"%u\"%s",
 			  (unsigned) ListUsrsAction,
-			  ListUsrsAction == Gbl.Usrs.Selected.Option ? " checked=\"checked\"" : "");
+			  ListUsrsAction == Gbl.Usrs.Selected.Option ? " checked=\"checked\"" :
+				                                       "");
 	 HTM_Txt (Label);
       HTM_LABEL_End ();
    HTM_LI_End ();
@@ -7102,7 +7088,7 @@ void Usr_SeeGstClassPhotoPrn (void)
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == HieLvl_CTR ||
 				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
-                                                                        -1L,
+                                                                     -1L,
 				 -1L,-1L);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
@@ -7146,12 +7132,12 @@ void Usr_SeeStdClassPhotoPrn (void)
 				  Gbl.Scope.Current == HieLvl_DEG ||
 				  Gbl.Scope.Current == HieLvl_CTR ||
 				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
-					                                -1L,
+					                             -1L,
 				 (Gbl.Scope.Current == HieLvl_CRS ||
 				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
-					                                -1L,
+					                             -1L,
 				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
-					                                -1L);
+					                             -1L);
       HTM_TABLE_BeginWide ();
 	 Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
 			     Rol_STD,&Gbl.Usrs.Selected,false);
@@ -7207,7 +7193,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 				     (Gbl.Scope.Current == HieLvl_CTR ? Gbl.Hierarchy.Ctr.CtrCod :
 				     (Gbl.Scope.Current == HieLvl_DEG ? Gbl.Hierarchy.Deg.DegCod :
 				     (Gbl.Scope.Current == HieLvl_CRS ? Gbl.Hierarchy.Crs.CrsCod :
-								     -1L))))),
+								        -1L))))),
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -7219,12 +7205,12 @@ void Usr_SeeTchClassPhotoPrn (void)
 				  Gbl.Scope.Current == HieLvl_DEG ||
 				  Gbl.Scope.Current == HieLvl_CTR ||
 				  Gbl.Scope.Current == HieLvl_INS) ? Gbl.Hierarchy.Ins.InsCod :
-					                                -1L,
+					                             -1L,
 				 (Gbl.Scope.Current == HieLvl_CRS ||
 				  Gbl.Scope.Current == HieLvl_DEG) ? Gbl.Hierarchy.Deg.DegCod :
-					                                -1L,
+					                             -1L,
 				  Gbl.Scope.Current == HieLvl_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
-					                                -1L);
+					                             -1L);
       HTM_TABLE_BeginWide ();
 
 	 /* List teachers and non-editing teachers */
@@ -7370,13 +7356,15 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    extern const char *Txt_columns;
    unsigned Cols;
 
-   /***** Begin selector *****/
+   /***** Begin label *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+
+      /***** Begin selector *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			"name=\"ColsClassPhoto\"");
 
-	 /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/
-	 for (Cols = 1;
+	 /***** Put a row in selector for every number of columns *****/
+	 for (Cols  = 1;
 	      Cols <= Usr_CLASS_PHOTO_COLS_MAX;
 	      Cols++)
 	    HTM_OPTION (HTM_Type_UNSIGNED,&Cols,
@@ -7385,7 +7373,10 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
       /***** End selector *****/
       HTM_SELECT_End ();
+
       HTM_Txt (Txt_columns);
+
+   /***** End label *****/
    HTM_LABEL_End ();
   }
 
@@ -7432,7 +7423,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 
    else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
             Role == Rol_TCH &&				// No teachers found
-            Gbl.Hierarchy.Level == HieLvl_CRS &&		// Course selected
+            Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (ActReqMdfOneTch,NULL,NULL,
@@ -7519,7 +7510,19 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 
 void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
   {
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK    ] = ActUnk,
+      [Rol_GST    ] = ActUnk,
+      [Rol_USR    ] = ActUnk,
+      [Rol_STD    ] = ActSeeRecOneStd,
+      [Rol_NET    ] = ActSeeRecOneTch,
+      [Rol_TCH    ] = ActSeeRecOneTch,
+      [Rol_DEG_ADM] = ActUnk,
+      [Rol_CTR_ADM] = ActUnk,
+      [Rol_INS_ADM] = ActUnk,
+      [Rol_SYS_ADM] = ActUnk,
+     };
 
    /***** Show user's photo *****/
    if (NumRows)
@@ -7539,27 +7542,13 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Action to go to user's record depending on role in course */
-   switch (UsrDat->Roles.InCurrentCrs)
-     {
-      case Rol_STD:
-	 NextAction = ActSeeRecOneStd;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 NextAction = ActSeeRecOneTch;
-	 break;
-      default:
-	 NextAction = ActUnk;
-	 break;
-     }
-
-   if (NextAction == ActUnk)
+   if (NextAction[UsrDat->Roles.InCurrentCrs] == ActUnk)
       /* Begin div */
       HTM_DIV_Begin ("class=\"LT AUTHOR_TXT\"");
    else
      {
       /* Begin form to go to user's record card */
-      Frm_BeginForm (NextAction);
+      Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
      }
@@ -7579,7 +7568,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       HTM_Txt (UsrDat->FrstName);
      }
 
-   if (NextAction == ActUnk)
+   if (NextAction[UsrDat->Roles.InCurrentCrs] == ActUnk)
       /* End div */
       HTM_DIV_End ();
    else

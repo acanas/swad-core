@@ -378,7 +378,7 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res)
 		     " FROM ntf_mail_domains,"
 		           "T1"
 		    " WHERE ntf_mail_domains.Domain=T1.Domain COLLATE 'latin1_bin')"
-		   " UNION "
+		    " UNION "
 		   "(SELECT MaiCod,"				// row[0]
 			   "Domain,"				// row[1]
 			   "Info,"				// row[2]
@@ -387,7 +387,7 @@ unsigned Mai_DB_GetMailDomains (MYSQL_RES **mysql_res)
 		    " WHERE Domain NOT IN"
 			  " (SELECT Domain COLLATE 'latin1_bin'"
 			     " FROM T2))"
-		   " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
+		    " ORDER BY %s",	// COLLATE necessary to avoid error in comparisons
 		   OrderBySubQuery[Gbl.Mails.SelectedOrder]);
   }
 

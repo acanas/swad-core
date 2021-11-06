@@ -668,7 +668,8 @@ unsigned Enr_DB_GetNumUsrsNotBelongingToAnyCrs (void)
 		  "SELECT COUNT(*)"
 		   " FROM usr_data"
 		  " WHERE UsrCod NOT IN"
-			" (SELECT DISTINCT(UsrCod)"
+			" (SELECT DISTINCT "
+			         "UsrCod"
 			   " FROM crs_users)");
   }
 

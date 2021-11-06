@@ -226,7 +226,8 @@ unsigned Pho_DB_QueryDegrees (MYSQL_RES **mysql_res,
 long Pho_DB_GetADegWithStdsNotInTableOfComputedDegs (void)
   {
    return DB_QuerySELECTCode ("can not get degree",
-			      "SELECT DISTINCT deg_degrees.DegCod"
+			      "SELECT DISTINCT "
+			             "deg_degrees.DegCod"
 			       " FROM deg_degrees,"
 				     "crs_courses,"
 				     "crs_users"
@@ -234,7 +235,8 @@ long Pho_DB_GetADegWithStdsNotInTableOfComputedDegs (void)
 			        " AND crs_courses.CrsCod=crs_users.CrsCod"
 			        " AND crs_users.Role=%u"
 			        " AND deg_degrees.DegCod NOT IN"
-				    " (SELECT DISTINCT DegCod"
+				    " (SELECT DISTINCT "
+				             "DegCod"
 				       " FROM sta_degrees)"
 			      " LIMIT 1",
 			     (unsigned) Rol_STD);

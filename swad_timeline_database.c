@@ -1079,7 +1079,8 @@ unsigned Tml_DB_GetPublishersInNoteExceptMe (MYSQL_RES **mysql_res,long PubCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get publishers of a note",
-		   "SELECT DISTINCT(PublisherCod)"
+		   "SELECT DISTINCT "
+		          "PublisherCod"
 		    " FROM tml_pubs"
 		   " WHERE NotCod=(SELECT NotCod"
 				   " FROM tml_pubs"

@@ -89,8 +89,9 @@ unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers",
-		   "SELECT DISTINCT CtrCod,"	// row[0]
-				   "ShortName"	// row[1]
+		   "SELECT DISTINCT "
+		          "CtrCod,"	// row[0]
+			  "ShortName"	// row[1]
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		   " ORDER BY ShortName",
@@ -171,7 +172,8 @@ unsigned Ctr_DB_GetListOfCtrsFullWithNumUsrs (MYSQL_RES **mysql_res,
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		     " AND CtrCod NOT IN"
-		         " (SELECT DISTINCT CtrCod"
+		         " (SELECT DISTINCT "
+		                  "CtrCod"
 			    " FROM usr_data))"
 		   " ORDER BY %s",
 		   InsCod,

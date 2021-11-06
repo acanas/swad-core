@@ -206,6 +206,36 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
   }
 
 /*****************************************************************************/
+/****** Build query to get the user's codes of all students of a degree ******/
+/*****************************************************************************/
+
+void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query)
+  {
+   DB_BuildQuery (Query,
+		  "SELECT DISTINCT "
+		         "usr_data.UsrCod,"		// row[ 0]
+			 "usr_data.EncryptedUsrCod,"	// row[ 1]
+			 "usr_data.Password,"		// row[ 2]
+			 "usr_data.Surname1,"		// row[ 3]
+			 "usr_data.Surname2,"		// row[ 4]
+			 "usr_data.FirstName,"		// row[ 5]
+			 "usr_data.Sex,"		// row[ 6]
+			 "usr_data.Photo,"		// row[ 7]
+			 "usr_data.PhotoVisibility,"	// row[ 8]
+			 "usr_data.CtyCod,"		// row[ 9]
+			 "usr_data.InsCod"		// row[10]
+		   " FROM crs_courses,"
+		         "crs_users,"
+		         "usr_data"
+		  " WHERE crs_courses.DegCod=%ld"
+		    " AND crs_courses.CrsCod=crs_users.CrsCod"
+		    " AND crs_users.Role=%u"
+		    " AND crs_users.UsrCod=usr_data.UsrCod",
+		  DegCod,
+		  (unsigned) Rol_STD);
+  }
+
+/*****************************************************************************/
 /************** Get number of users who have chosen an option ****************/
 /*****************************************************************************/
 
@@ -316,7 +346,8 @@ unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess)
 				    " FROM usr_last)"
 			  ") AS candidate_usrs"
 		   " WHERE UsrCod NOT IN"
-		         " (SELECT DISTINCT UsrCod"
+		         " (SELECT DISTINCT "
+		                  "UsrCod"
 			    " FROM crs_users)",
 		   (unsigned long long) SecondsWithoutAccess);
   }

@@ -266,8 +266,9 @@ unsigned Msg_DB_GetDistinctCrssInMyRcvMsgs (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get distinct courses in your messages",
-		   "SELECT DISTINCT crs_courses.CrsCod,"	// row[0]
-				   "crs_courses.ShortName"	// row[1]
+		   "SELECT DISTINCT "
+		          "crs_courses.CrsCod,"		// row[0]
+			  "crs_courses.ShortName"	// row[1]
 		    " FROM msg_rcv,"
 			  "msg_snt,"
 			  "crs_courses"
@@ -286,8 +287,9 @@ unsigned Msg_DB_GetDistinctCrssInMySntMsgs (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get distinct courses in your messages",
-		   "SELECT DISTINCT crs_courses.CrsCod,"	// row[0]
-				   "crs_courses.ShortName"	// row[1]
+		   "SELECT DISTINCT "
+		          "crs_courses.CrsCod,"		// row[0]
+			  "crs_courses.ShortName"	// row[1]
 		    " FROM msg_snt,"
 			  "crs_courses"
 		   " WHERE msg_snt.UsrCod=%ld"
@@ -448,7 +450,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 				          " AND msg_rcv.MsgCod=msg_snt.MsgCod"
 				          " AND msg_snt.CrsCod=%ld"
 				          " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
-				       " UNION "
+				        " UNION "
 				       "(SELECT msg_rcv.MsgCod"
 				         " FROM msg_rcv,"
 				               "msg_snt_deleted,"
@@ -470,7 +472,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 				          "%s"
 				          " AND msg_rcv.MsgCod=msg_snt.MsgCod"
 				          " AND msg_snt.CrsCod=%ld)"
-				       " UNION "
+				        " UNION "
 				       "(SELECT msg_rcv.MsgCod"
 				         " FROM msg_rcv,"
 				               "msg_snt_deleted"
@@ -486,7 +488,8 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
          case Msg_SENT:
             if (FilterFromToSubquery[0])
               {
-               if (asprintf (&SubQuery,"(SELECT DISTINCT msg_snt.MsgCod"
+               if (asprintf (&SubQuery,"(SELECT DISTINCT "
+        		                       "msg_snt.MsgCod"
 				         " FROM msg_snt,"
 				               "msg_rcv,"
 				               "usr_data"
@@ -494,9 +497,10 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 				          " AND msg_snt.CrsCod=%ld"
 				          " AND msg_snt.MsgCod=msg_rcv.MsgCod"
 				          " AND msg_rcv.UsrCod=usr_data.UsrCod"
-				          "%s)"
-				       " UNION "
-				       "(SELECT DISTINCT msg_snt.MsgCod"
+				            "%s)"
+				        " UNION "
+				       "(SELECT DISTINCT "
+				               "msg_snt.MsgCod"
 				         " FROM msg_snt,"
 				               "msg_rcv_deleted,"
 				               "usr_data"
@@ -504,7 +508,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 				          " AND msg_snt.CrsCod=%ld"
 				          " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 				          " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod"
-				          "%s)",
+				            "%s)",
 			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery,
 			     UsrCod,Messages->FilterCrsCod,FilterFromToSubquery) < 0)
                   Err_NotEnoughMemoryExit ();
@@ -535,20 +539,20 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
 				               "msg_snt,"
 				               "usr_data"
 				        " WHERE msg_rcv.UsrCod=%ld"
-				          "%s"
+				            "%s"
 				          " AND msg_rcv.MsgCod=msg_snt.MsgCod"
 				          " AND msg_snt.UsrCod=usr_data.UsrCod"
-				          "%s)"
-				       " UNION "
+				            "%s)"
+				        " UNION "
 				       "(SELECT msg_rcv.MsgCod"
 				         " FROM msg_rcv,"
 				               "msg_snt_deleted,"
 				               "usr_data"
 				        " WHERE msg_rcv.UsrCod=%ld"
-				          "%s"
+				            "%s"
 				          " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
 				          " AND msg_snt_deleted.UsrCod=usr_data.UsrCod"
-				          "%s)",
+				            "%s)",
 			     UsrCod,StrUnreadMsg,FilterFromToSubquery,
 			     UsrCod,StrUnreadMsg,FilterFromToSubquery) < 0)
                   Err_NotEnoughMemoryExit ();
@@ -839,7 +843,7 @@ unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod)
 		 	   "usr_data"
 		    " WHERE msg_rcv.MsgCod=%ld"
 		      " AND msg_rcv.UsrCod=usr_data.UsrCod)"
-		   " UNION "
+		    " UNION "
 		   "(SELECT msg_rcv_deleted.UsrCod,"	// row[0]
 			   "'Y',"			// row[1]
 			   "msg_rcv_deleted.Open,"	// row[2]
@@ -1372,7 +1376,8 @@ void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
 		          " (SELECT MsgCod"
 		             " FROM msg_snt)"
 		      " AND MsgCod NOT IN"
-		          " (SELECT DISTINCT MsgCod"
+		          " (SELECT DISTINCT "
+		                   "MsgCod"
 		             " FROM msg_rcv)");
 
    /* Messages in msg_content_deleted older than a certain time
@@ -1385,7 +1390,8 @@ void Msg_DB_MoveUnusedMsgsContentToDeleted (void)
 		         " (SELECT MsgCod"
 		            " FROM msg_snt)"
 		     " AND MsgCod NOT IN"
-		         " (SELECT DISTINCT MsgCod"
+		         " (SELECT DISTINCT "
+		                  "MsgCod"
 		            " FROM msg_rcv)");
   }
 

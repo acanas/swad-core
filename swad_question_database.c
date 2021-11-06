@@ -435,11 +435,12 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
    /* Begin query */
    // Reject questions with any tag hidden
    // Select only questions with tags
-   // DISTINCTROW is necessary to not repeat questions
+   // DISTINCT is necessary to not repeat questions
    snprintf (Query,Qst_MAX_BYTES_QUERY_QUESTIONS + 1,
-	     "SELECT DISTINCTROW tst_questions.QstCod,"		// row[0]
-                                "tst_questions.AnsType,"	// row[1]
-                                "tst_questions.Shuffle"		// row[2]
+	     "SELECT DISTINCT "
+	            "tst_questions.QstCod,"	// row[0]
+                    "tst_questions.AnsType,"	// row[1]
+                    "tst_questions.Shuffle"	// row[2]
 	      " FROM tst_questions,tst_question_tags,tst_tags"
 	     " WHERE tst_questions.CrsCod=%ld"
 	       " AND tst_questions.QstCod NOT IN"

@@ -220,7 +220,8 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
 			   "0 AS NumUsrs"		// row[...]
 		    " FROM cty_countrs"
 		   " WHERE CtyCod NOT IN"
-		         " (SELECT DISTINCT CtyCod"
+		         " (SELECT DISTINCT "
+		                  "CtyCod"
 			    " FROM usr_data))"
 		   " ORDER BY %s",
 		   SubQueryNam1,SubQueryWWW1,

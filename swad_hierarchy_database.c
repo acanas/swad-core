@@ -65,7 +65,7 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		     " FROM usr_admins"
 		    " WHERE UsrCod=%ld"
 		      " AND Scope='%s')"
-		   " UNION "
+		    " UNION "
 		   "(SELECT %u AS S,"			// row[0]
 			   "usr_admins.Cod,"		// row[1]
 			   "ins_instits.FullName"	// row[2]
@@ -74,7 +74,7 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		    " WHERE usr_admins.UsrCod=%ld"
 		      " AND usr_admins.Scope='%s'"
 		      " AND usr_admins.Cod=ins_instits.InsCod)"
-		   " UNION "
+		    " UNION "
 		   "(SELECT %u AS S,"			// row[0]
 			   "usr_admins.Cod,"		// row[1]
 			   "ctr_centers.FullName"	// row[2]
@@ -83,7 +83,7 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		    " WHERE usr_admins.UsrCod=%ld"
 		      " AND usr_admins.Scope='%s'"
 		      " AND usr_admins.Cod=ctr_centers.CtrCod)"
-		   " UNION "
+		    " UNION "
 		   "(SELECT %u AS S,"			// row[0]
 			   "usr_admins.Cod,"		// row[1]
 			   "deg_degrees.FullName"	// row[2]
@@ -92,8 +92,8 @@ unsigned Hie_DB_GetInsCtrDegAdminBy (MYSQL_RES **mysql_res,long UsrCod)
 		    " WHERE usr_admins.UsrCod=%ld"
 		      " AND usr_admins.Scope='%s'"
 		      " AND usr_admins.Cod=deg_degrees.DegCod)"
-		   " ORDER BY S,"
-		             "FullName",
+		    " ORDER BY S,"
+		              "FullName",
 		   (unsigned) HieLvl_SYS,UsrCod,Sco_GetDBStrFromScope (HieLvl_SYS),
 		   (unsigned) HieLvl_INS,UsrCod,Sco_GetDBStrFromScope (HieLvl_INS),
 		   (unsigned) HieLvl_CTR,UsrCod,Sco_GetDBStrFromScope (HieLvl_CTR),

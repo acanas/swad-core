@@ -163,7 +163,7 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 		    " WHERE hld_holidays.InsCod=%ld"
 		      " AND hld_holidays.PlcCod=plc_places.PlcCod"
 		      " AND plc_places.InsCod=%ld)"
-		   " UNION "
+		    " UNION "
 		   "(SELECT HldCod,"								// row[0]
 			   "PlcCod,"								// row[1]
 			   "'' as Place,"							// row[2]
@@ -174,10 +174,11 @@ unsigned Hld_DB_GetListHolidays (MYSQL_RES **mysql_res,Hld_Order_t SelectedOrder
 		     " FROM hld_holidays"
 		    " WHERE InsCod=%ld"
 		      " AND PlcCod NOT IN"
-			   "(SELECT DISTINCT PlcCod"
+			   "(SELECT DISTINCT "
+			           "PlcCod"
 			     " FROM plc_places"
 			    " WHERE InsCod=%ld))"
-		   " ORDER BY %s",
+		    " ORDER BY %s",
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ins.InsCod,
@@ -205,7 +206,7 @@ unsigned Hld_DB_GetDataOfHolidayByCod (MYSQL_RES **mysql_res,long HldCod)
 		      " AND hld_holidays.InsCod=%ld"
 		      " AND hld_holidays.PlcCod=plc_places.PlcCod"
 		      " AND plc_places.InsCod=%ld)"
-		   " UNION "
+		    " UNION "
 		   "(SELECT PlcCod,"
 			   "'' as Place,"
 			   "HldTyp,"
@@ -216,7 +217,8 @@ unsigned Hld_DB_GetDataOfHolidayByCod (MYSQL_RES **mysql_res,long HldCod)
 		    " WHERE HldCod=%ld"
 		      " AND InsCod=%ld"
 		      " AND PlcCod NOT IN"
-			   "(SELECT DISTINCT PlcCod"
+			   "(SELECT DISTINCT "
+			           "PlcCod"
 			     " FROM plc_places"
 			    " WHERE InsCod=%ld))",
 		   HldCod,

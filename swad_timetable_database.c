@@ -125,8 +125,8 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				      "tmt_courses.ClassType,"				// row[4]
 				      "tmt_courses.GrpCod,"				// row[5]
 				      "tmt_courses.CrsCod"				// row[6]
-			        " FROM tmt_courses,"
-				      "crs_users"
+			        " FROM crs_users,"
+			              "tmt_courses"
 			       " WHERE crs_users.UsrCod=%ld"
 			         " AND tmt_courses.GrpCod=-1"
 			         " AND tmt_courses.CrsCod=crs_users.CrsCod"
@@ -172,8 +172,8 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
 				      "tmt_courses.ClassType,"				// row[4]
 				      "tmt_courses.GrpCod,"				// row[5]
 				      "tmt_courses.CrsCod"				// row[6]
-			        " FROM tmt_courses,"
-				      "crs_users"
+			        " FROM crs_users,"
+			              "tmt_courses"
 			       " WHERE crs_users.UsrCod=%ld"
 			         " AND tmt_courses.CrsCod=crs_users.CrsCod"
 			       " UNION "

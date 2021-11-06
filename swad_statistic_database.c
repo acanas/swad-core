@@ -81,10 +81,10 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
          Str_Copy (SubQueryCountType,"COUNT(*)",sizeof (SubQueryCountType) - 1);
 	 break;
       case Sta_DISTINCT_USRS:
-         sprintf (SubQueryCountType,"COUNT(DISTINCT(%s.UsrCod))",LogTable);
+         sprintf (SubQueryCountType,"COUNT(DISTINCT %s.UsrCod)",LogTable);
 	 break;
       case Sta_CLICKS_PER_USR:
-         sprintf (SubQueryCountType,"COUNT(*)/GREATEST(COUNT(DISTINCT(%s.UsrCod)),1)+0.000000",LogTable);
+         sprintf (SubQueryCountType,"COUNT(*)/GREATEST(COUNT(DISTINCT %s.UsrCod),1)+0.000000",LogTable);
 	 break;
       case Sta_GENERATION_TIME:
          sprintf (SubQueryCountType,"(AVG(%s.TimeToGenerate)/1E6)+0.000000",LogTable);

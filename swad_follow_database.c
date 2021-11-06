@@ -119,19 +119,24 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
    // Get only users with surname 1 and first name
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users to follow",
-		   "SELECT DISTINCT UsrCod FROM"
+		   "SELECT DISTINCT "
+		          "UsrCod"
+		    " FROM"
 		   " ("
 		   /***** Likely known users *****/
-		   "(SELECT DISTINCT UsrCod FROM"
+		   "(SELECT DISTINCT "
+		           "UsrCod"
+		     " FROM"
 		   " ("
 		   // 1. Users followed by my followed
 		   "("
-		   "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
-		   " FROM usr_follow,"
-		         "(SELECT FollowedCod"
-			   " FROM usr_follow"
-			  " WHERE FollowerCod=%ld) AS my_followed,"
-		        " usr_data"
+		   "SELECT DISTINCT "
+		          "usr_follow.FollowedCod AS UsrCod"
+		    " FROM usr_follow,"
+		          "(SELECT FollowedCod"
+			    " FROM usr_follow"
+			   " WHERE FollowerCod=%ld) AS my_followed,"
+		         " usr_data"
 		   " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
 		     " AND usr_follow.FollowedCod<>%ld"
 		     " AND usr_follow.FollowedCod=usr_data.UsrCod"
@@ -142,7 +147,8 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 		   " UNION "
 		   // 2. Users who share any course with me
 		   "("
-		   "SELECT DISTINCT crs_users.UsrCod"
+		   "SELECT DISTINCT "
+		          "crs_users.UsrCod"
 		    " FROM crs_users,"
 			  "(SELECT CrsCod"
 			    " FROM crs_users"
@@ -158,12 +164,13 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 		   " UNION "
 		   // 3. Users who share any course with me with another role
 		   "("
-		   "SELECT DISTINCT crs_users.UsrCod"
-		   " FROM crs_users,"
-		         "(SELECT CrsCod,Role"
-			   " FROM crs_users"
-			  " WHERE UsrCod=%ld) AS my_crs_role,"
-		        " usr_data"
+		   "SELECT DISTINCT "
+		          "crs_users.UsrCod"
+		    " FROM crs_users,"
+		          "(SELECT CrsCod,Role"
+			    " FROM crs_users"
+			   " WHERE UsrCod=%ld) AS my_crs_role,"
+		         " usr_data"
 		   " WHERE crs_users.CrsCod=my_crs_role.CrsCod"
 		     " AND crs_users.Role<>my_crs_role.Role"
 		     " AND crs_users.UsrCod=usr_data.UsrCod"
@@ -197,11 +204,11 @@ unsigned Fol_DB_GetUsrsToFollow (unsigned MaxUsrsToShow,
 		     " AND usr_data.FirstName<>''"	// First name not empty
 		   "%s"				// SubQuery4
 		   // Do not select my followed
-		   " AND usr_data.UsrCod NOT IN"
-		       " (SELECT FollowedCod"
-		  	  " FROM usr_follow"
-		         " WHERE FollowerCod=%ld)"
-		   " AND usr_data.UsrCod>=random_usr.RandomUsrCod"	// random user code could not exists in table of users
+		     " AND usr_data.UsrCod NOT IN"
+		         " (SELECT FollowedCod"
+		  	    " FROM usr_follow"
+		           " WHERE FollowerCod=%ld)"
+		     " AND usr_data.UsrCod>=random_usr.RandomUsrCod"	// random user code could not exists in table of users
 		   // Get only MaxUsrsToShow users
 		   " LIMIT %u"
 		   ")"

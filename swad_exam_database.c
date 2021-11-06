@@ -2234,7 +2234,8 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeExam (MYSQL_RES **mysql_res,long ExaCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users in exam",
 		   "SELECT users.UsrCod"	// row[0]
-		    " FROM (SELECT DISTINCT exa_prints.UsrCod AS UsrCod"
+		    " FROM (SELECT DISTINCT "
+		                  "exa_prints.UsrCod AS UsrCod"
 			    " FROM exa_prints,"
 			          "exa_sessions,"
 			          "exa_exams"

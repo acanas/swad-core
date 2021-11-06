@@ -435,7 +435,7 @@ unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get degrees with students",
-		   "SELECT DISTINCTROW "
+		   "SELECT DISTINCT "
 			  "deg_degrees.DegCod,"			// row[0]
 			  "deg_degrees.CtrCod,"			// row[1]
 			  "deg_degrees.DegTypCod,"		// row[2]

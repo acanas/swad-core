@@ -108,12 +108,13 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
 			   "0 AS NumTchs"				// row[5]
 		     " FROM dpt_departments"
 		    " WHERE InsCod=%ld"
-		    " AND DptCod NOT IN"
-			" (SELECT DISTINCT usr_data.DptCod"
-			 " FROM usr_data,crs_users"
-			" WHERE crs_users.Role IN (%u,%u)"
-			  " AND crs_users.UsrCod=usr_data.UsrCod))"
-		   " ORDER BY %s",
+		      " AND DptCod NOT IN"
+			  " (SELECT DISTINCT "
+			           "usr_data.DptCod"
+			     " FROM usr_data,crs_users"
+		  	    " WHERE crs_users.Role IN (%u,%u)"
+			      " AND crs_users.UsrCod=usr_data.UsrCod))"
+	            " ORDER BY %s",
 		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 		   InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 		   OrderBySubQuery[SelectedOrder]);
@@ -149,7 +150,8 @@ unsigned Dpt_DB_GetDataOfDepartmentByCod (MYSQL_RES **mysql_res,long DptCod)
 		     " FROM dpt_departments"
 		    " WHERE DptCod=%ld"
 		      " AND DptCod NOT IN"
-			  " (SELECT DISTINCT usr_data.DptCod"
+			  " (SELECT DISTINCT "
+			           "usr_data.DptCod"
 			     " FROM usr_data,"
 				   "crs_users"
 			    " WHERE crs_users.Role=%u"

@@ -338,7 +338,8 @@ long Brw_DB_GetPublisherOfSubtree (const char *Path)
    /***** Get all common files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
    return DB_QuerySELECTCode ("can not get publishers of files",
-			      "SELECT DISTINCT(PublisherUsrCod)"
+			      "SELECT DISTINCT "
+			             "PublisherUsrCod"
 			       " FROM brw_files"
 			      " WHERE FileBrowser=%u"
 			        " AND Cod=%ld"

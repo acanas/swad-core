@@ -1017,7 +1017,8 @@ unsigned Mch_DB_GetUsrsWhoHavePlayedGam (MYSQL_RES **mysql_res,long GamCod)
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users in game",
 		   "SELECT users.UsrCod"
-		    " FROM (SELECT DISTINCT mch_results.UsrCod AS UsrCod"
+		    " FROM (SELECT DISTINCT "
+		                  "mch_results.UsrCod AS UsrCod"
 			    " FROM mch_results,"
 				  "mch_matches,"
 				  "gam_games"

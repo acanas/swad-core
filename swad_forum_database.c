@@ -374,7 +374,8 @@ unsigned For_DB_GetPublishersInThreadExceptMe (MYSQL_RES **mysql_res,long PstCod
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get publishers in thread",
-		   "SELECT DISTINCT(UsrCod)"
+		   "SELECT DISTINCT "
+		          "UsrCod"
 		    " FROM for_posts"
 		   " WHERE ThrCod=(SELECT ThrCod"
 				   " FROM for_posts"

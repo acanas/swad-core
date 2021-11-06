@@ -96,7 +96,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
             if (Indicators->DegTypCod > 0)
                return (unsigned)
                DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 				      "deg_degrees.FullName,"	// row[0]
 				      "crs_courses.FullName,"	// row[1]
 				      "crs_courses.CrsCod,"	// row[2]
@@ -119,7 +119,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
             else
                return (unsigned)
                DB_QuerySELECT (mysql_res,"can not get courses",
-			       "SELECT DISTINCTROW "
+			       "SELECT DISTINCT "
 				      "deg_degrees.FullName,"	// row[0]
 				      "crs_courses.FullName,"	// row[1]
 				      "crs_courses.CrsCod,"	// row[2]
@@ -171,7 +171,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
+			    "SELECT DISTINCT "
 				   "deg_degrees.FullName,"	// row[0]
 				   "crs_courses.FullName,"	// row[1]
 				   "crs_courses.CrsCod,"	// row[2]
@@ -217,7 +217,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
+			    "SELECT DISTINCT "
 				   "deg_degrees.FullName,"	// row[0]
 				   "crs_courses.FullName,"	// row[1]
 				   "crs_courses.CrsCod,"	// row[2]
@@ -259,7 +259,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
+			    "SELECT DISTINCT "
 				   "deg_degrees.FullName,"	// row[0]
 				   "crs_courses.FullName,"	// row[1]
 				   "crs_courses.CrsCod,"	// row[2]
@@ -297,7 +297,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
+			    "SELECT DISTINCT "
 				   "deg_degrees.FullName,"	// row[0]
 				   "crs_courses.FullName,"	// row[1]
 				   "crs_courses.CrsCod,"	// row[2]
@@ -335,7 +335,7 @@ unsigned Ind_DB_GetTableOfCourses (MYSQL_RES **mysql_res,
          if (Indicators->DptCod >= 0)	// 0 means another department
             return (unsigned)
             DB_QuerySELECT (mysql_res,"can not get courses",
-			    "SELECT DISTINCTROW "
+			    "SELECT DISTINCT "
 				   "deg_degrees.FullName,"	// row[0]
 				   "crs_courses.FullName,"	// row[1]
 				   "crs_courses.CrsCod,"	// row[2]

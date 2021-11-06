@@ -2916,8 +2916,9 @@ int swad__getAttendanceUsers (struct soap *soap,
       // Event for one or more groups
       // Subquery: list of users in groups of this attendance event...
       // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT DISTINCT grp_users.UsrCod AS UsrCod,"	// row[0]
-	                       "'N' AS Present"				// row[1]
+      sprintf (SubQuery,"SELECT DISTINCT "
+	                       "grp_users.UsrCod AS UsrCod,"	// row[0]
+	                       "'N' AS Present"			// row[1]
 		         " FROM att_groups,"
 		               "grp_groups,"
 		               "grp_types,"
@@ -4208,14 +4209,15 @@ static int API_GetTstQuestions (struct soap *soap,
    Qst_AnswerType_t AnswerType;
 
    /***** Get recent test questions from database *****/
-   // DISTINCTROW is necessary to not repeat questions
+   // DISTINCT is necessary to not repeat questions
    NumRows = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get test questions",
-		   "SELECT DISTINCTROW tst_questions.QstCod,"	// row[0]
-				      "tst_questions.AnsType,"	// row[1]
-				      "tst_questions.Shuffle,"	// row[2]
-				      "tst_questions.Stem,"	// row[3]
-				      "tst_questions.Feedback"	// row[4]
+		   "SELECT DISTINCT "
+		          "tst_questions.QstCod,"	// row[0]
+			  "tst_questions.AnsType,"	// row[1]
+			  "tst_questions.Shuffle,"	// row[2]
+			  "tst_questions.Stem,"		// row[3]
+			  "tst_questions.Feedback"	// row[4]
 		    " FROM tst_questions,"
 			  "tst_question_tags,"
 			  "tst_tags"
@@ -4567,7 +4569,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    NumRows = (unsigned)
    DB_QuerySELECT (&mysql_res,"can not get test questions",
-		   "SELECT DISTINCTROW "
+		   "SELECT DISTINCT "
 			  "tst_questions.QstCod,"				// row[0]
 			  "tst_questions.AnsType,"				// row[1]
 			  "tst_questions.Shuffle,"				// row[2]
@@ -6058,14 +6060,16 @@ int swad__getLastLocation (struct soap *soap,
    if (DB_QueryEXISTS ("can not check if you can see user location",
 		       "SELECT EXISTS"
 		       "(SELECT *"
-			 " FROM (SELECT DISTINCT deg_degrees.CtrCod"
+			 " FROM (SELECT DISTINCT "
+			               "deg_degrees.CtrCod"
 				 " FROM crs_users,"
 				       "crs_courses,"
 				       "deg_degrees"
 				" WHERE crs_users.UsrCod=%ld"
 				  " AND crs_users.CrsCod=crs_courses.CrsCod"
 				  " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
-			       "(SELECT DISTINCT deg_degrees.CtrCod"
+			       "(SELECT DISTINCT "
+			               "deg_degrees.CtrCod"
 				 " FROM crs_users,"
 				       "crs_courses,"
 				       "deg_degrees"

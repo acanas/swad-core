@@ -451,7 +451,8 @@ unsigned Ntf_DB_GetUsrsWhoMustBeNotified (MYSQL_RES **mysql_res)
    // !(Status & (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED))
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users who must be notified",
-		   "SELECT DISTINCT ToUsrCod"
+		   "SELECT DISTINCT "
+		          "ToUsrCod"
 		    " FROM ntf_notifications"
 		   " WHERE TimeNotif<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)"
 		     " AND (Status & %u)<>0"

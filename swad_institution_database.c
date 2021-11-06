@@ -273,8 +273,9 @@ unsigned Ins_DB_GetInssInCtyOrderedByShrtName (MYSQL_RES **mysql_res,long CtyCod
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get institutions",
-		   "SELECT DISTINCT InsCod,"	// row[0]
-				   "ShortName"	// row[1]
+		   "SELECT DISTINCT "
+		          "InsCod,"	// row[0]
+			  "ShortName"	// row[1]
 		    " FROM ins_instits"
 		   " WHERE CtyCod=%ld"
 		   " ORDER BY ShortName",
@@ -343,7 +344,8 @@ unsigned Ins_DB_GetFullListOfInssInCty (MYSQL_RES **mysql_res,long CtyCod)
 		     " FROM ins_instits"
 		    " WHERE CtyCod=%ld"
 		      " AND InsCod NOT IN"
-			  " (SELECT DISTINCT InsCod"
+			  " (SELECT DISTINCT "
+			           "InsCod"
 			     " FROM usr_data))"
 			    " ORDER BY %s",
 		   CtyCod,

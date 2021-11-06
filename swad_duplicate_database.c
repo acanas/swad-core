@@ -81,20 +81,19 @@ unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct UsrData *Us
        UsrDat->FrstName[0])	// Name and surname 1 not empty
       return (unsigned)
       DB_QuerySELECT (mysql_res,"can not get similar users",
-		      "SELECT DISTINCT UsrCod"
-		      " FROM (SELECT DISTINCT UsrCod"
-			      " FROM usr_ids"
-			     " WHERE UsrID IN"
-				   " (SELECT UsrID"
-				      " FROM usr_ids"
-				     " WHERE UsrCod=%ld)"
-			    " UNION"
-			    " SELECT UsrCod"
-			      " FROM usr_data"
-			     " WHERE Surname1='%s'"
-			       " AND Surname2='%s'"
-			       " AND FirstName='%s')"
-			    " AS U",
+		      "SELECT DISTINCT "
+		             "UsrCod"
+		       " FROM usr_ids"
+		      " WHERE UsrID IN"
+			    " (SELECT UsrID"
+			       " FROM usr_ids"
+			      " WHERE UsrCod=%ld)"
+		      " UNION DISTINCT"
+		     " SELECT UsrCod"
+		       " FROM usr_data"
+		      " WHERE Surname1='%s'"
+			" AND Surname2='%s'"
+			" AND FirstName='%s'",
 		      UsrDat->UsrCod,
 		      UsrDat->Surname1,
 		      UsrDat->Surname2,
@@ -102,7 +101,8 @@ unsigned Dup_DB_GetUsrsSimilarTo (MYSQL_RES **mysql_res,const struct UsrData *Us
 
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get similar users",
-		   "SELECT DISTINCT UsrCod"
+		   "SELECT DISTINCT "
+		          "UsrCod"
 		    " FROM usr_ids"
 		   " WHERE UsrID IN"
 			 " (SELECT UsrID"
