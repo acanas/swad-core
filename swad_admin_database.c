@@ -28,6 +28,7 @@
 #include "swad_admin.h"
 #include "swad_admin_database.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 
 /*****************************************************************************/
@@ -112,6 +113,23 @@ bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod)
 		   Sco_GetDBStrFromScope (Scope),
 		   Cod);
   }
+
+/*****************************************************************************/
+/************** Check if a user is a superuser (global admin) ****************/
+/*****************************************************************************/
+
+bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod)
+  {
+   return
+   DB_QueryEXISTS ("can not check if a user is superuser",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_admins"
+		    " WHERE UsrCod=%ld"
+		      " AND Scope='%s')",
+		   UsrCod,
+		   Sco_GetDBStrFromScope (HieLvl_SYS));
+   }
 
 /*****************************************************************************/
 /***** Remove user as administrator of an institution, center or degree ******/

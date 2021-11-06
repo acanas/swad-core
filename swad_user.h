@@ -349,10 +349,10 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 void Usr_GetListUsrs (HieLvl_Level_t Scope,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
-void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
-void Usr_DropTmpTableWithCandidateUsrs (void);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
+
+void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,HieLvl_Level_t Scope);
 
 void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,
                                    const struct UsrInList *UsrInList);

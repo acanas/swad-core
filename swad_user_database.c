@@ -136,22 +136,6 @@ void Usr_DB_UpdateMyOfficePhone (void)
   }
 
 /*****************************************************************************/
-/********************** Update my last type of search ************************/
-/*****************************************************************************/
-
-void Usr_DB_UpdateMyLastWhatToSearch (void)
-  {
-   // WhatToSearch is stored in usr_last for next time I log in
-   // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-   DB_QueryUPDATE ("can not update type of search in user's last data",
-		   "UPDATE usr_last"
-		     " SET WhatToSearch=%u"
-		   " WHERE UsrCod=%ld",
-		   (unsigned) Gbl.Search.WhatToSearch,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
 /************** Check if a user exists with a given user's code **************/
 /*****************************************************************************/
 
@@ -187,6 +171,91 @@ long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_E
   }
 
 /*****************************************************************************/
+/************ Get user's data from database giving a user's code *************/
+/*****************************************************************************/
+// UsrDat->UsrCod must contain an existing user's code
+
+unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
+                                      Usr_GetPrefs_t GetPrefs)
+  {
+   switch (GetPrefs)
+     {
+      case Usr_DONT_GET_PREFS:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get user's data",
+		         "SELECT EncryptedUsrCod,"	// row[ 0]
+			        "Password,"		// row[ 1]
+			        "Surname1,"		// row[ 2]
+			        "Surname2,"		// row[ 3]
+			        "FirstName,"		// row[ 4]
+			        "Sex,"			// row[ 5]
+			        "Photo,"		// row[ 6]
+			        "PhotoVisibility,"	// row[ 7]
+			        "BaPrfVisibility,"	// row[ 8]
+			        "ExPrfVisibility,"	// row[ 9]
+			        "CtyCod,"		// row[10]
+			        "InsCtyCod,"		// row[11]
+			        "InsCod,"		// row[12]
+			        "DptCod,"		// row[13]
+			        "CtrCod,"		// row[14]
+			        "Office,"		// row[15]
+			        "OfficePhone,"		// row[16]
+			        "LocalPhone,"		// row[17]
+			        "FamilyPhone,"		// row[18]
+			        "DATE_FORMAT(Birthday,"
+			        "'%%Y%%m%%d'),"		// row[19]
+			        "Comments,"		// row[20]
+			        "NotifNtfEvents,"	// row[21]
+			        "EmailNtfEvents"	// row[22]
+			  " FROM usr_data"
+		         " WHERE UsrCod=%ld",
+		          UsrCod);
+      case Usr_GET_PREFS:
+      default:
+	 return (unsigned)
+	 DB_QuerySELECT (mysql_res,"can not get user's data",
+		         "SELECT EncryptedUsrCod,"	// row[ 0]
+			        "Password,"		// row[ 1]
+			        "Surname1,"		// row[ 2]
+			        "Surname2,"		// row[ 3]
+			        "FirstName,"		// row[ 4]
+			        "Sex,"			// row[ 5]
+			        "Photo,"		// row[ 6]
+			        "PhotoVisibility,"	// row[ 7]
+			        "BaPrfVisibility,"	// row[ 8]
+			        "ExPrfVisibility,"	// row[ 9]
+			        "CtyCod,"		// row[10]
+			        "InsCtyCod,"		// row[11]
+			        "InsCod,"		// row[12]
+			        "DptCod,"		// row[13]
+			        "CtrCod,"		// row[14]
+			        "Office,"		// row[15]
+			        "OfficePhone,"		// row[16]
+			        "LocalPhone,"		// row[17]
+			        "FamilyPhone,"		// row[18]
+			        "DATE_FORMAT(Birthday,"
+			        "'%%Y%%m%%d'),"		// row[19]
+			        "Comments,"		// row[20]
+			        "NotifNtfEvents,"	// row[21]
+			        "EmailNtfEvents,"	// row[22]
+
+			        // Settings (usually not necessary
+			        // when getting another user's data)
+			        "Language,"		// row[23]
+			        "FirstDayOfWeek,"	// row[24]
+			        "DateFormat,"		// row[25]
+			        "Theme,"		// row[26]
+			        "IconSet,"		// row[27]
+			        "Menu,"			// row[28]
+			        "SideCols,"		// row[29]
+			        "ThirdPartyCookies"	// row[30]
+			  " FROM usr_data"
+		         " WHERE UsrCod=%ld",
+		         UsrCod);
+     }
+  }
+
+/*****************************************************************************/
 /****** Check if a string is found in first name or surnames of anybody ******/
 /*****************************************************************************/
 
@@ -203,6 +272,542 @@ bool Usr_DB_FindStrInUsrsNames (const char *Str)
 		   Str,
 		   Str,
 		   Str);
+  }
+
+/*****************************************************************************/
+/*********** Get list of users with a given role in a given scope ************/
+/*****************************************************************************/
+// Role can be:
+// - Rol_STD	Student
+// - Rol_NET	Non-editing teacher
+// - Rol_TCH	Teacher
+
+void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Scope,Rol_Role_t Role,char **Query)
+  {
+   const char *QueryFields =
+      "DISTINCT "
+      "usr_data.UsrCod,"		// row[ 0]
+      "usr_data.EncryptedUsrCod,"	// row[ 1]
+      "usr_data.Password,"		// row[ 2]
+      "usr_data.Surname1,"		// row[ 3]
+      "usr_data.Surname2,"		// row[ 4]
+      "usr_data.FirstName,"		// row[ 5]
+      "usr_data.Sex,"			// row[ 6]
+      "usr_data.Photo,"			// row[ 7]
+      "usr_data.PhotoVisibility,"	// row[ 8]
+      "usr_data.CtyCod,"		// row[ 9]
+      "usr_data.InsCod";		// row[10]
+   static const char *OrderBySubQuery =
+      " ORDER BY usr_data.Surname1,"
+		"usr_data.Surname2,"
+		"usr_data.FirstName,"
+		"usr_data.UsrCod";
+
+   /***** Build query *****/
+   switch (Scope)
+     {
+      case HieLvl_SYS:
+	 /* Get users in courses from the whole platform */
+	 DB_BuildQuery (Query,
+		        "SELECT %s"
+		         " FROM usr_data,"
+		               "crs_users"
+		        " WHERE usr_data.UsrCod=crs_users.UsrCod"
+		          " AND crs_users.Role=%u"
+		           " %s",
+		        QueryFields,
+		        (unsigned) Role,
+		        OrderBySubQuery);
+	 break;
+      case HieLvl_CTY:
+	 /* Get users in courses from the current country */
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data,"
+			       "crs_users,"
+			       "crs_courses,"
+			       "deg_degrees,"
+			       "ctr_centers,"
+			       "ins_instits"
+			" WHERE usr_data.UsrCod=crs_users.UsrCod"
+			  " AND crs_users.Role=%u"
+			  " AND crs_users.CrsCod=crs_courses.CrsCod"
+			  " AND crs_courses.DegCod=deg_degrees.DegCod"
+			  " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			  " AND ctr_centers.InsCod=ins_instits.InsCod"
+			  " AND ins_instits.CtyCod=%ld"
+			   " %s",
+			QueryFields,
+			(unsigned) Role,
+			Gbl.Hierarchy.Cty.CtyCod,
+			OrderBySubQuery);
+	 break;
+      case HieLvl_INS:
+	 /* Get users in courses from the current institution */
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data,"
+			       "crs_users,"
+			       "crs_courses,"
+			       "deg_degrees,"
+			       "ctr_centers"
+			" WHERE usr_data.UsrCod=crs_users.UsrCod"
+			  " AND crs_users.Role=%u"
+			  " AND crs_users.CrsCod=crs_courses.CrsCod"
+			  " AND crs_courses.DegCod=deg_degrees.DegCod"
+			  " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			  " AND ctr_centers.InsCod=%ld"
+			   " %s",
+			QueryFields,
+			(unsigned) Role,
+			Gbl.Hierarchy.Ins.InsCod,
+			OrderBySubQuery);
+	 break;
+      case HieLvl_CTR:
+	 /* Get users in courses from the current center */
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data,"
+			       "crs_users,"
+			       "crs_courses,"
+			       "deg_degrees"
+			" WHERE usr_data.UsrCod=crs_users.UsrCod"
+			  " AND crs_users.Role=%u"
+			  " AND crs_users.CrsCod=crs_courses.CrsCod"
+			  " AND crs_courses.DegCod=deg_degrees.DegCod"
+			  " AND deg_degrees.CtrCod=%ld"
+			" ORDER BY usr_data.Surname1,"
+			          "usr_data.Surname2,"
+			          "usr_data.FirstName,"
+			          "usr_data.UsrCod",
+			QueryFields,
+			(unsigned) Role,
+			Gbl.Hierarchy.Ctr.CtrCod);
+	 break;
+      case HieLvl_DEG:
+	 /* Get users in courses from the current degree */
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+		 	 " FROM usr_data,"
+			       "crs_users,"
+			       "crs_courses"
+			" WHERE usr_data.UsrCod=crs_users.UsrCod"
+			  " AND crs_users.Role=%u"
+			  " AND crs_users.CrsCod=crs_courses.CrsCod"
+			  " AND crs_courses.DegCod=%ld"
+			" ORDER BY usr_data.Surname1,"
+			          "usr_data.Surname2,"
+			          "usr_data.FirstName,"
+			          "usr_data.UsrCod",
+			QueryFields,
+			(unsigned) Role,
+			Gbl.Hierarchy.Deg.DegCod);
+	 break;
+      case HieLvl_CRS:
+	 /* Get users from the current course */
+	 Usr_DB_BuildQueryToGetUsrsLstCrs (Query,Role);
+	 break;
+      default:
+	 Err_WrongScopeExit ();
+	 break;
+     }
+/*
+   if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+      Lay_ShowAlert (Lay_INFO,Query);
+*/
+  }
+
+/*****************************************************************************/
+/******* Build query to get list with data of users in current course ********/
+/*****************************************************************************/
+
+#define Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS (16 * 1024 - 1)
+
+void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
+  {
+   unsigned NumPositiveCods = 0;
+   unsigned NumNegativeCods = 0;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   unsigned NumGrpSel;
+   long GrpCod;
+   unsigned NumGrpTyp;
+   bool *AddStdsWithoutGroupOf;
+   const char *QueryFields =
+      "usr_data.UsrCod,"
+      "usr_data.EncryptedUsrCod,"
+      "usr_data.Password,"
+      "usr_data.Surname1,"
+      "usr_data.Surname2,"
+      "usr_data.FirstName,"
+      "usr_data.Sex,"
+      "usr_data.Photo,"
+      "usr_data.PhotoVisibility,"
+      "usr_data.CtyCod,"
+      "usr_data.InsCod,"
+      "crs_users.Role,"
+      "crs_users.Accepted";
+   /*
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
+   row[11]: crs_users.Role	(only if Scope == HieLvl_CRS)
+   row[12]: crs_users.Accepted	(only if Scope == HieLvl_CRS)
+   */
+
+   /***** If there are no groups selected, don't do anything *****/
+   if (!Gbl.Usrs.ClassPhoto.AllGroups &&
+       !Gbl.Crs.Grps.LstGrpsSel.NumGrps)
+     {
+      *Query = NULL;
+      return;
+     }
+
+   /***** Allocate space for query *****/
+   if ((*Query = malloc (Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS + 1)) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Create query for users in the course *****/
+   if (Gbl.Action.Act == ActReqMsgUsr)        // Selecting users to write a message
+      snprintf (*Query,Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
+	        "SELECT %s"
+	         " FROM crs_users,"
+	               "usr_data"
+	        " WHERE crs_users.CrsCod=%ld"
+	          " AND crs_users.Role=%u"
+	          " AND crs_users.UsrCod NOT IN"
+	              " (SELECT ToUsrCod"
+	                 " FROM msg_banned"
+	                " WHERE FromUsrCod=%ld)"
+	          " AND crs_users.UsrCod=usr_data.UsrCod",        // Do not get banned users
+      	        QueryFields,
+                Gbl.Hierarchy.Crs.CrsCod,
+                (unsigned) Role,
+                Gbl.Usrs.Me.UsrDat.UsrCod);
+   else
+      snprintf (*Query,Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
+	        "SELECT %s"
+	         " FROM crs_users,"
+	               "usr_data"
+	        " WHERE crs_users.CrsCod=%ld"
+	          " AND crs_users.Role=%u"
+	          " AND crs_users.UsrCod=usr_data.UsrCod",
+	        QueryFields,
+                Gbl.Hierarchy.Crs.CrsCod,
+                (unsigned) Role);
+
+   /***** Select users in selected groups *****/
+   if (!Gbl.Usrs.ClassPhoto.AllGroups)
+     {
+      /***** Get list of groups types in current course *****/
+      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+
+      /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
+      if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,
+                                           sizeof (*AddStdsWithoutGroupOf))) == NULL)
+         Err_NotEnoughMemoryExit ();
+
+      /***** Initialize vector of booleans that indicates whether it's necessary add to the list
+             the students who don't belong to any group of each type *****/
+      for (NumGrpTyp = 0;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+           NumGrpTyp++)
+         AddStdsWithoutGroupOf[NumGrpTyp] = false;
+
+      /***** Create query with the students who belong to the groups selected *****/
+      if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)        // If there are groups selected...
+        {
+         /* Check if there are positive and negative codes in the list */
+         for (NumGrpSel = 0;
+              NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
+              NumGrpSel++)
+            if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
+               NumPositiveCods++;
+            else
+               for (NumGrpTyp = 0;
+                    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+                    NumGrpTyp++)
+                  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod == -GrpCod)
+                    {
+                     AddStdsWithoutGroupOf[NumGrpTyp] = true;
+                     break;
+                    }
+         /* If there are positive codes, add the students who belong to groups with those codes */
+         if (NumPositiveCods)
+           {
+            Str_Concat (*Query," AND (crs_users.UsrCod IN"
+			       " (SELECT DISTINCT "
+			                "UsrCod"
+			          " FROM grp_users"
+			         " WHERE",
+                        Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+            NumPositiveCods = 0;
+            for (NumGrpSel = 0;
+                 NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
+                 NumGrpSel++)
+               if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
+                 {
+                  Str_Concat (*Query,NumPositiveCods ? " OR GrpCod='" :
+                				       " GrpCod='",
+                	      Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+                  snprintf (LongStr,sizeof (LongStr),"%ld",GrpCod);
+                  Str_Concat (*Query,LongStr,Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+                  Str_Concat (*Query,"'",Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+                  NumPositiveCods++;
+                 }
+            Str_Concat (*Query,")",Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+           }
+        }
+
+      /***** Create a query with the students who don't belong to any group *****/
+      for (NumGrpTyp = 0;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+           NumGrpTyp++)
+         if (AddStdsWithoutGroupOf[NumGrpTyp])
+           {
+            if (NumPositiveCods || NumNegativeCods)
+               Str_Concat (*Query," OR ",Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+            else
+               Str_Concat (*Query," AND (",Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+            /* Select all students of the course who don't belong to any group of type GrpTypCod */
+            Str_Concat (*Query,"crs_users.UsrCod NOT IN"
+			       " (SELECT DISTINCT "
+			                "grp_users.UsrCod"
+			          " FROM grp_groups,"
+			                "grp_users"
+			         " WHERE grp_groups.GrpTypCod='",
+                        Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+            snprintf (LongStr,sizeof (LongStr),"%ld",
+		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+            Str_Concat (*Query,LongStr,Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+            Str_Concat (*Query,"' AND grp_groups.GrpCod=grp_users.GrpCod)",
+                        Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+            NumNegativeCods++;
+           }
+      if (NumPositiveCods ||
+          NumNegativeCods)
+         Str_Concat (*Query,")",Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+
+      /***** Free memory used by the list of booleans AddStdsWithoutGroupOf *****/
+      free (AddStdsWithoutGroupOf);
+
+      /***** Free list of groups types in current course *****/
+      Grp_FreeListGrpTypesAndGrps ();
+     }
+
+   /***** The last part of the query is for ordering the list *****/
+   Str_Concat (*Query," ORDER BY usr_data.Surname1,"
+		                "usr_data.Surname2,"
+		                "usr_data.FirstName,"
+		                "usr_data.UsrCod",
+	       Usr_DB_MAX_BYTES_QUERY_GET_LIST_USRS);
+  }
+
+/*****************************************************************************/
+/************ Build query to get list with data of administrators ************/
+/*****************************************************************************/
+
+void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query)
+  {
+   static const char *QueryFields =
+      "UsrCod,"			// row[ 0]
+      "EncryptedUsrCod,"	// row[ 1]
+      "Password,"		// row[ 2]
+      "Surname1,"		// row[ 3]
+      "Surname2,"		// row[ 4]
+      "FirstName,"		// row[ 5]
+      "Sex,"			// row[ 6]
+      "Photo,"			// row[ 7]
+      "PhotoVisibility,"	// row[ 8]
+      "CtyCod,"			// row[ 9]
+      "InsCod";			// row[10]
+   static const char *OrderBySubQuery =
+      " ORDER BY Surname1,"
+		"Surname2,"
+		"FirstName,"
+		"UsrCod";
+
+   /***** Build query *****/
+   // Important: it is better to use:
+   // SELECT... WHERE UsrCod IN (SELECT...) OR UsrCod IN (SELECT...) <-- fast
+   // instead of using or with different joins:
+   // SELECT... WHERE (...) OR (...) <-- very slow
+   switch (Scope)
+     {
+      case HieLvl_SYS:	// All admins
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data"
+			" WHERE UsrCod IN "
+			       "(SELECT DISTINCT "
+			               "UsrCod"
+				 " FROM usr_admins)"
+			    "%s",
+			QueryFields,
+			OrderBySubQuery);
+         break;
+      case HieLvl_CTY:	// System admins
+			// and admins of the institutions, centers and degrees in the current country
+         DB_BuildQuery (Query,
+                        "SELECT %s"
+                         " FROM usr_data"
+			" WHERE UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			         " FROM usr_admins,"
+				       "ins_instits"
+				" WHERE usr_admins.Scope='%s'"
+			          " AND usr_admins.Cod=ins_instits.InsCod"
+			          " AND ins_instits.CtyCod=%ld)"
+			   " OR UsrCod IN "
+			"(SELECT usr_admins.UsrCod"
+			  " FROM usr_admins,"
+			        "ctr_centers,"
+			        "ins_instits"
+			 " WHERE usr_admins.Scope='%s'"
+			   " AND usr_admins.Cod=ctr_centers.CtrCod"
+			   " AND ctr_centers.InsCod=ins_instits.InsCod"
+			   " AND ins_instits.CtyCod=%ld)"
+			    " OR UsrCod IN "
+				"(SELECT usr_admins.UsrCod"
+				  " FROM usr_admins,"
+				        "deg_degrees,"
+					"ctr_centers,"
+					"ins_instits"
+				 " WHERE usr_admins.Scope='%s'"
+				   " AND usr_admins.Cod=deg_degrees.DegCod"
+				   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+				   " AND ctr_centers.InsCod=ins_instits.InsCod"
+				   " AND ins_instits.CtyCod=%ld)"
+			    " %s",
+			QueryFields,
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Cty.CtyCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Cty.CtyCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Cty.CtyCod,
+			OrderBySubQuery);
+         break;
+      case HieLvl_INS:	// System admins,
+			// admins of the current institution,
+			// and admins of the centers and degrees in the current institution
+         DB_BuildQuery (Query,
+                        "SELECT %s"
+                         " FROM usr_data"
+			" WHERE UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			         " FROM usr_admins,"
+				       "ctr_centers"
+			        " WHERE usr_admins.Scope='%s'"
+			          " AND usr_admins.Cod=ctr_centers.CtrCod"
+			          " AND ctr_centers.InsCod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			         " FROM usr_admins,"
+				       "deg_degrees,"
+				       "ctr_centers"
+			        " WHERE usr_admins.Scope='%s'"
+			          " AND usr_admins.Cod=deg_degrees.DegCod"
+			          " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			          " AND ctr_centers.InsCod=%ld)"
+			    "%s",
+			QueryFields,
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Ins.InsCod,
+			OrderBySubQuery);
+         break;
+      case HieLvl_CTR:	// System admins,
+			// admins of the current institution,
+			// admins and the current center,
+			// and admins of the degrees in the current center
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data"
+			" WHERE UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT usr_admins.UsrCod"
+			        " FROM usr_admins,"
+				      "deg_degrees"
+			       " WHERE usr_admins.Scope='%s'"
+			         " AND usr_admins.Cod=deg_degrees.DegCod"
+			         " AND deg_degrees.CtrCod=%ld)"
+			    "%s",
+			QueryFields,
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Ctr.CtrCod,
+			OrderBySubQuery);
+         break;
+      case HieLvl_DEG:	// System admins
+			// and admins of the current institution, center or degree
+         DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM usr_data"
+			" WHERE UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s')"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			   " OR UsrCod IN "
+			       "(SELECT UsrCod"
+			         " FROM usr_admins"
+			        " WHERE Scope='%s'"
+			          " AND Cod=%ld)"
+			    "%s",
+			QueryFields,
+			Sco_GetDBStrFromScope (HieLvl_SYS),
+			Sco_GetDBStrFromScope (HieLvl_INS),Gbl.Hierarchy.Ins.InsCod,
+			Sco_GetDBStrFromScope (HieLvl_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (HieLvl_DEG),Gbl.Hierarchy.Deg.DegCod,
+			OrderBySubQuery);
+         break;
+      default:        // not aplicable
+	 Err_WrongScopeExit ();
+         break;
+     }
   }
 
 /*****************************************************************************/
@@ -242,7 +847,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
 			    "%s",
 			QueryFields,
 			OrderBySubQuery);
-         return;
+         break;
       case HieLvl_CTY:
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -258,7 +863,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
 			Gbl.Hierarchy.Cty.CtyCod,
 			Gbl.Hierarchy.Cty.CtyCod,
 			OrderBySubQuery);
-         return;
+         break;
       case HieLvl_INS:
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -271,7 +876,7 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
 			QueryFields,
 			Gbl.Hierarchy.Ins.InsCod,
 			OrderBySubQuery);
-         return;
+         break;
       case HieLvl_CTR:
 	 DB_BuildQuery (Query,
 			"SELECT %s"
@@ -284,11 +889,322 @@ void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query)
 			QueryFields,
 			Gbl.Hierarchy.Ctr.CtrCod,
 			OrderBySubQuery);
-         return;
+         break;
       default:        // not aplicable
 	 Err_WrongScopeExit ();
-	 return;	// Not reached
+	 break;	// Not reached
      }
+  }
+
+/*****************************************************************************/
+/*********** Search for users with a given role in current scope *************/
+/*****************************************************************************/
+
+void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
+  {
+   char SubQueryRole[64];
+   static const char *QueryFields =
+      "DISTINCT "
+      "usr_data.UsrCod,"		// row[ 0]
+      "usr_data.EncryptedUsrCod,"	// row[ 1]
+      "usr_data.Password,"		// row[ 2]
+      "usr_data.Surname1,"		// row[ 3]
+      "usr_data.Surname2,"		// row[ 4]
+      "usr_data.FirstName,"		// row[ 5]
+      "usr_data.Sex,"			// row[ 6]
+      "usr_data.Photo,"			// row[ 7]
+      "usr_data.PhotoVisibility,"	// row[ 8]
+      "usr_data.CtyCod,"		// row[ 9]
+      "usr_data.InsCod";		// row[10]
+   static const char *OrderBySubQuery =
+             "candidate_users.UsrCod=usr_data.UsrCod"
+      " ORDER BY usr_data.Surname1,"
+		"usr_data.Surname2,"
+		"usr_data.FirstName,"
+		"usr_data.UsrCod";
+
+   /***** Build query *****/
+   // if Gbl.Scope.Current is course ==> 3 columns are retrieved: UsrCod, Sex, Accepted
+   //                           else ==> 2 columns are retrieved: UsrCod, Sex
+   // Search is faster (aproximately x2) using a temporary table to store users found in the whole platform
+   switch (Role)
+     {
+      case Rol_UNK:	// Here Rol_UNK means any rol (role does not matter)
+	 switch (Gbl.Scope.Current)
+	   {
+	    case HieLvl_SYS:
+	       /* Search users from the whole platform */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			      " FROM candidate_users,usr_data"
+			      " WHERE %s",
+			      QueryFields,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_CTY:
+	       /* Search users in courses from the current country */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "deg_degrees,"
+			             "ctr_centers,"
+			             "ins_instits,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=deg_degrees.DegCod"
+			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			        " AND ctr_centers.InsCod=ins_instits.InsCod"
+			        " AND ins_instits.CtyCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_INS:
+	       /* Search users in courses from the current institution */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "deg_degrees,"
+			             "ctr_centers,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=deg_degrees.DegCod"
+			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			        " AND ctr_centers.InsCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      Gbl.Hierarchy.Ins.InsCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_CTR:
+	       /* Search users in courses from the current center */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "deg_degrees,"
+			            " usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=deg_degrees.DegCod"
+			        " AND deg_degrees.CtrCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_DEG:
+	       /* Search users in courses from the current degree */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_CRS:
+	       /* Search users in courses from the current course */
+	       DB_BuildQuery (Query,
+			      "SELECT %s,"
+			             "crs_users.Role,"		// row[11]
+			             "crs_users.Accepted"	// row[12]
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			        " AND crs_users.CrsCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      OrderBySubQuery);
+	       break;
+	    default:
+	       Err_WrongScopeExit ();
+	       break;
+	   }
+         break;
+      case Rol_GST:	// Guests (scope is not used)
+	 /* Search users with no courses */
+	 DB_BuildQuery (Query,
+			"SELECT %s"
+			 " FROM candidate_users,"
+			       "usr_data"
+			" WHERE candidate_users.UsrCod NOT IN"
+			      " (SELECT UsrCod"
+			         " FROM crs_users)"
+			  " AND %s",
+			QueryFields,
+			OrderBySubQuery);
+	 break;
+      case Rol_STD:	// Student
+      case Rol_NET:	// Non-editing teacher
+      case Rol_TCH:	// Teacher
+	 /*
+	    To achieve maximum speed, it's important to do the things in this order:
+	    1) Search for user's name (UsrQuery) getting candidate users
+	    2) Filter the candidate users according to scope
+	 */
+	 switch (Role)
+	   {
+	    case Rol_STD:	// Student
+	       sprintf (SubQueryRole," AND crs_users.Role=%u",
+			(unsigned) Rol_STD);
+	       break;
+	    case Rol_NET:	// Non-editing teacher
+	    case Rol_TCH:	// or teacher
+	       sprintf (SubQueryRole," AND crs_users.Role IN (%u,%u)",
+			(unsigned) Rol_NET,
+			(unsigned) Rol_TCH);
+	       break;
+	    default:
+	       SubQueryRole[0] = '\0';
+	       break;
+	   }
+	 switch (Gbl.Scope.Current)
+	   {
+	    case HieLvl_SYS:
+	       /* Search users in courses from the whole platform */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			          "%s"
+			        " AND %s",
+			      QueryFields,
+			      SubQueryRole,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_CTY:
+	       /* Search users in courses from the current country */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "deg_degrees,"
+			             "ctr_centers,"
+			             "ins_instits,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			          "%s"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=deg_degrees.DegCod"
+			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			        " AND ctr_centers.InsCod=ins_instits.InsCod"
+			        " AND ins_instits.CtyCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      SubQueryRole,
+			      Gbl.Hierarchy.Cty.CtyCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_INS:
+	       /* Search users in courses from the current institution */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "deg_degrees,"
+			             "ctr_centers,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			          "%s"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=deg_degrees.DegCod"
+			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
+			        " AND ctr_centers.InsCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      SubQueryRole,
+			      Gbl.Hierarchy.Ins.InsCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_CTR:
+	       /* Search users in courses from the current center */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "deg_degrees,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			          "%s"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=deg_degrees.DegCod"
+			        " AND deg_degrees.CtrCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      SubQueryRole,
+			      Gbl.Hierarchy.Ctr.CtrCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_DEG:
+	       /* Search users in courses from the current degree */
+	       DB_BuildQuery (Query,
+			      "SELECT %s"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "crs_courses,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			          "%s"
+			        " AND crs_users.CrsCod=crs_courses.CrsCod"
+			        " AND crs_courses.DegCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      SubQueryRole,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      OrderBySubQuery);
+	       break;
+	    case HieLvl_CRS:
+	       /* Search users in courses from the current course */
+	       DB_BuildQuery (Query,
+			      "SELECT %s,"
+			             "crs_users.Role,"
+			             "crs_users.Accepted"
+			       " FROM candidate_users,"
+			             "crs_users,"
+			             "usr_data"
+			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			          "%s"
+			        " AND crs_users.CrsCod=%ld"
+			        " AND %s",
+			      QueryFields,
+			      SubQueryRole,
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      OrderBySubQuery);
+	       break;
+	    default:
+	       Err_WrongScopeExit ();
+	       break;
+	   }
+	 break;
+      default:
+	 Err_WrongRoleExit ();
+	 break;
+     }
+
+   // if (Gbl.Usrs.Me.Roles.LoggedRole == Rol_SYS_ADM)
+   //   Lay_ShowAlert (Lay_INFO,Query);
   }
 
 /*****************************************************************************/
@@ -439,15 +1355,34 @@ unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess)
   }
 
 /*****************************************************************************/
-/*************************** Remove user's last data *************************/
+/*************** Create temporary table with candidate users *****************/
 /*****************************************************************************/
 
-void Usr_DB_RemoveUsrLastData (long UsrCod)
+void Usr_DB_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1])
   {
-   DB_QueryDELETE ("can not remove user's last data",
-		   "DELETE FROM usr_last"
-		   " WHERE UsrCod=%ld",
-		   UsrCod);
+   /***** Create temporary table with candidate users *****/
+   /*
+      - Search is faster (aproximately x2) using temporary tables.
+      - Searching for names is made in the whole platform
+        and stored in this table.
+   */
+   DB_Query ("can not create temporary table",
+	     "CREATE TEMPORARY TABLE candidate_users"
+	       " (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+	       " SELECT UsrCod"
+		 " FROM usr_data"
+		" WHERE %s",
+	     SearchQuery);
+  }
+
+/*****************************************************************************/
+/***************** Drop temporary table with candidate users *****************/
+/*****************************************************************************/
+
+void Usr_DB_DropTmpTableWithCandidateUsrs (void)
+  {
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS candidate_users");
   }
 
 /*****************************************************************************/
@@ -459,6 +1394,114 @@ void Usr_DB_RemoveUsrData (long UsrCod)
    /***** Remove user's data *****/
    DB_QueryDELETE ("can not remove user's data",
 		   "DELETE FROM usr_data"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
+  }
+
+/*****************************************************************************/
+/*************** Create new entry for my last data in database ***************/
+/*****************************************************************************/
+
+void Usr_DB_InsertMyLastData (void)
+  {
+   /***** Insert my last accessed course, tab and time of click in database *****/
+   DB_QueryINSERT ("can not insert last user's data",
+		   "INSERT INTO usr_last"
+	           " (UsrCod,WhatToSearch,"
+	             "LastSco,LastCod,LastAct,LastRole,LastTime,LastAccNotif)"
+                   " VALUES"
+                   " (%ld,%u,"
+                     "'%s',%ld,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) Sch_SEARCH_ALL,
+		   Sco_GetDBStrFromScope (Gbl.Hierarchy.Level),
+		   Gbl.Hierarchy.Cod,
+		   Act_GetActCod (Gbl.Action.Act),
+		   (unsigned) Gbl.Usrs.Me.Role.Logged,
+		   (long) (time_t) 0);	// The user never accessed to notifications
+  }
+/*****************************************************************************/
+/********* Update my last accessed course, tab and time in database **********/
+/*****************************************************************************/
+
+void Usr_DB_UpdateMyLastData (void)
+  {
+   /***** Update my last accessed course, tab and time of click in database *****/
+   // WhatToSearch, LastAccNotif remain unchanged
+   DB_QueryUPDATE ("can not update last user's data",
+		   "UPDATE usr_last"
+		     " SET LastSco='%s',"
+			  "LastCod=%ld,"
+			  "LastAct=%ld,"
+			  "LastRole=%u,"
+			  "LastTime=NOW()"
+		   " WHERE UsrCod=%ld",
+		   Sco_GetDBStrFromScope (Gbl.Hierarchy.Level),
+		   Gbl.Hierarchy.Cod,
+		   Act_GetActCod (Gbl.Action.Act),
+		   (unsigned) Gbl.Usrs.Me.Role.Logged,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********************** Update my last type of search ************************/
+/*****************************************************************************/
+
+void Usr_DB_UpdateMyLastWhatToSearch (void)
+  {
+   // WhatToSearch is stored in usr_last for next time I log in
+   // In other existing sessions distinct to this, WhatToSearch will remain unchanged
+   DB_QueryUPDATE ("can not update type of search in user's last data",
+		   "UPDATE usr_last"
+		     " SET WhatToSearch=%u"
+		   " WHERE UsrCod=%ld",
+		   (unsigned) Gbl.Search.WhatToSearch,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************** Check if it exists an entry for me in last data **************/
+/*****************************************************************************/
+
+bool Usr_DB_CheckMyLastData (void)
+  {
+   return
+   DB_QueryEXISTS ("can not check last user's data",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_last"
+		    " WHERE UsrCod=%ld)",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/********** Get user's last data from database giving a user's code **********/
+/*****************************************************************************/
+
+unsigned Usr_DB_GetMyLastData (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's last data",
+		   "SELECT WhatToSearch,"			// row[0]
+			  "LastSco,"				// row[1]
+			  "LastCod,"				// row[2]
+			  "LastAct,"				// row[3]
+			  "LastRole,"				// row[4]
+			  "UNIX_TIMESTAMP(LastTime),"		// row[5]
+			  "UNIX_TIMESTAMP(LastAccNotif)"	// row[6]
+		    " FROM usr_last"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/*************************** Remove user's last data *************************/
+/*****************************************************************************/
+
+void Usr_DB_RemoveUsrLastData (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's last data",
+		   "DELETE FROM usr_last"
 		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }

@@ -1859,7 +1859,7 @@ int swad__findUsers (struct soap *soap,
 	{
 	 /***** Create temporary table with candidate users *****/
 	 // Search is faster (aproximately x2) using temporary tables
-	 Usr_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
+	 Usr_DB_CreateTmpTableAndSearchCandidateUsrs (SearchQuery);
 
 	 /***** Search for users *****/
 	 Usr_SearchListUsrs (Role);
@@ -1868,7 +1868,7 @@ int swad__findUsers (struct soap *soap,
 	 Usr_FreeUsrsList (Role);
 
 	 /***** Drop temporary table with candidate users *****/
-	 Usr_DropTmpTableWithCandidateUsrs ();
+	 Usr_DB_DropTmpTableWithCandidateUsrs ();
         }
       else
 	 FilterTooShort = true;

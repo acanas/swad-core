@@ -45,6 +45,7 @@ void Adm_DB_InsertAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod);
 
 unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res);
 bool Adm_DB_CheckIfUsrIsAdm (long UsrCod,HieLvl_Level_t Scope,long Cod);
+bool Adm_DB_CheckIfUsrIsSuperuser (long UsrCod);
 
 void Adm_DB_RemAdmin (long UsrCod,HieLvl_Level_t Scope,long Cod);
 void Adm_DB_RemUsrAsAdmin (long UsrCod);

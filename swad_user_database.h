@@ -45,7 +45,7 @@
 // #include "swad_privacy_visibility_type.h"
 // #include "swad_role_type.h"
 // #include "swad_scope.h"
-// #include "swad_search.h"
+#include "swad_search.h"
 // #include "swad_string.h"
 // #include "swad_theme.h"
 
@@ -61,20 +61,37 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+//------------------------------- User's data ---------------------------------
 void Usr_DB_UpdateMyOffice (void);
 void Usr_DB_UpdateMyOfficePhone (void);
-void Usr_DB_UpdateMyLastWhatToSearch (void);
 
 bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
 long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
+                                      Usr_GetPrefs_t GetPrefs);
 bool Usr_DB_FindStrInUsrsNames (const char *Str);
+void Usr_DB_BuildQueryToGetUsrsLst (HieLvl_Level_t Scope,Rol_Role_t Role,char **Query);
+void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role);
+void Usr_DB_BuildQueryToGetAdmsLst (HieLvl_Level_t Scope,char **Query);
 void Usr_DB_BuildQueryToGetGstsLst (HieLvl_Level_t Scope,char **Query);
+void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query);
 void Usr_DB_BuildQueryToGetUnorderedStdsCodesInDeg (long DegCod,char **Query);
 unsigned Usr_DB_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 unsigned Usr_DB_GetOldUsrs (MYSQL_RES **mysql_res,time_t SecondsWithoutAccess);
+void Usr_DB_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
+void Usr_DB_DropTmpTableWithCandidateUsrs (void);
+
+void Usr_DB_RemoveUsrData (long UsrCod);
+
+//------------------------------ User's last data -----------------------------
+void Usr_DB_InsertMyLastData (void);
+void Usr_DB_UpdateMyLastData (void);
+void Usr_DB_UpdateMyLastWhatToSearch (void);
+
+bool Usr_DB_CheckMyLastData (void);
+unsigned Usr_DB_GetMyLastData (MYSQL_RES **mysql_res);
 
 void Usr_DB_RemoveUsrLastData (long UsrCod);
-void Usr_DB_RemoveUsrData (long UsrCod);
 
 //------------------------------ Birthdays today ------------------------------
 void Usr_DB_MarkMyBirthdayAsCongratulated (void);

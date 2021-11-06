@@ -146,64 +146,68 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Sch_WhatToSearch_t WhatToSearch;
    unsigned WTS;
 
-   /***** Begin box *****/
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   Box_BoxBegin (NULL,Txt_Search,
-                 Crs_PutIconToSelectMyCourses,NULL,
-                 Hlp_START_Search,Box_NOT_CLOSABLE);
 
-   /***** Begin form *****/
-   Frm_BeginForm (Action);
+      /***** Begin box *****/
+      Box_BoxBegin (NULL,Txt_Search,
+		    Crs_PutIconToSelectMyCourses,NULL,
+		    Hlp_START_Search,Box_NOT_CLOSABLE);
 
-   /***** Scope (whole platform, current country, current institution,
-                 current center, current degree or current course) *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtColonNBSP (Txt_Scope);
-   Gbl.Scope.Allowed = 1 << HieLvl_SYS |
-	               1 << HieLvl_CTY |
-		       1 << HieLvl_INS |
-		       1 << HieLvl_CTR |
-		       1 << HieLvl_DEG |
-		       1 << HieLvl_CRS;
-   Gbl.Scope.Default = DefaultScope;
-   Sco_GetScope ("ScopeSch");
-   Sco_PutSelectorScope ("ScopeSch",HTM_DONT_SUBMIT_ON_CHANGE);
-   HTM_LABEL_End ();
-   HTM_DIV_End ();
+	 /***** Begin form *****/
+	 Frm_BeginForm (Action);
 
-   /***** String to find *****/
-   Sch_PutInputStringToSearch ("");
+	    /***** Scope (whole platform, current country, current institution,
+			  current center, current degree or current course) *****/
+	    HTM_DIV_Begin ("class=\"CM\"");
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColonNBSP (Txt_Scope);
+		  Gbl.Scope.Allowed = 1 << HieLvl_SYS |
+				      1 << HieLvl_CTY |
+				      1 << HieLvl_INS |
+				      1 << HieLvl_CTR |
+				      1 << HieLvl_DEG |
+				      1 << HieLvl_CRS;
+		  Gbl.Scope.Default = DefaultScope;
+		  Sco_GetScope ("ScopeSch");
+		  Sco_PutSelectorScope ("ScopeSch",HTM_DONT_SUBMIT_ON_CHANGE);
+	       HTM_LABEL_End ();
+	    HTM_DIV_End ();
 
-   /***** What to search? *****/
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
-   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-		     "name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH\"");
-   for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
-        WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);
-        WhatToSearch++)
-      if (Sch_CheckIfIHavePermissionToSearch (WhatToSearch))
-	{
-	 WTS = (unsigned) WhatToSearch;
-	 HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
-		     Gbl.Search.WhatToSearch == WhatToSearch,false,
-		     "%s",Titles[WhatToSearch]);
-        }
-   HTM_SELECT_End ();
-   HTM_LABEL_End ();
+	    /***** String to find *****/
+	    Sch_PutInputStringToSearch ("");
 
-   /***** Magnifying glass icon *****/
-   Sch_PutMagnifyingGlassButton ("search.svg");
+	    /***** What to search? *****/
+	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtF (" %s&nbsp;",Txt_SEARCH_X_in_Y);
+	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
+				 "name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH\"");
+		  for (WhatToSearch  = (Sch_WhatToSearch_t) 0;
+		       WhatToSearch <= (Sch_WhatToSearch_t) (Sch_NUM_WHAT_TO_SEARCH - 1);
+		       WhatToSearch++)
+		     if (Sch_CheckIfIHavePermissionToSearch (WhatToSearch))
+		       {
+			WTS = (unsigned) WhatToSearch;
+			HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
+				    Gbl.Search.WhatToSearch == WhatToSearch,false,
+				    "%s",Titles[WhatToSearch]);
+		       }
+	       HTM_SELECT_End ();
+	    HTM_LABEL_End ();
 
-   /***** Send button *****/
-   Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
+	    /***** Magnifying glass icon *****/
+	    Sch_PutMagnifyingGlassButton ("search.svg");
 
-   /***** End form *****/
-   Frm_EndForm ();
+	    /***** Send button *****/
+	    Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
 
-   /***** End box *****/
-   Box_BoxEnd ();
+	 /***** End form *****/
+	 Frm_EndForm ();
+
+      /***** End box *****/
+      Box_BoxEnd ();
+
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

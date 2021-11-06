@@ -208,6 +208,24 @@ void Adm_AddAdmToDeg (void)
   }
 
 /*****************************************************************************/
+/******************** Get list with data of administrators *******************/
+/*****************************************************************************/
+
+void Adm_GetAdmsLst (HieLvl_Level_t Scope)
+  {
+   char *Query = NULL;
+
+   /***** Build query *****/
+   Usr_DB_BuildQueryToGetAdmsLst (Scope,&Query);
+
+   /***** Get list of administrators from database *****/
+   Usr_GetListUsrsFromQuery (Query,Rol_DEG_ADM,Scope);
+
+   /***** Free query string *****/
+   free (Query);
+  }
+
+/*****************************************************************************/
 /******************* Add an administrator to current degree ******************/
 /*****************************************************************************/
 
