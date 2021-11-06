@@ -181,7 +181,6 @@ bool Dpt_DB_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,
 
 unsigned Dpt_DB_GetNumDepartmentsInInstitution (long InsCod)
   {
-   /***** Get number of departments in an institution from database *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of departments in an institution",
 		  "SELECT COUNT(*)"

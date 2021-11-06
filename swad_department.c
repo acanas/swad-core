@@ -984,12 +984,7 @@ unsigned Dpt_GetNumDptsInIns (long InsCod)
 
    /***** 3. Slow: number of departments of an institution from database *****/
    Gbl.Cache.NumDptsInIns.InsCod  = InsCod;
-   Gbl.Cache.NumDptsInIns.NumDpts = (unsigned)
-   DB_QueryCOUNT ("can not get number of departments in an institution",
-		  "SELECT COUNT(*)"
-		   " FROM dpt_departments"
-		  " WHERE InsCod=%ld",
-		  InsCod);
+   Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInInstitution (InsCod);
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }
 

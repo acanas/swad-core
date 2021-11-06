@@ -502,7 +502,7 @@ static void InsCfg_NumDpts (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"DAT LB\"");
-	 HTM_Unsigned (Dpt_DB_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hierarchy.Ins.InsCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
