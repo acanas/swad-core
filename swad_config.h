@@ -500,7 +500,7 @@
 #define Cfg_TIME_TO_CHANGE_BANNER			((time_t)(               2UL * 60UL))	// After these seconds, change banner
 #define Cfg_NUMBER_OF_BANNERS				1					// Number of banners to show simultaneously
 
-#define Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY		((time_t)( 7UL * 24UL * 60UL * 60UL))	// After these seconds, a web service key is removed
+#define Cfg_TIME_TO_DELETE_API_KEY		((time_t)( 7UL * 24UL * 60UL * 60UL))	// After these seconds, a web service key is removed
 
 #define Cfg_TIME_TO_DELETE_HTML_OUTPUT			((time_t)(              30UL * 60UL))	// Remove the HTML output files older than these seconds
 

@@ -159,6 +159,19 @@ unsigned Crs_DB_GetDataOfCourseByCod (MYSQL_RES **mysql_res,long CrsCod)
   }
 
 /*****************************************************************************/
+/********************* Get degree code from course code **********************/
+/*****************************************************************************/
+
+long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void)
+  {
+   return DB_QuerySELECTCode ("can not get the degree of a course",
+			      "SELECT DegCod"
+			       " FROM crs_courses"
+			      " WHERE CrsCod=%ld",
+			      Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /******* Get the short names of degree and course from a course code *********/
 /*****************************************************************************/
 
@@ -193,6 +206,21 @@ void Crs_DB_GetShortNamesByCod (long CrsCod,
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************** Check if course code exists in existing courses **************/
+/*****************************************************************************/
+
+bool Crs_DB_CheckIfCrsCodExists (long CrsCod)
+  {
+   return
+   DB_QueryEXISTS ("can not check if a course already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM crs_courses"
+		    " WHERE CrsCod=%ld)",
+		   CrsCod);
   }
 
 /*****************************************************************************/

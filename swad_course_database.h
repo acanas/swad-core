@@ -49,9 +49,11 @@ unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod);
 unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetDataOfCourseByCod (MYSQL_RES **mysql_res,long CrsCod);
+long Crs_DB_GetCurrentDegCodFromCurrentCrsCod (void);
 void Crs_DB_GetShortNamesByCod (long CrsCod,
                                 char CrsShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1],
                                 char DegShortName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1]);
+bool Crs_DB_CheckIfCrsCodExists (long CrsCod);
 bool Crs_DB_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
                                              long DegCod,unsigned Year);
 unsigned Crs_DB_GetCrssOfAUsr (MYSQL_RES **mysql_res,long UsrCod,Rol_Role_t Role);

@@ -175,6 +175,7 @@ unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res)
 		    " FROM plg_plugins"
 		   " ORDER BY Name");
   }
+
 /*****************************************************************************/
 /*************************** Get data of a plugin ****************************/
 /*****************************************************************************/
@@ -192,6 +193,20 @@ unsigned Plg_DB_GetDataOfPluginByCod (MYSQL_RES **mysql_res,long PlgCod)
 		    " FROM plg_plugins"
 		   " WHERE PlgCod=%ld",
 		   PlgCod);
+  }
+
+/*****************************************************************************/
+/****** Check if the application key of the requester of a web service *******/
+/****** is one of the application keys allowed in the plugins          *******/
+/*****************************************************************************/
+
+long Plg_DB_GetPlgCodFromAppKey (const char *AppKey)
+  {
+   return DB_QuerySELECTCode ("can not check application key",
+			      "SELECT PlgCod"
+			       " FROM plg_plugins"
+			      " WHERE AppKey='%s'",
+			      AppKey);
   }
 
 /*****************************************************************************/

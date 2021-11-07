@@ -1,7 +1,7 @@
-// swad_plugin_database.h: plugins called from SWAD using web services, operations with database
+// swad_API_database.h: SWAD web API provided to external plugins, operations with database
 
-#ifndef _SWAD_PLG_DB
-#define _SWAD_PLG_DB
+#ifndef _SWAD_API_DB
+#define _SWAD_API_DB
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,15 +24,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
+#include <mysql/mysql.h>	// To access MySQL databases
 
-#include "swad_plugin.h"
+#include "swad_API.h"
 
 /*****************************************************************************/
-/****************************** Public constants *****************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
@@ -40,28 +40,14 @@
 /*****************************************************************************/
 
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Plg_DB_CreatePlugin (const struct Plugin *Plg);
-void Plg_DB_ChangeName (long PlgCod,
-                        const char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1]);
-void Plg_DB_ChangeDescription (long PlgCod,
-                               const char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1]);
-void Plg_DB_ChangeLogo (long PlgCod,
-                        const char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1]);
-void Plg_DB_ChangeAppKey (long PlgCod,
-                          const char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1]);
-void Plg_DB_ChangeURL (long PlgCod,
-                       const char NewURL[Cns_MAX_BYTES_WWW + 1]);
-void Plg_DB_ChangeIP (long PlgCod,
-                      const char NewIP[Cns_MAX_BYTES_IP + 1]);
+void API_DB_CreateAPIKey (char APIKey[API_BYTES_KEY + 1],long UsrCod,long PlgCod);
 
-unsigned Plg_DB_GetListPlugins (MYSQL_RES **mysql_res);
-unsigned Plg_DB_GetDataOfPluginByCod (MYSQL_RES **mysql_res,long PlgCod);
-long Plg_DB_GetPlgCodFromAppKey (const char *AppKey);
-bool Plg_DB_CheckIfPluginNameExists (const char *Name,long PlgCod);
+bool API_DB_CheckIfAPIKeyExists (char APIKey[API_BYTES_KEY + 1]);
+unsigned API_DB_GetDataFromAPIKey (MYSQL_RES **mysql_res,char APIKey[API_BYTES_KEY + 1]);
 
-void Plg_DB_RemovePlugin (long PlgCod);
+void API_DB_RemoveOldAPIKeys (void);
 
 #endif

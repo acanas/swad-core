@@ -103,9 +103,11 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 
 #include "swad_account.h"
 #include "swad_API.h"
+#include "swad_API_database.h"
 #include "swad_attendance_database.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"
+#include "swad_course_database.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_forum.h"
@@ -119,10 +121,12 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_password.h"
+#include "swad_plugin_database.h"
 #include "swad_question_database.h"
 #include "swad_role.h"
 #include "swad_room_database.h"
 #include "swad_search.h"
+#include "swad_session_database.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
@@ -209,8 +213,6 @@ static const API_Role_t API_RolRole_to_SvcRole[Rol_NUM_ROLES] =
    [Rol_TCH] = API_ROLE_TEACHER,
   };
 
-#define API_BYTES_WS_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
-
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -221,16 +223,14 @@ static void API_FreeSoapContext (struct soap *soap);
 static int API_GetPlgCodFromAppKey (struct soap *soap,
                                     const char *appKey);
 static int API_CheckIdSession (struct soap *soap,
-			       const char *IdSession);
-static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1]);
+			       const char *IdSes);
+static int API_CheckAPIKey (char APIKey[API_BYTES_KEY + 1]);
 
 static int API_CheckCourseAndGroupCodes (struct soap *soap,
 					 long CrsCod,long GrpCod);
-static int API_GenerateNewWSKey (struct soap *soap,
-                                 long UsrCod,
-                                 char WSKey[API_BYTES_WS_KEY + 1]);
-static int API_RemoveOldWSKeys (struct soap *soap);
-static int API_GetCurrentDegCodFromCurrentCrsCod (void);
+static int API_GenerateNewAPIKey (struct soap *soap,
+                                  long UsrCod,
+                                  char APIKey[API_BYTES_KEY + 1]);
 static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
 
 static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
@@ -364,13 +364,8 @@ static void API_FreeSoapContext (struct soap *soap)
 static int API_GetPlgCodFromAppKey (struct soap *soap,
                                     const char *appKey)
   {
-   /***** Get number of plugins with a IP address *****/
-   Gbl.WebService.PlgCod = DB_QuerySELECTCode ("can not check application key",
-					       "SELECT PlgCod"
-					        " FROM plg_plugins"
-					       " WHERE AppKey='%s'",
-					       appKey);	// Session found in table of sessions
-   if (Gbl.WebService.PlgCod < 0)
+   /***** Get plugin code from application key *****/
+   if ((Gbl.WebService.PlgCod = Plg_DB_GetPlgCodFromAppKey (appKey)) <= 0)
       return soap_sender_fault (soap,
 	                        "Unknown application key",
 	                        "Unknown application");
@@ -394,25 +389,25 @@ const char *API_GetFunctionNameFromFunCod (long FunCod)
 /*****************************************************************************/
 
 static int API_CheckIdSession (struct soap *soap,
-			       const char *IdSession)
+			       const char *IdSes)
   {
    const char *Ptr;
    unsigned i;
 
    /***** Check if pointer is NULL *****/
-   if (IdSession == NULL)
+   if (IdSes == NULL)
       return soap_sender_fault (soap,
 	                        "Bad session identifier",
 	                        "Session identifier is a null pointer");
 
    /***** Check length of session identifier *****/
-   if (strlen (IdSession) != Cns_BYTES_SESSION_ID)
+   if (strlen (IdSes) != Cns_BYTES_SESSION_ID)
       return soap_sender_fault (soap,
 	                        "Bad session identifier",
 	                        "The length of the session identifier is wrong");
 
    /***** Check if session identifier is in base64url *****/
-   for (Ptr = IdSession;
+   for (Ptr = IdSes;
 	*Ptr;
 	Ptr++)
      {
@@ -428,11 +423,7 @@ static int API_CheckIdSession (struct soap *soap,
      }
 
    /***** Query if session identifier already exists in database *****/
-   if (DB_QueryCOUNT ("can not get session data",
-		      "SELECT COUNT(*)"
-		       " FROM ses_sessions"
-		      " WHERE SessionId='%s'",
-                      IdSession) != 1)
+   if (!Ses_DB_CheckIfSessionExists (IdSes))
       return soap_receiver_fault (soap,
 	                          "Bad session identifier",
 	                          "Session identifier does not exist in database");
@@ -444,7 +435,7 @@ static int API_CheckIdSession (struct soap *soap,
 /************** Check if a web service key exists in database ****************/
 /*****************************************************************************/
 
-static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1])
+static int API_CheckAPIKey (char APIKey[API_BYTES_KEY + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -455,12 +446,7 @@ static int API_CheckWSKey (char WSKey[API_BYTES_WS_KEY + 1])
    Gbl.WebService.PlgCod = -1L;
 
    /***** Check that key does not exist in database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get existence of key",
-		       "SELECT UsrCod,"		// row[0]
-		              "PlgCod"		// row[1]
-		        " FROM api_keys"
-		       " WHERE WSKey='%s'",
-		       WSKey))	// Session found in table of sessions
+   if (API_DB_GetDataFromAPIKey (&mysql_res,APIKey))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -489,31 +475,17 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Query if course code already exists in database *****/
-   if (DB_QueryCOUNT ("can not get course",
-		      "SELECT COUNT(*)"
-		       " FROM crs_courses"
-		      " WHERE CrsCod=%ld",
-		      CrsCod) != 1)
+   if (!Crs_DB_CheckIfCrsCodExists (CrsCod))
       return soap_sender_fault (soap,
 	                        "Bad course code",
 	                        "Course code does not exist in database");
 
    /***** Course code exists in database, so check if group code exists in database and belongs to course *****/
-   if (GrpCod > 0)	// <=0 means "the whole course"
-     {
-      /***** Query if group code already exists in database *****/
-      if (DB_QueryCOUNT ("can not get group",
-			 "SELECT COUNT(*)"
-			  " FROM grp_types,"
-			        "grp_groups"
-			 " WHERE grp_types.CrsCod=%ld"
-			   " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-			   " AND grp_groups.GrpCod=%ld",
-			 CrsCod,GrpCod) != 1)
+   if (GrpCod > 0)	// <= 0 means "the whole course"
+      if (!Grp_DB_CheckIfGrpBelongsToCrs (GrpCod,CrsCod))
          return soap_sender_fault (soap,
                                    "Bad group code",
                                    "Group code does not exist in database or it's not a group of the specified course");
-     }
 
    return SOAP_OK;
   }
@@ -522,77 +494,24 @@ static int API_CheckCourseAndGroupCodes (struct soap *soap,
 /***** Generate a key used in subsequents calls to other web services ********/
 /*****************************************************************************/
 
-static int API_GenerateNewWSKey (struct soap *soap,
-                                 long UsrCod,
-                                 char WSKey[API_BYTES_WS_KEY + 1])
+static int API_GenerateNewAPIKey (struct soap *soap,
+                                  long UsrCod,
+                                  char APIKey[API_BYTES_KEY + 1])
   {
-   int ReturnCode;
-
    /***** Remove expired web service keys *****/
-   if ((ReturnCode = API_RemoveOldWSKeys (soap)) != SOAP_OK)
-      return ReturnCode;
+   API_DB_RemoveOldAPIKeys ();
 
    /***** Create a unique name for the key *****/
-   Str_Copy (WSKey,Gbl.UniqueNameEncrypted,API_BYTES_WS_KEY);
+   Str_Copy (APIKey,Gbl.UniqueNameEncrypted,API_BYTES_KEY);
 
    /***** Check that key does not exist in database *****/
-   if (DB_QueryEXISTS ("can not get existence of key",
-		       "SELECT EXISTS"
-		       "(SELECT *"
-			 " FROM api_keys"
-		        " WHERE WSKey='%s')",
-		       WSKey))
+   if (API_DB_CheckIfAPIKeyExists (APIKey))
       return soap_receiver_fault (soap,
 	                          "Error when generating key",
 	                          "Generated key already existed in database");
 
    /***** Insert key into database *****/
-   DB_QueryINSERT ("can not insert new key",
-		   "INSERT INTO api_keys"
-	           " (WSKey,UsrCod,PlgCod,LastTime)"
-                   " VALUES"
-                   " ('%s',%ld,%ld,NOW())",
-		   WSKey,
-		   UsrCod,
-		   Gbl.WebService.PlgCod);
-
-   return SOAP_OK;
-  }
-
-/*****************************************************************************/
-/************************ Remove old web service keys ************************/
-/*****************************************************************************/
-
-static int API_RemoveOldWSKeys (struct soap *soap)
-  {
-   char Query[512];
-
-   /***** Remove expired sessions *****/
-   /* A session expire when last click (LastTime) is too old,
-      or when there was at least one refresh (navigator supports AJAX) and last refresh is too old (browser probably was closed) */
-   sprintf (Query,"DELETE LOW_PRIORITY FROM api_keys"
-	          " WHERE LastTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-            Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY);
-   if (mysql_query (&Gbl.mysql,Query))
-      return soap_receiver_fault (soap,
-	                          "Can not remove old web service keys from database",
-	                          mysql_error (&Gbl.mysql));
-
-   return SOAP_OK;
-  }
-
-/*****************************************************************************/
-/********************* Get degree code from course code **********************/
-/*****************************************************************************/
-
-static int API_GetCurrentDegCodFromCurrentCrsCod (void)
-  {
-   /***** Check that key does not exist in database *****/
-   Gbl.Hierarchy.Deg.DegCod = DB_QuerySELECTCode ("can not get the degree of a course",
-						  "SELECT DegCod"
-						   " FROM crs_courses"
-						  " WHERE CrsCod=%ld",
-						  Gbl.Hierarchy.Crs.CrsCod);	// Course found in table of courses
+   API_DB_CreateAPIKey (APIKey,UsrCod,Gbl.WebService.PlgCod);
 
    return SOAP_OK;
   }
@@ -692,7 +611,7 @@ int swad__createAccount (struct soap *soap,
    Gbl.WebService.Function = API_createAccount;
 
    /***** Allocate space for strings *****/
-   createAccountOut->wsKey = soap_malloc (soap,API_BYTES_WS_KEY + 1);
+   createAccountOut->wsKey = soap_malloc (soap,API_BYTES_KEY + 1);
 
    /***** Default values returned on error *****/
    createAccountOut->userCode = 0;	// Undefined error
@@ -744,7 +663,7 @@ int swad__createAccount (struct soap *soap,
    createAccountOut->userCode = Gbl.Usrs.Me.UsrDat.UsrCod;
 
    /***** Generate a key used in subsequents calls to other web services *****/
-   return API_GenerateNewWSKey (soap,
+   return API_GenerateNewAPIKey (soap,
 				(long) createAccountOut->userCode,
 				createAccountOut->wsKey);
   }
@@ -827,7 +746,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    Gbl.WebService.Function = API_loginByUserPasswordKey;
 
    /***** Allocate space for strings *****/
-   loginByUserPasswordKeyOut->wsKey         = soap_malloc (soap,API_BYTES_WS_KEY                   + 1);
+   loginByUserPasswordKeyOut->wsKey         = soap_malloc (soap,API_BYTES_KEY                   + 1);
    loginByUserPasswordKeyOut->userNickname  = soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA  + 1);
    loginByUserPasswordKeyOut->userID        = soap_malloc (soap,ID_MAX_BYTES_USR_ID                + 1);
    loginByUserPasswordKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -946,7 +865,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
 
       /***** Generate a key used in subsequents calls to other web services *****/
-      return API_GenerateNewWSKey (soap,
+      return API_GenerateNewAPIKey (soap,
 				   (long) loginByUserPasswordKeyOut->userCode,
                                    loginByUserPasswordKeyOut->wsKey);
      }
@@ -986,7 +905,7 @@ int swad__loginBySessionKey (struct soap *soap,
    Gbl.WebService.Function = API_loginBySessionKey;
 
    /***** Allocate space for strings *****/
-   loginBySessionKeyOut->wsKey         = soap_malloc (soap,API_BYTES_WS_KEY                   + 1);
+   loginBySessionKeyOut->wsKey         = soap_malloc (soap,API_BYTES_KEY                   + 1);
    loginBySessionKeyOut->userNickname  = soap_malloc (soap,Nck_MAX_BYTES_NICK_WITHOUT_ARROBA  + 1);
    loginBySessionKeyOut->userID        = soap_malloc (soap,ID_MAX_BYTES_USR_ID                + 1);
    loginBySessionKeyOut->userFirstname = soap_malloc (soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -1066,8 +985,7 @@ int swad__loginBySessionKey (struct soap *soap,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get degree of current course *****/
-   if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)
-     return ReturnCode;
+   Gbl.Hierarchy.Deg.DegCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    if (UsrFound)
      {
@@ -1100,7 +1018,7 @@ int swad__loginBySessionKey (struct soap *soap,
       loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
 
       /***** Generate a key used in subsequents calls to other web services *****/
-      return API_GenerateNewWSKey (soap,
+      return API_GenerateNewAPIKey (soap,
 				   (long) loginBySessionKeyOut->userCode,
                                    loginBySessionKeyOut->wsKey);
      }
@@ -1134,8 +1052,8 @@ int swad__getAvailableRoles (struct soap *soap,
    /***** Default value returned on error *****/
    getAvailableRolesOut->roles = 0;	// error
 
-   /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   /***** Check API (web service) key *****/
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -1258,7 +1176,7 @@ int swad__getCourses (struct soap *soap,
    Gbl.WebService.Function = API_getCourses;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -1378,7 +1296,7 @@ int swad__getCourseInfo (struct soap *soap,
    Hie_InitHierarchy ();
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -1720,7 +1638,7 @@ int swad__getUsers (struct soap *soap,
 	                                          -1L;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -1750,8 +1668,7 @@ int swad__getUsers (struct soap *soap,
 				  "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)	// TODO: Is this necessary?
-     return ReturnCode;
+   Gbl.Hierarchy.Deg.DegCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Check requested users' role *****/
    if (userRole != API_ROLE_STUDENT &&	// Students
@@ -1801,7 +1718,7 @@ int swad__findUsers (struct soap *soap,
 	                                          -1L;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -1833,11 +1750,8 @@ int swad__findUsers (struct soap *soap,
 				     "Requester must belong to course");
 
    if (Gbl.Hierarchy.Level == HieLvl_CRS)
-     {
       /***** Get degree of current course *****/
-      if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)	// TODO: Is this necessary?
-	return ReturnCode;
-     }
+      Gbl.Hierarchy.Deg.DegCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Check requested users' role *****/
    if (userRole < API_ROLE_UNKNOWN ||
@@ -1973,7 +1887,7 @@ int swad__getGroupTypes (struct soap *soap,
    Grp_OpenGroupsAutomatically ();
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -2092,7 +2006,7 @@ int swad__getGroups (struct soap *soap,
    Grp_OpenGroupsAutomatically ();
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -2230,7 +2144,7 @@ int swad__sendMyGroups (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -2454,7 +2368,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -2671,7 +2585,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -2774,7 +2688,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    removeAttendanceEventOut->attendanceEventCode = 0;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -2886,7 +2800,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    Gbl.WebService.Function = API_getAttendanceUsers;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3096,7 +3010,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    sendAttendanceUsersOut->numUsers = 0;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3243,7 +3157,7 @@ int swad__getNotifications (struct soap *soap,
    Gbl.WebService.Function = API_getNotifications;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3519,7 +3433,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
    Gbl.WebService.Function = API_markNotificationsAsRead;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3595,7 +3509,7 @@ int swad__sendMessage (struct soap *soap,
    Gbl.WebService.Function = API_sendMessage;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3869,7 +3783,7 @@ int swad__sendNotice (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3891,8 +3805,7 @@ int swad__sendNotice (struct soap *soap,
       return ReturnCode;
 
    /***** Get degree of current course *****/
-   if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)
-     return ReturnCode;
+   Gbl.Hierarchy.Deg.DegCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Check if I am a teacher *****/
    if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
@@ -3940,7 +3853,7 @@ int swad__getTestConfig (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -3970,8 +3883,7 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)
-     return ReturnCode;
+   Gbl.Hierarchy.Deg.DegCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Set default result to empty *****/
    getTestConfigOut->numQuestions =
@@ -4066,7 +3978,7 @@ int swad__getTests (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -4096,8 +4008,7 @@ int swad__getTests (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Get degree of current course *****/
-   if ((ReturnCode = API_GetCurrentDegCodFromCurrentCrsCod ()) != SOAP_OK)
-     return ReturnCode;
+   Gbl.Hierarchy.Deg.DegCod = Crs_DB_GetCurrentDegCodFromCurrentCrsCod ();
 
    /***** Set default result to empty *****/
    getTestsOut->tagsArray.__size         = 0;
@@ -4512,7 +4423,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    Gbl.WebService.Function = API_getTrivialQuestion;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -4748,7 +4659,7 @@ int swad__getGames (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -4921,7 +4832,7 @@ int swad__getMatches (struct soap *soap,
    Gbl.Hierarchy.Crs.CrsCod = (long) courseCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5107,7 +5018,7 @@ int swad__getMatchStatus (struct soap *soap,
    getMatchStatusOut->answerIndex = -1;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5230,7 +5141,7 @@ int swad__answerMatchQuestion (struct soap *soap,
    answerMatchQuestionOut->matchCode = -1;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5358,7 +5269,7 @@ int swad__getDirectoryTree (struct soap *soap,
    Gbl.Crs.Grps.GrpCod = (long) groupCode;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5668,7 +5579,7 @@ int swad__getFile (struct soap *soap,
    getFileOut->publisherPhoto[0] = '\0';
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5817,7 +5728,7 @@ int swad__getMarks (struct soap *soap,
    getMarksOut->content = NULL;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5913,7 +5824,7 @@ int swad__getLocation (struct soap *soap,
    Gbl.WebService.Function = API_getLocation;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -5992,7 +5903,7 @@ int swad__sendMyLocation (struct soap *soap,
    sendMyLocationOut->success = 0;	// error
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
@@ -6044,7 +5955,7 @@ int swad__getLastLocation (struct soap *soap,
    Gbl.WebService.Function = API_getLastLocation;
 
    /***** Check web service key *****/
-   if ((ReturnCode = API_CheckWSKey (wsKey)) != SOAP_OK)
+   if ((ReturnCode = API_CheckAPIKey (wsKey)) != SOAP_OK)
       return ReturnCode;
    if (Gbl.Usrs.Me.UsrDat.UsrCod < 0)	// Web service key does not exist in database
       return soap_receiver_fault (soap,
