@@ -2644,15 +2644,15 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 /*********** Create a list with current group types in this course ***********/
 /*****************************************************************************/
 
-void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
+void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumGrpTyp;
-   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res) =
+   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,long CrsCod) =
     {
-     [Grp_ONLY_GROUP_TYPES_WITH_GROUPS] = Grp_DB_GetGrpTypesWithGrpsInCurrentCrs,
-     [Grp_ALL_GROUP_TYPES             ] = Grp_DB_GetAllGrpTypesInCurrentCrs,
+     [Grp_ONLY_GROUP_TYPES_WITH_GROUPS] = Grp_DB_GetGrpTypesWithGrpsInCrs,
+     [Grp_ALL_GROUP_TYPES             ] = Grp_DB_GetAllGrpTypesInCrs,
     };
 
    if (++Gbl.Crs.Grps.GrpTypes.NestedCalls > 1) // If list is created yet, there's nothing to do
@@ -2663,7 +2663,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    Grp_OpenGroupsAutomatically ();
 
    /***** Get group types from database *****/
-   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res);
+   Gbl.Crs.Grps.GrpTypes.NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrs[WhichGroupTypes] (&mysql_res,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -2768,7 +2768,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    Rol_Role_t Role;
 
    /***** First we get the list of group types *****/
-   Grp_GetListGrpTypesInThisCrs (WhichGroupTypes);
+   Grp_GetListGrpTypesInCurrentCrs (WhichGroupTypes);
 
    /***** Then we get the list of groups for each group type *****/
    for (NumGrpTyp = 0;

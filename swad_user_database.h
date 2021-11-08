@@ -52,8 +52,11 @@ void Usr_DB_UpdateMyOfficePhone (void);
 
 bool Usr_DB_ChkIfUsrCodExists (long UsrCod);
 long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+long Usr_DB_GetUsrCodFromNick (const char *NickWithoutArr);
 long Usr_DB_GetUsrCodFromNickPwd (const char *NickWithoutArr,const char *Password);
+long Usr_DB_GetUsrCodFromEmail (const char *Email);
 long Usr_DB_GetUsrCodFromEmailPwd (const char *Email,const char *Password);
+long Usr_DB_GetUsrCodFromID (const char *ID);
 long Usr_DB_GetUsrCodFromIDPwd (const char *ID,const char *Password);
 unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
                                       Usr_GetPrefs_t GetPrefs);

@@ -120,6 +120,20 @@ long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_E
   }
 
 /*****************************************************************************/
+/***************** Get user's code from database using nickname **************/
+/*****************************************************************************/
+
+long Usr_DB_GetUsrCodFromNick (const char *NickWithoutArr)
+  {
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT UsrCod"
+		        " FROM usr_nicknames"
+		       " WHERE Nickname='%s'",
+		       NickWithoutArr);
+  }
+
+/*****************************************************************************/
 /******** Get user's code from database using nickname and password **********/
 /*****************************************************************************/
 
@@ -138,6 +152,20 @@ long Usr_DB_GetUsrCodFromNickPwd (const char *NickWithoutArr,const char *Passwor
   }
 
 /*****************************************************************************/
+/**************** Get user's code from database using email ******************/
+/*****************************************************************************/
+
+long Usr_DB_GetUsrCodFromEmail (const char *Email)
+  {
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT UsrCod"
+		        " FROM usr_emails"
+		       " WHERE E_mail='%s'",	// TODO: Get only if email confirmed?
+		       Email);
+  }
+
+/*****************************************************************************/
 /********** Get user's code from database using email and password ***********/
 /*****************************************************************************/
 
@@ -146,12 +174,27 @@ long Usr_DB_GetUsrCodFromEmailPwd (const char *Email,const char *Password)
    return
    DB_QuerySELECTCode ("can not get user's code",
 		       "SELECT usr_emails.UsrCod"
-		        " FROM usr_emails,usr_data"
+		        " FROM usr_emails,"
+		              "usr_data"
 		       " WHERE usr_emails.E_mail='%s'"	// TODO: Get only if email confirmed?
 			 " AND usr_emails.UsrCod=usr_data.UsrCod"
 			 " AND usr_data.Password='%s'",
 		       Email,
 		       Password);
+  }
+
+/*****************************************************************************/
+/**************** Get user's code from database using ID *********************/
+/*****************************************************************************/
+
+long Usr_DB_GetUsrCodFromID (const char *ID)
+  {
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT UsrCod"
+		        " FROM usr_ids"
+		       " WHERE UsrID='%s'",	// TODO: Get only if ID confirmed?
+		       ID);
   }
 
 /*****************************************************************************/
@@ -528,7 +571,7 @@ void Usr_DB_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
    if (!Gbl.Usrs.ClassPhoto.AllGroups)
      {
       /***** Get list of groups types in current course *****/
-      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
       if ((AddStdsWithoutGroupOf = calloc (Gbl.Crs.Grps.GrpTypes.NumGrpTypes,

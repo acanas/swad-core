@@ -143,6 +143,26 @@ void Enr_DB_DropTmpTableMyCourses (void)
   }
 
 /*****************************************************************************/
+/************************* Get my courses from database **********************/
+/*****************************************************************************/
+
+unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's courses",
+		   "SELECT crs_courses.CrsCod,"	// row[0]
+			  "crs_courses.ShortName,"	// row[1]
+			  "crs_courses.FullName,"	// row[2]
+			  "crs_users.Role"		// row[3]
+		    " FROM crs_users,"
+			  "crs_courses"
+		   " WHERE crs_users.UsrCod=%ld"
+		     " AND crs_users.CrsCod=crs_courses.CrsCod"
+		   " ORDER BY crs_courses.FullName",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 

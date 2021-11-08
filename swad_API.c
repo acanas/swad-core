@@ -109,6 +109,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_browser_database.h"
 #include "swad_course_database.h"
 #include "swad_database.h"
+#include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_forum.h"
 #include "swad_global.h"
@@ -843,7 +844,6 @@ int swad__loginBySessionKey (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    bool UsrFound;
 
@@ -895,15 +895,7 @@ int swad__loginBySessionKey (struct soap *soap,
 
    // Now, we know that sessionID is a valid session identifier
    /***** Query data of the session from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get session data",
-		   "SELECT UsrCod,"	// row[0]
-			  "DegCod,"	// row[1]
-			  "CrsCod"	// row[2]
-		    " FROM ses_sessions"
-		   " WHERE SessionId='%s'",
-		   sessionID);
-   if (NumRows == 1)	// Session found in table of sessions
+   if (Ses_DB_GetSomeSessionData (&mysql_res,sessionID))	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -1052,20 +1044,11 @@ int swad__getNewPassword (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
-						      "SELECT UsrCod"
-						       " FROM usr_nicknames"
-						      " WHERE Nickname='%s'",
-						      UsrIDNickOrEmail);
+      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromNick (UsrIDNickOrEmail);
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
       /* User has typed an email */
-      // TODO: Get only if email confirmed?
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
-						      "SELECT UsrCod"
-						       " FROM usr_emails"
-						      " WHERE E_mail='%s'",
-						      UsrIDNickOrEmail);
+      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromEmail (UsrIDNickOrEmail);
    else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
@@ -1073,12 +1056,7 @@ int swad__getNewPassword (struct soap *soap,
       Str_ConvertToUpperText (UsrIDNickOrEmail);
       if (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
 	 /* User has typed a valid user's ID (existing or not) */
-	 // TODO: Get only if ID confirmed?
-	 Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
-						         "SELECT UsrCod"
-						          " FROM usr_ids"
-						         " WHERE UsrID='%s'",
-						         UsrIDNickOrEmail);
+	 Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromID (UsrIDNickOrEmail);
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (soap,
 				     "Bad log in",
@@ -1114,8 +1092,8 @@ int swad__getCourses (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
+   unsigned NumCrs;
+   unsigned NumCrss;
    Rol_Role_t Role;
 
    /***** Initializations *****/
@@ -1139,23 +1117,12 @@ int swad__getCourses (struct soap *soap,
    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
 
    /***** Query my courses from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's courses",
-		   "SELECT crs_courses.CrsCod,"	// row[0]
-			  "crs_courses.ShortName,"	// row[1]
-			  "crs_courses.FullName,"	// row[2]
-			  "crs_users.Role"		// row[3]
-		    " FROM crs_users,"
-			  "crs_courses"
-		   " WHERE crs_users.UsrCod=%ld"
-		     " AND crs_users.CrsCod=crs_courses.CrsCod"
-		   " ORDER BY crs_courses.FullName",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumCrss = Enr_DB_GetMyCoursesNames (&mysql_res);
 
-   getCoursesOut->numCourses = (int) NumRows;
-   getCoursesOut->coursesArray.__size = (int) NumRows;
+   getCoursesOut->numCourses          =
+   getCoursesOut->coursesArray.__size = (int) NumCrss;
 
-   if (NumRows == 0)
+   if (NumCrss == 0)
       getCoursesOut->coursesArray.__ptr = NULL;
    else	// Courses found
      {
@@ -1163,32 +1130,31 @@ int swad__getCourses (struct soap *soap,
 						       (getCoursesOut->coursesArray.__size) *
 						       sizeof (*(getCoursesOut->coursesArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumCrs = 0;
+	   NumCrs < NumCrss;
+	   NumCrs++)
 	{
 	 /* Get next course */
 	 row = mysql_fetch_row (mysql_res);
 
          /* Get course code (row[0]) */
-	 getCoursesOut->coursesArray.__ptr[NumRow].courseCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getCoursesOut->coursesArray.__ptr[NumCrs].courseCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
-         /* Get course short name (row[1]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName =
+         /* Get course short name (row[1])
+            and course full name (row[2]) */
+         getCoursesOut->coursesArray.__ptr[NumCrs].courseShortName =
             soap_malloc (soap,Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1);
-	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseShortName,
-	           row[1],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
-
-         /* Get course full name (row[2]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName =
+         getCoursesOut->coursesArray.__ptr[NumCrs].courseFullName =
             soap_malloc (soap,Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1);
-	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseFullName,
+	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumCrs].courseShortName,
+	           row[1],Cns_HIERARCHY_MAX_BYTES_SHRT_NAME);
+	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumCrs].courseFullName,
 	           row[2],Cns_HIERARCHY_MAX_BYTES_FULL_NAME);
 
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course
             Role = Rol_UNK;
-         getCoursesOut->coursesArray.__ptr[NumRow].userRole = API_RolRole_to_SvcRole[Role];
+         getCoursesOut->coursesArray.__ptr[NumCrs].userRole = API_RolRole_to_SvcRole[Role];
 	}
      }
 
@@ -1629,7 +1595,7 @@ int swad__getUsers (struct soap *soap,
    API_GetLstGrpsSel (groups);
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       /***** Get list of groups types and groups in current course *****/
-      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get list of users *****/
    Usr_GetListUsrs (HieLvl_CRS,Role);
@@ -1817,8 +1783,8 @@ int swad__getGroupTypes (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
+   unsigned NumGrpTyp;
+   unsigned NumGrpTypes;
    long OpenTime;
 
    /***** Initializations *****/
@@ -1864,22 +1830,12 @@ int swad__getGroupTypes (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Query group types in a course from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get group types",
-		   "SELECT GrpTypCod,"			// row[0]
-			  "GrpTypName,"			// row[1]
-			  "Mandatory,"			// row[2]
-			  "Multiple,"			// row[3]
-			  "UNIX_TIMESTAMP(OpenTime)"	// row[4]
-		    " FROM grp_types"
-		   " WHERE CrsCod=%d"
-		   " ORDER BY GrpTypName",
-		   courseCode);
+   NumGrpTypes = Grp_DB_GetAllGrpTypesInCrs (&mysql_res,courseCode);
 
-   getGroupTypesOut->numGroupTypes = (int) NumRows;
-   getGroupTypesOut->groupTypesArray.__size = (int) NumRows;
+   getGroupTypesOut->numGroupTypes = (int) NumGrpTypes;
+   getGroupTypesOut->groupTypesArray.__size = (int) NumGrpTypes;
 
-   if (NumRows == 0)
+   if (NumGrpTypes == 0)
       getGroupTypesOut->groupTypesArray.__ptr = NULL;
    else	// Groups found
      {
@@ -1887,35 +1843,39 @@ int swad__getGroupTypes (struct soap *soap,
 							     (getGroupTypesOut->groupTypesArray.__size) *
 							     sizeof (*(getGroupTypesOut->groupTypesArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumGrpTyp = 0;
+	   NumGrpTyp < NumGrpTypes;
+	   NumGrpTyp++)
 	{
 	 /* Get next group */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get group type code (row[0]) */
-	 getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName =
+         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].groupTypeName =
             soap_malloc (soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
-	 Str_Copy (getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName,
+	 Str_Copy (getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].groupTypeName,
 	           row[1],Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get whether enrolment is mandatory ('Y') or voluntary ('N') (row[2]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumRow].mandatory = (row[2][0] == 'Y') ? 1 :
+         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].mandatory = (row[2][0] == 'Y') ? 1 :
                                                                                           0;
 
          /* Get whether user can enrol in multiple groups ('Y') or only in one group ('N') (row[3]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumRow].multiple = (row[3][0] == 'Y') ? 1 :
+         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].multiple = (row[3][0] == 'Y') ? 1 :
                                                                                          0;
 
-         /* Get time of opening (row[4]) */
+         // Whether groups of this type must be opened (row[4]) ignored here
+
+         /* Get time of opening (row[5]) */
          OpenTime = 0L;
-         if (row[4])
-            sscanf (row[4],"%ld",&OpenTime);
-         getGroupTypesOut->groupTypesArray.__ptr[NumRow].openTime = OpenTime;
+         if (row[5])
+            sscanf (row[5],"%ld",&OpenTime);
+         getGroupTypesOut->groupTypesArray.__ptr[NumGrpTyp].openTime = OpenTime;
+
+         // Number of groups of this type (row[6]) ignored here
 	}
      }
 
@@ -1936,7 +1896,8 @@ int swad__getGroups (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumGrps;
+   unsigned NumGrp;
    long GrpCod;
    unsigned MaxStudents;
 
@@ -1983,27 +1944,12 @@ int swad__getGroups (struct soap *soap,
 	                          "Requester must belong to course");
 
    /***** Query groups in a course from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's groups",
-		   "SELECT grp_types.GrpTypCod,"	// row[0]
-			  "grp_types.GrpTypName,"	// row[1]
-			  "grp_groups.GrpCod,"		// row[2]
-			  "grp_groups.GrpName,"		// row[3]
-			  "grp_groups.MaxStudents,"	// row[4]
-			  "grp_groups.Open,	"	// row[5]
-			  "grp_groups.FileZones"	// row[6]
-		    " FROM grp_types,"
-			  "grp_groups"
-		   " WHERE grp_types.CrsCod=%d"
-		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
-		   courseCode);
+   NumGrps = Grp_DB_GetGrpsInCrs (&mysql_res,courseCode);
 
-   getGroupsOut->numGroups = (int) NumRows;
-   getGroupsOut->groupsArray.__size = (int) NumRows;
+   getGroupsOut->numGroups = (int) NumGrps;
+   getGroupsOut->groupsArray.__size = (int) NumGrps;
 
-   if (NumRows == 0)
+   if (NumGrps == 0)
       getGroupsOut->groupsArray.__ptr = NULL;
    else	// Groups found
      {
@@ -2011,50 +1957,50 @@ int swad__getGroups (struct soap *soap,
 						     (getGroupsOut->groupsArray.__size) *
 						     sizeof (*(getGroupsOut->groupsArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumGrp = 0;
+	   NumGrp < NumGrps;
+	   NumGrp++)
 	{
 	 /* Get next group */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get group type code (row[0]) */
-	 getGroupsOut->groupsArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getGroupsOut->groupsArray.__ptr[NumGrp].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName =
+         getGroupsOut->groupsArray.__ptr[NumGrp].groupTypeName =
             soap_malloc (soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
-	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
+	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumGrp].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get group code (row[2]) */
 	 GrpCod = Str_ConvertStrCodToLongCod (row[2]);
-	 getGroupsOut->groupsArray.__ptr[NumRow].groupCode = (int) GrpCod;
+	 getGroupsOut->groupsArray.__ptr[NumGrp].groupCode = (int) GrpCod;
 
          /* Get group name (row[3]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].groupName =
+         getGroupsOut->groupsArray.__ptr[NumGrp].groupName =
             soap_malloc (soap,Grp_MAX_BYTES_GROUP_NAME + 1);
-	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
+	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumGrp].groupName,row[3],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
          /* Get max number of students of group (row[4]) and number of current students */
          MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
-         getGroupsOut->groupsArray.__ptr[NumRow].maxStudents = (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP) ? -1 :
+         getGroupsOut->groupsArray.__ptr[NumGrp].maxStudents = (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP) ? -1 :
                                                                                                              (int) MaxStudents;
 
          /* Get number of current students */
-         getGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
+         getGroupsOut->groupsArray.__ptr[NumGrp].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].open = (row[5][0] == 'Y') ? 1 :
+         getGroupsOut->groupsArray.__ptr[NumGrp].open = (row[5][0] == 'Y') ? 1 :
                                                                              0;
 
          /* Get whether group have file zones ('Y') or not ('N') (row[6]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].fileZones = (row[6][0] == 'Y') ? 1 :
+         getGroupsOut->groupsArray.__ptr[NumGrp].fileZones = (row[6][0] == 'Y') ? 1 :
                                                                                   0;
 
          /* Get whether I belong to this group or not */
-         getGroupsOut->groupsArray.__ptr[NumRow].member = Grp_GetIfIBelongToGrp (GrpCod) ? 1 :
+         getGroupsOut->groupsArray.__ptr[NumGrp].member = Grp_GetIfIBelongToGrp (GrpCod) ? 1 :
                                                                                            0;
 	}
      }
@@ -2077,11 +2023,10 @@ int swad__sendMyGroups (struct soap *soap,
    struct ListCodGrps LstGrpsIWant;
    const char *Ptr;
    char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   unsigned NumGrps;
    unsigned NumGrp;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
    long GrpCod;
    unsigned MaxStudents;
 
@@ -2157,27 +2102,12 @@ int swad__sendMyGroups (struct soap *soap,
    Grp_FreeListCodGrp (&LstGrpsIWant);
 
    /***** Query groups in a course from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's groups",
-		   "SELECT grp_types.GrpTypCod,"	// row[0]
-			  "grp_types.GrpTypName,"	// row[1]
-			  "grp_groups.GrpCod,"		// row[2]
-			  "grp_groups.GrpName,"		// row[3]
-			  "grp_groups.MaxStudents,"	// row[4]
-			  "grp_groups.Open,"		// row[5]
-			  "grp_groups.FileZones"	// row[6]
-		    " FROM grp_types,"
-			  "grp_groups"
-		   " WHERE grp_types.CrsCod=%d"
-		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
-		   " ORDER BY grp_types.GrpTypName,"
-			     "grp_groups.GrpName",
-		   courseCode);
+   NumGrps = Grp_DB_GetGrpsInCrs (&mysql_res,courseCode);
 
-   SendMyGroupsOut->numGroups = (int) NumRows;
-   SendMyGroupsOut->groupsArray.__size = (int) NumRows;
+   SendMyGroupsOut->numGroups = (int) NumGrps;
+   SendMyGroupsOut->groupsArray.__size = (int) NumGrps;
 
-   if (NumRows == 0)
+   if (NumGrps == 0)
       SendMyGroupsOut->groupsArray.__ptr = NULL;
    else	// Groups found
      {
@@ -2185,50 +2115,49 @@ int swad__sendMyGroups (struct soap *soap,
 							(SendMyGroupsOut->groupsArray.__size) *
 							sizeof (*(SendMyGroupsOut->groupsArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumGrp = 0;
+	   NumGrp < NumGrps;
+	   NumGrp++)
 	{
 	 /* Get next group */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get group type code (row[0]) */
-	 SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 SendMyGroupsOut->groupsArray.__ptr[NumGrp].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName =
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].groupTypeName =
             soap_malloc (soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
-	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
+	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumGrp].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get group code (row[2]) */
 	 GrpCod = Str_ConvertStrCodToLongCod (row[2]);
-	 SendMyGroupsOut->groupsArray.__ptr[NumRow].groupCode = (int) GrpCod;
+	 SendMyGroupsOut->groupsArray.__ptr[NumGrp].groupCode = (int) GrpCod;
 
          /* Get group name (row[3]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName =
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].groupName =
             soap_malloc (soap,Grp_MAX_BYTES_GROUP_NAME + 1);
-	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
+	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumGrp].groupName,row[3],
 	           Grp_MAX_BYTES_GROUP_NAME);
 
          /* Get max number of students of group (row[4]) and number of current students */
          MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].maxStudents = (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP) ? -1 :
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].maxStudents = (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP) ? -1 :
                                                                                                                 (int) MaxStudents;
 
          /* Get number of current students */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].numStudents = (int) Grp_DB_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
-         /* Get whether group is open ('Y') or closed ('N') (row[5]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].open = (row[5][0] == 'Y') ? 1 :
-                                                                                0;
-
-         /* Get whether group have file zones ('Y') or not ('N') (row[6]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].fileZones = (row[6][0] == 'Y') ? 1 :
+         /* Get whether group is open ('Y') or closed ('N') (row[5])
+            and whether group have file zones ('Y') or not ('N') (row[6]) */
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].open      = (row[5][0] == 'Y') ? 1 :
+                                                                                     0;
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].fileZones = (row[6][0] == 'Y') ? 1 :
                                                                                      0;
 
          /* Get whether I belong to this group or not */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].member = Grp_GetIfIBelongToGrp (GrpCod) ? 1 :
+         SendMyGroupsOut->groupsArray.__ptr[NumGrp].member = Grp_GetIfIBelongToGrp (GrpCod) ? 1 :
                                                                                               0;
 	}
      }
@@ -2301,8 +2230,8 @@ int swad__getAttendanceEvents (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
-   int NumAttEvent;
+   unsigned NumAttEvents;
+   unsigned NumAttEvent;
    long AttCod;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    long StartTime;
@@ -2343,25 +2272,10 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance events *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get attendance events",
-		   "SELECT AttCod,"				// row[0]
-			  "Hidden,"				// row[1]
-			  "UsrCod,"				// row[2]
-			  "UNIX_TIMESTAMP(StartTime) AS ST,"	// row[3]
-			  "UNIX_TIMESTAMP(EndTime) AS ET,"	// row[4]
-			  "CommentTchVisible,"			// row[5]
-			  "Title,"				// row[6]
-			  "Txt"					// row[7]
-		    " FROM att_events"
-		   " WHERE CrsCod=%d"
-		   " ORDER BY ST DESC,"
-			     "ET DESC,"
-			     "Title DESC",
-		   courseCode);
+   NumAttEvents = Att_DB_GetDataOfAllAttEvents (&mysql_res,courseCode);
 
    getAttendanceEventsOut->eventsArray.__size =
-   getAttendanceEventsOut->numEvents          = (int) NumRows;
+   getAttendanceEventsOut->numEvents          = (int) NumAttEvents;
 
    if (getAttendanceEventsOut->numEvents == 0)
       getAttendanceEventsOut->eventsArray.__ptr = NULL;
@@ -2372,7 +2286,7 @@ int swad__getAttendanceEvents (struct soap *soap,
 							       sizeof (*(getAttendanceEventsOut->eventsArray.__ptr)));
 
       for (NumAttEvent = 0;
-	   NumAttEvent < getAttendanceEventsOut->numEvents;
+	   NumAttEvent < NumAttEvents;
 	   NumAttEvent++)
 	{
 	 /* Get next group */
@@ -2481,15 +2395,7 @@ static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
    size_t Length;
 
    /***** Get list of groups *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-		   "SELECT GrpCod"
-		    " FROM att_groups"
-		   " WHERE AttCod=%ld",
-		   AttCod);
-   if (NumGrps == 0)
-      *ListGroups = NULL;
-   else	// Events found
+   if ((NumGrps = Att_DB_GetGrpCodsAssociatedToEvent (&mysql_res,AttCod)))	// Events found
      {
       Length = NumGrps * (10 + 1) - 1;
       *ListGroups = soap_malloc (soap,Length + 1);
@@ -2507,6 +2413,8 @@ static void API_GetListGrpsInAttendanceEventFromDB (struct soap *soap,
 	 Str_Concat (*ListGroups,GrpCodStr,Length);
 	}
      }
+   else
+      *ListGroups = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

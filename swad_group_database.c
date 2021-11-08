@@ -434,10 +434,10 @@ bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
   }
 
 /*****************************************************************************/
-/************** Get group types with groups in current course ****************/
+/***************** Get group types with groups in a course *******************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get types of group of a course",
@@ -454,14 +454,14 @@ unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res)
 		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 		   " GROUP BY grp_types.GrpTypCod"
 		   " ORDER BY grp_types.GrpTypName",
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   CrsCod);
   }
 
 /*****************************************************************************/
-/********** Get group types with or without groups in current course *********/
+/************ Get group types with or without groups in a course *************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod)
   {
    // The tables in the second part of the UNION requires ALIAS in order to LOCK TABLES when registering in groups
    return (unsigned)
@@ -492,8 +492,8 @@ unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res)
 			  " (SELECT GrpTypCod"
 			     " FROM grp_groups))"
 		   " ORDER BY GrpTypName",
-		   Gbl.Hierarchy.Crs.CrsCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
+		   CrsCod,
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -545,12 +545,35 @@ unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
+/******************** Get groups in a course ********************/
+/*****************************************************************************/
+
+unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's groups",
+		   "SELECT grp_types.GrpTypCod,"	// row[0]
+			  "grp_types.GrpTypName,"	// row[1]
+			  "grp_groups.GrpCod,"		// row[2]
+			  "grp_groups.GrpName,"		// row[3]
+			  "grp_groups.MaxStudents,"	// row[4]
+			  "grp_groups.Open,	"	// row[5]
+			  "grp_groups.FileZones"	// row[6]
+		    " FROM grp_types,"
+			  "grp_groups"
+		   " WHERE grp_types.CrsCod=%d"
+		     " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
+		   " ORDER BY grp_types.GrpTypName,"
+			     "grp_groups.GrpName",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /******************** Get groups of a type in this course ********************/
 /*****************************************************************************/
 
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
   {
-   /***** Get groups of a type from database *****/
    // Don't use INNER JOIN because there are groups without assigned room
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get groups of a type",

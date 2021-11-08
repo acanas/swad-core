@@ -145,6 +145,30 @@ unsigned Att_DB_GetListAttEventsAllGrps (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/********************* Get list of all attendance events *********************/
+/*****************************************************************************/
+
+unsigned Att_DB_GetDataOfAllAttEvents (MYSQL_RES **mysql_res,long CrsCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get attendance events",
+		   "SELECT AttCod,"				// row[0]
+			  "Hidden,"				// row[1]
+			  "UsrCod,"				// row[2]
+			  "UNIX_TIMESTAMP(StartTime) AS ST,"	// row[3]
+			  "UNIX_TIMESTAMP(EndTime) AS ET,"	// row[4]
+			  "CommentTchVisible,"			// row[5]
+			  "Title,"				// row[6]
+			  "Txt"					// row[7]
+		    " FROM att_events"
+		   " WHERE CrsCod=%d"
+		   " ORDER BY ST DESC,"
+			     "ET DESC,"
+			     "Title DESC",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
 /**************** Get attendance event data using its code *******************/
 /*****************************************************************************/
 
@@ -299,7 +323,7 @@ unsigned Att_DB_GetGrpCodsAssociatedToEvent (MYSQL_RES **mysql_res,long AttCod)
    DB_QuerySELECT (mysql_res,"can not get groups of an attendance event",
 		   "SELECT GrpCod"	// row[0]
 		    " FROM att_groups"
-		   " WHERE att_groups.AttCod=%ld",
+		   " WHERE AttCod=%ld",
 		   AttCod);
   }
 

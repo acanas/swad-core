@@ -67,13 +67,14 @@ bool Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 bool Grp_DB_CheckIfIBelongToGrp (long GrpCod);
 bool Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
 
-unsigned Grp_DB_GetGrpTypesWithGrpsInCurrentCrs (MYSQL_RES **mysql_res);
-unsigned Grp_DB_GetAllGrpTypesInCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);
+unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long CrsCod);
 
 unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res);
 
 unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
 unsigned Grp_DB_CountNumGrpsInThisCrsOfType (long GrpTypCod);
+unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long CrsCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 
 unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);

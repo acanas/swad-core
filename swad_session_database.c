@@ -171,7 +171,7 @@ bool Ses_DB_CheckIfSessionExists (const char *IdSes)
 unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get data of session",
+   DB_QuerySELECT (mysql_res,"can not get session data",
 		   "SELECT UsrCod,"		// row[0]
 			  "Password,"		// row[1]
 			  "Role,"		// row[2]
@@ -185,6 +185,22 @@ unsigned Ses_DB_GetSessionData (MYSQL_RES **mysql_res)
 		    " FROM ses_sessions"
 		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
+  }
+
+/*****************************************************************************/
+/************************* Get some data of a session ************************/
+/*****************************************************************************/
+
+unsigned Ses_DB_GetSomeSessionData (MYSQL_RES **mysql_res,const char *SessionId)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get session data",
+		   "SELECT UsrCod,"	// row[0]
+			  "DegCod,"	// row[1]
+			  "CrsCod"	// row[2]
+		    " FROM ses_sessions"
+		   " WHERE SessionId='%s'",
+		   SessionId);
   }
 
 /*****************************************************************************/

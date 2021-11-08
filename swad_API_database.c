@@ -27,46 +27,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <dirent.h>		// For scandir, etc.
-// #include <linux/limits.h>	// For PATH_MAX
-// #include <stddef.h>		// For NULL
-// #include <string.h>
-// #include <stdsoap2.h>
-// #include <sys/stat.h>		// For lstat
-
-// #include "soap/soapH.h"		// gSOAP header
-// #include "soap/swad.nsmap"	// Namespaces map used
-
-// #include "swad_account.h"
 #include "swad_API_database.h"
-// #include "swad_attendance_database.h"
-// #include "swad_browser.h"
-// #include "swad_browser_database.h"
 #include "swad_config.h"
 #include "swad_database.h"
-// #include "swad_error.h"
-// #include "swad_forum.h"
 // #include "swad_global.h"
-// #include "swad_group_database.h"
-// #include "swad_hierarchy.h"
-// #include "swad_hierarchy_level.h"
-// #include "swad_ID.h"
-// #include "swad_match.h"
-// #include "swad_nickname_database.h"
-// #include "swad_notice.h"
-// #include "swad_notification.h"
-// #include "swad_password.h"
-// #include "swad_plugin_database.h"
-// #include "swad_question_database.h"
-// #include "swad_role.h"
-// #include "swad_room_database.h"
-// #include "swad_search.h"
-// #include "swad_session_database.h"
-// #include "swad_test_config.h"
-// #include "swad_test_visibility.h"
-// #include "swad_user.h"
-// #include "swad_user_database.h"
-// #include "swad_xml.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

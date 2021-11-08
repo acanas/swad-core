@@ -50,6 +50,7 @@ void Enr_DB_AcceptUsrInCrs (long UsrCod,long CrsCod);
 void Enr_DB_CreateTmpTableMyCourses (void);
 unsigned Enr_DB_GetMyCourses (MYSQL_RES **mysql_res);
 void Enr_DB_DropTmpTableMyCourses (void);
+unsigned Enr_DB_GetMyCoursesNames (MYSQL_RES **mysql_res);
 
 bool Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                     bool CountOnlyAcceptedCourses);

@@ -4369,7 +4369,7 @@ void Usr_ListAllDataStds (void)
      {
       /* Get list of groups types and groups in current course
          This is necessary to show columns with group selection */
-      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInCurrentCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /* Get groups to show */
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
