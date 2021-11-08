@@ -274,7 +274,7 @@ void Mch_ListMatches (struct Gam_Games *Games,
    unsigned NumMatches;
 
    /***** Get data of matches from database *****/
-   NumMatches = Mch_DB_GetMatches (&mysql_res,Game->GamCod);
+   NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Game->GamCod);
 
    /***** Begin box *****/
    Games->GamCod = Game->GamCod;

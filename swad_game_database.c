@@ -188,6 +188,34 @@ unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder)
   }
 
 /*****************************************************************************/
+/*************** Get data of all games in the current course *****************/
+/*****************************************************************************/
+
+unsigned Gam_DB_GetListAvailableGames (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get games",
+		   "SELECT gam_games.GamCod,"						// row[0]
+			  "gam_games.UsrCod,"						// row[1]
+			  "UNIX_TIMESTAMP(MIN(mch_matches.StartTime)) AS StartTime,"	// row[2]
+			  "UNIX_TIMESTAMP(MAX(mch_matches.EndTime)) AS EndTime,"	// row[3]
+			  "gam_games.MaxGrade,"						// row[4]
+			  "gam_games.Visibility,"					// row[5]
+			  "gam_games.Title,"						// row[6]
+			  "gam_games.Txt"						// row[7]
+		    " FROM gam_games"
+		    " LEFT JOIN mch_matches"
+		      " ON gam_games.GamCod=mch_matches.GamCod"
+		   " WHERE gam_games.CrsCod=%ld"
+		     " AND Hidden='N'"
+		   " GROUP BY gam_games.GamCod"
+		   " ORDER BY StartTime DESC,"
+			     "EndTime DESC,"
+			     "gam_games.Title DESC",
+		   Gbl.Hierarchy.Crs.CrsCod);
+   }
+
+/*****************************************************************************/
 /********************** Get game data using its code *************************/
 /*****************************************************************************/
 

@@ -378,6 +378,33 @@ unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications)
 		   SubQuery);
   }
 
+
+/*****************************************************************************/
+/************************* Get my recent notifications ***********************/
+/*****************************************************************************/
+
+unsigned Ntf_DB_GetMyRecentNotifications (MYSQL_RES **mysql_res,time_t BeginTime)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's notifications",
+		   "SELECT NtfCod,"			// row[0]
+			  "NotifyEvent,"		// row[1]
+			  "UNIX_TIMESTAMP(TimeNotif),"	// row[2]
+			  "FromUsrCod,"			// row[3]
+			  "InsCod,"			// row[4]
+			  "CtrCod,"			// row[5]
+			  "DegCod,"			// row[6]
+			  "CrsCod,"			// row[7]
+			  "Cod,"			// row[8]
+			  "Status"			// row[9]
+		    " FROM ntf_notifications"
+		   " WHERE ToUsrCod=%ld"
+		     " AND TimeNotif>=FROM_UNIXTIME(%ld)"
+		   " ORDER BY TimeNotif DESC",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (long) BeginTime);
+  }
+
 /*****************************************************************************/
 /******************* Get pending notifications to a user *********************/
 /*****************************************************************************/

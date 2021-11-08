@@ -57,12 +57,18 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
 unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
                                char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1],
                                float lowerScore,float upperScore);
+unsigned Qst_DB_GetNumQstsInCrs (long CrsCod);
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                             HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
 unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,
                                     Qst_AnswerType_t AnsType);
 unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
                                              Qst_AnswerType_t AnsType);
+
+unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
+                                    long CrsCod,time_t BeginTime);
+unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
+                                  long CrsCod,time_t BeginTime);
 
 unsigned Qst_DB_GetQstData (MYSQL_RES **mysql_res,long QstCod);
 Qst_AnswerType_t Qst_DB_GetQstAnswerType (long QstCod);

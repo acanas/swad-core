@@ -112,6 +112,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_enrolment_database.h"
 #include "swad_error.h"
 #include "swad_forum.h"
+#include "swad_game_database.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
 #include "swad_hierarchy.h"
@@ -120,9 +121,11 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_mail_database.h"
 #include "swad_match.h"
 #include "swad_match_database.h"
+#include "swad_message_database.h"
 #include "swad_nickname_database.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
+#include "swad_notification_database.h"
 #include "swad_password.h"
 #include "swad_plugin_database.h"
 #include "swad_question_database.h"
@@ -132,6 +135,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_search.h"
 #include "swad_session_database.h"
 #include "swad_setting_database.h"
+#include "swad_tag_database.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
@@ -267,17 +271,16 @@ static int API_GetMyLanguage (struct soap *soap);
 
 static int API_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
 
-static unsigned API_GetNumTestQuestionsInCrs (long CrsCod);
 static int API_GetTstTags (struct soap *soap,
 			   long CrsCod,struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstQuestions (struct soap *soap,
-				long CrsCod,long BeginTime,
+				long CrsCod,time_t BeginTime,
 				struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstAnswers (struct soap *soap,
-		              long CrsCod,long BeginTime,
+		              long CrsCod,time_t BeginTime,
 			      struct swad__getTestsOutput *getTestsOut);
 static int API_GetTstQuestionTags (struct soap *soap,
-		                   long CrsCod,long BeginTime,
+		                   long CrsCod,time_t BeginTime,
 				   struct swad__getTestsOutput *getTestsOut);
 
 static void API_GetListGrpsInMatchFromDB (struct soap *soap,
@@ -2645,10 +2648,11 @@ int swad__getAttendanceUsers (struct soap *soap,
   {
    int ReturnCode;
    struct Att_Event Event;
-   char SubQuery[512];
+   bool AttEventIsAsociatedToGrps;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumUsrs;
+   unsigned NumUsr;
    char PhotoURL[Cns_MAX_BYTES_WWW + 1];
    size_t Length;
 
@@ -2684,154 +2688,96 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Requester must be a teacher");
 
    /***** Query list of attendance users *****/
-   if (Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",Event.AttCod))
-      // Event for one or more groups
-      // Subquery: list of users in groups of this attendance event...
-      // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT DISTINCT "
-	                       "grp_users.UsrCod AS UsrCod,"	// row[0]
-	                       "'N' AS Present"			// row[1]
-		         " FROM att_groups,"
-		               "grp_groups,"
-		               "grp_types,"
-		               "crs_users,"
-		               "grp_users"
-		        " WHERE att_groups.AttCod=%ld"
-		          " AND att_groups.GrpCod=grp_groups.GrpCod"
-		          " AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
-		          " AND grp_types.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.Role=%u"
-		          " AND crs_users.UsrCod=grp_users.UsrCod"
-		          " AND grp_users.GrpCod=att_groups.GrpCod"
-		          " AND grp_users.UsrCod NOT IN"
-		              " (SELECT UsrCod"
-		                 " FROM att_users"
-		                " WHERE AttCod=%ld)",
-	       Event.AttCod,
-	       (unsigned) Rol_STD,
-	       Event.AttCod);
-   else
-      // Event for the whole course
-      // Subquery: list of users in the course of this attendance event...
-      // ...who have no entry in attendance list of users
-      sprintf (SubQuery,"SELECT crs_users.UsrCod AS UsrCod,"	// row[0]
-	                       "'N' AS Present"			// row[1]
-		         " FROM att_events,"
-		               "crs_users"
-		        " WHERE att_events.AttCod=%ld"
-		          " AND att_events.CrsCod=crs_users.CrsCod"
-		          " AND crs_users.Role=%u"
-		          " AND crs_users.UsrCod NOT IN"
-		              " (SELECT UsrCod"
-		                 " FROM att_users"
-		                " WHERE AttCod=%ld)",
-	       Event.AttCod,
-	       (unsigned) Rol_STD,
-	       Event.AttCod);
-   // Query: list of users in attendance list + rest of users (subquery)
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get users in an attendance event",
-		   "SELECT u.UsrCod,"	// row[0]
-			  "u.Present"	// row[1]
-		    " FROM (SELECT UsrCod,"
-				  "Present"
-			    " FROM att_users"
-			   " WHERE AttCod=%ld"
-			   " UNION %s) AS u,"
-			  "usr_data"
-		   " WHERE u.UsrCod=usr_data.UsrCod"
-		   " ORDER BY usr_data.Surname1,"
-			     "usr_data.Surname2,"
-			     "usr_data.FirstName",
-		   (long) attendanceEventCode,
-		   SubQuery);
+   AttEventIsAsociatedToGrps = Grp_DB_CheckIfAssociatedToGrps ("att_groups","AttCod",Event.AttCod);
 
-   getAttendanceUsersOut->numUsers = (int) NumRows;
-   getAttendanceUsersOut->usersArray.__size = (int) NumRows;
+   NumUsrs = Att_DB_GetListUsrsInAttEvent (&mysql_res,Event.AttCod,AttEventIsAsociatedToGrps);
 
-   if (NumRows == 0)
-      getAttendanceUsersOut->usersArray.__ptr = NULL;
-   else	// Events found
+   getAttendanceUsersOut->numUsers          =
+   getAttendanceUsersOut->usersArray.__size = (int) NumUsrs;
+
+   if (NumUsrs)	// Users found
      {
       getAttendanceUsersOut->usersArray.__ptr = soap_malloc (soap,
 							     (getAttendanceUsersOut->usersArray.__size) *
 							     sizeof (*(getAttendanceUsersOut->usersArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
 	{
 	 /* Get next user */
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get user's code (row[0]) */
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-         getAttendanceUsersOut->usersArray.__ptr[NumRow].userCode = (int) Gbl.Usrs.Other.UsrDat.UsrCod;
+         getAttendanceUsersOut->usersArray.__ptr[NumUsr].userCode = (int) Gbl.Usrs.Other.UsrDat.UsrCod;
 
          /* Get user's data */
          if (API_GetSomeUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,-1L))	// Get some user's data from database
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname =
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname =
                soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname,
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname,
                       Gbl.Usrs.Other.UsrDat.Nickname,Length);
 
             if (Gbl.Usrs.Other.UsrDat.IDs.Num)
               {
 	       Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
-	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID =
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID =
 	          soap_malloc (soap,Length + 1);
-	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID,
 	                 Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Length);
               }
             else
               {
-	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID =
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID =
 	          soap_malloc (soap,1);
-	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID[0] = '\0';
+	       getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID[0] = '\0';
               }
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1 =
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1 =
                soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1,
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2 =
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2 =
                soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2,
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FrstName);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname =
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname =
                soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname,
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FrstName,Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto =
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto =
                soap_malloc (soap,Length + 1);
-            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto,
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto,
                       PhotoURL,Length);
            }
          else
            {
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname  = NULL;
-	    getAttendanceUsersOut->usersArray.__ptr[NumRow].userID        = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1  = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2  = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname = NULL;
-            getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto     = NULL;
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userNickname  = NULL;
+	    getAttendanceUsersOut->usersArray.__ptr[NumUsr].userID        = NULL;
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname1  = NULL;
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userSurname2  = NULL;
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userFirstname = NULL;
+            getAttendanceUsersOut->usersArray.__ptr[NumUsr].userPhoto     = NULL;
            }
 
 	 /* Get if user is present or not (row[1]) */
-	 getAttendanceUsersOut->usersArray.__ptr[NumRow].present = (row[1][0] == 'Y') ? 1 :
+	 getAttendanceUsersOut->usersArray.__ptr[NumUsr].present = (row[1][0] == 'Y') ? 1 :
 											0;
 	}
      }
+   else
+      getAttendanceUsersOut->usersArray.__ptr = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2994,7 +2940,7 @@ int swad__getNotifications (struct soap *soap,
    int ReturnCode;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumNotifications;
+   unsigned NumNotifs;
    unsigned NumNotif;
    long NtfCod;
    Ntf_NotifyEvent_t NotifyEvent;
@@ -3034,34 +2980,16 @@ int swad__getNotifications (struct soap *soap,
       return ReturnCode;
 
    /***** Get my notifications from database *****/
-   NumNotifications = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get user's notifications",
-		   "SELECT NtfCod,"			// row[0]
-			  "NotifyEvent,"		// row[1]
-			  "UNIX_TIMESTAMP(TimeNotif),"	// row[2]
-			  "FromUsrCod,"			// row[3]
-			  "InsCod,"			// row[4]
-			  "CtrCod,"			// row[5]
-			  "DegCod,"			// row[6]
-			  "CrsCod,"			// row[7]
-			  "Cod,"			// row[8]
-			  "Status"			// row[9]
-		    " FROM ntf_notifications"
-		   " WHERE ToUsrCod=%ld"
-		     " AND TimeNotif>=FROM_UNIXTIME(%ld)"
-		   " ORDER BY TimeNotif DESC",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
-
-   if (NumNotifications)	// Notifications found
+   if ((NumNotifs = Ntf_DB_GetMyRecentNotifications (&mysql_res,(time_t) beginTime)))	// Notifications found
      {
-      getNotificationsOut->numNotifications = (int) NumNotifications;
-      getNotificationsOut->notificationsArray.__size = (int) NumNotifications;
+      getNotificationsOut->numNotifications          =
+      getNotificationsOut->notificationsArray.__size = (int) NumNotifs;
       getNotificationsOut->notificationsArray.__ptr = soap_malloc (soap,
 								   (getNotificationsOut->notificationsArray.__size) *
 								   sizeof (*(getNotificationsOut->notificationsArray.__ptr)));
 
       for (NumNotif = 0;
-	   NumNotif < NumNotifications;
+	   NumNotif < NumNotifs;
 	   NumNotif++)
 	{
 	 /* Get next notification */
@@ -3349,15 +3277,10 @@ int swad__sendMessage (struct soap *soap,
   {
    int ReturnCode;
    long ReplyUsrCod = -1L;
-   char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
-   char *Query = NULL;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   bool FirstNickname = true;
-   bool ThereAreNicknames = false;
-   const char *Ptr;
    bool ItsMe;
    bool NotifyByEmail;
 
@@ -3385,160 +3308,77 @@ int swad__sendMessage (struct soap *soap,
    if (messageCode)
      {
       /***** Check if the original message was really received by me *****/
-      if (DB_QuerySELECTUnsigned ("can not check original message",
-				  "SELECT SUM(N)"
-				   " FROM (SELECT COUNT(*) AS N"
-					   " FROM msg_rcv"
-					  " WHERE UsrCod=%ld"
-					    " AND MsgCod=%ld"
-					 " UNION"
-					 " SELECT COUNT(*) AS N"
-					   " FROM msg_rcv_deleted"
-					  " WHERE UsrCod=%ld"
-					    " AND MsgCod=%ld) AS T",
-				  Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
-				  Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode) == 0)
+      if (!Msg_DB_CheckIfMsgHasBeenReceivedByMe ((long) messageCode))
          return soap_sender_fault (soap,
                                    "Can not send reply message",
                                    "Original message does not exist");
 
       /***** Get the recipient of the message *****/
-      ReplyUsrCod = DB_QuerySELECTCode ("can not check original message",
-				        "SELECT UsrCod"
-					 " FROM msg_snt"
-				        " WHERE MsgCod=%ld"
-				        " UNION "
-				        "SELECT UsrCod"
-					 " FROM msg_snt_deleted"
-				        " WHERE MsgCod=%ld",
-				        (long) messageCode,
-				        (long) messageCode);
-      if (ReplyUsrCod <= 0)
+      if ((ReplyUsrCod = Msg_DB_GetSender ((long) messageCode)) <= 0)
          return soap_sender_fault (soap,
                                    "Can not send reply message",
                                    "Original message does not exist");
      }
 
-   /***** Allocate space for query *****/
-   if ((Query = malloc (API_MAX_BYTES_QUERY_RECIPIENTS + 1)) == NULL)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Build query for recipients from database *****/
-   if (ReplyUsrCod > 0)
-      snprintf (Query,API_MAX_BYTES_QUERY_RECIPIENTS + 1,
-	        "SELECT UsrCod"
-	         " FROM usr_data"
-	        " WHERE UsrCod=%ld",
-	        ReplyUsrCod);
-   else
-      Query[0] = '\0';
-
-   /***** Loop over recipients' nicknames building query *****/
-   Ptr = to;
-   while (*Ptr)
-     {
-      /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,Nick,sizeof (Nick) - 1);	// With leading arrobas
-
-      /* Check if string is a valid nickname */
-      if (Nck_CheckIfNickWithArrIsValid (Nick))	// String is a nickname (with leading arrobas)?
-	{
-         Str_RemoveLeadingArrobas (Nick);
-
-	 /* Check for overflow in query */
-	 if (strlen (Query) + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 32 >
-	     API_MAX_BYTES_QUERY_RECIPIENTS)
-	    return soap_sender_fault (soap,
-				      "Can not send message",
-				      "Too many recipients");
-
-	 /* Add this nickname to query */
-	 if (FirstNickname)
-	   {
-	    if (ReplyUsrCod > 0)
-	       Str_Concat (Query," UNION ",API_MAX_BYTES_QUERY_RECIPIENTS);
-	    Str_Concat (Query,"SELECT UsrCod"
-		               " FROM usr_nicknames"
-			      " WHERE Nickname IN ('",
-			API_MAX_BYTES_QUERY_RECIPIENTS);
-	    FirstNickname = false;
-	    ThereAreNicknames = true;
-	   }
-	 else
-	    Str_Concat (Query,",'",API_MAX_BYTES_QUERY_RECIPIENTS);
-	 Str_Concat (Query,Nick,API_MAX_BYTES_QUERY_RECIPIENTS);	// Leading arrobas already removed
-	 Str_Concat (Query,"'",API_MAX_BYTES_QUERY_RECIPIENTS);
-	}
-     }
-   if (ThereAreNicknames)
-      Str_Concat (Query,")",API_MAX_BYTES_QUERY_RECIPIENTS);
+   /***** Query database to get users *****/
+   NumUsrs = Msg_DB_GetRecipientsCods (&mysql_res,ReplyUsrCod,to);
 
    /***** Initialize output structure *****/
-   sendMessageOut->numUsers = 0;
-   sendMessageOut->usersArray.__size = 0;
-   sendMessageOut->usersArray.__ptr = NULL;
+   sendMessageOut->numUsers          =
+   sendMessageOut->usersArray.__size = (int) NumUsrs;
+   sendMessageOut->usersArray.__ptr  = NULL;
 
-   if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in "to"
+   /***** Get users *****/
+   if (NumUsrs)	// There are a recipient to reply or nicknames in "to"
      {
-      /***** Get users *****/
-      NumUsrs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get users",
-		      "%s",
-	              Query);
+      sendMessageOut->usersArray.__ptr = soap_malloc (soap,
+						      (sendMessageOut->usersArray.__size) *
+						      sizeof (*(sendMessageOut->usersArray.__ptr)));
 
-      sendMessageOut->numUsers = (int) NumUsrs;
-      sendMessageOut->usersArray.__size = (int) NumUsrs;
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 /* Get next user */
+	 row = mysql_fetch_row (mysql_res);
 
-      if (NumUsrs)	// Users found
-        {
-         sendMessageOut->usersArray.__ptr = soap_malloc (soap,
-							 (sendMessageOut->usersArray.__size) *
-							 sizeof (*(sendMessageOut->usersArray.__ptr)));
+	 /* Get user's code (row[0]) */
+	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = (long) Str_ConvertStrCodToLongCod (row[0])) > 0)
+	    /* Get recipient data */
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	      {
+	       /* This received message must be notified by email? */
+	       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	       NotifyByEmail = (!ItsMe &&
+				(Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
 
-         for (NumUsr = 0;
-              NumUsr < NumUsrs;
-              NumUsr++)
-           {
-            /* Get next user */
-            row = mysql_fetch_row (mysql_res);
+	       /* Send message to this user */
+	       if ((ReturnCode = API_SendMessageToUsr ((long) messageCode,
+						       Gbl.Usrs.Me.UsrDat.UsrCod,
+						       ReplyUsrCod,
+						       Gbl.Usrs.Other.UsrDat.UsrCod,
+						       NotifyByEmail,
+						       subject,
+						       body)) != SOAP_OK)
+		 {
+		  DB_FreeMySQLResult (&mysql_res);
+		  return ReturnCode;
+		 }
 
-            /* Get user's code (row[0]) */
-            if ((Gbl.Usrs.Other.UsrDat.UsrCod = (long) Str_ConvertStrCodToLongCod (row[0])) > 0)
-               /* Get recipient data */
-               if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
-                                                            Usr_DONT_GET_PREFS,
-                                                            Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-        	 {
-                  /* This received message must be notified by email? */
-        	  ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-                  NotifyByEmail = (!ItsMe &&
-                                   (Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
-
-                  /* Send message to this user */
-                  if ((ReturnCode = API_SendMessageToUsr ((long) messageCode,
-                                                          Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                          ReplyUsrCod,
-                                                          Gbl.Usrs.Other.UsrDat.UsrCod,
-                                                          NotifyByEmail,
-                                                          subject,
-                                                          body)) != SOAP_OK)
-                    {
-                     DB_FreeMySQLResult (&mysql_res);
-                     return ReturnCode;
-                    }
-
-                  /* Copy user's data into output structure */
-                  API_CopyUsrData (soap,
-				   &(sendMessageOut->usersArray.__ptr[NumUsr]),
-				   &Gbl.Usrs.Other.UsrDat,
-				   false);
-        	 }
-           }
-        }
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	       /* Copy user's data into output structure */
+	       API_CopyUsrData (soap,
+				&(sendMessageOut->usersArray.__ptr[NumUsr]),
+				&Gbl.Usrs.Other.UsrDat,
+				false);
+	      }
+	}
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
    return SOAP_OK;
   }
 
@@ -3783,40 +3623,9 @@ int swad__getTestConfig (struct soap *soap,
    /***** Get number of tests *****/
    if (TstCfg_GetConfigPluggable () == TstCfg_PLUGGABLE_YES &&
        TstCfg_GetConfigMax () > 0)
-      getTestConfigOut->numQuestions = (int) API_GetNumTestQuestionsInCrs ((long) courseCode);
+      getTestConfigOut->numQuestions = (int) Qst_DB_GetNumQstsInCrs ((long) courseCode);
 
    return SOAP_OK;
-  }
-
-/*****************************************************************************/
-/** Get number of visible test questions from database giving a course code **/
-/*****************************************************************************/
-
-static unsigned API_GetNumTestQuestionsInCrs (long CrsCod)
-  {
-   /***** Get number of questions *****/
-   // Reject questions with any tag hidden
-   // Select only questions with tags
-   return (unsigned)
-   DB_QueryCOUNT ("can not get number of test questions",
-		  "SELECT COUNT(*)"
-		   " FROM tst_questions,"
-			 "tst_question_tags,"
-			 "tst_tags"
-		  " WHERE tst_questions.CrsCod=%ld"
-		    " AND tst_questions.QstCod NOT IN"
-			" (SELECT tst_question_tags.QstCod"
-			   " FROM tst_tags,"
-				 "tst_question_tags"
-			  " WHERE tst_tags.CrsCod=%ld"
-			    " AND tst_tags.TagHidden='Y'"
-			    " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		    " AND tst_questions.QstCod=tst_question_tags.QstCod"
-		    " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		    " AND tst_tags.CrsCod=%ld",
-		  CrsCod,
-		  CrsCod,
-		  CrsCod);
   }
 
 /*****************************************************************************/
@@ -3887,17 +3696,17 @@ int swad__getTests (struct soap *soap,
 
       /***** Get questions *****/
       if ((ReturnCode = API_GetTstQuestions (soap,
-					     (long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
+					     (long) courseCode,(time_t) beginTime,getTestsOut)) != SOAP_OK)
          return ReturnCode;
 
       /***** Get answers *****/
       if ((ReturnCode = API_GetTstAnswers (soap,
-					   (long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
+					   (long) courseCode,(time_t) beginTime,getTestsOut)) != SOAP_OK)
          return ReturnCode;
 
       /***** Get tags for each question *****/
       if ((ReturnCode = API_GetTstQuestionTags (soap,
-						(long) courseCode,beginTime,getTestsOut)) != SOAP_OK)
+						(long) courseCode,(time_t) beginTime,getTestsOut)) != SOAP_OK)
          return ReturnCode;
      }
 
@@ -3918,15 +3727,7 @@ static int API_GetTstTags (struct soap *soap,
    unsigned NumTag;
 
    /***** Get available tags from database *****/
-   NumTags = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get test tags",
-		   "SELECT TagCod,"	// row[0]
-			  "TagTxt"	// row[1]
-		    " FROM tst_tags"
-		   " WHERE CrsCod=%ld"
-		     " AND TagHidden='N'"
-		   " ORDER BY TagTxt",
-		   CrsCod);
+   NumTags = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,CrsCod);
 
    getTestsOut->tagsArray.__size = (int) NumTags;
 
@@ -3967,53 +3768,23 @@ static int API_GetTstTags (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstQuestions (struct soap *soap,
-				long CrsCod,long BeginTime,
+				long CrsCod,time_t BeginTime,
 				struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
+   unsigned NumQsts;
+   unsigned NumQst;
    Qst_AnswerType_t AnswerType;
 
    /***** Get recent test questions from database *****/
    // DISTINCT is necessary to not repeat questions
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get test questions",
-		   "SELECT DISTINCT "
-		          "tst_questions.QstCod,"	// row[0]
-			  "tst_questions.AnsType,"	// row[1]
-			  "tst_questions.Shuffle,"	// row[2]
-			  "tst_questions.Stem,"		// row[3]
-			  "tst_questions.Feedback"	// row[4]
-		    " FROM tst_questions,"
-			  "tst_question_tags,"
-			  "tst_tags"
-		   " WHERE tst_questions.CrsCod=%ld"
-		     " AND tst_questions.QstCod NOT IN"
-			 " (SELECT tst_question_tags.QstCod"
-			    " FROM tst_tags,"
-				  "tst_question_tags"
-			   " WHERE tst_tags.CrsCod=%ld"
-			     " AND tst_tags.TagHidden='Y'"
-			     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		     " AND tst_questions.QstCod=tst_question_tags.QstCod"
-		     " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		     " AND tst_tags.CrsCod=%ld"
-		     " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-			   " OR "
-			   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld))"
-		   " ORDER BY QstCod",
-		   CrsCod,
-		   CrsCod,
-		   CrsCod,
-		   BeginTime,
-		   BeginTime);
+   NumQsts = Qst_DB_GetRecentQuestions (&mysql_res,CrsCod,BeginTime);
 
-   getTestsOut->questionsArray.__size = (int) NumRows;
+   getTestsOut->questionsArray.__size = (int) NumQsts;
 
-   if (NumRows == 0)
+   if (NumQsts == 0)
       getTestsOut->questionsArray.__ptr = NULL;
    else	// Questions found
      {
@@ -4021,38 +3792,38 @@ static int API_GetTstQuestions (struct soap *soap,
 						       (getTestsOut->questionsArray.__size) *
 						       sizeof (*(getTestsOut->questionsArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumQst = 0;
+	   NumQst < NumQsts;
+	   NumQst++)
 	{
 	 /* Get next question */
 	 row = mysql_fetch_row (mysql_res);
 
          /* Get question code (row[0]) */
-	 getTestsOut->questionsArray.__ptr[NumRow].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getTestsOut->questionsArray.__ptr[NumQst].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get answer type (row[1]) */
          AnswerType = Qst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-         getTestsOut->questionsArray.__ptr[NumRow].answerType =
+         getTestsOut->questionsArray.__ptr[NumQst].answerType =
             soap_malloc (soap,Qst_MAX_BYTES_ANSWER_TYPE + 1);
-	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
+	 Str_Copy (getTestsOut->questionsArray.__ptr[NumQst].answerType,
 	           Qst_StrAnswerTypesXML[AnswerType],
 	           Qst_MAX_BYTES_ANSWER_TYPE);
 
          /* Get shuffle (row[2]) */
-         getTestsOut->questionsArray.__ptr[NumRow].shuffle = (row[2][0] == 'Y') ? 1 :
+         getTestsOut->questionsArray.__ptr[NumQst].shuffle = (row[2][0] == 'Y') ? 1 :
                                                                                   0;
 
          /* Get question stem (row[3]) */
-         getTestsOut->questionsArray.__ptr[NumRow].stem =
+         getTestsOut->questionsArray.__ptr[NumQst].stem =
             soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
-         Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].stem,row[3],
+         Str_Copy (getTestsOut->questionsArray.__ptr[NumQst].stem,row[3],
                    Cns_MAX_BYTES_TEXT);
 
          /* Get question feedback (row[4]) */
-         getTestsOut->questionsArray.__ptr[NumRow].feedback =
+         getTestsOut->questionsArray.__ptr[NumQst].feedback =
             soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
-         Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].feedback,row[4],
+         Str_Copy (getTestsOut->questionsArray.__ptr[NumQst].feedback,row[4],
                    Cns_MAX_BYTES_TEXT);
 	}
      }
@@ -4068,54 +3839,22 @@ static int API_GetTstQuestions (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstAnswers (struct soap *soap,
-		              long CrsCod,long BeginTime,
+		              long CrsCod,time_t BeginTime,
 			      struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumAnss;
+   unsigned NumAns;
    unsigned Index;
 
-   /***** Get recent test questions from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get test answers",
-		   "SELECT QstCod,"	// row[0]
-			  "AnsInd,"	// row[1]
-			  "Correct,"	// row[2]
-			  "Answer,"	// row[3]
-			  "Feedback"	// row[4]
-		    " FROM tst_answers"
-		   " WHERE QstCod IN "
-			  "(SELECT tst_questions.QstCod"
-			    " FROM tst_questions,"
-				  "tst_question_tags,"
-				  "tst_tags"
-			   " WHERE tst_questions.CrsCod=%ld"
-			     " AND tst_questions.QstCod NOT IN"
-				 " (SELECT tst_question_tags.QstCod"
-				    " FROM tst_tags,"
-					  "tst_question_tags"
-				   " WHERE tst_tags.CrsCod=%ld"
-				     " AND tst_tags.TagHidden='Y'"
-				     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			    " AND tst_questions.QstCod=tst_question_tags.QstCod"
-			    " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			    " AND tst_tags.CrsCod=%ld"
-			    " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-				 " OR "
-				  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
-		   " ORDER BY QstCod,"
-			     "AnsInd",
-		   CrsCod,
-		   CrsCod,
-		   CrsCod,
-		   BeginTime,
-		   BeginTime);
+   /***** Get answers to recent test questions from database *****/
+   NumAnss = Qst_DB_GetRecentAnswers (&mysql_res,CrsCod,BeginTime);
 
-   getTestsOut->answersArray.__size = (int) NumRows;
+   getTestsOut->answersArray.__size = (int) NumAnss;
 
-   if (NumRows == 0)
+   if (NumAnss == 0)
       getTestsOut->answersArray.__ptr = NULL;
    else	// Answers found
      {
@@ -4123,36 +3862,36 @@ static int API_GetTstAnswers (struct soap *soap,
 						     (getTestsOut->answersArray.__size) *
 						     sizeof (*(getTestsOut->answersArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumAns = 0;
+	   NumAns < NumAnss;
+	   NumAns++)
 	{
 	 /* Get next question */
 	 row = mysql_fetch_row (mysql_res);
 
          /* Get question code (row[0]) */
-	 getTestsOut->answersArray.__ptr[NumRow].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getTestsOut->answersArray.__ptr[NumAns].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get answer index (row[1]) */
          if (sscanf (row[1],"%u",&Index) == 1)
-            getTestsOut->answersArray.__ptr[NumRow].answerIndex = (int) Index;
+            getTestsOut->answersArray.__ptr[NumAns].answerIndex = (int) Index;
          else
-            getTestsOut->answersArray.__ptr[NumRow].answerIndex = 0;	// error
+            getTestsOut->answersArray.__ptr[NumAns].answerIndex = 0;	// error
 
          /* Get correct (row[2]) */
-         getTestsOut->answersArray.__ptr[NumRow].correct = (row[2][0] == 'Y') ? 1 :
+         getTestsOut->answersArray.__ptr[NumAns].correct = (row[2][0] == 'Y') ? 1 :
                                                                                 0;
 
          /* Get answer (row[3]) */
-         getTestsOut->answersArray.__ptr[NumRow].answerText =
+         getTestsOut->answersArray.__ptr[NumAns].answerText =
             soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
-         Str_Copy (getTestsOut->answersArray.__ptr[NumRow].answerText,
+         Str_Copy (getTestsOut->answersArray.__ptr[NumAns].answerText,
                    row[3],Cns_MAX_BYTES_TEXT);
 
          /* Get feedback (row[4]) */
-         getTestsOut->answersArray.__ptr[NumRow].answerFeedback =
+         getTestsOut->answersArray.__ptr[NumAns].answerFeedback =
             soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
-         Str_Copy (getTestsOut->answersArray.__ptr[NumRow].answerFeedback,
+         Str_Copy (getTestsOut->answersArray.__ptr[NumAns].answerFeedback,
                    row[4],Cns_MAX_BYTES_TEXT);
 	}
      }
@@ -4168,77 +3907,47 @@ static int API_GetTstAnswers (struct soap *soap,
 /*****************************************************************************/
 
 static int API_GetTstQuestionTags (struct soap *soap,
-		                   long CrsCod,long BeginTime,
+		                   long CrsCod,time_t BeginTime,
 				   struct swad__getTestsOutput *getTestsOut)
   {
    extern const char *Qst_StrAnswerTypesXML[Qst_NUM_ANS_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow,NumRows;
+   unsigned NumQstTags;
+   unsigned NumQstTag;
    unsigned Index;
 
    /***** Get recent test questions from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get test question tags",
-		   "SELECT QstCod,"	// row[0]
-			  "TagCod,"	// row[1]
-			  "TagInd"	// row[2]
-		    " FROM tst_question_tags"
-		   " WHERE QstCod IN "
-			  "(SELECT tst_questions.QstCod"
-			    " FROM tst_questions,"
-				  "tst_question_tags,"
-				  "tst_tags"
-			   " WHERE tst_questions.CrsCod=%ld"
-			     " AND tst_questions.QstCod NOT IN"
-				 " (SELECT tst_question_tags.QstCod"
-				    " FROM tst_tags,"
-					  "tst_question_tags"
-				   " WHERE tst_tags.CrsCod=%ld"
-				     " AND tst_tags.TagHidden='Y'"
-				     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-			     " AND tst_questions.QstCod=tst_question_tags.QstCod"
-			     " AND tst_question_tags.TagCod=tst_tags.TagCod"
-			     " AND tst_tags.CrsCod=%ld"
-			     " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
-				  " OR "
-				   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
-		   " ORDER BY QstCod,"
-			     "TagInd",
-		   CrsCod,
-		   CrsCod,
-		   CrsCod,
-		   BeginTime,
-		   BeginTime);
+   NumQstTags = Tag_DB_GetRecentTags (&mysql_res,CrsCod,BeginTime);
 
-   getTestsOut->questionTagsArray.__size = (int) NumRows;
+   getTestsOut->questionTagsArray.__size = (int) NumQstTags;
 
-   if (NumRows == 0)
+   if (NumQstTags == 0)
       getTestsOut->questionTagsArray.__ptr = NULL;
-   else	// Answers found
+   else	// Questions-tags found
      {
       getTestsOut->questionTagsArray.__ptr = soap_malloc (soap,
 							  (getTestsOut->questionTagsArray.__size) *
 							  sizeof (*(getTestsOut->questionTagsArray.__ptr)));
 
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumQstTag = 0;
+	   NumQstTag < NumQstTags;
+	   NumQstTag++)
 	{
 	 /* Get next question */
 	 row = mysql_fetch_row (mysql_res);
 
          /* Get question code (row[0]) */
-	 getTestsOut->questionTagsArray.__ptr[NumRow].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	 getTestsOut->questionTagsArray.__ptr[NumQstTag].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get tag code (row[1]) */
-	 getTestsOut->questionTagsArray.__ptr[NumRow].tagCode = (int) Str_ConvertStrCodToLongCod (row[1]);
+	 getTestsOut->questionTagsArray.__ptr[NumQstTag].tagCode = (int) Str_ConvertStrCodToLongCod (row[1]);
 
          /* Get tag index (row[2]) */
          if (sscanf (row[2],"%u",&Index) == 1)
-            getTestsOut->questionTagsArray.__ptr[NumRow].tagIndex = (int) Index;
+            getTestsOut->questionTagsArray.__ptr[NumQstTag].tagIndex = (int) Index;
          else
-            getTestsOut->questionTagsArray.__ptr[NumRow].tagIndex = 0;	// error
+            getTestsOut->questionTagsArray.__ptr[NumQstTag].tagIndex = 0;	// error
 	}
      }
 
@@ -4499,27 +4208,8 @@ int swad__getGames (struct soap *soap,
 				  "Request forbidden",
 				  "Requester must be a student in the course");
 
-   /***** Query list of games *****/
-   NumGames = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get games",
-		   "SELECT gam_games.GamCod,"						// row[0]
-			  "gam_games.UsrCod,"						// row[1]
-			  "UNIX_TIMESTAMP(MIN(mch_matches.StartTime)) AS StartTime,"	// row[2]
-			  "UNIX_TIMESTAMP(MAX(mch_matches.EndTime)) AS EndTime,"	// row[3]
-			  "gam_games.MaxGrade,"						// row[4]
-			  "gam_games.Visibility,"					// row[5]
-			  "gam_games.Title,"						// row[6]
-			  "gam_games.Txt"						// row[7]
-		    " FROM gam_games"
-		    " LEFT JOIN mch_matches"
-		      " ON gam_games.GamCod=mch_matches.GamCod"
-		   " WHERE gam_games.CrsCod=%ld"
-		     " AND Hidden='N'"
-		   " GROUP BY gam_games.GamCod"
-		   " ORDER BY StartTime DESC,"
-			     "EndTime DESC,"
-			     "gam_games.Title DESC",
-		   Gbl.Hierarchy.Crs.CrsCod);
+   /***** Query list of games available for me *****/
+   NumGames = Gam_DB_GetListAvailableGames (&mysql_res);
    getGamesOut->gamesArray.__size =
    getGamesOut->numGames          = (int) NumGames;
 
@@ -4683,29 +4373,8 @@ int swad__getMatches (struct soap *soap,
 				  "Request forbidden",
 				  "Requester must be a student in the course");
 
-   /***** Query list of matches *****/
-   NumMatches = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get matches",
-		   "SELECT MchCod,"			// row[ 0]
-			  "UsrCod,"			// row[ 1]
-			  "UNIX_TIMESTAMP(StartTime),"	// row[ 2]
-			  "UNIX_TIMESTAMP(EndTime),"	// row[ 3]
-			  "Title,"			// row[ 4]
-			  "QstInd"			// row[ 5]
-		    " FROM mch_matches"
-		   " WHERE GamCod=%ld"
-		     " AND (MchCod NOT IN"
-			  " (SELECT MchCod FROM mch_groups)"
-			  " OR"
-			  " MchCod IN"
-			  " (SELECT mch_groups.MchCod"
-			     " FROM mch_groups,"
-				   "grp_users"
-			    " WHERE grp_users.UsrCod=%ld"
-			      " AND mch_groups.GrpCod=grp_users.GrpCod))"
-		   " ORDER BY MchCod",
-		   Game.GamCod,
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
+   /***** Query list of matches available for me *****/
+   NumMatches = Mch_DB_GetAvailableMatchesInGame (&mysql_res,Game.GamCod);
    getMatchesOut->matchesArray.__size =
    getMatchesOut->numMatches          = (int) NumMatches;
 
@@ -5652,36 +5321,8 @@ int swad__getLocation (struct soap *soap,
 	                          "Bad MAC",
 	                          "MAC address format should be 12 hexadecimal digits");
 
-   /***** Get list of locations *****/
-   NumLocs = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get matches",
-		   "SELECT ins_instits.InsCod,"		// row[ 0]
-			  "ins_instits.ShortName,"	// row[ 1]
-			  "ins_instits.FullName,"	// row[ 2]
-			  "ctr_centers.CtrCod,"		// row[ 3]
-			  "ctr_centers.ShortName,"	// row[ 4]
-			  "ctr_centers.FullName,"	// row[ 5]
-			  "bld_buildings.BldCod,"	// row[ 6]
-			  "bld_buildings.ShortName,"	// row[ 7]
-			  "bld_buildings.FullName,"	// row[ 8]
-			  "roo_rooms.Floor,"		// row[ 9]
-			  "roo_rooms.RooCod,"		// row[10]
-			  "roo_rooms.ShortName,"	// row[11]
-			  "roo_rooms.FullName"		// row[12]
-		    " FROM roo_macs,"
-			  "roo_rooms,"
-			  "bld_buildings,"
-			  "ctr_centers,"
-			  "ins_instits"
-		   " WHERE roo_macs.MAC=%llu"
-		     " AND roo_macs.RooCod=roo_rooms.RooCod"
-		     " AND roo_rooms.BldCod=bld_buildings.BldCod"
-		     " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
-		     " AND ctr_centers.InsCod=ins_instits.InsCod"
-		   " ORDER BY roo_rooms.Capacity DESC,"	// Get the biggest room
-			     "roo_rooms.ShortName"
-		   " LIMIT 1",
-		   MACnum);
+   /***** Get location *****/
+   NumLocs = Roo_DB_GetLocationByMAC (&mysql_res,MACnum);
 
    API_GetDataOfLocation (soap,
                           &(getLocationOut->location),
@@ -5769,40 +5410,7 @@ int swad__getLastLocation (struct soap *soap,
    if (Roo_DB_CheckIfICanSeeUsrLocation ((long) userCode))
      {
       /***** Get list of locations *****/
-      NumLocs = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get matches",
-		      "SELECT ins_instits.InsCod,"			// row[ 0]
-			     "ins_instits.ShortName,"			// row[ 1]
-			     "ins_instits.FullName,"			// row[ 2]
-			     "ctr_centers.CtrCod,"			// row[ 3]
-			     "ctr_centers.ShortName,"			// row[ 4]
-			     "ctr_centers.FullName,"			// row[ 5]
-			     "bld_buildings.BldCod,"			// row[ 6]
-			     "bld_buildings.ShortName,"			// row[ 7]
-			     "bld_buildings.FullName,"			// row[ 8]
-			     "roo_rooms.Floor,"				// row[ 9]
-			     "roo_rooms.RooCod,"			// row[10]
-			     "roo_rooms.ShortName,"			// row[11]
-			     "roo_rooms.FullName,"			// row[12]
-			     "UNIX_TIMESTAMP(roo_check_in.CheckInTime)"	// row[13]
-		       " FROM roo_check_in,"
-			     "roo_rooms,"
-			     "bld_buildings,"
-			     "ctr_centers,"
-			     "ins_instits"
-		     " WHERE roo_check_in.UsrCod=%d"
-		       " AND roo_check_in.ChkCod="
-			    "(SELECT ChkCod"
-			      " FROM roo_check_in"
-			     " WHERE UsrCod=%d"
-			     " ORDER BY ChkCod DESC"
-			     " LIMIT 1)"	// Faster than SELECT MAX
-		       " AND roo_check_in.RooCod=roo_rooms.RooCod"
-		       " AND roo_rooms.BldCod=bld_buildings.BldCod"
-		       " AND bld_buildings.CtrCod=ctr_centers.CtrCod"
-		       " AND ctr_centers.InsCod=ins_instits.InsCod",
-		      userCode,
-		      userCode);
+      NumLocs = Roo_DB_GetUsrLastLocation (&mysql_res,(long) userCode);
       API_GetDataOfLocation (soap,
 			     &(getLastLocationOut->location),
 			     &(getLastLocationOut->checkinTime),	// Get check in time

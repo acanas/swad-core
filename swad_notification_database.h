@@ -65,6 +65,7 @@ unsigned Ntf_DB_GetNumNotifSent (MYSQL_RES **mysql_res,
                                  long DegCod,long CrsCod,
                                  Ntf_NotifyEvent_t NotifyEvent);
 unsigned Ntf_DB_GetMyNotifications (MYSQL_RES **mysql_res,bool AllNotifications);
+unsigned Ntf_DB_GetMyRecentNotifications (MYSQL_RES **mysql_res,time_t BeginTime);
 unsigned Ntf_DB_GetPendingNtfsToUsr (MYSQL_RES **mysql_res,long ToUsrCod);
 unsigned Ntf_DB_GetNumAllMyUnseenNtfs (void);
 unsigned Ntf_DB_GetNumMyNewUnseenNtfs (void);

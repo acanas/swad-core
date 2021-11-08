@@ -225,17 +225,18 @@ unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 /*****************************************************************************/
 // Return the number of rows of the result
 
-unsigned Tag_DB_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
+unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,long CrsCod)
   {
    /***** Get available not hidden tags from database *****/
-   return (unsigned) DB_QuerySELECT (mysql_res,"can not get available enabled tags",
-				     "SELECT TagCod,"	// row[0]
-					    "TagTxt"	// row[1]
-				      " FROM tst_tags"
-				     " WHERE CrsCod=%ld"
-				       " AND TagHidden='N'"
-				     " ORDER BY TagTxt",
-				     Gbl.Hierarchy.Crs.CrsCod);
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get available enabled tags",
+		   "SELECT TagCod,"	// row[0]
+			  "TagTxt"	// row[1]
+		    " FROM tst_tags"
+		   " WHERE CrsCod=%ld"
+		     " AND TagHidden='N'"
+		   " ORDER BY TagTxt",
+		   CrsCod);
   }
 
 /*****************************************************************************/
@@ -268,6 +269,48 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
 			        " AND TagTxt='%s'",
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      TagTxt);
+  }
+
+
+/*****************************************************************************/
+/*** Get tags of recent test questions from database giving a course code ****/
+/*****************************************************************************/
+
+unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
+		               long CrsCod,time_t BeginTime)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get question tags",
+		   "SELECT QstCod,"	// row[0]
+			  "TagCod,"	// row[1]
+			  "TagInd"	// row[2]
+		    " FROM tst_question_tags"
+		   " WHERE QstCod IN "
+			  "(SELECT tst_questions.QstCod"
+			    " FROM tst_questions,"
+				  "tst_question_tags,"
+				  "tst_tags"
+			   " WHERE tst_questions.CrsCod=%ld"
+			     " AND tst_questions.QstCod NOT IN"
+				 " (SELECT tst_question_tags.QstCod"
+				    " FROM tst_tags,"
+					  "tst_question_tags"
+				   " WHERE tst_tags.CrsCod=%ld"
+				     " AND tst_tags.TagHidden='Y'"
+				     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			     " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			     " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			     " AND tst_tags.CrsCod=%ld"
+			     " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+				  " OR "
+				   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
+		   " ORDER BY QstCod,"
+			     "TagInd",
+		   CrsCod,
+		   CrsCod,
+		   CrsCod,
+		   (long) BeginTime,
+		   (long) BeginTime);
   }
 
 /*****************************************************************************/

@@ -55,9 +55,12 @@ void Tag_DB_EnableOrDisableTag (long TagCod,bool TagHidden);
 
 unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod);
 unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
-unsigned Tag_DB_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res);
+unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,long CrsCod);
 bool Tag_DB_CheckIfCurrentCrsHasTestTags (void);
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
+
+unsigned Tag_DB_GetRecentTags (MYSQL_RES **mysql_res,
+		               long CrsCod,time_t BeginTime);
 
 void Tag_DB_RemTagsInQstsInCrs (long CrsCod);
 void Tag_DB_RemTagsInCrs (long CrsCod);

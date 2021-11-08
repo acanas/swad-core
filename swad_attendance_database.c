@@ -25,7 +25,9 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stdio.h>		// For asprintf
 
 #include "swad_attendance.h"
 #include "swad_attendance_database.h"
@@ -471,6 +473,91 @@ unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long Us
 		     " AND UsrCod=%ld",
 		   AttCod,
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/*********** Return a list with the users in an attendance event *************/
+/*****************************************************************************/
+
+unsigned Att_DB_GetListUsrsInAttEvent (MYSQL_RES **mysql_res,
+                                       long AttCod,bool AttEventIsAsociatedToGrps)
+  {
+   char *SubQuery;
+   unsigned NumUsrs;
+
+   /***** Query list of attendance users *****/
+   if (AttEventIsAsociatedToGrps)
+     {
+      // Event for one or more groups
+      // Subquery: list of users in groups of this attendance event...
+      // ...who have no entry in attendance list of users
+      if (asprintf (&SubQuery,"SELECT DISTINCT "
+				     "grp_users.UsrCod AS UsrCod,"	// row[0]
+				     "'N' AS Present"			// row[1]
+			       " FROM att_groups,"
+				     "grp_groups,"
+				     "grp_types,"
+				     "crs_users,"
+				     "grp_users"
+			      " WHERE att_groups.AttCod=%ld"
+				" AND att_groups.GrpCod=grp_groups.GrpCod"
+				" AND grp_groups.GrpTypCod=grp_types.GrpTypCod"
+				" AND grp_types.CrsCod=crs_users.CrsCod"
+				" AND crs_users.Role=%u"
+				" AND crs_users.UsrCod=grp_users.UsrCod"
+				" AND grp_users.GrpCod=att_groups.GrpCod"
+				" AND grp_users.UsrCod NOT IN"
+				    " (SELECT UsrCod"
+				       " FROM att_users"
+				      " WHERE AttCod=%ld)",
+		     AttCod,
+		     (unsigned) Rol_STD,
+		     AttCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      // Event for the whole course
+      // Subquery: list of users in the course of this attendance event...
+      // ...who have no entry in attendance list of users
+      if (asprintf (&SubQuery,"SELECT crs_users.UsrCod AS UsrCod,"	// row[0]
+				     "'N' AS Present"			// row[1]
+			       " FROM att_events,"
+				     "crs_users"
+			      " WHERE att_events.AttCod=%ld"
+				" AND att_events.CrsCod=crs_users.CrsCod"
+				" AND crs_users.Role=%u"
+				" AND crs_users.UsrCod NOT IN"
+				    " (SELECT UsrCod"
+				       " FROM att_users"
+				      " WHERE AttCod=%ld)",
+		     AttCod,
+		     (unsigned) Rol_STD,
+		     AttCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+
+   // Query: list of users in attendance list + rest of users (subquery)
+   NumUsrs = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get users in an attendance event",
+		   "SELECT u.UsrCod,"	// row[0]
+			  "u.Present"	// row[1]
+		    " FROM (SELECT UsrCod,"
+				  "Present"
+			    " FROM att_users"
+			   " WHERE AttCod=%ld"
+			   " UNION %s) AS u,"
+			  "usr_data"
+		   " WHERE u.UsrCod=usr_data.UsrCod"
+		   " ORDER BY usr_data.Surname1,"
+			     "usr_data.Surname2,"
+			     "usr_data.FirstName",
+		   AttCod,
+		   SubQuery);
+
+   free (SubQuery);
+
+   return NumUsrs;
   }
 
 /*****************************************************************************/

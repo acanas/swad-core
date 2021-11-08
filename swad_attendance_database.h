@@ -67,6 +67,8 @@ unsigned Att_DB_GetNumStdsTotalWhoAreInAttEvent (long AttCod);
 unsigned Att_DB_GetNumStdsFromListWhoAreInAttEvent (long AttCod,const char *SubQueryUsrs);
 bool Att_DB_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present);
 unsigned Att_DB_GetPresentAndComments (MYSQL_RES **mysql_res,long AttCod,long UsrCod);
+unsigned Att_DB_GetListUsrsInAttEvent (MYSQL_RES **mysql_res,
+                                       long AttCod,bool AttEventIsAsociatedToGrps);
 void Att_DB_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,
                                               bool Present,
                                               const char *CommentStd,

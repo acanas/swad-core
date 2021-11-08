@@ -569,6 +569,37 @@ unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/** Get number of visible test questions from database giving a course code **/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetNumQstsInCrs (long CrsCod)
+  {
+   /***** Get number of questions *****/
+   // Reject questions with any tag hidden
+   // Select only questions with tags
+   return (unsigned)
+   DB_QueryCOUNT ("can not get number of test questions",
+		  "SELECT COUNT(*)"
+		   " FROM tst_questions,"
+			 "tst_question_tags,"
+			 "tst_tags"
+		  " WHERE tst_questions.CrsCod=%ld"
+		    " AND tst_questions.QstCod NOT IN"
+			" (SELECT tst_question_tags.QstCod"
+			   " FROM tst_tags,"
+				 "tst_question_tags"
+			  " WHERE tst_tags.CrsCod=%ld"
+			    " AND tst_tags.TagHidden='Y'"
+			    " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+		    " AND tst_questions.QstCod=tst_question_tags.QstCod"
+		    " AND tst_question_tags.TagCod=tst_tags.TagCod"
+		    " AND tst_tags.CrsCod=%ld",
+		  CrsCod,
+		  CrsCod,
+		  CrsCod);
+  }
+
+/*****************************************************************************/
 /*********************** Get number of test questions ************************/
 /*****************************************************************************/
 // Returns the number of test questions
@@ -1110,6 +1141,90 @@ unsigned Qst_DB_GetNumCrssWithPluggableQsts (HieLvl_Level_t Scope,
 	 Err_WrongScopeExit ();
 	 return 0;	// Not reached
      }
+  }
+
+/*****************************************************************************/
+/******* Get recent test questions from database giving a course code ********/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetRecentQuestions (MYSQL_RES **mysql_res,
+                                    long CrsCod,time_t BeginTime)
+  {
+   // DISTINCT is necessary to not repeat questions
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get test questions",
+		   "SELECT DISTINCT "
+		          "tst_questions.QstCod,"	// row[0]
+			  "tst_questions.AnsType,"	// row[1]
+			  "tst_questions.Shuffle,"	// row[2]
+			  "tst_questions.Stem,"		// row[3]
+			  "tst_questions.Feedback"	// row[4]
+		    " FROM tst_questions,"
+			  "tst_question_tags,"
+			  "tst_tags"
+		   " WHERE tst_questions.CrsCod=%ld"
+		     " AND tst_questions.QstCod NOT IN"
+			 " (SELECT tst_question_tags.QstCod"
+			    " FROM tst_tags,"
+				  "tst_question_tags"
+			   " WHERE tst_tags.CrsCod=%ld"
+			     " AND tst_tags.TagHidden='Y'"
+			     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+		     " AND tst_questions.QstCod=tst_question_tags.QstCod"
+		     " AND tst_question_tags.TagCod=tst_tags.TagCod"
+		     " AND tst_tags.CrsCod=%ld"
+		     " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+			   " OR "
+			   "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld))"
+		   " ORDER BY QstCod",
+		   CrsCod,
+		   CrsCod,
+		   CrsCod,
+		   (long) BeginTime,
+		   (long) BeginTime);
+  }
+
+/*****************************************************************************/
+/** Get answers of recent test questions from database giving a course code **/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetRecentAnswers (MYSQL_RES **mysql_res,
+                                  long CrsCod,time_t BeginTime)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get test answers",
+		   "SELECT QstCod,"	// row[0]
+			  "AnsInd,"	// row[1]
+			  "Correct,"	// row[2]
+			  "Answer,"	// row[3]
+			  "Feedback"	// row[4]
+		    " FROM tst_answers"
+		   " WHERE QstCod IN "
+			  "(SELECT tst_questions.QstCod"
+			    " FROM tst_questions,"
+				  "tst_question_tags,"
+				  "tst_tags"
+			   " WHERE tst_questions.CrsCod=%ld"
+			     " AND tst_questions.QstCod NOT IN"
+				 " (SELECT tst_question_tags.QstCod"
+				    " FROM tst_tags,"
+					  "tst_question_tags"
+				   " WHERE tst_tags.CrsCod=%ld"
+				     " AND tst_tags.TagHidden='Y'"
+				     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+			    " AND tst_questions.QstCod=tst_question_tags.QstCod"
+			    " AND tst_question_tags.TagCod=tst_tags.TagCod"
+			    " AND tst_tags.CrsCod=%ld"
+			    " AND (tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
+				 " OR "
+				  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)))"
+		   " ORDER BY QstCod,"
+			     "AnsInd",
+		   CrsCod,
+		   CrsCod,
+		   CrsCod,
+		   (long) BeginTime,
+		   (long) BeginTime);
   }
 
 /*****************************************************************************/

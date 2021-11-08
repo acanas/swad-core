@@ -46,7 +46,8 @@ void Mch_DB_UpdateVisResultsMchUsr (long MchCod,bool ShowUsrResults);
 
 unsigned Mch_DB_GetDataOfMatchByCod (MYSQL_RES **mysql_res,long MchCod);
 unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
-unsigned Mch_DB_GetMatches (MYSQL_RES **mysql_res,long GamCod);
+unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
+unsigned Mch_DB_GetAvailableMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 Mch_Showing_t Mch_DB_GetShowingFromStr (const char *Str);
 unsigned Mch_DB_GetNumMchsInGame (long GamCod);
 unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod);

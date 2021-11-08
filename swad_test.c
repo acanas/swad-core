@@ -143,7 +143,8 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Questions)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Get tags *****/
-      if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
+      if ((Questions->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
+                                                               Gbl.Hierarchy.Crs.CrsCod)) != 0)
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
 	 if (Tst_CheckIfNextTstAllowed ())

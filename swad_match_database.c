@@ -228,7 +228,7 @@ unsigned Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
 /************************* Get the matches of a game *************************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetMatches (MYSQL_RES **mysql_res,long GamCod)
+unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
   {
    char *SubQuery;
 
@@ -277,6 +277,36 @@ unsigned Mch_DB_GetMatches (MYSQL_RES **mysql_res,long GamCod)
 
    /***** Free allocated memory for subquery *****/
    free (SubQuery);
+  }
+
+/*****************************************************************************/
+/********************* Get available matches in a game ***********************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetAvailableMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get matches",
+		   "SELECT MchCod,"			// row[ 0]
+			  "UsrCod,"			// row[ 1]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 2]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 3]
+			  "Title,"			// row[ 4]
+			  "QstInd"			// row[ 5]
+		    " FROM mch_matches"
+		   " WHERE GamCod=%ld"
+		     " AND (MchCod NOT IN"
+			  " (SELECT MchCod FROM mch_groups)"
+			  " OR"
+			  " MchCod IN"
+			  " (SELECT mch_groups.MchCod"
+			     " FROM mch_groups,"
+				   "grp_users"
+			    " WHERE grp_users.UsrCod=%ld"
+			      " AND mch_groups.GrpCod=grp_users.GrpCod))"
+		   " ORDER BY MchCod",
+		   GamCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

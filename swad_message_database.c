@@ -806,6 +806,130 @@ bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod)
   }
 
 /*****************************************************************************/
+/************************* Get the sender of a message ***********************/
+/*****************************************************************************/
+
+long Msg_DB_GetSender (long MsgCod)
+  {
+   return
+   DB_QuerySELECTCode ("can not get sender",
+		       "SELECT UsrCod"
+		        " FROM msg_snt"
+		       " WHERE MsgCod=%ld"
+		       " UNION "
+		       "SELECT UsrCod"
+		        " FROM msg_snt_deleted"
+		       " WHERE MsgCod=%ld",
+		       MsgCod,
+		       MsgCod);
+  }
+
+/*****************************************************************************/
+/************** Check if a message has been really received by me ************/
+/*****************************************************************************/
+
+bool Msg_DB_CheckIfMsgHasBeenReceivedByMe (long MsgCod)
+  {
+   return
+   DB_QueryEXISTS ("can not check original message",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM msg_rcv"
+		    " WHERE UsrCod=%ld"
+		      " AND MsgCod=%ld"
+		   " UNION"
+		   " SELECT *"
+		     " FROM msg_rcv_deleted"
+		    " WHERE UsrCod=%ld"
+		      " AND MsgCod=%ld)",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
+  }
+
+/*****************************************************************************/
+/***************************** Get recipients' codes *************************/
+/*****************************************************************************/
+
+#define Msg_DB_MAX_BYTES_QUERY_RECIPIENTS (16 * 1024 - 1)
+
+unsigned Msg_DB_GetRecipientsCods (MYSQL_RES **mysql_res,
+                                   long ReplyUsrCod,const char *ListRecipients)
+  {
+   char *Query = NULL;
+   const char *Ptr;
+   char Nick[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
+   bool FirstNickname = true;
+   bool ThereAreNicknames = false;
+   unsigned NumUsrs = 0;
+
+   /***** Allocate space for query *****/
+   if ((Query = malloc (Msg_DB_MAX_BYTES_QUERY_RECIPIENTS + 1)) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Build query for recipients from database *****/
+   if (ReplyUsrCod > 0)
+      snprintf (Query,Msg_DB_MAX_BYTES_QUERY_RECIPIENTS + 1,
+	        "SELECT UsrCod"
+	         " FROM usr_data"
+	        " WHERE UsrCod=%ld",
+	        ReplyUsrCod);
+   else
+      Query[0] = '\0';
+
+   /***** Loop over recipients' nicknames building query *****/
+   Ptr = ListRecipients;
+   while (*Ptr)
+     {
+      /* Find next string in text until comma (leading and trailing spaces are removed) */
+      Str_GetNextStringUntilComma (&Ptr,Nick,sizeof (Nick) - 1);	// With leading arrobas
+
+      /* Check if string is a valid nickname */
+      if (Nck_CheckIfNickWithArrIsValid (Nick))	// String is a nickname (with leading arrobas)?
+	{
+         Str_RemoveLeadingArrobas (Nick);
+
+	 /* Check for overflow in query */
+	 if (strlen (Query) + Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 32 >
+	     Msg_DB_MAX_BYTES_QUERY_RECIPIENTS)
+            Err_NotEnoughMemoryExit ();
+
+	 /* Add this nickname to query */
+	 if (FirstNickname)
+	   {
+	    if (ReplyUsrCod > 0)
+	       Str_Concat (Query," UNION ",Msg_DB_MAX_BYTES_QUERY_RECIPIENTS);
+	    Str_Concat (Query,"SELECT UsrCod"
+		               " FROM usr_nicknames"
+			      " WHERE Nickname IN ('",
+			Msg_DB_MAX_BYTES_QUERY_RECIPIENTS);
+	    FirstNickname = false;
+	    ThereAreNicknames = true;
+	   }
+	 else
+	    Str_Concat (Query,",'",Msg_DB_MAX_BYTES_QUERY_RECIPIENTS);
+	 Str_Concat (Query,Nick,Msg_DB_MAX_BYTES_QUERY_RECIPIENTS);	// Leading arrobas already removed
+	 Str_Concat (Query,"'",Msg_DB_MAX_BYTES_QUERY_RECIPIENTS);
+	}
+     }
+   if (ThereAreNicknames)
+      Str_Concat (Query,")",Msg_DB_MAX_BYTES_QUERY_RECIPIENTS);
+
+   if (ReplyUsrCod > 0 || ThereAreNicknames)	// There are a recipient to reply or nicknames in list
+     {
+      /***** Get users *****/
+      NumUsrs = (unsigned)
+      DB_QuerySELECT (mysql_res,"can not get users",
+		      "%s",
+	              Query);
+     }
+
+   /***** Free space for query *****/
+   free (Query);
+
+   return NumUsrs;
+  }
+
+/*****************************************************************************/
 /************ Get number of recipients of a message from database ************/
 /*****************************************************************************/
 

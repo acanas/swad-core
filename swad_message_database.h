@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_hierarchy_level.h"
+#include "swad_message.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -76,6 +77,10 @@ void Msg_DB_GetStatusOfRcvMsg (long MsgCod,
                                bool *Open,bool *Replied,bool *Expanded);
 bool Msg_DB_CheckIfSntMsgIsDeleted (long MsgCod);
 bool Msg_DB_CheckIfRcvMsgIsDeletedForAllItsRecipients (long MsgCod);
+long Msg_DB_GetSender (long MsgCod);
+bool Msg_DB_CheckIfMsgHasBeenReceivedByMe (long MsgCod);
+unsigned Msg_DB_GetRecipientsCods (MYSQL_RES **mysql_res,
+                                   long ReplyUsrCod,const char *ListRecipients);
 unsigned Msg_DB_GetNumRecipients (long MsgCod);
 unsigned Msg_DB_GetKnownRecipients (MYSQL_RES **mysql_res,long MsgCod);
 unsigned Msg_DB_GetNumSntMsgs (HieLvl_Level_t Scope,Msg_Status_t MsgStatus);
