@@ -112,6 +112,21 @@ unsigned Nck_DB_GetUsrNicknames (MYSQL_RES **mysql_res,long UsrCod)
   }
 
 /*****************************************************************************/
+/*************** Check if nickname matches any of the nicknames **************/
+/*****************************************************************************/
+
+bool Nck_DB_CheckIfNickMatchesAnyNick (const char *NickWithoutArr)
+  {
+   return
+   DB_QueryEXISTS ("can not check if nickname already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_nicknames"
+		    " WHERE Nickname='%s')",
+		   NickWithoutArr);
+  }
+
+/*****************************************************************************/
 /************ Check if nickname matches any of a user's nicknames ************/
 /*****************************************************************************/
 

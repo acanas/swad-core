@@ -116,6 +116,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_hierarchy.h"
 #include "swad_hierarchy_level.h"
 #include "swad_ID.h"
+#include "swad_mail_database.h"
 #include "swad_match.h"
 #include "swad_nickname_database.h"
 #include "swad_notice.h"
@@ -124,6 +125,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_plugin_database.h"
 #include "swad_question_database.h"
 #include "swad_role.h"
+#include "swad_role_database.h"
 #include "swad_room_database.h"
 #include "swad_search.h"
 #include "swad_session_database.h"
@@ -525,65 +527,46 @@ static bool API_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   bool UsrFound;
 
    /***** Check if user's code is valid *****/
    if (UsrDat->UsrCod <= 0)
       return false;
 
    /***** Get some user's data *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's data",
-		       "SELECT Surname1,"				// row[0]
-		              "Surname2,"				// row[1]
-		              "FirstName,"				// row[2]
-		              "Photo,"					// row[3]
-		              "DATE_FORMAT(Birthday,'%%Y%%m%%d')"	// row[4]
-		       " FROM usr_data"
-		      " WHERE UsrCod=%ld",
-		       UsrDat->UsrCod) != 1)
-      return false;
+   if ((UsrFound = Usr_DB_GetSomeUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod)))
+     {
+      /***** Read some user's data *****/
+      row = mysql_fetch_row (mysql_res);
 
-   /* Read some user's data */
-   row = mysql_fetch_row (mysql_res);
+      /* Get user's name (row[0], row[1], row[2]) and photo (row[3]) */
+      Str_Copy (UsrDat->Surname1,row[0],sizeof (UsrDat->Surname1) - 1);
+      Str_Copy (UsrDat->Surname2,row[1],sizeof (UsrDat->Surname2) - 1);
+      Str_Copy (UsrDat->FrstName,row[2],sizeof (UsrDat->FrstName) - 1);
+      Str_Copy (UsrDat->Photo   ,row[3],sizeof (UsrDat->Photo   ) - 1);
 
-   /* Get user's name (row[0], row[1], row[2]) and photo (row[3]) */
-   Str_Copy (UsrDat->Surname1,row[0],sizeof (UsrDat->Surname1) - 1);
-   Str_Copy (UsrDat->Surname2,row[1],sizeof (UsrDat->Surname2) - 1);
-   Str_Copy (UsrDat->FrstName,row[2],sizeof (UsrDat->FrstName) - 1);
-   Str_Copy (UsrDat->Photo   ,row[3],sizeof (UsrDat->Photo   ) - 1);
+      /* Get user's brithday (row[4]) */
+      Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[4]);
 
-   /* Get user's brithday (row[4]) */
-   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[4]);
+      /***** Get list of user's IDs *****/
+      ID_GetListIDsFromUsrCod (UsrDat);
 
-   /* Free structure that stores the query result */
+      /***** Get user's nickname *****/
+      Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
+
+      /***** Get user's role *****/
+      if (CrsCod > 0)
+	 /* Get the role in the given course */
+	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetRoleUsrInCrs (UsrDat->UsrCod,CrsCod);
+      else
+	 /* Get the maximum role in any course */
+	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetMaxRoleUsrInCrss (UsrDat->UsrCod);
+     }
+
+   /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Get list of user's IDs *****/
-   ID_GetListIDsFromUsrCod (UsrDat);
-
-   /***** Get user's nickname *****/
-   Nck_DB_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
-
-   /***** Get user's role *****/
-   if (CrsCod > 0)
-      /* Get the role in the given course */
-      UsrDat->Roles.InCurrentCrs =
-      DB_QuerySELECTRole ("can not get user's role",
-			  "SELECT Role"
-			   " FROM crs_users"
-			  " WHERE CrsCod=%ld"
-			    " AND UsrCod=%ld",
-			  CrsCod,
-			  UsrDat->UsrCod);
-   else
-      /* Get the maximum role in any course */
-      UsrDat->Roles.InCurrentCrs =
-      DB_QuerySELECTRole ("can not get user's role",
-			  "SELECT MAX(Role)"
-			   " FROM crs_users"
-			  " WHERE UsrCod=%ld",
-			  UsrDat->UsrCod);
-
-   return true;
+   return UsrFound;
   }
 
 /*****************************************************************************/
@@ -683,19 +666,14 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
 
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
-   if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))        // If new nickname is valid
+   if (Nck_CheckIfNickWithArrIsValid (NewNickWithArr))	// If new nickname is valid
      {
       /***** Remove leading arrobas *****/
       Str_Copy (CopyOfNewNick,NewNickWithArr,sizeof (CopyOfNewNick) - 1);
       Str_RemoveLeadingArrobas (CopyOfNewNick);
 
       /***** Check if the new nickname matches any of the nicknames of other users *****/
-      if (DB_QueryEXISTS ("can not check if nickname already existed",
-			  "SELECT EXISTS"
-			  "(SELECT *"
-			    " FROM usr_nicknames"
-			   " WHERE Nickname='%s')",	// A nickname of another user is the same that this nickname
-			  CopyOfNewNick))		// Already without leading arrobas
+      if (Nck_DB_CheckIfNickMatchesAnyNick (CopyOfNewNick))	// Already without leading arrobas
 	 return API_CHECK_NEW_ACCOUNT_NICKNAME_REGISTERED_BY_ANOTHER_USER;
 
       /***** Output value of nickname without leading arrobas *****/
@@ -708,13 +686,7 @@ static int API_CheckParamsNewAccount (char *NewNickWithArr,		// Input
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
       /***** Check if the new email matches any of the confirmed emails of other users *****/
-      if (DB_QueryEXISTS ("can not check if email already existed",
-			  "SELECT EXISTS"
-			  "(SELECT *"
-			    " FROM usr_emails"
-			   " WHERE E_mail='%s'"
-			     " AND Confirmed='Y')",
-			  NewEmail))	// An email of another user is the same that my email
+      if (Mai_DB_CheckIfEmailExistsConfirmed (NewEmail))	// An email of another user is the same that my email
 	 return API_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
      }
    else	// New email is not valid
@@ -778,48 +750,23 @@ int swad__loginByUserPasswordKey (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
-						      "SELECT usr_nicknames.UsrCod"
-						       " FROM usr_nicknames,"
-							     "usr_data"
-						      " WHERE usr_nicknames.Nickname='%s'"
-						        " AND usr_nicknames.UsrCod=usr_data.UsrCod"
-						        " AND usr_data.Password='%s'",
-						      UsrIDNickOrEmail,
-						      userPassword);
+      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromNickPwd (UsrIDNickOrEmail,
+                                                               userPassword);
      }
    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))		// 2: It's an email
-     {
       /* User has typed an email */
       // TODO: Get only if email confirmed?
-      Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
-						      "SELECT usr_emails.UsrCod"
-						       " FROM usr_emails,usr_data"
-						      " WHERE usr_emails.E_mail='%s'"
-						        " AND usr_emails.UsrCod=usr_data.UsrCod"
-						        " AND usr_data.Password='%s'",
-						      UsrIDNickOrEmail,
-						      userPassword);
-     }
+      Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromEmailPwd (UsrIDNickOrEmail,
+                                                                userPassword);
    else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
       Str_ConvertToUpperText (UsrIDNickOrEmail);
       if (ID_CheckIfUsrIDIsValid (UsrIDNickOrEmail))
-	{
 	 /* User has typed a valid user's ID (existing or not) */
-	 // TODO: Get only if ID confirmed?
-	 Gbl.Usrs.Me.UsrDat.UsrCod = DB_QuerySELECTCode ("can not get user's data",
-							 "SELECT usr_ids.UsrCod"
-							  " FROM usr_ids,"
-							        "usr_data"
-							 " WHERE usr_ids.UsrID='%s'"
-							   " AND usr_ids.UsrCod=usr_data.UsrCod"
-							   " AND usr_data.Password='%s'",
-							 UsrIDNickOrEmail,
-							 userPassword);
-	}
+	 Gbl.Usrs.Me.UsrDat.UsrCod = Usr_DB_GetUsrCodFromIDPwd (UsrIDNickOrEmail,
+	                                                        userPassword);
       else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (soap,
 				     "Bad log in",

@@ -74,12 +74,26 @@ void Rol_DB_UpdateUsrRoleInCrs (long CrsCod,long UsrCod,Rol_Role_t NewRole)
 Rol_Role_t Rol_DB_GetRoleUsrInCrs (long UsrCod,long CrsCod)
   {
    return
-   DB_QuerySELECTRole ("can not get the role of a user in a course",
+   DB_QuerySELECTRole ("can not get user's role",
 		       "SELECT Role"
 			" FROM crs_users"
 		       " WHERE CrsCod=%ld"
 			 " AND UsrCod=%ld",
 		       CrsCod,
+		       UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Get the maximum role of a user in any course ***************/
+/*****************************************************************************/
+
+Rol_Role_t Rol_DB_GetMaxRoleUsrInCrss (long UsrCod)
+  {
+   return
+   DB_QuerySELECTRole ("can not get user's role",
+		       "SELECT MAX(Role)"
+			" FROM crs_users"
+		       " WHERE UsrCod=%ld",
 		       UsrCod);
   }
 

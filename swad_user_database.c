@@ -120,6 +120,59 @@ long Usr_DB_GetUsrCodFromEncryptedUsrCod (const char EncryptedUsrCod[Cry_BYTES_E
   }
 
 /*****************************************************************************/
+/******** Get user's code from database using nickname and password **********/
+/*****************************************************************************/
+
+long Usr_DB_GetUsrCodFromNickPwd (const char *NickWithoutArr,const char *Password)
+  {
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT usr_nicknames.UsrCod"
+		        " FROM usr_nicknames,"
+			      "usr_data"
+		       " WHERE usr_nicknames.Nickname='%s'"
+		         " AND usr_nicknames.UsrCod=usr_data.UsrCod"
+		         " AND usr_data.Password='%s'",
+		       NickWithoutArr,
+		       Password);
+  }
+
+/*****************************************************************************/
+/********** Get user's code from database using email and password ***********/
+/*****************************************************************************/
+
+long Usr_DB_GetUsrCodFromEmailPwd (const char *Email,const char *Password)
+  {
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT usr_emails.UsrCod"
+		        " FROM usr_emails,usr_data"
+		       " WHERE usr_emails.E_mail='%s'"	// TODO: Get only if email confirmed?
+			 " AND usr_emails.UsrCod=usr_data.UsrCod"
+			 " AND usr_data.Password='%s'",
+		       Email,
+		       Password);
+  }
+
+/*****************************************************************************/
+/*********** Get user's code from database using ID and password *************/
+/*****************************************************************************/
+
+long Usr_DB_GetUsrCodFromIDPwd (const char *ID,const char *Password)
+  {
+   return
+   DB_QuerySELECTCode ("can not get user's code",
+		       "SELECT usr_ids.UsrCod"
+		        " FROM usr_ids,"
+			      "usr_data"
+		       " WHERE usr_ids.UsrID='%s'"	// TODO: Get only if ID confirmed?
+		         " AND usr_ids.UsrCod=usr_data.UsrCod"
+		         " AND usr_data.Password='%s'",
+		       ID,
+		       Password);
+  }
+
+/*****************************************************************************/
 /************ Get user's data from database giving a user's code *************/
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
@@ -202,6 +255,25 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 		         " WHERE UsrCod=%ld",
 		         UsrCod);
      }
+  }
+
+/*****************************************************************************/
+/********** Get some user's data from database giving a user's code **********/
+/*****************************************************************************/
+// UsrDat->UsrCod must contain an existing user's code
+
+unsigned Usr_DB_GetSomeUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's data",
+		   "SELECT Surname1,"				// row[0]
+			  "Surname2,"				// row[1]
+			  "FirstName,"				// row[2]
+			  "Photo,"				// row[3]
+			  "DATE_FORMAT(Birthday,'%%Y%%m%%d')"	// row[4]
+		    " FROM usr_data"
+		   " WHERE UsrCod=%ld",
+		   UsrCod);
   }
 
 /*****************************************************************************/

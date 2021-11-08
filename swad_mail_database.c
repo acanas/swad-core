@@ -160,6 +160,22 @@ char Mai_DB_CheckIfEmailIsConfirmed (long UsrCod,const char Email[Cns_MAX_BYTES_
   }
 
 /*****************************************************************************/
+/********** Check if an email matches any of the confirmed emails ************/
+/*****************************************************************************/
+
+bool Mai_DB_CheckIfEmailExistsConfirmed (const char *Email)
+  {
+   return
+   DB_QueryEXISTS ("can not check if email already existed",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM usr_emails"
+		    " WHERE E_mail='%s'"
+		      " AND Confirmed='Y')",
+		   Email);
+  }
+
+/*****************************************************************************/
 /**** Check if an email matches any of the confirmed emails of other users ***/
 /*****************************************************************************/
 
