@@ -53,11 +53,15 @@ bool Roo_DB_CheckIfRoomNameExists (long CtrCod,long RooCod,
                                    const char *FieldName,const char *Name);
 unsigned Roo_DB_GetDataOfRoomByCod (MYSQL_RES **mysql_res,long RooCod);
 unsigned Roo_DB_GetMACAddresses (MYSQL_RES **mysql_res,long RooCod);
-bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod);
 
 void Roo_DB_RemoveRoom (long RooCod);
 void Roo_DB_RemoveMACAddress (long RooCod,unsigned long long MACnum);
 void Roo_DB_RemoveBuildingFromRooms (long BldCod);
 void Roo_DB_RemoveAllRoomsInCtr (long CtrCod);
+
+//--------------------------------- Check in ----------------------------------
+long Roo_DB_CheckIn (long RooCod);
+
+bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod);
 
 #endif

@@ -337,6 +337,27 @@ unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod)
   }
 
 /*****************************************************************************/
+/********************** Remove match from all tables *************************/
+/*****************************************************************************/
+/*
+mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'mch%';
+*/
+void Mch_DB_RemoveMatchFromAllTables (long MchCod)
+  {
+   /***** Remove match from secondary tables *****/
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_players");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_playing");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_results");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_answers");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_times");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_groups");
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_indexes");
+
+   /***** Remove match from main table *****/
+   Mch_DB_RemoveMatchFromTable (MchCod,"mch_matches");
+  }
+
+/*****************************************************************************/
 /************************* Remove match from table ***************************/
 /*****************************************************************************/
 
@@ -470,7 +491,21 @@ void Mch_DB_AssociateGroupToMatch (long MchCod,long GrpCod)
 /************** Get groups associated to a match from database ***************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetGrpsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
+unsigned Mch_DB_GetGrpCodsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get groups of a match",
+		   "SELECT GrpCod"
+		    " FROM mch_groups"
+		   " WHERE MchCod=%ld",
+	           MchCod);
+  }
+
+/*****************************************************************************/
+/************** Get groups associated to a match from database ***************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetGrpNamesAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get groups of a match",

@@ -333,43 +333,6 @@ unsigned Roo_DB_GetMACAddresses (MYSQL_RES **mysql_res,long RooCod)
   }
 
 /*****************************************************************************/
-/********************** Check if I can see user's location *******************/
-/*****************************************************************************/
-
-bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
-  {
-   /*
-   I can only consult the location of another user
-   if the intersection of the centers of our courses is not empty.
-   The other user does not have to share any course with me,
-   but at least some course of each one has to share center.
-   */
-   return
-   DB_QueryEXISTS ("can not check if you can see user location",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM (SELECT DISTINCT "
-				   "deg_degrees.CtrCod"
-			     " FROM crs_users,"
-				   "crs_courses,"
-				   "deg_degrees"
-			    " WHERE crs_users.UsrCod=%ld"
-			      " AND crs_users.CrsCod=crs_courses.CrsCod"
-			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
-			   "(SELECT DISTINCT "
-				   "deg_degrees.CtrCod"
-			     " FROM crs_users,"
-				   "crs_courses,"
-				   "deg_degrees"
-			    " WHERE crs_users.UsrCod=%ld"
-			      " AND crs_users.CrsCod=crs_courses.CrsCod"
-			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
-			    " WHERE C1.CtrCod=C2.CtrCod)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   UsrCod);
-  }
-
-/*****************************************************************************/
 /********************************* Remove room *******************************/
 /*****************************************************************************/
 
@@ -419,4 +382,63 @@ void Roo_DB_RemoveAllRoomsInCtr (long CtrCod)
 		   "DELETE FROM roo_rooms"
                    " WHERE CtrCod=%ld",
 		   CtrCod);
+  }
+
+
+/*****************************************************************************/
+/**** Check in (send user's current location by inserting pair user-room) ****/
+/*****************************************************************************/
+
+long Roo_DB_CheckIn (long RooCod)
+  {
+   /***** Check in (insert pair user-room) in the database *****/
+   /* Get the code of the inserted item */
+   return
+   DB_QueryINSERTandReturnCode ("can not save current location",
+				"INSERT INTO roo_check_in"
+				" (UsrCod,RooCod,CheckInTime)"
+				" SELECT %ld,"
+				        "RooCod,"
+				        "NOW()"
+			 	  " FROM roo_rooms"
+			 	 " WHERE RooCod=%ld",	// Check that room exists
+				Gbl.Usrs.Me.UsrDat.UsrCod,
+				RooCod);
+  }
+
+/*****************************************************************************/
+/********************** Check if I can see user's location *******************/
+/*****************************************************************************/
+
+bool Roo_DB_CheckIfICanSeeUsrLocation (long UsrCod)
+  {
+   /*
+   I can only consult the location of another user
+   if the intersection of the centers of our courses is not empty.
+   The other user does not have to share any course with me,
+   but at least some course of each one has to share center.
+   */
+   return
+   DB_QueryEXISTS ("can not check if you can see user location",
+		   "SELECT EXISTS"
+		   "(SELECT *"
+		     " FROM (SELECT DISTINCT "
+				   "deg_degrees.CtrCod"
+			     " FROM crs_users,"
+				   "crs_courses,"
+				   "deg_degrees"
+			    " WHERE crs_users.UsrCod=%ld"
+			      " AND crs_users.CrsCod=crs_courses.CrsCod"
+			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C1,"	// centers of my courses
+			   "(SELECT DISTINCT "
+				   "deg_degrees.CtrCod"
+			     " FROM crs_users,"
+				   "crs_courses,"
+				   "deg_degrees"
+			    " WHERE crs_users.UsrCod=%ld"
+			      " AND crs_users.CrsCod=crs_courses.CrsCod"
+			      " AND crs_courses.DegCod=deg_degrees.DegCod) AS C2"	// centers of user's courses
+			    " WHERE C1.CtrCod=C2.CtrCod)",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   UsrCod);
   }

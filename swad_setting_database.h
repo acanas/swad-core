@@ -52,6 +52,8 @@ void Set_DB_UpdateMySettingsAboutBasicProfile (void);
 void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
 void Set_DB_UpdateMySettingsAboutNotifyEvents (void);
 
+unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res);
+
 //-------------------- User settings in the current course --------------------
 void Set_DB_InsertUsrInCrsSettings (long UsrCod,long CrsCod);
 
@@ -59,6 +61,10 @@ void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod);
 void Set_DB_UpdateMyUsrListType (void);
 void Set_DB_UpdateMyColsClassPhoto (void);
 void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void);
+
+unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res);
+unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res);
+unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res);
 
 void Set_DB_RemUsrFromCrsSettings (long UsrCod,long CrsCod);
 void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);

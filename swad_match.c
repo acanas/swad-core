@@ -127,8 +127,6 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Mch_Match *Match);
 
-static void Mch_RemoveMatchFromAllTables (long MchCod);
-
 static void Mch_PutParamsPlay (void *MchCod);
 static void Mch_PutParamMchCod (long MchCod);
 
@@ -680,7 +678,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
    unsigned NumGrp;
 
    /***** Get groups associated to a match from database *****/
-   NumGrps = Mch_DB_GetGrpsAssociatedToMatch (&mysql_res,Match->MchCod);
+   NumGrps = Mch_DB_GetGrpNamesAssociatedToMatch (&mysql_res,Match->MchCod);
 
    HTM_DIV_Begin ("class=\"ASG_GRP\"");
 
@@ -1030,7 +1028,7 @@ void Mch_RemoveMatch (void)
       Err_NoPermissionExit ();
 
    /***** Remove the match from all database tables *****/
-   Mch_RemoveMatchFromAllTables (Match.MchCod);
+   Mch_DB_RemoveMatchFromAllTables (Match.MchCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Match_X_removed,
@@ -1040,27 +1038,6 @@ void Mch_RemoveMatch (void)
    Gam_ShowOnlyOneGame (&Games,&Game,
                         false,	// Do not list game questions
 	                false);	// Do not put form to start new match
-  }
-
-/*****************************************************************************/
-/********************** Remove match from all tables *************************/
-/*****************************************************************************/
-/*
-mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'mch%';
-*/
-static void Mch_RemoveMatchFromAllTables (long MchCod)
-  {
-   /***** Remove match from secondary tables *****/
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_players");
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_playing");
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_results");
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_answers");
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_times");
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_groups");
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_indexes");
-
-   /***** Remove match from main table *****/
-   Mch_DB_RemoveMatchFromTable (MchCod,"mch_matches");
   }
 
 /*****************************************************************************/

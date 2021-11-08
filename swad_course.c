@@ -2522,14 +2522,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    bool Accepted;
    static unsigned RowEvenOdd = 1;
    /*
-   SELECT deg_degrees.DegCod		row[0]
-	  crs_courses.CrsCod		row[1]
-	  deg_degrees.ShortName		row[2]
-	  deg_degrees.FullName		row[3]
-	  crs_courses.Year		row[4]
-	  crs_courses.FullName		row[5]
-	  ctr_centers.ShortName		row[6]
-	  crs_users.Accepted		row[7]	(only if WriteColumnAccepted == true)
+   row[0]: deg_degrees.DegCod
+   row[1]: crs_courses.CrsCod
+   row[2]: deg_degrees.ShortName
+   row[3]: deg_degrees.FullName
+   row[4]: crs_courses.Year
+   row[5]: crs_courses.FullName
+   row[6]: ctr_centers.ShortName
+   row[7]: crs_users.Accepted (only if WriteColumnAccepted == true)
    */
 
    /***** Get degree code (row[0]) *****/

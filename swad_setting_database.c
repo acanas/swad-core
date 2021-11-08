@@ -212,6 +212,20 @@ void Set_DB_UpdateMySettingsAboutNotifyEvents (void)
   }
 
 /*****************************************************************************/
+/********************* Get my language from database *************************/
+/*****************************************************************************/
+
+unsigned Set_DB_GetMyLanguage (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get user's language",
+		   "SELECT Language"	// row[0]
+		    " FROM usr_data"
+		   " WHERE UsrCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /************ Register last prefs in current course in database **************/
 /*****************************************************************************/
 
@@ -306,6 +320,55 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (void)
 						    'N',
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
 		      Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*************** Get my type of listing of users from database ***************/
+/*****************************************************************************/
+
+unsigned Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get type of listing of users",
+		   "SELECT UsrListType"	// row[0]
+		    " FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/*********** Get my number of columns in class photo from database ***********/
+/*****************************************************************************/
+
+unsigned Set_DB_GetMyColsClassPhoto (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get number of columns in class photo",
+		   "SELECT ColsClassPhoto"	// row[0]
+		    " FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Get my preference about listing with photos from database *********/
+/*****************************************************************************/
+
+unsigned Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not check if listing of users"
+			     " should show photos",
+		   "SELECT ListWithPhotos"	// row[0]
+		    " FROM crs_user_settings"
+		   " WHERE UsrCod=%ld"
+		     " AND CrsCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

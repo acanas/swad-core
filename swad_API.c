@@ -119,6 +119,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_ID.h"
 #include "swad_mail_database.h"
 #include "swad_match.h"
+#include "swad_match_database.h"
 #include "swad_nickname_database.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
@@ -130,6 +131,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_room_database.h"
 #include "swad_search.h"
 #include "swad_session_database.h"
+#include "swad_setting_database.h"
 #include "swad_test_config.h"
 #include "swad_test_visibility.h"
 #include "swad_user.h"
@@ -278,8 +280,8 @@ static int API_GetTstQuestionTags (struct soap *soap,
 		                   long CrsCod,long BeginTime,
 				   struct swad__getTestsOutput *getTestsOut);
 
-static void API_GetListGrpsInGameFromDB (struct soap *soap,
-					 long MchCod,char **ListGroups);
+static void API_GetListGrpsInMatchFromDB (struct soap *soap,
+					  long MchCod,char **ListGroups);
 
 static void API_ListDir (unsigned Level,const char *Path,const char *PathInTree);
 static bool API_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,const char *FileName);
@@ -3235,35 +3237,35 @@ static int API_GetMyLanguage (struct soap *soap)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Lan_Language_t Lan;
+   bool UsrFound;
 
    /***** Get user's language *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get user's language",
-		       "SELECT Language"	// row[0]
-		        " FROM usr_data"
-		       " WHERE UsrCod=%ld",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) != 1)
-      return soap_receiver_fault (soap,
-	                          "Can not get user's language from database",
-	                          "User doen't exist in database");
+   if ((UsrFound = Set_DB_GetMyLanguage (&mysql_res)))
+     {
+      /***** Get language from database *****/
+      row = mysql_fetch_row (mysql_res);
 
-   /***** Get language from database *****/
-   row = mysql_fetch_row (mysql_res);
-
-   /* Get language (row[0]) */
-   Gbl.Prefs.Language = Lan_LANGUAGE_UNKNOWN;
-   for (Lan  = (Lan_Language_t) 1;
-	Lan <= (Lan_Language_t) (Lan_NUM_LANGUAGES - 1);
-	Lan++)
-      if (!strcasecmp (row[0],Lan_STR_LANG_ID[Lan]))
-        {
-	 Gbl.Prefs.Language = Lan;
-         break;
-        }
-   if (Gbl.Prefs.Language == Lan_LANGUAGE_UNKNOWN)	// Language stored in database is unknown
-      Gbl.Prefs.Language = Cfg_DEFAULT_LANGUAGE;
+      /* Get language (row[0]) */
+      Gbl.Prefs.Language = Lan_LANGUAGE_UNKNOWN;
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) (Lan_NUM_LANGUAGES - 1);
+	   Lan++)
+	 if (!strcasecmp (row[0],Lan_STR_LANG_ID[Lan]))
+	   {
+	    Gbl.Prefs.Language = Lan;
+	    break;
+	   }
+      if (Gbl.Prefs.Language == Lan_LANGUAGE_UNKNOWN)	// Language stored in database is unknown
+	 Gbl.Prefs.Language = Cfg_DEFAULT_LANGUAGE;
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   if (!UsrFound)
+      return soap_receiver_fault (soap,
+	                          "Can not get user's language from database",
+	                          "User doen't exist in database");
 
    return SOAP_OK;
   }
@@ -4250,8 +4252,6 @@ static int API_GetTstQuestionTags (struct soap *soap,
 /***************** Return one test question for Trivial game *****************/
 /*****************************************************************************/
 
-#define API_MAX_BYTES_DEGREES_STR (1024 - 1)
-
 int swad__getTrivialQuestion (struct soap *soap,
                               char *wsKey,char *degrees,float lowerScore,float upperScore,	// input
                               struct swad__getTrivialQuestionOutput *getTrivialQuestionOut)	// output
@@ -4267,8 +4267,8 @@ int swad__getTrivialQuestion (struct soap *soap,
    bool FirstDegree = true;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRow;
-   unsigned NumRows;
+   unsigned NumAnss;
+   unsigned NumAns;
    long QstCod = -1L;
    Qst_AnswerType_t AnswerType;
    unsigned Index;
@@ -4333,44 +4333,9 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                        "lowerScore or upperScore values not valid");
 
    /***** Get test questions *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get test questions",
-		   "SELECT DISTINCT "
-			  "tst_questions.QstCod,"				// row[0]
-			  "tst_questions.AnsType,"				// row[1]
-			  "tst_questions.Shuffle,"				// row[2]
-			  "tst_questions.Stem,"					// row[3]
-			  "tst_questions.Feedback,"				// row[4]
-			  "tst_questions.Score/tst_questions.NumHits AS S"	// row[5]
-		    " FROM crs_courses,"
-			  "tst_questions"
-		   " WHERE crs_courses.DegCod IN (%s)"
-		     " AND crs_courses.CrsCod=tst_questions.CrsCod"
-		     " AND tst_questions.AnsType='unique_choice'"
-		     " AND tst_questions.NumHits>0"
-		     " AND tst_questions.QstCod NOT IN"
-			 " (SELECT tst_question_tags.QstCod"
-			    " FROM crs_courses,"
-				  "tst_tags,"
-				  "tst_question_tags"
-			   " WHERE crs_courses.DegCod IN (%s)"
-			     " AND crs_courses.CrsCod=tst_tags.CrsCod"
-			     " AND tst_tags.TagHidden='Y'"
-			     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
-		   " HAVING S>='%f'"
-		      " AND S<='%f'"
-		   " ORDER BY RAND()"
-		   " LIMIT 1",
-		   DegreesStr,
-		   DegreesStr,
-		   lowerScore,
-		   upperScore);
-   Str_SetDecimalPointToLocal ();	// Return to local system
-
-   if (NumRows == 1)	// Question found
+   if (Qst_DB_GetTrivialQst (&mysql_res,DegreesStr,lowerScore,upperScore))	// Question found
      {
-      /* Get next question */
+      /* Get question */
       row = mysql_fetch_row (mysql_res);
 
       /* Get question code (row[0]) */
@@ -4426,21 +4391,12 @@ int swad__getTrivialQuestion (struct soap *soap,
    if (QstCod > 0)
      {
       /***** Get answer from database *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get test answers",
-		      "SELECT QstCod,"		// row[0]
-			     "AnsInd,"		// row[1]
-			     "Correct,"		// row[2]
-			     "Answer,"		// row[3]
-			     "Feedback"		// row[4]
-		       " FROM tst_answers"
-		      " WHERE QstCod=%ld"
-		      " ORDER BY AnsInd",
-		      QstCod);
+      NumAnss = Qst_DB_GetDataOfAnswers (&mysql_res,QstCod,
+	                                 false);	// Don't shuffle
 
-      getTrivialQuestionOut->answersArray.__size = (int) NumRows;
+      getTrivialQuestionOut->answersArray.__size = (int) NumAnss;
 
-      if (NumRows == 0)
+      if (NumAnss == 0)
 	 getTrivialQuestionOut->answersArray.__ptr = NULL;
       else	// Answers found
 	{
@@ -4448,37 +4404,39 @@ int swad__getTrivialQuestion (struct soap *soap,
 								  (getTrivialQuestionOut->answersArray.__size) *
 								  sizeof (*(getTrivialQuestionOut->answersArray.__ptr)));
 
-	 for (NumRow = 0;
-	      NumRow < NumRows;
-	      NumRow++)
+	 for (NumAns = 0;
+	      NumAns < NumAnss;
+	      NumAns++)
 	   {
 	    /* Get next question */
 	    row = mysql_fetch_row (mysql_res);
 
-	    /* Get question code (row[0]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumRow].questionCode = (int) Str_ConvertStrCodToLongCod (row[0]);
+	    /* Get question code */
+	    getTrivialQuestionOut->answersArray.__ptr[NumAns].questionCode = (int) QstCod;
 
-	    /* Get answer index (row[1]) */
-	    if (sscanf (row[1],"%u",&Index) == 1)
-	       getTrivialQuestionOut->answersArray.__ptr[NumRow].answerIndex = (int) Index;
+	    /* Get answer index (row[0]) */
+	    if (sscanf (row[0],"%u",&Index) == 1)
+	       getTrivialQuestionOut->answersArray.__ptr[NumAns].answerIndex = (int) Index;
 	    else
-	       getTrivialQuestionOut->answersArray.__ptr[NumRow].answerIndex = 0;	// error
+	       getTrivialQuestionOut->answersArray.__ptr[NumAns].answerIndex = 0;	// error
 
-	    /* Get correct (row[2]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumRow].correct = (row[2][0] == 'Y') ? 1 :
-										             0;
-
-	    /* Get answer (row[3]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText =
+	    /* Get answer (row[1]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumAns].answerText =
 	       soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
-	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerText,
+	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumAns].answerText,
 	              row[3],Cns_MAX_BYTES_TEXT);
 
-	    /* Get feedback (row[4]) */
-	    getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback =
+	    /* Get feedback (row[2]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumAns].answerFeedback =
 	       soap_malloc (soap,Cns_MAX_BYTES_TEXT + 1);
-	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumRow].answerFeedback,
+	    Str_Copy (getTrivialQuestionOut->answersArray.__ptr[NumAns].answerFeedback,
 	              row[4],Cns_MAX_BYTES_TEXT);
+
+	    // Media code (row[3]) ignored here
+
+	    /* Get correct (row[4]) */
+	    getTrivialQuestionOut->answersArray.__ptr[NumAns].correct = (row[4][0] == 'Y') ? 1 :
+										             0;
 	   }
 	}
 
@@ -4830,8 +4788,8 @@ int swad__getMatches (struct soap *soap,
          getMatchesOut->matchesArray.__ptr[NumMatch].questionIndex = (int) Str_ConvertStrToUnsigned (row[5]);
 
 	 /* Get list of groups for this match */
-	 API_GetListGrpsInGameFromDB (soap,
-				      MchCod,&(getMatchesOut->matchesArray.__ptr[NumMatch].groups));
+	 API_GetListGrpsInMatchFromDB (soap,
+				       MchCod,&(getMatchesOut->matchesArray.__ptr[NumMatch].groups));
 	}
      }
 
@@ -5057,8 +5015,8 @@ int swad__answerMatchQuestion (struct soap *soap,
 /*********************** Get lists of groups of a match **********************/
 /*****************************************************************************/
 
-static void API_GetListGrpsInGameFromDB (struct soap *soap,
-					 long MchCod,char **ListGroups)
+static void API_GetListGrpsInMatchFromDB (struct soap *soap,
+					  long MchCod,char **ListGroups)
   {
    MYSQL_RES *mysql_res;
    long NumGrps;
@@ -5068,17 +5026,9 @@ static void API_GetListGrpsInGameFromDB (struct soap *soap,
    size_t Length;
 
    /***** Get list of groups *****/
-   NumGrps = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get groups of a match",
-		   "SELECT GrpCod"
-		    " FROM mch_groups"
-		   " WHERE MchCod=%ld",
-	           MchCod);
-   if (NumGrps == 0)
-      *ListGroups = NULL;
-   else	// Groups found
+   if ((NumGrps = Mch_DB_GetGrpCodsAssociatedToMatch (&mysql_res,MchCod)))	// Groups found
      {
-      Length = NumGrps * (10 + 1) - 1;
+      Length = NumGrps * (Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
       *ListGroups = soap_malloc (soap,Length + 1);
       (*ListGroups)[0] = '\0';
 
@@ -5094,6 +5044,8 @@ static void API_GetListGrpsInGameFromDB (struct soap *soap,
 	 Str_Concat (*ListGroups,GrpCodStr,Length);
 	}
      }
+   else
+      *ListGroups = NULL;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5775,17 +5727,7 @@ int swad__sendMyLocation (struct soap *soap,
 
    /***** Check in (insert pair user-room) in the database *****/
    /* Get the code of the inserted item */
-   ChkCod =
-   DB_QueryINSERTandReturnCode ("can not save current location",
-				"INSERT INTO roo_check_in"
-				" (UsrCod,RooCod,CheckInTime)"
-				" SELECT %ld,"
-				        "RooCod,"
-				        "NOW()"
-			 	  " FROM roo_rooms"
-			 	 " WHERE RooCod=%d",	// Check that room exists
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				roomCode);
+   ChkCod = Roo_DB_CheckIn (roomCode);
 
    /***** Return notification code *****/
    sendMyLocationOut->success = (ChkCod > 0) ? 1 : 0;

@@ -519,6 +519,56 @@ unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
+/******************* Get one question for trivial game **********************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
+                               char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1],
+                               float lowerScore,float upperScore)
+  {
+   unsigned NumQsts;
+
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+
+   NumQsts = (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get test questions",
+		   "SELECT DISTINCT "
+			  "tst_questions.QstCod,"				// row[0]
+			  "tst_questions.AnsType,"				// row[1]
+			  "tst_questions.Shuffle,"				// row[2]
+			  "tst_questions.Stem,"					// row[3]
+			  "tst_questions.Feedback,"				// row[4]
+			  "tst_questions.Score/tst_questions.NumHits AS S"	// row[5]
+		    " FROM crs_courses,"
+			  "tst_questions"
+		   " WHERE crs_courses.DegCod IN (%s)"
+		     " AND crs_courses.CrsCod=tst_questions.CrsCod"
+		     " AND tst_questions.AnsType='unique_choice'"
+		     " AND tst_questions.NumHits>0"
+		     " AND tst_questions.QstCod NOT IN"
+			 " (SELECT tst_question_tags.QstCod"
+			    " FROM crs_courses,"
+				  "tst_tags,"
+				  "tst_question_tags"
+			   " WHERE crs_courses.DegCod IN (%s)"
+			     " AND crs_courses.CrsCod=tst_tags.CrsCod"
+			     " AND tst_tags.TagHidden='Y'"
+			     " AND tst_tags.TagCod=tst_question_tags.TagCod)"
+		   " HAVING S>='%f'"
+		      " AND S<='%f'"
+		   " ORDER BY RAND()"
+		   " LIMIT 1",
+		   DegreesStr,
+		   DegreesStr,
+		   lowerScore,
+		   upperScore);
+
+   Str_SetDecimalPointToLocal ();	// Return to local system
+
+   return NumQsts;
+  }
+
+/*****************************************************************************/
 /*********************** Get number of test questions ************************/
 /*****************************************************************************/
 // Returns the number of test questions

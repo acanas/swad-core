@@ -2522,13 +2522,8 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 	    else						// No students attended to this event
 	      {
 	       /***** Get groups associated to an attendance event from database *****/
-	       NumGrpsInThisEvent = (unsigned)
-	       DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
-			       "SELECT GrpCod"		// row[0]
-			        " FROM att_groups"
-			       " WHERE att_groups.AttCod=%ld",
-			       Events->Lst[NumAttEvent].AttCod);
-	       if (NumGrpsInThisEvent)	// This event is associated to groups
+	       if ((NumGrpsInThisEvent = Att_DB_GetGrpCodsAssociatedToEvent (&mysql_res,
+	                                                                     Events->Lst[NumAttEvent].AttCod)))	// This event is associated to groups
 		  /* Get groups associated to this event */
 		  for (NumGrpInThisEvent = 0;
 		       NumGrpInThisEvent < NumGrpsInThisEvent &&

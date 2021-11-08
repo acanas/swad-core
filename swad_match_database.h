@@ -51,6 +51,7 @@ Mch_Showing_t Mch_DB_GetShowingFromStr (const char *Str);
 unsigned Mch_DB_GetNumMchsInGame (long GamCod);
 unsigned Mch_DB_GetNumUnfinishedMchsInGame (long GamCod);
 
+void Mch_DB_RemoveMatchFromAllTables (long MchCod);
 void Mch_DB_RemoveMatchFromTable (long MchCod,const char *TableName);
 void Mch_DB_RemoveMatchesInGameFromMainTable (long GamCod);
 void Mch_DB_RemoveMatchesInGameFromOtherTable (long GamCod,const char *TableName);
@@ -63,7 +64,8 @@ void Mch_DB_RemoveMatchesMadeByUsrInCrsFromTable (long UsrCod,long CrsCod,
 //---------------------------------Groups -------------------------------------
 void Mch_DB_AssociateGroupToMatch (long MchCod,long GrpCod);
 
-unsigned Mch_DB_GetGrpsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod);
+unsigned Mch_DB_GetGrpCodsAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod);
+unsigned Mch_DB_GetGrpNamesAssociatedToMatch (MYSQL_RES **mysql_res,long MchCod);
 bool Mch_DB_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
 
 void Mch_DB_RemoveGroup (long GrpCod);

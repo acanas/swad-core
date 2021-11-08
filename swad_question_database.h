@@ -54,6 +54,9 @@ unsigned Qst_DB_GetQsts (MYSQL_RES **mysql_res,
                          const struct Qst_Questions *Questions);
 unsigned Qst_DB_GetQstsForNewTestPrint (MYSQL_RES **mysql_res,
                                         const struct Qst_Questions *Questions);
+unsigned Qst_DB_GetTrivialQst (MYSQL_RES **mysql_res,
+                               char DegreesStr[API_MAX_BYTES_DEGREES_STR + 1],
+                               float lowerScore,float upperScore);
 unsigned Qst_DB_GetNumQsts (MYSQL_RES **mysql_res,
                             HieLvl_Level_t Scope,Qst_AnswerType_t AnsType);
 unsigned Qst_DB_GetNumCrssWithQsts (HieLvl_Level_t Scope,

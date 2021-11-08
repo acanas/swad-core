@@ -356,19 +356,10 @@ static void Set_GetMyUsrListTypeFromDB (void)
    extern const char *Set_DB_StringsUsrListTypes[Set_NUM_USR_LIST_TYPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
    Set_ShowUsrsType_t ListType;
 
    /***** Get type of listing of users from database *****/
-   NumRows = (unsigned)
-   DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
-		   "SELECT UsrListType"	// row[0]
-		    " FROM crs_user_settings"
-		   " WHERE UsrCod=%ld"
-		     " AND CrsCod=%ld",
-		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Crs.CrsCod);
-   if (NumRows == 1)		// Should be one only row
+   if (Set_DB_GetMyUsrListType (&mysql_res))		// Should be one only row
      {
       /* Get type of users' listing used to select some of them */
       Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
@@ -383,13 +374,10 @@ static void Set_GetMyUsrListTypeFromDB (void)
                break;
               }
      }
-   else if (NumRows == 0)	// If I am an administrator or superuser
-				// and I don't belong to current course,
-				// then the result will be the default
+   else		// If I am an administrator or superuser
+		// and I don't belong to current course,
+		// then the result will be the default
       Gbl.Usrs.Me.ListType = Set_SHOW_USRS_TYPE_DEFAULT;
-   else				// Error in database:
-				// more than one row for a user in course
-      Err_ShowErrorAndExit ("Error when getting type of listing of users.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -421,7 +409,6 @@ void Set_GetMyColsClassPhotoFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
 
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
@@ -430,15 +417,7 @@ void Set_GetMyColsClassPhotoFromDB (void)
        Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
      {
       /***** Get number of columns in class photo from database *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not get number of columns in class photo",
-		      "SELECT ColsClassPhoto"	// row[0]
-		       " FROM crs_user_settings"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
-      if (NumRows == 1)		// Should be one only row
+      if (Set_DB_GetMyColsClassPhoto (&mysql_res))
         {
          /* Get number of columns in class photo */
          row = mysql_fetch_row (mysql_res);
@@ -448,10 +427,6 @@ void Set_GetMyColsClassPhotoFromDB (void)
                    Gbl.Usrs.ClassPhoto.Cols > Usr_CLASS_PHOTO_COLS_MAX)
                   Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
         }
-      else if (NumRows > 1)	// Error in database:
-				// more than one row for a user in course
-         Err_ShowErrorAndExit ("Error when getting number of columns"
-			       " in class photo.");
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -534,7 +509,6 @@ void Set_GetMyPrefAboutListWithPhotosFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
 
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
 
@@ -542,26 +516,13 @@ void Set_GetMyPrefAboutListWithPhotosFromDB (void)
    if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Crs.CrsCod)
      {
       /***** Get if listing of users must show photos from database *****/
-      NumRows = (unsigned)
-      DB_QuerySELECT (&mysql_res,"can not check if listing of users"
-			         " must show photos",
-		      "SELECT ListWithPhotos"	// row[0]
-		       " FROM crs_user_settings"
-		      " WHERE UsrCod=%ld"
-		        " AND CrsCod=%ld",
-		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.CrsCod);
-      if (NumRows == 1)                // Should be one only row
+      if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res))
         {
          /* Get number of columns in class photo */
          Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
          row = mysql_fetch_row (mysql_res);
          Gbl.Usrs.Listing.WithPhotos = (row[0][0] == 'Y');
         }
-      else if (NumRows > 1)        // Error in database:
-				   // more than one row for a user in course
-         Err_ShowErrorAndExit ("Error when checking if listing of users"
-			       " must show photos.");
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
