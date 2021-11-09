@@ -8163,29 +8163,25 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_SHOW_DOC_GRP:
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_DOC_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_DOCUMENT_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_TCH_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_TEACHERS_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_SHR_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_SHARED_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    case Brw_SHOW_MRK_CRS:
 	    case Brw_SHOW_MRK_GRP:
 	    case Brw_ADMI_MRK_CRS:
 	    case Brw_ADMI_MRK_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_MARKS_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    default:
 	       break;
@@ -8313,29 +8309,25 @@ void Brw_DownloadFile (void)
 	    case Brw_SHOW_DOC_GRP:
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_DOC_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_DOCUMENT_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_TCH_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_TEACHERS_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_SHR_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_SHARED_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    case Brw_SHOW_MRK_CRS:
 	    case Brw_SHOW_MRK_GRP:
 	    case Brw_ADMI_MRK_CRS:
 	    case Brw_ADMI_MRK_GRP:
-	       Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
-				   Gbl.Usrs.Me.UsrDat.UsrCod);
+	       Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_MARKS_FILE,
+	                                   FileMetadata.FilCod);
 	       break;
 	    default:
 	       break;

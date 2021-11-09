@@ -682,7 +682,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
 							     "DAT_LIGHT");
-      HTM_Txt (Txt);
+	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
 
@@ -702,14 +702,12 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Mark possible notification as seen *****/
    if (Svy.Scope == HieLvl_CRS)	// Only course surveys are notified
-      Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_SURVEY,
-	                   SvyCod,Svy.Cod,
-	                   Gbl.Usrs.Me.UsrDat.UsrCod);
+      Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_SURVEY,Svy.Cod);
 
    if (ShowOnlyThisSvyComplete)
      {
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
       /***** End box *****/
       Box_BoxEnd ();

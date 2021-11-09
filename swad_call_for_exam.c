@@ -551,9 +551,7 @@ void Cfe_ListCallsForExamsSee (void)
    Cfe_ListCallsForExams (&CallsForExams,Cfe_NORMAL_VIEW);
 
    /***** Mark possible notifications as seen *****/
-   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_CALL_FOR_EXAM,
-	                -1L,Gbl.Hierarchy.Crs.CrsCod,
-	                Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifsInCrsAsSeenByMe (Ntf_EVENT_CALL_FOR_EXAM);
   }
 
 /*****************************************************************************/

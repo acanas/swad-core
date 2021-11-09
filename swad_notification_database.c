@@ -122,49 +122,60 @@ void Ntf_DB_MarkPendingNtfsAsSent (long ToUsrCod)
   }
 
 /*****************************************************************************/
-/********************** Set possible notification as seen ********************/
+/**************** Set one possible notification as seen by me ****************/
 /*****************************************************************************/
 
-void Ntf_DB_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod)
+void Ntf_DB_MarkNotifAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
+   /***** Trivial check: if no code specified, nothing to do *****/
+   if (Cod <= 0)	// If the user code is specified
+      return;
+
    /***** Set notification as seen by me *****/
-   if (ToUsrCod > 0)	// If the user code is specified
-     {
-      if (Cod > 0)		// Set only one notification
-				// for the user as seen
-         DB_QueryUPDATE ("can not set notification(s) as seen",
-			 "UPDATE ntf_notifications"
-			   " SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld"
-			   " AND NotifyEvent=%u"
-			   " AND Cod=%ld",
-                         (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,
-                         (unsigned) NotifyEvent,
-                         Cod);
-      else if (CrsCod > 0)	// Set all notifications of this type
-				// in the current course for the user as seen
-         DB_QueryUPDATE ("can not set notification(s) as seen",
-			 "UPDATE ntf_notifications"
-			   " SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld"
-			   " AND NotifyEvent=%u"
-			   " AND CrsCod=%ld",
-                         (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,
-                         (unsigned) NotifyEvent,
-                         Gbl.Hierarchy.Crs.CrsCod);
-      else			// Set all notifications of this type
-				// for the user as seen
-         DB_QueryUPDATE ("can not set notification(s) as seen",
-			 "UPDATE ntf_notifications"
-			   " SET Status=(Status | %u)"
-			 " WHERE ToUsrCod=%ld"
-			   " AND NotifyEvent=%u",
-                         (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,
-                         (unsigned) NotifyEvent);
-     }
+   DB_QueryUPDATE ("can not set notification(s) as seen",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE ToUsrCod=%ld"
+		     " AND NotifyEvent=%u"
+		     " AND Cod=%ld",
+		   (unsigned) Ntf_STATUS_BIT_READ,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) NotifyEvent,
+		   Cod);
+  }
+
+/*****************************************************************************/
+/** Set all notifications of this type in the current course as seen by me ***/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifsInCrsAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent)
+  {
+   DB_QueryUPDATE ("can not set notification(s) as seen",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE ToUsrCod=%ld"
+		     " AND NotifyEvent=%u"
+		     " AND CrsCod=%ld",
+		   (unsigned) Ntf_STATUS_BIT_READ,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) NotifyEvent,
+		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/************* Set all notifications of this type as seen by me **************/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifsAsSeen (Ntf_NotifyEvent_t NotifyEvent)
+  {
+   DB_QueryUPDATE ("can not set notification(s) as seen",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE ToUsrCod=%ld"
+		     " AND NotifyEvent=%u",
+		   (unsigned) Ntf_STATUS_BIT_READ,
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   (unsigned) NotifyEvent);
   }
 
 /*****************************************************************************/

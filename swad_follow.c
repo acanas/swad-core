@@ -564,15 +564,12 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData FollowerUsrDat;
-   bool ItsMe;
 
    /***** Show user's profile *****/
    if (Prf_ShowUserProfile (UsrDat))
      {
       /***** Get list of followers *****/
-      NumUsrs = Fol_DB_GetListFollowers (UsrDat->UsrCod,&mysql_res);
-
-      if (NumUsrs)
+      if ((NumUsrs = Fol_DB_GetListFollowers (UsrDat->UsrCod,&mysql_res)))
 	{
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
@@ -582,24 +579,26 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	                    NULL,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
-	      NumUsr++)
-	   {
-	    /***** Get user's code *****/
-	    FollowerUsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
+	      {
+	       /***** Get user's code *****/
+	       FollowerUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
-	    /***** Show user *****/
-	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	       HTM_TR_Begin (NULL);
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,
-	                                                 Usr_DONT_GET_PREFS,
-	                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	       Fol_ShowFollowedOrFollower (&FollowerUsrDat);
-	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
-		NumUsr == NumUsrs - 1)
-	       HTM_TR_End ();
-	   }
+	       /***** Show user *****/
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
+		  HTM_TR_Begin (NULL);
+
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		  Fol_ShowFollowedOrFollower (&FollowerUsrDat);
+
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+		   NumUsr == NumUsrs - 1)
+		  HTM_TR_End ();
+	      }
 
          /***** End table and box *****/
 	 Box_BoxTableEnd ();
@@ -612,11 +611,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** If it's me, mark possible notification as seen *****/
-      ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-      if (ItsMe)
-	 Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
-			      -1L,-1L,
-			      Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (Usr_ItsMe (UsrDat->UsrCod))
+	 Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_FOLLOWER);
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

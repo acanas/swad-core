@@ -781,17 +781,15 @@ static void For_ShowPostsOfAThread (struct For_Forums *Forums,
 		    {
 		     case For_FORUM_COURSE_TCHS:
 		     case For_FORUM_COURSE_USRS:
-			Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
-					     Forums->PstCod,Gbl.Hierarchy.Crs.CrsCod,
-					     Gbl.Usrs.Me.UsrDat.UsrCod);
+			Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_FORUM_POST_COURSE,
+			                            Forums->PstCod);
 			break;
 		     default:
 			break;
 		    }
 		  if (Thread.NumMyPosts)
-		     Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_FORUM_REPLY,
-					  Forums->PstCod,-1L,
-					  Gbl.Usrs.Me.UsrDat.UsrCod);
+		     Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_FORUM_REPLY,
+		                                 Forums->PstCod);
 		 }
 
 	    /***** End table *****/

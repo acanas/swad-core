@@ -522,9 +522,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
    /***** Mark possible notification as seen *****/
-   Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	                   AsgCod,Gbl.Hierarchy.Crs.CrsCod,
-	                   Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_ASSIGNMENT,AsgCod);
   }
 
 /*****************************************************************************/

@@ -457,8 +457,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 Err_WrongRoleExit ();
 	 break;
      }
-   Ntf_DB_MarkNotifAsSeen (NotifyEvent,-1L,Gbl.Hierarchy.Crs.CrsCod,
-                        Gbl.Usrs.Me.UsrDat.UsrCod);
+   Ntf_DB_MarkNotifsInCrsAsSeenByMe (NotifyEvent);
   }
 
 /*****************************************************************************/
@@ -2342,9 +2341,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		  HTM_TR_End ();
 
 		  /***** Mark possible notification as seen *****/
-		  Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
-				      ReqCod,Gbl.Hierarchy.Crs.CrsCod,
-				      Gbl.Usrs.Me.UsrDat.UsrCod);
+		  Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
 		 }
 	       else        // User does not exists or user already belongs to course ==> remove pair from crs_requests table
 		  Enr_RemUsrEnrolmentRequestInCrs (UsrDat.UsrCod,Crs.CrsCod);
