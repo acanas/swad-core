@@ -51,17 +51,17 @@
 typedef enum
   {
    Tml_Pub_UNKNOWN		= 0,
-   Tml_Pub_ORIGINAL_NOTE		= 1,
+   Tml_Pub_ORIGINAL_NOTE	= 1,
    Tml_Pub_SHARED_NOTE		= 2,
    Tml_Pub_COMMENT_TO_NOTE	= 3,
-  } Tml_Pub_PubType_t;
+  } Tml_Pub_Type_t;
 
 struct Tml_Pub_Publication
   {
-   long PubCod;
-   long NotCod;
+   long PubCod;				// Publication code
+   long NotCod;				// Note code
    long PublisherCod;			// Sharer or writer of the publication
-   Tml_Pub_PubType_t PubType;
+   Tml_Pub_Type_t Type;			// Original note, shared note, comment
    struct Tml_Pub_Publication *Next;	// Used for chained list
   };
 
@@ -91,7 +91,7 @@ void Tml_Pub_FreeListPubs (struct Tml_Timeline *Timeline);
 void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline);
 void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline);
 
-Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_PubType_t PubType);
+Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_Type_t PubType);
 
 void Tml_Pub_PutLinkToViewNewPubs (void);
 void Tml_Pub_PutLinkToViewOldPubs (void);

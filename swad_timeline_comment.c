@@ -774,7 +774,7 @@ static long Tml_Com_ReceiveComm (void)
       /* Insert into publications */
       Pub.NotCod       = Not.NotCod;
       Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Pub.PubType      = Tml_Pub_COMMENT_TO_NOTE;
+      Pub.Type      = Tml_Pub_COMMENT_TO_NOTE;
       Tml_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
       /* Insert comment content in the database */

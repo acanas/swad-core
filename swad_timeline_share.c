@@ -121,7 +121,7 @@ static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
    /***** Share (publish note in timeline) *****/
    Pub.NotCod       = Not->NotCod;
    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Pub.PubType      = Tml_Pub_SHARED_NOTE;
+   Pub.Type      = Tml_Pub_SHARED_NOTE;
    Tml_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
    /***** Update number of times this note is shared *****/

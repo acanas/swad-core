@@ -35,88 +35,80 @@
 
 void Btn_PutButton (Btn_Button_t Button,const char *TxtButton)
   {
+   static void (*Function[Btn_NUM_BUTTON_TYPES]) (const char *TxtButton) =
+     {
+      [Btn_NO_BUTTON     ] = NULL,
+      [Btn_CREATE_BUTTON ] = Btn_PutCreateButton,
+      [Btn_CONFIRM_BUTTON] = Btn_PutConfirmButton,
+      [Btn_REMOVE_BUTTON ] = Btn_PutRemoveButton,
+     };
+
    if (TxtButton)
       if (TxtButton[0])
-	 switch (Button)
-           {
-	    case Btn_NO_BUTTON:
-	       break;
-	    case Btn_CREATE_BUTTON:
-	       Btn_PutCreateButton (TxtButton);
-	       break;
-	    case Btn_CONFIRM_BUTTON:
-	       Btn_PutConfirmButton (TxtButton);
-	       break;
-	    case Btn_REMOVE_BUTTON:
- 	       Btn_PutRemoveButton (TxtButton);
-	       break;
-          }
+	 if (Function[Button])
+	    Function[Button] (TxtButton);
   }
 
 void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton)
   {
+   static void (*Function[Btn_NUM_BUTTON_TYPES]) (const char *TxtButton) =
+     {
+      [Btn_NO_BUTTON     ] = NULL,
+      [Btn_CREATE_BUTTON ] = Btn_PutCreateButtonInline,
+      [Btn_CONFIRM_BUTTON] = Btn_PutConfirmButtonInline,
+      [Btn_REMOVE_BUTTON ] = Btn_PutRemoveButtonInline,
+     };
+
    if (TxtButton)
       if (TxtButton[0])
-	 switch (Button)
-           {
-	    case Btn_NO_BUTTON:
-	       break;
-	    case Btn_CREATE_BUTTON:
-	       Btn_PutCreateButtonInline (TxtButton);
-	       break;
-	    case Btn_CONFIRM_BUTTON:
-	       Btn_PutConfirmButtonInline (TxtButton);
-	       break;
-	    case Btn_REMOVE_BUTTON:
- 	       Btn_PutRemoveButtonInline (TxtButton);
-	       break;
-          }
+	 if (Function[Button])
+	    Function[Button] (TxtButton);
   }
 
 void Btn_PutCreateButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_CREATE",NULL);
-   HTM_Txt (TxtButton);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_CREATE",NULL);
+	 HTM_Txt (TxtButton);
+      HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
 void Btn_PutCreateButtonInline (const char *TxtButton)
   {
    HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
-   HTM_Txt (TxtButton);
+      HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }
 
 void Btn_PutConfirmButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_CONFIRM",NULL);
-   HTM_Txt (TxtButton);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_CONFIRM",NULL);
+	 HTM_Txt (TxtButton);
+      HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
 void Btn_PutConfirmButtonInline (const char *TxtButton)
   {
    HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CONFIRM",NULL);
-   HTM_Txt (TxtButton);
+      HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }
 
 void Btn_PutRemoveButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_REMOVE",NULL);
-   HTM_Txt (TxtButton);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_REMOVE",NULL);
+	 HTM_Txt (TxtButton);
+      HTM_BUTTON_End ();
    HTM_DIV_End ();
   }
 
 void Btn_PutRemoveButtonInline (const char *TxtButton)
   {
    HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_REMOVE",NULL);
-   HTM_Txt (TxtButton);
+      HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }

@@ -98,7 +98,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not);
 
 static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not);
 
-static Tml_Not_NoteType_t Tml_Not_GetNoteTypeFromStr (const char *Str);
+static Tml_Not_Type_t Tml_Not_GetNoteTypeFromStr (const char *Str);
 
 static void Tml_Not_ResetNote (struct Tml_Not_Note *Not);
 
@@ -218,7 +218,7 @@ void Tml_Not_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
    /***** Trivial check: codes *****/
    if (Not->NotCod   <= 0 ||
        Not->UsrCod   <= 0 ||
-       Not->NoteType == TL_NOTE_UNKNOWN)
+       Not->Type == TL_NOTE_UNKNOWN)
      {
       Ale_ShowAlert (Ale_ERROR,"Error in note.");
       return;
@@ -370,7 +370,7 @@ void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
 
 static void Tml_Not_WriteContent (const struct Tml_Not_Note *Not)
   {
-   if (Not->NoteType == TL_NOTE_POST)	// It's a post
+   if (Not->Type == TL_NOTE_POST)	// It's a post
       Tml_Pst_GetAndWritePost (Not->Cod);
    else					// Not a post
       Tml_Not_GetAndWriteNoPost (Not);
@@ -428,7 +428,7 @@ static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
    Hie->Crs.CrsCod = -1L;
 
    /***** Get location in hierarchy *****/
-   switch (Not->NoteType)
+   switch (Not->Type)
      {
       case TL_NOTE_INS_DOC_PUB_FILE:
       case TL_NOTE_INS_SHA_PUB_FILE:
@@ -486,7 +486,7 @@ static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
    HTM_DIV_Begin ("class=\"TL_LOC\"");
 
       /***** Write location *****/
-      switch (Not->NoteType)
+      switch (Not->Type)
 	{
 	 case TL_NOTE_INS_DOC_PUB_FILE:
 	 case TL_NOTE_INS_SHA_PUB_FILE:
@@ -605,7 +605,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
 
          /* Text ("not available") */
-	 HTM_Txt (Txt_TIMELINE_NOTE[Not->NoteType]);
+	 HTM_Txt (Txt_TIMELINE_NOTE[Not->Type]);
 	 if (Not->Unavailable)
 	    HTM_TxtF ("&nbsp;(%s)",Txt_not_available);
 
@@ -618,39 +618,39 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       HTM_DIV_Begin ("class=\"TL_FORM\"");
 
 	 /***** Begin form with parameters depending on the type of note *****/
-	 switch (Not->NoteType)
+	 switch (Not->Type)
 	   {
 	    case TL_NOTE_INS_DOC_PUB_FILE:
 	    case TL_NOTE_INS_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->Type]);
 	       Brw_PutHiddenParamFilCod (Not->Cod);
 	       if (Not->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
 		  Ins_PutParamInsCod (Not->HieCod);		// Go to another institution
 	       break;
 	    case TL_NOTE_CTR_DOC_PUB_FILE:
 	    case TL_NOTE_CTR_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->Type]);
 	       Brw_PutHiddenParamFilCod (Not->Cod);
 	       if (Not->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current center
 		  Ctr_PutParamCtrCod (Not->HieCod);		// Go to another center
 	       break;
 	    case TL_NOTE_DEG_DOC_PUB_FILE:
 	    case TL_NOTE_DEG_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->Type]);
 	       Brw_PutHiddenParamFilCod (Not->Cod);
 	       if (Not->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 		  Deg_PutParamDegCod (Not->HieCod);		// Go to another degree
 	       break;
 	    case TL_NOTE_CRS_DOC_PUB_FILE:
 	    case TL_NOTE_CRS_SHA_PUB_FILE:
-	       Frm_BeginFormUnique (TL_DefaultActions[Not->NoteType]);
+	       Frm_BeginFormUnique (TL_DefaultActions[Not->Type]);
 	       Brw_PutHiddenParamFilCod (Not->Cod);
 	       if (Not->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 		  Crs_PutParamCrsCod (Not->HieCod);		// Go to another course
 	       break;
 	    case TL_NOTE_CALL_FOR_EXAM:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
-	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
+	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->Type],
 					  Anchor);	// Locate on this specific exam
 	       Frm_FreeAnchorStr (Anchor);
 	       Cfe_PutHiddenParamExaCod (Not->Cod);
@@ -673,7 +673,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 	       break;
 	    case TL_NOTE_NOTICE:
 	       Frm_SetAnchorStr (Not->Cod,&Anchor);
-	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->NoteType],
+	       Frm_BeginFormUniqueAnchor (TL_DefaultActions[Not->Type],
 					  Anchor);
 	       Frm_FreeAnchorStr (Anchor);
 	       Not_PutHiddenParamNotCod (Not->Cod);
@@ -686,16 +686,16 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
-	    HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->NoteType],
+	    HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->Type],
 				     Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
 							 The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
 				     NULL);
 	    Str_FreeString ();
 
 	       /* Icon and text */
-	       Ico_PutIcon (TL_Icons[Not->NoteType],
-	                    Txt_TIMELINE_NOTE[Not->NoteType],"CONTEXT_ICO_x16");
-	       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->NoteType]);
+	       Ico_PutIcon (TL_Icons[Not->Type],
+	                    Txt_TIMELINE_NOTE[Not->Type],"CONTEXT_ICO_x16");
+	       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->Type]);
 
 	    /* End button */
 	    HTM_BUTTON_End ();
@@ -717,7 +717,7 @@ void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
   {
    SummaryStr[0] = '\0';
 
-   switch (Not->NoteType)
+   switch (Not->Type)
      {
       case TL_NOTE_UNKNOWN:
           break;
@@ -878,14 +878,14 @@ static void Tml_Not_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
 /***************** Store and publish a note into database ********************/
 /*****************************************************************************/
 
-void Tml_Not_StoreAndPublishNote (Tml_Not_NoteType_t NoteType,long Cod)
+void Tml_Not_StoreAndPublishNote (Tml_Not_Type_t NoteType,long Cod)
   {
    struct Tml_Pub_Publication Pub;
 
    Tml_Not_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
   }
 
-void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
+void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_Type_t NoteType,long Cod,
                                           struct Tml_Pub_Publication *Pub)
   {
    long HieCod;	// Hierarchy code (institution/center/degree/course)
@@ -918,7 +918,7 @@ void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
    /***** Publish note in timeline *****/
    Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Pub->NotCod       = Tml_DB_CreateNewNote (NoteType,Cod,Pub->PublisherCod,HieCod);
-   Pub->PubType      = Tml_Pub_ORIGINAL_NOTE;
+   Pub->Type      = Tml_Pub_ORIGINAL_NOTE;
    Tml_Pub_PublishPubInTimeline (Pub);
   }
 
@@ -931,7 +931,7 @@ void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path)
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
-   Tml_Not_NoteType_t NoteType;
+   Tml_Not_Type_t NoteType;
 
    switch (FileBrowser)
      {
@@ -993,7 +993,7 @@ void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   Tml_Not_NoteType_t NoteType;
+   Tml_Not_Type_t NoteType;
 
    switch (FileBrowser)
      {
@@ -1268,7 +1268,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove media associated to post *****/
-   if (Not->NoteType == TL_NOTE_POST)
+   if (Not->Type == TL_NOTE_POST)
       if ((MedCod = Tml_DB_GetMedCodFromPost (Not->Cod)) > 0)
 	 Med_RemoveMedia (MedCod);
 
@@ -1291,7 +1291,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
    /***** Remove note *****/
    Tml_DB_RemoveNote (Not->NotCod);
 
-   if (Not->NoteType == TL_NOTE_POST)
+   if (Not->Type == TL_NOTE_POST)
       /***** Remove post *****/
       Tml_DB_RemovePost (Not->Cod);
   }
@@ -1315,7 +1315,7 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
    Not->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get note type (row[1]) *****/
-   Not->NoteType    = Tml_Not_GetNoteTypeFromStr (row[1]);
+   Not->Type    = Tml_Not_GetNoteTypeFromStr (row[1]);
 
    /***** Get file/post... code (row[2]) *****/
    Not->Cod         = Str_ConvertStrCodToLongCod (row[2]);
@@ -1344,13 +1344,13 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
 /********* Get note type from string number coming from database *************/
 /*****************************************************************************/
 
-static Tml_Not_NoteType_t Tml_Not_GetNoteTypeFromStr (const char *Str)
+static Tml_Not_Type_t Tml_Not_GetNoteTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < TL_NOT_NUM_NOTE_TYPES)
-         return (Tml_Not_NoteType_t) UnsignedNum;
+         return (Tml_Not_Type_t) UnsignedNum;
 
    return TL_NOTE_UNKNOWN;
   }
@@ -1362,7 +1362,7 @@ static Tml_Not_NoteType_t Tml_Not_GetNoteTypeFromStr (const char *Str)
 static void Tml_Not_ResetNote (struct Tml_Not_Note *Not)
   {
    Not->NotCod      = -1L;
-   Not->NoteType    = TL_NOTE_UNKNOWN;
+   Not->Type    = TL_NOTE_UNKNOWN;
    Not->UsrCod      = -1L;
    Not->HieCod      = -1L;
    Not->Cod         = -1L;

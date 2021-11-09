@@ -58,7 +58,7 @@ static void Tml_Pub_UpdateFirstLastPubCodesIntoSession (const struct Tml_Timelin
 
 static struct Tml_Pub_Publication *Tml_Pub_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries);
 
-static Tml_Pub_PubType_t Tml_Pub_GetPubTypeFromStr (const char *Str);
+static Tml_Pub_Type_t Tml_Pub_GetPubTypeFromStr (const char *Str);
 
 /*****************************************************************************/
 /*************** Get list of pubications to show in timeline *****************/
@@ -358,7 +358,7 @@ void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
                     Not.NotCod);		// ...from JavaScript...
 						// ...to avoid repeating notes
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					      Tml_Pub_GetTopMessage (Pub->PubType),
+					      Tml_Pub_GetTopMessage (Pub->Type),
 					      Pub->PublisherCod);
       HTM_LI_End ();
      }
@@ -386,7 +386,7 @@ void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
       /* Write note */
       HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP\"");
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-					      Tml_Pub_GetTopMessage (Pub->PubType),
+					      Tml_Pub_GetTopMessage (Pub->Type),
 					      Pub->PublisherCod);
       HTM_LI_End ();
      }
@@ -396,7 +396,7 @@ void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
 /************* Get a top message given the type of publication ***************/
 /*****************************************************************************/
 
-Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_PubType_t PubType)
+Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_Type_t PubType)
   {
    static const Tml_TopMessage_t TopMessages[Tml_Pub_NUM_PUB_TYPES] =
      {
@@ -523,21 +523,21 @@ void Tml_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
    Pub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
    Pub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
    Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
-   Pub->PubType      = Tml_Pub_GetPubTypeFromStr (row[3]);
+   Pub->Type      = Tml_Pub_GetPubTypeFromStr (row[3]);
   }
 
 /*****************************************************************************/
 /******* Get publication type from string number coming from database ********/
 /*****************************************************************************/
 
-static Tml_Pub_PubType_t Tml_Pub_GetPubTypeFromStr (const char *Str)
+static Tml_Pub_Type_t Tml_Pub_GetPubTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    /***** Get publication type from string *****/
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Tml_Pub_NUM_PUB_TYPES)
-         return (Tml_Pub_PubType_t) UnsignedNum;
+         return (Tml_Pub_Type_t) UnsignedNum;
 
    return Tml_Pub_UNKNOWN;
   }

@@ -357,7 +357,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (HieLvl_Level_t Scope)
                         "SELECT COUNT(DISTINCT UsrCod)"
 			 " FROM agd_agendas"
 		        " WHERE UsrCod>0");
-       case HieLvl_CTY:
+      case HieLvl_CTY:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
                         "SELECT COUNT(DISTINCT agd_agendas.UsrCod)"

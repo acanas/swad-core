@@ -2234,7 +2234,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Tml_Not_NoteType_t NoteType;
+   Tml_Not_Type_t NoteType;
    unsigned NumNotes;
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
@@ -2257,8 +2257,8 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
 
       /***** Get total number of timeline notes and users for each note type *****/
-      for (NoteType  = (Tml_Not_NoteType_t) 0;
-	   NoteType <= (Tml_Not_NoteType_t) (TL_NOT_NUM_NOTE_TYPES - 1);
+      for (NoteType  = (Tml_Not_Type_t) 0;
+	   NoteType <= (Tml_Not_Type_t) (TL_NOT_NUM_NOTE_TYPES - 1);
 	   NoteType++)
 	{
 	 /***** Get number of timeline notes and users for this type *****/

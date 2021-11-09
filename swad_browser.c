@@ -3223,7 +3223,19 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_record_for_this_course;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActUnk,
+      [Rol_GST	  ] = ActUnk,
+      [Rol_USR	  ] = ActUnk,
+      [Rol_STD	  ] = ActSeeRecOneStd,
+      [Rol_NET	  ] = ActSeeRecOneTch,
+      [Rol_TCH	  ] = ActSeeRecOneTch,
+      [Rol_DEG_ADM] = ActUnk,
+      [Rol_CTR_ADM] = ActUnk,
+      [Rol_INS_ADM] = ActUnk,
+      [Rol_SYS_ADM] = ActUnk,
+     };
 
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
@@ -3235,21 +3247,10 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
       HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-	 switch (UsrDat->Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:
-	       NextAction = ActSeeRecOneStd;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActSeeRecOneTch;
-	       break;
-	    default:
-	       NextAction = ActUnk;
-	       Err_WrongRoleExit ();
-	       break;
-	   }
-	 Frm_BeginForm (NextAction);
+	 if (NextAction[UsrDat->Roles.InCurrentCrs] == ActUnk)
+	    Err_WrongRoleExit ();
+
+	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    /***** Show user's ID *****/
@@ -8356,24 +8357,24 @@ void Brw_DownloadFile (void)
 	 case Brw_ADMI_DOC_CRS:
 	 case Brw_ADMI_DOC_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
-				    FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_TCH_CRS:
 	 case Brw_ADMI_TCH_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
-				    FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 case Brw_ADMI_SHR_CRS:
 	 case Brw_ADMI_SHR_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
-				    FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 case Brw_SHOW_MRK_CRS:
 	 case Brw_SHOW_MRK_GRP:
 	 case Brw_ADMI_MRK_CRS:
 	 case Brw_ADMI_MRK_GRP:
 	    Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
-				    FileMetadata.FilCod);
+				       FileMetadata.FilCod);
 	    break;
 	 default:
 	    break;
@@ -9485,14 +9486,11 @@ static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
 
 bool Brw_CheckIfICanViewProjectFiles (long PrjCod)
   {
-   unsigned MyRolesInProject;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 MyRolesInProject = Prj_GetMyRolesInProject (PrjCod);
-	 return (MyRolesInProject != 0);	// Am I a member?
+	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
 	 return true;
@@ -9507,14 +9505,11 @@ bool Brw_CheckIfICanViewProjectFiles (long PrjCod)
 
 static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod)
   {
-   unsigned MyRolesInProject;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 MyRolesInProject = Prj_GetMyRolesInProject (PrjCod);
-	 return (MyRolesInProject != 0);	// Am I a member?
+	 return (Prj_GetMyRolesInProject (PrjCod) != 0);	// Am I a member?
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
@@ -9530,15 +9525,12 @@ static bool Brw_CheckIfICanViewProjectDocuments (long PrjCod)
 
 static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod)
   {
-   unsigned MyRolesInProject;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 MyRolesInProject = Prj_GetMyRolesInProject (PrjCod);
-	 return ((MyRolesInProject & (1 << Prj_ROLE_TUT |		// Tutor...
-	                              1 << Prj_ROLE_EVL)) != 0);	// ...or evaluator
+	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT |		// Tutor...
+	                                              1 << Prj_ROLE_EVL)) != 0);	// ...or evaluator
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return true;
@@ -9558,14 +9550,11 @@ static bool Brw_CheckIfICanViewProjectAssessment (long PrjCod)
 
 static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
   {
-   unsigned MyRolesInProject;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
-	 if (MyRolesInProject)	// I am a member
+	 if (Prj_GetMyRolesInProject (Prj_GetPrjCod ()))	// I am a member
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
 	 return false;
       case Rol_TCH:	// Editing teachers in a course can access to all files
@@ -9587,15 +9576,12 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
 
 static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
   {
-   unsigned MyRolesInProject;
-
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 MyRolesInProject = Prj_GetMyRolesInProject (Prj_GetPrjCod ());
-	 if ((MyRolesInProject & (1 << Prj_ROLE_TUT |	// Tutor...
-	                          1 << Prj_ROLE_EVL)))	// ...or evaluator
+	 if ((Prj_GetMyRolesInProject (Prj_GetPrjCod ()) & (1 << Prj_ROLE_TUT |	// Tutor...
+	                                                    1 << Prj_ROLE_EVL)))	// ...or evaluator
             return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_DB_GetPublisherOfSubtree (Gbl.FileBrowser.FilFolLnk.Full));	// Am I the publisher of subtree?
 	 return false;
       case Rol_TCH:	// Editing teachers in a course can access to all files

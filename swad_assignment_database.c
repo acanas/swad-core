@@ -515,7 +515,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (HieLvl_Level_t Scope)
                         "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM asg_assignments"
 			" WHERE CrsCod>0");
-       case HieLvl_CTY:
+      case HieLvl_CTY:
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT asg_assignments.CrsCod)"

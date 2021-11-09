@@ -61,19 +61,25 @@ typedef enum
    TL_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
    /* Analytics tab */
    /* Profile tab */
-  } Tml_Not_NoteType_t;
+  } Tml_Not_Type_t;
 
 struct Tml_Not_Note
   {
-   long NotCod;			// Unique code/identifier for each note
-   Tml_Not_NoteType_t NoteType;	// Timeline post, public file, exam announcement, notice, forum post...
-   long UsrCod;			// Publisher
-   long HieCod;			// Hierarchy code (institution/center/degree/course)
-   long Cod;			// Code of file, forum post, notice, timeline post...
-   bool Unavailable;		// File, forum post, notice,... unavailable (removed)
-   time_t DateTimeUTC;		// Date-time of publication in UTC time
-   unsigned NumShared;		// Number of times (users) this note has been shared
-   unsigned NumFavs;		// Number of times (users) this note has been favourited
+   long NotCod;		// Unique code/identifier for each note
+   Tml_Not_Type_t Type;	// Timeline post, public file,
+			// call for exam, notice, forum post...
+   long UsrCod;		// Publisher
+   long HieCod;		// Hierarchy code
+			// (institution/center/degree/course)
+   long Cod;		// Code of file, forum post,
+			// notice, timeline post...
+   bool Unavailable;	// File, forum post, notice,...
+			// unavailable (removed)
+   time_t DateTimeUTC;	// Date-time of publication in UTC time
+   unsigned NumShared;	// Number of times (users)
+			// this note has been shared
+   unsigned NumFavs;	// Number of times (users)
+			// this note has been favourited
   };
 
 /*****************************************************************************/
@@ -94,8 +100,8 @@ void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
 void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
                              char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 
-void Tml_Not_StoreAndPublishNote (Tml_Not_NoteType_t NoteType,long Cod);
-void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_NoteType_t NoteType,long Cod,
+void Tml_Not_StoreAndPublishNote (Tml_Not_Type_t NoteType,long Cod);
+void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_Type_t NoteType,long Cod,
                                           struct Tml_Pub_Publication *Pub);
 void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path);
 void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);

@@ -1108,34 +1108,30 @@ static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
 void Acc_PutIconToChangeUsrAccount (void)
   {
    extern const char *Txt_Change_account;
-   Act_Action_t NextAction;
-   bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActFrmAccOth,
+      [Rol_GST	  ] = ActFrmAccOth,
+      [Rol_USR	  ] = ActFrmAccOth,
+      [Rol_STD	  ] = ActFrmAccStd,
+      [Rol_NET	  ] = ActFrmAccTch,
+      [Rol_TCH	  ] = ActFrmAccTch,
+      [Rol_DEG_ADM] = ActFrmAccOth,
+      [Rol_CTR_ADM] = ActFrmAccOth,
+      [Rol_INS_ADM] = ActFrmAccOth,
+      [Rol_SYS_ADM] = ActFrmAccOth,
+     };
 
    /***** Link for changing the account *****/
-   if (ItsMe)
+   if (Usr_ItsMe (Gbl.Record.UsrDat->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActFrmMyAcc,NULL,
                                      NULL,NULL,
 			             "at.svg",
 			             Txt_Change_account);
    else	// Not me
       if (Usr_ICanEditOtherUsr (Gbl.Record.UsrDat))
-	{
-	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:
-	       NextAction = ActFrmAccStd;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActFrmAccTch;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActFrmAccOth;
-	       break;
-	   }
-	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 	                                Rec_PutParamUsrCodEncrypted,NULL,
 	                                "at.svg",
 				        Txt_Change_account);
-	}
   }

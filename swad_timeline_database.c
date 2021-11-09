@@ -50,7 +50,7 @@ static const char *Tml_DB_FieldFav[Tml_Usr_NUM_FAV_SHA] =
    [Tml_Usr_FAV_UNF_COMM] = "PubCod",
    [Tml_Usr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static Tml_Pub_PubType_t Tml_DB_PubTypeFav[Tml_Usr_NUM_FAV_SHA] =
+static Tml_Pub_Type_t Tml_DB_PubTypeFav[Tml_Usr_NUM_FAV_SHA] =
   {
    [Tml_Usr_FAV_UNF_NOTE] = Tml_Pub_ORIGINAL_NOTE,
    [Tml_Usr_FAV_UNF_COMM] = Tml_Pub_COMMENT_TO_NOTE,
@@ -144,7 +144,7 @@ long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
 /*****************************************************************************/
 // Returns code of note just created
 
-long Tml_DB_CreateNewNote (Tml_Not_NoteType_t NoteType,long Cod,
+long Tml_DB_CreateNewNote (Tml_Not_Type_t NoteType,long Cod,
                            long PublisherCod,long HieCod)
   {
    return
@@ -165,7 +165,7 @@ long Tml_DB_CreateNewNote (Tml_Not_NoteType_t NoteType,long Cod,
 /************************* Mark a note as unavailable ************************/
 /*****************************************************************************/
 
-void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod)
+void Tml_DB_MarkNoteAsUnavailable (Tml_Not_Type_t NoteType,long Cod)
   {
    DB_QueryUPDATE ("can not mark note as unavailable",
 		   "UPDATE tml_notes"
@@ -180,7 +180,7 @@ void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod)
 /***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
+void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_Type_t NoteType,
                                                     Brw_FileBrowser_t FileBrowser,
                                                     long Cod,const char *Path)
   {
@@ -205,7 +205,7 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
 /*****************************************************************************/
 
 unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
-                                          Tml_Not_NoteType_t NoteType)
+                                          Tml_Not_Type_t NoteType)
   {
    switch (Gbl.Scope.Current)
      {
@@ -1097,7 +1097,7 @@ long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub)
 				" (%ld,%ld,%u,NOW())",
 				Pub->NotCod,
 				Pub->PublisherCod,
-				(unsigned) Pub->PubType);
+				(unsigned) Pub->Type);
   }
 
 /*****************************************************************************/

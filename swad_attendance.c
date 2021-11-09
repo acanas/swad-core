@@ -1682,7 +1682,6 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
-   bool ItsMe;
    bool ICanChangeStdAttendance;
    bool ICanEditStdComment;
    bool ICanEditTchComment;
@@ -1692,8 +1691,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      {
       case Rol_STD:
 	 // A student can see only her/his attendance
-	 ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-	 if (!ItsMe)
+	 if (!Usr_ItsMe (UsrDat->UsrCod))
 	    Err_ShowErrorAndExit ("Wrong call.");
 	 ICanChangeStdAttendance = false;
 	 ICanEditStdComment = Event->Open;	// Attendance event is open

@@ -101,7 +101,7 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
-   Pub.PubType = Tml_Pub_UNKNOWN;
+   Pub.Type = Tml_Pub_UNKNOWN;
    SummaryStr[0]  = '\0';	// Return nothing on error
    Content.Txt[0] = '\0';
 
@@ -114,7 +114,7 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get summary and content *****/
-   switch (Pub.PubType)
+   switch (Pub.Type)
      {
       case Tml_Pub_UNKNOWN:
 	 break;
@@ -124,7 +124,7 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 Not.NotCod = Pub.NotCod;
 	 Tml_Not_GetDataOfNoteByCod (&Not);
 
-	 if (Not.NoteType == TL_NOTE_POST)
+	 if (Not.Type == TL_NOTE_POST)
 	   {
 	    /***** Get post from database *****/
             if (Tml_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row

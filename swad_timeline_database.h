@@ -46,15 +46,15 @@ void Tml_DB_UpdateWho (Usr_Who_t Who);
 /*********************************** Notes ***********************************/
 unsigned Tml_DB_GetDataOfNoteByCod (long NotCod,MYSQL_RES **mysql_res);
 long Tml_DB_GetPubCodOfOriginalNote (long NotCod);
-long Tml_DB_CreateNewNote (Tml_Not_NoteType_t NoteType,long Cod,
+long Tml_DB_CreateNewNote (Tml_Not_Type_t NoteType,long Cod,
                            long PublisherCod,long HieCod);
-void Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType_t NoteType,long Cod);
-void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType_t NoteType,
+void Tml_DB_MarkNoteAsUnavailable (Tml_Not_Type_t NoteType,long Cod);
+void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_Type_t NoteType,
                                                     Brw_FileBrowser_t FileBrowser,
                                                     long Cod,const char *Path);
 
 unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
-                                          Tml_Not_NoteType_t NoteType);
+                                          Tml_Not_Type_t NoteType);
 unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res);
 
 void Tml_DB_CreateTmpTableJustRetrievedNotes (void);

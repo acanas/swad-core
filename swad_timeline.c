@@ -495,7 +495,7 @@ static unsigned Tml_ListRecentPubs (struct Tml_Timeline *Timeline,
 	               Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
 							 "TL_WIDTH TL_SEP");
 	    Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-						Tml_Pub_GetTopMessage (Pub->PubType),
+						Tml_Pub_GetTopMessage (Pub->Type),
 						Pub->PublisherCod);
 	 HTM_LI_End ();
 	}
