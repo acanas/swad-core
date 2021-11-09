@@ -2800,13 +2800,6 @@ int swad__sendAttendanceUsers (struct soap *soap,
   {
    int ReturnCode;
    struct Att_Event Event;
-   const char *Ptr;
-   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   struct UsrData UsrDat;
-   unsigned NumCodsInList;
-   char *SubQueryAllUsrs = NULL;
-   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
-   size_t Length = 0;	// Initialized to avoid warning
 
    /***** Initializations *****/
    API_Set_gSOAP_RuntimeEnv (soap);
@@ -2844,83 +2837,12 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
 
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
+   /***** Set users as present *****/
+   Att_DB_SetUsrsAsPresent (Event.AttCod,users,setOthersAsAbsent);
 
+   /***** Purge absent users without comments from table *****/
    if (setOthersAsAbsent)
-     {
-      /* Count number of codes in list */
-      for (Ptr = users, NumCodsInList = 0;
-	   *Ptr;
-	   NumCodsInList++)
-	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-
-      /* Allocate subquery used to mark not present users as absent */
-      Length = 256 + NumCodsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
-      if ((SubQueryAllUsrs = malloc (Length + 1)) == NULL)
-	 return soap_receiver_fault (soap,
-	                             "Not enough memory",
-	                             "Not enough memory to store list of users");
-      SubQueryAllUsrs[0] = '\0';
-     }
-
-   for (Ptr = users;
-	*Ptr;
-	)
-     {
-      /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
-      if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
-	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
-	    // The user must belong to course,
-	    // but it's not necessary he/she belongs to groups associated to the event
-	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
-	      {
-	       /* Mark user as present */
-	       Att_RegUsrInAttEventNotChangingComments (Event.AttCod,UsrDat.UsrCod);
-
-	       /* Add this user to query used to mark not present users as absent */
-	       if (setOthersAsAbsent)
-		 {
-		  if (sendAttendanceUsersOut->numUsers)
-		    {
-		     snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),",%ld",
-		               UsrDat.UsrCod);
-		     Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,Length);
-		    }
-		  else
-		     snprintf (SubQueryAllUsrs,Length," AND UsrCod NOT IN (%ld",
-			       UsrDat.UsrCod);
-		 }
-
-	       sendAttendanceUsersOut->numUsers++;
-	      }
-     }
-
-   if (setOthersAsAbsent)
-     {
-      /* Mark not present users as absent in table of users */
-      if (sendAttendanceUsersOut->numUsers)
-         Str_Concat (SubQueryAllUsrs,")",Length);
-
-      DB_QueryUPDATE ("can not set other users as absent",
-      		     "UPDATE att_users"
-      		       " SET Present='N'"
-		     " WHERE AttCod=%ld"
-		         "%s",
-		     Event.AttCod,
-		     SubQueryAllUsrs);
-
-      /* Free memory for subquery string */
-      free (SubQueryAllUsrs);
-
-      /* Clean attendance users table */
       Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (Event.AttCod);
-     }
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
 
    sendAttendanceUsersOut->success = 1;
 

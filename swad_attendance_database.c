@@ -35,6 +35,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy_level.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -596,6 +597,105 @@ void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod)
 		     " AND UsrCod=%ld",
 		   AttCod,
 		   UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Set users as present in an attendance event ****************/
+/*****************************************************************************/
+
+void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsAbsent)
+  {
+   const char *Ptr;
+   char LongStr[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   struct UsrData UsrDat;
+   unsigned NumCodsInList;
+   char *SubQueryAllUsrs = NULL;
+   char SubQueryOneUsr[1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
+   bool Present;
+   size_t Length = 0;	// Initialized to avoid warning
+   unsigned NumUsrsPresent = 0;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Build list of present users *****/
+   if (SetOthersAsAbsent)
+     {
+      /***** Count number of codes in list *****/
+      for (Ptr = ListUsrs, NumCodsInList = 0;
+	   *Ptr;
+	   NumCodsInList++)
+	 /* Find next string in text until comma (leading and trailing spaces are removed) */
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+
+      /***** Allocate subquery used to mark not present users as absent *****/
+      Length = 256 + NumCodsInList * (1 + Cns_MAX_DECIMAL_DIGITS_LONG + 1) - 1;
+      if ((SubQueryAllUsrs = malloc (Length + 1)) == NULL)
+	 Err_NotEnoughMemoryExit ();
+      SubQueryAllUsrs[0] = '\0';
+     }
+
+   for (Ptr = ListUsrs;
+	*Ptr;
+	)
+     {
+      /* Find next string in text until comma
+         (leading and trailing spaces are removed) */
+      Str_GetNextStringUntilComma (&Ptr,LongStr,Cns_MAX_DECIMAL_DIGITS_LONG);
+      if ((UsrDat.UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
+	 if (Usr_DB_ChkIfUsrCodExists (UsrDat.UsrCod))
+	    // The user must belong to course,
+	    // but it's not necessary he/she belongs to groups associated to the event
+	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	      {
+	       /* Mark user as present */
+	       if (Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrDat.UsrCod,&Present))	// User is in table att_users
+		 {
+		  if (!Present)	// If already present ==> nothing to do
+		     /***** Set user as present in database *****/
+		     Att_DB_SetUsrAsPresent (AttCod,UsrDat.UsrCod);
+		 }
+	       else									// User is not in table att_users
+		  Att_DB_RegUsrInAttEventChangingComments (AttCod,UsrDat.UsrCod,true,"","");
+
+	       /* Add this user to query used to mark not present users as absent */
+	       if (SetOthersAsAbsent)
+		 {
+		  if (!NumUsrsPresent)	// Begin building subquery
+		     snprintf (SubQueryAllUsrs,Length," AND UsrCod NOT IN (%ld",
+			       UsrDat.UsrCod);
+		  else			// Continue building subquery
+		    {
+		     snprintf (SubQueryOneUsr,sizeof (SubQueryOneUsr),",%ld",
+		               UsrDat.UsrCod);
+		     Str_Concat (SubQueryAllUsrs,SubQueryOneUsr,Length);
+		    }
+		 }
+
+	       NumUsrsPresent++;
+	      }
+     }
+
+   if (NumUsrsPresent)			// End building subquery
+      Str_Concat (SubQueryAllUsrs,")",Length);
+
+   /***** Mark not present users as absent in table of users *****/
+   if (SetOthersAsAbsent)
+     {
+      DB_QueryUPDATE ("can not set other users as absent",
+      		      "UPDATE att_users"
+      		        " SET Present='N'"
+		      " WHERE AttCod=%ld"
+		          "%s",
+		      AttCod,
+		      SubQueryAllUsrs);
+
+      /* Free memory for subquery string */
+      free (SubQueryAllUsrs);
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/

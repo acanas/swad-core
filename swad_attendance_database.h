@@ -74,6 +74,7 @@ void Att_DB_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,
                                               const char *CommentStd,
                                               const char *CommentTch);
 void Att_DB_SetUsrAsPresent (long AttCod,long UsrCod);
+void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,bool SetOthersAsAbsent);
 void Att_DB_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
 void Att_DB_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
 

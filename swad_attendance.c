@@ -2162,25 +2162,6 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
   }
 
 /*****************************************************************************/
-/******* Register a user in an attendance event not changing comments ********/
-/*****************************************************************************/
-
-void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
-  {
-   bool Present;
-
-   /***** Check if user is already in table att_users (present or not) *****/
-   if (Att_DB_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_users
-     {
-      if (!Present)	// If already present ==> nothing to do
-	 /***** Set user as present in database *****/
-	 Att_DB_SetUsrAsPresent (AttCod,UsrCod);
-     }
-   else									// User is not in table att_users
-      Att_DB_RegUsrInAttEventChangingComments (AttCod,UsrCod,true,"","");
-  }
-
-/*****************************************************************************/
 /********** Request listing attendance of users to several events ************/
 /*****************************************************************************/
 

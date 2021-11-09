@@ -103,8 +103,6 @@ void Att_SeeOneAttEvent (void);
 void Att_RegisterMeAsStdInAttEvent (void);
 void Att_RegisterStudentsInAttEvent (void);
 
-void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod);
-
 void Att_ReqListUsrsAttendanceCrs (void);
 void Att_ListMyAttendanceCrs (void);
 void Att_PrintMyAttendanceCrs (void);
