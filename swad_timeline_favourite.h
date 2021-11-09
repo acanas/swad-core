@@ -27,7 +27,7 @@
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-#define Tml_Fav_ICON_FAV		"heart.svg"
+#define Tml_Fav_ICON_FAV	"heart.svg"
 #define Tml_Fav_ICON_FAVED	"heart-red.svg"
 
 /*****************************************************************************/

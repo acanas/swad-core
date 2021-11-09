@@ -46,21 +46,9 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Cty_MAX_BYTES_SUBQUERY_CTYS		((1 + Lan_NUM_LANGUAGES) * 32)
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
-
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/***************************** Private variables *****************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
+#define Cty_DB_MAX_BYTES_SUBQUERY_CTYS		((1 + Lan_NUM_LANGUAGES) * 32)
+#define Cty_DB_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
+#define Cty_DB_MAX_BYTES_SUBQUERY_CTYS_WWW	((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
 
 /*****************************************************************************/
 /**************************** Create a new country ***************************/
@@ -71,10 +59,10 @@ void Cty_DB_CreateCountry (const struct Cty_Countr *Cty)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;
    char StrField[32];
-   char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS_NAME + 1];
-   char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS_WWW + 1];
+   char SubQueryNam1[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryNam2[Cty_DB_MAX_BYTES_SUBQUERY_CTYS_NAME + 1];
+   char SubQueryWWW1[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryWWW2[Cty_DB_MAX_BYTES_SUBQUERY_CTYS_WWW + 1];
 
    /***** Create a new country *****/
    SubQueryNam1[0] = '\0';
@@ -162,10 +150,10 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char StrField[32];
-   char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryNam2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryWWW1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
-   char SubQueryWWW2[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryNam1[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryNam2[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryWWW1[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
+   char SubQueryWWW2[Cty_DB_MAX_BYTES_SUBQUERY_CTYS + 1];
    char *OrderBySubQuery = NULL;
    static const char *OrderBySubQueryFmt[Cty_NUM_ORDERS] =
      {

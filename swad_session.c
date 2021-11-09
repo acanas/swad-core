@@ -41,10 +41,6 @@
 #include "swad_timeline_database.h"
 
 /*****************************************************************************/
-/***************************** Private constants *****************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
@@ -62,7 +58,6 @@ static void Ses_RemoveSessionFromDB (void);
 
 void Ses_GetNumSessions (void)
   {
-   /***** Get the number of open sessions from database *****/
    Gbl.Session.NumSessions = (unsigned) DB_GetNumRowsTable ("ses_sessions");
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = (unsigned long) (Gbl.Session.NumSessions/
