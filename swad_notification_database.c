@@ -125,7 +125,23 @@ void Ntf_DB_MarkPendingNtfsAsSent (long ToUsrCod)
 /**************** Set one possible notification as seen by me ****************/
 /*****************************************************************************/
 
-void Ntf_DB_MarkNotifAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent,long Cod)
+void Ntf_DB_MarkNotifAsSeenUsingNtfCod (long NtfCod)
+  {
+   DB_QueryUPDATE ("can not set notification as seen",
+		   "UPDATE ntf_notifications"
+		     " SET Status=(Status | %u)"
+		   " WHERE NtfCod=%ld"
+		     " AND ToUsrCod=%ld",
+		   (unsigned) Ntf_STATUS_BIT_READ,
+		   NtfCod,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/**************** Set one possible notification as seen by me ****************/
+/*****************************************************************************/
+
+void Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
    /***** Trivial check: if no code specified, nothing to do *****/
    if (Cod <= 0)	// If the user code is specified
@@ -148,7 +164,7 @@ void Ntf_DB_MarkNotifAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 /** Set all notifications of this type in the current course as seen by me ***/
 /*****************************************************************************/
 
-void Ntf_DB_MarkNotifsInCrsAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent)
+void Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_NotifyEvent_t NotifyEvent)
   {
    DB_QueryUPDATE ("can not set notification(s) as seen",
 		   "UPDATE ntf_notifications"

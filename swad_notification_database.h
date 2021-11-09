@@ -48,8 +48,9 @@ void Ntf_DB_StoreNotifyEventToUsr (Ntf_NotifyEvent_t NotifyEvent,
 void Ntf_DB_UpdateMyLastAccessToNotifications (void);
 void Ntf_DB_MarkAllMyNotifAsSeen (void);
 void Ntf_DB_MarkPendingNtfsAsSent (long ToUsrCod);
-void Ntf_DB_MarkNotifAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent,long Cod);
-void Ntf_DB_MarkNotifsInCrsAsSeenByMe (Ntf_NotifyEvent_t NotifyEvent);
+void Ntf_DB_MarkNotifAsSeenUsingNtfCod (long NtfCod);
+void Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_NotifyEvent_t NotifyEvent,long Cod);
+void Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_NotifyEvent_t NotifyEvent);
 void Ntf_DB_MarkNotifsAsSeen (Ntf_NotifyEvent_t NotifyEvent);
 void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
 void Ntf_DB_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod);

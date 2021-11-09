@@ -1211,7 +1211,7 @@ void Msg_ExpRecMsg (void)
    Msg_DB_ExpandRcvMsg (Messages.ExpandedMsgCod);
 
    /***** Mark possible notification as seen *****/
-   Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_MESSAGE,Messages.ExpandedMsgCod);
+   Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MESSAGE,Messages.ExpandedMsgCod);
 
    /***** Show again the messages *****/
    Msg_ShowRecMsgs ();

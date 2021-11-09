@@ -431,7 +431,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Mark possible notification as seen *****/
-   Ntf_DB_MarkNotifsInCrsAsSeenByMe (Ntf_EVENT_NOTICE);
+   Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_EVENT_NOTICE);
   }
 
 /*****************************************************************************/

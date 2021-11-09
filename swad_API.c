@@ -3249,15 +3249,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
          if ((NtfCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
            {
 	    /***** Mark notification as read in the database *****/
-	    DB_QueryUPDATE ("can not mark notification as read",
-			    "UPDATE ntf_notifications"
-			      " SET Status=(Status | %u)"
-			    " WHERE NtfCod=%ld"
-			      " AND ToUsrCod=%ld",
-			    (unsigned) Ntf_STATUS_BIT_READ,
-			    (long) NtfCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
+	    Ntf_DB_MarkNotifAsSeenUsingNtfCod (NtfCod);
 	    NumNtfsMarkedAsRead++;
            }
         }

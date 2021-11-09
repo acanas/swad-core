@@ -702,7 +702,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 
    /***** Mark possible notification as seen *****/
    if (Svy.Scope == HieLvl_CRS)	// Only course surveys are notified
-      Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_SURVEY,Svy.Cod);
+      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SURVEY,Svy.Cod);
 
    if (ShowOnlyThisSvyComplete)
      {

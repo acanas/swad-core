@@ -280,7 +280,8 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
    /***** If it's not me, mark possible notification as seen *****/
    if (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))	// Not me
-      Ntf_DB_MarkNotifAsSeenByMe (Ntf_EVENT_FOLLOWER,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_FOLLOWER,
+                                      Gbl.Usrs.Other.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
