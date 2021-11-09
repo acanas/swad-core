@@ -757,13 +757,13 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		  if (CreateNotif)
 		    {
 		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TL_MENTION));
-		     Ntf_DB_StoreNotifyEventToOneUser (Ntf_EVENT_TL_MENTION,&UsrDat,PubCod,
-						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-										    0),
-						    Gbl.Hierarchy.Ins.InsCod,
-						    Gbl.Hierarchy.Ctr.CtrCod,
-						    Gbl.Hierarchy.Deg.DegCod,
-						    Gbl.Hierarchy.Crs.CrsCod);
+		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TL_MENTION,UsrDat.UsrCod,PubCod,
+						   (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+										   0),
+						   Gbl.Hierarchy.Ins.InsCod,
+						   Gbl.Hierarchy.Ctr.CtrCod,
+						   Gbl.Hierarchy.Deg.DegCod,
+						   Gbl.Hierarchy.Crs.CrsCod);
 		    }
 		 }
 	      }

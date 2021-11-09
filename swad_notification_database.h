@@ -42,10 +42,9 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
-                                       struct UsrData *UsrDat,
-                                       long Cod,Ntf_Status_t Status,
-                                       long InsCod,long CtrCod,long DegCod,long CrsCod);
+void Ntf_DB_StoreNotifyEventToUsr (Ntf_NotifyEvent_t NotifyEvent,
+                                   long ToUsrCod,long Cod,Ntf_Status_t Status,
+                                   long InsCod,long CtrCod,long DegCod,long CrsCod);
 void Ntf_DB_UpdateMyLastAccessToNotifications (void);
 void Ntf_DB_MarkAllMyNotifAsSeen (void);
 void Ntf_DB_MarkPendingNtfsAsSent (long ToUsrCod);

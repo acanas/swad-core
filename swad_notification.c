@@ -1173,14 +1173,15 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
               {
 	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
 		 {
-		  Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,
-						    (Ntf_Status_t) Ntf_STATUS_BIT_EMAIL,
-						    InsCod,CtrCod,DegCod,CrsCod);
+		  Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,Cod,
+						(Ntf_Status_t) Ntf_STATUS_BIT_EMAIL,
+						InsCod,CtrCod,DegCod,CrsCod);
 		  NumUsrsToBeNotifiedByEMail++;
 		 }
 	       else							// Don't send notification by email
-		  Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,(Ntf_Status_t) 0,
-						    InsCod,CtrCod,DegCod,CrsCod);
+		  Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,Cod,
+		                                (Ntf_Status_t) 0,
+						InsCod,CtrCod,DegCod,CrsCod);
               }
         }
 

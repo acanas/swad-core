@@ -97,8 +97,8 @@ static void Fol_PutHiddenParSelectedUsrsCods (void *SelectedUsrs);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
-static void Fol_FollowUsr (struct UsrData *UsrDat);
-static void Fol_UnfollowUsr (struct UsrData *UsrDat);
+static void Fol_FollowUsr (const struct UsrData *UsrDat);
+static void Fol_UnfollowUsr (const struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /********************** Put link to show users to follow **********************/
@@ -1098,7 +1098,7 @@ void Fol_UnfollowUsrs (void)
 /******************************** Follow user ********************************/
 /*****************************************************************************/
 
-static void Fol_FollowUsr (struct UsrData *UsrDat)
+static void Fol_FollowUsr (const struct UsrData *UsrDat)
   {
    bool CreateNotif;
    bool NotifyByEmail;
@@ -1124,20 +1124,20 @@ static void Fol_FollowUsr (struct UsrData *UsrDat)
 	  If this followed wants to receive notifications by email,
 	  activate the sending of a notification *****/
    if (CreateNotif)
-      Ntf_DB_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
-				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-								     0),
-				     Gbl.Hierarchy.Ins.InsCod,
-				     Gbl.Hierarchy.Ctr.CtrCod,
-				     Gbl.Hierarchy.Deg.DegCod,
-				     Gbl.Hierarchy.Crs.CrsCod);
+      Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_FOLLOWER,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+								    0),
+				    Gbl.Hierarchy.Ins.InsCod,
+				    Gbl.Hierarchy.Ctr.CtrCod,
+				    Gbl.Hierarchy.Deg.DegCod,
+				    Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
 /******************************* Unfollow user *******************************/
 /*****************************************************************************/
 
-static void Fol_UnfollowUsr (struct UsrData *UsrDat)
+static void Fol_UnfollowUsr (const struct UsrData *UsrDat)
   {
    /***** Avoid wrong cases *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||

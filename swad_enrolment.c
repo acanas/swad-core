@@ -112,7 +112,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole);
+static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
+                                      Rol_Role_t NewRole);
 
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
@@ -297,7 +298,8 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 /********* Create notification after register user in current course *********/
 /*****************************************************************************/
 
-static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
+static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
+                                      Rol_Role_t NewRole)
   {
    bool CreateNotif;
    bool NotifyByEmail;
@@ -334,13 +336,13 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    NotifyByEmail = CreateNotif && !ItsMe &&
 		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent));
    if (CreateNotif)
-      Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
-				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-					                             0),
-				     Gbl.Hierarchy.Ins.InsCod,
-				     Gbl.Hierarchy.Ctr.CtrCod,
-				     Gbl.Hierarchy.Deg.DegCod,
-				     Gbl.Hierarchy.Crs.CrsCod);
+      Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat->UsrCod,-1L,
+				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+					                            0),
+				    Gbl.Hierarchy.Ins.InsCod,
+				    Gbl.Hierarchy.Ctr.CtrCod,
+				    Gbl.Hierarchy.Deg.DegCod,
+				    Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

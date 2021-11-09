@@ -52,10 +52,9 @@ extern struct Globals Gbl;
 /************** Store a notify event to one user into database ***************/
 /*****************************************************************************/
 
-void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
-                                       struct UsrData *UsrDat,
-                                       long Cod,Ntf_Status_t Status,
-                                       long InsCod,long CtrCod,long DegCod,long CrsCod)
+void Ntf_DB_StoreNotifyEventToUsr (Ntf_NotifyEvent_t NotifyEvent,
+                                   long ToUsrCod,long Cod,Ntf_Status_t Status,
+                                   long InsCod,long CtrCod,long DegCod,long CrsCod)
   {
    DB_QueryINSERT ("can not create new notification event",
 		   "INSERT INTO ntf_notifications"
@@ -65,7 +64,7 @@ void Ntf_DB_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
 		   " (%u,%ld,%ld,"
 		     "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
 	           (unsigned) NotifyEvent,
-		   UsrDat->UsrCod,
+		   ToUsrCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 	           InsCod,
 	           CtrCod,

@@ -523,8 +523,8 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 
    /***** Mark possible notification as seen *****/
    Ntf_DB_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	                AsgCod,Gbl.Hierarchy.Crs.CrsCod,
-	                Gbl.Usrs.Me.UsrDat.UsrCod);
+	                   AsgCod,Gbl.Hierarchy.Crs.CrsCod,
+	                   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

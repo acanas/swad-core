@@ -76,7 +76,7 @@ long Msg_DB_CreateNewMsg (const char *Subject,const char *Content,long MedCod)
 /************* Insert a message in the table of sent messages ****************/
 /*****************************************************************************/
 
-void Msg_DB_CreateSntMsg (long MsgCod)
+void Msg_DB_CreateSntMsg (long MsgCod,long CrsCod)
   {
    DB_QueryINSERT ("can not create sent message",
 		   "INSERT INTO msg_snt"
@@ -84,7 +84,7 @@ void Msg_DB_CreateSntMsg (long MsgCod)
 		   " VALUES"
 		   " (%ld,%ld,%ld,'N',NOW())",
 	           MsgCod,
-	           Gbl.Hierarchy.Crs.CrsCod,
+	           CrsCod,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

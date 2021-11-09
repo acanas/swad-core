@@ -87,13 +87,13 @@ void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 	     If this author wants to receive notifications by email,
 	     activate the sending of a notification *****/
       if (CreateNotif)
-	 Ntf_DB_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,
-					(Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-									0),
-					Gbl.Hierarchy.Ins.InsCod,
-					Gbl.Hierarchy.Ctr.CtrCod,
-					Gbl.Hierarchy.Deg.DegCod,
-					Gbl.Hierarchy.Crs.CrsCod);
+	 Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,PubCod,
+				       (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+								       0),
+				       Gbl.Hierarchy.Ins.InsCod,
+				       Gbl.Hierarchy.Ctr.CtrCod,
+				       Gbl.Hierarchy.Deg.DegCod,
+				       Gbl.Hierarchy.Crs.CrsCod);
      }
 
    /***** Free memory used for user's data *****/

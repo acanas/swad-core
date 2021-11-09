@@ -124,6 +124,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_message_database.h"
 #include "swad_nickname_database.h"
 #include "swad_notice.h"
+#include "swad_notice_database.h"
 #include "swad_notification.h"
 #include "swad_notification_database.h"
 #include "swad_password.h"
@@ -269,7 +270,10 @@ static void API_GetLstGrpsSel (const char *Groups);
 
 static int API_GetMyLanguage (struct soap *soap);
 
-static int API_SendMessageToUsr (long OriginalMsgCod,long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,bool NotifyByEmail,const char *Subject,const char *Content);
+static int API_SendMessageToUsr (long OriginalMsgCod,
+                                 long ReplyUsrCod,long RecipientUsrCod,
+                                 bool NotifyByEmail,
+                                 const char *Subject,const char *Content);
 
 static int API_GetTstTags (struct soap *soap,
 			   long CrsCod,struct swad__getTestsOutput *getTestsOut);
@@ -3356,7 +3360,6 @@ int swad__sendMessage (struct soap *soap,
 
 	       /* Send message to this user */
 	       if ((ReturnCode = API_SendMessageToUsr ((long) messageCode,
-						       Gbl.Usrs.Me.UsrDat.UsrCod,
 						       ReplyUsrCod,
 						       Gbl.Usrs.Other.UsrDat.UsrCod,
 						       NotifyByEmail,
@@ -3385,80 +3388,45 @@ int swad__sendMessage (struct soap *soap,
 /*****************************************************************************/
 /************************* Send a message to one user ************************/
 /*****************************************************************************/
-/*
-API_SendMessageToUsr ((long) messageCode,
-                      Gbl.Usrs.Me.UsrDat.UsrCod,ReplyUsrCod,Gbl.Usrs.Other.UsrDat.UsrCod,
-                      NotifyByEmail,subject,body)) != SOAP_OK)
-*/
+
 static int API_SendMessageToUsr (long OriginalMsgCod,
-                                 long SenderUsrCod,long ReplyUsrCod,long RecipientUsrCod,
+                                 long ReplyUsrCod,long RecipientUsrCod,
                                  bool NotifyByEmail,
                                  const char *Subject,const char *Content)
   {
    static bool MsgAlreadyInserted = false;
-   static long NewMsgCod;
+   static long MsgCod;
 
    /***** Create message *****/
    if (!MsgAlreadyInserted)      // The message is inserted only once in the table of messages sent
      {
       /***** Insert message subject and body in the database *****/
       /* Get the code of the inserted item */
-      NewMsgCod =
-      DB_QueryINSERTandReturnCode ("can not create message",
-				   "INSERT INTO msg_content"
-				   " (Subject,Content,MedCod)"
-				   " VALUES"
-				   " ('%s','%s',-1)",
-				   Subject,
-				   Content);
+      MsgCod = Msg_DB_CreateNewMsg (Subject,Content,
+                                    -1L);	// No media content
 
       /* Insert message in sent messages */
-      DB_QueryINSERT ("can not create message",
-		      "INSERT INTO msg_snt"
-	              " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
-                      " VALUES"
-                      " (%ld,-1,%ld,'N',NOW())",
-		      NewMsgCod,
-		      SenderUsrCod);
+      Msg_DB_CreateSntMsg (MsgCod,
+                           -1L);		// No origin course
 
       MsgAlreadyInserted = true;
      }
 
    /***** Insert message received in the database *****/
-   DB_QueryINSERT ("can not create received message",
-		   "INSERT INTO msg_rcv"
-	           " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
-                   " VALUES"
-                   " (%ld,%ld,'%c','N','N','N')",
-		   NewMsgCod,
-		   RecipientUsrCod,
-		   NotifyByEmail ? 'Y' :
-				   'N');
+   Msg_DB_CreateRcvMsg (MsgCod,RecipientUsrCod,NotifyByEmail);
 
    /***** Create notification for this recipient.
-          If this recipient wants to receive notifications by email, activate the sending of a notification *****/
-   DB_QueryINSERT ("can not create new notification event",
-		   "INSERT INTO ntf_notifications"
-	           " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
-                   " VALUES"
-                   " (%u,%ld,%ld,-1,-1,-1,%ld,NOW(),%u)",
-		   (unsigned) Ntf_EVENT_MESSAGE,
-		   RecipientUsrCod,
-		   SenderUsrCod,
-		   NewMsgCod,
-		   (unsigned) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-					       0));
+          If this recipient wants to receive notifications by email,
+          activate the sending of a notification *****/
+   Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,RecipientUsrCod,MsgCod,
+				 (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+								 0),
+				 -1L,-1L,-1L,-1L);
 
    /***** If this recipient is the original sender of a message been replied... *****/
    if (RecipientUsrCod == ReplyUsrCod)
       /***** ...then update received message setting Replied field to true *****/
-      DB_QueryUPDATE ("can not update a received message",
-		      "UPDATE msg_rcv"
-		        " SET Replied='Y'"
-	              " WHERE MsgCod=%ld"
-	                " AND UsrCod=%ld",
-		      OriginalMsgCod,
-		      SenderUsrCod);
+      Msg_DB_SetRcvMsgAsReplied (OriginalMsgCod);
 
    return SOAP_OK;
   }
@@ -3512,15 +3480,7 @@ int swad__sendNotice (struct soap *soap,
 
    /***** Insert notice in the database *****/
    /* Get the code of the inserted item */
-   NotCod =
-   DB_QueryINSERTandReturnCode ("can not create message",
-				"INSERT INTO not_notices"
-				" (CrsCod,UsrCod,CreatTime,Content,Status)"
-				" VALUES"
-				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.Hierarchy.Crs.CrsCod,
-				Gbl.Usrs.Me.UsrDat.UsrCod,
-				body,(unsigned) Not_ACTIVE_NOTICE);
+   NotCod = Not_DB_InsertNotice (body);
 
    /***** Create notifications *****/
    // TODO: create notifications
