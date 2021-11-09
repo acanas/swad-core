@@ -1,7 +1,7 @@
-// swad_account.h: user's account
+// swad_template.h: template header file
 
-#ifndef _SWAD_ACC
-#define _SWAD_ACC
+#ifndef _SWAD_TPT
+#define _SWAD_TPT
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,50 +24,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdbool.h>		// For boolean type
-
-#include "swad_constant.h"
-#include "swad_user.h"
-
 /*****************************************************************************/
-/******************************** Public types *******************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Acc_REQUEST_REMOVE_USR,
-   Acc_REMOVE_USR,
-  } Acc_ReqOrRemUsr_t;
-
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/******************************* Public types ********************************/
 /*****************************************************************************/
 
-void Acc_PutLinkToCreateAccount (void);
-void Acc_ShowFormMyAccount (void);
-void Acc_CheckIfEmptyAccountExists (void);
-void Acc_ShowFormCreateMyAccount (void);
-
-void Acc_ShowFormGoToRequestNewAccount (void);
-void Acc_ShowFormChgMyAccount (void);
-void Acc_ShowFormChgOtherUsrAccount (void);
-void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args);
-bool Acc_CreateMyNewAccountAndLogIn (void);
-void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount);
-void Acc_AfterCreationNewAccount (void);
-
-void Acc_GetUsrCodAndRemUsrGbl (void);
-void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove);
-
-bool Acc_CheckIfICanEliminateAccount (long UsrCod);
-void Acc_AskIfRemoveMyAccount (void);
-void Acc_RemoveMyAccount (void);
-void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
-                                     Cns_QuietOrVerbose_t QuietOrVerbose);
-
-void Acc_PutIconToChangeUsrAccount (void);
+/*****************************************************************************/
+/***************************** Public prototypes *****************************/
+/*****************************************************************************/
 
 #endif

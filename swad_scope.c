@@ -35,30 +35,10 @@
 #include "swad_scope.h"
 
 /*****************************************************************************/
-/****************************** Public constants *****************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/***************************** Private constants *****************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-
-/*****************************************************************************/
-/************************* Private global variables **************************/
-/*****************************************************************************/
-
-/*****************************************************************************/
-/***************************** Private prototypes ****************************/
-/*****************************************************************************/
 
 /*****************************************************************************/
 /** Put a selector to choice between ranges when getting users for listing ***/
@@ -79,97 +59,97 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
    HTM_SELECT_Begin (SubmitOnChange,
 		     "id=\"%s\" name=\"%s\"",ParamName,ParamName);
 
-   for (Scope  = (HieLvl_Level_t) 0;
-	Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
-	Scope++)
-      if ((Gbl.Scope.Allowed & (1 << Scope)))
-	{
-	 /* Don't put forbidden options in selectable list */
-	 WriteScope = false;
-	 switch (Scope)
+      for (Scope  = (HieLvl_Level_t) 0;
+	   Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);
+	   Scope++)
+	 if ((Gbl.Scope.Allowed & (1 << Scope)))
 	   {
-	    case HieLvl_SYS:
-	       WriteScope = true;
-	       break;
-	    case HieLvl_CTY:
-	       if (Gbl.Hierarchy.Cty.CtyCod > 0)
-		  WriteScope = true;
-	       break;
-	    case HieLvl_INS:
-	       if (Gbl.Hierarchy.Ins.InsCod > 0)
-		  WriteScope = true;
-	       break;
-	    case HieLvl_CTR:
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-		  WriteScope = true;
-	       break;
-	    case HieLvl_DEG:
-	       if (Gbl.Hierarchy.Deg.DegCod > 0)
-		  WriteScope = true;
-	       break;
-	    case HieLvl_CRS:
-	       if (Gbl.Hierarchy.Level == HieLvl_CRS)
-		  WriteScope = true;
-	       break;
-	    default:
-	       Err_WrongScopeExit ();
-	       break;
-	   }
-
-	 if (WriteScope)
-	   {
-	    /***** Write allowed option *****/
-	    ScopeUnsigned = (unsigned) Scope;
+	    /* Don't put forbidden options in selectable list */
+	    WriteScope = false;
 	    switch (Scope)
 	      {
 	       case HieLvl_SYS:
-		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			      Gbl.Scope.Current == Scope,false,
-			      "%s: %s",
-			      Txt_System,
-			      Cfg_PLATFORM_SHORT_NAME);
+		  WriteScope = true;
 		  break;
 	       case HieLvl_CTY:
-		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			      Gbl.Scope.Current == Scope,false,
-			      "%s: %s",
-			      Txt_Country,
-			      Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+		  if (Gbl.Hierarchy.Cty.CtyCod > 0)
+		     WriteScope = true;
 		  break;
 	       case HieLvl_INS:
-		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			      Gbl.Scope.Current == Scope,false,
-			      "%s: %s",
-			      Txt_Institution,
-			      Gbl.Hierarchy.Ins.ShrtName);
+		  if (Gbl.Hierarchy.Ins.InsCod > 0)
+		     WriteScope = true;
 		  break;
 	       case HieLvl_CTR:
-		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			      Gbl.Scope.Current == Scope,false,
-			      "%s: %s",
-			      Txt_Center,
-			      Gbl.Hierarchy.Ctr.ShrtName);
+		  if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+		     WriteScope = true;
 		  break;
 	       case HieLvl_DEG:
-		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			      Gbl.Scope.Current == Scope,false,
-			      "%s: %s",
-			      Txt_Degree,
-			      Gbl.Hierarchy.Deg.ShrtName);
+		  if (Gbl.Hierarchy.Deg.DegCod > 0)
+		     WriteScope = true;
 		  break;
 	       case HieLvl_CRS:
-		  HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
-			      Gbl.Scope.Current == Scope,false,
-			      "%s: %s",
-			      Txt_Course,
-			      Gbl.Hierarchy.Crs.ShrtName);
+		  if (Gbl.Hierarchy.Level == HieLvl_CRS)
+		     WriteScope = true;
 		  break;
 	       default:
 		  Err_WrongScopeExit ();
 		  break;
 	      }
+
+	    if (WriteScope)
+	      {
+	       /***** Write allowed option *****/
+	       ScopeUnsigned = (unsigned) Scope;
+	       switch (Scope)
+		 {
+		  case HieLvl_SYS:
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+				 Gbl.Scope.Current == Scope,false,
+				 "%s: %s",
+				 Txt_System,
+				 Cfg_PLATFORM_SHORT_NAME);
+		     break;
+		  case HieLvl_CTY:
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+				 Gbl.Scope.Current == Scope,false,
+				 "%s: %s",
+				 Txt_Country,
+				 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+		     break;
+		  case HieLvl_INS:
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+				 Gbl.Scope.Current == Scope,false,
+				 "%s: %s",
+				 Txt_Institution,
+				 Gbl.Hierarchy.Ins.ShrtName);
+		     break;
+		  case HieLvl_CTR:
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+				 Gbl.Scope.Current == Scope,false,
+				 "%s: %s",
+				 Txt_Center,
+				 Gbl.Hierarchy.Ctr.ShrtName);
+		     break;
+		  case HieLvl_DEG:
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+				 Gbl.Scope.Current == Scope,false,
+				 "%s: %s",
+				 Txt_Degree,
+				 Gbl.Hierarchy.Deg.ShrtName);
+		     break;
+		  case HieLvl_CRS:
+		     HTM_OPTION (HTM_Type_UNSIGNED,&ScopeUnsigned,
+				 Gbl.Scope.Current == Scope,false,
+				 "%s: %s",
+				 Txt_Course,
+				 Gbl.Hierarchy.Crs.ShrtName);
+		     break;
+		  default:
+		     Err_WrongScopeExit ();
+		     break;
+		 }
+	      }
 	   }
-	}
 
    HTM_SELECT_End ();
   }

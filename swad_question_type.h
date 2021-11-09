@@ -59,8 +59,4 @@ typedef enum
 #define Qst_MAX_CHARS_ANSWERS_ONE_QST	(128 - 1)	// 127
 #define Qst_MAX_BYTES_ANSWERS_ONE_QST	((Qst_MAX_CHARS_ANSWERS_ONE_QST + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-/*****************************************************************************/
-/***************************** Public prototypes *****************************/
-/*****************************************************************************/
-
 #endif
