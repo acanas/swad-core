@@ -552,16 +552,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    extern const char *Txt_View_record_for_this_course;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = ActUnk,
-      [Rol_GST	  ] = ActUnk,
-      [Rol_USR	  ] = ActUnk,
-      [Rol_STD	  ] = ActSeeRecOneStd,
-      [Rol_NET	  ] = ActSeeRecOneTch,
-      [Rol_TCH	  ] = ActSeeRecOneTch,
-      [Rol_DEG_ADM] = ActUnk,
-      [Rol_CTR_ADM] = ActUnk,
-      [Rol_INS_ADM] = ActUnk,
-      [Rol_SYS_ADM] = ActUnk,
+      [Rol_STD] = ActSeeRecOneStd,
+      [Rol_NET] = ActSeeRecOneTch,
+      [Rol_TCH] = ActSeeRecOneTch,
      };
    const char *ClassTxt;
    const char *ClassLink;
@@ -612,7 +605,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 // The form must be unique because
 	 // the list of connected users
 	 // is dynamically updated via AJAX
-         if (NextAction[Role] == ActUnk)
+         if (!NextAction[Role])
 	    Err_WrongRoleExit ();
          Frm_BeginFormUnique (NextAction[Role]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
@@ -652,16 +645,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = ActUnk,
-      [Rol_GST	  ] = ActUnk,
-      [Rol_USR	  ] = ActUnk,
-      [Rol_STD	  ] = ActSeeRecOneStd,
-      [Rol_NET	  ] = ActSeeRecOneTch,
-      [Rol_TCH	  ] = ActSeeRecOneTch,
-      [Rol_DEG_ADM] = ActUnk,
-      [Rol_CTR_ADM] = ActUnk,
-      [Rol_INS_ADM] = ActUnk,
-      [Rol_SYS_ADM] = ActUnk,
+      [Rol_STD] = ActSeeRecOneStd,
+      [Rol_NET] = ActSeeRecOneTch,
+      [Rol_TCH] = ActSeeRecOneTch,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -727,7 +713,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 		  if (PutLinkToRecord)
 		    {
-		     if (NextAction[Role] == ActUnk)
+		     if (!NextAction[Role])
 			Err_WrongRoleExit ();
 		     Frm_BeginForm (NextAction[Role]);
 		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);

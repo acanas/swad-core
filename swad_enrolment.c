@@ -289,27 +289,19 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
                                       Rol_Role_t NewRole)
   {
+   static const Ntf_NotifyEvent_t NotifyEvent[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = Ntf_EVENT_ENROLMENT_STD,
+      [Rol_NET] = Ntf_EVENT_ENROLMENT_NET,
+      [Rol_TCH] = Ntf_EVENT_ENROLMENT_TCH,
+     };
    bool CreateNotif;
    bool NotifyByEmail;
-   Ntf_NotifyEvent_t NotifyEvent;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if user's role is allowed *****/
-   switch (NewRole)
-     {
-      case Rol_STD:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
-	 break;
-      case Rol_NET:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_NET;
-	 break;
-      case Rol_TCH:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_TCH;
-	 break;
-      default:
-	 NotifyEvent = Ntf_EVENT_UNKNOWN;
-         Err_WrongRoleExit ();
-     }
+   if (!NotifyEvent[NewRole])
+      Err_WrongRoleExit ();
 
    /***** Remove possible enrolment request ******/
    Enr_RemUsrEnrolmentRequestInCrs (UsrDat->UsrCod,Gbl.Hierarchy.Crs.CrsCod);
@@ -320,11 +312,11 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
    Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
-   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent));
+   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole]));
    NotifyByEmail = CreateNotif && !ItsMe &&
-		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent));
+		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole]));
    if (CreateNotif)
-      Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat->UsrCod,-1L,
+      Ntf_DB_StoreNotifyEventToUsr (NotifyEvent[NewRole],UsrDat->UsrCod,-1L,
 				    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 					                            0),
 				    Gbl.Hierarchy.Ins.InsCod,
@@ -377,7 +369,20 @@ void Enr_ReqAcceptRegisterInCrs (void)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Confirm_my_enrolment;
    extern const char *Txt_Remove_me_from_this_course;
-   Ntf_NotifyEvent_t NotifyEvent;
+   static const struct
+     {
+      struct
+        {
+	 Act_Action_t Accept;
+	 Act_Action_t Refuse;
+        } NextAction;
+      Ntf_NotifyEvent_t NotifyEvent;
+     } WhatToDo[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = {{ActAccEnrStd,ActRemMe_Std},Ntf_EVENT_ENROLMENT_STD},
+      [Rol_NET] = {{ActAccEnrNET,ActRemMe_NET},Ntf_EVENT_ENROLMENT_NET},
+      [Rol_TCH] = {{ActAccEnrTch,ActRemMe_Tch},Ntf_EVENT_ENROLMENT_TCH},
+     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Enrolment,
@@ -390,62 +395,26 @@ void Enr_ReqAcceptRegisterInCrs (void)
 		     Gbl.Hierarchy.Crs.FullName);
 
       /***** Send button to accept register in the current course *****/
-      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
-	{
-	 case Rol_STD:
-	    Frm_BeginForm (ActAccEnrStd);
-	    break;
-	 case Rol_NET:
-	    Frm_BeginForm (ActAccEnrNET);
-	    break;
-	 case Rol_TCH:
-	    Frm_BeginForm (ActAccEnrTch);
-	    break;
-	 default:
-	    Err_WrongRoleExit ();
-	}
-      Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
+      if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept)
+	 Err_WrongRoleExit ();
+      Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Accept);
+	 Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
       Frm_EndForm ();
 
       /***** Send button to refuse register in the current course *****/
-      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
-	{
-	 case Rol_STD:
-	    Frm_BeginForm (ActRemMe_Std);
-	    break;
-	 case Rol_NET:
-	    Frm_BeginForm (ActRemMe_NET);
-	    break;
-	 case Rol_TCH:
-	    Frm_BeginForm (ActRemMe_Tch);
-	    break;
-	 default:
-	    Err_WrongRoleExit ();
-	}
-      Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
+      if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse)
+	 Err_WrongRoleExit ();
+      Frm_BeginForm (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NextAction.Refuse);
+	 Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
       Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Mark possible notification as seen *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
-     {
-      case Rol_STD:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
-	 break;
-      case Rol_NET:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_NET;
-	 break;
-      case Rol_TCH:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_TCH;
-	 break;
-      default:
-	 NotifyEvent = Ntf_EVENT_UNKNOWN;
-	 Err_WrongRoleExit ();
-	 break;
-     }
-   Ntf_DB_MarkNotifsInCrsAsSeen (NotifyEvent);
+   if (!WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NotifyEvent)
+      Err_WrongRoleExit ();
+   Ntf_DB_MarkNotifsInCrsAsSeen (WhatToDo[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs].NotifyEvent);
   }
 
 /*****************************************************************************/
@@ -566,8 +535,16 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrolment_removing;
    extern const char *Txt_Confirm;
-   Act_Action_t NextAction;
-   const char *Title;
+   static const struct
+     {
+      Act_Action_t NextAction;
+      const char **Title;
+     } WhatToDo[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = {ActRcvFrmEnrSevStd,&Txt_Administer_multiple_students            },
+      [Rol_NET] = {ActRcvFrmEnrSevNET,&Txt_Administer_multiple_non_editing_teachers},
+      [Rol_TCH] = {ActRcvFrmEnrSevTch,&Txt_Administer_multiple_teachers            },
+     };
 
    /***** Contextual menu *****/
    if (Gbl.Hierarchy.Level == HieLvl_CRS)	 	// Course selected
@@ -594,8 +571,6 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	       Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
 	       break;
 	    default:
-	       NextAction = ActUnk;
-	       Title = NULL;
 	       Err_WrongRoleExit ();
 	       break;
 	   }
@@ -604,30 +579,12 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
 
    /***** Form to send students to be enroled / removed *****/
-   switch (Role)
-     {
-      case Rol_STD:
-	 NextAction = ActRcvFrmEnrSevStd;
-	 Title = Txt_Administer_multiple_students;
-	 break;
-      case Rol_NET:
-	 NextAction = ActRcvFrmEnrSevNET;
-	 Title = Txt_Administer_multiple_non_editing_teachers;
-	 break;
-      case Rol_TCH:
-	 NextAction = ActRcvFrmEnrSevTch;
-	 Title = Txt_Administer_multiple_teachers;
-	 break;
-      default:
-	 NextAction = ActUnk;
-	 Title = NULL;
-	 Err_WrongRoleExit ();
-	 break;
-     }
-   Frm_BeginForm (NextAction);
+   if (!WhatToDo[Role].NextAction)
+      Err_WrongRoleExit ();
+   Frm_BeginForm (WhatToDo[Role].NextAction);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Title,
+      Box_BoxBegin (NULL,*WhatToDo[Role].Title,
 		    NULL,NULL,
 		    Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
@@ -992,7 +949,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       case Enr_REGISTER_SPECIFIED_USRS_IN_CRS:
 	 WhatToDo.RemoveUsrs = false;
 	 WhatToDo.RemoveSpecifiedUsrs = false;	// Ignored
-	 WhatToDo.EliminateUsrs = false;		// Ignored
+	 WhatToDo.EliminateUsrs = false;	// Ignored
 	 WhatToDo.RegisterUsrs = true;
 	 break;
       case Enr_REMOVE_SPECIFIED_USRS_FROM_CRS:
@@ -2129,7 +2086,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    bool UsrExists;
    bool UsrBelongsToCrs;
    Rol_Role_t DesiredRole;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = ActReqMdfStd,
+      [Rol_NET] = ActReqMdfNET,
+      [Rol_TCH] = ActReqMdfTch,
+     };
 
    /***** Remove expired enrolment requests *****/
    Enr_DB_RemoveExpiredEnrolmentRequests ();
@@ -2294,23 +2256,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** Button to confirm the request *****/
 		     HTM_TD_Begin ("class=\"DAT LT\"");
-			switch (DesiredRole)
-			  {
-			   case Rol_STD:
-			      NextAction = ActReqMdfStd;
-			      break;
-			   case Rol_NET:
-			      NextAction = ActReqMdfNET;
-			      break;
-			   case Rol_TCH:
-			      NextAction = ActReqMdfTch;
-			      break;
-			   default:
-			      NextAction = ActUnk;
-			      Err_WrongRoleExit ();
-			      break;
-			  }
-			Frm_BeginForm (NextAction);
+			if (!NextAction[DesiredRole])
+			   Err_WrongRoleExit ();
+			Frm_BeginForm (NextAction[DesiredRole]);
 			Crs_PutParamCrsCod (Crs.CrsCod);
 			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutCreateButtonInline (Txt_Register);
@@ -2398,32 +2346,23 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Administer_multiple_students;
    extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
-   Act_Action_t NextAction;
-   const char *TitleText;
-
-   switch (Role)
+   static const struct
      {
-      case Rol_STD:
-	 NextAction = ActReqEnrSevStd;
-	 TitleText = Txt_Administer_multiple_students;
-	 break;
-      case Rol_NET:
-	 NextAction = ActReqEnrSevNET;
-	 TitleText = Txt_Administer_multiple_non_editing_teachers;
-	 break;
-      case Rol_TCH:
-	 NextAction = ActReqEnrSevTch;
-	 TitleText = Txt_Administer_multiple_teachers;
-	 break;
-      default:
-	 NextAction = ActUnk;
-	 TitleText = NULL;
-	 Err_WrongRoleExit ();
-     }
-   Lay_PutContextualLinkIconText (NextAction,NULL,
+      Act_Action_t NextAction;
+      const char **Title;
+     } WhatToDo[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = {ActReqEnrSevStd,&Txt_Administer_multiple_students            },
+      [Rol_NET] = {ActReqEnrSevNET,&Txt_Administer_multiple_non_editing_teachers},
+      [Rol_TCH] = {ActReqEnrSevTch,&Txt_Administer_multiple_teachers            },
+     };
+
+   if (!WhatToDo[Role].NextAction)
+      Err_WrongRoleExit ();
+   Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,
                                   NULL,NULL,
 				  "users-cog.svg",
-				  TitleText);
+				  *WhatToDo[Role].Title);
   }
 
 /*****************************************************************************/
@@ -2478,7 +2417,13 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_one_user;
    extern const char *Txt_Administer_one_user;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_GST] = ActReqMdfOth,
+      [Rol_STD] = ActReqMdfStd,
+      [Rol_NET] = ActReqMdfNET,
+      [Rol_TCH] = ActReqMdfTch,
+     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Administer_one_user,
@@ -2486,26 +2431,9 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
                  Hlp_USERS_Administration_administer_one_user,Box_NOT_CLOSABLE);
 
       /***** Write form to request another user's ID *****/
-      switch (Role)
-	{
-	 case Rol_GST:
-	    NextAction = ActReqMdfOth;
-	    break;
-	 case Rol_STD:
-	    NextAction = ActReqMdfStd;
-	    break;
-	 case Rol_NET:
-	    NextAction = ActReqMdfNET;
-	    break;
-	 case Rol_TCH:
-	    NextAction = ActReqMdfTch;
-	    break;
-	 default:
-	    NextAction = ActUnk;
-	    Err_WrongRoleExit ();
-	    break;
-	}
-      Enr_WriteFormToReqAnotherUsrID (NextAction,NULL);
+      if (!NextAction[Role])
+	 Err_WrongRoleExit ();
+      Enr_WriteFormToReqAnotherUsrID (NextAction[Role],NULL);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -2804,6 +2732,13 @@ void Enr_CreateNewUsr1 (void)
    extern const char *Txt_The_ID_X_is_not_valid;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
+   static const Act_Action_t Action[Rol_NUM_ROLES] =
+     {
+      [Rol_GST] = ActCreOth,
+      [Rol_STD] = ActCreStd,
+      [Rol_NET] = ActCreNET,
+      [Rol_TCH] = ActCreTch,
+     };
 
    /***** Get user's ID from form *****/
    ID_GetParamOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
@@ -2862,24 +2797,9 @@ void Enr_CreateNewUsr1 (void)
 	}
 
       /***** Change current action *****/
-      switch (NewRole)
-        {
-	 case Rol_GST:
-	    Gbl.Action.Act = ActCreOth;
-	    break;
-	 case Rol_STD:
-	    Gbl.Action.Act = ActCreStd;
-	    break;
-	 case Rol_NET:
-	    Gbl.Action.Act = ActCreNET;
-	    break;
-	 case Rol_TCH:
-	    Gbl.Action.Act = ActCreTch;
-	    break;
-	 default:
-	    Err_WrongRoleExit ();
-	    break;
-        }
+      if (!Action[NewRole])
+	 Err_WrongRoleExit ();
+      Gbl.Action.Act = Action[NewRole];
       Tab_SetCurrentTab ();
      }
    else        // User's ID not valid
@@ -2915,6 +2835,13 @@ void Enr_ModifyUsr1 (void)
    bool ItsMe;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
+   static const Act_Action_t Action[Rol_NUM_ROLES] =
+     {
+      [Rol_GST] = ActUpdOth,
+      [Rol_STD] = ActUpdStd,
+      [Rol_NET] = ActUpdNET,
+      [Rol_TCH] = ActUpdTch,
+     };
 
    /***** Get user from form *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -2993,24 +2920,9 @@ void Enr_ModifyUsr1 (void)
 		    }
 
 		  /***** Change current action *****/
-		  switch (NewRole)
-		    {
-		     case Rol_GST:
-			Gbl.Action.Act = ActUpdOth;
-			break;
-		     case Rol_STD:
-			Gbl.Action.Act = ActUpdStd;
-			break;
-		     case Rol_NET:
-			Gbl.Action.Act = ActUpdNET;
-			break;
-		     case Rol_TCH:
-			Gbl.Action.Act = ActUpdTch;
-			break;
-		     default:
-			Err_WrongRoleExit ();
-			break;
-		    }
+		  if (!Action[NewRole])
+		     Err_WrongRoleExit ();
+		  Gbl.Action.Act = Action[NewRole];
 		  Tab_SetCurrentTab ();
 		 }
 	      }
@@ -3125,7 +3037,12 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
    extern const char *Txt_Remove_me_from_this_course;
    extern const char *Txt_Remove_user_from_this_course;
    bool ItsMe;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_STD] = ActRemStdCrs,
+      [Rol_NET] = ActRemNETCrs,
+      [Rol_TCH] = ActRemTchCrs,
+     };
 
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
@@ -3141,23 +3058,9 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
       /* Show form to request confirmation */
-      switch (UsrDat->Roles.InCurrentCrs)
-        {
-	 case Rol_STD:
-	    NextAction = ActRemStdCrs;
-	    break;
-	 case Rol_NET:
-	    NextAction = ActRemNETCrs;
-	    break;
-	 case Rol_TCH:
-	    NextAction = ActRemTchCrs;
-	    break;
-	 default:
-	    NextAction = ActUnk;
-	    Err_WrongRoleExit ();
-	    break;
-        }
-      Frm_BeginForm (NextAction);
+      if (!NextAction[UsrDat->Roles.InCurrentCrs])
+	 Err_WrongRoleExit ();
+      Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
 	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :

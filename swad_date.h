@@ -96,6 +96,7 @@ typedef enum
    Dat_FORM_SECONDS_ON,
   } Dat_FormSeconds;
 
+#define Dat_NUM_SET_HMS 3
 typedef enum
   {
    Dat_HMS_DO_NOT_SET = 0,

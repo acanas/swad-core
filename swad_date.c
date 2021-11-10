@@ -556,6 +556,12 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       [Dat_FORM_SECONDS_OFF] = 5,
       [Dat_FORM_SECONDS_ON ] = 1,
      };
+   static const char *Format[Dat_NUM_SET_HMS] =
+     {
+      [Dat_HMS_DO_NOT_SET] = NULL,
+      [Dat_HMS_TO_000000 ] = "setHMSTo000000('%s');",	// Set HH:MM:SS form selectors to 00:00:00
+      [Dat_HMS_TO_235959 ] = "setHMSTo235959('%s');",	// Set HH:MM:SS form selectors to 23:59:59
+     };
    char *IdTimeUTC;
    char *ParamNameTimeUTC;
 
@@ -723,23 +729,12 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_SCRIPT_Begin (NULL,NULL);
       HTM_TxtF ("setLocalDateTimeFormFromUTC('%s',%ld);\n"	// Set date-time form from UTC time
 		"adjustDateForm('%s');\n"			// Adjust date-time form
-		"setUTCFromLocalDateTimeForm('%s');\n",	// Adjust UTC time from date-time form
+		"setUTCFromLocalDateTimeForm('%s');\n",		// Adjust UTC time from date-time form
 		Id,(long) TimeUTC,
 		Id,
 		Id);
-      switch (SetHMS)
-	{
-	 case Dat_HMS_TO_000000:
-	    // Set HH:MM:SS form selectors to 00:00:00
-	    HTM_TxtF ("setHMSTo000000('%s');",Id);	// Hidden TimeUTC is also adjusted
-	    break;
-	 case Dat_HMS_TO_235959:
-	    // Set HH:MM:SS form selectors to 23:59:59
-	    HTM_TxtF ("setHMSTo235959('%s');",Id);	// Hidden TimeUTC is also adjusted
-	    break;
-	 default:
-	    break;
-	}
+      if (Format[SetHMS])
+	 HTM_TxtF (Format[SetHMS],Id);	// Hidden TimeUTC is also adjusted
    HTM_SCRIPT_End ();
   }
 

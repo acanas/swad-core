@@ -6365,16 +6365,9 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
   {
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK    ] = ActUnk,
-      [Rol_GST    ] = ActUnk,
-      [Rol_USR    ] = ActUnk,
-      [Rol_STD    ] = ActSeeRecOneStd,
-      [Rol_NET    ] = ActSeeRecOneTch,
-      [Rol_TCH    ] = ActSeeRecOneTch,
-      [Rol_DEG_ADM] = ActUnk,
-      [Rol_CTR_ADM] = ActUnk,
-      [Rol_INS_ADM] = ActUnk,
-      [Rol_SYS_ADM] = ActUnk,
+      [Rol_STD] = ActSeeRecOneStd,
+      [Rol_NET] = ActSeeRecOneTch,
+      [Rol_TCH] = ActSeeRecOneTch,
      };
 
    /***** Show user's photo *****/
@@ -6395,7 +6388,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Action to go to user's record depending on role in course */
-   if (NextAction[UsrDat->Roles.InCurrentCrs] == ActUnk)
+   if (!NextAction[UsrDat->Roles.InCurrentCrs])
       /* Begin div */
       HTM_DIV_Begin ("class=\"LT AUTHOR_TXT\"");
    else

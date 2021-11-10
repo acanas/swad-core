@@ -3225,16 +3225,9 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    extern const char *Txt_View_record_for_this_course;
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
-      [Rol_UNK	  ] = ActUnk,
-      [Rol_GST	  ] = ActUnk,
-      [Rol_USR	  ] = ActUnk,
-      [Rol_STD	  ] = ActSeeRecOneStd,
-      [Rol_NET	  ] = ActSeeRecOneTch,
-      [Rol_TCH	  ] = ActSeeRecOneTch,
-      [Rol_DEG_ADM] = ActUnk,
-      [Rol_CTR_ADM] = ActUnk,
-      [Rol_INS_ADM] = ActUnk,
-      [Rol_SYS_ADM] = ActUnk,
+      [Rol_STD] = ActSeeRecOneStd,
+      [Rol_NET] = ActSeeRecOneTch,
+      [Rol_TCH] = ActSeeRecOneTch,
      };
 
    /***** Show user's photo *****/
@@ -3247,9 +3240,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
       HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-	 if (NextAction[UsrDat->Roles.InCurrentCrs] == ActUnk)
+	 if (!NextAction[UsrDat->Roles.InCurrentCrs])
 	    Err_WrongRoleExit ();
-
 	 Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
