@@ -123,7 +123,6 @@ unsigned Gam_DB_GetListGames (MYSQL_RES **mysql_res,Gam_Order_t SelectedOrder)
 	                          "gam_games.Title DESC",
       [Gam_ORDER_BY_TITLE     ] = "gam_games.Title",
      };
-   ;
    char *HiddenSubQuery;
    unsigned NumGames;
 

@@ -114,22 +114,22 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    extern const char *Txt_documents_in_my_courses;
    extern const char *Txt_open_documents;
    extern const char *Txt_Search;
-   const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
+   static const char **Titles[Sch_NUM_WHAT_TO_SEARCH] =
      {
-      [Sch_SEARCH_UNKNOWN            ] = "",
-      [Sch_SEARCH_ALL                ] = Txt_all,
-      [Sch_SEARCH_COUNTRIES          ] = Txt_countries,
-      [Sch_SEARCH_INSTITS            ] = Txt_institutions,
-      [Sch_SEARCH_CENTERS            ] = Txt_centers,
-      [Sch_SEARCH_DEGREES            ] = Txt_degrees,
-      [Sch_SEARCH_COURSES            ] = Txt_courses,
-      [Sch_SEARCH_USERS              ] = Txt_users[Usr_SEX_UNKNOWN],
-      [Sch_SEARCH_TEACHERS           ] = Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_UNKNOWN],
-      [Sch_SEARCH_STUDENTS           ] = Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],
-      [Sch_SEARCH_GUESTS             ] = Txt_ROLES_PLURAL_abc[Rol_GST][Usr_SEX_UNKNOWN],
-      [Sch_SEARCH_OPEN_DOCUMENTS     ] = Txt_open_documents,
-      [Sch_SEARCH_DOCUM_IN_MY_COURSES] = Txt_documents_in_my_courses,
-      [Sch_SEARCH_MY_DOCUMENTS       ] = Txt_my_documents,
+      [Sch_SEARCH_UNKNOWN            ] = NULL,
+      [Sch_SEARCH_ALL                ] = &Txt_all,
+      [Sch_SEARCH_COUNTRIES          ] = &Txt_countries,
+      [Sch_SEARCH_INSTITS            ] = &Txt_institutions,
+      [Sch_SEARCH_CENTERS            ] = &Txt_centers,
+      [Sch_SEARCH_DEGREES            ] = &Txt_degrees,
+      [Sch_SEARCH_COURSES            ] = &Txt_courses,
+      [Sch_SEARCH_USERS              ] = &Txt_users[0],
+      [Sch_SEARCH_TEACHERS           ] = &Txt_ROLES_PLURAL_abc[Rol_TCH][0],
+      [Sch_SEARCH_STUDENTS           ] = &Txt_ROLES_PLURAL_abc[Rol_STD][0],
+      [Sch_SEARCH_GUESTS             ] = &Txt_ROLES_PLURAL_abc[Rol_GST][0],
+      [Sch_SEARCH_OPEN_DOCUMENTS     ] = &Txt_open_documents,
+      [Sch_SEARCH_DOCUM_IN_MY_COURSES] = &Txt_documents_in_my_courses,
+      [Sch_SEARCH_MY_DOCUMENTS       ] = &Txt_my_documents,
      };
    Sch_WhatToSearch_t WhatToSearch;
    unsigned WTS;
@@ -178,7 +178,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 			WTS = (unsigned) WhatToSearch;
 			HTM_OPTION (HTM_Type_UNSIGNED,&WTS,
 				    Gbl.Search.WhatToSearch == WhatToSearch,false,
-				    "%s",Titles[WhatToSearch]);
+				    "%s",*Titles[WhatToSearch]);
 		       }
 	       HTM_SELECT_End ();
 	    HTM_LABEL_End ();

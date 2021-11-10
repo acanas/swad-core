@@ -124,8 +124,12 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Exa_NUM_ORDERS] =
      {
-      [Exa_ORDER_BY_START_DATE] = "StartTime DESC,EndTime DESC,exa_exams.Title DESC",
-      [Exa_ORDER_BY_END_DATE  ] = "EndTime DESC,StartTime DESC,exa_exams.Title DESC",
+      [Exa_ORDER_BY_START_DATE] = "StartTime DESC,"
+	                          "EndTime DESC,"
+	                          "exa_exams.Title DESC",
+      [Exa_ORDER_BY_END_DATE  ] = "EndTime DESC,"
+	                          "StartTime DESC,"
+	                          "exa_exams.Title DESC",
       [Exa_ORDER_BY_TITLE     ] = "exa_exams.Title",
      };
    char *HiddenSubQuery;

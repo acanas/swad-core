@@ -1788,11 +1788,11 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
-   const char *TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
+   static const char **TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = NULL,
-      [Msg_RECEIVED] = Txt_Messages_received_from_A_COURSE,
-      [Msg_SENT    ] = Txt_Messages_sent_from_A_COURSE
+      [Msg_RECEIVED] = &Txt_Messages_received_from_A_COURSE,
+      [Msg_SENT    ] = &Txt_Messages_sent_from_A_COURSE
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1815,7 +1815,7 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
 
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtF ("%s&nbsp;",TxtSelector[Messages->TypeOfMessages]);
+      HTM_TxtF ("%s&nbsp;",*TxtSelector[Messages->TypeOfMessages]);
       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			"name=\"FilterCrsCod\"");
 
@@ -1855,11 +1855,11 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
-   const char *TxtFromTo[Msg_NUM_TYPES_OF_MSGS] =
+   static const char **TxtFromTo[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = NULL,
-      [Msg_RECEIVED] = Txt_MSG_From,
-      [Msg_SENT    ] = Txt_MSG_To
+      [Msg_RECEIVED] = &Txt_MSG_From,
+      [Msg_SENT    ] = &Txt_MSG_To
      };
 
    /***** Begin table *****/
@@ -1870,7 +1870,7 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 	 /***** Filter authors/recipients *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       HTM_TxtColonNBSP (TxtFromTo[Messages->TypeOfMessages]);
+	       HTM_TxtColonNBSP (*TxtFromTo[Messages->TypeOfMessages]);
 	       HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
 				 Messages->FilterFromTo,
 				 "size=\"20\"");

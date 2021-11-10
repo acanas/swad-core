@@ -114,6 +114,7 @@ typedef enum
   } Dat_Format_t;	// Do not change these numbers because they are used in database
 #define Dat_FORMAT_DEFAULT Dat_FORMAT_YYYY_MM_DD
 
+#define Dat_NUM_SEPARATORS 3
 typedef enum
   {
    Dat_SEPARATOR_NONE,	// No separator

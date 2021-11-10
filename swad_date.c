@@ -1639,7 +1639,7 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 				   bool WriteToday,bool WriteDateOnSameDay,
 				   bool WriteWeekDay,unsigned WriteHMS)
   {
-   static const char *SeparatorStr[] =
+   static const char *SeparatorStr[Dat_NUM_SEPARATORS] =
      {
       [Dat_SEPARATOR_NONE ] = "",
       [Dat_SEPARATOR_COMMA] = ",&nbsp;",

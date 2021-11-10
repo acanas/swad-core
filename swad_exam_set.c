@@ -951,10 +951,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       [Qst_INVALID_QUESTION] = "times-red.svg",
       [Qst_VALID_QUESTION  ] = "check-green.svg",
      };
-   const char *Title[Qst_NUM_VALIDITIES] =
+   static const char **Title[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = Txt_Invalid_question,
-      [Qst_VALID_QUESTION  ] = Txt_Valid_question,
+      [Qst_INVALID_QUESTION] = &Txt_Invalid_question,
+      [Qst_VALID_QUESTION  ] = &Txt_Valid_question,
      };
 
    /***** Begin table *****/
@@ -1005,7 +1005,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	       Lay_PutContextualLinkOnlyIcon (NextAction[Question.Validity],Anchor,
 					      ExaSet_PutParamsOneQst,Exams,
 					      Icon[Question.Validity],
-					      Title[Question.Validity]);
+					      *Title[Question.Validity]);
 
 	    HTM_TD_End ();
 

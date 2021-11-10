@@ -159,7 +159,8 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
    static const char *OrderBySubQueryFmt[Cty_NUM_ORDERS] =
      {
       [Cty_ORDER_BY_COUNTRY ] = "Name_%s",
-      [Cty_ORDER_BY_NUM_USRS] = "NumUsrs DESC,Name_%s",
+      [Cty_ORDER_BY_NUM_USRS] = "NumUsrs DESC,"
+	                        "Name_%s",
      };
    unsigned NumCtys;
    Lan_Language_t Lan;

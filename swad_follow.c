@@ -76,8 +76,8 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat);
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat);
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat);
 static void Fol_PutInactiveIconToFollowUnfollow (void);
-static void Fol_PutIconToFollow (struct UsrData *UsrDat);
-static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
+static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
@@ -135,34 +135,34 @@ void Fol_SuggestUsrsToFollowMainZone (void)
                          Fol_PutIconsWhoToFollow,NULL,
                          Hlp_START_Profiles_who_to_follow,Box_NOT_CLOSABLE,2);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+	 /***** Initialize structure with user's data *****/
+	 Usr_UsrDataConstructor (&UsrDat);
 
-      /***** List users *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 /***** Get user *****/
-	 row = mysql_fetch_row (mysql_res);
+	 /***** List users *****/
+	 for (NumUsr = 0;
+	      NumUsr < NumUsrs;
+	      NumUsr++)
+	   {
+	    /***** Get user *****/
+	    row = mysql_fetch_row (mysql_res);
 
-	 /* Get user's code (row[0]) */
-	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	    /* Get user's code (row[0]) */
+	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	 /***** Show user *****/
-	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	    HTM_TR_Begin (NULL);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	    Fol_ShowFollowedOrFollower (&UsrDat);
-	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
-	     NumUsr == NumUsrs - 1)
-	    HTM_TR_End ();
-	}
+	    /***** Show user *****/
+	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
+	       HTM_TR_Begin (NULL);
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							 Usr_DONT_GET_PREFS,
+							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	       Fol_ShowFollowedOrFollower (&UsrDat);
+	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+		NumUsr == NumUsrs - 1)
+	       HTM_TR_End ();
+	   }
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+	 /***** Free memory used for user's data *****/
+	 Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table and box *****/
       Box_BoxTableEnd ();
@@ -198,42 +198,42 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"CONNECTED\"");
 
-      /***** Title with link to suggest more users to follow *****/
-      Frm_BeginForm (ActSeeSocPrf);
-      HTM_BUTTON_SUBMIT_Begin (Txt_Who_to_follow,"BT_LINK CONNECTED_TXT",NULL);
-      HTM_Txt (Txt_Who_to_follow);
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /***** Title with link to suggest more users to follow *****/
+	 Frm_BeginForm (ActSeeSocPrf);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Who_to_follow,"BT_LINK CONNECTED_TXT",NULL);
+	       HTM_Txt (Txt_Who_to_follow);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
-      /***** Begin table *****/
-      HTM_TABLE_Begin (NULL);
+	 /***** Begin table *****/
+	 HTM_TABLE_Begin (NULL);
 
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
+	    /***** Initialize structure with user's data *****/
+	    Usr_UsrDataConstructor (&UsrDat);
 
-      /***** List users *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 /***** Get user *****/
-	 row = mysql_fetch_row (mysql_res);
+	    /***** List users *****/
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
+	      {
+	       /***** Get user *****/
+	       row = mysql_fetch_row (mysql_res);
 
-	 /* Get user's code (row[0]) */
-	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+	       /* Get user's code (row[0]) */
+	       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	 /***** Show user *****/
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
-	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	    Fol_WriteRowUsrToFollowOnRightColumn (&UsrDat);
-	}
+	       /***** Show user *****/
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		  Fol_WriteRowUsrToFollowOnRightColumn (&UsrDat);
+	      }
 
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+	    /***** Free memory used for user's data *****/
+	    Usr_UsrDataDestructor (&UsrDat);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
       /***** End container *****/
       HTM_DIV_End ();
@@ -265,9 +265,9 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
    extern const char *Txt_Update;
 
    Frm_BeginForm (ActSeeSocPrf);
-   HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
-   Ico_PutCalculateIcon (Txt_Update);
-   HTM_BUTTON_End ();
+      HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
+	 Ico_PutCalculateIcon (Txt_Update);
+      HTM_BUTTON_End ();
    Frm_EndForm ();
   }
 
@@ -324,55 +324,55 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    /***** Begin section *****/
    HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
 
-   /***** Followed users *****/
-   HTM_DIV_Begin ("id=\"following_side\"");
-   HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
+      /***** Followed users *****/
+      HTM_DIV_Begin ("id=\"following_side\"");
+	 HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
 
-   /* User follows me? */
-   HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT\"");
-   if (UsrFollowsMe)
-      HTM_Txt (Txt_FOLLOWS_YOU);
-   HTM_DIV_End ();
+	    /* User follows me? */
+	    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT\"");
+	       if (UsrFollowsMe)
+		  HTM_Txt (Txt_FOLLOWS_YOU);
+	    HTM_DIV_End ();
 
-   /* Number of followed */
-   Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
-                                         NumFollowing,
-                                         ActSeeFlg,Txt_Following);
+	    /* Number of followed */
+	    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
+						  NumFollowing,
+						  ActSeeFlg,Txt_Following);
 
-   /* End following side */
-   HTM_DIV_End ();
-   HTM_DIV_End ();
+	 /* End following side */
+	 HTM_DIV_End ();
+      HTM_DIV_End ();
 
-   /***** Followers *****/
-   HTM_DIV_Begin ("id=\"followers_side\"");
-   HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
+      /***** Followers *****/
+      HTM_DIV_Begin ("id=\"followers_side\"");
+	 HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
 
-   /* Number of followers */
-   Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
-                                         NumFollowers,
-                                         ActSeeFlr,Txt_Followers);
+	    /* Number of followers */
+	    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
+						  NumFollowers,
+						  ActSeeFlr,Txt_Followers);
 
-   /* I follow user? */
-   HTM_DIV_Begin ("id=\"follow_usr\"");
-   if (Gbl.Usrs.Me.Logged &&	// Logged
-       !ItsMe)			// Not me!
-     {
-      Frm_BeginForm (IFollowUsr ? ActUnfUsr :
-	                          ActFolUsr);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
-		       IFollowUsr ? "user-check.svg" :
-				    "user-plus.svg",
-		       IFollowUsr ? Txt_Following_unfollow :
-				    Txt_Follow,
-		       "ICO_HIGHLIGHT ICO40x40");
-      Frm_EndForm ();
-     }
-   HTM_DIV_End ();
+	    /* I follow user? */
+	    HTM_DIV_Begin ("id=\"follow_usr\"");
+	       if (Gbl.Usrs.Me.Logged &&	// Logged
+		   !ItsMe)			// Not me!
+		 {
+		  Frm_BeginForm (IFollowUsr ? ActUnfUsr :
+					      ActFolUsr);
+		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
+				      IFollowUsr ? "user-check.svg" :
+						   "user-plus.svg",
+				      IFollowUsr ? Txt_Following_unfollow :
+						   Txt_Follow,
+				      "ICO_HIGHLIGHT ICO40x40");
+		  Frm_EndForm ();
+		 }
+	    HTM_DIV_End ();
 
-   /* End followers side */
-   HTM_DIV_End ();
-   HTM_DIV_End ();
+	 /* End followers side */
+	 HTM_DIV_End ();
+      HTM_DIV_End ();
 
    /***** End section *****/
    HTM_SECTION_End ();
@@ -395,50 +395,50 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"FOLLOW_BOX\"");
 
-   /***** Number *****/
-   if (NumUsrs)
-     {
-      /* Form to list users */
-      Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (Title,
-			       (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
-							    "BT_LINK FOLLOW_NUM",
-			       NULL);
-     }
-   else
-      HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
-					                          "FOLLOW_NUM");
-   HTM_Unsigned (NumUsrs);
-   if (NumUsrs)
-     {
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   else
-      HTM_SPAN_End ();
+      /***** Number *****/
+      if (NumUsrs)
+	{
+	 /* Form to list users */
+	 Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    HTM_BUTTON_SUBMIT_Begin (Title,
+				     (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
+								  "BT_LINK FOLLOW_NUM",
+				     NULL);
+	}
+      else
+	 HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
+								     "FOLLOW_NUM");
+      HTM_Unsigned (NumUsrs);
+      if (NumUsrs)
+	{
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+	}
+      else
+	 HTM_SPAN_End ();
 
-   /***** Text *****/
-   HTM_DIV_Begin ("class=\"%s\"",
-                  (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
-        	                               The_ClassFormOutBox    [Gbl.Prefs.Theme]);
-   if (NumUsrs)
-     {
-      /* Form to list users */
-      Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-      HTM_BUTTON_SUBMIT_Begin (Title,
-			       (Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
-							    The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
-			       NULL);
-     }
-   HTM_Txt (Title);
-   if (NumUsrs)
-     {
-      HTM_BUTTON_End ();
-      Frm_EndForm ();
-     }
-   HTM_DIV_End ();
+      /***** Text *****/
+      HTM_DIV_Begin ("class=\"%s\"",
+		     (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
+						  The_ClassFormOutBox    [Gbl.Prefs.Theme]);
+	 if (NumUsrs)
+	   {
+	    /* Form to list users */
+	    Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       HTM_BUTTON_SUBMIT_Begin (Title,
+					(Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
+								     The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
+					NULL);
+	   }
+	 HTM_Txt (Title);
+	 if (NumUsrs)
+	   {
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	   }
+      HTM_DIV_End ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -490,24 +490,24 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	                    NULL,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
-	 for (NumUsr = 0;
-	      NumUsr < NumUsrs;
-	      NumUsr++)
-	   {
-	    /***** Get user's code *****/
-	    FollowingUsrDat.UsrCod = DB_GetNextCode (mysql_res);
+	    for (NumUsr = 0;
+		 NumUsr < NumUsrs;
+		 NumUsr++)
+	      {
+	       /***** Get user's code *****/
+	       FollowingUsrDat.UsrCod = DB_GetNextCode (mysql_res);
 
-	    /***** Show user *****/
-	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	       HTM_TR_Begin (NULL);
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,
-	                                                 Usr_DONT_GET_PREFS,
-	                                                 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
-	       Fol_ShowFollowedOrFollower (&FollowingUsrDat);
-	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
-		NumUsr == NumUsrs - 1)
-	       HTM_TR_End ();
-	   }
+	       /***** Show user *****/
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
+		  HTM_TR_Begin (NULL);
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,
+							    Usr_DONT_GET_PREFS,
+							    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+		  Fol_ShowFollowedOrFollower (&FollowingUsrDat);
+	       if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+		   NumUsr == NumUsrs - 1)
+		  HTM_TR_End ();
+	      }
 
          /***** End table and box *****/
 	 Box_BoxTableEnd ();
@@ -649,10 +649,10 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                  UsrDat->UsrCod))	// I follow user
 	    /* Form to unfollow */
-	    Fol_PutIconToUnfollow (UsrDat);
+	    Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
 	 else if (Visible)	// I do not follow this user and I can follow
 	    /* Form to follow */
-	    Fol_PutIconToFollow (UsrDat);
+	    Fol_PutIconToFollow (UsrDat->EnUsrCod);
 	}
 
    HTM_TD_End ();
@@ -705,10 +705,10 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                  UsrDat->UsrCod))	// I follow user
 	    /* Form to unfollow */
-	    Fol_PutIconToUnfollow (UsrDat);
+	    Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
 	 else if (Visible)	// I do not follow this user and I can follow
 	    /* Form to follow */
-	    Fol_PutIconToFollow (UsrDat);
+	    Fol_PutIconToFollow (UsrDat->EnUsrCod);
 	}
       HTM_TD_End ();
 
@@ -725,7 +725,7 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
   {
    /***** Inactive icon to follow/unfollow *****/
    HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIDDEN\"");
-   Ico_PutIcon ("user.svg","","ICO16x16");
+      Ico_PutIcon ("user.svg","","ICO16x16");
    HTM_DIV_End ();
    }
 
@@ -733,15 +733,15 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
 /*********************** Put icon to follow another user *********************/
 /*****************************************************************************/
 
-static void Fol_PutIconToFollow (struct UsrData *UsrDat)
+static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    extern const char *Txt_Follow;
 
    /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
-		    Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
+   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
+		       Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
   }
 
@@ -749,15 +749,15 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
 /********************** Put icon to unfollow another user ********************/
 /*****************************************************************************/
 
-static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
+static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    extern const char *Txt_Unfollow;
 
    /* Form to follow */
    Frm_BeginForm (ActUnfUsr);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-		    Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
+   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
+		       Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
   }
 

@@ -83,7 +83,8 @@ unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
    static const char *OrderBySubQuery[DegTyp_NUM_ORDERS] =
      {
       [DegTyp_ORDER_BY_DEGREE_TYPE] = "DegTypName",
-      [DegTyp_ORDER_BY_NUM_DEGREES] = "NumDegs DESC,DegTypName",
+      [DegTyp_ORDER_BY_NUM_DEGREES] = "NumDegs DESC,"
+	                              "DegTypName",
      };
 
    /***** Get types of degree from database *****/

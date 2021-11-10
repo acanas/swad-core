@@ -305,28 +305,28 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
       [Tml_Usr_FAV_UNF_COMM] = Tml_Fav_ICON_FAV,
       [Tml_Usr_SHA_UNS_NOTE] = Tml_Sha_ICON_SHARE,
      };
-   const char *TitleWithUsrs[Tml_Usr_NUM_FAV_SHA] =
+   static const char **TitleWithUsrs[Tml_Usr_NUM_FAV_SHA] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] = Txt_TIMELINE_Favourited_by_X_USERS,
-      [Tml_Usr_FAV_UNF_COMM] = Txt_TIMELINE_Favourited_by_X_USERS,
-      [Tml_Usr_SHA_UNS_NOTE] = Txt_TIMELINE_Shared_by_X_USERS,
+      [Tml_Usr_FAV_UNF_NOTE] = &Txt_TIMELINE_Favourited_by_X_USERS,
+      [Tml_Usr_FAV_UNF_COMM] = &Txt_TIMELINE_Favourited_by_X_USERS,
+      [Tml_Usr_SHA_UNS_NOTE] = &Txt_TIMELINE_Shared_by_X_USERS,
      };
-   const char *TitleWithoutUsrs[Tml_Usr_NUM_FAV_SHA] =
+   static const char **TitleWithoutUsrs[Tml_Usr_NUM_FAV_SHA] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] = Txt_TIMELINE_Not_favourited_by_anyone,
-      [Tml_Usr_FAV_UNF_COMM] = Txt_TIMELINE_Not_favourited_by_anyone,
-      [Tml_Usr_SHA_UNS_NOTE] = Txt_TIMELINE_Not_shared_by_anyone,
+      [Tml_Usr_FAV_UNF_NOTE] = &Txt_TIMELINE_Not_favourited_by_anyone,
+      [Tml_Usr_FAV_UNF_COMM] = &Txt_TIMELINE_Not_favourited_by_anyone,
+      [Tml_Usr_SHA_UNS_NOTE] = &Txt_TIMELINE_Not_shared_by_anyone,
      };
 
    /***** Disabled icon to fav/share *****/
    if (NumUsrs)
      {
       Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],
-		      Str_BuildStringLong (TitleWithUsrs[FavSha],(long) NumUsrs));
+		      Str_BuildStringLong (*TitleWithUsrs[FavSha],(long) NumUsrs));
       Str_FreeString ();
      }
    else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],TitleWithoutUsrs[FavSha]);
+      Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],*TitleWithoutUsrs[FavSha]);
   }
 
 /*****************************************************************************/

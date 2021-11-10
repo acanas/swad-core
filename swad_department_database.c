@@ -64,7 +64,8 @@ unsigned Dpt_DB_GetListDepartments (MYSQL_RES **mysql_res,
    static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
      {
       [Dpt_ORDER_BY_DEPARTMENT] = "FullName",
-      [Dpt_ORDER_BY_NUM_TCHS  ] = "NumTchs DESC,FullName",
+      [Dpt_ORDER_BY_NUM_TCHS  ] = "NumTchs DESC,"
+	                          "FullName",
      };
 
    return (unsigned)

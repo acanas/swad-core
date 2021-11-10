@@ -5556,16 +5556,16 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
    extern const char *Txt_Continue;
-   const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
+   static const char **Label[Usr_LIST_USRS_NUM_OPTIONS] =
      {
       [Usr_OPTION_UNKNOWN   ] = NULL,
-      [Usr_OPTION_RECORDS   ] = Txt_View_records,
-      [Usr_OPTION_HOMEWORK  ] = Txt_View_homework,
-      [Usr_OPTION_ATTENDANCE] = Txt_View_attendance,
-      [Usr_OPTION_MESSAGE   ] = Txt_Send_message,
-      [Usr_OPTION_EMAIL     ] = Txt_Create_email_message,
-      [Usr_OPTION_FOLLOW    ] = Txt_Follow,
-      [Usr_OPTION_UNFOLLOW  ] = Txt_Unfollow,
+      [Usr_OPTION_RECORDS   ] = &Txt_View_records,
+      [Usr_OPTION_HOMEWORK  ] = &Txt_View_homework,
+      [Usr_OPTION_ATTENDANCE] = &Txt_View_attendance,
+      [Usr_OPTION_MESSAGE   ] = &Txt_Send_message,
+      [Usr_OPTION_EMAIL     ] = &Txt_Create_email_message,
+      [Usr_OPTION_FOLLOW    ] = &Txt_Follow,
+      [Usr_OPTION_UNFOLLOW  ] = &Txt_Unfollow,
      };
    Usr_ListUsrsOption_t Opt;
 
@@ -5581,7 +5581,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 	   Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	   Opt++)
 	 if (ICanChooseOption[Opt])
-	    Usr_ShowOneListUsrsOption (Opt,Label[Opt]);
+	    Usr_ShowOneListUsrsOption (Opt,*Label[Opt]);
 
    /* End list of options */
    HTM_UL_End ();

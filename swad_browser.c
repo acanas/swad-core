@@ -3373,74 +3373,75 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Project_documents;
    extern const char *Txt_Project_assessment;
-   const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
-   const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
+
+   static const char **Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_UNKNOWN     ] = NULL,
+      [Brw_SHOW_DOC_CRS] = &Txt_Documents_area,
+      [Brw_SHOW_MRK_CRS] = &Txt_Marks_area,
+      [Brw_ADMI_DOC_CRS] = &Txt_Documents_management_area,
+      [Brw_ADMI_SHR_CRS] = &Txt_Shared_files_area,
+      [Brw_ADMI_SHR_GRP] = &Txt_Shared_files_area,
+      [Brw_ADMI_WRK_USR] = &Txt_Works_area,
+      [Brw_ADMI_WRK_CRS] = &Txt_Works_area,
+      [Brw_ADMI_MRK_CRS] = &Txt_Marks_management_area,
+      [Brw_ADMI_BRF_USR] = &Txt_Temporary_private_storage_area,
+      [Brw_SHOW_DOC_GRP] = &Txt_Documents_area,
+      [Brw_ADMI_DOC_GRP] = &Txt_Documents_management_area,
+      [Brw_SHOW_MRK_GRP] = &Txt_Marks_area,
+      [Brw_ADMI_MRK_GRP] = &Txt_Marks_management_area,
+      [Brw_ADMI_ASG_USR] = &Txt_Assignments_area,
+      [Brw_ADMI_ASG_CRS] = &Txt_Assignments_area,
+      [Brw_SHOW_DOC_DEG] = &Txt_Documents_area,
+      [Brw_ADMI_DOC_DEG] = &Txt_Documents_management_area,
+      [Brw_SHOW_DOC_CTR] = &Txt_Documents_area,
+      [Brw_ADMI_DOC_CTR] = &Txt_Documents_management_area,
+      [Brw_SHOW_DOC_INS] = &Txt_Documents_area,
+      [Brw_ADMI_DOC_INS] = &Txt_Documents_management_area,
+      [Brw_ADMI_SHR_DEG] = &Txt_Shared_files_area,
+      [Brw_ADMI_SHR_CTR] = &Txt_Shared_files_area,
+      [Brw_ADMI_SHR_INS] = &Txt_Shared_files_area,
+      [Brw_ADMI_TCH_CRS] = &Txt_Teachers_files_area,
+      [Brw_ADMI_TCH_GRP] = &Txt_Teachers_files_area,
+      [Brw_ADMI_DOC_PRJ] = &Txt_Project_documents,
+      [Brw_ADMI_ASS_PRJ] = &Txt_Project_assessment,
+     };
+   static const char **Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_UNKNOWN     ] = NULL,
+      [Brw_SHOW_DOC_CRS] = &Hlp_FILES_Documents,
+      [Brw_SHOW_MRK_CRS] = &Hlp_FILES_Marks,
+      [Brw_ADMI_DOC_CRS] = &Hlp_FILES_Documents,
+      [Brw_ADMI_SHR_CRS] = &Hlp_FILES_Shared,
+      [Brw_ADMI_SHR_GRP] = &Hlp_FILES_Shared,
+      [Brw_ADMI_WRK_USR] = &Hlp_FILES_Homework_for_students,
+      [Brw_ADMI_WRK_CRS] = &Hlp_FILES_Homework_for_teachers,
+      [Brw_ADMI_MRK_CRS] = &Hlp_FILES_Marks,
+      [Brw_ADMI_BRF_USR] = &Hlp_FILES_Briefcase,
+      [Brw_SHOW_DOC_GRP] = &Hlp_FILES_Documents,
+      [Brw_ADMI_DOC_GRP] = &Hlp_FILES_Documents,
+      [Brw_SHOW_MRK_GRP] = &Hlp_FILES_Marks,
+      [Brw_ADMI_MRK_GRP] = &Hlp_FILES_Marks,
+      [Brw_ADMI_ASG_USR] = &Hlp_FILES_Homework_for_students,
+      [Brw_ADMI_ASG_CRS] = &Hlp_FILES_Homework_for_teachers,
+      [Brw_SHOW_DOC_DEG] = &Hlp_FILES_Documents,
+      [Brw_ADMI_DOC_DEG] = &Hlp_FILES_Documents,
+      [Brw_SHOW_DOC_CTR] = &Hlp_FILES_Documents,
+      [Brw_ADMI_DOC_CTR] = &Hlp_FILES_Documents,
+      [Brw_SHOW_DOC_INS] = &Hlp_FILES_Documents,
+      [Brw_ADMI_DOC_INS] = &Hlp_FILES_Documents,
+      [Brw_ADMI_SHR_DEG] = &Hlp_FILES_Shared,
+      [Brw_ADMI_SHR_CTR] = &Hlp_FILES_Shared,
+      [Brw_ADMI_SHR_INS] = &Hlp_FILES_Shared,
+      [Brw_ADMI_TCH_CRS] = &Hlp_FILES_Private,
+      [Brw_ADMI_TCH_GRP] = &Hlp_FILES_Private,
+      [Brw_ADMI_DOC_PRJ] = &Hlp_ASSESSMENT_Projects,
+      [Brw_ADMI_ASS_PRJ] = &Hlp_ASSESSMENT_Projects,
+     };
    struct Brw_NumObjects Removed;
    char FileBrowserSectionId[32];
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
-
-   /***** Set title of file browser *****/
-   Brw_TitleOfFileBrowser[Brw_UNKNOWN     ] = NULL;
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CRS] = Txt_Documents_area;
-   Brw_TitleOfFileBrowser[Brw_SHOW_MRK_CRS] = Txt_Marks_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CRS] = Txt_Documents_management_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_CRS] = Txt_Shared_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_GRP] = Txt_Shared_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_WRK_USR] = Txt_Works_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_WRK_CRS] = Txt_Works_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_MRK_CRS] = Txt_Marks_management_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_BRF_USR] = Txt_Temporary_private_storage_area;
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_GRP] = Txt_Documents_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_GRP] = Txt_Documents_management_area;
-   Brw_TitleOfFileBrowser[Brw_SHOW_MRK_GRP] = Txt_Marks_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_MRK_GRP] = Txt_Marks_management_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_ASG_USR] = Txt_Assignments_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_ASG_CRS] = Txt_Assignments_area;
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_DEG] = Txt_Documents_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_DEG] = Txt_Documents_management_area;
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CTR] = Txt_Documents_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CTR] = Txt_Documents_management_area;
-   Brw_TitleOfFileBrowser[Brw_SHOW_DOC_INS] = Txt_Documents_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_INS] = Txt_Documents_management_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_DEG] = Txt_Shared_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_CTR] = Txt_Shared_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_SHR_INS] = Txt_Shared_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_TCH_CRS] = Txt_Teachers_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_TCH_GRP] = Txt_Teachers_files_area;
-   Brw_TitleOfFileBrowser[Brw_ADMI_DOC_PRJ] = Txt_Project_documents;
-   Brw_TitleOfFileBrowser[Brw_ADMI_ASS_PRJ] = Txt_Project_assessment;
-
-   /***** Set help link of file browser *****/
-   Brw_HelpOfFileBrowser[Brw_UNKNOWN     ] = NULL;
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CRS] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_SHOW_MRK_CRS] = Hlp_FILES_Marks;
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CRS] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_CRS] = Hlp_FILES_Shared;
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_GRP] = Hlp_FILES_Shared;
-   Brw_HelpOfFileBrowser[Brw_ADMI_WRK_USR] = Hlp_FILES_Homework_for_students;
-   Brw_HelpOfFileBrowser[Brw_ADMI_WRK_CRS] = Hlp_FILES_Homework_for_teachers;
-   Brw_HelpOfFileBrowser[Brw_ADMI_MRK_CRS] = Hlp_FILES_Marks;
-   Brw_HelpOfFileBrowser[Brw_ADMI_BRF_USR] = Hlp_FILES_Briefcase;
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_GRP] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_GRP] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_SHOW_MRK_GRP] = Hlp_FILES_Marks;
-   Brw_HelpOfFileBrowser[Brw_ADMI_MRK_GRP] = Hlp_FILES_Marks;
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASG_USR] = Hlp_FILES_Homework_for_students;
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASG_CRS] = Hlp_FILES_Homework_for_teachers;
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_DEG] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_DEG] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CTR] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CTR] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_SHOW_DOC_INS] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_INS] = Hlp_FILES_Documents;
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_DEG] = Hlp_FILES_Shared;
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_CTR] = Hlp_FILES_Shared;
-   Brw_HelpOfFileBrowser[Brw_ADMI_SHR_INS] = Hlp_FILES_Shared;
-   Brw_HelpOfFileBrowser[Brw_ADMI_TCH_CRS] = Hlp_FILES_Private;
-   Brw_HelpOfFileBrowser[Brw_ADMI_TCH_GRP] = Hlp_FILES_Private;
-   Brw_HelpOfFileBrowser[Brw_ADMI_DOC_PRJ] = Hlp_ASSESSMENT_Projects;
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASS_PRJ] = Hlp_ASSESSMENT_Projects;
 
    /***** Set contextual icon in box *****/
    Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;
@@ -3512,9 +3513,9 @@ static void Brw_ShowFileBrowser (void)
              "file_browser_%u",Gbl.FileBrowser.Id);
    HTM_SECTION_Begin (FileBrowserSectionId);
 
-      Box_BoxBegin ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+      Box_BoxBegin ("100%",*Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
 		    Brw_PutIconsFileBrowser,NULL,
-		    Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
+		    *Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
 	 /***** Subtitle *****/
 	 Brw_WriteSubtitleOfFileBrowser ();
@@ -5769,12 +5770,12 @@ static void Brw_WriteCurrentClipboard (void)
 			 Usr_MAX_BYTES_FULL_NAME +
 			 Prj_MAX_BYTES_PROJECT_TITLE];
    char FileNameToShow[NAME_MAX + 1];
-   const char *TxtFileType[Brw_NUM_FILE_TYPES] =
+   static const char **TxtFileType[Brw_NUM_FILE_TYPES] =
      {
-      [Brw_IS_UNKNOWN] = Txt_file_folder,
-      [Brw_IS_FILE   ] = Txt_file,
-      [Brw_IS_FOLDER ] = Txt_folder,
-      [Brw_IS_LINK   ] = Txt_link,
+      [Brw_IS_UNKNOWN] = &Txt_file_folder,
+      [Brw_IS_FILE   ] = &Txt_file,
+      [Brw_IS_FOLDER ] = &Txt_folder,
+      [Brw_IS_LINK   ] = &Txt_link,
      };
 
    switch (Gbl.FileBrowser.Clipboard.FileBrowser)
@@ -5987,7 +5988,7 @@ static void Brw_WriteCurrentClipboard (void)
 
       Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
                      Txt_Copy_source,TxtClipboardZone,
-                     TxtFileType[Gbl.FileBrowser.Clipboard.FilFolLnk.Type],
+                     *TxtFileType[Gbl.FileBrowser.Clipboard.FilFolLnk.Type],
                      FileNameToShow);
      }
    else
