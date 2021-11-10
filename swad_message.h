@@ -52,6 +52,7 @@ typedef enum
    Msg_SENT,
   } Msg_TypeOfMessages_t;
 
+#define Msg_NUM_STATUS 3
 typedef enum
   {
    Msg_STATUS_ALL,

@@ -512,15 +512,14 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
 
 static bool Mch_CheckIfICanEditMatches (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanEditMatches[Rol_NUM_ROLES] =
      {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
+      [Rol_NET    ] = true,
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanEditMatches[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -766,22 +765,21 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
                                             const struct Mch_Match *Match)
   {
+   static void (*Function[Rol_NUM_ROLES]) (struct Gam_Games *Games,
+                                           const struct Mch_Match *Match) =
+     {
+      [Rol_STD    ] = Mch_ListOneOrMoreMatchesResultStd,
+      [Rol_NET    ] = Mch_ListOneOrMoreMatchesResultTch,
+      [Rol_TCH    ] = Mch_ListOneOrMoreMatchesResultTch,
+      [Rol_SYS_ADM] = Mch_ListOneOrMoreMatchesResultTch,
+     };
+
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 Mch_ListOneOrMoreMatchesResultStd (Games,Match);
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 Mch_ListOneOrMoreMatchesResultTch (Games,Match);
-	 break;
-      default:
+      if (Function[Gbl.Usrs.Me.Role.Logged])
+	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);
+      else
 	 Err_WrongRoleExit ();
-	 break;
-     }
 
    HTM_TD_End ();
   }

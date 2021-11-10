@@ -1063,7 +1063,23 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
    unsigned NumEmails;
    unsigned NumEmail;
    bool Confirmed;
-   Act_Action_t NextAction;
+   static const struct
+     {
+      Act_Action_t Remove;
+      Act_Action_t New;
+     } NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_GST	  ] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_USR    ] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_STD	  ] = {ActRemMaiStd,ActNewMaiStd},
+      [Rol_NET	  ] = {ActRemMaiTch,ActNewMaiTch},
+      [Rol_TCH	  ] = {ActRemMaiTch,ActNewMaiTch},
+      [Rol_DEG_ADM] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_CTR_ADM] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_INS_ADM] = {ActRemMaiOth,ActNewMaiOth},
+      [Rol_SYS_ADM] = {ActRemMaiOth,ActNewMaiOth},
+     };
    const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
@@ -1118,23 +1134,8 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    Ico_PutContextualIconToRemove (ActRemMyMai,Mai_EMAIL_SECTION_ID,
 					   Mai_PutParamsRemoveMyEmail,row[0]);
 	 else
-	   {
-	    switch (UsrDat->Roles.InCurrentCrs)
-	      {
-	       case Rol_STD:
-		  NextAction = ActRemMaiStd;
-		  break;
-	       case Rol_NET:
-	       case Rol_TCH:
-		  NextAction = ActRemMaiTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActRemMaiOth;
-		  break;
-	      }
-	    Ico_PutContextualIconToRemove (NextAction,Mai_EMAIL_SECTION_ID,
+	    Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,Mai_EMAIL_SECTION_ID,
 					   Mai_PutParamsRemoveOtherEmail,row[0]);
-	   }
 
 	 /* Email */
 	 HTM_Txt (row[0]);
@@ -1156,20 +1157,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	       Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	    else
 	      {
-	       switch (UsrDat->Roles.InCurrentCrs)
-		 {
-		  case Rol_STD:
-		     NextAction = ActNewMaiStd;
-		     break;
-		  case Rol_NET:
-		  case Rol_TCH:
-		     NextAction = ActNewMaiTch;
-		     break;
-		  default:	// Guest, user or admin
-		     NextAction = ActNewMaiOth;
-		     break;
-		 }
-	       Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+	       Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	      }
 	    Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
@@ -1202,20 +1190,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else
 	   {
-	    switch (UsrDat->Roles.InCurrentCrs)
-	      {
-	       case Rol_STD:
-		  NextAction = ActNewMaiStd;
-		  break;
-	       case Rol_NET:
-	       case Rol_TCH:
-		  NextAction = ActNewMaiTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActNewMaiOth;
-		  break;
-	      }
-	    Frm_BeginFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
+	    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
 	 HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,

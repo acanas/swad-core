@@ -703,6 +703,15 @@ static void Usr_GetTitleFromForm (const char *ParamName,struct Med_Media *Media)
 static void Med_GetAndProcessFileFromForm (const char *ParamFile,
                                            struct Med_Media *Media)
   {
+   static void (*Process[Med_NUM_TYPES]) (struct Med_Media *Media,
+			                  const char PathFileOrg[PATH_MAX + 1]) =
+     {
+      [Med_JPG ] = Med_ProcessJPG,
+      [Med_GIF ] = Med_ProcessGIF,
+      [Med_MP4 ] = Med_ProcessVideo,
+      [Med_WEBM] = Med_ProcessVideo,
+      [Med_OGG ] = Med_ProcessVideo,
+     };
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
@@ -760,22 +769,8 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
             Media->Type = Med_JPG;
 
       /***** Process media depending on the media file extension *****/
-      switch (Media->Type)
-        {
-         case Med_JPG:
-            Med_ProcessJPG (Media,PathFileOrg);
-            break;
-         case Med_GIF:
-            Med_ProcessGIF (Media,PathFileOrg);
-            break;
-         case Med_MP4:
-         case Med_WEBM:
-         case Med_OGG:
-            Med_ProcessVideo (Media,PathFileOrg);
-            break;
-         default:
-            break;
-        }
+      if (Process[Media->Type])
+         Process[Media->Type] (Media,PathFileOrg);
      }
 
    /***** Remove temporary original file *****/
@@ -1393,6 +1388,16 @@ void Med_StoreMediaInDB (struct Med_Media *Media)
 void Med_ShowMedia (const struct Med_Media *Media,
                     const char *ClassContainer,const char *ClassMedia)
   {
+   static void (*Show[Med_NUM_TYPES]) (const struct Med_Media *Media,
+			               const char PathMedPriv[PATH_MAX + 1],
+			               const char *ClassMedia) =
+     {
+      [Med_JPG ] = Med_ShowJPG,
+      [Med_GIF ] = Med_ShowGIF,
+      [Med_MP4 ] = Med_ShowVideo,
+      [Med_WEBM] = Med_ShowVideo,
+      [Med_OGG ] = Med_ShowVideo,
+     };
    bool PutLink;
    char PathMedPriv[PATH_MAX + 1];
 
@@ -1435,22 +1440,8 @@ void Med_ShowMedia (const struct Med_Media *Media,
 		      Media->Name[1]);
 
 	    /* Show media */
-	    switch (Media->Type)
-	      {
-	       case Med_JPG:
-		  Med_ShowJPG (Media,PathMedPriv,ClassMedia);
-		  break;
-	       case Med_GIF:
-		  Med_ShowGIF (Media,PathMedPriv,ClassMedia);
-		  break;
-	       case Med_MP4:
-	       case Med_WEBM:
-	       case Med_OGG:
-		  Med_ShowVideo (Media,PathMedPriv,ClassMedia);
-		  break;
-	       default:
-		  break;
-	      }
+	    if (Show[Media->Type])
+	       Show[Media->Type] (Media,PathMedPriv,ClassMedia);
 
 	    /* End optional link to external URL */
 	    if (PutLink)

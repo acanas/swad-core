@@ -1788,11 +1788,17 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
+   static unsigned (*GetDistinctCrssInMyRcvMsgs[Msg_NUM_TYPES_OF_MSGS]) (MYSQL_RES **mysql_res) =
+     {
+      [Msg_WRITING ] = NULL,
+      [Msg_RECEIVED] = Msg_DB_GetDistinctCrssInMyRcvMsgs,
+      [Msg_SENT    ] = Msg_DB_GetDistinctCrssInMySntMsgs,
+     };
    static const char **TxtSelector[Msg_NUM_TYPES_OF_MSGS] =
      {
       [Msg_WRITING ] = NULL,
       [Msg_RECEIVED] = &Txt_Messages_received_from_A_COURSE,
-      [Msg_SENT    ] = &Txt_Messages_sent_from_A_COURSE
+      [Msg_SENT    ] = &Txt_Messages_sent_from_A_COURSE,
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1801,17 +1807,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    long CrsCod;
 
    /***** Get distinct courses in my messages *****/
-   switch (Messages->TypeOfMessages)
-     {
-      case Msg_RECEIVED:
-         NumCrss = Msg_DB_GetDistinctCrssInMyRcvMsgs (&mysql_res);
-         break;
-      case Msg_SENT:
-         NumCrss = Msg_DB_GetDistinctCrssInMySntMsgs (&mysql_res);
-         break;
-      default: // Not aplicable here
-         break;
-     }
+   if (GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages])
+      NumCrss = GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages] (&mysql_res);
 
    /***** Course selection *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
