@@ -70,7 +70,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
                                           MYSQL_RES *mysql_res);
 static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions);
 static bool ExaSes_CheckIfICanEditSessions (void);
-static bool ExaSes_CheckIfICanEditThisSession (const struct ExaSes_Session *Session);
+static bool ExaSes_CheckIfICanEditThisSession (long UsrCod);
 static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
@@ -311,7 +311,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	       /* Icons */
 	       if (ICanEditSessions)
-		  if (ExaSes_CheckIfICanEditThisSession (&Session))
+		  if (ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
 		     ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
 
 	       /* Session participant */
@@ -383,27 +383,26 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
 
 static bool ExaSes_CheckIfICanEditSessions (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanEditSessions[Rol_NUM_ROLES] =
      {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
+      [Rol_NET    ] = true,
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanEditSessions[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
 /************ Check if I can edit (remove/resume) an exam session ************/
 /*****************************************************************************/
 
-static bool ExaSes_CheckIfICanEditThisSession (const struct ExaSes_Session *Session)
+static bool ExaSes_CheckIfICanEditThisSession (long UsrCod)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return (Session->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// Only if I am the creator
+	 return (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// Only if I am the creator
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
@@ -420,7 +419,7 @@ static bool ExaSes_CheckIfVisibilityOfResultsCanBeChanged (const struct ExaSes_S
   {
    if (Session->ShowUsrResults ||					// Results are currently visible
        Session->TimeUTC[Dat_END_TIME] < Gbl.StartExecutionTimeUTC)	// End of time is in the past
-      if (ExaSes_CheckIfICanEditThisSession (Session))
+      if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
 	 return true;
 
    return false;
@@ -615,22 +614,21 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
                                                 const struct ExaSes_Session *Session)
   {
+   static void (*Function[Rol_NUM_ROLES]) (struct Exa_Exams *Exams,
+	                                   const struct ExaSes_Session *Session) =
+     {
+      [Rol_STD    ] = ExaSes_ListOneOrMoreSessionsResultStd,
+      [Rol_NET    ] = ExaSes_ListOneOrMoreSessionsResultTch,
+      [Rol_TCH    ] = ExaSes_ListOneOrMoreSessionsResultTch,
+      [Rol_SYS_ADM] = ExaSes_ListOneOrMoreSessionsResultTch,
+     };
+
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    ExaSes_ListOneOrMoreSessionsResultStd (Exams,Session);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    ExaSes_ListOneOrMoreSessionsResultTch (Exams,Session);
-	    break;
-	 default:
-	    Err_WrongRoleExit ();
-	    break;
-	}
+      if (Function[Gbl.Usrs.Me.Role.Logged])
+	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);
+      else
+	 Err_WrongRoleExit ();
 
    HTM_TD_End ();
   }
@@ -667,7 +665,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    Exams->SesCod = Session->SesCod;
 
    /***** Show exam session results *****/
-   if (ExaSes_CheckIfICanEditThisSession (Session))
+   if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
 				     "trophy.svg",
@@ -834,7 +832,7 @@ void ExaSes_RemoveSession (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Check if I can remove this exam session *****/
-   if (!ExaSes_CheckIfICanEditThisSession (&Session))
+   if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
       Err_NoPermissionExit ();
 
    /***** Remove questions of exams prints, and exam prints, in this session *****/
@@ -880,7 +878,7 @@ void ExaSes_HideSession (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Check if I can remove this exam session *****/
-   if (!ExaSes_CheckIfICanEditThisSession (&Session))
+   if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
       Err_NoPermissionExit ();
 
    /***** Hide session *****/
@@ -910,7 +908,7 @@ void ExaSes_UnhideSession (void)
    ExaSes_GetAndCheckParameters (&Exams,&Exam,&Session);
 
    /***** Check if I can remove this exam session *****/
-   if (!ExaSes_CheckIfICanEditThisSession (&Session))
+   if (!ExaSes_CheckIfICanEditThisSession (Session.UsrCod))
       Err_NoPermissionExit ();
 
    /***** Unhide session *****/

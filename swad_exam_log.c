@@ -240,7 +240,14 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 				// 12345678901234
    char SessionId[Cns_BYTES_SESSION_ID + 1];
    char *UserAgent;
-   const char *Class;
+   const char *Class[ExaLog_NUM_ACTIONS] =
+     {
+      [ExaLog_UNKNOWN_ACTION ] = "DAT_SMALL_LIGHT",
+      [ExaLog_START_EXAM     ] = "DAT_SMALL_N",
+      [ExaLog_RESUME_EXAM    ] = "DAT_SMALL_N",
+      [ExaLog_ANSWER_QUESTION] = "DAT_SMALL",
+      [ExaLog_FINISH_EXAM    ] = "DAT_SMALL_N",
+     };
 
    /***** Get print log from database *****/
    if ((NumClicks = Exa_DB_GetExamLog (&mysql_res,Print->PrnCod)))
@@ -308,25 +315,6 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 						      "=") < 0)
 		  Err_NotEnoughMemoryExit ();
 
-	       /***** Set color of row depending on action *****/
-	       if (UsrCouldAnswer)
-		  switch (Action)
-		    {
-		     case ExaLog_START_EXAM:
-		     case ExaLog_RESUME_EXAM:
-		     case ExaLog_FINISH_EXAM:
-			Class = "DAT_SMALL_N";
-			break;
-		     case ExaLog_ANSWER_QUESTION:
-			Class = "DAT_SMALL";
-			break;
-		     default:
-			Class = "DAT_SMALL_LIGHT";
-			break;
-		    }
-	       else	// Closed or not accesible exam print
-		  Class = "DAT_SMALL_LIGHT";
-
 	       /***** Write row *****/
 	       HTM_TR_Begin (NULL);
 
@@ -340,7 +328,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  /* Write click time */
 		  if (asprintf (&Id,"click_date_%u",NumClick) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  HTM_TD_Begin ("id=\"%s\" class=\"LT COLOR%u %s\"",Id,Gbl.RowEvenOdd,Class);
+		  HTM_TD_Begin ("id=\"%s\" class=\"LT COLOR%u %s\"",Id,Gbl.RowEvenOdd,Class[Action]);
 		     Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						   true,true,true,0x7);
@@ -348,12 +336,12 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write action */
-		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class[Action]);
 		     HTM_Txt (Txt_EXAM_LOG_ACTIONS[Action]);
 		  HTM_TD_End ();
 
 		  /* Write number of question */
-		  HTM_TD_Begin ("class=\"RT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+		  HTM_TD_Begin ("class=\"RT COLOR%u %s\"",Gbl.RowEvenOdd,Class[Action]);
 		     if (QstInd >= 0)
 			HTM_Unsigned ((unsigned) QstInd + 1);
 		  HTM_TD_End ();
@@ -367,7 +355,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write IP */
-		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class[Action]);
 		     Length = strlen (IP);
 		     if (Length > 6)
 		       {
@@ -385,7 +373,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write session id */
-		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class[Action]);
 		     if (SessionId[0])
 		       {
 			Length = strlen (SessionId);
@@ -406,7 +394,7 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write user agent (row[6]) */
-		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class);
+		  HTM_TD_Begin ("class=\"LT COLOR%u %s\"",Gbl.RowEvenOdd,Class[Action]);
 		     if (UserAgent[0])
 			HTM_Txt (UserAgent);
 		  HTM_TD_End ();

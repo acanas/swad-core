@@ -318,15 +318,13 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 
 bool Exa_CheckIfICanEditExams (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanEditExams[Rol_NUM_ROLES] =
      {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
-   return false;
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanEditExams[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -335,6 +333,14 @@ bool Exa_CheckIfICanEditExams (void)
 
 static void Exa_PutIconsListExams (void *Exams)
   {
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_STD    ] = ActSeeMyExaResCrs,
+      [Rol_NET    ] = ActReqSeeUsrExaRes,
+      [Rol_TCH    ] = ActReqSeeUsrExaRes,
+      [Rol_SYS_ADM] = ActReqSeeUsrExaRes,
+     };
+
    if (Exams)
      {
       /***** Put icon to create a new exam *****/
@@ -342,21 +348,9 @@ static void Exa_PutIconsListExams (void *Exams)
 	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
 
       /***** Put icon to view sessions results *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyExaResCrs,NULL,
-	                                        NULL,NULL);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActReqSeeUsrExaRes,NULL,
-	                                        NULL,NULL);
-	    break;
-	 default:
-	    break;
-	}
+      if (NextAction[Gbl.Usrs.Me.Role.Logged])
+	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],NULL,
+					     NULL,NULL);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_EXAMS);
@@ -642,25 +636,19 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
 static void Exa_PutIconToShowResultsOfExam (void *Exams)
   {
-   if (Exams)
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
+      [Rol_STD    ] = ActSeeMyExaResExa,
+      [Rol_NET    ] = ActSeeUsrExaResExa,
+      [Rol_TCH    ] = ActSeeUsrExaResExa,
+      [Rol_SYS_ADM] = ActSeeUsrExaResExa,
+     };
+
+   if (Exams)
       /***** Put icon to view sessions results *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyExaResExa,ExaRes_RESULTS_BOX_ID,
-						Exa_PutParams,Exams);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActSeeUsrExaResExa,ExaRes_RESULTS_BOX_ID,
-						Exa_PutParams,Exams);
-	    break;
-	 default:
-	    break;
-	}
-     }
+      if (NextAction[Gbl.Usrs.Me.Role.Logged])
+	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],ExaRes_RESULTS_BOX_ID,
+					     Exa_PutParams,Exams);
   }
 
 /*****************************************************************************/

@@ -391,23 +391,22 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
   {
    extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActCnfID_Oth,
+      [Rol_GST	  ] = ActCnfID_Oth,
+      [Rol_USR    ] = ActCnfID_Oth,
+      [Rol_STD	  ] = ActCnfID_Std,
+      [Rol_NET	  ] = ActCnfID_Tch,
+      [Rol_TCH	  ] = ActCnfID_Tch,
+      [Rol_DEG_ADM] = ActCnfID_Oth,
+      [Rol_CTR_ADM] = ActCnfID_Oth,
+      [Rol_INS_ADM] = ActCnfID_Oth,
+      [Rol_SYS_ADM] = ActCnfID_Oth,
+     };
 
    /***** Begin form *****/
-   switch (UsrDat->Roles.InCurrentCrs)
-     {
-      case Rol_STD:
-	 NextAction = ActCnfID_Std;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 NextAction = ActCnfID_Tch;
-	 break;
-      default:	// Guest, user or admin
-	 NextAction = ActCnfID_Oth;
-	 break;
-     }
-   Frm_BeginFormAnchor (NextAction,Anchor);
+   Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs],Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
       Par_PutHiddenParamLong (NULL,"OriginalActCod",
@@ -510,7 +509,23 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
-   Act_Action_t NextAction;
+   static const struct
+     {
+      Act_Action_t Remove;
+      Act_Action_t New;
+     } NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_GST	  ] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_USR    ] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_STD	  ] = {ActRemID_Std,ActNewID_Std},
+      [Rol_NET	  ] = {ActRemID_Tch,ActNewID_Tch},
+      [Rol_TCH	  ] = {ActRemID_Tch,ActNewID_Tch},
+      [Rol_DEG_ADM] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_CTR_ADM] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_INS_ADM] = {ActRemID_Oth,ActNewID_Oth},
+      [Rol_SYS_ADM] = {ActRemID_Oth,ActNewID_Oth},
+     };
    const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
 
@@ -554,23 +569,8 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 		  Ico_PutContextualIconToRemove (ActRemMyID,ID_ID_SECTION_ID,
 						 ID_PutParamsRemoveMyID,UsrDat->IDs.List[NumID].ID);
 	       else
-		 {
-		  switch (UsrDat->Roles.InCurrentCrs)
-		    {
-		     case Rol_STD:
-			NextAction = ActRemID_Std;
-			break;
-		     case Rol_NET:
-		     case Rol_TCH:
-			NextAction = ActRemID_Tch;
-			break;
-		     default:	// Guest, user or admin
-			NextAction = ActRemID_Oth;
-			break;
-		    }
-		  Ico_PutContextualIconToRemove (NextAction,ID_ID_SECTION_ID,
+		  Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,ID_ID_SECTION_ID,
 						 ID_PutParamsRemoveOtherID,UsrDat->IDs.List[NumID].ID);
-		 }
 	      }
 	   }
 
@@ -619,20 +619,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 		  Frm_BeginFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
 	       else
 		 {
-		  switch (UsrDat->Roles.InCurrentCrs)
-		    {
-		     case Rol_STD:
-			NextAction = ActNewID_Std;
-			break;
-		     case Rol_NET:
-		     case Rol_TCH:
-			NextAction = ActNewID_Tch;
-			break;
-		     default:	// Guest, user or admin
-			NextAction = ActNewID_Oth;
-			break;
-		    }
-		  Frm_BeginFormAnchor (NextAction,ID_ID_SECTION_ID);
+		  Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,ID_ID_SECTION_ID);
 		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		 }
 	       HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,

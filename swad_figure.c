@@ -2586,72 +2586,34 @@ static void Fig_ShowStatOfAForumType (For_ForumType_t ForumType,
    extern const char *Txt_Institutions;
    extern const char *Txt_General;
    extern const char *Txt_only_teachers;
-
-   switch (ForumType)
+   static const char *PlatformShortName = Cfg_PLATFORM_SHORT_NAME;
+   static const char *EmptyName = "";
+   static const struct
      {
-      case For_FORUM_GLOBAL_USRS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "comments.svg",FiguresForum,
-                                      Txt_General,"");
-         break;
-      case For_FORUM_GLOBAL_TCHS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "comments.svg",FiguresForum,
-                                      Txt_General,Txt_only_teachers);
-         break;
-      case For_FORUM__SWAD__USRS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "swad64x64.png",FiguresForum,
-                                      Cfg_PLATFORM_SHORT_NAME,"");
-         break;
-      case For_FORUM__SWAD__TCHS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "swad64x64.png",FiguresForum,
-                                      Cfg_PLATFORM_SHORT_NAME,Txt_only_teachers);
-         break;
-      case For_FORUM_INSTIT_USRS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "university.svg",FiguresForum,
-                                      Txt_Institutions,"");
-         break;
-      case For_FORUM_INSTIT_TCHS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "university.svg",FiguresForum,
-                                      Txt_Institutions,Txt_only_teachers);
-         break;
-      case For_FORUM_CENTER_USRS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "building.svg",FiguresForum,
-                                      Txt_Centers,"");
-         break;
-      case For_FORUM_CENTER_TCHS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "building.svg",FiguresForum,
-                                      Txt_Centers,Txt_only_teachers);
-         break;
-      case For_FORUM_DEGREE_USRS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "graduation-cap.svg",FiguresForum,
-                                      Txt_Degrees,"");
-         break;
-      case For_FORUM_DEGREE_TCHS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "graduation-cap.svg",FiguresForum,
-                                      Txt_Degrees,Txt_only_teachers);
-         break;
-      case For_FORUM_COURSE_USRS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "chalkboard-teacher.svg",FiguresForum,
-                                      Txt_Courses,"");
-         break;
-      case For_FORUM_COURSE_TCHS:
-         Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
-                                      "chalkboard-teacher.svg",FiguresForum,
-                                      Txt_Courses,Txt_only_teachers);
-         break;
-      default:
-	 break;
-     }
+      const char *Icon;
+      const char **ForumName1;
+      const char **ForumName2;
+     } Params[For_NUM_TYPES_FORUM] =
+     {
+      [For_FORUM_COURSE_USRS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&EmptyName        },
+      [For_FORUM_COURSE_TCHS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&Txt_only_teachers},
+      [For_FORUM_DEGREE_USRS] = {"graduation-cap.svg"    ,&Txt_Degrees      ,&EmptyName        },
+      [For_FORUM_DEGREE_TCHS] = {"graduation-cap.svg"    ,&Txt_Degrees      ,&Txt_only_teachers},
+      [For_FORUM_CENTER_USRS] = {"building.svg"          ,&Txt_Centers      ,&EmptyName        },
+      [For_FORUM_CENTER_TCHS] = {"building.svg"          ,&Txt_Centers      ,&Txt_only_teachers},
+      [For_FORUM_INSTIT_USRS] = {"university.svg"        ,&Txt_Institutions ,&EmptyName        },
+      [For_FORUM_INSTIT_TCHS] = {"university.svg"        ,&Txt_Institutions ,&Txt_only_teachers},
+      [For_FORUM_GLOBAL_USRS] = {"comments.svg"          ,&Txt_General      ,&EmptyName        },
+      [For_FORUM_GLOBAL_TCHS] = {"comments.svg"          ,&Txt_General      ,&Txt_only_teachers},
+      [For_FORUM__SWAD__USRS] = {"swad64x64.png"         ,&PlatformShortName,&EmptyName        },
+      [For_FORUM__SWAD__TCHS] = {"swad64x64.png"         ,&PlatformShortName,&Txt_only_teachers},
+     };
+
+   if (Params[ForumType].Icon)
+      Fig_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
+				    Params[ForumType].Icon,FiguresForum,
+				   *Params[ForumType].ForumName1,
+				   *Params[ForumType].ForumName2);
   }
 
 /*****************************************************************************/

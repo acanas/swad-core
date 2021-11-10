@@ -341,15 +341,13 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 
 static bool Gam_CheckIfICanEditGames (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanEditGames[Rol_NUM_ROLES] =
      {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
-   return false;
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanEditGames[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -358,16 +356,14 @@ static bool Gam_CheckIfICanEditGames (void)
 
 static bool Gam_CheckIfICanListGameQuestions (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanListGameQuestions[Rol_NUM_ROLES] =
      {
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
-   return false;
+      [Rol_NET    ] = true,
+      [Rol_TCH    ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanListGameQuestions[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/
@@ -376,6 +372,14 @@ static bool Gam_CheckIfICanListGameQuestions (void)
 
 static void Gam_PutIconsListGames (void *Games)
   {
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_STD    ] = ActSeeMyMchResCrs,
+      [Rol_NET    ] = ActReqSeeUsrMchRes,
+      [Rol_TCH    ] = ActReqSeeUsrMchRes,
+      [Rol_SYS_ADM] = ActReqSeeUsrMchRes,
+     };
+
    if (Games)
      {
       /***** Put icon to create a new game *****/
@@ -383,21 +387,9 @@ static void Gam_PutIconsListGames (void *Games)
 	 Gam_PutIconToCreateNewGame ((struct Gam_Games *) Games);
 
       /***** Put icon to view matches results *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyMchResCrs,NULL,
-	                                        NULL,NULL);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActReqSeeUsrMchRes,NULL,
-	                                        NULL,NULL);
-	    break;
-	 default:
-	    break;
-	}
+      if (NextAction[Gbl.Usrs.Me.Role.Logged])
+	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],NULL,
+					     NULL,NULL);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_GAMES);
@@ -695,25 +687,19 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
 static void Gam_PutIconToShowResultsOfGame (void *Games)
   {
-   if (Games)
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
+      [Rol_STD    ] = ActSeeMyMchResGam,
+      [Rol_NET    ] = ActSeeUsrMchResGam,
+      [Rol_TCH    ] = ActSeeUsrMchResGam,
+      [Rol_SYS_ADM] = ActSeeUsrMchResGam,
+     };
+
+   if (Games)
       /***** Put icon to view matches results *****/
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    Ico_PutContextualIconToShowResults (ActSeeMyMchResGam,MchRes_RESULTS_BOX_ID,
-						Gam_PutParams,Games);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Ico_PutContextualIconToShowResults (ActSeeUsrMchResGam,MchRes_RESULTS_BOX_ID,
-						Gam_PutParams,Games);
-	    break;
-	 default:
-	    break;
-	}
-     }
+      if (NextAction[Gbl.Usrs.Me.Role.Logged])
+	 Ico_PutContextualIconToShowResults (NextAction[Gbl.Usrs.Me.Role.Logged],MchRes_RESULTS_BOX_ID,
+					     Gam_PutParams,Games);
   }
 
 /*****************************************************************************/
