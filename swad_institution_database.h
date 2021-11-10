@@ -37,9 +37,9 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status);
+long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,Hie_Status_t Status);
 void Ins_DB_UpdateInsCty (long InsCod,long CtyCod);
-void Ins_DB_UpdateInsStatus (long InsCod,Ins_Status_t Status);
+void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status);
 void Ins_DB_UpdateInsName (long InsCod,const char *FieldName,const char *NewInsName);
 void Ins_DB_UpdateInsWWW (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 

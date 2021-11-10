@@ -100,27 +100,20 @@ static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
 static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs);
-static Crs_StatusTxt_t Crs_GetStatusTxtFromStatusBits (Crs_Status_t Status);
-static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt);
 static void Crs_PutFormToCreateCourse (void);
 static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
-static void Crs_ReceiveFormRequestOrCreateCrs (unsigned Status);
+static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status);
 static void Crs_GetParamsNewCourse (struct Crs_Course *Crs);
 
 static void Crs_GetDataOfCourseFromRow (struct Crs_Course *Crs,MYSQL_ROW row);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
-static void Crs_UpdateCrsStatus (struct Crs_Course *Crs,Crs_Status_t Status);
-
 static void Crs_PutButtonToGoToCrs (void);
 static void Crs_PutButtonToRegisterInCrs (void);
 
 static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args);
-
-static void Crs_PutParamOtherCrsCod (void *CrsCod);
-static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
 
@@ -938,13 +931,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
+   extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumCrs;
    struct Crs_Course *Crs;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   Crs_StatusTxt_t StatusTxt;
    bool ThisYearHasCourses = false;
    unsigned NumUsrs[Rol_NUM_ROLES];
 
@@ -957,7 +949,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
       if (Crs->Year == Year)	// The year of the course is this?
 	{
 	 ThisYearHasCourses = true;
-	 if (Crs->Status & Crs_STATUS_BIT_PENDING)
+	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
 	   {
 	    TxtClassNormal = "DAT_LIGHT";
 	    TxtClassStrong = "BT_LINK LT DAT_LIGHT";
@@ -1025,11 +1017,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course status */
-	    StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-	    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-	       if (StatusTxt != Crs_STATUS_ACTIVE) // If active ==> do not show anything
-		  HTM_Txt (Txt_COURSE_STATUS[StatusTxt]);
-	    HTM_TD_End ();
+            Hie_WriteStatusCell (Crs->Status,TxtClassNormal,BgColor,Txt_COURSE_STATUS);
 
 	 HTM_TR_End ();
 	}
@@ -1151,15 +1139,13 @@ static void Crs_ListCoursesForEdition (void)
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
+   extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
    struct Crs_Course *Crs;
    unsigned YearAux;
    unsigned NumCrs;
    struct UsrData UsrDat;
    bool ICanEdit;
    unsigned NumUsrs[Rol_NUM_ROLES];
-   Crs_StatusTxt_t StatusTxt;
-   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1191,7 +1177,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else	// Crs->NumUsrs == 0 && ICanEdit
 		  Ico_PutContextualIconToRemove (ActRemCrs,NULL,
-						 Crs_PutParamOtherCrsCod,&Crs->CrsCod);
+						 Hie_PutParamOtherHieCod,&Crs->CrsCod);
 	    HTM_TD_End ();
 
 	    /* Course code */
@@ -1204,7 +1190,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsCrsCod);
-		  Crs_PutParamOtherCrsCod (&Crs->CrsCod);
+		  Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 				     Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_INS_CODE\"");
@@ -1219,7 +1205,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActChgCrsYea);
-	       Crs_PutParamOtherCrsCod (&Crs->CrsCod);
+	       Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
 		     for (YearAux = 0;
@@ -1242,7 +1228,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsSho);
-		  Crs_PutParamOtherCrsCod (&Crs->CrsCod);
+		  Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME\"");
@@ -1257,7 +1243,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCrsFul);
-		  Crs_PutParamOtherCrsCod (&Crs->CrsCod);
+		  Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME\"");
@@ -1288,30 +1274,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course status */
-	    StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-	    HTM_TD_Begin ("class=\"DAT LM\"");
-	       if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM &&
-		   StatusTxt == Crs_STATUS_PENDING)
-		 {
-		  Frm_BeginForm (ActChgCrsSta);
-		  Crs_PutParamOtherCrsCod (&Crs->CrsCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				       "name=\"Status\" class=\"INPUT_STATUS\"");
-
-			StatusUnsigned = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_PENDING);
-			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-				    "%s",Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
-
-			StatusUnsigned = (unsigned) Crs_GetStatusBitsFromStatusTxt (Crs_STATUS_ACTIVE);
-			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-				    "%s",Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
-
-		     HTM_SELECT_End ();
-		  Frm_EndForm ();
-		 }
-	       else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
-		  HTM_Txt (Txt_COURSE_STATUS[StatusTxt]);
-	    HTM_TD_End ();
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM,
+	                                 Crs->Status,ActChgCrsSta,Crs->CrsCod,
+	                                 Txt_COURSE_STATUS);
 
 	 HTM_TR_End ();
 	}
@@ -1328,50 +1293,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
-                  ((Crs->Status & Crs_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
+                  ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));	// I am the requester
-  }
-
-/*****************************************************************************/
-/******************* Set StatusTxt depending on status bits ******************/
-/*****************************************************************************/
-// Crs_STATUS_UNKNOWN = 0	// Other
-// Crs_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Crs_STATUS_PENDING = 2	// 01 (Status == Crs_STATUS_BIT_PENDING)
-// Crs_STATUS_REMOVED = 3	// 1- (Status & Crs_STATUS_BIT_REMOVED)
-
-static Crs_StatusTxt_t Crs_GetStatusTxtFromStatusBits (Crs_Status_t Status)
-  {
-   if (Status == 0)
-      return Crs_STATUS_ACTIVE;
-   if (Status == Crs_STATUS_BIT_PENDING)
-      return Crs_STATUS_PENDING;
-   if (Status & Crs_STATUS_BIT_REMOVED)
-      return Crs_STATUS_REMOVED;
-   return Crs_STATUS_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/******************* Set status bits depending on StatusTxt ******************/
-/*****************************************************************************/
-// Crs_STATUS_UNKNOWN = 0	// Other
-// Crs_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Crs_STATUS_PENDING = 2	// 01 (Status == Crs_STATUS_BIT_PENDING)
-// Crs_STATUS_REMOVED = 3	// 1- (Status & Crs_STATUS_BIT_REMOVED)
-
-static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt)
-  {
-   switch (StatusTxt)
-     {
-      case Crs_STATUS_UNKNOWN:
-      case Crs_STATUS_ACTIVE:
-	 return (Crs_Status_t) 0;
-      case Crs_STATUS_PENDING:
-	 return Crs_STATUS_BIT_PENDING;
-      case Crs_STATUS_REMOVED:
-	 return Crs_STATUS_BIT_REMOVED;
-     }
-   return (Crs_Status_t) 0;
   }
 
 /*****************************************************************************/
@@ -1541,7 +1464,7 @@ void Crs_ReceiveFormReqCrs (void)
    Crs_EditingCourseConstructor ();
 
    /***** Receive form to request a new course *****/
-   Crs_ReceiveFormRequestOrCreateCrs ((unsigned) Crs_STATUS_BIT_PENDING);
+   Crs_ReceiveFormRequestOrCreateCrs ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
@@ -1554,14 +1477,14 @@ void Crs_ReceiveFormNewCrs (void)
    Crs_EditingCourseConstructor ();
 
    /***** Receive form to create a new course *****/
-   Crs_ReceiveFormRequestOrCreateCrs (0);
+   Crs_ReceiveFormRequestOrCreateCrs ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new course ****************/
 /*****************************************************************************/
 
-static void Crs_ReceiveFormRequestOrCreateCrs (unsigned Status)
+static void Crs_ReceiveFormRequestOrCreateCrs (Hie_Status_t Status)
   {
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_Created_new_course_X;
@@ -1648,7 +1571,7 @@ void Crs_RemoveCourse (void)
    Crs_EditingCourseConstructor ();
 
    /***** Get course code *****/
-   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /***** Get data of the course from database *****/
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
@@ -1691,7 +1614,7 @@ bool Crs_GetDataOfCourseByCod (struct Crs_Course *Crs)
    /***** Clear data *****/
    Crs->DegCod = -1L;
    Crs->Year = 0;
-   Crs->Status = (Crs_Status_t) 0;
+   Crs->Status = (Hie_Status_t) 0;
    Crs->RequesterUsrCod = -1L;
    Crs->ShrtName[0] = '\0';
    Crs->FullName[0] = '\0';
@@ -1883,7 +1806,7 @@ void Crs_ChangeInsCrsCod (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /* Get institutional code */
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
@@ -1929,7 +1852,7 @@ void Crs_ChangeCrsYear (void)
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /* Get parameter with year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
@@ -2003,19 +1926,6 @@ void Crs_UpdateCrsYear (struct Crs_Course *Crs,unsigned NewYear)
   }
 
 /*****************************************************************************/
-/********************** Change the status of a course ************************/
-/*****************************************************************************/
-
-static void Crs_UpdateCrsStatus (struct Crs_Course *Crs,Crs_Status_t Status)
-  {
-   /***** Update status in table of courses *****/
-   Crs_DB_UpdateCrsStatus (Crs->CrsCod,Status);
-
-   /***** Copy course status *****/
-   Crs->Status = Status;
-  }
-
-/*****************************************************************************/
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
@@ -2025,7 +1935,7 @@ void Crs_RenameCourseShort (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
    Crs_RenameCourse (Crs_EditingCrs,Cns_SHRT_NAME);
   }
 
@@ -2035,7 +1945,7 @@ void Crs_RenameCourseFull (void)
    Crs_EditingCourseConstructor ();
 
    /***** Rename course *****/
-   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
    Crs_RenameCourse (Crs_EditingCrs,Cns_FULL_NAME);
   }
 
@@ -2125,32 +2035,24 @@ void Crs_RenameCourse (struct Crs_Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullNam
 void Crs_ChangeCrsStatus (void)
   {
    extern const char *Txt_The_status_of_the_course_X_has_changed;
-   Crs_Status_t Status;
-   Crs_StatusTxt_t StatusTxt;
+   Hie_Status_t Status;
 
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Get parameters from form *****/
    /* Get course code */
-   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /* Get parameter with status */
-   Status = (Crs_Status_t)
-	    Par_GetParToUnsignedLong ("Status",
-	                              0,
-	                              (unsigned long) Crs_MAX_STATUS,
-                                      (unsigned long) Crs_WRONG_STATUS);
-   if (Status == Crs_WRONG_STATUS)
-      Err_WrongStatusExit ();
-   StatusTxt = Crs_GetStatusTxtFromStatusBits (Status);
-   Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
+   Status = Hie_GetParamStatus ();	// New status
 
    /***** Get data of course *****/
    Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
    /***** Update status *****/
-   Crs_UpdateCrsStatus (Crs_EditingCrs,Status);
+   Crs_DB_UpdateCrsStatus (Crs_EditingCrs->CrsCod,Status);
+   Crs_EditingCrs->Status = Status;
 
    /***** Create alert to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -2332,31 +2234,6 @@ void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
 void Crs_PutParamCrsCod (long CrsCod)
   {
    Par_PutHiddenParamLong (NULL,"crs",CrsCod);
-  }
-
-/*****************************************************************************/
-/******************** Write parameter with code of course ********************/
-/*****************************************************************************/
-
-static void Crs_PutParamOtherCrsCod (void *CrsCod)
-  {
-   if (CrsCod)
-      Par_PutHiddenParamLong (NULL,"OthCrsCod",*((long *) CrsCod));
-  }
-
-/*****************************************************************************/
-/********************* Get parameter with code of course *********************/
-/*****************************************************************************/
-
-static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed)
-  {
-   long CrsCod;
-
-   /***** Get and check parameter with code of course *****/
-   if ((CrsCod = Par_GetParToLong ("OthCrsCod")) < MinCodAllowed)
-      Err_WrongCourseExit ();
-
-   return CrsCod;
   }
 
 /*****************************************************************************/

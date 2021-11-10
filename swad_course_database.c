@@ -35,6 +35,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -46,7 +47,7 @@ extern struct Globals Gbl;
 /************* Add a new requested course to pending requests ****************/
 /*****************************************************************************/
 
-void Crs_DB_CreateCourse (struct Crs_Course *Crs,unsigned Status)
+void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status)
   {
    /***** Insert new course into pending requests *****/
    Crs->CrsCod =
@@ -60,7 +61,7 @@ void Crs_DB_CreateCourse (struct Crs_Course *Crs,unsigned Status)
 				Crs->DegCod,
 				Crs->Year,
 				Crs->InstitutionalCrsCod,
-				Status,
+				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Crs->ShrtName,
 				Crs->FullName);
@@ -118,7 +119,7 @@ unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
 		   " ORDER BY Year,"
 			     "ShortName",
 		   Gbl.Hierarchy.Deg.DegCod,
-		   (unsigned) Crs_STATUS_BIT_REMOVED);	// All courses except those removed
+		   (unsigned) Hie_STATUS_BIT_REMOVED);	// All courses except those removed
   }
 
 /*****************************************************************************/
@@ -498,20 +499,6 @@ void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear)
   }
 
 /*****************************************************************************/
-/********************** Change the status of a course ************************/
-/*****************************************************************************/
-
-void Crs_DB_UpdateCrsStatus (long CrsCod,Crs_Status_t Status)
-  {
-   DB_QueryUPDATE ("can not update the status of a course",
-		   "UPDATE crs_courses"
-		     " SET Status=%u"
-		   " WHERE CrsCod=%ld",
-                   (unsigned) Status,
-                   CrsCod);
-  }
-
-/*****************************************************************************/
 /***************** Update course name in table of courses ********************/
 /*****************************************************************************/
 
@@ -537,6 +524,20 @@ void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod)
 		   " WHERE CrsCod=%ld",
 	           DegCod,
 	           CrsCod);
+  }
+
+/*****************************************************************************/
+/********************** Change the status of a course ************************/
+/*****************************************************************************/
+
+void Crs_DB_UpdateCrsStatus (long CrsCod,Hie_Status_t Status)
+  {
+   DB_QueryUPDATE ("can not update the status of a course",
+		   "UPDATE crs_courses"
+		     " SET Status=%u"
+		   " WHERE CrsCod=%ld",
+                   (unsigned) Status,
+                   CrsCod);
   }
 
 /*****************************************************************************/

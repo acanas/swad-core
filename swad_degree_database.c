@@ -30,6 +30,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -53,7 +54,7 @@ void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE
 /***************************** Create a new degree ***************************/
 /*****************************************************************************/
 
-void Deg_DB_CreateDegree (struct Deg_Degree *Deg,unsigned Status)
+void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status)
   {
    Deg->DegCod =
    DB_QueryINSERTandReturnCode ("can not create a new degree",
@@ -65,7 +66,7 @@ void Deg_DB_CreateDegree (struct Deg_Degree *Deg,unsigned Status)
 				  "%ld,'%s','%s','%s')",
 				Deg->CtrCod,
 				Deg->DegTypCod,
-				Status,
+				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Deg->ShrtName,
 				Deg->FullName,
@@ -392,7 +393,7 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res)
 			 " ORDER BY deg_degrees.ShortName",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Sco_GetDBStrFromScope (HieLvl_DEG),
-			 (unsigned) Crs_STATUS_BIT_PENDING);
+			 (unsigned) Hie_STATUS_BIT_PENDING);
       case Rol_SYS_ADM:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get degrees with pending courses",
@@ -404,7 +405,7 @@ unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res)
 			   " AND crs_courses.DegCod=deg_degrees.DegCod"
 			 " GROUP BY crs_courses.DegCod"
 			 " ORDER BY deg_degrees.ShortName",
-			 (unsigned) Crs_STATUS_BIT_PENDING);
+			 (unsigned) Hie_STATUS_BIT_PENDING);
       default:	// Forbidden for other users
 	 Err_WrongRoleExit ();
 	 return 0;	// Not reached
@@ -663,7 +664,7 @@ void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
 /*********************** Update the status of a degree ***********************/
 /*****************************************************************************/
 
-void Deg_DB_UpdateDegStatus (long DegCod,Deg_Status_t NewStatus)
+void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus)
   {
    DB_QueryUPDATE ("can not update the status of a degree",
 		   "UPDATE deg_degrees"

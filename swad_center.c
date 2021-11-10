@@ -82,10 +82,6 @@ static void Ctr_GetDataOfCenterFromRow (struct Ctr_Center *Ctr,MYSQL_ROW row);
 
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr);
-static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
-static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
-
-static void Ctr_PutParamOtherCtrCod (void *CtrCod);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 static void Ctr_PutParamGoToCtr (void *CtrCod);
@@ -93,7 +89,7 @@ static void Ctr_PutParamGoToCtr (void *CtrCod);
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentersForEdition (void);
-static void Ctr_ReceiveFormRequestOrCreateCtr (Ctr_Status_t Status);
+static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status);
 
 static unsigned Ctr_GetNumCtrsInCty (long CtyCod);
 
@@ -329,18 +325,17 @@ static void Ctr_PutIconToEditCenters (void)
 
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
   {
-   extern const char *Txt_CENTER_STATUS[Ctr_NUM_STATUS_TXT];
+   extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    struct Plc_Place Plc;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   Ctr_StatusTxt_t StatusTxt;
 
    /***** Get data of place of this center *****/
    Plc.PlcCod = Ctr->PlcCod;
    Plc_GetDataOfPlaceByCod (&Plc);
 
-   if (Ctr->Status & Ctr_STATUS_BIT_PENDING)
+   if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
       TxtClassStrong = "BT_LINK LT DAT_LIGHT";
@@ -395,11 +390,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       HTM_TD_End ();
 
       /***** Center status *****/
-      StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-	 if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
-	    HTM_Txt (Txt_CENTER_STATUS[StatusTxt]);
-      HTM_TD_End ();
+      Hie_WriteStatusCell (Ctr->Status,TxtClassNormal,BgColor,Txt_CENTER_STATUS);
 
    HTM_TR_End ();
 
@@ -604,7 +595,7 @@ bool Ctr_GetDataOfCenterByCod (struct Ctr_Center *Ctr)
    /***** Clear data *****/
    Ctr->InsCod          = -1L;
    Ctr->PlcCod          = -1L;
-   Ctr->Status          = (Ctr_Status_t) 0;
+   Ctr->Status          = (Hie_Status_t) 0;
    Ctr->RequesterUsrCod = -1L;
    Ctr->ShrtName[0]     = '\0';
    Ctr->FullName[0]     = '\0';
@@ -750,7 +741,7 @@ void Ctr_WriteSelectorOfCenter (void)
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
-   extern const char *Txt_CENTER_STATUS[Ctr_NUM_STATUS_TXT];
+   extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumCtr;
    struct Ctr_Center *Ctr;
    unsigned NumPlc;
@@ -760,8 +751,6 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    unsigned NumDegs;
    unsigned NumUsrsCtr;
    unsigned NumUsrsInCrssOfCtr;
-   Ctr_StatusTxt_t StatusTxt;
-   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -798,7 +787,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else	// I can remove center
 		  Ico_PutContextualIconToRemove (ActRemCtr,NULL,
-						 Ctr_PutParamOtherCtrCod,&Ctr->CtrCod);
+						 Hie_PutParamOtherHieCod,&Ctr->CtrCod);
 	    HTM_TD_End ();
 
 	    /* Center code */
@@ -816,7 +805,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
-		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"PlcCod\" class=\"PLC_SEL\"");
 			HTM_OPTION (HTM_Type_STRING,"0",
@@ -844,7 +833,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
-		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME\"");
@@ -859,7 +848,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
-		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME\"");
@@ -874,7 +863,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
-		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
+		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();
@@ -916,30 +905,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	    HTM_TD_End ();
 
 	    /* Center status */
-	    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-	    HTM_TD_Begin ("class=\"DAT LM\"");
-	       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
-		   StatusTxt == Ctr_STATUS_PENDING)
-		 {
-		  Frm_BeginForm (ActChgCtrSta);
-		  Ctr_PutParamOtherCtrCod (&Ctr->CtrCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				       "name=\"Status\" class=\"INPUT_STATUS\"");
-
-			StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_PENDING);
-			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-				    "%s",Txt_CENTER_STATUS[Ctr_STATUS_PENDING]);
-
-			StatusUnsigned = (unsigned) Ctr_GetStatusBitsFromStatusTxt (Ctr_STATUS_ACTIVE);
-			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-				    "%s",Txt_CENTER_STATUS[Ctr_STATUS_ACTIVE]);
-
-		     HTM_SELECT_End ();
-		  Frm_EndForm ();
-		 }
-	       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
-		  HTM_Txt (Txt_CENTER_STATUS[StatusTxt]);
-	    HTM_TD_End ();
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM,
+	                                 Ctr->Status,ActChgCtrSta,Ctr->CtrCod,
+                                         Txt_CENTER_STATUS);
 
 	 HTM_TR_End ();
 	}
@@ -958,50 +926,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
-                  ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
+                  ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));	// I am the requester
-  }
-
-/*****************************************************************************/
-/******************* Set StatusTxt depending on status bits ******************/
-/*****************************************************************************/
-// Ctr_STATUS_UNKNOWN = 0	// Other
-// Ctr_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Ctr_STATUS_PENDING = 2	// 01 (Status == Ctr_STATUS_BIT_PENDING)
-// Ctr_STATUS_REMOVED = 3	// 1- (Status & Ctr_STATUS_BIT_REMOVED)
-
-static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status)
-  {
-   if (Status == 0)
-      return Ctr_STATUS_ACTIVE;
-   if (Status == Ctr_STATUS_BIT_PENDING)
-      return Ctr_STATUS_PENDING;
-   if (Status & Ctr_STATUS_BIT_REMOVED)
-      return Ctr_STATUS_REMOVED;
-   return Ctr_STATUS_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/******************* Set status bits depending on StatusTxt ******************/
-/*****************************************************************************/
-// Ctr_STATUS_UNKNOWN = 0	// Other
-// Ctr_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Ctr_STATUS_PENDING = 2	// 01 (Status == Ctr_STATUS_BIT_PENDING)
-// Ctr_STATUS_REMOVED = 3	// 1- (Status & Ctr_STATUS_BIT_REMOVED)
-
-static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt)
-  {
-   switch (StatusTxt)
-     {
-      case Ctr_STATUS_UNKNOWN:
-      case Ctr_STATUS_ACTIVE:
-	 return (Ctr_Status_t) 0;
-      case Ctr_STATUS_PENDING:
-	 return Ctr_STATUS_BIT_PENDING;
-      case Ctr_STATUS_REMOVED:
-	 return Ctr_STATUS_BIT_REMOVED;
-     }
-   return (Ctr_Status_t) 0;
   }
 
 /*****************************************************************************/
@@ -1011,16 +937,6 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt)
 void Ctr_PutParamCtrCod (long CtrCod)
   {
    Par_PutHiddenParamLong (NULL,"ctr",CtrCod);
-  }
-
-/*****************************************************************************/
-/***************** Write parameter with code of other center *****************/
-/*****************************************************************************/
-
-static void Ctr_PutParamOtherCtrCod (void *CtrCod)
-  {
-   if (CtrCod)
-      Par_PutHiddenParamLong (NULL,"OthCtrCod",*((long *) CtrCod));
   }
 
 /*****************************************************************************/
@@ -1052,7 +968,7 @@ void Ctr_RemoveCenter (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /***** Get data of the center from database *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
@@ -1124,7 +1040,7 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /***** Get parameter with place code *****/
    NewPlcCod = Plc_GetParamPlcCod ();
@@ -1152,7 +1068,7 @@ void Ctr_RenameCenterShort (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Rename center *****/
-   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
    Ctr_RenameCenter (Ctr_EditingCtr,Cns_SHRT_NAME);
   }
 
@@ -1162,7 +1078,7 @@ void Ctr_RenameCenterFull (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Rename center *****/
-   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
    Ctr_RenameCenter (Ctr_EditingCtr,Cns_FULL_NAME);
   }
 
@@ -1252,7 +1168,7 @@ void Ctr_ChangeCtrWWW (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Get the code of the center *****/
-   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /***** Get the new WWW for the center *****/
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1284,32 +1200,24 @@ void Ctr_ChangeCtrWWW (void)
 void Ctr_ChangeCtrStatus (void)
   {
    extern const char *Txt_The_status_of_the_center_X_has_changed;
-   Ctr_Status_t NewStatus;
-   Ctr_StatusTxt_t NewStatusTxt;
+   Hie_Status_t Status;
 
    /***** Center constructor *****/
    Ctr_EditingCenterConstructor ();
 
-   /***** Get center code *****/
-   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   /***** Get parameters from form *****/
+   /* Get center code */
+   Ctr_EditingCtr->CtrCod = Hie_GetAndCheckParamOtherHieCod (1);
 
-   /***** Get parameter with status *****/
-   NewStatus = (Ctr_Status_t)
-	       Par_GetParToUnsignedLong ("Status",
-					 0,
-					 (unsigned long) Ctr_MAX_STATUS,
-					 (unsigned long) Ctr_WRONG_STATUS);
-   if (NewStatus == Ctr_WRONG_STATUS)
-      Err_WrongStatusExit ();
-   NewStatusTxt = Ctr_GetStatusTxtFromStatusBits (NewStatus);
-   NewStatus = Ctr_GetStatusBitsFromStatusTxt (NewStatusTxt);	// New status
+   /* Get parameter with status */
+   Status = Hie_GetParamStatus ();	// New status
 
    /***** Get data of center *****/
    Ctr_GetDataOfCenterByCod (Ctr_EditingCtr);
 
-   /***** Update status in table of centers *****/
-   Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->CtrCod,NewStatus);
-   Ctr_EditingCtr->Status = NewStatus;
+   /***** Update status *****/
+   Ctr_DB_UpdateCtrStatus (Ctr_EditingCtr->CtrCod,Status);
+   Ctr_EditingCtr->Status = Status;
 
    /***** Write message to show the change made
 	  and put button to go to center changed *****/
@@ -1581,7 +1489,7 @@ void Ctr_ReceiveFormReqCtr (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Receive form to request a new center *****/
-   Ctr_ReceiveFormRequestOrCreateCtr ((Ctr_Status_t) Ctr_STATUS_BIT_PENDING);
+   Ctr_ReceiveFormRequestOrCreateCtr ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
@@ -1594,14 +1502,14 @@ void Ctr_ReceiveFormNewCtr (void)
    Ctr_EditingCenterConstructor ();
 
    /***** Receive form to create a new center *****/
-   Ctr_ReceiveFormRequestOrCreateCtr ((Ctr_Status_t) 0);
+   Ctr_ReceiveFormRequestOrCreateCtr ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /************* Receive form to request or create a new center ****************/
 /*****************************************************************************/
 
-static void Ctr_ReceiveFormRequestOrCreateCtr (Ctr_Status_t Status)
+static void Ctr_ReceiveFormRequestOrCreateCtr (Hie_Status_t Status)
   {
    extern const char *Txt_The_center_X_already_exists;
    extern const char *Txt_Created_new_center_X;
@@ -1962,7 +1870,7 @@ static void Ctr_EditingCenterConstructor (void)
    Ctr_EditingCtr->CtrCod          = -1L;
    Ctr_EditingCtr->InsCod          = -1L;
    Ctr_EditingCtr->PlcCod          = -1L;
-   Ctr_EditingCtr->Status          = (Ctr_Status_t) 0;
+   Ctr_EditingCtr->Status          = (Hie_Status_t) 0;
    Ctr_EditingCtr->RequesterUsrCod = -1L;
    Ctr_EditingCtr->ShrtName[0]     = '\0';
    Ctr_EditingCtr->FullName[0]     = '\0';

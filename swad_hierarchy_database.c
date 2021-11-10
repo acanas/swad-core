@@ -31,6 +31,29 @@
 #include "swad_scope.h"
 
 /*****************************************************************************/
+/******************* Get number of countries with users **********************/
+/*****************************************************************************/
+
+void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod)
+  {
+   static const char *Format[HieLvl_NUM_LEVELS] =
+     {
+      [HieLvl_UNK] = "",				// Unknown
+      [HieLvl_SYS] = "",				// System
+      [HieLvl_CTY] = "ins_instits.CtyCod=%ld AND ",	// Country
+      [HieLvl_INS] = "ctr_centers.InsCod=%ld AND ",	// Institution
+      [HieLvl_CTR] = "deg_degrees.CtrCod=%ld AND ",	// Center
+      [HieLvl_DEG] = "crs_courses.DegCod=%ld AND ",	// Degree
+      [HieLvl_CRS] = "crs_users.CrsCod=%ld AND ",	// Course
+     };
+
+   if (Cod > 0)
+      sprintf (SubQuery,Format[Scope],Cod);
+   else
+      SubQuery[0] = '\0';
+  }
+
+/*****************************************************************************/
 /****** Get institutions, centers and degrees administrated by an admin *****/
 /*****************************************************************************/
 

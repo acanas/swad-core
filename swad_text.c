@@ -71,6 +71,7 @@
 #include "swad_exam_log.h"
 #include "swad_figure.h"
 #include "swad_forum.h"
+#include "swad_hierarchy.h"
 #include "swad_holiday.h"
 #include "swad_info.h"
 #include "swad_institution.h"
@@ -4033,9 +4034,9 @@ const char *Txt_Center_X_removed =	// Warning: it is very important to include %
 	"Centro <strong>%s</strong> removido.";
 #endif
 
-const char *Txt_CENTER_STATUS[Crs_NUM_STATUS_TXT] =
+const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT] =
 	{
- 	[Ctr_STATUS_UNKNOWN] =
+ 	[Hie_STATUS_UNKNOWN] =
 #if   L==1	// ca
 	"Desconegudo"
 #elif L==2	// de
@@ -4056,7 +4057,7 @@ const char *Txt_CENTER_STATUS[Crs_NUM_STATUS_TXT] =
 	"Desconhecido"
 #endif
 	,
- 	[Ctr_STATUS_ACTIVE] =
+ 	[Hie_STATUS_ACTIVE] =
 #if   L==1	// ca
 	"Activo"
 #elif L==2	// de
@@ -4077,7 +4078,7 @@ const char *Txt_CENTER_STATUS[Crs_NUM_STATUS_TXT] =
 	"Ativo"
 #endif
 	,
- 	[Ctr_STATUS_PENDING] =
+ 	[Hie_STATUS_PENDING] =
 #if   L==1	// ca
 	"Novo"
 #elif L==2	// de
@@ -4098,7 +4099,7 @@ const char *Txt_CENTER_STATUS[Crs_NUM_STATUS_TXT] =
 	"Novo"
 #endif
 	,
- 	[Ctr_STATUS_REMOVED] =
+ 	[Hie_STATUS_REMOVED] =
 #if   L==1	// ca
 	"Eliminado"
 #elif L==2	// de
@@ -5710,9 +5711,9 @@ const char *Txt_Course_program =
 	"Programa da disciplina";
 #endif
 
-const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
+const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT] =
 	{
-	[Crs_STATUS_UNKNOWN] =
+	[Hie_STATUS_UNKNOWN] =
 #if   L==1	// ca
 	"Desconegudo"
 #elif L==2	// de
@@ -5733,7 +5734,7 @@ const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
 	"Desconhecido"
 #endif
 	,
-	[Crs_STATUS_ACTIVE] =
+	[Hie_STATUS_ACTIVE] =
 #if   L==1	// ca
 	"Activa"
 #elif L==2	// de
@@ -5754,7 +5755,7 @@ const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
 	"Ativa"
 #endif
 	,
-	[Crs_STATUS_PENDING] =
+	[Hie_STATUS_PENDING] =
 #if   L==1	// ca
 	"Nova"
 #elif L==2	// de
@@ -5775,7 +5776,7 @@ const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
 	"Nova"
 #endif
 	,
-	[Crs_STATUS_REMOVED] =
+	[Hie_STATUS_REMOVED] =
 #if   L==1	// ca
 	"Eliminada"
 #elif L==2	// de
@@ -8120,9 +8121,9 @@ const char *Txt_degree =
 	"grau";
 #endif
 
-const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
+const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT] =
 	{
-	[Deg_STATUS_UNKNOWN] =
+	[Hie_STATUS_UNKNOWN] =
 #if   L==1	// ca
 	"Desconegudo"
 #elif L==2	// de
@@ -8143,7 +8144,7 @@ const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
 	"Desconhecido"
 #endif
 	,
-	[Deg_STATUS_ACTIVE] =
+	[Hie_STATUS_ACTIVE] =
 #if   L==1	// ca
 	"Activa"
 #elif L==2	// de
@@ -8164,7 +8165,7 @@ const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
 	"Ativa"
 #endif
 	,
-	[Deg_STATUS_PENDING] =
+	[Hie_STATUS_PENDING] =
 #if   L==1	// ca
 	"Nova"
 #elif L==2	// de
@@ -8185,7 +8186,7 @@ const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
 	"Nova"
 #endif
 	,
-	[Deg_STATUS_REMOVED] =
+	[Hie_STATUS_REMOVED] =
 #if   L==1	// ca
 	"Eliminada"
 #elif L==2	// de
@@ -17443,9 +17444,9 @@ const char *Txt_Institution_X_removed =	// Warning: it is very important to incl
 #endif
 
 
-const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT] =
+const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT] =
 	{
-	[Ins_STATUS_UNKNOWN] =
+	[Hie_STATUS_UNKNOWN] =
 #if   L==1	// ca
 	"Desconegudo"
 #elif L==2	// de
@@ -17466,7 +17467,7 @@ const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT] =
 	"Desconhecido"
 #endif
 	,
-	[Ins_STATUS_ACTIVE] =
+	[Hie_STATUS_ACTIVE] =
 #if   L==1	// ca
 	"Activa"
 #elif L==2	// de
@@ -17487,7 +17488,7 @@ const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT] =
 	"Ativa"
 #endif
 	,
-	[Ins_STATUS_PENDING] =
+	[Hie_STATUS_PENDING] =
 #if   L==1	// ca
 	"Nova"
 #elif L==2	// de
@@ -17508,7 +17509,7 @@ const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT] =
 	"Nova"
 #endif
 	,
-	[Ins_STATUS_REMOVED] =
+	[Hie_STATUS_REMOVED] =
 #if   L==1	// ca
 	"Eliminada"
 #elif L==2	// de

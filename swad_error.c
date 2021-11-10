@@ -81,6 +81,11 @@ void Err_WrongScopeExit (void)
 /********* when wrong country, institution, center, degree or course *********/
 /*****************************************************************************/
 
+void Err_WrongHierarchyExit (void)
+  {
+   Err_ShowErrorAndExit ("Wrong hierarchy.");
+  }
+
 void Err_WrongCountrExit (void)
   {
    Err_ShowErrorAndExit ("Wrong country.");

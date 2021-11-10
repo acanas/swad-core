@@ -39,25 +39,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Ctr_STATUS_BIT_PENDING = (1 << 0),	// Center is requested, but not yet activated
-   Ctr_STATUS_BIT_REMOVED = (1 << 1),	// Center has been removed
-  } Ctr_Status_Bits_t;
-
-typedef unsigned Ctr_Status_t;
-#define Ctr_MAX_STATUS		((Ctr_Status_t) 3)
-#define Ctr_WRONG_STATUS	((Ctr_Status_t) (Ctr_MAX_STATUS + 1))
-
-#define Ctr_NUM_STATUS_TXT	4
-typedef enum
-  {
-   Ctr_STATUS_UNKNOWN = 0,	// Other
-   Ctr_STATUS_ACTIVE  = 1,	// 00 (Status == 0)
-   Ctr_STATUS_PENDING = 2,	// 01 (Status == Ctr_STATUS_BIT_PENDING)
-   Ctr_STATUS_REMOVED = 3,	// 1- (Status & Ctr_STATUS_BIT_REMOVED)
-  } Ctr_StatusTxt_t;
-
 #define Ctr_MAX_CENTERS_PER_USR	 10 // Used in list of my centers
 
 struct Ctr_Center
@@ -65,7 +46,7 @@ struct Ctr_Center
    long CtrCod;			// Center code
    long InsCod;			// Institution code
    long PlcCod;			// Place code
-   Ctr_Status_t Status;		// Center status
+   Hie_Status_t Status;		// Center status
    long RequesterUsrCod;	// User code of the person who requested the creation of this center
    struct Map_Coordinates Coord;	// Geographical coordinates
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];

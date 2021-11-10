@@ -79,8 +79,6 @@ static struct Deg_Degree *Deg_EditingDeg = NULL;	// Static variable to keep the 
 
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg);
-static Deg_StatusTxt_t Deg_GetStatusTxtFromStatusBits (Deg_Status_t Status);
-static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt);
 static void Deg_PutFormToCreateDegree (void);
 static void Deg_PutHeadDegreesForSeeing (void);
 static void Deg_PutHeadDegreesForEdition (void);
@@ -94,8 +92,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg);
 static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
 
-static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status);
-static void Deg_PutParamOtherDegCod (void *DegCod);
+static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status);
 
 static void Deg_GetDataOfDegreeFromRow (struct Deg_Degree *Deg,MYSQL_ROW row);
 
@@ -303,7 +300,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (void)
   {
-   extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
+   extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumDeg;
    struct DegreeType *DegTyp;
    struct Deg_Degree *Deg;
@@ -313,8 +310,6 @@ static void Deg_ListDegreesForEdition (void)
    bool ICanEdit;
    unsigned NumCrss;
    unsigned NumUsrsInCrssOfDeg;
-   Deg_StatusTxt_t StatusTxt;
-   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -349,7 +344,7 @@ static void Deg_ListDegreesForEdition (void)
 		  Ico_PutIconRemovalNotAllowed ();
 	       else
 		  Ico_PutContextualIconToRemove (ActRemDeg,NULL,
-						 Deg_PutParamOtherDegCod,&Deg->DegCod);
+						 Hie_PutParamOtherHieCod,&Deg->DegCod);
 	    HTM_TD_End ();
 
 	    /* Degree code */
@@ -367,7 +362,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
-		  Deg_PutParamOtherDegCod (&Deg->DegCod);
+		  Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME\"");
@@ -382,7 +377,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
-		  Deg_PutParamOtherDegCod (&Deg->DegCod);
+		  Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME\"");
@@ -397,7 +392,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
-		  Deg_PutParamOtherDegCod (&Deg->DegCod);
+		  Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
 			for (NumDegTyp = 0;
@@ -426,7 +421,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
-		  Deg_PutParamOtherDegCod (&Deg->DegCod);
+		  Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();
@@ -463,27 +458,10 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree status */
-	    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-	    HTM_TD_Begin ("class=\"DAT LM\"");
-	       if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM &&
-		   StatusTxt == Deg_STATUS_PENDING)
-		 {
-		  Frm_BeginForm (ActChgDegSta);
-		  Deg_PutParamOtherDegCod (&Deg->DegCod);
-		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				       "name=\"Status\" class=\"INPUT_STATUS\"");
-			StatusUnsigned = (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_PENDING);
-			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-				    "%s",Txt_DEGREE_STATUS[Deg_STATUS_PENDING]);
-			StatusUnsigned = (unsigned) Deg_GetStatusBitsFromStatusTxt (Deg_STATUS_ACTIVE);
-			HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-				    "%s",Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
-		     HTM_SELECT_End ();
-		  Frm_EndForm ();
-		 }
-	       else if (StatusTxt != Deg_STATUS_ACTIVE)	// If active ==> do not show anything
-		  HTM_Txt (Txt_DEGREE_STATUS[StatusTxt]);
-	    HTM_TD_End ();
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM,
+	                                 Deg->Status,ActChgDegSta,Deg->DegCod,
+	                                 Txt_DEGREE_STATUS);
+
 	 HTM_TR_End ();
 	}
 
@@ -501,50 +479,8 @@ static void Deg_ListDegreesForEdition (void)
 static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
-                  ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
+                  ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));	// I am the requester
-  }
-
-/*****************************************************************************/
-/******************* Set StatusTxt depending on status bits ******************/
-/*****************************************************************************/
-// Deg_STATUS_UNKNOWN = 0	// Other
-// Deg_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Deg_STATUS_PENDING = 2	// 01 (Status == Deg_STATUS_BIT_PENDING)
-// Deg_STATUS_REMOVED = 3	// 1- (Status & Deg_STATUS_BIT_REMOVED)
-
-static Deg_StatusTxt_t Deg_GetStatusTxtFromStatusBits (Deg_Status_t Status)
-  {
-   if (Status == 0)
-      return Deg_STATUS_ACTIVE;
-   if (Status == Deg_STATUS_BIT_PENDING)
-      return Deg_STATUS_PENDING;
-   if (Status & Deg_STATUS_BIT_REMOVED)
-      return Deg_STATUS_REMOVED;
-   return Deg_STATUS_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/******************* Set status bits depending on StatusTxt ******************/
-/*****************************************************************************/
-// Deg_STATUS_UNKNOWN = 0	// Other
-// Deg_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Deg_STATUS_PENDING = 2	// 01 (Status == Deg_STATUS_BIT_PENDING)
-// Deg_STATUS_REMOVED = 3	// 1- (Status & Deg_STATUS_BIT_REMOVED)
-
-static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt)
-  {
-   switch (StatusTxt)
-     {
-      case Deg_STATUS_UNKNOWN:
-      case Deg_STATUS_ACTIVE:
-	 return (Deg_Status_t) 0;
-      case Deg_STATUS_PENDING:
-	 return Deg_STATUS_BIT_PENDING;
-      case Deg_STATUS_REMOVED:
-	 return Deg_STATUS_BIT_REMOVED;
-     }
-   return (Deg_Status_t) 0;
   }
 
 /*****************************************************************************/
@@ -831,20 +767,19 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
-   extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
+   extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    struct DegreeType DegTyp;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
    unsigned NumCrss = Crs_GetCachedNumCrssInDeg (Deg->DegCod);
-   Deg_StatusTxt_t StatusTxt;
 
    /***** Get data of type of degree of this degree *****/
    DegTyp.DegTypCod = Deg->DegTypCod;
    if (!DegTyp_GetDataOfDegreeTypeByCod (&DegTyp))
       Err_WrongDegTypExit ();
 
-   if (Deg->Status & Deg_STATUS_BIT_PENDING)
+   if (Deg->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
       TxtClassStrong = "BT_LINK LT DAT_LIGHT";
@@ -899,11 +834,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
       HTM_TD_End ();
 
       /***** Degree status *****/
-      StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-	 if (StatusTxt != Deg_STATUS_ACTIVE) // If active ==> do not show anything
-	    HTM_Txt (Txt_DEGREE_STATUS[StatusTxt]);
-      HTM_TD_End ();
+      Hie_WriteStatusCell (Deg->Status,TxtClassNormal,BgColor,Txt_DEGREE_STATUS);
 
    /***** End table row *****/
    HTM_TR_End ();
@@ -1105,7 +1036,7 @@ void Deg_ReceiveFormReqDeg (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Receive form to request a new degree *****/
-   Deg_ReceiveFormRequestOrCreateDeg ((unsigned) Deg_STATUS_BIT_PENDING);
+   Deg_ReceiveFormRequestOrCreateDeg ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
@@ -1118,14 +1049,14 @@ void Deg_ReceiveFormNewDeg (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Receive form to create a new degree *****/
-   Deg_ReceiveFormRequestOrCreateDeg (0);
+   Deg_ReceiveFormRequestOrCreateDeg ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /******************* Receive form to create a new degree *********************/
 /*****************************************************************************/
 
-static void Deg_ReceiveFormRequestOrCreateDeg (unsigned Status)
+static void Deg_ReceiveFormRequestOrCreateDeg (Hie_Status_t Status)
   {
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_Created_new_degree_X;
@@ -1192,7 +1123,7 @@ void Deg_RemoveDegree (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Get degree code *****/
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
@@ -1225,16 +1156,6 @@ void Deg_PutParamDegCod (long DegCod)
   }
 
 /*****************************************************************************/
-/******************** Write parameter with code of degree ********************/
-/*****************************************************************************/
-
-static void Deg_PutParamOtherDegCod (void *DegCod)
-  {
-   if (DegCod)
-      Par_PutHiddenParamLong (NULL,"OthDegCod",*((long *) DegCod));
-  }
-
-/*****************************************************************************/
 /********************* Get parameter with code of degree *********************/
 /*****************************************************************************/
 
@@ -1263,7 +1184,7 @@ bool Deg_GetDataOfDegreeByCod (struct Deg_Degree *Deg)
    /***** Clear data *****/
    Deg->CtrCod          = -1L;
    Deg->DegTypCod       = -1L;
-   Deg->Status          = (Deg_Status_t) 0;
+   Deg->Status          = (Hie_Status_t) 0;
    Deg->RequesterUsrCod = -1L;
    Deg->ShrtName[0]     = '\0';
    Deg->FullName[0]     = '\0';
@@ -1385,7 +1306,7 @@ void Deg_RenameDegreeShort (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
    Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
   }
 
@@ -1395,7 +1316,7 @@ void Deg_RenameDegreeFull (void)
    Deg_EditingDegreeConstructor ();
 
    /***** Rename degree *****/
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
    Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
   }
 
@@ -1486,7 +1407,7 @@ void Deg_ChangeDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
 
    /* Get the new degree type */
    NewDegTypCod = DegTyp_GetAndCheckParamOtherDegTypCod (1);
@@ -1519,7 +1440,7 @@ void Deg_ChangeDegWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the degree */
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
 
    /* Get the new WWW for the degree */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1551,31 +1472,22 @@ void Deg_ChangeDegWWW (void)
 void Deg_ChangeDegStatus (void)
   {
    extern const char *Txt_The_status_of_the_degree_X_has_changed;
-   Deg_Status_t Status;
-   Deg_StatusTxt_t StatusTxt;
+   Hie_Status_t Status;
 
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1L);
+   Deg_EditingDeg->DegCod = Hie_GetAndCheckParamOtherHieCod (1L);
 
    /* Get parameter with status */
-   Status = (Deg_Status_t)
-	    Par_GetParToUnsignedLong ("Status",
-	                              0,
-	                              (unsigned long) Deg_MAX_STATUS,
-                                      (unsigned long) Deg_WRONG_STATUS);
-   if (Status == Deg_WRONG_STATUS)
-      Err_WrongStatusExit ();
-   StatusTxt = Deg_GetStatusTxtFromStatusBits (Status);
-   Status = Deg_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
+   Status = Hie_GetParamStatus ();	// New status
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
 
-   /***** Update status in table of degrees *****/
+   /***** Update status *****/
    Deg_DB_UpdateDegStatus (Deg_EditingDeg->DegCod,Status);
    Deg_EditingDeg->Status = Status;
 
@@ -1919,7 +1831,7 @@ static void Deg_EditingDegreeConstructor (void)
    Deg_EditingDeg->DegCod          = -1L;
    Deg_EditingDeg->DegTypCod       = -1L;
    Deg_EditingDeg->CtrCod          = -1L;
-   Deg_EditingDeg->Status          = (Deg_Status_t) 0;
+   Deg_EditingDeg->Status          = (Hie_Status_t) 0;
    Deg_EditingDeg->RequesterUsrCod = -1L;
    Deg_EditingDeg->ShrtName[0]     = '\0';
    Deg_EditingDeg->FullName[0]     = '\0';

@@ -35,7 +35,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Crs_DB_CreateCourse (struct Crs_Course *Crs,unsigned Status);
+void Crs_DB_CreateCourse (struct Crs_Course *Crs,Hie_Status_t Status);
 
 unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long DegCod);
 unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
@@ -65,10 +65,10 @@ unsigned Crs_DB_GetNumCrssWithUsrs (Rol_Role_t Role,
 unsigned Crs_DB_GetCrssFromUsr (MYSQL_RES **mysql_res,long UsrCod,long DegCod);
 
 void Crs_DB_UpdateInstitutionalCrsCod (long CrsCod,const char *NewInstitutionalCrsCod);
-void Crs_DB_UpdateCrsStatus (long CrsCod,Crs_Status_t Status);
 void Crs_DB_UpdateCrsYear (long CrsCod,unsigned NewYear);
 void Crs_DB_UpdateCrsName (long CrsCod,const char *FieldName,const char *NewCrsName);
 void Crs_DB_UpdateCrsDeg (long CrsCod,long DegCod);
+void Crs_DB_UpdateCrsStatus (long CrsCod,Hie_Status_t Status);
 
 void Crs_DB_UpdateCrsLastClick (void);
 

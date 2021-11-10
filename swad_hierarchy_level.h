@@ -40,4 +40,23 @@ typedef enum
    HieLvl_CRS = 6,	// Course
   } HieLvl_Level_t;
 
+typedef enum
+  {
+   Hie_STATUS_BIT_PENDING = (1 << 0),	// Requested, but not yet activated
+   Hie_STATUS_BIT_REMOVED = (1 << 1),	// Removed
+  } Hie_Status_Bits_t;
+
+typedef unsigned Hie_Status_t;
+#define Hie_MAX_STATUS		((Hie_Status_t) 3)
+#define Hie_WRONG_STATUS	((Hie_Status_t) (Hie_MAX_STATUS + 1))
+
+#define Hie_NUM_STATUS_TXT	4
+typedef enum
+  {
+   Hie_STATUS_UNKNOWN = 0,	// Other
+   Hie_STATUS_ACTIVE  = 1,	// 00 (Status == 0)
+   Hie_STATUS_PENDING = 2,	// 01 (Status == Hie_STATUS_BIT_PENDING)
+   Hie_STATUS_REMOVED = 3,	// 1- (Status & Hie_STATUS_BIT_REMOVED)
+  } Hie_StatusTxt_t;
+
 #endif

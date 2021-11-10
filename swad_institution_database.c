@@ -33,6 +33,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_database.h"
 #include "swad_institution.h"
 #include "swad_institution_database.h"
 
@@ -46,7 +47,7 @@ extern struct Globals Gbl;
 /************************** Create a new institution *************************/
 /*****************************************************************************/
 
-long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status)
+long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,Hie_Status_t Status)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create institution",
@@ -57,7 +58,7 @@ long Ins_DB_CreateInstitution (const struct Ins_Instit *Ins,unsigned Status)
 				" (%ld,%u,%ld,"
 				  "'%s','%s','%s')",
 				Ins->CtyCod,
-				Status,
+				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Ins->ShrtName,
 				Ins->FullName,
@@ -82,7 +83,7 @@ void Ins_DB_UpdateInsCty (long InsCod,long CtyCod)
 /****************** Update status in table of institutions *******************/
 /*****************************************************************************/
 
-void Ins_DB_UpdateInsStatus (long InsCod,Ins_Status_t Status)
+void Ins_DB_UpdateInsStatus (long InsCod,Hie_Status_t Status)
   {
    DB_QueryUPDATE ("can not update the status of an institution",
 		   "UPDATE ins_instits"
@@ -223,7 +224,7 @@ unsigned Ins_DB_GetAllInsWithPendingCtr (MYSQL_RES **mysql_res)
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
 		   " GROUP BY ctr_centers.InsCod"
 		   " ORDER BY ins_instits.ShortName",
-		   (unsigned) Ctr_STATUS_BIT_PENDING);
+		   (unsigned) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
@@ -245,7 +246,7 @@ unsigned Ins_DB_GetInsWithPendingCtrsAdminByMe (MYSQL_RES **mysql_res)
 		     " AND ctr_centers.InsCod=ins_instits.InsCod"
 		   " GROUP BY ctr_centers.InsCod"
 		   " ORDER BY ins_instits.ShortName",
-		   (unsigned) Ctr_STATUS_BIT_PENDING,
+		   (unsigned) Hie_STATUS_BIT_PENDING,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

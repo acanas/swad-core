@@ -87,11 +87,6 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
 
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
-static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
-static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
-
-static void Ins_PutParamOtherInsCod (void *InsCod);
-static long Ins_GetParamOtherInsCod (void);
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 
@@ -100,7 +95,7 @@ static void Ins_PutParamGoToIns (void *InsCod);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
-static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status);
+static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status);
 
 static void Ins_EditingInstitutionConstructor ();
 static void Ins_EditingInstitutionDestructor ();
@@ -364,13 +359,12 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
-   extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
+   extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   Ins_StatusTxt_t StatusTxt;
 
-   if (Ins->Status & Ins_STATUS_BIT_PENDING)
+   if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
       TxtClassStrong = "BT_LINK LT DAT_LIGHT";
@@ -431,11 +425,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
       HTM_TD_End ();
 
       /***** Institution status *****/
-      StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
-	 if (StatusTxt != Ins_STATUS_ACTIVE) // If active ==> do not show anything
-	    HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
-      HTM_TD_End ();
+      Hie_WriteStatusCell (Ins->Status,TxtClassNormal,BgColor,Txt_INSTITUTION_STATUS);
 
    HTM_TR_End ();
 
@@ -709,12 +699,12 @@ bool Ins_GetDataOfInstitByCod (struct Ins_Instit *Ins)
    bool InsFound = false;
 
    /***** Clear data *****/
-   Ins->CtyCod             = -1L;
-   Ins->Status             = (Ins_Status_t) 0;
-   Ins->RequesterUsrCod    = -1L;
-   Ins->ShrtName[0]        =
-   Ins->FullName[0]        =
-   Ins->WWW[0]             = '\0';
+   Ins->CtyCod          = -1L;
+   Ins->Status          = (Hie_Status_t) 0;
+   Ins->RequesterUsrCod = -1L;
+   Ins->ShrtName[0]     =
+   Ins->FullName[0]     =
+   Ins->WWW[0]          = '\0';
    Ins->NumUsrsWhoClaimToBelongToIns.Valid = false;
 
    /***** Check if institution code is correct *****/
@@ -923,7 +913,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
-   extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
+   extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Ins_Instit *Ins;
    char WWW[Cns_MAX_BYTES_WWW + 1];
@@ -932,8 +922,6 @@ static void Ins_ListInstitutionsForEdition (void)
    unsigned NumCtrs;
    unsigned NumUsrsIns;
    unsigned NumUsrsInCrssOfIns;
-   Ins_StatusTxt_t StatusTxt;
-   unsigned StatusUnsigned;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -971,7 +959,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       Ico_PutIconRemovalNotAllowed ();
 	    else
 	       Ico_PutContextualIconToRemove (ActRemIns,NULL,
-					      Ins_PutParamOtherInsCod,&Ins->InsCod);
+					      Hie_PutParamOtherHieCod,&Ins->InsCod);
 	    HTM_TD_End ();
 
 	    /* Institution code */
@@ -989,10 +977,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsSho);
-	       Ins_PutParamOtherInsCod (&Ins->InsCod);
-	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME\"");
+	       Hie_PutParamOtherHieCod (&Ins->InsCod);
+		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_SHORT_NAME\"");
 	       Frm_EndForm ();
 	      }
 	    else
@@ -1004,10 +992,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
-	       Ins_PutParamOtherInsCod (&Ins->InsCod);
-	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
-			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME\"");
+	       Hie_PutParamOtherHieCod (&Ins->InsCod);
+		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
+				  HTM_SUBMIT_ON_CHANGE,
+				  "class=\"INPUT_FULL_NAME\"");
 	       Frm_EndForm ();
 	      }
 	    else
@@ -1019,19 +1007,19 @@ static void Ins_ListInstitutionsForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
-		  Ins_PutParamOtherInsCod (&Ins->InsCod);
-		  HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+		  Hie_PutParamOtherHieCod (&Ins->InsCod);
+		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
+				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();
 		 }
 	       else
 		 {
 		  Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
 		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
-			       Ins->WWW,Ins->WWW);
-		  HTM_Txt (WWW);
-		  HTM_A_End ();
+		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
+				  Ins->WWW,Ins->WWW);
+			HTM_Txt (WWW);
+		     HTM_A_End ();
 		  HTM_DIV_End ();
 		 }
 	    HTM_TD_End ();
@@ -1061,27 +1049,9 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution status */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
-	       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-	       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
-		   StatusTxt == Ins_STATUS_PENDING)
-		 {
-		  Frm_BeginForm (ActChgInsSta);
-		  Ins_PutParamOtherInsCod (&Ins->InsCod);
-		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"Status\" class=\"INPUT_STATUS\"");
-		     StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_PENDING);
-		     HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
-				 "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_PENDING]);
-		     StatusUnsigned = (unsigned) Ins_GetStatusBitsFromStatusTxt (Ins_STATUS_ACTIVE);
-		     HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
-				 "%s",Txt_INSTITUTION_STATUS[Ins_STATUS_ACTIVE]);
-		  HTM_SELECT_End ();
-		  Frm_EndForm ();
-		 }
-	       else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
-		  HTM_Txt (Txt_INSTITUTION_STATUS[StatusTxt]);
-	    HTM_TD_End ();
+	    Hie_WriteStatusCellEditable (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM,
+	                                 Ins->Status,ActChgInsSta,Ins->InsCod,
+	                                 Txt_INSTITUTION_STATUS);
 
 	 HTM_TR_End ();
 	}
@@ -1100,50 +1070,8 @@ static void Ins_ListInstitutionsForEdition (void)
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins)
   {
    return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
-                  ((Ins->Status & Ins_STATUS_BIT_PENDING) != 0 &&		// Institution is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod));		// I am the requester
-  }
-
-/*****************************************************************************/
-/******************* Set StatusTxt depending on status bits ******************/
-/*****************************************************************************/
-// Ins_STATUS_UNKNOWN = 0	// Other
-// Ins_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Ins_STATUS_PENDING = 2	// 01 (Status == Ins_STATUS_BIT_PENDING)
-// Ins_STATUS_REMOVED = 3	// 1- (Status & Ins_STATUS_BIT_REMOVED)
-
-static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status)
-  {
-   if (Status == 0)
-      return Ins_STATUS_ACTIVE;
-   if (Status == Ins_STATUS_BIT_PENDING)
-      return Ins_STATUS_PENDING;
-   if (Status & Ins_STATUS_BIT_REMOVED)
-      return Ins_STATUS_REMOVED;
-   return Ins_STATUS_UNKNOWN;
-  }
-
-/*****************************************************************************/
-/******************* Set status bits depending on StatusTxt ******************/
-/*****************************************************************************/
-// Ins_STATUS_UNKNOWN = 0	// Other
-// Ins_STATUS_ACTIVE  = 1	// 00 (Status == 0)
-// Ins_STATUS_PENDING = 2	// 01 (Status == Ins_STATUS_BIT_PENDING)
-// Ins_STATUS_REMOVED = 3	// 1- (Status & Ins_STATUS_BIT_REMOVED)
-
-static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt)
-  {
-   switch (StatusTxt)
-     {
-      case Ins_STATUS_UNKNOWN:
-      case Ins_STATUS_ACTIVE:
-	 return (Ins_Status_t) 0;
-      case Ins_STATUS_PENDING:
-	 return Ins_STATUS_BIT_PENDING;
-      case Ins_STATUS_REMOVED:
-	 return Ins_STATUS_BIT_REMOVED;
-     }
-   return (Ins_Status_t) 0;
+                  ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
+                   Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod));	// I am the requester
   }
 
 /*****************************************************************************/
@@ -1166,16 +1094,6 @@ void Ins_PutParamInsCod (long InsCod)
   }
 
 /*****************************************************************************/
-/***************** Write parameter with code of institution ******************/
-/*****************************************************************************/
-
-static void Ins_PutParamOtherInsCod (void *InsCod)
-  {
-   if (InsCod)
-      Par_PutHiddenParamLong (NULL,"OthInsCod",*((long *) InsCod));
-  }
-
-/*****************************************************************************/
 /******************* Get parameter with code of institution ******************/
 /*****************************************************************************/
 
@@ -1184,16 +1102,10 @@ long Ins_GetAndCheckParamOtherInsCod (long MinCodAllowed)
    long InsCod;
 
    /***** Get and check parameter with code of institution *****/
-   if ((InsCod = Ins_GetParamOtherInsCod ()) < MinCodAllowed)
+   if ((InsCod = Par_GetParToLong ("OthInsCod")) < MinCodAllowed)
       Err_WrongInstitExit ();
 
    return InsCod;
-  }
-
-static long Ins_GetParamOtherInsCod (void)
-  {
-   /***** Get code of institution *****/
-   return Par_GetParToLong ("OthInsCod");
   }
 
 /*****************************************************************************/
@@ -1210,7 +1122,7 @@ void Ins_RemoveInstitution (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Get institution code *****/
-   Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /***** Get data of the institution from database *****/
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
@@ -1284,7 +1196,7 @@ void Ins_RenameInsShort (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Rename institution *****/
-   Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
    Ins_RenameInstitution (Ins_EditingIns,Cns_SHRT_NAME);
   }
 
@@ -1294,7 +1206,7 @@ void Ins_RenameInsFull (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Rename institution *****/
-   Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
    Ins_RenameInstitution (Ins_EditingIns,Cns_FULL_NAME);
   }
 
@@ -1398,7 +1310,7 @@ void Ins_ChangeInsWWW (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
-   Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /* Get the new WWW for the institution */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
@@ -1430,31 +1342,22 @@ void Ins_ChangeInsWWW (void)
 void Ins_ChangeInsStatus (void)
   {
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
-   Ins_Status_t Status;
-   Ins_StatusTxt_t StatusTxt;
+   Hie_Status_t Status;
 
    /***** Institution constructor *****/
    Ins_EditingInstitutionConstructor ();
 
    /***** Get parameters from form *****/
    /* Get institution code */
-   Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Ins_EditingIns->InsCod = Hie_GetAndCheckParamOtherHieCod (1);
 
    /* Get parameter with status */
-   Status = (Ins_Status_t)
-	    Par_GetParToUnsignedLong ("Status",
-	                              0,
-	                              (unsigned long) Ins_MAX_STATUS,
-                                      (unsigned long) Ins_WRONG_STATUS);
-   if (Status == Ins_WRONG_STATUS)
-      Err_WrongStatusExit ();
-   StatusTxt = Ins_GetStatusTxtFromStatusBits (Status);
-   Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
+   Status = Hie_GetParamStatus ();	// New status
 
    /***** Get data of institution *****/
    Ins_GetDataOfInstitByCod (Ins_EditingIns);
 
-   /***** Update status in table of institutions *****/
+   /***** Update status *****/
    Ins_DB_UpdateInsStatus (Status,Ins_EditingIns->InsCod);
    Ins_EditingIns->Status = Status;
 
@@ -1650,7 +1553,7 @@ void Ins_ReceiveFormReqIns (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Receive form to request a new institution *****/
-   Ins_ReceiveFormRequestOrCreateIns ((unsigned) Ins_STATUS_BIT_PENDING);
+   Ins_ReceiveFormRequestOrCreateIns ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
   }
 
 /*****************************************************************************/
@@ -1663,14 +1566,14 @@ void Ins_ReceiveFormNewIns (void)
    Ins_EditingInstitutionConstructor ();
 
    /***** Receive form to create a new institution *****/
-   Ins_ReceiveFormRequestOrCreateIns (0);
+   Ins_ReceiveFormRequestOrCreateIns ((Hie_Status_t) 0);
   }
 
 /*****************************************************************************/
 /*********** Receive form to request or create a new institution *************/
 /*****************************************************************************/
 
-static void Ins_ReceiveFormRequestOrCreateIns (unsigned Status)
+static void Ins_ReceiveFormRequestOrCreateIns (Hie_Status_t Status)
   {
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_Created_new_institution_X;

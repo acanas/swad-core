@@ -38,7 +38,7 @@
 /*****************************************************************************/
 
 void Deg_DB_CreateDegreeType (const char DegTypName[DegTyp_MAX_BYTES_DEGREE_TYPE_NAME + 1]);
-void Deg_DB_CreateDegree (struct Deg_Degree *Deg,unsigned Status);
+void Deg_DB_CreateDegree (struct Deg_Degree *Deg,Hie_Status_t Status);
 
 unsigned Deg_DB_GetDegreeTypes (MYSQL_RES **mysql_res,
                                 HieLvl_Level_t Scope,DegTyp_Order_t Order);
@@ -76,7 +76,7 @@ void Deg_DB_UpdateDegNameDB (long DegCod,const char *FieldName,
 void Deg_DB_UpdateDegCtr (long DegCod,long NewCtrCod);
 void Deg_DB_UpdateDegTyp (long DegCod,long NewDegTypCod);
 void Deg_DB_UpdateDegWWW (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
-void Deg_DB_UpdateDegStatus (long DegCod,Deg_Status_t NewStatus);
+void Deg_DB_UpdateDegStatus (long DegCod,Hie_Status_t NewStatus);
 
 unsigned Deg_DB_GetDegsFromUsr (MYSQL_RES **mysql_res,long UsrCod,long CtrCod);
 unsigned Deg_DB_GetUsrMainDeg (MYSQL_RES **mysql_res,long UsrCod);

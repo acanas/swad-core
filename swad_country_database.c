@@ -34,6 +34,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_database.h"
 #include "swad_search.h"
 
 /*****************************************************************************/
@@ -137,7 +138,7 @@ unsigned Cty_DB_GetCtysWithPendingInss (MYSQL_RES **mysql_res)
 		     " AND ins_instits.CtyCod=cty_countrs.CtyCod"
 		   " GROUP BY ins_instits.CtyCod"
 		   " ORDER BY cty_countrs.Name_%s",
-		   (unsigned) Ins_STATUS_BIT_PENDING,
+		   (unsigned) Hie_STATUS_BIT_PENDING,
 		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
   }
 

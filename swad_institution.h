@@ -35,32 +35,13 @@
 /************************ Public types and constants *************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Ins_STATUS_BIT_PENDING = (1 << 0),	// Institution is requested, but not yet activated
-   Ins_STATUS_BIT_REMOVED = (1 << 1),	// Institution has been removed
-  } Ins_Status_Bits_t;
-
-typedef unsigned Ins_Status_t;
-#define Ins_MAX_STATUS		((Ins_Status_t) 3)
-#define Ins_WRONG_STATUS	((Ins_Status_t) (Ins_MAX_STATUS + 1))
-
-#define Ins_NUM_STATUS_TXT	4
-typedef enum
-  {
-   Ins_STATUS_UNKNOWN = 0,	// Other
-   Ins_STATUS_ACTIVE  = 1,	// 00 (Status == 0)
-   Ins_STATUS_PENDING = 2,	// 01 (Status == Ins_STATUS_BIT_PENDING)
-   Ins_STATUS_REMOVED = 3,	// 1- (Status & Ins_STATUS_BIT_REMOVED)
-  } Ins_StatusTxt_t;
-
 #define Ins_MAX_INSTITS_PER_USR	 10	// Used in list of my institutions
 
 struct Ins_Instit
   {
    long InsCod;
    long CtyCod;
-   Ins_Status_t Status;		// Institution status
+   Hie_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];

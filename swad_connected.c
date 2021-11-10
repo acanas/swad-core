@@ -550,6 +550,19 @@ static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Rol
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
    extern const char *Txt_View_record_for_this_course;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActUnk,
+      [Rol_GST	  ] = ActUnk,
+      [Rol_USR	  ] = ActUnk,
+      [Rol_STD	  ] = ActSeeRecOneStd,
+      [Rol_NET	  ] = ActSeeRecOneTch,
+      [Rol_TCH	  ] = ActSeeRecOneTch,
+      [Rol_DEG_ADM] = ActUnk,
+      [Rol_CTR_ADM] = ActUnk,
+      [Rol_INS_ADM] = ActUnk,
+      [Rol_SYS_ADM] = ActUnk,
+     };
    const char *ClassTxt;
    const char *ClassLink;
    long UsrCod;
@@ -599,19 +612,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 // The form must be unique because
 	 // the list of connected users
 	 // is dynamically updated via AJAX
-	 switch (Role)
-	   {
-	    case Rol_STD:
-	       Frm_BeginFormUnique (ActSeeRecOneStd);
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       Frm_BeginFormUnique (ActSeeRecOneTch);
-	       break;
-	    default:
-	       Err_WrongRoleExit ();
-	       break;
-	   }
+         if (NextAction[Role] == ActUnk)
+	    Err_WrongRoleExit ();
+         Frm_BeginFormUnique (NextAction[Role]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
@@ -647,6 +650,19 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
 static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t Role)
   {
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActUnk,
+      [Rol_GST	  ] = ActUnk,
+      [Rol_USR	  ] = ActUnk,
+      [Rol_STD	  ] = ActSeeRecOneStd,
+      [Rol_NET	  ] = ActSeeRecOneTch,
+      [Rol_TCH	  ] = ActSeeRecOneTch,
+      [Rol_DEG_ADM] = ActUnk,
+      [Rol_CTR_ADM] = ActUnk,
+      [Rol_INS_ADM] = ActUnk,
+      [Rol_SYS_ADM] = ActUnk,
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
@@ -708,20 +724,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		  ClassLink = "BT_LINK CON_NAME_WIDE CON_NO_CRS";
 		 }
 	       HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+
 		  if (PutLinkToRecord)
 		    {
-		     switch (Role)
-		       {
-			case Rol_STD:
-			   Frm_BeginForm (ActSeeRecOneStd);
-			   break;
-			case Rol_NET:
-			case Rol_TCH:
-			   Frm_BeginForm (ActSeeRecOneTch);
-			   break;
-			default:
-			   Err_WrongRoleExit ();
-		       }
+		     if (NextAction[Role] == ActUnk)
+			Err_WrongRoleExit ();
+		     Frm_BeginForm (NextAction[Role]);
 		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 		    }
 
@@ -735,6 +743,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 		  if (PutLinkToRecord)
 		     Frm_EndForm ();
+
 	       HTM_TD_End ();
 
 	       /***** Write time from last access *****/

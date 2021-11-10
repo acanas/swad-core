@@ -34,6 +34,7 @@
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_hierarchy_database.h"
 #include "swad_search.h"
 
 /*****************************************************************************/
@@ -46,7 +47,7 @@ extern struct Globals Gbl;
 /***************************** Create a new center ***************************/
 /*****************************************************************************/
 
-long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Ctr_Status_t Status)
+long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Hie_Status_t Status)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create a new center",
@@ -187,7 +188,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			 " GROUP BY deg_degrees.CtrCod"
 			 " ORDER BY ctr_centers.ShortName",
-			 (unsigned) Deg_STATUS_BIT_PENDING,
+			 (unsigned) Hie_STATUS_BIT_PENDING,
 			 Gbl.Usrs.Me.UsrDat.UsrCod);
       case Rol_SYS_ADM:
          return (unsigned)
@@ -200,7 +201,7 @@ unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res)
 			   " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
 			 " GROUP BY deg_degrees.CtrCod"
 			 " ORDER BY ctr_centers.ShortName",
-			 (unsigned) Deg_STATUS_BIT_PENDING);
+			 (unsigned) Hie_STATUS_BIT_PENDING);
       default:		// Forbidden for other users
 	 Err_WrongRoleExit ();
 	 return 0;	// Not reached
@@ -594,7 +595,7 @@ void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
 /******************** Update status in table of centers **********************/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus)
+void Ctr_DB_UpdateCtrStatus (long CtrCod,Hie_Status_t NewStatus)
   {
    DB_QueryUPDATE ("can not update the status of a center",
 		   "UPDATE ctr_centers"

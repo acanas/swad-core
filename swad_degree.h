@@ -47,31 +47,12 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Deg_STATUS_BIT_PENDING = (1 << 0),	// Degree is requested, but not yet activated
-   Deg_STATUS_BIT_REMOVED = (1 << 1),	// Degree has been removed
-  } Deg_Status_Bits_t;
-
-typedef unsigned Deg_Status_t;
-#define Deg_MAX_STATUS		((Deg_Status_t) 3)
-#define Deg_WRONG_STATUS	((Deg_Status_t) (Deg_MAX_STATUS + 1))
-
-#define Deg_NUM_STATUS_TXT	4
-typedef enum
-  {
-   Deg_STATUS_UNKNOWN = 0,	// Other
-   Deg_STATUS_ACTIVE  = 1,	// 00 (Status == 0)
-   Deg_STATUS_PENDING = 2,	// 01 (Status == Deg_STATUS_BIT_PENDING)
-   Deg_STATUS_REMOVED = 3,	// 1- (Status & Deg_STATUS_BIT_REMOVED)
-  } Deg_StatusTxt_t;
-
 struct Deg_Degree
   {
    long DegCod;					// Degree code
    long DegTypCod;				// Degree type code
    long CtrCod;					// Center code
-   Deg_Status_t Status;				// Degree status
+   Hie_Status_t Status;				// Degree status
    long RequesterUsrCod;			// User code of the person who requested the creation of this degree
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of degree

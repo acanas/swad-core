@@ -48,6 +48,13 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
+static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
+
+/*****************************************************************************/
 /********** List pending institutions, centers, degrees and courses **********/
 /*****************************************************************************/
 
@@ -747,24 +754,145 @@ void Hie_FreeGoToMsg (void)
   }
 
 /*****************************************************************************/
-/******************* Get number of countries with users **********************/
+/*********************** Write status cell in table **************************/
 /*****************************************************************************/
 
-void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod)
+void Hie_WriteStatusCell (Hie_Status_t Status,
+			  const char *Class,const char *BgColor,
+			  const char *Txt[Hie_NUM_STATUS_TXT])
   {
-   static const char *Format[HieLvl_NUM_LEVELS] =
+   Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
+
+   HTM_TD_Begin ("class=\"%s LM %s\"",Class,BgColor);
+      if (StatusTxt != Hie_STATUS_ACTIVE) // If active ==> do not show anything
+	 HTM_Txt (Txt[StatusTxt]);
+   HTM_TD_End ();
+  }
+
+void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
+                                  Act_Action_t NextAction,long HieCod,
+                                  const char *Txt[Hie_NUM_STATUS_TXT])
+  {
+   Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
+   unsigned StatusUnsigned;
+
+   /***** Begin cell *****/
+   HTM_TD_Begin ("class=\"DAT LM\"");
+      if (ICanEdit && StatusTxt == Hie_STATUS_PENDING)
+	{
+	 /* Begin form */
+	 Frm_BeginForm (NextAction);
+	 Hie_PutParamOtherHieCod (&HieCod);
+
+	    /* Selector */
+	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
+			      "name=\"Status\" class=\"INPUT_STATUS\"");
+
+	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_PENDING);
+	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,true,false,
+			   "%s",Txt[Hie_STATUS_PENDING]);
+
+	       StatusUnsigned = (unsigned) Hie_GetStatusBitsFromStatusTxt (Hie_STATUS_ACTIVE);
+	       HTM_OPTION (HTM_Type_UNSIGNED,&StatusUnsigned,false,false,
+			   "%s",Txt[Hie_STATUS_ACTIVE]);
+
+	    HTM_SELECT_End ();
+
+	 /* End form */
+	 Frm_EndForm ();
+	}
+      else if (StatusTxt != Hie_STATUS_ACTIVE)	// If active ==> do not show anything
+	 HTM_Txt (Txt[StatusTxt]);
+
+   /***** End cell *****/
+   HTM_TD_End ();
+  }
+
+/*****************************************************************************/
+/**************************** Get parameter status ***************************/
+/*****************************************************************************/
+
+Hie_Status_t Hie_GetParamStatus (void)
+  {
+   Hie_Status_t Status;
+   Hie_StatusTxt_t StatusTxt;
+
+   /***** Get parameter with status *****/
+   Status = (Hie_Status_t)
+	    Par_GetParToUnsignedLong ("Status",
+	                              0,
+	                              (unsigned long) Hie_MAX_STATUS,
+                                      (unsigned long) Hie_WRONG_STATUS);
+   if (Status == Hie_WRONG_STATUS)
+      Err_WrongStatusExit ();
+
+   StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
+   Status = Hie_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
+
+   return Status;
+  }
+
+/*****************************************************************************/
+/******************* Set StatusTxt depending on status bits ******************/
+/*****************************************************************************/
+// Hie_STATUS_UNKNOWN = 0	// Other
+// Hie_STATUS_ACTIVE  = 1	// 00 (Status == 0)
+// Hie_STATUS_PENDING = 2	// 01 (Status == Hie_STATUS_BIT_PENDING)
+// Hie_STATUS_REMOVED = 3	// 1- (Status & Hie_STATUS_BIT_REMOVED)
+
+static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status)
+  {
+   if (Status == 0)
+      return Hie_STATUS_ACTIVE;
+   if (Status == Hie_STATUS_BIT_PENDING)
+      return Hie_STATUS_PENDING;
+   if (Status & Hie_STATUS_BIT_REMOVED)
+      return Hie_STATUS_REMOVED;
+   return Hie_STATUS_UNKNOWN;
+  }
+
+/*****************************************************************************/
+/******************* Set status bits depending on StatusTxt ******************/
+/*****************************************************************************/
+// Hie_STATUS_UNKNOWN = 0	// Other
+// Hie_STATUS_ACTIVE  = 1	// 00 (Status == 0)
+// Hie_STATUS_PENDING = 2	// 01 (Status == Hie_STATUS_BIT_PENDING)
+// Hie_STATUS_REMOVED = 3	// 1- (Status & Hie_STATUS_BIT_REMOVED)
+
+static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt)
+  {
+   static const Hie_Status_t StatusBits[Hie_NUM_STATUS_TXT] =
      {
-      [HieLvl_UNK] = "",				// Unknown
-      [HieLvl_SYS] = "",				// System
-      [HieLvl_CTY] = "ins_instits.CtyCod=%ld AND ",	// Country
-      [HieLvl_INS] = "ctr_centers.InsCod=%ld AND ",	// Institution
-      [HieLvl_CTR] = "deg_degrees.CtrCod=%ld AND ",	// Center
-      [HieLvl_DEG] = "crs_courses.DegCod=%ld AND ",	// Degree
-      [HieLvl_CRS] = "crs_users.CrsCod=%ld AND ",	// Course
+      [Hie_STATUS_UNKNOWN] = (Hie_Status_t) 0,
+      [Hie_STATUS_ACTIVE ] = (Hie_Status_t) 0,
+      [Hie_STATUS_PENDING] = Hie_STATUS_BIT_PENDING,
+      [Hie_STATUS_REMOVED] = Hie_STATUS_BIT_REMOVED,
      };
 
-   if (Cod > 0)
-      sprintf (SubQuery,Format[Scope],Cod);
-   else
-      SubQuery[0] = '\0';
+   return StatusBits[StatusTxt];
+  }
+
+/*****************************************************************************/
+/**** Write parameter with code of other institution/center/degree/course ****/
+/*****************************************************************************/
+
+void Hie_PutParamOtherHieCod (void *HieCod)
+  {
+   if (HieCod)
+      Par_PutHiddenParamLong (NULL,"OthHieCod",*((long *) HieCod));
+  }
+
+/*****************************************************************************/
+/***** Get parameter with code of other institution/center/degree/course *****/
+/*****************************************************************************/
+
+long Hie_GetAndCheckParamOtherHieCod (long MinCodAllowed)
+  {
+   long HieCod;
+
+   /***** Get and check parameter with code *****/
+   if ((HieCod = Par_GetParToLong ("OthHieCod")) < MinCodAllowed)
+      Err_WrongHierarchyExit ();
+
+   return HieCod;
   }

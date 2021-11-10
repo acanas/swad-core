@@ -52,33 +52,14 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   Crs_STATUS_BIT_PENDING = (1 << 0),	// Course is requested, but not yet activated
-   Crs_STATUS_BIT_REMOVED = (1 << 1),	// Course has been removed
-  } Crs_Status_Bits_t;
-
-typedef unsigned Crs_Status_t;
-#define Crs_MAX_STATUS		((Crs_Status_t) 3)
-#define Crs_WRONG_STATUS	((Crs_Status_t) (Crs_MAX_STATUS + 1))
-
-#define Crs_NUM_STATUS_TXT	4
-typedef enum
-  {
-   Crs_STATUS_UNKNOWN = 0,	// Other
-   Crs_STATUS_ACTIVE  = 1,	// 00 (Status == 0)
-   Crs_STATUS_PENDING = 2,	// 01 (Status == Crs_STATUS_BIT_PENDING)
-   Crs_STATUS_REMOVED = 3,	// 1- (Status & Crs_STATUS_BIT_REMOVED)
-  } Crs_StatusTxt_t;
-
 struct Crs_Course
   {
    long CrsCod;
    char InstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];	// Institutional code of the course
    long DegCod;
-   unsigned Year;				// Year: 0 (optatives), 1, 2, 3...
-   unsigned Status;				// Course status
-   long RequesterUsrCod;			// User code of the person who requested the creation of this course
+   unsigned Year;		// Year: 0 (optatives), 1, 2, 3...
+   Hie_Status_t Status;		// Course status
+   long RequesterUsrCod;	// User code of the person who requested the creation of this course
    char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];	// Short name of course
    char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];	// Full name of course
   };

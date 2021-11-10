@@ -31,6 +31,7 @@ void Err_NotEnoughMemoryExit (void);
 void Err_QuerySizeExceededExit (void);
 void Err_WrongActionExit (void);
 void Err_WrongScopeExit (void);
+void Err_WrongHierarchyExit (void);
 void Err_WrongCountrExit (void);
 void Err_WrongInstitExit (void);
 void Err_WrongCenterExit (void);

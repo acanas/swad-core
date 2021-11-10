@@ -65,6 +65,14 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 char *Hie_BuildGoToMsg (const char *Where);
 void Hie_FreeGoToMsg (void);
 
-void Hie_DB_BuildSubquery (char SubQuery[128],HieLvl_Level_t Scope,long Cod);
+void Hie_WriteStatusCell (Hie_Status_t Status,
+			  const char *Class,const char *BgColor,
+			  const char *Txt[Hie_NUM_STATUS_TXT]);
+void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
+                                  Act_Action_t NextAction,long HieCod,
+                                  const char *Txt[Hie_NUM_STATUS_TXT]);
+Hie_Status_t Hie_GetParamStatus (void);
+void Hie_PutParamOtherHieCod (void *HieCod);
+long Hie_GetAndCheckParamOtherHieCod (long MinCodAllowed);
 
 #endif

@@ -38,7 +38,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Ctr_Status_t Status);
+long Ctr_DB_CreateCenter (const struct Ctr_Center *Ctr,Hie_Status_t Status);
 
 unsigned Ctr_DB_GetListOfCtrsInCurrentIns (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetListOfCtrsFull (MYSQL_RES **mysql_res,long InsCod);
@@ -74,7 +74,7 @@ void Ctr_DB_UpdateCtrWWW (long CtrCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 void Ctr_DB_UpdateCtrPhotoAttribution (long CtrCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 void Ctr_DB_UpdateCtrCoordinate (long CtrCod,
 				 const char *CoordField,double NewCoord);
-void Ctr_DB_UpdateCtrStatus (long CtrCod,Ctr_Status_t NewStatus);
+void Ctr_DB_UpdateCtrStatus (long CtrCod,Hie_Status_t NewStatus);
 
 
 bool Ctr_DB_CheckIfMapIsAvailableInIns (long InsCod);
