@@ -997,6 +997,11 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    FILE *NewFile;
    unsigned NumItem;
    struct MoveSubtrees Subtree;
+   static void (*CalculateSubtreeSyllabus[Syl_NUM_CHANGE_POS_ITEM]) (struct MoveSubtrees *Subtree,unsigned NumItem) =
+     {
+      [Syl_GET_UP  ] = Syl_CalculateUpSubtreeSyllabus,
+      [Syl_GET_DOWN] = Syl_CalculateDownSubtreeSyllabus,
+     };
 
    /***** Reset syllabus context *****/
    Syl_ResetSyllabus (&Syllabus);
@@ -1023,15 +1028,7 @@ static void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
       Fil_CreateUpdateFile (PathFile,".old",PathOldFile,PathNewFile,&NewFile);
 
       /***** Get up or get down position *****/
-      switch (UpOrDownPos)
-	{
-	 case Syl_GET_UP:
-	    Syl_CalculateUpSubtreeSyllabus (&Subtree,Syllabus.NumItem);
-	    break;
-	 case Syl_GET_DOWN:
-	    Syl_CalculateDownSubtreeSyllabus (&Subtree,Syllabus.NumItem);
-	    break;
-	}
+      CalculateSubtreeSyllabus[UpOrDownPos] (&Subtree,Syllabus.NumItem);
 
       /***** Create the new XML file *****/
       Syl_WriteStartFileSyllabus (NewFile);

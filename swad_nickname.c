@@ -161,12 +161,28 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
    extern const char *Txt_New_nickname;
    extern const char *Txt_Change_nickname;
    extern const char *Txt_Save_changes;
+   static const struct
+     {
+      Act_Action_t Remove;
+      Act_Action_t Change;
+     } NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_GST	  ] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_USR	  ] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_STD	  ] = {ActRemOldNicStd,ActChgNicStd},
+      [Rol_NET	  ] = {ActRemOldNicTch,ActChgNicTch},
+      [Rol_TCH	  ] = {ActRemOldNicTch,ActChgNicTch},
+      [Rol_DEG_ADM] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_CTR_ADM] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_INS_ADM] = {ActRemOldNicOth,ActChgNicOth},
+      [Rol_SYS_ADM] = {ActRemOldNicOth,ActChgNicOth},
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 2 + 1];
    unsigned NumNicks;
    unsigned NumNick;
-   Act_Action_t NextAction;
    char NickWithArr[Nck_MAX_BYTES_NICK_WITH_ARROBA + 1];
    const struct UsrData *UsrDat = (ItsMe ? &Gbl.Usrs.Me.UsrDat :
 	                                   &Gbl.Usrs.Other.UsrDat);
@@ -206,11 +222,11 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		  /* The first nickname is the current one */
 		  HTM_TR_Begin (NULL);
 
-		  /* Label */
-		  Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
+		     /* Label */
+		     Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Current_nickname);
 
-		  /* Data */
-		  HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
+		     /* Data */
+		     HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 		 }
 	       else	// NumNick >= 2
 		 {
@@ -218,11 +234,11 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		    {
 		     HTM_TR_Begin (NULL);
 
-		     /* Label */
-		     Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
+			/* Label */
+			Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
 
-		     /* Data */
-		     HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+			/* Data */
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 		    }
 
 		  /* Form to remove old nickname */
@@ -230,23 +246,8 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		     Ico_PutContextualIconToRemove (ActRemMyNck,Nck_NICKNAME_SECTION_ID,
 						    Nck_PutParamsRemoveMyNick,row[0]);
 		  else
-		    {
-		     switch (UsrDat->Roles.InCurrentCrs)
-		       {
-			case Rol_STD:
-			   NextAction = ActRemOldNicStd;
-			   break;
-			case Rol_NET:
-			case Rol_TCH:
-			   NextAction = ActRemOldNicTch;
-			   break;
-			default:	// Guest, user or admin
-			   NextAction = ActRemOldNicOth;
-			   break;
-		       }
-		     Ico_PutContextualIconToRemove (NextAction,Nck_NICKNAME_SECTION_ID,
+		     Ico_PutContextualIconToRemove (NextAction[UsrDat->Roles.InCurrentCrs].Remove,Nck_NICKNAME_SECTION_ID,
 						    Nck_PutParamsRemoveOtherNick,row[0]);
-		    }
 		 }
 
 	       /* Nickname */
@@ -265,33 +266,20 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 		  else
 		    {
-		     switch (UsrDat->Roles.InCurrentCrs)
-		       {
-			case Rol_STD:
-			   NextAction = ActChgNicStd;
-			   break;
-			case Rol_NET:
-			case Rol_TCH:
-			   NextAction = ActChgNicTch;
-			   break;
-			default:	// Guest, user or admin
-			   NextAction = ActChgNicOth;
-			   break;
-		       }
-		     Frm_BeginFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
 		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		    }
 
 		  snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
 		  Par_PutHiddenParamString (NULL,"NewNick",NickWithArr);	// Nickname
-		  Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
+		     Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
 		  Frm_EndForm ();
 		 }
 
 	       if (NumNick == 1 ||
 		   NumNick == NumNicks)
 		 {
-		  HTM_TD_End ();
+		     HTM_TD_End ();
 		  HTM_TR_End ();
 		 }
 	       else
@@ -304,7 +292,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 	       /* Label */
 	       Frm_LabelColumn ("REC_C1_BOT RT","NewNick",
 				NumNicks ? Txt_New_nickname :	// A new nickname
-					   Txt_Nickname);		// The first nickname
+					   Txt_Nickname);	// The first nickname
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
@@ -312,20 +300,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 		  else
 		    {
-		     switch (UsrDat->Roles.InCurrentCrs)
-		       {
-			case Rol_STD:
-			   NextAction = ActChgNicStd;
-			   break;
-			case Rol_NET:
-			case Rol_TCH:
-			   NextAction = ActChgNicTch;
-			   break;
-			default:	// Guest, user or admin
-			   NextAction = ActChgNicOth;
-			   break;
-		       }
-		     Frm_BeginFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
+		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
 		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		    }
 		  snprintf (NickWithArr,sizeof (NickWithArr),"@%s",

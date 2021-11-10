@@ -113,6 +113,7 @@ typedef enum
 // Don't change these numbers! They are used for user's sex in database
 
 // Related with class photograph
+#define Usr_NUM_CLASS_PHOTO_TYPE 3
 typedef enum
   {
    Usr_CLASS_PHOTO_SEL,		// Only for selection of users

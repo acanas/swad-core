@@ -2322,7 +2322,19 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
    bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
    bool RecipientHasBannedMe;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActReqMdfOth,
+      [Rol_GST	  ] = ActReqMdfOth,
+      [Rol_USR	  ] = ActReqMdfOth,
+      [Rol_STD	  ] = ActReqMdfStd,
+      [Rol_NET	  ] = ActReqMdfNET,
+      [Rol_TCH	  ] = ActReqMdfTch,
+      [Rol_DEG_ADM] = ActReqMdfOth,
+      [Rol_CTR_ADM] = ActReqMdfOth,
+      [Rol_INS_ADM] = ActReqMdfOth,
+      [Rol_SYS_ADM] = ActReqMdfOth,
+     };
 
    if (!Gbl.Form.Inside &&					// Only if not inside another form
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
@@ -2380,27 +2392,10 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	     Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	   {
-	    switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
-	      {
-	       case Rol_STD:
-		  NextAction = ActReqMdfStd;
-		  break;
-	       case Rol_NET:
-		  NextAction = ActReqMdfNET;
-		  break;
-	       case Rol_TCH:
-		  NextAction = ActReqMdfTch;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActReqMdfOth;
-		  break;
-	      }
-	    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+	    Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 					   Rec_PutParamUsrCodEncrypted,NULL,
 					   "user-cog.svg",
 					   Txt_Administer_user);
-	   }
 
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
 	   {

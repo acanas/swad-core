@@ -214,20 +214,18 @@ List --> |Name.Start        |    -> |Name.Start        |
 
 void Par_CreateListOfParams (void)
   {
+   static void (*CreateListOfParams[Act_NUM_CONTENTS]) (void) =
+     {
+      [Act_CONT_NORM] = Par_CreateListOfParamsFromQueryString,
+      [Act_CONT_DATA] = Par_CreateListOfParamsFromTmpFile,
+     };
+
    /***** Initialize empty list of parameters *****/
    Gbl.Params.List = NULL;
 
    /***** Get list *****/
    if (Gbl.Params.ContentLength)
-      switch (Gbl.ContentReceivedByCGI)
-	{
-	 case Act_CONT_NORM:
-	    Par_CreateListOfParamsFromQueryString ();
-	    break;
-	 case Act_CONT_DATA:
-	    Par_CreateListOfParamsFromTmpFile ();
-	    break;
-	}
+      CreateListOfParams[Gbl.ContentReceivedByCGI] ();
   }
 
 /*****************************************************************************/

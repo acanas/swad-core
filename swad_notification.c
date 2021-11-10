@@ -909,51 +909,27 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
+   static const Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
+     {
+      [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_ADMI_TCH_CRS] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_TCH_GRP] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_SHR_CRS] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_SHR_GRP] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
+      [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
+     };
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
-   Ntf_NotifyEvent_t NotifyEvent;
 
-   switch (FileBrowser)
+   if (NotifyEvent[FileBrowser])
      {
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_MRK_GRP:
-         /***** Get file code *****/
-	 FilCod = Brw_DB_GetFilCodByPath (Path,false);	// Any file, public or not
-	 if (FilCod > 0)
-	   {
-	    /***** Set notification as removed *****/
-	    switch (FileBrowser)
-	      {
-	       case Brw_ADMI_DOC_CRS:
-	       case Brw_ADMI_DOC_GRP:
-		  NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
-		  break;
-	       case Brw_ADMI_TCH_CRS:
-	       case Brw_ADMI_TCH_GRP:
-		  NotifyEvent = Ntf_EVENT_TEACHERS_FILE;
-		  break;
-	       case Brw_ADMI_SHR_CRS:
-	       case Brw_ADMI_SHR_GRP:
-		  NotifyEvent = Ntf_EVENT_SHARED_FILE;
-		  break;
-	       case Brw_ADMI_MRK_CRS:
-	       case Brw_ADMI_MRK_GRP:
-		  NotifyEvent = Ntf_EVENT_MARKS_FILE;
-		  break;
-	       default:
-		  return;
-	      }
-            Ntf_DB_MarkNotifAsRemoved (NotifyEvent,FilCod);
-	   }
-         break;
-      default:
-	 break;
+      /***** Get file code *****/
+      FilCod = Brw_DB_GetFilCodByPath (Path,false);	// Any file, public or not
+      if (FilCod > 0)
+	 /***** Set notification as removed *****/
+	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[FileBrowser],FilCod);
      }
   }
 
@@ -964,48 +940,24 @@ void Ntf_MarkNotifOneFileAsRemoved (const char *Path)
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
-   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   Ntf_NotifyEvent_t NotifyEvent;
-
-   switch (FileBrowser)
+   static const Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_TYPES_FILE_BROWSER] =
      {
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_MRK_GRP:
-         /***** Set notification as removed *****/
-	 switch (FileBrowser)
-	   {
-	    case Brw_ADMI_DOC_CRS:
-	    case Brw_ADMI_DOC_GRP:
-	       NotifyEvent = Ntf_EVENT_DOCUMENT_FILE;
-	       break;
-	    case Brw_ADMI_TCH_CRS:
-	    case Brw_ADMI_TCH_GRP:
-	       NotifyEvent = Ntf_EVENT_TEACHERS_FILE;
-	       break;
-	    case Brw_ADMI_SHR_CRS:
-	    case Brw_ADMI_SHR_GRP:
-	       NotifyEvent = Ntf_EVENT_SHARED_FILE;
-	       break;
-	    case Brw_ADMI_MRK_CRS:
-	    case Brw_ADMI_MRK_GRP:
-	       NotifyEvent = Ntf_EVENT_MARKS_FILE;
-	       break;
-	    default:
-	       return;
-	   }
-	 Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent,FileBrowser,
-                                                    Brw_GetCodForFileBrowser (),
-                                                    Path);
-         break;
-      default:
-	 break;
-     }
+      [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_ADMI_TCH_CRS] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_TCH_GRP] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_SHR_CRS] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_SHR_GRP] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
+      [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
+     };
+   Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
+
+   if (NotifyEvent[FileBrowser])
+      /***** Set notification as removed *****/
+      Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[FileBrowser],FileBrowser,
+						 Brw_GetCodForFileBrowser (),
+						 Path);
   }
 
 /*****************************************************************************/
@@ -1016,6 +968,29 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
+   static unsigned (*GetUsrsBrowser[Brw_NUM_TYPES_FILE_BROWSER]) (MYSQL_RES **mysql_res) =
+     {
+      // Notify all users in course except me
+      [Brw_ADMI_DOC_CRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
+      [Brw_ADMI_SHR_CRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
+      [Brw_ADMI_MRK_CRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
+
+      // Notify all teachers in course except me
+      [Brw_ADMI_TCH_CRS] = Enr_DB_GetTchsFromCurrentCrsExceptMe,
+
+      // Notify all users in group except me
+      [Brw_ADMI_DOC_GRP] = Grp_DB_GetUsrsFromCurrentGrpExceptMe,
+      [Brw_ADMI_SHR_GRP] = Grp_DB_GetUsrsFromCurrentGrpExceptMe,
+      [Brw_ADMI_MRK_GRP] = Grp_DB_GetUsrsFromCurrentGrpExceptMe,
+
+      // Notify all teachers in group except me
+      [Brw_ADMI_TCH_GRP] = Grp_DB_GetTchsFromCurrentGrpExceptMe,
+     };
+   static unsigned (*GetUsrsForum[For_NUM_TYPES_FORUM]) (MYSQL_RES **mysql_res) =
+     {
+      [For_FORUM_COURSE_USRS] = Enr_DB_GetUsrsFromCurrentCrsExceptMe,
+      [For_FORUM_COURSE_TCHS] = Enr_DB_GetTchsFromCurrentCrsExceptMe,
+     };
    MYSQL_RES *mysql_res;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
    unsigned NumUsr;
@@ -1037,27 +1012,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-         switch (Gbl.FileBrowser.Type)
-           {
-            case Brw_ADMI_DOC_CRS:
-            case Brw_ADMI_SHR_CRS:
-            case Brw_ADMI_MRK_CRS:	// Notify all users in course except me
-               NumUsrs = Enr_DB_GetUsrsFromCurrentCrsExceptMe (&mysql_res);
-               break;
-            case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
-               NumUsrs = Enr_DB_GetTchsFromCurrentCrsExceptMe (&mysql_res);
-               break;
-            case Brw_ADMI_DOC_GRP:
-            case Brw_ADMI_SHR_GRP:
-            case Brw_ADMI_MRK_GRP:	// Notify all users in group except me
-               NumUsrs = Grp_DB_GetUsrsFromCurrentGrpExceptMe (&mysql_res);
-               break;
-            case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
-               NumUsrs = Grp_DB_GetTchsFromCurrentGrpExceptMe (&mysql_res);
-               break;
-            default:	// This function should not be called in other cases
-               return 0;
-           }
+	 if (GetUsrsBrowser[Gbl.FileBrowser.Type])
+            NumUsrs = GetUsrsBrowser[Gbl.FileBrowser.Type] (&mysql_res);
+	 else
+	    return 0;
          break;
       case Ntf_EVENT_ASSIGNMENT:
          NumUsrs = Asg_DB_GetUsrsFromAssignmentExceptMe (&mysql_res,Cod);
@@ -1096,17 +1054,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 // Check if forum is for users or for all users in the course
 	 For_GetForumTypeAndLocationOfAPost (Cod,&ForumSelected);
 
-	 switch (ForumSelected.Type)
-	   {
-	    case For_FORUM_COURSE_USRS:
-               NumUsrs = Enr_DB_GetUsrsFromCurrentCrsExceptMe (&mysql_res);
-	       break;
-	    case For_FORUM_COURSE_TCHS:
-               NumUsrs = Enr_DB_GetTchsFromCurrentCrsExceptMe (&mysql_res);
-	       break;
-	    default:
-	       return 0;
-	   }
+	 if (GetUsrsForum[ForumSelected.Type])
+            NumUsrs = GetUsrsForum[ForumSelected.Type] (&mysql_res);
+	 else
+	    return 0;
          break;
       case Ntf_EVENT_FORUM_REPLY:
          // Cod is the code of the post

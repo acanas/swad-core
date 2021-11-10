@@ -6098,25 +6098,16 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    unsigned NumUsr;
    bool TRIsOpen = false;
    bool UsrIsTheMsgSender;
-   const char *ClassPhoto = "PHOTO21x28";	// Default photo size
    struct UsrData UsrDat;
+   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE] =
+     {
+      [Usr_CLASS_PHOTO_SEL    ] = "PHOTO21x28",
+      [Usr_CLASS_PHOTO_SEL_SEE] = "PHOTO45x60",
+      [Usr_CLASS_PHOTO_PRN    ] = "PHOTO45x60",
+     };
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
-      /***** Set width and height of photos *****/
-      switch (ClassPhotoType)
-	{
-	 case Usr_CLASS_PHOTO_SEL:
-	    ClassPhoto = "PHOTO21x28";
-	    break;
-	 case Usr_CLASS_PHOTO_SEL_SEE:
-	    ClassPhoto = "PHOTO45x60";
-	    break;
-	 case Usr_CLASS_PHOTO_PRN:
-	    ClassPhoto = "PHOTO45x60";
-	    break;
-	}
-
       /***** Put a row to select all users *****/
       if (PutCheckBoxToSelectUsr)
 	 Usr_PutCheckboxToSelectAllUsers (Role,SelectedUsrs);
@@ -6159,26 +6150,26 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 					 SelectedUsrs);
 
 	 /***** Show photo *****/
-	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,ClassPhoto,Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,ClassPhoto[ClassPhotoType],Pho_ZOOM,false);
 
 	 /***** Photo foot *****/
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
 
-	 /* Name */
-	 if (UsrDat.FrstName[0])
-	    HTM_Txt (UsrDat.FrstName);
-	 else
-	    HTM_NBSP ();
-	 HTM_BR ();
-	 if (UsrDat.Surname1[0])
-	    HTM_Txt (UsrDat.Surname1);
-	 else
-	    HTM_NBSP ();
-	 HTM_BR ();
-	 if (UsrDat.Surname2[0])
-	    HTM_Txt (UsrDat.Surname2);
-	 else
-	    HTM_NBSP ();
+	    /* Name */
+	    if (UsrDat.FrstName[0])
+	       HTM_Txt (UsrDat.FrstName);
+	    else
+	       HTM_NBSP ();
+	    HTM_BR ();
+	    if (UsrDat.Surname1[0])
+	       HTM_Txt (UsrDat.Surname1);
+	    else
+	       HTM_NBSP ();
+	    HTM_BR ();
+	    if (UsrDat.Surname2[0])
+	       HTM_Txt (UsrDat.Surname2);
+	    else
+	       HTM_NBSP ();
 
 	 HTM_DIV_End ();
 

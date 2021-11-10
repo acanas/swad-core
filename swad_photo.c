@@ -177,7 +177,19 @@ void Pho_PutIconToChangeUsrPhoto (void)
    bool PhotoExists;
    char PhotoURL[PATH_MAX + 1];
    const char *TitleText;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActReqOthPho,
+      [Rol_GST	  ] = ActReqOthPho,
+      [Rol_USR	  ] = ActReqOthPho,
+      [Rol_STD	  ] = ActReqStdPho,
+      [Rol_NET	  ] = ActReqTchPho,
+      [Rol_TCH	  ] = ActReqTchPho,
+      [Rol_DEG_ADM] = ActReqOthPho,
+      [Rol_CTR_ADM] = ActReqOthPho,
+      [Rol_INS_ADM] = ActReqOthPho,
+      [Rol_SYS_ADM] = ActReqOthPho,
+     };
    bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
 
    /***** Link for changing / uploading the photo *****/
@@ -196,20 +208,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (Gbl.Record.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
-	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:
-	       NextAction = ActReqStdPho;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActReqTchPho;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActReqOthPho;
-	       break;
-	   }
-	 Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 				        Rec_PutParamUsrCodEncrypted,NULL,
 	                                "camera.svg",
 				        TitleText);
@@ -241,30 +240,27 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) voi
    extern const char *Txt_Remove_photo;
    char PhotoURL[PATH_MAX + 1];
    bool PhotoExists;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActReqRemOthPho,
+      [Rol_GST	  ] = ActReqRemOthPho,
+      [Rol_USR	  ] = ActReqRemOthPho,
+      [Rol_STD	  ] = ActReqRemStdPho,
+      [Rol_NET	  ] = ActReqRemTchPho,
+      [Rol_TCH	  ] = ActReqRemTchPho,
+      [Rol_DEG_ADM] = ActReqRemOthPho,
+      [Rol_CTR_ADM] = ActReqRemOthPho,
+      [Rol_INS_ADM] = ActReqRemOthPho,
+      [Rol_SYS_ADM] = ActReqRemOthPho,
+     };
 
    /***** Link to request the removal of another user's photo *****/
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
-     {
-      switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
-	{
-	 case Rol_STD:
-	    NextAction = ActReqRemStdPho;
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	    NextAction = ActReqRemTchPho;
-	    break;
-	 default:	// Guest, user or admin
-	    NextAction = ActReqRemOthPho;
-	    break;
-	}
-      Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
+      Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
 				     Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     "trash.svg",
 				     Txt_Remove_photo);
-     }
   }
 
 /*****************************************************************************/
@@ -306,7 +302,19 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActDetOthPho,
+      [Rol_GST	  ] = ActDetOthPho,
+      [Rol_USR	  ] = ActDetOthPho,
+      [Rol_STD	  ] = ActDetStdPho,
+      [Rol_NET	  ] = ActDetTchPho,
+      [Rol_TCH	  ] = ActDetTchPho,
+      [Rol_DEG_ADM] = ActDetOthPho,
+      [Rol_CTR_ADM] = ActDetOthPho,
+      [Rol_INS_ADM] = ActDetOthPho,
+      [Rol_SYS_ADM] = ActDetOthPho,
+     };
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,
@@ -319,20 +327,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 	 Frm_BeginForm (ActDetMyPho);
       else
 	{
-	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:
-	       NextAction = ActDetStdPho;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActDetTchPho;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActDetOthPho;
-	       break;
-	   }
-	 Frm_BeginForm (NextAction);
+	 Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
 
@@ -486,7 +481,19 @@ void Pho_ReqRemoveUsrPhoto (void)
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
    char PhotoURL[PATH_MAX + 1];
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActRemOthPho,
+      [Rol_GST	  ] = ActRemOthPho,
+      [Rol_USR	  ] = ActRemOthPho,
+      [Rol_STD	  ] = ActRemStdPho,
+      [Rol_NET	  ] = ActRemTchPho,
+      [Rol_TCH	  ] = ActRemTchPho,
+      [Rol_DEG_ADM] = ActRemOthPho,
+      [Rol_CTR_ADM] = ActRemOthPho,
+      [Rol_INS_ADM] = ActRemOthPho,
+      [Rol_SYS_ADM] = ActRemOthPho,
+     };
 
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -511,20 +518,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
-	      {
-	       case Rol_STD:
-		  NextAction = ActRemStdPho;
-		  break;
-	       case Rol_NET:
-	       case Rol_TCH:
-		  NextAction = ActRemTchPho;
-		  break;
-	       default:	// Guest, user or admin
-		  NextAction = ActRemOthPho;
-		  break;
-	      }
-	    Ale_ShowAlertAndButton2 (NextAction,NULL,NULL,
+	    Ale_ShowAlertAndButton2 (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
 	                             Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     Btn_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
@@ -605,7 +599,19 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    unsigned Radius;
    unsigned BackgroundCode;
    char StrFileName[NAME_MAX + 1];
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActUpdOthPho,
+      [Rol_GST	  ] = ActUpdOthPho,
+      [Rol_USR	  ] = ActUpdOthPho,
+      [Rol_STD	  ] = ActUpdStdPho,
+      [Rol_NET	  ] = ActUpdTchPho,
+      [Rol_TCH	  ] = ActUpdTchPho,
+      [Rol_DEG_ADM] = ActUpdOthPho,
+      [Rol_CTR_ADM] = ActUpdOthPho,
+      [Rol_INS_ADM] = ActUpdOthPho,
+      [Rol_SYS_ADM] = ActUpdOthPho,
+     };
    char ErrorTxt[256];
 
    /***** Creates directories if not exist *****/
@@ -688,20 +694,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         	  Frm_BeginForm (ActUpdMyPho);
                else
         	 {
-               	  switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
-		    {
-		     case Rol_STD:
-			NextAction = ActUpdStdPho;
-			break;
-		     case Rol_NET:
-		     case Rol_TCH:
-			NextAction = ActUpdTchPho;
-			break;
-		     default:	// Guest, user or admin
-			NextAction = ActUpdOthPho;
-			break;
-		    }
-		  Frm_BeginForm (NextAction);
+		  Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
                   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
         	 }
                Par_PutHiddenParamString (NULL,"FileName",StrFileName);
@@ -1582,6 +1575,12 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *Hlp_ANALYTICS_Degrees;
    extern const char *Txt_Degrees;
+   static void (*ShowOrPrintDegrees[Set_NUM_USR_LIST_TYPES]) (struct Pho_DegPhotos *DegPhotos,
+                                                              Pho_AvgPhotoSeeOrPrint_t SeeOrPrint) =
+     {
+      [Set_USR_LIST_AS_CLASS_PHOTO] = Pho_ShowOrPrintClassPhotoDegrees,
+      [Set_USR_LIST_AS_LISTING	  ] = Pho_ShowOrPrintListDegrees,
+     };
    struct Pho_DegPhotos DegPhotos;
 
    /***** Get parameters from form *****/
@@ -1633,17 +1632,8 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    Pho_GetMaxStdsPerDegree (&DegPhotos);
 
    /***** Draw the classphoto/list *****/
-   switch (Gbl.Usrs.Me.ListType)
-     {
-      case Set_USR_LIST_AS_CLASS_PHOTO:
-         Pho_ShowOrPrintClassPhotoDegrees (&DegPhotos,SeeOrPrint);
-         break;
-      case Set_USR_LIST_AS_LISTING:
-         Pho_ShowOrPrintListDegrees (&DegPhotos,SeeOrPrint);
-         break;
-      default:
-	 break;
-     }
+   if (ShowOrPrintDegrees[Gbl.Usrs.Me.ListType])
+      ShowOrPrintDegrees[Gbl.Usrs.Me.ListType] (&DegPhotos,SeeOrPrint);
 
    /***** End box *****/
    Box_BoxEnd ();

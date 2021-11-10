@@ -54,6 +54,22 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+static const Tml_Not_Type_t Tml_Not_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   [Brw_ADMI_DOC_INS] = TL_NOTE_INS_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_INS] = TL_NOTE_INS_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_CTR] = TL_NOTE_CTR_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_CTR] = TL_NOTE_CTR_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_DEG] = TL_NOTE_DEG_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_DEG] = TL_NOTE_DEG_SHA_PUB_FILE,
+   [Brw_ADMI_DOC_CRS] = TL_NOTE_CRS_DOC_PUB_FILE,
+   [Brw_ADMI_SHR_CRS] = TL_NOTE_CRS_SHA_PUB_FILE,
+  };
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -931,57 +947,14 @@ void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path)
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
-   Tml_Not_Type_t NoteType;
 
-   switch (FileBrowser)
+   if (Tml_Not_NoteType[FileBrowser])
      {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_SHR_CRS:
-         /***** Get file code *****/
-	 FilCod = Brw_DB_GetFilCodByPath (Path,true);	// Only if file is public
-	 if (FilCod > 0)
-	   {
-	    /***** Mark possible note as unavailable *****/
-	    switch (FileBrowser)
-	      {
-	       case Brw_ADMI_DOC_INS:
-		  NoteType = TL_NOTE_INS_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_INS:
-		  NoteType = TL_NOTE_INS_SHA_PUB_FILE;
-		  break;
-	       case Brw_ADMI_DOC_CTR:
-		  NoteType = TL_NOTE_CTR_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_CTR:
-		  NoteType = TL_NOTE_CTR_SHA_PUB_FILE;
-		  break;
-	       case Brw_ADMI_DOC_DEG:
-		  NoteType = TL_NOTE_DEG_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_DEG:
-		  NoteType = TL_NOTE_DEG_SHA_PUB_FILE;
-		  break;
-	       case Brw_ADMI_DOC_CRS:
-		  NoteType = TL_NOTE_CRS_DOC_PUB_FILE;
-		  break;
-	       case Brw_ADMI_SHR_CRS:
-		  NoteType = TL_NOTE_CRS_SHA_PUB_FILE;
-		  break;
-	       default:
-		  return;
-	      }
-	    Tml_DB_MarkNoteAsUnavailable (NoteType,FilCod);
-	   }
-         break;
-      default:
-	 break;
+      /***** Get file code *****/
+      FilCod = Brw_DB_GetFilCodByPath (Path,true);	// Only if file is public
+      if (FilCod > 0)
+	 /***** Mark possible note as unavailable *****/
+	 Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType[FileBrowser],FilCod);
      }
   }
 
@@ -993,55 +966,11 @@ void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
-   Tml_Not_Type_t NoteType;
 
-   switch (FileBrowser)
-     {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_SHR_CRS:
-	 /***** Mark possible note as unavailable *****/
-	 switch (FileBrowser)
-	   {
-	    case Brw_ADMI_DOC_INS:
-	       NoteType = TL_NOTE_INS_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_INS:
-	       NoteType = TL_NOTE_INS_SHA_PUB_FILE;
-	       break;
-	    case Brw_ADMI_DOC_CTR:
-	       NoteType = TL_NOTE_CTR_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_CTR:
-	       NoteType = TL_NOTE_CTR_SHA_PUB_FILE;
-	       break;
-	    case Brw_ADMI_DOC_DEG:
-	       NoteType = TL_NOTE_DEG_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_DEG:
-	       NoteType = TL_NOTE_DEG_SHA_PUB_FILE;
-	       break;
-	    case Brw_ADMI_DOC_CRS:
-	       NoteType = TL_NOTE_CRS_DOC_PUB_FILE;
-	       break;
-	    case Brw_ADMI_SHR_CRS:
-	       NoteType = TL_NOTE_CRS_SHA_PUB_FILE;
-	       break;
-	    default:
-	       return;
-	   }
-         Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (NoteType,FileBrowser,
-                                                        Brw_GetCodForFileBrowser (),
-                                                        Path);
-         break;
-      default:
-	 break;
-     }
+   if (Tml_Not_NoteType[FileBrowser])
+      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType[FileBrowser],FileBrowser,
+						     Brw_GetCodForFileBrowser (),
+						     Path);
   }
 
 /*****************************************************************************/

@@ -42,6 +42,7 @@
 #define Act_MAX_CHARS_ACTION_TXT	(256 - 1)			// 255
 #define Act_MAX_BYTES_ACTION_TXT	Act_MAX_CHARS_ACTION_TXT	// 255
 
+#define Act_NUM_CONTENTS 2
 typedef enum
   {
    Act_CONT_NORM,

@@ -307,18 +307,16 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 
 static bool Svy_CheckIfICanCreateSvy (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanCreateSvy[Rol_NUM_ROLES] =
      {
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-         return true;
-      default:
-         return false;
-     }
-   return false;
+      [Rol_TCH	  ] = true,
+      [Rol_DEG_ADM] = true,
+      [Rol_CTR_ADM] = true,
+      [Rol_INS_ADM] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanCreateSvy[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/

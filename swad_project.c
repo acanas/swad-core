@@ -3655,14 +3655,13 @@ static void Prj_UpdateProject (struct Prj_Project *Prj)
 
 static bool Prj_CheckIfICanConfigAllProjects (void)
   {
-   switch (Gbl.Usrs.Me.Role.Logged)
+   static const bool ICanConfigAllProjects[Rol_NUM_ROLES] =
      {
-      case Rol_TCH:
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
+      [Rol_TCH	  ] = true,
+      [Rol_SYS_ADM] = true,
+     };
+
+   return ICanConfigAllProjects[Gbl.Usrs.Me.Role.Logged];
   }
 
 /*****************************************************************************/

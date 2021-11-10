@@ -730,7 +730,19 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
   {
    extern const char *Txt_Password;
    extern const char *Txt_Change_password;
-   Act_Action_t NextAction;
+   static const Act_Action_t NextAction[Rol_NUM_ROLES] =
+     {
+      [Rol_UNK	  ] = ActChgPwdOth,
+      [Rol_GST	  ] = ActChgPwdOth,
+      [Rol_USR	  ] = ActChgPwdOth,
+      [Rol_STD	  ] = ActChgPwdStd,
+      [Rol_NET	  ] = ActChgPwdTch,
+      [Rol_TCH	  ] = ActChgPwdTch,
+      [Rol_DEG_ADM] = ActChgPwdOth,
+      [Rol_CTR_ADM] = ActChgPwdOth,
+      [Rol_INS_ADM] = ActChgPwdOth,
+      [Rol_SYS_ADM] = ActChgPwdOth,
+     };
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
@@ -745,20 +757,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
 	 /***** Form to change password *****/
 	 /* Begin form */
-	 switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs)
-	   {
-	    case Rol_STD:
-	       NextAction = ActChgPwdStd;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       NextAction = ActChgPwdTch;
-	       break;
-	    default:	// Guest, user or admin
-	       NextAction = ActChgPwdOth;
-	       break;
-	   }
-	 Frm_BeginFormAnchor (NextAction,Pwd_PASSWORD_SECTION_ID);
+	 Frm_BeginFormAnchor (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],Pwd_PASSWORD_SECTION_ID);
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
 	    /* New password */

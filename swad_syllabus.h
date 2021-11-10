@@ -35,6 +35,7 @@ typedef enum
   } Syl_WhichSyllabus_t;	// Which syllabus I want to see
 #define Syl_DEFAULT_WHICH_SYLLABUS Syl_LECTURES
 
+#define Syl_NUM_CHANGE_POS_ITEM 2
 typedef enum
   {
    Syl_GET_UP,
