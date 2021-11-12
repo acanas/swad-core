@@ -2230,7 +2230,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Number_of_posts_BR_per_user;
-   extern const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES];
+   extern const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES];
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2258,7 +2258,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
       /***** Get total number of timeline notes and users for each note type *****/
       for (NoteType  = (Tml_Not_Type_t) 0;
-	   NoteType <= (Tml_Not_Type_t) (TL_NOT_NUM_NOTE_TYPES - 1);
+	   NoteType <= (Tml_Not_Type_t) (Tml_NOT_NUM_NOTE_TYPES - 1);
 	   NoteType++)
 	{
 	 /***** Get number of timeline notes and users for this type *****/

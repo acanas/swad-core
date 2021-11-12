@@ -385,7 +385,7 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
   {
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-   Ico_PutIcon (Icon,Title,"CONTEXT_ICO_16x16");
+      Ico_PutIcon (Icon,Title,"CONTEXT_ICO_16x16");
    HTM_DIV_End ();
   }
 
@@ -396,7 +396,7 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
 void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title)
   {
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-   Ico_PutIconLink (Icon,Title);
+      Ico_PutIconLink (Icon,Title);
    HTM_DIV_End ();
   }
 
@@ -417,8 +417,8 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
   {
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-   Ico_PutIcon (Icon,Text,"CONTEXT_ICO_x16");
-   HTM_TxtF ("&nbsp;%s",Text);
+      Ico_PutIcon (Icon,Text,"CONTEXT_ICO_x16");
+      HTM_TxtF ("&nbsp;%s",Text);
    HTM_DIV_End ();
   }
 

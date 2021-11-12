@@ -353,7 +353,7 @@ void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline)
       Tml_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP TL_NEW_PUB\""
+      HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP Tml_NEW_PUB\""
 	            " data-note-code=\"%ld\"",	// Note code to be read later...
                     Not.NotCod);		// ...from JavaScript...
 						// ...to avoid repeating notes
@@ -384,7 +384,7 @@ void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline)
       Tml_Not_GetDataOfNoteByCod (&Not);
 
       /* Write note */
-      HTM_LI_Begin ("class=\"TL_WIDTH TL_SEP\"");
+      HTM_LI_Begin ("class=\"Tml_WIDTH Tml_SEP\"");
 	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
 					      Tml_Pub_GetTopMessage (Pub->Type),
 					      Pub->PublisherCod);
@@ -422,7 +422,7 @@ void Tml_Pub_PutLinkToViewNewPubs (void)
    /* Begin container */
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    HTM_DIV_Begin ("id=\"view_new_posts_container\""
-		  " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
+		  " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\""
 		  " style=\"display:none;\"");
 
       /* Begin anchor */
@@ -456,7 +456,7 @@ void Tml_Pub_PutLinkToViewOldPubs (void)
    /***** Animated link to view old publications *****/
    /* Begin container */
    HTM_DIV_Begin ("id=\"view_old_posts_container\""
-	          " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\"");
+	          " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\"");
 
       /* Begin anchor */
       HTM_A_Begin ("href=\"\" class=\"%s\" onclick=\""
@@ -497,7 +497,6 @@ void Tml_Pub_PutHiddenParamPubCod (long PubCod)
 
 long Tml_Pub_GetParamPubCod (void)
   {
-   /***** Get comment code *****/
    return Par_GetParToLong ("PubCod");
   }
 
@@ -523,7 +522,7 @@ void Tml_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
    Pub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
    Pub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
    Pub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
-   Pub->Type      = Tml_Pub_GetPubTypeFromStr (row[3]);
+   Pub->Type         = Tml_Pub_GetPubTypeFromStr (row[3]);
   }
 
 /*****************************************************************************/

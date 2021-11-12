@@ -27899,7 +27899,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos pedidos de inscri&ccedil;&atilde;o"
 #endif
 	,
-	[Ntf_EVENT_TL_COMMENT] =
+	[Ntf_EVENT_TML_COMMENT] =
 #if   L==1	// ca
 	"Nous comentaris als meus missatges socials"
 #elif L==2	// de
@@ -27920,7 +27920,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos coment&aacute;rio &agrave;s minhos posts sociais"
 #endif
 	,
-	[Ntf_EVENT_TL_FAV] =
+	[Ntf_EVENT_TML_FAV] =
 #if   L==1	// ca
 	"Nous favorits als meus missatges socials"
 #elif L==2	// de
@@ -27941,7 +27941,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novos favoritos &agrave;s minhos posts sociais"
 #endif
 	,
-	[Ntf_EVENT_TL_SHARE] =
+	[Ntf_EVENT_TML_SHARE] =
 #if   L==1	// ca
 	"Noves comparticions dels meus missatges socials"
 #elif L==2	// de
@@ -27962,7 +27962,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	"Novas partilhas de minhos posts sociais"
 #endif
 	,
-	[Ntf_EVENT_TL_MENTION] =
+	[Ntf_EVENT_TML_MENTION] =
 #if   L==1	// ca
 	"Noves mencions"
 #elif L==2	// de
@@ -28343,7 +28343,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Pedido de inscri&ccedil;&atilde;o"
 #endif
 	,
-	[Ntf_EVENT_TL_COMMENT] =
+	[Ntf_EVENT_TML_COMMENT] =
 #if   L==1	// ca
 	"Comentari a un missatge social"
 #elif L==2	// de
@@ -28364,7 +28364,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Coment&aacute;rio a um post sociais"
 #endif
 	,
-	[Ntf_EVENT_TL_FAV] =
+	[Ntf_EVENT_TML_FAV] =
 #if   L==1	// ca
 	"Missatge social marcat com favorit"
 #elif L==2	// de
@@ -28385,7 +28385,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Post sociais marcado como favorito"
 #endif
 	,
-	[Ntf_EVENT_TL_SHARE] =
+	[Ntf_EVENT_TML_SHARE] =
 #if   L==1	// ca
 	"Missatge social compartit"
 #elif L==2	// de
@@ -28406,7 +28406,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	"Post sociais compartido"
 #endif
 	,
-	[Ntf_EVENT_TL_MENTION] =
+	[Ntf_EVENT_TML_MENTION] =
 #if   L==1	// ca
 	"Menci&oacute;"
 #elif L==2	// de
@@ -52601,9 +52601,9 @@ const char *Txt_TIMELINE_Not_shared_by_anyone =	// No shared
 	"N&atilde;o compartilhado por qualquer pessoa";
 #endif
 
-const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
+const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES] =
 	{
-	[TL_NOTE_UNKNOWN] =
+	[Tml_NOTE_UNKNOWN] =
 #if   L==1	// ca
 	"Esdeveniment desconegut"
 #elif L==2	// de
@@ -52624,7 +52624,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Evento desconhecido"
 #endif
 	,
-	[TL_NOTE_INS_DOC_PUB_FILE] =
+	[Tml_NOTE_INS_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
@@ -52645,7 +52645,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	,
-	[TL_NOTE_INS_SHA_PUB_FILE] =
+	[Tml_NOTE_INS_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (instituci&oacute;)"
 #elif L==2	// de
@@ -52666,7 +52666,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	,
-	[TL_NOTE_CTR_DOC_PUB_FILE] =
+	[Tml_NOTE_CTR_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (center)"
 #elif L==2	// de
@@ -52687,7 +52687,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (centro)"
 #endif
 	,
-	[TL_NOTE_CTR_SHA_PUB_FILE] =
+	[Tml_NOTE_CTR_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (center)"
 #elif L==2	// de
@@ -52708,7 +52708,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (centro)"
 #endif
 	,
-	[TL_NOTE_DEG_DOC_PUB_FILE] =
+	[Tml_NOTE_DEG_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
@@ -52729,7 +52729,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (grau)"
 #endif
 	,
-	[TL_NOTE_DEG_SHA_PUB_FILE] =
+	[Tml_NOTE_DEG_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (titulaci&oacute;)"
 #elif L==2	// de
@@ -52750,7 +52750,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (grau)"
 #endif
 	,
-	[TL_NOTE_CRS_DOC_PUB_FILE] =
+	[Tml_NOTE_CRS_DOC_PUB_FILE] =
 #if   L==1	// ca
 	"Document p&uacute;blic (assignatura)"
 #elif L==2	// de
@@ -52771,7 +52771,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo de documento p&uacute;blico (disciplina)"
 #endif
 	,
-	[TL_NOTE_CRS_SHA_PUB_FILE] =
+	[Tml_NOTE_CRS_SHA_PUB_FILE] =
 #if   L==1	// ca
 	"Arxiu compartit p&uacute;blic (assignatura)"
 #elif L==2	// de
@@ -52792,7 +52792,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Arquivo compartilhado p&uacute;blico (disciplina)"
 #endif
 	,
-	[TL_NOTE_CALL_FOR_EXAM] =
+	[Tml_NOTE_CALL_FOR_EXAM] =
 #if   L==1	// ca
 	"Convocat&ograve;ria d'examen"
 #elif L==2	// de
@@ -52813,7 +52813,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Chamada para exame"
 #endif
 	,
-	[TL_NOTE_POST] =
+	[Tml_NOTE_POST] =
 #if   L==1	// ca
 	"Missatge social"
 #elif L==2	// de
@@ -52834,7 +52834,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Post sociais"
 #endif
 	,
-	[TL_NOTE_FORUM_POST] =
+	[Tml_NOTE_FORUM_POST] =
 #if   L==1	// ca
 	"Comentari en un f&ograve;rum"
 #elif L==2	// de
@@ -52855,7 +52855,7 @@ const char *Txt_TIMELINE_NOTE[TL_NOT_NUM_NOTE_TYPES] =
 	"Post em um f&oacute;rum"
 #endif
 	,
-	[TL_NOTE_NOTICE] =
+	[Tml_NOTE_NOTICE] =
 #if   L==1	// ca
 	"Av&iacute;s"
 #elif L==2	// de

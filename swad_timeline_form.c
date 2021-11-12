@@ -98,7 +98,7 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
    extern const char *Txt_TIMELINE_Favourite;
    extern const char *Txt_TIMELINE_Share;
    extern const char *Txt_TIMELINE_Shared;
-   struct TL_Form Form[Tml_Usr_NUM_FAV_SHA][2] =
+   struct Tml_Form Form[Tml_Usr_NUM_FAV_SHA][2] =
      {
       [Tml_Usr_FAV_UNF_NOTE] =
 	{
@@ -200,7 +200,7 @@ void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
                                            Tml_Usr_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
-   struct TL_Form Form =
+   struct Tml_Form Form =
      {
       .Action      = Action,
       .ParamFormat = ParamFormat,
@@ -226,27 +226,28 @@ void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
-void Tml_Frm_FormFavSha (const struct TL_Form *Form)
+void Tml_Frm_FormFavSha (const struct Tml_Form *Form)
   {
    char *OnSubmit;
+   const char *Anchor;
    char ParamStr[7 + Cns_MAX_DECIMAL_DIGITS_LONG + 1];
 
    /***** Create parameter string *****/
    sprintf (ParamStr,Form->ParamFormat,Form->ParamCod);
 
    /*
-   +---------------------------------------------------------------------------+
+    ___________________________________________________________________________
    | div which content will be updated (parent of parent of form)              |
-   | +---------------------+ +-------+ +-------------------------------------+ |
+   |  _____________________   _______   _____________________________________  |
    | | div (parent of form)| | div   | | div for users                       | |
-   | | +-----------------+ | | for   | | +------+ +------+ +------+ +------+ | |
+   | |  _________________  | | for   | |  ______   ______   ______   ______  | |
    | | |    this form    | | | num.  | | |      | |      | |      | | form | | |
-   | | | +-------------+ | | | of    | | | user | | user | | user | |  to  | | |
+   | | |  _____________  | | | of    | | | user | | user | | user | |  to  | | |
    | | | |   fav icon  | | | | users | | |   1  | |   2  | |   3  | | show | | |
-   | | | +-------------+ | | |       | | |      | |      | |      | |  all | | |
-   | | +-----------------+ | |       | | +------+ +------+ +------+ +------+ | |
-   | +---------------------+ +-------+ +-------------------------------------+ |
-   +---------------------------------------------------------------------------+
+   | | | |_____________| | | |       | | |      | |      | |      | |  all | | |
+   | | |_________________| | |       | | |______| |______| |______| |______| | |
+   | |_____________________| |_______| |_____________________________________| |
+   |___________________________________________________________________________|
    */
 
    /***** Form and icon to mark note as favourite *****/
@@ -261,7 +262,7 @@ void Tml_Frm_FormFavSha (const struct TL_Form *Form)
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+      Anchor = "timeline";
      }
    else
      {
@@ -272,13 +273,12 @@ void Tml_Frm_FormFavSha (const struct TL_Form *Form)
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+      Anchor = NULL;
      }
-   Ico_PutIconLink (Form->Icon,Form->Title);
-   Frm_EndForm ();
-
-   /* Free allocated memory */
+   Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,Anchor,OnSubmit);
    free (OnSubmit);
+      Ico_PutIconLink (Form->Icon,Form->Title);
+   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -292,12 +292,13 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *Txt_See_the_previous_X_COMMENTS;
    char *OnSubmit;
+   const char *Anchor;
 
    /***** Begin container which content will be updated via AJAX *****/
-   HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_WIDTH\"",IdComms);
+   HTM_DIV_Begin ("id=\"%s\" class=\"Tml_RIGHT_WIDTH\"",IdComms);
 
       /***** Begin container *****/
-      HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
+      HTM_DIV_Begin ("id=\"exp_%s\" class=\"Tml_EXPAND_COM Tml_RIGHT_WIDTH\"",
 		     IdComms);
 
 	 /***** Form and icon-text to show hidden comments *****/
@@ -316,7 +317,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 			  NumInitialComms,
 			  Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+	    Anchor = "timeline";
 	   }
 	 else
 	   {
@@ -331,22 +332,21 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 			  IdComms,
 			  NumInitialComms) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+	    Anchor = NULL;
 	   }
+	 Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,Anchor,OnSubmit);
+	 free (OnSubmit);
 
-	 /* Put icon and text with link to show the first hidden comments */
-	 HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-	    Ico_PutIconTextLink ("angle-up.svg",
-				 Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
-						      (long) NumInitialComms));
-	    Str_FreeString ();
-	 HTM_BUTTON_End ();
+	    /* Put icon and text with link to show the first hidden comments */
+	    HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+	       Ico_PutIconTextLink ("angle-up.svg",
+				    Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
+							 (long) NumInitialComms));
+	       Str_FreeString ();
+	    HTM_BUTTON_End ();
 
 	 /* End form */
 	 Frm_EndForm ();
-
-	 /* Free allocated memory */
-	 free (OnSubmit);
 
       /***** End container *****/
       HTM_DIV_End ();

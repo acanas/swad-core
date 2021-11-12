@@ -326,7 +326,7 @@ static void Ins_ListInstitutions (void)
 
 static bool Ins_CheckIfICanCreateInstitutions (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_GST);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -1069,9 +1069,9 @@ static void Ins_ListInstitutionsForEdition (void)
 
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
-                  ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod));	// I am the requester
+   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||		// I am a superuser
+          ((Ins->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Institution is not yet activated
+          Gbl.Usrs.Me.UsrDat.UsrCod == Ins->RequesterUsrCod);	// I am the requester
   }
 
 /*****************************************************************************/

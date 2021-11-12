@@ -201,7 +201,7 @@ static Bld_Order_t Bld_GetParamBuildingOrder (void)
 
 static bool Bld_CheckIfICanCreateBuildings (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
   }
 
 /*****************************************************************************/

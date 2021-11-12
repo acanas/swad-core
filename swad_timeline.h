@@ -37,12 +37,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define TL_TIMELINE_SECTION_ID	"timeline"
+#define Tml_TIMELINE_SECTION_ID	"timeline"
 
 /*
    Timeline images will be saved with:
-   · maximum width  of TL_IMAGE_SAVED_MAX_HEIGHT
-   · maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
+   · maximum width  of Tml_IMAGE_SAVED_MAX_HEIGHT
+   · maximum height of Tml_IMAGE_SAVED_MAX_HEIGHT
    · maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 */
 #define Tml_IMAGE_SAVED_MAX_WIDTH	768

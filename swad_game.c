@@ -2196,9 +2196,9 @@ static bool Gam_CheckIfEditable (const struct Gam_Game *Game)
   {
    if (Gam_CheckIfICanEditGames ())
       /***** Questions are editable only if game has no matches *****/
-      return (bool) (Game->NumMchs == 0);	// Games with matches should not be edited
+      return Game->NumMchs == 0;	// Games with matches should not be edited
    else
-      return false;	// Questions are not editable
+      return false;			// Questions are not editable
   }
 
 /*****************************************************************************/

@@ -237,7 +237,7 @@ static Plc_Order_t Plc_GetParamPlcOrder (void)
 
 static bool Plc_CheckIfICanCreatePlaces (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM;
   }
 
 /*****************************************************************************/

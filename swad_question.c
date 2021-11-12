@@ -429,8 +429,8 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 
 bool Qst_CheckIfICanEditQsts (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
   }
 
 /*****************************************************************************/

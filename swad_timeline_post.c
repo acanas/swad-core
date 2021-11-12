@@ -124,14 +124,14 @@ static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
    /***** Write content text *****/
    if (Content->Txt[0])
      {
-      HTM_DIV_Begin ("class=\"TL_TXT\"");
+      HTM_DIV_Begin ("class=\"Tml_TXT\"");
 	 Msg_WriteMsgContent (Content->Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
 
    /***** Show media *****/
-   Med_ShowMedia (&Content->Media,"TL_PST_MED_CONT TL_RIGHT_WIDTH",
-	                          "TL_PST_MED TL_RIGHT_WIDTH");
+   Med_ShowMedia (&Content->Media,"Tml_PST_MED_CONT Tml_RIGHT_WIDTH",
+	                          "Tml_PST_MED Tml_RIGHT_WIDTH");
   }
 
 /*****************************************************************************/
@@ -141,10 +141,10 @@ static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
 void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    /***** Begin list *****/
-   HTM_UL_Begin ("class=\"TL_LIST\"");
+   HTM_UL_Begin ("class=\"Tml_LIST\"");
 
       /***** Begin list item *****/
-      HTM_LI_Begin ("class=\"TL_WIDTH\"");
+      HTM_LI_Begin ("class=\"Tml_WIDTH\"");
 
 	 /***** Left: write author's photo (my photo) *****/
          Tml_Not_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
@@ -168,20 +168,20 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
    extern const char *Txt_New_TIMELINE_post;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 
       /***** Author name *****/
       Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,
-                               "BT_LINK TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH DAT_N_BOLD");
+                               "BT_LINK Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH DAT_N_BOLD");
 
       /***** Form to write the post *****/
       /* Begin container */
-      HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
+      HTM_DIV_Begin ("class=\"Tml_FORM_NEW_PST Tml_RIGHT_WIDTH\"");
 
          /* Form with textarea */
 	 Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_POST);
 	    Tml_Pst_PutTextarea (Txt_New_TIMELINE_post,
-				"TL_PST_TEXTAREA TL_RIGHT_WIDTH");
+				"Tml_PST_TEXTAREA Tml_RIGHT_WIDTH");
 	 Tml_Frm_EndForm ();
 
       /* End container */
@@ -219,7 +219,7 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
+      Med_PutMediaUploader (-1,"Tml_MED_INPUT_WIDTH");
 
       /***** Submit button *****/
       HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
@@ -249,7 +249,7 @@ void Tml_Pst_ReceivePostUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Receive and store post, and
 	     write updated timeline after publication (user) *****/
@@ -307,7 +307,7 @@ static long Tml_Pst_ReceivePost (void)
       PstCod = Tml_DB_CreateNewPost (&Content);
 
       /* Insert post in notes */
-      Tml_Not_StoreAndPublishNoteInternal (TL_NOTE_POST,PstCod,&Pub);
+      Tml_Not_StoreAndPublishNoteInternal (Tml_NOTE_POST,PstCod,&Pub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);

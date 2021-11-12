@@ -987,7 +987,7 @@ function moveNewTimelineToTimeline () {
 			if (mostRecentOcurrenceOfNote) {
 				// Move node from new timeline to timeline
 				timeline.insertBefore(newTimeline.lastChild, timeline.firstChild);
-				timeline.firstChild.className += " TL_NEW_PUB";
+				timeline.firstChild.className += " Tml_NEW_PUB";
 			}
 			else
 				// Remove last child (because is repeated in more recent pubs)
@@ -1397,10 +1397,10 @@ function toggleOffGIF (elem, staticURL) {
 function toggleNewComment (id) {
 	var iconDiv = document.getElementById (id + '_ico');
 
-	if (iconDiv.className == 'TL_ICO_COM_OFF')
-		iconDiv.className = 'TL_ICO_COM_ON';
+	if (iconDiv.className == 'Tml_ICO_COM_OFF')
+		iconDiv.className = 'Tml_ICO_COM_ON';
 	else
-		iconDiv.className = 'TL_ICO_COM_OFF';
+		iconDiv.className = 'Tml_ICO_COM_OFF';
 	toggleDisplay(id);
 }
 

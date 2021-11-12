@@ -371,7 +371,7 @@ static Roo_Order_t Roo_GetParamRoomOrder (void)
 
 static bool Roo_CheckIfICanCreateRooms (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM;
   }
 
 /*****************************************************************************/

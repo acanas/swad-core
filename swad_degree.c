@@ -478,9 +478,9 @@ static void Deg_ListDegreesForEdition (void)
 
 static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
-                  ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod));	// I am the requester
+   return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||		// I am a center administrator or higher
+          ((Deg->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Degree is not yet activated
+          Gbl.Usrs.Me.UsrDat.UsrCod == Deg->RequesterUsrCod);	// I am the requester
   }
 
 /*****************************************************************************/
@@ -729,7 +729,7 @@ static void Deg_ListDegrees (void)
 
 static bool Deg_CheckIfICanCreateDegrees (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_GST);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/

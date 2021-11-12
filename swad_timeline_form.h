@@ -56,7 +56,7 @@ typedef enum
    Tml_Frm_SHO_HID_COMM,	// Show / hide comments
   } Tml_Frm_Action_t;
 
-struct TL_Form
+struct Tml_Form
   {
    Tml_Frm_Action_t Action;
    const char *ParamFormat;
@@ -78,7 +78,7 @@ void Tml_Frm_EndForm (void);
 void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
 		                           const char *ParamFormat,long ParamCod,
                                            Tml_Usr_HowManyUsrs_t HowManyUsrs);
-void Tml_Frm_FormFavSha (const struct TL_Form *Form);
+void Tml_Frm_FormFavSha (const struct Tml_Form *Form);
 
 void Tml_Frm_FormToShowHiddenComms (long NotCod,
 				    char IdComms[Frm_MAX_BYTES_ID + 1],

@@ -33,32 +33,32 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define TL_NOT_NUM_NOTE_TYPES	13
+#define Tml_NOT_NUM_NOTE_TYPES	13
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table tml_notes
 typedef enum
   {
-   TL_NOTE_UNKNOWN		=  0,
+   Tml_NOTE_UNKNOWN		=  0,
    /* Start tab */
-   TL_NOTE_POST			= 10,	// Post written directly in timeline
+   Tml_NOTE_POST		= 10,	// Post written directly in timeline
    /* Institution tab */
-   TL_NOTE_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
-   TL_NOTE_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
+   Tml_NOTE_INS_DOC_PUB_FILE	=  1,	// Public file in documents of institution
+   Tml_NOTE_INS_SHA_PUB_FILE	=  2,	// Public file in shared files of institution
    /* Center tab */
-   TL_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of center
-   TL_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of center
+   Tml_NOTE_CTR_DOC_PUB_FILE	=  3,	// Public file in documents of center
+   Tml_NOTE_CTR_SHA_PUB_FILE	=  4,	// Public file in shared files of center
    /* Degree tab */
-   TL_NOTE_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
-   TL_NOTE_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
+   Tml_NOTE_DEG_DOC_PUB_FILE	=  5,	// Public file in documents of degree
+   Tml_NOTE_DEG_SHA_PUB_FILE	=  6,	// Public file in shared files of degree
    /* Course tab */
-   TL_NOTE_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
-   TL_NOTE_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
+   Tml_NOTE_CRS_DOC_PUB_FILE	=  7,	// Public file in documents of course
+   Tml_NOTE_CRS_SHA_PUB_FILE	=  8,	// Public file in shared files of course
    /* Assessment tab */
-   TL_NOTE_CALL_FOR_EXAM	=  9,	// Exam announcement in a course
+   Tml_NOTE_CALL_FOR_EXAM	=  9,	// Call for exam in a course
    /* Users tab */
    /* Messages tab */
-   TL_NOTE_NOTICE		= 12,	// A public notice in a course
-   TL_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
+   Tml_NOTE_NOTICE		= 12,	// A public notice in a course
+   Tml_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
    /* Analytics tab */
    /* Profile tab */
   } Tml_Not_Type_t;

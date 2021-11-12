@@ -131,7 +131,7 @@ static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
 	  for the author of the post *****/
    OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      Tml_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TL_SHARE);
+      Tml_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TML_SHARE);
   }
 
 /*****************************************************************************/
@@ -181,5 +181,5 @@ static void Tml_Sha_UnsNote (struct Tml_Not_Note *Not)
    /***** Mark possible notifications on this note as removed *****/
    OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
    if (OriginalPubCod > 0)
-      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_SHARE,OriginalPubCod);
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_SHARE,OriginalPubCod);
   }

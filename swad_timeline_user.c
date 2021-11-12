@@ -151,7 +151,7 @@ static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
    HTM_DIV_End ();
 
    /* List users one by one */
-   HTM_DIV_Begin ("class=\"TL_USRS\"");
+   HTM_DIV_Begin ("class=\"Tml_USRS\"");
       Tml_Usr_ListSharersOrFavers (&mysql_res,NumUsrs,NumFirstUsrs);
       if (NumFirstUsrs < NumUsrs)		// Not all are shown
 	 /* Clickable ellipsis to show all users */
@@ -207,7 +207,7 @@ static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
                                                    Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	{
 	 /* Begin container */
-	 HTM_DIV_Begin ("class=\"TL_SHARER\"");
+	 HTM_DIV_Begin ("class=\"Tml_SHARER\"");
 
 	    /* User's photo */
 	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO12x16",Pho_ZOOM,true);	// Use unique id
@@ -273,7 +273,7 @@ void Tml_Usr_PutIconFavSha (Tml_Usr_FavSha_t FavSha,
   {
    /***** Put form to fav/unfav or share/unshare this note/comment *****/
    /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_ICO\"");
+   HTM_DIV_Begin ("class=\"Tml_ICO\"");
 
       /* Icon to fav/unfav or share/unshare this note/comment */
       if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav or share/unshare
@@ -299,34 +299,55 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
    extern const char *Txt_TIMELINE_Not_favourited_by_anyone;
    extern const char *Txt_TIMELINE_Shared_by_X_USERS;
    extern const char *Txt_TIMELINE_Not_shared_by_anyone;
-   static const char *Icon[Tml_Usr_NUM_FAV_SHA] =
+   static const struct
      {
-      [Tml_Usr_FAV_UNF_NOTE] = Tml_Fav_ICON_FAV,
-      [Tml_Usr_FAV_UNF_COMM] = Tml_Fav_ICON_FAV,
-      [Tml_Usr_SHA_UNS_NOTE] = Tml_Sha_ICON_SHARE,
-     };
-   static const char **TitleWithUsrs[Tml_Usr_NUM_FAV_SHA] =
+      const char *Icon;
+      struct
+        {
+         const char **WithUsrs;
+         const char **WithoutUsrs;
+        } Title;
+     } Ico[Tml_Usr_NUM_FAV_SHA] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] = &Txt_TIMELINE_Favourited_by_X_USERS,
-      [Tml_Usr_FAV_UNF_COMM] = &Txt_TIMELINE_Favourited_by_X_USERS,
-      [Tml_Usr_SHA_UNS_NOTE] = &Txt_TIMELINE_Shared_by_X_USERS,
-     };
-   static const char **TitleWithoutUsrs[Tml_Usr_NUM_FAV_SHA] =
-     {
-      [Tml_Usr_FAV_UNF_NOTE] = &Txt_TIMELINE_Not_favourited_by_anyone,
-      [Tml_Usr_FAV_UNF_COMM] = &Txt_TIMELINE_Not_favourited_by_anyone,
-      [Tml_Usr_SHA_UNS_NOTE] = &Txt_TIMELINE_Not_shared_by_anyone,
+      [Tml_Usr_FAV_UNF_NOTE] =
+	 {
+	  .Icon = Tml_Fav_ICON_FAV,
+	  .Title =
+	    {
+             .WithUsrs    = &Txt_TIMELINE_Favourited_by_X_USERS,
+             .WithoutUsrs = &Txt_TIMELINE_Not_favourited_by_anyone,
+	    },
+	 },
+      [Tml_Usr_FAV_UNF_COMM] =
+	 {
+	  .Icon = Tml_Fav_ICON_FAV,
+	  .Title =
+	    {
+             .WithUsrs    = &Txt_TIMELINE_Favourited_by_X_USERS,
+             .WithoutUsrs = &Txt_TIMELINE_Not_favourited_by_anyone,
+	    },
+	 },
+      [Tml_Usr_SHA_UNS_NOTE] =
+	 {
+	  .Icon = Tml_Sha_ICON_SHARE,
+	  .Title =
+	    {
+             .WithUsrs    = &Txt_TIMELINE_Shared_by_X_USERS,
+             .WithoutUsrs = &Txt_TIMELINE_Not_shared_by_anyone,
+	    },
+	 },
      };
 
    /***** Disabled icon to fav/share *****/
    if (NumUsrs)
      {
-      Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],
-		      Str_BuildStringLong (*TitleWithUsrs[FavSha],(long) NumUsrs));
+      Ico_PutDivIcon ("Tml_ICO_DISABLED",Ico[FavSha].Icon,
+		      Str_BuildStringLong (*Ico[FavSha].Title.WithUsrs,(long) NumUsrs));
       Str_FreeString ();
      }
    else
-      Ico_PutDivIcon ("TL_ICO_DISABLED",Icon[FavSha],*TitleWithoutUsrs[FavSha]);
+      Ico_PutDivIcon ("Tml_ICO_DISABLED",Ico[FavSha].Icon,
+                      *Ico[FavSha].Title.WithoutUsrs);
   }
 
 /*****************************************************************************/

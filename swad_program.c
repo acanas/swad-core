@@ -317,8 +317,8 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 
 static bool Prg_CheckIfICanCreateItems (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
   }
 
 /*****************************************************************************/

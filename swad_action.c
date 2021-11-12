@@ -3835,7 +3835,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
 	 return false;
      }
 
-   return (bool) (Permission & (1 << Gbl.Usrs.Me.Role.Logged));
+   return ((Permission & (1 << Gbl.Usrs.Me.Role.Logged)) != 0);
   }
 
 /*****************************************************************************/

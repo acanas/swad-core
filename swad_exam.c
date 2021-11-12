@@ -1561,7 +1561,7 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
   {
    if (Exa_CheckIfICanEditExams ())
       /***** Questions are editable only if exam has no sessions *****/
-      return (bool) (Exam->NumSess == 0);	// Exams with sessions should not be edited
+      return Exam->NumSess == 0;	// Exams with sessions should not be edited
    else
       return false;	// Questions are not editable
   }

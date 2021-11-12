@@ -274,8 +274,8 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 
 static bool Asg_CheckIfICanCreateAssignments (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   return Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+          Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
   }
 
 /*****************************************************************************/

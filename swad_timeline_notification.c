@@ -124,7 +124,7 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 Not.NotCod = Pub.NotCod;
 	 Tml_Not_GetDataOfNoteByCod (&Not);
 
-	 if (Not.Type == TL_NOTE_POST)
+	 if (Not.Type == Tml_NOTE_POST)
 	   {
 	    /***** Get post from database *****/
             if (Tml_DB_GetPostByCod (Not.Cod,&mysql_res) == 1)   // Result should have a unique row
@@ -201,8 +201,8 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Tml_Ntf_MarkMyNotifAsSeen (void)
   {
-   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TL_COMMENT);
-   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TL_FAV    );
-   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TL_SHARE  );
-   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TL_MENTION);
+   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TML_COMMENT);
+   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TML_FAV    );
+   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TML_SHARE  );
+   Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TML_MENTION);
   }

@@ -534,7 +534,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NU
 	[Lan_LANGUAGE_PL     ] = "Nowe prosby o rejestracji",
 	[Lan_LANGUAGE_PT     ] = "Novo pedido de inscrição",
 	},
-[Ntf_EVENT_TL_COMMENT] =
+[Ntf_EVENT_TML_COMMENT] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
 	[Lan_LANGUAGE_CA     ] = "Nou comentari a un missatge social",
@@ -547,7 +547,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NU
 	[Lan_LANGUAGE_PL     ] = "Nowy komentarz do post spoleczna",
 	[Lan_LANGUAGE_PT     ] = "Novo comentário a um post sociais",
 	},
-[Ntf_EVENT_TL_FAV] =
+[Ntf_EVENT_TML_FAV] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
 	[Lan_LANGUAGE_CA     ] = "Nou favorit a un missatge social",
@@ -560,7 +560,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NU
 	[Lan_LANGUAGE_PL     ] = "Nowy ulubiony do post spoleczna",
 	[Lan_LANGUAGE_PT     ] = "Novo favorito a um post sociais",
 	},
-[Ntf_EVENT_TL_SHARE] =
+[Ntf_EVENT_TML_SHARE] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
 	[Lan_LANGUAGE_CA     ] = "Nova compartició de missatge social",
@@ -573,7 +573,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Lan_NU
 	[Lan_LANGUAGE_PL     ] = "Nowy podzial post spoleczna",
 	[Lan_LANGUAGE_PT     ] = "Nova partilha de post sociais",
 	},
-[Ntf_EVENT_TL_MENTION] =
+[Ntf_EVENT_TML_MENTION] =
 	{
 	[Lan_LANGUAGE_UNKNOWN] = "",
 	[Lan_LANGUAGE_CA     ] = "Nova menció",

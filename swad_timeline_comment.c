@@ -119,7 +119,7 @@ void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 
    /***** Link to toggle on/off the form to comment a note *****/
    /* Begin container */
-   HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
+   HTM_DIV_Begin ("id=\"%s_ico\" class=\"Tml_ICO_COM_OFF\"",UniqueId);
 
       /* Begin anchor */
       HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');"
@@ -146,7 +146,7 @@ void Tml_Com_PutIconCommDisabled (void)
 
    /***** Disabled icon to comment a note *****/
    /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\"");
+   HTM_DIV_Begin ("class=\"Tml_ICO_COM_OFF Tml_ICO_DISABLED\"");
 
       /* Disabled icon */
       Ico_PutIcon ("edit.svg",Txt_Comment,"ICO16x16");
@@ -164,7 +164,7 @@ void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
                                             const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"%s\" class=\"TL_FORM_NEW_COM TL_RIGHT_WIDTH\""
+   HTM_DIV_Begin ("id=\"%s\" class=\"Tml_FORM_NEW_COM Tml_RIGHT_WIDTH\""
 		  " style=\"display:none;\"",
 	          IdNewComm);
 
@@ -186,7 +186,7 @@ static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
   {
    /***** Show author's photo *****/
    /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
+   HTM_DIV_Begin ("class=\"Tml_COM_PHOTO\"");
 
       /* Author's photo */
       Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
@@ -205,7 +205,7 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
    extern const char *Txt_New_TIMELINE_comment;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
 
       /***** Begin form to write the post *****/
       Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_COMM);
@@ -213,7 +213,7 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
 	 /***** Textarea and button *****/
 	 Tml_Pst_PutTextarea (Txt_New_TIMELINE_comment,
-			     "TL_COM_TEXTAREA TL_COMM_WIDTH");
+			     "Tml_COM_TEXTAREA Tml_COMM_WIDTH");
 
       /***** End form *****/
       Tml_Frm_EndForm ();
@@ -283,7 +283,8 @@ void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
    |                                 |     | |_____________________________| |
    |  _____________________________  |     |  _____________________________  |
    | |        div exp_<id>         | |     | |         div exp_<id>        | |
-   | |  _________________________  | |     | |          (hidden)           | |
+   | |          (visible)          | |     | |          (hidden)           | |
+   | |  _________________________  | |     | |                             | |
    | | |          form           | | |     | |                             | |
    | | |  _____________________  | | |     | |    _____________________    | |
    | | | | ^ See prev.comments | | | |     | |   | ^ See prev.comments |   | |
@@ -319,7 +320,7 @@ void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
    /***** List final visible comments *****/
    if (NumFinalComms)
      {
-      HTM_UL_Begin ("class=\"TL_LIST\"");	// Never hidden, always visible
+      HTM_UL_Begin ("class=\"Tml_LIST\"");	// Never hidden, always visible
 	 Tml_Com_ListComms (Timeline,NumFinalComms,mysql_res);
       HTM_UL_End ();
      }
@@ -385,7 +386,7 @@ static unsigned Tml_Com_WriteHiddenComms (struct Tml_Timeline *Timeline,
 				                &mysql_res);
 
    /***** List comments *****/
-   HTM_UL_Begin ("id=\"com_%s\" class=\"TL_LIST\"",IdComms);
+   HTM_UL_Begin ("id=\"com_%s\" class=\"Tml_LIST\"",IdComms);
       Tml_Com_ListComms (Timeline,NumInitialCommsGot,mysql_res);
    HTM_UL_End ();
 
@@ -429,7 +430,7 @@ static void Tml_Com_WriteOneCommInList (const struct Tml_Timeline *Timeline,
    Tml_Com_GetDataOfCommFromRow (row,&Com);
 
    /***** Write comment *****/
-   HTM_LI_Begin ("class=\"TL_COM\"");
+   HTM_LI_Begin ("class=\"Tml_COM\"");
       Tml_Com_CheckAndWriteComm (Timeline,&Com);
    HTM_LI_End ();
 
@@ -447,31 +448,36 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
   {
    extern const char *Txt_See_only_the_latest_X_COMMENTS;
    extern const char *Txt_See_the_previous_X_COMMENTS;
-   static const char *Id[Tml_Com_NUM_CONTRACT_EXPAND] =
+   static const struct
      {
-      "con",					// contract
-      "exp",					// expand
-     };
-   static const char *Icon[Tml_Com_NUM_CONTRACT_EXPAND] =
+      const char *Id;
+      const char *Icon;
+      const char **Text;
+     } Link[Tml_Com_NUM_CONTRACT_EXPAND] =
      {
-      "angle-down.svg",				// contract
-      "angle-up.svg",				// expand
-     };
-   const char *Text[Tml_Com_NUM_CONTRACT_EXPAND] =
-     {
-      Txt_See_only_the_latest_X_COMMENTS,	// contract
-      Txt_See_the_previous_X_COMMENTS,		// expand
+	[Tml_Com_CONTRACT] =
+	  {
+	   .Id   = "con",
+	   .Icon = "angle-down.svg",
+	   .Text = &Txt_See_only_the_latest_X_COMMENTS,
+	  },
+	[Tml_Com_EXPAND] =
+	  {
+	   .Id   = "exp",
+	   .Icon = "angle-up.svg",
+	   .Text = &Txt_See_the_previous_X_COMMENTS,
+	  },
      };
 
-   /***** Icon and text to show only the latest comments ****/
+   /***** Link (icon and text) to show comments ****/
    /* Begin container */
-   HTM_DIV_Begin ("id=\"%s_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
+   HTM_DIV_Begin ("id=\"%s_%s\" class=\"Tml_EXPAND_COM Tml_RIGHT_WIDTH\""
 		  " style=\"display:none;\"",	// Hidden
-		  Id[ConExp],IdComms);
+		  Link[ConExp].Id,IdComms);
 
       /* Icon and text */
-      Tml_Com_PutIconToToggleComms (IdComms,Icon[ConExp],
-				    Str_BuildStringLong (Text[ConExp],(long) NumComms));
+      Tml_Com_PutIconToToggleComms (IdComms,Link[ConExp].Icon,
+				    Str_BuildStringLong (*Link[ConExp].Text,(long) NumComms));
       Str_FreeString ();
 
    /* End container */
@@ -508,7 +514,8 @@ static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
 static void Tml_Com_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
 	                               struct Tml_Com_Comment *Com)
   {
-   /*__________________________________________
+   /*
+    ___________________________________________
    | _____  |                      |           | \              \
    ||     | | Author's name        | Date-time |  |              |
    ||Auth.| |______________________|___________|  |              |
@@ -557,7 +564,7 @@ static void Tml_Com_WriteComm (const struct Tml_Timeline *Timeline,
 
    /***** Right: author's name, time, content, and buttons *****/
    /* Begin container */
-   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
 
       /* Right top: author's name, time, and content */
       Tml_Com_WriteAuthorTimeAndContent (Com,&UsrDat);
@@ -606,7 +613,7 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       /* Author's name */
       HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							    Txt_Another_user_s_profile,
-			       "BT_LINK TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
+			       "BT_LINK Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 
@@ -623,14 +630,14 @@ static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com)
    /***** Write content of the comment *****/
    if (Com->Content.Txt[0])
      {
-      HTM_DIV_Begin ("class=\"TL_TXT\"");
+      HTM_DIV_Begin ("class=\"Tml_TXT\"");
 	 Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
 
    /***** Show image *****/
-   Med_ShowMedia (&Com->Content.Media,"TL_COM_MED_CONT TL_COMM_WIDTH",
-				      "TL_COM_MED TL_COMM_WIDTH");
+   Med_ShowMedia (&Com->Content.Media,"Tml_COM_MED_CONT Tml_COMM_WIDTH",
+				      "Tml_COM_MED Tml_COMM_WIDTH");
   }
 
 /*****************************************************************************/
@@ -646,10 +653,10 @@ static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
    NumDiv++;
 
    /***** Begin buttons container *****/
-   HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_FOOT Tml_COMM_WIDTH\"");
 
       /***** Foot column 1: fav zone *****/
-      HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
+      HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"Tml_FAV_COM Tml_FAV_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
 	 Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
 	                       Com->PubCod,Com->UsrCod,Com->NumFavs,
@@ -657,7 +664,7 @@ static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
       HTM_DIV_End ();
 
       /***** Foot column 2: icon to remove this comment *****/
-      HTM_DIV_Begin ("class=\"TL_REM\"");
+      HTM_DIV_Begin ("class=\"Tml_REM\"");
 	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
 	    Tml_Com_PutFormToRemoveComm (Timeline,Com->PubCod);
       HTM_DIV_End ();
@@ -706,7 +713,7 @@ void Tml_Com_ReceiveCommUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Receive comment in a note
 	     and write updated timeline after commenting (user) *****/
@@ -774,14 +781,14 @@ static long Tml_Com_ReceiveComm (void)
       /* Insert into publications */
       Pub.NotCod       = Not.NotCod;
       Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Pub.Type      = Tml_Pub_COMMENT_TO_NOTE;
+      Pub.Type         = Tml_Pub_COMMENT_TO_NOTE;
       Tml_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
       /* Insert comment content in the database */
       Tml_DB_InsertCommContent (Pub.PubCod,&Content);
 
       /***** Store notifications about the new comment *****/
-      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TL_COMMENT,Pub.PubCod);
+      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TML_COMMENT,Pub.PubCod);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);
@@ -811,7 +818,7 @@ void Tml_Com_RequestRemComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Request the removal of comment in note *****/
       Tml_Com_RequestRemovalComm (&Timeline);
@@ -866,11 +873,11 @@ static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline)
 		    NULL,Box_NOT_CLOSABLE);
 
          /* Indent the comment */
-	 HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
+	 HTM_DIV_Begin ("class=\"Tml_LEFT_PHOTO\"");
 	 HTM_DIV_End ();
 
 	 /* Show the comment */
-	 HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
+	 HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 	    Tml_Com_CheckAndWriteComm (Timeline,&Com);
 	 HTM_DIV_End ();
 
@@ -920,7 +927,7 @@ void Tml_Com_RemoveComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Begin section *****/
-   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Remove a comment *****/
       Tml_Com_RemoveComm ();
@@ -999,9 +1006,9 @@ void Tml_Com_RemoveCommMediaAndDBEntries (long PubCod)
    Med_RemoveMedia (Tml_DB_GetMedCodFromComm (PubCod));
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_COMMENT,PubCod);
-   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV    ,PubCod);
-   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_MENTION,PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_COMMENT,PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_FAV    ,PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_MENTION,PubCod);
 
    /***** Remove favs for this comment *****/
    Tml_DB_RemoveCommFavs (PubCod);

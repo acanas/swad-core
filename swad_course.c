@@ -894,7 +894,7 @@ static void Crs_ListCourses (void)
 
 static bool Crs_CheckIfICanCreateCourses (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_GST);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -1292,9 +1292,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
-                  ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod));	// I am the requester
+   return Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||		// I am a degree administrator or higher
+          ((Crs->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Course is not yet activated
+          Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod);	// I am the requester
   }
 
 /*****************************************************************************/

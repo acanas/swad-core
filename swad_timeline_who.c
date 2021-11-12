@@ -44,7 +44,7 @@ extern struct Globals Gbl;
 /************************* Private global variables **************************/
 /*****************************************************************************/
 
-Usr_Who_t TL_GlobalWho;
+Usr_Who_t Tml_GlobalWho;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -175,12 +175,12 @@ void Tml_Who_SaveWhoInDB (struct Tml_Timeline *Timeline)
 
 static void Tml_Who_SetGlobalWho (Usr_Who_t Who)
   {
-   TL_GlobalWho = Who;
+   Tml_GlobalWho = Who;
   }
 
 Usr_Who_t Tml_Who_GetGlobalWho (void)
   {
-   return TL_GlobalWho;
+   return Tml_GlobalWho;
   }
 
 /*****************************************************************************/

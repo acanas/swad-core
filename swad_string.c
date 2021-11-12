@@ -745,11 +745,11 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		                               Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
 		  /* Create notification for the mentioned user *****/
-		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TL_MENTION));
+		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TML_MENTION));
 		  if (CreateNotif)
 		    {
-		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TL_MENTION));
-		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TL_MENTION,UsrDat.UsrCod,PubCod,
+		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TML_MENTION));
+		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TML_MENTION,UsrDat.UsrCod,PubCod,
 						   (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 										   0),
 						   Gbl.Hierarchy.Ins.InsCod,
@@ -2641,7 +2641,7 @@ bool Str_Path1BeginsByPath2 (const char *Path1,const char *Path2)
 
    /* The string Path1 starts by the complete string Path2 */
    /* Check that the next character of Path1 is '\0' or '/' */
-   return (bool) (*Path1 == '\0' || *Path1 == '/');
+   return *Path1 == '\0' || *Path1 == '/';
   }
 
 /*****************************************************************************/

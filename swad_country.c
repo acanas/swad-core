@@ -473,7 +473,7 @@ static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
 
 bool Cty_CheckIfICanEditCountries (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
   }
 
 /*****************************************************************************/

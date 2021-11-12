@@ -289,7 +289,7 @@ static void Ctr_ListCenters (void)
 
 static bool Ctr_CheckIfICanCreateCenters (void)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_GST);
+   return Gbl.Usrs.Me.Role.Logged >= Rol_GST;
   }
 
 /*****************************************************************************/
@@ -925,9 +925,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 
 static bool Ctr_CheckIfICanEditACenter (struct Ctr_Center *Ctr)
   {
-   return (bool) (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
-                  ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));	// I am the requester
+   return  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||		// I am an institution administrator or higher
+           ((Ctr->Status & Hie_STATUS_BIT_PENDING) != 0 &&	// Center is not yet activated
+           Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod);	// I am the requester
   }
 
 /*****************************************************************************/
@@ -1912,8 +1912,8 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr)
 bool Ctr_GetIfMapIsAvailable (const struct Ctr_Center *Ctr)
   {
    /***** Coordinates 0, 0 means not set ==> don't show map *****/
-   return (bool) (Ctr->Coord.Latitude ||
-                  Ctr->Coord.Longitude);
+   return Ctr->Coord.Latitude ||
+          Ctr->Coord.Longitude;
   }
 
 /*****************************************************************************/

@@ -246,7 +246,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
             Tml_ResetTimeline (&Timeline);
 
 	    /* Show timeline */
-	    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
+	    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 	       Tml_ShowTimelineUsr (&Timeline);
 	    HTM_SECTION_End ();
 	   }

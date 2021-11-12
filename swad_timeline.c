@@ -376,7 +376,8 @@ static void Tml_GetAndShowOldTimeline (struct Tml_Timeline *Timeline)
 /*****************************************************************************/
 /******************************* Show timeline *******************************/
 /*****************************************************************************/
-/*             _____
+/*
+               _____
             / |_____| just_now_timeline_list (Posts retrieved automatically
            |  |_____|                         via AJAX from time to time.
            |  |_____|                         They are transferred inmediately
@@ -479,7 +480,7 @@ static unsigned Tml_ListRecentPubs (struct Tml_Timeline *Timeline,
    struct Tml_Not_Note Not;
 
    /***** Begin list *****/
-   HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
+   HTM_UL_Begin ("id=\"timeline_list\" class=\"Tml_LIST\"");
 
       /***** For each publication in list... *****/
       for (Pub = Timeline->Pubs.Top, NumNotesShown = 0;
@@ -492,8 +493,8 @@ static unsigned Tml_ListRecentPubs (struct Tml_Timeline *Timeline,
 
 	 /* Write list item (note) */
 	 HTM_LI_Begin ("class=\"%s\"",
-	               Not.NotCod == NotCodToHighlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
-							 "TL_WIDTH TL_SEP");
+	               Not.NotCod == NotCodToHighlight ? "Tml_WIDTH Tml_SEP Tml_NEW_PUB" :
+							 "Tml_WIDTH Tml_SEP");
 	    Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
 						Tml_Pub_GetTopMessage (Pub->Type),
 						Pub->PublisherCod);
@@ -512,7 +513,7 @@ static unsigned Tml_ListRecentPubs (struct Tml_Timeline *Timeline,
 
 static void Tml_PutHiddenList (const char *Id)
   {
-   HTM_UL_Begin ("id=\"%s\" class=\"TL_LIST\"",Id);
+   HTM_UL_Begin ("id=\"%s\" class=\"Tml_LIST\"",Id);
    HTM_UL_End ();
   }
 
@@ -529,7 +530,7 @@ void Tml_WriteDateTime (time_t TimeUTC)
    Frm_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
-   HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_TIME DAT_LIGHT\"",IdDateTime);
+   HTM_DIV_Begin ("id=\"%s\" class=\"Tml_RIGHT_TIME DAT_LIGHT\"",IdDateTime);
    HTM_DIV_End ();
 
    /***** Script to write date and time in browser local time *****/

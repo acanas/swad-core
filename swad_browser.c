@@ -6062,7 +6062,7 @@ static bool Brw_GetMyClipboard (void)
    if (NumRows > 1)
       Err_WrongCopySrcExit ();
 
-   return (bool) (NumRows == 1);
+   return NumRows == 1;
   }
 
 /*****************************************************************************/
@@ -8669,28 +8669,28 @@ void Brw_ChgFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  Tml_Not_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       default:
 		  break;

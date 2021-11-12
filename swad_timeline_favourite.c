@@ -151,9 +151,8 @@ static void Tml_Fav_FavNote (struct Tml_Not_Note *Not)
 
    /***** Create notification about favourite post
 	  for the author of the post *****/
-   OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
-   if (OriginalPubCod > 0)
-      Tml_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TL_FAV);
+   if ((OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod)) > 0)
+      Tml_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TML_FAV);
   }
 
 static void Tml_Fav_UnfNote (struct Tml_Not_Note *Not)
@@ -181,9 +180,8 @@ static void Tml_Fav_UnfNote (struct Tml_Not_Note *Not)
 			               Not->NotCod,Not->UsrCod);
 
    /***** Mark possible notifications on this note as removed *****/
-   OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
-   if (OriginalPubCod > 0)
-      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,OriginalPubCod);
+   if ((OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod)) > 0)
+      Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_FAV,OriginalPubCod);
   }
 
 /*****************************************************************************/
@@ -296,7 +294,7 @@ static void Tml_Fav_FavComm (struct Tml_Com_Comment *Com)
 
    /***** Create notification about favourite post
 	  for the author of the post *****/
-   Tml_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,Ntf_EVENT_TL_FAV);
+   Tml_Ntf_CreateNotifToAuthor (Com->UsrCod,Com->PubCod,Ntf_EVENT_TML_FAV);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
@@ -334,7 +332,7 @@ static void Tml_Fav_UnfComm (struct Tml_Com_Comment *Com)
 				       Com->PubCod,Com->UsrCod);
 
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TL_FAV,Com->PubCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_FAV,Com->PubCod);
 
    /***** Free image *****/
    Med_MediaDestructor (&Com->Content.Media);
