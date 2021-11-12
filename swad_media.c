@@ -143,6 +143,7 @@ static bool Med_MoveTmpFileToDefDir (struct Med_Media *Media,
 				     const char PathMedPriv[PATH_MAX + 1],
 				     const char *Extension);
 
+static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMedia);
 static void Med_ShowJPG (const struct Med_Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
@@ -312,6 +313,41 @@ void Med_GetMediaDataByCod (struct Med_Media *Media)
 /*****************************************************************************/
 /********* Draw input fields to upload an image/video inside a form **********/
 /*****************************************************************************/
+/*
+   _container_____________________________________________
+  |                     _<id>_med_ico                     |
+  |                    |____Clip_____|                    |
+  |                                                       |
+  |  _container <id>_med_upl_(initially hidden)_________  |
+  | |  _box___________________________________________  | |
+  | | |                                             ? | | |
+  | | |                   Multimedia                  | | |
+  | | |                                               | | |
+  | | |      _prefs_container___________________      | | |
+  | | |     | _pref_container_________________  |     | | |
+  | | |     | |  _______   _______   _______  | |     | | |
+  | | |     | | | Image/| |YouTube| | Embed | | |     | | |
+  | | |     | | |_video_| |_______| |_______| | |     | | |
+  | | |     | |_______________________________| |     | | |
+  | | |     |___________________________________|     | | |
+  | | |  _file_container____________________________  | | |
+  | | | |  ___________                              | | | |
+  | | | | |_Browse..._| No file selected.           | | | |
+  | | | |___________________________________________| | | |
+  | | |  _URL_container_____________________________  | | |
+  | | | |  _______________________________________  | | | |
+  | | | | |_Link__________________________________| | | | |
+  | | | |___________________________________________| | | |
+  | | |  _title_container___________________________  | | |
+  | | | |  _______________________________________  | | | |
+  | | | | |_Title/attribution_____________________| | | | |
+  | | | |___________________________________________| | | |
+  | | |_______________________________________________| | |
+  | |___________________________________________________| |
+  |_______________________________________________________|
+*/
+
+#define Med_NUM_MEDIA_UPLOADERS 3
 
 void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
   {
@@ -323,10 +359,9 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
    struct ParamUploadMedia ParamUploadMedia;
    char Id[Frm_MAX_BYTES_ID + 1];
    size_t NumUploader;
-#define Med_NUM_MEDIA_UPLOADERS 3
    struct MediaUploader MediaUploader[Med_NUM_MEDIA_UPLOADERS] =
      {
-	{/* Upload */
+	{// Upload
 	 .FormType     = Med_FORM_FILE,
 	 .IconSuffix   = "ico_upl",			// <id>_ico_upl
 	 .ParamSuffix  = "par_upl",			// <id>_par_upl
@@ -334,7 +369,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	 .Icon         = "photo-video.svg",
 	 .Title        = Txt_Image_video
 	},
-	{/* YouTube */
+	{// YouTube
 	 .FormType     = Med_FORM_YOUTUBE,
 	 .IconSuffix   = "ico_you",			// <id>_ico_you
 	 .ParamSuffix  = "par_you",			// <id>_par_you
@@ -342,7 +377,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	 .Icon         = "youtube-brands.svg",
 	 .Title        = "YouTube"
 	},
-	{/* Embed */
+	{// Embed
 	 .FormType     = Med_FORM_EMBED,
 	 .IconSuffix   = "ico_emb",			// <id>_ico_emb
 	 .ParamSuffix  = "par_emb",			// <id>_par_emb
@@ -361,7 +396,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
    /***** Begin media uploader container *****/
    HTM_DIV_Begin ("class=\"MED_UPLOADER\"");				// container
 
-      /***** Icon 'clip' *****/
+      /***** Clip icon *****/
       /* Begin container */
       HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);				// <id>_med_ico
 
@@ -384,75 +419,75 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 		       NULL,NULL,
 		       Hlp_Multimedia,Box_NOT_CLOSABLE);
 
-	 /***** Action to perform on media *****/
-	 Par_PutHiddenParamUnsigned (NULL,ParamUploadMedia.Action,
-	                             (unsigned) Med_ACTION_NEW_MEDIA);
+	    /***** Action to perform on media *****/
+	    Par_PutHiddenParamUnsigned (NULL,ParamUploadMedia.Action,
+					(unsigned) Med_ACTION_NEW_MEDIA);
 
-	 /***** Icons *****/
-	 /* Begin containers */
-	 HTM_DIV_Begin ("class=\"PREF_CONTS\"");
-	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
+	    /***** Icons *****/
+	    /* Begin containers */
+	    HTM_DIV_Begin ("class=\"PREF_CONTS\"");
+	       HTM_DIV_Begin ("class=\"PREF_CONT\"");
 
-	    /* Draw icons */
+		  /* Draw icons */
+		  for (NumUploader = 0;
+		       NumUploader < Med_NUM_MEDIA_UPLOADERS;
+		       NumUploader++)
+		     Med_PutIconMediaUploader (Id,&MediaUploader[NumUploader]);
+
+	       /* End containers */
+	       HTM_DIV_End ();
+	    HTM_DIV_End ();
+
+	    /***** Form types *****/
 	    for (NumUploader = 0;
 		 NumUploader < Med_NUM_MEDIA_UPLOADERS;
 		 NumUploader++)
-	       Med_PutIconMediaUploader (Id,&MediaUploader[NumUploader]);
+	       Med_PutHiddenFormTypeMediaUploader (Id,&MediaUploader[NumUploader],
+						   &ParamUploadMedia);
 
-	 /* End containers */
-	 HTM_DIV_End ();
-	 HTM_DIV_End ();
+	    /***** Media file *****/
+	    /* Begin container */
+	    HTM_DIV_Begin (NULL);
 
-	 /***** Form types *****/
-	 for (NumUploader = 0;
-	      NumUploader < Med_NUM_MEDIA_UPLOADERS;
-	      NumUploader++)
-	    Med_PutHiddenFormTypeMediaUploader (Id,&MediaUploader[NumUploader],
-						&ParamUploadMedia);
+	       /* Media file */
+	       HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"%s_fil\" class=\"%s\""		// <id>_fil
+			       " disabled=\"disabled\" style=\"display:none;\"",
+			       Id,ClassInput);
 
-	 /***** Media file *****/
-         /* Begin container */
-	 HTM_DIV_Begin (NULL);
+	    /* End container */
+	    HTM_DIV_End ();
 
-	    /* Media file */
-	    HTM_INPUT_FILE (ParamUploadMedia.File,"image/,video/",
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"%s_fil\" class=\"%s\""		// <id>_fil
-			    " disabled=\"disabled\" style=\"display:none;\"",
-			    Id,ClassInput);
+	    /***** Media URL *****/
+	    /* Begin container */
+	    HTM_DIV_Begin (NULL);
 
-         /* End container */
-	 HTM_DIV_End ();
+	       /* Media URL */
+	       HTM_INPUT_URL (ParamUploadMedia.URL,"",
+			      HTM_DONT_SUBMIT_ON_CHANGE,
+			      "id=\"%s_url\" class=\"%s\""			// <id>_url
+			      " placeholder=\"%s\" maxlength=\"%u\""
+			      " disabled=\"disabled\" style=\"display:none;\"",
+			      Id,ClassInput,Txt_Link,Cns_MAX_CHARS_WWW);
 
-	 /***** Media URL *****/
-         /* Begin container */
-	 HTM_DIV_Begin (NULL);
+	    /* End container */
+	    HTM_DIV_End ();
 
-	    /* Media URL */
-	    HTM_INPUT_URL (ParamUploadMedia.URL,"",
-	                   HTM_DONT_SUBMIT_ON_CHANGE,
-			   "id=\"%s_url\" class=\"%s\""			// <id>_url
-			   " placeholder=\"%s\" maxlength=\"%u\""
-			   " disabled=\"disabled\" style=\"display:none;\"",
-			   Id,ClassInput,Txt_Link,Cns_MAX_CHARS_WWW);
+	    /***** Media title *****/
+	    /* Begin container */
+	    HTM_DIV_Begin (NULL);
 
-         /* End container */
-	 HTM_DIV_End ();
+	       /* Media title */
+	       HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"%s_tit\" class=\"%s\""		// <id>_tit
+			       " placeholder=\"%s\""
+			       " disabled=\"disabled\" style=\"display:none;\"",
+			       Id,ClassInput,Txt_Title_attribution);
 
-	 /***** Media title *****/
-         /* Begin container */
-	 HTM_DIV_Begin (NULL);
-
-	    /* Media title */
-	    HTM_INPUT_TEXT (ParamUploadMedia.Title,Med_MAX_CHARS_TITLE,"",
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"%s_tit\" class=\"%s\""		// <id>_tit
-			    " placeholder=\"%s\""
-			    " disabled=\"disabled\" style=\"display:none;\"",
-			    Id,ClassInput,Txt_Title_attribution);
-
-         /* End container */
-	 HTM_DIV_End ();
+	    /* End container */
+	    HTM_DIV_End ();
 
 	 /***** End box *****/
 	 Box_BoxEnd ();
@@ -1388,6 +1423,40 @@ void Med_StoreMediaInDB (struct Med_Media *Media)
 void Med_ShowMedia (const struct Med_Media *Media,
                     const char *ClassContainer,const char *ClassMedia)
   {
+   static void (*Show[Med_NUM_TYPES]) (const struct Med_Media *Media,const char *ClassMedia) =
+     {
+      [Med_JPG    ] = Med_ShowMediaFile,
+      [Med_GIF    ] = Med_ShowMediaFile,
+      [Med_MP4    ] = Med_ShowMediaFile,
+      [Med_WEBM   ] = Med_ShowMediaFile,
+      [Med_OGG    ] = Med_ShowMediaFile,
+      [Med_YOUTUBE] = Med_ShowYoutube,
+      [Med_EMBED  ] = Med_ShowEmbed,
+     };
+
+   /***** If no media to show ==> nothing to do *****/
+   if (Media->MedCod <= 0 ||
+       Media->Status != Med_STORED_IN_DB ||
+       Media->Type   == Med_TYPE_NONE)
+      return;
+
+   /***** Begin media container *****/
+   HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
+
+      /***** Show media *****/
+      if (Show[Media->Type])
+	 Show[Media->Type] (Media,ClassMedia);
+
+   /***** End media container *****/
+   HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*********************** Show an embed YouTube video *************************/
+/*****************************************************************************/
+
+static void Med_ShowMediaFile (const struct Med_Media *Media,const char *ClassMedia)
+  {
    static void (*Show[Med_NUM_TYPES]) (const struct Med_Media *Media,
 			               const char PathMedPriv[PATH_MAX + 1],
 			               const char *ClassMedia) =
@@ -1402,65 +1471,32 @@ void Med_ShowMedia (const struct Med_Media *Media,
    char PathMedPriv[PATH_MAX + 1];
 
    /***** If no media to show ==> nothing to do *****/
-   if (Media->MedCod <= 0 ||
-       Media->Status != Med_STORED_IN_DB ||
-       Media->Type == Med_TYPE_NONE)
+   if (!Media->Name)
+      return;
+   if (!Media->Name[0])
       return;
 
-   /***** Begin media container *****/
-   HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
+   /***** Begin optional link to external URL *****/
+   PutLink = false;
+   if (Media->URL)
+      if (Media->URL[0])
+	 PutLink = true;
+   if (PutLink)
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
-      /***** Show media *****/
-      switch (Media->Type)
-	{
-	 case Med_JPG:
-	 case Med_GIF:
-	 case Med_MP4:
-	 case Med_WEBM:
-	 case Med_OGG:
-	    /***** Show uploaded file *****/
-	    /* If no media to show ==> nothing to do */
-	    if (!Media->Name)
-	       return;
-	    if (!Media->Name[0])
-	       return;
+   /***** Build path to private directory with the media *****/
+   snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
+	     Cfg_PATH_MEDIA_PRIVATE,
+	     Media->Name[0],
+	     Media->Name[1]);
 
-	    /* Begin optional link to external URL */
-	    PutLink = false;
-	    if (Media->URL)
-	       if (Media->URL[0])
-		  PutLink = true;
-	    if (PutLink)
-	       HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
+   /***** Show media *****/
+   if (Show[Media->Type])
+      Show[Media->Type] (Media,PathMedPriv,ClassMedia);
 
-	    /* Build path to private directory with the media */
-	    snprintf (PathMedPriv,sizeof (PathMedPriv),"%s/%c%c",
-		      Cfg_PATH_MEDIA_PRIVATE,
-		      Media->Name[0],
-		      Media->Name[1]);
-
-	    /* Show media */
-	    if (Show[Media->Type])
-	       Show[Media->Type] (Media,PathMedPriv,ClassMedia);
-
-	    /* End optional link to external URL */
-	    if (PutLink)
-	       HTM_A_End ();
-	    break;
-	 case Med_YOUTUBE:
-	    /***** Show embed YouTube video *****/
-	    Med_ShowYoutube (Media,ClassMedia);
-	    break;
-	 case Med_EMBED:
-	    /***** Show other embed media *****/
-	    Med_ShowEmbed (Media,ClassMedia);
-	    break;
-	 default:
-	    break;
-	}
-
-   /***** End media container *****/
-   HTM_DIV_End ();
+   /***** End optional link to external URL *****/
+   if (PutLink)
+      HTM_A_End ();
   }
 
 /*****************************************************************************/
@@ -2106,4 +2142,3 @@ static void Med_ErrorProcessingMediaFile (void)
 
    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
   }
-

@@ -659,8 +659,8 @@ static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"Tml_FAV_COM Tml_FAV_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
 	 Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
-	                       Com->PubCod,Com->UsrCod,Com->NumFavs,
-			       Tml_Usr_SHOW_FEW_USRS);
+	                        Com->PubCod,Com->UsrCod,Com->NumFavs,
+			        Tml_Usr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: icon to remove this comment *****/
