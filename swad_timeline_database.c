@@ -922,9 +922,9 @@ void Tml_DB_CreateSubQueryAlreadyExists (const struct Tml_Timeline *Timeline,
   {
    static const char *Table[Tml_NUM_WHAT_TO_GET] =
      {
-      [Tml_GET_RECENT_TIMELINE] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [Tml_GET_ONLY_NEW_PUBS  ] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [Tml_GET_ONLY_OLD_PUBS  ] = "tml_tmp_visible_timeline",		// Avoid notes already shown
+      [Tml_GET_NEW_PUBS   ] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [Tml_GET_RECENT_PUBS] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [Tml_GET_OLD_PUBS   ] = "tml_tmp_visible_timeline",	// Avoid notes already shown
      };
 
    snprintf (SubQueries->AlreadyExists,sizeof (SubQueries->AlreadyExists),
@@ -970,8 +970,8 @@ unsigned Tml_DB_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQuer
 			  "tml_pubs.PubType"		// row[3]
 		    " FROM tml_pubs%s"
 		   " WHERE %s%s%s%s"
-		   " ORDER BY tml_pubs.PubCod"
-		    " DESC LIMIT 1",
+		   " ORDER BY tml_pubs.PubCod DESC"
+		   " LIMIT 1",
 		   SubQueries->TablePublishers,
 		   SubQueries->RangeBottom,
 		   SubQueries->RangeTop,
@@ -1024,27 +1024,17 @@ long Tml_DB_GetNotCodFromPubCod (long PubCod)
 
 long Tml_DB_GetPubCodFromSession (const char *FieldName)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    long PubCod;
 
    /***** Get last publication code from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
-		       "SELECT %s"		// row[0]
-		        " FROM ses_sessions"
-		       " WHERE SessionId='%s'",
-		       FieldName,Gbl.Session.Id) == 1)
-     {
-      /* Get last publication code */
-      row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%ld",&PubCod) != 1)
-	 PubCod = 0;
-     }
-   else
+   PubCod = DB_QuerySELECTCode ("can not get publication code from session",
+		                "SELECT %s"		// row[0]
+		                 " FROM ses_sessions"
+		                " WHERE SessionId='%s'",
+		                FieldName,
+		                Gbl.Session.Id);
+   if (PubCod < 0)
       PubCod = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    return PubCod;
   }

@@ -63,7 +63,24 @@ static Tml_Pub_Type_t Tml_Pub_GetPubTypeFromStr (const char *Str);
 /*****************************************************************************/
 /*************** Get list of pubications to show in timeline *****************/
 /*****************************************************************************/
-
+/*
+             _ ______________________
+            / |______________________| Tml_GET_ONLY_NEW_PUBS
+     New  <   |______________________| automatically from time to time
+            \_|______________________| (AJAX)
+             _|_See_new_activity_(3)_|
+            / |______________________| Tml_GET_RECENT_TIMELINE
+           |  |______________________| user clicks on action menu
+   Recent <   |______________________| or after editing timeline
+           |  |______________________|
+            \_|______________________|
+             _|_______See_more_______|
+            / |______________________| Tml_GET_ONLY_OLD_PUBS
+           |  |______________________| user clicks on bottom link
+     Old  <   |______________________| (AJAX)
+           |  |______________________|
+            \_|______________________|
+*/
 void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
   {
    struct Tml_Pub_SubQueries SubQueries;
@@ -76,7 +93,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    Tml_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
 
    /***** Clear timeline for this session in database *****/
-   if (Timeline->WhatToGet == Tml_GET_RECENT_TIMELINE)
+   if (Timeline->WhatToGet == Tml_GET_RECENT_PUBS)
       Tml_DB_ClearTimelineNotesOfSessionFromDB ();
 
    /***** Create temporary tables *****/
@@ -84,7 +101,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    Tml_DB_CreateTmpTableJustRetrievedNotes ();
 
    /* Create temporary table with all notes visible in timeline */
-   if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)
+   if (Timeline->WhatToGet == Tml_GET_OLD_PUBS)
       Tml_DB_CreateTmpTableVisibleTimeline ();
 
    /***** Create subqueries *****/
@@ -120,15 +137,16 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 
    /***** Get the publications in timeline *****/
    /* With the current approach, we select one by one
-      the publications and notes in a loop. In each iteration,
-      we get the most recent publication (original, shared or commment)
-      of every set of publications corresponding to the same note,
-      checking that the note is not already retrieved.
-      After getting a publication, its note code is stored
-      in order to not get it again.
+      the publications and notes in a loop.
+      In each iteration:
+	 we get the most recent publication (original, shared or comment)
+	 of every set of publications corresponding to the same note,
+	 checking that the note is not already retrieved.
+	 After getting a publication, its note code is saved
+	 in order to not get it again.
 
       As an alternative, we tried to get the maximum PubCod,
-      i.e more recent publication (original, shared or commment),
+      i.e more recent publication (original, shared or comment),
       of every set of publications corresponding to the same note:
       SELECT MAX(PubCod) AS NewestPubCod
         FROM tml_pubs ...
@@ -152,7 +170,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 	 Timeline->Pubs.Top          = Pub;	// Pointer to top publication
       else
 	 Timeline->Pubs.Bottom->Next = Pub;	// Chain the previous publication with the current one
-      Timeline->Pubs.Bottom = Pub;	// Update pointer to bottom publication
+      Timeline->Pubs.Bottom = Pub;		// Update pointer to bottom publication
 
       if (Pub == NULL)	// Nothing got ==> abort loop
          break;		// Last publication
@@ -160,7 +178,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       /* Insert note in temporary tables with just retrieved notes.
 	 These tables will be used to not get notes already shown */
       Tml_DB_InsertNoteInJustRetrievedNotes (Pub->NotCod);
-      if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)	// Get only old publications
+      if (Timeline->WhatToGet == Tml_GET_OLD_PUBS)	// Get only old publications
 	 Tml_DB_InsertNoteInVisibleTimeline (Pub->NotCod);
 
       /* Narrow the range for the next iteration */
@@ -177,7 +195,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    /***** Drop temporary tables *****/
    /* Drop temporary tables with notes already retrieved */
    Tml_DB_DropTmpTableJustRetrievedNotes ();
-   if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)	// Get only old publications
+   if (Timeline->WhatToGet == Tml_GET_OLD_PUBS)	// Get only old publications
       Tml_DB_DropTmpTableVisibleTimeline ();
 
    /* Drop temporary table with me and users I follow */
@@ -210,28 +228,31 @@ static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
               |_____| 1
                       0
    */
-   /* Default range */
-   RangePubsToGet->Top    = 0;	// +Infinite
-   RangePubsToGet->Bottom = 0;	// -Infinite
 
    switch (WhatToGet)
      {
-      case Tml_GET_ONLY_NEW_PUBS:	// Get the publications (without limit)
-					// newer than LastPubCod
+      case Tml_GET_NEW_PUBS:	// Get the publications (without limit)
+				// newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
+         RangePubsToGet->Top    = 0;	// +Infinite
 	 RangePubsToGet->Bottom = Tml_DB_GetPubCodFromSession ("LastPubCod");
 	 break;
-      case Tml_GET_ONLY_OLD_PUBS:	// Get some limited publications
-					// older than FirstPubCod
+      case Tml_GET_RECENT_PUBS:	// Get some limited recent publications
+	 /* This is the first query to get initial timeline shown
+	    ==> no notes yet in current timeline table */
+	 RangePubsToGet->Top    = 0;	// +Infinite
+	 RangePubsToGet->Bottom = 0;	// -Infinite
+	 break;
+      case Tml_GET_OLD_PUBS:	// Get some limited publications
+				// older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publications */
 	 RangePubsToGet->Top    = Tml_DB_GetPubCodFromSession ("FirstPubCod");
+         RangePubsToGet->Bottom = 0;	// -Infinite
 	 break;
-      case Tml_GET_RECENT_TIMELINE:	// Get some limited recent publications
       default:
-	 /* This is the first query to get initial timeline shown
-	    ==> no notes yet in current timeline table */
-	 break;
+	 RangePubsToGet->Top    = 0;	// +Infinite
+	 RangePubsToGet->Bottom = 0;	// -Infinite
      }
   }
 
@@ -243,9 +264,9 @@ static unsigned Tml_Pub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline)
   {
    static const unsigned MaxPubsToGet[Tml_NUM_WHAT_TO_GET] =
      {
-      [Tml_GET_RECENT_TIMELINE] = Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW,
-      [Tml_GET_ONLY_NEW_PUBS  ] = Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
-      [Tml_GET_ONLY_OLD_PUBS  ] = Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_NEW_PUBS   ] = Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_RECENT_PUBS] = Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_OLD_PUBS   ] = Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW,
      };
 
    return MaxPubsToGet[Timeline->WhatToGet];
@@ -262,18 +283,18 @@ static void Tml_Pub_UpdateFirstLastPubCodesIntoSession (const struct Tml_Timelin
 
    switch (Timeline->WhatToGet)
      {
-      case Tml_GET_ONLY_NEW_PUBS:	// Get only new publications
+      case Tml_GET_NEW_PUBS:	// Get only new publications
 	 Tml_DB_UpdateLastPubCodInSession ();
 	 break;
-      case Tml_GET_ONLY_OLD_PUBS:	// Get only old publications
-      case Tml_GET_RECENT_TIMELINE:	// Get last publications
+      case Tml_GET_RECENT_PUBS:	// Get last publications
+      case Tml_GET_OLD_PUBS:	// Get only old publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-	 if (Timeline->WhatToGet == Tml_GET_ONLY_OLD_PUBS)
-	    Tml_DB_UpdateFirstPubCodInSession (FirstPubCod);
-	 else
+	 if (Timeline->WhatToGet == Tml_GET_RECENT_PUBS)
             Tml_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
+	 else
+	    Tml_DB_UpdateFirstPubCodInSession (FirstPubCod);
 	 break;
      }
   }

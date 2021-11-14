@@ -37,8 +37,8 @@
 /*****************************************************************************/
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
 #define Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// New publishings retrieved (big number)
+#define Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
 #define Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
 
 /*****************************************************************************/

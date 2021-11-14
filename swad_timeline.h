@@ -69,12 +69,14 @@ typedef enum
 #define Tml_NUM_WHAT_TO_GET 3
 typedef enum
   {
-   Tml_GET_RECENT_TIMELINE,	// Recent timeline is shown when the user clicks on action menu,...
-				// or after editing timeline
-   Tml_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
-				// automatically from time to time
-   Tml_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
-				// when the user clicks on link at bottom of timeline
+   Tml_GET_NEW_PUBS,	// New publications are retrieved via AJAX...
+			// automatically from time to time
+   Tml_GET_RECENT_PUBS,	// Recent timeline is shown...
+			// when the user clicks on action menu,...
+			// or after editing timeline
+   Tml_GET_OLD_PUBS,	// Old publications are retrieved via AJAX...
+			// when the user clicks on link...
+			// at bottom of timeline
   } Tml_WhatToGet_t;
 
 struct Tml_Timeline

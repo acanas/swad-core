@@ -184,7 +184,7 @@ void Tml_ResetTimeline (struct Tml_Timeline *Timeline)
   {
    Timeline->UsrOrGbl    = Tml_Usr_TIMELINE_GBL;
    Timeline->Who         = Tml_Who_DEFAULT_WHO;
-   Timeline->WhatToGet   = Tml_GET_RECENT_TIMELINE;
+   Timeline->WhatToGet   = Tml_GET_RECENT_PUBS;
    Timeline->Pubs.Top    =
    Timeline->Pubs.Bottom = NULL,
    Timeline->NotCod      = -1L;
@@ -248,7 +248,7 @@ void Tml_ShowTimelineGblHighlighting (struct Tml_Timeline *Timeline,long NotCod)
 
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
-   Timeline->WhatToGet = Tml_GET_RECENT_TIMELINE;
+   Timeline->WhatToGet = Tml_GET_RECENT_PUBS;
    Tml_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
@@ -277,7 +277,7 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
 
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_USR;
-   Timeline->WhatToGet = Tml_GET_RECENT_TIMELINE;
+   Timeline->WhatToGet = Tml_GET_RECENT_PUBS;
    Tml_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
@@ -310,7 +310,7 @@ void Tml_RefreshNewTimelineGbl (void)
 
    /***** Get list of pubications to show in timeline *****/
    Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
-   Timeline.WhatToGet = Tml_GET_ONLY_NEW_PUBS;
+   Timeline.WhatToGet = Tml_GET_NEW_PUBS;
    Tml_Pub_GetListPubsToShowInTimeline (&Timeline);
 
    /***** Show new timeline *****/
@@ -336,7 +336,7 @@ void Tml_RefreshOldTimelineGbl (void)
 
    /***** Show old publications *****/
    Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
-   Timeline.WhatToGet = Tml_GET_ONLY_OLD_PUBS;
+   Timeline.WhatToGet = Tml_GET_OLD_PUBS;
    Tml_GetAndShowOldTimeline (&Timeline);
   }
 
@@ -353,7 +353,7 @@ void Tml_RefreshOldTimelineUsr (void)
 
    /***** If user exists, show old publications *****/
    Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_USR;
-   Timeline.WhatToGet = Tml_GET_ONLY_OLD_PUBS;
+   Timeline.WhatToGet = Tml_GET_OLD_PUBS;
    Tml_GetAndShowOldTimeline (&Timeline);
   }
 

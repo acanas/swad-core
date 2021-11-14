@@ -13508,4 +13508,18 @@ SELECT gam_questions.QstCod,gam_questions.QstInd,tst_questions.AnsType,tst_quest
 
 SELECT COUNT(tst_answers.AnsInd) AS N FROM tst_answers,gam_questions WHERE gam_questions.GamCod=8 AND gam_questions.QstCod=tst_answers.QstCod GROUP BY tst_answers.QstCod;
 
+---------------------------
+
+SELECT MAX(PubCod) AS NewestPubCod
+  FROM tml_pubs
+ GROUP BY NotCod
+ ORDER BY NewestPubCod DESC
+ LIMIT 10;
+ 
+SELECT PubCod
+FROM tml_pubs
+WHERE NotCod NOT IN (SELECT NotCod FROM tml_tmp_just_retrieved_notes)
+ORDER BY PubCod DESC
+LIMIT 1;
+
 		   

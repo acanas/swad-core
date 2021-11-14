@@ -45,8 +45,8 @@
 
 typedef enum
   {
-   Tml_Usr_TIMELINE_USR,		// Show the timeline of a user
-   Tml_Usr_TIMELINE_GBL,		// Show the timeline of the users follwed by me
+   Tml_Usr_TIMELINE_USR,	// Show the timeline of a user
+   Tml_Usr_TIMELINE_GBL,	// Show the timeline of the users follwed by me
   } Tml_Usr_UsrOrGbl_t;
 
 typedef enum
