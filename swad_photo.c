@@ -139,12 +139,11 @@ static void Pho_ComputePhotoSize (const struct Pho_DegPhotos *DegPhotos,
 
 bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
   {
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-
-   if (ItsMe)
+   /***** I can change my photo *****/
+   if (Usr_ItsMe (UsrDat->UsrCod))
       return true;
 
-   /* Check if I have permission to change user's photo */
+   /***** Check if I have permission to change user's photo *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
@@ -154,8 +153,7 @@ bool Pho_ICanChangeOtherUsrPhoto (struct UsrData *UsrDat)
 
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
-         UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
-         return UsrDat->Accepted;
+         return (UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat));
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -190,10 +188,9 @@ void Pho_PutIconToChangeUsrPhoto (void)
       [Rol_INS_ADM] = ActReqOthPho,
       [Rol_SYS_ADM] = ActReqOthPho,
      };
-   bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
 
    /***** Link for changing / uploading the photo *****/
-   if (ItsMe)
+   if (Usr_ItsMe (Gbl.Record.UsrDat->UsrCod))
      {
       TitleText = Gbl.Usrs.Me.MyPhotoExists ? Txt_Change_photo :
 			                      Txt_Upload_photo;

@@ -1308,16 +1308,14 @@ void May_NewMyUsrEmail (void)
 
 void Mai_NewOtherUsrEmail (void)
   {
-   bool ItsMe;
-
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** New user's ID *****/
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,ItsMe);
+	 Mai_NewUsrEmail (&Gbl.Usrs.Other.UsrDat,
+	                  Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
 	 /***** Show form again *****/
 	 Acc_ShowFormChgOtherUsrAccount ();
@@ -1625,9 +1623,8 @@ void Mai_WriteFootNoteEMail (FILE *FileMail,Lan_Language_t Language)
 
 bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
   {
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-
-   if (ItsMe)
+   /***** I can see my email *****/
+   if (Usr_ItsMe (UsrDat->UsrCod))
       return true;
 
    /***** Check if I have permission to see another user's email *****/

@@ -1369,15 +1369,12 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
                                           long UsrCod,
                                           struct ExaRes_ICanView *ICanView)
   {
-   bool ItsMe;
-
    /***** Check if I can view print result and score *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
 	 // Depends on visibility of exam, session and result (eye icons)
-	 ItsMe = Usr_ItsMe (UsrCod);
-	 ICanView->Result = (ItsMe &&			// The result is mine
+	 ICanView->Result = (Usr_ItsMe (UsrCod) &&	// The result is mine
 			     !Exam->Hidden &&		// The exam is visible
 			     !Session->Hidden &&	// The session is visible
 			     Session->ShowUsrResults);	// The results of the session are visible to users

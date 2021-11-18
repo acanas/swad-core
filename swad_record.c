@@ -968,8 +968,6 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
 
 static void Rec_ShowRecordOneStdCrs (void)
   {
-   bool ItsMe;
-
    /***** Get if student has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
@@ -1013,8 +1011,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	       if (ItsMe)
+	       if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 		 {
 		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		     Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
@@ -1065,7 +1062,6 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
-   bool ItsMe;
    char RecordSectionId[32];
 
    /***** Get list of selected users if not already got *****/
@@ -1140,19 +1136,16 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	       /* Record of the student in the course */
 	       if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
-		 {
-		  ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 		  if ( Gbl.Usrs.Me.Role.Logged == Rol_NET     ||
 		       Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
 		       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 		      (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// I am student in this course...
-		       ItsMe))					// ...and it's me
+		       Usr_ItsMe (UsrDat.UsrCod)))		// ...and it's me
 		    {
 		     HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 			Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
 		     HTM_DIV_End ();
 		    }
-		 }
 
 	       /* End container for this user */
 	       HTM_DIV_End ();
@@ -1585,7 +1578,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       [Rec_CRS_PRINT_SEVERAL_RECORDS     ] = NULL,
      };
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
-   bool ItsMe;
    bool ICanEdit = false;
    unsigned NumField;
    MYSQL_RES *mysql_res;
@@ -1598,8 +1590,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// I am a student
-	 ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-	 if (ItsMe)
+	 if (Usr_ItsMe (UsrDat->UsrCod))
 	   {
 	    switch (TypeOfView)
 	      {

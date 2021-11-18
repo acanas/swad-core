@@ -372,7 +372,6 @@ void Agd_ShowUsrAgenda (void)
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const char *Txt_Public_agenda_USER;
    struct Agd_Agenda Agenda;
-   bool ItsMe;
    bool Error = true;
 
    /***** Get user *****/
@@ -385,8 +384,7 @@ void Agd_ShowUsrAgenda (void)
 	 Agd_ResetAgenda (&Agenda);
 
 	 /***** Begin box *****/
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 if (ItsMe)
+	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Me.UsrDat.FullName),
 			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
@@ -423,7 +421,6 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    struct Agd_Agenda Agenda;
-   bool ItsMe;
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -439,8 +436,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Agd_ResetAgenda (&Agenda);
 
 	    /***** Begin box *****/
-	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    if (ItsMe)
+	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
 							Gbl.Usrs.Me.UsrDat.FullName),
 			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,

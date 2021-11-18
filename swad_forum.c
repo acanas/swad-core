@@ -2866,7 +2866,6 @@ void For_RemovePost (void)
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
-   bool ItsMe;
    bool ThreadDeleted = false;
 
    /***** Reset forum *****/
@@ -2888,8 +2887,7 @@ void For_RemovePost (void)
       Err_WrongPostExit ();
 
    /* Check if I am the author of the message */
-   ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-   if (!ItsMe)
+   if (!Usr_ItsMe (UsrDat.UsrCod))
       Err_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
@@ -2927,6 +2925,7 @@ void For_RemovePost (void)
      {
       /***** Show threads again *****/
       For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,NULL);
+
       /***** Show the remaining posts *****/
       For_ShowPostsOfAThread (&Forums,Ale_SUCCESS,Txt_FORUM_Post_removed);
      }

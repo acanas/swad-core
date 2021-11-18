@@ -1840,7 +1840,6 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    struct TstPrn_NumQuestions NumTotalQsts;
    double TotalScore;
    unsigned NumPrintsVisibleByTchs = 0;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    struct TstRes_ICanView ICanView;
    char *ClassDat;
 
@@ -1990,7 +1989,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	   }
 
 	 /***** Write totals for this user *****/
-	 TstPrn_ShowPrintsSummaryRow (ItsMe,NumPrintsVisibleByTchs,
+	 TstPrn_ShowPrintsSummaryRow (Usr_ItsMe (UsrDat->UsrCod),NumPrintsVisibleByTchs,
 				      &NumTotalQsts,TotalScore);
 	}
       else

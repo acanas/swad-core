@@ -297,7 +297,6 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
      };
    bool CreateNotif;
    bool NotifyByEmail;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if user's role is allowed *****/
    if (!NotifyEvent[NewRole])
@@ -313,7 +312,7 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent[NewRole]));
-   NotifyByEmail = CreateNotif && !ItsMe &&
+   NotifyByEmail = CreateNotif && !Usr_ItsMe (UsrDat->UsrCod) &&
 		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent[NewRole]));
    if (CreateNotif)
       Ntf_DB_StoreNotifyEventToUsr (NotifyEvent[NewRole],UsrDat->UsrCod,-1L,
@@ -2676,25 +2675,22 @@ void Enr_RemUsrFromCrs2 (void)
 
 static bool Enr_CheckIfICanRemUsrFromCrs (void)
   {
-   bool ItsMe;
-
-   /* Check if I can remove another user from current course */
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 return ItsMe;	// A student or non-editing teacher can remove herself/himself
+	 // A student or non-editing teacher can remove herself/himself
+	 return Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 return true;	// A teacher or administrator can remove anyone
+	 // A teacher or administrator can remove anyone
+	 return true;
       default:
 	 return false;
      }
-   return false;
   }
 
 /*****************************************************************************/
@@ -3086,7 +3082,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
 					  Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
      {
@@ -3130,7 +3125,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
       Usr_FlushCachesUsr ();
 
       /***** If it's me, change my roles *****/
-      if (ItsMe)
+      if (Usr_ItsMe (UsrDat->UsrCod))
 	{
 	 /* Now I don't belong to current course */
 	 Gbl.Usrs.Me.IBelongToCurrentCrs =
@@ -3383,8 +3378,6 @@ void Enr_FlushCacheUsrSharesAnyOfMyCrs (void)
 
 bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
   {
-   bool ItsMe;
-
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -3394,8 +3387,7 @@ bool Enr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: It's me? *****/
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   if (ItsMe)
+   if (Usr_ItsMe (UsrDat->UsrCod))
       return true;
 
    /***** 4. Fast check: Is already calculated if user shares any course with me? *****/

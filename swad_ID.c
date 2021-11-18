@@ -341,9 +341,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
 
 bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
   {
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-
-   if (ItsMe)
+   if (Usr_ItsMe (UsrDat->UsrCod))
       return true;
 
    /***** Check if I have permission to see another user's IDs *****/
@@ -677,16 +675,14 @@ void ID_RemoveMyUsrID (void)
 
 void ID_RemoveOtherUsrID (void)
   {
-   bool ItsMe;
-
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Remove user's ID *****/
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
+	 ID_RemoveUsrID (&Gbl.Usrs.Other.UsrDat,
+	                 Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
 	 /***** Update list of IDs *****/
 	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
@@ -769,16 +765,14 @@ void ID_NewMyUsrID (void)
 
 void ID_NewOtherUsrID (void)
   {
-   bool ItsMe;
-
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** New user's ID *****/
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,ItsMe);
+	 ID_NewUsrID (&Gbl.Usrs.Other.UsrDat,
+	              Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod));
 
 	 /***** Update list of IDs *****/
 	 ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
@@ -881,7 +875,6 @@ void ID_ConfirmOtherUsrID (void)
    long OriginalActCod;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanConfirm;
-   bool ItsMe;
    bool Found;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
@@ -893,9 +886,7 @@ void ID_ConfirmOtherUsrID (void)
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-      if (!ItsMe)	// Not me
+      if (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))	// Not me
         {
 	 /* If user is a student in current course,
 	    check if he/she has accepted */
@@ -906,7 +897,6 @@ void ID_ConfirmOtherUsrID (void)
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;
         }
-     }
 
    if (ICanConfirm)
      {

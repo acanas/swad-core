@@ -692,7 +692,6 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
       size_t Length;		// Length of the nickname
      } Nickname;
    struct UsrData UsrDat;
-   bool ItsMe;
    bool CreateNotif;
    bool NotifyByEmail;
 
@@ -735,9 +734,7 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 	    UsrDat.Nickname[Nickname.Length] = '\0';
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
-	      {
-	       ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-	       if (!ItsMe)	// Not me
+	       if (!Usr_ItsMe (UsrDat.UsrCod))	// Not me
 		 {
 		  /* Get user's data */
 		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,
@@ -758,7 +755,6 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 						   Gbl.Hierarchy.Crs.CrsCod);
 		    }
 		 }
-	      }
 	   }
 	}
       /* The next char is not the start of a nickname */

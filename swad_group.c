@@ -1211,14 +1211,12 @@ void Grp_RemUsrFromAllGrps (long UsrCod)
 
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
   {
-   bool ItsMe = Usr_ItsMe (UsrCod);
-
    /***** Remove user from group *****/
    Grp_DB_RemoveUsrFromGrp (UsrCod,GrpCod);
 
    /***** Flush caches *****/
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
-   if (ItsMe)
+   if (Usr_ItsMe (UsrCod))
       Grp_FlushCacheIBelongToGrp ();
   }
 
@@ -3022,8 +3020,6 @@ void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
 
 bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
   {
-   bool ItsMe;
-
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -3041,8 +3037,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
       return false;
 
    /***** 5. Fast check: It's me? *****/
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   if (ItsMe)
+   if (Usr_ItsMe (UsrDat->UsrCod))
       return true;
 
    /***** 6. Fast check: Is already calculated if user shares

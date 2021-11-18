@@ -2530,7 +2530,6 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
       [Prj_ROLE_EVL] = ActRemEvlPrj,	// Evaluator
      };
    struct Prj_Project Prj;
-   bool ItsMe;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -2548,12 +2547,10 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
      {
       if (Prj_CheckIfICanEditProject (&Prj))
 	{
-	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-
 	 /***** Show question and button to remove user as a role from project *****/
 	 /* Begin alert */
-	 Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
-			                               Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
+	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
+			                                                                  Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
 				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex],
 				  Prj.Title);
 

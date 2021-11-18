@@ -1190,7 +1190,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 					 Usr_DONT_GET_PREFS,
 					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 
 	    /* Get figure (row[1]) */
 	    if (sscanf (row[1],"%ld",&Figure) != 1)
@@ -1260,7 +1260,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	    Usr_GetAllUsrDataFromUsrCod (&UsrDat,
 					 Usr_DONT_GET_PREFS,
 					 Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    ItsMe = (UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 
 	    /* Get average number of clicks per day (row[1]) */
 	    NumClicksPerDay = Str_GetDoubleFromStr (row[1]);

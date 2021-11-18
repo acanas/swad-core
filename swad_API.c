@@ -3199,7 +3199,6 @@ int swad__sendMessage (struct soap *soap,
    MYSQL_ROW row;
    unsigned NumUsrs;
    unsigned NumUsr;
-   bool ItsMe;
    bool NotifyByEmail;
 
    /***** Initializations *****/
@@ -3268,8 +3267,7 @@ int swad__sendMessage (struct soap *soap,
 							 Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
 	      {
 	       /* This received message must be notified by email? */
-	       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	       NotifyByEmail = (!ItsMe &&
+	       NotifyByEmail = (!Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod) &&
 				(Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
 
 	       /* Send message to this user */

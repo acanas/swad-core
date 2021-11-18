@@ -319,7 +319,6 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    extern const char *Txt_Followers;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
@@ -355,7 +354,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	    /* I follow user? */
 	    HTM_DIV_Begin ("id=\"follow_usr\"");
 	       if (Gbl.Usrs.Me.Logged &&	// Logged
-		   !ItsMe)			// Not me!
+		   !Usr_ItsMe (UsrDat->UsrCod))	// Not me!
 		 {
 		  Frm_BeginForm (IFollowUsr ? ActUnfUsr :
 					      ActFolUsr);
@@ -614,7 +613,6 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"FOLLOW_PHOTO\"");
@@ -638,9 +636,8 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 Frm_EndForm ();
 	}
 
-      ItsMe = Usr_ItsMe (UsrDat->UsrCod);
       if (!Gbl.Usrs.Me.Logged ||	// Not logged
-	  ItsMe)			// It's me
+	  Usr_ItsMe (UsrDat->UsrCod))	// It's me
 	 /* Inactive icon to follow/unfollow */
 	 Fol_PutInactiveIconToFollowUnfollow ();
       else				// It's not me
@@ -666,7 +663,6 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
    HTM_TR_Begin (NULL);
@@ -696,7 +692,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       /***** Icon to follow *****/
       HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
       if (!Gbl.Usrs.Me.Logged ||	// Not logged
-	  ItsMe)			// It's me
+	  Usr_ItsMe (UsrDat->UsrCod))	// It's me
 	 /* Inactive icon to follow/unfollow */
 	 Fol_PutInactiveIconToFollowUnfollow ();
       else				// It's not me
