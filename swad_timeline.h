@@ -54,16 +54,14 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Tml_NUM_TOP_MESSAGES (1 + 6)
+#define Tml_NUM_TOP_MESSAGES (1 + 4)
 typedef enum
   {
-   Tml_TOP_MESSAGE_NONE		= 0,
+   Tml_TOP_MESSAGE_NONE		= 0,	// 0 to avoid need of explicit inicialization
    Tml_TOP_MESSAGE_COMMENTED	= 1,
-   Tml_TOP_MESSAGE_FAVED		= 2,
-   Tml_TOP_MESSAGE_UNFAVED	= 3,
-   Tml_TOP_MESSAGE_SHARED	= 4,
-   Tml_TOP_MESSAGE_UNSHARED	= 5,
-   Tml_TOP_MESSAGE_MENTIONED	= 6,
+   Tml_TOP_MESSAGE_FAVED	= 2,
+   Tml_TOP_MESSAGE_SHARED	= 3,
+   Tml_TOP_MESSAGE_MENTIONED	= 4,
   } Tml_TopMessage_t;
 
 #define Tml_NUM_WHAT_TO_GET 3
@@ -71,7 +69,7 @@ typedef enum
   {
    Tml_GET_NEW_PUBS,	// New publications are retrieved via AJAX...
 			// automatically from time to time
-   Tml_GET_RECENT_PUBS,	// Recent timeline is shown...
+   Tml_GET_REC_PUBS,	// Recent timeline is shown...
 			// when the user clicks on action menu,...
 			// or after editing timeline
    Tml_GET_OLD_PUBS,	// Old publications are retrieved via AJAX...

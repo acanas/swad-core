@@ -693,7 +693,6 @@ void Fol_DB_RemoveUsrFromUsrFollow (long UsrCod)
 
 void Fol_DB_CreateTmpTableMeAndUsrsIFollow (void)
   {
-   /***** Create temporary table with me and the users I follow *****/
    DB_Query ("can not create temporary table",
 	     "CREATE TEMPORARY TABLE fol_tmp_me_and_followed "
 	     "(UsrCod INT NOT NULL,"
@@ -710,7 +709,6 @@ void Fol_DB_CreateTmpTableMeAndUsrsIFollow (void)
 
 void Fol_DB_DropTmpTableMeAndUsrsIFollow (void)
   {
-   /***** Drop temporary table with me and the users I follow *****/
    DB_Query ("can not remove temporary table",
 	     "DROP TEMPORARY TABLE IF EXISTS fol_tmp_me_and_followed");
   }

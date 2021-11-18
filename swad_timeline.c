@@ -155,7 +155,7 @@ static void Tml_GetAndShowOldTimeline (struct Tml_Timeline *Timeline);
 static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
                               long NotCodToHighlight,const char *Title);
 static void Tml_PutIconsTimeline (__attribute__((unused)) void *Args);
-static unsigned Tml_ListRecentPubs (struct Tml_Timeline *Timeline,
+static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
                                     long NotCodToHighlight);
 
 static void Tml_PutHiddenList (const char *Id);
@@ -184,7 +184,7 @@ void Tml_ResetTimeline (struct Tml_Timeline *Timeline)
   {
    Timeline->UsrOrGbl    = Tml_Usr_TIMELINE_GBL;
    Timeline->Who         = Tml_Who_DEFAULT_WHO;
-   Timeline->WhatToGet   = Tml_GET_RECENT_PUBS;
+   Timeline->WhatToGet   = Tml_GET_REC_PUBS;
    Timeline->Pubs.Top    =
    Timeline->Pubs.Bottom = NULL,
    Timeline->NotCod      = -1L;
@@ -218,21 +218,17 @@ void Tml_ShowNoteAndTimelineGbl (struct Tml_Timeline *Timeline)
    long PubCod;
    struct Tml_Not_Note Not;
 
-   /***** Initialize note code to -1 ==> no highlighted note *****/
-   Not.NotCod = -1L;
-
    /***** Get parameter with the code of a publication *****/
    // This parameter is optional. It can be provided by a notification.
-   // If > 0 ==> the note is shown highlighted above the timeline
-   PubCod = Tml_Pub_GetParamPubCod ();
-
-   /***** If a note should be highlighted ==> get code of note from database *****/
-   if (PubCod > 0)
-      Not.NotCod = Tml_DB_GetNotCodFromPubCod (PubCod);
-
-   /***** If a note should be highlighted ==> show it above the timeline *****/
-   if (Not.NotCod > 0)
-      Tml_Not_ShowHighlightedNote (Timeline,&Not);
+   // If > 0 ==> the associated note will be shown highlighted
+   //            get its code from database and show it above the timeline
+   if ((PubCod = Tml_Pub_GetParamPubCod ()) > 0)
+     {
+      if ((Not.NotCod = Tml_DB_GetNotCodFromPubCod (PubCod)) > 0)
+          Tml_Not_ShowHighlightedNote (Timeline,&Not);
+     }
+   else
+      Not.NotCod = -1L;	//  ==> no highlighted note
 
    /***** Show timeline with possible highlighted note *****/
    Tml_ShowTimelineGblHighlighting (Timeline,Not.NotCod);
@@ -248,7 +244,7 @@ void Tml_ShowTimelineGblHighlighting (struct Tml_Timeline *Timeline,long NotCod)
 
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
-   Timeline->WhatToGet = Tml_GET_RECENT_PUBS;
+   Timeline->WhatToGet = Tml_GET_REC_PUBS;
    Tml_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
@@ -277,7 +273,7 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
 
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_USR;
-   Timeline->WhatToGet = Tml_GET_RECENT_PUBS;
+   Timeline->WhatToGet = Tml_GET_REC_PUBS;
    Tml_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
@@ -411,7 +407,6 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
   {
    extern const char *Hlp_START_Timeline;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
-   unsigned NumNotesShown;
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Title,
@@ -439,12 +434,10 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
 	 Tml_PutHiddenList ("new_timeline_list");
 	}
 
-      /***** List recent publications in timeline *****/
-      NumNotesShown = Tml_ListRecentPubs (Timeline,NotCodToHighlight);
-
-      /***** If the number of publications shown is the maximum,
+      /***** List recent publications in timeline.
+             If the number of publications shown is the maximum,
 	     probably there will be more, so show link to get more *****/
-      if (NumNotesShown == Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
+      if (Tml_ListRecentPubs (Timeline,NotCodToHighlight) == Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
 	{
 	 /* Link to view old publications via AJAX */
 	 Tml_Pub_PutLinkToViewOldPubs ();
@@ -472,12 +465,12 @@ static void Tml_PutIconsTimeline (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 // Returns number of notes shown
 
-static unsigned Tml_ListRecentPubs (struct Tml_Timeline *Timeline,
+static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
                                     long NotCodToHighlight)
   {
-   unsigned NumNotesShown;
-   struct Tml_Pub_Publication *Pub;
+   const struct Tml_Pub_Publication *Pub;
    struct Tml_Not_Note Not;
+   unsigned NumNotesShown;
 
    /***** Begin list *****/
    HTM_UL_Begin ("id=\"timeline_list\" class=\"Tml_LIST\"");

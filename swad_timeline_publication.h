@@ -67,15 +67,25 @@ struct Tml_Pub_Publication
 
 struct Tml_Pub_RangePubsToGet
   {
-   long Top;
-   long Bottom;
+   long Top;	// Top pub code
+   long Bottom;	// Bottom pub code
   };
+
+#define Tml_Pub_NUM_FIRST_LAST 2
+typedef enum
+  {
+   Tml_Pub_FIRST = 0,
+   Tml_Pub_LAST  = 1,
+  } Tml_Pub_FirstLast_t;
 
 #define Tml_Pub_MAX_BYTES_SUBQUERY (128 - 1)
 struct Tml_Pub_SubQueries
   {
-   char *TablePublishers;
-   char Publishers   [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+   struct
+     {
+      char *Table;
+      char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+     } Publishers;
    char RangeBottom  [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
    char RangeTop     [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
    char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1];

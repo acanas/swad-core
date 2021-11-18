@@ -129,40 +129,10 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
    Ntf_NotifyEvent_t NotifyEvent;
    static const Tml_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
-      [Ntf_EVENT_UNKNOWN          ] = Tml_TOP_MESSAGE_NONE,
-      /* Start tab */
-      [Ntf_EVENT_TML_COMMENT      ] = Tml_TOP_MESSAGE_COMMENTED,
-      [Ntf_EVENT_TML_FAV          ] = Tml_TOP_MESSAGE_FAVED,
-      [Ntf_EVENT_TML_SHARE        ] = Tml_TOP_MESSAGE_SHARED,
-      [Ntf_EVENT_TML_MENTION      ] = Tml_TOP_MESSAGE_MENTIONED,
-      [Ntf_EVENT_FOLLOWER         ] = Tml_TOP_MESSAGE_NONE,
-      /* System tab */
-      /* Country tab */
-      /* Institution tab */
-      /* Center tab */
-      /* Degree tab */
-      /* Course tab */
-      /* Assessment tab */
-      [Ntf_EVENT_ASSIGNMENT       ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_SURVEY           ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_CALL_FOR_EXAM	  ] = Tml_TOP_MESSAGE_NONE,
-      /* Files tab */
-      [Ntf_EVENT_DOCUMENT_FILE    ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_TEACHERS_FILE    ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_SHARED_FILE      ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_MARKS_FILE       ] = Tml_TOP_MESSAGE_NONE,
-      /* Users tab */
-      [Ntf_EVENT_ENROLMENT_STD    ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_ENROLMENT_NET    ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_ENROLMENT_TCH    ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_ENROLMENT_REQUEST] = Tml_TOP_MESSAGE_NONE,
-      /* Messages tab */
-      [Ntf_EVENT_NOTICE           ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_FORUM_POST_COURSE] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_FORUM_REPLY      ] = Tml_TOP_MESSAGE_NONE,
-      [Ntf_EVENT_MESSAGE          ] = Tml_TOP_MESSAGE_NONE,
-      /* Analytics tab */
-      /* Profile tab */
+      [Ntf_EVENT_TML_COMMENT] = Tml_TOP_MESSAGE_COMMENTED,
+      [Ntf_EVENT_TML_FAV    ] = Tml_TOP_MESSAGE_FAVED,
+      [Ntf_EVENT_TML_SHARE  ] = Tml_TOP_MESSAGE_SHARED,
+      [Ntf_EVENT_TML_MENTION] = Tml_TOP_MESSAGE_MENTIONED,
      };
 
    /***** Get other parameters *****/
@@ -1307,7 +1277,7 @@ void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not)
    /***** Trivial check: note code should be > 0 *****/
    if (Not->NotCod <= 0)
      {
-      /***** Reset fields of note *****/
+      /* Reset fields of note */
       Tml_Not_ResetNote (Not);
       return;
      }
@@ -1315,12 +1285,12 @@ void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not)
    /***** Get data of note from database *****/
    if (Tml_DB_GetDataOfNoteByCod (Not->NotCod,&mysql_res))
      {
-      /***** Get data of note *****/
+      /* Get data of note */
       row = mysql_fetch_row (mysql_res);
       Tml_Not_GetDataOfNoteFromRow (row,Not);
      }
    else
-      /***** Reset fields of note *****/
+      /* Reset fields of note */
       Tml_Not_ResetNote (Not);
 
    /***** Free structure that stores the query result *****/

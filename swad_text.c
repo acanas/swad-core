@@ -52924,27 +52924,6 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 	"marcou como favorito"
 #endif
 	,
-	[Tml_TOP_MESSAGE_UNFAVED] =
-#if   L==1	// ca
-	"ha desmarcat com favorit"
-#elif L==2	// de
-	"hat als Favorit unmarkiert"
-#elif L==3	// en
-	"has unmarked as favourite"
-#elif L==4	// es
-	"ha desmarcado como favorito"
-#elif L==5	// fr
-	"a pas marqu&eacute; en tant que favori"
-#elif L==6	// gn
-	"ha desmarcado como favorito"	// Okoteve traducción
-#elif L==7	// it
-	"ha smarcato come preferito"
-#elif L==8	// pl
-	"nieoznaczonych jako ulubiony"
-#elif L==9	// pt
-	"desmarcou como favorito"
-#endif
-	,
 	[Tml_TOP_MESSAGE_SHARED] =
 #if   L==1	// ca
 	"ha compartit"
@@ -52964,27 +52943,6 @@ const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES] =
 	"podzieli&lstrok;"
 #elif L==9	// pt
 	"compartilhou"
-#endif
-	,
-	[Tml_TOP_MESSAGE_UNSHARED] =
-#if   L==1	// ca
-	"ha deixat de compartir"
-#elif L==2	// de
-	"hat Sharing gestoppt"
-#elif L==3	// en
-	"has stopped sharing"
-#elif L==4	// es
-	"ha dejado de compartir"
-#elif L==5	// fr
-	"a cess&eacute; de partage"
-#elif L==6	// gn
-	"ha dejado de compartir"	// Okoteve traducción
-#elif L==7	// it
-	"ha smesso di condividere"
-#elif L==8	// pl
-	"przesta&lstrok; udost&eogon;pniania"
-#elif L==9	// pt
-	"parou compartilhar"
 #endif
 	,
 	[Tml_TOP_MESSAGE_MENTIONED] =

@@ -875,35 +875,36 @@ static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
 /******* Create temporary table and subquery with potential publishers *******/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
-                                      struct Tml_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
+                                      char **Table,
+                                      char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
   {
-   switch (Timeline->UsrOrGbl)
+   switch (UsrOrGbl)
      {
-      case Tml_Usr_TIMELINE_USR:		// Show the timeline of a user
-	 SubQueries->TablePublishers = "";
-	 sprintf (SubQueries->Publishers,"tml_pubs.PublisherCod=%ld AND ",
+      case Tml_Usr_TIMELINE_USR:	// Show the timeline of a user
+	 *Table = "";
+	 sprintf (SubQuery,"tml_pubs.PublisherCod=%ld AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
-      case Tml_Usr_TIMELINE_GBL:		// Show the global timeline
-	 switch (Timeline->Who)
+      case Tml_Usr_TIMELINE_GBL:	// Show the global timeline
+	 switch (Who)
 	   {
 	    case Usr_WHO_ME:		// Show my timeline
-	       SubQueries->TablePublishers = "";
-	       snprintf (SubQueries->Publishers,sizeof (SubQueries->Publishers),
+	       *Table = "";
+	       snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
 	                 "tml_pubs.PublisherCod=%ld AND ",
 	                 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
 	    case Usr_WHO_FOLLOWED:	// Show the timeline of the users I follow
 	       Fol_DB_CreateTmpTableMeAndUsrsIFollow ();
-	       SubQueries->TablePublishers = ",fol_tmp_me_and_followed";
-	       Str_Copy (SubQueries->Publishers,
+	       *Table = ",fol_tmp_me_and_followed";
+	       Str_Copy (SubQuery,
 			 "tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod AND ",
-			 sizeof (SubQueries->Publishers) - 1);
+			 Tml_Pub_MAX_BYTES_SUBQUERY);
 	       break;
 	    case Usr_WHO_ALL:		// Show the timeline of all users
-	       SubQueries->TablePublishers = "";
-	       SubQueries->Publishers[0] = '\0';
+	       *Table = "";
+	       SubQuery[0] = '\0';
 	       break;
 	    default:
 	       Err_WrongWhoExit ();
@@ -917,41 +918,45 @@ void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
 /********* Create subquery to get only notes not present in timeline *********/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryAlreadyExists (const struct Tml_Timeline *Timeline,
-                                         struct Tml_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryAlreadyExists (Tml_WhatToGet_t WhatToGet,
+                                         char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
   {
    static const char *Table[Tml_NUM_WHAT_TO_GET] =
      {
-      [Tml_GET_NEW_PUBS   ] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [Tml_GET_RECENT_PUBS] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [Tml_GET_OLD_PUBS   ] = "tml_tmp_visible_timeline",	// Avoid notes already shown
+      [Tml_GET_NEW_PUBS] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [Tml_GET_REC_PUBS] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
+      [Tml_GET_OLD_PUBS] = "tml_tmp_visible_timeline",		// Avoid notes already shown
      };
 
-   snprintf (SubQueries->AlreadyExists,sizeof (SubQueries->AlreadyExists),
+   snprintf (AlreadyExists,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
 	     " tml_pubs.NotCod NOT IN"
 	     " (SELECT NotCod"
 	        " FROM %s)",
-	     Table[Timeline->WhatToGet]);
+	     Table[WhatToGet]);
   }
 
 /*****************************************************************************/
 /***** Create subqueries with range of publications to get from tml_pubs *****/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryRangeBottom (long Bottom,struct Tml_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryRangeBottom (long Bottom,
+                                       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
   {
    if (Bottom > 0)
-      sprintf (SubQueries->RangeBottom,"tml_pubs.PubCod>%ld AND ",Bottom);
+      snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
+                "tml_pubs.PubCod>%ld AND ",Bottom);
    else
-      SubQueries->RangeBottom[0] = '\0';
+      SubQuery[0] = '\0';
   }
 
-void Tml_DB_CreateSubQueryRangeTop (long Top,struct Tml_Pub_SubQueries *SubQueries)
+void Tml_DB_CreateSubQueryRangeTop (long Top,
+                                    char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
   {
    if (Top > 0)
-      sprintf (SubQueries->RangeTop,"tml_pubs.PubCod<%ld AND ",Top);
+      snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
+                "tml_pubs.PubCod<%ld AND ",Top);
    else
-      SubQueries->RangeTop[0] = '\0';
+      SubQuery[0] = '\0';
   }
 
 /*****************************************************************************/
@@ -959,8 +964,8 @@ void Tml_DB_CreateSubQueryRangeTop (long Top,struct Tml_Pub_SubQueries *SubQueri
 /*****************************************************************************/
 // Returns the number of rows got
 
-unsigned Tml_DB_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries,
-                                        MYSQL_RES **mysql_res)
+unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
+                                        const struct Tml_Pub_SubQueries *SubQueries)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get publication",
@@ -972,10 +977,10 @@ unsigned Tml_DB_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQuer
 		   " WHERE %s%s%s%s"
 		   " ORDER BY tml_pubs.PubCod DESC"
 		   " LIMIT 1",
-		   SubQueries->TablePublishers,
+		   SubQueries->Publishers.Table,
 		   SubQueries->RangeBottom,
 		   SubQueries->RangeTop,
-		   SubQueries->Publishers,
+		   SubQueries->Publishers.SubQuery,
 		   SubQueries->AlreadyExists);
   }
 
@@ -1016,14 +1021,16 @@ long Tml_DB_GetNotCodFromPubCod (long PubCod)
   }
 
 /*****************************************************************************/
-/************* Get last/first publication code stored in session *************/
+/************* Get first/last publication code stored in session *************/
 /*****************************************************************************/
-// FieldName can be:
-// "LastPubCod"
-// "FirstPubCod"
 
-long Tml_DB_GetPubCodFromSession (const char *FieldName)
+long Tml_DB_GetPubCodFromSession (Tml_Pub_FirstLast_t FirstLast)
   {
+   static const char *FieldName[Tml_Pub_NUM_FIRST_LAST] =
+     {
+      [Tml_Pub_FIRST] = "FirstPubCod",
+      [Tml_Pub_LAST ] = "LastPubCod",
+     };
    long PubCod;
 
    /***** Get last publication code from database *****/
@@ -1031,7 +1038,7 @@ long Tml_DB_GetPubCodFromSession (const char *FieldName)
 		                "SELECT %s"		// row[0]
 		                 " FROM ses_sessions"
 		                " WHERE SessionId='%s'",
-		                FieldName,
+		                FieldName[FirstLast],
 		                Gbl.Session.Id);
    if (PubCod < 0)
       PubCod = 0;

@@ -97,17 +97,20 @@ void Tml_DB_RemoveAllCommsInAllNotesOf (long UsrCod);
 void Tml_DB_RemoveAllCommsMadeBy (long UsrCod);
 
 /****************************** Publications *********************************/
-void Tml_DB_CreateSubQueryPublishers (const struct Tml_Timeline *Timeline,
-                                      struct Tml_Pub_SubQueries *SubQueries);
-void Tml_DB_CreateSubQueryAlreadyExists (const struct Tml_Timeline *Timeline,
-                                         struct Tml_Pub_SubQueries *SubQueries);
-void Tml_DB_CreateSubQueryRangeBottom (long Bottom,struct Tml_Pub_SubQueries *SubQueries);
-void Tml_DB_CreateSubQueryRangeTop (long Top,struct Tml_Pub_SubQueries *SubQueries);
-unsigned Tml_DB_SelectTheMostRecentPub (const struct Tml_Pub_SubQueries *SubQueries,
-                                        MYSQL_RES **mysql_res);
+void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
+                                      char **Table,
+                                      char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
+void Tml_DB_CreateSubQueryAlreadyExists (Tml_WhatToGet_t WhatToGet,
+                                         char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
+void Tml_DB_CreateSubQueryRangeBottom (long Bottom,
+                                       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
+void Tml_DB_CreateSubQueryRangeTop (long Top,
+                                    char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
+unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
+                                        const struct Tml_Pub_SubQueries *SubQueries);
 unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res);
 long Tml_DB_GetNotCodFromPubCod (long PubCod);
-long Tml_DB_GetPubCodFromSession (const char *FieldName);
+long Tml_DB_GetPubCodFromSession (Tml_Pub_FirstLast_t FirstLast);
 unsigned Tml_DB_GetNumPubsUsr (long UsrCod);
 unsigned Tml_DB_GetPublishersInNoteExceptMe (MYSQL_RES **mysql_res,long PubCod);
 long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub);

@@ -93,7 +93,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    Tml_Pub_InitializeRangeOfPubs (Timeline->WhatToGet,&RangePubsToGet);
 
    /***** Clear timeline for this session in database *****/
-   if (Timeline->WhatToGet == Tml_GET_RECENT_PUBS)
+   if (Timeline->WhatToGet == Tml_GET_REC_PUBS)
       Tml_DB_ClearTimelineNotesOfSessionFromDB ();
 
    /***** Create temporary tables *****/
@@ -106,14 +106,18 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 
    /***** Create subqueries *****/
    /* Create subquery with potential publishers */
-   Tml_DB_CreateSubQueryPublishers (Timeline,&SubQueries);
+   Tml_DB_CreateSubQueryPublishers (Timeline->UsrOrGbl,Timeline->Who,
+                                    &SubQueries.Publishers.Table,
+                                    SubQueries.Publishers.SubQuery);
 
    /* Create subquery to get only notes not present in timeline */
-   Tml_DB_CreateSubQueryAlreadyExists (Timeline,&SubQueries);
+   Tml_DB_CreateSubQueryAlreadyExists (Timeline->WhatToGet,
+                                       SubQueries.AlreadyExists);
 
    /* Create subquery with bottom range of publications to get from tml_pubs.
       Bottom pub. code remains unchanged in all iterations of the loop. */
-   Tml_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,&SubQueries);
+   Tml_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,
+                                     SubQueries.RangeBottom);
 
    /***** Initialize list of publications *****/
    /* Chained list of publications:
@@ -160,7 +164,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
      {
       /* Create subquery with top range of publications to get from tml_pubs
          In each iteration of this loop, top publication code is changed to a lower value */
-      Tml_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,&SubQueries);
+      Tml_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,SubQueries.RangeTop);
 
       /* Select the most recent publication from tml_pubs */
       Pub = Tml_Pub_SelectTheMostRecentPub (&SubQueries);
@@ -211,10 +215,8 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
 static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
                                            struct Tml_Pub_RangePubsToGet *RangePubsToGet)
   {
-   /* Initialize range of pubs:
-
-              tml_pubs
-               _____
+   /*        tml_pubs
+               _____  0
               |_____|11
               |_____|10
              _|_____| 9 <-- RangePubsToGet.Top
@@ -226,33 +228,67 @@ static void Tml_Pub_InitializeRangeOfPubs (Tml_WhatToGet_t WhatToGet,
               |_____| 3 <-- RangePubsToGet.Bottom
               |_____| 2
               |_____| 1
-                      0
-   */
-
+                      0 */
    switch (WhatToGet)
      {
       case Tml_GET_NEW_PUBS:	// Get the publications (without limit)
-				// newer than LastPubCod
-	 /* This query is made via AJAX automatically from time to time */
-         RangePubsToGet->Top    = 0;	// +Infinite
-	 RangePubsToGet->Bottom = Tml_DB_GetPubCodFromSession ("LastPubCod");
+				// newer than last pub. code
+	 /* Via AJAX automatically from time to time */
+         RangePubsToGet->Top = 0;
+	 /*  _ _____  0 <-- RangePubsToGet.Top = +infinite
+    Get     / |_____|11
+   these  <   |_____|10
+    pubs    \_|_____| 9
+            / |_____| 8 <-- RangePubsToGet.Bottom = last pub. code
+    Pubs   |  |_____| 7
+  already <   |_____| 6
+   shown   |  |_____| 5
+           |  |_____| 4
+           .  |_____| .
+           .  |_____| .
+           .  |_____| .
+          */
+	 RangePubsToGet->Bottom = Tml_DB_GetPubCodFromSession (Tml_Pub_LAST);
 	 break;
-      case Tml_GET_RECENT_PUBS:	// Get some limited recent publications
-	 /* This is the first query to get initial timeline shown
+      case Tml_GET_REC_PUBS:	// Get some limited recent publications
+	 /* First query to get initial timeline shown
 	    ==> no notes yet in current timeline table */
-	 RangePubsToGet->Top    = 0;	// +Infinite
-	 RangePubsToGet->Bottom = 0;	// -Infinite
+	 RangePubsToGet->Top = 0;
+	 /*  _ _____  0 <-- RangePubsToGet.Top = +infinite
+            / |_____| 8
+     Get   |  |_____| 7
+     pubs <   |_____| 6
+     from  |  |_____| 5
+     all   .  |_____| 4
+     range .  |_____| 3
+           .  |_____| 2
+              |_____| 1
+                      0 <-- RangePubsToGet.Bottom = -infinite */
+	 RangePubsToGet->Bottom = 0;
 	 break;
       case Tml_GET_OLD_PUBS:	// Get some limited publications
-				// older than FirstPubCod
-	 /* This query is made via AJAX
-	    when I click in link to get old publications */
-	 RangePubsToGet->Top    = Tml_DB_GetPubCodFromSession ("FirstPubCod");
-         RangePubsToGet->Bottom = 0;	// -Infinite
+				// older than first pub. code
+	 /* Via AJAX when I click in link to get old publications */
+	 RangePubsToGet->Top = Tml_DB_GetPubCodFromSession (Tml_Pub_FIRST);
+	 /*    _____
+           .  |_____| .
+           .  |_____| .
+           .  |_____| .
+    Pubs   |  |_____| 8
+  already <   |_____| 7
+   shown   |  |_____| 6
+           |  |_____| 5
+    Get     \_|_____| 4 <-- RangePubsToGet.Top = first pub. code
+   pubs     / |_____| 3
+   from   <   |_____| 2
+   this     \_|_____| 1
+   rage               0 <-- RangePubsToGet.Bottom = -infinite */
+         RangePubsToGet->Bottom = 0;
 	 break;
-      default:
-	 RangePubsToGet->Top    = 0;	// +Infinite
-	 RangePubsToGet->Bottom = 0;	// -Infinite
+      default:	// Not reached
+	 RangePubsToGet->Top    =
+	 RangePubsToGet->Bottom = 0;	// Initialized to avoid warning
+	 break;
      }
   }
 
@@ -264,9 +300,9 @@ static unsigned Tml_Pub_GetMaxPubsToGet (const struct Tml_Timeline *Timeline)
   {
    static const unsigned MaxPubsToGet[Tml_NUM_WHAT_TO_GET] =
      {
-      [Tml_GET_NEW_PUBS   ] = Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
-      [Tml_GET_RECENT_PUBS] = Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW,
-      [Tml_GET_OLD_PUBS   ] = Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_NEW_PUBS] = Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_REC_PUBS] = Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW,
+      [Tml_GET_OLD_PUBS] = Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW,
      };
 
    return MaxPubsToGet[Timeline->WhatToGet];
@@ -286,12 +322,12 @@ static void Tml_Pub_UpdateFirstLastPubCodesIntoSession (const struct Tml_Timelin
       case Tml_GET_NEW_PUBS:	// Get only new publications
 	 Tml_DB_UpdateLastPubCodInSession ();
 	 break;
-      case Tml_GET_RECENT_PUBS:	// Get last publications
+      case Tml_GET_REC_PUBS:	// Get recent publications
       case Tml_GET_OLD_PUBS:	// Get only old publications
 	 // The oldest publication code retrieved and shown
 	 FirstPubCod = Timeline->Pubs.Bottom ? Timeline->Pubs.Bottom->PubCod :
 			                       0;
-	 if (Timeline->WhatToGet == Tml_GET_RECENT_PUBS)
+	 if (Timeline->WhatToGet == Tml_GET_REC_PUBS)
             Tml_DB_UpdateFirstLastPubCodsInSession (FirstPubCod);
 	 else
 	    Tml_DB_UpdateFirstPubCodInSession (FirstPubCod);
@@ -335,7 +371,7 @@ static struct Tml_Pub_Publication *Tml_Pub_SelectTheMostRecentPub (const struct 
    struct Tml_Pub_Publication *Pub;
 
    /***** Select the most recent publication from database *****/
-   if (Tml_DB_SelectTheMostRecentPub (SubQueries,&mysql_res) == 1)
+   if (Tml_DB_SelectTheMostRecentPub (&mysql_res,SubQueries) == 1)
      {
       /* Allocate space for publication */
       if ((Pub = malloc (sizeof (*Pub))) == NULL)
@@ -421,8 +457,6 @@ Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_Type_t PubType)
   {
    static const Tml_TopMessage_t TopMessages[Tml_Pub_NUM_PUB_TYPES] =
      {
-      [Tml_Pub_UNKNOWN        ] = Tml_TOP_MESSAGE_NONE,
-      [Tml_Pub_ORIGINAL_NOTE  ] = Tml_TOP_MESSAGE_NONE,
       [Tml_Pub_SHARED_NOTE    ] = Tml_TOP_MESSAGE_SHARED,
       [Tml_Pub_COMMENT_TO_NOTE] = Tml_TOP_MESSAGE_COMMENTED,
      };
