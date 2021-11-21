@@ -96,13 +96,8 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
    if (Timeline->WhatToGet == Tml_GET_REC_PUBS)
       Tml_DB_ClearTimelineNotesOfSessionFromDB ();
 
-   /***** Create temporary tables *****/
-   /* Create temporary table with notes just retrieved */
-   Tml_DB_CreateTmpTableJustRetrievedNotes ();
-
-   /* Create temporary table with all notes visible in timeline */
-   if (Timeline->WhatToGet == Tml_GET_OLD_PUBS)
-      Tml_DB_CreateTmpTableVisibleTimeline ();
+   /***** Create temporary table with all notes visible in timeline *****/
+   Tml_DB_CreateTmpTableTimeline (Timeline->WhatToGet);
 
    /***** Create subqueries *****/
    /* Create subquery with potential publishers */
@@ -111,8 +106,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
                                     SubQueries.Publishers.SubQuery);
 
    /* Create subquery to get only notes not present in timeline */
-   Tml_DB_CreateSubQueryAlreadyExists (Timeline->WhatToGet,
-                                       SubQueries.AlreadyExists);
+   Tml_DB_CreateSubQueryAlreadyExists (SubQueries.AlreadyExists);
 
    /* Create subquery with bottom range of publications to get from tml_pubs.
       Bottom pub. code remains unchanged in all iterations of the loop. */
@@ -179,11 +173,9 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       if (Pub == NULL)	// Nothing got ==> abort loop
          break;		// Last publication
 
-      /* Insert note in temporary tables with just retrieved notes.
+      /* Insert note in temporary tables with visible notes.
 	 These tables will be used to not get notes already shown */
-      Tml_DB_InsertNoteInJustRetrievedNotes (Pub->NotCod);
-      if (Timeline->WhatToGet == Tml_GET_OLD_PUBS)	// Get only old publications
-	 Tml_DB_InsertNoteInVisibleTimeline (Pub->NotCod);
+      Tml_DB_InsertNoteInTimeline (Pub->NotCod);
 
       /* Narrow the range for the next iteration */
       RangePubsToGet.Top = Pub->PubCod;
@@ -193,14 +185,9 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
           into session for next refresh *****/
    Tml_Pub_UpdateFirstLastPubCodesIntoSession (Timeline);
 
-   /***** Add notes just retrieved to visible timeline for this session *****/
-   Tml_DB_AddNotesJustRetrievedToVisibleTimelineOfSession ();
-
    /***** Drop temporary tables *****/
-   /* Drop temporary tables with notes already retrieved */
-   Tml_DB_DropTmpTableJustRetrievedNotes ();
-   if (Timeline->WhatToGet == Tml_GET_OLD_PUBS)	// Get only old publications
-      Tml_DB_DropTmpTableVisibleTimeline ();
+   /* Drop temporary table with visible notes in timeline */
+   Tml_DB_DropTmpTableTimeline ();
 
    /* Drop temporary table with me and users I follow */
    if (Timeline->UsrOrGbl == Tml_Usr_TIMELINE_GBL &&	// Show the global timeline

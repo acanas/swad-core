@@ -307,17 +307,15 @@ void Mai_DB_RemoveExpiredPendingEmails (void)
 
 void Mai_DB_CreateTmpTables (void)
   {
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
-	     " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,"
-	             "COUNT(*) as N"
-    	       " FROM usr_emails"
-    	      " GROUP BY Domain");
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE T1 ENGINE=MEMORY"
+		      " SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS Domain,"
+			      "COUNT(*) as N"
+		        " FROM usr_emails"
+		       " GROUP BY Domain");
 
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE T2 ENGINE=MEMORY"
-	     " SELECT *"
-	       " FROM T1");
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE T2 ENGINE=MEMORY"
+		      " SELECT *"
+		        " FROM T1");
   }
 
 /*****************************************************************************/
@@ -457,7 +455,6 @@ void Mai_DB_RemoveMailDomain (long MaiCod)
 
 void Mai_DB_RemoveTmpTables (void)
   {
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS T1,"
-	                                    "T2");
+   DB_DropTmpTable ("T1");
+   DB_DropTmpTable ("T2");
   }

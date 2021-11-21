@@ -57,13 +57,9 @@ unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
                                           Tml_Not_Type_t NoteType);
 unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res);
 
-void Tml_DB_CreateTmpTableJustRetrievedNotes (void);
-void Tml_DB_CreateTmpTableVisibleTimeline (void);
-void Tml_DB_InsertNoteInJustRetrievedNotes (long NotCod);
-void Tml_DB_InsertNoteInVisibleTimeline (long NotCod);
-void Tml_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (void);
-void Tml_DB_DropTmpTableJustRetrievedNotes (void);
-void Tml_DB_DropTmpTableVisibleTimeline (void);
+void Tml_DB_CreateTmpTableTimeline (Tml_WhatToGet_t WhatToGet);
+void Tml_DB_InsertNoteInTimeline (long NotCod);
+void Tml_DB_DropTmpTableTimeline (void);
 void Tml_DB_ClearOldTimelinesNotesFromDB (void);
 void Tml_DB_ClearTimelineNotesOfSessionFromDB (void);
 
@@ -100,8 +96,7 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod);
 void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
                                       char **Table,
                                       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
-void Tml_DB_CreateSubQueryAlreadyExists (Tml_WhatToGet_t WhatToGet,
-                                         char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
+void Tml_DB_CreateSubQueryAlreadyExists (char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
 void Tml_DB_CreateSubQueryRangeBottom (long Bottom,
                                        char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
 void Tml_DB_CreateSubQueryRangeTop (long Top,

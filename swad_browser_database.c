@@ -1722,43 +1722,40 @@ unsigned Brw_DB_SearchFilesInMyCrss (MYSQL_RES **mysql_res,
 
    /***** Create temporary tables with codes of files in documents and shared areas accessible by me.
 	  It is necessary to speed up the second query *****/
-   DB_Query ("can not remove temporary tables",
-	     "DROP TEMPORARY TABLE IF EXISTS my_files_crs,"
-					    "my_files_grp");
+   DB_DropTmpTable ("my_files_crs");
+   DB_DropTmpTable ("my_files_grp");
 
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE my_files_crs"
-	     " (FilCod INT NOT NULL,"
-	       "UNIQUE INDEX(FilCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT brw_files.FilCod"
-	       " FROM crs_users,"
-		     "brw_files"
-	      " WHERE crs_users.UsrCod=%ld"
-		" AND crs_users.CrsCod=brw_files.Cod"
-		" AND brw_files.FileBrowser IN (%u,%u,%u,%u)",
-	     Gbl.Usrs.Me.UsrDat.UsrCod,
-	     (unsigned) Brw_ADMI_DOC_CRS,
-	     (unsigned) Brw_ADMI_TCH_CRS,
-	     (unsigned) Brw_ADMI_SHR_CRS,
-	     (unsigned) Brw_ADMI_MRK_CRS);
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE my_files_crs"
+		      " (FilCod INT NOT NULL,"
+		      "UNIQUE INDEX(FilCod))"
+		      " ENGINE=MEMORY"
+		      " SELECT brw_files.FilCod"
+		        " FROM crs_users,"
+			      "brw_files"
+		       " WHERE crs_users.UsrCod=%ld"
+		         " AND crs_users.CrsCod=brw_files.Cod"
+		         " AND brw_files.FileBrowser IN (%u,%u,%u,%u)",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      (unsigned) Brw_ADMI_DOC_CRS,
+		      (unsigned) Brw_ADMI_TCH_CRS,
+		      (unsigned) Brw_ADMI_SHR_CRS,
+		      (unsigned) Brw_ADMI_MRK_CRS);
 
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE my_files_grp"
-	     " (FilCod INT NOT NULL,"
-	       "UNIQUE INDEX(FilCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT brw_files.FilCod"
-	       " FROM grp_users,"
-		     "brw_files"
-	      " WHERE grp_users.UsrCod=%ld"
-		" AND grp_users.GrpCod=brw_files.Cod"
-		" AND brw_files.FileBrowser IN (%u,%u,%u,%u)",
-	     Gbl.Usrs.Me.UsrDat.UsrCod,
-	     (unsigned) Brw_ADMI_DOC_GRP,
-	     (unsigned) Brw_ADMI_TCH_GRP,
-	     (unsigned) Brw_ADMI_SHR_GRP,
-	     (unsigned) Brw_ADMI_MRK_GRP);
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE my_files_grp"
+		      " (FilCod INT NOT NULL,"
+		        "UNIQUE INDEX(FilCod))"
+		      " ENGINE=MEMORY"
+		      " SELECT brw_files.FilCod"
+		        " FROM grp_users,"
+			      "brw_files"
+		       " WHERE grp_users.UsrCod=%ld"
+		         " AND grp_users.GrpCod=brw_files.Cod"
+		         " AND brw_files.FileBrowser IN (%u,%u,%u,%u)",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      (unsigned) Brw_ADMI_DOC_GRP,
+		      (unsigned) Brw_ADMI_TCH_GRP,
+		      (unsigned) Brw_ADMI_SHR_GRP,
+		      (unsigned) Brw_ADMI_MRK_GRP);
 
    /***** Build the query *****/
    NumFiles = (unsigned)
@@ -1853,9 +1850,8 @@ unsigned Brw_DB_SearchFilesInMyCrss (MYSQL_RES **mysql_res,
 		   RangeQuery);
 
    /***** Drop temporary tables *****/
-   DB_Query ("can not remove temporary table",
-	     "DROP TEMPORARY TABLE IF EXISTS my_files_crs,"
-					    "my_files_grp");
+   DB_DropTmpTable ("my_files_crs");
+   DB_DropTmpTable ("my_files_grp");
 
    return NumFiles;
   }

@@ -961,7 +961,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
       "usr_data.CtyCod,"		// row[ 9]
       "usr_data.InsCod";		// row[10]
    static const char *OrderBySubQuery =
-             "candidate_users.UsrCod=usr_data.UsrCod"
+             "usr_candidate_users.UsrCod=usr_data.UsrCod"
       " ORDER BY usr_data.Surname1,"
 		"usr_data.Surname2,"
 		"usr_data.FirstName,"
@@ -980,7 +980,7 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users from the whole platform */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			      " FROM candidate_users,usr_data"
+			      " FROM usr_candidate_users,usr_data"
 			      " WHERE %s",
 			      QueryFields,
 			      OrderBySubQuery);
@@ -989,14 +989,14 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current country */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "deg_degrees,"
 			             "ctr_centers,"
 			             "ins_instits,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=deg_degrees.DegCod"
 			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
@@ -1011,13 +1011,13 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current institution */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "deg_degrees,"
 			             "ctr_centers,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=deg_degrees.DegCod"
 			        " AND deg_degrees.CtrCod=ctr_centers.CtrCod"
@@ -1031,12 +1031,12 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current center */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "deg_degrees,"
 			            " usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=deg_degrees.DegCod"
 			        " AND deg_degrees.CtrCod=%ld"
@@ -1049,11 +1049,11 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current degree */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=%ld"
 			        " AND %s",
@@ -1067,10 +1067,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			      "SELECT %s,"
 			             "crs_users.Role,"		// row[11]
 			             "crs_users.Accepted"	// row[12]
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			        " AND crs_users.CrsCod=%ld"
 			        " AND %s",
 			      QueryFields,
@@ -1086,9 +1086,9 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	 /* Search users with no courses */
 	 DB_BuildQuery (Query,
 			"SELECT %s"
-			 " FROM candidate_users,"
+			 " FROM usr_candidate_users,"
 			       "usr_data"
-			" WHERE candidate_users.UsrCod NOT IN"
+			" WHERE usr_candidate_users.UsrCod NOT IN"
 			      " (SELECT UsrCod"
 			         " FROM crs_users)"
 			  " AND %s",
@@ -1125,10 +1125,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the whole platform */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			          "%s"
 			        " AND %s",
 			      QueryFields,
@@ -1139,14 +1139,14 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current country */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "deg_degrees,"
 			             "ctr_centers,"
 			             "ins_instits,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			          "%s"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=deg_degrees.DegCod"
@@ -1163,13 +1163,13 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current institution */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "deg_degrees,"
 			             "ctr_centers,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			          "%s"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=deg_degrees.DegCod"
@@ -1185,12 +1185,12 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current center */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "deg_degrees,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			          "%s"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=deg_degrees.DegCod"
@@ -1205,11 +1205,11 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 	       /* Search users in courses from the current degree */
 	       DB_BuildQuery (Query,
 			      "SELECT %s"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "crs_courses,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			          "%s"
 			        " AND crs_users.CrsCod=crs_courses.CrsCod"
 			        " AND crs_courses.DegCod=%ld"
@@ -1225,10 +1225,10 @@ void Usr_DB_BuildQueryToSearchListUsrs (Rol_Role_t Role,char **Query)
 			      "SELECT %s,"
 			             "crs_users.Role,"
 			             "crs_users.Accepted"
-			       " FROM candidate_users,"
+			       " FROM usr_candidate_users,"
 			             "crs_users,"
 			             "usr_data"
-			      " WHERE candidate_users.UsrCod=crs_users.UsrCod"
+			      " WHERE usr_candidate_users.UsrCod=crs_users.UsrCod"
 			          "%s"
 			        " AND crs_users.CrsCod=%ld"
 			        " AND %s",
@@ -1410,13 +1410,12 @@ void Usr_DB_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX
       - Searching for names is made in the whole platform
         and stored in this table.
    */
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE candidate_users"
-	       " (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-	       " SELECT UsrCod"
-		 " FROM usr_data"
-		" WHERE %s",
-	     SearchQuery);
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE usr_candidate_users"
+		      " (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+		      " SELECT UsrCod"
+		        " FROM usr_data"
+		       " WHERE %s",
+		      SearchQuery);
   }
 
 /*****************************************************************************/
@@ -1425,8 +1424,7 @@ void Usr_DB_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX
 
 void Usr_DB_DropTmpTableWithCandidateUsrs (void)
   {
-   DB_Query ("can not remove temporary table",
-	     "DROP TEMPORARY TABLE IF EXISTS candidate_users");
+   DB_DropTmpTable ("usr_candidate_users");
   }
 
 /*****************************************************************************/

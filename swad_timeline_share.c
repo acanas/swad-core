@@ -121,7 +121,7 @@ static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
    /***** Share (publish note in timeline) *****/
    Pub.NotCod       = Not->NotCod;
    Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Pub.Type      = Tml_Pub_SHARED_NOTE;
+   Pub.Type         = Tml_Pub_SHARED_NOTE;
    Tml_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
    /***** Update number of times this note is shared *****/
@@ -129,8 +129,7 @@ static void Tml_Sha_ShaNote (struct Tml_Not_Note *Not)
 
    /***** Create notification about shared post
 	  for the author of the post *****/
-   OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
-   if (OriginalPubCod > 0)
+   if ((OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod)) > 0)
       Tml_Ntf_CreateNotifToAuthor (Not->UsrCod,OriginalPubCod,Ntf_EVENT_TML_SHARE);
   }
 
@@ -179,7 +178,6 @@ static void Tml_Sha_UnsNote (struct Tml_Not_Note *Not)
    Not->NumShared = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
 
    /***** Mark possible notifications on this note as removed *****/
-   OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
-   if (OriginalPubCod > 0)
+   if ((OriginalPubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod)) > 0)
       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_SHARE,OriginalPubCod);
   }

@@ -69,6 +69,9 @@ void DB_QueryUPDATE (const char *MsgError,const char *fmt,...);
 
 void DB_QueryDELETE (const char *MsgError,const char *fmt,...);
 
+void DB_CreateTmpTable (const char *fmt,...);
+void DB_DropTmpTable (const char *Table);
+
 void DB_Query (const char *MsgError,const char *fmt,...);
 
 void DB_FreeMySQLResult (MYSQL_RES **mysql_res);

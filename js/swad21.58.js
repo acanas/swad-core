@@ -937,8 +937,30 @@ function readNewTimelineData () {
 					// (move all the LI elements (notes) in UL 'just_now_timeline_list'...
 					// ...to the top of UL 'new_timeline_list')
 					var newTimeline = document.getElementById('new_timeline_list');	// Access to UL with the new timeline
-					for (var i=0; i<numNotesJustGot; i++)
-						newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.firstChild);
+
+					for (var i=1; i<=numNotesJustGot; i++) {
+						// Check if the last child (the oldest) in just now timeline...
+						// ...is the last ocurrence of the note
+						var mostRecentOcurrenceOfNote = true;
+						var lastChildIndex = numNotesJustGot - i;
+						var noteCode = justNowTimeline.lastChild.dataset.noteCode;
+						for (var j=0; j<lastChildIndex; j++)
+							if (justNowTimeline.childNodes[j].dataset.noteCode == noteCode) {
+								mostRecentOcurrenceOfNote = false;
+								break;
+							}
+
+						// Move or remove node from new timeline
+						if (mostRecentOcurrenceOfNote) {
+							// Move node from just now timeline to new timeline
+							newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.firstChild);
+							newTimeline.firstChild.className += " Tml_NEW_PUB";
+						}
+						else
+							// Remove last child (because is repeated in more recent pubs)
+							justNowTimeline.removeChild(justNowTimeline.lastChild);
+					
+					}
 
 					// Update number of new posts
 					var viewNewPostsCount = document.getElementById('view_new_posts_count');
@@ -975,10 +997,9 @@ function moveNewTimelineToTimeline () {
 			// ...is the last ocurrence of the note
 			var mostRecentOcurrenceOfNote = true;
 			var lastChildIndex = numNewNotes - i;
-
+			var noteCode = newTimeline.lastChild.dataset.noteCode;
 			for (var j=0; j<lastChildIndex; j++)
-				if (newTimeline.childNodes[j].dataset.noteCode ==
-				    newTimeline.lastChild.dataset.noteCode) {
+				if (newTimeline.childNodes[j].dataset.noteCode == noteCode) {
 					mostRecentOcurrenceOfNote = false;
 					break;
 				}

@@ -76,13 +76,12 @@ void Tag_DB_AddTagToQst (long QstCod,long TagCod,unsigned TagInd)
 
 void Tag_DB_CreateTmpTableQuestionsWithTag (long TagCod)
   {
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tst_question_tags_tmp"
-	     " ENGINE=MEMORY"
-	     " SELECT QstCod"
-	       " FROM tst_question_tags"
-	      " WHERE TagCod=%ld",
-	     TagCod);
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE tst_question_tags_tmp"
+		      " ENGINE=MEMORY"
+		      " SELECT QstCod"
+		        " FROM tst_question_tags"
+		       " WHERE TagCod=%ld",
+		      TagCod);
   }
 
 /*****************************************************************************/
@@ -92,8 +91,7 @@ void Tag_DB_CreateTmpTableQuestionsWithTag (long TagCod)
 
 void Tag_DB_DropTmpTableQuestionsWithTag (void)
   {
-   DB_Query ("can not remove temporary table",
-	     "DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
+   DB_DropTmpTable ("tst_question_tags_tmp");
   }
 
 /*****************************************************************************/

@@ -3724,7 +3724,7 @@ mysql> DESCRIBE usr_webs;
 static void DB_CreateTable (const char *Query)
   {
    HTM_LI_Begin ("class=\"DAT\"");
-   HTM_Txt (Query);
+      HTM_Txt (Query);
    HTM_LI_End ();
 
    if (mysql_query (&Gbl.mysql,Query))
@@ -4222,6 +4222,36 @@ void DB_QueryDELETE (const char *MsgError,const char *fmt,...)
    free (Query);
    if (Result)
       DB_ExitOnMySQLError (MsgError);
+  }
+
+/*****************************************************************************/
+/**************************** Create temporary table *************************/
+/*****************************************************************************/
+
+void DB_CreateTmpTable (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Query;
+   int Result;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Query,fmt,ap);
+   va_end (ap);
+   if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+      Err_NotEnoughMemoryExit ();
+
+   /***** Query database and free query string pointer *****/
+   Result = mysql_query (&Gbl.mysql,Query);	// Returns 0 on success
+   free (Query);
+   if (Result)
+      DB_ExitOnMySQLError ("can not create temporary table");
+  }
+
+void DB_DropTmpTable (const char *Table)
+  {
+   DB_Query ("can not remove temporary table",
+	     "DROP TEMPORARY TABLE IF EXISTS %s",Table);
   }
 
 /*****************************************************************************/

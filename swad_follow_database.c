@@ -693,22 +693,20 @@ void Fol_DB_RemoveUsrFromUsrFollow (long UsrCod)
 
 void Fol_DB_CreateTmpTableMeAndUsrsIFollow (void)
   {
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE fol_tmp_me_and_followed "
-	     "(UsrCod INT NOT NULL,"
-	     "UNIQUE INDEX(UsrCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT %ld AS UsrCod"		// Me
-	     " UNION"
-	     " SELECT FollowedCod AS UsrCod"	// Users I follow
-	       " FROM usr_follow"
-	      " WHERE FollowerCod=%ld",
-	     Gbl.Usrs.Me.UsrDat.UsrCod,
-	     Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_CreateTmpTable ("CREATE TEMPORARY TABLE fol_tmp_me_and_followed "
+		      "(UsrCod INT NOT NULL,"
+		      "UNIQUE INDEX(UsrCod))"
+		      " ENGINE=MEMORY"
+		      " SELECT %ld AS UsrCod"		// Me
+		      " UNION"
+		      " SELECT FollowedCod AS UsrCod"	// Users I follow
+		        " FROM usr_follow"
+		       " WHERE FollowerCod=%ld",
+		      Gbl.Usrs.Me.UsrDat.UsrCod,
+		      Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 void Fol_DB_DropTmpTableMeAndUsrsIFollow (void)
   {
-   DB_Query ("can not remove temporary table",
-	     "DROP TEMPORARY TABLE IF EXISTS fol_tmp_me_and_followed");
+   DB_DropTmpTable ("fol_tmp_me_and_followed");
   }

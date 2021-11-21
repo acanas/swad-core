@@ -1172,8 +1172,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
 
    /***** Mark possible notifications on the publications
           of this note as removed *****/
-   PubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod);
-   if (PubCod > 0)
+   if ((PubCod = Tml_DB_GetPubCodOfOriginalNote (Not->NotCod)) > 0)
      {
       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_FAV    ,PubCod);
       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TML_SHARE  ,PubCod);

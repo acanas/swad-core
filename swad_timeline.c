@@ -45,7 +45,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 
     *Numbers are got from swad.ugr.es on may 2021
 
-   ____tml_pubs___             _tml_comments
+   _tml_pubs______             _tml_comments
   |               |           |             |
   | Publication p |---------->|  Comment c  |-----+
   |   (comment)   |           | (to note 2) |     |
@@ -61,35 +61,35 @@ mysql> SHOW TABLES LIKE 'tml_%';
   |               |                (4855)       | |
   |Publication i+3|--                           | |
   |(original note)|  \                          | |
-  |_______________|   \       ___tml_notes___   | |     _calls_for_exams
+  |_______________|   \       _tml_notes_____   | |     _cfe_exams_____
   |               |    \     |               |  | |    |               |
   |Publication i+2|--   ---->|     Note n    |<-+ |    | Call for exam | (5581)
   |(original note)|  \       |(exam announc.)|-(2622)->|_______________|
-  |_______________|   \      |_______________|  11%     ____files____
-  |               |    \     |               |    |    |             |
-  |Publication i+1|--   ---->|    Note n-1   |-(64)--->| Public file | (1497132)
-  |(original note)|  \       | (public file) |  <1%    |_____________|
-  |_______________|   \      |_______________|    |     _notices_
-  |               |    \     |               |    |    |         |
-  | Publication i |--   ---->|    Note n-2   |-(17078)>| Notice  | (14984)
-  |(original note)|  \       |    (notice)   |  72%    |_________|
-  |_______________|   \      |_______________|    |     __tml_posts__
-  |               |    \     |               |    |    |             |
-  ·      ...      ·     ---->|    Note n-3   |-(3533)->|    Post s   |
-  ·      ...      ·          |   (tl. post)  |  15%    |             |
-  |_______________|          |_______________|    |    |_____________|
-  |               |          |               |    |    |             |
-  | Publication 3 |          ·      ...      ·    |    ·     ...     · (3533)
-  | (shared note) |---       ·      ...      ·    |    ·     ...     ·
-  |_______________|   \      |_______________|    |    |_____________|
-  |               |    \     |               |    |    |             |
-  | Publication 2 |     ---->|     Note 2    |<---+    |    Post 1   |
-  |(original note)|--------->|   (tl. post)  |-------->|             |
-  |_______________|          |_______________|         |_____________|
-  |               |          |               |          _forum_post_
-  | Publication 1 |--------->|     Note 1    |         |            |
-  |(original note)|          | (forum post)  |-(276)-->| Forum post | (66226)
-  |_______________|          |_______________|   1%    |____________|
+  |_______________|   \      |_______________|  11%     _brw_files_____
+  |               |    \     |               |    |    |               |
+  |Publication i+1|--   ---->|    Note n-1   |-(64)--->|  Public file  | (1497132)
+  |(original note)|  \       | (public file) |  <1%    |_______________|
+  |_______________|   \      |_______________|    |     _not_notices___
+  |               |    \     |               |    |    |               |
+  | Publication i |--   ---->|    Note n-2   |-(17078)>|    Notice     | (14984)
+  |(original note)|  \       |    (notice)   |  72%    |_______________|
+  |_______________|   \      |_______________|    |     _tml_posts_____
+  |               |    \     |               |    |    |               |
+  ·      ...      ·     ---->|    Note n-3   |-(3533)->|     Post s    |
+  ·      ...      ·          |   (tl. post)  |  15%    |               |
+  |_______________|          |_______________|    |    |_______________|
+  |               |          |               |    |    |               |
+  | Publication 3 |          ·      ...      ·    |    ·      ...      · (3533)
+  | (shared note) |---       ·      ...      ·    |    ·      ...      ·
+  |_______________|   \      |_______________|    |    |_______________|
+  |               |    \     |               |    |    |               |
+  | Publication 2 |     ---->|     Note 2    |<---+    |     Post 1    |
+  |(original note)|--------->|   (tl. post)  |-------->|               |
+  |_______________|          |_______________|         |_______________|
+  |               |          |               |          _for_posts_____
+  | Publication 1 |--------->|     Note 1    |         |               |
+  |(original note)|          | (forum post)  |-(276)-->|  Forum post   | (66226)
+  |_______________|          |_______________|   1%    |_______________|
        (29435)                    (23573)
 
    A note can be:

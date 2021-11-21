@@ -397,55 +397,34 @@ unsigned Tml_DB_GetNumNotesAndUsrsTotal (MYSQL_RES **mysql_res)
 /******* Create temporary tables used to not get notes already shown *********/
 /*****************************************************************************/
 
-void Tml_DB_CreateTmpTableJustRetrievedNotes (void)
+void Tml_DB_CreateTmpTableTimeline (Tml_WhatToGet_t WhatToGet)
   {
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tml_tmp_just_retrieved_notes "
-	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
-	     " ENGINE=MEMORY");
-  }
-
-void Tml_DB_CreateTmpTableVisibleTimeline (void)
-  {
-   DB_Query ("can not create temporary table",
-	     "CREATE TEMPORARY TABLE tml_tmp_visible_timeline "
-	     "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
-	     " ENGINE=MEMORY"
-	     " SELECT NotCod"
-	       " FROM tml_timelines"
-	      " WHERE SessionId='%s'",
-	     Gbl.Session.Id);
-  }
-
-/*****************************************************************************/
-/**** Insert note in temporary tables used to not get notes already shown ****/
-/*****************************************************************************/
-
-void Tml_DB_InsertNoteInJustRetrievedNotes (long NotCod)
-  {
-   /* Insert note in temporary table with just retrieved notes.
-      This table will be used to not get notes already shown */
-   DB_QueryINSERT ("can not store note code",
-		   "INSERT IGNORE INTO tml_tmp_just_retrieved_notes"
-		   " SET NotCod=%ld",
-		   NotCod);
-  }
-
-void Tml_DB_InsertNoteInVisibleTimeline (long NotCod)
-  {
-   /* Insert note in temporary table with visible timeline.
-      This table will be used to not get notes already shown */
-   DB_QueryINSERT ("can not store note code",
-		   "INSERT IGNORE INTO tml_tmp_visible_timeline"
-		   " SET NotCod=%ld",
-		   NotCod);
+   switch (WhatToGet)
+     {
+      case Tml_GET_OLD_PUBS:
+	 DB_CreateTmpTable ("CREATE TEMPORARY TABLE tml_tmp_timeline "
+			    "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
+			    " ENGINE=MEMORY"
+			    " SELECT NotCod"
+			      " FROM tml_timelines"
+			     " WHERE SessionId='%s'",
+			    Gbl.Session.Id);
+	 break;
+      case Tml_GET_NEW_PUBS:
+      case Tml_GET_REC_PUBS:
+      default:
+	 DB_CreateTmpTable ("CREATE TEMPORARY TABLE tml_tmp_timeline "
+			    "(NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod))"
+			    " ENGINE=MEMORY");
+	 break;
+     }
   }
 
 /*****************************************************************************/
-/****** Add just retrieved notes to current timeline for this session ********/
+/**** Insert note in temporary table used to not get notes already shown *****/
 /*****************************************************************************/
 
-void Tml_DB_AddNotesJustRetrievedToVisibleTimelineOfSession (void)
+void Tml_DB_InsertNoteInTimeline (long NotCod)
   {
    /* tml_timelines contains the distinct notes in timeline of each open session:
 mysql> SELECT SessionId,COUNT(*) FROM tml_timelines GROUP BY SessionId;
@@ -465,31 +444,29 @@ mysql> SELECT SessionId,COUNT(*) FROM tml_timelines GROUP BY SessionId;
 +---------------------------------------------+----------+
 10 rows in set (0,01 sec)
    */
-   DB_QueryINSERT ("can not insert notes in timeline",
+   /* Insert note in temporary table with visible timeline.
+      This table will be used to not get notes already shown */
+   DB_QueryINSERT ("can not insert note in timeline",
+		   "INSERT IGNORE INTO tml_tmp_timeline"
+		   " SET NotCod=%ld",
+		   NotCod);
+
+   DB_QueryINSERT ("can not insert note in timeline",
 		   "INSERT IGNORE INTO tml_timelines"
 	           " (SessionId,NotCod)"
-	           " SELECT '%s',"
-	                    "NotCod"
-	             " FROM tml_tmp_just_retrieved_notes",
-		   Gbl.Session.Id);
+	           " VALUES"
+	           " ('%s',%ld)",
+		   Gbl.Session.Id,
+		   NotCod);
   }
 
 /*****************************************************************************/
-/******** Drop temporary tables used to not get notes already shown **********/
+/********** Drop temporary table with all notes visible in timeline **********/
 /*****************************************************************************/
 
-void Tml_DB_DropTmpTableJustRetrievedNotes (void)
+void Tml_DB_DropTmpTableTimeline (void)
   {
-   /***** Drop temporary table with notes just retrieved *****/
-   DB_Query ("can not remove temporary table",
-	     "DROP TEMPORARY TABLE IF EXISTS tml_tmp_just_retrieved_notes");
-  }
-
-void Tml_DB_DropTmpTableVisibleTimeline (void)
-  {
-   /***** Drop temporary table with all notes visible in timeline *****/
-   DB_Query ("can not remove temporary table",
-             "DROP TEMPORARY TABLE IF EXISTS tml_tmp_visible_timeline");
+   DB_DropTmpTable ("tml_tmp_timeline");
   }
 
 /*****************************************************************************/
@@ -918,21 +895,13 @@ void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
 /********* Create subquery to get only notes not present in timeline *********/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryAlreadyExists (Tml_WhatToGet_t WhatToGet,
-                                         char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
+void Tml_DB_CreateSubQueryAlreadyExists (char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
   {
-   static const char *Table[Tml_NUM_WHAT_TO_GET] =
-     {
-      [Tml_GET_NEW_PUBS] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [Tml_GET_REC_PUBS] = "tml_tmp_just_retrieved_notes",	// Avoid notes just retrieved
-      [Tml_GET_OLD_PUBS] = "tml_tmp_visible_timeline",		// Avoid notes already shown
-     };
-
-   snprintf (AlreadyExists,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
+   Str_Copy (AlreadyExists,
 	     " tml_pubs.NotCod NOT IN"
 	     " (SELECT NotCod"
-	        " FROM %s)",
-	     Table[WhatToGet]);
+	        " FROM tml_tmp_timeline)",
+	     Tml_Pub_MAX_BYTES_SUBQUERY);
   }
 
 /*****************************************************************************/

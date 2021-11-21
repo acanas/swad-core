@@ -13522,4 +13522,41 @@ WHERE NotCod NOT IN (SELECT NotCod FROM tml_tmp_just_retrieved_notes)
 ORDER BY PubCod DESC
 LIMIT 1;
 
+
+CREATE TEMPORARY TABLE tml_tmp_just_retrieved_notes (NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod)) ENGINE=MEMORY;
+CREATE TEMPORARY TABLE tml_tmp_visible_timeline (NotCod BIGINT NOT NULL,UNIQUE INDEX(NotCod)) ENGINE=MEMORY SELECT NotCod FROM tml_timelines WHERE SessionId='%s',Gbl.Session.Id);	      
 		   
+		   
+CREATE TEMPORARY TABLE fol_tmp_me_and_followed (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY SELECT 1 AS UsrCod UNION SELECT FollowedCod AS UsrCod FROM usr_follow WHERE FollowerCod=1;
+
+CREATE TEMPORARY TABLE fol_tmp_me_and_followed_2 (UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY SELECT 1 UNION SELECT FollowedCod FROM usr_follow WHERE FollowerCod=1;
+
+
+SELECT tml_pubs.PubCod,
+       tml_pubs.NotCod,
+       tml_pubs.PublisherCod,
+       tml_pubs.PubType
+  FROM tml_pubs,
+       fol_tmp_me_and_followed
+ WHERE tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod
+   AND tml_pubs.NotCod NOT IN
+       (SELECT NotCod
+          FROM tml_tmp_just_retrieved_notes)
+ ORDER BY PubCod DESC
+ LIMIT 1;
+ 
+ 		   "SELECT tml_pubs.PubCod,"		// row[0]
+			  "tml_pubs.NotCod,"		// row[1]
+			  "tml_pubs.PublisherCod,"	// row[2]
+			  "tml_pubs.PubType"		// row[3]
+		    " FROM tml_pubs%s"
+		   " WHERE tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod
+		       AND "
+		   " ORDER BY tml_pubs.PubCod DESC"
+		   " LIMIT 1",
+		   SubQueries->Publishers.Table,
+		   SubQueries->RangeBottom,
+		   SubQueries->RangeTop,
+		   SubQueries->Publishers.SubQuery,
+		   SubQueries->AlreadyExists);
+ 
