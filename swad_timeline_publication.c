@@ -109,7 +109,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       Bottom pub. code remains unchanged in all iterations of the loop. */
    Tml_DB_CreateSubQueryRange (Tml_Pub_BOTTOM,
                                RangePubsToGet.Bottom,
-                               SubQueries.RangeBottom);
+                               SubQueries.Range.Bottom);
 
    /***** Initialize list of publications *****/
    /* Chained list of publications:
@@ -158,7 +158,7 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
          In each iteration of this loop, top publication code is changed to a lower value */
       Tml_DB_CreateSubQueryRange (Tml_Pub_TOP,
                                   RangePubsToGet.Top,
-                                  SubQueries.RangeTop);
+                                  SubQueries.Range.Top);
 
       /* Select the most recent publication from tml_pubs */
       Pub = Tml_Pub_SelectTheMostRecentPub (&SubQueries);

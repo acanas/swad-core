@@ -933,8 +933,8 @@ unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
 		   " ORDER BY tml_pubs.PubCod DESC"
 		   " LIMIT 1",
 		   SubQueries->Publishers.Table,
-		   SubQueries->RangeBottom,
-		   SubQueries->RangeTop,
+		   SubQueries->Range.Bottom,
+		   SubQueries->Range.Top,
 		   SubQueries->Publishers.SubQuery);
   }
 

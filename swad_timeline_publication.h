@@ -93,8 +93,11 @@ struct Tml_Pub_SubQueries
       char *Table;
       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
      } Publishers;
-   char RangeBottom  [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
-   char RangeTop     [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+   struct
+     {
+      char Top   [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+      char Bottom[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+     } Range;
   };
 
 /*****************************************************************************/

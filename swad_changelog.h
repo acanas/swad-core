@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.58.1 (2021-11-21)"
+#define Log_PLATFORM_VERSION	"SWAD 21.58.2 (2021-11-21)"
 #define CSS_FILE		"swad21.57.css"
 #define JS_FILE			"swad21.58.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.58.2:  Nov 21, 2021  Code refactoring in timeline. (319135 lines)
 	Version 21.58.1:  Nov 21, 2021  Code refactoring in timeline. (319131 lines)
 	Version 21.58:    Nov 21, 2021  Code refactoring in timeline. (319140 lines)
 	Version 21.57.5:  Nov 18, 2021  Code refactoring related to check if user logged is me. (319174 lines)
