@@ -96,11 +96,8 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod);
 void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
                                       char **Table,
                                       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
-void Tml_DB_CreateSubQueryAlreadyExists (char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
-void Tml_DB_CreateSubQueryRangeBottom (long Bottom,
-                                       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
-void Tml_DB_CreateSubQueryRangeTop (long Top,
-                                    char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
+void Tml_DB_CreateSubQueryRange (Tml_Pub_Range_t Range,long PubCod,
+                                 char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1]);
 unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
                                         const struct Tml_Pub_SubQueries *SubQueries);
 unsigned Tml_DB_GetDataOfPubByCod (long PubCod,MYSQL_RES **mysql_res);

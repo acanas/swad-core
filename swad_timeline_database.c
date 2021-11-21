@@ -892,38 +892,21 @@ void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
   }
 
 /*****************************************************************************/
-/********* Create subquery to get only notes not present in timeline *********/
-/*****************************************************************************/
-
-void Tml_DB_CreateSubQueryAlreadyExists (char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
-  {
-   Str_Copy (AlreadyExists,
-	     " tml_pubs.NotCod NOT IN"
-	     " (SELECT NotCod"
-	        " FROM tml_tmp_timeline)",
-	     Tml_Pub_MAX_BYTES_SUBQUERY);
-  }
-
-/*****************************************************************************/
 /***** Create subqueries with range of publications to get from tml_pubs *****/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryRangeBottom (long Bottom,
-                                       char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
+void Tml_DB_CreateSubQueryRange (Tml_Pub_Range_t Range,long PubCod,
+                                 char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
   {
-   if (Bottom > 0)
-      snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
-                "tml_pubs.PubCod>%ld AND ",Bottom);
-   else
-      SubQuery[0] = '\0';
-  }
+   static const char Operator[Tml_Pub_NUM_RANGES] =
+     {
+      [Tml_Pub_TOP   ] = '<',
+      [Tml_Pub_BOTTOM] = '>',
+     };
 
-void Tml_DB_CreateSubQueryRangeTop (long Top,
-                                    char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
-  {
-   if (Top > 0)
+   if (PubCod > 0)
       snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
-                "tml_pubs.PubCod<%ld AND ",Top);
+                "tml_pubs.PubCod%c%ld AND ",Operator[Range],PubCod);
    else
       SubQuery[0] = '\0';
   }
@@ -943,14 +926,16 @@ unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
 			  "tml_pubs.PublisherCod,"	// row[2]
 			  "tml_pubs.PubType"		// row[3]
 		    " FROM tml_pubs%s"
-		   " WHERE %s%s%s%s"
+		   " WHERE %s%s%s"
+                   	 " tml_pubs.NotCod NOT IN"
+			 " (SELECT NotCod"
+			    " FROM tml_tmp_timeline)"
 		   " ORDER BY tml_pubs.PubCod DESC"
 		   " LIMIT 1",
 		   SubQueries->Publishers.Table,
 		   SubQueries->RangeBottom,
 		   SubQueries->RangeTop,
-		   SubQueries->Publishers.SubQuery,
-		   SubQueries->AlreadyExists);
+		   SubQueries->Publishers.SubQuery);
   }
 
 /*****************************************************************************/

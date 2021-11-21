@@ -65,6 +65,13 @@ struct Tml_Pub_Publication
    struct Tml_Pub_Publication *Next;	// Used for chained list
   };
 
+#define Tml_Pub_NUM_RANGES 2
+typedef enum
+  {
+   Tml_Pub_TOP    = 0,
+   Tml_Pub_BOTTOM = 1,
+  } Tml_Pub_Range_t;
+
 struct Tml_Pub_RangePubsToGet
   {
    long Top;	// Top pub code
@@ -88,7 +95,6 @@ struct Tml_Pub_SubQueries
      } Publishers;
    char RangeBottom  [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
    char RangeTop     [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
-   char AlreadyExists[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
   };
 
 /*****************************************************************************/

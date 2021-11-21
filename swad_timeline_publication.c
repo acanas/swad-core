@@ -105,13 +105,11 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
                                     &SubQueries.Publishers.Table,
                                     SubQueries.Publishers.SubQuery);
 
-   /* Create subquery to get only notes not present in timeline */
-   Tml_DB_CreateSubQueryAlreadyExists (SubQueries.AlreadyExists);
-
    /* Create subquery with bottom range of publications to get from tml_pubs.
       Bottom pub. code remains unchanged in all iterations of the loop. */
-   Tml_DB_CreateSubQueryRangeBottom (RangePubsToGet.Bottom,
-                                     SubQueries.RangeBottom);
+   Tml_DB_CreateSubQueryRange (Tml_Pub_BOTTOM,
+                               RangePubsToGet.Bottom,
+                               SubQueries.RangeBottom);
 
    /***** Initialize list of publications *****/
    /* Chained list of publications:
@@ -158,7 +156,9 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
      {
       /* Create subquery with top range of publications to get from tml_pubs
          In each iteration of this loop, top publication code is changed to a lower value */
-      Tml_DB_CreateSubQueryRangeTop (RangePubsToGet.Top,SubQueries.RangeTop);
+      Tml_DB_CreateSubQueryRange (Tml_Pub_TOP,
+                                  RangePubsToGet.Top,
+                                  SubQueries.RangeTop);
 
       /* Select the most recent publication from tml_pubs */
       Pub = Tml_Pub_SelectTheMostRecentPub (&SubQueries);
