@@ -2013,7 +2013,7 @@ static void Fig_GetAndShowTestsStats (void)
 	 /***** Get the stats about test questions from this location *****/
 	 Qst_GetTestStats (AnsType,&Stats);
 
-	 /***** Write number of assignments *****/
+	 /***** Write stats *****/
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -2062,7 +2062,7 @@ static void Fig_GetAndShowTestsStats (void)
       /***** Get the stats about test questions from this location *****/
       Qst_GetTestStats (Qst_ANS_UNKNOWN,&Stats);
 
-      /***** Write number of assignments *****/
+      /***** Write stats *****/
       HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");

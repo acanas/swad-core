@@ -26,7 +26,7 @@
 var Gbl_HTMLContent;
 
 // Global variable used to call SWAD via AJAX
-var ActionAJAX;
+var actionAJAX;
 
 /*****************************************************************************/
 /************************** Handle match keystrokes **************************/
@@ -493,20 +493,22 @@ var objXMLHttpReqCon = false;
 function refreshConnected () {
 	objXMLHttpReqCon = AJAXCreateObject();
 	if (objXMLHttpReqCon) {
-		var RefreshParams = RefreshParamNxtActCon + '&' +
-							RefreshParamIdSes + '&' +
-							RefreshParamCrsCod;
+		var refreshParams = refreshParamNxtActCon + '&' +
+							refreshParamIdSes + '&' +
+							refreshParamCrsCod;
 
-		objXMLHttpReqCon.onreadystatechange = readConnUsrsData;	// onreadystatechange must be lowercase
-		objXMLHttpReqCon.open('POST',ActionAJAX,true);
-		objXMLHttpReqCon.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqCon.send(RefreshParams);
+		// onreadystatechange must be lowercase
+		objXMLHttpReqCon.onreadystatechange = readConnUsrsData;
+		objXMLHttpReqCon.open('POST',actionAJAX,true);
+		objXMLHttpReqCon.setRequestHeader('Content-Type',
+										  'application/x-www-form-urlencoded');
+		objXMLHttpReqCon.send(refreshParams);
 	}
 }
 
 // Receive and show connected users data
 function readConnUsrsData () {
-	if (objXMLHttpReqCon.readyState == 4) {	// Check if data have been received
+	if (objXMLHttpReqCon.readyState == 4)	// Check if data have been received
 		if (objXMLHttpReqCon.status == 200) {
 			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);				// Get separator position
 			var endOfNotif   = objXMLHttpReqCon.responseText.indexOf('|',endOfDelay  + 1);	// Get separator position
@@ -548,7 +550,6 @@ function readConnUsrsData () {
 			if (delay >= 60000)	// If refresh slower than 1 time each 60 seconds, do refresh; else abort
 				setTimeout('refreshConnected()',delay);
 		}
-	}
 }
 
 /*****************************************************************************/
@@ -590,8 +591,9 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,Language) {
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
-		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
-			if (objXMLHttp.readyState == 4)	{			// Check if data have been received
+		// onreadystatechange must be lowercase
+		objXMLHttp.onreadystatechange = function() {
+			if (objXMLHttp.readyState == 4)	// Check if data have been received
 				if (objXMLHttp.status == 200) {
 					// Response received
 					clearTimeout (xmlHttpTimeout);		// Clear timeout
@@ -603,13 +605,11 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,Language) {
 							// Scripts in div got via AJAX are not executed ==> execute them
 							evalScriptsInElem (div);
 	
-							// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-							// MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);	// old versions
+							// Process maths; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 							MathJax.typeset();
 						}
 					}
 				}
-			}
 		};
 
 		var inputElem = document.getElementById(idInput);
@@ -650,8 +650,9 @@ function updateExamPrint (idDiv,idInput,nameInput,Params,Language) {
 		
 		IHaveFinishedTxt = disableFinished (txtSaving[Language]);	// Disable finished button on sending. When answer is saved and response received ==> the button will be reloaded
 
-		objXMLHttp.open('POST',ActionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.open('POST',actionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type',
+									'application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 
 		/* Timeout to abort in 5 seconds.
@@ -756,19 +757,21 @@ var objXMLHttpReqMchStd = false;
 function refreshMatchStd () {
 	objXMLHttpReqMchStd = AJAXCreateObject();
 	if (objXMLHttpReqMchStd) {
-		var RefreshParams = RefreshParamNxtActMch + '&' +
-							RefreshParamMchCod + '&' +
-							RefreshParamIdSes;
+		var refreshParams = refreshParamNxtActMch + '&' +
+							refreshParamMchCod + '&' +
+							refreshParamIdSes;
 
-		objXMLHttpReqMchStd.onreadystatechange = readMatchStdData;	// onreadystatechange must be lowercase
-		objXMLHttpReqMchStd.open('POST',ActionAJAX,true);
-		objXMLHttpReqMchStd.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		objXMLHttpReqMchStd.send(RefreshParams);
+		// onreadystatechange must be lowercase
+		objXMLHttpReqMchStd.onreadystatechange = readMatchStdData;
+		objXMLHttpReqMchStd.open('POST',actionAJAX,true);
+		objXMLHttpReqMchStd.setRequestHeader('Content-Type',
+											 'application/x-www-form-urlencoded');
+		objXMLHttpReqMchStd.send(refreshParams);
 	}
 }
 
 function readMatchStdData () {
-	if (objXMLHttpReqMchStd.readyState == 4) {	// Check if data have been received
+	if (objXMLHttpReqMchStd.readyState == 4)	// Check if data have been received
 		if (objXMLHttpReqMchStd.status == 200) {
 			var htmlMatch = objXMLHttpReqMchStd.responseText;	// Get HTML code
 
@@ -778,7 +781,6 @@ function readMatchStdData () {
 			// Global delay variable is set initially in swad-core
 			setTimeout('refreshMatchStd()',delayMatch);
 		}
-	}
 }
 
 /*****************************************************************************/
@@ -790,19 +792,21 @@ var objXMLHttpReqMchTch = false;
 function refreshMatchTch () {
 	objXMLHttpReqMchTch = AJAXCreateObject();
 	if (objXMLHttpReqMchTch) {
-		var RefreshParams = RefreshParamNxtActMch + '&' +
-							RefreshParamMchCod + '&' +
-							RefreshParamIdSes;
+		var refreshParams = refreshParamNxtActMch + '&' +
+							refreshParamMchCod + '&' +
+							refreshParamIdSes;
 
-		objXMLHttpReqMchTch.onreadystatechange = readMatchTchData;	// onreadystatechange must be lowercase
-		objXMLHttpReqMchTch.open('POST',ActionAJAX,true);
-		objXMLHttpReqMchTch.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		objXMLHttpReqMchTch.send(RefreshParams);
+		// onreadystatechange must be lowercase
+		objXMLHttpReqMchTch.onreadystatechange = readMatchTchData;
+		objXMLHttpReqMchTch.open('POST',actionAJAX,true);
+		objXMLHttpReqMchTch.setRequestHeader('Content-Type',
+											 'application/x-www-form-urlencoded');
+		objXMLHttpReqMchTch.send(refreshParams);
 	}
 }
 
 function readMatchTchData () {
-	if (objXMLHttpReqMchTch.readyState == 4) {	// Check if data have been received
+	if (objXMLHttpReqMchTch.readyState == 4)	// Check if data have been received
 		if (objXMLHttpReqMchTch.status == 200) {
 			var endOfId = objXMLHttpReqMchTch.responseText.indexOf('|',0           );	// Get separator position
 			var endOfEv = objXMLHttpReqMchTch.responseText.indexOf('|',endOfId  + 1);	// Get separator position
@@ -819,8 +823,7 @@ function readMatchTchData () {
 					// Scripts in div got via AJAX are not executed ==> execute them
 					evalScriptsInElem (div);
 
-					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);	// old versions
+					// Process maths; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 					MathJax.typeset();
 				}
 			}
@@ -828,7 +831,6 @@ function readMatchTchData () {
 			// Global delay variable is set initially in swad-core
 			setTimeout('refreshMatchTch()',delayMatch);
 		}
-	}
 }
 
 /*****************************************************************************/
@@ -842,18 +844,19 @@ function updateMatchTch (id,Params) {
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
-		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
-			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+		// onreadystatechange must be lowercase
+		objXMLHttp.onreadystatechange = function() {
+			if (objXMLHttp.readyState == 4)	// Check if data have been received
 				if (objXMLHttp.status == 200)
 					if (id) {
 						var div = document.getElementById(id);			// Access to DIV
 						if (div)
 							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
 					}
-			}
 		};
-		objXMLHttp.open('POST',ActionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.open('POST',actionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type',
+									'application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }
@@ -867,19 +870,21 @@ var objXMLHttpReqLog = false;
 function refreshLastClicks () {
 	objXMLHttpReqLog = AJAXCreateObject();
 	if (objXMLHttpReqLog) {
-		var RefreshParams = RefreshParamNxtActLstClk + '&' +
-							RefreshParamIdSes + '&' +
-							RefreshParamCrsCod;
+		var refreshParams = refreshParamNxtActLstClk + '&' +
+							refreshParamIdSes + '&' +
+							refreshParamCrsCod;
 
-		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
-		objXMLHttpReqLog.open('POST',ActionAJAX,true);
-		objXMLHttpReqLog.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		objXMLHttpReqLog.send(RefreshParams);
+		// onreadystatechange must be lowercase
+		objXMLHttpReqLog.onreadystatechange = readLastClicksData;
+		objXMLHttpReqLog.open('POST',actionAJAX,true);
+		objXMLHttpReqLog.setRequestHeader('Content-Type',
+										  'application/x-www-form-urlencoded');
+		objXMLHttpReqLog.send(refreshParams);
 	}
 }
 
 function readLastClicksData () {
-	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received
+	if (objXMLHttpReqLog.readyState == 4)	// Check if data have been received
 		if (objXMLHttpReqLog.status == 200) {
 			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);	// Get separator position
 
@@ -892,78 +897,81 @@ function readLastClicksData () {
 			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
 				setTimeout('refreshLastClicks()',delay);
 		}
-	}
 }
 
 /*****************************************************************************/
-/*** Automatically refresh new publications in social timeline using AJAX ****/
+/******* Automatically refresh new publications in timeline using AJAX *******/
 /*****************************************************************************/
 
 // This function must be called from time to time
-var objXMLHttpReqNewTL = false;
-function refreshNewTL () {
-	objXMLHttpReqNewTL = AJAXCreateObject();
-	if (objXMLHttpReqNewTL) {
-		var RefreshParams = RefreshParamNxtActNewPub + '&' +
-							RefreshParamIdSes + '&' +
-							RefreshParamWho;
 
-		objXMLHttpReqNewTL.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
-		objXMLHttpReqNewTL.open('POST',ActionAJAX,true);
-		objXMLHttpReqNewTL.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		objXMLHttpReqNewTL.send(RefreshParams);
+var objXMLHttpReqNewTml = false;
+
+function refreshNewTimeline () {
+	objXMLHttpReqNewTml = AJAXCreateObject();
+	if (objXMLHttpReqNewTml) {
+		var refreshParams = refreshParamNxtActNewPub + '&' +
+							refreshParamIdSes + '&' +
+							refreshParamWho;
+
+		// onreadystatechange must be lowercase
+		objXMLHttpReqNewTml.onreadystatechange = readNewTimelineData;
+		objXMLHttpReqNewTml.open('POST',actionAJAX,true);
+		objXMLHttpReqNewTml.setRequestHeader('Content-Type',
+											 'application/x-www-form-urlencoded');
+		objXMLHttpReqNewTml.send(refreshParams);
 	}
 }
 
-// Receive and show new social timeline data
 function readNewTimelineData () {
-	if (objXMLHttpReqNewTL.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqNewTL.status == 200) {
+	if (objXMLHttpReqNewTml.readyState == 4)	// Check if data have been received
+		if (objXMLHttpReqNewTml.status == 200) {
 
-			var justNowTimeline = document.getElementById('just_now_timeline_list');// Access to UL for the just received timeline
+			// Access to UL for just now timeline
+			var justNowTimeline = document.getElementById('just_now_timeline_list');
 			if (justNowTimeline) {
-				justNowTimeline.innerHTML = objXMLHttpReqNewTL.responseText;	// Update list of publications in just now timeline		
+				// Update list of publications in just now timeline		
+				justNowTimeline.innerHTML = objXMLHttpReqNewTml.responseText;
 
 				var numNotesJustGot = justNowTimeline.childNodes.length;
-				if (numNotesJustGot) {	// New notes just received
-					// Scripts in timeline got via AJAX are not executed ==> execute them
+				if (numNotesJustGot) {	// New notes received
+					// Scripts in timeline got via AJAX not executed ==> execute them
 					evalScriptsInElem (justNowTimeline);
 
-					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,justNowTimeline]);	// old versions
+					// Process maths; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 					MathJax.typeset();
 
-					// Move just received timeline to top of new timeline
-					// (move all the LI elements (notes) in UL 'just_now_timeline_list'...
-					// ...to the top of UL 'new_timeline_list')
-					var newTimeline = document.getElementById('new_timeline_list');	// Access to UL with the new timeline
+					// Move all the LI elements (notes) in UL 'just_now_timeline_list'...
+					// ...to the top of UL 'new_timeline_list'
+					var newTimeline = document.getElementById('new_timeline_list');
 
 					for (var i=0; i<numNotesJustGot; i++) {
 						// Move node from just now timeline to new timeline
-						newTimeline.insertBefore(justNowTimeline.lastChild, newTimeline.firstChild);
+						newTimeline.insertBefore(justNowTimeline.lastChild,newTimeline.firstChild);
 						newTimeline.firstChild.className += " Tml_NEW_PUB";					
 					}
 
-					// Update number of new posts
-					var viewNewPostsCount = document.getElementById('view_new_posts_count');
-					viewNewPostsCount.innerHTML = newTimeline.childNodes.length;
+					// Update number of notes in new timeline
+					var viewNewCount = document.getElementById('view_new_count');
+					viewNewCount.innerHTML = newTimeline.childNodes.length;
 
-					// Display message with new posts if hidden
-					var viewNewPostsContainer = document.getElementById('view_new_posts_container');
-					viewNewPostsContainer.style.display = '';
+					// Unhide message with number of notes if hidden
+					var viewNewContainer = document.getElementById('view_new_container');
+					viewNewContainer.style.display = '';
 				}
 			}
 			
 			// Global delay variable is set initially in swad-core
-			delayNewTL += 1000;	// Increase 1 second
-			setTimeout('refreshNewTL()',delayNewTL);
+			delayNewTml += 1000;	// Increase one second on each call
+			setTimeout('refreshNewTimeline()',delayNewTml);
 		}
-	}
 }
 
 /*****************************************************************************/
-/* View new publication in timeline by moving new timeline to top of timeline */
+/*** View new pubs. in timeline by moving new timeline to top of timeline ****/
 /*****************************************************************************/
+
+// This function is called when user clicks in 'See new activity (n)'
 
 function moveNewTimelineToTimeline () {
 	// Move the LI elements (notes) in UL 'new_timeline_list'...
@@ -989,7 +997,7 @@ function moveNewTimelineToTimeline () {
 			// Move or remove node from new timeline
 			if (mostRecentOcurrenceOfNote) {
 				// Move node from new timeline to timeline
-				timeline.insertBefore(newTimeline.lastChild, timeline.firstChild);
+				timeline.insertBefore(newTimeline.lastChild,timeline.firstChild);
 				timeline.firstChild.className += " Tml_NEW_PUB";
 			}
 			else
@@ -998,74 +1006,80 @@ function moveNewTimelineToTimeline () {
 		}
 	}
 
-	// Reset number of new posts after moving
-	var viewNewPostsCount = document.getElementById('view_new_posts_count');
-	viewNewPostsCount.innerHTML = 0;
+	// Reset number of new publications after moving
+	var viewNewCount = document.getElementById('view_new_count');
+	viewNewCount.innerHTML = 0;
 
-	// Hide link to view new posts after moving
-	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
-	viewNewPostsContainer.style.display = 'none';
+	// Hide link to view new publications after moving
+	var viewNewContainer = document.getElementById('view_new_container');
+	viewNewContainer.style.display = 'none';
 }
 
 /*****************************************************************************/
-/********** Refresh old publications in social timeline using AJAX ***********/
+/************* Refresh old publications in timeline using AJAX ***************/
 /*****************************************************************************/
 
-// This function is called when user clicks in link
-var objXMLHttpReqOldTL = false;
+// This function is called when user clicks in 'See more'
+
+var objXMLHttpReqOldTml = false;
+
 function refreshOldTimeline () {
-	objXMLHttpReqOldTL = AJAXCreateObject ();
-	if (objXMLHttpReqOldTL) {
-		var RefreshParams = RefreshParamNxtActOldPub + '&' +
-							RefreshParamIdSes;
-		if (typeof RefreshParamUsr !== 'undefined') {
-			if (RefreshParamUsr.length)
-				RefreshParams += '&' + RefreshParamUsr;
+	objXMLHttpReqOldTml = AJAXCreateObject ();
+	if (objXMLHttpReqOldTml) {
+		var refreshParams = refreshParamNxtActOldPub + '&' +
+							refreshParamIdSes;
+		if (typeof refreshParamUsr !== 'undefined') {
+			if (refreshParamUsr.length)
+				refreshParams += '&' + refreshParamUsr;
 		}
-		if (typeof RefreshParamWho !== 'undefined') {
-			if (RefreshParamWho.length)
-				RefreshParams += '&' + RefreshParamWho;
+		if (typeof refreshParamWho !== 'undefined') {
+			if (refreshParamWho.length)
+				refreshParams += '&' + refreshParamWho;
 		}
 
-		objXMLHttpReqOldTL.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
-		objXMLHttpReqOldTL.open('POST',ActionAJAX,true);
-		objXMLHttpReqOldTL.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqOldTL.send(RefreshParams);
+		// onreadystatechange must be lowercase
+		objXMLHttpReqOldTml.onreadystatechange = readOldTimelineData;
+		objXMLHttpReqOldTml.open('POST',actionAJAX,true);
+		objXMLHttpReqOldTml.setRequestHeader('Content-Type',
+											 'application/x-www-form-urlencoded');
+		objXMLHttpReqOldTml.send(refreshParams);
 	}
 }
 
-// Receive and show old social timeline data
 function readOldTimelineData () {
-	if (objXMLHttpReqOldTL.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqOldTL.status == 200) {
-			var oldTimeline = document.getElementById('old_timeline_list');	// Access to UL with the old timeline
+	if (objXMLHttpReqOldTml.readyState == 4)	// Check if data have been received
+		if (objXMLHttpReqOldTml.status == 200) {
+			// Access to UL with the old timeline
+			var oldTimeline = document.getElementById('old_timeline_list');
 			if (oldTimeline) {
-				oldTimeline.innerHTML = objXMLHttpReqOldTL.responseText;		// Fill list of publications in old timeline
+				// Fill list of publications in old timeline
+				oldTimeline.innerHTML = objXMLHttpReqOldTml.responseText;
 
 				var countOldTimeline = oldTimeline.childNodes.length;
 				if (countOldTimeline) {
-					// Scripts in timeline got via AJAX are not executed ==> execute them
+					// Scripts in timeline got via AJAX not executed ==> execute them
 					evalScriptsInElem (oldTimeline);
 
-					// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-					// MathJax.Hub.Queue(["Typeset",MathJax.Hub,oldTimeline]);	// old versions
+					// Process maths; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 					MathJax.typeset();
 
-					// Move all the LI elements in UL 'old_timeline_list' to the bottom of UL 'timeline_list'
+					// Move all the LI elements in UL 'old_timeline_list'
+					// to the bottom of UL 'timeline_list'
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 						timeline.appendChild(oldTimeline.firstChild);
 						
 					// There may be more publications
-					document.getElementById('get_old_timeline').style.display='';			// Show icon to be hidden on click
-					document.getElementById('getting_old_timeline').style.display='none';	// Hide icon to be shown on click
+					// Unhide icon to be hidden on click
+					document.getElementById('get_old_timeline').style.display = '';
+					// Hide icon to be shown on click
+					document.getElementById('getting_old_timeline').style.display = 'none';
 				}
-				else	// No old publications retrieved, so we have reached the oldest publication
+				else	// No old publications retrieved, so we have reached the oldest pub.
 						// Hide container with link to get old publications
-					document.getElementById("view_old_posts_container").style.display = 'none';
+					document.getElementById("view_old_pubs_container").style.display = 'none';
 			}
 		}
-	}
 }
 
 /*****************************************************************************/
@@ -1093,8 +1107,9 @@ function updateDivHiddenComments (form,Params) {
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
-		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
-			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+		// onreadystatechange must be lowercase
+		objXMLHttp.onreadystatechange = function() {
+			if (objXMLHttp.readyState == 4)	// Check if data have been received
 				if (objXMLHttp.status == 200)
 					if (id) {
 						var div = document.getElementById(id);			// Access to DIV
@@ -1104,15 +1119,14 @@ function updateDivHiddenComments (form,Params) {
 							// Scripts in div got via AJAX are not executed ==> execute them
 							evalScriptsInElem (div);
 	
-							// Process mathematics; see http://docs.mathjax.org/en/latest/advanced/typeset.html
-							// MathJax.Hub.Queue(["Typeset",MathJax.Hub,div]);	// old versions
+							// Process maths; see http://docs.mathjax.org/en/latest/advanced/typeset.html
 							MathJax.typeset();
 						}
 					}
-			}
 		};
-		objXMLHttp.open('POST',ActionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.open('POST',actionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type',
+									'application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }
@@ -1129,18 +1143,19 @@ function updateDivLockUnlockProject (form,Params) {
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
-		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
-			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+		// onreadystatechange must be lowercase
+		objXMLHttp.onreadystatechange = function() {
+			if (objXMLHttp.readyState == 4)	// Check if data have been received
 				if (objXMLHttp.status == 200)
 					if (id) {
 						var div = document.getElementById(id);			// Access to DIV
 						if (div)
 							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
 					}
-			}
 		};
-		objXMLHttp.open('POST',ActionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.open('POST',actionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type',
+									'application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }
@@ -1157,18 +1172,19 @@ function updateDivFaversSharers (form,Params) {
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
-		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
-			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+		// onreadystatechange must be lowercase
+		objXMLHttp.onreadystatechange = function() {
+			if (objXMLHttp.readyState == 4)	// Check if data have been received
 				if (objXMLHttp.status == 200)
 					if (id) {
 						var div = document.getElementById(id);			// Access to DIV
 						if (div)
 							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
 					}
-			}
 		};
-		objXMLHttp.open('POST',ActionAJAX,true);
-		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.open('POST',actionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type',
+									'application/x-www-form-urlencoded');
 		objXMLHttp.send(Params);
 	}
 }

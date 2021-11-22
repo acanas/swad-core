@@ -795,33 +795,33 @@ static void Lay_WriteScriptInit (void)
       Dat_WriteScriptMonths ();
 
       if (RefreshNewTimeline)		// Refresh new timeline via AJAX
-	 HTM_TxtF ("\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
+	 HTM_TxtF ("\tvar delayNewTml = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
       else if (RefreshMatchStd)		// Refresh match via AJAX
 	 HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
       else if (RefreshMatchTch)		// Refresh match via AJAX
 	 HTM_TxtF ("\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
       /***** Function init () ******/
-      HTM_Txt ("function init(){\n");
+      HTM_Txt ("function init() {\n");
 
-      HTM_TxtF ("\tActionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+      HTM_TxtF ("\tactionAJAX = \"%s\";\n",Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
       if (RefreshConnected)	// Refresh connected users via AJAX
 	{
 	 Con_WriteScriptClockConnected ();
-	 HTM_TxtF ("\tsetTimeout(\"refreshConnected()\",%lu);\n",
+	 HTM_TxtF ("\tsetTimeout('refreshConnected()',%lu);\n",
 		   Gbl.Usrs.Connected.TimeToRefreshInMs);
 	}
 
       if (RefreshLastClicks)		// Refresh last clicks via AJAX
-	 HTM_TxtF ("\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
+	 HTM_TxtF ("\tsetTimeout('refreshLastClicks()',%lu);\n",
 		   Cfg_TIME_TO_REFRESH_LAST_CLICKS);
       else if (RefreshNewTimeline)		// Refresh timeline via AJAX
-	 HTM_Txt ("\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
+	 HTM_Txt ("\tsetTimeout('refreshNewTimeline()',delayNewTml);\n");
       else if (RefreshMatchStd)		// Refresh match for a student via AJAX
-	 HTM_Txt ("\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
+	 HTM_Txt ("\tsetTimeout('refreshMatchStd()',delayMatch);\n");
       else if (RefreshMatchTch)		// Refresh match for a teacher via AJAX
-	 HTM_Txt ("\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
+	 HTM_Txt ("\tsetTimeout('refreshMatchTch()',delayMatch);\n");
 
       HTM_Txt ("}\n");
 
@@ -839,15 +839,15 @@ static void Lay_WriteScriptParamsAJAX (void)
 
       /***** Parameters with code of session and current course code *****/
       // Refresh parameters
-      HTM_TxtF ("var RefreshParamIdSes = \"ses=%s\";\n"
-		"var RefreshParamCrsCod = \"crs=%ld\";\n",
+      HTM_TxtF ("var refreshParamIdSes = \"ses=%s\";\n"
+		"var refreshParamCrsCod = \"crs=%ld\";\n",
 		Gbl.Session.Id,
 		Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Parameter to refresh connected users *****/
       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
 	 // Refresh parameter
-	 HTM_TxtF ("var RefreshParamNxtActCon = \"act=%ld\";\n",
+	 HTM_TxtF ("var refreshParamNxtActCon = \"act=%ld\";\n",
 		   Act_GetActCod (ActRefCon));
 
       /***** Parameters related with expanding/contracting folders in file browsers *****/
@@ -855,8 +855,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 /* In all actions related to file browsers ==>
 	    put parameters used by AJAX */
 	 // Refresh parameters
-	 HTM_TxtF ("var RefreshParamExpand = \"act=%ld\";\n"
-		   "var RefreshParamContract = \"act=%ld\";\n",
+	 HTM_TxtF ("var refreshParamExpand = \"act=%ld\";\n"
+		   "var refreshParamContract = \"act=%ld\";\n",
 		   Act_GetActCod (Brw_GetActionExpand   ()),
 		   Act_GetActCod (Brw_GetActionContract ()));
 
@@ -874,9 +874,9 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    /* In all actions related to view or editing global timeline ==>
 	       put parameters used by AJAX */
 	    // Refresh parameters
-	    HTM_TxtF ("var RefreshParamNxtActNewPub = \"act=%ld\";\n"
-		      "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-		      "var RefreshParamWho = \"Who=%u\";\n",
+	    HTM_TxtF ("var refreshParamNxtActNewPub = \"act=%ld\";\n"
+		      "var refreshParamNxtActOldPub = \"act=%ld\";\n"
+		      "var refreshParamWho = \"Who=%u\";\n",
 		      Act_GetActCod (ActRefNewPubGblTL),
 		      Act_GetActCod (ActRefOldPubGblTL),
 		      (unsigned) Tml_Who_GetGlobalWho ());	// Global variable got in a priori function
@@ -894,8 +894,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
 	       Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
 	    // Refresh parameters
-	    HTM_TxtF ("var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-		      "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
+	    HTM_TxtF ("var refreshParamNxtActOldPub = \"act=%ld\";\n"
+		      "var refreshParamUsr = \"OtherUsrCod=%s\";\n",
 		      Act_GetActCod (ActRefOldPubUsrTL),
 		      Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	    break;
@@ -905,8 +905,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 case ActRemMchAnsQstStd:
 	 case ActAnsMchQstStd:
 	    // Refresh parameters
-	    HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
-		      "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+	    HTM_TxtF ("var refreshParamNxtActMch = \"act=%ld\";\n"
+		      "var refreshParamMchCod = \"MchCod=%ld\";\n",
 		      Act_GetActCod (ActRefMchStd),
 		      Mch_GetMchCodBeingPlayed ());
 	    break;
@@ -922,15 +922,15 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    // Handle keys in keyboard/presenter
 	    HTM_Txt ("document.addEventListener(\"keydown\",handleMatchKeys);\n");
 	    // Refresh parameters
-	    HTM_TxtF ("var RefreshParamNxtActMch = \"act=%ld\";\n"
-		      "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+	    HTM_TxtF ("var refreshParamNxtActMch = \"act=%ld\";\n"
+		      "var refreshParamMchCod = \"MchCod=%ld\";\n",
 		      Act_GetActCod (ActRefMchTch),
 		      Mch_GetMchCodBeingPlayed ());
 	    break;
 	 /* Parameter related with clicks refreshing */
 	 case ActLstClk:
 	    // Refresh parameter
-	    HTM_TxtF ("var RefreshParamNxtActLstClk = \"act=%ld\";\n",
+	    HTM_TxtF ("var refreshParamNxtActLstClk = \"act=%ld\";\n",
 		      Act_GetActCod (ActRefLstClk));
 	    break;
 	 default:

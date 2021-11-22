@@ -381,9 +381,9 @@ static void Tml_GetAndShowOldTimeline (struct Tml_Timeline *Timeline)
   Hidden  <    __v__
            |  |_____| new_timeline_list (Posts retrieved but hidden.
            |  |_____|                    When user clicks to view them,
-           |  |_____|                    they are transferred
-            \ |_____|                    to visible timeline_list.)
-                 |
+           |  |_____|                    the most recent of each note is
+            \ |_____|                    is transferred
+                 |                       to visible timeline_list.)
                __v__
             / |_____| timeline_list (Posts visible on page)
            |  |_____|
@@ -424,14 +424,14 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
       /***** New publications refreshed dynamically via AJAX *****/
       if (GlobalTimeline)
 	{
-	 /* Link to view new publications via AJAX */
-	 Tml_Pub_PutLinkToViewNewPubs ();
-
 	 /* Hidden lists to insert publications received via AJAX:
 	    1. just received (not visible) publications
 	    2. new (not visible) publications */
 	 Tml_PutHiddenList ("just_now_timeline_list");
 	 Tml_PutHiddenList ("new_timeline_list");
+
+	 /* Link to view new publications via AJAX */
+	 Tml_Pub_PutLinkToViewNewPubs ();
 	}
 
       /***** List recent publications in timeline.

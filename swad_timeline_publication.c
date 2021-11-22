@@ -121,10 +121,10 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
                        |______|   /   |______|    ->|______|       ______
                        |______|  /    |______|   /  |______|    ->|______|
                        |_Next_|--     |______|  /   |______|   // |______|
-                                      |_Next_|--    |______|  //  |______|
+                      more recent     |_Next_|--    |______|  //  |______|
          ______                                     |_Next_|--/   |______|
         |______|----------------------------------------------    |_NULL_|
-
+                                                                    older
    Timeline->Pubs.Bottom
 
    */
@@ -147,7 +147,8 @@ void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline)
       SELECT MAX(PubCod) AS NewestPubCod
         FROM tml_pubs ...
        GROUP BY NotCod
-       ORDER BY NewestPubCod DESC LIMIT ...
+       ORDER BY NewestPubCod DESC
+       LIMIT 10
       but this query is slow (several seconds) with a big table.
    */
    for (NumPub = 0;
@@ -462,8 +463,8 @@ void Tml_Pub_PutLinkToViewNewPubs (void)
 
    /***** Link to view (show hidden) new publications *****/
    /* Begin container */
-   // div is hidden. When new posts arrive to the client via AJAX, div is shown
-   HTM_DIV_Begin ("id=\"view_new_posts_container\""
+   // div is hidden. When new notes arrive to the client via AJAX, div is shown
+   HTM_DIV_Begin ("id=\"view_new_container\""
 		  " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\""
 		  " style=\"display:none;\"");
 
@@ -474,7 +475,7 @@ void Tml_Pub_PutLinkToViewNewPubs (void)
 
          /* Text */
 	 HTM_TxtF ("%s (",Txt_See_new_activity);
-	 HTM_SPAN_Begin ("id=\"view_new_posts_count\"");
+	 HTM_SPAN_Begin ("id=\"view_new_count\"");
 	    HTM_Unsigned (0);
 	 HTM_SPAN_End ();
 	 HTM_Txt (")");
@@ -497,7 +498,7 @@ void Tml_Pub_PutLinkToViewOldPubs (void)
 
    /***** Animated link to view old publications *****/
    /* Begin container */
-   HTM_DIV_Begin ("id=\"view_old_posts_container\""
+   HTM_DIV_Begin ("id=\"view_old_pubs_container\""
 	          " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\"");
 
       /* Begin anchor */

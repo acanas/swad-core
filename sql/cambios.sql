@@ -13551,7 +13551,8 @@ SELECT tml_pubs.PubCod,
 			  "tml_pubs.PubType"		// row[3]
 		    " FROM tml_pubs%s"
 		   " WHERE tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod
-		       AND "
+		       AND tml_pubs.PubCod>Bottom AND "
+		       AND tml_pubs.PubCod<Top AND "
 		   " ORDER BY tml_pubs.PubCod DESC"
 		   " LIMIT 1",
 		   SubQueries->Publishers.Table,
@@ -13559,4 +13560,9 @@ SELECT tml_pubs.PubCod,
 		   SubQueries->RangeTop,
 		   SubQueries->Publishers.SubQuery,
 		   SubQueries->AlreadyExists);
+		   
+		   
+SELECT MAX(PstCod) AS NewestPstCod FROM for_posts GROUP BY ThrCod ORDER BY NewestPstCod DESC LIMIT 10;
+ 
+SELECT PstCod FROM for_posts ORDER BY PstCod DESC LIMIT 1;
  
