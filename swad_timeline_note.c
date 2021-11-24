@@ -290,14 +290,13 @@ static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
 
 void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
   {
-   /***** Show author's photo *****/
-   /* Begin container */
+   /***** Begin container *****/
    HTM_DIV_Begin ("class=\"Tml_LEFT_PHOTO\"");
 
-      /* Photo */
+      /***** Photo *****/
       Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,FormUnique);
 
-   /* End container */
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

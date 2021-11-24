@@ -972,7 +972,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	 if (Enabled)
 	   {
 	    Str_Copy (Content,OriginalContent,sizeof (Content) - 1);
-	    Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	    Msg_WriteMsgContent (Content,true,false);
 
 	    /***** Show image *****/
 	    Med_ShowMedia (&Media,"FOR_IMG_CONT","FOR_IMG");

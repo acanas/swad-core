@@ -43,6 +43,34 @@
 #include "swad_string.h"
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+typedef enum
+  {
+   Str_LINK_UNKNOWN = 0,
+   Str_LINK_URL     = 1,
+   Str_LINK_NICK    = 2,
+  } Str_LinkType_t;
+
+struct Str_Substring
+  {
+   char *Str;	// Pointer to the first char of substring
+   size_t Len;	// Length of the substring
+  };
+
+struct Str_Link
+  {
+   Str_LinkType_t Type;
+   struct Str_Substring URLorNick;
+   struct Str_Substring AnchorNick1;
+   struct Str_Substring AnchorNick2;
+   size_t AddedLengthUntilHere;	// Total length of extra HTML code added until this link (included)
+   struct Str_Link *Prev;
+   struct Str_Link *Next;
+  };
+
+/*****************************************************************************/
 /******************** Global variables from other modules ********************/
 /*****************************************************************************/
 
@@ -51,6 +79,20 @@ extern struct Globals Gbl;		// Declaration in swad.c
 /*****************************************************************************/
 /*************************** Private prototypes ******************************/
 /*****************************************************************************/
+
+static void Str_CreateFirstLink (struct Str_Link **Link,
+                                 struct Str_Link **LastLink);
+static void Str_CreateNextLink (struct Str_Link **Link,
+                                struct Str_Link **LastLink);
+static void Str_FreeLinks (struct Str_Link *LastLink);
+static bool Str_CheckURL (char **PtrSrc,
+                          struct Str_Link **Link,
+                          struct Str_Link **LastLink,
+                          size_t MaxCharsURLOnScreen);
+static bool Str_CheckNickname (char **PtrSrc,
+			       struct Str_Link **Link,
+			       struct Str_Link **LastLink);
+static void Str_InsertSubstring (const struct Str_Substring *PtrSrc,char **PtrDst);
 
 static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
 
@@ -98,384 +140,419 @@ action="https://localhost/swad/es" method="post">
 
 */
 
-#define ANCHOR_1_URL	"<a href=\""
-#define ANCHOR_2_URL	"\" target=\"_blank\">"
-#define ANCHOR_3_URL	"</a>"
-#define ANCHOR_3_NICK	"</a></form>"
+// For URLs the length of anchor is fixed, so it can be calculated once
+#define ANCHOR_URL_1		"<a href=\""
+#define ANCHOR_URL_2		"\" target=\"_blank\">"
+#define ANCHOR_URL_3		"</a>"
+#define ANCHOR_URL_1_LENGTH	(sizeof (ANCHOR_URL_1) - 1)
+#define ANCHOR_URL_2_LENGTH	(sizeof (ANCHOR_URL_2) - 1)
+#define ANCHOR_URL_3_LENGTH	(sizeof (ANCHOR_URL_3) - 1)
+#define ANCHOR_URL_TOTAL_LENGTH	(ANCHOR_URL_1_LENGTH + ANCHOR_URL_2_LENGTH + ANCHOR_URL_3_LENGTH)
 
-#define MAX_LINKS 1000
+// For nicknames the length of anchor is variable,
+// so it can be calculated for each link,
+// except the third part that is fixed
+#define ANCHOR_NICK_3		"</a></form>"
+#define ANCHOR_NICK_3_LENGTH	(sizeof (ANCHOR_NICK_3) - 1)
 
-#define MAX_BYTES_LIMITED_URL (1024 - 1)	// Max. number of bytes of the URL shown on screen
+static const struct Str_Substring AnchorURL1 =
+  {
+  .Str = ANCHOR_URL_1,
+  .Len = ANCHOR_URL_1_LENGTH,
+  };
+static const struct Str_Substring AnchorURL2 =
+  {
+  .Str = ANCHOR_URL_2,
+  .Len = ANCHOR_URL_2_LENGTH,
+  };
+static const struct Str_Substring AnchorURL3 =
+  {
+  .Str = ANCHOR_URL_3,
+  .Len = ANCHOR_URL_3_LENGTH,
+  };
+static const struct Str_Substring AnchorNick3 =
+  {
+  .Str = ANCHOR_NICK_3,
+  .Len = ANCHOR_NICK_3_LENGTH,
+  };
 
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
-   char Anchor1Nick[256 + 256 + 256 + Cns_BYTES_SESSION_ID + 256 + 256];
-   char Anchor2Nick[256 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
    size_t TxtLength;
-   size_t TxtLengthWithInsertedAnchors;
-
-   size_t Anchor1URLLength;
-   size_t Anchor2URLLength;
-   size_t Anchor3URLLength;
-   size_t AnchorURLTotalLength;
-
-   size_t Anchor1NickLength = 0;	// Initialized only to avoid warning
-   size_t Anchor2NickLength = 0;	// Initialized only to avoid warning
-   size_t Anchor3NickLength;
-   size_t AnchorNickTotalLength = 0;	// Initialized only to avoid warning
-
    char *PtrSrc;
    char *PtrDst;
-   bool URLStartFound;
-   bool IsNickname;
-   int NumLinks = 0;
-   int NumLink;
-   struct
-     {
-      char *PtrStart;			// Pointer to the first char of URL/nickname in original text
-      char *PtrEnd;			// Pointer to the last  char of URL/nickname in original text
-      size_t NumActualBytes;		// Actual length of the URL/nickname
-      char *Anchor1Nick;
-      char *Anchor2Nick;
-      size_t Anchor1NickLength;
-      size_t Anchor2NickLength;
-      size_t AddedLengthUntilHere;	// Total length of extra HTML code added until this link (included)
-     } Links[MAX_LINKS];
-   size_t LengthVisibleLink;
+   struct Str_Link *Link;
+   struct Str_Link *LastLink;
    size_t Length;
    size_t i;
-   size_t NumChars1;
-   size_t NumChars2;
-   size_t NumBytesToCopy;
-   size_t NumBytesToShow;		// Length of the link displayed on screen (may be shorter than actual length)
-   char LimitedURL[MAX_BYTES_LIMITED_URL + 1];
-   unsigned char Ch;
-
-   /****** Initialize constant anchors and their lengths *****/
-   TxtLength = strlen (Txt);
-
-   // For URLs the length of anchor is fixed
-   // so it can be calculated once
-   Anchor1URLLength = strlen (ANCHOR_1_URL);
-   Anchor2URLLength = strlen (ANCHOR_2_URL);
-   Anchor3URLLength = strlen (ANCHOR_3_URL);
-   AnchorURLTotalLength  = Anchor1URLLength +
-	                   Anchor2URLLength +
-	                   Anchor3URLLength;
-
-   // For nicknames the length of anchor is variable
-   // so it can be calculated for each link,
-   // except the third part that is fixed
-   Anchor3NickLength = strlen (ANCHOR_3_NICK);
+   struct Str_Substring Limited;	// URL displayed on screen (may be shorter than actual length)
+   const struct Str_Substring *Anchor1;
+   const struct Str_Substring *Anchor2;
+   const struct Str_Substring *Anchor3;
 
    /**************************************************************/
    /***** Find starts and ends of links (URLs and nicknames) *****/
    /**************************************************************/
+   Str_CreateFirstLink (&Link,&LastLink);
+
    for (PtrSrc = Txt;
 	*PtrSrc;)
+     {
+      Link->Type = Str_LINK_UNKNOWN;
+
       /* Check if the next char is the start of a URL */
-      if (tolower ((int) *PtrSrc) == (int) 'h')
-        {
-         URLStartFound = false;
-         Links[NumLinks].PtrStart = PtrSrc;
-         if (tolower ((int) *++PtrSrc) == (int) 't') // ht...
-           {
-            if (tolower ((int) *++PtrSrc) == (int) 't') // htt...
-              {
-               if (tolower ((int) *++PtrSrc) == (int) 'p') // http...
-                 {
-                  PtrSrc++;
-                  if (*PtrSrc == ':') // http:...
-                    {
-                     if (*++PtrSrc ==  '/') // http:/...
-                        if (*++PtrSrc == '/') // http://...
-                           URLStartFound = true;
-                    }
-                  else if (tolower ((int) *PtrSrc) == (int) 's') // https...
-                    {
-                     if (*++PtrSrc == ':') // https:...
-                       {
-                        if (*++PtrSrc == '/') // https:/...
-                           if (*++PtrSrc == '/') // https://...
-                              URLStartFound = true;
-                       }
-                    }
-                 }
-              }
-           }
-         if (URLStartFound)
-           {
-            /* Find URL end */
-            PtrSrc++;	// Points to first character after http:// or https://
-            for (;;)
-              {
-               NumChars1 = Str_GetNextASCIICharFromStr (PtrSrc,&Ch);
-               PtrSrc += NumChars1;
-               if (Ch <= 32 || Ch == '<'  || Ch == '"')
-                 {
-                  Links[NumLinks].PtrEnd = PtrSrc - NumChars1 - 1;
-                  break;
-                 }
-               else if (Ch == ',' || Ch == '.' || Ch == ';' || Ch == ':' || Ch == ')' || Ch == ']' || Ch == '}')
-                 {
-                  NumChars2 = Str_GetNextASCIICharFromStr (PtrSrc,&Ch);
-                  PtrSrc += NumChars2;
-                  if (Ch <= 32 || Ch == '<' || Ch == '"')
-                    {
-                     Links[NumLinks].PtrEnd = PtrSrc - NumChars2 - NumChars1 - 1;
-                     break;
-                    }
-                 }
-              }
-
-            /* Initialize anchors for this link */
-            Links[NumLinks].Anchor1Nick = NULL;
-            Links[NumLinks].Anchor2Nick = NULL;
-
-            /* Calculate length of this URL */
-            Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd + 1 - Links[NumLinks].PtrStart);
-            if (Links[NumLinks].NumActualBytes <= MaxCharsURLOnScreen)
-               LengthVisibleLink = Links[NumLinks].NumActualBytes;
-            else	// If URL is too long to be displayed ==> short it
-              {
-               /* Make a copy of this URL */
-               NumBytesToCopy = (Links[NumLinks].NumActualBytes < MAX_BYTES_LIMITED_URL) ? Links[NumLinks].NumActualBytes :
-        	                                                                           MAX_BYTES_LIMITED_URL;
-               strncpy (LimitedURL,Links[NumLinks].PtrStart,NumBytesToCopy);
-               LimitedURL[NumBytesToCopy] = '\0';
-
-               /* Limit the number of characters on screen of the copy, and calculate its length in bytes */
-               LengthVisibleLink = Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
-              }
-            if (NumLinks == 0)
-               Links[NumLinks].AddedLengthUntilHere = AnchorURLTotalLength + LengthVisibleLink;
-            else
-               Links[NumLinks].AddedLengthUntilHere = Links[NumLinks - 1].AddedLengthUntilHere +
-                                                      AnchorURLTotalLength + LengthVisibleLink;
-
-	    /* Increment number of found links */
-	    NumLinks++;
-	    if (NumLinks == MAX_LINKS)
-               break;
-           }
-        }
-      /* Check if the next char is the start of a nickname */
-      else if ((int) *PtrSrc == (int) '@')
-	{
-         Links[NumLinks].PtrStart = PtrSrc;
-
-	 /* Find nickname end */
-	 PtrSrc++;	// Points to first character after @
-
-	 /* A nick can have digits, letters and '_'  */
-	 for (;
-	      *PtrSrc;
-	      PtrSrc++)
-	    if (!((*PtrSrc >= 'a' && *PtrSrc <= 'z') ||
-		  (*PtrSrc >= 'A' && *PtrSrc <= 'Z') ||
-		  (*PtrSrc >= '0' && *PtrSrc <= '9') ||
-		  (*PtrSrc == '_')))
-	       break;
-
-	 /* Calculate length of this nickname */
-	 Links[NumLinks].PtrEnd = PtrSrc - 1;
-         Links[NumLinks].NumActualBytes = (size_t) (PtrSrc - Links[NumLinks].PtrStart);
-
-	 /* A nick (without arroba) must have a number of characters
-            Nck_MIN_CHARS_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA */
-	 Length = Links[NumLinks].NumActualBytes - 1;	// Do not count the initial @
-	 IsNickname = (Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
-	               Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA);
-
-	 if (IsNickname)
-	   {
-            /* Initialize anchors for this link */
-            Links[NumLinks].Anchor1Nick = NULL;
-            Links[NumLinks].Anchor2Nick = NULL;
-
-	    /* Create id for this form */
-	    Gbl.Form.Num++;
-	    if (Gbl.Usrs.Me.Logged)
-	       snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-		         "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-	    else
-	       snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-		         "form_%d",Gbl.Form.Num);
-
-	    /* Store first part of anchor */
-	    Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
-	    snprintf (Anchor1Nick,sizeof (Anchor1Nick),
-		      "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
-		      "%s"
-		      "<input type=\"hidden\" name=\"usr\" value=\"",
-		      Cfg_URL_SWAD_CGI,
-		      Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-			                   Gbl.Form.Id,
-		      ParamsStr);
-	    Anchor1NickLength = strlen (Anchor1Nick);
-	    if ((Links[NumLinks].Anchor1Nick = malloc (Anchor1NickLength + 1)) == NULL)
-	       Err_NotEnoughMemoryExit ();
-	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
-	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
-
-	    /* Store second part of anchor */
-	    snprintf (Anchor2Nick,sizeof (Anchor2Nick),
-		      "\">"
-		      "<a href=\"\""
-		      " onclick=\"document.getElementById('%s').submit();return false;\">",
-		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-			                   Gbl.Form.Id);
-	    Anchor2NickLength = strlen (Anchor2Nick);
-	    if ((Links[NumLinks].Anchor2Nick = malloc (Anchor2NickLength + 1)) == NULL)
-	       Err_NotEnoughMemoryExit ();
-	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
-	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
-
-	    AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3NickLength;
-
-	    LengthVisibleLink = Links[NumLinks].NumActualBytes;
-            if (NumLinks == 0)
-               Links[NumLinks].AddedLengthUntilHere = AnchorNickTotalLength + LengthVisibleLink;
-            else
-               Links[NumLinks].AddedLengthUntilHere = Links[NumLinks - 1].AddedLengthUntilHere +
-                                                      AnchorNickTotalLength + LengthVisibleLink;
-
-	    /* Increment number of found links */
-	    NumLinks++;
-	    if (NumLinks == MAX_LINKS)
-	       break;
-	   }
-	}
-      /* The next char is not the start of URL or nickname */
-      else	// Character distinct to 'h' or '@'
-         PtrSrc++;
+      if (!Str_CheckURL (&PtrSrc,&Link,&LastLink,MaxCharsURLOnScreen))
+	 /* Check if the next char is the start of a nickname */
+	 if (!Str_CheckNickname (&PtrSrc,&Link,&LastLink))
+	    /* The next char is not the start of a URL or a nickname */
+	    PtrSrc++;
+     }
 
    /**********************************************************************/
    /***** If there are one or more links (URLs or nicknames) in text *****/
    /**********************************************************************/
-   if (NumLinks)
+   if (LastLink)	// Not null ==> one or more links found
      {
       /***** Insert links from end to start of text,
              only if there is enough space available in text *****/
-      TxtLengthWithInsertedAnchors = TxtLength + Links[NumLinks - 1].AddedLengthUntilHere;
-      if (TxtLengthWithInsertedAnchors <= MaxLength)
-         for (NumLink = NumLinks - 1;
-              NumLink >= 0;
-              NumLink--)
+      TxtLength = strlen (Txt);
+      if (TxtLength + LastLink->AddedLengthUntilHere <= MaxLength)
+         for (Link = LastLink;
+              Link;
+              Link = Link->Prev)
            {
-            IsNickname = (*(Links[NumLink].PtrStart) == '@');
+            /***** Set anchors *****/
+            switch (Link->Type)
+              {
+               case Str_LINK_URL:
+                  Anchor1 = &AnchorURL1;
+                  Anchor2 = &AnchorURL2;
+                  Anchor3 = &AnchorURL3;
+		  break;
+               case Str_LINK_NICK:
+                  Anchor1 = &Link->AnchorNick1;
+                  Anchor2 = &Link->AnchorNick2;
+                  Anchor3 =       &AnchorNick3;
+		  break;
+               default:
+        	  continue;
+              }
 
             /***** Step 1: Move forward the text after the link (URL or nickname)
                            (it's mandatory to do the copy in reverse order
                             to avoid overwriting source) *****/
-            for (i = 0,
-                 PtrSrc = (NumLink == NumLinks - 1) ? Txt + TxtLength :
-                                                      Links[NumLink + 1].PtrStart - 1,
-                 PtrDst = PtrSrc + Links[NumLink].AddedLengthUntilHere,
-                 Length = PtrSrc - Links[NumLink].PtrEnd;
+	    PtrSrc = (Link == LastLink) ? Txt + TxtLength :
+					  Link->Next->URLorNick.Str - 1,
+	    PtrDst = PtrSrc + Link->AddedLengthUntilHere,
+	    Length = PtrSrc - (Link->URLorNick.Str + Link->URLorNick.Len - 1);
+            for (i = 0;
                  i < Length;
                  i++)
                *PtrDst-- = *PtrSrc--;
 
-            /***** Step 2: Insert ANCHOR_3_NICK or ANCHOR_3_URL *****/
-            if (IsNickname)
-              {
-	       Length = Anchor3NickLength;
-	       PtrSrc = ANCHOR_3_NICK + Length - 1;
-              }
-            else
-              {
-	       Length = Anchor3URLLength;
-	       PtrSrc = ANCHOR_3_URL + Length - 1;
-              }
-	    for (i = 0;
-		 i < Length;
-		 i++)
-               *PtrDst-- = *PtrSrc--;
+            /***** Step 2: Insert thirs part of anchor *****/
+            Str_InsertSubstring (Anchor3,&PtrDst);
 
             /***** Step 3: Move forward the link (URL or nickname)
                            to be shown on screen *****/
-            if (IsNickname ||
-        	Links[NumLink].NumActualBytes <= MaxCharsURLOnScreen)
+            switch (Link->Type)
               {
-               NumBytesToShow = Links[NumLink].NumActualBytes;
-               PtrSrc = Links[NumLink].PtrEnd;			// PtrSrc must point to end of complete nickname
+               case Str_LINK_URL:
+        	  if (Link->URLorNick.Len <= MaxCharsURLOnScreen)
+		     Str_InsertSubstring (&Link->URLorNick,&PtrDst);
+        	  else
+        	    {
+		     /* Limit the length of URL */
+		     if ((Limited.Str = malloc (Link->URLorNick.Len + 1)) == NULL)
+			Err_NotEnoughMemoryExit ();
+		     strncpy (Limited.Str,Link->URLorNick.Str,Link->URLorNick.Len);
+		     Limited.Str[Link->URLorNick.Len] = '\0';
+		     Limited.Len = Str_LimitLengthHTMLStr (Limited.Str,MaxCharsURLOnScreen);
+		     Str_InsertSubstring (&Limited,&PtrDst);
+		     free (Limited.Str);
+        	    }
+		  break;
+               case Str_LINK_NICK:
+                  Str_InsertSubstring (&Link->URLorNick,&PtrDst);
+		  break;
+               default:
+        	  break;
               }
-            else	// If URL is too long to be displayed ==> short it
-              {
-               /* Make a copy of this URL */
-               NumBytesToCopy = (Links[NumLink].NumActualBytes < MAX_BYTES_LIMITED_URL) ? Links[NumLink].NumActualBytes :
-        	                                                                          MAX_BYTES_LIMITED_URL;
-               strncpy (LimitedURL,Links[NumLink].PtrStart,NumBytesToCopy);
-               LimitedURL[NumBytesToCopy] = '\0';
 
-               /* Limit the length of the copy */
-               NumBytesToShow = Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
-
-               PtrSrc = LimitedURL + NumBytesToShow - 1;	// PtrSrc must point to end of limited URL
-              }
-            for (i = 0;
-        	 i < NumBytesToShow;
-        	 i++)
-               *PtrDst-- = *PtrSrc--;
-
-            /***** Step 4: Insert Anchor2Nick or ANCHOR_2_URL *****/
-            if (IsNickname)
-              {
-	       Length = Links[NumLink].Anchor2NickLength;
-	       PtrSrc = Links[NumLink].Anchor2Nick + Length - 1;
-              }
-            else
-              {
-	       Length = Anchor2URLLength;
-	       PtrSrc = ANCHOR_2_URL + Length - 1;
-              }
-	    for (i = 0;
-		 i < Length;
-		 i++)
-	       *PtrDst-- = *PtrSrc--;
+            /***** Step 4: Insert second part of anchor *****/
+            Str_InsertSubstring (Anchor2,&PtrDst);
 
             /***** Step 5: Insert link into directive A
                            (it's mandatory to do the copy in reverse order
                            to avoid overwriting source URL or nickname) *****/
-            for (i = 0, PtrSrc = Links[NumLink].PtrEnd;
-        	 i < Links[NumLink].NumActualBytes;
-        	 i++)
-               *PtrDst-- = *PtrSrc--;
+            Str_InsertSubstring (&Link->URLorNick,&PtrDst);
 
-            /***** Step 6: Insert Anchor1Nick or ANCHOR_1_URL *****/
-            if (IsNickname)
-              {
-	       Length = Links[NumLink].Anchor1NickLength;
-	       PtrSrc = Links[NumLink].Anchor1Nick + Length - 1;
-              }
-            else
-              {
-	       Length = Anchor1URLLength;
-	       PtrSrc = ANCHOR_1_URL + Length - 1;
-              }
-	    for (i = 0;
-		 i < Length;
-		 i++)
-	       *PtrDst-- = *PtrSrc--;
+            /***** Step 6: Insert first part of anchor *****/
+            Str_InsertSubstring (Anchor1,&PtrDst);
            }
      }
 
    /***********************************/
    /***** Free memory for anchors *****/
    /***********************************/
-   for (NumLink = 0;
-	NumLink < NumLinks;
-	NumLink++)
+   Str_FreeLinks (LastLink);
+  }
+
+/***************************** Create first link ******************************/
+
+static void Str_CreateFirstLink (struct Str_Link **Link,
+                                 struct Str_Link **LastLink)
+  {
+   /***** Reset last link pointer *****/
+   (*LastLink) = NULL;
+
+   /***** Allocate current link *****/
+   if (((*Link) = malloc (sizeof (struct Str_Link))) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Initialize current link *****/
+   (*Link)->Prev = NULL;
+   (*Link)->Next = NULL;
+  }
+
+/***************************** Create next link ******************************/
+
+static void Str_CreateNextLink (struct Str_Link **Link,
+                                struct Str_Link **LastLink)
+  {
+   /***** Current link now is pointing to a correct link,
+          so set last link pointer to current link *****/
+   (*LastLink) = (*Link);
+
+   /***** Allocate next link *****/
+   if (((*Link)->Next = malloc (sizeof (struct Str_Link))) == NULL)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Initialize next link *****/
+   (*Link)->Next->Prev = *Link;
+   (*Link)->Next->Next = NULL;
+
+   /***** Change current link to just allocated link *****/
+   (*Link) = (*Link)->Next;
+  }
+
+/***************************** Free found links ******************************/
+
+static void Str_FreeLinks (struct Str_Link *LastLink)
+  {
+   struct Str_Link *Link;
+   struct Str_Link *PrevLink;
+
+   for (Link = LastLink;
+	Link;
+	Link = PrevLink)
      {
-      if (Links[NumLink].Anchor1Nick)
-	 free (Links[NumLink].Anchor1Nick);
-      if (Links[NumLink].Anchor2Nick)
-	 free (Links[NumLink].Anchor2Nick);
+      PrevLink = Link->Prev;
+      free (Link);
      }
+  }
+
+/**************************** Check if a URL found ***************************/
+
+static bool Str_CheckURL (char **PtrSrc,
+                          struct Str_Link **Link,
+                          struct Str_Link **LastLink,
+                          size_t MaxCharsURLOnScreen)
+  {
+   unsigned char Ch;
+   size_t NumChars1;
+   size_t NumChars2;
+   char *PtrEnd;	// Pointer to the last char of URL/nickname in original text
+   char *Limited;	// URL displayed on screen (may be shorter than actual length)
+
+   /***** Check if the next char is the start of a URL *****/
+   if (tolower ((int) *(*PtrSrc)) == (int) 'h')
+     {
+      (*Link)->URLorNick.Str = (*PtrSrc);
+      if (tolower ((int) *++(*PtrSrc)) == (int) 't') // ht...
+	{
+	 if (tolower ((int) *++(*PtrSrc)) == (int) 't') // htt...
+	   {
+	    if (tolower ((int) *++(*PtrSrc)) == (int) 'p') // http...
+	      {
+	       (*PtrSrc)++;
+	       if (*(*PtrSrc) == ':') // http:...
+		 {
+		  if (*++(*PtrSrc) ==  '/') // http:/...
+		     if (*++(*PtrSrc) == '/') // http://...
+			(*Link)->Type = Str_LINK_URL;
+		 }
+	       else if (tolower ((int) *(*PtrSrc)) == (int) 's') // https...
+		 {
+		  if (*++(*PtrSrc) == ':') // https:...
+		    {
+		     if (*++(*PtrSrc) == '/') // https:/...
+			if (*++(*PtrSrc) == '/') // https://...
+			   (*Link)->Type = Str_LINK_URL;
+		    }
+		 }
+	      }
+	   }
+	}
+      if ((*Link)->Type == Str_LINK_URL)
+	{
+	 /***** Find URL end *****/
+	 (*PtrSrc)++;	// Points to first character after http:// or https://
+	 for (;;)
+	   {
+	    NumChars1 = Str_GetNextASCIICharFromStr ((*PtrSrc),&Ch);
+	    (*PtrSrc) += NumChars1;
+	    if (Ch <= 32 || Ch == '<'  || Ch == '"')
+	      {
+	       PtrEnd = (*PtrSrc) - NumChars1 - 1;
+	       break;
+	      }
+	    else if (Ch == ',' || Ch == '.' || Ch == ';' || Ch == ':' ||
+		     Ch == ')' || Ch == ']' || Ch == '}')
+	      {
+	       NumChars2 = Str_GetNextASCIICharFromStr ((*PtrSrc),&Ch);
+	       (*PtrSrc) += NumChars2;
+	       if (Ch <= 32 || Ch == '<' || Ch == '"')
+		 {
+		  PtrEnd = (*PtrSrc) - NumChars2 - NumChars1 - 1;
+		  break;
+		 }
+	      }
+	   }
+
+	 /***** Calculate length of this URL *****/
+	 (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere : 0;
+	 (*Link)->URLorNick.Len = (size_t) (PtrEnd + 1 - (*Link)->URLorNick.Str);
+	 if ((*Link)->URLorNick.Len <= MaxCharsURLOnScreen)
+	    (*Link)->AddedLengthUntilHere += ANCHOR_URL_TOTAL_LENGTH +
+					     (*Link)->URLorNick.Len;
+	 else	// If URL is too long to be displayed ==> short it
+	   {
+	    /***** Limit the length of URL and calculate its length in bytes *****/
+	    if ((Limited = malloc ((*Link)->URLorNick.Len + 1)) == NULL)
+	       Err_NotEnoughMemoryExit ();
+	    strncpy (Limited,(*Link)->URLorNick.Str,(*Link)->URLorNick.Len);
+	    Limited[(*Link)->URLorNick.Len] = '\0';
+	    (*Link)->AddedLengthUntilHere += ANCHOR_URL_TOTAL_LENGTH +
+					     Str_LimitLengthHTMLStr (Limited,MaxCharsURLOnScreen);
+	    free (Limited);
+	   }
+
+	 /***** Create next link *****/
+	 Str_CreateNextLink (Link,LastLink);
+	}
+
+      return true;
+     }
+
+   return false;
+  }
+
+/************************* Check if a nickname found *************************/
+
+static bool Str_CheckNickname (char **PtrSrc,
+			       struct Str_Link **Link,
+			       struct Str_Link **LastLink)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   size_t Length;
+   char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
+
+   /***** Check if the next char is the start of a nickname *****/
+   if ((int) *(*PtrSrc) == (int) '@')
+     {
+      (*Link)->URLorNick.Str = (*PtrSrc);
+
+      /***** Find nickname end *****/
+      (*PtrSrc)++;	// Points to first character after @
+
+      /***** A nick can have digits, letters and '_'  *****/
+      for (;
+	   *(*PtrSrc);
+	   (*PtrSrc)++)
+	 if (!((*(*PtrSrc) >= 'a' && *(*PtrSrc) <= 'z') ||
+	       (*(*PtrSrc) >= 'A' && *(*PtrSrc) <= 'Z') ||
+	       (*(*PtrSrc) >= '0' && *(*PtrSrc) <= '9') ||
+	       (*(*PtrSrc) == '_')))
+	    break;
+
+      /***** Calculate length of this nickname *****/
+      (*Link)->URLorNick.Len = (size_t) ((*PtrSrc) - (*Link)->URLorNick.Str);
+
+      /***** A nick (without arroba) must have a number of characters
+	     Nck_MIN_CHARS_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA *****/
+      Length = (*Link)->URLorNick.Len - 1;	// Do not count the initial @
+      if (Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
+	  Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA)
+	 (*Link)->Type = Str_LINK_NICK;
+
+      if ((*Link)->Type == Str_LINK_NICK)
+	{
+	 /***** Create id for this form *****/
+	 Gbl.Form.Num++;
+	 if (Gbl.Usrs.Me.Logged)
+	    snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
+		      "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+	 else
+	    snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
+		      "form_%d",Gbl.Form.Num);
+
+	 /***** Store first part of anchor *****/
+	 Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
+	 if (asprintf (&(*Link)->AnchorNick1.Str,
+		       "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
+		       "%s"	// Parameters
+		       "<input type=\"hidden\" name=\"usr\" value=\"",
+		       Cfg_URL_SWAD_CGI,
+		       Lan_STR_LANG_ID[Gbl.Prefs.Language],
+		       Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+					    Gbl.Form.Id,
+		       ParamsStr) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 (*Link)->AnchorNick1.Len = strlen ((*Link)->AnchorNick1.Str);
+
+	 /***** Store second part of anchor *****/
+	 if (asprintf (&(*Link)->AnchorNick2.Str,
+		       "\">"
+		       "<a href=\"\""
+		       " onclick=\"document.getElementById('%s').submit();return false;\">",
+		       Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+					    Gbl.Form.Id) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 (*Link)->AnchorNick2.Len = strlen ((*Link)->AnchorNick2.Str);
+
+	 (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere : 0;
+	 (*Link)->AddedLengthUntilHere += (*Link)->AnchorNick1.Len +
+				          (*Link)->AnchorNick2.Len +
+				                   AnchorNick3.Len +
+				          (*Link)->URLorNick.Len;
+
+	 /***** Create next link *****/
+	 Str_CreateNextLink (Link,LastLink);
+	}
+
+      return true;
+     }
+
+   return false;
+  }
+
+/************** Copy source substring to destination, backwards **************/
+
+static void Str_InsertSubstring (const struct Str_Substring *PtrSrc,char **PtrDst)
+  {
+   size_t i;
+   char *PtrSrcStart;
+   char *PtrDstStart;
+   size_t Len = PtrSrc->Len;
+
+   *PtrDst -= Len;		// Update destination pointer
+   PtrSrcStart = PtrSrc->Str;
+   PtrDstStart = *PtrDst + 1;
+   for (i = 0;
+	i < Len;
+	i++)
+      *PtrDstStart++ = *PtrSrcStart++;
   }
 
 /*****************************************************************************/

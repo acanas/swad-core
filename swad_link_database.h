@@ -35,7 +35,7 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Lnk_DB_CreateLink (const struct Link *Lnk);
+void Lnk_DB_CreateLink (const struct Str_Link *Lnk);
 void Lnk_DB_UpdateLnkName (long LnkCod,const char *FieldName,const char *NewLnkName);
 void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 

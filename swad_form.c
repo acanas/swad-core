@@ -169,7 +169,7 @@ void Frm_BeginFormNoAction (void)
   }
 
 void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_t NextAction,
-                        bool PutParameterLocationIfNoSesion)
+                        bool PutParameterLocationIfNoSession)
   {
    char ParamAction[Frm_MAX_BYTES_PARAM_ACTION + 1];
    char ParamSession[Frm_MAX_BYTES_PARAM_SESSION + 1];
@@ -189,7 +189,7 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	 snprintf (ParamSession,sizeof (ParamSession),
 		   "<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
 		   Gbl.Session.Id);
-      else if (PutParameterLocationIfNoSesion)
+      else if (PutParameterLocationIfNoSession)
 	 // Extra parameters necessary when there's no open session
 	{
 	 /* If session is open, course code will be get from session data,

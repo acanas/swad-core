@@ -304,7 +304,7 @@ void Tml_RefreshNewTimelineGbl (void)
    /***** Get which users *****/
    Timeline.Who = Tml_Who_GetGlobalWho ();
 
-   /***** Get list of pubications to show in timeline *****/
+   /***** Get list of publications to show in timeline *****/
    Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
    Timeline.WhatToGet = Tml_GET_NEW_PUBS;
    Tml_Pub_GetListPubsToShowInTimeline (&Timeline);

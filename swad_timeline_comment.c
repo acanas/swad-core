@@ -631,7 +631,7 @@ static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com)
    if (Com->Content.Txt[0])
      {
       HTM_DIV_Begin ("class=\"Tml_TXT\"");
-	 Msg_WriteMsgContent (Com->Content.Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (Com->Content.Txt,true,false);
       HTM_DIV_End ();
      }
 

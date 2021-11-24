@@ -125,7 +125,7 @@ static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
    if (Content->Txt[0])
      {
       HTM_DIV_Begin ("class=\"Tml_TXT\"");
-	 Msg_WriteMsgContent (Content->Txt,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 Msg_WriteMsgContent (Content->Txt,true,false);
       HTM_DIV_End ();
      }
 

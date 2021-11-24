@@ -629,7 +629,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (struct Msg_Messages *Messag
 		  if (!SubjectAndContentComeFromForm)
 		     HTM_TxtF ("\n\n----- %s -----\n",Txt_Original_message);
 
-		  Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,false,true);
+		  Msg_WriteMsgContent (Content,false,true);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
       	}
@@ -2156,7 +2156,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 /***** Show content and media *****/
 	 HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
 	    if (Content[0])
-	       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	       Msg_WriteMsgContent (Content,true,false);
 	    Med_ShowMedia (&Media,"MSG_IMG_CONT","MSG_IMG");
 	 HTM_TD_End ();
 
@@ -2682,11 +2682,12 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 /********************* Write the text (content) of a message *****************/
 /*****************************************************************************/
 
-void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks,bool ChangeBRToRet)
+void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+                          bool InsertLinks,bool ChangeBRToRet)
   {
    /***** Insert links in URLs *****/
    if (InsertLinks)
-      Str_InsertLinks (Content,MaxLength,60);
+      Str_InsertLinks (Content,Cns_MAX_BYTES_LONG_TEXT,60);
 
    /***** Write message to file *****/
    if (ChangeBRToRet)

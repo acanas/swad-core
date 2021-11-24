@@ -33,7 +33,7 @@
 #define Lnk_MAX_CHARS_LINK_FULL_NAME	(128 - 1)	// 127
 #define Lnk_MAX_BYTES_LINK_FULL_NAME	((Lnk_MAX_CHARS_LINK_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-struct Link
+struct Str_Link
   {
    long LnkCod;
    char ShrtName[Lnk_MAX_BYTES_LINK_SHRT_NAME + 1];
@@ -54,7 +54,7 @@ void Lnk_PutIconToViewLinks (void);
 
 void Lnk_GetListLinks (void);
 void Lnk_FreeListLinks (void);
-void Lnk_GetDataOfLinkByCod (struct Link *Lnk);
+void Lnk_GetDataOfLinkByCod (struct Str_Link *Lnk);
 long Lnk_GetParamLnkCod (void);
 void Lnk_RemoveLink (void);
 void Lnk_RenameLinkShort (void);
