@@ -34,6 +34,7 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
+#include "swad_database.h"	// TODO: Remove
 #include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -85,14 +86,14 @@ static void Str_CreateFirstLink (struct Str_Link **Link,
 static void Str_CreateNextLink (struct Str_Link **Link,
                                 struct Str_Link **LastLink);
 static void Str_FreeLinks (struct Str_Link *LastLink);
-static bool Str_CheckURL (char **PtrSrc,
-                          struct Str_Link **Link,
-                          struct Str_Link **LastLink,
-                          size_t MaxCharsURLOnScreen);
-static bool Str_CheckNickname (char **PtrSrc,
-			       struct Str_Link **Link,
-			       struct Str_Link **LastLink);
-static void Str_InsertSubstring (const struct Str_Substring *PtrSrc,char **PtrDst);
+static Str_LinkType_t Str_CheckURL (char **PtrSrc,
+				    struct Str_Link **Link,
+				    struct Str_Link **LastLink,
+				    size_t MaxCharsURLOnScreen);
+static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
+                                         struct Str_Link **Link,
+                                         struct Str_Link **LastLink);
+static void Str_CopySubstring (const struct Str_Substring *PtrSrc,char **PtrDst);
 
 static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
 
@@ -197,16 +198,15 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 
    for (PtrSrc = Txt;
 	*PtrSrc;)
-     {
-      Link->Type = Str_LINK_UNKNOWN;
-
       /* Check if the next char is the start of a URL */
-      if (!Str_CheckURL (&PtrSrc,&Link,&LastLink,MaxCharsURLOnScreen))
+      if ((Link->Type = Str_CheckURL (&PtrSrc,
+                                      &Link,&LastLink,
+                                      MaxCharsURLOnScreen)) == Str_LINK_UNKNOWN)
 	 /* Check if the next char is the start of a nickname */
-	 if (!Str_CheckNickname (&PtrSrc,&Link,&LastLink))
+	 if ((Link->Type = Str_CheckNickname (&PtrSrc,
+	                                      &Link,&LastLink)) == Str_LINK_UNKNOWN)
 	    /* The next char is not the start of a URL or a nickname */
 	    PtrSrc++;
-     }
 
    /**********************************************************************/
    /***** If there are one or more links (URLs or nicknames) in text *****/
@@ -216,7 +216,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
       /***** Insert links from end to start of text,
              only if there is enough space available in text *****/
       TxtLength = strlen (Txt);
-      if (TxtLength + LastLink->AddedLengthUntilHere <= MaxLength)
+       if (TxtLength + LastLink->AddedLengthUntilHere <= MaxLength)
          for (Link = LastLink;
               Link;
               Link = Link->Prev)
@@ -250,8 +250,8 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                  i++)
                *PtrDst-- = *PtrSrc--;
 
-            /***** Step 2: Insert thirs part of anchor *****/
-            Str_InsertSubstring (Anchor3,&PtrDst);
+            /***** Step 2: Copy third part of anchor *****/
+            Str_CopySubstring (Anchor3,&PtrDst);
 
             /***** Step 3: Move forward the link (URL or nickname)
                            to be shown on screen *****/
@@ -259,7 +259,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
               {
                case Str_LINK_URL:
         	  if (Link->URLorNick.Len <= MaxCharsURLOnScreen)
-		     Str_InsertSubstring (&Link->URLorNick,&PtrDst);
+		     Str_CopySubstring (&Link->URLorNick,&PtrDst);
         	  else
         	    {
 		     /* Limit the length of URL */
@@ -268,27 +268,27 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		     strncpy (Limited.Str,Link->URLorNick.Str,Link->URLorNick.Len);
 		     Limited.Str[Link->URLorNick.Len] = '\0';
 		     Limited.Len = Str_LimitLengthHTMLStr (Limited.Str,MaxCharsURLOnScreen);
-		     Str_InsertSubstring (&Limited,&PtrDst);
+		     Str_CopySubstring (&Limited,&PtrDst);
 		     free (Limited.Str);
         	    }
 		  break;
                case Str_LINK_NICK:
-                  Str_InsertSubstring (&Link->URLorNick,&PtrDst);
+                  Str_CopySubstring (&Link->URLorNick,&PtrDst);
 		  break;
                default:
         	  break;
               }
 
-            /***** Step 4: Insert second part of anchor *****/
-            Str_InsertSubstring (Anchor2,&PtrDst);
+            /***** Step 4: Copy second part of anchor *****/
+            Str_CopySubstring (Anchor2,&PtrDst);
 
-            /***** Step 5: Insert link into directive A
+            /***** Step 5: Copy link into directive A
                            (it's mandatory to do the copy in reverse order
                            to avoid overwriting source URL or nickname) *****/
-            Str_InsertSubstring (&Link->URLorNick,&PtrDst);
+            Str_CopySubstring (&Link->URLorNick,&PtrDst);
 
-            /***** Step 6: Insert first part of anchor *****/
-            Str_InsertSubstring (Anchor1,&PtrDst);
+            /***** Step 6: Copy first part of anchor *****/
+            Str_CopySubstring (Anchor1,&PtrDst);
            }
      }
 
@@ -354,16 +354,17 @@ static void Str_FreeLinks (struct Str_Link *LastLink)
 
 /**************************** Check if a URL found ***************************/
 
-static bool Str_CheckURL (char **PtrSrc,
-                          struct Str_Link **Link,
-                          struct Str_Link **LastLink,
-                          size_t MaxCharsURLOnScreen)
+static Str_LinkType_t Str_CheckURL (char **PtrSrc,
+				    struct Str_Link **Link,
+				    struct Str_Link **LastLink,
+				    size_t MaxCharsURLOnScreen)
   {
    unsigned char Ch;
    size_t NumChars1;
    size_t NumChars2;
    char *PtrEnd;	// Pointer to the last char of URL/nickname in original text
    char *Limited;	// URL displayed on screen (may be shorter than actual length)
+   Str_LinkType_t Type = Str_LINK_UNKNOWN;
 
    /***** Check if the next char is the start of a URL *****/
    if (tolower ((int) *(*PtrSrc)) == (int) 'h')
@@ -380,7 +381,7 @@ static bool Str_CheckURL (char **PtrSrc,
 		 {
 		  if (*++(*PtrSrc) ==  '/') // http:/...
 		     if (*++(*PtrSrc) == '/') // http://...
-			(*Link)->Type = Str_LINK_URL;
+			Type = Str_LINK_URL;
 		 }
 	       else if (tolower ((int) *(*PtrSrc)) == (int) 's') // https...
 		 {
@@ -388,13 +389,13 @@ static bool Str_CheckURL (char **PtrSrc,
 		    {
 		     if (*++(*PtrSrc) == '/') // https:/...
 			if (*++(*PtrSrc) == '/') // https://...
-			   (*Link)->Type = Str_LINK_URL;
+			   Type = Str_LINK_URL;
 		    }
 		 }
 	      }
 	   }
 	}
-      if ((*Link)->Type == Str_LINK_URL)
+      if (Type == Str_LINK_URL)
 	{
 	 /***** Find URL end *****/
 	 (*PtrSrc)++;	// Points to first character after http:// or https://
@@ -441,22 +442,21 @@ static bool Str_CheckURL (char **PtrSrc,
 	 /***** Create next link *****/
 	 Str_CreateNextLink (Link,LastLink);
 	}
-
-      return true;
      }
 
-   return false;
+   return Type;
   }
 
 /************************* Check if a nickname found *************************/
 
-static bool Str_CheckNickname (char **PtrSrc,
-			       struct Str_Link **Link,
-			       struct Str_Link **LastLink)
+static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
+                                         struct Str_Link **Link,
+                                         struct Str_Link **LastLink)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    size_t Length;
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
+   Str_LinkType_t Type = Str_LINK_UNKNOWN;
 
    /***** Check if the next char is the start of a nickname *****/
    if ((int) *(*PtrSrc) == (int) '@')
@@ -484,9 +484,9 @@ static bool Str_CheckNickname (char **PtrSrc,
       Length = (*Link)->URLorNick.Len - 1;	// Do not count the initial @
       if (Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
 	  Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA)
-	 (*Link)->Type = Str_LINK_NICK;
+	 Type = Str_LINK_NICK;
 
-      if ((*Link)->Type == Str_LINK_NICK)
+      if (Type == Str_LINK_NICK)
 	{
 	 /***** Create id for this form *****/
 	 Gbl.Form.Num++;
@@ -530,29 +530,49 @@ static bool Str_CheckNickname (char **PtrSrc,
 	 /***** Create next link *****/
 	 Str_CreateNextLink (Link,LastLink);
 	}
-
-      return true;
      }
 
-   return false;
+   return Type;
   }
 
 /************** Copy source substring to destination, backwards **************/
 
-static void Str_InsertSubstring (const struct Str_Substring *PtrSrc,char **PtrDst)
+static void Str_CopySubstring (const struct Str_Substring *Src,char **Dst)
   {
-   size_t i;
-   char *PtrSrcStart;
-   char *PtrDstStart;
-   size_t Len = PtrSrc->Len;
-
-   *PtrDst -= Len;		// Update destination pointer
-   PtrSrcStart = PtrSrc->Str;
-   PtrDstStart = *PtrDst + 1;
-   for (i = 0;
-	i < Len;
-	i++)
-      *PtrDstStart++ = *PtrSrcStart++;
+   char *PtrSrc;	// Local pointer optimizes access to memory
+   char *PtrDst;	// Local pointer optimizes access to memory
+   size_t Len = Src->Len;
+   /*
+   Example: Src->Str = "<a href=\""
+            Src->Len = 9
+   Src->Str
+      |
+     _v_________________
+     |<|a|_|h|r|e|f|=|"|
+      | | | | | | | | |
+       \ \ \ \ \ \ \ \ \
+        \ \ \ \ \ \ \ \ \
+         \ \ \ \ \ \ \ \ \
+          \ \ \ \ \ \ \ \ \
+           \ \ \ \ \ \ \ \ \
+            | | | | | | | | |
+     _______v_v_v_v_v_v_v_v_v_____________
+     |_|_|_|<|a|_|h|r|e|f|=|"|_|_|_|_|_|_|
+          ^                 ^
+          |                 |
+       PtrDst            (*Dst)
+   The copy has to be done backwards to avoid overwriting the original string
+   */
+   if (Len)
+     {
+      PtrSrc = Src->Str + Len - 1;
+      PtrDst = *Dst;	// Make a local copy of destination pointer
+      for (;
+	   Len;
+	   Len--)
+	 *PtrDst-- = *PtrSrc--;
+      *Dst = PtrDst;	// Update destination pointer
+     }
   }
 
 /*****************************************************************************/
