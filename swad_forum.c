@@ -870,7 +870,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
-   Enabled = For_DB_GetIfPstIsEnabled (Forums->PstCod);
+   Enabled = !For_DB_GetIfPstIsDisabled (Forums->PstCod);
 
    /***** Get data of post *****/
    For_GetPstData (Forums->PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
@@ -1999,7 +1999,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 
    /***** Fill the list of threads for current page *****/
    mysql_data_seek (mysql_res,(my_ulonglong) (PaginationThrs.FirstItemVisible - 1));
-   for (NumThr = PaginationThrs.FirstItemVisible, NumThrInScreen = 0;
+   for (NumThr  = PaginationThrs.FirstItemVisible, NumThrInScreen = 0;
         NumThr <= PaginationThrs.LastItemVisible;
         NumThr++, NumThrInScreen++)
       /* Get thread code(row[0]) */
@@ -2351,8 +2351,7 @@ static void For_GetThreadData (struct For_Thread *Thr)
    for (Order  = Dat_STR_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
-      Thr->Enabled[Order] = For_DB_GetIfPstIsEnabled (Thr->PstCod[Order]);
-      // Thr->Enabled[Order] = true;
+      Thr->Enabled[Order] = !For_DB_GetIfPstIsDisabled (Thr->PstCod[Order]);
 
    /***** Get number of posts in this thread *****/
    Thr->NumPosts = For_DB_GetNumPstsInThr (Thr->ThrCod);

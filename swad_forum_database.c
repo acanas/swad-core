@@ -935,14 +935,14 @@ void For_DB_InsertPstIntoDisabled (long PstCod)
   }
 
 /*****************************************************************************/
-/*********************** Get if a forum post is enabled **********************/
+/*********************** Get if a forum post is disabled *********************/
 /*****************************************************************************/
 
-bool For_DB_GetIfPstIsEnabled (long PstCod)
+bool For_DB_GetIfPstIsDisabled (long PstCod)
   {
    /***** Trivial check: post code should be > 0 *****/
    if (PstCod <= 0)
-      return false;
+      return true;
 
    /***** Get if post is disabled from database *****/
    return

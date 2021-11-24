@@ -572,7 +572,7 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,char PrevCh,
 		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 		  Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 							     NULL,
-					 "PHOTO15x20",Pho_ZOOM,
+					 "PHOTO12x16",Pho_ZOOM,
 					 &CaptionStr,
 					 &ImgStr);
 		  if (asprintf (&(*Link)->Nick.Anchor3.Str,
