@@ -28,6 +28,7 @@
 #define _GNU_SOURCE 		// For asprintf
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 
 #include "swad_attendance.h"
 #include "swad_attendance_database.h"
