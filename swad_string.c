@@ -34,13 +34,16 @@
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
-#include "swad_database.h"	// TODO: Remove
 #include "swad_error.h"
+#include "swad_follow.h"	// TODO: Remove?
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
+#include "swad_institution.h"	// TODO: Remove?
+#include "swad_nickname_database.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
+#include "swad_photo.h"		// TODO: Remove?
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -64,8 +67,12 @@ struct Str_Link
   {
    Str_LinkType_t Type;
    struct Str_Substring URLorNick;
-   struct Str_Substring AnchorNick1;
-   struct Str_Substring AnchorNick2;
+   struct
+     {
+      struct Str_Substring Anchor1;
+      struct Str_Substring Anchor2;
+      struct Str_Substring Anchor3;
+     } Nick;
    size_t AddedLengthUntilHere;	// Total length of extra HTML code added until this link (included)
    struct Str_Link *Prev;
    struct Str_Link *Next;
@@ -94,6 +101,10 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
                                          struct Str_Link **Link,
                                          struct Str_Link **LastLink);
 static void Str_CopySubstring (const struct Str_Substring *PtrSrc,char **PtrDst);
+static void Str_GetUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+                             const char *ClassPhoto,
+                             char **CaptionStr,
+                             char **ImgStr);
 
 static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
 
@@ -142,41 +153,43 @@ action="https://localhost/swad/es" method="post">
 */
 
 // For URLs the length of anchor is fixed, so it can be calculated once
-#define ANCHOR_URL_1		"<a href=\""
-#define ANCHOR_URL_2		"\" target=\"_blank\">"
-#define ANCHOR_URL_3		"</a>"
-#define ANCHOR_URL_1_LENGTH	(sizeof (ANCHOR_URL_1) - 1)
-#define ANCHOR_URL_2_LENGTH	(sizeof (ANCHOR_URL_2) - 1)
-#define ANCHOR_URL_3_LENGTH	(sizeof (ANCHOR_URL_3) - 1)
-#define ANCHOR_URL_TOTAL_LENGTH	(ANCHOR_URL_1_LENGTH + ANCHOR_URL_2_LENGTH + ANCHOR_URL_3_LENGTH)
+#define URL_ANCHOR_1		"<a href=\""
+#define URL_ANCHOR_2		"\" target=\"_blank\">"
+#define URL_ANCHOR_3		"</a>"
+#define URL_ANCHOR_1_LENGTH	(sizeof (URL_ANCHOR_1) - 1)
+#define URL_ANCHOR_2_LENGTH	(sizeof (URL_ANCHOR_2) - 1)
+#define URL_ANCHOR_3_LENGTH	(sizeof (URL_ANCHOR_3) - 1)
+#define URL_ANCHOR_TOTAL_LENGTH	(URL_ANCHOR_1_LENGTH + URL_ANCHOR_2_LENGTH + URL_ANCHOR_3_LENGTH)
 
 // For nicknames the length of anchor is variable,
 // so it can be calculated for each link,
 // except the third part that is fixed
-#define ANCHOR_NICK_3		"</a></form>"
-#define ANCHOR_NICK_3_LENGTH	(sizeof (ANCHOR_NICK_3) - 1)
-
-static const struct Str_Substring AnchorURL1 =
+/*
+#define NICK_ANCHOR_3		"</a></form>"
+#define NICK_ANCHOR_3_LENGTH	(sizeof (NICK_ANCHOR_3) - 1)
+*/
+static const struct Str_Substring URLAnchor1 =
   {
-  .Str = ANCHOR_URL_1,
-  .Len = ANCHOR_URL_1_LENGTH,
+  .Str = URL_ANCHOR_1,
+  .Len = URL_ANCHOR_1_LENGTH,
   };
-static const struct Str_Substring AnchorURL2 =
+static const struct Str_Substring URLAnchor2 =
   {
-  .Str = ANCHOR_URL_2,
-  .Len = ANCHOR_URL_2_LENGTH,
+  .Str = URL_ANCHOR_2,
+  .Len = URL_ANCHOR_2_LENGTH,
   };
-static const struct Str_Substring AnchorURL3 =
+static const struct Str_Substring URLAnchor3 =
   {
-  .Str = ANCHOR_URL_3,
-  .Len = ANCHOR_URL_3_LENGTH,
+  .Str = URL_ANCHOR_3,
+  .Len = URL_ANCHOR_3_LENGTH,
   };
-static const struct Str_Substring AnchorNick3 =
+/*
+static const struct Str_Substring NickAnchor3 =
   {
-  .Str = ANCHOR_NICK_3,
-  .Len = ANCHOR_NICK_3_LENGTH,
+  .Str = NICK_ANCHOR_3,
+  .Len = NICK_ANCHOR_3_LENGTH,
   };
-
+*/
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    size_t TxtLength;
@@ -225,14 +238,14 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             switch (Link->Type)
               {
                case Str_LINK_URL:
-                  Anchor1 = &AnchorURL1;
-                  Anchor2 = &AnchorURL2;
-                  Anchor3 = &AnchorURL3;
+                  Anchor1 = &URLAnchor1;
+                  Anchor2 = &URLAnchor2;
+                  Anchor3 = &URLAnchor3;
 		  break;
                case Str_LINK_NICK:
-                  Anchor1 = &Link->AnchorNick1;
-                  Anchor2 = &Link->AnchorNick2;
-                  Anchor3 =       &AnchorNick3;
+                  Anchor1 = &Link->Nick.Anchor1;
+                  Anchor2 = &Link->Nick.Anchor2;
+                  Anchor3 = &Link->Nick.Anchor3;
 		  break;
                default:
         	  continue;
@@ -348,6 +361,12 @@ static void Str_FreeLinks (struct Str_Link *LastLink)
 	Link = PrevLink)
      {
       PrevLink = Link->Prev;
+      if (Link->Type == Str_LINK_NICK)
+	{
+	 if (Link->Nick.Anchor3.Str) free (Link->Nick.Anchor3.Str);
+	 if (Link->Nick.Anchor2.Str) free (Link->Nick.Anchor2.Str);
+	 if (Link->Nick.Anchor1.Str) free (Link->Nick.Anchor1.Str);
+	}
       free (Link);
      }
   }
@@ -421,20 +440,19 @@ static Str_LinkType_t Str_CheckURL (char **PtrSrc,
 	      }
 	   }
 
-	 /***** Calculate length of this URL *****/
+	 /***** Compute number of bytes added until here *****/
 	 (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere : 0;
 	 (*Link)->URLorNick.Len = (size_t) (PtrEnd + 1 - (*Link)->URLorNick.Str);
 	 if ((*Link)->URLorNick.Len <= MaxCharsURLOnScreen)
-	    (*Link)->AddedLengthUntilHere += ANCHOR_URL_TOTAL_LENGTH +
+	    (*Link)->AddedLengthUntilHere += URL_ANCHOR_TOTAL_LENGTH +
 					     (*Link)->URLorNick.Len;
 	 else	// If URL is too long to be displayed ==> short it
 	   {
-	    /***** Limit the length of URL and calculate its length in bytes *****/
 	    if ((Limited = malloc ((*Link)->URLorNick.Len + 1)) == NULL)
 	       Err_NotEnoughMemoryExit ();
 	    strncpy (Limited,(*Link)->URLorNick.Str,(*Link)->URLorNick.Len);
 	    Limited[(*Link)->URLorNick.Len] = '\0';
-	    (*Link)->AddedLengthUntilHere += ANCHOR_URL_TOTAL_LENGTH +
+	    (*Link)->AddedLengthUntilHere += URL_ANCHOR_TOTAL_LENGTH +
 					     Str_LimitLengthHTMLStr (Limited,MaxCharsURLOnScreen);
 	    free (Limited);
 	   }
@@ -456,6 +474,12 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    size_t Length;
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
+   struct UsrData UsrDat;
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX + 1];
+   char *CaptionStr;
+   char *ImgStr;
+   char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
    Str_LinkType_t Type = Str_LINK_UNKNOWN;
 
    /***** Check if the next char is the start of a nickname *****/
@@ -484,10 +508,27 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
       Length = (*Link)->URLorNick.Len - 1;	// Do not count the initial @
       if (Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
 	  Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA)
+	{
+	 strncpy (NickWithoutArr,(*Link)->URLorNick.Str + 1,Length);
+	 NickWithoutArr[Length] = '\0';
 	 Type = Str_LINK_NICK;
+	}
 
       if (Type == Str_LINK_NICK)
 	{
+	 /***** Get user's code using nickname *****/
+         Usr_UsrDataConstructor (&UsrDat);
+	 UsrDat.UsrCod = Nck_DB_GetUsrCodFromNickname (NickWithoutArr);
+	 if (UsrDat.UsrCod > 0)
+	    Usr_GetUsrDataFromUsrCod (&UsrDat,
+				      Usr_DONT_GET_PREFS,
+				      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+
+	 /***** Reset anchors (checked on freeing) *****/
+	 (*Link)->Nick.Anchor1.Str =
+	 (*Link)->Nick.Anchor2.Str =
+	 (*Link)->Nick.Anchor3.Str = NULL;
+
 	 /***** Create id for this form *****/
 	 Gbl.Form.Num++;
 	 if (Gbl.Usrs.Me.Logged)
@@ -499,7 +540,7 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
 
 	 /***** Store first part of anchor *****/
 	 Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
-	 if (asprintf (&(*Link)->AnchorNick1.Str,
+	 if (asprintf (&(*Link)->Nick.Anchor1.Str,
 		       "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
 		       "%s"	// Parameters
 		       "<input type=\"hidden\" name=\"usr\" value=\"",
@@ -509,23 +550,44 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
 					    Gbl.Form.Id,
 		       ParamsStr) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 (*Link)->AnchorNick1.Len = strlen ((*Link)->AnchorNick1.Str);
+	 (*Link)->Nick.Anchor1.Len = strlen ((*Link)->Nick.Anchor1.Str);
 
 	 /***** Store second part of anchor *****/
-	 if (asprintf (&(*Link)->AnchorNick2.Str,
+	 if (asprintf (&(*Link)->Nick.Anchor2.Str,
 		       "\">"
 		       "<a href=\"\""
 		       " onclick=\"document.getElementById('%s').submit();return false;\">",
 		       Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 					    Gbl.Form.Id) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 (*Link)->AnchorNick2.Len = strlen ((*Link)->AnchorNick2.Str);
+	 (*Link)->Nick.Anchor2.Len = strlen ((*Link)->Nick.Anchor2.Str);
 
+	 /***** Store third part of anchor *****/
+         ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	 Str_GetUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+					      NULL,
+                          "PHOTO15x20",
+                          &CaptionStr,
+                          &ImgStr);
+	 if (asprintf (&(*Link)->Nick.Anchor3.Str,
+		       "</a></form>"
+		       "%s%s",
+		       CaptionStr,
+                       ImgStr) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 free (ImgStr);
+	 free (CaptionStr);
+	 (*Link)->Nick.Anchor3.Len = strlen ((*Link)->Nick.Anchor3.Str);
+
+	 /***** Free memory used for user's data *****/
+         Usr_UsrDataDestructor (&UsrDat);
+
+	 /***** Compute number of bytes added until here *****/
 	 (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere : 0;
-	 (*Link)->AddedLengthUntilHere += (*Link)->AnchorNick1.Len +
-				          (*Link)->AnchorNick2.Len +
-				                   AnchorNick3.Len +
-				          (*Link)->URLorNick.Len;
+	 (*Link)->AddedLengthUntilHere += (*Link)->Nick.Anchor1.Len +
+					  (*Link)->URLorNick.Len +
+					  (*Link)->Nick.Anchor2.Len +
+					  (*Link)->Nick.Anchor3.Len;
 
 	 /***** Create next link *****/
 	 Str_CreateNextLink (Link,LastLink);
@@ -572,6 +634,178 @@ static void Str_CopySubstring (const struct Str_Substring *Src,char **Dst)
 	   Len--)
 	 *PtrDst-- = *PtrSrc--;
       *Dst = PtrDst;	// Update destination pointer
+     }
+  }
+
+/*****************************************************************************/
+/*************************** Show a user's photo *****************************/
+/*****************************************************************************/
+
+static void Str_GetUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+                             const char *ClassPhoto,
+                             char **CaptionStr,
+                             char **ImgStr)
+  {
+   extern const char *Rol_Icons[Rol_NUM_ROLES];
+   extern const char *Txt_Following;
+   extern const char *Txt_Followers;
+   unsigned NumFollowing;
+   unsigned NumFollowers;
+   bool PhotoExists;
+   char IdCaption[Frm_MAX_BYTES_ID + 1];
+   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   struct Ins_Instit Ins;
+   char MainDegreeShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
+   Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
+   struct
+     {
+      char *Name;
+      char *Nick;
+      char *InsCty;
+      char *MainDeg;
+      char *Follow;
+     } Caption;
+
+   /***** First name and surnames *****/
+   if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE DAT_N_BOLD\">"	// Limited width
+				  "%s<br />"
+				  "%s%s%s"
+			       "</div>",
+		 UsrDat->FrstName,
+		 UsrDat->Surname1,
+		 UsrDat->Surname2[0] ? "&nbsp;" :
+				       "",
+		 UsrDat->Surname2[0] ? UsrDat->Surname2 :
+				       "") < 0)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Nickname *****/
+   if (UsrDat->Nickname[0])
+     {
+      if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
+				     "@%s"
+				  "</div>",
+		    UsrDat->Nickname) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else if (asprintf (&Caption.Nick,"%s","") < 0)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Institution full name and institution country *****/
+   if (UsrDat->InsCod > 0)
+     {
+      /***** Get institution short name and country name *****/
+      Ins.InsCod = UsrDat->InsCod;
+      Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
+
+      /***** Write institution short name and country name *****/
+      if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+				       "%s&nbsp;(%s)"
+				    "</div>",
+		    Ins.ShrtName,CtyName) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else if (UsrDat->CtyCod > 0)
+     {
+      /***** Get country name *****/
+      Cty_GetCountryName (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
+
+      /***** Write country name *****/
+      if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+				       "%s"
+				    "</div>",
+			       CtyName) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else if (asprintf (&Caption.InsCty,"%s","") < 0)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Main degree (in which the user has more courses) short name *****/
+   Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
+   if (MainDegreeShrtName[0])
+     {
+      if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+					 "<div class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\">"
+					    "%s"
+					 "</div>"
+				      "</div>",
+				Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
+				MainDegreeShrtName) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else if (asprintf (&Caption.MainDeg,"%s","") < 0)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Following and followers *****/
+   if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
+     {
+      Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+      if (asprintf (&Caption.Follow,"<div class=\"ZOOM_TXT_LINE\">"
+					"<span class=\"DAT_N_BOLD\">"
+					   "%u"
+					"</span>"
+					"<span class=\"DAT_SMALL\">"
+					   "&nbsp;%s&nbsp;"
+					"</span>"
+					"<span class=\"DAT_N_BOLD\">"
+					   "%u"
+					"</span>"
+					"<span class=\"DAT_SMALL\">"
+					   "&nbsp;%s"
+					"</span>"
+				     "</div>",
+		    NumFollowing,
+		    Txt_Following,
+		    NumFollowers,
+		    Txt_Followers) < 0)
+	 Err_NotEnoughMemoryExit ();
+     }
+   else if (asprintf (&Caption.Follow,"%s","") < 0)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Hidden div *****/
+   Frm_SetUniqueId (IdCaption);
+   if (asprintf (CaptionStr,"<div id=\"%s\" class=\"NOT_SHOWN\">"
+			       "%s%s%s%s%s"
+			    "</div>",
+                 IdCaption,
+                 Caption.Name,
+                 Caption.Nick,
+                 Caption.InsCty,
+                 Caption.MainDeg,
+                 Caption.Follow) < 0)
+       Err_NotEnoughMemoryExit ();
+   free (Caption.Follow);
+   free (Caption.MainDeg);
+   free (Caption.InsCty);
+   free (Caption.Nick);
+   free (Caption.Name);
+
+   /***** Image zoom *****/
+   PhotoExists = false;
+   if (PhotoURL)
+      if (PhotoURL[0])
+	 PhotoExists = true;
+
+   if (PhotoExists)
+     {
+      if (asprintf (ImgStr,"<img src=\"%s\" alt=\"%s\" title=\"%s\" class=\"%s\""
+			   " onmouseover=\"zoom(this,'%s','%s');\""
+			   " onmouseout=\"noZoom();\""
+			   " />",
+		    PhotoURL,UsrDat->FullName,UsrDat->FullName,ClassPhoto,
+		    PhotoURL,IdCaption) < 0)
+         Err_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"%s\" title=\"%s\" class=\"%s\""
+			   " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
+			   " onmouseout=\"noZoom();\""
+			   " />",
+		    Cfg_URL_ICON_PUBLIC,UsrDat->FullName,UsrDat->FullName,ClassPhoto,
+		    Cfg_URL_ICON_PUBLIC,IdCaption) < 0)
+         Err_NotEnoughMemoryExit ();
      }
   }
 

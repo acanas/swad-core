@@ -82,9 +82,6 @@ static void Ins_PutIconToViewInstitutions (void);
 
 static void Ins_GetDataOfInstitFromRow (struct Ins_Instit *Ins,MYSQL_ROW row);
 
-static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
-                                                char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1]);
-
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Ins_Instit *Ins);
 
@@ -775,8 +772,8 @@ void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
    Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0]  = '\0';
   }
 
-static void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
-                                                char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
+void Ins_GetShrtNameAndCtyOfInstitution (struct Ins_Instit *Ins,
+                                         char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
