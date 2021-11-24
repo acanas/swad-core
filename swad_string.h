@@ -83,6 +83,9 @@ typedef enum
 /*****************************************************************************/
 
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen);
+
+bool Str_ChIsAlphaNum (char Ch);
+
 size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen);
 
 void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt);

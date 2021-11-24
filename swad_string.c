@@ -35,15 +35,13 @@
 #include <string.h>		// For string functions
 
 #include "swad_error.h"
-#include "swad_follow.h"	// TODO: Remove?
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
-#include "swad_institution.h"	// TODO: Remove?
 #include "swad_nickname_database.h"
 #include "swad_notification_database.h"
 #include "swad_parameter.h"
-#include "swad_photo.h"		// TODO: Remove?
+#include "swad_photo.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -93,18 +91,14 @@ static void Str_CreateFirstLink (struct Str_Link **Link,
 static void Str_CreateNextLink (struct Str_Link **Link,
                                 struct Str_Link **LastLink);
 static void Str_FreeLinks (struct Str_Link *LastLink);
-static Str_LinkType_t Str_CheckURL (char **PtrSrc,
+static Str_LinkType_t Str_CheckURL (char **PtrSrc,char PrevCh,
 				    struct Str_Link **Link,
 				    struct Str_Link **LastLink,
 				    size_t MaxCharsURLOnScreen);
-static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
+static Str_LinkType_t Str_CheckNickname (char **PtrSrc,char PrevCh,
                                          struct Str_Link **Link,
                                          struct Str_Link **LastLink);
 static void Str_CopySubstring (const struct Str_Substring *PtrSrc,char **PtrDst);
-static void Str_GetUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                             const char *ClassPhoto,
-                             char **CaptionStr,
-                             char **ImgStr);
 
 static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
 
@@ -193,6 +187,7 @@ static const struct Str_Substring NickAnchor3 =
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    size_t TxtLength;
+   char PrevCh = '\0';
    char *PtrSrc;
    char *PtrDst;
    struct Str_Link *Link;
@@ -212,14 +207,17 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
    for (PtrSrc = Txt;
 	*PtrSrc;)
       /* Check if the next char is the start of a URL */
-      if ((Link->Type = Str_CheckURL (&PtrSrc,
+      if ((Link->Type = Str_CheckURL (&PtrSrc,PrevCh,
                                       &Link,&LastLink,
                                       MaxCharsURLOnScreen)) == Str_LINK_UNKNOWN)
 	 /* Check if the next char is the start of a nickname */
-	 if ((Link->Type = Str_CheckNickname (&PtrSrc,
+	 if ((Link->Type = Str_CheckNickname (&PtrSrc,PrevCh,
 	                                      &Link,&LastLink)) == Str_LINK_UNKNOWN)
+	   {
 	    /* The next char is not the start of a URL or a nickname */
+	    PrevCh = *PtrSrc;
 	    PtrSrc++;
+	   }
 
    /**********************************************************************/
    /***** If there are one or more links (URLs or nicknames) in text *****/
@@ -373,7 +371,7 @@ static void Str_FreeLinks (struct Str_Link *LastLink)
 
 /**************************** Check if a URL found ***************************/
 
-static Str_LinkType_t Str_CheckURL (char **PtrSrc,
+static Str_LinkType_t Str_CheckURL (char **PtrSrc,char PrevCh,
 				    struct Str_Link **Link,
 				    struct Str_Link **LastLink,
 				    size_t MaxCharsURLOnScreen)
@@ -387,91 +385,94 @@ static Str_LinkType_t Str_CheckURL (char **PtrSrc,
 
    /***** Check if the next char is the start of a URL *****/
    if (tolower ((int) *(*PtrSrc)) == (int) 'h')
-     {
-      (*Link)->URLorNick.Str = (*PtrSrc);
-      if (tolower ((int) *++(*PtrSrc)) == (int) 't') // ht...
+      if (!Str_ChIsAlphaNum (PrevCh))
 	{
-	 if (tolower ((int) *++(*PtrSrc)) == (int) 't') // htt...
+	 (*Link)->URLorNick.Str = (*PtrSrc);
+	 if (tolower ((int) *++(*PtrSrc)) == (int) 't') // ht...
 	   {
-	    if (tolower ((int) *++(*PtrSrc)) == (int) 'p') // http...
+	    if (tolower ((int) *++(*PtrSrc)) == (int) 't') // htt...
 	      {
-	       (*PtrSrc)++;
-	       if (*(*PtrSrc) == ':') // http:...
+	       if (tolower ((int) *++(*PtrSrc)) == (int) 'p') // http...
 		 {
-		  if (*++(*PtrSrc) ==  '/') // http:/...
-		     if (*++(*PtrSrc) == '/') // http://...
-			Type = Str_LINK_URL;
-		 }
-	       else if (tolower ((int) *(*PtrSrc)) == (int) 's') // https...
-		 {
-		  if (*++(*PtrSrc) == ':') // https:...
+		  (*PtrSrc)++;
+		  if (*(*PtrSrc) == ':') // http:...
 		    {
-		     if (*++(*PtrSrc) == '/') // https:/...
-			if (*++(*PtrSrc) == '/') // https://...
+		     if (*++(*PtrSrc) ==  '/') // http:/...
+			if (*++(*PtrSrc) == '/') // http://...
 			   Type = Str_LINK_URL;
+		    }
+		  else if (tolower ((int) *(*PtrSrc)) == (int) 's') // https...
+		    {
+		     if (*++(*PtrSrc) == ':') // https:...
+		       {
+			if (*++(*PtrSrc) == '/') // https:/...
+			   if (*++(*PtrSrc) == '/') // https://...
+			      Type = Str_LINK_URL;
+		       }
 		    }
 		 }
 	      }
 	   }
-	}
-      if (Type == Str_LINK_URL)
-	{
-	 /***** Find URL end *****/
-	 (*PtrSrc)++;	// Points to first character after http:// or https://
-	 for (;;)
+	 if (Type == Str_LINK_URL)
 	   {
-	    NumChars1 = Str_GetNextASCIICharFromStr ((*PtrSrc),&Ch);
-	    (*PtrSrc) += NumChars1;
-	    if (Ch <= 32 || Ch == '<'  || Ch == '"')
+	    /***** Find URL end *****/
+	    (*PtrSrc)++;	// Points to first character after http:// or https://
+	    for (;;)
 	      {
-	       PtrEnd = (*PtrSrc) - NumChars1 - 1;
-	       break;
-	      }
-	    else if (Ch == ',' || Ch == '.' || Ch == ';' || Ch == ':' ||
-		     Ch == ')' || Ch == ']' || Ch == '}')
-	      {
-	       NumChars2 = Str_GetNextASCIICharFromStr ((*PtrSrc),&Ch);
-	       (*PtrSrc) += NumChars2;
-	       if (Ch <= 32 || Ch == '<' || Ch == '"')
+	       NumChars1 = Str_GetNextASCIICharFromStr ((*PtrSrc),&Ch);
+	       (*PtrSrc) += NumChars1;
+	       if (Ch <= 32 || Ch == '<'  || Ch == '"')
 		 {
-		  PtrEnd = (*PtrSrc) - NumChars2 - NumChars1 - 1;
+		  PtrEnd = (*PtrSrc) - NumChars1 - 1;
 		  break;
 		 }
+	       else if (Ch == ',' || Ch == '.' || Ch == ';' || Ch == ':' ||
+			Ch == ')' || Ch == ']' || Ch == '}')
+		 {
+		  NumChars2 = Str_GetNextASCIICharFromStr ((*PtrSrc),&Ch);
+		  (*PtrSrc) += NumChars2;
+		  if (Ch <= 32 || Ch == '<' || Ch == '"')
+		    {
+		     PtrEnd = (*PtrSrc) - NumChars2 - NumChars1 - 1;
+		     break;
+		    }
+		 }
 	      }
-	   }
 
-	 /***** Compute number of bytes added until here *****/
-	 (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere : 0;
-	 (*Link)->URLorNick.Len = (size_t) (PtrEnd + 1 - (*Link)->URLorNick.Str);
-	 if ((*Link)->URLorNick.Len <= MaxCharsURLOnScreen)
-	    (*Link)->AddedLengthUntilHere += URL_ANCHOR_TOTAL_LENGTH +
-					     (*Link)->URLorNick.Len;
-	 else	// If URL is too long to be displayed ==> short it
-	   {
-	    if ((Limited = malloc ((*Link)->URLorNick.Len + 1)) == NULL)
-	       Err_NotEnoughMemoryExit ();
-	    strncpy (Limited,(*Link)->URLorNick.Str,(*Link)->URLorNick.Len);
-	    Limited[(*Link)->URLorNick.Len] = '\0';
-	    (*Link)->AddedLengthUntilHere += URL_ANCHOR_TOTAL_LENGTH +
-					     Str_LimitLengthHTMLStr (Limited,MaxCharsURLOnScreen);
-	    free (Limited);
-	   }
+	    /***** Compute number of bytes added until here *****/
+	    (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere :
+							    0;
+	    (*Link)->URLorNick.Len = (size_t) (PtrEnd + 1 - (*Link)->URLorNick.Str);
+	    if ((*Link)->URLorNick.Len <= MaxCharsURLOnScreen)
+	       (*Link)->AddedLengthUntilHere += URL_ANCHOR_TOTAL_LENGTH +
+						(*Link)->URLorNick.Len;
+	    else	// If URL is too long to be displayed ==> short it
+	      {
+	       if ((Limited = malloc ((*Link)->URLorNick.Len + 1)) == NULL)
+		  Err_NotEnoughMemoryExit ();
+	       strncpy (Limited,(*Link)->URLorNick.Str,(*Link)->URLorNick.Len);
+	       Limited[(*Link)->URLorNick.Len] = '\0';
+	       (*Link)->AddedLengthUntilHere += URL_ANCHOR_TOTAL_LENGTH +
+						Str_LimitLengthHTMLStr (Limited,MaxCharsURLOnScreen);
+	       free (Limited);
+	      }
 
-	 /***** Create next link *****/
-	 Str_CreateNextLink (Link,LastLink);
+	    /***** Create next link *****/
+	    Str_CreateNextLink (Link,LastLink);
+	   }
 	}
-     }
 
    return Type;
   }
 
 /************************* Check if a nickname found *************************/
 
-static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
+static Str_LinkType_t Str_CheckNickname (char **PtrSrc,char PrevCh,
                                          struct Str_Link **Link,
                                          struct Str_Link **LastLink)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   char Ch;
    size_t Length;
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
    struct UsrData UsrDat;
@@ -480,119 +481,125 @@ static Str_LinkType_t Str_CheckNickname (char **PtrSrc,
    char *CaptionStr;
    char *ImgStr;
    char NickWithoutArr[Nck_MAX_BYTES_NICK_WITHOUT_ARROBA + 1];
+   bool NickSeemsValid;
    Str_LinkType_t Type = Str_LINK_UNKNOWN;
 
    /***** Check if the next char is the start of a nickname *****/
-   if ((int) *(*PtrSrc) == (int) '@')
-     {
-      (*Link)->URLorNick.Str = (*PtrSrc);
+   Ch = *(*PtrSrc);
+   if (Ch == '@')					// Current is @
+      if (!Str_ChIsAlphaNum (PrevCh))			// Previous is not alphanumeric
+         if (Str_ChIsAlphaNum (*((*PtrSrc) + 1)))	// Next is alphanumeric
+	   {
+	    (*Link)->URLorNick.Str = (*PtrSrc);
 
-      /***** Find nickname end *****/
-      (*PtrSrc)++;	// Points to first character after @
+	    /***** Find nickname end *****/
+	    (*PtrSrc)++;	// Points to first character after @
 
-      /***** A nick can have digits, letters and '_'  *****/
-      for (;
-	   *(*PtrSrc);
-	   (*PtrSrc)++)
-	 if (!((*(*PtrSrc) >= 'a' && *(*PtrSrc) <= 'z') ||
-	       (*(*PtrSrc) >= 'A' && *(*PtrSrc) <= 'Z') ||
-	       (*(*PtrSrc) >= '0' && *(*PtrSrc) <= '9') ||
-	       (*(*PtrSrc) == '_')))
-	    break;
+	    /***** A nick can have digits, letters and '_'  *****/
+	    for (;
+		 *(*PtrSrc);
+		 (*PtrSrc)++)
+	      {
+	       Ch = *(*PtrSrc);
+	       if (!Str_ChIsAlphaNum (Ch))
+		  break;
+	      }
 
-      /***** Calculate length of this nickname *****/
-      (*Link)->URLorNick.Len = (size_t) ((*PtrSrc) - (*Link)->URLorNick.Str);
+	    /***** Calculate length of this nickname *****/
+	    (*Link)->URLorNick.Len = (size_t) ((*PtrSrc) - (*Link)->URLorNick.Str);
 
-      /***** A nick (without arroba) must have a number of characters
-	     Nck_MIN_CHARS_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA *****/
-      Length = (*Link)->URLorNick.Len - 1;	// Do not count the initial @
-      if (Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
-	  Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA)
-	{
-	 strncpy (NickWithoutArr,(*Link)->URLorNick.Str + 1,Length);
-	 NickWithoutArr[Length] = '\0';
-	 Type = Str_LINK_NICK;
-	}
+	    /***** A nick (without arroba) must have a number of characters
+		   Nck_MIN_CHARS_NICK_WITHOUT_ARROBA <= Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA *****/
+	    Length = (*Link)->URLorNick.Len - 1;	// Do not count the initial @
+	    NickSeemsValid = Length >= Nck_MIN_CHARS_NICK_WITHOUT_ARROBA &&
+			     Length <= Nck_MAX_CHARS_NICK_WITHOUT_ARROBA;
 
-      if (Type == Str_LINK_NICK)
-	{
-	 /***** Get user's code using nickname *****/
-         Usr_UsrDataConstructor (&UsrDat);
-	 UsrDat.UsrCod = Nck_DB_GetUsrCodFromNickname (NickWithoutArr);
-	 if (UsrDat.UsrCod > 0)
-	    Usr_GetUsrDataFromUsrCod (&UsrDat,
-				      Usr_DONT_GET_PREFS,
-				      Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+	    if (NickSeemsValid)
+	      {
+	       /***** Get user's code using nickname *****/
+	       Usr_UsrDataConstructor (&UsrDat);
+	       strncpy (NickWithoutArr,(*Link)->URLorNick.Str + 1,Length);
+	       NickWithoutArr[Length] = '\0';
+	       if ((UsrDat.UsrCod = Nck_DB_GetUsrCodFromNickname (NickWithoutArr)) > 0)
+		 {
+		  Type = Str_LINK_NICK;
+		  Usr_GetUsrDataFromUsrCod (&UsrDat,
+					    Usr_DONT_GET_PREFS,
+					    Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
+		 }
 
-	 /***** Reset anchors (checked on freeing) *****/
-	 (*Link)->Nick.Anchor1.Str =
-	 (*Link)->Nick.Anchor2.Str =
-	 (*Link)->Nick.Anchor3.Str = NULL;
+	       if (Type == Str_LINK_NICK)
+		 {
+		  /***** Reset anchors (checked on freeing) *****/
+		  (*Link)->Nick.Anchor1.Str =
+		  (*Link)->Nick.Anchor2.Str =
+		  (*Link)->Nick.Anchor3.Str = NULL;
 
-	 /***** Create id for this form *****/
-	 Gbl.Form.Num++;
-	 if (Gbl.Usrs.Me.Logged)
-	    snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
-		      "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
-	 else
-	    snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
-		      "form_%d",Gbl.Form.Num);
+		  /***** Create id for this form *****/
+		  Gbl.Form.Num++;
+		  if (Gbl.Usrs.Me.Logged)
+		     snprintf (Gbl.Form.UniqueId,sizeof (Gbl.Form.UniqueId),
+			       "form_%s_%d",Gbl.UniqueNameEncrypted,Gbl.Form.Num);
+		  else
+		     snprintf (Gbl.Form.Id,sizeof (Gbl.Form.Id),
+			       "form_%d",Gbl.Form.Num);
 
-	 /***** Store first part of anchor *****/
-	 Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
-	 if (asprintf (&(*Link)->Nick.Anchor1.Str,
-		       "<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
-		       "%s"	// Parameters
-		       "<input type=\"hidden\" name=\"usr\" value=\"",
-		       Cfg_URL_SWAD_CGI,
-		       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-		       Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-					    Gbl.Form.Id,
-		       ParamsStr) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 (*Link)->Nick.Anchor1.Len = strlen ((*Link)->Nick.Anchor1.Str);
+		  /***** Store first part of anchor *****/
+		  Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
+		  if (asprintf (&(*Link)->Nick.Anchor1.Str,
+				"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
+				"%s"	// Parameters
+				"<input type=\"hidden\" name=\"usr\" value=\"",
+				Cfg_URL_SWAD_CGI,
+				Lan_STR_LANG_ID[Gbl.Prefs.Language],
+				Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+						     Gbl.Form.Id,
+				ParamsStr) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  (*Link)->Nick.Anchor1.Len = strlen ((*Link)->Nick.Anchor1.Str);
 
-	 /***** Store second part of anchor *****/
-	 if (asprintf (&(*Link)->Nick.Anchor2.Str,
-		       "\">"
-		       "<a href=\"\""
-		       " onclick=\"document.getElementById('%s').submit();return false;\">",
-		       Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
-					    Gbl.Form.Id) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 (*Link)->Nick.Anchor2.Len = strlen ((*Link)->Nick.Anchor2.Str);
+		  /***** Store second part of anchor *****/
+		  if (asprintf (&(*Link)->Nick.Anchor2.Str,
+				"\">"
+				"<a href=\"\""
+				" onclick=\"document.getElementById('%s').submit();return false;\">",
+				Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
+						     Gbl.Form.Id) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  (*Link)->Nick.Anchor2.Len = strlen ((*Link)->Nick.Anchor2.Str);
 
-	 /***** Store third part of anchor *****/
-         ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-	 Str_GetUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-					      NULL,
-                          "PHOTO15x20",
-                          &CaptionStr,
-                          &ImgStr);
-	 if (asprintf (&(*Link)->Nick.Anchor3.Str,
-		       "</a></form>"
-		       "%s%s",
-		       CaptionStr,
-                       ImgStr) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 free (ImgStr);
-	 free (CaptionStr);
-	 (*Link)->Nick.Anchor3.Len = strlen ((*Link)->Nick.Anchor3.Str);
+		  /***** Store third part of anchor *****/
+		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+		  Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+							     NULL,
+					 "PHOTO15x20",Pho_ZOOM,
+					 &CaptionStr,
+					 &ImgStr);
+		  if (asprintf (&(*Link)->Nick.Anchor3.Str,
+				"</a></form>%s%s",
+				CaptionStr,
+				ImgStr) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  free (ImgStr);
+		  free (CaptionStr);
+		  (*Link)->Nick.Anchor3.Len = strlen ((*Link)->Nick.Anchor3.Str);
 
-	 /***** Free memory used for user's data *****/
-         Usr_UsrDataDestructor (&UsrDat);
+		  /***** Free memory used for user's data *****/
+		  Usr_UsrDataDestructor (&UsrDat);
 
-	 /***** Compute number of bytes added until here *****/
-	 (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere : 0;
-	 (*Link)->AddedLengthUntilHere += (*Link)->Nick.Anchor1.Len +
-					  (*Link)->URLorNick.Len +
-					  (*Link)->Nick.Anchor2.Len +
-					  (*Link)->Nick.Anchor3.Len;
+		  /***** Compute number of bytes added until here *****/
+		  (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere :
+								  0;
+		  (*Link)->AddedLengthUntilHere += (*Link)->Nick.Anchor1.Len +
+						   (*Link)->URLorNick.Len +
+						   (*Link)->Nick.Anchor2.Len +
+						   (*Link)->Nick.Anchor3.Len;
 
-	 /***** Create next link *****/
-	 Str_CreateNextLink (Link,LastLink);
-	}
-     }
+		  /***** Create next link *****/
+		  Str_CreateNextLink (Link,LastLink);
+		 }
+	      }
+	   }
 
    return Type;
   }
@@ -638,175 +645,15 @@ static void Str_CopySubstring (const struct Str_Substring *Src,char **Dst)
   }
 
 /*****************************************************************************/
-/*************************** Show a user's photo *****************************/
+/*********** Check if a character is in set { a-z, A-Z, 0-9, _ } *************/
 /*****************************************************************************/
 
-static void Str_GetUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                             const char *ClassPhoto,
-                             char **CaptionStr,
-                             char **ImgStr)
+bool Str_ChIsAlphaNum (char Ch)
   {
-   extern const char *Rol_Icons[Rol_NUM_ROLES];
-   extern const char *Txt_Following;
-   extern const char *Txt_Followers;
-   unsigned NumFollowing;
-   unsigned NumFollowers;
-   bool PhotoExists;
-   char IdCaption[Frm_MAX_BYTES_ID + 1];
-   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
-   struct Ins_Instit Ins;
-   char MainDegreeShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
-   Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
-   struct
-     {
-      char *Name;
-      char *Nick;
-      char *InsCty;
-      char *MainDeg;
-      char *Follow;
-     } Caption;
-
-   /***** First name and surnames *****/
-   if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE DAT_N_BOLD\">"	// Limited width
-				  "%s<br />"
-				  "%s%s%s"
-			       "</div>",
-		 UsrDat->FrstName,
-		 UsrDat->Surname1,
-		 UsrDat->Surname2[0] ? "&nbsp;" :
-				       "",
-		 UsrDat->Surname2[0] ? UsrDat->Surname2 :
-				       "") < 0)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Nickname *****/
-   if (UsrDat->Nickname[0])
-     {
-      if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
-				     "@%s"
-				  "</div>",
-		    UsrDat->Nickname) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else if (asprintf (&Caption.Nick,"%s","") < 0)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Institution full name and institution country *****/
-   if (UsrDat->InsCod > 0)
-     {
-      /***** Get institution short name and country name *****/
-      Ins.InsCod = UsrDat->InsCod;
-      Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
-
-      /***** Write institution short name and country name *****/
-      if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
-				       "%s&nbsp;(%s)"
-				    "</div>",
-		    Ins.ShrtName,CtyName) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else if (UsrDat->CtyCod > 0)
-     {
-      /***** Get country name *****/
-      Cty_GetCountryName (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
-
-      /***** Write country name *****/
-      if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
-				       "%s"
-				    "</div>",
-			       CtyName) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else if (asprintf (&Caption.InsCty,"%s","") < 0)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Main degree (in which the user has more courses) short name *****/
-   Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
-   if (MainDegreeShrtName[0])
-     {
-      if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
-					 "<div class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\">"
-					    "%s"
-					 "</div>"
-				      "</div>",
-				Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
-				MainDegreeShrtName) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else if (asprintf (&Caption.MainDeg,"%s","") < 0)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Following and followers *****/
-   if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
-     {
-      Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-      if (asprintf (&Caption.Follow,"<div class=\"ZOOM_TXT_LINE\">"
-					"<span class=\"DAT_N_BOLD\">"
-					   "%u"
-					"</span>"
-					"<span class=\"DAT_SMALL\">"
-					   "&nbsp;%s&nbsp;"
-					"</span>"
-					"<span class=\"DAT_N_BOLD\">"
-					   "%u"
-					"</span>"
-					"<span class=\"DAT_SMALL\">"
-					   "&nbsp;%s"
-					"</span>"
-				     "</div>",
-		    NumFollowing,
-		    Txt_Following,
-		    NumFollowers,
-		    Txt_Followers) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else if (asprintf (&Caption.Follow,"%s","") < 0)
-      Err_NotEnoughMemoryExit ();
-
-   /***** Hidden div *****/
-   Frm_SetUniqueId (IdCaption);
-   if (asprintf (CaptionStr,"<div id=\"%s\" class=\"NOT_SHOWN\">"
-			       "%s%s%s%s%s"
-			    "</div>",
-                 IdCaption,
-                 Caption.Name,
-                 Caption.Nick,
-                 Caption.InsCty,
-                 Caption.MainDeg,
-                 Caption.Follow) < 0)
-       Err_NotEnoughMemoryExit ();
-   free (Caption.Follow);
-   free (Caption.MainDeg);
-   free (Caption.InsCty);
-   free (Caption.Nick);
-   free (Caption.Name);
-
-   /***** Image zoom *****/
-   PhotoExists = false;
-   if (PhotoURL)
-      if (PhotoURL[0])
-	 PhotoExists = true;
-
-   if (PhotoExists)
-     {
-      if (asprintf (ImgStr,"<img src=\"%s\" alt=\"%s\" title=\"%s\" class=\"%s\""
-			   " onmouseover=\"zoom(this,'%s','%s');\""
-			   " onmouseout=\"noZoom();\""
-			   " />",
-		    PhotoURL,UsrDat->FullName,UsrDat->FullName,ClassPhoto,
-		    PhotoURL,IdCaption) < 0)
-         Err_NotEnoughMemoryExit ();
-     }
-   else
-     {
-      if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"%s\" title=\"%s\" class=\"%s\""
-			   " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
-			   " onmouseout=\"noZoom();\""
-			   " />",
-		    Cfg_URL_ICON_PUBLIC,UsrDat->FullName,UsrDat->FullName,ClassPhoto,
-		    Cfg_URL_ICON_PUBLIC,IdCaption) < 0)
-         Err_NotEnoughMemoryExit ();
-     }
+   return ((Ch >= 'a' && Ch <= 'z') ||
+	   (Ch >= 'A' && Ch <= 'Z') ||
+	   (Ch >= '0' && Ch <= '9') ||
+	   (Ch == '_'));
   }
 
 /*****************************************************************************/

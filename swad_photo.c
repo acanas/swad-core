@@ -1034,12 +1034,13 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char PathPrivRelPhoto[PATH_MAX + 1]
   }
 
 /*****************************************************************************/
-/*************************** Show a user's photo *****************************/
+/********************* Build HTML code for user's photo **********************/
 /*****************************************************************************/
 
-void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
-                       const char *ClassPhoto,Pho_Zoom_t Zoom,
-                       bool FormUnique)
+void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+			    const char *ClassPhoto,Pho_Zoom_t Zoom,
+			    char **ImgStr,
+			    char **CaptionStr)
   {
    extern const char *Rol_Icons[Rol_NUM_ROLES];
    extern const char *Txt_Following;
@@ -1051,99 +1052,144 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
 	                      BrowserTab == Act_AJAX_NORMAL ||
 			      BrowserTab == Act_AJAX_RFRESH);
-   bool PutLinkToPublicProfile = !Gbl.Form.Inside &&	// Only if not inside another form
-                                 BrowserTabIs1stTab;	// Only in main browser tab (or AJAX)
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char IdCaption[Frm_MAX_BYTES_ID + 1];
+   char CtyName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1];
+   struct Ins_Instit Ins;
    char MainDegreeShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
    Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
-
-   /***** Begin form to go to public profile *****/
-   if (PutLinkToPublicProfile)
+   struct
      {
-      if (FormUnique)
-	 Frm_BeginFormUnique (ActSeeOthPubPrf);
-      else
-	 Frm_BeginForm (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-
-	 HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
-     }
+      char *Name;
+      char *Nick;
+      char *InsCty;
+      char *MainDeg;
+      char *Follow;
+     } Caption;
 
    /***** Hidden div to pass user's name to Javascript *****/
    if (PutZoomCode)
      {
+      /* First name and surnames */
+      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE DAT_N_BOLD\">"	// Limited width
+				     "%s<br />"
+				     "%s%s%s"
+				  "</div>",
+		    UsrDat->FrstName,
+		    UsrDat->Surname1,
+		    UsrDat->Surname2[0] ? "&nbsp;" :
+					  "",
+		    UsrDat->Surname2[0] ? UsrDat->Surname2 :
+					  "") < 0)
+	 Err_NotEnoughMemoryExit ();
+
+      /* Nickname */
+      if (UsrDat->Nickname[0])
+	{
+	 if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
+					"@%s"
+				     "</div>",
+		       UsrDat->Nickname) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+      else if (asprintf (&Caption.Nick,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+
+      /* Institution full name and institution country */
+      if (UsrDat->InsCod > 0)
+	{
+	 /* Get institution short name and country name */
+	 Ins.InsCod = UsrDat->InsCod;
+	 Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
+
+	 /* Write institution short name and country name */
+	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+					  "%s&nbsp;(%s)"
+				       "</div>",
+		       Ins.ShrtName,CtyName) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+      else if (UsrDat->CtyCod > 0)
+	{
+	 /* Get country name */
+	 Cty_GetCountryName (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
+
+	 /* Write country name */
+	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+					  "%s"
+				       "</div>",
+				  CtyName) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+      else if (asprintf (&Caption.InsCty,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+
+      /* Main degree (in which the user has more courses) short name */
+      Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
+      if (MainDegreeShrtName[0])
+	{
+	 if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+					    "<div class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\">"
+					       "%s"
+					    "</div>"
+					 "</div>",
+				   Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
+				   MainDegreeShrtName) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+      else if (asprintf (&Caption.MainDeg,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+
+      /* Following and followers */
+      if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
+	{
+	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+	 if (asprintf (&Caption.Follow,"<div class=\"ZOOM_TXT_LINE\">"
+					   "<span class=\"DAT_N_BOLD\">"
+					      "%u"
+					   "</span>"
+					   "<span class=\"DAT_SMALL\">"
+					      "&nbsp;%s&nbsp;"
+					   "</span>"
+					   "<span class=\"DAT_N_BOLD\">"
+					      "%u"
+					   "</span>"
+					   "<span class=\"DAT_SMALL\">"
+					      "&nbsp;%s"
+					   "</span>"
+					"</div>",
+		       NumFollowing,
+		       Txt_Following,
+		       NumFollowers,
+		       Txt_Followers) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
+      else if (asprintf (&Caption.Follow,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
+
+      /* Hidden div */
       Frm_SetUniqueId (IdCaption);
-      HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
-
-	 /* First name and surnames */
-	 HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N_BOLD\"");	// Limited width
-	    Usr_WriteFirstNameBRSurnames (UsrDat);
-	 HTM_DIV_End ();
-
-	 /* Nickname */
-	 if (UsrDat->Nickname[0])
-	   {
-	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL_N\"");
-	       HTM_TxtF ("@%s",UsrDat->Nickname);
-	    HTM_DIV_End ();
-	   }
-
-	 /* Institution full name and institution country */
-	 if (UsrDat->InsCod > 0)
-	   {
-	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
-	       Ins_WriteInstitutionNameAndCty (UsrDat->InsCod);
-	    HTM_DIV_End ();
-	   }
-	 /* User's country */
-	 else if (UsrDat->CtyCod > 0)
-	   {
-	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
-	       Cty_WriteCountryName (UsrDat->CtyCod,
-				     NULL);	// Don't put link to country
-	    HTM_DIV_End ();
-	   }
-
-	 /* Main degree (in which the user has more courses) short name */
-	 Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
-	 if (MainDegreeShrtName[0])
-	   {
-	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_SMALL\"");
-	       HTM_DIV_Begin ("class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\"",
-			      Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole]);
-		  HTM_Txt (MainDegreeShrtName);
-	       HTM_DIV_End ();
-	    HTM_DIV_End ();
-	   }
-
-	 /* Following and followers */
-	 if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
-	   {
-	    Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-	    HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE\"");
-
-	       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-		  HTM_Unsigned (NumFollowing);
-	       HTM_SPAN_End ();
-
-	       HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-		  HTM_TxtF ("&nbsp;%s&nbsp;",Txt_Following);
-	       HTM_SPAN_End ();
-
-	       HTM_SPAN_Begin ("class=\"DAT_N_BOLD\"");
-		  HTM_Unsigned (NumFollowers);
-	       HTM_SPAN_End ();
-
-	       HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
-		  HTM_TxtF ("&nbsp;%s",Txt_Followers);
-	       HTM_SPAN_End ();
-
-	    HTM_DIV_End ();
-	   }
-
-      HTM_DIV_End ();
+      if (asprintf (CaptionStr,"<div id=\"%s\" class=\"NOT_SHOWN\">"
+				  "%s%s%s%s%s"
+			       "</div>",
+		    IdCaption,
+		    Caption.Name,
+		    Caption.Nick,
+		    Caption.InsCty,
+		    Caption.MainDeg,
+		    Caption.Follow) < 0)
+	  Err_NotEnoughMemoryExit ();
+      free (Caption.Follow);
+      free (Caption.MainDeg);
+      free (Caption.InsCty);
+      free (Caption.Nick);
+      free (Caption.Name);
+     }
+   else
+     {
+      if (asprintf (CaptionStr,"%s","") < 0)
+	  Err_NotEnoughMemoryExit ();
      }
 
    /***** Image zoom *****/
@@ -1154,33 +1200,85 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutZoomCode)
      {
       if (PhotoExists)
-	 HTM_IMG (PhotoURL,NULL,UsrDat->FullName,
-	          "class=\"%s\""
-	          " onmouseover=\"zoom(this,'%s','%s');\""
-	          " onmouseout=\"noZoom();\"",
-		  ClassPhoto,PhotoURL,IdCaption);
+	{
+	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\""
+			      " onmouseover=\"zoom(this,'%s','%s');\""
+			      " onmouseout=\"noZoom();\""
+			      " />",
+		       PhotoURL,UsrDat->FullName,ClassPhoto,
+		       PhotoURL,IdCaption) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
       else
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",UsrDat->FullName,
-	          "class=\"%s\""
-	          " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
-	          " onmouseout=\"noZoom();\"",
-		  ClassPhoto,Cfg_URL_ICON_PUBLIC,IdCaption);
+	{
+	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\""
+			      " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
+			      " onmouseout=\"noZoom();\""
+			      " />",
+		       Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto,
+		       Cfg_URL_ICON_PUBLIC,IdCaption) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
      }
    else
      {
       if (PhotoExists)
-	 HTM_IMG (PhotoURL,NULL,UsrDat->FullName,
-		  "class=\"%s\"",ClassPhoto);
+	{
+	 if (asprintf (ImgStr,"<img src=\"%s\" alt=\"\" title=\"%s\" class=\"%s\" />",
+		       PhotoURL,UsrDat->FullName,ClassPhoto) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
       else
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",UsrDat->FullName,
-		  "class=\"%s\"",ClassPhoto);
+	{
+	 if (asprintf (ImgStr,"<img src=\"%s/usr_bl.jpg\" alt=\"\" title=\"%s\" class=\"%s\" />",
+		       Cfg_URL_ICON_PUBLIC,UsrDat->FullName,ClassPhoto) < 0)
+	    Err_NotEnoughMemoryExit ();
+	}
      }
+  }
+
+/*****************************************************************************/
+/*************************** Show a user's photo *****************************/
+/*****************************************************************************/
+
+void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
+                       const char *ClassPhoto,Pho_Zoom_t Zoom,
+                       bool FormUnique)
+  {
+   Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
+   bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
+	                      BrowserTab == Act_AJAX_NORMAL ||
+			      BrowserTab == Act_AJAX_RFRESH);
+   bool PutLinkToPublicProfile = !Gbl.Form.Inside &&	// Only if not inside another form
+                                 BrowserTabIs1stTab;	// Only in main browser tab (or AJAX)
+   char *CaptionStr;
+   char *ImgStr;
+
+   /***** Begin form to go to public profile *****/
+   if (PutLinkToPublicProfile)
+     {
+      if (FormUnique)
+	 Frm_BeginFormUnique (ActSeeOthPubPrf);
+      else
+	 Frm_BeginForm (ActSeeOthPubPrf);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	 HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
+     }
+
+   /***** Hidden div to pass user's name to Javascript *****/
+   Pho_BuildHTMLUsrPhoto (UsrDat,PhotoURL,
+			  ClassPhoto,Zoom,
+			  &CaptionStr,
+			  &ImgStr);
+   HTM_Txt (CaptionStr);
+   HTM_Txt (ImgStr);
+   free (ImgStr);
+   free (CaptionStr);
 
    /***** End form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
 	 HTM_BUTTON_End ();
-
       Frm_EndForm ();
      }
   }

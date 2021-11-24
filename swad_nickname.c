@@ -90,10 +90,7 @@ bool Nck_CheckIfNickWithArrIsValid (const char *NickWithArr)
    for (Ptr = CopyOfNick;		// Leading arrobas already removed
         *Ptr;
         Ptr++)
-      if (!((*Ptr >= 'a' && *Ptr <= 'z') ||
-            (*Ptr >= 'A' && *Ptr <= 'Z') ||
-            (*Ptr >= '0' && *Ptr <= '9') ||
-            (*Ptr == '_')))
+      if (!Str_ChIsAlphaNum (*Ptr))
          return false;
 
    return true;
