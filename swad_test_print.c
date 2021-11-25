@@ -671,9 +671,9 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_SPAN_Begin ("class=\"%s\"",
 			       PrintedQuestions[QstInd].StrAnswers[0] ?
-			       (PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
-								     "ANS_BAD") :// Wrong
-								     "ANS_0");	// Blank answer
+			       (PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :		// Correct/semicorrect
+								     "ANS_BAD") :	// Wrong
+								     "ANS_0");		// Blank answer
 		  HTM_Double2Decimals (PrintedQuestions[QstInd].Score);
 	       HTM_SPAN_End ();
 	    HTM_DIV_End ();

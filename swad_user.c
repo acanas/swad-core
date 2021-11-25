@@ -6387,7 +6387,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       HTM_Txt (UsrDat->FrstName);
      }
 
-   if (NextAction[UsrDat->Roles.InCurrentCrs] == ActUnk)
+   if (!NextAction[UsrDat->Roles.InCurrentCrs])
       /* End div */
       HTM_DIV_End ();
    else

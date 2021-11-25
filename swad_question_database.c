@@ -1352,6 +1352,21 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
   }
 
 /*****************************************************************************/
+/********** Get answers correctness for a question in an exam set ************/
+/*****************************************************************************/
+
+unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get correctness of answers of a question",
+		   "SELECT Correct"		// row[0]
+		    " FROM tst_answers"
+		   " WHERE QstCod=%ld"
+		   " ORDER BY AnsInd",
+		   QstCod);
+  }
+
+/*****************************************************************************/
 /*********** Get suffled/not-shuffled answers indexes of question ************/
 /*****************************************************************************/
 
