@@ -242,6 +242,54 @@ void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
+/************************** Update test print score **************************/
+/*****************************************************************************/
+
+void Tst_DB_UpdatePrintScore (const struct TstPrn_Print *Print)
+  {
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+   DB_QueryUPDATE ("can not update match print",
+		   "UPDATE tst_exams"
+	             " SET Score='%.15lg'"
+	           " WHERE ExaCod=%ld",
+	           Print->Score,
+	           Print->PrnCod);
+   /*
+   HTM_TxtF ("UPDATE tst_exams"
+	       " SET Score='%.15lg'"
+	     " WHERE ExaCod=%ld",
+	     Print->Score,
+	     Print->PrnCod);
+   */
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
+/************************ Get test prints between dates **********************/
+/*****************************************************************************/
+
+unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
+                                       const char *From,
+                                       const char *To)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get prints",
+		   "SELECT ExaCod,"			// row[0]
+                          "UsrCod,"			// row[1]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[2]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[3]
+                   	  "NumQsts,"  			// row[4]
+                   	  "NumQstsNotBlank,"  		// row[5]
+                   	  "Score"  			// row[6]
+		    " FROM tst_exams"
+		   " WHERE StartTime>='%s'"
+                     " AND StartTime<='%s'"
+		   " ORDER BY ExaCod",
+		   From,
+		   To);
+  }
+
+/*****************************************************************************/
 /************ Get the test prints of a user in the current course ************/
 /*****************************************************************************/
 
@@ -352,13 +400,48 @@ void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd
   }
 
 /*****************************************************************************/
+/************ Store user's answers of an test print into database ************/
+/*****************************************************************************/
+
+void Tst_DB_FixOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd)
+  {
+   /***** Insert question and user's answers into database *****/
+   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
+   DB_QueryREPLACE ("can not update a question of a test",
+		    "REPLACE INTO tst_exam_questions"
+		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
+		    " VALUES"
+		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
+		    Print->PrnCod,
+		    Print->PrintedQuestions[QstInd].QstCod,
+		    QstInd,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].StrIndexes,
+		    Print->PrintedQuestions[QstInd].StrAnswers);
+   /*
+   Ale_ShowAlert (Ale_INFO,
+		    "REPLACE INTO tst_exam_questions"
+		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
+		    " VALUES"
+		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
+		    Print->PrnCod,
+		    Print->PrintedQuestions[QstInd].QstCod,
+		    QstInd,	// 0, 1, 2, 3...
+		    Print->PrintedQuestions[QstInd].Score,
+		    Print->PrintedQuestions[QstInd].StrIndexes,
+		    Print->PrintedQuestions[QstInd].StrAnswers);
+   */
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
 /**************** Get all tags of questions in a test print ******************/
 /*****************************************************************************/
 
 unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get tags present in a test",
+   DB_QuerySELECT (mysql_res,"can not get tags present in a test print",
 		   "SELECT tst_tags.TagTxt"	// row[0]
 		    " FROM (SELECT DISTINCT "
 		                  "tst_question_tags.TagCod"
@@ -379,7 +462,7 @@ unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod)
 unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod)
   {
    return (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get questions of a test",
+   DB_QuerySELECT (mysql_res,"can not get questions of a test print",
 		   "SELECT QstCod,"	// row[0]
 			  "Score,"	// row[1]
 			  "Indexes,"	// row[2]

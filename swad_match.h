@@ -98,6 +98,9 @@ void Mch_ListMatches (struct Gam_Games *Games,
                       struct Gam_Game *Game,
                       bool PutFormNewMatch);
 void Mch_GetDataOfMatchByCod (struct Mch_Match *Match);
+void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match);
+void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned UniqueId);
+void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match);
 
 void Mch_ToggleVisResultsMchUsr (void);
 
@@ -149,8 +152,6 @@ void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
                               struct Mch_UsrAnswer *UsrAnswer);
 
 void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print);
-
-void Mch_ComputeScore (struct MchPrn_Print *Print);
 
 void Mch_DrawBarNumUsrs (unsigned NumRespondersAns,unsigned NumRespondersQst,bool Correct);
 

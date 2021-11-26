@@ -106,12 +106,9 @@ static bool Mch_CheckIfVisibilityOfResultsCanBeChanged (const struct Mch_Match *
 static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
                                            const char *Anchor);
-static void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match);
-static void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned UniqueId);
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
                                                const char *Anchor);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match *Match);
-static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned NumQsts);
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
                                             const struct Mch_Match *Match);
@@ -587,7 +584,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 /************* Put a column for teacher who created the match ****************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match)
+void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match)
   {
    /***** Match author (teacher) *****/
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -599,7 +596,7 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match)
 /***************** Put a column for match start and end times ****************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned UniqueId)
+void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned UniqueId)
   {
    Dat_StartEndTime_t StartEndTime;
    char *Id;
@@ -718,7 +715,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 /******************* Put a column for number of players **********************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
+void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3726,35 +3723,6 @@ void Mch_GetMatchQuestionsFromDB (struct MchPrn_Print *Print)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/******************** Compute match score for a student **********************/
-/*****************************************************************************/
-
-void Mch_ComputeScore (struct MchPrn_Print *Print)
-  {
-   unsigned NumQst;
-   struct Qst_Question Question;
-
-   for (NumQst = 0, Print->Score = 0.0;
-	NumQst < Print->NumQsts.All;
-	NumQst++)
-     {
-      /***** Create test question *****/
-      Qst_QstConstructor (&Question);
-      Question.QstCod = Print->PrintedQuestions[NumQst].QstCod;
-      Question.Answer.Type = Qst_ANS_UNIQUE_CHOICE;
-
-      /***** Compute score for this answer ******/
-      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
-
-      /***** Update total score *****/
-      Print->Score += Print->PrintedQuestions[NumQst].Score;
-
-      /***** Destroy test question *****/
-      Qst_QstDestructor (&Question);
-     }
   }
 
 /*****************************************************************************/

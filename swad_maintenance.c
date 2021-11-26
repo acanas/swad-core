@@ -27,6 +27,7 @@
 
 #include "swad_course.h"
 #include "swad_database.h"
+#include "swad_match_print.h"
 #include "swad_menu.h"
 
 /*****************************************************************************/
@@ -43,8 +44,10 @@ void Mtn_Maintenance (void)
   {
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-      Mtn_PutLinkToSetUp ();		// Set up
-      Crs_PutLinkToRemoveOldCrss ();	// Remove old courses
+      Mtn_PutLinkToSetUp ();				// Set up
+      // MchPrn_PutLinkToFixMatchesPrintsScores ();	// Fix match prints scores
+      // TstPrn_PutLinkToFixTestsPrintsScores ();	// Fix test prints scores
+      Crs_PutLinkToRemoveOldCrss ();			// Remove old courses
    Mnu_ContextMenuEnd ();
   }
 

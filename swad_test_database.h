@@ -50,7 +50,11 @@ void Tst_DB_RemoveTstConfig (long CrsCod);
 //------------------------------- Test prints ---------------------------------
 long Tst_DB_CreatePrint (unsigned NumQsts);
 void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print);
+void Tst_DB_UpdatePrintScore (const struct TstPrn_Print *Print);
 
+unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
+                                       const char *From,
+                                       const char *To);
 unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod);
 unsigned Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
 
@@ -60,6 +64,7 @@ void Tst_DB_RemovePrintsMadeByInCrs (long CrsCod);
 
 //-------------------------- Test print questions -----------------------------
 void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd);
+void Tst_DB_FixOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd);
 
 unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod);
 unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);

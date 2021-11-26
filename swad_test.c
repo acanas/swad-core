@@ -276,7 +276,8 @@ void Tst_ReceiveTestDraft (void)
    else // Print not yet sent
      {
       /***** Get test print questions from database *****/
-      TstPrn_GetPrintQuestionsFromDB (&Print);
+      if (!TstPrn_GetPrintQuestionsFromDB (&Print))
+         Err_WrongExamExit ();
 
       /***** Get answers from form to assess a test *****/
       TstPrn_GetAnswersFromForm (&Print);
@@ -332,7 +333,8 @@ void Tst_AssessTest (void)
    else	// Print not yet sent
      {
       /***** Get test print questions from database *****/
-      TstPrn_GetPrintQuestionsFromDB (&Print);
+      if (!TstPrn_GetPrintQuestionsFromDB (&Print))
+         Err_WrongExamExit ();
 
       /***** Get answers from form to assess a test *****/
       TstPrn_GetAnswersFromForm (&Print);

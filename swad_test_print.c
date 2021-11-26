@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
+#include <math.h>		// For fabs
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
@@ -166,6 +167,8 @@ static void TstRes_CheckIfICanSeePrintResult (const struct TstPrn_Print *Print,
                                               struct TstRes_ICanView *ICanView);
 
 static void TstPrn_ShowTagsPresentInAPrint (long PrnCod);
+
+static void TstPrn_ComputeScoresAndFixQuestionsOfPrint (struct TstPrn_Print *Print);
 
 /*****************************************************************************/
 /***************************** Reset test print ******************************/
@@ -2174,7 +2177,8 @@ void TstPrn_ShowOnePrint (void)
    if (ICanView.Result)	// I am allowed to view this test print result
      {
       /***** Get questions and user's answers of the test from database *****/
-      TstPrn_GetPrintQuestionsFromDB (&Print);
+      if (!TstPrn_GetPrintQuestionsFromDB (&Print))
+	 Err_WrongExamExit ();
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Result,
@@ -2490,7 +2494,7 @@ void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print)
 /************* Get the questions of a test print from database ***************/
 /*****************************************************************************/
 
-void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
+bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2529,8 +2533,7 @@ void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (NumQsts != Print->NumQsts.All)
-      Err_WrongExamExit ();
+   return (NumQsts == Print->NumQsts.All);
   }
 
 /*****************************************************************************/
@@ -2607,4 +2610,227 @@ unsigned TstPrn_GetNumPrintsGeneratedByMe (void)
      }
 
    return NumPrintsGeneratedByMe;
+  }
+
+/*****************************************************************************/
+/********* Recompute scores stored in test prints made on 2021-11-25 *********/
+/*****************************************************************************/
+
+void TstPrn_PutLinkToFixTestsPrintsScores (void)
+  {
+   Lay_PutContextualLinkIconText (ActFixTstSco,NULL,
+                                  NULL,NULL,
+				  "recycle.svg",
+				  "Recalcular puntuaci&oacute;n tests");
+  }
+
+void TstPrn_FixTestsPrintsScores (void)
+  {
+   extern const char *Txt_Results;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumPrints;
+   unsigned NumPrint;
+   unsigned UniqueId;
+   char *Id;
+   struct TstPrn_Print Print;
+   long UsrCod;
+   Dat_StartEndTime_t StartEndTime;
+   double StoredScore;
+
+   /***** Reset match *****/
+   Box_BoxBegin ("100%",Txt_Results,
+                 NULL,NULL,
+                 NULL,Box_NOT_CLOSABLE);
+
+      /***** Get data of matches from database *****/
+      NumPrints = Tst_DB_GetPrintsBetweenDates (&mysql_res,
+						"2021-11-24 20:00:00",	// From
+						"2021-11-25 16:00:00");	// To
+
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
+
+	 /***** Write rows *****/
+	 for (NumPrint = 0, UniqueId = 1;
+	      NumPrint < NumPrints;
+	      NumPrint++, UniqueId++)
+	   {
+	    Gbl.RowEvenOdd = NumPrint % 2;
+
+	    /***** Get match data *****/
+	    row = mysql_fetch_row (mysql_res);
+	    /*
+	    row[0]: ExaCod
+	    row[1]: UsrCod
+	    row[2]: UNIX_TIMESTAMP(StartTime)
+	    row[3]: UNIX_TIMESTAMP(EndTime)
+	    row[4]: NumQsts
+	    row[5]: NumQstsNotBlank
+	    row[6]: Score
+	    */
+	    /* Code of the print (row[0]) */
+	    if ((Print.PrnCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	       Err_WrongGameExit ();
+
+	    /* Get user code (row[1]) */
+	    UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+
+	    /* Get start/end times (row[2], row[3] hold start/end UTC times) */
+	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		 StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		 StartEndTime++)
+	       Print.TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[2 + StartEndTime]);
+
+	    /* Get number of questions (row[4]) */
+	    if (sscanf (row[4],"%u",&Print.NumQsts.All) != 1)
+	       Print.NumQsts.All = 0;
+
+	    /* Get number of questions not blank (row[5]) */
+	    if (sscanf (row[5],"%u",&Print.NumQsts.NotBlank) != 1)
+	       Print.NumQsts.NotBlank = 0;
+
+	    /* Get score (row[6]) */
+	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
+	    if (sscanf (row[6],"%lf",&StoredScore) != 1)
+	       StoredScore = 0.0;
+	    Str_SetDecimalPointToLocal ();	// Return to local system
+
+	    /***** List print *****/
+	    HTM_TR_Begin (NULL);
+
+	       /* Print code */
+	       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_Txt ("PrnCod: ");
+		  HTM_Long (Print.PrnCod);
+	       HTM_TD_End ();
+
+	       /* Student */
+	       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		  Usr_WriteAuthor1Line (UsrCod,false);
+	       HTM_TD_End ();
+
+	       /* Write dates and times */
+	       for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		    StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		    StartEndTime++)
+		 {
+		  if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  HTM_TD_Begin ("id=\"%s\" class=\"DAT LT COLOR%u\"",
+				Id,Gbl.RowEvenOdd);
+		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
+						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+						   true,true,false,0x7);
+		  HTM_TD_End ();
+		  free (Id);
+		 }
+
+	       /* Number of questions */
+	       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_Txt ("NumQsts: ");
+		  HTM_Unsigned (Print.NumQsts.All);
+	       HTM_TD_End ();
+
+	       /* Number of questions not blank */
+	       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_Txt ("NumQstsNotBlank: ");
+		  HTM_Unsigned (Print.NumQsts.NotBlank);
+	       HTM_TD_End ();
+
+	       /* Stored score */
+	       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_Txt ("Stored score: ");
+		  HTM_Double (StoredScore);
+	       HTM_TD_End ();
+
+	       /* Compute score */
+               if (TstPrn_GetPrintQuestionsFromDB (&Print))
+        	 {
+		  HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		     TstPrn_ComputeScoresAndFixQuestionsOfPrint (&Print);
+		     HTM_Txt ("Computed score: ");
+		     HTM_Double (Print.Score);
+		  HTM_TD_End ();
+
+		  /* Store computed score? */
+		  HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		     if (fabs (StoredScore-Print.Score) < 0.0000000001)
+			HTM_Txt ("=");
+		     else
+		       {
+			HTM_Txt ("!");
+			Tst_DB_UpdatePrintScore (&Print);
+		       }
+		  HTM_TD_End ();
+        	 }
+               else
+        	 {
+		  HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+              	     Ale_ShowAlert (Ale_ERROR,"Wrong exam.");
+		  HTM_TD_End ();
+		  HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_End ();
+        	 }
+
+	    HTM_TR_End ();
+	   }
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/*********** Compute score of each question and store in database ************/
+/*****************************************************************************/
+
+static void TstPrn_ComputeScoresAndFixQuestionsOfPrint (struct TstPrn_Print *Print)
+  {
+   unsigned QstInd;
+   struct Qst_Question Question;
+   double BadScore;
+   double GoodScore;
+
+   /***** Initialize total score *****/
+   Print->Score = 0.0;
+   Print->NumQsts.NotBlank = 0;
+
+   /***** Compute and store scores of all questions *****/
+   for (QstInd = 0;
+	QstInd < Print->NumQsts.All;
+	QstInd++)
+     {
+      /* Make a copy of score retrieved from database before computing it */
+      BadScore = Print->PrintedQuestions[QstInd].Score;
+
+      /* Compute question score */
+      Qst_QstConstructor (&Question);
+      Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
+      Question.Answer.Type = Qst_DB_GetQstAnswerType (Question.QstCod);
+      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],&Question);
+      Qst_QstDestructor (&Question);
+
+      /* Make a copy of just computed score */
+      GoodScore = Print->PrintedQuestions[QstInd].Score;
+
+      /* Store test question in database */
+      Tst_DB_FixOneQstOfPrint (Print,
+			       QstInd);	// 0, 1, 2, 3...
+
+      /* Accumulate total score */
+      Print->Score += Print->PrintedQuestions[QstInd].Score;
+      if (Print->PrintedQuestions[QstInd].StrAnswers[0])	// User's answer is not blank
+	 Print->NumQsts.NotBlank++;
+
+      /* Update the number of hits and the score of this question in tests database */
+      Qst_DB_FixQstScore (Print->PrintedQuestions[QstInd].QstCod,
+                          Print->PrintedQuestions[QstInd].StrAnswers[0] != '\0',
+                          BadScore,GoodScore);
+     }
   }

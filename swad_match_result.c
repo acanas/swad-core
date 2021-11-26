@@ -119,7 +119,7 @@ void MchRes_ShowMyMchResultsInCrs (void)
 
    /***** List my matches results in the current course *****/
    MchRes_ShowResultsBegin (&Games,Txt_Results,true);	// List games to select
-   MchRes_ListMyMchResultsInCrs (&Games);
+      MchRes_ListMyMchResultsInCrs (&Games);
    MchRes_ShowResultsEnd ();
 
    /***** Free list of games *****/
@@ -172,7 +172,7 @@ void MchRes_ShowMyMchResultsInGam (void)
                             Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
 			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListMyMchResultsInGam (&Games,Game.GamCod);
+      MchRes_ListMyMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
@@ -224,7 +224,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    MchRes_ShowResultsBegin (&Games,Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
 			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
+      MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
@@ -277,7 +277,7 @@ static void MchRes_ShowAllMchResultsInSelectedGames (void *Games)
    MchRes_ShowResultsBegin ((struct Gam_Games *) Games,
                             Txt_Results,
                             true);	// List games to select
-   MchRes_ListAllMchResultsInSelectedGames ((struct Gam_Games *) Games);
+      MchRes_ListAllMchResultsInSelectedGames ((struct Gam_Games *) Games);
    MchRes_ShowResultsEnd ();
 
    /***** Free list of games *****/
@@ -376,7 +376,7 @@ void MchRes_ShowAllMchResultsInGam (void)
                             Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
 			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListAllMchResultsInGam (&Games,Game.GamCod);
+      MchRes_ListAllMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
@@ -451,7 +451,7 @@ void MchRes_ShowAllMchResultsInMch (void)
                             Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
 			    false);	// Do not list games to select
    Str_FreeString ();
-   MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
+      MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
    /***** Game end *****/
@@ -913,7 +913,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				       TotalScore,
 				       TotalGrade);
      }
-   else
+   else	// No results
      {
       /* Columns for dates and match */
       HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM COLOR%u\"",

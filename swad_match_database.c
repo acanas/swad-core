@@ -298,6 +298,31 @@ unsigned Mch_DB_GetAvailableMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
   }
 
 /*****************************************************************************/
+/************************* Get matches between dates *************************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetMatchesBetweenDates (MYSQL_RES **mysql_res,
+                                        const char *From,
+                                        const char *To)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get matches",
+		   "SELECT GamCod,"			// row[ 0]
+			  "MchCod,"			// row[ 1]
+                          "UsrCod,"			// row[ 2]
+			  "UNIX_TIMESTAMP(StartTime),"	// row[ 3]
+			  "UNIX_TIMESTAMP(EndTime),"	// row[ 4]
+			  "Title"			// row[ 5]
+		    " FROM mch_matches"
+		   " WHERE StartTime>='%s'"
+                     " AND StartTime<='%s'"
+		   " ORDER BY GamCod,"
+		             "MchCod",
+		   From,
+		   To);
+  }
+
+/*****************************************************************************/
 /****************** Get parameter with what is being shown *******************/
 /*****************************************************************************/
 
@@ -975,6 +1000,34 @@ void Mch_DB_UpdateMatchPrint (const struct MchPrn_Print *Print)
   }
 
 /*****************************************************************************/
+/************************* Update match print score **************************/
+/*****************************************************************************/
+
+void Mch_DB_UpdateMatchPrintScore (const struct MchPrn_Print *Print)
+  {
+   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
+/*
+   DB_QueryUPDATE ("can not update match print",
+		    "UPDATE mch_results"
+		      " SET Score='%.15lg'"
+		    " WHERE MchCod=%ld"
+		      " AND UsrCod=%ld",
+		    Print->Score,
+		    Print->MchCod,
+		    Print->UsrCod);
+*/
+   HTM_TxtF ("UPDATE mch_results"
+	       " SET Score='%.15lg'"
+	     " WHERE MchCod=%ld"
+	       " AND UsrCod=%ld",
+	     Print->Score,
+	     Print->MchCod,
+	     Print->UsrCod);
+
+   Str_SetDecimalPointToLocal ();	// Return to local system
+  }
+
+/*****************************************************************************/
 /*********************** Check if match print exists *************************/
 /*****************************************************************************/
 
@@ -1016,6 +1069,23 @@ unsigned Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
 		   Print->MchCod,
 		   Print->UsrCod,
 		   Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/********* Get data of a match print using match code and user code **********/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetPrintsInMatch (MYSQL_RES **mysql_res,long MchCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get match prints",
+		   "SELECT UsrCod,"		// row[0]
+			  "NumQsts,"		// row[1]
+			  "NumQstsNotBlank,"	// row[2]
+			  "Score"		// row[3]
+		    " FROM mch_results"
+		   " WHERE MchCod=%ld",
+		   MchCod);
   }
 
 /*****************************************************************************/

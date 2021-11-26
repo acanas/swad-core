@@ -13565,4 +13565,59 @@ SELECT tml_pubs.PubCod,
 SELECT MAX(PstCod) AS NewestPstCod FROM for_posts GROUP BY ThrCod ORDER BY NewestPstCod DESC LIMIT 10;
  
 SELECT PstCod FROM for_posts ORDER BY PstCod DESC LIMIT 1;
+
+
+-------------------------------------------------------------------------------
+*******************************************************************************
+
+2021-11-25: Error en juegos
+
+mch_results.Score se ha guardado erróneamente en los juegos realizados aproximadamente entre estas fechas:
+mch_result.StartTime>=20211124210000 AND mch_result.StartTime<=20211125160000
+
+Sólo los que han contestado alguna pregunta:
+mch_result.NumQstsNotBlank>0
+
+La función:
+void MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (long MchCod)
+calcula Score y lo guarda en la base de datos.
+Llama a:
+   Mch_GetMatchQuestionsFromDB (&Print);
+   MchPrn_ComputeScore (&Print);
+      TstPrn_ComputeAnswerScore (&Print->PrintedQuestions[NumQst],&Question);
+         TstPrn_GetCorrectAndComputeChoAnsScore (struct TstPrn_PrintedQuestion *PrintedQuestion,
+				                 struct Qst_Question *Question);
+	    Qst_GetCorrectChoAnswerFromDB (Question);		// <----- Aquí estaba el fallo
+	          SELECT Correct
+		    FROM tst_answers
+		   WHERE QstCod=%ld	// Question code
+		   ORDER BY AnsInd;
+            TstPrn_ComputeChoAnsScore (PrintedQuestion,Question);
+      Print->Score += Print->PrintedQuestions[NumQst].Score;
+   MchPrn_UpdateMatchPrintInDB (&Print);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  

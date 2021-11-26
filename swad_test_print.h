@@ -151,11 +151,14 @@ void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
 			      unsigned Visibility);
 void TstPrn_GetPrintDataByPrnCod (struct TstPrn_Print *Print);
 
-void TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
+bool TstPrn_GetPrintQuestionsFromDB (struct TstPrn_Print *Print);
 void TstPrn_RemovePrintsMadeByUsrInAllCrss (long UsrCod);
 void TstPrn_RemovePrintsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void TstPrn_RemoveCrsPrints (long CrsCod);
 
 unsigned TstPrn_GetNumPrintsGeneratedByMe (void);
+
+void TstPrn_PutLinkToFixTestsPrintsScores (void);
+void TstPrn_FixTestsPrintsScores (void);
 
 #endif
