@@ -33,6 +33,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_attendance.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -669,7 +670,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       Svy_DB_GetSurveyTxt (Svy.SvyCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
 							     "DAT_LIGHT");
 	 HTM_Txt (Txt);

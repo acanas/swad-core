@@ -34,6 +34,7 @@
 #include <time.h>		// For time
 
 #include "swad_action.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_course.h"
@@ -2687,7 +2688,7 @@ void Msg_WriteMsgContent (char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
   {
    /***** Insert links in URLs *****/
    if (InsertLinks)
-      Str_InsertLinks (Content,Cns_MAX_BYTES_LONG_TEXT,60);
+      ALn_InsertLinks (Content,Cns_MAX_BYTES_LONG_TEXT,60);
 
    /***** Write message to file *****/
    if (ChangeBRToRet)

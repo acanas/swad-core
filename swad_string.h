@@ -82,9 +82,9 @@ typedef enum
 /***************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen);
-
 bool Str_ChIsAlphaNum (char Ch);
+
+unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
 
 size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen);
 

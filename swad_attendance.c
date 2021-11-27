@@ -35,6 +35,7 @@
 
 #include "swad_attendance.h"
 #include "swad_attendance_database.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -551,7 +552,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
       Att_DB_GetAttEventDescription (Event->AttCod,Description);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Description,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      Str_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      ALn_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
       if (ShowOnlyThisAttEventComplete)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else

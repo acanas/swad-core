@@ -32,7 +32,7 @@
 /**************************** Create a new link ******************************/
 /*****************************************************************************/
 
-void Lnk_DB_CreateLink (const struct Str_Link *Lnk)
+void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk)
   {
    DB_QueryINSERT ("can not create institutional link",
 		   "INSERT INTO lnk_links"

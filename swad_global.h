@@ -210,7 +210,7 @@ struct Globals
    struct
      {
       unsigned Num;		// Number of institutional links
-      struct Str_Link *Lst;		// List of institutional links
+      struct Lnk_Link *Lst;		// List of institutional links
      } Links;
    struct
      {

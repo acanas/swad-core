@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>
 
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -380,7 +381,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	    Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
-	    Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
+	    ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 			     Not_MaxCharsURLOnScreen[TypeNoticesListing]);
 	    break;
         }
@@ -511,7 +512,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
 
       /* Get the content (row[2]) and insert links*/
       Str_Copy (Content,row[2],sizeof (Content) - 1);
-      Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
+      ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 		       Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
 
       /* Get status of the notice (row[3]) */

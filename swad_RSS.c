@@ -29,6 +29,7 @@
 #include <stddef.h>		// For NULL
 #include <string.h>
 
+#include "swad_autolink.h"
 #include "swad_call_for_exam_database.h"
 #include "swad_changelog.h"
 #include "swad_database.h"
@@ -199,7 +200,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Crs_Course *Crs)
 
          /* Write full content of the notice */
          Str_Copy (Content,row[3],sizeof (Content) - 1);
-         Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
+         ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
          fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
                   UsrDat.FrstName,UsrDat.Surname1,UsrDat.Surname2,Content);
 

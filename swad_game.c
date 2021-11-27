@@ -33,6 +33,7 @@
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
+#include "swad_autolink.h"
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_figure.h"
@@ -661,7 +662,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Gam_DB_GetGameTxt (Game->GamCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
-      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? "DAT_LIGHT" :
 						       "DAT");
 	 HTM_Txt (Txt);

@@ -1,7 +1,7 @@
-// swad_link_database.h: institutional links, operations with database
+// swad_autolink.h: inserting automatic links in text
 
-#ifndef _SWAD_LNK_DB
-#define _SWAD_LNK_DB
+#ifndef _SWAD_ALN
+#define _SWAD_ALN
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -24,25 +24,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************* Headers ***********************************/
+/***************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-#include <mysql/mysql.h>	// To access MySQL databases
-
-#include "swad_link.h"
-
-/*****************************************************************************/
-/****************************** Public prototypes ****************************/
-/*****************************************************************************/
-
-void Lnk_DB_CreateLink (const struct Lnk_Link *Lnk);
-void Lnk_DB_UpdateLnkName (long LnkCod,const char *FieldName,const char *NewLnkName);
-void Lnk_DB_UpdateLnkWWW (long LnkCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
-
-unsigned Lnk_DB_GetLinks (MYSQL_RES **mysql_res);
-unsigned Lnk_DB_GetDataOfLinkByCod (MYSQL_RES **mysql_res,long LnkCod);
-bool Lnk_DB_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
-
-void Lnk_DB_RemoveLink (long LnkCod);
+void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen);
 
 #endif

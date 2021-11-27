@@ -105,6 +105,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_API.h"
 #include "swad_API_database.h"
 #include "swad_attendance_database.h"
+#include "swad_autolink.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_course_database.h"
@@ -1426,7 +1427,7 @@ static int API_WritePlainTextIntoHTMLBuffer (struct soap *soap,
       /* Convert to respectful HTML and insert links */
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);		// Convert from HTML to recpectful HTML
-      Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+      ALn_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
       /* Write text */
       fprintf (FileHTMLTmp,"%s",TxtHTML);

@@ -27,6 +27,7 @@
 
 #include "swad_announcement.h"
 #include "swad_announcement_database.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -123,7 +124,7 @@ void Ann_ShowAllAnnouncements (void)
 	 /* Get the subject (row[3]), the content (row[4]), and insert links */
 	 Str_Copy (Subject,row[3],sizeof (Subject) - 1);
 	 Str_Copy (Content,row[4],sizeof (Content) - 1);
-	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
+	 ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
 	 /* Show the announcement */
 	 Ann_DrawAnAnnouncement (AnnCod,Status,Subject,Content,
@@ -203,7 +204,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	    /* Get the subject (row[1]), the content (row[2]), and insert links */
 	    Str_Copy (Subject,row[1],sizeof (Subject) - 1);
 	    Str_Copy (Content,row[2],sizeof (Content) - 1);
-	    Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
+	    ALn_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
 	    /* Show the announcement */
 	    Ann_DrawAnAnnouncement (AnnCod,Ann_ACTIVE_ANNOUNCEMENT,Subject,Content,

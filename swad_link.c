@@ -52,7 +52,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Str_Link *Lnk_EditingLnk = NULL;	// Static variable to keep the link being edited
+static struct Lnk_Link *Lnk_EditingLnk = NULL;	// Static variable to keep the link being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -65,7 +65,7 @@ static void Lnk_WriteListOfLinks (void);
 static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
 
-static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Str_Link *Lnk);
+static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk);
 
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (void *LnkCod);
@@ -309,7 +309,7 @@ void Lnk_GetListLinks (void)
 /**************************** Get link full name *****************************/
 /*****************************************************************************/
 
-void Lnk_GetDataOfLinkByCod (struct Str_Link *Lnk)
+void Lnk_GetDataOfLinkByCod (struct Lnk_Link *Lnk)
   {
    MYSQL_RES *mysql_res;
 
@@ -334,7 +334,7 @@ void Lnk_GetDataOfLinkByCod (struct Str_Link *Lnk)
 /**************************** Get data of link *******************************/
 /*****************************************************************************/
 
-static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Str_Link *Lnk)
+static void Lnk_GetDataOfLink (MYSQL_RES *mysql_res,struct Lnk_Link *Lnk)
   {
    MYSQL_ROW row;
 
@@ -376,7 +376,7 @@ void Lnk_FreeListLinks (void)
 static void Lnk_ListLinksForEdition (void)
   {
    unsigned NumLnk;
-   struct Str_Link *Lnk;
+   struct Lnk_Link *Lnk;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);

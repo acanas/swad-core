@@ -34,6 +34,7 @@
 
 #include "swad_assignment.h"
 #include "swad_assignment_database.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -491,7 +492,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       Asg_DB_GetAssignmentTxtByCod (Asg.AsgCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       if (PrintView)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else

@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -439,7 +440,7 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
       Prg_DB_GetItemTxt (Item->Hierarchy.ItmCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-      Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR PRG_TXT%s\"",
 		     LightStyle ? "PRG_HIDDEN" :
 				  "");

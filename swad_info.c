@@ -34,6 +34,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_action.h"
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -1499,7 +1500,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 	 /***** Convert to respectful HTML and insert links *****/
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   TxtHTML,Cns_MAX_BYTES_LONG_TEXT,false);	// Convert from HTML to recpectful HTML
-	 Str_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
+	 ALn_InsertLinks (TxtHTML,Cns_MAX_BYTES_LONG_TEXT,60);	// Insert links
 
 	 /***** Write text *****/
 	 HTM_Txt (TxtHTML);

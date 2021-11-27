@@ -1378,7 +1378,7 @@ unsigned Qst_DB_GetTextOfAnswers (MYSQL_RES **mysql_res,long QstCod)
   }
 
 /*****************************************************************************/
-/********** Get answers correctness for a question in an exam set ************/
+/*************** Get answers correctness for a question **********************/
 /*****************************************************************************/
 
 unsigned Qst_DB_GetQstAnswersCorr (MYSQL_RES **mysql_res,long QstCod)

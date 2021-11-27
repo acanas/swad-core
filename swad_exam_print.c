@@ -31,6 +31,7 @@
 #include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_error.h"
@@ -634,7 +635,7 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
    Exa_DB_GetExamTxt (ExaCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,	// Convert from HTML to rigorous HTML
                      Txt,Cns_MAX_BYTES_TEXT,false);
-   Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
+   ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
 
    /***** Write description *****/
    HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL\"");

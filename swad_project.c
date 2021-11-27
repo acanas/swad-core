@@ -32,6 +32,7 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
+#include "swad_autolink.h"
 #include "swad_box.h"
 #include "swad_browser_database.h"
 #include "swad_database.h"
@@ -1857,7 +1858,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 	{
 	 case Prj_LIST_PROJECTS:
 	 case Prj_FILE_BROWSER_PROJECT:
-	    Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	    ALn_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
 	    break;
 	 default:
 	    break;
