@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.64 (2021-11-28)"
+#define Log_PLATFORM_VERSION	"SWAD 21.64.1 (2021-11-28)"
 #define CSS_FILE		"swad21.59.css"
 #define JS_FILE			"swad21.59.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.64.1:  Nov 28, 2021  Code refactoring in link insertion. (320070 lines)
 	Version 21.64:    Nov 28, 2021  New module swad_autolink to insert links in texts. (320076 lines)
 	Version 21.63:    Nov 26, 2021  Fixing of corruption in test prints and match prints. (320010 lines)
 	Version 21.62.3:  Nov 25, 2021  Fixed bug in test questions. Reported by Javier Fernández Baldomero and Jesús González Peñalver. (319438 lines)

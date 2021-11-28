@@ -64,12 +64,7 @@ struct ALn_Link
   {
    ALn_LinkType_t Type;
    struct ALn_Substring URLorNick;
-   struct
-     {
-      struct ALn_Substring Anchor1;
-      struct ALn_Substring Anchor2;
-      struct ALn_Substring Anchor3;
-     } Nick;
+   struct ALn_Substring NickAnchor[3];
    size_t AddedLengthUntilHere;	// Total length of extra HTML code added until this link (included)
    struct ALn_Link *Prev;
    struct ALn_Link *Next;
@@ -104,28 +99,28 @@ static void ALn_CopySubstring (const struct ALn_Substring *PtrSrc,char **PtrDst)
 /*****************************************************************************/
 
 // For URLs the length of anchor is fixed, so it can be calculated once
-#define ALn_URL_ANCHOR_1		"<a href=\""
-#define ALn_URL_ANCHOR_2		"\" target=\"_blank\">"
-#define ALn_URL_ANCHOR_3		"</a>"
+#define ALn_URL_ANCHOR_0		"<a href=\""
+#define ALn_URL_ANCHOR_1		"\" target=\"_blank\">"
+#define ALn_URL_ANCHOR_2		"</a>"
+#define ALn_URL_ANCHOR_0_LENGTH		(sizeof (ALn_URL_ANCHOR_0) - 1)
 #define ALn_URL_ANCHOR_1_LENGTH		(sizeof (ALn_URL_ANCHOR_1) - 1)
 #define ALn_URL_ANCHOR_2_LENGTH		(sizeof (ALn_URL_ANCHOR_2) - 1)
-#define ALn_URL_ANCHOR_3_LENGTH		(sizeof (ALn_URL_ANCHOR_3) - 1)
-#define ALn_URL_ANCHOR_TOTAL_LENGTH	(ALn_URL_ANCHOR_1_LENGTH + ALn_URL_ANCHOR_2_LENGTH + ALn_URL_ANCHOR_3_LENGTH)
+#define ALn_URL_ANCHOR_TOTAL_LENGTH	(ALn_URL_ANCHOR_0_LENGTH + ALn_URL_ANCHOR_1_LENGTH + ALn_URL_ANCHOR_2_LENGTH)
 
-static const struct ALn_Substring URLAnchor1 =
+static const struct ALn_Substring URLAnchor[3] =
   {
-  .Str = ALn_URL_ANCHOR_1,
-  .Len = ALn_URL_ANCHOR_1_LENGTH,
-  };
-static const struct ALn_Substring URLAnchor2 =
-  {
-  .Str = ALn_URL_ANCHOR_2,
-  .Len = ALn_URL_ANCHOR_2_LENGTH,
-  };
-static const struct ALn_Substring URLAnchor3 =
-  {
-  .Str = ALn_URL_ANCHOR_3,
-  .Len = ALn_URL_ANCHOR_3_LENGTH,
+   [0] = {
+	  .Str = ALn_URL_ANCHOR_0,
+	  .Len = ALn_URL_ANCHOR_0_LENGTH,
+	  },
+   [1] = {
+	  .Str = ALn_URL_ANCHOR_1,
+	  .Len = ALn_URL_ANCHOR_1_LENGTH,
+	  },
+   [2] = {
+	  .Str = ALn_URL_ANCHOR_2,
+	  .Len = ALn_URL_ANCHOR_2_LENGTH,
+	  },
   };
 
 /*****************************************************************************/
@@ -161,9 +156,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
    size_t Length;
    size_t i;
    struct ALn_Substring Limited;	// URL displayed on screen (may be shorter than actual length)
-   const struct ALn_Substring *Anchor1;
-   const struct ALn_Substring *Anchor2;
-   const struct ALn_Substring *Anchor3;
+   const struct ALn_Substring *Anchor[3];
 
    /**************************************************************/
    /***** Find starts and ends of links (URLs and nicknames) *****/
@@ -202,14 +195,14 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             switch (Link->Type)
               {
                case ALn_LINK_URL:
-                  Anchor1 = &URLAnchor1;
-                  Anchor2 = &URLAnchor2;
-                  Anchor3 = &URLAnchor3;
+                  Anchor[0] = &URLAnchor[0];
+                  Anchor[1] = &URLAnchor[1];
+                  Anchor[2] = &URLAnchor[2];
 		  break;
                case ALn_LINK_NICK:
-                  Anchor1 = &Link->Nick.Anchor1;
-                  Anchor2 = &Link->Nick.Anchor2;
-                  Anchor3 = &Link->Nick.Anchor3;
+                  Anchor[0] = &Link->NickAnchor[0];
+                  Anchor[1] = &Link->NickAnchor[1];
+                  Anchor[2] = &Link->NickAnchor[2];
 		  break;
                default:
         	  continue;
@@ -228,7 +221,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                *PtrDst-- = *PtrSrc--;
 
             /***** Step 2: Copy third part of anchor *****/
-            ALn_CopySubstring (Anchor3,&PtrDst);
+            ALn_CopySubstring (Anchor[2],&PtrDst);
 
             /***** Step 3: Move forward the link (URL or nickname)
                            to be shown on screen *****/
@@ -257,7 +250,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
               }
 
             /***** Step 4: Copy second part of anchor *****/
-            ALn_CopySubstring (Anchor2,&PtrDst);
+            ALn_CopySubstring (Anchor[1],&PtrDst);
 
             /***** Step 5: Copy link into directive A
                            (it's mandatory to do the copy in reverse order
@@ -265,7 +258,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             ALn_CopySubstring (&Link->URLorNick,&PtrDst);
 
             /***** Step 6: Copy first part of anchor *****/
-            ALn_CopySubstring (Anchor1,&PtrDst);
+            ALn_CopySubstring (Anchor[0],&PtrDst);
            }
      }
 
@@ -327,9 +320,9 @@ static void ALn_FreeLinks (struct ALn_Link *LastLink)
       PrevLink = Link->Prev;
       if (Link->Type == ALn_LINK_NICK)
 	{
-	 if (Link->Nick.Anchor3.Str) free (Link->Nick.Anchor3.Str);
-	 if (Link->Nick.Anchor2.Str) free (Link->Nick.Anchor2.Str);
-	 if (Link->Nick.Anchor1.Str) free (Link->Nick.Anchor1.Str);
+	 if (Link->NickAnchor[2].Str) free (Link->NickAnchor[2].Str);
+	 if (Link->NickAnchor[1].Str) free (Link->NickAnchor[1].Str);
+	 if (Link->NickAnchor[0].Str) free (Link->NickAnchor[0].Str);
 	}
       free (Link);
      }
@@ -497,9 +490,9 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 	       if (Type == ALn_LINK_NICK)
 		 {
 		  /***** Reset anchors (checked on freeing) *****/
-		  (*Link)->Nick.Anchor1.Str =
-		  (*Link)->Nick.Anchor2.Str =
-		  (*Link)->Nick.Anchor3.Str = NULL;
+		  (*Link)->NickAnchor[0].Str =
+		  (*Link)->NickAnchor[1].Str =
+		  (*Link)->NickAnchor[2].Str = NULL;
 
 		  /***** Create id for this form *****/
 		  Gbl.Form.Num++;
@@ -512,7 +505,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 
 		  /***** Store first part of anchor *****/
 		  Frm_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
-		  if (asprintf (&(*Link)->Nick.Anchor1.Str,
+		  if (asprintf (&(*Link)->NickAnchor[0].Str,
 				"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
 				"%s"	// Parameters
 				"<input type=\"hidden\" name=\"usr\" value=\"",
@@ -522,17 +515,17 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 						     Gbl.Form.Id,
 				ParamsStr) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  (*Link)->Nick.Anchor1.Len = strlen ((*Link)->Nick.Anchor1.Str);
+		  (*Link)->NickAnchor[0].Len = strlen ((*Link)->NickAnchor[0].Str);
 
 		  /***** Store second part of anchor *****/
-		  if (asprintf (&(*Link)->Nick.Anchor2.Str,
+		  if (asprintf (&(*Link)->NickAnchor[1].Str,
 				"\">"
 				"<a href=\"\""
 				" onclick=\"document.getElementById('%s').submit();return false;\">",
 				Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 						     Gbl.Form.Id) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  (*Link)->Nick.Anchor2.Len = strlen ((*Link)->Nick.Anchor2.Str);
+		  (*Link)->NickAnchor[1].Len = strlen ((*Link)->NickAnchor[1].Str);
 
 		  /***** Store third part of anchor *****/
 		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
@@ -541,14 +534,14 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 					 "PHOTO12x16",Pho_ZOOM,
 					 &CaptionStr,
 					 &ImgStr);
-		  if (asprintf (&(*Link)->Nick.Anchor3.Str,
+		  if (asprintf (&(*Link)->NickAnchor[2].Str,
 				"</a></form>%s%s",
 				CaptionStr,
 				ImgStr) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  free (ImgStr);
 		  free (CaptionStr);
-		  (*Link)->Nick.Anchor3.Len = strlen ((*Link)->Nick.Anchor3.Str);
+		  (*Link)->NickAnchor[2].Len = strlen ((*Link)->NickAnchor[2].Str);
 
 		  /***** Free memory used for user's data *****/
 		  Usr_UsrDataDestructor (&UsrDat);
@@ -556,10 +549,10 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		  /***** Compute number of bytes added until here *****/
 		  (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere :
 								  0;
-		  (*Link)->AddedLengthUntilHere += (*Link)->Nick.Anchor1.Len +
+		  (*Link)->AddedLengthUntilHere += (*Link)->NickAnchor[0].Len +
 						   (*Link)->URLorNick.Len +
-						   (*Link)->Nick.Anchor2.Len +
-						   (*Link)->Nick.Anchor3.Len;
+						   (*Link)->NickAnchor[1].Len +
+						   (*Link)->NickAnchor[2].Len;
 
 		  /***** Create next link *****/
 		  ALn_CreateNextLink (Link,LastLink);
