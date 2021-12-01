@@ -1394,6 +1394,7 @@ void Usr_WriteLoggedUsrHead (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC18x24",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE18x24",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO18x24",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR18x24",
      };
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
@@ -2196,6 +2197,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
@@ -2288,6 +2290,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
@@ -2376,6 +2379,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumGrpTyp,NumField;
@@ -2486,6 +2490,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
@@ -2566,6 +2571,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
@@ -6139,12 +6145,15 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
      {
       [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
       [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
       [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
       [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
       [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
       [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
       [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
@@ -6369,6 +6378,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
      };
    bool ShowPhoto = false;
@@ -6416,6 +6426,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
      };
 

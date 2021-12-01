@@ -2160,6 +2160,7 @@ void TstPrn_ShowOnePrint (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
      };
    struct TstPrn_Print Print;

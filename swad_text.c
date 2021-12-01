@@ -55632,13 +55632,33 @@ const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS] =
 #elif L==5	// fr
 	"Ellipse"
 #elif L==6	// gn
-	"Elipse"	// Okoteve traducción
+	"Elipse"		// Okoteve traducción
 #elif L==7	// it
 	"Ellisse"
 #elif L==8	// pl
 	"Elipsa"
 #elif L==9	// pt
 	"Elipse"
+#endif
+	,
+#if   L==1	// ca
+	"Oval"
+#elif L==2	// de
+	"Oval"
+#elif L==3	// en
+	"Oval"
+#elif L==4	// es
+	"&Oacute;valo"
+#elif L==5	// fr
+	"Ovale"
+#elif L==6	// gn
+	"&Oacute;valo"		// Okoteve traducción
+#elif L==7	// it
+	"Ovale"
+#elif L==8	// pl
+	"Owalny"
+#elif L==9	// pt
+	"Ovalo"
 #endif
 	,
 #if   L==1	// ca

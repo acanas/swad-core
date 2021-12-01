@@ -3233,6 +3233,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC60x80",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE60x80",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO60x80",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR60x80",
      };
 
@@ -5456,6 +5457,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20B",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20B",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20B",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20B",
      };
    bool ShowUsr = false;
@@ -7847,6 +7849,7 @@ void Brw_ShowFileMetadata (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
      };
    struct FileMetadata FileMetadata;

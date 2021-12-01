@@ -2601,8 +2601,9 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
   {
    static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOR186x248",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOR186x248",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOR186x248",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
      };
 

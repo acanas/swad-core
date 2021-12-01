@@ -483,6 +483,7 @@ static void Msg_ShowOneUniqueRecipient (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
 
@@ -2294,6 +2295,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO30x40",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
      };
    bool WriteAuthor;
@@ -2461,6 +2463,7 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
 
@@ -2536,6 +2539,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
@@ -2879,6 +2883,7 @@ void Msg_ListBannedUsrs (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;

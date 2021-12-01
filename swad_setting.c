@@ -301,6 +301,7 @@ static void Set_PutIconsToSelectUsrPhotos (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "ICO_HIGHLIGHT PHOTOC15x20B",
       [Set_USR_PHOTO_ELLIPSE  ] = "ICO_HIGHLIGHT PHOTOE15x20B",
+      [Set_USR_PHOTO_OVAL     ] = "ICO_HIGHLIGHT PHOTOO15x20B",
       [Set_USR_PHOTO_RECTANGLE] = "ICO_HIGHLIGHT PHOTOR15x20B",
      };
    Set_UsrPhotos_t UsrPhotos;

@@ -560,6 +560,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    const char *ClassTxt;
@@ -661,6 +662,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;

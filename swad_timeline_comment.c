@@ -188,6 +188,7 @@ static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO30x40",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
      };
 

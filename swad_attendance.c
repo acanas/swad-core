@@ -1684,6 +1684,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
      };
    bool Present;
@@ -2918,6 +2919,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;
@@ -3078,6 +3080,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;

@@ -465,6 +465,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC12x16",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE12x16",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO12x16",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR12x16",
      };
    char Ch;

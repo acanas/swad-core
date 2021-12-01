@@ -616,6 +616,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC60x80",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE60x80",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO60x80",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR60x80",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
@@ -674,6 +675,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);

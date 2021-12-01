@@ -602,12 +602,17 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.65 (2021-12-01)"
-#define CSS_FILE		"swad21.65.css"
+#define Log_PLATFORM_VERSION	"SWAD 21.65.1 (2021-12-01)"
+#define CSS_FILE		"swad21.65.1.css"
 #define JS_FILE			"swad21.59.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
+
+	Version 21.65.1:  Dec 01, 2021  New shape of user photos. (320833 lines)
+					2 changes necessary in database:
+UPDATE set_ip_settings SET UsrPhotos=3 WHERE UsrPhotos=2;
+UPDATE usr_data SET UsrPhotos=3 WHERE UsrPhotos=2;
 
 	Version 21.65:    Dec 01, 2021  Selection of shape of user photos. (320755 lines)
 					4 changes necessary in database:

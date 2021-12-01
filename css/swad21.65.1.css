@@ -2120,15 +2120,15 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /******************************* User's photo ********************************/
-.PHOTOC12x16	{width: 12px; height: 16px; clip-path: circle(50% at center); vertical-align:middle; margin-top:-2px;}
-.PHOTOC15x20	{width: 15px; height: 20px; clip-path: circle(50% at center); vertical-align:middle;}
-.PHOTOC15x20B	{width: 15px; height: 20px; clip-path: circle(50% at center); vertical-align:middle; display:block; margin:0 auto;}
-.PHOTOC18x24	{width: 18px; height: 24px; clip-path: circle(50% at center); vertical-align:middle;}
-.PHOTOC21x28	{width: 21px; height: 28px; clip-path: circle(50% at center); vertical-align:middle;}
-.PHOTOC30x40	{width: 30px; height: 40px; clip-path: circle(50% at center); vertical-align:middle;}
-.PHOTOC45x60	{width: 45px; height: 60px; clip-path: circle(50% at center); vertical-align:middle;}
-.PHOTOC60x80	{width: 60px; height: 80px; clip-path: circle(50% at center); vertical-align:middle;}
-.PHOTOC186x248	{width:186px; height:248px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC12x16	{width: 12px; height: 16px; clip-path: circle(40% at center); vertical-align:middle; margin-top:-2px;}
+.PHOTOC15x20	{width: 15px; height: 20px; clip-path: circle(40% at center); vertical-align:middle;}
+.PHOTOC15x20B	{width: 15px; height: 20px; clip-path: circle(40% at center); vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOC18x24	{width: 18px; height: 24px; clip-path: circle(40% at center); vertical-align:middle;}
+.PHOTOC21x28	{width: 21px; height: 28px; clip-path: circle(40% at center); vertical-align:middle;}
+.PHOTOC30x40	{width: 30px; height: 40px; clip-path: circle(40% at center); vertical-align:middle;}
+.PHOTOC45x60	{width: 45px; height: 60px; clip-path: circle(40% at center); vertical-align:middle;}
+.PHOTOC60x80	{width: 60px; height: 80px; clip-path: circle(40% at center); vertical-align:middle;}
+.PHOTOC186x248	{width:186px; height:248px; clip-path: circle(40% at center); margin-top:-24px;}
 
 .PHOTOE12x16	{width: 12px; height: 16px; clip-path: ellipse(50% 50% at center); vertical-align:middle; margin-top:-2px;}
 .PHOTOE15x20	{width: 15px; height: 20px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
@@ -2138,7 +2138,17 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .PHOTOE30x40	{width: 30px; height: 40px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
 .PHOTOE45x60	{width: 45px; height: 60px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
 .PHOTOE60x80	{width: 60px; height: 80px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
-.PHOTOE186x248	{width:186px; height:248px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE186x248	{width:186px; height:248px; clip-path: ellipse(50% 50% at center);}
+
+.PHOTOO12x16	{width: 12px; height: 16px; border-radius: 6px; vertical-align:middle; margin-top:-2px;}
+.PHOTOO15x20	{width: 15px; height: 20px; border-radius: 8px; vertical-align:middle;}
+.PHOTOO15x20B	{width: 15px; height: 20px; border-radius: 8px; vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOO18x24	{width: 18px; height: 24px; border-radius: 9px; vertical-align:middle;}
+.PHOTOO21x28	{width: 21px; height: 28px; border-radius:11px; vertical-align:middle;}
+.PHOTOO30x40	{width: 30px; height: 40px; border-radius:15px; vertical-align:middle;}
+.PHOTOO45x60	{width: 45px; height: 60px; border-radius:23px; vertical-align:middle;}
+.PHOTOO60x80	{width: 60px; height: 80px; border-radius:30px; vertical-align:middle;}
+.PHOTOO186x248	{width:186px; height:248px; border-radius:92px;}
 
 .PHOTOR12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
 .PHOTOR15x20	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle;}
@@ -2148,7 +2158,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .PHOTOR30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
 .PHOTOR45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
 .PHOTOR60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
-.PHOTOR186x248	{width:186px; height:248px; border-radius:4px; vertical-align:middle;}
+.PHOTOR186x248	{width:186px; height:248px; border-radius:4px;}
 
 .IMG_USR
 	{

@@ -2138,6 +2138,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
      };
    unsigned NumThr;

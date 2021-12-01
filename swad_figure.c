@@ -3986,6 +3986,7 @@ static void Fig_GetAndShowNumUsrsPerUserPhotos (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20B",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20B",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20B",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20B",
      };
    Set_UsrPhotos_t UsrPhotos;
@@ -3994,7 +3995,7 @@ static void Fig_GetAndShowNumUsrsPerUserPhotos (void)
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SIDE_COLUMNS],
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_USER_PHOTOS],
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 

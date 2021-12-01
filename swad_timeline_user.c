@@ -183,6 +183,7 @@ static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC12x16",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE12x16",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO12x16",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR12x16",
      };
    unsigned NumUsr;

@@ -2078,6 +2078,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;

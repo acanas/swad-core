@@ -1303,6 +1303,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO30x48",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);

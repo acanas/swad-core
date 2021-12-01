@@ -423,8 +423,9 @@ void Pho_ReqRemoveMyPhoto (void)
    extern const char *Txt_The_photo_no_longer_exists;
    static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOR186x248",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOR186x248",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOR186x248",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
      };
 
@@ -501,6 +502,7 @@ void Pho_ReqRemoveUsrPhoto (void)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO186x248",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
      };
    char PhotoURL[PATH_MAX + 1];

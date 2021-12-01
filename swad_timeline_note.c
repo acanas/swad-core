@@ -293,6 +293,7 @@ void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
      {
       [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
       [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
       [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
      };
 

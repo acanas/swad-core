@@ -30,6 +30,7 @@
 #include <locale.h>		// For setlocale
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
 #include <stdio.h>		// For asprintf
+#include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
 #include "swad_error.h"

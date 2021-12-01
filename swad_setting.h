@@ -34,12 +34,13 @@
 /*****************************************************************************/
 
 // Related with user photo shape
-#define Set_NUM_USR_PHOTOS 3
+#define Set_NUM_USR_PHOTOS 4
 typedef enum
   {
    Set_USR_PHOTO_CIRCLE    = 0,
    Set_USR_PHOTO_ELLIPSE   = 1,
-   Set_USR_PHOTO_RECTANGLE = 2,
+   Set_USR_PHOTO_OVAL      = 2,
+   Set_USR_PHOTO_RECTANGLE = 3,
   } Set_UsrPhotos_t;
 #define Set_USR_PHOTOS_DEFAULT Set_USR_PHOTO_CIRCLE
 
