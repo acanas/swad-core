@@ -224,8 +224,8 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
      {
       /***** Begin form *****/
       Frm_BeginForm (Action[RequestOrConfirm]);
-      TstPrn_PutParamPrnCod (Print->PrnCod);
-      Par_PutHiddenParamUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
+	 TstPrn_PutParamPrnCod (Print->PrnCod);
+	 Par_PutHiddenParamUnsigned (NULL,"NumTst",NumPrintsGeneratedByMe);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWideMarginPadding (10);
@@ -1977,7 +1977,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 		 {
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
-		  TstPrn_PutParamPrnCod (Print.PrnCod);
+		     TstPrn_PutParamPrnCod (Print.PrnCod);
 		     Ico_PutIconLink ("tasks.svg",Txt_View_test);
 		  Frm_EndForm ();
 		 }
@@ -2156,6 +2156,12 @@ void TstPrn_ShowOnePrint (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+     };
    struct TstPrn_Print Print;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
@@ -2216,7 +2222,9 @@ void TstPrn_ShowOnePrint (void)
 		  if (Gbl.Usrs.Other.UsrDat.FrstName[0])
 		     HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
 		  HTM_BR ();
-		  Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+		  Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
+		                             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                             false);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

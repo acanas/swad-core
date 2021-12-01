@@ -586,7 +586,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
-	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
 					   "BT_LINK LT DAT",NULL);
 		  Hie_FreeGoToMsg ();
@@ -757,7 +757,7 @@ static void CtrCfg_NumDegs (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB\"");
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	 Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
 							 Gbl.Hierarchy.Ctr.ShrtName),
 				     "BT_LINK DAT",NULL);

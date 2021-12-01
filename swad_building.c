@@ -127,7 +127,7 @@ void Bld_SeeBuildings (void)
 	      {
 	       HTM_TH_Begin (1,1,"LM");
 		  Frm_BeginForm (ActSeeBld);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		     HTM_BUTTON_SUBMIT_Begin (Txt_BUILDINGS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 			if (Order == Buildings.SelectedOrder)
 			   HTM_U_Begin ();
@@ -442,7 +442,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building short name */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldSho,Anchor);
-	       Bld_PutParamBldCod (&Building->BldCod);
+		  Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("ShortName",Bld_MAX_CHARS_SHRT_NAME,Building->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"10\" class=\"INPUT_SHORT_NAME\"");
@@ -452,7 +452,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building full name */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldFul,Anchor);
-	       Bld_PutParamBldCod (&Building->BldCod);
+		  Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("FullName",Bld_MAX_CHARS_FULL_NAME,Building->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\" class=\"INPUT_FULL_NAME\"");
@@ -462,7 +462,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 	    /* Building location */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenBldLoc,Anchor);
-	       Bld_PutParamBldCod (&Building->BldCod);
+		  Bld_PutParamBldCod (&Building->BldCod);
 		  HTM_INPUT_TEXT ("Location",Bld_MAX_CHARS_LOCATION,Building->Location,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\" class=\"INPUT_FULL_NAME\"");

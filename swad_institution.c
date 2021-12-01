@@ -200,7 +200,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
    if (PutLink)
      {
       Frm_BeginForm (ActSeeInsInf);
-      Ins_PutParamInsCod (Ins->InsCod);
+	 Ins_PutParamInsCod (Ins->InsCod);
 	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
      }
    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
@@ -221,7 +221,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-   Ins_PutParamInsCod (Ins->InsCod);
+      Ins_PutParamInsCod (Ins->InsCod);
 
       /***** Link to action *****/
       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
@@ -465,7 +465,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],ClassButton[Order],NULL);
 		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
 			HTM_U_Begin ();
@@ -974,7 +974,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsSho);
-	       Hie_PutParamOtherHieCod (&Ins->InsCod);
+		  Hie_PutParamOtherHieCod (&Ins->InsCod);
 		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME\"");
@@ -989,7 +989,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
-	       Hie_PutParamOtherHieCod (&Ins->InsCod);
+		  Hie_PutParamOtherHieCod (&Ins->InsCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME\"");
@@ -1004,7 +1004,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
-		  Hie_PutParamOtherHieCod (&Ins->InsCod);
+		     Hie_PutParamOtherHieCod (&Ins->InsCod);
 		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();

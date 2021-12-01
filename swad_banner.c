@@ -455,7 +455,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanSho);
-	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME\"");
@@ -465,7 +465,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenBanFul);
-	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME\"");
@@ -475,7 +475,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgBanImg);
-	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"12\"");
@@ -485,7 +485,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgBanWWW);
-	       Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
+		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
 				 "class=\"INPUT_WWW_NARROW\""
 				 " required=\"required\"");
@@ -1031,8 +1031,8 @@ void Ban_WriteMenuWithBanners (void)
 
          /* Begin form */
 	 Frm_BeginForm (ActClkBan);
-	 Ban_PutParamBanCod (Banners.Lst[NumBan].BanCod);
-	 Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
+	    Ban_PutParamBanCod (Banners.Lst[NumBan].BanCod);
+	    Par_PutHiddenParamString (NULL,"URL",Banners.Lst[NumBan].WWW);
 
 	    /* Banner image */
 	    HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,

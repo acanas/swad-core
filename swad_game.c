@@ -280,8 +280,8 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllGam);
-		     Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
-		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+			Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
+			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
 			HTM_BUTTON_SUBMIT_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
 			   if (Order == Games->SelectedOrder)
@@ -419,7 +419,7 @@ static void Gam_PutButtonToCreateNewGame (struct Gam_Games *Games)
    extern const char *Txt_New_game;
 
    Frm_BeginForm (ActFrmNewGam);
-   Gam_PutParamsToCreateNewGame (Games);
+      Gam_PutParamsToCreateNewGame (Games);
 
       Btn_PutConfirmButton (Txt_New_game);
 
@@ -596,7 +596,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Games->GamCod = Game->GamCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
-	 Gam_PutParams (Games);
+	    Gam_PutParams (Games);
 	    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
 				     Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
 						    "BT_LINK LT ASG_TITLE",
@@ -627,7 +627,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
-      Gam_PutParams (Games);
+	 Gam_PutParams (Games);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
 				  Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
 						 "BT_LINK LT ASG_TITLE",
@@ -1312,7 +1312,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
    Games->GamCod = Game->GamCod;
    Frm_BeginForm (ItsANewGame ? ActNewGam :
 				ActChgGam);
-   Gam_PutParams (Games);
+      Gam_PutParams (Games);
 
       /***** Begin box and table *****/
       if (ItsANewGame)
@@ -1827,7 +1827,7 @@ static void Gam_PutButtonToAddNewQuestions (struct Gam_Games *Games)
    extern const char *Txt_Add_questions;
 
    Frm_BeginForm (ActAddOneGamQst);
-   Gam_PutParams (Games);
+      Gam_PutParams (Games);
 
       Btn_PutConfirmButton (Txt_Add_questions);
 
@@ -2211,8 +2211,8 @@ void Gam_PutButtonNewMatch (struct Gam_Games *Games,long GamCod)
    extern const char *Txt_New_match;
 
    Frm_BeginFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
-   Games->GamCod = GamCod;
-   Gam_PutParams (Games);
+      Games->GamCod = GamCod;
+      Gam_PutParams (Games);
 
       Btn_PutConfirmButton (Txt_New_match);
 

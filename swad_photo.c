@@ -325,18 +325,18 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
       else
 	{
 	 Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	}
 
-      /***** Show help message *****/
-      Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
+	 /***** Show help message *****/
+	 Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
-      /***** Form to upload photo *****/
-      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	 HTM_TxtColonNBSP (Txt_File_with_the_photo);
-	 HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
-			 HTM_SUBMIT_ON_CHANGE,NULL);
-      HTM_LABEL_End ();
+	 /***** Form to upload photo *****/
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TxtColonNBSP (Txt_File_with_the_photo);
+	    HTM_INPUT_FILE (Fil_NAME_OF_PARAM_FILENAME_ORG,"image/*",
+			    HTM_SUBMIT_ON_CHANGE,NULL);
+	 HTM_LABEL_End ();
 
       /***** End form *****/
       Frm_EndForm ();
@@ -421,6 +421,12 @@ void Pho_ReqRemoveMyPhoto (void)
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
+     };
 
    /***** Show current photo and help message *****/
    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
@@ -431,7 +437,8 @@ void Pho_ReqRemoveMyPhoto (void)
 
       /* Show current photo */
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
-			"PHOTO186x248",Pho_NO_ZOOM,false);
+			ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+			false);
 
       /* End alert */
       Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
@@ -477,7 +484,6 @@ void Pho_ReqRemoveUsrPhoto (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_photo_of_X;
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
-   char PhotoURL[PATH_MAX + 1];
    static const Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
       [Rol_UNK	  ] = ActRemOthPho,
@@ -491,6 +497,13 @@ void Pho_ReqRemoveUsrPhoto (void)
       [Rol_INS_ADM] = ActRemOthPho,
       [Rol_SYS_ADM] = ActRemOthPho,
      };
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
+     };
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -512,7 +525,8 @@ void Pho_ReqRemoveUsrPhoto (void)
 
 	    /* Show current photo */
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
-			      "PHOTO186x248",Pho_NO_ZOOM,false);
+			      ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+			      false);
 
 	    /* End alert */
 	    Ale_ShowAlertAndButton2 (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,NULL,
@@ -692,10 +706,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
                else
         	 {
 		  Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
-                  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
         	 }
-               Par_PutHiddenParamString (NULL,"FileName",StrFileName);
-               Frm_EndForm ();
+		  Par_PutHiddenParamString (NULL,"FileName",StrFileName);
+		  Frm_EndForm ();
               }
             else
                NumFacesRed++;
@@ -1375,7 +1389,7 @@ void Pho_ChangePhotoVisibility (void)
 	                                                        Pri_PHOTO_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
-   Set_DB_UpdateMySettingsAboutPhoto ();
+   Set_DB_UpdateMySettingsAboutPhotoVisibility ();
 
    /***** Show form again *****/
    Set_EditSettings ();
@@ -1769,9 +1783,9 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 Frm_BeginForm (ActSeePhoDeg);
-	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	 Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
+	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"AvgType\" name=\"AvgType\"");
 	       for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
@@ -1833,9 +1847,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 Frm_BeginForm (ActSeePhoDeg);
-	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	 Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
+	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"PhotoSize\" name=\"PhotoSize\"");
 	       for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
@@ -1897,9 +1911,9 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 Frm_BeginForm (ActSeePhoDeg);
-	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	 Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"Order\" name=\"Order\"");
 	       for (Order  = (Pho_HowOrderDegrees_t) 0;
@@ -1989,10 +2003,10 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
 	 /* Begin form */
 	 Frm_BeginForm (ActCalPhoDeg);
-	 Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
-	 Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
-	 Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
-	 Set_PutParamsPrefsAboutUsrList ();
+	    Pho_PutHiddenParamTypeOfAvg (DegPhotos->TypeOfAverage);
+	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
+	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
+	    Set_PutParamsPrefsAboutUsrList ();
 
 	    HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
 				       The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
@@ -2344,9 +2358,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
-      Deg_PutParamDegCod (Deg->DegCod);
-      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
-      Hie_FreeGoToMsg ();
+	 Deg_PutParamDegCod (Deg->DegCod);
+	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
+	 Hie_FreeGoToMsg ();
      }
 
    /***** Check if photo of degree can be shown *****/
@@ -2425,7 +2439,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
-      HTM_BUTTON_End ();
+	 HTM_BUTTON_End ();
       Frm_EndForm ();
      }
   }

@@ -253,10 +253,10 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllSvy);
-		     WhichGroups = Grp_GetParamWhichGroups ();
-		     Grp_PutParamWhichGroups (&WhichGroups);
-		     Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-		     Dat_PutHiddenParamOrder (Order);
+			WhichGroups = Grp_GetParamWhichGroups ();
+			Grp_PutParamWhichGroups (&WhichGroups);
+			Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+			Dat_PutHiddenParamOrder (Order);
 			HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
 						 "BT_LINK TIT_TBL",NULL);
 			   if (Order == Surveys->SelectedOrder)
@@ -356,7 +356,7 @@ static void Svy_PutButtonToCreateNewSvy (struct Svy_Surveys *Surveys)
    extern const char *Txt_New_survey;
 
    Frm_BeginForm (ActFrmNewSvy);
-   Svy_PutParamsToCreateNewSvy (Surveys);
+      Svy_PutParamsToCreateNewSvy (Surveys);
       Btn_PutConfirmButton (Txt_New_survey);
    Frm_EndForm ();
   }
@@ -529,11 +529,11 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
-	 Svy_PutParamSvyCod (SvyCod);
-	 Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
-	 WhichGroups = Grp_GetParamWhichGroups ();
-	 Grp_PutParamWhichGroups (&WhichGroups);
-	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+	    Svy_PutParamSvyCod (SvyCod);
+	    Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
+	    WhichGroups = Grp_GetParamWhichGroups ();
+	    Grp_PutParamWhichGroups (&WhichGroups);
+	    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 	    HTM_BUTTON_SUBMIT_Begin (Txt_View_survey,
 				     Svy.Status.Visible ? "BT_LINK LT ASG_TITLE" :
 							  "BT_LINK LT ASG_TITLE_LIGHT",
@@ -571,12 +571,12 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	       Frm_BeginForm (ActSeeSvy);
-	       Svy_PutParamSvyCod (Svy.SvyCod);
-	       Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
-	       WhichGroups = Grp_GetParamWhichGroups ();
-	       Grp_PutParamWhichGroups (&WhichGroups);
-	       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-		  Btn_PutCreateButtonInline (Txt_Answer_survey);
+		  Svy_PutParamSvyCod (Svy.SvyCod);
+		  Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+		     Btn_PutCreateButtonInline (Txt_Answer_survey);
 	       Frm_EndForm ();
 
 	    HTM_DIV_End ();
@@ -587,11 +587,11 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	       Frm_BeginForm (ActSeeSvy);
-	       Svy_PutParamSvyCod (Svy.SvyCod);
-	       Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
-	       WhichGroups = Grp_GetParamWhichGroups ();
-	       Grp_PutParamWhichGroups (&WhichGroups);
-	       Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
+		  Svy_PutParamSvyCod (Svy.SvyCod);
+		  Svy_PutHiddenParamSvyOrder (Surveys->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 		  Btn_PutConfirmButtonInline (Txt_View_results);
 	       Frm_EndForm ();
 
@@ -1521,7 +1521,7 @@ static void Svy_PutButtonToResetSurvey (struct Svy_Surveys *Surveys)
    extern const char *Txt_Reset_survey;
 
    Frm_BeginForm (ActRstSvy);
-   Svy_PutParams (Surveys);
+      Svy_PutParams (Surveys);
       Btn_PutRemoveButton (Txt_Reset_survey);
    Frm_EndForm ();
   }
@@ -1711,7 +1711,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Surveys.SvyCod = Svy.SvyCod;
    Frm_BeginForm (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
-   Svy_PutParams (&Surveys);
+      Svy_PutParams (&Surveys);
 
       /***** Begin box and table *****/
       if (ItsANewSurvey)
@@ -2365,99 +2365,99 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvSvyQst);
-   Svy_PutParamSvyCod (SvyCod);
-   if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-      Svy_PutParamQstCod (SvyQst->QstCod);
+      Svy_PutParamSvyCod (SvyCod);
+      if (SvyQst->QstCod > 0)	// If the question already has assigned a code
+	 Svy_PutParamQstCod (SvyQst->QstCod);
 
-   /***** Begin table *****/
-   HTM_TABLE_BeginWidePadding (2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginWidePadding (2);
 
-      /***** Stem *****/
-      HTM_TR_Begin (NULL);
+	 /***** Stem *****/
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Txt",Txt_Wording);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Txt",Txt_Wording);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
-	       HTM_Txt (Stem);
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
+		  HTM_Txt (Stem);
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /***** Type of answer *****/
-      HTM_TR_Begin (NULL);
+	 /***** Type of answer *****/
+	 HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    HTM_TxtColon (Txt_Type);
-	 HTM_TD_End ();
+	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Type);
+	    HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    for (AnsType  = (Svy_AnswerType_t) 0;
-		 AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
-		 AnsType++)
-	      {
-	       HTM_LABEL_Begin (NULL);
-		  HTM_INPUT_RADIO ("AnswerType",false,
-				   "value=\"%u\"%s",
-				   (unsigned) AnsType,
-				   AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
-		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
-	       HTM_LABEL_End ();
-	       HTM_BR ();
-	      }
-	 HTM_TD_End ();
-
-      HTM_TR_End ();
-
-      /***** Answers *****/
-      HTM_TR_Begin (NULL);
-
-	 HTM_TD_Empty (1);
-
-	 /* Unique or multiple choice answers */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TABLE_BeginPadding (2);
-	       for (NumAns = 0;
-		    NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
-		    NumAns++)
+	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       for (AnsType  = (Svy_AnswerType_t) 0;
+		    AnsType <= (Svy_AnswerType_t) (Svy_NUM_ANS_TYPES - 1);
+		    AnsType++)
 		 {
-		  HTM_TR_Begin (NULL);
-
-		     /* Label with the number of the answer */
-		     HTM_TD_Begin ("class=\"RT\"");
-			HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\"",
-					 NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
-			   HTM_TxtF ("%u)",NumAns + 1);
-			HTM_LABEL_End ();
-		     HTM_TD_End ();
-
-		     /* Answer text */
-		     HTM_TD_Begin ("class=\"RT\"");
-			HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
-					    NumAns,NumAns);
-			   if (SvyQst->AnsChoice[NumAns].Text)
-			      HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
-			HTM_TEXTAREA_End ();
-		     HTM_TD_End ();
-
-		  HTM_TR_End ();
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO ("AnswerType",false,
+				      "value=\"%u\"%s",
+				      (unsigned) AnsType,
+				      AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
+		     HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
+		  HTM_LABEL_End ();
+		  HTM_BR ();
 		 }
-	    HTM_TABLE_End ();
-	 HTM_TD_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-   /***** End table *****/
-   HTM_TABLE_End ();
+	 /***** Answers *****/
+	 HTM_TR_Begin (NULL);
 
-   /***** Send button *****/
-   if (SvyQst->QstCod > 0)	// If the question already has assigned a code
-      Btn_PutConfirmButton (Txt_Save_changes);
-   else
-      Btn_PutCreateButton (Txt_Create_question);
+	    HTM_TD_Empty (1);
+
+	    /* Unique or multiple choice answers */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TABLE_BeginPadding (2);
+		  for (NumAns = 0;
+		       NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
+		       NumAns++)
+		    {
+		     HTM_TR_Begin (NULL);
+
+			/* Label with the number of the answer */
+			HTM_TD_Begin ("class=\"RT\"");
+			   HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\"",
+					    NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
+			      HTM_TxtF ("%u)",NumAns + 1);
+			   HTM_LABEL_End ();
+			HTM_TD_End ();
+
+			/* Answer text */
+			HTM_TD_Begin ("class=\"RT\"");
+			   HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
+					       NumAns,NumAns);
+			      if (SvyQst->AnsChoice[NumAns].Text)
+				 HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
+			   HTM_TEXTAREA_End ();
+			HTM_TD_End ();
+
+		     HTM_TR_End ();
+		    }
+	       HTM_TABLE_End ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+      /***** Send button *****/
+      if (SvyQst->QstCod > 0)	// If the question already has assigned a code
+	 Btn_PutConfirmButton (Txt_Save_changes);
+      else
+	 Btn_PutCreateButton (Txt_Create_question);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2767,7 +2767,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	{
 	 /***** Begin form to send answers to survey *****/
 	 Frm_BeginForm (ActAnsSvy);
-	 Svy_PutParamSvyCod (Svy->SvyCod);
+	    Svy_PutParamSvyCod (Svy->SvyCod);
 	}
 
       /***** Write the heading *****/
@@ -2921,7 +2921,7 @@ static void Svy_PutButtonToCreateNewQuestion (struct Svy_Surveys *Surveys)
    extern const char *Txt_New_question;
 
    Frm_BeginForm (ActEdiOneSvyQst);
-   Svy_PutParams (Surveys);
+      Svy_PutParams (Surveys);
       Btn_PutConfirmButton (Txt_New_question);
    Frm_EndForm ();
   }

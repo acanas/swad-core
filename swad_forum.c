@@ -925,7 +925,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	    Frm_BeginFormAnchor (Enabled ? For_ActionsDisPstFor[Forums->Forum.Type] :
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
-	    For_PutParamsForum (Forums);
+	       For_PutParamsForum (Forums);
 	       Ico_PutIconLink (Enabled ? "eye-green.svg" :
 					  "eye-slash-red.svg",
 				Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
@@ -1386,7 +1386,7 @@ static void For_PutFormWhichForums (const struct For_Forums *Forums)
           - all my forums
           - only the forums of current institution/degree/course *****/
    Frm_BeginForm (ActSeeFor);
-   Dat_PutHiddenParamOrder (Forums->ThreadsOrder);
+      Dat_PutHiddenParamOrder (Forums->ThreadsOrder);
       HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
 	 HTM_UL_Begin (NULL);
 
@@ -1696,14 +1696,14 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	   {
 	    Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
 				 For_FORUM_THREADS_SECTION_ID);
-	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
-					 1,	// Page of posts   = first
-					 Forums->ForumSet,
-					 Forums->ThreadsOrder,
-					 Forum->Location,
-					 Forums->Thread.ToMove,
-					 -1L);
-	    Ico_PutIconPaste ();
+	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					    1,	// Page of posts   = first
+					    Forums->ForumSet,
+					    Forums->ThreadsOrder,
+					    Forum->Location,
+					    Forums->Thread.ToMove,
+					    -1L);
+	       Ico_PutIconPaste ();
 	    Frm_EndForm ();
 	   }
 	}
@@ -1711,13 +1711,13 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
       /***** Write link to forum *****/
       Frm_BeginFormAnchor (For_ActionsSeeFor[Forum->Type],
 			   For_FORUM_THREADS_SECTION_ID);
-      For_PutAllHiddenParamsForum (1,	// Page of threads = first
-				   1,	// Page of posts   = first
-				   Forums->ForumSet,
-				   Forums->ThreadsOrder,
-				   Forum->Location,
-				   -1L,
-				   -1L);
+	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
+				      1,	// Page of posts   = first
+				      Forums->ForumSet,
+				      Forums->ThreadsOrder,
+				      Forum->Location,
+				      -1L,
+				      -1L);
 
 	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
 				  Class,NULL);
@@ -2045,13 +2045,13 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 
 			Frm_BeginFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
 					     For_FORUM_THREADS_SECTION_ID);
-			For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-						     1,				// Page of posts   = first
-						     Forums->ForumSet,
-						     Order,
-						     Forums->Forum.Location,
-						     -1L,
-						     -1L);
+			   For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
+							1,				// Page of posts   = first
+							Forums->ForumSet,
+							Order,
+							Forums->Forum.Location,
+							-1L,
+							-1L);
 			   HTM_BUTTON_SUBMIT_Begin (Txt_FORUM_THREAD_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 			      if (Order == Forums->ThreadsOrder)
 				 HTM_U_Begin ();
@@ -2134,6 +2134,12 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
+     };
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
    struct For_Thread Thr;
@@ -2181,7 +2187,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 			Gbl.Usrs.Me.PhotoURL[0] ? NULL :
 						  "usr_bl.jpg",
 			Txt_Thread_with_posts_from_you,
-			"class=\"PHOTO15x20\"");
+			"class=\"%s\"",ClassPhoto[Gbl.Prefs.UsrPhotos]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
@@ -2207,14 +2213,14 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       HTM_BR ();
 	       Frm_BeginFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
 				    For_FORUM_THREADS_SECTION_ID);
-	       For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
-					    1,			// Page of posts   = first
-					    Forums->ForumSet,
-					    Forums->ThreadsOrder,
-					    Forums->Forum.Location,
-					    Thr.ThrCod,
-					    -1L);
-	       Ico_PutIconCut ();
+		  For_PutAllHiddenParamsForum (Forums->CurrentPageThrs,	// Page of threads = current
+					       1,			// Page of posts   = first
+					       Forums->ForumSet,
+					       Forums->ThreadsOrder,
+					       Forums->Forum.Location,
+					       Thr.ThrCod,
+					       -1L);
+		  Ico_PutIconCut ();
 	       Frm_EndForm ();
 	      }
 
@@ -2672,60 +2678,60 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
      {
       Frm_BeginFormAnchor (For_ActionsRecRepFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewPost (Forums);
+	 For_PutAllHiddenParamsNewPost (Forums);
      }
    else		// Form to write the first post of a new thread
      {
       Frm_BeginFormAnchor (For_ActionsRecThrFor[Forums->Forum.Type],
                            For_FORUM_POSTS_SECTION_ID);
-      For_PutAllHiddenParamsNewThread (Forums);
+	 For_PutAllHiddenParamsNewThread (Forums);
      }
 
-   /***** Subject and content *****/
-   HTM_TABLE_BeginCenterPadding (2);
+      /***** Subject and content *****/
+      HTM_TABLE_BeginCenterPadding (2);
 
-      // If writing a reply to a message of an existing thread ==> write subject
-      /* Subject */
-      HTM_TR_Begin (NULL);
+	 // If writing a reply to a message of an existing thread ==> write subject
+	 /* Subject */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Subject",Txt_MSG_Subject);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
-			    IsReply ? Subject :
-				      "",
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,
+			       IsReply ? Subject :
+					 "",
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-      /* Content */
-      HTM_TR_Begin (NULL);
+	 /* Content */
+	 HTM_TR_Begin (NULL);
 
-	 /* Label */
-	 Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
+	    /* Label */
+	    Frm_LabelColumn ("RT","Content",Txt_MSG_Content);
 
-	 /* Data */
-	 HTM_TD_Begin ("class=\"LT\"");
-	    HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");
-	    HTM_TEXTAREA_End ();
-	 HTM_TD_End ();
+	    /* Data */
+	    HTM_TD_Begin ("class=\"LT\"");
+	       HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");
+	       HTM_TEXTAREA_End ();
+	    HTM_TD_End ();
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
-   HTM_TABLE_End ();
+      HTM_TABLE_End ();
 
-   /***** Help for text editor *****/
-   Lay_HelpPlainEditor ();
+      /***** Help for text editor *****/
+      Lay_HelpPlainEditor ();
 
-   /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,"FOR_MED_INPUT");
+      /***** Attached image (optional) *****/
+      Med_PutMediaUploader (-1,"FOR_MED_INPUT");
 
-   /***** Send button *****/
-   Btn_PutCreateButton (Txt_Send);
+      /***** Send button *****/
+      Btn_PutCreateButton (Txt_Send);
 
    /***** End form *****/
    Frm_EndForm ();

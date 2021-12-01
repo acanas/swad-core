@@ -331,7 +331,7 @@ void The_PutIconsToSelectTheme (void)
 	       HTM_DIV_Begin ("class=\"%s\"",Theme == Gbl.Prefs.Theme ? "PREF_ON" :
 									"PREF_OFF");
 		  Frm_BeginForm (ActChgThe);
-		  Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
+		     Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
 		     snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
 			       Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
 		     Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);

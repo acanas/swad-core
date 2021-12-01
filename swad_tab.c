@@ -103,7 +103,7 @@ void Tab_DrawTabs (void)
 		     HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\"");
 
 		  Frm_BeginForm (ActMnu);
-		  Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
+		     Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
 		     HTM_BUTTON_SUBMIT_Begin (Txt_TABS_TXT[NumTab],
 					      NumTab == Gbl.Action.Tab ? "BT_LINK" :
 									 "BT_LINK",

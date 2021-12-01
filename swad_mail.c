@@ -132,7 +132,7 @@ void Mai_SeeMailDomains (void)
 	 HTM_TH_Begin (1,1,"LM");
 
 	    Frm_BeginForm (ActSeeMai);
-	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	       HTM_BUTTON_SUBMIT_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 		  if (Order == Gbl.Mails.SelectedOrder)
 		     HTM_U_Begin ();
@@ -436,7 +436,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	    /* Mail domain */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenMaiSho);
-	       Mai_PutParamMaiCod (&Mai->MaiCod);
+		  Mai_PutParamMaiCod (&Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"15\"");
@@ -446,7 +446,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	    /* Mail domain info */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenMaiFul);
-	       Mai_PutParamMaiCod (&Mai->MaiCod);
+		  Mai_PutParamMaiCod (&Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"40\"");
@@ -1158,9 +1158,9 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    else
 	      {
 	       Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	      }
-	    Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
+	       Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
 	       Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 								      Txt_Use_this_email);
 	    Frm_EndForm ();
@@ -1191,13 +1191,13 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	 else
 	   {
 	    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,Mai_EMAIL_SECTION_ID);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
-	 HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
-			  "id=\"NewEmail\" size=\"18\"");
-	 HTM_BR ();
-	 Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
-						Txt_Save_changes);		// User has no email address yet
+	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
+			     "id=\"NewEmail\" size=\"18\"");
+	    HTM_BR ();
+	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
+						   Txt_Save_changes);		// User has no email address yet
 	 Frm_EndForm ();
       HTM_TD_End ();
 

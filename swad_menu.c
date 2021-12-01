@@ -299,7 +299,7 @@ void Mnu_PutIconsToSelectMenu (void)
 	       HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :
 								      "PREF_OFF");
 		  Frm_BeginForm (ActChgMnu);
-		  Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
+		     Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
 		     Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
 		  Frm_EndForm ();
 	       HTM_DIV_End ();

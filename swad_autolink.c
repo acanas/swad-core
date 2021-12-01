@@ -62,12 +62,13 @@ struct ALn_Substring
 
 struct ALn_Link
   {
-   ALn_LinkType_t Type;
-   struct ALn_Substring URLorNick;
-   struct ALn_Substring NickAnchor[3];
-   size_t AddedLengthUntilHere;	// Total length of extra HTML code added until this link (included)
-   struct ALn_Link *Prev;
-   struct ALn_Link *Next;
+   ALn_LinkType_t Type;			// URL or nickname?
+   struct ALn_Substring URLorNick;	// Link text
+   struct ALn_Substring NickAnchor[3];	// Pointer to anchors if nick
+   size_t LengthAddedUpToHere;	// Total length of extra HTML code
+				// added up to this link (included)
+   struct ALn_Link *Prev;	// Pointer to previous link
+   struct ALn_Link *Next;	// Pointer to next link
   };
 
 /*****************************************************************************/
@@ -144,7 +145,36 @@ action="https://localhost/swad/es" method="post">
 </form>
 
 */
+/*
+    ______          ______          ______          ______
+   |______|<--  -->|______|<--  -->|______|<--  -->|______|<--- LastLink
+   |______|   \/   |______|   \/   |______|   \/   |______|
+   |______|   /\   |______|   /\   |______|   /\   |______|
+   |_NULL_|  /  ---|_Prev_|  /  ---|_Prev_|  /  ---|_Prev_|
+   |_Next_|--      |_Next_|--      |_Next_|--      |_NULL_|
 
+1 Move forward the text after the link
+2 Copy the 3rd part of the anchor
+3 Move forward the link
+4 Copy the 2nd part of the anchor
+5 Copy the link into the anchor
+6 Copy the 1st part of the anchor
+
+Hi @admin, can I use https://openswad.org for free?
+   _______________________________
+  |H|i|_|@|a|d|m|i|n|,|_|c|a|n|...|
+   | | | | | | | | | | | | | | |
+   | | | | | | | | | \_\_\_\_\_\______________________________________1____
+   | | | \ \ \ \ \ \                                             \ \ \ \ \ \
+   | | |  \_\_\_\_\_\_________________________3____              | | | | | |
+   | | |   \ \ \ \ \ \                   \ \ \ \ \ \             | | | | | |
+   | | |    \_\_\_\_\_\_5____            | | | | | |             | | | | | |
+   | | |           \ \ \ \ \ \           | | | | | |             | | | | | |
+   | | |      6    | | | | | |     4     | | | | | |      2      | | | | | |
+   v v v  anchor#1 v v v v v v anchor#2  v v v v v v  anchor#3   v v v v v v
+   ___________________________________________________________________________
+  |H|i|_|<|_|_|_|_|@|a|d|m|i|n|_|_|_|_|>|@|a|d|m|i|n|<|_|_|_|_|>|,|_|c|a|n|...|
+*/
 void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    size_t TxtLength;
@@ -186,7 +216,7 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
       /***** Insert links from end to start of text,
              only if there is enough space available in text *****/
       TxtLength = strlen (Txt);
-       if (TxtLength + LastLink->AddedLengthUntilHere <= MaxLength)
+       if (TxtLength + LastLink->LengthAddedUpToHere  <= MaxLength)
          for (Link = LastLink;
               Link;
               Link = Link->Prev)
@@ -213,14 +243,14 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                             to avoid overwriting source) *****/
 	    PtrSrc = (Link == LastLink) ? Txt + TxtLength :
 					  Link->Next->URLorNick.Str - 1,
-	    PtrDst = PtrSrc + Link->AddedLengthUntilHere,
+	    PtrDst = PtrSrc + Link->LengthAddedUpToHere ,
 	    Length = PtrSrc - (Link->URLorNick.Str + Link->URLorNick.Len - 1);
             for (i = 0;
                  i < Length;
                  i++)
                *PtrDst-- = *PtrSrc--;
 
-            /***** Step 2: Copy third part of anchor *****/
+            /***** Step 2: Copy the third part of the anchor *****/
             ALn_CopySubstring (Anchor[2],&PtrDst);
 
             /***** Step 3: Move forward the link (URL or nickname)
@@ -249,15 +279,15 @@ void ALn_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
         	  break;
               }
 
-            /***** Step 4: Copy second part of anchor *****/
+            /***** Step 4: Copy the second part of the anchor  *****/
             ALn_CopySubstring (Anchor[1],&PtrDst);
 
-            /***** Step 5: Copy link into directive A
+            /***** Step 5: Copy the link into the anchor
                            (it's mandatory to do the copy in reverse order
                            to avoid overwriting source URL or nickname) *****/
             ALn_CopySubstring (&Link->URLorNick,&PtrDst);
 
-            /***** Step 6: Copy first part of anchor *****/
+            /***** Step 6: Copy the first part of the anchor *****/
             ALn_CopySubstring (Anchor[0],&PtrDst);
            }
      }
@@ -399,11 +429,11 @@ static ALn_LinkType_t ALn_CheckURL (char **PtrSrc,char PrevCh,
 	      }
 
 	    /***** Compute number of bytes added until here *****/
-	    (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere :
+	    (*Link)->LengthAddedUpToHere  = (*Link)->Prev ? (*Link)->Prev->LengthAddedUpToHere  :
 							    0;
 	    (*Link)->URLorNick.Len = (size_t) (PtrEnd + 1 - (*Link)->URLorNick.Str);
 	    if ((*Link)->URLorNick.Len <= MaxCharsURLOnScreen)
-	       (*Link)->AddedLengthUntilHere += ALn_URL_ANCHOR_TOTAL_LENGTH +
+	       (*Link)->LengthAddedUpToHere  += ALn_URL_ANCHOR_TOTAL_LENGTH +
 						(*Link)->URLorNick.Len;
 	    else	// If URL is too long to be displayed ==> short it
 	      {
@@ -411,7 +441,7 @@ static ALn_LinkType_t ALn_CheckURL (char **PtrSrc,char PrevCh,
 		  Err_NotEnoughMemoryExit ();
 	       strncpy (Limited,(*Link)->URLorNick.Str,(*Link)->URLorNick.Len);
 	       Limited[(*Link)->URLorNick.Len] = '\0';
-	       (*Link)->AddedLengthUntilHere += ALn_URL_ANCHOR_TOTAL_LENGTH +
+	       (*Link)->LengthAddedUpToHere  += ALn_URL_ANCHOR_TOTAL_LENGTH +
 						Str_LimitLengthHTMLStr (Limited,MaxCharsURLOnScreen);
 	       free (Limited);
 	      }
@@ -431,6 +461,12 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
                                          struct ALn_Link **LastLink)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC12x16",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE12x16",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR12x16",
+     };
    char Ch;
    size_t Length;
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
@@ -531,7 +567,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 		  Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 							     NULL,
-					 "PHOTO12x16",Pho_ZOOM,
+					 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
 					 &CaptionStr,
 					 &ImgStr);
 		  if (asprintf (&(*Link)->NickAnchor[2].Str,
@@ -547,9 +583,9 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		  Usr_UsrDataDestructor (&UsrDat);
 
 		  /***** Compute number of bytes added until here *****/
-		  (*Link)->AddedLengthUntilHere = (*Link)->Prev ? (*Link)->Prev->AddedLengthUntilHere :
+		  (*Link)->LengthAddedUpToHere  = (*Link)->Prev ? (*Link)->Prev->LengthAddedUpToHere  :
 								  0;
-		  (*Link)->AddedLengthUntilHere += (*Link)->NickAnchor[0].Len +
+		  (*Link)->LengthAddedUpToHere  += (*Link)->NickAnchor[0].Len +
 						   (*Link)->URLorNick.Len +
 						   (*Link)->NickAnchor[1].Len +
 						   (*Link)->NickAnchor[2].Len;

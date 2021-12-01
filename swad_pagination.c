@@ -176,92 +176,92 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	      {
 	       case Pag_ASSIGNMENTS:
 		  Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_PROJECTS:
 		  Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-				 ((struct Prj_Projects *) Context)->SelectedOrder,
-				 1,
-				 Cod);
+		     Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				    ((struct Prj_Projects *) Context)->SelectedOrder,
+				    1,
+				    Cod);
 		  break;
 	       case Pag_EXAMS:
 		  Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_GAMES:
 		  Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_SURVEYS:
 		  Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_ATT_EVENTS:
 		  Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-		  WhichGroups = Grp_GetParamWhichGroups ();
-		  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
 		  break;
 	       case Pag_THREADS_FORUM:
 		  Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
 				       Pagination->Anchor);
-		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
-					       1,	// Page of posts   = first
-					       ((struct For_Forums *) Context)->ForumSet,
-					       ((struct For_Forums *) Context)->ThreadsOrder,
-					       ((struct For_Forums *) Context)->Forum.Location,
-					       -1L,
-					       -1L);
+		     For_PutAllHiddenParamsForum (1,	// Page of threads = first
+						  1,	// Page of posts   = first
+						  ((struct For_Forums *) Context)->ForumSet,
+						  ((struct For_Forums *) Context)->ThreadsOrder,
+						  ((struct For_Forums *) Context)->Forum.Location,
+						  -1L,
+						  -1L);
 		  break;
 	       case Pag_POSTS_FORUM:
 		  Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
 				       Pagination->Anchor);
-		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-					       1,				// Page of posts   = first
-					       ((struct For_Forums *) Context)->ForumSet,
-					       ((struct For_Forums *) Context)->ThreadsOrder,
-					       ((struct For_Forums *) Context)->Forum.Location,
-					       Cod,
-					       -1L);
+		     For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+						  1,				// Page of posts   = first
+						  ((struct For_Forums *) Context)->ForumSet,
+						  ((struct For_Forums *) Context)->ThreadsOrder,
+						  ((struct For_Forums *) Context)->Forum.Location,
+						  Cod,
+						  -1L);
 		  break;
 	       case Pag_MESSAGES_RECEIVED:
 		  Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
 		  break;
 	       case Pag_MESSAGES_SENT:
 		  Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
 		  break;
 	       case Pag_MY_AGENDA:
 		  Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-		  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-					 ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-					 ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-					 ((struct Agd_Agenda *) Context)->SelectedOrder,
-					 1,
-					 Cod);
+		     Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					    ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					    ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					    ((struct Agd_Agenda *) Context)->SelectedOrder,
+					    1,
+					    Cod);
 		  break;
 	       case Pag_ANOTHER_AGENDA:
 		  Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-		  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
-		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		     Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		     Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		  break;
 	       default:
 		  break;
@@ -303,102 +303,102 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
                Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-               Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-                              ((struct Prj_Projects *) Context)->SelectedOrder,
-                              1,
-                              Cod);
+		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				 ((struct Prj_Projects *) Context)->SelectedOrder,
+				 1,
+				 Cod);
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                            1,	// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    -1L,
-					    -1L);
+		  For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					       1,	// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       -1L,
+					       -1L);
 	       break;
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-                                            1,				// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    Cod,
-					    -1L);
+		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+					       1,				// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       Cod,
+					       -1L);
 	       break;
             case Pag_MESSAGES_RECEIVED:
                Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
             case Pag_MESSAGES_SENT:
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
             case Pag_MY_AGENDA:
                Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-               Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-                                      ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-                                      ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-			              ((struct Agd_Agenda *) Context)->SelectedOrder,
-                                      1,
-                                      Cod);
+		  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					 ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					 ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					 ((struct Agd_Agenda *) Context)->SelectedOrder,
+					 1,
+					 Cod);
                break;
             case Pag_ANOTHER_AGENDA:
                Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-               Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,1);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                break;
             default:
                break;
            }
-         if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
-	    Err_NotEnoughMemoryExit ();
-         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-	    HTM_Unsigned (1);
-         HTM_BUTTON_End ();
-         free (Title);
+	    if (asprintf (&Title,Txt_Page_X_of_Y,1,Pagination->NumPags) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+	       HTM_Unsigned (1);
+	    HTM_BUTTON_End ();
+	    free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
            {
@@ -416,103 +416,103 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_PROJECTS:
                Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-               Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-                              ((struct Prj_Projects *) Context)->SelectedOrder,
-                              Pagination->LeftPage,
-                              Cod);
+		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				 ((struct Prj_Projects *) Context)->SelectedOrder,
+				 Pagination->LeftPage,
+				 Cod);
                break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Pagination->LeftPage,	// Page of threads = left
-                                            1,				// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    -1L,
-					    -1L);
+		  For_PutAllHiddenParamsForum (Pagination->LeftPage,	// Page of threads = left
+					       1,				// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       -1L,
+					       -1L);
                break;
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-                                            Pagination->LeftPage,	// Page of posts   = left
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    Cod,
-					    -1L);
+		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+					       Pagination->LeftPage,	// Page of posts   = left
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       Cod,
+					       -1L);
 	       break;
             case Pag_MESSAGES_RECEIVED:
                Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
             case Pag_MESSAGES_SENT:
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
             case Pag_MY_AGENDA:
                Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-               Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-                                      ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-                                      ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-			              ((struct Agd_Agenda *) Context)->SelectedOrder,
-                                      Pagination->LeftPage,
-                                      Cod);
+		  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					 ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					 ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					 ((struct Agd_Agenda *) Context)->SelectedOrder,
+					 Pagination->LeftPage,
+					 Cod);
                break;
             case Pag_ANOTHER_AGENDA:
                Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-               Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                break;
             default:
                break;
            }
-         if (asprintf (&Title,Txt_Page_X_of_Y,
-		       Pagination->LeftPage,Pagination->NumPags) < 0)
-	    Err_NotEnoughMemoryExit ();
-         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-	    HTM_Unsigned (Pagination->LeftPage);
-         HTM_BUTTON_End ();
-         free (Title);
+	    if (asprintf (&Title,Txt_Page_X_of_Y,
+			  Pagination->LeftPage,Pagination->NumPags) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+	       HTM_Unsigned (Pagination->LeftPage);
+	    HTM_BUTTON_End ();
+	    free (Title);
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
            {
@@ -541,99 +541,99 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
               {
                case Pag_ASSIGNMENTS:
                   Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-                  WhichGroups = Grp_GetParamWhichGroups ();
-                  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
 	       case Pag_PROJECTS:
 		  Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-                                 ((struct Prj_Projects *) Context)->SelectedOrder,
-                                 NumPage,
-                                 Cod);
+		     Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				    ((struct Prj_Projects *) Context)->SelectedOrder,
+				    NumPage,
+				    Cod);
 		  break;
                case Pag_EXAMS:
                   Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-                  WhichGroups = Grp_GetParamWhichGroups ();
-                  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_GAMES:
                   Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-                  WhichGroups = Grp_GetParamWhichGroups ();
-                  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_SURVEYS:
                   Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-                  WhichGroups = Grp_GetParamWhichGroups ();
-                  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_ATT_EVENTS:
                   Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-                  WhichGroups = Grp_GetParamWhichGroups ();
-                  Grp_PutParamWhichGroups (&WhichGroups);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		     WhichGroups = Grp_GetParamWhichGroups ();
+		     Grp_PutParamWhichGroups (&WhichGroups);
                   break;
                case Pag_THREADS_FORUM:
                   Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
                                        Pagination->Anchor);
-		  For_PutAllHiddenParamsForum (NumPage,	// Page of threads = number of page
-                                               1,	// Page of posts   = first
-                                               ((struct For_Forums *) Context)->ForumSet,
-					       ((struct For_Forums *) Context)->ThreadsOrder,
-					       ((struct For_Forums *) Context)->Forum.Location,
-					       -1L,
-					       -1L);
+		     For_PutAllHiddenParamsForum (NumPage,	// Page of threads = number of page
+						  1,	// Page of posts   = first
+						  ((struct For_Forums *) Context)->ForumSet,
+						  ((struct For_Forums *) Context)->ThreadsOrder,
+						  ((struct For_Forums *) Context)->Forum.Location,
+						  -1L,
+						  -1L);
                   break;
                case Pag_POSTS_FORUM:
                   Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                        Pagination->Anchor);
-		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-                                               NumPage,				// Page of posts   = number of page
-                                               ((struct For_Forums *) Context)->ForumSet,
-					       ((struct For_Forums *) Context)->ThreadsOrder,
-					       ((struct For_Forums *) Context)->Forum.Location,
-					       Cod,
-					       -1L);
+		     For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+						  NumPage,				// Page of posts   = number of page
+						  ((struct For_Forums *) Context)->ForumSet,
+						  ((struct For_Forums *) Context)->ThreadsOrder,
+						  ((struct For_Forums *) Context)->Forum.Location,
+						  Cod,
+						  -1L);
                   break;
                case Pag_MESSAGES_RECEIVED:
                   Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                   break;
                case Pag_MESSAGES_SENT:
                   Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                   break;
                case Pag_MY_AGENDA:
                   Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-                  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-                                         ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-                                         ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-			                 ((struct Agd_Agenda *) Context)->SelectedOrder,
-                                         NumPage,
-                                         Cod);
+		     Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					    ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					    ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					    ((struct Agd_Agenda *) Context)->SelectedOrder,
+					    NumPage,
+					    Cod);
                   break;
                case Pag_ANOTHER_AGENDA:
                   Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-                  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		     Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		     Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+		     Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
                   break;
 	       default:
 		  break;
               }
-            HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-	       HTM_Unsigned (NumPage);
-            HTM_BUTTON_End ();
+	       HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+		  HTM_Unsigned (NumPage);
+	       HTM_BUTTON_End ();
             Frm_EndForm ();
            }
          free (Title);
@@ -653,103 +653,103 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
 	    case Pag_PROJECTS:
 	       Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-	       Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-                              ((struct Prj_Projects *) Context)->SelectedOrder,
-			      Pagination->RightPage,
-			      Cod);
+		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				 ((struct Prj_Projects *) Context)->SelectedOrder,
+				 Pagination->RightPage,
+				 Cod);
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Pagination->RightPage,	// Page of threads = right
-                                            1,				// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    -1L,
-					    -1L);
+		  For_PutAllHiddenParamsForum (Pagination->RightPage,	// Page of threads = right
+					       1,				// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       -1L,
+					       -1L);
 	       break;
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-                                            Pagination->RightPage,	// Page of posts   = right
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    Cod,
-					    -1L);
+		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+					       Pagination->RightPage,	// Page of posts   = right
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       Cod,
+					       -1L);
                break;
             case Pag_MESSAGES_RECEIVED:
                Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
             case Pag_MESSAGES_SENT:
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-	       Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-	                              ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-	                              ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-			              ((struct Agd_Agenda *) Context)->SelectedOrder,
-	                              Pagination->RightPage,
-	                              Cod);
+		  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					 ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					 ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					 ((struct Agd_Agenda *) Context)->SelectedOrder,
+					 Pagination->RightPage,
+					 Cod);
 	       break;
 	    case Pag_ANOTHER_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-	       Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       break;
             default:
                break;
            }
-         if (asprintf (&Title,Txt_Page_X_of_Y,
-		       Pagination->RightPage,Pagination->NumPags) < 0)
-	    Err_NotEnoughMemoryExit ();
-         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-	    HTM_Unsigned (Pagination->RightPage);
-         HTM_BUTTON_End ();
-         free (Title);
+	    if (asprintf (&Title,Txt_Page_X_of_Y,
+			  Pagination->RightPage,Pagination->NumPags) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+	       HTM_Unsigned (Pagination->RightPage);
+	    HTM_BUTTON_End ();
+	    free (Title);
          Frm_EndForm ();
         }
 
@@ -766,103 +766,103 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Frm_BeginFormAnchor (ActSeeAsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Dat_PutHiddenParamOrder (((struct Asg_Assignments *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
 	    case Pag_PROJECTS:
 	       Frm_BeginFormAnchor (ActSeePrj,Pagination->Anchor);
-	       Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
-                              ((struct Prj_Projects *) Context)->SelectedOrder,
-			      Pagination->NumPags,
-			      Cod);
+		  Prj_PutParams (&((struct Prj_Projects *) Context)->Filter,
+				 ((struct Prj_Projects *) Context)->SelectedOrder,
+				 Pagination->NumPags,
+				 Cod);
 	       break;
             case Pag_EXAMS:
                Frm_BeginFormAnchor (ActSeeAllExa,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Dat_PutHiddenParamOrder (((struct Exa_Exams *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_GAMES:
                Frm_BeginFormAnchor (ActSeeAllGam,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Dat_PutHiddenParamOrder (((struct Gam_Games *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_SURVEYS:
                Frm_BeginFormAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Dat_PutHiddenParamOrder (((struct Svy_Surveys *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_ATT_EVENTS:
                Frm_BeginFormAnchor (ActSeeAtt,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
-               WhichGroups = Grp_GetParamWhichGroups ();
-               Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Dat_PutHiddenParamOrder (((struct Att_Events *) Context)->SelectedOrder);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
                break;
             case Pag_THREADS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeeFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (Pagination->NumPags,	// Page of threads = last
-                                            1,				// Page of posts   = first
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    -1L,
-					    -1L);
+		  For_PutAllHiddenParamsForum (Pagination->NumPags,	// Page of threads = last
+					       1,				// Page of posts   = first
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       -1L,
+					       -1L);
                break;
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-	       For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
-                                            Pagination->NumPags,	// Page of posts   = last
-                                            ((struct For_Forums *) Context)->ForumSet,
-					    ((struct For_Forums *) Context)->ThreadsOrder,
-					    ((struct For_Forums *) Context)->Forum.Location,
-					    Cod,
-					    -1L);
+		  For_PutAllHiddenParamsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+					       Pagination->NumPags,	// Page of posts   = last
+					       ((struct For_Forums *) Context)->ForumSet,
+					       ((struct For_Forums *) Context)->ThreadsOrder,
+					       ((struct For_Forums *) Context)->Forum.Location,
+					       Cod,
+					       -1L);
                break;
             case Pag_MESSAGES_RECEIVED:
                Frm_BeginFormAnchor (ActSeeRcvMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
             case Pag_MESSAGES_SENT:
                Frm_BeginFormAnchor (ActSeeSntMsg,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Msg_PutHiddenParamsMsgsFilters ((struct Msg_Messages *) Context);
                break;
 	    case Pag_MY_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeMyAgd,Pagination->Anchor);
-	       Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
-	                              ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
-	                              ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
-			              ((struct Agd_Agenda *) Context)->SelectedOrder,
-	                              Pagination->NumPags,
-	                              Cod);
+		  Agd_PutParamsMyAgenda (((struct Agd_Agenda *) Context)->Past__FutureEvents,
+					 ((struct Agd_Agenda *) Context)->PrivatPublicEvents,
+					 ((struct Agd_Agenda *) Context)->HiddenVisiblEvents,
+					 ((struct Agd_Agenda *) Context)->SelectedOrder,
+					 Pagination->NumPags,
+					 Cod);
 	       break;
 	    case Pag_ANOTHER_AGENDA:
 	       Frm_BeginFormAnchor (ActSeeUsrAgd,Pagination->Anchor);
-	       Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
-	       Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-	       Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		  Agd_PutHiddenParamEventsOrder (((struct Agd_Agenda *) Context)->SelectedOrder);
+		  Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 	       break;
             default:
                break;
            }
-         if (asprintf (&Title,Txt_Page_X_of_Y,
-		       Pagination->NumPags,Pagination->NumPags) < 0)
-	    Err_NotEnoughMemoryExit ();
-         HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
-	    HTM_Unsigned (Pagination->NumPags);
-         HTM_BUTTON_End ();
-         free (Title);
+	    if (asprintf (&Title,Txt_Page_X_of_Y,
+			  Pagination->NumPags,Pagination->NumPags) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_SUBMIT_Begin (Title,ClassLink,NULL);
+	       HTM_Unsigned (Pagination->NumPags);
+	    HTM_BUTTON_End ();
+	    free (Title);
          Frm_EndForm ();
         }
 

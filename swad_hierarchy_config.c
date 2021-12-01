@@ -235,7 +235,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 	       HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
 							    Gbl.Hierarchy.Ins.ShrtName),
 					"BT_LINK DAT",NULL);

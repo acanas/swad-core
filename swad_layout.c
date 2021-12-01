@@ -1004,7 +1004,7 @@ static void Lay_WritePageTopHeading (void)
 
 	    /* Begin form to go to home page */
 	    Frm_BeginFormGoTo (ActMnu);
-	    Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
+	       Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 
 	       HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
@@ -1225,11 +1225,11 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
   {
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
-   if (FuncParams)
-      FuncParams (Args);
+      if (FuncParams)
+	 FuncParams (Args);
 
-   /***** Put icon with link *****/
-   Ico_PutIconLink (Icon,Title);
+      /***** Put icon with link *****/
+      Ico_PutIconLink (Icon,Title);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1252,13 +1252,13 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
-   if (FuncParams)
-      FuncParams (Args);
+      if (FuncParams)
+	 FuncParams (Args);
 
-   /***** Put icon and text with link *****/
-   HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-      Ico_PutIconTextLink (Icon,Text);
-   HTM_BUTTON_End ();
+      /***** Put icon and text with link *****/
+      HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+	 Ico_PutIconTextLink (Icon,Text);
+      HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1286,13 +1286,13 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
-   if (FuncParams)
-      FuncParams (Args);
+      if (FuncParams)
+	 FuncParams (Args);
 
-   /***** Put icon with link *****/
-   HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
-      Ico_PutIconTextLink (Icon,Text);
-   HTM_BUTTON_End ();
+      /***** Put icon with link *****/
+      HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
+	 Ico_PutIconTextLink (Icon,Text);
+      HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1321,37 +1321,37 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
    /***** Begin form *****/
    Frm_BeginForm (NextAction);
-   if (FuncParams)
-      FuncParams ();
+      if (FuncParams)
+	 FuncParams ();
 
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_OPT %s %s\" title=\"%s\"",
-		  Checked ? "CHECKBOX_CHECKED" :
-			    "CHECKBOX_UNCHECKED",
-		  The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
-		  Title);
+      /***** Begin container *****/
+      HTM_DIV_Begin ("class=\"CONTEXT_OPT %s %s\" title=\"%s\"",
+		     Checked ? "CHECKBOX_CHECKED" :
+			       "CHECKBOX_UNCHECKED",
+		     The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
+		     Title);
 
-      /***** Begin label *****/
-      HTM_LABEL_Begin (NULL);
+	 /***** Begin label *****/
+	 HTM_LABEL_Begin (NULL);
 
-	 /****** Checkbox *****/
-	 HTM_INPUT_CHECKBOX (CheckboxName,HTM_SUBMIT_ON_CHANGE,
-			     "value=\"Y\"%s%s",
-			     Checked ? " checked=\"checked\"" :
-				       "",
-			     Disabled ? " disabled=\"disabled\"" :
-					"");
+	    /****** Checkbox *****/
+	    HTM_INPUT_CHECKBOX (CheckboxName,HTM_SUBMIT_ON_CHANGE,
+				"value=\"Y\"%s%s",
+				Checked ? " checked=\"checked\"" :
+					  "",
+				Disabled ? " disabled=\"disabled\"" :
+					   "");
 
-	 /***** Text *****/
-	 if (Text)
-	    if (Text[0])
-	       HTM_TxtF ("&nbsp;%s",Text);
+	    /***** Text *****/
+	    if (Text)
+	       if (Text[0])
+		  HTM_TxtF ("&nbsp;%s",Text);
 
-      /***** End label *****/
-      HTM_LABEL_End ();
+	 /***** End label *****/
+	 HTM_LABEL_End ();
 
-   /***** End container *****/
-   HTM_DIV_End ();
+      /***** End container *****/
+      HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();

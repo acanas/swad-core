@@ -971,8 +971,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
      {
       /***** Begin form *****/
       Frm_BeginFormAnchor (ActRcvCfe,Anchor);
-      if (ExaCod > 0)	// Existing call for exam
-         Cfe_PutHiddenParamExaCod (ExaCod);
+	 if (ExaCod > 0)	// Existing call for exam
+	    Cfe_PutHiddenParamExaCod (ExaCod);
      }
 
       /***** Begin table *****/

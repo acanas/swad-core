@@ -522,8 +522,8 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	 if (ExaSes_CheckIfICanAnswerThisSession (Exam,Session))
 	   {
 	    Frm_BeginForm (ActSeeExaPrn);
-	    Exa_PutParams (Exams);
-	    ExaSes_PutParamSesCod (Session->SesCod);
+	       Exa_PutParams (Exams);
+	       ExaSes_PutParamSesCod (Session->SesCod);
 	       HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									     Txt_Resume,
 					Session->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
@@ -1005,44 +1005,44 @@ static void ExaSes_PutFormSession (const struct ExaSes_Session *Session)
       /***** Begin form *****/
       Frm_BeginForm (ItsANewSession ? ActNewExaSes :	// New session
 				      ActChgExaSes);	// Existing session
-      Exa_PutParamExamCod (Session->ExaCod);
-      if (!ItsANewSession)	// Existing session
-	 ExaSes_PutParamSesCod (Session->SesCod);
+	 Exa_PutParamExamCod (Session->ExaCod);
+	 if (!ItsANewSession)	// Existing session
+	    ExaSes_PutParamSesCod (Session->SesCod);
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
-					       Session->Title,
-			 NULL,NULL,
-			 Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
+	 /***** Begin box and table *****/
+	 Box_BoxTableBegin (NULL,ItsANewSession ? Txt_New_session :
+						  Session->Title,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Exams_sessions,Box_NOT_CLOSABLE,2);
 
-	 /***** Session title *****/
-	 HTM_TR_Begin (NULL);
+	    /***** Session title *****/
+	    HTM_TR_Begin (NULL);
 
-	    /* Label */
-	    Frm_LabelColumn ("RT","Title",Txt_Title);
+	       /* Label */
+	       Frm_LabelColumn ("RT","Title",Txt_Title);
 
-	    /* Data */
-	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" size=\"45\" required=\"required\"");
-	    HTM_TD_End ();
+	       /* Data */
+	       HTM_TD_Begin ("class=\"LT\"");
+		  HTM_INPUT_TEXT ("Title",ExaSes_MAX_CHARS_TITLE,Session->Title,
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"Title\" size=\"45\" required=\"required\"");
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /***** Start and end dates *****/
-	 Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
-						  Dat_FORM_SECONDS_OFF,
-						  SetHMS);
+	    /***** Start and end dates *****/
+	    Dat_PutFormStartEndClientLocalDateTimes (Session->TimeUTC,
+						     Dat_FORM_SECONDS_OFF,
+						     SetHMS);
 
-	 /***** Groups *****/
-	 ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
+	    /***** Groups *****/
+	    ExaSes_ShowLstGrpsToCreateSession (Session->SesCod);
 
-      /***** End table, send button and end box *****/
-      if (ItsANewSession)
-	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_session);
-      else
-	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+	 /***** End table, send button and end box *****/
+	 if (ItsANewSession)
+	    Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_session);
+	 else
+	    Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1123,7 +1123,7 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
 
    Exams->ExaCod = ExaCod;
    Frm_BeginFormAnchor (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID);
-   Exa_PutParams (Exams);
+      Exa_PutParams (Exams);
       Btn_PutConfirmButton (Txt_New_session);
    Frm_EndForm ();
   }

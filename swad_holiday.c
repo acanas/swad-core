@@ -135,7 +135,7 @@ void Hld_SeeHolidays (void)
 		    {
 		     HTM_TH_Begin (1,1,"LM");
 			Frm_BeginForm (ActSeeHld);
-			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 			   HTM_BUTTON_SUBMIT_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 			      if (Order == Holidays.SelectedOrder)
 				 HTM_U_Begin ();
@@ -543,7 +543,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday place */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldPlc);
-	       Hld_PutParamHldCod (&Hld->HldCod);
+		  Hld_PutParamHldCod (&Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"PlcCod\" class=\"PLC_SEL\"");
 		     HTM_OPTION (HTM_Type_STRING,"-1",Hld->PlcCod <= 0,false,
@@ -561,7 +561,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday type */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldTyp);
-	       Hld_PutParamHldCod (&Hld->HldCod);
+		  Hld_PutParamHldCod (&Hld->HldCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"HldTyp\" style=\"width:62px;\"");
 		     for (HolidayType  = (Hld_HolidayType_t) 0;
@@ -580,7 +580,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday date / Non school period start date */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldStrDat);
-	       Hld_PutParamHldCod (&Hld->HldCod);
+		  Hld_PutParamHldCod (&Hld->HldCod);
 		  Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 				     Gbl.Now.Date.Year + 1,
 				     "Start",
@@ -592,7 +592,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Non school period end date */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActChgHldEndDat);
-	       Hld_PutParamHldCod (&Hld->HldCod);
+		  Hld_PutParamHldCod (&Hld->HldCod);
 		  Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 				     Gbl.Now.Date.Year + 1,
 				     "End",
@@ -604,7 +604,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    /* Holiday name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenHld);
-	       Hld_PutParamHldCod (&Hld->HldCod);
+		  Hld_PutParamHldCod (&Hld->HldCod);
 		  HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "size=\"20\"");

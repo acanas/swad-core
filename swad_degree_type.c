@@ -415,7 +415,7 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 	    /* Name of degree type */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginForm (ActRenDegTyp);
-	       DegTyp_PutParamOtherDegTypCod (&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+		  DegTyp_PutParamOtherDegTypCod (&Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
 		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,
 				  Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -524,13 +524,13 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 
 	    /* Begin form to change order */
 	    Frm_BeginForm (NextAction);
-	    if (NextAction == ActSeeUseGbl)
-	      {
-	       Figures.Scope      = Scope;
-	       Figures.FigureType = Fig_DEGREE_TYPES;
-	       Fig_PutHiddenParamFigures (&Figures);
-	      }
-	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	       if (NextAction == ActSeeUseGbl)
+		 {
+		  Figures.Scope      = Scope;
+		  Figures.FigureType = Fig_DEGREE_TYPES;
+		  Fig_PutHiddenParamFigures (&Figures);
+		 }
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
 	       /* Link with the head of this column */
 	       HTM_BUTTON_SUBMIT_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],

@@ -264,12 +264,12 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		  else
 		    {
 		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
-		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+			Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		    }
 
-		  snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
-		  Par_PutHiddenParamString (NULL,"NewNick",NickWithArr);	// Nickname
-		     Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
+		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",row[0]);
+		     Par_PutHiddenParamString (NULL,"NewNick",NickWithArr);	// Nickname
+			Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
 		  Frm_EndForm ();
 		 }
 
@@ -298,16 +298,16 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 		  else
 		    {
 		     Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].Change,Nck_NICKNAME_SECTION_ID);
-		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+			Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		    }
-		  snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
-			    Gbl.Usrs.Me.UsrDat.Nickname);
-		  HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
-				  NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"NewNick\" size=\"18\"");
-		  HTM_BR ();
-		  Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
-							Txt_Save_changes);	// I have no nickname yet);
+		     snprintf (NickWithArr,sizeof (NickWithArr),"@%s",
+			       Gbl.Usrs.Me.UsrDat.Nickname);
+		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
+				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
+				     "id=\"NewNick\" size=\"18\"");
+		     HTM_BR ();
+		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
+							   Txt_Save_changes);	// I have no nickname yet);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

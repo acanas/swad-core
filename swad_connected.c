@@ -417,7 +417,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 						      // the list of connected users
 						      // is dynamically updated via AJAX
-	       Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
+		  Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
 				   Txt_Connected_users,"ICO16x16");
 	       Frm_EndForm ();
@@ -556,6 +556,12 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    const char *ClassTxt;
    const char *ClassLink;
    long UsrCod;
@@ -587,7 +593,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
       /***** Show photo *****/
       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,true);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            true);
       HTM_TD_End ();
 
       /***** Write full name and link *****/
@@ -608,7 +616,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
          Frm_BeginFormUnique (NextAction[Role]);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
 	       HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
@@ -648,6 +656,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
       [Rol_STD] = ActSeeRecOneStd,
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
+     };
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -695,7 +709,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 	       /***** Show photo *****/
 	       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
-		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+		                             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                             false);
 	       HTM_TD_End ();
 
 	       /***** Write full name and link *****/
@@ -716,7 +732,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     if (!NextAction[Role])
 			Err_WrongRoleExit ();
 		     Frm_BeginForm (NextAction[Role]);
-		     Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 		    }
 
 		  HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width

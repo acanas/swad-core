@@ -115,7 +115,8 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 				  "CtyCod,"
 				  "LocalPhone,FamilyPhone,"
 				  "Birthday,Comments,"
-				  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
+				  "Menu,SideCols,UsrPhotos,"
+				  "NotifNtfEvents,EmailNtfEvents)"
 				" VALUES"
 				" ('%s','%s',"
 				  "'%s','%s','%s','%s',"
@@ -124,7 +125,8 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 				  "%ld,"
 				  "'%s','%s',"
 				  "%s,'%s',"
-				  "%u,%u,-1,0)",
+				  "%u,%u,%u,"
+				  "-1,0)",
 				UsrDat->EnUsrCod,
 				UsrDat->Password,
 				UsrDat->Surname1,
@@ -146,7 +148,8 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 				UsrDat->Comments ? UsrDat->Comments :
 						   "",
 				(unsigned) Mnu_MENU_DEFAULT,
-				(unsigned) Cfg_DEFAULT_COLUMNS);
+				(unsigned) Cfg_DEFAULT_COLUMNS,
+				(unsigned) Set_USR_PHOTOS_DEFAULT);
   }
 
 /*****************************************************************************/

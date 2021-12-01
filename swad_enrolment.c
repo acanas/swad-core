@@ -178,7 +178,7 @@ void Enr_PutButtonInlineToRegisterStds (long CrsCod)
 				 1 << Rol_STD))	// No students in course
 	{
 	 Frm_BeginForm (ActReqEnrSevStd);
-	 Crs_PutParamCrsCod (CrsCod);
+	    Crs_PutParamCrsCod (CrsCod);
 	    Btn_PutCreateButtonInline (Txt_Register_students);
 	 Frm_EndForm ();
 	}
@@ -336,22 +336,22 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
 
    /***** Form to request user's ID, @nickname or email address *****/
    Frm_BeginForm (NextAction);
-   if (FuncParams)
-      FuncParams ();
+      if (FuncParams)
+	 FuncParams ();
 
-   /***** Label *****/
-   HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
-		    The_ClassFormInBox[Gbl.Prefs.Theme]);
-      HTM_TxtColonNBSP (Txt_nick_email_or_ID);
-   HTM_LABEL_End ();
+      /***** Label *****/
+      HTM_LABEL_Begin ("for=\"OtherUsrIDNickOrEMail\" class=\"%s RM\"",
+		       The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TxtColonNBSP (Txt_nick_email_or_ID);
+      HTM_LABEL_End ();
 
-   /***** Input box to enter user *****/
-   HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
-		   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"OtherUsrIDNickOrEMail\" size=\"18\" required=\"required\"");
+      /***** Input box to enter user *****/
+      HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
+		      HTM_DONT_SUBMIT_ON_CHANGE,
+		      "id=\"OtherUsrIDNickOrEMail\" size=\"18\" required=\"required\"");
 
-   /***** Send button*****/
-   Btn_PutConfirmButton (Txt_Continue);
+      /***** Send button*****/
+      Btn_PutConfirmButton (Txt_Continue);
 
    Frm_EndForm ();
   }
@@ -1704,7 +1704,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 
 	 /* Show form to request confirmation */
 	 Frm_BeginForm (ActRemAllStdCrs);
-	 Grp_PutParamAllGroups ();
+	    Grp_PutParamAllGroups ();
 	    Pwd_AskForConfirmationOnDangerousAction ();
 	    Btn_PutRemoveButton (Txt_Remove_all_students);
 	 Frm_EndForm ();
@@ -2074,6 +2074,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrolment_requests;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumReqs;
@@ -2217,7 +2223,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Deg_GetDataOfDegreeByCod (&Deg);
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
-			Crs_PutParamCrsCod (Crs.CrsCod);
+			   Crs_PutParamCrsCod (Crs.CrsCod);
 			   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
 						    "BT_LINK LT DAT",NULL);
 			      Hie_FreeGoToMsg ();
@@ -2235,7 +2241,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 		     /***** User photo *****/
 		     HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
-			Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+			Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+			                           ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+			                           false);
 		     HTM_TD_End ();
 
 		     /***** User name *****/
@@ -2258,8 +2266,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
-			Crs_PutParamCrsCod (Crs.CrsCod);
-			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			   Crs_PutParamCrsCod (Crs.CrsCod);
+			   Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutCreateButtonInline (Txt_Register);
 			Frm_EndForm ();
 		     HTM_TD_End ();
@@ -2267,8 +2275,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     /***** Button to reject the request *****/
 		     HTM_TD_Begin ("class=\"DAT LT\"");
 			Frm_BeginForm (ActReqRejSignUp);
-			Crs_PutParamCrsCod (Crs.CrsCod);
-			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
+			   Crs_PutParamCrsCod (Crs.CrsCod);
+			   Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 			   Btn_PutRemoveButtonInline (Txt_Reject);
 			Frm_EndForm ();
 		     HTM_TD_End ();
@@ -3057,7 +3065,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       if (!NextAction[UsrDat->Roles.InCurrentCrs])
 	 Err_WrongRoleExit ();
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 Pwd_AskForConfirmationOnDangerousAction ();
 	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
 				      Txt_Remove_user_from_this_course);

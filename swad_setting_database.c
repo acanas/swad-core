@@ -146,10 +146,24 @@ void Set_DB_UpdateMySettingsAboutSideCols (void)
   }
 
 /*****************************************************************************/
+/**************** Update user photo shape on user data table *****************/
+/*****************************************************************************/
+
+void Set_DB_UpdateMySettingsAboutUsrPhotos (void)
+  {
+   DB_QueryUPDATE ("can not update your setting about user photo shape",
+		   "UPDATE usr_data"
+		     " SET UsrPhotos=%u"
+		   " WHERE UsrCod=%ld",
+		   (unsigned) Gbl.Prefs.UsrPhotos,
+		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
 /***************** Update my settings about photo visibility *****************/
 /*****************************************************************************/
 
-void Set_DB_UpdateMySettingsAboutPhoto (void)
+void Set_DB_UpdateMySettingsAboutPhotoVisibility (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
 
@@ -417,10 +431,10 @@ void Set_DB_UpdateSettingsFromIP (void)
    DB_QueryREPLACE ("can not store settings from current IP address",
 		    "REPLACE INTO set_ip_settings"
 		    " (IP,UsrCod,LastChange,"
-		      "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
+		      "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols,UsrPhotos)"
 		    " VALUES"
 		    " ('%s',%ld,NOW(),"
-		      "%u,%u,'%s','%s',%u,%u)",
+		      "%u,%u,'%s','%s',%u,%u,%u)",
 	            Gbl.IP,
 	            Gbl.Usrs.Me.UsrDat.UsrCod,
 	            Gbl.Prefs.FirstDayOfWeek,
@@ -428,7 +442,8 @@ void Set_DB_UpdateSettingsFromIP (void)
 	            The_ThemeId[Gbl.Prefs.Theme],
 	            Ico_IconSetId[Gbl.Prefs.IconSet],
 	            (unsigned) Gbl.Prefs.Menu,
-	            Gbl.Prefs.SideCols);
+	            Gbl.Prefs.SideCols,
+	            (unsigned) Gbl.Prefs.UsrPhotos);
   }
 
 /*****************************************************************************/
@@ -447,7 +462,8 @@ void Set_DB_UpdateMySettingsFromIP (void)
 			  "Theme='%s',"
 			  "IconSet='%s',"
 			  "Menu=%u,"
-			  "SideCols=%u"
+			  "SideCols=%u,"
+			  "UsrPhotos=%u"
 		   " WHERE UsrCod=%ld",
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (unsigned) Gbl.Prefs.DateFormat,
@@ -455,6 +471,7 @@ void Set_DB_UpdateMySettingsFromIP (void)
 		   Ico_IconSetId[Gbl.Prefs.IconSet],
 		   (unsigned) Gbl.Prefs.Menu,
 		   Gbl.Prefs.SideCols,
+		   (unsigned) Gbl.Prefs.UsrPhotos,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
    }
 
@@ -471,7 +488,8 @@ unsigned Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res)
 			  "Theme,"		// row[2]
 			  "IconSet,"		// row[3]
 			  "Menu,"		// row[4]
-			  "SideCols"		// row[5]
+			  "SideCols,"		// row[5]
+			  "UsrPhotos"		// row[6]
 		    " FROM set_ip_settings"
 		   " WHERE IP='%s'",
 		   Gbl.IP);

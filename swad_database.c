@@ -2689,20 +2689,21 @@ mysql> DESCRIBE ses_sessions;
    /***** Table set_ip_settings *****/
 /*
 mysql> DESCRIBE set_ip_settings;
-+----------------+------------+------+-----+---------+-------+
-| Field          | Type       | Null | Key | Default | Extra |
-+----------------+------------+------+-----+---------+-------+
-| IP             | char(15)   | NO   | PRI | NULL    |       |
-| UsrCod         | int(11)    | NO   | MUL | -1      |       |
-| LastChange     | datetime   | NO   | MUL | NULL    |       |
-| FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
-| DateFormat     | tinyint(4) | NO   |     | 0       |       |
-| Theme          | char(16)   | NO   |     | NULL    |       |
-| IconSet        | char(16)   | NO   |     | NULL    |       |
-| Menu           | tinyint(4) | NO   |     | 0       |       |
-| SideCols       | tinyint(4) | NO   |     | NULL    |       |
-+----------------+------------+------+-----+---------+-------+
-9 rows in set (0,00 sec)
++----------------+----------+------+-----+---------+-------+
+| Field          | Type     | Null | Key | Default | Extra |
++----------------+----------+------+-----+---------+-------+
+| IP             | char(15) | NO   | PRI | NULL    |       |
+| UsrCod         | int      | NO   | MUL | -1      |       |
+| LastChange     | datetime | NO   | MUL | NULL    |       |
+| FirstDayOfWeek | tinyint  | NO   |     | 0       |       |
+| DateFormat     | tinyint  | NO   |     | 0       |       |
+| Theme          | char(16) | NO   |     | NULL    |       |
+| IconSet        | char(16) | NO   |     | NULL    |       |
+| Menu           | tinyint  | NO   |     | 0       |       |
+| SideCols       | tinyint  | NO   |     | NULL    |       |
+| UsrPhotos      | tinyint  | NO   |     | 0       |       |
++----------------+----------+------+-----+---------+-------+
+10 rows in set (0,01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS set_ip_settings ("
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
@@ -2714,6 +2715,7 @@ mysql> DESCRIBE set_ip_settings;
 			"IconSet CHAR(16) NOT NULL,"	// Ico_MAX_BYTES_ICON_SET_ID
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL,"
+			"UsrPhotos TINYINT NOT NULL DEFAULT 0,"
 		   "PRIMARY KEY (IP),"
 		   "INDEX(UsrCod),"
 		   "INDEX(LastChange))");
@@ -3361,7 +3363,7 @@ mysql> DESCRIBE usr_data;
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
 | Field             | Type                                             | Null | Key | Default | Extra          |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-| UsrCod            | int(11)                                          | NO   | PRI | NULL    | auto_increment |
+| UsrCod            | int                                              | NO   | PRI | NULL    | auto_increment |
 | EncryptedUsrCod   | char(43)                                         | NO   | UNI |         |                |
 | Password          | char(86)                                         | NO   |     |         |                |
 | Surname1          | varchar(511)                                     | NO   |     |         |                |
@@ -3371,17 +3373,17 @@ mysql> DESCRIBE usr_data;
 | Theme             | char(16)                                         | NO   | MUL |         |                |
 | IconSet           | char(16)                                         | NO   | MUL |         |                |
 | Language          | char(2)                                          | NO   | MUL |         |                |
-| FirstDayOfWeek    | tinyint(4)                                       | NO   | MUL | 0       |                |
-| DateFormat        | tinyint(4)                                       | NO   | MUL | 0       |                |
+| FirstDayOfWeek    | tinyint                                          | NO   | MUL | 0       |                |
+| DateFormat        | tinyint                                          | NO   | MUL | 0       |                |
 | Photo             | char(43)                                         | NO   |     |         |                |
 | PhotoVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | BaPrfVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | ExPrfVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
-| CtyCod            | int(11)                                          | NO   | MUL | -1      |                |
-| InsCtyCod         | int(11)                                          | NO   | MUL | -1      |                |
-| InsCod            | int(11)                                          | NO   | MUL | -1      |                |
-| DptCod            | int(11)                                          | NO   | MUL | -1      |                |
-| CtrCod            | int(11)                                          | NO   | MUL | -1      |                |
+| CtyCod            | int                                              | NO   | MUL | -1      |                |
+| InsCtyCod         | int                                              | NO   | MUL | -1      |                |
+| InsCod            | int                                              | NO   | MUL | -1      |                |
+| DptCod            | int                                              | NO   | MUL | -1      |                |
+| CtrCod            | int                                              | NO   | MUL | -1      |                |
 | Office            | varchar(2047)                                    | NO   |     |         |                |
 | OfficePhone       | char(16)                                         | NO   |     |         |                |
 | LocalAddress      | varchar(2047)                                    | NO   |     |         |                |
@@ -3391,13 +3393,14 @@ mysql> DESCRIBE usr_data;
 | OriginPlace       | varchar(2047)                                    | NO   |     |         |                |
 | Birthday          | date                                             | YES  |     | NULL    |                |
 | Comments          | text                                             | NO   |     | NULL    |                |
-| Menu              | tinyint(4)                                       | NO   | MUL | 0       |                |
-| SideCols          | tinyint(4)                                       | NO   | MUL | 3       |                |
+| Menu              | tinyint                                          | NO   | MUL | 0       |                |
+| SideCols          | tinyint                                          | NO   | MUL | 3       |                |
+| UsrPhotos         | tinyint                                          | NO   | MUL | 0       |                |
 | ThirdPartyCookies | enum('N','Y')                                    | NO   | MUL | N       |                |
-| NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
-| EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
+| NotifNtfEvents    | int                                              | NO   |     | 0       |                |
+| EmailNtfEvents    | int                                              | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-35 rows in set (0.00 sec)
+36 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
 			"UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -3432,6 +3435,7 @@ mysql> DESCRIBE usr_data;
 			"Comments TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL DEFAULT 3,"
+			"UsrPhotos TINYINT NOT NULL DEFAULT 0,"
 			"ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NotifNtfEvents INT NOT NULL DEFAULT 0,"
 			"EmailNtfEvents INT NOT NULL DEFAULT 0,"
@@ -3452,6 +3456,7 @@ mysql> DESCRIBE usr_data;
 		   "INDEX(CtrCod),"
 		   "INDEX(Menu),"
 		   "INDEX(SideCols),"
+		   "INDEX(UsrPhotos),"
 		   "INDEX(ThirdPartyCookies))");
 
    /***** Table usr_duplicated *****/

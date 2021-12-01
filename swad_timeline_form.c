@@ -176,13 +176,13 @@ void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,
      {
       /***** Begin form in user timeline *****/
       Frm_BeginFormAnchor (Tml_Frm_ActionUsr[Action],"timeline");
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else
      {
       /***** Begin form in global timeline *****/
       Frm_BeginForm (Tml_Frm_ActionGbl[Action]);
-      Usr_PutHiddenParamWho (Timeline->Who);
+	 Usr_PutHiddenParamWho (Timeline->Who);
      }
   }
 

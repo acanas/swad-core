@@ -2120,16 +2120,36 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /******************************* User's photo ********************************/
-.PHOTO12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
-.PHOTO15x20	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle;}
-.PHOTO15x20B	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle; display:block; margin:0 auto;}
-.PHOTO18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
-.PHOTO21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
-.PHOTO30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
-.PHOTO42x56	{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
-.PHOTO45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
-.PHOTO60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
-.PHOTO186x248	{width:186px; height:248px; border-radius:4px; vertical-align:middle;}
+.PHOTOC12x16	{width: 12px; height: 16px; clip-path: circle(50% at center); vertical-align:middle; margin-top:-2px;}
+.PHOTOC15x20	{width: 15px; height: 20px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC15x20B	{width: 15px; height: 20px; clip-path: circle(50% at center); vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOC18x24	{width: 18px; height: 24px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC21x28	{width: 21px; height: 28px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC30x40	{width: 30px; height: 40px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC45x60	{width: 45px; height: 60px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC60x80	{width: 60px; height: 80px; clip-path: circle(50% at center); vertical-align:middle;}
+.PHOTOC186x248	{width:186px; height:248px; clip-path: circle(50% at center); vertical-align:middle;}
+
+.PHOTOE12x16	{width: 12px; height: 16px; clip-path: ellipse(50% 50% at center); vertical-align:middle; margin-top:-2px;}
+.PHOTOE15x20	{width: 15px; height: 20px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE15x20B	{width: 15px; height: 20px; clip-path: ellipse(50% 50% at center); vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOE18x24	{width: 18px; height: 24px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE21x28	{width: 21px; height: 28px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE30x40	{width: 30px; height: 40px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE45x60	{width: 45px; height: 60px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE60x80	{width: 60px; height: 80px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+.PHOTOE186x248	{width:186px; height:248px; clip-path: ellipse(50% 50% at center); vertical-align:middle;}
+
+.PHOTOR12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
+.PHOTOR15x20	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle;}
+.PHOTOR15x20B	{width: 15px; height: 20px; border-radius:1px; vertical-align:middle; display:block; margin:0 auto;}
+.PHOTOR18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
+.PHOTOR21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
+.PHOTOR30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
+.PHOTOR45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
+.PHOTOR60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
+.PHOTOR186x248	{width:186px; height:248px; border-radius:4px; vertical-align:middle;}
+
 .IMG_USR
 	{
 	box-sizing:border-box;

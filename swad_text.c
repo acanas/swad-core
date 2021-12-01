@@ -44592,6 +44592,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Colunas"
 #endif
 	,
+	[Fig_USER_PHOTOS] =
+#if   L==1	// ca
+	"Fotos d'usuaris"
+#elif L==2	// de
+	"Benutzerfotos"
+#elif L==3	// en
+	"User photos"
+#elif L==4	// es
+	"Fotos de usuarios"
+#elif L==5	// fr
+	"Photos des utilisateurs"
+#elif L==6	// gn
+	"Fotos de usuarios"		// Okoteve traducción
+#elif L==7	// it
+	"Foto utente"
+#elif L==8	// pl
+	"Zdj&eogon;cia u&zdot;ytkownika "
+#elif L==9	// pt
+	"Fotos de utilizadores"
+#endif
+	,
 	[Fig_PRIVACY] =
 #if   L==1	// ca
 	"Privacitat"
@@ -55556,6 +55577,90 @@ const char *Txt_User_not_found_or_you_do_not_have_permission_ =
 	" ou voc&ecirc; n&atilde;o tem permiss&atilde;o"
 	" para realizar esta a&ccedil;&atilde;o.";
 #endif
+
+const char *Txt_User_photos =
+#if   L==1	// ca
+	"Fotos d'usuaris";
+#elif L==2	// de
+	"Benutzerfotos";
+#elif L==3	// en
+	"User photos";
+#elif L==4	// es
+	"Fotos de usuarios";
+#elif L==5	// fr
+	"Photos des utilisateurs";
+#elif L==6	// gn
+	"Fotos de usuarios";		// Okoteve traducción
+#elif L==7	// it
+	"Foto utente";
+#elif L==8	// pl
+	"Zdj&eogon;cia u&zdot;ytkownika ";
+#elif L==9	// pt
+	"Fotos de utilizadores";
+#endif
+
+const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS] =
+	{
+#if   L==1	// ca
+	"Cercle"
+#elif L==2	// de
+	"Kreis"
+#elif L==3	// en
+	"Circle"
+#elif L==4	// es
+	"C&iacute;rculo"
+#elif L==5	// fr
+	"Cercle"
+#elif L==6	// gn
+	"C&iacute;rculo"	// Okoteve traducción
+#elif L==7	// it
+	"Cerchio"
+#elif L==8	// pl
+	"Ko&lstrok;o"
+#elif L==9	// pt
+	"C&iacute;rculo"
+#endif
+	,
+#if   L==1	// ca
+	"El&middot;lipse"
+#elif L==2	// de
+	"Ellipse"
+#elif L==3	// en
+	"Ellipse"
+#elif L==4	// es
+	"Elipse"
+#elif L==5	// fr
+	"Ellipse"
+#elif L==6	// gn
+	"Elipse"	// Okoteve traducción
+#elif L==7	// it
+	"Ellisse"
+#elif L==8	// pl
+	"Elipsa"
+#elif L==9	// pt
+	"Elipse"
+#endif
+	,
+#if   L==1	// ca
+	"Rectangle"
+#elif L==2	// de
+	"Rechteck"
+#elif L==3	// en
+	"Rectangle"
+#elif L==4	// es
+	"Rect&aacute;ngulo"
+#elif L==5	// fr
+	"Rectangle"
+#elif L==6	// gn
+	"Rect&aacute;ngulo"	// Okoteve traducción
+#elif L==7	// it
+	"Rettangolo"
+#elif L==8	// pl
+	"Prostok&aogon;t"
+#elif L==9	// pt
+	"Ret&acirc;ngulo"
+#endif
+	};
 
 const char *Txt_Users =
 #if   L==1	// ca

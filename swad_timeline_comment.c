@@ -184,12 +184,21 @@ void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
 static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
+     };
+
    /***** Show author's photo *****/
    /* Begin container */
    HTM_DIV_Begin ("class=\"Tml_COM_PHOTO\"");
 
       /* Author's photo */
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,
+                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 true);	// Use unique id
 
    /* End container */
    HTM_DIV_End ();
@@ -209,7 +218,7 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
       /***** Begin form to write the post *****/
       Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_COMM);
-      Tml_Not_PutHiddenParamNotCod (NotCod);
+	 Tml_Not_PutHiddenParamNotCod (NotCod);
 
 	 /***** Textarea and button *****/
 	 Tml_Pst_PutTextarea (Txt_New_TIMELINE_comment,
@@ -608,7 +617,7 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
    Frm_BeginFormUnique (ActSeeOthPubPrf);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
       HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
@@ -685,7 +694,7 @@ static void Tml_Com_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
    /***** Form to remove publication *****/
    /* Begin form */
    Tml_Frm_BeginForm (Timeline,Tml_Frm_REQ_REM_COMM);
-   Tml_Pub_PutHiddenParamPubCod (PubCod);
+      Tml_Pub_PutHiddenParamPubCod (PubCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Txt_Remove);

@@ -145,10 +145,11 @@ struct Globals
       Lan_Language_t Language;
       unsigned FirstDayOfWeek;
       Dat_Format_t DateFormat;
-      Mnu_Menu_t Menu;
-      unsigned SideCols;
-      The_Theme_t Theme;
       Ico_IconSet_t IconSet;
+      Mnu_Menu_t Menu;
+      The_Theme_t Theme;
+      unsigned SideCols;
+      Set_UsrPhotos_t UsrPhotos;
       char URLTheme[PATH_MAX + 1];
       char URLIconSet[PATH_MAX + 1];
      } Prefs;

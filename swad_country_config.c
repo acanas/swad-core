@@ -370,16 +370,16 @@ static void CtyCfg_Platform (bool PrintView)
 	 if (!PrintView)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
-	    HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
-				     "BT_LINK LT DAT",NULL);
-	    Hie_FreeGoToMsg ();
+	       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
+					"BT_LINK LT DAT",NULL);
+	       Hie_FreeGoToMsg ();
 	   }
 	 Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO20x20");
 	 HTM_NBSP ();
 	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	 if (!PrintView)
 	   {
-	    HTM_BUTTON_End ();
+	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
       HTM_TD_End ();
@@ -472,7 +472,7 @@ static void CtyCfg_NumInss (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB\"");
 	 Frm_BeginFormGoTo (ActSeeIns);
-	 Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
 	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 							 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 				     "BT_LINK DAT",NULL);

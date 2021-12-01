@@ -247,7 +247,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	    if (!PrintView)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
-	       Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
 					   "BT_LINK LT DAT",NULL);
 		  Hie_FreeGoToMsg ();

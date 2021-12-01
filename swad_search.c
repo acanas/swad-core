@@ -236,7 +236,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
 
       /***** Put form *****/
       Frm_BeginForm (ActSch);
-      Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
+	 Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
 	 Sch_PutInputStringToSearch ("head_search_text");
 	 Sch_PutMagnifyingGlassButton ("search-white.svg");
       Frm_EndForm ();

@@ -550,8 +550,8 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
       /***** Begin form to update the results
 	     depending on the games selected *****/
       Frm_BeginFormAnchor (Gbl.Action.Act,MchRes_RESULTS_TABLE_ID);
-      Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Grp_PutParamsCodGrps ();
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWidePadding (2);
@@ -889,12 +889,12 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 		 {
 		  case Usr_ME:
 		     Frm_BeginForm (ActSeeOneMchResMe);
-		     Mch_PutParamsEdit (Games);
+			Mch_PutParamsEdit (Games);
 		     break;
 		  case Usr_OTHER:
 		     Frm_BeginForm (ActSeeOneMchResOth);
-		     Mch_PutParamsEdit (Games);
-		     Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			Mch_PutParamsEdit (Games);
+			Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 		     break;
 		 }
 		  Ico_PutIconLink ("tasks.svg",Txt_Result);
@@ -1041,6 +1041,12 @@ void MchRes_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+     };
    struct Gam_Games Games;
    struct Gam_Game Game;
    struct Mch_Match Match;
@@ -1125,7 +1131,9 @@ void MchRes_ShowOneMchResult (void)
 		  if (UsrDat->FrstName[0])
 		     HTM_TxtF (", %s",UsrDat->FrstName);
 		  HTM_BR ();
-		  Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+		  Pho_ShowUsrPhotoIfAllowed (UsrDat,
+		                             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                             false);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

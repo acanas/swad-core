@@ -62,6 +62,9 @@ extern struct Globals Gbl;
 static void Set_PutIconsToSelectSideCols (void);
 static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args);
 
+static void Set_PutIconsToSelectUsrPhotos (void);
+static void Set_PutIconsUsrPhotos (__attribute__((unused)) void *Args);
+
 static void Set_GetAndUpdateUsrListType (void);
 static void Set_GetUsrListTypeFromForm (void);
 static void Set_GetMyUsrListTypeFromDB (void);
@@ -115,11 +118,15 @@ void Set_EditSettings (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 The_PutIconsToSelectTheme ();		// 6. Theme
+	 The_PutIconsToSelectTheme ();			// 6. Theme
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
 	 Set_PutIconsToSelectSideCols ();		// 7. Side columns
+      HTM_DIV_End ();
+
+      HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
+	 Set_PutIconsToSelectUsrPhotos ();		// 8. User photos
       HTM_DIV_End ();
 
    Box_BoxEnd ();
@@ -176,6 +183,15 @@ void Set_GetSettingsFromIP (void)
 	   }
 	 else
 	    Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+
+	 /* Get user photo shape (row[6]) */
+	 if (sscanf (row[6],"%u",&Gbl.Prefs.UsrPhotos) == 1)
+	   {
+	    if (Gbl.Prefs.UsrPhotos >= Set_NUM_USR_PHOTOS)
+	       Gbl.Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
+	   }
+	 else
+	    Gbl.Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
 	}
 
       /***** Free structure that stores the query result *****/
@@ -214,14 +230,14 @@ static void Set_PutIconsToSelectSideCols (void)
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();
-	 for (SideCols = 0;
+	 for (SideCols  = 0;
 	      SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	      SideCols++)
 	   {
 	    HTM_DIV_Begin ("class=\"%s\"",SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
 									   "PREF_OFF");
 	       Frm_BeginForm (ActChgCol);
-	       Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
+		  Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
 		  snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
 			    SideCols >> 1,SideCols & 1);
 		  Ico_PutSettingIconLink (Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
@@ -270,6 +286,84 @@ unsigned Set_GetParamSideCols (void)
                                                0,
                                                Lay_SHOW_BOTH_COLUMNS,
                                                Cfg_DEFAULT_COLUMNS);
+  }
+
+/*****************************************************************************/
+/******************* Put icons to select user photo shape ********************/
+/*****************************************************************************/
+
+static void Set_PutIconsToSelectUsrPhotos (void)
+  {
+   extern const char *Hlp_PROFILE_Settings_user_photos;
+   extern const char *Txt_User_photos;
+   extern const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "ICO_HIGHLIGHT PHOTOC15x20B",
+      [Set_USR_PHOTO_ELLIPSE  ] = "ICO_HIGHLIGHT PHOTOE15x20B",
+      [Set_USR_PHOTO_RECTANGLE] = "ICO_HIGHLIGHT PHOTOR15x20B",
+     };
+   Set_UsrPhotos_t UsrPhotos;
+
+   Box_BoxBegin (NULL,Txt_User_photos,
+                 Set_PutIconsUsrPhotos,NULL,
+                 Hlp_PROFILE_Settings_user_photos,Box_NOT_CLOSABLE);
+      Set_BeginSettingsHead ();
+	 Set_BeginOneSettingSelector ();
+	 for (UsrPhotos  = (Set_UsrPhotos_t) 0;
+	      UsrPhotos <= (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1);
+	      UsrPhotos++)
+	   {
+	    HTM_DIV_Begin ("class=\"%s\"",UsrPhotos == Gbl.Prefs.UsrPhotos ? "PREF_ON" :
+									     "PREF_OFF");
+	       Frm_BeginForm (ActChgUsrPho);
+		  Par_PutHiddenParamUnsigned (NULL,"UsrPhotos",UsrPhotos);
+		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_USER_PHOTOS[UsrPhotos],ClassPhoto[UsrPhotos]);
+	       Frm_EndForm ();
+	    HTM_DIV_End ();
+	   }
+	 Set_EndOneSettingSelector ();
+      Set_EndSettingsHead ();
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/************** Put contextual icons in side-columns setting *****************/
+/*****************************************************************************/
+
+static void Set_PutIconsUsrPhotos (__attribute__((unused)) void *Args)
+  {
+   /***** Put icon to show a figure *****/
+   Fig_PutIconToShowFigure (Fig_USER_PHOTOS);
+  }
+
+/*****************************************************************************/
+/************************** Change user photo shape **************************/
+/*****************************************************************************/
+
+void Set_ChangeUsrPhotos (void)
+  {
+   /***** Get param with user photo shape *****/
+   Gbl.Prefs.UsrPhotos = Set_GetParamUsrPhotos ();
+
+   /***** Store side colums in database *****/
+   if (Gbl.Usrs.Me.Logged)
+      Set_DB_UpdateMySettingsAboutUsrPhotos ();
+
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
+  }
+
+/*****************************************************************************/
+/************** Get parameter used to change user photo shape ****************/
+/*****************************************************************************/
+
+Set_UsrPhotos_t Set_GetParamUsrPhotos (void)
+  {
+   return (Set_UsrPhotos_t) Par_GetParToUnsignedLong ("UsrPhotos",
+						      (Set_UsrPhotos_t) 0,
+						      (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1),
+						      Set_USR_PHOTOS_DEFAULT);
   }
 
 /*****************************************************************************/

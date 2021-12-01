@@ -209,12 +209,12 @@ void Ind_ReqIndicatorsCourses (void)
 
 	 /* Button to show more details */
 	 Frm_BeginForm (ActSeeAllStaCrs);
-	 Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-	 Par_PutHiddenParamLong (NULL,"OthDegTypCod",Indicators.DegTypCod);
-	 Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Indicators.DptCod);
-	 if (Indicators.StrIndicatorsSelected[0])
-	    Par_PutHiddenParamString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
-	 Btn_PutConfirmButton (Txt_Show_more_details);
+	    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
+	    Par_PutHiddenParamLong (NULL,"OthDegTypCod",Indicators.DegTypCod);
+	    Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Indicators.DptCod);
+	    if (Indicators.StrIndicatorsSelected[0])
+	       Par_PutHiddenParamString (NULL,"Indicators",Indicators.StrIndicatorsSelected);
+	    Btn_PutConfirmButton (Txt_Show_more_details);
 	 Frm_EndForm ();
 	}
 

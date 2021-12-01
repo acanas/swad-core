@@ -265,10 +265,10 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 		  HTM_TH_Begin (1,1,"LM");
 
 		     Frm_BeginForm (ActSeeAtt);
-		     WhichGroups = Grp_GetParamWhichGroups ();
-		     Grp_PutParamWhichGroups (&WhichGroups);
-		     Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
-		     Dat_PutHiddenParamOrder (Order);
+			WhichGroups = Grp_GetParamWhichGroups ();
+			Grp_PutParamWhichGroups (&WhichGroups);
+			Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
+			Dat_PutHiddenParamOrder (Order);
 
 			HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 
@@ -395,7 +395,7 @@ static void Att_PutButtonToCreateNewAttEvent (struct Att_Events *Events)
 
    /***** Begin form *****/
    Frm_BeginForm (ActFrmNewAtt);
-   Att_PutParamsToCreateNewAttEvent (Events);
+      Att_PutParamsToCreateNewAttEvent (Events);
 
       /***** Button to create new event *****/
       Btn_PutConfirmButton (Txt_New_event);
@@ -852,17 +852,17 @@ void Att_AskRemAttEvent (void)
 
    /***** Button of confirmation of removing *****/
    Frm_BeginForm (ActRemAtt);
-   Att_PutParamAttCod (Event.AttCod);
-   Dat_PutHiddenParamOrder (Events.SelectedOrder);
-   WhichGroups = Grp_GetParamWhichGroups ();
-   Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
+      Att_PutParamAttCod (Event.AttCod);
+      Dat_PutHiddenParamOrder (Events.SelectedOrder);
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
-   /* Ask for confirmation of removing */
-   Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_remove_the_event_X,
-                  Event.Title);
+      /* Ask for confirmation of removing */
+      Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_remove_the_event_X,
+		     Event.Title);
 
-   Btn_PutRemoveButton (Txt_Remove_event);
+      Btn_PutRemoveButton (Txt_Remove_event);
    Frm_EndForm ();
 
    /***** Show attendance events again *****/
@@ -1026,12 +1026,12 @@ void Att_RequestCreatOrEditAttEvent (void)
    else
      {
       Frm_BeginForm (ActChgAtt);
-      Att_PutParamAttCod (Event.AttCod);
+	 Att_PutParamAttCod (Event.AttCod);
      }
-   Dat_PutHiddenParamOrder (Events.SelectedOrder);
-   WhichGroups = Grp_GetParamWhichGroups ();
-   Grp_PutParamWhichGroups (&WhichGroups);
-   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
+      Dat_PutHiddenParamOrder (Events.SelectedOrder);
+      WhichGroups = Grp_GetParamWhichGroups ();
+      Grp_PutParamWhichGroups (&WhichGroups);
+      Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
 
       /***** Begin box and table *****/
       if (ItsANewAttEvent)
@@ -1530,7 +1530,7 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
       if (Event->Open)
 	{
 	 Frm_BeginForm (ActRecAttMe);
-	 Att_PutParamAttCod (Event->AttCod);
+	    Att_PutParamAttCod (Event->AttCod);
 	}
 
 	 /***** List students (only me) *****/
@@ -1611,8 +1611,8 @@ static void Att_ListAttStudents (struct Att_Events *Events,
 
 	    /* Begin form */
 	    Frm_BeginForm (ActRecAttStd);
-	    Att_PutParamAttCod (Event->AttCod);
-	    Grp_PutParamsCodGrps ();
+	       Att_PutParamAttCod (Event->AttCod);
+	       Grp_PutParamsCodGrps ();
 
 	       /* Begin table */
 	       HTM_TABLE_BeginWideMarginPadding (2);
@@ -1680,6 +1680,12 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
                                           struct Att_Event *Event)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+     };
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
@@ -1749,7 +1755,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -1822,8 +1830,8 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
   {
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
-   Att_PutParamAttCod (AttEvent->AttCod);
-   Att_PutParamsCodGrps (AttEvent->AttCod);
+      Att_PutParamAttCod (AttEvent->AttCod);
+      Att_PutParamsCodGrps (AttEvent->AttCod);
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_SUBMIT_Begin (Title,Class,NULL);
@@ -2599,15 +2607,15 @@ static void Att_PutButtonToShowDetails (const struct Att_Events *Events)
    /***** Button to show more details *****/
    /* Begin form */
    Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
-   Par_PutHiddenParamChar ("ShowDetails",'Y');
-   Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   if (Events->StrAttCodsSelected)
-      if (Events->StrAttCodsSelected[0])
-	 Par_PutHiddenParamString (NULL,"AttCods",Events->StrAttCodsSelected);
+      Par_PutHiddenParamChar ("ShowDetails",'Y');
+      Grp_PutParamsCodGrps ();
+      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+      if (Events->StrAttCodsSelected)
+	 if (Events->StrAttCodsSelected[0])
+	    Par_PutHiddenParamString (NULL,"AttCods",Events->StrAttCodsSelected);
 
-   /* Button */
-   Btn_PutConfirmButton (Txt_Show_more_details);
+      /* Button */
+      Btn_PutConfirmButton (Txt_Show_more_details);
 
    /* End form */
    Frm_EndForm ();
@@ -2657,8 +2665,8 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
       if (NormalView)
 	{
 	 Frm_BeginFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
-	 Grp_PutParamsCodGrps ();
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Grp_PutParamsCodGrps ();
+	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	}
 
       /***** Begin table *****/
@@ -2906,6 +2914,12 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct UsrData *UsrDat)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    unsigned NumAttEvent;
    bool Present;
    unsigned NumTimesPresent;
@@ -2924,7 +2938,9 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -3058,6 +3074,12 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    unsigned NumAttEvent;
    unsigned UniqueId;
    char *Id;
@@ -3075,12 +3097,14 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 		    UsrDat->Accepted ? "DAT_N" :
 				       "DAT",
 		    Gbl.RowEvenOdd);
-      HTM_TxtF ("%u:",NumUsr);
+	 HTM_TxtF ("%u:",NumUsr);
       HTM_TD_End ();
 
       /***** Show student's photo *****/
       HTM_TD_Begin ("colspan=\"2\" class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            false);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);

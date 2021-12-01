@@ -758,7 +758,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 	 /***** Form to change password *****/
 	 /* Begin form */
 	 Frm_BeginFormAnchor (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],Pwd_PASSWORD_SECTION_ID);
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 
 	    /* New password */
 	    HTM_TABLE_BeginWidePadding (2);

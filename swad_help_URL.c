@@ -4172,6 +4172,27 @@ const char *Hlp_PROFILE_Settings_columns =
 	"PROFILE.Settings.en#columns";
 #endif
 
+const char *Hlp_PROFILE_Settings_user_photos =
+#if   L==1
+	"PROFILE.Settings.es#fotos-de-usuarios";
+#elif L==2
+	"PROFILE.Settings.en#user-photos";
+#elif L==3
+	"PROFILE.Settings.en#user-photos";
+#elif L==4
+	"PROFILE.Settings.es#fotos-de-usuarios";
+#elif L==5
+	"PROFILE.Settings.en#user-photos";
+#elif L==6
+	"PROFILE.Settings.es#fotos-de-usuarios";
+#elif L==7
+	"PROFILE.Settings.en#user-photos";
+#elif L==8
+	"PROFILE.Settings.en#user-photos";
+#elif L==9
+	"PROFILE.Settings.en#user-photos";
+#endif
+
 const char *Hlp_PROFILE_Settings_privacy =
 #if   L==1
 	"PROFILE.Settings.es#privacidad";

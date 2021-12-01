@@ -860,8 +860,8 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 								    ActInsIteSylPra) :
 			       (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
 								    ActModIteSylPra));
-      Syllabus->ParamNumItem = NumItem;
-      Syl_PutParamNumItem (&Syllabus->ParamNumItem);
+	 Syllabus->ParamNumItem = NumItem;
+	 Syl_PutParamNumItem (&Syllabus->ParamNumItem);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
 			 HTM_SUBMIT_ON_CHANGE,
 			 "size=\"60\" placeholder=\"%s\"%s",

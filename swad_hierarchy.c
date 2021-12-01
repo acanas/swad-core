@@ -198,7 +198,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_NBSP ();
 
       Frm_BeginFormGoTo (ActMnu);
-      Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
+	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 	 HTM_BUTTON_SUBMIT_Begin (Txt_System,ClassLink,NULL);
 	    HTM_Txt (Txt_System);
 	 HTM_BUTTON_End ();
@@ -215,7 +215,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	 Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
 	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],ClassLink,NULL);
 	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	    HTM_BUTTON_End ();
@@ -249,7 +249,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	 Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+	    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ins.FullName,ClassLink,NULL);
 	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
 	    HTM_BUTTON_End ();
@@ -295,7 +295,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	 Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ctr.FullName,ClassLink,NULL);
 	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
 	    HTM_BUTTON_End ();
@@ -341,7 +341,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
-	 Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Deg.FullName,ClassLink,NULL);
 	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
 	    HTM_BUTTON_End ();
@@ -782,7 +782,7 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
 	{
 	 /* Begin form */
 	 Frm_BeginForm (NextAction);
-	 Hie_PutParamOtherHieCod (&HieCod);
+	    Hie_PutParamOtherHieCod (&HieCod);
 
 	    /* Selector */
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,

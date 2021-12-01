@@ -593,8 +593,8 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
       /***** Begin form to update the results
 	     depending on the exams selected *****/
       Frm_BeginFormAnchor (Gbl.Action.Act,ExaRes_RESULTS_TABLE_ID);
-      Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Grp_PutParamsCodGrps ();
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 
 	 /***** Begin table *****/
 	 HTM_TABLE_BeginWidePadding (2);
@@ -1013,15 +1013,15 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		    {
 		     case Usr_ME:
 			Frm_BeginForm (ActSeeOneExaResMe);
-			ExaSes_PutParamsEdit (Exams);
+			   ExaSes_PutParamsEdit (Exams);
 			break;
 		     case Usr_OTHER:
 			Frm_BeginForm (ActSeeOneExaResOth);
-			ExaSes_PutParamsEdit (Exams);
-			Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+			   ExaSes_PutParamsEdit (Exams);
+			   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 			break;
 		    }
-		  Ico_PutIconLink ("tasks.svg",Txt_Result);
+		     Ico_PutIconLink ("tasks.svg",Txt_Result);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1483,6 +1483,12 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+     };
 
    /***** Row begin *****/
    HTM_TR_Begin (NULL);
@@ -1501,7 +1507,9 @@ void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
 	 if (UsrDat->FrstName[0])
 	    HTM_TxtF (", %s",UsrDat->FrstName);
 	 HTM_BR ();
-	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            false);
       HTM_TD_End ();
 
    /***** Row end *****/

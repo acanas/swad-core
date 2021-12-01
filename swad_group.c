@@ -384,38 +384,38 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
 	  depending on the groups selected *****/
    Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
-   Set_PutParamsPrefsAboutUsrList ();
-   if (FuncParams)
-      FuncParams (Args);
+      Set_PutParamsPrefsAboutUsrList ();
+      if (FuncParams)
+	 FuncParams (Args);
 
-   /***** Select all groups *****/
-   Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
+      /***** Select all groups *****/
+      Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
 
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      /***** Get list of groups types and groups in this course *****/
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** List the groups for each group type *****/
-   HTM_TABLE_BeginWidePadding (2);
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
-	   NumGrpTyp++)
-	 if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-	    Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-					      GroupsSelectableByStdsOrNETs);
-   HTM_TABLE_End ();
+      /***** List the groups for each group type *****/
+      HTM_TABLE_BeginWidePadding (2);
+	 for (NumGrpTyp = 0;
+	      NumGrpTyp < Gbl.Crs.Grps.GrpTypes.NumGrpTypes;
+	      NumGrpTyp++)
+	    if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+	       Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+						 GroupsSelectableByStdsOrNETs);
+      HTM_TABLE_End ();
 
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
+      /***** Free list of groups types and groups in this course *****/
+      Grp_FreeListGrpTypesAndGrps ();
 
-   /***** Submit button *****/
-   HTM_DIV_Begin ("class=\"CM\" style=\"padding-top:12px;\"");
-      HTM_BUTTON_Animated_Begin (Txt_Update_users,
-				 The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-				 Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-								  NULL);
-	 Ico_PutCalculateIconWithText (Txt_Update_users);
-      HTM_BUTTON_End ();
-   HTM_DIV_End ();
+      /***** Submit button *****/
+      HTM_DIV_Begin ("class=\"CM\" style=\"padding-top:12px;\"");
+	 HTM_BUTTON_Animated_Begin (Txt_Update_users,
+				    The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				    Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
+								     NULL);
+	    Ico_PutCalculateIconWithText (Txt_Update_users);
+	 HTM_BUTTON_End ();
+      HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1258,7 +1258,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Name of group type */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
 				  HTM_SUBMIT_ON_CHANGE,
@@ -1269,7 +1269,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Is it mandatory to register in any group? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MandatoryEnrolment\""
 				    " style=\"width:150px;\"");
@@ -1286,7 +1286,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Is it possible to register in multiple groups? */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "name=\"MultipleEnrolment\""
 				    " style=\"width:150px;\"");
@@ -1303,7 +1303,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	    /* Open time */
 	    HTM_TD_Begin ("class=\"LM\"");
 	       Frm_BeginFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-	       Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		  Grp_PutParamGrpTypCod (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
 		  HTM_TABLE_BeginCenterPadding (2);
 		     HTM_TR_Begin (NULL);
 
@@ -1455,7 +1455,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (Grp->Open ? ActCloGrp :
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
-		  Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
 						  "lock.svg",
 				      Str_BuildStringStr (Grp->Open ? Txt_Group_X_open_click_to_close_it :
@@ -1470,7 +1470,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		  Frm_BeginFormAnchor (Grp->FileZones ? ActDisFilZonGrp :
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
-		  Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
 						       "folder-red.svg",
 				      Str_BuildStringStr (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
@@ -1484,7 +1484,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
-		  Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"GrpTypCod\" style=\"width:100px;\"");
 
@@ -1507,7 +1507,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Group name *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
-		  Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"20\"");
@@ -1518,7 +1518,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /* Begin selector */
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgGrpRoo,Grp_GROUPS_SECTION_ID);
-		  Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"RooCod\" style=\"width:100px;\"");
 
@@ -1558,7 +1558,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 	       /***** Maximum number of students of the group (row[3]) *****/
 	       HTM_TD_Begin ("class=\"CM\"");
 		  Frm_BeginFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
-		  Grp_PutParamGrpCod (&Grp->GrpCod);
+		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
 		     HTM_INPUT_TEXT ("MaxStudents",Cns_MAX_DECIMAL_DIGITS_UINT,StrMaxStudents,
 				     HTM_SUBMIT_ON_CHANGE,
@@ -1758,9 +1758,9 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       /***** End form *****/
       if (PutFormToChangeGrps)
 	{
-	 if (ICanChangeMyGrps)
-	    Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
-						   Txt_Enrol_in_groups);
+	    if (ICanChangeMyGrps)
+	       Btn_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+						      Txt_Enrol_in_groups);
 	 Frm_EndForm ();
 	}
      }
@@ -4347,12 +4347,12 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 			 WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
 							       "PREF_OFF");
 	    Frm_BeginForm (Action);
-	    Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-	    if (FuncParams)	// Extra parameters depending on the action
-	       FuncParams (Args);
-	    Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-								 "sitemap.svg",
-				    Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+	       Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	       if (FuncParams)	// Extra parameters depending on the action
+		  FuncParams (Args);
+	       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
+								    "sitemap.svg",
+				       Txt_GROUP_WHICH_GROUPS[WhichGrps]);
 	    Frm_EndForm ();
 	 HTM_DIV_End ();
 	}

@@ -1291,6 +1291,7 @@ CREATE TABLE IF NOT EXISTS set_ip_settings (
 	IconSet CHAR(16) NOT NULL,
 	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL,
+	UsrPhotos TINYINT NOT NULL DEFAULT 0,
 	PRIMARY KEY(IP),
 	INDEX(UsrCod),
 	INDEX(LastChange));
@@ -1625,6 +1626,7 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	Comments TEXT NOT NULL,
 	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL DEFAULT 3,
+	UsrPhotos TINYINT NOT NULL DEFAULT 0,
 	ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N',
 	NotifNtfEvents INT NOT NULL DEFAULT 0,
 	EmailNtfEvents INT NOT NULL DEFAULT 0,
@@ -1645,6 +1647,7 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(CtrCod),
 	INDEX(Menu),
 	INDEX(SideCols),
+	INDEX(UsrPhotos),
 	INDEX(ThirdPartyCookies));
 --
 -- Table usr_duplicated: stores informs of users possibly duplicated

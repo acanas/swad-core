@@ -33,6 +33,16 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+// Related with user photo shape
+#define Set_NUM_USR_PHOTOS 3
+typedef enum
+  {
+   Set_USR_PHOTO_CIRCLE    = 0,
+   Set_USR_PHOTO_ELLIPSE   = 1,
+   Set_USR_PHOTO_RECTANGLE = 2,
+  } Set_UsrPhotos_t;
+#define Set_USR_PHOTOS_DEFAULT Set_USR_PHOTO_CIRCLE
+
 // Related with type of list of users
 #define Set_NUM_USR_LIST_TYPES 3
 typedef enum
@@ -54,6 +64,9 @@ void Set_SetSettingsFromIP (void);
 
 void Set_ChangeSideCols (void);
 unsigned Set_GetParamSideCols (void);
+
+void Set_ChangeUsrPhotos (void);
+Set_UsrPhotos_t Set_GetParamUsrPhotos (void);
 
 //------------------------ My settings on users' list -------------------------
 void Set_PutParamsPrefsAboutUsrList (void);

@@ -437,7 +437,7 @@ void Tag_ShowFormEditTags (void)
 	       /* Form to rename this tag */
 	       HTM_TD_Begin ("class=\"LM\"");
 		  Frm_BeginForm (ActRenTag);
-		  Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
+		     Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"36\" required=\"required\"");
@@ -467,7 +467,7 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
 
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
-      Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
+	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-slash-red.svg",
 			  Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
 					      TagTxt));
@@ -486,7 +486,7 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
 
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
-      Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
+	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-green.svg",
 			  Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
 					      TagTxt));

@@ -130,7 +130,7 @@ void Plc_SeePlaces (void)
 	       HTM_TH_Begin (1,1,"LM");
 
 		  Frm_BeginForm (ActSeePlc);
-		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		     HTM_BUTTON_SUBMIT_Begin (Txt_PLACES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 			if (Order == Places.SelectedOrder)
 			   HTM_U_Begin ();
@@ -207,7 +207,7 @@ void Plc_SeePlaces (void)
 	 if (Plc_CheckIfICanCreatePlaces ())
 	   {
 	    Frm_BeginForm (ActEdiPlc);
-	    Btn_PutConfirmButton (Txt_New_place);
+	       Btn_PutConfirmButton (Txt_New_place);
 	    Frm_EndForm ();
 	   }
 
@@ -490,7 +490,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcSho);
-	       Plc_PutParamPlcCod (&Plc->PlcCod);
+		  Plc_PutParamPlcCod (&Plc->PlcCod);
 		  HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME\"");
@@ -500,7 +500,7 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
 	    /* Place full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenPlcFul);
-	       Plc_PutParamPlcCod (&Plc->PlcCod);
+		  Plc_PutParamPlcCod (&Plc->PlcCod);
 		  HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME\"");

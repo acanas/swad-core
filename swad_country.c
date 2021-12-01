@@ -360,7 +360,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	 if (OrderSelectable)
 	   {
 	    Frm_BeginForm (ActSeeCty);
-	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	       HTM_BUTTON_SUBMIT_Begin (Txt_COUNTRIES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 		  if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
 		     HTM_U_Begin ();
@@ -499,7 +499,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-   Cty_PutParamCtyCod (Cty->CtyCod);
+      Cty_PutParamCtyCod (Cty->CtyCod);
 
       /***** Begin container *****/
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
@@ -908,7 +908,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
      {
       /***** Write country name with link to country information *****/
       Frm_BeginForm (ActSeeCtyInf);
-      Cty_PutParamCtyCod (CtyCod);
+	 Cty_PutParamCtyCod (CtyCod);
 	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeCtyInf),ClassLink,NULL);
 	    HTM_Txt (CtyName);
 	 HTM_BUTTON_End ();
@@ -1120,8 +1120,8 @@ static void Cty_ListCountriesForEdition (void)
 	       /* Name */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActRenCty);
-		  Cty_PutParamOtherCtyCod (&Cty->CtyCod);
-		  Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
+		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
+		     Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 				     HTM_SUBMIT_ON_CHANGE,
 				     "size=\"15\"");
@@ -1131,8 +1131,8 @@ static void Cty_ListCountriesForEdition (void)
 	       /* WWW */
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginForm (ActChgCtyWWW);
-		  Cty_PutParamOtherCtyCod (&Cty->CtyCod);
-		  Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
+		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
+		     Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();

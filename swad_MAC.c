@@ -75,7 +75,7 @@ static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anc
   {
    /* Form to enter a new MAC address */
    Frm_BeginFormAnchor (NextAction,Anchor);
-   FuncParams (Args);
+      FuncParams (Args);
       HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Params *) Args)->MACstr,
 		      HTM_SUBMIT_ON_CHANGE,
 		      "size=\"8\"");

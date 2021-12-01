@@ -278,7 +278,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Name of the field */
 	 HTM_TD_Begin ("class=\"LM\"");
 	    Frm_BeginForm (ActRenFie);
-	    Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 			       HTM_SUBMIT_ON_CHANGE,
@@ -289,7 +289,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Number of lines in the form */
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgRowFie);
-	    Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       snprintf (StrNumLines,sizeof (StrNumLines),"%u",
 			 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
@@ -301,7 +301,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	 /* Visibility of a field */
 	 HTM_TD_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActChgVisFie);
-	    Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "name=\"Visibility\"");
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
@@ -886,7 +886,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevGst);
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	 Frm_EndForm ();
 
@@ -986,9 +986,9 @@ static void Rec_ShowRecordOneStdCrs (void)
 
       /* Print view */
       Frm_BeginForm (ActPrnRecSevStd);
-      Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
@@ -1088,7 +1088,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevStd);
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	 Frm_EndForm ();
 
@@ -1215,12 +1215,12 @@ static void Rec_ShowRecordOneTchCrs (void)
 
       /* Print view */
       Frm_BeginForm (ActPrnRecSevTch);
-      Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
-      Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-      Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-      Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-      Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
-								  'N');
+	 Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected);
+	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	 Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+	 Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+	 Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
+								     'N');
 	 Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
@@ -1305,11 +1305,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Print view */
 	 Frm_BeginForm (ActPrnRecSevTch);
-	 Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-	 Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-	 Par_PutHiddenParamChar ("ShowOfficeHours",
-				 ShowOfficeHours ? 'Y' :
-						   'N');
+	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+	    Par_PutHiddenParamChar ("ShowOfficeHours",
+				    ShowOfficeHours ? 'Y' :
+						      'N');
 	    Rec_ShowLinkToPrintPreviewOfRecords ();
 	 Frm_EndForm ();
 
@@ -1633,11 +1633,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   {
 	    ICanEdit = true;
 	    Frm_BeginFormAnchor (ActRcvRecOthUsr,Anchor);
-	    Par_PutHiddenParamLong (NULL,"OriginalActCod",
-				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
-	       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	       Par_PutHiddenParamLong (NULL,"OriginalActCod",
+				       Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
+		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 	   }
 	 break;
       default:
@@ -2178,7 +2178,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			break;
 		    }
 		  Frm_BeginForm (NextAction);
-		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
+		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 		  break;
 	       case Rec_SHA_OTHER_NEW_USR_FORM:
 		  switch (Gbl.Action.Act)
@@ -2197,7 +2197,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			break;
 		    }
 		  Frm_BeginForm (NextAction);
-		  ID_PutParamOtherUsrIDPlain ();				// New user
+		     ID_PutParamOtherUsrIDPlain ();				// New user
 		  break;
 	       default:
 		  break;
@@ -2559,7 +2559,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	    Ins_PutParamInsCod (Ins->InsCod);
+	       Ins_PutParamInsCod (Ins->InsCod);
 	       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
 	   }
 	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,
@@ -2580,7 +2580,7 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 	 if (PutFormLinks)
 	   {
 	    Frm_BeginFormGoTo (ActSeeInsInf);
-	    Ins_PutParamInsCod (Ins->InsCod);
+	       Ins_PutParamInsCod (Ins->InsCod);
 	       HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK REC_HEAD LM",NULL);
 	   }
 	 HTM_Txt (Ins->FullName);
@@ -2599,9 +2599,18 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 
 static void Rec_ShowPhoto (struct UsrData *UsrDat)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
+     };
+
    /***** User's photo *****/
    HTM_TD_Begin ("rowspan=\"3\" class=\"REC_C3_TOP CT\"");
-      Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO186x248",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (UsrDat,
+                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 false);
    HTM_TD_End ();
   }
 
@@ -2648,7 +2657,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	       /* Put form to go to public profile */
 	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 	       Frm_BeginForm (ActSeeOthPubPrf);
-	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		  HTM_BUTTON_SUBMIT_Begin (ItsMe ? Txt_My_public_profile :
 						   Txt_Another_user_s_profile,
 					   "BT_LINK REC_NICK",

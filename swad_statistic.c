@@ -303,9 +303,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	       /***** Begin form *****/
 	       Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
-	       Grp_PutParamsCodGrps ();
-	       Par_PutHiddenParamLong (NULL,"FirstRow",0);
-	       Par_PutHiddenParamLong (NULL,"LastRow",0);
+		  Grp_PutParamsCodGrps ();
+		  Par_PutHiddenParamLong (NULL,"FirstRow",0);
+		  Par_PutHiddenParamLong (NULL,"LastRow",0);
 
 		  /***** Put list of users to select some of them *****/
 		  HTM_TABLE_BeginCenterPadding (2);
@@ -1120,13 +1120,13 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	       if (FirstRow > 1)
 		 {
 		  Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
-		  Dat_WriteParamsIniEndDates ();
-		  Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-		  Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-		  Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
-		  Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
-		  Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
-		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+		     Dat_WriteParamsIniEndDates ();
+		     Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+		     Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+		     Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Stats->RowsPerPage);
+		     Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
+		     Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
+		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
 		  if (FirstRow > 1)
@@ -1158,13 +1158,13 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	       if (LastRow < NumHits)
 		 {
 		  Frm_BeginFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
-		  Dat_WriteParamsIniEndDates ();
-		  Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-		  Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-		  Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
-		  Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
-		  Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
-		  Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+		     Dat_WriteParamsIniEndDates ();
+		     Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+		     Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+		     Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
+		     Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Stats->RowsPerPage));
+		     Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
+		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
 	       HTM_TD_Begin ("class=\"RM\"");
 		  if (LastRow < NumHits)
@@ -1306,6 +1306,12 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    extern const char *Txt_Role;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
+     };
    MYSQL_ROW row;
    unsigned NumHit;
    struct Sta_Hits Hits;
@@ -1347,7 +1353,9 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
 	 /* Show the photo */
 	 HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO15x20",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student in current course */
@@ -1573,17 +1581,17 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
       HTM_TD_Begin ("colspan=\"26\" class=\"CM\"");
 
 	 Frm_BeginFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
-	 Dat_WriteParamsIniEndDates ();
-	 Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
-	 Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
-	 Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
-	 if (Gbl.Action.Act == ActSeeAccCrs)
-	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-	 else // Gbl.Action.Act == ActSeeAccGbl
-	   {
-	    Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Stats->Role);
-	    Sta_PutHiddenParamScopeSta ();
-	   }
+	    Dat_WriteParamsIniEndDates ();
+	    Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Stats->ClicksGroupedBy);
+	    Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Stats->CountType);
+	    Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Stats->NumAction);
+	    if (Gbl.Action.Act == ActSeeAccCrs)
+	       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	    else // Gbl.Action.Act == ActSeeAccGbl
+	      {
+	       Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Stats->Role);
+	       Sta_PutHiddenParamScopeSta ();
+	      }
 
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Color_of_the_graphic);
@@ -3269,7 +3277,7 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	    if (CrsOK)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
-	       Crs_PutParamCrsCod (Crs.CrsCod);
+		  Crs_PutParamCrsCod (Crs.CrsCod);
 		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
 		  Hie_FreeGoToMsg ();
 		     HTM_Txt (Crs.ShrtName);

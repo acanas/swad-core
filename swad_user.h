@@ -44,6 +44,7 @@
 #include "swad_role_type.h"
 #include "swad_scope.h"
 #include "swad_search.h"
+#include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_theme.h"
 
@@ -213,6 +214,7 @@ struct UsrData
       Ico_IconSet_t IconSet;
       Mnu_Menu_t Menu;
       unsigned SideCols;
+      Set_UsrPhotos_t UsrPhotos;
       bool AcceptThirdPartyCookies;	// User has accepted third party cookies
      } Prefs;
   };

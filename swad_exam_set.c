@@ -228,7 +228,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
    /***** Begin form *****/
    Exams->ExaCod = Exam->ExaCod;
    Frm_BeginForm (ActNewExaSet);
-   Exa_PutParams (Exams);
+      Exa_PutParams (Exams);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Txt_New_set_of_questions,
@@ -819,7 +819,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		  if (ICanEditSets)
 		    {
 		     Frm_BeginFormAnchor (ActChgTitExaSet,Anchor);
-		     ExaSet_PutParamsOneSet (Exams);
+			ExaSet_PutParamsOneSet (Exams);
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_SUBMIT_ON_CHANGE,
 					"id=\"Title\" required=\"required\""
@@ -847,7 +847,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       if (ICanEditSets)
 		 {
 		  Frm_BeginFormAnchor (ActChgNumQstExaSet,Anchor);
-		  ExaSet_PutParamsOneSet (Exams);
+		     ExaSet_PutParamsOneSet (Exams);
 		     HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set.NumQstsToPrint,
 				     HTM_SUBMIT_ON_CHANGE,false,
 				      "class=\"INPUT_LONG\" required=\"required\"");
@@ -1837,8 +1837,8 @@ static void ExaSet_PutButtonToAddNewQuestions (struct Exa_Exams *Exams)
    extern const char *Txt_Add_questions;
 
    Frm_BeginForm (ActReqAddQstExaSet);
-   ExaSet_PutParamsOneSet (Exams);
-   Btn_PutConfirmButtonInline (Txt_Add_questions);
+      ExaSet_PutParamsOneSet (Exams);
+      Btn_PutConfirmButtonInline (Txt_Add_questions);
    Frm_EndForm ();
   }
 

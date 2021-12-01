@@ -715,9 +715,9 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 		  break;
 	      }
 	    Frm_BeginForm (Action);
-	    if (GrpCod > 0)
-	       Grp_PutParamGrpCod (&GrpCod);
-            Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
+	       if (GrpCod > 0)
+		  Grp_PutParamGrpCod (&GrpCod);
+	       Brw_PutHiddenParamFilCod (FileMetadata.FilCod);
 	   }
 	 break;
       case Ntf_EVENT_TML_COMMENT:
@@ -726,17 +726,17 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TML_MENTION:
 	 // Cod is the code of the social publishing
          Frm_BeginForm (ActSeeGblTL);
-	 Tml_Pub_PutHiddenParamPubCod (Cod);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-         Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
+	    Tml_Pub_PutHiddenParamPubCod (Cod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
       case Ntf_EVENT_FOLLOWER:
          if (UsrDat->EnUsrCod[0])	// User's code found ==>
 					// go to user's public profile
            {
             Frm_BeginForm (ActSeeOthPubPrf);
-            /* Put param to go to follower's profile */
-            Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       /* Put param to go to follower's profile */
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
            }
          else	// No user's code found ==> go to see my followers
             Frm_BeginForm (ActSeeFlr);
@@ -744,21 +744,21 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
 	 Frm_BeginForm (For_ActionsSeeFor[Forums->Forum.Type]);
-	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                      1,	// Page of posts   = first
-                                      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forums->Forum.Location,
-				      Forums->Thread.Selected,
-				      -1L);
+	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					 1,	// Page of posts   = first
+					 Forums->ForumSet,
+					 Forums->ThreadsOrder,
+					 Forums->Forum.Location,
+					 Forums->Thread.Selected,
+					 -1L);
 	 break;
       case Ntf_EVENT_NOTICE:
          Frm_BeginForm (ActSeeOneNot);
-	 Not_PutHiddenParamNotCod (Cod);
+	    Not_PutHiddenParamNotCod (Cod);
 	 break;
       case Ntf_EVENT_MESSAGE:
          Frm_BeginForm (ActExpRcvMsg);
-	 Msg_PutHiddenParamMsgCod (Cod);
+	    Msg_PutHiddenParamMsgCod (Cod);
 	 break;
       default:
          Frm_BeginForm (Ntf_DefaultActions[NotifyEvent]);

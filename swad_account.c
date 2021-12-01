@@ -308,7 +308,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
       /***** Button to login with this account *****/
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	 Frm_BeginForm (ActLogInNew);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Btn_PutCreateButtonInline (Txt_Its_me);
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -890,8 +890,8 @@ void Acc_AskIfRemoveMyAccount (void)
 
    /* Show form to request confirmation */
    Frm_BeginForm (ActRemMyAcc);
-   Pwd_AskForConfirmationOnDangerousAction ();
-   Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
+      Pwd_AskForConfirmationOnDangerousAction ();
+      Btn_PutRemoveButton (Txt_Eliminate_my_user_account);
    Frm_EndForm ();
 
    /* End alert */
@@ -919,9 +919,9 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
       /* Show form to request confirmation */
       Frm_BeginForm (ActRemUsrGbl);
-      Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-      Pwd_AskForConfirmationOnDangerousAction ();
-      Btn_PutRemoveButton (Txt_Eliminate_user_account);
+	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 Pwd_AskForConfirmationOnDangerousAction ();
+	 Btn_PutRemoveButton (Txt_Eliminate_user_account);
       Frm_EndForm ();
 
       /* End alert */

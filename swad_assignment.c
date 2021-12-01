@@ -235,10 +235,10 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	      {
 	       /* Begin form */
 	       Frm_BeginForm (ActSeeAsg);
-	       WhichGroups = Grp_GetParamWhichGroups ();
-	       Grp_PutParamWhichGroups (&WhichGroups);
-	       Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
-	       Dat_PutHiddenParamOrder (Order);
+		  WhichGroups = Grp_GetParamWhichGroups ();
+		  Grp_PutParamWhichGroups (&WhichGroups);
+		  Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
+		  Dat_PutHiddenParamOrder (Order);
 
 	          /* Begin link to select order */
 		  HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
@@ -324,8 +324,8 @@ static void Asg_PutButtonToCreateNewAsg (void *Assignments)
      {
       /* Begin form */
       Frm_BeginForm (ActFrmNewAsg);
-      ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
-      Asg_PutParams (Assignments);
+	 ((struct Asg_Assignments *) Assignments)->AsgCodToEdit = -1L;
+	 Asg_PutParams (Assignments);
 
          /* Button to create new assignment */
 	 Btn_PutConfirmButton (Txt_New_assignment);

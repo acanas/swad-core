@@ -774,7 +774,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
    extern const char *Txt_Calculate;
 
    Frm_BeginForm (ActCalFig);
-   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
       HTM_BUTTON_Animated_Begin (Txt_Calculate,
 				 The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
 				 NULL);
@@ -850,8 +850,8 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
 
    /***** Rank in form to go to ranking *****/
    Frm_BeginForm (ActSeeUseGbl);
-   Sco_PutParamScope ("ScopeSta",HieLvl_SYS);
-   Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
+      Sco_PutParamScope ("ScopeSta",HieLvl_SYS);
+      Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
       if (asprintf (&Title,"#%u %s %u",
 		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -1299,6 +1299,12 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
    extern const char *Txt_Another_user_s_profile;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
+     };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
    HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
@@ -1312,7 +1318,9 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_Begin ("class=\"RANK_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
       if (Visible)
 	 /***** User's photo *****/
-	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            false);
    HTM_TD_End ();
 
    /***** Put form to go to public profile *****/
@@ -1320,7 +1328,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
       if (Visible)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
 				     ItsMe ? "BT_LINK RANK_USR DAT_SMALL_N" :
 					     "BT_LINK RANK_USR DAT_SMALL",

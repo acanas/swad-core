@@ -164,7 +164,7 @@ static void Ann_PutButtonToAddNewAnnouncement (void)
    extern const char *Txt_New_announcement;
 
    Frm_BeginForm (ActWriAnn);
-   Btn_PutConfirmButton (Txt_New_announcement);
+      Btn_PutConfirmButton (Txt_New_announcement);
    Frm_EndForm ();
   }
 

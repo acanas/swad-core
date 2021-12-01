@@ -82,7 +82,7 @@ void Tml_Who_PutFormWho (struct Tml_Timeline *Timeline)
 
 		  /* Begin form */
 		  Frm_BeginForm (ActSeeGblTL);
-		  Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
+		     Par_PutHiddenParamUnsigned (NULL,"Who",(unsigned) Who);
 
 		     /* Icon to select which users */
 		     Usr_PutWhoIcon (Who);

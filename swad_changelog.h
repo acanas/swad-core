@@ -602,12 +602,19 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.64.1 (2021-11-28)"
-#define CSS_FILE		"swad21.59.css"
+#define Log_PLATFORM_VERSION	"SWAD 21.65 (2021-12-01)"
+#define CSS_FILE		"swad21.65.css"
 #define JS_FILE			"swad21.59.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
+
+	Version 21.65:    Dec 01, 2021  Selection of shape of user photos. (320755 lines)
+					4 changes necessary in database:
+ALTER TABLE set_ip_settings ADD COLUMN UsrPhotos TINYINT NOT NULL DEFAULT 0 AFTER SideCols;
+UPDATE set_ip_settings SET UsrPhotos=2;
+ALTER TABLE usr_data ADD COLUMN UsrPhotos TINYINT NOT NULL DEFAULT 0 AFTER SideCols,ADD INDEX (UsrPhotos);
+UPDATE usr_data SET UsrPhotos=2;
 
 	Version 21.64.1:  Nov 28, 2021  Code refactoring in link insertion. (320070 lines)
 	Version 21.64:    Nov 28, 2021  New module swad_autolink to insert links in texts. (320076 lines)

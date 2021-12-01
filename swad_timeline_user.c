@@ -179,6 +179,12 @@ static void Tml_Usr_ShowNumSharersOrFavers (unsigned NumUsrs)
 static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 			                 unsigned NumUsrs,unsigned NumFirstUsrs)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC12x16",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE12x16",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR12x16",
+     };
    unsigned NumUsr;
    struct UsrData UsrDat;
 
@@ -210,7 +216,9 @@ static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 	 HTM_DIV_Begin ("class=\"Tml_SHARER\"");
 
 	    /* User's photo */
-	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO12x16",Pho_ZOOM,true);	// Use unique id
+	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               true);	// Use unique id
 
 	 /* End container */
 	 HTM_DIV_End ();

@@ -636,7 +636,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
 	 /***** Match title *****/
 	 Frm_BeginForm (Gbl.Usrs.Me.Role.Logged == Rol_STD ? ActJoiMch :
 							     ActResMch);
-	 Mch_PutParamMchCod (Match->MchCod);
+	    Mch_PutParamMchCod (Match->MchCod);
 
 	    HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume,
@@ -1214,7 +1214,7 @@ static void Mch_PutFormExistingMatch (struct Gam_Games *Games,
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActChgMch,Anchor);
-   Mch_PutParamsEdit (Games);
+      Mch_PutParamsEdit (Games);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (NULL,Match->Title,
@@ -1268,8 +1268,8 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 
       /***** Begin form *****/
       Frm_BeginForm (ActNewMch);
-      Gam_PutParamGameCod (Game->GamCod);
-      Gam_PutParamQstInd (0);	// Start by first question in game
+	 Gam_PutParamGameCod (Game->GamCod);
+	 Gam_PutParamQstInd (0);	// Start by first question in game
 
 	 /***** Begin box and table *****/
 	 Box_BoxTableBegin (NULL,Txt_New_match,
@@ -2631,8 +2631,8 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 
 	 /* Begin form */
 	 Frm_BeginForm (ActChgNumColMch);
-	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
-	 Mch_PutParamNumCols (NumCols);		// Number of columns
+	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+	    Mch_PutParamNumCols (NumCols);		// Number of columns
 
 	    /* Number of columns */
 	    Ico_PutSettingIconLink (NumColsIcon[NumCols],
@@ -2674,7 +2674,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActChgVisResMchQst);
-      Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
 	 HTM_BUTTON_SUBMIT_Begin (Txt_View_results,"BT_LINK DAT ICO_HIGHLIGHT",NULL);
@@ -2711,7 +2711,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	{
 	 /* Begin form */
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
-	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
 	    HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,"BT_LINK DAT_SMALL_GREEN");
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
@@ -2752,8 +2752,8 @@ static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match)
 
       /***** Begin form *****/
       Frm_BeginForm (ActRemMchAnsQstStd);
-      Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-      Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+	 Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+	 Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 
 	 /***** Put icon with link *****/
 	 HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
@@ -3008,9 +3008,9 @@ static void Mch_ShowQuestionAndAnswersStd (const struct Mch_Match *Match,
 		  is necessary in order to be fast
 		  and not lose clicks due to refresh */
 	       Frm_BeginForm (ActAnsMchQstStd);
-	       Mch_PutParamMchCod (Match->MchCod);		// Current match being played
-	       Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-	       Mch_PutParamNumOpt (NumOpt);		// Number of button
+		  Mch_PutParamMchCod (Match->MchCod);		// Current match being played
+		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+		  Mch_PutParamNumOpt (NumOpt);		// Number of button
 
 		  if (asprintf (&Class,"MCH_STD_BUTTON%s BT_%c",
 				UsrAnswer->NumOpt == (int) NumOpt &&	// Student's answer
@@ -3272,7 +3272,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
   {
    /***** Begin form *****/
    Frm_BeginFormId (NextAction,Id);
-   Mch_PutParamMchCod (MchCod);
+      Mch_PutParamMchCod (MchCod);
 
       /***** Put icon with link *****/
       HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");

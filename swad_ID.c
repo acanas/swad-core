@@ -405,23 +405,23 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs],Anchor);
-   if (Gbl.Action.Original != ActUnk)
-     {
-      Par_PutHiddenParamLong (NULL,"OriginalActCod",
-                              Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
-      switch (Gbl.Action.Original)
+      if (Gbl.Action.Original != ActUnk)
 	{
-	 case ActSeeRecSevGst:
-	 case ActSeeRecSevStd:
-	 case ActSeeRecSevTch:
-	    Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
-	    break;
-	 default:
-	    break;
+	 Par_PutHiddenParamLong (NULL,"OriginalActCod",
+				 Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
+	 switch (Gbl.Action.Original)
+	   {
+	    case ActSeeRecSevGst:
+	    case ActSeeRecSevStd:
+	    case ActSeeRecSevTch:
+	       Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
+	       break;
+	    default:
+	       break;
+	   }
 	}
-     }
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
       /***** Put link *****/
       HTM_BUTTON_SUBMIT_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
@@ -618,15 +618,15 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	       else
 		 {
 		  Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs].New,ID_ID_SECTION_ID);
-		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		 }
-	       HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
-			       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
-						 "",	// Show the most recent ID
-			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"NewID\" size=\"18\"");
-	       HTM_BR ();
-	       Btn_PutCreateButtonInline (Txt_Add_this_ID);
+		  HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
+				  UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
+						    "",	// Show the most recent ID
+				  HTM_DONT_SUBMIT_ON_CHANGE,
+				  "id=\"NewID\" size=\"18\"");
+		  HTM_BR ();
+		  Btn_PutCreateButtonInline (Txt_Add_this_ID);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 

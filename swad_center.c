@@ -183,7 +183,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-   Ctr_PutParamCtrCod (Ctr->CtrCod);
+      Ctr_PutParamCtrCod (Ctr->CtrCod);
 
       /***** Link to action *****/
       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
@@ -805,7 +805,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrPlc);
-		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"PlcCod\" class=\"PLC_SEL\"");
 			HTM_OPTION (HTM_Type_STRING,"0",
@@ -833,7 +833,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrSho);
-		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME\"");
@@ -848,7 +848,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenCtrFul);
-		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME\"");
@@ -863,7 +863,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgCtrWWW);
-		  Hie_PutParamOtherHieCod (&Ctr->CtrCod);
+		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();
@@ -1409,7 +1409,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_SUBMIT_Begin (Txt_CENTERS_HELP_ORDER[Order],
 					   Order == Ctr_ORDER_BY_CENTER ? "BT_LINK LM TIT_TBL" :
 									  "BT_LINK RM TIT_TBL",

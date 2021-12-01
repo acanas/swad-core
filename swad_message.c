@@ -317,63 +317,63 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 
       /***** Begin form to select recipients and write the message *****/
       Frm_BeginForm (ActRcvMsgUsr);
-      if (Messages->Reply.IsReply)
-	{
-	 Par_PutHiddenParamChar ("IsReply",'Y');
-	 Msg_PutHiddenParamMsgCod (Messages->Reply.OriginalMsgCod);
-	}
-      if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	{
-	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-	 if (Messages->ShowOnlyOneRecipient)
-	    Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-	}
+	 if (Messages->Reply.IsReply)
+	   {
+	    Par_PutHiddenParamChar ("IsReply",'Y');
+	    Msg_PutHiddenParamMsgCod (Messages->Reply.OriginalMsgCod);
+	   }
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	   {
+	    Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	    if (Messages->ShowOnlyOneRecipient)
+	       Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+	   }
 
-      /***** Begin table *****/
-      HTM_TABLE_BeginCenterPadding (2);
+	 /***** Begin table *****/
+	 HTM_TABLE_BeginCenterPadding (2);
 
-	 /***** "To:" section (recipients) *****/
-	 HTM_TR_Begin (NULL);
+	    /***** "To:" section (recipients) *****/
+	    HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	       HTM_TxtColon (Txt_MSG_To);
-	    HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  HTM_TxtColon (Txt_MSG_To);
+	       HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LT\"");
-	       if (Messages->ShowOnlyOneRecipient)
-		  /***** Show only one user as recipient *****/
-		  Msg_ShowOneUniqueRecipient ();
-	       else
-		 {
-		  /***** Show potential recipients *****/
-		  HTM_TABLE_BeginWide ();
-		     if (ShowUsrsInCrs)
-		       {
-			Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
-			Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);	// All non-editing teachers in course
-			Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);	// All students in selected groups
-		       }
-		     Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
-		  HTM_TABLE_End ();
-		 }
-	    HTM_TD_End ();
+	       HTM_TD_Begin ("class=\"LT\"");
+		  if (Messages->ShowOnlyOneRecipient)
+		     /***** Show only one user as recipient *****/
+		     Msg_ShowOneUniqueRecipient ();
+		  else
+		    {
+		     /***** Show potential recipients *****/
+		     HTM_TABLE_BeginWide ();
+			if (ShowUsrsInCrs)
+			  {
+			   Usr_ListUsersToSelect (Rol_TCH,&Gbl.Usrs.Selected);	// All teachers in course
+			   Usr_ListUsersToSelect (Rol_NET,&Gbl.Usrs.Selected);	// All non-editing teachers in course
+			   Usr_ListUsersToSelect (Rol_STD,&Gbl.Usrs.Selected);	// All students in selected groups
+			  }
+			Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
+		     HTM_TABLE_End ();
+		    }
+	       HTM_TD_End ();
 
-	 HTM_TR_End ();
+	    HTM_TR_End ();
 
-	 /***** Subject and content sections *****/
-	 Msg_WriteFormSubjectAndContentMsgToUsrs (Messages,Content);
+	    /***** Subject and content sections *****/
+	    Msg_WriteFormSubjectAndContentMsgToUsrs (Messages,Content);
 
-      /***** End table *****/
-      HTM_TABLE_End ();
+	 /***** End table *****/
+	 HTM_TABLE_End ();
 
-      /***** Help for text editor and send button *****/
-      Lay_HelpPlainEditor ();
+	 /***** Help for text editor and send button *****/
+	 Lay_HelpPlainEditor ();
 
-      /***** Attached image (optional) *****/
-      Med_PutMediaUploader (-1,"MSG_MED_INPUT");
+	 /***** Attached image (optional) *****/
+	 Med_PutMediaUploader (-1,"MSG_MED_INPUT");
 
-      /***** Send button *****/
-      Btn_PutCreateButton (Txt_Send_message);
+	 /***** Send button *****/
+	 Btn_PutCreateButton (Txt_Send_message);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -479,8 +479,17 @@ static void Msg_PutHiddenParamsSubjectAndContent (void)
 
 static void Msg_ShowOneUniqueRecipient (void)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
+
    /***** Show user's photo *****/
-   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
+                              ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                              false);
 
    /****** Write user's IDs ******/
    HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s\"",
@@ -2249,8 +2258,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 									    ActExpRcvMsg) :
 							        (Expanded ? ActConSntMsg :
 									    ActExpSntMsg));
-      Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
-      Msg_PutHiddenParamsOneMsg (Messages);
+	 Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
+	 Msg_PutHiddenParamsOneMsg (Messages);
 
 	 HTM_BUTTON_SUBMIT_Begin (Expanded ? Txt_Hide_message :
 					     Txt_See_message,
@@ -2281,6 +2290,12 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor)
   {
    extern const char *Txt_Unknown_or_without_photo;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
+     };
    bool WriteAuthor;
 
    /***** Write author name or don't write it? *****/
@@ -2301,9 +2316,12 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	    HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
 
 	 if (WriteAuthor)
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO30x40",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 else
-	    Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO30x40");
+	    Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,
+	                 ClassPhoto[Gbl.Prefs.UsrPhotos]);
 
 	 HTM_TD_End ();
 
@@ -2367,7 +2385,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
            {
             /* Write course, including link */
             Frm_BeginFormGoTo (ActSeeCrsInf);
-            Crs_PutParamCrsCod (Crs.CrsCod);
+	       Crs_PutParamCrsCod (Crs.CrsCod);
 	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
 		  HTM_Txt ("(");
 		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
@@ -2410,13 +2428,13 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
    else	// Not the current course ==> go to another course
      {
       Frm_BeginFormGoTo (ActReqMsgUsr);
-      Crs_PutParamCrsCod (CrsCod);
+	 Crs_PutParamCrsCod (CrsCod);
      }
-   Grp_PutParamAllGroups ();
-   Par_PutHiddenParamChar ("IsReply",'Y');
-   Msg_PutHiddenParamMsgCod (MsgCod);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+      Grp_PutParamAllGroups ();
+      Par_PutHiddenParamChar ("IsReply",'Y');
+      Msg_PutHiddenParamMsgCod (MsgCod);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
       /****** Link *****/
       Ico_PutIconLink ("reply.svg",
@@ -2439,6 +2457,12 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
 
    HTM_TABLE_Begin (NULL);
       HTM_TR_Begin (NULL);
@@ -2454,7 +2478,9 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 
 	 /***** Put user's photo *****/
 	 HTM_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 
 	 /***** Write user's name *****/
@@ -2500,6 +2526,18 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    extern const char *Txt_and_X_other_recipients;
    extern const char *Txt_unknown_recipient;
    extern const char *Txt_unknown_recipients;
+   static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      [Msg_WRITING ] = ActUnk,
+      [Msg_RECEIVED] = ActSeeRcvMsg,
+      [Msg_SENT    ] = ActSeeSntMsg,
+     };
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRcp;
@@ -2517,12 +2555,6 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
    bool ShowPhoto;
    const char *Title;
    char PhotoURL[PATH_MAX + 1];
-   static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
-     {
-      [Msg_WRITING ] = ActUnk,
-      [Msg_RECEIVED] = ActSeeRcvMsg,
-      [Msg_SENT    ] = ActSeeSntMsg,
-     };
 
    /***** Get number of recipients of a message from database *****/
    NumRecipients.Total = Msg_DB_GetNumRecipients (MsgCod);
@@ -2587,7 +2619,8 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 					  false);
 		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 							NULL,
-				    "PHOTO21x28",Pho_ZOOM,false);
+				    ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+				    false);
 	       HTM_TD_End ();
 
 	       /* Write user's name */
@@ -2626,13 +2659,13 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
 		  Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
-		  Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
-		  Msg_PutHiddenParamsOneMsg (Messages);
-		  Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-		     HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
-			HTM_TxtF (Txt_and_X_other_recipients,
-				  NumRecipients.Known - NumRecipients.ToShow);
-		     HTM_BUTTON_End ();
+		     Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
+		     Msg_PutHiddenParamsOneMsg (Messages);
+		     Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
+			HTM_BUTTON_SUBMIT_Begin (Txt_View_all_recipients,"BT_LINK AUTHOR_TXT",NULL);
+			   HTM_TxtF (Txt_and_X_other_recipients,
+				     NumRecipients.Known - NumRecipients.ToShow);
+			HTM_BUTTON_End ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -2726,11 +2759,11 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
    extern const char *Txt_Sender_permitted_click_to_ban_him;
 
    Frm_BeginForm (ActBanUsrMsg);
-   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
-	                     Messages->CurrentPage);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   Msg_PutHiddenParamsMsgsFilters (Messages);
-      Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
+      Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
+				Messages->CurrentPage);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Msg_PutHiddenParamsMsgsFilters (Messages);
+	 Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
 
@@ -2744,11 +2777,11 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
    extern const char *Txt_Sender_banned_click_to_unban_him;
 
    Frm_BeginForm (ActUnbUsrMsg);
-   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
-	                     Messages->CurrentPage);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-   Msg_PutHiddenParamsMsgsFilters (Messages);
-      Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
+      Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
+				Messages->CurrentPage);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+      Msg_PutHiddenParamsMsgsFilters (Messages);
+	 Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
   }
 
@@ -2842,6 +2875,12 @@ void Msg_ListBannedUsrs (void)
    extern const char *Txt_You_have_not_banned_any_sender;
    extern const char *Txt_Banned_users;
    extern const char *Txt_Sender_banned_click_to_unban_him;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    MYSQL_RES *mysql_res;
    unsigned NumUsr;
    unsigned NumUsrs;
@@ -2883,7 +2922,9 @@ void Msg_ListBannedUsrs (void)
 
 		  /* Show photo */
 		  HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
-		     Pho_ShowUsrPhotoIfAllowed (&UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+		     Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+		                                ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                                false);
 		  HTM_TD_End ();
 
 		  /* Write user's full name */

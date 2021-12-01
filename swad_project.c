@@ -583,15 +583,15 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 						        "PREF_OFF");
 	    Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
 						     ActSeePrj);
-	    Filter.Who    = Who;
-	    Filter.Assign = Projects->Filter.Assign;
-	    Filter.Hidden = Projects->Filter.Hidden;
-	    Filter.Faulti = Projects->Filter.Faulti;
-	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
+	       Filter.Who    = Who;
+	       Filter.Assign = Projects->Filter.Assign;
+	       Filter.Hidden = Projects->Filter.Hidden;
+	       Filter.Faulti = Projects->Filter.Faulti;
+	       Filter.DptCod = Projects->Filter.DptCod;
+	       Prj_PutParams (&Filter,
+			      Projects->SelectedOrder,
+			      Projects->CurrentPage,
+			      -1L);
 	       Usr_PutWhoIcon (Who);
 	    Frm_EndForm ();
 	 HTM_DIV_End ();
@@ -618,15 +618,15 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 		     (Projects->Filter.Assign & (1 << Assign)) ? "PREF_ON" :
 								 "PREF_OFF");
 	 Frm_BeginForm (ActSeePrj);
-	 Filter.Who    = Projects->Filter.Who;
-	 Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
-	 Filter.Hidden = Projects->Filter.Hidden;
-	 Filter.Faulti = Projects->Filter.Faulti;
-	 Filter.DptCod = Projects->Filter.DptCod;
-	 Prj_PutParams (&Filter,
-			Projects->SelectedOrder,
-			Projects->CurrentPage,
-			-1L);
+	    Filter.Who    = Projects->Filter.Who;
+	    Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
+	    Filter.Hidden = Projects->Filter.Hidden;
+	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.DptCod = Projects->Filter.DptCod;
+	    Prj_PutParams (&Filter,
+			   Projects->SelectedOrder,
+			   Projects->CurrentPage,
+			   -1L);
 	    Ico_PutSettingIconLink (AssignedNonassigImage[Assign],
 				    Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
 	 Frm_EndForm ();
@@ -659,15 +659,15 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 		     (Projects->Filter.Hidden & (1 << HidVis)) ? "PREF_ON" :
 								 "PREF_OFF");
 	 Frm_BeginForm (ActSeePrj);
-	 Filter.Who    = Projects->Filter.Who;
-	 Filter.Assign = Projects->Filter.Assign;
-	 Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
-	 Filter.Faulti = Projects->Filter.Faulti;
-	 Filter.DptCod = Projects->Filter.DptCod;
-	 Prj_PutParams (&Filter,
-			Projects->SelectedOrder,
-			Projects->CurrentPage,
-			-1L);
+	    Filter.Who    = Projects->Filter.Who;
+	    Filter.Assign = Projects->Filter.Assign;
+	    Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
+	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.DptCod = Projects->Filter.DptCod;
+	    Prj_PutParams (&Filter,
+			   Projects->SelectedOrder,
+			   Projects->CurrentPage,
+			   -1L);
 	    Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
 				    Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
 	 Frm_EndForm ();
@@ -700,15 +700,15 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 		     (Projects->Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
 								     "PREF_OFF");
 	 Frm_BeginForm (ActSeePrj);
-	 Filter.Who    = Projects->Filter.Who;
-	 Filter.Assign = Projects->Filter.Assign;
-	 Filter.Hidden = Projects->Filter.Hidden;
-	 Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
-	 Filter.DptCod = Projects->Filter.DptCod;
-	 Prj_PutParams (&Filter,
-			Projects->SelectedOrder,
-			Projects->CurrentPage,
-			-1L);
+	    Filter.Who    = Projects->Filter.Who;
+	    Filter.Assign = Projects->Filter.Assign;
+	    Filter.Hidden = Projects->Filter.Hidden;
+	    Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
+	    Filter.DptCod = Projects->Filter.DptCod;
+	    Prj_PutParams (&Filter,
+			   Projects->SelectedOrder,
+			   Projects->CurrentPage,
+			   -1L);
 	    Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
 				    Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
 	 Frm_EndForm ();
@@ -729,15 +729,15 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
    /***** Begin form *****/
    HTM_DIV_Begin (NULL);
       Frm_BeginForm (ActSeePrj);
-      Filter.Who    = Projects->Filter.Who;
-      Filter.Assign = Projects->Filter.Assign;
-      Filter.Hidden = Projects->Filter.Hidden;
-      Filter.Faulti = Projects->Filter.Faulti;
-      Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
-      Prj_PutParams (&Filter,
-		     Projects->SelectedOrder,
-		     Projects->CurrentPage,
-		     -1L);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign;
+	 Filter.Hidden = Projects->Filter.Hidden;
+	 Filter.Faulti = Projects->Filter.Faulti;
+	 Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
 
 	 /***** Write selector with departments *****/
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
@@ -977,10 +977,10 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	       case Prj_LIST_PROJECTS:
 	       case Prj_FILE_BROWSER_PROJECT:
 		  Frm_BeginForm (ActSeePrj);
-		  Prj_PutParams (&Projects->Filter,
-				 Order,
-				 Projects->CurrentPage,
-				 -1L);
+		     Prj_PutParams (&Projects->Filter,
+				    Order,
+				    Projects->CurrentPage,
+				    -1L);
 		     HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
 			if (Order == Projects->SelectedOrder)
 			   HTM_U_Begin ();
@@ -1121,7 +1121,7 @@ static void Prj_PutButtonToCreateNewPrj (struct Prj_Projects *Projects)
 
    Projects->PrjCod = -1L;
    Frm_BeginForm (ActFrmNewPrj);
-   Prj_PutCurrentParams (Projects);
+      Prj_PutCurrentParams (Projects);
       Btn_PutConfirmButton (Txt_New_project);
    Frm_EndForm ();
   }
@@ -1353,7 +1353,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	       if (ICanViewProjectFiles)
 		 {
 		  Frm_BeginForm (ActAdmDocPrj);
-		  Prj_PutCurrentParams (Projects);
+		     Prj_PutCurrentParams (Projects);
 		     HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
 			HTM_Txt (Prj->Title);
 		     HTM_BUTTON_End ();
@@ -2014,13 +2014,6 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    extern const char *Txt_Remove;
    extern const char *Txt_Add_USERS;
    extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   bool WriteRow;
-   unsigned NumUsr;
-   unsigned NumUsrs;
-   const char *ClassLabel;
-   const char *ClassData;
    static const Act_Action_t ActionReqRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       [Prj_ROLE_UNK] = ActUnk,		// Unknown
@@ -2035,6 +2028,19 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
       [Prj_ROLE_TUT] = ActReqAddTutPrj,	// Tutor
       [Prj_ROLE_EVL] = ActReqAddEvlPrj,	// Evaluator
      };
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   bool WriteRow;
+   unsigned NumUsr;
+   unsigned NumUsrs;
+   const char *ClassLabel;
+   const char *ClassData;
 
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
@@ -2128,7 +2134,9 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 
 			/* Put user's photo */
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
-			   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+			   Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
+			                              ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+			                              false);
 			HTM_TD_End ();
 
 			/* Write user's name */
@@ -2560,8 +2568,8 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 
 	    /* Show form to request confirmation */
 	    Frm_BeginForm (ActionRemUsr[RoleInPrj]);
-	    Projects->PrjCod = Prj.PrjCod;
-	    Prj_PutCurrentParams (Projects);
+	       Projects->PrjCod = Prj.PrjCod;
+	       Prj_PutCurrentParams (Projects);
 	       Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
 							Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
 	       Str_FreeString ();
@@ -3290,7 +3298,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    /* Begin data form */
    Frm_BeginForm (ItsANewProject ? ActNewPrj :
 	                           ActChgPrj);
-   Prj_PutCurrentParams (Projects);
+      Prj_PutCurrentParams (Projects);
 
       /* Begin box and table */
       Box_BoxTableBegin (NULL,Txt_Data,
@@ -3997,7 +4005,7 @@ static void Prj_FormLockUnlock (const struct Prj_Project *Prj)
 		 Prj->PrjCod) < 0)
       Err_NotEnoughMemoryExit ();
    Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
-   Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
+      Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
    Frm_EndForm ();
 
    /* Free allocated memory for subquery */

@@ -358,7 +358,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 		 {
 		  Frm_BeginForm (IFollowUsr ? ActUnfUsr :
 					      ActFolUsr);
-		  Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+		     Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 		     HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
 				      IFollowUsr ? "user-check.svg" :
 						   "user-plus.svg",
@@ -399,7 +399,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 	{
 	 /* Form to list users */
 	 Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_BUTTON_SUBMIT_Begin (Title,
 				     (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
 								  "BT_LINK FOLLOW_NUM",
@@ -425,7 +425,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 	   {
 	    /* Form to list users */
 	    Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_BUTTON_SUBMIT_Begin (Title,
 					(Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
 								     The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
@@ -612,12 +612,20 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC60x80",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE60x80",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR60x80",
+     };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"FOLLOW_PHOTO\"");
       if (Visible)
-	 Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO60x80",Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            false);
    HTM_TD_End ();
 
    /***** Show user's name and icon to follow/unfollow *****/
@@ -627,7 +635,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	{
 	 /* Put form to go to public profile */
 	 Frm_BeginForm (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
 	       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
@@ -662,6 +670,12 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
    /***** Show user's photo *****/
@@ -669,7 +683,9 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 
       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
 	 if (Visible)
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
       HTM_TD_End ();
 
       /***** User's name *****/
@@ -678,7 +694,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	   {
 	    /* Put form to go to public profile */
 	    Frm_BeginForm (ActSeeOthPubPrf);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
 		  HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
 		                           "BT_LINK CON_NAME_FOLLOW CON_CRS",NULL);
@@ -735,7 +751,7 @@ static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_
 
    /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
-   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
 		       Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();
@@ -751,7 +767,7 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
 
    /* Form to follow */
    Frm_BeginForm (ActUnfUsr);
-   Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
+      Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
 		       Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
    Frm_EndForm ();

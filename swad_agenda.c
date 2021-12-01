@@ -223,12 +223,12 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 	             (Agenda->Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
 							            "PREF_OFF");
 	 Frm_BeginForm (ActSeeMyAgd);
-	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
-				Agenda->PrivatPublicEvents,
-				Agenda->HiddenVisiblEvents,
-				Agenda->SelectedOrder,
-				Agenda->CurrentPage,
-				-1L);
+	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
+				   Agenda->PrivatPublicEvents,
+				   Agenda->HiddenVisiblEvents,
+				   Agenda->SelectedOrder,
+				   Agenda->CurrentPage,
+				   -1L);
 	    Ico_PutSettingIconLink (Icon[PstFut],
 				    Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
 	 Frm_EndForm ();
@@ -260,12 +260,12 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 	             (Agenda->PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
 							            "PREF_OFF");
 	 Frm_BeginForm (ActSeeMyAgd);
-	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-				Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
-				Agenda->HiddenVisiblEvents,
-				Agenda->SelectedOrder,
-				Agenda->CurrentPage,
-				-1L);
+	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				   Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
+				   Agenda->HiddenVisiblEvents,
+				   Agenda->SelectedOrder,
+				   Agenda->CurrentPage,
+				   -1L);
 	    Ico_PutSettingIconLink (Icon[PrvPub],
 				    Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
 	 Frm_EndForm ();
@@ -297,12 +297,12 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
 	             (Agenda->HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
 							            "PREF_OFF");
 	 Frm_BeginForm (ActSeeMyAgd);
-	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-				Agenda->PrivatPublicEvents,
-				Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
-				Agenda->SelectedOrder,
-				Agenda->CurrentPage,
-				-1L);
+	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				   Agenda->PrivatPublicEvents,
+				   Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
+				   Agenda->SelectedOrder,
+				   Agenda->CurrentPage,
+				   -1L);
 	    Ico_PutSettingIconLink (Icon[HidVis],
 				    Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
 	 Frm_EndForm ();
@@ -622,13 +622,13 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	       case Agd_MY_AGENDA_TODAY:
 	       case Agd_MY_AGENDA:
 		  Frm_BeginForm (ActSeeMyAgd);
-		  Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,Agenda->CurrentPage);
+		     Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,Agenda->CurrentPage);
 		  break;
 	       case Agd_ANOTHER_AGENDA_TODAY:
 	       case Agd_ANOTHER_AGENDA:
 		  Frm_BeginForm (ActSeeUsrAgd);
-		  Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		  Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
+		     Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
+		     Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
 		  break;
 	      }
 	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
@@ -747,12 +747,12 @@ static void Agd_PutButtonToCreateNewEvent (const struct Agd_Agenda *Agenda)
 
    /***** Begin form *****/
    Frm_BeginForm (ActFrmNewEvtMyAgd);
-   Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-		          Agenda->PrivatPublicEvents,
-		          Agenda->HiddenVisiblEvents,
-			  Agenda->SelectedOrder,
-		          Agenda->CurrentPage,
-		          -1L);
+      Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+			     Agenda->PrivatPublicEvents,
+			     Agenda->HiddenVisiblEvents,
+			     Agenda->SelectedOrder,
+			     Agenda->CurrentPage,
+			     -1L);
 
       /***** Confirm button *****/
       Btn_PutConfirmButton (Txt_New_event);

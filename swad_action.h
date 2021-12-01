@@ -65,7 +65,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_MAX_ACTION_COD		1916
+#define Act_MAX_ACTION_COD		1917
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB	  13
 
@@ -1726,18 +1726,19 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActChgCol		(ActSeeMyUsgRep + 52)
 #define ActChgIco		(ActSeeMyUsgRep + 53)
 #define ActChgMnu		(ActSeeMyUsgRep + 54)
-#define ActChgPriPho		(ActSeeMyUsgRep + 55)
-#define ActChgBasPriPrf		(ActSeeMyUsgRep + 56)
-#define ActChgExtPriPrf		(ActSeeMyUsgRep + 57)
-#define ActChgCooPrf		(ActSeeMyUsgRep + 58)
-#define ActChgNtfPrf		(ActSeeMyUsgRep + 59)
+#define ActChgUsrPho		(ActSeeMyUsgRep + 55)
+#define ActChgPriPho		(ActSeeMyUsgRep + 56)
+#define ActChgBasPriPrf		(ActSeeMyUsgRep + 57)
+#define ActChgExtPriPrf		(ActSeeMyUsgRep + 58)
+#define ActChgCooPrf		(ActSeeMyUsgRep + 59)
+#define ActChgNtfPrf		(ActSeeMyUsgRep + 60)
 
-#define ActPrnUsrQR		(ActSeeMyUsgRep + 60)
+#define ActPrnUsrQR		(ActSeeMyUsgRep + 61)
 
-#define ActPrnMyTT		(ActSeeMyUsgRep + 61)
-#define ActEdiTut		(ActSeeMyUsgRep + 62)
-#define ActChgTut		(ActSeeMyUsgRep + 63)
-#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 64)
+#define ActPrnMyTT		(ActSeeMyUsgRep + 62)
+#define ActEdiTut		(ActSeeMyUsgRep + 63)
+#define ActChgTut		(ActSeeMyUsgRep + 64)
+#define ActChgMyTT1stDay	(ActSeeMyUsgRep + 65)
 
 #define Act_NUM_ACTIONS		(ActChgMyTT1stDay + 1)
 

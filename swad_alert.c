@@ -434,10 +434,10 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
 	{
          /* Begin form */
          Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
-	 if (FuncParams)
-	   {
-	    FuncParams (Args);
-	   }
+	    if (FuncParams)
+	      {
+	       FuncParams (Args);
+	      }
 
 	    /* Put button */
 	    Btn_PutButton (Button,TxtButton);

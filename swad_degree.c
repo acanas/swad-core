@@ -189,7 +189,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
-   Deg_PutParamDegCod (Deg->DegCod);
+      Deg_PutParamDegCod (Deg->DegCod);
 
       /***** Link to action *****/
       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),ClassLink,NULL);
@@ -362,7 +362,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
-		  Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_SHORT_NAME\"");
@@ -377,7 +377,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
-		  Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
 				     "class=\"INPUT_FULL_NAME\"");
@@ -392,7 +392,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
-		  Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\"");
 			for (NumDegTyp = 0;
@@ -421,7 +421,7 @@ static void Deg_ListDegreesForEdition (void)
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
-		  Hie_PutParamOtherHieCod (&Deg->DegCod);
+		     Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_URL ("WWW",Deg->WWW,HTM_SUBMIT_ON_CHANGE,
 				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
 		  Frm_EndForm ();

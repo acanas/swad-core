@@ -340,6 +340,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.IconSet        = Ico_ICON_SET_DEFAULT;
    UsrDat->Prefs.Menu           = Mnu_MENU_DEFAULT;
    UsrDat->Prefs.SideCols       = Cfg_DEFAULT_COLUMNS;
+   UsrDat->Prefs.UsrPhotos      = Set_USR_PHOTOS_DEFAULT;
    UsrDat->Prefs.AcceptThirdPartyCookies = false;	// By default, don't accept third party cookies
    UsrDat->NtfEvents.SendEmail = 0;       		// By default, don't notify anything
   }
@@ -592,8 +593,17 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
 	 else
 	    UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
-	 /* Get if user accepts third party cookies (row[30]) */
-	 UsrDat->Prefs.AcceptThirdPartyCookies = (row[30][0] == 'Y');
+	 /* Get user settings on user photo shape (row[30]) */
+	 if (sscanf (row[30],"%u",&UsrDat->Prefs.UsrPhotos) == 1)
+	   {
+	    if (UsrDat->Prefs.UsrPhotos >= Set_NUM_USR_PHOTOS)
+	       UsrDat->Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
+	   }
+	 else
+	    UsrDat->Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
+
+	 /* Get if user accepts third party cookies (row[31]) */
+	 UsrDat->Prefs.AcceptThirdPartyCookies = (row[31][0] == 'Y');
 	}
      }
    else
@@ -1186,37 +1196,37 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
       /***** Begin form *****/
       Frm_BeginForm (NextAction);
-      if (FuncParams)
-	 FuncParams ();
+	 if (FuncParams)
+	    FuncParams ();
 
-      /***** Begin box and table *****/
-      Box_BoxTableBegin (NULL,Txt_Log_in,
-			 NULL,NULL,
-			 Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
+	 /***** Begin box and table *****/
+	 Box_BoxTableBegin (NULL,Txt_Log_in,
+			    NULL,NULL,
+			    Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
-	 /***** User's ID/nickname *****/
-	 HTM_DIV_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("for=\"UsrId\"");
-	       Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
-	    HTM_LABEL_End ();
-	    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
-			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
-			    " autofocus=\"autofocus\" required=\"required\"",
-			    Txt_nick_email_or_ID);
-	 HTM_DIV_End ();
+	    /***** User's ID/nickname *****/
+	    HTM_DIV_Begin ("class=\"LM\"");
+	       HTM_LABEL_Begin ("for=\"UsrId\"");
+		  Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
+	       HTM_LABEL_End ();
+	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
+			       " autofocus=\"autofocus\" required=\"required\"",
+			       Txt_nick_email_or_ID);
+	    HTM_DIV_End ();
 
-	 /***** User's password *****/
-	 HTM_DIV_Begin ("class=\"LM\"");
-	    HTM_LABEL_Begin ("for=\"UsrPwd\"");
-	       Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
-	    HTM_LABEL_End ();
-	    HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
-				"id=\"UsrPwd\"");
-	 HTM_DIV_End ();
+	    /***** User's password *****/
+	    HTM_DIV_Begin ("class=\"LM\"");
+	       HTM_LABEL_Begin ("for=\"UsrPwd\"");
+		  Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
+	       HTM_LABEL_End ();
+	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
+				   "id=\"UsrPwd\"");
+	    HTM_DIV_End ();
 
-      /***** End table, send button and end box *****/
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Log_in);
+	 /***** End table, send button and end box *****/
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Log_in);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1380,6 +1390,12 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC18x24",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE18x24",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR18x24",
+     };
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
 
    HTM_DIV_Begin ("class=\"HEAD_USR %s\"",The_ClassUsr[Gbl.Prefs.Theme]);
@@ -1404,7 +1420,9 @@ void Usr_WriteLoggedUsrHead (void)
       HTM_NBSP ();
 
       /***** Show my photo *****/
-      Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,"PHOTO18x24",Pho_ZOOM,false);
+      Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,
+                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 false);
 
       /***** User's name *****/
       if (Gbl.Usrs.Me.UsrDat.FrstName[0])
@@ -2174,6 +2192,12 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -2227,7 +2251,9 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 	{
 	 /***** Show user's photo *****/
 	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -2258,6 +2284,12 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
    struct Dpt_Department Dpt;
@@ -2269,7 +2301,9 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	{
 	 /***** Show guest's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -2338,6 +2372,12 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    unsigned NumGrpTyp,NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2353,7 +2393,9 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	{
 	 /***** Show student's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -2440,6 +2482,12 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
    struct Dpt_Department Dpt;
@@ -2453,7 +2501,9 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 	{
 	 /***** Show teacher's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_NO_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -2512,6 +2562,12 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+     };
    struct Ins_Instit Ins;
 
    /***** Begin row *****/
@@ -2526,7 +2582,9 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 	{
 	 /***** Show administrator's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
-	    Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO21x28",Pho_ZOOM,false);
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               false);
 	 HTM_TD_End ();
 	}
 
@@ -3568,12 +3626,12 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
       /* Number of columns in the class photo */
       Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
-      Grp_PutParamsCodGrps ();
-      Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
-      Set_PutParamListWithPhotos ();
-      Usr_PutSelectorNumColsClassPhoto ();
-      if (FuncParams)
-	 FuncParams (Args);
+	 Grp_PutParamsCodGrps ();
+	 Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
+	 Set_PutParamListWithPhotos ();
+	 Usr_PutSelectorNumColsClassPhoto ();
+	 if (FuncParams)
+	    FuncParams (Args);
       Frm_EndForm ();
    HTM_DIV_End ();
 
@@ -3587,11 +3645,11 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
       /* See the photos in list? */
       Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
 			   Usr_USER_LIST_SECTION_ID);
-      Grp_PutParamsCodGrps ();
-      Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
-      if (FuncParams)
-	 FuncParams (Args);
-      Usr_PutCheckboxListWithPhotos ();
+	 Grp_PutParamsCodGrps ();
+	 Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
+	 if (FuncParams)
+	    FuncParams (Args);
+	 Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
    HTM_DIV_End ();
 
@@ -3612,20 +3670,20 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
    /***** Begin form *****/
    Frm_BeginFormAnchor (Gbl.Action.Act,			// Repeat current action
 	                Usr_USER_LIST_SECTION_ID);
-   Grp_PutParamsCodGrps ();
-   Set_PutParamUsrListType (ListType);
-   Set_PutParamListWithPhotos ();
-   if (FuncParams)
-      FuncParams (Args);
+      Grp_PutParamsCodGrps ();
+      Set_PutParamUsrListType (ListType);
+      Set_PutParamListWithPhotos ();
+      if (FuncParams)
+	 FuncParams (Args);
 
-   /***** Link and image *****/
-   HTM_BUTTON_SUBMIT_Begin (Txt_USR_LIST_TYPES[ListType],
-			    The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
-			    Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-							     NULL);
-      Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Txt_USR_LIST_TYPES[ListType],"ICO20x20");
-      HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
-   HTM_BUTTON_End ();
+      /***** Link and image *****/
+      HTM_BUTTON_SUBMIT_Begin (Txt_USR_LIST_TYPES[ListType],
+			       The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
+			       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
+								NULL);
+	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Txt_USR_LIST_TYPES[ListType],"ICO20x20");
+	 HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
+      HTM_BUTTON_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -3702,43 +3760,43 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct SelectedUsrs *SelectedUsrs,
 		  /* Begin form */
 		  Frm_BeginForm (NextAction);
 
-		  /* Hidden parameters */
-		  Grp_PutParamsCodGrps ();
-		  if (NextAction == ActAdmAsgWrkCrs)
-		    {
-		     Gbl.FileBrowser.FullTree = true;	// By default, show all files
-		     Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
-		    }
-		  if (FuncParams)
-		     FuncParams (Args);
+		     /* Hidden parameters */
+		     Grp_PutParamsCodGrps ();
+		     if (NextAction == ActAdmAsgWrkCrs)
+		       {
+			Gbl.FileBrowser.FullTree = true;	// By default, show all files
+			Brw_PutHiddenParamFullTreeIfSelected (&Gbl.FileBrowser.FullTree);
+		       }
+		     if (FuncParams)
+			FuncParams (Args);
 
-		  HTM_TABLE_BeginCenterPadding (2);
+		     HTM_TABLE_BeginCenterPadding (2);
 
-		     /* Put list of users to select some of them */
-		     HTM_TR_Begin (NULL);
+			/* Put list of users to select some of them */
+			HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-			   HTM_TxtColon (Txt_Users);
-			HTM_TD_End ();
+			   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			      HTM_TxtColon (Txt_Users);
+			   HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-			   HTM_TABLE_BeginCenterPadding (2);
-			      Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
-			      Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
-			      Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
-			   HTM_TABLE_End ();
-			HTM_TD_End ();
+			   HTM_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+			      HTM_TABLE_BeginCenterPadding (2);
+				 Usr_ListUsersToSelect (Rol_TCH,SelectedUsrs);
+				 Usr_ListUsersToSelect (Rol_NET,SelectedUsrs);
+				 Usr_ListUsersToSelect (Rol_STD,SelectedUsrs);
+			      HTM_TABLE_End ();
+			   HTM_TD_End ();
 
-		     HTM_TR_End ();
+			HTM_TR_End ();
 
-		     /* Starting and ending dates in the search */
-		     if (PutFormDateRange)
-			Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+			/* Starting and ending dates in the search */
+			if (PutFormDateRange)
+			   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
 
-		  HTM_TABLE_End ();
+		     HTM_TABLE_End ();
 
-		  /***** Send button *****/
-		  Btn_PutConfirmButton (TxtButton);
+		     /***** Send button *****/
+		     Btn_PutConfirmButton (TxtButton);
 
 		  /***** End form *****/
 		  Frm_EndForm ();
@@ -4873,7 +4931,7 @@ void Usr_ListDataAdms (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstOth);
-	 Set_PutParamListWithPhotos ();
+	    Set_PutParamListWithPhotos ();
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -4887,7 +4945,7 @@ void Usr_ListDataAdms (void)
 	 HTM_DIV_Begin ("class=\"PREF_CONT\"");
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActLstOth);
-	       Sco_PutParamCurrentScope (&Gbl.Scope.Current);
+		  Sco_PutParamCurrentScope (&Gbl.Scope.Current);
 		  Usr_PutCheckboxListWithPhotos ();
 	       Frm_EndForm ();
 	    HTM_DIV_End ();
@@ -5015,7 +5073,7 @@ void Usr_SeeGuests (void)
 	{
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Frm_BeginForm (ActLstGst);
-	    Set_PutParamsPrefsAboutUsrList ();
+	       Set_PutParamsPrefsAboutUsrList ();
 	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 		  HTM_TxtColonNBSP (Txt_Scope);
 		  Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -5162,7 +5220,7 @@ void Usr_SeeStudents (void)
 	 case Rol_SYS_ADM:
 	    HTM_DIV_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActLstStd);
-	       Set_PutParamsPrefsAboutUsrList ();
+		  Set_PutParamsPrefsAboutUsrList ();
 		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 		     HTM_TxtColonNBSP (Txt_Scope);
 		     Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -5212,7 +5270,7 @@ void Usr_SeeStudents (void)
 	       if (PutForm)
 		 {
 		  Frm_BeginForm (ActDoActOnSevStd);
-		  Grp_PutParamsCodGrps ();
+		     Grp_PutParamsCodGrps ();
 		 }
 
 	       /* Begin table */
@@ -5343,7 +5401,7 @@ void Usr_SeeTeachers (void)
       /***** Form to select scope *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActLstTch);
-	 Set_PutParamsPrefsAboutUsrList ();
+	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Scope);
 	       Sco_PutSelectorScope ("ScopeUsr",HTM_SUBMIT_ON_CHANGE);
@@ -5389,7 +5447,7 @@ void Usr_SeeTeachers (void)
 	       if (PutForm)
 		 {
 		  Frm_BeginForm (ActDoActOnSevTch);
-		  Grp_PutParamsCodGrps ();
+		     Grp_PutParamsCodGrps ();
 		 }
 
 	       /* Begin table */
@@ -6077,16 +6135,22 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr)
   {
+   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][Set_NUM_USR_PHOTOS] =
+     {
+      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
+      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
+      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+     };
    unsigned NumUsr;
    bool TRIsOpen = false;
    bool UsrIsTheMsgSender;
    struct UsrData UsrDat;
-   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE] =
-     {
-      [Usr_CLASS_PHOTO_SEL    ] = "PHOTO21x28",
-      [Usr_CLASS_PHOTO_SEL_SEE] = "PHOTO45x60",
-      [Usr_CLASS_PHOTO_PRN    ] = "PHOTO45x60",
-     };
 
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
      {
@@ -6132,7 +6196,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 					 SelectedUsrs);
 
 	 /***** Show photo *****/
-	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,ClassPhoto[ClassPhotoType],Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,ClassPhoto[ClassPhotoType][Gbl.Prefs.UsrPhotos],Pho_ZOOM,false);
 
 	 /***** Photo foot *****/
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
@@ -6301,6 +6365,12 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
   {
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
+     };
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    struct UsrData UsrDat;
@@ -6318,7 +6388,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-	             "PHOTO15x20",Pho_ZOOM,false);
+	             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,false);
 
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s\"",Hidden ? "AUTHOR_TXT_LIGHT" :
@@ -6342,6 +6412,12 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+     };
 
    /***** Show user's photo *****/
    if (NumRows)
@@ -6349,7 +6425,9 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
-   Pho_ShowUsrPhotoIfAllowed (UsrDat,"PHOTO45x60",Pho_ZOOM,false);
+   Pho_ShowUsrPhotoIfAllowed (UsrDat,
+                              ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                              false);
    HTM_TD_End ();
 
    /***** User's IDs and name *****/
@@ -6368,7 +6446,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
      {
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
      }
 
@@ -6419,7 +6497,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 			  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
 						    "usr_bl.jpg",
 		          Txt_WHO[Who],
-	                  "ICO_HIGHLIGHT PHOTO15x20");
+	                  "ICO_HIGHLIGHT PHOTOR15x20");
 	 break;
       case Usr_WHO_SELECTED:
          HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"search.svg",

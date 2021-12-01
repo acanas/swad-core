@@ -152,7 +152,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActLstTstQst);
-	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Qst_DEFAULT_ORDER);
+	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Qst_DEFAULT_ORDER);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -328,7 +328,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActLstTstQstForSet);
-	 ExaSet_PutParamsOneSet (Exams);
+	    ExaSet_PutParamsOneSet (Exams);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -391,7 +391,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
       if ((Questions->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActGamLstTstQst);
-	 Gam_PutParams (Games);
+	    Gam_PutParams (Games);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -922,8 +922,8 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	    if (Questions->NumQsts > 1)
 	      {
 	       Frm_BeginForm (ActLstTstQst);
-	       Qst_PutParamsEditQst (Questions);
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  Qst_PutParamsEditQst (Questions);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_SUBMIT_Begin (Txt_TST_STR_ORDER_FULL[Order],"BT_LINK TIT_TBL",NULL);
 		     if (Order == Questions->SelectedOrder)
 			HTM_U_Begin ();
@@ -1005,8 +1005,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 		Questions->Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	      {
 	       Frm_BeginForm (ActChgShfTstQst);
-	       Qst_PutParamsEditQst (Questions);
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
+		  Qst_PutParamsEditQst (Questions);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Questions->SelectedOrder);
 		  HTM_INPUT_CHECKBOX ("Shuffle",HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"%s",
 				      Questions->Question.Answer.Shuffle ? " checked=\"checked\"" :
@@ -1092,7 +1092,7 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 
       /***** Begin form *****/
       Frm_BeginForm (ActAddQstToExa);
-      ExaSet_PutParamsOneSet (Exams);
+	 ExaSet_PutParamsOneSet (Exams);
 
 	 /***** Select all questions *****/
 	 Qst_PutCheckboxToSelectAllQuestions ();
@@ -1179,7 +1179,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 
       /***** Begin form *****/
       Frm_BeginForm (ActAddTstQstToGam);
-      Gam_PutParams (Games);
+	 Gam_PutParams (Games);
 
 	 /***** Select all questions *****/
 	 Qst_PutCheckboxToSelectAllQuestions ();
@@ -1870,7 +1870,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
    /***** Begin form *****/
    Frm_BeginForm (ActRcvTstQst);
-   Qst_PutParamQstCod (&Question->QstCod);
+      Qst_PutParamQstCod (&Question->QstCod);
 
       /***** Begin table *****/
       HTM_TABLE_BeginPadding (2);	// Table for this question

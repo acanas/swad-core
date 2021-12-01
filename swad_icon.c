@@ -129,7 +129,7 @@ void Ico_PutIconsToSelectIconSet (void)
 			      IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
 							     "PREF_OFF");
 		  Frm_BeginForm (ActChgIco);
-		  Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
+		     Par_PutHiddenParamString (NULL,"IconSet",Ico_IconSetId[IconSet]);
 		     snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
 			       Cfg_ICON_FOLDER_SETS,
 			       Ico_IconSetId[IconSet]);

@@ -407,7 +407,7 @@ static void Lnk_ListLinksForEdition (void)
 	    /* Link short name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenLnkSho);
-	       Lnk_PutParamLnkCod (&Lnk->LnkCod);
+		  Lnk_PutParamLnkCod (&Lnk->LnkCod);
 		  HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_SHORT_NAME\" required=\"required\"");
@@ -417,7 +417,7 @@ static void Lnk_ListLinksForEdition (void)
 	    /* Link full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       Frm_BeginForm (ActRenLnkFul);
-	       Lnk_PutParamLnkCod (&Lnk->LnkCod);
+		  Lnk_PutParamLnkCod (&Lnk->LnkCod);
 		  HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "class=\"INPUT_FULL_NAME\" required=\"required\"");

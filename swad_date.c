@@ -344,14 +344,14 @@ void Dat_ShowClientLocalTime (void)
 	 if (Gbl.Usrs.Me.Logged)
 	   {
 	    Frm_BeginForm (ActSeeMyAgd);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Show_agenda,"BT_LINK CURRENT_DAY",NULL);
+	       HTM_BUTTON_SUBMIT_Begin (Txt_Show_agenda,"BT_LINK CURRENT_DAY",NULL);
 	   }
 	 HTM_SPAN_Begin ("id=\"current_day_txt\"");
 	 // JavaScript will write HTML here
 	 HTM_SPAN_End ();
 	 if (Gbl.Usrs.Me.Logged)
 	   {
-	    HTM_BUTTON_End ();
+	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
       HTM_DIV_End ();

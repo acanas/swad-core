@@ -211,6 +211,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void);
 static void Fig_GetAndShowNumUsrsPerMenu (void);
 static void Fig_GetAndShowNumUsrsPerTheme (void);
 static void Fig_GetAndShowNumUsrsPerSideColumns (void);
+static void Fig_GetAndShowNumUsrsPerUserPhotos (void);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -371,6 +372,7 @@ void Fig_ShowFigures (void)
       [Fig_MENUS            ] = Fig_GetAndShowNumUsrsPerMenu,
       [Fig_THEMES           ] = Fig_GetAndShowNumUsrsPerTheme,
       [Fig_SIDE_COLUMNS     ] = Fig_GetAndShowNumUsrsPerSideColumns,
+      [Fig_USER_PHOTOS      ] = Fig_GetAndShowNumUsrsPerUserPhotos,
       [Fig_PRIVACY          ] = Fig_GetAndShowNumUsrsPerPrivacy,
       [Fig_COOKIES          ] = Fig_GetAndShowNumUsrsPerCookies,
      };
@@ -1228,7 +1230,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 				The_ClassFormInBox[Gbl.Prefs.Theme]);
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
-		     Ins_PutParamInsCod (Ins.InsCod);
+			Ins_PutParamInsCod (Ins.InsCod);
 			HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
@@ -3900,12 +3902,12 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    extern const char *Txt_Columns;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
    char *SubQuery;
    char *Icon;
    unsigned NumUsrs[4];
    unsigned NumUsrsTotal = 0;
-   extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
 
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SIDE_COLUMNS],
@@ -3919,8 +3921,8 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
       HTM_TR_End ();
 
-      /***** For each language... *****/
-      for (SideCols = 0;
+      /***** For each layout of columns... *****/
+      for (SideCols  = 0;
 	   SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	   SideCols++)
 	{
@@ -3936,7 +3938,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	}
 
       /***** Write number of users who have chosen this layout of columns *****/
-      for (SideCols = 0;
+      for (SideCols  = 0;
 	   SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	   SideCols++)
 	{
@@ -3957,6 +3959,86 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 
 	    HTM_TD_Begin ("class=\"DAT RM\"");
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/****** Get and show number of users who have chosen a user photo shape ******/
+/*****************************************************************************/
+
+static void Fig_GetAndShowNumUsrsPerUserPhotos (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_columns;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_User_photos;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS];
+   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+     {
+      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20B",
+      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20B",
+      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20B",
+     };
+   Set_UsrPhotos_t UsrPhotos;
+   char *SubQuery;
+   unsigned NumUsrs[Set_NUM_USR_PHOTOS];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SIDE_COLUMNS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (1,1,"CM",Txt_User_photos);
+	 HTM_TH (1,1,"RM",Txt_Number_of_users);
+	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+      HTM_TR_End ();
+
+      /***** For each user photo shape... *****/
+      for (UsrPhotos  = (Set_UsrPhotos_t) 0;
+	   UsrPhotos <= (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1);
+	   UsrPhotos++)
+	{
+	 /* Get the number of users who have chosen this layout of columns from database */
+	 if (asprintf (&SubQuery,"usr_data.UsrPhotos=%u",
+		       (unsigned) UsrPhotos) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[UsrPhotos] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[UsrPhotos];
+	}
+
+      /***** Write number of users who have chosen this user photo shape *****/
+      for (UsrPhotos  = (Set_UsrPhotos_t) 0;
+	   UsrPhotos <= (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1);
+	   UsrPhotos++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"CM\"");
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_USER_PHOTOS[UsrPhotos],
+			"class=\"%s\"",ClassPhoto[UsrPhotos]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Unsigned (NumUsrs[UsrPhotos]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[UsrPhotos] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
