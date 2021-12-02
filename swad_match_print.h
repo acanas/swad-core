@@ -59,7 +59,4 @@ void MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (long MchCod);
 
 void MchPrn_GetMatchPrintDataByMchCodAndUsrCod (struct MchPrn_Print *Print);
 
-void MchPrn_PutLinkToFixMatchesPrintsScores (void);
-void MchPrn_FixMatchesPrintsScores (void);
-
 #endif

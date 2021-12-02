@@ -1000,34 +1000,6 @@ void Mch_DB_UpdateMatchPrint (const struct MchPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/************************* Update match print score **************************/
-/*****************************************************************************/
-
-void Mch_DB_UpdateMatchPrintScore (const struct MchPrn_Print *Print)
-  {
-   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-/*
-   DB_QueryUPDATE ("can not update match print",
-		    "UPDATE mch_results"
-		      " SET Score='%.15lg'"
-		    " WHERE MchCod=%ld"
-		      " AND UsrCod=%ld",
-		    Print->Score,
-		    Print->MchCod,
-		    Print->UsrCod);
-*/
-   HTM_TxtF ("UPDATE mch_results"
-	       " SET Score='%.15lg'"
-	     " WHERE MchCod=%ld"
-	       " AND UsrCod=%ld",
-	     Print->Score,
-	     Print->MchCod,
-	     Print->UsrCod);
-
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /*********************** Check if match print exists *************************/
 /*****************************************************************************/
 

@@ -400,41 +400,6 @@ void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd
   }
 
 /*****************************************************************************/
-/************ Store user's answers of an test print into database ************/
-/*****************************************************************************/
-
-void Tst_DB_FixOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd)
-  {
-   /***** Insert question and user's answers into database *****/
-   Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-   DB_QueryREPLACE ("can not update a question of a test",
-		    "REPLACE INTO tst_exam_questions"
-		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
-		    " VALUES"
-		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		    Print->PrnCod,
-		    Print->PrintedQuestions[QstInd].QstCod,
-		    QstInd,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[QstInd].Score,
-		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].StrAnswers);
-   /*
-   Ale_ShowAlert (Ale_INFO,
-		    "REPLACE INTO tst_exam_questions"
-		    " (ExaCod,QstCod,QstInd,Score,Indexes,Answers)"
-		    " VALUES"
-		    " (%ld,%ld,%u,'%.15lg','%s','%s')",
-		    Print->PrnCod,
-		    Print->PrintedQuestions[QstInd].QstCod,
-		    QstInd,	// 0, 1, 2, 3...
-		    Print->PrintedQuestions[QstInd].Score,
-		    Print->PrintedQuestions[QstInd].StrIndexes,
-		    Print->PrintedQuestions[QstInd].StrAnswers);
-   */
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /**************** Get all tags of questions in a test print ******************/
 /*****************************************************************************/
 

@@ -30,8 +30,6 @@
 long Qst_DB_CreateQst (const struct Qst_Question *Question);
 void Qst_DB_UpdateQst (const struct Qst_Question *Question);
 void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score);
-void Qst_DB_FixQstScore (long QstCod,bool AnswerIsNotBlank,
-                         double BadScore,double GoodScore);
 void Qst_DB_UpdateQstShuffle (long QstCod,bool Shuffle);
 //-----------------------------------------------------------------------------
 void Qst_DB_CreateIntAnswer (struct Qst_Question *Question);

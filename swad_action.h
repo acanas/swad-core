@@ -212,10 +212,8 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActChgPlgIP		(ActRenMaiFul + 38)
 
 #define ActSetUp		(ActRenMaiFul + 39)
-#define ActFixMchSco		(ActRenMaiFul + 40)
-#define ActFixTstSco		(ActRenMaiFul + 41)
-#define ActReqRemOldCrs		(ActRenMaiFul + 42)
-#define ActRemOldCrs		(ActRenMaiFul + 43)
+#define ActReqRemOldCrs		(ActRenMaiFul + 40)
+#define ActRemOldCrs		(ActRenMaiFul + 41)
 
 /*****************************************************************************/
 /******************************** Country tab ********************************/

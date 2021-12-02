@@ -252,9 +252,7 @@ const struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    [ActChgPlgURL	] = { 783,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgURL		,Plg_ContEditAfterChgPlg	,NULL},
    [ActChgPlgIP		] = { 780,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Plg_ChangePlgIP		,Plg_ContEditAfterChgPlg	,NULL},
 
-   [ActSetUp		] = { 840, 5,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_SetUp			,NULL},
-   [ActFixMchSco	] = {1915,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,MchPrn_FixMatchesPrintsScores	,NULL},
-   [ActFixTstSco	] = {1916,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TstPrn_FixTestsPrintsScores	,NULL},
+   [ActSetUp		] = { 840,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_SetUp			,NULL},
    [ActReqRemOldCrs	] = {1109,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mtn_RemoveOldCrss		,NULL},
    [ActRemOldCrs	] = {1110,-1,TabUnk,ActMtn		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_RemoveOldCrss		,NULL},
 
@@ -3742,8 +3740,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActLstOneGam,		// #1912
 	ActEdiMch,		// #1913
 	ActChgMch,		// #1914
-	ActFixMchSco,		// #1915
-	ActFixTstSco,		// #1916
+	-1,			// #1915 (obsolete action)
+	-1,			// #1916 (obsolete action)
 	ActChgUsrPho,		// #1917
   };
 

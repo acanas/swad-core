@@ -158,7 +158,4 @@ void TstPrn_RemoveCrsPrints (long CrsCod);
 
 unsigned TstPrn_GetNumPrintsGeneratedByMe (void);
 
-void TstPrn_PutLinkToFixTestsPrintsScores (void);
-void TstPrn_FixTestsPrintsScores (void);
-
 #endif

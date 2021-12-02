@@ -150,32 +150,6 @@ void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
   }
 
 /*****************************************************************************/
-/************************* Fix the score of a question ***********************/
-/*****************************************************************************/
-
-void Qst_DB_FixQstScore (long QstCod,bool AnswerIsNotBlank,
-                         double BadScore,double GoodScore)
-  {
-   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   if (AnswerIsNotBlank)	// User's answer is not blank
-      DB_QueryUPDATE ("can not update the score of a question",
-		      "UPDATE tst_questions"
-	                " SET Score=Score-(%.15lg)+(%.15lg)"
-                      " WHERE QstCod=%ld",
-		      BadScore,GoodScore,
-		      QstCod);
-      /*
-      Ale_ShowAlert (Ale_INFO,
-		      "UPDATE tst_questions"
-	                " SET Score=Score-(%.15lg)+(%.15lg)"
-                      " WHERE QstCod=%ld",
-		      BadScore,GoodScore,
-		      QstCod);
-      */
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /*********************** Change the shuffle of a question ********************/
 /*****************************************************************************/
 

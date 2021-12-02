@@ -64,7 +64,6 @@ void Tst_DB_RemovePrintsMadeByInCrs (long CrsCod);
 
 //-------------------------- Test print questions -----------------------------
 void Tst_DB_StoreOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd);
-void Tst_DB_FixOneQstOfPrint (const struct TstPrn_Print *Print,unsigned QstInd);
 
 unsigned Tst_DB_GetTagsPresentInAPrint (MYSQL_RES **mysql_res,long PrnCod);
 unsigned Tst_DB_GetPrintQuestions (MYSQL_RES **mysql_res,long PrnCod);
