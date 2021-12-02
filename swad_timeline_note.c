@@ -289,12 +289,12 @@ static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
 
 void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
 
    /***** Begin container *****/
@@ -302,7 +302,7 @@ void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
 
       /***** Photo *****/
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                                  FormUnique);
 
    /***** End container *****/

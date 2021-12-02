@@ -612,12 +612,12 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC60x80",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE60x80",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO60x80",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR60x80",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC60x80",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE60x80",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO60x80",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR60x80",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
@@ -625,7 +625,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    HTM_TD_Begin ("class=\"FOLLOW_PHOTO\"");
       if (Visible)
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            false);
    HTM_TD_End ();
 
@@ -671,12 +671,12 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
@@ -686,7 +686,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
 	 if (Visible)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
       HTM_TD_End ();
 

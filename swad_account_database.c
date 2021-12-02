@@ -30,6 +30,7 @@
 #include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_photo.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -115,7 +116,7 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 				  "CtyCod,"
 				  "LocalPhone,FamilyPhone,"
 				  "Birthday,Comments,"
-				  "Menu,SideCols,UsrPhotos,"
+				  "Menu,SideCols,PhotoShape,"
 				  "NotifNtfEvents,EmailNtfEvents)"
 				" VALUES"
 				" ('%s','%s',"
@@ -149,7 +150,7 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 						   "",
 				(unsigned) Mnu_MENU_DEFAULT,
 				(unsigned) Cfg_DEFAULT_COLUMNS,
-				(unsigned) Set_USR_PHOTOS_DEFAULT);
+				(unsigned) Pho_SHAPE_DEFAULT);
   }
 
 /*****************************************************************************/

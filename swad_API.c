@@ -3088,10 +3088,8 @@ int swad__getNotifications (struct soap *soap,
 
 static int API_GetMyLanguage (struct soap *soap)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Lan_Language_t Lan;
    bool UsrFound;
 
    /***** Get user's language *****/
@@ -3101,15 +3099,7 @@ static int API_GetMyLanguage (struct soap *soap)
       row = mysql_fetch_row (mysql_res);
 
       /* Get language (row[0]) */
-      Gbl.Prefs.Language = Lan_LANGUAGE_UNKNOWN;
-      for (Lan  = (Lan_Language_t) 1;
-	   Lan <= (Lan_Language_t) (Lan_NUM_LANGUAGES - 1);
-	   Lan++)
-	 if (!strcasecmp (row[0],Lan_STR_LANG_ID[Lan]))
-	   {
-	    Gbl.Prefs.Language = Lan;
-	    break;
-	   }
+      Gbl.Prefs.Language = Lan_GetLanguageFromStr (row[0]);
       if (Gbl.Prefs.Language == Lan_LANGUAGE_UNKNOWN)	// Language stored in database is unknown
 	 Gbl.Prefs.Language = Cfg_DEFAULT_LANGUAGE;
      }
@@ -3593,7 +3583,6 @@ int swad__getTests (struct soap *soap,
 static int API_GetTstTags (struct soap *soap,
 			   long CrsCod,struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumTags;

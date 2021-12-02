@@ -275,7 +275,7 @@ unsigned Usr_DB_GetUsrDataFromUsrCod (MYSQL_RES **mysql_res,long UsrCod,
 			        "IconSet,"		// row[27]
 			        "Menu,"			// row[28]
 			        "SideCols,"		// row[29]
-			        "UsrPhotos,"		// row[30]
+			        "PhotoShape,"		// row[30]
 			        "ThirdPartyCookies"	// row[31]
 			  " FROM usr_data"
 		         " WHERE UsrCod=%ld",

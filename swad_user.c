@@ -333,14 +333,14 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Tch.Office[0]      = '\0';
    UsrDat->Tch.OfficePhone[0] = '\0';
 
-   UsrDat->Prefs.Language       = Lan_LANGUAGE_UNKNOWN;			// Language unknown
-   UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
-   UsrDat->Prefs.DateFormat     = Dat_FORMAT_DEFAULT		;	// Default date format
-   UsrDat->Prefs.Theme          = The_THEME_DEFAULT;
-   UsrDat->Prefs.IconSet        = Ico_ICON_SET_DEFAULT;
-   UsrDat->Prefs.Menu           = Mnu_MENU_DEFAULT;
-   UsrDat->Prefs.SideCols       = Cfg_DEFAULT_COLUMNS;
-   UsrDat->Prefs.UsrPhotos      = Set_USR_PHOTOS_DEFAULT;
+   UsrDat->Prefs.Language	= Lan_LANGUAGE_UNKNOWN;			// Language unknown
+   UsrDat->Prefs.FirstDayOfWeek	= Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
+   UsrDat->Prefs.DateFormat	= Dat_FORMAT_DEFAULT		;	// Default date format
+   UsrDat->Prefs.Theme		= The_THEME_DEFAULT;
+   UsrDat->Prefs.IconSet	= Ico_ICON_SET_DEFAULT;
+   UsrDat->Prefs.Menu		= Mnu_MENU_DEFAULT;
+   UsrDat->Prefs.SideCols	= Cfg_DEFAULT_COLUMNS;
+   UsrDat->Prefs.PhotoShape	= Pho_SHAPE_DEFAULT;
    UsrDat->Prefs.AcceptThirdPartyCookies = false;	// By default, don't accept third party cookies
    UsrDat->NtfEvents.SendEmail = 0;       		// By default, don't notify anything
   }
@@ -448,13 +448,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
                                Usr_GetPrefs_t GetPrefs,
                                Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
   {
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *The_ThemeId[The_NUM_THEMES];
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   The_Theme_t Theme;
-   Ico_IconSet_t IconSet;
    Lan_Language_t Lan;
 
    /***** Get user's data from database *****/
@@ -543,15 +538,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
       if (GetPrefs == Usr_GET_PREFS)
 	{
 	 /* Get language (row[23]) */
-	 UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
-	 for (Lan  = (Lan_Language_t) 1;
-	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
-	      Lan++)
-	    if (!strcasecmp (row[23],Lan_STR_LANG_ID[Lan]))
-	      {
-	       UsrDat->Prefs.Language = Lan;
-	       break;
-	      }
+	 UsrDat->Prefs.Language = Lan_GetLanguageFromStr (row[23]);
 
 	 /* Get first day of week (row[24]) */
 	 UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[24]);
@@ -560,47 +547,19 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
 	 UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[25]);
 
 	 /* Get theme (row[26]) */
-	 UsrDat->Prefs.Theme = The_THEME_DEFAULT;
-	 for (Theme  = (The_Theme_t) 0;
-	      Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
-	      Theme++)
-	    if (!strcasecmp (row[26],The_ThemeId[Theme]))
-	      {
-	       UsrDat->Prefs.Theme = Theme;
-	       break;
-	      }
+	 UsrDat->Prefs.Theme = The_GetThemeFromStr (row[26]);
 
 	 /* Get icon set (row[27]) */
-	 UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
-	 for (IconSet  = (Ico_IconSet_t) 0;
-	      IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
-	      IconSet++)
-	    if (!strcasecmp (row[27],Ico_IconSetId[IconSet]))
-	      {
-	       UsrDat->Prefs.IconSet = IconSet;
-	       break;
-	      }
+	 UsrDat->Prefs.IconSet = Ico_GetIconSetFromStr (row[27]);
 
 	 /* Get menu (row[28]) */
 	 UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
 
 	 /* Get if user wants to show side columns (row[29]) */
-	 if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
-	   {
-	    if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
-	       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
-	   }
-	 else
-	    UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+	 UsrDat->Prefs.SideCols = Set_GetSideColsFromStr (row[29]);
 
 	 /* Get user settings on user photo shape (row[30]) */
-	 if (sscanf (row[30],"%u",&UsrDat->Prefs.UsrPhotos) == 1)
-	   {
-	    if (UsrDat->Prefs.UsrPhotos >= Set_NUM_USR_PHOTOS)
-	       UsrDat->Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
-	   }
-	 else
-	    UsrDat->Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
+	 UsrDat->Prefs.PhotoShape = Pho_GetShapeFromStr (row[30]);
 
 	 /* Get if user accepts third party cookies (row[31]) */
 	 UsrDat->Prefs.AcceptThirdPartyCookies = (row[31][0] == 'Y');
@@ -1390,12 +1349,12 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC18x24",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE18x24",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO18x24",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR18x24",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC18x24",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE18x24",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO18x24",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR18x24",
      };
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
 
@@ -1422,7 +1381,7 @@ void Usr_WriteLoggedUsrHead (void)
 
       /***** Show my photo *****/
       Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Me.UsrDat,
-                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                                  false);
 
       /***** User's name *****/
@@ -1985,7 +1944,6 @@ static void Usr_SetMyPrefsAndRoles (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   char URL[PATH_MAX + 1];
    bool GetRoleAndActionFromLastData;
    Act_Action_t LastSuperAction;
    bool JustAfterLogin = Gbl.Action.Act == ActLogIn    ||
@@ -2002,18 +1960,15 @@ static void Usr_SetMyPrefsAndRoles (void)
    /***** Set settings from my settings *****/
    Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;
    Gbl.Prefs.DateFormat     = Gbl.Usrs.Me.UsrDat.Prefs.DateFormat;
+   Gbl.Prefs.IconSet        = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
    Gbl.Prefs.Menu           = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
+   Gbl.Prefs.Theme          = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
-
-   Gbl.Prefs.Theme   = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
-   snprintf (URL,sizeof (URL),"%s/%s",
-	     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.URLTheme  ,URL,sizeof (Gbl.Prefs.URLTheme  ) - 1);
-
-   Gbl.Prefs.IconSet = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
-   snprintf (URL,sizeof (URL),"%s/%s",
+   Gbl.Prefs.PhotoShape     = Gbl.Usrs.Me.UsrDat.Prefs.PhotoShape;
+   snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),"%s/%s",
 	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
-   Str_Copy (Gbl.Prefs.URLIconSet,URL,sizeof (Gbl.Prefs.URLIconSet) - 1);
+   snprintf (Gbl.Prefs.URLTheme,sizeof (Gbl.Prefs.URLTheme),"%s/%s",
+	     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
 
    /***** Construct the path to my directory *****/
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);
@@ -2193,12 +2148,12 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
@@ -2254,7 +2209,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 	 /***** Show user's photo *****/
 	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -2286,12 +2241,12 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
@@ -2305,7 +2260,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	 /***** Show guest's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -2375,12 +2330,12 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumGrpTyp,NumField;
    MYSQL_RES *mysql_res;
@@ -2398,7 +2353,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	 /***** Show student's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -2486,12 +2441,12 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
@@ -2507,7 +2462,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 	 /***** Show teacher's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -2567,12 +2522,12 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
 
@@ -2589,7 +2544,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 	 /***** Show administrator's photo *****/
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -6141,20 +6096,20 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr)
   {
-   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][Pho_NUM_SHAPES] =
      {
-      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Usr_CLASS_PHOTO_SEL    ][Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
-      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
    bool TRIsOpen = false;
@@ -6205,7 +6160,9 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 					 SelectedUsrs);
 
 	 /***** Show photo *****/
-	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,ClassPhoto[ClassPhotoType][Gbl.Prefs.UsrPhotos],Pho_ZOOM,false);
+	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,
+	                            ClassPhoto[ClassPhotoType][Gbl.Prefs.PhotoShape],Pho_ZOOM,
+	                            false);
 
 	 /***** Photo foot *****/
 	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
@@ -6374,12 +6331,12 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
@@ -6398,7 +6355,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
-	             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,false);
+	             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,false);
 
    /***** Write name *****/
    HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s\"",Hidden ? "AUTHOR_TXT_LIGHT" :
@@ -6422,12 +6379,12 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
 
    /***** Show user's photo *****/
@@ -6437,7 +6394,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    else
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                              ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                               false);
    HTM_TD_End ();
 

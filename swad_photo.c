@@ -421,12 +421,12 @@ void Pho_ReqRemoveMyPhoto (void)
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOR186x248",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOR186x248",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOR186x248",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOR186x248",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOR186x248",
+      [Pho_SHAPE_OVAL     ] = "PHOTOR186x248",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR186x248",
      };
 
    /***** Show current photo and help message *****/
@@ -438,7 +438,7 @@ void Pho_ReqRemoveMyPhoto (void)
 
       /* Show current photo */
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
-			ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+			ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 			false);
 
       /* End alert */
@@ -498,12 +498,12 @@ void Pho_ReqRemoveUsrPhoto (void)
       [Rol_INS_ADM] = ActRemOthPho,
       [Rol_SYS_ADM] = ActRemOthPho,
      };
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC186x248",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE186x248",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO186x248",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR186x248",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC186x248",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE186x248",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO186x248",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR186x248",
      };
    char PhotoURL[PATH_MAX + 1];
 
@@ -527,7 +527,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 
 	    /* Show current photo */
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
-			      ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_NO_ZOOM,
+			      ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 			      false);
 
 	    /* End alert */

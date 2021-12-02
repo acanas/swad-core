@@ -2701,7 +2701,7 @@ mysql> DESCRIBE set_ip_settings;
 | IconSet        | char(16) | NO   |     | NULL    |       |
 | Menu           | tinyint  | NO   |     | 0       |       |
 | SideCols       | tinyint  | NO   |     | NULL    |       |
-| UsrPhotos      | tinyint  | NO   |     | 0       |       |
+| PhotoShape     | tinyint  | NO   |     | 0       |       |
 +----------------+----------+------+-----+---------+-------+
 10 rows in set (0,01 sec)
 */
@@ -2715,7 +2715,7 @@ mysql> DESCRIBE set_ip_settings;
 			"IconSet CHAR(16) NOT NULL,"	// Ico_MAX_BYTES_ICON_SET_ID
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL,"
-			"UsrPhotos TINYINT NOT NULL DEFAULT 0,"
+			"PhotoShape TINYINT NOT NULL DEFAULT 0,"
 		   "PRIMARY KEY (IP),"
 		   "INDEX(UsrCod),"
 		   "INDEX(LastChange))");
@@ -3395,7 +3395,7 @@ mysql> DESCRIBE usr_data;
 | Comments          | text                                             | NO   |     | NULL    |                |
 | Menu              | tinyint                                          | NO   | MUL | 0       |                |
 | SideCols          | tinyint                                          | NO   | MUL | 3       |                |
-| UsrPhotos         | tinyint                                          | NO   | MUL | 0       |                |
+| PhotoShape        | tinyint                                          | NO   | MUL | 0       |                |
 | ThirdPartyCookies | enum('N','Y')                                    | NO   | MUL | N       |                |
 | NotifNtfEvents    | int                                              | NO   |     | 0       |                |
 | EmailNtfEvents    | int                                              | NO   |     | 0       |                |
@@ -3435,7 +3435,7 @@ mysql> DESCRIBE usr_data;
 			"Comments TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL DEFAULT 3,"
-			"UsrPhotos TINYINT NOT NULL DEFAULT 0,"
+			"PhotoShape TINYINT NOT NULL DEFAULT 0,"
 			"ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NotifNtfEvents INT NOT NULL DEFAULT 0,"
 			"EmailNtfEvents INT NOT NULL DEFAULT 0,"
@@ -3456,7 +3456,7 @@ mysql> DESCRIBE usr_data;
 		   "INDEX(CtrCod),"
 		   "INDEX(Menu),"
 		   "INDEX(SideCols),"
-		   "INDEX(UsrPhotos),"
+		   "INDEX(PhotoShape),"
 		   "INDEX(ThirdPartyCookies))");
 
    /***** Table usr_duplicated *****/

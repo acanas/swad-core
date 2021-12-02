@@ -1041,12 +1041,12 @@ void MchRes_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    struct Gam_Games Games;
    struct Gam_Game Game;
@@ -1133,7 +1133,7 @@ void MchRes_ShowOneMchResult (void)
 		     HTM_TxtF (", %s",UsrDat->FrstName);
 		  HTM_BR ();
 		  Pho_ShowUsrPhotoIfAllowed (UsrDat,
-		                             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 		                             false);
 	       HTM_TD_End ();
 

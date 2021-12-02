@@ -13599,6 +13599,10 @@ Llama a:
 
 
 
+ALTER TABLE set_ip_settings ADD COLUMN PhotoShape TINYINT NOT NULL DEFAULT 0 AFTER SideCols;
+UPDATE set_ip_settings SET PhotoShape=3;
+ALTER TABLE usr_data ADD COLUMN PhotoShape TINYINT NOT NULL DEFAULT 0 AFTER SideCols,ADD INDEX (PhotoShape);
+UPDATE usr_data SET PhotoShape=3;
 
 
 

@@ -35,7 +35,7 @@ void Set_DB_UpdateMySettingsAboutIconSet (const char *IconSetId);
 void Set_DB_UpdateMySettingsAboutMenu (Mnu_Menu_t Menu);
 void Set_DB_UpdateMySettingsAboutTheme (const char *ThemeId);
 void Set_DB_UpdateMySettingsAboutSideCols (void);
-void Set_DB_UpdateMySettingsAboutUsrPhotos (void);
+void Set_DB_UpdateMySettingsAboutPhotoShape (void);
 void Set_DB_UpdateMySettingsAboutPhotoVisibility (void);
 void Set_DB_UpdateMySettingsAboutBasicProfile (void);
 void Set_DB_UpdateMySettingsAboutExtendedProfile (void);
@@ -60,8 +60,8 @@ void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
 void Set_DB_RemAllUsrsFromCrsSettings (long CrsCod);
 
 //------------------- IP settings (when no user logged) -----------------------
-void Set_DB_UpdateSettingsFromIP (void);
-void Set_DB_UpdateMySettingsFromIP (void);
+void Set_DB_UpdateMyIPSettingsForCurrentIP (void);
+void Set_DB_UpdateMyIPSettingsForAllMyIPs (void);
 
 unsigned Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res);
 

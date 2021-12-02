@@ -40,6 +40,7 @@
 #include "swad_menu.h"
 #include "swad_nickname.h"
 #include "swad_password.h"
+#include "swad_photo_shape.h"
 #include "swad_privacy_visibility_type.h"
 #include "swad_role_type.h"
 #include "swad_scope.h"
@@ -214,7 +215,7 @@ struct UsrData
       Ico_IconSet_t IconSet;
       Mnu_Menu_t Menu;
       unsigned SideCols;
-      Set_UsrPhotos_t UsrPhotos;
+      Pho_Shape_t PhotoShape;
       bool AcceptThirdPartyCookies;	// User has accepted third party cookies
      } Prefs;
   };

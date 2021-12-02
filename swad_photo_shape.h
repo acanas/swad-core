@@ -1,7 +1,7 @@
-// swad_theme.h: themes (colour layouts)
+// swad_photo_shape.h: User photo shape
 
-#ifndef _SWAD_THE
-#define _SWAD_THE
+#ifndef _SWAD_PHO_SHA
+#define _SWAD_PHO_SHA
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -23,34 +23,29 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-#define The_NUM_THEMES 6
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/************************* Public types and constants ************************/
 /*****************************************************************************/
 
+// Related with user photo shape
+#define Pho_NUM_SHAPES 4
 typedef enum
   {
-   The_THEME_WHITE   = 0,
-   The_THEME_GREY    = 1,
-   The_THEME_PURPLE  = 2,
-   The_THEME_BLUE    = 3,
-   The_THEME_YELLOW  = 4,
-   The_THEME_PINK    = 5,
-   } The_Theme_t;
-#define The_THEME_DEFAULT The_THEME_PINK
+   Pho_SHAPE_CIRCLE    = 0,
+   Pho_SHAPE_ELLIPSE   = 1,
+   Pho_SHAPE_OVAL      = 2,
+   Pho_SHAPE_RECTANGLE = 3,
+  } Pho_Shape_t;
+#define Pho_SHAPE_DEFAULT Pho_SHAPE_CIRCLE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void The_PutIconsToSelectTheme (void);
-void The_ChangeTheme (void);
-The_Theme_t The_GetParamTheme (void);
-The_Theme_t The_GetThemeFromStr (const char *Str);
+void Pho_PutIconsToSelectPhotoShape (void);
+void Pho_ChangePhotoShape (void);
+Pho_Shape_t Pho_GetParamPhotoShape (void);
+Pho_Shape_t Pho_GetShapeFromStr (const char *Str);
 
 #endif

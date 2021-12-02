@@ -393,7 +393,7 @@ The_Theme_t The_GetParamTheme (void)
       if (!strcmp (ThemeId,The_ThemeId[Theme]))
          return Theme;
 
-   return The_THEME_UNKNOWN;
+   return The_THEME_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -410,5 +410,5 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
       if (!strcasecmp (Str,The_ThemeId[Theme]))
 	 return Theme;
 
-   return The_THEME_UNKNOWN;
+   return The_THEME_DEFAULT;
   }

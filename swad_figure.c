@@ -211,7 +211,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void);
 static void Fig_GetAndShowNumUsrsPerMenu (void);
 static void Fig_GetAndShowNumUsrsPerTheme (void);
 static void Fig_GetAndShowNumUsrsPerSideColumns (void);
-static void Fig_GetAndShowNumUsrsPerUserPhotos (void);
+static void Fig_GetAndShowNumUsrsPerPhotoShape (void);
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -372,7 +372,7 @@ void Fig_ShowFigures (void)
       [Fig_MENUS            ] = Fig_GetAndShowNumUsrsPerMenu,
       [Fig_THEMES           ] = Fig_GetAndShowNumUsrsPerTheme,
       [Fig_SIDE_COLUMNS     ] = Fig_GetAndShowNumUsrsPerSideColumns,
-      [Fig_USER_PHOTOS      ] = Fig_GetAndShowNumUsrsPerUserPhotos,
+      [Fig_PHOTO_SHAPES     ] = Fig_GetAndShowNumUsrsPerPhotoShape,
       [Fig_PRIVACY          ] = Fig_GetAndShowNumUsrsPerPrivacy,
       [Fig_COOKIES          ] = Fig_GetAndShowNumUsrsPerCookies,
      };
@@ -3974,28 +3974,28 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 /****** Get and show number of users who have chosen a user photo shape ******/
 /*****************************************************************************/
 
-static void Fig_GetAndShowNumUsrsPerUserPhotos (void)
+static void Fig_GetAndShowNumUsrsPerPhotoShape (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_columns;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_User_photos;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   extern const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS];
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   extern const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES];
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20B",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20B",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20B",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20B",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20B",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20B",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20B",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
-   Set_UsrPhotos_t UsrPhotos;
+   Pho_Shape_t Shape;
    char *SubQuery;
-   unsigned NumUsrs[Set_NUM_USR_PHOTOS];
+   unsigned NumUsrs[Pho_NUM_SHAPES];
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
-   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_USER_PHOTOS],
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PHOTO_SHAPES],
                       NULL,NULL,
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
@@ -4007,39 +4007,39 @@ static void Fig_GetAndShowNumUsrsPerUserPhotos (void)
       HTM_TR_End ();
 
       /***** For each user photo shape... *****/
-      for (UsrPhotos  = (Set_UsrPhotos_t) 0;
-	   UsrPhotos <= (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1);
-	   UsrPhotos++)
+      for (Shape  = (Pho_Shape_t) 0;
+	   Shape <= (Pho_Shape_t) (Pho_NUM_SHAPES - 1);
+	   Shape++)
 	{
 	 /* Get the number of users who have chosen this layout of columns from database */
-	 if (asprintf (&SubQuery,"usr_data.UsrPhotos=%u",
-		       (unsigned) UsrPhotos) < 0)
+	 if (asprintf (&SubQuery,"usr_data.PhotoShape=%u",
+		       (unsigned) Shape) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 NumUsrs[UsrPhotos] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 NumUsrs[Shape] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
 	 free (SubQuery);
 
 	 /* Update total number of users */
-	 NumUsrsTotal += NumUsrs[UsrPhotos];
+	 NumUsrsTotal += NumUsrs[Shape];
 	}
 
       /***** Write number of users who have chosen this user photo shape *****/
-      for (UsrPhotos  = (Set_UsrPhotos_t) 0;
-	   UsrPhotos <= (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1);
-	   UsrPhotos++)
+      for (Shape  = (Pho_Shape_t) 0;
+	   Shape <= (Pho_Shape_t) (Pho_NUM_SHAPES - 1);
+	   Shape++)
 	{
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"CM\"");
-	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_USER_PHOTOS[UsrPhotos],
-			"class=\"%s\"",ClassPhoto[UsrPhotos]);
+	       HTM_IMG (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_PHOTO_SHAPES[Shape],
+			"class=\"%s\"",ClassPhoto[Shape]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT RM\"");
-	       HTM_Unsigned (NumUsrs[UsrPhotos]);
+	       HTM_Unsigned (NumUsrs[Shape]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"DAT RM\"");
-	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[UsrPhotos] * 100.0 /
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Shape] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();

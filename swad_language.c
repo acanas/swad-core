@@ -25,6 +25,8 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include <string.h>	// For strcasecmp
+
 #include "swad_box.h"
 #include "swad_database.h"
 #include "swad_figure.h"
@@ -213,4 +215,22 @@ Lan_Language_t Lan_GetParamLanguage (void)
                                     1,
                                     Lan_NUM_LANGUAGES,
                                     (unsigned long) Txt_Current_CGI_SWAD_Language);
+  }
+
+/*****************************************************************************/
+/************************** Get language from string *************************/
+/*****************************************************************************/
+
+Lan_Language_t Lan_GetLanguageFromStr (const char *Str)
+  {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   Lan_Language_t Lan;
+
+   for (Lan  = (Lan_Language_t) 1;
+	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	Lan++)
+      if (!strcasecmp (Str,Lan_STR_LANG_ID[Lan]))
+	 return Lan;
+
+   return Lan_LANGUAGE_UNKNOWN;
   }

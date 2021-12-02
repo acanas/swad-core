@@ -65,7 +65,7 @@ typedef enum
    Fig_MENUS,			// Number of users per menu
    Fig_THEMES,			// Number of users per theme
    Fig_SIDE_COLUMNS,		// Number of users per layout of columns
-   Fig_USER_PHOTOS,		// Number of users per user photo shape
+   Fig_PHOTO_SHAPES,		// Number of users per user photo shape
    Fig_PRIVACY,			// Number of users per privacity
    Fig_COOKIES,			// Number of users per acceptation of cookies
   } Fig_FigureType_t;

@@ -784,10 +784,6 @@ void Par_GetMainParams (void)
 
    if (!Gbl.Session.IsOpen)	// When no session open (no logged user)...
      {
-      /***** Try to get settings changed from current IP *****/
-      if (Gbl.Prefs.Theme == The_THEME_UNKNOWN)
-         Gbl.Prefs.Theme = The_THEME_DEFAULT;
-
       /***** Set path of theme and path of icon set *****/
       snprintf (URL,sizeof (URL),"%s/%s",
                 Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme  ]);

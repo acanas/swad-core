@@ -3229,18 +3229,18 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC60x80",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE60x80",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO60x80",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR60x80",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC60x80",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE60x80",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO60x80",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR60x80",
      };
 
    /***** Show user's photo *****/
    HTM_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                                  false);
    HTM_TD_End ();
 
@@ -5453,12 +5453,12 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
   {
    extern const char *Txt_Unknown_or_without_photo;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20B",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20B",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20B",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20B",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20B",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20B",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20B",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
    bool ShowUsr = false;
    struct UsrData UsrDat;
@@ -5480,11 +5480,11 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
       if (ShowUsr)
 	 /***** Show photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            false);
       else
 	 Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,
-	              ClassPhoto[Gbl.Prefs.UsrPhotos]);
+	              ClassPhoto[Gbl.Prefs.PhotoShape]);
 
    HTM_TD_End ();
 
@@ -7845,12 +7845,12 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_Save_file_properties;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    struct FileMetadata FileMetadata;
    struct UsrData PublisherUsrDat;
@@ -8016,7 +8016,7 @@ void Brw_ShowFileMetadata (void)
 		    {
 		     /* Show photo */
 		     Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-		                                ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                                ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 		                                false);
 
 		     /* Write name */

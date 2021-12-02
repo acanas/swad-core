@@ -42,9 +42,10 @@
 #include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_layout.h"
-#include "swad_notification.h"
 #include "swad_menu.h"
+#include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_photo.h"
 #include "swad_privacy.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
@@ -61,9 +62,6 @@ extern struct Globals Gbl;
 
 static void Set_PutIconsToSelectSideCols (void);
 static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args);
-
-static void Set_PutIconsToSelectUsrPhotos (void);
-static void Set_PutIconsUsrPhotos (__attribute__((unused)) void *Args);
 
 static void Set_GetAndUpdateUsrListType (void);
 static void Set_GetUsrListTypeFromForm (void);
@@ -126,7 +124,7 @@ void Set_EditSettings (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Set_PutIconsToSelectUsrPhotos ();		// 8. User photos
+	 Pho_PutIconsToSelectPhotoShape ();		// 8. User photos
       HTM_DIV_End ();
 
    Box_BoxEnd ();
@@ -176,22 +174,10 @@ void Set_GetSettingsFromIP (void)
 	 Gbl.Prefs.Menu = Mnu_GetMenuFromStr (row[4]);
 
 	 /* Get if user wants to show side columns (row[5]) */
-	 if (sscanf (row[5],"%u",&Gbl.Prefs.SideCols) == 1)
-	   {
-	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
-	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
-	   }
-	 else
-	    Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+	 Gbl.Prefs.SideCols = Set_GetSideColsFromStr (row[5]);
 
 	 /* Get user photo shape (row[6]) */
-	 if (sscanf (row[6],"%u",&Gbl.Prefs.UsrPhotos) == 1)
-	   {
-	    if (Gbl.Prefs.UsrPhotos >= Set_NUM_USR_PHOTOS)
-	       Gbl.Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
-	   }
-	 else
-	    Gbl.Prefs.UsrPhotos = Set_USR_PHOTOS_DEFAULT;
+	 Gbl.Prefs.PhotoShape = Pho_GetShapeFromStr (row[6]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -205,12 +191,12 @@ void Set_GetSettingsFromIP (void)
 
 void Set_SetSettingsFromIP (void)
   {
-   /***** Update settings from current IP in database *****/
-   Set_DB_UpdateSettingsFromIP ();
+   /***** Update IP settings for current IP in database *****/
+   Set_DB_UpdateMyIPSettingsForCurrentIP ();
 
-   /***** If I am logged, update my settings in database for all my IP's *****/
+   /***** If I am logged, update my IP settings in database for all my IP's *****/
    if (Gbl.Usrs.Me.Logged)
-      Set_DB_UpdateMySettingsFromIP ();
+      Set_DB_UpdateMyIPSettingsForAllMyIPs ();
   }
 
 /*****************************************************************************/
@@ -289,82 +275,18 @@ unsigned Set_GetParamSideCols (void)
   }
 
 /*****************************************************************************/
-/******************* Put icons to select user photo shape ********************/
+/*************************** Get menu from string ****************************/
 /*****************************************************************************/
 
-static void Set_PutIconsToSelectUsrPhotos (void)
+unsigned Set_GetSideColsFromStr (const char *Str)
   {
-   extern const char *Hlp_PROFILE_Settings_user_photos;
-   extern const char *Txt_User_photos;
-   extern const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS];
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
-     {
-      [Set_USR_PHOTO_CIRCLE   ] = "ICO_HIGHLIGHT PHOTOC15x20B",
-      [Set_USR_PHOTO_ELLIPSE  ] = "ICO_HIGHLIGHT PHOTOE15x20B",
-      [Set_USR_PHOTO_OVAL     ] = "ICO_HIGHLIGHT PHOTOO15x20B",
-      [Set_USR_PHOTO_RECTANGLE] = "ICO_HIGHLIGHT PHOTOR15x20B",
-     };
-   Set_UsrPhotos_t UsrPhotos;
+   unsigned UnsignedNum;
 
-   Box_BoxBegin (NULL,Txt_User_photos,
-                 Set_PutIconsUsrPhotos,NULL,
-                 Hlp_PROFILE_Settings_user_photos,Box_NOT_CLOSABLE);
-      Set_BeginSettingsHead ();
-	 Set_BeginOneSettingSelector ();
-	 for (UsrPhotos  = (Set_UsrPhotos_t) 0;
-	      UsrPhotos <= (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1);
-	      UsrPhotos++)
-	   {
-	    HTM_DIV_Begin ("class=\"%s\"",UsrPhotos == Gbl.Prefs.UsrPhotos ? "PREF_ON" :
-									     "PREF_OFF");
-	       Frm_BeginForm (ActChgUsrPho);
-		  Par_PutHiddenParamUnsigned (NULL,"UsrPhotos",UsrPhotos);
-		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_USER_PHOTOS[UsrPhotos],ClassPhoto[UsrPhotos]);
-	       Frm_EndForm ();
-	    HTM_DIV_End ();
-	   }
-	 Set_EndOneSettingSelector ();
-      Set_EndSettingsHead ();
-   Box_BoxEnd ();
-  }
+   if (sscanf (Str,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum <= Lay_SHOW_BOTH_COLUMNS)
+         return UnsignedNum;
 
-/*****************************************************************************/
-/************** Put contextual icons in side-columns setting *****************/
-/*****************************************************************************/
-
-static void Set_PutIconsUsrPhotos (__attribute__((unused)) void *Args)
-  {
-   /***** Put icon to show a figure *****/
-   Fig_PutIconToShowFigure (Fig_USER_PHOTOS);
-  }
-
-/*****************************************************************************/
-/************************** Change user photo shape **************************/
-/*****************************************************************************/
-
-void Set_ChangeUsrPhotos (void)
-  {
-   /***** Get param with user photo shape *****/
-   Gbl.Prefs.UsrPhotos = Set_GetParamUsrPhotos ();
-
-   /***** Store side colums in database *****/
-   if (Gbl.Usrs.Me.Logged)
-      Set_DB_UpdateMySettingsAboutUsrPhotos ();
-
-   /***** Set settings from current IP *****/
-   Set_SetSettingsFromIP ();
-  }
-
-/*****************************************************************************/
-/************** Get parameter used to change user photo shape ****************/
-/*****************************************************************************/
-
-Set_UsrPhotos_t Set_GetParamUsrPhotos (void)
-  {
-   return (Set_UsrPhotos_t) Par_GetParToUnsignedLong ("UsrPhotos",
-						      (Set_UsrPhotos_t) 0,
-						      (Set_UsrPhotos_t) (Set_NUM_USR_PHOTOS - 1),
-						      Set_USR_PHOTOS_DEFAULT);
+   return Cfg_DEFAULT_COLUMNS;
   }
 
 /*****************************************************************************/

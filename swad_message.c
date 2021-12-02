@@ -479,17 +479,17 @@ static void Msg_PutHiddenParamsSubjectAndContent (void)
 
 static void Msg_ShowOneUniqueRecipient (void)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
 
    /***** Show user's photo *****/
    Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-                              ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                              ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                               false);
 
    /****** Write user's IDs ******/
@@ -2291,12 +2291,12 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor)
   {
    extern const char *Txt_Unknown_or_without_photo;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO30x40",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC30x40",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO30x40",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
    bool WriteAuthor;
 
@@ -2319,11 +2319,11 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 
 	 if (WriteAuthor)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 else
 	    Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,
-	                 ClassPhoto[Gbl.Prefs.UsrPhotos]);
+	                 ClassPhoto[Gbl.Prefs.PhotoShape]);
 
 	 HTM_TD_End ();
 
@@ -2459,12 +2459,12 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
 
    HTM_TABLE_Begin (NULL);
@@ -2482,7 +2482,7 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 	 /***** Put user's photo *****/
 	 HTM_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 
@@ -2535,12 +2535,12 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
       [Msg_RECEIVED] = ActSeeRcvMsg,
       [Msg_SENT    ] = ActSeeSntMsg,
      };
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2623,7 +2623,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 					  false);
 		  Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 							NULL,
-				    ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+				    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 				    false);
 	       HTM_TD_End ();
 
@@ -2879,12 +2879,12 @@ void Msg_ListBannedUsrs (void)
    extern const char *Txt_You_have_not_banned_any_sender;
    extern const char *Txt_Banned_users;
    extern const char *Txt_Sender_banned_click_to_unban_him;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    unsigned NumUsr;
@@ -2928,7 +2928,7 @@ void Msg_ListBannedUsrs (void)
 		  /* Show photo */
 		  HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
 		     Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-		                                ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                                ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 		                                false);
 		  HTM_TD_End ();
 

@@ -1299,12 +1299,12 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
    extern const char *Txt_Another_user_s_profile;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO30x48",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC30x40",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO30x48",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
@@ -1320,7 +1320,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
       if (Visible)
 	 /***** User's photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            false);
    HTM_TD_End ();
 

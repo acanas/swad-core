@@ -2156,12 +2156,12 @@ void TstPrn_ShowOnePrint (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    struct TstPrn_Print Print;
    Dat_StartEndTime_t StartEndTime;
@@ -2224,7 +2224,7 @@ void TstPrn_ShowOnePrint (void)
 		     HTM_TxtF (", %s",Gbl.Usrs.Other.UsrDat.FrstName);
 		  HTM_BR ();
 		  Pho_ShowUsrPhotoIfAllowed (&Gbl.Usrs.Other.UsrDat,
-		                             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 		                             false);
 	       HTM_TD_End ();
 

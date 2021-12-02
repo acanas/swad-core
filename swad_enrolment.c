@@ -2074,12 +2074,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrolment_requests;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2243,7 +2243,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     /***** User photo *****/
 		     HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
 			Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-			                           ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+			                           ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 			                           false);
 		     HTM_TD_End ();
 

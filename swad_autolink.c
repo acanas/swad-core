@@ -461,12 +461,12 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
                                          struct ALn_Link **LastLink)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC12x16",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE12x16",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO12x16",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR12x16",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC12x16",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE12x16",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO12x16",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
    char Ch;
    size_t Length;
@@ -568,7 +568,7 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
 		  ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 		  Pho_BuildHTMLUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 							     NULL,
-					 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+					 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 					 &CaptionStr,
 					 &ImgStr);
 		  if (asprintf (&(*Link)->NickAnchor[2].Str,

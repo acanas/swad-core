@@ -1306,12 +1306,12 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    extern const char *Txt_Role;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC15x20",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE15x20",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO15x20",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR15x20",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    MYSQL_ROW row;
    unsigned NumHit;
@@ -1355,7 +1355,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 /* Show the photo */
 	 HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 

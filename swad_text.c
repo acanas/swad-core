@@ -30585,6 +30585,89 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #endif
 	};
 
+const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES] =
+	{
+#if   L==1	// ca
+	"Cercle"
+#elif L==2	// de
+	"Kreis"
+#elif L==3	// en
+	"Circle"
+#elif L==4	// es
+	"C&iacute;rculo"
+#elif L==5	// fr
+	"Cercle"
+#elif L==6	// gn
+	"C&iacute;rculo"	// Okoteve traducción
+#elif L==7	// it
+	"Cerchio"
+#elif L==8	// pl
+	"Ko&lstrok;o"
+#elif L==9	// pt
+	"C&iacute;rculo"
+#endif
+	,
+#if   L==1	// ca
+	"El&middot;lipse"
+#elif L==2	// de
+	"Ellipse"
+#elif L==3	// en
+	"Ellipse"
+#elif L==4	// es
+	"Elipse"
+#elif L==5	// fr
+	"Ellipse"
+#elif L==6	// gn
+	"Elipse"		// Okoteve traducción
+#elif L==7	// it
+	"Ellisse"
+#elif L==8	// pl
+	"Elipsa"
+#elif L==9	// pt
+	"Elipse"
+#endif
+	,
+#if   L==1	// ca
+	"Oval"
+#elif L==2	// de
+	"Oval"
+#elif L==3	// en
+	"Oval"
+#elif L==4	// es
+	"&Oacute;valo"
+#elif L==5	// fr
+	"Ovale"
+#elif L==6	// gn
+	"&Oacute;valo"		// Okoteve traducción
+#elif L==7	// it
+	"Ovale"
+#elif L==8	// pl
+	"Owalny"
+#elif L==9	// pt
+	"Ovalo"
+#endif
+	,
+#if   L==1	// ca
+	"Rectangle"
+#elif L==2	// de
+	"Rechteck"
+#elif L==3	// en
+	"Rectangle"
+#elif L==4	// es
+	"Rect&aacute;ngulo"
+#elif L==5	// fr
+	"Rectangle"
+#elif L==6	// gn
+	"Rect&aacute;ngulo"	// Okoteve traducción
+#elif L==7	// it
+	"Rettangolo"
+#elif L==8	// pl
+	"Prostok&aogon;t"
+#elif L==9	// pt
+	"Ret&acirc;ngulo"
+#endif
+	};
+
 const char *Txt_Photo_removed =
 #if   L==1	// ca
 	"Fotograf&iacute;a eliminada.";	// Necessita traduccio
@@ -44592,7 +44675,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Colunas"
 #endif
 	,
-	[Fig_USER_PHOTOS] =
+	[Fig_PHOTO_SHAPES] =
 #if   L==1	// ca
 	"Fotos d'usuaris"
 #elif L==2	// de
@@ -55598,89 +55681,6 @@ const char *Txt_User_photos =
 #elif L==9	// pt
 	"Fotos de utilizadores";
 #endif
-
-const char *Txt_USER_PHOTOS[Set_NUM_USR_PHOTOS] =
-	{
-#if   L==1	// ca
-	"Cercle"
-#elif L==2	// de
-	"Kreis"
-#elif L==3	// en
-	"Circle"
-#elif L==4	// es
-	"C&iacute;rculo"
-#elif L==5	// fr
-	"Cercle"
-#elif L==6	// gn
-	"C&iacute;rculo"	// Okoteve traducción
-#elif L==7	// it
-	"Cerchio"
-#elif L==8	// pl
-	"Ko&lstrok;o"
-#elif L==9	// pt
-	"C&iacute;rculo"
-#endif
-	,
-#if   L==1	// ca
-	"El&middot;lipse"
-#elif L==2	// de
-	"Ellipse"
-#elif L==3	// en
-	"Ellipse"
-#elif L==4	// es
-	"Elipse"
-#elif L==5	// fr
-	"Ellipse"
-#elif L==6	// gn
-	"Elipse"		// Okoteve traducción
-#elif L==7	// it
-	"Ellisse"
-#elif L==8	// pl
-	"Elipsa"
-#elif L==9	// pt
-	"Elipse"
-#endif
-	,
-#if   L==1	// ca
-	"Oval"
-#elif L==2	// de
-	"Oval"
-#elif L==3	// en
-	"Oval"
-#elif L==4	// es
-	"&Oacute;valo"
-#elif L==5	// fr
-	"Ovale"
-#elif L==6	// gn
-	"&Oacute;valo"		// Okoteve traducción
-#elif L==7	// it
-	"Ovale"
-#elif L==8	// pl
-	"Owalny"
-#elif L==9	// pt
-	"Ovalo"
-#endif
-	,
-#if   L==1	// ca
-	"Rectangle"
-#elif L==2	// de
-	"Rechteck"
-#elif L==3	// en
-	"Rectangle"
-#elif L==4	// es
-	"Rect&aacute;ngulo"
-#elif L==5	// fr
-	"Rectangle"
-#elif L==6	// gn
-	"Rect&aacute;ngulo"	// Okoteve traducción
-#elif L==7	// it
-	"Rettangolo"
-#elif L==8	// pl
-	"Prostok&aogon;t"
-#elif L==9	// pt
-	"Ret&acirc;ngulo"
-#endif
-	};
 
 const char *Txt_Users =
 #if   L==1	// ca

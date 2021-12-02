@@ -184,12 +184,12 @@ void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
 static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC30x40",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE30x40",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO30x40",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR30x40",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC30x40",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO30x40",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
 
    /***** Show author's photo *****/
@@ -198,7 +198,7 @@ static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
 
       /* Author's photo */
       Pho_ShowUsrPhotoIfAllowed (UsrDat,
-                                 ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+                                 ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                                  true);	// Use unique id
 
    /* End container */

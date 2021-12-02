@@ -1680,12 +1680,12 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
                                           struct Att_Event *Event)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC45x60",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE45x60",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO45x60",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR45x60",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
@@ -1757,7 +1757,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	{
 	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -2915,12 +2915,12 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
                                              unsigned NumUsr,struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;
    bool Present;
@@ -2941,7 +2941,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 	{
 	 HTM_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 	}
@@ -3076,12 +3076,12 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
   {
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;
    unsigned UniqueId;
@@ -3106,7 +3106,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
       /***** Show student's photo *****/
       HTM_TD_Begin ("colspan=\"2\" class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            false);
       HTM_TD_End ();
 

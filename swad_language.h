@@ -61,5 +61,6 @@ void Lan_ChangeLanguage (void);
 void Lan_UpdateMyLanguageToCurrentLanguage (void);
 
 Lan_Language_t Lan_GetParamLanguage (void);
+Lan_Language_t Lan_GetLanguageFromStr (const char *Str);
 
 #endif

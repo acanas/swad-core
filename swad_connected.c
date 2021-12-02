@@ -556,12 +556,12 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    const char *ClassTxt;
    const char *ClassLink;
@@ -595,7 +595,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       /***** Show photo *****/
       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                            ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            true);
       HTM_TD_End ();
 
@@ -658,12 +658,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Set_NUM_USR_PHOTOS] =
+   static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
-      [Set_USR_PHOTO_CIRCLE   ] = "PHOTOC21x28",
-      [Set_USR_PHOTO_ELLIPSE  ] = "PHOTOE21x28",
-      [Set_USR_PHOTO_OVAL     ] = "PHOTOO21x28",
-      [Set_USR_PHOTO_RECTANGLE] = "PHOTOR21x28",
+      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -712,7 +712,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       /***** Show photo *****/
 	       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
 		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
-		                             ClassPhoto[Gbl.Prefs.UsrPhotos],Pho_ZOOM,
+		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 		                             false);
 	       HTM_TD_End ();
 
