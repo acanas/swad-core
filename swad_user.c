@@ -341,8 +341,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.Menu		= Mnu_MENU_DEFAULT;
    UsrDat->Prefs.SideCols	= Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.PhotoShape	= Pho_SHAPE_DEFAULT;
-   UsrDat->Prefs.AcceptThirdPartyCookies = false;	// By default, don't accept third party cookies
-   UsrDat->NtfEvents.SendEmail = 0;       		// By default, don't notify anything
+   UsrDat->Prefs.AcceptCookies	= false;	// By default, don't accept third party cookies
+   UsrDat->NtfEvents.SendEmail	= 0;       	// By default, don't notify anything
   }
 
 /*****************************************************************************/
@@ -450,7 +450,6 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Lan_Language_t Lan;
 
    /***** Get user's data from database *****/
    if (Usr_DB_GetUsrDataFromUsrCod (&mysql_res,UsrDat->UsrCod,GetPrefs))
@@ -537,32 +536,24 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
       /***** Get user's settings *****/
       if (GetPrefs == Usr_GET_PREFS)
 	{
-	 /* Get language (row[23]) */
-	 UsrDat->Prefs.Language = Lan_GetLanguageFromStr (row[23]);
-
-	 /* Get first day of week (row[24]) */
+	 /* Get language (row[23]),
+		first day of week (row[24]),
+		date format (row[25]),
+		theme (row[26]),
+		icon set (row[27]),
+		menu (row[28]),
+		if user wants to show side columns (row[29]),
+		user settings on user photo shape (row[30]),
+	    	and if user accepts third party cookies (row[31]) */
+	 UsrDat->Prefs.Language	      = Lan_GetLanguageFromStr (row[23]);
 	 UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[24]);
-
-	 /* Get date format (row[25]) */
-	 UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[25]);
-
-	 /* Get theme (row[26]) */
-	 UsrDat->Prefs.Theme = The_GetThemeFromStr (row[26]);
-
-	 /* Get icon set (row[27]) */
-	 UsrDat->Prefs.IconSet = Ico_GetIconSetFromStr (row[27]);
-
-	 /* Get menu (row[28]) */
-	 UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
-
-	 /* Get if user wants to show side columns (row[29]) */
-	 UsrDat->Prefs.SideCols = Set_GetSideColsFromStr (row[29]);
-
-	 /* Get user settings on user photo shape (row[30]) */
-	 UsrDat->Prefs.PhotoShape = Pho_GetShapeFromStr (row[30]);
-
-	 /* Get if user accepts third party cookies (row[31]) */
-	 UsrDat->Prefs.AcceptThirdPartyCookies = (row[31][0] == 'Y');
+	 UsrDat->Prefs.DateFormat     = Dat_GetDateFormatFromStr (row[25]);
+	 UsrDat->Prefs.Theme          = The_GetThemeFromStr (row[26]);
+	 UsrDat->Prefs.IconSet        = Ico_GetIconSetFromStr (row[27]);
+	 UsrDat->Prefs.Menu           = Mnu_GetMenuFromStr (row[28]);
+	 UsrDat->Prefs.SideCols       = Set_GetSideColsFromStr (row[29]);
+	 UsrDat->Prefs.PhotoShape     = Pho_GetShapeFromStr (row[30]);
+	 UsrDat->Prefs.AcceptCookies  = (row[31][0] == 'Y');
 	}
      }
    else

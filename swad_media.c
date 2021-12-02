@@ -1724,7 +1724,7 @@ static void Med_ShowYoutube (const struct Med_Media *Media,const char *ClassMedi
    /***** Check if YouTube code exists *****/
    if (Media->Name[0])	// YouTube code
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
         {
 	 /***** Show linked external media *****/
 	 // Example of code given by YouTube:
@@ -1769,7 +1769,7 @@ static void Med_ShowEmbed (const struct Med_Media *Media,const char *ClassMedia)
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
         {
 	 /***** Show linked external media *****/
 	 // Example of code given by Slideshare:

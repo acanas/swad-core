@@ -216,7 +216,7 @@ struct UsrData
       Mnu_Menu_t Menu;
       unsigned SideCols;
       Pho_Shape_t PhotoShape;
-      bool AcceptThirdPartyCookies;	// User has accepted third party cookies
+      bool AcceptCookies;	// User has accepted third party cookies
      } Prefs;
   };
 

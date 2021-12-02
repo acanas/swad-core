@@ -72,14 +72,14 @@ void Coo_EditMyPrefsOnCookies (void)
 
 	    /* Begin container */
 	    HTM_DIV_Begin ("class=\"%s\"",
-			   (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
-										"DAT");
+			   (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies) ? "DAT_N LIGHT_BLUE" :
+								      "DAT");
 	       /* Check box */
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_CHECKBOX ("cookies",HTM_SUBMIT_ON_CHANGE,
 				      "value=\"Y\"%s",
-				      Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? " checked=\"checked\"" :
-					                                                 "");
+				      Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies ? " checked=\"checked\"" :
+					                                       "");
 		  HTM_Txt (Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 	       HTM_LABEL_End ();
 
@@ -113,7 +113,7 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args)
 void Coo_ChangeMyPrefsCookies (void)
   {
    /***** Get param with preference about third party cookies *****/
-   Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies = Par_GetParToBool ("cookies");
+   Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies = Par_GetParToBool ("cookies");
 
    /***** Store preference in database *****/
    if (Gbl.Usrs.Me.Logged)
