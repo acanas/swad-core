@@ -50,7 +50,6 @@ void Tst_DB_RemoveTstConfig (long CrsCod);
 //------------------------------- Test prints ---------------------------------
 long Tst_DB_CreatePrint (unsigned NumQsts);
 void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print);
-void Tst_DB_UpdatePrintScore (const struct TstPrn_Print *Print);
 
 unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
                                        const char *From,

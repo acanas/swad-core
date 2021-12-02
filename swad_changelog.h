@@ -609,7 +609,7 @@ TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta q
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
-	Version 21.66.4:  Dec 02, 2021  Removed code used to fix problem on tests and matches. (320402 lines)
+	Version 21.66.4:  Dec 02, 2021  Removed code used to fix problem on tests and matches. (320379 lines)
 	Version 21.66.3:  Dec 02, 2021  Fixed issue in CSS for background. (320874 lines)
 	Version 21.66:    Dec 02, 2021  New module swad_photo_shape for user photo shapes. (320876 lines)
 	Version 21.65.1:  Dec 01, 2021  New shape of user photos. (320833 lines)

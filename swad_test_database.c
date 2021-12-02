@@ -242,29 +242,6 @@ void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print)
   }
 
 /*****************************************************************************/
-/************************** Update test print score **************************/
-/*****************************************************************************/
-
-void Tst_DB_UpdatePrintScore (const struct TstPrn_Print *Print)
-  {
-   Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   DB_QueryUPDATE ("can not update match print",
-		   "UPDATE tst_exams"
-	             " SET Score='%.15lg'"
-	           " WHERE ExaCod=%ld",
-	           Print->Score,
-	           Print->PrnCod);
-   /*
-   HTM_TxtF ("UPDATE tst_exams"
-	       " SET Score='%.15lg'"
-	     " WHERE ExaCod=%ld",
-	     Print->Score,
-	     Print->PrnCod);
-   */
-   Str_SetDecimalPointToLocal ();	// Return to local system
-  }
-
-/*****************************************************************************/
 /************************ Get test prints between dates **********************/
 /*****************************************************************************/
 

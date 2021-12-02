@@ -1609,7 +1609,6 @@ void Qst_GetCorrectChoAnswerFromDB (struct Qst_Question *Question)
    unsigned NumOpt;
 
    /***** Query database *****/
-   // Question->Answer.NumOptions = Qst_DB_GetTextOfAnswers (&mysql_res,Question->QstCod); // TODO: Esta línea llevó al error del 25 de noviembre de 2021 Remove this line!!!!!!!
    Question->Answer.NumOptions = Qst_DB_GetQstAnswersCorr (&mysql_res,Question->QstCod);
 
    /***** Get options *****/

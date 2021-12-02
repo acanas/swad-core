@@ -131,7 +131,7 @@ void Qst_DB_UpdateQst (const struct Qst_Question *Question)
 void Qst_DB_UpdateQstScore (long QstCod,bool AnswerIsNotBlank,double Score)
   {
    Str_SetDecimalPointToUS ();		// To print the floating point as a dot
-   if (AnswerIsNotBlank)	// User's answer is not blank
+   if (AnswerIsNotBlank)		// User's answer is not blank
       DB_QueryUPDATE ("can not update the score of a question",
 		      "UPDATE tst_questions"
 	                " SET NumHits=NumHits+1,"
