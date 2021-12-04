@@ -3477,6 +3477,27 @@ const char *Hlp_ANALYTICS_Figures_columns =
 	"ANALYTICS.Figures.en#columns";
 #endif
 
+const char *Hlp_ANALYTICS_Figures_user_photos =
+#if   L==1
+	"ANALYTICS.Figures.es#fotos-de-usuarios";
+#elif L==2
+	"ANALYTICS.Figures.en#user-photos";
+#elif L==3
+	"ANALYTICS.Figures.en#user-photos";
+#elif L==4
+	"ANALYTICS.Figures.es#fotos-de-usuarios";
+#elif L==5
+	"ANALYTICS.Figures.en#user-photos";
+#elif L==6
+	"ANALYTICS.Figures.es#fotos-de-usuarios";
+#elif L==7
+	"ANALYTICS.Figures.en#user-photos";
+#elif L==8
+	"ANALYTICS.Figures.en#user-photos";
+#elif L==9
+	"ANALYTICS.Figures.en#user-photos";
+#endif
+
 const char *Hlp_ANALYTICS_Figures_privacy =
 #if   L==1
 	"ANALYTICS.Figures.es#privacidad";

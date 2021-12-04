@@ -3976,7 +3976,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 
 static void Fig_GetAndShowNumUsrsPerPhotoShape (void)
   {
-   extern const char *Hlp_ANALYTICS_Figures_columns;
+   extern const char *Hlp_ANALYTICS_Figures_user_photos;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_User_photos;
    extern const char *Txt_Number_of_users;
@@ -3997,7 +3997,7 @@ static void Fig_GetAndShowNumUsrsPerPhotoShape (void)
    /***** Begin box and table *****/
    Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PHOTO_SHAPES],
                       NULL,NULL,
-                      Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
+                      Hlp_ANALYTICS_Figures_user_photos,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
