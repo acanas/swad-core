@@ -1464,7 +1464,7 @@ static void Cfe_PutIconsCallForExam (void *CallsForExams)
 					Cfe_PutParamExaCodToEdit,
 					&((struct Cfe_CallsForExams *) CallsForExams)->ExaCod);
 
-	 /***** Put form to hide/show exam announement *****/
+	 /***** Put form to hide/show call for exam *****/
 	 switch (((struct Cfe_CallsForExams *) CallsForExams)->CallForExam.Status)
 	   {
 	    case Cfe_VISIBLE_CALL_FOR_EXAM:

@@ -20404,7 +20404,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2	// de
 	"Pr&uuml;fungsaufrufe"
 #elif L==3	// en
-	"Announcements"
+	"Calls"
 #elif L==4	// es
 	"Convocatorias"
 #elif L==5	// fr
@@ -25131,7 +25131,7 @@ const char *Txt_New_call_FOR_EXAM =
 #elif L==2	// de
 	"Neuer Aufruf";
 #elif L==3	// en
-	"New announcement";
+	"New call";
 #elif L==4	// es
 	"Nueva convocatoria";
 #elif L==5	// fr
