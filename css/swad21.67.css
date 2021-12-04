@@ -1112,21 +1112,6 @@ a:hover						/* Default ==> underlined */
 .MENU_TXT_YELLOW	{color:#7c4d2a;}
 .MENU_TXT_PINK		{color:#63474e;}
 
-/****************** Title of current action in main block ********************/
-.TITLE_ACTION_WHITE	{color:#404040; font-size:20pt;}
-.TITLE_ACTION_GREY	{color:#606060; font-size:20pt;}
-.TITLE_ACTION_PURPLE	{color:#573c4d; font-size:20pt;}
-.TITLE_ACTION_BLUE	{color:#4D88A1; font-size:20pt;}
-.TITLE_ACTION_YELLOW	{color:#7c4d2a; font-size:20pt;}
-.TITLE_ACTION_PINK	{color:#63474e; font-size:20pt;}
-
-.SUBTITLE_ACTION_WHITE	{color:#404040; font-size:12pt;}
-.SUBTITLE_ACTION_GREY	{color:#606060; font-size:12pt;}
-.SUBTITLE_ACTION_PURPLE	{color:#573c4d; font-size:12pt;}
-.SUBTITLE_ACTION_BLUE	{color:#4D88A1; font-size:12pt;}
-.SUBTITLE_ACTION_YELLOW	{color:#7c4d2a; font-size:12pt;}
-.SUBTITLE_ACTION_PINK	{color:#63474e; font-size:12pt;}
-
 /***************************** Users connected *******************************/
 .CONNECTED
 	{

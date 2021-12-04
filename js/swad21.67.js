@@ -106,7 +106,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	var Hou;
 	var Min;
 	var Sec;
-	var StrDate;
+	var StrDat;
 	var StrMon;
 	var StrDay;
 	var StrHou;
@@ -132,25 +132,25 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	writeLocalDateHMSFromUTC.lastd = d;	// Update last date for the next call
 
 	/* Set date */
-	StrDate = '';
+	StrDat = '';
 	if (WriteDate) {
         WriteToday = WriteToday && (Yea == todayYea &&
         							Mon == todayMon &&
         							Day == todayDay);	// Date is today
         if (WriteToday)
-        	StrDate = txtToday[Language];
+        	StrDat = txtToday[Language];
 		else
 			switch (DateFormat) {
 				case 0:	// Dat_FORMAT_YYYY_MM_DD
 					StrMon = ((Mon < 10) ? '0' : '') + Mon;
 					StrDay = ((Day < 10) ? '0' : '') + Day;
-					StrDate = Yea.toString() + '-' + StrMon + '-' + StrDay;
+					StrDat = Yea.toString() + '-' + StrMon + '-' + StrDay;
 					break;
 				case 1:	// Dat_FORMAT_DD_MONTH_YYYY
-					StrDate = Day.toString() + '&nbsp;' + MonthsShort[Mon - 1] + '&nbsp;' + Yea.toString();
+					StrDat = Day.toString() + '&nbsp;' + MonthsShort[Mon - 1] + '&nbsp;' + Yea.toString();
 					break;
 				case 2:	// Dat_FORMAT_MONTH_DD_YYYY
-					StrDate = MonthsShort[Mon - 1] + '&nbsp;' + Day.toString() + ',&nbsp;' + Yea.toString();
+					StrDat = MonthsShort[Mon - 1] + '&nbsp;' + Day.toString() + ',&nbsp;' + Yea.toString();
 					break;
 				default:
 					break;
@@ -159,9 +159,9 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 		if (WriteWeekDay) {
 			DayOfWeek = d.getDay();
 			DayOfWeek = (DayOfWeek == 0) ? 6 : DayOfWeek - 1;
-			StrDate += Separator + DAYS[DayOfWeek];
+			StrDat += Separator + DAYS[DayOfWeek];
 		}
-		StrDate += Separator;
+		StrDat += Separator;
 	}
 
 	/* Set HH:MM:SS */
@@ -185,7 +185,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	}
 
 	/* Write date and time */
-	document.getElementById(id).innerHTML = StrDate + StrHou + StrMin + StrSec;
+	document.getElementById(id).innerHTML = StrDat + StrHou + StrMin + StrSec;
 }
 
 /*****************************************************************************/
@@ -1137,10 +1137,9 @@ function updateDivHiddenComments (form,Params) {
 
 // This function is called when user submit a form just inside a parent div
 function updateDivLockUnlockProject (form,Params) {
-    var objXMLHttp = false;
 	var id = form.parentNode.id;
 
-	objXMLHttp = AJAXCreateObject ();
+	var objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
 		// onreadystatechange must be lowercase
@@ -1166,10 +1165,9 @@ function updateDivLockUnlockProject (form,Params) {
 
 // This function is called when user submit a form inside two parent divs
 function updateDivFaversSharers (form,Params) {
-    var objXMLHttp = false;
 	var id = form.parentNode.parentNode.id;
 
-	objXMLHttp = AJAXCreateObject ();
+	var objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
 		/* Send request to server */
 		// onreadystatechange must be lowercase
@@ -1416,10 +1414,8 @@ function toggleOffGIF (elem, staticURL) {
 function toggleNewComment (id) {
 	var iconDiv = document.getElementById (id + '_ico');
 
-	if (iconDiv.className == 'Tml_ICO_COM_OFF')
-		iconDiv.className = 'Tml_ICO_COM_ON';
-	else
-		iconDiv.className = 'Tml_ICO_COM_OFF';
+	iconDiv.className = (iconDiv.className == 'Tml_ICO_COM_OFF') ? 'Tml_ICO_COM_ON' :
+																   'Tml_ICO_COM_OFF';
 	toggleDisplay(id);
 }
 
@@ -1826,7 +1822,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 	var ExaCod;
 	var StrMon;
 	var StrDay;
-	var StrDate;
+	var StrDat;
 	var Week;
 	var DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
 	var NumDaysInMonth;
@@ -1965,7 +1961,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 							ExaCod = LstExamAnnouncements[NumExamAnnouncement].ExaCod;
 							StrMon = ((Mon < 10) ? '0' : '') + Mon;
 							StrDay = ((Day < 10) ? '0' : '') + Day;
-							StrDate = Yea + StrMon + StrDay;	// YYYYMMDD
+							StrDat = Yea + StrMon + StrDay;	// YYYYMMDD
 							TextForDay = STR_EXAM;
 						}
 						break;	// Only last exam in the day (list is ordered from more recent to older)
@@ -1989,7 +1985,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 									'" id="' + FormId + '">' +
 									FormEventParams +
 									'<input type="hidden" name=\"Date\" value="' +
-									StrDate +
+									StrDat +
 									'" /><div class="' + ClassForDay + '"';
 				if (TextForDay.length)
 					Gbl_HTMLContent += ' title="' + TextForDay + '"';

@@ -172,26 +172,6 @@ const char *The_ClassTxtTabOn[The_NUM_THEMES] =
    [The_THEME_PINK  ] = "TAB_ON_TXT_PINK",
   };
 
-const char *The_ClassTitleAction[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "TITLE_ACTION_WHITE",
-   [The_THEME_GREY  ] = "TITLE_ACTION_GREY",
-   [The_THEME_PURPLE] = "TITLE_ACTION_PURPLE",
-   [The_THEME_BLUE  ] = "TITLE_ACTION_BLUE",
-   [The_THEME_YELLOW] = "TITLE_ACTION_YELLOW",
-   [The_THEME_PINK  ] = "TITLE_ACTION_PINK",
-  };
-
-const char *The_ClassSubtitleAction[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "SUBTITLE_ACTION_WHITE",
-   [The_THEME_GREY  ] = "SUBTITLE_ACTION_GREY",
-   [The_THEME_PURPLE] = "SUBTITLE_ACTION_PURPLE",
-   [The_THEME_BLUE  ] = "SUBTITLE_ACTION_BLUE",
-   [The_THEME_YELLOW] = "SUBTITLE_ACTION_YELLOW",
-   [The_THEME_PINK  ] = "SUBTITLE_ACTION_PINK",
-  };
-
 const char *The_ClassTitle[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "TITLE_WHITE",

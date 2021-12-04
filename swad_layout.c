@@ -91,8 +91,6 @@ static void Lay_WriteScriptCustomDropzone (void);
 static void Lay_WritePageTopHeading (void);
 static void Lay_WriteBreadcrumb (void);
 
-static void Lay_WriteTitleAction (void);
-
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
 
@@ -361,11 +359,6 @@ void Lay_WriteStartOfPage (void)
 		     /* If it is mandatory to read any information about course */
 		     if (Gbl.Crs.Info.ShowMsgMustBeRead)
 			Inf_WriteMsgYouMustReadInfo ();
-
-		     /* Write title of the current action */
-		     if (Gbl.Prefs.Menu == Mnu_MENU_VERTICAL &&
-			Act_GetIndexInMenu (Gbl.Action.Act) >= 0)
-			Lay_WriteTitleAction ();
 
 		     Gbl.Layout.WritingHTMLStart = false;
 		     Gbl.Layout.HTMLStartWritten = true;
@@ -1090,36 +1083,6 @@ static void Lay_WriteBreadcrumb (void)
       Hie_WriteHierarchyInBreadcrumb ();
       Crs_WriteSelectorMyCoursesInBreadcrumb ();
    HTM_Txt ("</nav>");
-  }
-
-/*****************************************************************************/
-/*********** Write icon and title associated to the current action ***********/
-/*****************************************************************************/
-
-static void Lay_WriteTitleAction (void)
-  {
-   extern const char *The_ClassTitleAction[The_NUM_THEMES];
-   extern const char *The_ClassSubtitleAction[The_NUM_THEMES];
-   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
-
-   /***** Container start *****/
-   HTM_DIV_Begin ("id=\"action_title\" style=\"background-image:url('%s/%s');\"",
-	          Gbl.Prefs.URLIconSet,
-	          Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
-
-      /***** Title *****/
-      HTM_DIV_Begin ("class=\"%s\"",The_ClassTitleAction[Gbl.Prefs.Theme]);
-	 HTM_TxtF ("%s &gt; %s",Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
-				Act_GetTitleAction (Gbl.Action.Act));
-      HTM_DIV_End ();
-
-      /***** Subtitle *****/
-      HTM_DIV_Begin ("class=\"%s\"",The_ClassSubtitleAction[Gbl.Prefs.Theme]);
-	 HTM_Txt (Act_GetSubtitleAction (Gbl.Action.Act));
-      HTM_DIV_End ();
-
-   /***** Container end *****/
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

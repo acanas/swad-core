@@ -602,13 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.66.4 (2021-12-02)"
-#define CSS_FILE		"swad21.66.3.css"
-#define JS_FILE			"swad21.59.js"
+#define Log_PLATFORM_VERSION	"SWAD 21.67 (2021-12-04)"
+#define CSS_FILE		"swad21.67.css"
+#define JS_FILE			"swad21.67.js"
 /*
 TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.67:    Dec 04, 2021  Removed title of action associated to vertical menu. (320316 lines)
 	Version 21.66.4:  Dec 02, 2021  Removed code used to fix problem on tests and matches. (320379 lines)
 	Version 21.66.3:  Dec 02, 2021  Fixed issue in CSS for background. (320874 lines)
 	Version 21.66:    Dec 02, 2021  New module swad_photo_shape for user photo shapes. (320876 lines)
