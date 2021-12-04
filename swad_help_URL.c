@@ -713,23 +713,23 @@ const char *Hlp_CENTER_Buildings =
 
 const char *Hlp_CENTER_Buildings_edit =
 #if   L==1
-	"CENTER.Buildings.es#editar";
+	"CENTER.Buildings.es#editar-edificios";
 #elif L==2
-	"CENTER.Buildings.en#edit";
+	"CENTER.Buildings.en#edit-buildings";
 #elif L==3
-	"CENTER.Buildings.en#edit";
+	"CENTER.Buildings.en#edit-buildings";
 #elif L==4
-	"CENTER.Buildings.es#editar";
+	"CENTER.Buildings.es#editar-edificios";
 #elif L==5
-	"CENTER.Buildings.en#edit";
+	"CENTER.Buildings.en#edit-buildings";
 #elif L==6
-	"CENTER.Buildings.es#editar";
+	"CENTER.Buildings.es#editar-edificios";
 #elif L==7
-	"CENTER.Buildings.en#edit";
+	"CENTER.Buildings.en#edit-buildings";
 #elif L==8
-	"CENTER.Buildings.en#edit";
+	"CENTER.Buildings.en#edit-buildings";
 #elif L==9
-	"CENTER.Buildings.en#edit";
+	"CENTER.Buildings.en#edit-buildings";
 #endif
 
 const char *Hlp_CENTER_Rooms =
@@ -755,23 +755,23 @@ const char *Hlp_CENTER_Rooms =
 
 const char *Hlp_CENTER_Rooms_edit =
 #if   L==1
-	"CENTER.Rooms.es#editar";
+	"CENTER.Rooms.es#editar-salas";
 #elif L==2
-	"CENTER.Rooms.en#edit";
+	"CENTER.Rooms.en#edit-rooms";
 #elif L==3
-	"CENTER.Rooms.en#edit";
+	"CENTER.Rooms.en#edit-rooms";
 #elif L==4
-	"CENTER.Rooms.es#editar";
+	"CENTER.Rooms.es#editar-salas";
 #elif L==5
-	"CENTER.Rooms.en#edit";
+	"CENTER.Rooms.en#edit-rooms";
 #elif L==6
-	"CENTER.Rooms.es#editar";
+	"CENTER.Rooms.es#editar-salas";
 #elif L==7
-	"CENTER.Rooms.en#edit";
+	"CENTER.Rooms.en#edit-rooms";
 #elif L==8
-	"CENTER.Rooms.en#edit";
+	"CENTER.Rooms.en#edit-rooms";
 #elif L==9
-	"CENTER.Rooms.en#edit";
+	"CENTER.Rooms.en#edit-rooms";
 #endif
 
 /***** DEGREE tab *****/

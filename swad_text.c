@@ -39962,11 +39962,11 @@ const char *Txt_ROOM_TYPES[Roo_NUM_TYPES] =
 #elif L==3	// en
 	"Pavilion"
 #elif L==4	// es
-	"Pabellón"
+	"Pabell&oacute;n"
 #elif L==5	// fr
 	""
 #elif L==6	// gn
-	"Pabellón"			// Okoteve traducción
+	"Pabell&oacute;n"			// Okoteve traducción
 #elif L==7	// it
 	""
 #elif L==8	// pl

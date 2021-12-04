@@ -606,9 +606,9 @@ TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta q
 #define CSS_FILE		"swad21.67.css"
 #define JS_FILE			"swad21.67.js"
 /*
-TODO: Rename CENTRE to CENTER in help wiki.
 TODO: Rename ASSESSMENT.Announcements to ASSESSMENT.Calls_for_exams
 
+	Version 21.67.1:  Dec 04, 2021  Renamed CENTRE to CENTER in help wiki. (320316 lines)
 	Version 21.67:    Dec 04, 2021  Removed title of action associated to vertical menu. (320316 lines)
 	Version 21.66.4:  Dec 02, 2021  Removed code used to fix problem on tests and matches. (320379 lines)
 	Version 21.66.3:  Dec 02, 2021  Fixed issue in CSS for background. (320874 lines)
