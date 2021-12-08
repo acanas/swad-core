@@ -94,18 +94,14 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 									WriteToday,WriteDateOnSameDay,WriteWeekDay,WriteHMS) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
-	var todayYea = today.getFullYear();
-	var todayMon = today.getMonth() + 1;
-	var todayDay = today.getDate();
+	var todayYea = today.getFullYear ();
+	var todayMon = today.getMonth () + 1;
+	var todayDay = today.getDate ();
 	var d = new Date();
 	var WriteDate;
-	var Yea;
-	var Mon;
-	var Day;
+	var Yea,Mon,Day;
 	var DayOfWeek;
-	var Hou;
-	var Min;
-	var Sec;
+	var Hou,Min,Sec;
 	var StrDat;
 	var StrMon;
 	var StrDay;
@@ -113,21 +109,22 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 	var StrMin;
 	var StrSec;
 
-	d.setTime(TimeUTC * 1000);
-	Yea = d.getFullYear();
-	Mon = d.getMonth() + 1;
-	Day = d.getDate();
+	d.setTime (TimeUTC * 1000);
+	Yea = d.getFullYear ();
+	Mon = d.getMonth () + 1;
+	Day = d.getDate ();
 	
 	if (WriteDateOnSameDay)
 		WriteDate = true;
 	// Check to see if the last date has been initialized
-	else if (typeof writeLocalDateHMSFromUTC.lastd == 'undefined')	// Static variable to remember current date for the next call
+	else if (typeof writeLocalDateHMSFromUTC.lastd == 'undefined')
+		// lastd: static variable to remember current date for the next call
 		// Not initialized
 		WriteDate = true;
 	else
-		WriteDate = (Yea != writeLocalDateHMSFromUTC.lastd.getFullYear()	||
-					 Mon != writeLocalDateHMSFromUTC.lastd.getMonth() + 1	||
-					 Day != writeLocalDateHMSFromUTC.lastd.getDate())
+		WriteDate = (Yea != writeLocalDateHMSFromUTC.lastd.getFullYear ()	||
+					 Mon != writeLocalDateHMSFromUTC.lastd.getMonth () + 1	||
+					 Day != writeLocalDateHMSFromUTC.lastd.getDate ());
 
 	writeLocalDateHMSFromUTC.lastd = d;	// Update last date for the next call
 
@@ -144,13 +141,17 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 				case 0:	// Dat_FORMAT_YYYY_MM_DD
 					StrMon = ((Mon < 10) ? '0' : '') + Mon;
 					StrDay = ((Day < 10) ? '0' : '') + Day;
-					StrDat = Yea.toString() + '-' + StrMon + '-' + StrDay;
+					StrDat = Yea.toString () + '-' + StrMon + '-' + StrDay;
 					break;
 				case 1:	// Dat_FORMAT_DD_MONTH_YYYY
-					StrDat = Day.toString() + '&nbsp;' + MonthsShort[Mon - 1] + '&nbsp;' + Yea.toString();
+					StrDat = Day.toString () + '&nbsp;' +
+							 MonthsShort[Mon - 1] + '&nbsp;' +
+							 Yea.toString ();
 					break;
 				case 2:	// Dat_FORMAT_MONTH_DD_YYYY
-					StrDat = MonthsShort[Mon - 1] + '&nbsp;' + Day.toString() + ',&nbsp;' + Yea.toString();
+					StrDat = MonthsShort[Mon - 1] + '&nbsp;' +
+							 Day.toString() + ',&nbsp;' +
+							 Yea.toString ();
 					break;
 				default:
 					break;
@@ -174,18 +175,18 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,Language,
 		StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
 		if (WriteHMS & (1<<1)) {
 			// Bits 2,1 on => Write minutes
-			Min = d.getMinutes();
+			Min = d.getMinutes ();
 			StrMin = ((Min < 10) ? ':0' : ':') + Min;
 			if (WriteHMS & 1) {
 				// Bits 2,1,0 on => Write seconds
-				Sec = d.getSeconds();
+				Sec = d.getSeconds ();
 				StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
 			}
 		}
 	}
 
 	/* Write date and time */
-	document.getElementById(id).innerHTML = StrDat + StrHou + StrMin + StrSec;
+	document.getElementById (id).innerHTML = StrDat + StrHou + StrMin + StrSec;
 }
 
 /*****************************************************************************/
@@ -1243,7 +1244,7 @@ function mediaClickOnActivateUpload (id) {
 		var url		= document.getElementById (id + '_url');
 		var tit		= document.getElementById (id + '_tit');
 
-		// Enable embed, disable others
+		// Enable upload, disable others
 	    par_upl.disabled = false;		// Enable upload
 	    par_you.disabled = true;		// Disable youtube
 	    par_emb.disabled = true;		// Disable embed

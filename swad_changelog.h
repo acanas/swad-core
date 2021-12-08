@@ -602,10 +602,11 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.67.3 (2021-12-04)"
-#define CSS_FILE		"swad21.67.css"
-#define JS_FILE			"swad21.67.js"
+#define Log_PLATFORM_VERSION	"SWAD 21.67.4 (2021-12-07)"
+#define CSS_FILE		"swad21.67.4.css"
+#define JS_FILE			"swad21.67.4.js"
 /*
+	Version 21.67.4:  Dec 07, 2021  Fixed bug in CSS for photos. Reported by Cristina Sánchez Justicia. (320339 lines)
 	Version 21.67.3:  Dec 04, 2021  Help about user photo shapes. (320337 lines)
 	Version 21.67.2:  Dec 04, 2021  Renamed exam announcements to calls for exams in help wiki. (320316 lines)
 	Version 21.67.1:  Dec 04, 2021  Renamed CENTRE to CENTER in help wiki. (320316 lines)
