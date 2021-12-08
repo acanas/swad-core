@@ -67,6 +67,7 @@ void Tab_DrawTabs (void)
       [The_THEME_BLUE  ] = "HEAD_ROW_3_BLUE",
       [The_THEME_YELLOW] = "HEAD_ROW_3_YELLOW",
       [The_THEME_PINK  ] = "HEAD_ROW_3_PINK",
+      [The_THEME_DARK  ] = "HEAD_ROW_3_DARK",
       };
 
    /***** Begin tabs container *****/

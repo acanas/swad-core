@@ -209,6 +209,7 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
+   extern const char *The_ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES];
    extern const char *The_ClassTxtMenu[The_NUM_THEMES];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    unsigned NumOptInMenu;
@@ -249,10 +250,13 @@ void Mnu_WriteMenuThisTab (void)
 					      NULL);
 
 			/***** Icon and text *****/
-			HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
-				       Gbl.Prefs.URLIconSet,
-				       Act_GetIcon (NumAct));
-			   HTM_DIV_Begin ("class=\"MENU_TEXT %s\"",
+			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");
+			   HTM_DIV_Begin ("class=\"MENU_ICO%s\" style=\"background-image:url('%s/%s');\"",
+					  The_ClassIcoMenu[Gbl.Prefs.IconSet][Gbl.Prefs.Theme],
+					  Gbl.Prefs.URLIconSet,
+					  Act_GetIcon (NumAct));
+			   HTM_DIV_End ();
+			   HTM_DIV_Begin ("class=\"MENU_TXT %s\"",
 			                  The_ClassTxtMenu[Gbl.Prefs.Theme]);
 			      HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 			   HTM_DIV_End ();

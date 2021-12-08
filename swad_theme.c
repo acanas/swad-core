@@ -60,6 +60,7 @@ const char *The_ThemeId[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "blue",
    [The_THEME_YELLOW] = "yellow",
    [The_THEME_PINK  ] = "pink",
+   [The_THEME_DARK  ] = "dark",
   };
 
 const char *The_ThemeNames[The_NUM_THEMES] =
@@ -70,6 +71,18 @@ const char *The_ThemeNames[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "Blue",
    [The_THEME_YELLOW] = "Yellow",
    [The_THEME_PINK  ] = "Pink",
+   [The_THEME_DARK  ] = "Dark",
+  };
+
+const char *The_ClassBodyBG[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "BODY_BG_WHITE",
+   [The_THEME_GREY  ] = "BODY_BG_GREY",
+   [The_THEME_PURPLE] = "BODY_BG_PURPLE",
+   [The_THEME_BLUE  ] = "BODY_BG_BLUE",
+   [The_THEME_YELLOW] = "BODY_BG_YELLOW",
+   [The_THEME_PINK  ] = "BODY_BG_PINK",
+   [The_THEME_DARK  ] = "BODY_BG_DARK",
   };
 
 const char *The_TabOnBgColors[The_NUM_THEMES] =
@@ -80,6 +93,7 @@ const char *The_TabOnBgColors[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "TAB_ON_BLUE",
    [The_THEME_YELLOW] = "TAB_ON_YELLOW",
    [The_THEME_PINK  ] = "TAB_ON_PINK",
+   [The_THEME_DARK  ] = "TAB_ON_DARK",
   };
 
 const char *The_TabOffBgColors[The_NUM_THEMES] =
@@ -90,6 +104,7 @@ const char *The_TabOffBgColors[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "TAB_OFF_BLUE",
    [The_THEME_YELLOW] = "TAB_OFF_YELLOW",
    [The_THEME_PINK  ] = "TAB_OFF_PINK",
+   [The_THEME_DARK  ] = "TAB_OFF_DARK",
   };
 
 const char *The_ClassTagline[The_NUM_THEMES] =
@@ -100,6 +115,7 @@ const char *The_ClassTagline[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK TAGLINE_BLUE",
    [The_THEME_YELLOW] = "BT_LINK TAGLINE_YELLOW",
    [The_THEME_PINK  ] = "BT_LINK TAGLINE_PINK",
+   [The_THEME_DARK  ] = "BT_LINK TAGLINE_DARK",
   };
 
 const char *The_ClassNotif[The_NUM_THEMES] =
@@ -110,6 +126,7 @@ const char *The_ClassNotif[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK NOTIF_BLUE",
    [The_THEME_YELLOW] = "BT_LINK NOTIF_YELLOW",
    [The_THEME_PINK  ] = "BT_LINK NOTIF_PINK",
+   [The_THEME_DARK  ] = "BT_LINK NOTIF_DARK",
   };
 
 const char *The_ClassUsr[The_NUM_THEMES] =
@@ -120,6 +137,7 @@ const char *The_ClassUsr[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "USR_BLUE",
    [The_THEME_YELLOW] = "USR_YELLOW",
    [The_THEME_PINK  ] = "USR_PINK",
+   [The_THEME_DARK  ] = "USR_DARK",
   };
 
 const char *The_ClassBreadcrumb[The_NUM_THEMES] =
@@ -130,6 +148,7 @@ const char *The_ClassBreadcrumb[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BC_BLUE",
    [The_THEME_YELLOW] = "BC_YELLOW",
    [The_THEME_PINK  ] = "BC_PINK",
+   [The_THEME_DARK  ] = "BC_DARK",
   };
 
 const char *The_ClassCourse[The_NUM_THEMES] =
@@ -140,6 +159,26 @@ const char *The_ClassCourse[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "MAIN_TITLE_BLUE",
    [The_THEME_YELLOW] = "MAIN_TITLE_YELLOW",
    [The_THEME_PINK  ] = "MAIN_TITLE_PINK",
+   [The_THEME_DARK  ] = "MAIN_TITLE_DARK",
+  };
+
+const char *The_ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
+  {
+   [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "",
+   [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "",
+   [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "",
+   [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "",
+   [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "",
+   [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "",
+   [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " MENU_ICO_DARK",
+
+   [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
+   [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "",
+   [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "",
+   [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "",
+   [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "",
+   [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "",
+   [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "",
   };
 
 const char *The_ClassTxtMenu[The_NUM_THEMES] =
@@ -150,6 +189,7 @@ const char *The_ClassTxtMenu[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "MENU_TXT_BLUE",
    [The_THEME_YELLOW] = "MENU_TXT_YELLOW",
    [The_THEME_PINK  ] = "MENU_TXT_PINK",
+   [The_THEME_DARK  ] = "MENU_TXT_DARK",
   };
 
 const char *The_ClassTxtTabOff[The_NUM_THEMES] =
@@ -160,6 +200,7 @@ const char *The_ClassTxtTabOff[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "TAB_OFF_TXT_BLUE",
    [The_THEME_YELLOW] = "TAB_OFF_TXT_YELLOW",
    [The_THEME_PINK  ] = "TAB_OFF_TXT_PINK",
+   [The_THEME_DARK  ] = "TAB_OFF_TXT_DARK",
   };
 
 const char *The_ClassTxtTabOn[The_NUM_THEMES] =
@@ -170,6 +211,7 @@ const char *The_ClassTxtTabOn[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "TAB_ON_TXT_BLUE",
    [The_THEME_YELLOW] = "TAB_ON_TXT_YELLOW",
    [The_THEME_PINK  ] = "TAB_ON_TXT_PINK",
+   [The_THEME_DARK  ] = "TAB_ON_TXT_DARK",
   };
 
 const char *The_ClassTitle[The_NUM_THEMES] =
@@ -180,6 +222,7 @@ const char *The_ClassTitle[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "TITLE_BLUE",
    [The_THEME_YELLOW] = "TITLE_YELLOW",
    [The_THEME_PINK  ] = "TITLE_PINK",
+   [The_THEME_DARK  ] = "TITLE_DARK",
   };
 
 const char *The_ClassFormLinkInBox[The_NUM_THEMES] =
@@ -190,6 +233,7 @@ const char *The_ClassFormLinkInBox[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK FORM_IN_BLUE",
    [The_THEME_YELLOW] = "BT_LINK FORM_IN_YELLOW",
    [The_THEME_PINK  ] = "BT_LINK FORM_IN_PINK",
+   [The_THEME_DARK  ] = "BT_LINK FORM_IN_DARK",
   };
 
 const char *The_ClassFormInBox[The_NUM_THEMES] =
@@ -200,6 +244,7 @@ const char *The_ClassFormInBox[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "FORM_IN_BLUE",
    [The_THEME_YELLOW] = "FORM_IN_YELLOW",
    [The_THEME_PINK  ] = "FORM_IN_PINK",
+   [The_THEME_DARK  ] = "FORM_IN_DARK",
   };
 
 const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES] =
@@ -210,6 +255,7 @@ const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK FORM_IN_BLUE BOLD",
    [The_THEME_YELLOW] = "BT_LINK FORM_IN_YELLOW BOLD",
    [The_THEME_PINK  ] = "BT_LINK FORM_IN_PINK BOLD",
+   [The_THEME_DARK  ] = "BT_LINK FORM_IN_DARK BOLD",
   };
 
 const char *The_ClassFormInBoxBold[The_NUM_THEMES] =
@@ -220,6 +266,7 @@ const char *The_ClassFormInBoxBold[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "FORM_IN_BLUE BOLD",
    [The_THEME_YELLOW] = "FORM_IN_YELLOW BOLD",
    [The_THEME_PINK  ] = "FORM_IN_PINK BOLD",
+   [The_THEME_DARK  ] = "FORM_IN_DARK BOLD",
   };
 
 const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES] =
@@ -230,6 +277,7 @@ const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK FORM_IN_BLUE NOWRAP",
    [The_THEME_YELLOW] = "BT_LINK FORM_IN_YELLOW NOWRAP",
    [The_THEME_PINK  ] = "BT_LINK FORM_IN_PINK NOWRAP",
+   [The_THEME_DARK  ] = "BT_LINK FORM_IN_DARK NOWRAP",
   };
 
 const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
@@ -240,6 +288,7 @@ const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "FORM_IN_BLUE NOWRAP",
    [The_THEME_YELLOW] = "FORM_IN_YELLOW NOWRAP",
    [The_THEME_PINK  ] = "FORM_IN_PINK NOWRAP",
+   [The_THEME_DARK  ] = "FORM_IN_DARK NOWRAP",
   };
 
 const char *The_ClassFormLinkOutBox[The_NUM_THEMES] =
@@ -250,6 +299,7 @@ const char *The_ClassFormLinkOutBox[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK FORM_OUT_BLUE",
    [The_THEME_YELLOW] = "BT_LINK FORM_OUT_YELLOW",
    [The_THEME_PINK  ] = "BT_LINK FORM_OUT_PINK",
+   [The_THEME_DARK  ] = "BT_LINK FORM_OUT_DARK",
   };
 
 const char *The_ClassFormOutBox[The_NUM_THEMES] =
@@ -260,6 +310,7 @@ const char *The_ClassFormOutBox[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "FORM_OUT_BLUE",
    [The_THEME_YELLOW] = "FORM_OUT_YELLOW",
    [The_THEME_PINK  ] = "FORM_OUT_PINK",
+   [The_THEME_DARK  ] = "FORM_OUT_DARK",
   };
 
 const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES] =
@@ -270,6 +321,7 @@ const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "BT_LINK FORM_OUT_BLUE BOLD",
    [The_THEME_YELLOW] = "BT_LINK FORM_OUT_YELLOW BOLD",
    [The_THEME_PINK  ] = "BT_LINK FORM_OUT_PINK BOLD",
+   [The_THEME_DARK  ] = "BT_LINK FORM_OUT_DARK BOLD",
   };
 
 const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
@@ -280,6 +332,7 @@ const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
    [The_THEME_BLUE  ] = "FORM_OUT_BLUE BOLD",
    [The_THEME_YELLOW] = "FORM_OUT_YELLOW BOLD",
    [The_THEME_PINK  ] = "FORM_OUT_PINK BOLD",
+   [The_THEME_DARK  ] = "FORM_OUT_DARK BOLD",
   };
 
 /*****************************************************************************/

@@ -25,11 +25,18 @@
 body
 	{
 	margin:0;
-	background-color:white;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size:1em;
 	overflow-y:scroll;	/* force vertical scrollbar */
 	}
+.BODY_BG_WHITE	{background-color:white;}
+.BODY_BG_GREY	{background-color:white;}
+.BODY_BG_PURPLE	{background-color:white;}
+.BODY_BG_BLUE	{background-color:white;}
+.BODY_BG_YELLOW	{background-color:white;}
+.BODY_BG_PINK	{background-color:white;}
+.BODY_BG_DARK	{background-color:#404040;}
+
 input	
 	{
 	font-size:12pt;
@@ -139,10 +146,10 @@ a:hover						/* Default ==> underlined */
 	background-image:linear-gradient(#bf667f 0,#c86b85 100%);
 	background-repeat:no-repeat;
 	}
-.HEAD_ROW_1_PINK
+.HEAD_ROW_1_DARK
 	{
-	background-image:-webkit-linear-gradient(#8e5e8f 0,#ab5c84 100%);	/* Safari */
-	background-image:linear-gradient(#8e5e8f 0,#ab5c84 100%);
+	background-image:-webkit-linear-gradient(#383838 0,#404040 100%);	/* Safari */
+	background-image:linear-gradient(#383838 0,#404040 100%);
 	background-repeat:no-repeat;
 	}
 
@@ -196,6 +203,7 @@ a:hover						/* Default ==> underlined */
 .TAGLINE_BLUE	{color:#bad2da;}
 .TAGLINE_YELLOW	{color:#b3b0b3;}
 .TAGLINE_PINK	{color:#e8e8e8;}
+.TAGLINE_DARK	{color:#e0e0e0;}
 
 #head_row_1_search
 	{
@@ -246,6 +254,7 @@ a:hover						/* Default ==> underlined */
 .USR_BLUE		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
 .USR_YELLOW		{color:#b3b0b3; font-size:15pt; font-weight:bold; white-space:nowrap;}
 .USR_PINK		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_BLACK		{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
 
 #head_row_1_right
 	{
@@ -297,6 +306,10 @@ a:hover						/* Default ==> underlined */
 	background-image:-webkit-linear-gradient(#ab5c84 0,#c86b85 100%);	/* Safari */
 	background-image:linear-gradient(#ab5c84 0,#c86b85 100%);
 	background-repeat:no-repeat;
+	}
+.HEAD_ROW_2_DARK
+	{
+	background-color:#404040;
 	}
 
 /******************************* Current time ********************************/
@@ -451,6 +464,7 @@ a:hover						/* Default ==> underlined */
 .BC_BLUE	{color:#ffc040;}
 .BC_YELLOW	{color:#ffb42e;}
 .BC_PINK	{color:#ffc040;}
+.BC_DARK	{color:#ffb42e;}
 
 .BC_ICON
 	{
@@ -517,6 +531,7 @@ a:hover						/* Default ==> underlined */
 .MAIN_TITLE_BLUE	{color:white;}
 .MAIN_TITLE_YELLOW	{color:white;}
 .MAIN_TITLE_PINK	{color:white;}
+.MAIN_TITLE_DARK	{color:#f7f6f5;}
 #my_courses
 	{
 	width:130px;
@@ -554,11 +569,12 @@ a:hover						/* Default ==> underlined */
     	}
 	}
 .NOTIF_WHITE	{color:#707070; font-size:12pt; white-space:nowrap;}
-.NOTIF_GREY		{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
+.NOTIF_GREY	{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
 .NOTIF_PURPLE	{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
-.NOTIF_BLUE		{color:white;   font-size:12pt; white-space:nowrap;}
+.NOTIF_BLUE	{color:white;   font-size:12pt; white-space:nowrap;}
 .NOTIF_YELLOW	{color:#b3b0b3; font-size:12pt; white-space:nowrap;}
-.NOTIF_PINK		{color:white;   font-size:12pt; white-space:nowrap;}
+.NOTIF_PINK	{color:white;   font-size:12pt; white-space:nowrap;}
+.NOTIF_DARK	{color:#e0e0e0; font-size:12pt; white-space:nowrap;}
 
 /******************* Layout (third heading row with tabs) ********************/
 .HEAD_ROW_3_WHITE
@@ -590,7 +606,11 @@ a:hover						/* Default ==> underlined */
 	background-image:-webkit-linear-gradient(#c86b85 0,#c86b85 54px,white 54px,white 100%);	/* Safari */
 	background-image:linear-gradient(#c86b85 0,#c86b85 54px,white 54px,white 100%);
 	}
-
+.HEAD_ROW_3_DARK
+	{
+	background-image:-webkit-linear-gradient(#404040 0,#404040 54px,white 54px,white 100%);	/* Safari */
+	background-image:linear-gradient(#404040 0,#404040 54px,#404040 54px,#404040 100%);
+	}
 
 .TAB_LIST
 	{
@@ -753,6 +773,7 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_BLUE	{background-color:#e8f3f6;}
 .TAB_ON_YELLOW	{background-color:#faf0da;}
 .TAB_ON_PINK	{background-color:#faf0e8;}
+.TAB_ON_DARK	{background-color:#606060;}
 
 .TAB_OFF_WHITE	{background-color:#d4d4d4;}
 .TAB_OFF_GREY	{background-color:#aea79f;}
@@ -760,6 +781,7 @@ a:hover						/* Default ==> underlined */
 .TAB_OFF_BLUE	{background-color:#cae1e8;}
 .TAB_OFF_YELLOW	{background-color:#f4dfb2;}
 .TAB_OFF_PINK	{background-color:#f3dcca;}
+.TAB_OFF_DARK	{background-color:#aea79f;}
 
 .TAB_OFF_TXT_WHITE	{color:#707070;}
 .TAB_OFF_TXT_GREY	{color:#505050;}
@@ -767,6 +789,7 @@ a:hover						/* Default ==> underlined */
 .TAB_OFF_TXT_BLUE	{color:#365e6e;}
 .TAB_OFF_TXT_YELLOW	{color:#4a2e19;}
 .TAB_OFF_TXT_PINK	{color:#505050;}
+.TAB_OFF_TXT_DARK	{color:#505050;}
 
 .TAB_ON_TXT_WHITE	{color:#4d88A1;}
 .TAB_ON_TXT_GREY	{color:#606060;}
@@ -774,6 +797,7 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_TXT_BLUE	{color:#4d88A1;}
 .TAB_ON_TXT_YELLOW	{color:#7c4d2a;}
 .TAB_ON_TXT_PINK	{color:#63474e;}
+.TAB_ON_TXT_DARK	{color:#606060;}
 
 .TAB_ICO
 	{
@@ -927,10 +951,13 @@ a:hover						/* Default ==> underlined */
 	transform:scale(1.286,1.286);
 	}
 
+#main_horizontal .MENU_ICO_TXT
+	{
+	}
 #main_horizontal .MENU_ICO
 	{
 	box-sizing:border-box;
-	padding:26px 0 0 0;
+	padding:28px 0 0 0;
 	background-size:auto 26px;
 	background-repeat:no-repeat;
 	background-position:center top;
@@ -986,10 +1013,13 @@ a:hover						/* Default ==> underlined */
 		opacity:1;
 		transform:scale(1.286,1.286);
 		}
+	#main_vertical .MENU_ICO_TXT
+		{
+		}
 	#main_vertical .MENU_ICO
 		{
 		box-sizing:border-box;
-		padding:26px 0 0 0;
+		padding:28px 0 0 0;
 		background-size:auto 26px;
 		background-repeat:no-repeat;
 		background-position:center top;
@@ -1042,9 +1072,14 @@ a:hover						/* Default ==> underlined */
 		{
 		opacity:1;
 		}
-	#main_vertical .MENU_ICO
+	#main_vertical .MENU_ICO_TXT
 		{
 		display:table-cell;
+		vertical-align:middle;
+		}
+	#main_vertical .MENU_ICO
+		{
+		display:inline-block;
 		box-sizing:border-box;
 		height:40px;
 		vertical-align:middle;
@@ -1081,8 +1116,9 @@ a:hover						/* Default ==> underlined */
 /********************************* Menu fonts ********************************/
 @media only screen and (max-width: 800px)
 	{	/* For mobile-phones */
-	.MENU_TEXT
+	.MENU_TXT
 		{
+		display:inline;
 		font-size:12pt;
 		font-weight:bold;
 		line-height:110%;
@@ -1095,8 +1131,9 @@ a:hover						/* Default ==> underlined */
 	}
 @media only screen and (min-width: 800px)
 	{	/* For tablets and desktop */
-	.MENU_TEXT
+	.MENU_TXT
 		{
+		display:inline;
 		font-size:12pt;
 		font-weight:bold;
 		line-height:110%;
@@ -1105,12 +1142,15 @@ a:hover						/* Default ==> underlined */
 		}
 	}
 
+.MENU_ICO_DARK		{filter:invert(1);}
+
 .MENU_TXT_WHITE		{color:#4D88a1;}
 .MENU_TXT_GREY		{color:#606060;}
 .MENU_TXT_PURPLE	{color:#573c4d;}
 .MENU_TXT_BLUE		{color:#4D88a1;}
 .MENU_TXT_YELLOW	{color:#7c4d2a;}
 .MENU_TXT_PINK		{color:#63474e;}
+.MENU_TXT_DARK		{color:#c0c0c0;}
 
 /***************************** Users connected *******************************/
 .CONNECTED
@@ -2217,6 +2257,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .TITLE_BLUE	{color:#4D88A1; font-size:18pt;}
 .TITLE_YELLOW	{color:#7c4d2a; font-size:18pt;}
 .TITLE_PINK	{color:#63474e; font-size:18pt;}
+.TITLE_DARK	{color:#505050; font-size:18pt;}
 
 /*********************** Icon and checkbox highlighting **********************/
 .ICO_HIDDEN
@@ -2250,6 +2291,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_IN_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_IN_YELLOW		{color:#7c4d2a; font-size:13pt;}
 .FORM_IN_PINK		{color:#4d88a1; font-size:13pt;}
+.FORM_IN_DARK		{color:#4d88a1; font-size:13pt;}
 
 /* Outside white box */
 .FORM_OUT_WHITE		{color:#4d88a1; font-size:13pt;}
@@ -2258,6 +2300,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_OUT_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_OUT_YELLOW	{color:#7c4d2a; font-size:13pt;}
 .FORM_OUT_PINK		{color:#63474e; font-size:13pt;}
+.FORM_OUT_DARK		{color:#4d88a1; font-size:13pt;}
 
 .BOLD	{font-weight:bold;}
 .NOWRAP	{white-space:nowrap;}
@@ -2440,11 +2483,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 .DAT_SMALL_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
 .DAT_SMALL_RED		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
-.DAT_SMALL_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
 .DAT_SMALL_GREEN	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
 .DAT_SMALL_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
 .DAT_SMALL_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
-.DAT_SMALL_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
 
 /******************************** User's IDs *********************************/
 .USR_ID		{font-size:18pt; font-weight:bold;}

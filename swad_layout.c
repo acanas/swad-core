@@ -106,6 +106,7 @@ void Lay_WriteStartOfPage (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
+   extern const char *The_ClassBodyBG[The_NUM_THEMES];
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
@@ -257,7 +258,8 @@ void Lay_WriteStartOfPage (void)
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
-	       HTM_Txt ("<body onload=\"init();\">\n");
+	       HTM_TxtF ("<body class=\"%s\" onload=\"init();\">\n",
+	                 The_ClassBodyBG[Gbl.Prefs.Theme]);
 	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
 			   "class=\"IMG_USR\" id=\"zoomImg\"");
@@ -974,6 +976,7 @@ static void Lay_WritePageTopHeading (void)
       [The_THEME_BLUE  ] = "HEAD_ROW_1_BLUE",
       [The_THEME_YELLOW] = "HEAD_ROW_1_YELLOW",
       [The_THEME_PINK  ] = "HEAD_ROW_1_PINK",
+      [The_THEME_DARK  ] = "HEAD_ROW_1_DARK",
      };
    static const char *ClassHeadRow2[The_NUM_THEMES] =
      {
@@ -983,6 +986,7 @@ static void Lay_WritePageTopHeading (void)
       [The_THEME_BLUE  ] = "HEAD_ROW_2_BLUE",
       [The_THEME_YELLOW] = "HEAD_ROW_2_YELLOW",
       [The_THEME_PINK  ] = "HEAD_ROW_2_PINK",
+      [The_THEME_DARK  ] = "HEAD_ROW_2_DARK",
       };
 
    /***** Begin header *****/
