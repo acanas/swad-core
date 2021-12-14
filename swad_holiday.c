@@ -95,6 +95,7 @@ void Hld_ResetHolidays (struct Hld_Holidays *Holidays)
 void Hld_SeeHolidays (void)
   {
    extern const char *Hlp_INSTITUTION_Holidays;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Holidays;
    extern const char *Txt_HOLIDAYS_HELP_ORDER[2];
    extern const char *Txt_HOLIDAYS_ORDER[2];
@@ -163,18 +164,20 @@ void Hld_SeeHolidays (void)
 		  /* Write data of this holiday */
 		  HTM_TR_Begin (NULL);
 
-		     HTM_TD_Begin ("class=\"DAT LM\"");
+		     HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_Txt (Holidays.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 								    Holidays.Lst[NumHld].PlaceFullName);
 		     HTM_TD_End ();
 
 		     Dat_ConvDateToDateStr (&Holidays.Lst[NumHld].StartDate,StrDate);
 
-		     HTM_TD_Begin ("class=\"DAT LM\"");
+		     HTM_TD_Begin ("class=\"%s LM\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_TxtF ("&nbsp;%s",StrDate);
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("class=\"DAT LM\"");
+		     HTM_TD_Begin ("class=\"%s LM\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_NBSP ();
 			switch (Holidays.Lst[NumHld].HldTyp)
 			  {
@@ -187,7 +190,8 @@ void Hld_SeeHolidays (void)
 			  }
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("class=\"DAT LM\"");
+		     HTM_TD_Begin ("class=\"%s LM\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_TxtF ("&nbsp;%s",Holidays.Lst[NumHld].Name);
 		     HTM_TD_End ();
 
@@ -503,6 +507,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					const struct Plc_Places *Places)
   {
    extern const char *Hlp_INSTITUTION_Holidays_edit;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Holidays;
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
@@ -536,7 +541,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 	    HTM_TD_End ();
 
 	    /* Holiday code */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%ld&nbsp;",Hld->HldCod);
 	    HTM_TD_End ();
 

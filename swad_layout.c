@@ -1581,6 +1581,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
 void Lay_AdvertisementMobile (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Stay_connected_with_SWADroid;
 
    if (!(rand () % Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X))
@@ -1594,9 +1595,9 @@ void Lay_AdvertisementMobile (void)
 
 	 /***** Show advertisement *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("class=\"DAT CM\"");
+	    HTM_TD_Begin ("class=\"%s CM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-			    " class=\"DAT\"");
+			    " class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (Txt_Stay_connected_with_SWADroid);
 		  HTM_BR ();
 		  HTM_BR ();

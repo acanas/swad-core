@@ -395,7 +395,7 @@ void Agd_ShowUsrAgenda (void)
 						     Gbl.Usrs.Other.UsrDat.FullName),
 			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-         Str_FreeString ();
+         Str_FreeStrings ();
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
@@ -447,7 +447,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 							Gbl.Usrs.Other.UsrDat.FullName),
 			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-            Str_FreeString ();
+            Str_FreeStrings ();
 
 	       /***** Show the current events in the user's agenda *****/
 	       Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
@@ -770,6 +770,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
   {
    extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
    extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -857,7 +858,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       /* Text of the event */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 	 HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? "DAT_LIGHT" :
-							     "DAT");
+							     The_ClassDat[Gbl.Prefs.Theme]);
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
@@ -1619,7 +1620,7 @@ void Agd_PrintAgdQRCode (void)
 	                                  Gbl.Usrs.Me.UsrDat.FullName),
                  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       /***** Print QR code ****/
       QR_PrintQRCode ();

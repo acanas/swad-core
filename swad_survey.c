@@ -424,6 +424,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
                                long SvyCod,bool ShowOnlyThisSvyComplete)
   {
    extern const char *Hlp_ASSESSMENT_Surveys;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Survey;
    extern const char *Txt_View_survey;
    extern const char *Txt_Number_of_questions;
@@ -671,7 +672,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
+      HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? The_ClassDat[Gbl.Prefs.Theme] :
 							     "DAT_LIGHT");
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -1642,6 +1643,7 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Hlp_ASSESSMENT_Surveys_new_survey;
    extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
@@ -1785,7 +1787,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	    HTM_TxtColon (Txt_Users);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Rol_WriteSelectorRoles (1 << Rol_STD |
 				    1 << Rol_NET |
 				    1 << Rol_TCH,
@@ -1901,6 +1903,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Svy_Survey *Svy)
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1925,7 +1928,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	    /***** First row: checkbox to select the whole course *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+	       HTM_TD_Begin ("colspan=\"7\" class=\"%s LM\"",
+	                     The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
@@ -2731,6 +2735,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
                                   struct Svy_Survey *Svy)
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -2828,7 +2833,8 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	       HTM_TD_End ();
 
 	       /* Write the stem and the answers of this question */
-	       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		  Svy_WriteQstStem (Stem);
 		  Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
 	       HTM_TD_End ();
@@ -2958,6 +2964,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
                                     struct Svy_Question *SvyQst,
                                     bool PutFormAnswerSurvey)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumAnswers;
    unsigned NumAns;
    MYSQL_RES *mysql_res;
@@ -3023,16 +3030,18 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 	    /* Write the number of option */
 	    HTM_TD_Begin ("class=\"SVY_OPT LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
-				(unsigned) SvyQst->QstCod,NumAns);
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"%s\"",
+				(unsigned) SvyQst->QstCod,NumAns,
+				The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%u)",NumAns + 1);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
 	    /* Write the text of the answer */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
-				(unsigned) SvyQst->QstCod,NumAns);
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"%s\"",
+				(unsigned) SvyQst->QstCod,NumAns,
+				The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -3062,6 +3071,7 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned BarWidth = 0;
    char *Title;
@@ -3082,7 +3092,8 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
          Err_NotEnoughMemoryExit ();
      }
 
-   HTM_TD_Begin ("class=\"DAT LT\" style=\"width:%upx;\"",Svy_MAX_BAR_WIDTH + 125);
+   HTM_TD_Begin ("class=\"%s LT\" style=\"width:%upx;\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Svy_MAX_BAR_WIDTH + 125);
 
       /***** Draw bar with a with proportional to the number of clicks *****/
       if (NumUsrs && MaxUsrs)

@@ -209,9 +209,26 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
-   extern const char *The_ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES];
    extern const char *The_ClassTxtMenu[The_NUM_THEMES];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   static const char *ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
+     {
+      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " MENU_ICO_DARK",
+
+      [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "",
+     };
    unsigned NumOptInMenu;
    Act_Action_t NumAct;
    const char *Title;
@@ -252,7 +269,7 @@ void Mnu_WriteMenuThisTab (void)
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");
 			   HTM_DIV_Begin ("class=\"MENU_ICO%s\" style=\"background-image:url('%s/%s');\"",
-					  The_ClassIcoMenu[Gbl.Prefs.IconSet][Gbl.Prefs.Theme],
+					  ClassIcoMenu[Gbl.Prefs.IconSet][Gbl.Prefs.Theme],
 					  Gbl.Prefs.URLIconSet,
 					  Act_GetIcon (NumAct));
 			   HTM_DIV_End ();

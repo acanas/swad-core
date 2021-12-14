@@ -280,7 +280,7 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
    Tml_ShowTimeline (Timeline,NotCod,
                     Str_BuildStringStr (Txt_Timeline_OF_A_USER,
 					Gbl.Usrs.Other.UsrDat.FrstName));
-   Str_FreeString ();
+   Str_FreeStrings ();
 
    /***** Free chained list of publications *****/
    Tml_Pub_FreeListPubs (Timeline);

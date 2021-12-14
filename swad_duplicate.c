@@ -107,6 +107,7 @@ void Dup_PutLinkToListDupUsrs (void)
 void Dup_ListDuplicateUsrs (void)
   {
    extern const char *Hlp_USERS_Duplicates_possibly_duplicate_users;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
    MYSQL_RES *mysql_res;
@@ -165,8 +166,9 @@ void Dup_ListDuplicateUsrs (void)
 		     HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("colspan=\"%u\" class=\"DAT LM COLOR%u\"",
-				   Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+		     HTM_TD_Begin ("colspan=\"%u\" class=\"%s LM COLOR%u\"",
+				   Usr_NUM_MAIN_FIELDS_DATA_USR - 2,
+				   The_ClassDat[Gbl.Prefs.Theme],
 				   Gbl.RowEvenOdd);
 
 			/* Write number of informants (row[1]) if greater than 1 */

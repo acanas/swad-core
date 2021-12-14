@@ -3930,6 +3930,7 @@ static void Brw_InitHiddenLevels (void)
 
 static void Brw_ShowAndStoreSizeOfFileTree (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_level;
    extern const char *Txt_levels;
    extern const char *Txt_folder;
@@ -3939,7 +3940,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
-   HTM_DIV_Begin ("class=\"DAT CM\"");
+   HTM_DIV_Begin ("class=\"%s CM\"",The_ClassDat[Gbl.Prefs.Theme]);
 
       if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
 	{
@@ -7828,6 +7829,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 void Brw_ShowFileMetadata (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
@@ -7998,7 +8000,7 @@ void Brw_ShowFileMetadata (void)
 		  HTM_TxtColon (Txt_Filename);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	       HTM_TD_End ();
 
@@ -8011,7 +8013,7 @@ void Brw_ShowFileMetadata (void)
 		  HTM_TxtColon (Txt_Uploaded_by);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (FileHasPublisher)
 		    {
 		     /* Show photo */
@@ -8042,7 +8044,7 @@ void Brw_ShowFileMetadata (void)
 		  HTM_TxtColon (Txt_File_size);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (FileSizeStr);
 	       HTM_TD_End ();
 
@@ -8055,7 +8057,8 @@ void Brw_ShowFileMetadata (void)
 		  HTM_TxtColon (Txt_Date_of_creation);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("id=\"filedate\" class=\"DAT LB\"");
+	       HTM_TD_Begin ("id=\"filedate\" class=\"%s LB\"",
+	                     The_ClassDat[Gbl.Prefs.Theme]);
 		  Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						true,true,true,0x7);
@@ -8070,7 +8073,7 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT","PublicFile",Txt_Availability);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"DAT LT\"");
+	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ICanChangePublic)	// I can change file to public
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -8097,7 +8100,7 @@ void Brw_ShowFileMetadata (void)
 	       Frm_LabelColumn ("RT","License",Txt_License);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"DAT LT\"");
+	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ICanEdit)	// I can edit file properties
 		    {
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -8128,7 +8131,7 @@ void Brw_ShowFileMetadata (void)
 		     HTM_TxtColon (Txt_My_views);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT LB\"");
+		  HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_Unsigned (FileMetadata.NumMyViews);
 		  HTM_TD_End ();
 
@@ -8142,7 +8145,7 @@ void Brw_ShowFileMetadata (void)
 		  HTM_TxtColon (Txt_Identified_views);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
 		  HTM_TxtF ("(%u %s)",
 			    FileMetadata.NumLoggedUsrs,
@@ -8159,7 +8162,7 @@ void Brw_ShowFileMetadata (void)
 		  HTM_TxtColon (Txt_Public_views);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (FileMetadata.NumPublicViews);
 	       HTM_TD_End ();
 
@@ -8536,6 +8539,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct FileMetadata *FileMetadata,
                                               const char *FileNameToShow)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Check_marks_in_the_file;
 
    /***** On the screen a link will be shown to download the file *****/
@@ -8553,7 +8557,10 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 /* Begin link */
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,"BT_LINK DAT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,
+	                          Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                          NULL);
+         Str_FreeStrings ();
 
 	    /* Name of the file of marks */
 	    HTM_Txt (FileNameToShow);
@@ -8567,8 +8574,8 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
    else
      {
       /* Put anchor and filename */
-      HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
-	           URL,FileNameToShow);
+      HTM_A_Begin ("href=\"%s\" class=\"%s\" title=\"%s\" target=\"_blank\"",
+	           URL,The_ClassDat[Gbl.Prefs.Theme],FileNameToShow);
 	 HTM_Txt (FileNameToShow);
       HTM_A_End ();
      }
@@ -9807,7 +9814,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 								       TitlePlural),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeString ();
+      Str_FreeStrings ();
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
@@ -9861,6 +9868,8 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Documents_area;
    extern const char *Txt_Teachers_files_area;
    extern const char *Txt_Shared_files_area;
@@ -9931,7 +9940,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TR_Begin (NULL);
 
 	 /***** Write number of document in this search *****/
-	 HTM_TD_Begin ("class=\"RT DAT %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"RT %s %s\"",
+	               The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (++(*NumDocsNotHidden));
 	 HTM_TD_End ();
 
@@ -9941,9 +9951,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Deg_PutParamDegCod (InsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (InsShortName),
-					   "BT_LINK LT DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (InsShortName),
+		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+		                           NULL);
+		  Str_FreeStrings ();
 		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 		     HTM_TxtF ("&nbsp;%s",InsShortName);
 		  HTM_BUTTON_End ();
@@ -9957,9 +9968,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Deg_PutParamDegCod (CtrCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CtrShortName),
-					   "BT_LINK LT DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (CtrShortName),
+		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   NULL);
+		  Str_FreeStrings ();
 		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
 		     HTM_TxtF ("&nbsp;%s",CtrShortName);
 		  HTM_BUTTON_End ();
@@ -9973,9 +9985,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (DegCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (DegShortName),
-					   "BT_LINK LT DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (DegShortName),
+		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   NULL);
+		  Str_FreeStrings ();
 		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
 		     HTM_TxtF ("&nbsp;%s",DegShortName);
 		  HTM_BUTTON_End ();
@@ -9989,8 +10002,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (CrsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (CrsShortName),"BT_LINK DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (CrsShortName),
+		                           Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+		                           NULL);
+		  Str_FreeStrings ();
 		     HTM_Txt (CrsShortName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -10042,7 +10057,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       break;
 	   }
 
-	 HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	               The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	    HTM_Txt (Title);
 	 HTM_TD_End ();
 
@@ -10052,7 +10068,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 				FileNameToShow);
 
 	 /***** Write file name using path (row[1]) *****/
-	 HTM_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
 
 	    /* Begin form */
 	    Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
@@ -10092,7 +10109,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 					 FileMetadata.FilCod);
 
 	    /* File or folder icon */
-	    HTM_BUTTON_SUBMIT_Begin (FileNameToShow,"BT_LINK LT DAT_N",NULL);
+	    HTM_BUTTON_SUBMIT_Begin (FileNameToShow,
+	                             Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]),
+	                             NULL);
+	    Str_FreeStrings ();
 	       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 		  /* Icon with folder */
 		  Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");

@@ -522,6 +522,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_ZIP_file;
    extern const char *Txt_Download;
    extern const char *Txt_Filename;
@@ -554,9 +555,9 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    HTM_TxtColon (Txt_Filename);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
-			 URL,FileName);
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_A_Begin ("href=\"%s\" class=\"%s\" title=\"%s\" target=\"_blank\"",
+			 URL,The_ClassDat[Gbl.Prefs.Theme],FileName);
 	       HTM_Txt (FileName);
 	    HTM_A_End ();
 	 HTM_TD_End ();
@@ -571,7 +572,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    HTM_TxtColon (Txt_File_size);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (FileSizeStr);
 	    if (UncompressedSize)
 	      {

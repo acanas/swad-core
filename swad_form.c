@@ -295,6 +295,7 @@ void Frm_FreeAnchorStr (char *Anchor)
 void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
 
    /***** Column/cell begin *****/
    if (TDClass)
@@ -313,7 +314,7 @@ void Frm_LabelColumn (const char *TDClass,const char *Id,const char *Label)
 			  The_ClassFormInBox[Gbl.Prefs.Theme]);
      }
    else
-      HTM_LABEL_Begin ("class=\"DAT\"");
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
    HTM_TxtColon (Label);
    HTM_LABEL_End ();
 

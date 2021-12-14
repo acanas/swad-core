@@ -131,7 +131,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 									      Gbl.Hierarchy.Crs.ShrtName),
 							  ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
 							  Btn_REMOVE_BUTTON,Txt_Remove_me);
-		     Str_FreeString ();
+		     Str_FreeStrings ();
 		    }
 	      }
 	    else					// I do not belong to this course
@@ -141,7 +141,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 									Gbl.Hierarchy.Crs.ShrtName),
 						    ActReqSignUp,
 						    Btn_CREATE_BUTTON,Txt_Sign_up);
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 	      }
 	   }
 
@@ -157,7 +157,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 									   Gbl.Hierarchy.Crs.ShrtName),
 						       ActReqEnrSevStd,
 						       Btn_CREATE_BUTTON,Txt_Register_students);
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 
 	    if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
@@ -175,7 +175,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 								     Gbl.Hierarchy.Deg.ShrtName),
 						 ActSeeCrs,
 						 Btn_CONFIRM_BUTTON,Txt_Courses);
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected
 	   {
@@ -185,7 +185,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 								     Gbl.Hierarchy.Ctr.ShrtName),
 						 ActSeeDeg,
 						 Btn_CONFIRM_BUTTON,Txt_Degrees);
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
 	   {
@@ -195,7 +195,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 								     Gbl.Hierarchy.Ins.ShrtName),
 						 ActSeeCtr,
 						 Btn_CONFIRM_BUTTON,Txt_Centers);
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
 	   {
@@ -205,7 +205,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 								     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 						 ActSeeIns,
 						 Btn_CONFIRM_BUTTON,Txt_Institutions);
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else
 	    /* Select a country */
@@ -231,7 +231,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 								  Cfg_PLATFORM_SHORT_NAME),
 					      ActFrmMyAcc,
 					      Btn_CREATE_BUTTON,Txt_Create_account);
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 	}
 
    /***** End table and box *****/
@@ -247,10 +247,12 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Btn_Button_t Button,
                                                  const char *TxtButton)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+
    HTM_TR_Begin (NULL);
 
       /***** Description *****/
-      HTM_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Description);
       HTM_TD_End ();
 

@@ -150,6 +150,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
                                            bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
@@ -235,7 +236,8 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 			Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_nicknames);
 
 			/* Data */
-			HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+			HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",
+			              The_ClassDat[Gbl.Prefs.Theme]);
 		    }
 
 		  /* Form to remove old nickname */
@@ -292,7 +294,8 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 					   Txt_Nickname);	// The first nickname
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ItsMe)
 		     Frm_BeginFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
 		  else

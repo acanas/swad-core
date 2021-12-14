@@ -109,6 +109,7 @@ static void Deg_EditingDegreeDestructor (void);
 void Deg_SeeDegWithPendingCrss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -162,7 +163,8 @@ void Deg_SeeDegWithPendingCrss (void)
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
-	       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"%s RM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -192,8 +194,8 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
       Deg_PutParamDegCod (Deg->DegCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),ClassLink,NULL);
-      Hie_FreeGoToMsg ();
+      HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Deg->FullName),ClassLink,NULL);
+      Str_FreeStrings ();
 
 	 /***** Degree logo and name *****/
 	 Lgo_DrawLogo (HieLvl_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
@@ -300,6 +302,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumDeg;
    struct DegreeType *DegTyp;
@@ -348,7 +351,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree code */
-	    HTM_TD_Begin ("class=\"DAT CODE\"");
+	    HTM_TD_Begin ("class=\"%s CODE\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Long (Deg->DegCod);
 	    HTM_TD_End ();
 
@@ -358,7 +361,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree short name */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegSho);
@@ -373,7 +376,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree full name */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActRenDegFul);
@@ -388,7 +391,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree type */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegTyp);
@@ -417,7 +420,7 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree WWW */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgDegWWW);
@@ -430,8 +433,10 @@ static void Deg_ListDegreesForEdition (void)
 		 {
 		  Str_Copy (WWW,Deg->WWW,sizeof (WWW) - 1);
 		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
-				  Deg->WWW,Deg->WWW);
+		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\" title=\"%s\"",
+				  Deg->WWW,
+				  The_ClassDat[Gbl.Prefs.Theme],
+				  Deg->WWW);
 			HTM_Txt (WWW);
 		     HTM_A_End ();
 		  HTM_DIV_End ();
@@ -439,12 +444,12 @@ static void Deg_ListDegreesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of courses in this degree */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumCrss);
 	    HTM_TD_End ();
 
 	    /* Number of users in courses of this degree */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrsInCrssOfDeg);
 	    HTM_TD_End ();
 
@@ -453,7 +458,8 @@ static void Deg_ListDegreesForEdition (void)
 	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 						     Usr_DONT_GET_PREFS,
 						     Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
-	    HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	    HTM_TD_Begin ("class=\"%s INPUT_REQUESTER LT\"",
+	                  The_ClassDat[Gbl.Prefs.Theme]);
 	       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	    HTM_TD_End ();
 
@@ -489,6 +495,7 @@ static bool Deg_CheckIfICanEditADegree (struct Deg_Degree *Deg)
 
 static void Deg_PutFormToCreateDegree (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_degree;
    extern const char *Txt_Create_degree;
    struct DegreeType *DegTyp;
@@ -562,22 +569,23 @@ static void Deg_PutFormToCreateDegree (void)
 	 HTM_TD_End ();
 
 	 /***** Number of courses in this degree *****/
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Number of users in courses of this degree *****/
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Degree requester *****/
-	 HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	 HTM_TD_Begin ("class=\"%s INPUT_REQUESTER LT\"",
+	               The_ClassDat[Gbl.Prefs.Theme]);
 	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
 	 HTM_TD_End ();
 
 	 /***** Degree status *****/
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -688,7 +696,7 @@ static void Deg_ListDegrees (void)
 				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       if (Gbl.Hierarchy.Degs.Num)	// There are degrees in the current center
 	{
@@ -765,6 +773,8 @@ static void Deg_PutIconToEditDegrees (void)
 
 static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
@@ -782,12 +792,12 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "BT_LINK LT DAT_LIGHT";
+      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s","DAT_LIGHT");
      }
    else
      {
-      TxtClassNormal = "DAT";
-      TxtClassStrong = "BT_LINK LT DAT_N";
+      TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
+      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -839,6 +849,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    /***** End table row *****/
    HTM_TR_End ();
 
+   Str_FreeStrings ();
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
@@ -878,7 +889,7 @@ static void Deg_EditDegreesInternal (void)
 				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       if (Gbl.DegTypes.Num)
 	{
@@ -1529,8 +1540,8 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
                                   Deg_PutParamGoToDeg,&Deg_EditingDeg->DegCod,
                                   Btn_CONFIRM_BUTTON,
-				  Hie_BuildGoToMsg (Deg_EditingDeg->ShrtName));
-      Hie_FreeGoToMsg ();
+				  Str_BuildGoToMsg (Deg_EditingDeg->ShrtName));
+      Str_FreeStrings ();
      }
    else
       /***** Alert *****/
@@ -1785,7 +1796,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 								       Txt_degrees),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeString ();
+      Str_FreeStrings ();
 
 	 /***** Write heading *****/
 	 Deg_PutHeadDegreesForSeeing ();

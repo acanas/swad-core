@@ -198,6 +198,7 @@ static void DegCfg_Title (bool PutLink)
 
 static void DegCfg_Center (bool PrintView,bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Center;
    unsigned NumCtr;
 
@@ -210,7 +211,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 		       Txt_Center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of centers of the current institution */
@@ -239,9 +240,10 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
-					   "BT_LINK LT DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
+					   Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   NULL);
+		  Str_FreeStrings ();
 	      }
 	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
 			  20,"LM",true);
@@ -312,6 +314,7 @@ static void DegCfg_QR (void)
 
 static void DegCfg_NumCrss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
 
@@ -328,8 +331,9 @@ static void DegCfg_NumCrss (void)
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
 							 Gbl.Hierarchy.Deg.ShrtName),
-				     "BT_LINK DAT",NULL);
-	    Str_FreeString ();
+				     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+				     NULL);
+	    Str_FreeStrings ();
 	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

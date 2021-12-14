@@ -514,6 +514,7 @@ void Gam_ShowOnlyOneGameEnd (void)
 static void Gam_ShowOneGame (struct Gam_Games *Games,
                              struct Gam_Game *Game,bool ShowOnlyThisGame)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
@@ -664,7 +665,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? "DAT_LIGHT" :
-						       "DAT");
+						       The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();
@@ -1761,7 +1762,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						 "arrow-up.svg",
 						 Str_BuildStringStr (Txt_Move_up_X,
 								     StrQstInd));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -1774,7 +1775,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						 "arrow-down.svg",
 						 Str_BuildStringStr (Txt_Move_down_X,
 								     StrQstInd));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);

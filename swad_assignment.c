@@ -393,6 +393,7 @@ void Asg_PrintOneAssignment (void)
 static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -468,9 +469,11 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 
       /* Assignment folder */
       if (PrintView)
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",
+	               The_ClassDat[Gbl.Prefs.Theme]);
       else
-	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       if (Asg.SendWork == Asg_SEND_WORK)
 	 Asg_WriteAssignmentFolder (&Asg,PrintView);
       HTM_TD_End ();
@@ -501,7 +504,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
       HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? "DAT_LIGHT" :
-						     "DAT");
+						     The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
 
@@ -1065,6 +1068,7 @@ void Asg_RequestCreatOrEditAsg (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Title;
@@ -1134,84 +1138,84 @@ void Asg_RequestCreatOrEditAsg (void)
      }
    Asg_PutParams (&Assignments);
 
-   /***** Begin box and table *****/
-   if (ItsANewAssignment)
-      Box_BoxTableBegin (NULL,Txt_New_assignment,
-                         NULL,NULL,
-			 Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,
-                         Asg.Title[0] ? Asg.Title :
-                	                Txt_Edit_assignment,
-                         NULL,NULL,
-			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
+      /***** Begin box and table *****/
+      if (ItsANewAssignment)
+	 Box_BoxTableBegin (NULL,Txt_New_assignment,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
+      else
+	 Box_BoxTableBegin (NULL,
+			    Asg.Title[0] ? Asg.Title :
+					   Txt_Edit_assignment,
+			    NULL,NULL,
+			    Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
 
 
-   /***** Assignment title *****/
-   HTM_TR_Begin (NULL);
+      /***** Assignment title *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RM","Title",Txt_Title);
+	 /* Label */
+	 Frm_LabelColumn ("RM","Title",Txt_Title);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Title\" required=\"required\""
-		   " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
+			    HTM_DONT_SUBMIT_ON_CHANGE,
+			    "id=\"Title\" required=\"required\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,
-					    Dat_FORM_SECONDS_ON,
-					    Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
-						                             SetHMSDontSet);
+      /***** Assignment start and end dates *****/
+      Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,
+					       Dat_FORM_SECONDS_ON,
+					       Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
+										SetHMSDontSet);
 
-   /***** Send work? *****/
-   HTM_TR_Begin (NULL);
+      /***** Send work? *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
+	 /* Label */
+	 Frm_LabelColumn ("RM","Folder",Txt_Upload_files_QUESTION);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LM\"");
-   HTM_LABEL_Begin ("class=\"DAT\"");
-   HTM_TxtColon (Txt_Folder);
-   HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
-                   HTM_DONT_SUBMIT_ON_CHANGE,
-		   "id=\"Folder\" size=\"30\"");
-   HTM_LABEL_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LM\"");
+	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TxtColon (Txt_Folder);
+	       HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
+			       HTM_DONT_SUBMIT_ON_CHANGE,
+			       "id=\"Folder\" size=\"30\"");
+	    HTM_LABEL_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Assignment text *****/
-   HTM_TR_Begin (NULL);
+      /***** Assignment text *****/
+      HTM_TR_Begin (NULL);
 
-   /* Label */
-   Frm_LabelColumn ("RT","Txt",Txt_Description);
+	 /* Label */
+	 Frm_LabelColumn ("RT","Txt",Txt_Description);
 
-   /* Data */
-   HTM_TD_Begin ("class=\"LT\"");
-   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-	               " class=\"TITLE_DESCRIPTION_WIDTH\"");
-   if (!ItsANewAssignment)
-      HTM_Txt (Txt);
-   HTM_TEXTAREA_End ();
-   HTM_TD_End ();
+	 /* Data */
+	 HTM_TD_Begin ("class=\"LT\"");
+	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
+				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+	       if (!ItsANewAssignment)
+		  HTM_Txt (Txt);
+	    HTM_TEXTAREA_End ();
+	 HTM_TD_End ();
 
-   HTM_TR_End ();
+      HTM_TR_End ();
 
-   /***** Groups *****/
-   Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
+      /***** Groups *****/
+      Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
 
-   /***** End table, send button and end box *****/
-   if (ItsANewAssignment)
-      Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_assignment);
-   else
-      Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+      /***** End table, send button and end box *****/
+      if (ItsANewAssignment)
+	 Box_BoxTableWithButtonEnd (Btn_CREATE_BUTTON,Txt_Create_assignment);
+      else
+	 Box_BoxTableWithButtonEnd (Btn_CONFIRM_BUTTON,Txt_Save_changes);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1228,6 +1232,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1252,7 +1257,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		  HTM_TD_Begin ("colspan=\"7\" class=\"%s LM\"",
+		                The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"

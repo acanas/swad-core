@@ -488,7 +488,7 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
       /* Icon and text */
       Tml_Com_PutIconToToggleComms (IdComms,Link[ConExp].Icon,
 				    Str_BuildStringLong (*Link[ConExp].Text,(long) NumComms));
-      Str_FreeString ();
+      Str_FreeStrings ();
 
    /* End container */
    HTM_DIV_End ();

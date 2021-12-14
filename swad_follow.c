@@ -611,6 +611,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
@@ -638,7 +639,10 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
-	       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,"BT_LINK LT DAT",NULL);
+	       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
+	                                Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                                NULL);
+	       Str_FreeStrings ();
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();

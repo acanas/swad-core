@@ -788,7 +788,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 						 "arrow-up.svg",
 						 Str_BuildStringStr (Txt_Move_up_X,
 								     StrSetInd));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -801,7 +801,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 						 "arrow-down.svg",
 						 Str_BuildStringStr (Txt_Move_down_X,
 								     StrSetInd));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);

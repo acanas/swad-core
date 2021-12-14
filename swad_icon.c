@@ -384,8 +384,19 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
   {
+   static const char *ClassIco[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "CONTEXT_ICO_16x16",
+      [The_THEME_GREY  ] = "CONTEXT_ICO_16x16",
+      [The_THEME_PURPLE] = "CONTEXT_ICO_16x16",
+      [The_THEME_BLUE  ] = "CONTEXT_ICO_16x16",
+      [The_THEME_YELLOW] = "CONTEXT_ICO_16x16",
+      [The_THEME_PINK  ] = "CONTEXT_ICO_16x16",
+      [The_THEME_DARK  ] = "CONTEXT_ICO_16x16 CONTEXT_ICO_DARK",
+     };
+
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-      Ico_PutIcon (Icon,Title,"CONTEXT_ICO_16x16");
+      Ico_PutIcon (Icon,Title,ClassIco[Gbl.Prefs.Theme]);
    HTM_DIV_End ();
   }
 
@@ -406,7 +417,18 @@ void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title
 
 void Ico_PutIconLink (const char *Icon,const char *Title)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16");
+   static const char *ClassIco[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
+      [The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
+      [The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
+      [The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
+      [The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
+      [The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
+      [The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 CONTEXT_ICO_DARK",
+     };
+
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,ClassIco[Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
@@ -415,9 +437,20 @@ void Ico_PutIconLink (const char *Icon,const char *Title)
 
 void Ico_PutIconTextLink (const char *Icon,const char *Text)
   {
+   static const char *ClassIco[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "CONTEXT_ICO_x16",
+      [The_THEME_GREY  ] = "CONTEXT_ICO_x16",
+      [The_THEME_PURPLE] = "CONTEXT_ICO_x16",
+      [The_THEME_BLUE  ] = "CONTEXT_ICO_x16",
+      [The_THEME_YELLOW] = "CONTEXT_ICO_x16",
+      [The_THEME_PINK  ] = "CONTEXT_ICO_x16",
+      [The_THEME_DARK  ] = "CONTEXT_ICO_x16 CONTEXT_ICO_DARK",
+     };
+
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-      Ico_PutIcon (Icon,Text,"CONTEXT_ICO_x16");
+      Ico_PutIcon (Icon,Text,ClassIco[Gbl.Prefs.Theme]);
       HTM_TxtF ("&nbsp;%s",Text);
    HTM_DIV_End ();
   }

@@ -1565,6 +1565,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
@@ -1733,7 +1734,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
 	       /* Write form, text, or nothing depending on
 		  the user's role and the visibility of the field */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT %s COLOR%u\"",
+	                     The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		  if (ICanEditThisField)	// Show with form
 		    {
 		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
@@ -2681,11 +2683,16 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 
 static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
   {
-   HTM_TD_Begin ("class=\"REC_C2_MID DAT_N LT\"");
+   extern const char *The_ClassDatN[The_NUM_THEMES];
+
+   HTM_TD_Begin ("class=\"REC_C2_MID LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
       if (ShowData && UsrDat->CtyCod > 0)
+	{
 	 /* Link to see country information */
 	 Cty_WriteCountryName (UsrDat->CtyCod,
-			       "BT_LINK DAT_N");	// Put link to country
+			       Str_BuildStringStr ("BT_LINK %s",The_ClassDatN[Gbl.Prefs.Theme]));	// Put link to country
+	 Str_FreeStrings ();
+	}
    HTM_TD_End ();
   }
 
@@ -2708,6 +2715,7 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
 
 static void Rec_ShowEmail (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Email;
 
    /***** Email *****/
@@ -2717,13 +2725,14 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Email);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (UsrDat->Email[0])
 	   {
 	    HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
 	       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 		 {
-		  HTM_A_Begin ("href=\"mailto:%s\" class=\"DAT_N\"",UsrDat->Email);
+		  HTM_A_Begin ("href=\"mailto:%s\" class=\"%s\"",
+		               UsrDat->Email,The_ClassDatN[Gbl.Prefs.Theme]);
 		     HTM_Txt (UsrDat->Email);
 		  HTM_A_End ();
 		 }
@@ -2742,6 +2751,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat)
 
 static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_ID;
 
    /***** User's IDs *****/
@@ -2751,7 +2761,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_ID);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 ID_WriteUsrIDs (UsrDat,Anchor);
       HTM_TD_End ();
 
@@ -2766,6 +2776,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_Sex;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -2791,7 +2802,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 Frm_LabelColumn ("REC_C1_BOT RM","Role",Txt_Role);
 
 	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    switch (TypeOfView)
 	      {
 	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:		// I want to apply for enrolment
@@ -2987,7 +2998,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 /* Label */
 	 Frm_LabelColumn ("REC_C1_BOT RM","",
 			  Str_BuildStringStr ("%s*",Txt_Sex));
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -2995,7 +3006,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		 Sex <= Usr_SEX_MALE;
 		 Sex++)
 	      {
-	       HTM_LABEL_Begin ("class=\"DAT_N\"");
+	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_INPUT_RADIO ("Sex",false,
 				   "value=\"%u\"%s  required=\"required\"",
 				   (unsigned) Sex,
@@ -3012,7 +3023,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Role);
 
 	 /* Data */
-	 HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
 	 HTM_TD_End ();
 	}
@@ -3026,6 +3037,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Surname_1;
 
    HTM_TR_Begin (NULL);
@@ -3035,13 +3047,13 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 	{
 	 Frm_LabelColumn ("REC_C1_BOT RM","Surname1",
 			  Str_BuildStringStr ("%s*",Txt_Surname_1));
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 	}
       else
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
@@ -3064,6 +3076,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Surname_2;
 
    HTM_TR_Begin (NULL);
@@ -3074,7 +3087,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 		       Txt_Surname_2);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->Surname2,
@@ -3097,6 +3110,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_First_name;
 
    HTM_TR_Begin (NULL);
@@ -3106,13 +3120,14 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 	{
 	 Frm_LabelColumn ("REC_C1_BOT RM","FirstName",
 			  Str_BuildStringStr ("%s*",Txt_First_name));
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 	}
       else
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
 
       /* Data */
-      HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM %s\"",
+                    The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->FrstName,
@@ -3151,7 +3166,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 	{
 	 Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",
 			  Str_BuildStringStr ("%s*",Txt_Country));
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 	}
       else
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
@@ -3185,6 +3200,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Date_of_birth;
 
    /***** Date of birth *****/
@@ -3196,7 +3212,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 		       Txt_Date_of_birth);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	   {
 	    if (PutForm)
@@ -3221,6 +3237,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,bool ShowData,bool PutFo
 static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Phone;
    char *Name;
    char *Label;
@@ -3242,7 +3259,7 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 		       Label);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	   {
 	    if (PutForm)
@@ -3251,7 +3268,8 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 			      "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",Name);
 	    else if (UsrDat->Phone[NumPhone][0])
 	      {
-	       HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",UsrDat->Phone[NumPhone]);
+	       HTM_A_Begin ("href=\"tel:%s\" class=\"%s\"",
+	                    UsrDat->Phone[NumPhone],The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_Txt (UsrDat->Phone[NumPhone]);
 	       HTM_A_End ();
 	      }
@@ -3273,6 +3291,7 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_USER_comments;
 
    /***** Comments *****/
@@ -3284,7 +3303,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 		       Txt_USER_comments);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	   {
 	    if (PutForm)
@@ -3335,6 +3354,7 @@ static void Rec_ShowTeacherRows (struct UsrData *UsrDat,struct Ins_Instit *Ins,
 
 static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Institution;
 
    /***** Institution *****/
@@ -3344,13 +3364,13 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	    if (Ins->InsCod > 0)
 	      {
 	       if (Ins->WWW[0])
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-			       Ins->WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			       Ins->WWW,The_ClassDatN[Gbl.Prefs.Theme]);
 	       HTM_Txt (Ins->FullName);
 	       if (Ins->WWW[0])
 		  HTM_A_End ();
@@ -3366,6 +3386,7 @@ static void Rec_ShowInstitution (struct Ins_Instit *Ins,bool ShowData)
 
 static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Center;
    struct Ctr_Center Ctr;
 
@@ -3376,7 +3397,7 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	   {
 	    if (UsrDat->Tch.CtrCod > 0)
@@ -3384,8 +3405,8 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
 	       Ctr.CtrCod = UsrDat->Tch.CtrCod;
 	       Ctr_GetDataOfCenterByCod (&Ctr);
 	       if (Ctr.WWW[0])
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-			       Ctr.WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			       Ctr.WWW,The_ClassDatN[Gbl.Prefs.Theme]);
 	       HTM_Txt (Ctr.FullName);
 	       if (Ctr.WWW[0])
 		  HTM_A_End ();
@@ -3402,6 +3423,7 @@ static void Rec_ShowCenter (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Department;
    struct Dpt_Department Dpt;
 
@@ -3412,7 +3434,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Department);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	   {
 	    if (UsrDat->Tch.DptCod > 0)
@@ -3420,8 +3442,8 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
 	       Dpt.DptCod = UsrDat->Tch.DptCod;
 	       Dpt_GetDataOfDepartmentByCod (&Dpt);
 	       if (Dpt.WWW[0])
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-			       Dpt.WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			       Dpt.WWW,The_ClassDatN[Gbl.Prefs.Theme]);
 	       HTM_Txt (Dpt.FullName);
 	       if (Dpt.WWW[0])
 		  HTM_A_End ();
@@ -3438,6 +3460,7 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Office;
 
    /***** Office *****/
@@ -3447,7 +3470,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Office);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	    HTM_Txt (UsrDat->Tch.Office);
       HTM_TD_End ();
@@ -3461,6 +3484,7 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,bool ShowData)
 
 static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Phone;
 
    /***** Office phone *****/
@@ -3470,11 +3494,11 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,bool ShowData)
       Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Phone);
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT DAT_N LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (ShowData)
 	   {
-	    HTM_A_Begin ("href=\"tel:%s\" class=\"DAT_N\"",
-			 UsrDat->Tch.OfficePhone);
+	    HTM_A_Begin ("href=\"tel:%s\" class=\"%s\"",
+			 UsrDat->Tch.OfficePhone,The_ClassDatN[Gbl.Prefs.Theme]);
 	       HTM_Txt (UsrDat->Tch.OfficePhone);
 	    HTM_A_End ();
 	   }
@@ -3751,7 +3775,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    /* Label */
 	    Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",
 			     Str_BuildStringStr ("%s*",Txt_Country));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3783,7 +3807,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    /* Label */
 	    Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",
 			     Str_BuildStringStr ("%s*",Txt_Institution));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3824,7 +3848,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Label */
 	       Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",
 				Str_BuildStringStr ("%s*",Txt_Center));
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3863,7 +3887,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       /* Label */
 	       Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,
 				Str_BuildStringStr ("%s*",Txt_Department));
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");

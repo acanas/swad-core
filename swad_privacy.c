@@ -154,6 +154,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    unsigned MaskAllowedVisibility)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
 
@@ -170,24 +172,25 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	    Frm_BeginFormAnchor (Action,Pri_PRIVACY_ID);
 	 HTM_UL_Begin ("class=\"PRI_LIST LIST_LEFT\"");
 
-	    for (Visibility = Pri_VISIBILITY_USER;
+	    for (Visibility  = Pri_VISIBILITY_USER;
 		 Visibility <= Pri_VISIBILITY_WORLD;
 		 Visibility++)
 	       if (MaskAllowedVisibility & (1 << Visibility))
 		 {
-		  HTM_LI_Begin ("class=\"%s\"",
-				(Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
-									"DAT");
-		     HTM_LABEL_Begin (NULL);
-			HTM_INPUT_RADIO (ParamName,Action != ActUnk,
-					 "value=\"%u\"%s%s",
-					 (unsigned) Visibility,
-					 Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" :
-						                               "",
-					 Action == ActUnk ? " disabled=\"disabled\"" :
-						            "");
-			HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
-		     HTM_LABEL_End ();
+		  if (Visibility == CurrentVisibilityInDB)
+		     HTM_LI_Begin ("class=\"%s LIGHT_BLUE\"",The_ClassDatN[Gbl.Prefs.Theme]);
+		  else
+		     HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_LABEL_Begin (NULL);
+		     HTM_INPUT_RADIO (ParamName,Action != ActUnk,
+				      "value=\"%u\"%s%s",
+				      (unsigned) Visibility,
+				      Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" :
+									    "",
+				      Action == ActUnk ? " disabled=\"disabled\"" :
+							 "");
+		     HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
+		  HTM_LABEL_End ();
 		  HTM_LI_End ();
 		 }
 

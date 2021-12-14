@@ -208,7 +208,7 @@ void ExaRes_ShowMyResultsInExa (void)
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_exam_X,Exam.Title),
 			    false);	// Do not list exams to select
-   Str_FreeString ();
+   Str_FreeStrings ();
    ExaRes_ListMyResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
@@ -260,7 +260,7 @@ void ExaRes_ShowMyResultsInSes (void)
    /***** List my sessions results in session *****/
    ExaRes_ShowResultsBegin (&Exams,Str_BuildStringStr (Txt_Results_of_session_X,Session.Title),
 			    false);	// Do not list exams to select
-   Str_FreeString ();
+   Str_FreeStrings ();
    ExaRes_ListMyResultsInSes (&Exams,Session.SesCod);
    ExaRes_ShowResultsEnd ();
 
@@ -408,7 +408,7 @@ void ExaRes_ShowAllResultsInExa (void)
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_exam_X,Exam.Title),
 			    false);	// Do not list exams to select
-   Str_FreeString ();
+   Str_FreeStrings ();
    ExaRes_ListAllResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
@@ -485,7 +485,7 @@ void ExaRes_ShowAllResultsInSes (void)
    ExaRes_ShowResultsBegin (&Exams,
                             Str_BuildStringStr (Txt_Results_of_session_X,Session.Title),
 			    false);	// Do not list exams to select
-   Str_FreeString ();
+   Str_FreeStrings ();
    ExaRes_ListAllResultsInSes (&Exams,Session.SesCod);
    ExaRes_ShowResultsEnd ();
 
@@ -575,6 +575,7 @@ static void ExaRes_ShowResultsEnd (void)
 static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
   {
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Exams;
    extern const char *Txt_Exam;
    extern const char *Txt_Update_results;
@@ -618,7 +619,8 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	       /* Write a row for this session */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
+		                The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		     HTM_INPUT_CHECKBOX ("ExaCod",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"%s",
 					 NumExam,Exams->Lst[NumExam].ExaCod,
@@ -626,13 +628,15 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 									"");
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+		                The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumExam);
 			HTM_TxtF ("%u:",NumExam + 1);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		                The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		     HTM_Txt (Exam.Title);
 		  HTM_TD_End ();
 
@@ -762,6 +766,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 				long ExaCod,	// <= 0 ==> any
 				const char *ExamsSelectedCommas)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Result;
    MYSQL_RES *mysql_res;
    struct UsrData *UsrDat;
@@ -839,8 +844,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	       UniqueId++;
 	       if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
-			     Id,Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("id =\"%s\" class=\"%s LT COLOR%u\"",
+			     Id,The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						true,true,false,0x7);
@@ -849,7 +854,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	      }
 
 	    /* Write session title */
-	    HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       HTM_Txt (Session.Title);
 	    HTM_TD_End ();
 
@@ -872,7 +878,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	      }
 
 	    /* Write total number of questions */
-	    HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		  HTM_Unsigned (Print.NumQsts.All);
 	       else
@@ -907,7 +914,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Write number of correct questions */
-	    HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  if (Print.NumQsts.Valid.Correct)
@@ -920,7 +928,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Write number of wrong questions */
-	    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  if (Print.NumQsts.Valid.Wrong.Negative)
@@ -932,7 +941,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  if (Print.NumQsts.Valid.Wrong.Zero)
@@ -944,7 +954,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		  Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  if (Print.NumQsts.Valid.Wrong.Positive)
@@ -957,7 +968,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Write number of blank questions */
-	    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  if (Print.NumQsts.Valid.Blank)
@@ -970,7 +982,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Write score valid (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  HTM_Double2Decimals (Print.Score.Valid);
@@ -982,7 +995,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Write average score per question (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		  HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
 								   (double) Print.NumQsts.Valid.Total :
@@ -992,7 +1006,8 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /* Write grade over maximum grade (taking into account only valid questions) */
-	    HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	                  The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       if (ICanView.Score)
 		 {
 		  Grade = TstPrn_ComputeGrade (Print.NumQsts.Valid.Total,Print.Score.Valid,Exam.MaxGrade);
@@ -1086,22 +1101,25 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
                                           const struct ExaPrn_Score *TotalScore,
 					  double TotalGrade)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Sessions;
    unsigned NumTotalQstsInvalid;
 
    /***** Row title *****/
-   HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"3\" class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_TxtColonNBSP (Txt_Sessions);
       HTM_Unsigned (NumResults);
    HTM_TD_End ();
 
    /***** Write total number of questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_Unsigned (NumTotalQsts->All);
    HTM_TD_End ();
 
    /***** Write total number of valid questions *****/
-   HTM_TD_Begin ("class=\"DAT_GREEN RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT DAT_GREEN LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
       if (NumTotalQsts->Valid.Total)
 	 HTM_Unsigned (NumTotalQsts->Valid.Total);
       else
@@ -1118,7 +1136,8 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write number of correct questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       if (NumTotalQsts->Valid.Correct)
 	 HTM_Unsigned (NumTotalQsts->Valid.Correct);
       else
@@ -1126,21 +1145,24 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write number of wrong questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       if (NumTotalQsts->Valid.Wrong.Negative)
 	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Negative);
       else
 	 HTM_Light0 ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       if (NumTotalQsts->Valid.Wrong.Zero)
 	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Zero);
       else
 	 HTM_Light0 ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       if (NumTotalQsts->Valid.Wrong.Positive)
 	 HTM_Unsigned (NumTotalQsts->Valid.Wrong.Positive);
       else
@@ -1148,7 +1170,8 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write number of blank questions *****/
-   HTM_TD_Begin ("class=\"DAT_N RT LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       if (NumTotalQsts->Valid.Blank)
 	 HTM_Unsigned (NumTotalQsts->Valid.Blank);
       else
@@ -1156,14 +1179,16 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
    HTM_TD_End ();
 
    /***** Write total valid score *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_Double2Decimals (TotalScore->Valid);
       HTM_Txt ("/");
       HTM_Unsigned (NumTotalQsts->Valid.Total);
    HTM_TD_End ();
 
    /***** Write average valid score per valid question *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_Double2Decimals (NumTotalQsts->Valid.Total ? TotalScore->Valid /
 						       (double) NumTotalQsts->Valid.Total :
 						       0.0);
@@ -1171,12 +1196,14 @@ static void ExaRes_ShowResultsSummaryRow (unsigned NumResults,
 
 
    /***** Write total grade *****/
-   HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_Double2Decimals (TotalGrade);
    HTM_TD_End ();
 
    /***** Last cell *****/
-   HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                 The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
    HTM_TD_End ();
   }
 
@@ -1482,6 +1509,8 @@ static void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print)
 
 void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[Pho_NUM_SHAPES] =
      {
@@ -1495,12 +1524,12 @@ void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
       HTM_TD_End ();
 
       /***** User's data *****/
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
@@ -1523,6 +1552,8 @@ void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
 
 static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    Dat_StartEndTime_t StartEndTime;
    char *Id;
@@ -1535,14 +1566,15 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
       HTM_TR_Begin (NULL);
 
 	 /***** Label *****/
-	 HTM_TD_Begin ("class=\"DAT_N RT\"");
+	 HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
 	 /***** Time *****/
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+	               Id,The_ClassDat[Gbl.Prefs.Theme]);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Print->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					  true,true,true,0x7);
@@ -1561,6 +1593,8 @@ static void ExaRes_ShowExamResultTime (struct ExaPrn_Print *Print)
 static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Questions;
    extern const char *Txt_QUESTIONS_valid;
    extern const char *Txt_QUESTIONS_invalid;
@@ -1569,12 +1603,12 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Txt_Questions);
       HTM_TD_End ();
 
       /***** Number of questions *****/
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (ICanView->Result)
 	   {
 	    HTM_TxtF ("%u",Print->NumQsts.All);
@@ -1614,6 +1648,8 @@ static void ExaRes_ShowExamResultNumQsts (struct ExaPrn_Print *Print,
 static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
                                           const struct ExaRes_ICanView *ICanView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Valid_answers;
    extern const char *Txt_ANSWERS_correct;
    extern const char *Txt_ANSWERS_wrong;
@@ -1623,12 +1659,12 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Txt_Valid_answers);
       HTM_TD_End ();
 
       /***** Number of answers *****/
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (ICanView->Score)
 	    HTM_TxtF ("%s(<em>p<sub>i</sub></em>=1):&nbsp;%u; "
 		      "%s(-1&le;<em>p<sub>i</sub></em>&lt;0):&nbsp;%u; "
@@ -1655,6 +1691,8 @@ static void ExaRes_ShowExamResultNumAnss (struct ExaPrn_Print *Print,
 static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Score;
    extern const char *Txt_valid_score;
 
@@ -1662,12 +1700,12 @@ static void ExaRes_ShowExamResultScore (struct ExaPrn_Print *Print,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Txt_Score);
       HTM_TD_End ();
 
       /***** Score *****/
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (ICanView->Score)
 	   {
 	    /* Score counting all questions */
@@ -1707,6 +1745,8 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
 	                                struct ExaPrn_Print *Print,
                                         const struct ExaRes_ICanView *ICanView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Grade;
    extern const char *Txt_valid_grade;
 
@@ -1714,12 +1754,12 @@ static void ExaRes_ShowExamResultGrade (const struct Exa_Exam *Exam,
    HTM_TR_Begin (NULL);
 
       /***** Label *****/
-      HTM_TD_Begin ("class=\"DAT_N RT\"");
+      HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_TxtColon (Txt_Grade);
       HTM_TD_End ();
 
       /***** Grade *****/
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (ICanView->Score)
 	   {
 	    /* Grade counting all questions */

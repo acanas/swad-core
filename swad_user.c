@@ -1359,7 +1359,7 @@ void Usr_WriteLoggedUsrHead (void)
 				     Str_BuildStringStr ("BT_LINK %s",
 							 The_ClassUsr[Gbl.Prefs.Theme]),
 				     NULL);
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -2031,6 +2031,7 @@ void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
@@ -2052,7 +2053,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       /***** Put a form to change my role *****/
       if (Rol_GetNumAvailableRoles () == 1)
 	{
-	 HTM_SPAN_Begin ("class=\"DAT\"");
+	 HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Role);
 	 HTM_SPAN_End ();
 
@@ -4732,7 +4733,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 											    Txt_ROLES_PLURAL_abc[Role][Sex])),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeString ();
+      Str_FreeStrings ();
 
 	 /***** Heading row with column names *****/
 	 Gbl.Usrs.Listing.WithPhotos = true;

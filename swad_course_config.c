@@ -207,6 +207,7 @@ static void CrsCfg_Title (bool PutLink)
 
 static void CrsCfg_Degree (bool PrintView,bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degree;
    unsigned NumDeg;
 
@@ -219,7 +220,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		       Txt_Degree);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of degrees of the current center */
@@ -248,9 +249,10 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
-					   "BT_LINK LT DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
+					   Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   NULL);
+		  Str_FreeStrings ();
 	      }
 	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
 			  20,"LM",true);
@@ -294,6 +296,7 @@ static void CrsCfg_ShrtName (bool PutForm)
 
 static void CrsCfg_Year (bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Not_applicable;
@@ -308,7 +311,7 @@ static void CrsCfg_Year (bool PutForm)
 		       Txt_Year_OF_A_DEGREE);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgCrsYeaCfg);
@@ -337,6 +340,7 @@ static void CrsCfg_Year (bool PutForm)
 
 static void CrsCfg_InstitutionalCode (bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutional_code;
 
    /***** Institutional course code *****/
@@ -348,7 +352,7 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 		       Txt_Institutional_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    Frm_BeginForm (ActChgInsCrsCodCfg);
@@ -372,6 +376,7 @@ static void CrsCfg_InstitutionalCode (bool PutForm)
 
 static void CrsCfg_InternalCode (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Internal_code;
 
    /***** Internal course code *****/
@@ -381,7 +386,7 @@ static void CrsCfg_InternalCode (void)
       Frm_LabelColumn ("RT",NULL,Txt_Internal_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Long (Gbl.Hierarchy.Crs.CrsCod);
       HTM_TD_End ();
 
@@ -412,6 +417,7 @@ static void CrsCfg_QR (void)
 
 static void CrsCfg_Indicators (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    struct Ind_IndicatorsCrs IndicatorsCrs;
@@ -435,7 +441,10 @@ static void CrsCfg_Indicators (void)
 			  IndicatorsCrs.NumIndicators,
 			  Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_BUTTON_SUBMIT_Begin (Title,"BT_LINK DAT",NULL);
+	    HTM_BUTTON_SUBMIT_Begin (Title,
+	                             Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                             NULL);
+	    Str_FreeStrings ();
 	       HTM_TxtF ("%s&nbsp;",Title);
 	       Ico_PutIcon ((IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
 										  "exclamation-triangle.svg",

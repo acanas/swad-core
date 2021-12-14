@@ -931,7 +931,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 				Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
 							       Txt_FORUM_Post_X_banned_Click_to_unban_it,
 						     (long) PstNum));
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 	    Frm_EndForm ();
 	   }
 	 else
@@ -942,7 +942,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 							Txt_FORUM_Post_X_banned,
 					      (long) PstNum),
 			 "ICO_HIDDEN ICO16x16");
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 
 	 /***** Form to remove post *****/

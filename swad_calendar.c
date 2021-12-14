@@ -134,7 +134,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 		  Ico_PutSettingIconLink (Icon,
 					  Str_BuildStringStr (Txt_First_day_of_the_week_X,
 							      Txt_DAYS_SMALL[FirstDayOfWeek]));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 	       Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }

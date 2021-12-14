@@ -357,6 +357,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
 
 static void CtyCfg_Platform (bool PrintView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Platform;
 
    /***** Institution *****/
@@ -366,13 +367,14 @@ static void CtyCfg_Platform (bool PrintView)
       Frm_LabelColumn ("RT",NULL,Txt_Platform);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (!PrintView)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
-	       HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
-					"BT_LINK LT DAT",NULL);
-	       Hie_FreeGoToMsg ();
+	       HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
+					Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					NULL);
+	       Str_FreeStrings ();
 	   }
 	 Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO20x20");
 	 HTM_NBSP ();
@@ -393,6 +395,7 @@ static void CtyCfg_Platform (bool PrintView)
 
 static void CtyCfg_Name (bool PutLink)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Country;
 
    /***** Country name *****/
@@ -402,10 +405,11 @@ static void CtyCfg_Name (bool PutLink)
       Frm_LabelColumn ("RT",NULL,Txt_Country);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT_N LB\"");
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (PutLink)
-	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-			 Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			 Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
+			 The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 if (PutLink)
 	    HTM_A_End ();
@@ -438,6 +442,7 @@ static void CtyCfg_QR (void)
 
 static void CtyCfg_NumUsrs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Users_of_the_country;
 
    /***** Number of users *****/
@@ -447,7 +452,7 @@ static void CtyCfg_NumUsrs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_country);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (&Gbl.Hierarchy.Cty));
       HTM_TD_End ();
 
@@ -460,6 +465,7 @@ static void CtyCfg_NumUsrs (void)
 
 static void CtyCfg_NumInss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
 
@@ -475,8 +481,9 @@ static void CtyCfg_NumInss (void)
 	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
 	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
 							 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-				     "BT_LINK DAT",NULL);
-	    Str_FreeString ();
+				     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+				     NULL);
+	    Str_FreeStrings ();
 	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -491,6 +498,7 @@ static void CtyCfg_NumInss (void)
 
 static void CtyCfg_NumDegs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees;
 
    /***** Number of degrees *****/
@@ -500,7 +508,7 @@ static void CtyCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
       HTM_TD_End ();
 
@@ -513,6 +521,7 @@ static void CtyCfg_NumDegs (void)
 
 static void CtyCfg_NumCrss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -522,7 +531,7 @@ static void CtyCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
       HTM_TD_End ();
 

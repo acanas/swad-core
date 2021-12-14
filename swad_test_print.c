@@ -1829,6 +1829,7 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 
 static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    unsigned NumPrints;
@@ -1842,7 +1843,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    double TotalScore;
    unsigned NumPrintsVisibleByTchs = 0;
    struct TstRes_ICanView ICanView;
-   char *ClassDat;
+   const char *ClassDat;
 
    /***** Reset total number of questions and total score *****/
    NumTotalQsts.All      =
@@ -1870,7 +1871,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Get print data */
 	    TstPrn_GetPrintDataByPrnCod (&Print);
-	    ClassDat = Print.AllowTeachers ? "DAT" :
+	    ClassDat = Print.AllowTeachers ? The_ClassDat[Gbl.Prefs.Theme] :
 					     "DAT_LIGHT";
 
 	    /* Get if I can see print result and score */
@@ -2056,6 +2057,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
                                          struct TstPrn_NumQuestions *NumTotalQsts,
                                          double TotalScore)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Visible_tests;
    bool ICanViewTotalScore;
 
@@ -2085,31 +2087,36 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
    HTM_TR_Begin (NULL);
 
       /***** Row title *****/
-      HTM_TD_Begin ("colspan=\"2\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"2\" class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 HTM_TxtColonNBSP (Txt_Visible_tests);
 	 HTM_Unsigned (NumPrints);
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write total number of non-blank answers *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total number of blank answers *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total score *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (ICanViewTotalScore)
 	   {
 	    HTM_Double2Decimals (TotalScore);
@@ -2119,20 +2126,23 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       HTM_TD_End ();
 
       /***** Write average score per question *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (ICanViewTotalScore)
 	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
 						     0.0);
       HTM_TD_End ();
 
       /***** Write grade over Tst_SCORE_MAX *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (ICanViewTotalScore)
 	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
 
       /***** Last cell *****/
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -2146,6 +2156,8 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
 void TstPrn_ShowOnePrint (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -2209,11 +2221,11 @@ void TstPrn_ShowOnePrint (void)
 	    /* User */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs][Gbl.Usrs.Other.UsrDat.Sex]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
 		  HTM_TxtF ("&nbsp;%s",Gbl.Usrs.Other.UsrDat.Surname1);
 		  if (Gbl.Usrs.Other.UsrDat.Surname2[0])
@@ -2238,11 +2250,12 @@ void TstPrn_ShowOnePrint (void)
 
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		     HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
+		  HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+		                Id,The_ClassDat[Gbl.Prefs.Theme]);
 		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						   true,true,true,0x7);
@@ -2256,11 +2269,11 @@ void TstPrn_ShowOnePrint (void)
 	    /***** Number of questions *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Questions);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (Print.NumQsts.All);
 	       HTM_TD_End ();
 
@@ -2269,11 +2282,11 @@ void TstPrn_ShowOnePrint (void)
 	    /***** Number of answers *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Answers);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (Print.NumQsts.NotBlank);
 	       HTM_TD_End ();
 
@@ -2282,11 +2295,11 @@ void TstPrn_ShowOnePrint (void)
 	    /***** Score *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Score);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ICanView.Score)
 		    {
 		     HTM_STRONG_Begin ();
@@ -2304,11 +2317,11 @@ void TstPrn_ShowOnePrint (void)
 	    /***** Grade *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Grade);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ICanView.Score)
 		    {
 		     HTM_STRONG_Begin ();
@@ -2324,11 +2337,11 @@ void TstPrn_ShowOnePrint (void)
 	    /***** Tags present in this test *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Tags);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  TstPrn_ShowTagsPresentInAPrint (Print.PrnCod);
 	       HTM_TD_End ();
 

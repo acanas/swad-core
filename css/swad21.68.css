@@ -35,7 +35,7 @@ body
 .BODY_BG_BLUE	{background-color:white;}
 .BODY_BG_YELLOW	{background-color:white;}
 .BODY_BG_PINK	{background-color:white;}
-.BODY_BG_DARK	{background-color:#404040;}
+.BODY_BG_DARK	{background-color:#383838;}
 
 input	
 	{
@@ -148,8 +148,8 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_1_DARK
 	{
-	background-image:-webkit-linear-gradient(#383838 0,#404040 100%);	/* Safari */
-	background-image:linear-gradient(#383838 0,#404040 100%);
+	background-image:-webkit-linear-gradient(#303030 0,#383838 100%);	/* Safari */
+	background-image:linear-gradient(#303030 0,#383838 100%);
 	background-repeat:no-repeat;
 	}
 
@@ -254,7 +254,7 @@ a:hover						/* Default ==> underlined */
 .USR_BLUE		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
 .USR_YELLOW		{color:#b3b0b3; font-size:15pt; font-weight:bold; white-space:nowrap;}
 .USR_PINK		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_BLACK		{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_DARK		{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
 
 #head_row_1_right
 	{
@@ -283,7 +283,7 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_2_GREY
 	{
-	background-color:#404040;
+	background-color:#383838;
 	}
 .HEAD_ROW_2_PURPLE
 	{
@@ -309,7 +309,7 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_2_DARK
 	{
-	background-color:#404040;
+	background-color:#383838;
 	}
 
 /******************************* Current time ********************************/
@@ -608,8 +608,8 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_3_DARK
 	{
-	background-image:-webkit-linear-gradient(#404040 0,#404040 54px,white 54px,white 100%);	/* Safari */
-	background-image:linear-gradient(#404040 0,#404040 54px,#404040 54px,#404040 100%);
+	background-image:-webkit-linear-gradient(#383838 0,#383838 54px,#383838 54px,#383838 100%);	/* Safari */
+	background-image:linear-gradient(#383838 0,#383838 54px,#383838 54px,#383838 100%);
 	}
 
 .TAB_LIST
@@ -781,7 +781,7 @@ a:hover						/* Default ==> underlined */
 .TAB_OFF_BLUE	{background-color:#cae1e8;}
 .TAB_OFF_YELLOW	{background-color:#f4dfb2;}
 .TAB_OFF_PINK	{background-color:#f3dcca;}
-.TAB_OFF_DARK	{background-color:#aea79f;}
+.TAB_OFF_DARK	{background-color:#484848;}
 
 .TAB_OFF_TXT_WHITE	{color:#707070;}
 .TAB_OFF_TXT_GREY	{color:#505050;}
@@ -789,7 +789,7 @@ a:hover						/* Default ==> underlined */
 .TAB_OFF_TXT_BLUE	{color:#365e6e;}
 .TAB_OFF_TXT_YELLOW	{color:#4a2e19;}
 .TAB_OFF_TXT_PINK	{color:#505050;}
-.TAB_OFF_TXT_DARK	{color:#505050;}
+.TAB_OFF_TXT_DARK	{color:#d0d0d0;}
 
 .TAB_ON_TXT_WHITE	{color:#4d88A1;}
 .TAB_ON_TXT_GREY	{color:#606060;}
@@ -797,7 +797,7 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_TXT_BLUE	{color:#4d88A1;}
 .TAB_ON_TXT_YELLOW	{color:#7c4d2a;}
 .TAB_ON_TXT_PINK	{color:#63474e;}
-.TAB_ON_TXT_DARK	{color:#606060;}
+.TAB_ON_TXT_DARK	{color:#e0e0e0;}
 
 .TAB_ICO
 	{
@@ -805,6 +805,8 @@ a:hover						/* Default ==> underlined */
 	vertical-align:middle;
 	padding:4px 0;
 	}
+
+.TAB_ICO_DARK	{filter:invert(1);}
 
 /*********************** Layout (fourth row, main zone) **********************/
 #main_zone
@@ -1112,6 +1114,8 @@ a:hover						/* Default ==> underlined */
 		overflow:hidden;
 		}
 	}
+	
+.MENU_ICO_DARK	{filter:invert(1);}
 
 /********************************* Menu fonts ********************************/
 @media only screen and (max-width: 800px)
@@ -1141,16 +1145,13 @@ a:hover						/* Default ==> underlined */
 		padding:2px 0;
 		}
 	}
-
-.MENU_ICO_DARK		{filter:invert(1);}
-
 .MENU_TXT_WHITE		{color:#4D88a1;}
 .MENU_TXT_GREY		{color:#606060;}
 .MENU_TXT_PURPLE	{color:#573c4d;}
 .MENU_TXT_BLUE		{color:#4D88a1;}
 .MENU_TXT_YELLOW	{color:#7c4d2a;}
 .MENU_TXT_PINK		{color:#63474e;}
-.MENU_TXT_DARK		{color:#c0c0c0;}
+.MENU_TXT_DARK		{color:#d0d0d0;}
 
 /***************************** Users connected *******************************/
 .CONNECTED
@@ -1922,6 +1923,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin-top:-2px;
 	vertical-align:middle;
 	}
+.CONTEXT_ICO_DARK	{filter:invert(1);}
 
 /********************************** Frame ************************************/
 .FRAME_INLINE
@@ -1937,18 +1939,26 @@ a:hover img.CENTER_PHOTO_SHOW
 	text-align:center;
 	vertical-align:middle;
 	}
+
 .FRAME
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	margin:5px 0;
 	padding:8px 12px 12px 12px;
-	background-color:white;
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	text-align:center;
 	overflow:hidden;
 	}
+.FRAME_WHITE	{background-color:white;}
+.FRAME_GREY	{background-color:white;}
+.FRAME_PURPLE	{background-color:white;}
+.FRAME_BLUE	{background-color:white;}
+.FRAME_YELLOW	{background-color:white;}
+.FRAME_PINK	{background-color:white;}
+.FRAME_DARK	{background-color:#484848;}
+
 .FRAME_SHADOW
 	{
 	display:inline-block;
@@ -2013,14 +2023,19 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 .FRAME_TITLE_BIG
 	{
-	color:#404040;
 	font-size:22pt;
 	}
 .FRAME_TITLE_SMALL
 	{
-	color:#808080;
 	font-size:18pt;
 	}
+.FRAME_TITLE_WHITE	{color:#404040;}
+.FRAME_TITLE_GREY	{color:#404040;}
+.FRAME_TITLE_PURPLE	{color:#404040;}
+.FRAME_TITLE_BLUE	{color:#404040;}
+.FRAME_TITLE_YELLOW	{color:#404040;}
+.FRAME_TITLE_PINK	{color:#404040;}
+.FRAME_TITLE_DARK	{color:#d0d0d0;}
 
 /* Apply only to the first level of th and td */
 table.CELLS_PAD_1	> tbody > tr > th {padding: 1px;}
@@ -2300,7 +2315,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_OUT_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_OUT_YELLOW	{color:#7c4d2a; font-size:13pt;}
 .FORM_OUT_PINK		{color:#63474e; font-size:13pt;}
-.FORM_OUT_DARK		{color:#4d88a1; font-size:13pt;}
+.FORM_OUT_DARK		{color:#c0e0ff; font-size:13pt;}
 
 .BOLD	{font-weight:bold;}
 .NOWRAP	{white-space:nowrap;}
@@ -2439,19 +2454,33 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 /*****************************************************************************/
 
-.T1			{color:#202020; font-size:15pt;}
-.T2			{color:#202020; font-size:13pt;}
-.T3			{color:#202020; font-size:12pt;}
+.T1		{color:#202020; font-size:15pt;}
+.T2		{color:#202020; font-size:13pt;}
+.T3		{color:#202020; font-size:12pt;}
 
-.DAT			{color:#404040; font-size:13pt;}
-.DAT_NOBR		{color:#404040; font-size:13pt; white-space:nowrap;}
-.DAT_BOLD		{color:#404040; font-size:13pt; font-weight:bold;}
-.DAT_GREEN		{color:#246600; font-size:13pt;}
-.DAT_RED		{color:#660000; font-size:13pt;}
-.DAT_LIGHT		{color:#A0A0A0; font-size:13pt;}
-.DAT_N			{color:black;   font-size:13pt;}
-.DAT_NOBR_N		{color:black;   font-size:13pt; white-space:nowrap;}
-.DAT_N_BOLD		{color:black;   font-size:13pt; font-weight:bold;}
+.DAT_WHITE	{color:#404040; font-size:13pt;}
+.DAT_GREY	{color:#404040; font-size:13pt;}
+.DAT_PURPLE	{color:#404040; font-size:13pt;}
+.DAT_BLUE	{color:#404040; font-size:13pt;}
+.DAT_YELLOW	{color:#404040; font-size:13pt;}
+.DAT_PINK	{color:#404040; font-size:13pt;}
+.DAT_DARK	{color:#d0d0d0; font-size:13pt;}
+
+.DAT_N_WHITE	{color:black; font-size:13pt;}
+.DAT_N_GREY	{color:black; font-size:13pt;}
+.DAT_N_PURPLE	{color:black; font-size:13pt;}
+.DAT_N_BLUE	{color:black; font-size:13pt;}
+.DAT_N_YELLOW	{color:black; font-size:13pt;}
+.DAT_N_PINK	{color:black; font-size:13pt;}
+.DAT_N_DARK	{color:white; font-size:13pt;}
+
+.DAT_NOBR	{color:#404040; font-size:13pt; white-space:nowrap;}
+.DAT_BOLD	{color:#404040; font-size:13pt; font-weight:bold;}
+.DAT_GREEN	{color:#246600; font-size:13pt;}
+.DAT_RED	{color:#660000; font-size:13pt;}
+.DAT_LIGHT	{color:#A0A0A0; font-size:13pt;}
+.DAT_NOBR_N	{color:black;   font-size:13pt; white-space:nowrap;}
+.DAT_N_BOLD	{color:black;   font-size:13pt; font-weight:bold;}
 
 /*********************** Line in top part of a table row *********************/
 .LINE_TOP

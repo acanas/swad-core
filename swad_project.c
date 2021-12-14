@@ -1003,6 +1003,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 
 static void Prj_ShowTableAllProjectsHead (void)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Number_of_students;
@@ -1014,26 +1015,29 @@ static void Prj_ShowTableAllProjectsHead (void)
    extern const char *Txt_URL;
    Prj_Order_t Order;
    unsigned NumRoleToShow;
+   const char *Class = Str_BuildStringStr ("LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
 
    HTM_TR_Begin (NULL);
 
       for (Order  = (Prj_Order_t) 0;
 	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	   Order++)
-	 HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
-      HTM_TH (1,1,"LT DAT_N",Txt_Assigned_QUESTION);
-      HTM_TH (1,1,"LT DAT_N",Txt_Number_of_students);
+	 HTM_TH (1,1,Class,Txt_PROJECT_ORDER[Order]);
+      HTM_TH (1,1,Class,Txt_Assigned_QUESTION);
+      HTM_TH (1,1,Class,Txt_Number_of_students);
       for (NumRoleToShow = 0;
 	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
 	   NumRoleToShow++)
-	 HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
-      HTM_TH (1,1,"LT DAT_N",Txt_Proposal);
-      HTM_TH (1,1,"LT DAT_N",Txt_Description);
-      HTM_TH (1,1,"LT DAT_N",Txt_Required_knowledge);
-      HTM_TH (1,1,"LT DAT_N",Txt_Required_materials);
-      HTM_TH (1,1,"LT DAT_N",Txt_URL);
+	 HTM_TH (1,1,Class,Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
+      HTM_TH (1,1,Class,Txt_Proposal);
+      HTM_TH (1,1,Class,Txt_Description);
+      HTM_TH (1,1,Class,Txt_Required_knowledge);
+      HTM_TH (1,1,Class,Txt_Required_materials);
+      HTM_TH (1,1,Class,Txt_URL);
 
    HTM_TR_End ();
+
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -1214,6 +1218,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
                                 struct Prj_Project *Prj,
                                 Prj_ProjectView_t ProjectView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Project_files;
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
@@ -1249,7 +1254,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    ClassLink  = (Prj->Hidden == Prj_HIDDEN) ? "BT_LINK LT ASG_TITLE_LIGHT" :
 					      "BT_LINK LT ASG_TITLE";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					      "DAT";
+					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Prj->PrjCod,&Anchor);
@@ -1651,6 +1656,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
 
 static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
@@ -1667,7 +1673,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    ClassDate = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
 					     "DATE_BLUE";
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -1754,13 +1760,14 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
 static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
                                           Prj_ProjectView_t ProjectView)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    struct Dpt_Department Dpt;
    bool PutLink;
    const char *ClassData;
 
    /***** Set CSS classes *****/
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get data of department *****/
    Dpt.DptCod = Prj->DptCod;
@@ -1792,12 +1799,13 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
 
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    struct Dpt_Department Dpt;
    const char *ClassData;
 
    /***** Set CSS classes *****/
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get data of department *****/
    Dpt.DptCod = Prj->DptCod;
@@ -1819,6 +1827,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
                                         const char *Label,char *TxtField,
 					bool Warning)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    const char *ClassLabel;
    const char *ClassData;
 
@@ -1826,7 +1835,7 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					      "DAT";
+					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Label *****/
    switch (ProjectView)
@@ -1887,11 +1896,12 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
                                               char *TxtField)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    const char *ClassData;
 
    /***** Set CSS classes *****/
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Change format *****/
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1911,6 +1921,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
                                    Prj_ProjectView_t ProjectView,
                                    const char *id,unsigned UniqueId)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_URL;
    const char *ClassLabel;
    const char *ClassData;
@@ -1922,7 +1933,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					      "DAT";
+					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Write row with label and text *****/
    switch (ProjectView)
@@ -1970,11 +1981,12 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 
 static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    const char *ClassData;
 
    /***** Set CSS classes *****/
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Show URL *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
@@ -2009,6 +2021,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
                                                 Prj_ProjectView_t ProjectView,
                                                 Prj_RoleInProject_t RoleInPrj)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove;
@@ -2047,7 +2060,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					      "DAT";
+					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Prj->PrjCod,RoleInPrj);
@@ -2098,7 +2111,8 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 			     ClassData);
 	       break;
 	    case Prj_EDIT_ONE_PROJECT:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT\"");
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme]);
 	       break;
 	   }
 
@@ -2161,7 +2175,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 						       Prj_PutCurrentParams,Projects,
 						       Str_BuildStringStr (Txt_Add_USERS,
 									   Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]));
-			   Str_FreeString ();
+			   Str_FreeStrings ();
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
@@ -2191,6 +2205,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *Prj,
                                                       Prj_RoleInProject_t RoleInPrj)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -2199,7 +2214,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
 
    /***** Set CSS classes *****/
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
-					     "DAT";
+					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get users in project from database *****/
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Prj->PrjCod,RoleInPrj);
@@ -2573,7 +2588,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	       Prj_PutCurrentParams (Projects);
 	       Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
 							Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 	    Frm_EndForm ();
 
 	 /* End alert */
@@ -3241,6 +3256,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Data;
@@ -3420,7 +3436,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    Frm_LabelColumn ("RT","WWW",Txt_URL);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"DAT LT\"");
+	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
 			      "class=\"TITLE_DESCRIPTION_WIDTH\"");
 	    HTM_TD_End ();

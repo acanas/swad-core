@@ -168,26 +168,28 @@ void Ban_ShowAllBanners (void)
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumBan;
 
    /***** List start *****/
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
-   /***** Write all banners *****/
-   for (NumBan = 0;
-	NumBan < Banners->Num;
-	NumBan++)
-     {
-      /* Write data of this banner */
-      HTM_LI_Begin (NULL);
-	 HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-		      Banners->Lst[NumBan].WWW,
-		      Banners->Lst[NumBan].FullName);
-	    HTM_IMG (Cfg_URL_BANNER_PUBLIC,Banners->Lst[NumBan].Img,Banners->Lst[NumBan].FullName,
-		     "class=\"BANNER\"");
-	 HTM_A_End ();
-      HTM_LI_End ();
-     }
+      /***** Write all banners *****/
+      for (NumBan = 0;
+	   NumBan < Banners->Num;
+	   NumBan++)
+	{
+	 /* Write data of this banner */
+	 HTM_LI_Begin (NULL);
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+			 Banners->Lst[NumBan].WWW,
+			 Banners->Lst[NumBan].FullName,
+			 The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Banners->Lst[NumBan].Img,Banners->Lst[NumBan].FullName,
+			"class=\"BANNER\"");
+	    HTM_A_End ();
+	 HTM_LI_End ();
+	}
 
    /***** List end *****/
    HTM_UL_End ();
@@ -400,6 +402,7 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
@@ -446,7 +449,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    /* Banner code */
 	    HTM_TD_Begin ("class=\"%s RM\"",
 			  Ban->Hidden ? "DAT_LIGHT" :
-					"DAT");
+					The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Ban->BanCod);
 	       HTM_ARTICLE_End ();

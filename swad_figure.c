@@ -442,11 +442,13 @@ static void Fig_GetAndShowUsersStats (void)
 
 static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    long Cod = Sco_GetCurrentCod ();
-   char *Class = (Role == Rol_UNK) ? "DAT_N LINE_TOP RB" :
-	                             "DAT RB";
+   char *Class = (Role == Rol_UNK) ? Str_BuildStringStr ("RB %s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+	                             Str_BuildStringStr ("RB %s",The_ClassDat[Gbl.Prefs.Theme]);
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
 	                                 (1 << Rol_NET) |
 	                                 (1 << Rol_TCH)) :
@@ -474,6 +476,8 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
       HTM_TD_End ();
 
    HTM_TR_End ();
+
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -482,8 +486,9 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 
 static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char *Class = "DAT RB";
+   char *Class = Str_BuildStringStr ("%s RB",The_ClassDat[Gbl.Prefs.Theme]);
 
    /***** Write the total number of users not belonging to any course *****/
    HTM_TR_Begin (NULL);
@@ -505,6 +510,8 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
       HTM_TD_End ();
 
    HTM_TR_End ();
+
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -514,6 +521,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
 static void Fig_GetAndShowUsersRanking (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_ranking;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
@@ -542,31 +550,31 @@ static void Fig_GetAndShowUsersRanking (void)
       /***** Rankings *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingClicks ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingClicksPerDay ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingTimelinePubs ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Fol_GetAndShowRankingFollowers ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingFileViews ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingForPsts ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Prf_GetAndShowRankingMsgsSnt ();
 	 HTM_TD_End ();
 
@@ -662,6 +670,7 @@ static void Fig_WriteHeadHierarchy (void)
 
 static void Fig_GetAndShowHierarchyWithInss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_institutions;
    unsigned NumCtysWithInss = 1;
@@ -685,7 +694,7 @@ static void Fig_GetAndShowHierarchyWithInss (void)
 
    /***** Write number of elements with institutions *****/
    Fig_ShowHierarchyRow (Txt_With_,Txt_institutions,
-			 "DAT",
+			 The_ClassDat[Gbl.Prefs.Theme],
                          (int) NumCtysWithInss,
                          -1,		// < 0 ==> do not show number
                          -1,		// < 0 ==> do not show number
@@ -699,6 +708,7 @@ static void Fig_GetAndShowHierarchyWithInss (void)
 
 static void Fig_GetAndShowHierarchyWithCtrs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_centers;
    unsigned NumCtysWithCtrs = 1;
@@ -726,7 +736,7 @@ static void Fig_GetAndShowHierarchyWithCtrs (void)
 
    /***** Write number of elements with centers *****/
    Fig_ShowHierarchyRow (Txt_With_,Txt_centers,
-			 "DAT",
+			 The_ClassDat[Gbl.Prefs.Theme],
                          (int) NumCtysWithCtrs,
                          (int) NumInssWithCtrs,
                          -1,		// < 0 ==> do not show number
@@ -740,6 +750,7 @@ static void Fig_GetAndShowHierarchyWithCtrs (void)
 
 static void Fig_GetAndShowHierarchyWithDegs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_degrees;
    unsigned NumCtysWithDegs = 1;
@@ -772,7 +783,7 @@ static void Fig_GetAndShowHierarchyWithDegs (void)
 
    /***** Write number of elements with degrees *****/
    Fig_ShowHierarchyRow (Txt_With_,Txt_degrees,
-			 "DAT",
+			 The_ClassDat[Gbl.Prefs.Theme],
                          (int) NumCtysWithDegs,
                          (int) NumInssWithDegs,
                          (int) NumCtrsWithDegs,
@@ -786,6 +797,7 @@ static void Fig_GetAndShowHierarchyWithDegs (void)
 
 static void Fig_GetAndShowHierarchyWithCrss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_courses;
    unsigned NumCtysWithCrss = 1;
@@ -821,7 +833,7 @@ static void Fig_GetAndShowHierarchyWithCrss (void)
 
    /***** Write number of elements with courses *****/
    Fig_ShowHierarchyRow (Txt_With_,Txt_courses,
-			 "DAT",
+			 The_ClassDat[Gbl.Prefs.Theme],
                          (int) NumCtysWithCrss,
                          (int) NumInssWithCrss,
                          (int) NumCtrsWithCrss,
@@ -835,6 +847,7 @@ static void Fig_GetAndShowHierarchyWithCrss (void)
 
 static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_With_;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumCtysWithUsrs;
@@ -852,7 +865,7 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 
    /***** Write number of elements with students *****/
    Fig_ShowHierarchyRow (Txt_With_,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
-			 "DAT",
+			 The_ClassDat[Gbl.Prefs.Theme],
                          (int) NumCtysWithUsrs,
                          (int) NumInssWithUsrs,
                          (int) NumCtrsWithUsrs,
@@ -866,6 +879,7 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 
 static void Fig_GetAndShowHierarchyTotal (void)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Total;
    unsigned NumCtysTotal = 1;
    unsigned NumInssTotal = 1;
@@ -910,12 +924,13 @@ static void Fig_GetAndShowHierarchyTotal (void)
 
    /***** Write total number of elements *****/
    Fig_ShowHierarchyRow ("",Txt_Total,
-			 "DAT_N LINE_TOP",
+			 Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]),
                          (int) NumCtysTotal,
                          (int) NumInssTotal,
                          (int) NumCtrsTotal,
                          (int) NumDegsTotal,
 			 (int) NumCrssTotal);
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -1156,6 +1171,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
    unsigned NumOrder;
@@ -1221,7 +1237,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  /***** Number of order *****/
 		  if (NumberThisRow != NumberLastRow)
 		     NumOrder = NumIns;
-		  HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_Unsigned (NumOrder);
 		  HTM_TD_End ();
 
@@ -1244,7 +1260,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		  HTM_TD_End ();
 
 		  /***** Write statistic *****/
-		  HTM_TD_Begin ("class=\"DAT RM\"");
+		  HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_Unsigned (NumberThisRow);
 		  HTM_TD_End ();
 
@@ -1535,12 +1551,14 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N LINE_TOP" :
-	                                     "DAT";
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
 
@@ -1597,17 +1615,21 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
       HTM_TD_End ();
 
    HTM_TR_End ();
+
+   Str_FreeStrings ();
   }
 
 static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N LINE_TOP" :
-	                                     "DAT";
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
      {
@@ -1650,17 +1672,21 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
       HTM_TD_End ();
 
    HTM_TR_End ();
+
+   Str_FreeStrings ();
   }
 
 static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N LINE_TOP" :
-	                                     "DAT";
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
      {
@@ -1703,6 +1729,8 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
       HTM_TD_End ();
 
    HTM_TR_End ();
+
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -1712,6 +1740,7 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 static void Fig_GetAndShowOERsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_License;
    extern const char *Txt_Number_of_private_files;
@@ -1740,15 +1769,15 @@ static void Fig_GetAndShowOERsStats (void)
 
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_LICENSES[License]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_UnsignedLong (NumFiles[0]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_UnsignedLong (NumFiles[1]);
 	    HTM_TD_End ();
 
@@ -1806,6 +1835,7 @@ static void Fig_GetNumberOfOERs (Brw_License_t License,
 static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
   {
    extern const char *Hlp_ANALYTICS_Figures_course_programs;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_program_items;
    extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
@@ -1835,15 +1865,15 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumItems);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithItems);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumItemsPerCourse);
 	 HTM_TD_End ();
 
@@ -1860,6 +1890,7 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
 static void Fig_GetAndShowAssignmentsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_assignments;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
@@ -1892,19 +1923,19 @@ static void Fig_GetAndShowAssignmentsStats (void)
       /***** Write number of assignments *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumAssignments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithAssignments);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumAssignmentsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotif);
 	 HTM_TD_End ();
 
@@ -1921,6 +1952,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
 static void Fig_GetAndShowProjectsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_projects;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_projects;
    extern const char *Txt_Number_of_BR_courses_with_BR_projects;
@@ -1950,15 +1982,15 @@ static void Fig_GetAndShowProjectsStats (void)
       /***** Write number of projects *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumProjects);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithProjects);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumProjectsPerCourse);
 	 HTM_TD_End ();
 
@@ -1975,6 +2007,8 @@ static void Fig_GetAndShowProjectsStats (void)
 static void Fig_GetAndShowTestsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_tests;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
@@ -2018,15 +2052,15 @@ static void Fig_GetAndShowTestsStats (void)
 	 /***** Write stats *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Stats.NumCoursesWithQuestions);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%u (%.1lf%%)",
 			 Stats.NumCoursesWithPluggableQuestions,
 			 Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
@@ -2034,27 +2068,27 @@ static void Fig_GetAndShowTestsStats (void)
 							 0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Stats.NumQsts);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgQstsPerCourse);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_UnsignedLong (Stats.NumHits);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgHitsPerCourse);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Stats.AvgScorePerQuestion);
 	    HTM_TD_End ();
 
@@ -2067,15 +2101,15 @@ static void Fig_GetAndShowTestsStats (void)
       /***** Write stats *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Stats.NumCoursesWithQuestions);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%u (%.1f%%)",
 		      Stats.NumCoursesWithPluggableQuestions,
 		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
@@ -2083,27 +2117,27 @@ static void Fig_GetAndShowTestsStats (void)
 						      0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Stats.NumQsts);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_UnsignedLong (Stats.NumHits);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
 	 HTM_TD_End ();
 
@@ -2120,6 +2154,7 @@ static void Fig_GetAndShowTestsStats (void)
 static void Fig_GetAndShowExamsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_exams;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_exams;
    extern const char *Txt_Number_of_BR_courses_with_BR_exams;
@@ -2148,15 +2183,15 @@ static void Fig_GetAndShowExamsStats (void)
       /***** Write number of exams *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumExams);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithExams);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumExamsPerCourse);
 	 HTM_TD_End ();
 
@@ -2173,6 +2208,7 @@ static void Fig_GetAndShowExamsStats (void)
 static void Fig_GetAndShowGamesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_games;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_games;
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
@@ -2201,15 +2237,15 @@ static void Fig_GetAndShowGamesStats (void)
       /***** Write number of games *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumGames);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithGames);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumGamesPerCourse);
 	 HTM_TD_End ();
 
@@ -2226,6 +2262,8 @@ static void Fig_GetAndShowGamesStats (void)
 static void Fig_GetAndShowTimelineActivityStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_timeline;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_Number_of_posts;
@@ -2290,25 +2328,25 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 	 /***** Write number of timeline notes and number of users *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumNotes);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes /
 			                      (double) NumUsrs :
 				              0.0);
@@ -2345,25 +2383,25 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       /* Write totals */
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotes);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 				 0.0);
 	 HTM_TD_End ();
@@ -2381,6 +2419,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 static void Fig_GetAndShowFollowStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_followed_followers;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_Number_of_users;
@@ -2418,16 +2457,16 @@ static void Fig_GetAndShowFollowStats (void)
 	 /***** Write number of followed / followers *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Fol == 0 ? Txt_Followed :
 				   Txt_Followers);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -2446,11 +2485,11 @@ static void Fig_GetAndShowFollowStats (void)
 	 /***** Write number of followed per follower *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_FollowPerFollow[Fol]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Double2Decimals (Average);
 	    HTM_TD_End ();
 
@@ -2627,6 +2666,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
                                          const char *Icon,struct Fig_FiguresForum *FiguresForum,
                                          const char *ForumName1,const char *ForumName2)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumForums;
    unsigned NumThreads;
    unsigned NumPosts;
@@ -2666,36 +2706,36 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
 	 free (ForumName);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Txt (ForumName1);
 	 HTM_Txt (ForumName2);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
       HTM_Unsigned (NumForums);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (NumThreads);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (NumPosts);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 
@@ -2708,6 +2748,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
 static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Total;
    double NumThrsPerForum;
    double NumPostsPerThread;
@@ -2727,38 +2768,39 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP\" style=\"width:20px;\"");
+      HTM_TD_Begin ("class=\"%s LINE_TOP\" style=\"width:20px;\"",
+                    The_ClassDatN[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+      HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt_Total);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumForums);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumThreads);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumPosts);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP RM\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 
@@ -2772,6 +2814,8 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
 static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notifications;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
@@ -2870,25 +2914,25 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[NotifyEvent]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumEvents[NotifyEvent]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumMails[NotifyEvent]);
 	    HTM_TD_End ();
 
@@ -2898,25 +2942,25 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       /***** Write total number of users who want to be notified by email on some event *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP LM\"");
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumEventsTotal);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMailsTotal);
 	 HTM_TD_End ();
 
@@ -2933,6 +2977,8 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 static void Fig_GetAndShowNoticesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notices;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
@@ -2976,23 +3022,23 @@ static void Fig_GetAndShowNoticesStats (void)
       /***** Write number of notices *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNoticesDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned ( NumTotalNotices);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumTotalNotifications);
 	 HTM_TD_End ();
 
@@ -3009,6 +3055,8 @@ static void Fig_GetAndShowNoticesStats (void)
 static void Fig_GetAndShowMsgsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_messages;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -3046,23 +3094,23 @@ static void Fig_GetAndShowMsgsStats (void)
       /***** Write number of messages *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"LM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_MSGS_Sent);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentNotDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Hyphen ();
 	 HTM_TD_End ();
 
@@ -3070,23 +3118,23 @@ static void Fig_GetAndShowMsgsStats (void)
 
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"LM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_MSGS_Received);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedAndNotified);
 	 HTM_TD_End ();
 
@@ -3104,6 +3152,7 @@ static void Fig_GetAndShowMsgsStats (void)
 static void Fig_GetAndShowAgendasStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_agendas;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_events;
    extern const char *Txt_Number_of_users;
@@ -3138,21 +3187,21 @@ static void Fig_GetAndShowAgendasStats (void)
       /***** Write number of users who have chosen each language *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumEvents);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					   (double) NumUsrsTotal :
 					   0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
 					   (double) NumUsrs :
 					   0);
@@ -3171,6 +3220,7 @@ static void Fig_GetAndShowAgendasStats (void)
 static void Fig_GetAndShowSurveysStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_surveys;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_surveys;
    extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
@@ -3209,23 +3259,23 @@ static void Fig_GetAndShowSurveysStats (void)
       /***** Write number of surveys *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumSurveys);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCoursesWithSurveys);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumSurveysPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumQstsPerSurvey);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotif);
 	 HTM_TD_End ();
 
@@ -3277,9 +3327,10 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
                                                         const char *FieldName,
                                                         unsigned MaskAllowedVisibility)
   {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
    char *SubQuery;
@@ -3318,15 +3369,15 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Visibility]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3343,6 +3394,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 static void Fig_GetAndShowNumUsrsPerCookies (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_cookies;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Cookies;
    extern const char *Txt_Number_of_users;
@@ -3407,11 +3459,11 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 	       HTM_Txt (AcceptedSymbol[i]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[i]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[i] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3431,6 +3483,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 static void Fig_GetAndShowNumUsrsPerLanguage (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_language;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Language;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -3477,15 +3530,15 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_STR_LANG_NAME[Lan]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Lan]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0);
@@ -3506,6 +3559,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
   {
    extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Hlp_ANALYTICS_Figures_calendar;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Calendar;
    extern const char *Txt_First_day_of_the_week_X;
@@ -3563,15 +3617,15 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 			       Str_BuildStringStr (Txt_First_day_of_the_week_X,
 						   Txt_DAYS_SMALL[FirstDayOfWeek]),
 			       "ICO40x40");
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		  free (Icon);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
 						 (double) NumUsrsTotal :
 						  0.0);
@@ -3591,6 +3645,8 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 static void Fig_GetAndShowNumUsrsPerDateFormat (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_dates;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Format;
    extern const char *Txt_Number_of_users;
@@ -3635,16 +3691,16 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"DAT_N LM\"");
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	       Dat_PutSpanDateFormat (Format);
 	       Dat_PutScriptDateFormat (Format);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Format]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3666,6 +3722,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    extern const char *Hlp_ANALYTICS_Figures_icons;
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Ico_IconSetNames[Ico_NUM_ICON_SETS];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Icons;
    extern const char *Txt_Number_of_users;
@@ -3720,11 +3777,11 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 	       free (URL);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[IconSet]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[IconSet] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3745,6 +3802,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_menu;
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Menu;
    extern const char *Txt_Number_of_users;
@@ -3794,11 +3852,11 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
 	       Ico_PutIcon (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],"ICO40x40");
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Menu]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3820,6 +3878,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    extern const char *Hlp_ANALYTICS_Figures_theme;
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *The_ThemeNames[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Theme_SKIN;
    extern const char *Txt_Number_of_users;
@@ -3874,11 +3933,11 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 	       free (URL);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Theme]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3898,6 +3957,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 static void Fig_GetAndShowNumUsrsPerSideColumns (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_columns;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Columns;
    extern const char *Txt_Number_of_users;
@@ -3953,11 +4013,11 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	       free (Icon);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[SideCols]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[SideCols] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);
@@ -3977,6 +4037,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 static void Fig_GetAndShowNumUsrsPerPhotoShape (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_user_photos;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_User_photos;
    extern const char *Txt_Number_of_users;
@@ -4034,11 +4095,11 @@ static void Fig_GetAndShowNumUsrsPerPhotoShape (void)
 			"class=\"%s\"",ClassPhoto[Shape]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrs[Shape]);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Shape] * 100.0 /
 					      (double) NumUsrsTotal :
 					      0.0);

@@ -291,6 +291,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
                           bool ShowOnlyEnabledTags)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
@@ -370,7 +371,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		 }
 
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_LABEL_Begin ("class=\"DAT\"");
+		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_INPUT_CHECKBOX ("ChkTag",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
 					 row[1],
@@ -471,7 +472,7 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
 	 Ico_PutIconLink ("eye-slash-red.svg",
 			  Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
 					      TagTxt));
-	 Str_FreeString ();
+	 Str_FreeStrings ();
       Frm_EndForm ();
    HTM_TD_End ();
   }
@@ -490,7 +491,7 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
 	 Ico_PutIconLink ("eye-green.svg",
 			  Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
 					      TagTxt));
-	 Str_FreeString ();
+	 Str_FreeStrings ();
       Frm_EndForm ();
    HTM_TD_End ();
   }

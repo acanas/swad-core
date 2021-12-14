@@ -82,6 +82,7 @@ static void Plg_EditingPluginDestructor (void);
 
 void Plg_ListPlugins (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Option_under_development;
    extern const char *Txt_Plugins;
    extern const char *Txt_Plugin;
@@ -129,20 +130,21 @@ void Plg_ListPlugins (void)
       // TODO: Change plugin icons to 32x32
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-			 URL,Plg->Name);
+	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:45px;\"",
+	               The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+			 URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
 			Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
 			Plg->Name,
 			"class=\"ICO40x40\"");
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 	    HTM_A_End ();
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
-			 URL,Plg->Name);
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+			 URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Plg->Name);
 	    HTM_A_End ();
 	 HTM_TD_End ();
@@ -326,6 +328,7 @@ void Plg_FreeListPlugins (void)
 
 static void Plg_ListPluginsForEdition (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumPlg;
    struct Plugin *Plg;
 
@@ -352,7 +355,7 @@ static void Plg_ListPluginsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Plugin code */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Long (Plg->PlgCod);
 	    HTM_TD_End ();
 
@@ -363,7 +366,7 @@ static void Plg_ListPluginsForEdition (void)
 			Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
 			Gbl.Plugins.Lst[NumPlg].Name,
 			"class=\"ICO40x40\"");
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 	    HTM_TD_End ();
 
 	    /* Plugin name */

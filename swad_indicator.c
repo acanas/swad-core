@@ -93,6 +93,7 @@ void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *Hlp_ANALYTICS_Indicators;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -141,7 +142,7 @@ void Ind_ReqIndicatorsCourses (void)
 	       Frm_LabelColumn ("RT","OthDegTypCod",Txt_Types_of_degree);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"DAT LT\"");
+	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  DegTyp_WriteSelectorDegreeTypes (Indicators.DegTypCod);
 		  HTM_Txt (" (");
 		  HTM_TxtF (Txt_only_if_the_scope_is_X,Cfg_PLATFORM_SHORT_NAME);
@@ -427,13 +428,15 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Indicators;
    extern const char *Txt_Courses;
    extern const char *Txt_Total;
    unsigned Ind;
    const char *Class;
    const char *ClassNormal = "DAT_LIGHT RM";
-   const char *ClassHighlight = "DAT RM LIGHT_BLUE";
+   const char *ClassHighlight = Str_BuildStringStr ("%s RM LIGHT_BLUE",The_ClassDat[Gbl.Prefs.Theme]);
 
    /***** Write number of courses with each number of indicators valid *****/
    HTM_TABLE_BeginPadding (2);
@@ -492,21 +495,23 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	 if (PutForm)
 	    HTM_TD_Empty (1);
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCrss);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT_N LINE_TOP RM\"");
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("(%.1f%%)",100.0);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
 
    HTM_TABLE_End ();
+
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/

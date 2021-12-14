@@ -171,7 +171,7 @@ void MchRes_ShowMyMchResultsInGam (void)
    MchRes_ShowResultsBegin (&Games,
                             Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
 			    false);	// Do not list games to select
-   Str_FreeString ();
+   Str_FreeStrings ();
       MchRes_ListMyMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
@@ -223,7 +223,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    /***** List my matches results in match *****/
    MchRes_ShowResultsBegin (&Games,Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
 			    false);	// Do not list games to select
-   Str_FreeString ();
+   Str_FreeStrings ();
       MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
@@ -375,7 +375,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    MchRes_ShowResultsBegin (&Games,
                             Str_BuildStringStr (Txt_Results_of_game_X,Game.Title),
 			    false);	// Do not list games to select
-   Str_FreeString ();
+   Str_FreeStrings ();
       MchRes_ListAllMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
@@ -450,7 +450,7 @@ void MchRes_ShowAllMchResultsInMch (void)
    MchRes_ShowResultsBegin (&Games,
                             Str_BuildStringStr (Txt_Results_of_match_X,Match.Title),
 			    false);	// Do not list games to select
-   Str_FreeString ();
+   Str_FreeStrings ();
       MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
@@ -532,6 +532,7 @@ static void MchRes_ShowResultsEnd (void)
 static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
   {
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Games;
    extern const char *Txt_Game;
    extern const char *Txt_Update_results;
@@ -576,7 +577,8 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	       /* Write a row for this event */
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
+		                The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		     HTM_INPUT_CHECKBOX ("GamCod",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "id=\"Gam%u\" value=\"%ld\"%s",
 					 NumGame,Games->Lst[NumGame].GamCod,
@@ -584,13 +586,15 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 									"");
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+		                The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumGame);
 			HTM_TxtF ("%u:",NumGame + 1);
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+		                The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		     HTM_Txt (Game.Title);
 		  HTM_TD_End ();
 
@@ -716,6 +720,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 				   long GamCod,	// <= 0 ==> any
 				   const char *GamesSelectedCommas)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Result;
    MYSQL_RES *mysql_res;
    struct UsrData *UsrDat;
@@ -788,8 +793,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    if (asprintf (&Id,"mch_res_time_%u_%u",
 	                  (unsigned) StartEndTime,UniqueId) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
-			  Id,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("id =\"%s\" class=\"%s LT COLOR%u\"",
+			  Id,The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					     true,true,false,0x7);
@@ -798,7 +803,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   }
 
 	 /* Write match title */
-	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
@@ -811,7 +817,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   }
 
 	 /* Write number of questions */
-	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    if (ICanView.Score)
 	       HTM_Unsigned (Print.NumQsts.All);
 	    else
@@ -819,7 +826,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write number of non-blank answers */
-	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    if (ICanView.Score)
 	      {
 	       if (Print.NumQsts.NotBlank)
@@ -832,7 +840,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write number of blank answers */
-	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
 	    if (ICanView.Score)
 	      {
@@ -846,7 +855,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write score */
-	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    if (ICanView.Score)
 	      {
 	       HTM_Double2Decimals (Print.Score);
@@ -858,7 +868,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write average score per question */
-	 HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    if (ICanView.Score)
 	       HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
 							(double) Print.NumQsts.All :
@@ -868,7 +879,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write grade over maximum grade */
-	 HTM_TD_Begin ("class=\"DAT RT LINE_LEFT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s RT LINE_LEFT COLOR%u\"",
+	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	    if (ICanView.Score)
 	      {
 	       Grade = TstPrn_ComputeGrade (Print.NumQsts.All,Print.Score,Game.MaxGrade);
@@ -963,64 +975,65 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
                                              double TotalScore,
 					     double TotalGrade)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Matches;
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Row title *****/
-      HTM_TD_Begin ("colspan=\"3\" class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"3\" class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 HTM_TxtColonNBSP (Txt_Matches);
 	 HTM_Unsigned (NumResults);
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (NumResults)
 	    HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write total number of non-blank answers *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (NumResults)
 	    HTM_Unsigned (NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total number of blank answers *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 if (NumResults)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total score *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 HTM_Double2Decimals (TotalScore);
 	 HTM_Txt ("/");
 	 HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write average score per question *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
 						  (double) NumTotalQsts->All :
 						  0.0);
       HTM_TD_End ();
 
       /***** Write total grade *****/
-      HTM_TD_Begin ("class=\"DAT_N RM LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 	 HTM_Double2Decimals (TotalGrade);
       HTM_TD_End ();
 
       /***** Last cell *****/
-      HTM_TD_Begin ("class=\"DAT_N LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
-                    Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s LINE_TOP LINE_BOTTOM LINE_LEFT COLOR%u\"",
+                    The_ClassDatN[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_TD_End ();
 
    /***** End row *****/
@@ -1034,6 +1047,8 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
 void MchRes_ShowOneMchResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
@@ -1120,11 +1135,11 @@ void MchRes_ShowOneMchResult (void)
 	    /* User */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  ID_WriteUsrIDs (UsrDat,NULL);
 		  HTM_TxtF ("&nbsp;%s",UsrDat->Surname1);
 		  if (UsrDat->Surname2[0])
@@ -1146,13 +1161,14 @@ void MchRes_ShowOneMchResult (void)
 	      {
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"DAT_N RT\"");
+		  HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		     HTM_TxtColon (Txt_START_END_TIME[StartEndTime]);
 		  HTM_TD_End ();
 
 		  if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  HTM_TD_Begin ("id=\"%s\" class=\"DAT LB\"",Id);
+		  HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+		                Id,The_ClassDat[Gbl.Prefs.Theme]);
 		     Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						   true,true,true,0x7);
@@ -1165,11 +1181,11 @@ void MchRes_ShowOneMchResult (void)
 	    /***** Number of questions *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Questions);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (Print.NumQsts.All);
 	       HTM_TD_End ();
 
@@ -1178,11 +1194,11 @@ void MchRes_ShowOneMchResult (void)
 	    /***** Number of answers *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Answers);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (Print.NumQsts.NotBlank);
 	       HTM_TD_End ();
 
@@ -1191,11 +1207,11 @@ void MchRes_ShowOneMchResult (void)
 	    /***** Score *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Score);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ICanView.Score)
 		    {
 		     HTM_STRONG_Begin ();
@@ -1213,11 +1229,11 @@ void MchRes_ShowOneMchResult (void)
 	    /***** Grade *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Grade);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (ICanView.Score)
 		    {
 		     HTM_STRONG_Begin ();
@@ -1233,11 +1249,11 @@ void MchRes_ShowOneMchResult (void)
 	    /***** Tags present in this result *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT_N RT\"");
+	       HTM_TD_Begin ("class=\"RT %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_Tags);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  Gam_ShowTstTagsPresentInAGame (Match.GamCod);
 	       HTM_TD_End ();
 

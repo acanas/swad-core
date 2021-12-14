@@ -30,9 +30,16 @@
 #include <stdlib.h>		// For malloc, free
 
 #include "swad_error.h"
+#include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_test_visibility.h"
+
+/*****************************************************************************/
+/************** External global variables from others modules ****************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /******************************* Show visibility *****************************/
@@ -86,6 +93,7 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,bool Hidden)
 
 void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_TST_STR_VISIBILITY[TstVis_NUM_ITEMS_VISIBILITY];
    static const char *Icons[TstVis_NUM_ITEMS_VISIBILITY] =
      {
@@ -104,7 +112,7 @@ void TstVis_PutVisibilityCheckboxes (unsigned SelectedVisibility)
 	Visibility++)
      {
       /* Begin label */
-      HTM_LABEL_Begin ("class=\"DAT\"");
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 
          /* Checkbox with icon and text */
          ItemVisible = (SelectedVisibility & (1 << Visibility)) != 0;

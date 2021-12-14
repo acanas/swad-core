@@ -342,7 +342,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 	       Ico_PutIconTextLink ("angle-up.svg",
 				    Str_BuildStringLong (Txt_See_the_previous_X_COMMENTS,
 							 (long) NumInitialComms));
-	       Str_FreeString ();
+	       Str_FreeStrings ();
 	    HTM_BUTTON_End ();
 
 	 /* End form */

@@ -717,8 +717,11 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Mch_Match 
 
 void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+
    /***** Number of players who have answered any question in the match ******/
-   HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
@@ -729,15 +732,17 @@ void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
 
 static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned NumQsts)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 
       if (Match->Status.Showing != Mch_END)	// Match not over
 	{
 	 /* Current question index / total of questions */
-	 HTM_DIV_Begin ("class=\"DAT\"");
+	 HTM_DIV_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%u/%u",Match->Status.QstInd,NumQsts);
 	 HTM_DIV_End ();
 	}
@@ -762,6 +767,7 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
                                             const struct Mch_Match *Match)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    static void (*Function[Rol_NUM_ROLES]) (struct Gam_Games *Games,
                                            const struct Mch_Match *Match) =
      {
@@ -771,7 +777,8 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
       [Rol_SYS_ADM] = Mch_ListOneOrMoreMatchesResultTch,
      };
 
-   HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);
@@ -1318,6 +1325,7 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 static void Mch_ShowLstGrpsToEditMatch (long MchCod)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1343,7 +1351,8 @@ static void Mch_ShowLstGrpsToEditMatch (long MchCod)
 	       /***** First row: checkbox to select the whole course *****/
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+		  HTM_TD_Begin ("colspan=\"7\" class=\"%s LM\"",
+		                The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_LABEL_Begin (NULL);
 			HTM_INPUT_CHECKBOX ("WholeCrs",HTM_DONT_SUBMIT_ON_CHANGE,
 					    "id=\"WholeCrs\" value=\"Y\"%s"
@@ -2370,7 +2379,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 								"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
 						      Color),
 				  NULL);
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 
 	    HTM_NBSP ();
 	    if (Seconds >= 0)
@@ -2639,7 +2648,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 				    Str_BuildStringLongStr ((long) NumCols,
 							    NumCols == 1 ? Txt_column :
 									   Txt_columns));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 
 	 /* End form */
 	 Frm_EndForm ();
@@ -2667,6 +2676,7 @@ static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
 
 static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_View_results;
 
    /***** Begin container *****/
@@ -2677,7 +2687,10 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	 Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
-	 HTM_BUTTON_SUBMIT_Begin (Txt_View_results,"BT_LINK DAT ICO_HIGHLIGHT",NULL);
+	 HTM_BUTTON_SUBMIT_Begin (Txt_View_results,
+	                          Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",The_ClassDat[Gbl.Prefs.Theme]),
+	                          NULL);
+	 Str_FreeStrings ();
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 						     "fas fa-toggle-off");
@@ -3220,7 +3233,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 					  NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
 							 Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
 		  "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
-	 Str_FreeString ();
+	 Str_FreeStrings ();
 	 free (Icon);
 	 HTM_TxtF ("&nbsp;%u",NumUsrs);
       HTM_TD_End ();

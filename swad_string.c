@@ -2658,51 +2658,101 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
   }
 
 /*****************************************************************************/
+/********************* Build a "Go to <where>" message ***********************/
+/*****************************************************************************/
+// Where is a hierarchy member (country, institution, center, degree or course
+// Str_FreeStrings() must be called after calling this function
+
+char *Str_BuildGoToMsg (const char *Where)
+  {
+   extern const char *Txt_Go_to_X;
+
+   return Str_BuildStringStr (Txt_Go_to_X,Where);
+  }
+
+/*****************************************************************************/
 /******************** Build and free a text with format **********************/
 /*****************************************************************************/
 
-static char *Str_String = NULL;
+#define Str_MAX_STRINGS 10
+static struct
+  {
+   size_t Num;
+   char *Str[Str_MAX_STRINGS];
+  } Str_Strings =
+  {
+   .Num = 0,
+  };
+
+// Str_FreeStrings() must be called after calling these functions
 
 // fmt must be a string including "%s"
-// Str_FreeString() must be called after calling this function
-
 char *Str_BuildStringStr (const char *fmt,const char *Str)
   {
-   Str_FreeString ();
-   if (asprintf (&Str_String,fmt,Str) < 0)
+   char *Ptr;
+
+   if (Str_Strings.Num >= Str_MAX_STRINGS)
       Err_NotEnoughMemoryExit ();
 
-   return Str_String;
+   if (Str_Strings.Str[Str_Strings.Num] != NULL)
+      Err_NotEnoughMemoryExit ();
+
+   if (asprintf (&Str_Strings.Str[Str_Strings.Num],fmt,Str) < 0)
+      Err_NotEnoughMemoryExit ();
+   Ptr = Str_Strings.Str[Str_Strings.Num];
+   Str_Strings.Num++;
+
+   return Ptr;
   }
 
 // fmt must be a string including "%ld"
-// Str_FreeString() must be called after calling this function
-
 char *Str_BuildStringLong (const char *fmt,long Num)
   {
-   Str_FreeString ();
-   if (asprintf (&Str_String,fmt,Num) < 0)
+   char *Ptr;
+
+   if (Str_Strings.Num >= Str_MAX_STRINGS)
       Err_NotEnoughMemoryExit ();
 
-   return Str_String;
-  }
+   if (Str_Strings.Str[Str_Strings.Num] != NULL)
+      Err_NotEnoughMemoryExit ();
 
-// Str_FreeString() must be called after calling this function
+   if (asprintf (&Str_Strings.Str[Str_Strings.Num],fmt,Num) < 0)
+      Err_NotEnoughMemoryExit ();
+   Ptr = Str_Strings.Str[Str_Strings.Num];
+   Str_Strings.Num++;
+
+   return Ptr;
+  }
 
 char *Str_BuildStringLongStr (long Num,const char *Str)
   {
-   Str_FreeString ();
-   if (asprintf (&Str_String,"%ld %s",Num,Str) < 0)
+   char *Ptr;
+
+   if (Str_Strings.Num >= Str_MAX_STRINGS)
       Err_NotEnoughMemoryExit ();
 
-   return Str_String;
+   if (Str_Strings.Str[Str_Strings.Num] != NULL)
+      Err_NotEnoughMemoryExit ();
+
+   if (asprintf (&Str_Strings.Str[Str_Strings.Num],"%ld %s",Num,Str) < 0)
+      Err_NotEnoughMemoryExit ();
+   Ptr = Str_Strings.Str[Str_Strings.Num];
+   Str_Strings.Num++;
+
+   return Ptr;
   }
 
-void Str_FreeString (void)
+void Str_FreeStrings (void)
   {
-   if (Str_String != NULL)
+   size_t i;
+
+   for (i  = Str_Strings.Num;
+	i != 0;
+	i--)
      {
-      free (Str_String);
-      Str_String = NULL;
+      free (Str_Strings.Str[i - 1]);
+      Str_Strings.Str[i - 1] = NULL;
      }
+
+   Str_Strings.Num = 0;
   }

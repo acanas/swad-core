@@ -2062,6 +2062,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
    extern const char *Hlp_USERS_Requests;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
@@ -2140,7 +2141,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 	       Frm_LabelColumn ("RT","Role",Txt_Users);
 
-	       HTM_TD_Begin ("class=\"DAT LT\"");
+	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  Rol_WriteSelectorRoles (1 << Rol_STD |
 					  1 << Rol_NET |
 					  1 << Rol_TCH,
@@ -2212,7 +2213,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		  HTM_TR_Begin (NULL);
 
 		     /***** Number *****/
-		     HTM_TD_Begin ("class=\"DAT RT\"");
+		     HTM_TD_Begin ("class=\"%s RT\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_Unsigned (NumReqs - NumReq);
 		     HTM_TD_End ();
 
@@ -2225,9 +2227,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   Crs_PutParamCrsCod (Crs.CrsCod);
-			   HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
-						    "BT_LINK LT DAT",NULL);
-			      Hie_FreeGoToMsg ();
+			   HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs.FullName),
+						    Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+						    NULL);
+			   Str_FreeStrings ();
 			      HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -2235,35 +2238,41 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Number of teachers in the course *****/
-		     HTM_TD_Begin ("class=\"DAT RT\"");
+		     HTM_TD_Begin ("class=\"%s RT\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_Unsigned (Enr_GetNumUsrsInCrss (HieLvl_CRS,Crs.CrsCod,
 							    1 << Rol_TCH));
 		     HTM_TD_End ();
 
 		     /***** User photo *****/
-		     HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
+		     HTM_TD_Begin ("class=\"%s CT\" style=\"width:22px;\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			Pho_ShowUsrPhotoIfAllowed (&UsrDat,
 			                           ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 			                           false);
 		     HTM_TD_End ();
 
 		     /***** User name *****/
-		     HTM_TD_Begin ("class=\"DAT LT\"");
+		     HTM_TD_Begin ("class=\"%s LT\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_DIV_Begin ("class=\"REQUESTER_NAME\"");	// Limited width
 			   Usr_WriteFirstNameBRSurnames (&UsrDat);
 			HTM_DIV_End ();
 		     HTM_TD_End ();
 
 		     /***** Requested role (row[3]) *****/
-		     HTM_TD_Begin ("class=\"DAT LT\"");
+		     HTM_TD_Begin ("class=\"%s LT\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_Txt (Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
 		     HTM_TD_End ();
 
 		     /***** Request time (row[4]) *****/
-		     Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
+		     Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),
+		                       The_ClassDat[Gbl.Prefs.Theme]);
 
 		     /***** Button to confirm the request *****/
-		     HTM_TD_Begin ("class=\"DAT LT\"");
+		     HTM_TD_Begin ("class=\"%s LT\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			if (!NextAction[DesiredRole])
 			   Err_WrongRoleExit ();
 			Frm_BeginForm (NextAction[DesiredRole]);
@@ -2274,7 +2283,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Button to reject the request *****/
-		     HTM_TD_Begin ("class=\"DAT LT\"");
+		     HTM_TD_Begin ("class=\"%s LT\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 			Frm_BeginForm (ActReqRejSignUp);
 			   Crs_PutParamCrsCod (Crs.CrsCod);
 			   Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);

@@ -322,6 +322,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_webs_social_networks;
    extern const char *Net_DB_WebsAndSocialNetworks[Net_NUM_WEBS_AND_SOCIAL_NETWORKS];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
    extern const char *Txt_Number_of_users;
@@ -376,7 +377,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
 		           Net_WebsAndSocialNetworksIcons[Web],
 		           Net_WebsAndSocialNetworksTitle[Web],
@@ -385,11 +386,11 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  HTM_Txt (Net_WebsAndSocialNetworksTitle[Web]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (NumUsrs);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Percentage (NumUsrsTotal ? 100.0 * (double) NumUsrs /
 						 (double) NumUsrsTotal :
 						 0.0);

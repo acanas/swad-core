@@ -70,6 +70,8 @@ void HieCfg_Title (bool PutLink,
 void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
+
    /***** Full name *****/
    HTM_TR_Begin (NULL);
 
@@ -79,7 +81,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		       Label);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT_N LB\"");
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Form to change full name */
@@ -104,6 +106,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
    /***** Short name *****/
@@ -115,7 +118,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		       Txt_Short_name);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT_N LB\"");
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Form to change short name */
@@ -140,6 +143,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1])
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Web;
 
    /***** Web *****/
@@ -151,7 +155,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		       Txt_Web);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Form to change web */
@@ -164,7 +168,8 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 	   {
 	    HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
 	       if (!PrintView)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+		               WWW,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (WWW);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -181,6 +186,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 
 void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Shortcut;
 
    /***** Short cut *****/
@@ -190,16 +196,18 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
       Frm_LabelColumn ("RT",NULL,Txt_Shortcut);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (!PrintView)
 	   {
 	    if (ParamName)
-	       HTM_A_Begin ("href=\"%s/?%s=%ld\" class=\"DAT\" target=\"_blank\"",
+	       HTM_A_Begin ("href=\"%s/?%s=%ld\" class=\"%s\" target=\"_blank\"",
 			    Cfg_URL_SWAD_CGI,
-			    ParamName,HieCod);
+			    ParamName,HieCod,
+			    The_ClassDat[Gbl.Prefs.Theme]);
 	    else
-	       HTM_A_Begin ("href=\"%s/\" class=\"DAT\" target=\"_blank\"",
-			    Cfg_URL_SWAD_CGI);
+	       HTM_A_Begin ("href=\"%s/\" class=\"%s\" target=\"_blank\"",
+			    Cfg_URL_SWAD_CGI,
+			    The_ClassDat[Gbl.Prefs.Theme]);
 	   }
 	 if (ParamName)
 	    HTM_TxtF ("%s/?%s=%ld",
@@ -221,6 +229,7 @@ void HieCfg_Shortcut (bool PrintView,const char *ParamName,long HieCod)
 
 void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
 
@@ -238,8 +247,9 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 	       HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
 							    Gbl.Hierarchy.Ins.ShrtName),
-					"BT_LINK DAT",NULL);
-	       Str_FreeString ();
+	                                Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+					NULL);
+	       Str_FreeStrings ();
 	   }
 	 HTM_Unsigned (NumCtrs);
 	 if (PutForm)
@@ -258,6 +268,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 
 void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Centers_with_map;
 
    /***** Number of centers with map *****/
@@ -267,7 +278,7 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
       Frm_LabelColumn ("RT",NULL,Txt_Centers_with_map);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%u (%.1lf%%)",
 		   NumCtrsWithMap,
 		   NumCtrs ? (double) NumCtrsWithMap * 100.0 /
@@ -284,6 +295,7 @@ void HieCfg_NumCtrsWithMap (unsigned NumCtrs,unsigned NumCtrsWithMap)
 
 void HieCfg_QR (const char *ParamName,long HieCod)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_QR_code;
 
    /***** QR *****/
@@ -293,7 +305,7 @@ void HieCfg_QR (const char *ParamName,long HieCod)
       Frm_LabelColumn ("RT",NULL,Txt_QR_code);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 QR_LinkTo (250,ParamName,HieCod);
       HTM_TD_End ();
 
@@ -306,6 +318,7 @@ void HieCfg_QR (const char *ParamName,long HieCod)
 
 void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
@@ -318,7 +331,7 @@ void HieCfg_NumUsrsInCrss (HieLvl_Level_t Scope,long Cod,Rol_Role_t Role)
 					 Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Scope,Cod,
 						   Role == Rol_UNK ? (1 << Rol_STD) |
 								     (1 << Rol_NET) |

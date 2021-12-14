@@ -313,6 +313,7 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 
 static void DegTyp_ListDegreeTypesForSeeing (void)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    unsigned NumDegTyp;
    const char *BgColor;
 
@@ -329,17 +330,20 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
       HTM_TR_Begin (NULL);
 
 	 /* Number of degree type in this list */
-	 HTM_TD_Begin ("class=\"DAT_N RM %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"RM %s %s\"",
+	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (NumDegTyp + 1);
 	 HTM_TD_End ();
 
 	 /* Name of degree type */
-	 HTM_TD_Begin ("class=\"DAT_N LM %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"LM %s %s\"",
+	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
 	    HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
-	 HTM_TD_Begin ("class=\"DAT_N RM %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"RM %s %s\"",
+	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 
@@ -382,6 +386,7 @@ static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
 
 static void DegTyp_ListDegreeTypesForEdition (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumDegTyp;
 
    /***** Begin table *****/
@@ -408,7 +413,7 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Degree type code */
-	    HTM_TD_Begin ("class=\"DAT CODE\"");
+	    HTM_TD_Begin ("class=\"%s CODE\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Long (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
 	    HTM_TD_End ();
 
@@ -424,7 +429,7 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of degrees of this type */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 	    HTM_TD_End ();
 
@@ -451,6 +456,7 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
@@ -484,7 +490,7 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 	    HTM_TD_End ();
 
 	    /***** Number of degrees of this degree type ****/
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (0);
 	    HTM_TD_End ();
 

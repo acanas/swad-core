@@ -101,6 +101,7 @@ static void Mai_EditingMailDomainDestructor (void);
 void Mai_SeeMailDomains (void)
   {
    extern const char *Hlp_START_Domains;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
@@ -154,15 +155,15 @@ void Mai_SeeMailDomains (void)
       /* Write data of this mail domain */
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (Gbl.Mails.Lst[NumMai].Domain);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (Gbl.Mails.Lst[NumMai].Info);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RT\"");
+	 HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Gbl.Mails.Lst[NumMai].NumUsrs);
 	 HTM_TD_End ();
 
@@ -401,6 +402,7 @@ void Mai_FreeListMailDomains (void)
 static void Mai_ListMailDomainsForEdition (void)
   {
    extern const char *Hlp_START_Domains_edit;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
@@ -429,7 +431,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Mail code */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Long (Mai->MaiCod);
 	    HTM_TD_End ();
 
@@ -454,7 +456,7 @@ static void Mai_ListMailDomainsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of users */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (Mai->NumUsrs);
 	    HTM_TD_End ();
 
@@ -792,6 +794,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
   {
    extern const char *Hlp_COMMUNICATION_Email;
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Email_addresses;
    extern const char *Txt_X_users_who_have_email;
    extern const char *Txt_X_users_who_have_accepted_and_who_have_email;
@@ -865,12 +868,12 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
       HTM_DIV_End ();
 
       /***** Show a message with the number of users with email ****/
-      HTM_DIV_Begin ("class=\"DAT CM\"");
+      HTM_DIV_Begin ("class=\"%s CM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TxtF (Txt_X_users_who_have_email,NumUsrsWithEmail);
       HTM_DIV_End ();
 
       /***** Show a message with the number of users who have accepted and have email ****/
-      HTM_DIV_Begin ("class=\"DAT CM\"");
+      HTM_DIV_Begin ("class=\"%s CM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TxtF (Txt_X_users_who_have_accepted_and_who_have_email,
 		   NumAcceptedUsrsWithEmail);
       HTM_DIV_End ();
@@ -1047,6 +1050,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 				        bool IMustFillInEmail,
 				        bool IShouldConfirmEmail)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
@@ -1126,7 +1130,8 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	       Frm_LabelColumn ("REC_C1_BOT RT",NULL,Txt_Other_emails);
 
 	       /* Data */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme]);
 	   }
 
 	 /* Form to remove email */
@@ -1146,7 +1151,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	    Ico_PutIcon ("check-circle.svg",
 			 Str_BuildStringStr (Txt_Email_X_confirmed,row[0]),
 			 "ICO16x16");
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 
 	 /* Form to change user's email */
@@ -1185,7 +1190,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 				   Txt_Email);	// The first email
 
       /* Data */
-      HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LT %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (ItsMe)
 	    Frm_BeginFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
 	 else

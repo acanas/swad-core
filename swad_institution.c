@@ -106,6 +106,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
 void Ins_SeeInsWithPendingCtrs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutions_with_pending_centers;
    extern const char *Txt_Institution;
    extern const char *Txt_Centers_ABBREVIATION;
@@ -170,7 +171,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
-	       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"%s RM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -224,8 +226,8 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
       Ins_PutParamInsCod (Ins->InsCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
-      Hie_FreeGoToMsg ();
+      HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
+      Str_FreeStrings ();
 
 	 /***** Institution logo and name *****/
 	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
@@ -284,7 +286,7 @@ static void Ins_ListInstitutions (void)
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       if (Gbl.Hierarchy.Inss.Num)	// There are institutions in the current country
 	{
@@ -356,6 +358,8 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -364,12 +368,12 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
    if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = "BT_LINK LT DAT_LIGHT";
+      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s","DAT_LIGHT");
      }
    else
      {
-      TxtClassNormal = "DAT";
-      TxtClassStrong = "BT_LINK LT DAT_N";
+      TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
+      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -426,6 +430,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    HTM_TR_End ();
 
+   Str_FreeStrings ();
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
@@ -539,7 +544,7 @@ static void Ins_EditInstitutionsInternal (void)
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       /***** Put a form to create a new institution *****/
       Ins_PutFormToCreateInstitution ();
@@ -910,6 +915,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Ins_Instit *Ins;
@@ -948,44 +954,44 @@ static void Ins_ListInstitutionsForEdition (void)
 
 	    /* Put icon to remove institution */
 	    HTM_TD_Begin ("class=\"BM\"");
-	    if (!ICanEdit ||
-		NumCtrs ||		// Institution has centers
-		NumUsrsIns ||		// Institution has users
-		NumUsrsInCrssOfIns)	// Institution has users
-	       // Institution has centers or users ==> deletion forbidden
-	       Ico_PutIconRemovalNotAllowed ();
-	    else
-	       Ico_PutContextualIconToRemove (ActRemIns,NULL,
-					      Hie_PutParamOtherHieCod,&Ins->InsCod);
+	       if (!ICanEdit ||
+		   NumCtrs ||		// Institution has centers
+		   NumUsrsIns ||		// Institution has users
+		   NumUsrsInCrssOfIns)	// Institution has users
+		  // Institution has centers or users ==> deletion forbidden
+		  Ico_PutIconRemovalNotAllowed ();
+	       else
+		  Ico_PutContextualIconToRemove (ActRemIns,NULL,
+						 Hie_PutParamOtherHieCod,&Ins->InsCod);
 	    HTM_TD_End ();
 
 	    /* Institution code */
-	    HTM_TD_Begin ("class=\"DAT CODE\"");
-	    HTM_Long (Ins->InsCod);
+	    HTM_TD_Begin ("class=\"%s CODE\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Long (Ins->InsCod);
 	    HTM_TD_End ();
 
 	    /* Institution logo */
 	    HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
-	    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+	       Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
 	    HTM_TD_End ();
 
 	    /* Institution short name */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
-	    if (ICanEdit)
-	      {
-	       Frm_BeginForm (ActRenInsSho);
-		  Hie_PutParamOtherHieCod (&Ins->InsCod);
-		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME\"");
-	       Frm_EndForm ();
-	      }
-	    else
-	       HTM_Txt (Ins->ShrtName);
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       if (ICanEdit)
+		 {
+		  Frm_BeginForm (ActRenInsSho);
+		     Hie_PutParamOtherHieCod (&Ins->InsCod);
+		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+				     HTM_SUBMIT_ON_CHANGE,
+				     "class=\"INPUT_SHORT_NAME\"");
+		  Frm_EndForm ();
+		 }
+	       else
+		  HTM_Txt (Ins->ShrtName);
 	    HTM_TD_End ();
 
 	    /* Institution full name */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    if (ICanEdit)
 	      {
 	       Frm_BeginForm (ActRenInsFul);
@@ -1000,7 +1006,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Institution WWW */
-	    HTM_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       if (ICanEdit)
 		 {
 		  Frm_BeginForm (ActChgInsWWW);
@@ -1013,8 +1019,10 @@ static void Ins_ListInstitutionsForEdition (void)
 		 {
 		  Str_Copy (WWW,Ins->WWW,sizeof (WWW) - 1);
 		  HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
-				  Ins->WWW,Ins->WWW);
+		     HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\" title=\"%s\"",
+				  Ins->WWW,
+				  The_ClassDat[Gbl.Prefs.Theme],
+				  Ins->WWW);
 			HTM_Txt (WWW);
 		     HTM_A_End ();
 		  HTM_DIV_End ();
@@ -1022,22 +1030,23 @@ static void Ins_ListInstitutionsForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Number of users who claim to belong to this institution */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrsIns);
 	    HTM_TD_End ();
 
 	    /* Number of centers */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumCtrs);
 	    HTM_TD_End ();
 
 	    /* Number of users in courses of this institution */
-	    HTM_TD_Begin ("class=\"DAT RM\"");
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrsInCrssOfIns);
 	    HTM_TD_End ();
 
 	    /* Institution requester */
-	    HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	    HTM_TD_Begin ("class=\"%s INPUT_REQUESTER LT\"",
+	                  The_ClassDat[Gbl.Prefs.Theme]);
 	       UsrDat.UsrCod = Ins->RequesterUsrCod;
 	       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							Usr_DONT_GET_PREFS,
@@ -1396,8 +1405,8 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
                                   Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
                                   Btn_CONFIRM_BUTTON,
-				  Hie_BuildGoToMsg (Ins_EditingIns->ShrtName));
-      Hie_FreeGoToMsg ();
+				  Str_BuildGoToMsg (Ins_EditingIns->ShrtName));
+      Str_FreeStrings ();
      }
    else
       /***** Alert *****/
@@ -1417,6 +1426,7 @@ static void Ins_PutParamGoToIns (void *InsCod)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_institution;
    extern const char *Txt_Create_institution;
 
@@ -1472,27 +1482,28 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this institution ****/
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Number of centers *****/
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Number of users in courses of this institution ****/
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
 	 /***** Institution requester *****/
-	 HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	 HTM_TD_Begin ("class=\"%s INPUT_REQUESTER LT\"",
+	               The_ClassDat[Gbl.Prefs.Theme]);
 	    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
 	 HTM_TD_End ();
 
 	 /***** Institution status *****/
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1797,7 +1808,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 								     Txt_institutions),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeString ();
+      Str_FreeStrings ();
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable

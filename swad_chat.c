@@ -103,6 +103,7 @@ void Cht_ShowChatRooms (void)
 
 void Cht_ShowListOfAvailableChatRooms (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Chat_rooms;
    extern const char *Txt_General;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -135,7 +136,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Title of top level *****/
-	 HTM_LI_Begin ("class=\"DAT\"");
+	 HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
 	    HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
 	 HTM_LI_End ();
@@ -242,6 +243,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
 void Cht_ShowListOfChatRoomsWithUsrs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Rooms_with_users;
    extern const char *Txt_CHAT_Room_code;
    extern const char *Txt_Number_of_users;
@@ -275,11 +277,11 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"DAT LM\"");
+	       HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (row[0]);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 

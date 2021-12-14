@@ -778,7 +778,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 					   "arrow-up.svg",
 					   Str_BuildStringStr (Txt_Move_up_X,
 							       StrItemIndex));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -791,7 +791,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 					   "arrow-down.svg",
 					   Str_BuildStringStr (Txt_Move_down_X,
 							       StrItemIndex));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
@@ -804,7 +804,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 					   "arrow-left.svg",
 					   Str_BuildStringStr (Txt_Increase_level_of_X,
 							       StrItemIndex));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
@@ -817,7 +817,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 					   "arrow-right.svg",
 					   Str_BuildStringStr (Txt_Decrease_level_of_X,
 							       StrItemIndex));
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 	   }
 	 else
             Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);

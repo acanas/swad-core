@@ -62,9 +62,6 @@ void Hie_ResetHierarchy (void);
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
-char *Hie_BuildGoToMsg (const char *Where);
-void Hie_FreeGoToMsg (void);
-
 void Hie_WriteStatusCell (Hie_Status_t Status,
 			  const char *Class,const char *BgColor,
 			  const char *Txt[Hie_NUM_STATUS_TXT]);

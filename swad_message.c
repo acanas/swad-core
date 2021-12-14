@@ -2390,9 +2390,9 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 	       Crs_PutParamCrsCod (Crs.CrsCod);
 	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
 		  HTM_Txt ("(");
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs.FullName),
 					   "BT_LINK AUTHOR_TXT",NULL);
-		  Hie_FreeGoToMsg ();
+		  Str_FreeStrings ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();
 		  HTM_Txt (")");
@@ -2876,6 +2876,7 @@ static void Msg_UnbanSender (void)
 
 void Msg_ListBannedUsrs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_You_have_not_banned_any_sender;
    extern const char *Txt_Banned_users;
    extern const char *Txt_Sender_banned_click_to_unban_him;
@@ -2933,7 +2934,7 @@ void Msg_ListBannedUsrs (void)
 		  HTM_TD_End ();
 
 		  /* Write user's full name */
-		  HTM_TD_Begin ("class=\"DAT LM\"");
+		  HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_Txt (UsrDat.FullName);
 		  HTM_TD_End ();
 

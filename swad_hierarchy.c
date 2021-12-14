@@ -736,24 +736,6 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   }
 
 /*****************************************************************************/
-/********************* Build a "Go to <where>" message ***********************/
-/*****************************************************************************/
-// Where is a hierarchy member (country, institution, center, degree or course
-// Hie_FreeGoToMsg() must be called after calling this function
-
-char *Hie_BuildGoToMsg (const char *Where)
-  {
-   extern const char *Txt_Go_to_X;
-
-   return Str_BuildStringStr (Txt_Go_to_X,Where);
-  }
-
-void Hie_FreeGoToMsg (void)
-  {
-   Str_FreeString ();
-  }
-
-/*****************************************************************************/
 /*********************** Write status cell in table **************************/
 /*****************************************************************************/
 
@@ -773,11 +755,12 @@ void Hie_WriteStatusCellEditable (bool ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT])
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
    unsigned StatusUnsigned;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
       if (ICanEdit && StatusTxt == Hie_STATUS_PENDING)
 	{
 	 /* Begin form */

@@ -195,6 +195,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Questions)
 void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
@@ -247,7 +248,7 @@ void Qst_ShowFormAnswerTypes (const struct Qst_AnswerTypes *AnswerTypes)
 		    }
 		 }
 	       HTM_TD_Begin ("class=\"LM\"");
-		  HTM_LABEL_Begin ("class=\"DAT\"");
+		  HTM_LABEL_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_INPUT_CHECKBOX ("AnswerType",HTM_DONT_SUBMIT_ON_CHANGE,
 					 "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
 					 (unsigned) AnsType,
@@ -1860,7 +1861,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
       Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
 		    Qst_PutIconToRemoveOneQst,&Question->QstCod,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
-      Str_FreeString ();
+      Str_FreeStrings ();
      }
    else
       Box_BoxBegin (NULL,Txt_New_question,

@@ -433,6 +433,7 @@ static void CtrCfg_Altitude (void)
 static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1])
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    char *PhotoAttribution = NULL;
    char *URL;
    char *Icon;
@@ -449,8 +450,8 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
       if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
-		      Gbl.Hierarchy.Ctr.WWW);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+		      Gbl.Hierarchy.Ctr.WWW,The_ClassDatN[Gbl.Prefs.Theme]);
       if (asprintf (&URL,"%s/%02u/%u",
 		    Cfg_URL_CTR_PUBLIC,
 		    (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
@@ -546,6 +547,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
 
@@ -558,7 +560,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		       Txt_Institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of institutions of the current country */
@@ -587,9 +589,10 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
-					   "BT_LINK LT DAT",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
+		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   NULL);
+		  Str_FreeStrings ();
 	      }
 
 	    Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,
@@ -635,6 +638,7 @@ static void CtrCfg_ShrtName (bool PutForm)
 
 static void CtrCfg_Place (bool PutForm)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
    struct Plc_Places Places;
@@ -657,7 +661,7 @@ static void CtrCfg_Place (bool PutForm)
 		       Txt_Place);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of places of the current institution */
@@ -723,6 +727,7 @@ static void CtrCfg_QR (void)
 
 static void CtrCfg_NumUsrs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Users_of_the_center;
 
    /***** Number of users *****/
@@ -732,7 +737,7 @@ static void CtrCfg_NumUsrs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Users_of_the_center);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (&Gbl.Hierarchy.Ctr));
       HTM_TD_End ();
 
@@ -745,6 +750,7 @@ static void CtrCfg_NumUsrs (void)
 
 static void CtrCfg_NumDegs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
 
@@ -760,8 +766,9 @@ static void CtrCfg_NumDegs (void)
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
 							 Gbl.Hierarchy.Ctr.ShrtName),
-				     "BT_LINK DAT",NULL);
-	    Str_FreeString ();
+				     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+				     NULL);
+	    Str_FreeStrings ();
 	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -776,6 +783,7 @@ static void CtrCfg_NumDegs (void)
 
 static void CtrCfg_NumCrss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -785,7 +793,7 @@ static void CtrCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       HTM_TD_End ();
 

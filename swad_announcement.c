@@ -349,6 +349,7 @@ void Ann_ShowFormAnnouncement (void)
   {
    extern const char *Hlp_COMMUNICATION_Announcements;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
@@ -374,7 +375,7 @@ void Ann_ShowFormAnnouncement (void)
 	       HTM_TxtColonNBSP (Txt_Users);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"DAT LT\"");
+	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       Rol_WriteSelectorRoles (1 << Rol_UNK |
 				       1 << Rol_GST |
 				       1 << Rol_STD |

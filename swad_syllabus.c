@@ -153,6 +153,7 @@ Syl_WhichSyllabus_t Syl_GetParamWhichSyllabus (void)
 
 void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyl;
 
@@ -165,7 +166,7 @@ void Syl_PutFormWhichSyllabus (Syl_WhichSyllabus_t SyllabusSelected)
 	      WhichSyl <= (Syl_WhichSyllabus_t) (For_NUM_FORUM_SETS - 1);
 	      WhichSyl++)
 	   {
-	    HTM_LI_Begin ("class=\"DAT LM\"");
+	    HTM_LI_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("WhichSyllabus",true,
 				   "value=\"%u\"%s",
@@ -650,7 +651,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
 														     Txt_Move_up_X,
 								     StrItemCod));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
@@ -669,7 +670,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Str_BuildStringStr (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
 														     Txt_Move_down_X,
 								     StrItemCod));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
@@ -686,7 +687,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 "arrow-left.svg",
 						 Str_BuildStringStr (Txt_Increase_level_of_X,
 								     StrItemCod));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
@@ -704,7 +705,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 "arrow-right.svg",
 						 Str_BuildStringStr (Txt_Decrease_level_of_X,
 								     StrItemCod));
-		  Str_FreeString ();
+		  Str_FreeStrings ();
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);

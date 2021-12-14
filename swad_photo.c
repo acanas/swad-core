@@ -793,7 +793,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 	       Str_BuildStringStr ("%s_map.jpg",Gbl.UniqueNameEncrypted),
 	       Txt_Faces_detected,
 	       "usemap=\"#faces_map\"");
-      Str_FreeString ();
+      Str_FreeStrings ();
    HTM_DIV_End ();
 
    /***** End alert *****/
@@ -886,6 +886,7 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
 
 static void Pho_UpdatePhoto2 (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
    unsigned NumPhoto;
    char *Img;
@@ -900,7 +901,8 @@ static void Pho_UpdatePhoto2 (void)
 	      NumPhoto < 3;
 	      NumPhoto++)
 	   {
-	    HTM_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
+	    HTM_TD_Begin ("class=\"%s CT\" style=\"width:33%%;\"",
+	                  The_ClassDat[Gbl.Prefs.Theme]);
 	       if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
@@ -2177,6 +2179,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -2229,15 +2232,21 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	    HTM_TR_Begin (NULL);
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"DAT RM COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
+		    {
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-							"BT_LINK DAT","CT");
+							Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+							"CT");
+		     Str_FreeStrings ();
+		    }
 		  else	// Pho_DEGREES_PRINT
 		    {
 		     Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
@@ -2310,9 +2319,10 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
 
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_photos;
 
-   HTM_SPAN_Begin ("class=\"DAT\"");
+   HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
       HTM_TxtF ("%d&nbsp;",NumStds);
    HTM_SPAN_End ();
 
@@ -2335,6 +2345,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
@@ -2361,8 +2372,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
 	 Deg_PutParamDegCod (Deg->DegCod);
-	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
-	 Hie_FreeGoToMsg ();
+	 HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
+	 Str_FreeStrings ();
      }
 
    /***** Check if photo of degree can be shown *****/
@@ -2398,7 +2409,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 				    0);
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
-	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE DAT_N\"");
+	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE %s\"",
+	                      The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_Txt (PhotoCaption);
 	       HTM_DIV_End ();
 	    HTM_DIV_End ();

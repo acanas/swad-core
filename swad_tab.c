@@ -69,6 +69,24 @@ void Tab_DrawTabs (void)
       [The_THEME_PINK  ] = "HEAD_ROW_3_PINK",
       [The_THEME_DARK  ] = "HEAD_ROW_3_DARK",
       };
+   static const char *ClassIcoTab[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
+     {
+      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " TAB_ICO_DARK",
+
+      [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "",
+     };
 
    /***** Begin tabs container *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassHeadRow3[Gbl.Prefs.Theme]);
@@ -110,7 +128,7 @@ void Tab_DrawTabs (void)
 									 "BT_LINK",
 					      NULL);
 			HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
-				 "class=\"TAB_ICO\"");
+				 "class=\"TAB_ICO%s\"",ClassIcoTab[Gbl.Prefs.IconSet][Gbl.Prefs.Theme]);
 			HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
 				       NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 								  The_ClassTxtTabOff[Gbl.Prefs.Theme]);

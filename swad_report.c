@@ -128,7 +128,7 @@ void Rep_ReqMyUsageReport (void)
 					     Cfg_PLATFORM_SHORT_NAME),
 		    NULL,NULL,
 		    Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-      Str_FreeString ();
+      Str_FreeStrings ();
 
 	 /***** Header *****/
 	 Rep_TitleReport (NULL);	// NULL means do not write date
@@ -236,7 +236,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 				          Cfg_PLATFORM_SHORT_NAME),
                  NULL,NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       /***** Header *****/
       Rep_TitleReport (&Report->CurrentTimeUTC);
@@ -267,10 +267,12 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
 static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Date;
 
-   HTM_DIV_Begin ("class=\"TITLE_REPORT DAT\"");
+   HTM_DIV_Begin ("class=\"TITLE_REPORT %s\"",The_ClassDat[Gbl.Prefs.Theme]);
 
       /***** User *****/
       HTM_TxtColonNBSP (Txt_User[Gbl.Usrs.Me.UsrDat.Sex]);
@@ -283,7 +285,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
 	{
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Date);
-	 HTM_SPAN_Begin ("class=\"DAT_N\"");
+	 HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatN[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%s %s UTC",CurrentTimeUTC->StrDate,
 				  CurrentTimeUTC->StrTime);
 	 HTM_SPAN_End ();

@@ -82,10 +82,21 @@ void Box_BoxBegin (const char *Width,const char *Title,
                    void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                    const char *HelpLink,Box_Closable_t Closable)
   {
+   static const char *BgColor[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "FRAME FRAME_WHITE",
+      [The_THEME_GREY  ] = "FRAME FRAME_GREY",
+      [The_THEME_PURPLE] = "FRAME FRAME_PURPLE",
+      [The_THEME_BLUE  ] = "FRAME FRAME_BLUE",
+      [The_THEME_YELLOW] = "FRAME FRAME_YELLOW",
+      [The_THEME_PINK  ] = "FRAME FRAME_PINK",
+      [The_THEME_DARK  ] = "FRAME FRAME_DARK",
+     };
+
    Box_BoxInternalBegin (Width,Title,
 			 FunctionToDrawContextualIcons,Args,
 			 HelpLink,Closable,
-			 "FRAME");
+			 BgColor[Gbl.Prefs.Theme]);
   }
 
 void Box_BoxShadowBegin (const char *Width,const char *Title,
@@ -106,6 +117,16 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
   {
    extern const char *Txt_Help;
    extern const char *Txt_Close;
+   static const char *ClassFrameTitleColor[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "FRAME_TITLE_WHITE",
+      [The_THEME_GREY  ] = "FRAME_TITLE_GREY",
+      [The_THEME_PURPLE] = "FRAME_TITLE_PURPLE",
+      [The_THEME_BLUE  ] = "FRAME_TITLE_BLUE",
+      [The_THEME_YELLOW] = "FRAME_TITLE_YELLOW",
+      [The_THEME_PINK  ] = "FRAME_TITLE_PINK",
+      [The_THEME_DARK  ] = "FRAME_TITLE_DARK",
+     };
 
    /***** Check level of nesting *****/
    if (Gbl.Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
@@ -143,35 +164,35 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    /***** Row for left and right icons *****/
    HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
-   /* Contextual icons at left */
-   if (FunctionToDrawContextualIcons)
-     {
-      HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
-      FunctionToDrawContextualIcons (Args);
+      /* Contextual icons at left */
+      if (FunctionToDrawContextualIcons)
+	{
+	 HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
+	    FunctionToDrawContextualIcons (Args);
+	 HTM_DIV_End ();
+	}
+
+      /* Icons at right: help and close */
+      HTM_DIV_Begin ("class=\"FRAME_ICO_RIGHT\"");
+
+	 if (HelpLink)	// Link to help
+	   {
+	    HTM_A_Begin ("href=\"%s%s\" target=\"_blank\"",Hlp_WIKI,HelpLink);
+	       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
+			       "question.svg",Txt_Help);
+	    HTM_A_End ();
+	   }
+
+	 if (Closable == Box_CLOSABLE)	// Icon to close the box
+	   {
+	    HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
+			 Gbl.Box.Ids[Gbl.Box.Nested]);
+	       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
+			       "times.svg",Txt_Close);
+	    HTM_A_End ();
+	   }
+
       HTM_DIV_End ();
-     }
-
-   /* Icons at right: help and close */
-   HTM_DIV_Begin ("class=\"FRAME_ICO_RIGHT\"");
-
-   if (HelpLink)	// Link to help
-     {
-      HTM_A_Begin ("href=\"%s%s\" target=\"_blank\"",Hlp_WIKI,HelpLink);
-      Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
-		      "question.svg",Txt_Help);
-      HTM_A_End ();
-     }
-
-   if (Closable == Box_CLOSABLE)	// Icon to close the box
-     {
-      HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
-	           Gbl.Box.Ids[Gbl.Box.Nested]);
-      Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
-		      "times.svg",Txt_Close);
-      HTM_A_End ();
-     }
-
-   HTM_DIV_End ();
 
    /***** End row for left and right icons *****/
    HTM_DIV_End ();
@@ -179,10 +200,11 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
    /***** Frame title *****/
    if (Title)
      {
-      HTM_DIV_Begin ("class=\"FRAME_TITLE %s\"",
+      HTM_DIV_Begin ("class=\"FRAME_TITLE %s %s\"",
 	             Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
-		                      "FRAME_TITLE_BIG");
-      HTM_Txt (Title);
+		                      "FRAME_TITLE_BIG",
+		     ClassFrameTitleColor[Gbl.Prefs.Theme]);
+	 HTM_Txt (Title);
       HTM_DIV_End ();
      }
   }

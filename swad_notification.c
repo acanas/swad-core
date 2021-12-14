@@ -309,6 +309,7 @@ static void Ntf_GetParamsNotifyEvents (void);
 void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_START_Notifications;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
@@ -590,8 +591,9 @@ void Ntf_ShowMyNotifications (void)
 		     HTM_TD_Begin ("colspan=\"2\"");
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\""
-			           " style=\"padding-bottom:12px;\"");
+		     HTM_TD_Begin ("colspan=\"4\" class=\"%s LT\""
+			           " style=\"padding-bottom:12px;\"",
+			           The_ClassDat[Gbl.Prefs.Theme]);
 			HTM_Txt (SummaryStr);
 		     HTM_TD_End ();
 

@@ -40,12 +40,19 @@
 #include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
+#include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy_config.h"
 #include "swad_hierarchy_level.h"
 #include "swad_HTML.h"
 #include "swad_role.h"
 #include "swad_system_config.h"
+
+/*****************************************************************************/
+/************** External global variables from others modules ****************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -251,6 +258,7 @@ static void SysCfg_Map (void)
 
 static void SysCfg_Platform (void)
   {
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Platform;
 
    /***** Institution *****/
@@ -260,7 +268,7 @@ static void SysCfg_Platform (void)
    Frm_LabelColumn ("RT",NULL,Txt_Platform);
 
    /* Data */
-   HTM_TD_Begin ("class=\"DAT_N LB\"");
+   HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
    HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
    HTM_TD_End ();
 
@@ -291,6 +299,7 @@ static void SysCfg_QR (void)
 
 static void SysCfg_NumCtys (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Countries;
 
    /***** Number of countries ******/
@@ -302,7 +311,10 @@ static void SysCfg_NumCtys (void)
       /* Data */
       HTM_TD_Begin ("class=\"LB\"");
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,"BT_LINK DAT",NULL);
+	    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,
+	                             Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                             NULL);
+	    Str_FreeStrings ();
 	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -317,6 +329,7 @@ static void SysCfg_NumCtys (void)
 
 static void SysCfg_NumInss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutions;
 
    /***** Number of institutions ******/
@@ -326,7 +339,7 @@ static void SysCfg_NumInss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Institutions);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Ins_GetCachedNumInssInSys ());
       HTM_TD_End ();
 
@@ -339,6 +352,7 @@ static void SysCfg_NumInss (void)
 
 static void SysCfg_NumDegs (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees;
 
    /***** Number of degrees *****/
@@ -348,7 +362,7 @@ static void SysCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInSys ());
       HTM_TD_End ();
 
@@ -361,6 +375,7 @@ static void SysCfg_NumDegs (void)
 
 static void SysCfg_NumCrss (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Courses;
 
    /***** Number of courses *****/
@@ -370,7 +385,7 @@ static void SysCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"DAT LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInSys ());
       HTM_TD_End ();
 

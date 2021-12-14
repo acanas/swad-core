@@ -279,7 +279,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 				          Gbl.Hierarchy.Crs.ShrtName),
                  NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
-   Str_FreeString ();
+   Str_FreeStrings ();
 
       /***** Show form to select the groups *****/
       Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
@@ -1047,6 +1047,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
                                           MYSQL_RES *mysql_res)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Show_previous_X_clicks;
    extern const char *Txt_PAGES_Previous;
    extern const char *Txt_Clicks;
@@ -1134,7 +1135,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_previous_X_clicks,
 								   (long) Stats->RowsPerPage),
 					      "BT_LINK TIT_TBL",NULL);
-		     Str_FreeString ();
+		     Str_FreeStrings ();
 			HTM_STRONG_Begin ();
 			   HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
 			HTM_STRONG_End ();
@@ -1145,7 +1146,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		  Frm_EndForm ();
 
 	       /* Write number of current page */
-	       HTM_TD_Begin ("class=\"DAT_N CM\"");
+	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatN[Gbl.Prefs.Theme]);
 		  HTM_STRONG_Begin ();
 		     HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
 			       Txt_Clicks,
@@ -1172,7 +1173,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_next_X_clicks,
 								   (long) Stats->RowsPerPage),
 					      "BT_LINK TIT_TBL",NULL);
-		     Str_FreeString ();
+		     Str_FreeStrings ();
 			HTM_STRONG_Begin ();
 			   HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
 			HTM_STRONG_End ();
@@ -2781,6 +2782,7 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
                                       unsigned NumHits,
                                       MYSQL_RES *mysql_res)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Banner;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    unsigned NumHit;
@@ -2825,9 +2827,10 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 	    Err_WrongBannerExit ();
 	 Ban_GetDataOfBannerByCod (&Ban);
 	 HTM_TD_Begin ("class=\"LOG LT\"");
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
 			 Ban.WWW,
-			 Ban.FullName);
+			 Ban.FullName,
+			 The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
 			"style=\"margin:0 10px 5px 0;\"");
 	    HTM_A_End ();
@@ -3279,8 +3282,8 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
-		  Hie_FreeGoToMsg ();
+		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
+		  Str_FreeStrings ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();
 	      }

@@ -686,7 +686,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 				     Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
 							 The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
 				     NULL);
-	    Str_FreeString ();
+	    Str_FreeStrings ();
 
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],

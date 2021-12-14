@@ -162,25 +162,6 @@ const char *The_ClassCourse[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "MAIN_TITLE_DARK",
   };
 
-const char *The_ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
-  {
-   [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "",
-   [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "",
-   [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "",
-   [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "",
-   [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "",
-   [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "",
-   [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " MENU_ICO_DARK",
-
-   [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
-   [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "",
-   [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "",
-   [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "",
-   [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "",
-   [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "",
-   [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "",
-  };
-
 const char *The_ClassTxtMenu[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "MENU_TXT_WHITE",
@@ -333,6 +314,28 @@ const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
    [The_THEME_YELLOW] = "FORM_OUT_YELLOW BOLD",
    [The_THEME_PINK  ] = "FORM_OUT_PINK BOLD",
    [The_THEME_DARK  ] = "FORM_OUT_DARK BOLD",
+  };
+
+const char *The_ClassDat[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "DAT_WHITE",
+   [The_THEME_GREY  ] = "DAT_GREY",
+   [The_THEME_PURPLE] = "DAT_PURPLE",
+   [The_THEME_BLUE  ] = "DAT_BLUE",
+   [The_THEME_YELLOW] = "DAT_YELLOW",
+   [The_THEME_PINK  ] = "DAT_PINK",
+   [The_THEME_DARK  ] = "DAT_DARK",
+  };
+
+const char *The_ClassDatN[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "DAT_N_WHITE",
+   [The_THEME_GREY  ] = "DAT_N_GREY",
+   [The_THEME_PURPLE] = "DAT_N_PURPLE",
+   [The_THEME_BLUE  ] = "DAT_N_BLUE",
+   [The_THEME_YELLOW] = "DAT_N_YELLOW",
+   [The_THEME_PINK  ] = "DAT_N_PINK",
+   [The_THEME_DARK  ] = "DAT_N_DARK",
   };
 
 /*****************************************************************************/

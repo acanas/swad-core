@@ -3728,7 +3728,9 @@ mysql> DESCRIBE usr_webs;
 
 static void DB_CreateTable (const char *Query)
   {
-   HTM_LI_Begin ("class=\"DAT\"");
+   extern const char *The_ClassDat[The_NUM_THEMES];
+
+   HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
       HTM_Txt (Query);
    HTM_LI_End ();
 

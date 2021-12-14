@@ -98,6 +98,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty);
 void Cty_SeeCtyWithPendingInss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
    extern const char *Txt_Institutions_ABBREVIATION;
@@ -156,11 +157,13 @@ void Cty_SeeCtyWithPendingInss (void)
 		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL",
-						     "BT_LINK DAT");
+						     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]));
+		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
 	       /* Number of pending institutions (row[1]) */
-	       HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"%s RM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -204,6 +207,7 @@ void Cty_ListCountries1 (void)
 void Cty_ListCountries2 (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Countries;
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
@@ -228,7 +232,8 @@ void Cty_ListCountries2 (void)
 
       /***** Separation row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"8\" class=\"DAT CM\"");
+	 HTM_TD_Begin ("colspan=\"8\" class=\"%s CM\"",
+	               The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
       HTM_TR_End ();
@@ -236,40 +241,40 @@ void Cty_ListCountries2 (void)
       /***** Write users and institutions in other countries *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Other_countries);
 	 HTM_TD_End ();
 
 	 /* Number of users who claim to belong to another country */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToAnotherCty ());
 	 HTM_TD_End ();
 
 	 /* Number of institutions in other countries */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Ins_GetCachedNumInssInCty (0));
 	 HTM_TD_End ();
 
 	 /* Number of centers in other countries */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (0));
 	 HTM_TD_End ();
 
 	 /* Number of degrees in other countries */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Deg_GetCachedNumDegsInCty (0));
 	 HTM_TD_End ();
 
 	 /* Number of courses in other countries */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Crs_GetCachedNumCrssInCty (0));
 	 HTM_TD_End ();
 
 	 /* Number of users in courses of other countries */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,0,
 						      1 << Rol_STD |
 						      1 << Rol_NET |
@@ -281,39 +286,39 @@ void Cty_ListCountries2 (void)
       /***** Write users and institutions with unknown country *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Country_unspecified);
 	 HTM_TD_End ();
 
 	 /* Number of users who do not claim to belong to any country */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Cty_GetCachedNumUsrsWhoDontClaimToBelongToAnyCty ());
 	 HTM_TD_End ();
 
 	 /* Number of institutions with unknown country */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Ins_GetCachedNumInssInCty (-1L));
 	 HTM_TD_End ();
 
 	 /* Number of centers with unknown country */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (-1L));
 	 HTM_TD_End ();
 
 	 /* Number of degrees with unknown country */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Deg_GetCachedNumDegsInCty (-1L));
 	 HTM_TD_End ();
 
 	 /* Number of courses with unknown country */
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Crs_GetCachedNumCrssInCty (-1L));
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (0);
 	 HTM_TD_End ();
 
@@ -395,6 +400,8 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 
 static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    const char *BgColor;
 
    BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
@@ -403,7 +410,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
    HTM_TR_Begin (NULL);
 
       /***** Number of country in this list *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumCty);
       HTM_TD_End ();
 
@@ -412,36 +419,37 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL",
-					    "BT_LINK DAT_N");
+					    Str_BuildStringStr ("BT_LINK %s",The_ClassDatN[Gbl.Prefs.Theme]));
+	 Str_FreeStrings ();
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this country *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Cty_GetCachedNumUsrsWhoClaimToBelongToCty (Cty));
       HTM_TD_End ();
 
       /***** Number of institutions *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ins_GetCachedNumInssInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of centers *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ctr_GetCachedNumCtrsInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCty (Cty->CtyCod));
       HTM_TD_End ();
 
       /***** Number of users in courses *****/
-      HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s RM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTY,Cty->CtyCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -505,9 +513,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
 	 /***** Link to action *****/
-	 HTM_BUTTON_SUBMIT_Begin (Hie_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
+	 HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
 				  ClassLink,NULL);
-	 Hie_FreeGoToMsg ();
+	 Str_FreeStrings ();
 
 	    /***** Draw country map *****/
 	    Cty_DrawCountryMap (Cty,ClassMap);
@@ -548,7 +556,7 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
       HTM_IMG (URL,Str_BuildStringStr ("%s.png",Cty->Alpha2),
 	       Cty->Name[Gbl.Prefs.Language],
 	       "class=\"%s\"",Class);
-      Str_FreeString ();
+      Str_FreeStrings ();
       free (URL);
      }
    else
@@ -1040,6 +1048,7 @@ void Cty_FreeListCountries (void)
 
 static void Cty_ListCountriesForEdition (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
    struct Cty_Countr *Cty;
@@ -1082,24 +1091,28 @@ static void Cty_ListCountriesForEdition (void)
 	    HTM_TD_End ();
 
 	    /* Numerical country code (ISO 3166-1) */
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"%s RT\"",
+	                  1 + Lan_NUM_LANGUAGES,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%03ld",Cty->CtyCod);
 	    HTM_TD_End ();
 
 	    /* Alphabetic country code with 2 letters (ISO 3166-1) */
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"%s RT\"",
+	                  1 + Lan_NUM_LANGUAGES,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Txt (Cty->Alpha2);
 	    HTM_TD_End ();
 
 	    HTM_TD_Empty (3);
 
 	    /* Number of users */
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"%s RT\"",
+	                  1 + Lan_NUM_LANGUAGES,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumUsrsCty);
 	    HTM_TD_End ();
 
 	    /* Number of institutions */
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"%s RT\"",
+	                  1 + Lan_NUM_LANGUAGES,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (NumInss);
 	    HTM_TD_End ();
 
@@ -1113,7 +1126,7 @@ static void Cty_ListCountriesForEdition (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Language */
-	       HTM_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_TxtColon (Txt_STR_LANG_NAME[Lan]);
 	       HTM_TD_End ();
 
@@ -1395,8 +1408,8 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
                                   Cty_PutParamGoToCty,&Cty_EditingCty->CtyCod,
                                   Btn_CONFIRM_BUTTON,
-				  Hie_BuildGoToMsg (Cty_EditingCty->Name[Gbl.Prefs.Language]));
-      Hie_FreeGoToMsg ();
+				  Str_BuildGoToMsg (Cty_EditingCty->Name[Gbl.Prefs.Language]));
+      Str_FreeStrings ();
      }
    else
       /***** Alert *****/
@@ -1416,9 +1429,10 @@ static void Cty_PutParamGoToCty (void *CtyCod)
 
 static void Cty_PutFormToCreateCountry (void)
   {
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_New_country;
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
-   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
    Lan_Language_t Lan;
    char StrCtyCod[Cns_MAX_DECIMAL_DIGITS_LONG + 1];
@@ -1460,12 +1474,14 @@ static void Cty_PutFormToCreateCountry (void)
 	    HTM_TD_Empty (3);
 
 	    /***** Number of users *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"%s RT\"",
+	                  1 + Lan_NUM_LANGUAGES,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (0);
 	    HTM_TD_End ();
 
 	    /***** Number of institutions *****/
-	    HTM_TD_Begin ("rowspan=\"%u\" class=\"DAT RT\"",1 + Lan_NUM_LANGUAGES);
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"%s RT\"",
+	                  1 + Lan_NUM_LANGUAGES,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_Unsigned (0);
 	    HTM_TD_End ();
 
@@ -1479,7 +1495,7 @@ static void Cty_PutFormToCreateCountry (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Language */
-	       HTM_TD_Begin ("class=\"DAT RT\"");
+	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (Txt_STR_LANG_NAME[Lan]);
 	       HTM_TD_End ();
 
@@ -1796,7 +1812,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 								     Txt_countries),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeString ();
+      Str_FreeStrings ();
 
 	 /***** Write heading *****/
 	 Cty_PutHeadCountriesForSeeing (false);	// Order not selectable

@@ -122,6 +122,8 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatN[The_NUM_THEMES];
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
@@ -140,17 +142,19 @@ void Dat_PutBoxToSelectDateFormat (void)
 		 Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 		 Format++)
 	      {
-	       HTM_LI_Begin ("class=\"%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
-									       "DAT");
-		  HTM_LABEL_Begin (NULL);
-		     HTM_INPUT_RADIO ("DateFormat",true,
-				      " value=\"%u\"%s",
-				      (unsigned) Format,
-				      Format == Gbl.Prefs.DateFormat ? " checked=\"checked\"" :
-					                               "");
-		     Dat_PutSpanDateFormat (Format);
-		     Dat_PutScriptDateFormat (Format);
-		  HTM_LABEL_End ();
+	       if (Format == Gbl.Prefs.DateFormat)
+		  HTM_LI_Begin ("class=\"%s LIGHT_BLUE\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	       else
+		  HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin (NULL);
+		  HTM_INPUT_RADIO ("DateFormat",true,
+				   " value=\"%u\"%s",
+				   (unsigned) Format,
+				   Format == Gbl.Prefs.DateFormat ? " checked=\"checked\"" :
+								    "");
+		  Dat_PutSpanDateFormat (Format);
+		  Dat_PutScriptDateFormat (Format);
+	       HTM_LABEL_End ();
 	       HTM_LI_End ();
 	      }
 
@@ -191,7 +195,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
 				 Gbl.StartExecutionTimeUTC,
 				 Format,Dat_SEPARATOR_NONE,
 				 false,true,false,0x0);
-   Str_FreeString ();
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/

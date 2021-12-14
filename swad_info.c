@@ -887,6 +887,7 @@ void Inf_SetInfoSrc (void)
 void Inf_FormsToSelSendInfo (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_SOURCES];
@@ -947,21 +948,21 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Select info source */
-	    if (InfoSrc == FromDB.Src)
-	       HTM_TD_Begin ("class=\"DAT LT LIGHT_BLUE\"");
-	    else
-	       HTM_TD_Begin ("class=\"DAT LT\"");
-	    Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
-	       HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
-					  (InfoSrc == Inf_NONE ||
-					   InfoAvailable[InfoSrc]),	// Info available for this source
-				"id=\"InfoSrc%u\" value=\"%u\"%s",
-				(unsigned) InfoSrc,(unsigned) InfoSrc,
-				InfoSrc == FromDB.Src ? " checked=\"checked\"" :
-							(InfoSrc == Inf_NONE ||
-							InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
-										  " disabled=\"disabled\"");
-	    Frm_EndForm ();
+	    HTM_TD_Begin ("class=\"%s LT%s\"",
+			  The_ClassDat[Gbl.Prefs.Theme],
+			  InfoSrc == FromDB.Src ? " LIGHT_BLUE" :
+				                  "");
+	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+		  HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
+					     (InfoSrc == Inf_NONE ||
+					      InfoAvailable[InfoSrc]),	// Info available for this source
+				   "id=\"InfoSrc%u\" value=\"%u\"%s",
+				   (unsigned) InfoSrc,(unsigned) InfoSrc,
+				   InfoSrc == FromDB.Src ? " checked=\"checked\"" :
+							   (InfoSrc == Inf_NONE ||
+							   InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
+										     " disabled=\"disabled\"");
+	       Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /* Form for this info source */
@@ -975,7 +976,7 @@ void Inf_FormsToSelSendInfo (void)
 	    HTM_LABEL_End ();
 	    if (Txt_INFO_SRC_HELP[InfoSrc])
 	      {
-	       HTM_SPAN_Begin ("class=\"DAT\"");
+	       HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_BR ();
 		  HTM_TxtF ("(%s)",Txt_INFO_SRC_HELP[InfoSrc]);
 	       HTM_SPAN_End ();
@@ -1459,6 +1460,7 @@ static bool Inf_CheckPlainTxt (long CrsCod,Inf_Type_t InfoType)
 
 static bool Inf_CheckAndShowPlainTxt (void)
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -1495,7 +1497,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-      HTM_DIV_Begin ("class=\"DAT LM\"");
+      HTM_DIV_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
 
 	 /***** Convert to respectful HTML and insert links *****/
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
