@@ -283,7 +283,7 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_2_GREY
 	{
-	background-color:#383838;
+	background-color:#404040;
 	}
 .HEAD_ROW_2_PURPLE
 	{
@@ -2306,7 +2306,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_IN_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_IN_YELLOW		{color:#7c4d2a; font-size:13pt;}
 .FORM_IN_PINK		{color:#4d88a1; font-size:13pt;}
-.FORM_IN_DARK		{color:#4d88a1; font-size:13pt;}
+.FORM_IN_DARK		{color:#c0e0ff; font-size:13pt;}
 
 /* Outside white box */
 .FORM_OUT_WHITE		{color:#4d88a1; font-size:13pt;}
@@ -2316,9 +2316,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_OUT_YELLOW	{color:#7c4d2a; font-size:13pt;}
 .FORM_OUT_PINK		{color:#63474e; font-size:13pt;}
 .FORM_OUT_DARK		{color:#c0e0ff; font-size:13pt;}
-
-.BOLD	{font-weight:bold;}
-.NOWRAP	{white-space:nowrap;}
 
 /****************************** Placing of objects ***************************/
 .LT	{text-align:left;   vertical-align:top;   }	/* Left Top      */
@@ -2331,12 +2328,19 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .RM	{text-align:right;  vertical-align:middle;}	/* Right Middle  */
 .RB	{text-align:right;  vertical-align:bottom;}	/* Right Bottom  */
 
-/***************** Colors used in headers,backgrounds,etc. *****************/
+/***************** Colors used in headers, backgrounds, etc. *****************/
 .COLOR0			{background-color:#F4F2EA;}
 .COLOR1			{background-color:#FBFAF7;}
 .LIGHT_GREEN		{background-color:#C0FF40;}
-.LIGHT_BLUE		{background-color:#DDECF1;}
 .VERY_LIGHT_BLUE	{background-color:#EAF3F6;}
+
+.BG_HIGHLIGHT_WHITE	{background-color:#ddecf1;}
+.BG_HIGHLIGHT_GREY	{background-color:#ddecf1;}
+.BG_HIGHLIGHT_PURPLE	{background-color:#ddecf1;}
+.BG_HIGHLIGHT_BLUE	{background-color:#ddecf1;}
+.BG_HIGHLIGHT_YELLOW	{background-color:#ddecf1;}
+.BG_HIGHLIGHT_PINK	{background-color:#ddecf1;}
+.BG_HIGHLIGHT_DARK	{background-color:#707070;}
 
 /********************************* Course info *******************************/
 #crs_info
@@ -2458,29 +2462,35 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .T2		{color:#202020; font-size:13pt;}
 .T3		{color:#202020; font-size:12pt;}
 
-.DAT_WHITE	{color:#404040; font-size:13pt;}
-.DAT_GREY	{color:#404040; font-size:13pt;}
-.DAT_PURPLE	{color:#404040; font-size:13pt;}
-.DAT_BLUE	{color:#404040; font-size:13pt;}
-.DAT_YELLOW	{color:#404040; font-size:13pt;}
-.DAT_PINK	{color:#404040; font-size:13pt;}
-.DAT_DARK	{color:#d0d0d0; font-size:13pt;}
+.DAT_WHITE		{color:#404040; font-size:13pt;}
+.DAT_GREY		{color:#404040; font-size:13pt;}
+.DAT_PURPLE		{color:#404040; font-size:13pt;}
+.DAT_BLUE		{color:#404040; font-size:13pt;}
+.DAT_YELLOW		{color:#404040; font-size:13pt;}
+.DAT_PINK		{color:#404040; font-size:13pt;}
+.DAT_DARK		{color:#d0d0d0; font-size:13pt;}
 
-.DAT_N_WHITE	{color:black; font-size:13pt;}
-.DAT_N_GREY	{color:black; font-size:13pt;}
-.DAT_N_PURPLE	{color:black; font-size:13pt;}
-.DAT_N_BLUE	{color:black; font-size:13pt;}
-.DAT_N_YELLOW	{color:black; font-size:13pt;}
-.DAT_N_PINK	{color:black; font-size:13pt;}
-.DAT_N_DARK	{color:white; font-size:13pt;}
+.DAT_STRONG_WHITE	{color:black; font-size:13pt;}
+.DAT_STRONG_GREY	{color:black; font-size:13pt;}
+.DAT_STRONG_PURPLE	{color:black; font-size:13pt;}
+.DAT_STRONG_BLUE	{color:black; font-size:13pt;}
+.DAT_STRONG_YELLOW	{color:black; font-size:13pt;}
+.DAT_STRONG_PINK	{color:black; font-size:13pt;}
+.DAT_STRONG_DARK	{color:white; font-size:13pt;}
 
-.DAT_NOBR	{color:#404040; font-size:13pt; white-space:nowrap;}
-.DAT_BOLD	{color:#404040; font-size:13pt; font-weight:bold;}
+.DAT_LIGHT_WHITE	{color:#a0a0a0; font-size:13pt;}
+.DAT_LIGHT_GREY		{color:#a0a0a0; font-size:13pt;}
+.DAT_LIGHT_PURPLE	{color:#a0a0a0; font-size:13pt;}
+.DAT_LIGHT_BLUE		{color:#a0a0a0; font-size:13pt;}
+.DAT_LIGHT_YELLOW	{color:#a0a0a0; font-size:13pt;}
+.DAT_LIGHT_PINK		{color:#a0a0a0; font-size:13pt;}
+.DAT_LIGHT_DARK		{color:#909090; font-size:13pt;}
+
 .DAT_GREEN	{color:#246600; font-size:13pt;}
 .DAT_RED	{color:#660000; font-size:13pt;}
-.DAT_LIGHT	{color:#A0A0A0; font-size:13pt;}
-.DAT_NOBR_N	{color:black;   font-size:13pt; white-space:nowrap;}
-.DAT_N_BOLD	{color:black;   font-size:13pt; font-weight:bold;}
+
+.NOWRAP	{white-space:nowrap;}
+.BOLD	{font-weight:bold;}
 
 /*********************** Line in top part of a table row *********************/
 .LINE_TOP

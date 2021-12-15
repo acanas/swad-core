@@ -153,9 +153,10 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
 
@@ -178,9 +179,11 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	       if (MaskAllowedVisibility & (1 << Visibility))
 		 {
 		  if (Visibility == CurrentVisibilityInDB)
-		     HTM_LI_Begin ("class=\"%s LIGHT_BLUE\"",The_ClassDatN[Gbl.Prefs.Theme]);
+		     HTM_LI_Begin ("class=\"%s %s\"",
+		                   The_ClassDatStrong[Gbl.Prefs.Theme],The_ClassBgHighlight[Gbl.Prefs.Theme]);
 		  else
-		     HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		     HTM_LI_Begin ("class=\"%s\"",
+		                   The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_LABEL_Begin (NULL);
 		     HTM_INPUT_RADIO (ParamName,Action != ActUnk,
 				      "value=\"%u\"%s%s",

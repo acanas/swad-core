@@ -327,15 +327,37 @@ const char *The_ClassDat[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "DAT_DARK",
   };
 
-const char *The_ClassDatN[The_NUM_THEMES] =
+const char *The_ClassDatStrong[The_NUM_THEMES] =
   {
-   [The_THEME_WHITE ] = "DAT_N_WHITE",
-   [The_THEME_GREY  ] = "DAT_N_GREY",
-   [The_THEME_PURPLE] = "DAT_N_PURPLE",
-   [The_THEME_BLUE  ] = "DAT_N_BLUE",
-   [The_THEME_YELLOW] = "DAT_N_YELLOW",
-   [The_THEME_PINK  ] = "DAT_N_PINK",
-   [The_THEME_DARK  ] = "DAT_N_DARK",
+   [The_THEME_WHITE ] = "DAT_STRONG_WHITE",
+   [The_THEME_GREY  ] = "DAT_STRONG_GREY",
+   [The_THEME_PURPLE] = "DAT_STRONG_PURPLE",
+   [The_THEME_BLUE  ] = "DAT_STRONG_BLUE",
+   [The_THEME_YELLOW] = "DAT_STRONG_YELLOW",
+   [The_THEME_PINK  ] = "DAT_STRONG_PINK",
+   [The_THEME_DARK  ] = "DAT_STRONG_DARK",
+  };
+
+const char *The_ClassDatLight[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "DAT_LIGHT_WHITE",
+   [The_THEME_GREY  ] = "DAT_LIGHT_GREY",
+   [The_THEME_PURPLE] = "DAT_LIGHT_PURPLE",
+   [The_THEME_BLUE  ] = "DAT_LIGHT_BLUE",
+   [The_THEME_YELLOW] = "DAT_LIGHT_YELLOW",
+   [The_THEME_PINK  ] = "DAT_LIGHT_PINK",
+   [The_THEME_DARK  ] = "DAT_LIGHT_DARK",
+  };
+
+const char *The_ClassBgHighlight[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "BG_HIGHLIGHT_WHITE",
+   [The_THEME_GREY  ] = "BG_HIGHLIGHT_GREY",
+   [The_THEME_PURPLE] = "BG_HIGHLIGHT_PURPLE",
+   [The_THEME_BLUE  ] = "BG_HIGHLIGHT_BLUE",
+   [The_THEME_YELLOW] = "BG_HIGHLIGHT_YELLOW",
+   [The_THEME_PINK  ] = "BG_HIGHLIGHT_PINK",
+   [The_THEME_DARK  ] = "BG_HIGHLIGHT_DARK",
   };
 
 /*****************************************************************************/

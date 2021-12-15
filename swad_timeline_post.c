@@ -165,6 +165,7 @@ void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
 static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_post;
 
    /***** Begin container *****/
@@ -172,8 +173,9 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
       /***** Author name *****/
       Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,
-                               "BT_LINK Tml_RIGHT_AUTHOR"
-                               " Tml_RIGHT_AUTHOR_WIDTH DAT_N_BOLD");
+                               Str_BuildString ("Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
+                                                   The_ClassDatStrong[Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
 
       /***** Form to write the post *****/
       /* Begin container */

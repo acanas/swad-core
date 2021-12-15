@@ -6881,6 +6881,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
   {
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_Upload_files;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
@@ -6914,7 +6915,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 HTM_DIV_Begin ("class=\"dz-message\"");
-	    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+	    HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
 	    HTM_SPAN_End ();
 	 HTM_DIV_End ();
@@ -8558,7 +8559,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 
 	 /* Begin link */
 	 HTM_BUTTON_SUBMIT_Begin (Txt_Check_marks_in_the_file,
-	                          Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                          Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
 	                          NULL);
          Str_FreeStrings ();
 
@@ -9809,9 +9810,10 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
      {
       /***** Begin box and table *****/
       /* Number of documents found */
-      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumDocs,
-						      (NumDocs == 1) ? TitleSingular :
-								       TitlePlural),
+      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
+                                               NumDocs,
+					       (NumDocs == 1) ? TitleSingular :
+								TitlePlural),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeStrings ();
@@ -9868,8 +9870,9 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Documents_area;
    extern const char *Txt_Teachers_files_area;
    extern const char *Txt_Shared_files_area;
@@ -9934,8 +9937,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
       /***** Set row color *****/
       BgColor = (CrsCod > 0 &&
-	         CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "LIGHT_BLUE" :
-                                                        Gbl.ColorRows[Gbl.RowEvenOdd];
+	         CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
 
       HTM_TR_Begin (NULL);
 
@@ -9952,7 +9955,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Deg_PutParamDegCod (InsCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (InsShortName),
-		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+		                           Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 		                           NULL);
 		  Str_FreeStrings ();
 		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
@@ -9969,7 +9972,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Deg_PutParamDegCod (CtrCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (CtrShortName),
-		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+		                           Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
 		  Str_FreeStrings ();
 		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
@@ -9986,7 +9989,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (DegCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (DegShortName),
-		                           Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+		                           Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
 		  Str_FreeStrings ();
 		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
@@ -10003,7 +10006,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (CrsCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (CrsShortName),
-		                           Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+		                           Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
 		                           NULL);
 		  Str_FreeStrings ();
 		     HTM_Txt (CrsShortName);
@@ -10069,7 +10072,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
 	 /***** Write file name using path (row[1]) *****/
 	 HTM_TD_Begin ("class=\"%s LT %s\"",
-	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
+	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
 
 	    /* Begin form */
 	    Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
@@ -10110,7 +10113,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
 	    /* File or folder icon */
 	    HTM_BUTTON_SUBMIT_Begin (FileNameToShow,
-	                             Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]),
+	                             Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]),
 	                             NULL);
 	    Str_FreeStrings ();
 	       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)

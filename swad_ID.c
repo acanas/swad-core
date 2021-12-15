@@ -577,7 +577,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
 			    UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 								"USR_ID_NC",
-			    Str_BuildStringStr (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+			    Str_BuildString (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
 										    Txt_ID_X_not_confirmed,
 						UsrDat->IDs.List[NumID].ID));
 	    Str_FreeStrings ();

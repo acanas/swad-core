@@ -272,7 +272,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_Name;
    extern const char *Txt_yet_unnamed;
@@ -289,7 +289,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
       /***** Write user's ID and name *****/
       HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-                    The_ClassDatN[Gbl.Prefs.Theme],
+                    The_ClassDatStrong[Gbl.Prefs.Theme],
                     Gbl.RowEvenOdd);
 	 HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
 	 HTM_BR ();
@@ -438,7 +438,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    extern const char *Txt_Create_account;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_New_on_PLATFORM_Sign_up,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_New_on_PLATFORM_Sign_up,
 				          Cfg_PLATFORM_SHORT_NAME),
                  NULL,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);

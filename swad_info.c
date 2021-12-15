@@ -886,6 +886,7 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
@@ -948,26 +949,29 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TR_Begin (NULL);
 
 	    /* Select info source */
-	    HTM_TD_Begin ("class=\"%s LT%s\"",
-			  The_ClassDat[Gbl.Prefs.Theme],
-			  InfoSrc == FromDB.Src ? " LIGHT_BLUE" :
-				                  "");
-	       Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
-		  HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
-					     (InfoSrc == Inf_NONE ||
-					      InfoAvailable[InfoSrc]),	// Info available for this source
-				   "id=\"InfoSrc%u\" value=\"%u\"%s",
-				   (unsigned) InfoSrc,(unsigned) InfoSrc,
-				   InfoSrc == FromDB.Src ? " checked=\"checked\"" :
-							   (InfoSrc == Inf_NONE ||
-							   InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
-										     " disabled=\"disabled\"");
-	       Frm_EndForm ();
+	    if (InfoSrc == FromDB.Src)
+	       HTM_TD_Begin ("class=\"LT %s %s\"",
+			     The_ClassDat[Gbl.Prefs.Theme],
+			     The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	    else
+	       HTM_TD_Begin ("class=\"LT %s\"",
+			     The_ClassDat[Gbl.Prefs.Theme]);
+	    Frm_BeginForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
+	       HTM_INPUT_RADIO ("InfoSrc",InfoSrc != FromDB.Src &&
+					  (InfoSrc == Inf_NONE ||
+					   InfoAvailable[InfoSrc]),	// Info available for this source
+				"id=\"InfoSrc%u\" value=\"%u\"%s",
+				(unsigned) InfoSrc,(unsigned) InfoSrc,
+				InfoSrc == FromDB.Src ? " checked=\"checked\"" :
+							(InfoSrc == Inf_NONE ||
+							InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
+										  " disabled=\"disabled\"");
+	    Frm_EndForm ();
 	    HTM_TD_End ();
 
 	    /* Form for this info source */
 	    if (InfoSrc == FromDB.Src)
-	       HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
+	       HTM_TD_Begin ("class=\"LT %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
 	    else
 	       HTM_TD_Begin ("class=\"LT\"");
 	    HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"%s\"",

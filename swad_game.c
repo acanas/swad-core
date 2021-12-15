@@ -515,6 +515,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
                              struct Gam_Game *Game,bool ShowOnlyThisGame)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
@@ -664,7 +665,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? "DAT_LIGHT" :
+      HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
 						       The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
@@ -1760,7 +1761,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-up.svg",
-						 Str_BuildStringStr (Txt_Move_up_X,
+						 Str_BuildString (Txt_Move_up_X,
 								     StrQstInd));
 		  Str_FreeStrings ();
 		 }
@@ -1773,7 +1774,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-down.svg",
-						 Str_BuildStringStr (Txt_Move_down_X,
+						 Str_BuildString (Txt_Move_down_X,
 								     StrQstInd));
 		  Str_FreeStrings ();
 		 }

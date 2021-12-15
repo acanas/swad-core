@@ -786,7 +786,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-up.svg",
-						 Str_BuildStringStr (Txt_Move_up_X,
+						 Str_BuildString (Txt_Move_up_X,
 								     StrSetInd));
 		  Str_FreeStrings ();
 		 }
@@ -799,7 +799,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-down.svg",
-						 Str_BuildStringStr (Txt_Move_down_X,
+						 Str_BuildString (Txt_Move_down_X,
 								     StrSetInd));
 		  Str_FreeStrings ();
 		 }

@@ -135,7 +135,7 @@ void Plg_ListPlugins (void)
 	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
 			 URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
-			Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
+			Str_BuildString ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
 			Plg->Name,
 			"class=\"ICO40x40\"");
 	       Str_FreeStrings ();
@@ -363,7 +363,7 @@ static void Plg_ListPluginsForEdition (void)
 	    // TODO: Change plugin icons to 32x32
 	    HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
 	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
-			Str_BuildStringStr ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
+			Str_BuildString ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
 			Gbl.Plugins.Lst[NumPlg].Name,
 			"class=\"ICO40x40\"");
 	       Str_FreeStrings ();

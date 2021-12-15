@@ -470,7 +470,7 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
       Frm_BeginForm (ActEnaTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-slash-red.svg",
-			  Str_BuildStringStr (Txt_Tag_X_not_allowed_Click_to_allow_it,
+			  Str_BuildString (Txt_Tag_X_not_allowed_Click_to_allow_it,
 					      TagTxt));
 	 Str_FreeStrings ();
       Frm_EndForm ();
@@ -489,7 +489,7 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
       Frm_BeginForm (ActDisTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-green.svg",
-			  Str_BuildStringStr (Txt_Tag_X_allowed_Click_to_disable_it,
+			  Str_BuildString (Txt_Tag_X_allowed_Click_to_disable_it,
 					      TagTxt));
 	 Str_FreeStrings ();
       Frm_EndForm ();

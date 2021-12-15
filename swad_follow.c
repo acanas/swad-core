@@ -314,6 +314,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,
                                     bool UsrFollowsMe,bool IFollowUsr)
   {
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_FOLLOWS_YOU;
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
@@ -328,7 +329,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
 
 	    /* User follows me? */
-	    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT\"");
+	    HTM_DIV_Begin ("id=\"follows_me\" class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
 	       if (UsrFollowsMe)
 		  HTM_Txt (Txt_FOLLOWS_YOU);
 	    HTM_DIV_End ();
@@ -640,7 +641,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
 	       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
-	                                Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                                Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 	                                NULL);
 	       Str_FreeStrings ();
 		  Usr_WriteFirstNameBRSurnames (UsrDat);

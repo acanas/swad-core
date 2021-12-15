@@ -487,7 +487,7 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
 
       /* Icon and text */
       Tml_Com_PutIconToToggleComms (IdComms,Link[ConExp].Icon,
-				    Str_BuildStringLong (*Link[ConExp].Text,(long) NumComms));
+				    Str_BuildString (*Link[ConExp].Text,NumComms));
       Str_FreeStrings ();
 
    /* End container */
@@ -612,6 +612,7 @@ static void Tml_Com_WriteAuthorTimeAndContent (struct Tml_Com_Comment *Com,
 
 static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
   {
+   extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
 
@@ -623,7 +624,9 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       /* Author's name */
       HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							    Txt_Another_user_s_profile,
-			       "BT_LINK Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH DAT_BOLD",NULL);
+			       Str_BuildString ("Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
+			                           The_ClassDat[Gbl.Prefs.Theme]),
+			       NULL);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 

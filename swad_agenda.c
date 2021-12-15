@@ -386,12 +386,12 @@ void Agd_ShowUsrAgenda (void)
 
 	 /***** Begin box *****/
 	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+	    Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Me.UsrDat.FullName),
 			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	 else
-	    Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+	    Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
 						     Gbl.Usrs.Other.UsrDat.FullName),
 			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
@@ -438,12 +438,12 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 
 	    /***** Begin box *****/
 	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+	       Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
 							Gbl.Usrs.Me.UsrDat.FullName),
 			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	    else
-	       Box_BoxBegin ("100%",Str_BuildStringStr (Txt_Public_agenda_USER,
+	       Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
 							Gbl.Usrs.Other.UsrDat.FullName),
 			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
@@ -771,6 +771,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
    extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -857,7 +858,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 
       /* Text of the event */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? "DAT_LIGHT" :
+	 HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
 							     The_ClassDat[Gbl.Prefs.Theme]);
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1616,7 +1617,7 @@ void Agd_PrintAgdQRCode (void)
    extern const char *Txt_Where_s_USER;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Where_s_USER,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Where_s_USER,
 	                                  Gbl.Usrs.Me.UsrDat.FullName),
                  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);

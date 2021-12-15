@@ -55,8 +55,9 @@ static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
 void Coo_EditMyPrefsOnCookies (void)
   {
    extern const char *Hlp_PROFILE_Settings_cookies;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Cookies;
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
 
@@ -74,7 +75,9 @@ void Coo_EditMyPrefsOnCookies (void)
 
 	    /* Begin container */
 	    if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptCookies)
-	       HTM_DIV_Begin ("class=\"%s LIGHT_BLUE\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"%s %s\"",
+	                      The_ClassDatStrong[Gbl.Prefs.Theme],
+	                      The_ClassBgHighlight[Gbl.Prefs.Theme]);
 	    else
 	       HTM_DIV_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 

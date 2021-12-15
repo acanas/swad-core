@@ -1460,7 +1460,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
 						  "lock.svg",
-				      Str_BuildStringStr (Grp->Open ? Txt_Group_X_open_click_to_close_it :
+				      Str_BuildString (Grp->Open ? Txt_Group_X_open_click_to_close_it :
 								      Txt_Group_X_closed_click_to_open_it,
 							  Grp->GrpName));
 		     Str_FreeStrings ();
@@ -1475,7 +1475,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
 						       "folder-red.svg",
-				      Str_BuildStringStr (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
+				      Str_BuildString (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
 									   Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
 							  Grp->GrpName));
 		     Str_FreeStrings ();
@@ -1620,6 +1620,7 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
                                         Grp_WhichIsAssociatedToGrp_t WhichIsAssociatedToGrp,
                                         long Cod)	// Assignment, attendance event, survey, exam event or match
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    static const struct
      {
       const char *Table;
@@ -1663,18 +1664,19 @@ void Grp_ListGrpsToEditAsgAttSvyEvtMch (struct GroupType *GrpTyp,
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"%s\"",
-                       IBelongToThisGroup ? "LM LIGHT_BLUE" :
-		                            "LM");
-	    HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"Grp%ld\" value=\"%ld\"%s%s"
-				" onclick=\"uncheckParent(this,'WholeCrs')\"",
-				Grp->GrpCod,Grp->GrpCod,
-				AssociatedToGrp ? " checked=\"checked\"" :
-						  "",
-				(IBelongToThisGroup ||
-				 Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
-									   " disabled=\"disabled\"");
+         if (IBelongToThisGroup)
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	 else
+	    HTM_TD_Begin ("class=\"LM\"");
+	 HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Grp%ld\" value=\"%ld\"%s%s"
+			     " onclick=\"uncheckParent(this,'WholeCrs')\"",
+			     Grp->GrpCod,Grp->GrpCod,
+			     AssociatedToGrp ? " checked=\"checked\"" :
+					       "",
+			     (IBelongToThisGroup ||
+			      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" :
+									" disabled=\"disabled\"");
 	 HTM_TD_End ();
 
 	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -1843,6 +1845,7 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                                               unsigned *NumGrpsThisTypeIBelong)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
    struct Group *Grp;
@@ -1956,44 +1959,45 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       /* Put radio item or checkbox to select the group */
       HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"%s\"",
-                       IBelongToThisGroup ? "LM LIGHT_BLUE" :
-		                            "LM");
+         if (IBelongToThisGroup)
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	 else
+	    HTM_TD_Begin ("class=\"LM\"");
 
-	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	    if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
-		!GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
-		GrpTyp->NumGrps > 1)			// ...and there are more than one group
-	      {
-	       /* Put a radio item */
-	       if (GrpTyp->MandatoryEnrolment)
-		  HTM_INPUT_RADIO (StrGrpCod,false,
-				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
-				   Grp->GrpCod,Grp->GrpCod,
-				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
-				   ICanChangeMySelectionForThisGrp ? "" :
-								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-											  " disabled=\"disabled\"");	// I can not register
-	       else	// If the enrolment is not mandatory, I can select no groups
-		  HTM_INPUT_RADIO (StrGrpCod,false,
-				   "id=\"Grp%ld\" value=\"%ld\"%s%s"
-				   " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
-				   Grp->GrpCod,Grp->GrpCod,
-				   IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
-				   ICanChangeMySelectionForThisGrp ? "" :
-								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-											  " disabled=\"disabled\"",	// I can not register
-				   GrpTyp->GrpTypCod,GrpTyp->NumGrps);
-	      }
-	    else
-	       /* Put a checkbox item */
-	       HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
-				   "id=\"Grp%ld\" value=\"%ld\"%s%s",
-				   Grp->GrpCod,Grp->GrpCod,
-				   IBelongToThisGroup ? " checked=\"checked\"" : "",
-				   ICanChangeMySelectionForThisGrp ? "" :
-								     IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
-											  " disabled=\"disabled\"");	// I can not register
+	 snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
+	     !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
+	     GrpTyp->NumGrps > 1)			// ...and there are more than one group
+	   {
+	    /* Put a radio item */
+	    if (GrpTyp->MandatoryEnrolment)
+	       HTM_INPUT_RADIO (StrGrpCod,false,
+				"id=\"Grp%ld\" value=\"%ld\"%s%s",
+				Grp->GrpCod,Grp->GrpCod,
+				IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+				ICanChangeMySelectionForThisGrp ? "" :
+								  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+										       " disabled=\"disabled\"");	// I can not register
+	    else	// If the enrolment is not mandatory, I can select no groups
+	       HTM_INPUT_RADIO (StrGrpCod,false,
+				"id=\"Grp%ld\" value=\"%ld\"%s%s"
+				" onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
+				Grp->GrpCod,Grp->GrpCod,
+				IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+				ICanChangeMySelectionForThisGrp ? "" :
+								  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+										       " disabled=\"disabled\"",	// I can not register
+				GrpTyp->GrpTypCod,GrpTyp->NumGrps);
+	   }
+	 else
+	    /* Put a checkbox item */
+	    HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
+				"id=\"Grp%ld\" value=\"%ld\"%s%s",
+				Grp->GrpCod,Grp->GrpCod,
+				IBelongToThisGroup ? " checked=\"checked\"" : "",
+				ICanChangeMySelectionForThisGrp ? "" :
+								  IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+										       " disabled=\"disabled\"");	// I can not register
 
 	 HTM_TD_End ();
 
@@ -2050,6 +2054,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpThisType;
    bool UsrBelongsToThisGroup;
@@ -2077,19 +2082,20 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       HTM_TR_Begin (NULL);
 
 	 /* Begin cell for checkbox */
-         HTM_TD_Begin ("class=\"%s\"",
-                       UsrBelongsToThisGroup ? "LM LIGHT_BLUE" :
-		                               "LM");
+         if (UsrBelongsToThisGroup)
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	 else
+	    HTM_TD_Begin ("class=\"LM\"");
 
-	    /* Put checkbox to select the group */
-	    // Always checkbox, not radio, because the role in the form may be teacher,
-	    // so if he/she is registered as teacher, he/she can belong to several groups
-	    snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
-	    HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"Grp%ld\" value=\"%ld\"%s",
-				Grp->GrpCod,Grp->GrpCod,
-				UsrBelongsToThisGroup ? " checked=\"checked\"" :
-							"");	// I can not register
+	 /* Put checkbox to select the group */
+	 // Always checkbox, not radio, because the role in the form may be teacher,
+	 // so if he/she is registered as teacher, he/she can belong to several groups
+	 snprintf (StrGrpCod,sizeof (StrGrpCod),"GrpCod%ld",GrpTyp->GrpTypCod);
+	 HTM_INPUT_CHECKBOX (StrGrpCod,HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Grp%ld\" value=\"%ld\"%s",
+			     Grp->GrpCod,Grp->GrpCod,
+			     UsrBelongsToThisGroup ? " checked=\"checked\"" :
+						     "");	// I can not register
 
 	 /* End cell for checkbox */
 	 HTM_TD_End ();
@@ -2113,6 +2119,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
                                               Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
@@ -2181,16 +2188,17 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
 
-         HTM_TD_Begin ("class=\"%s\"",
-                       IBelongToThisGroup ? "LIGHT_BLUE" :
-		                            "LM");
-	    HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
-				"id=\"Grp%ld\" value=\"%ld\"%s%s",
-				Grp->GrpCod,Grp->GrpCod,
-				Checked ? " checked=\"checked\"" :
-					  "",
-				ICanSelUnselGroup ? " onclick=\"checkParent(this,'AllGroups')\"" :
-						    " disabled=\"disabled\"");
+         if (IBelongToThisGroup)
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	 else
+	    HTM_TD_Begin ("class=\"LM\"");
+	 HTM_INPUT_CHECKBOX ("GrpCods",HTM_DONT_SUBMIT_ON_CHANGE,
+			     "id=\"Grp%ld\" value=\"%ld\"%s%s",
+			     Grp->GrpCod,Grp->GrpCod,
+			     Checked ? " checked=\"checked\"" :
+				       "",
+			     ICanSelUnselGroup ? " onclick=\"checkParent(this,'AllGroups')\"" :
+						 " disabled=\"disabled\"");
 	 HTM_TD_End ();
 
 	 Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -2325,6 +2333,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
 static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Group_X_open;
    extern const char *Txt_Group_X_closed;
@@ -2335,32 +2344,37 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    /***** Write icon to show if group is open or closed *****/
 
    if (Highlight)
-      HTM_TD_Begin ("class=\"BM LIGHT_BLUE\"");
+      HTM_TD_Begin ("class=\"BM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
    else
       HTM_TD_Begin ("class=\"BM\"");
    Ico_PutIconOff (Grp->Open ? "unlock.svg" :
         	               "lock.svg",
-	           Str_BuildStringStr (Grp->Open ? Txt_Group_X_open :
+	           Str_BuildString (Grp->Open ? Txt_Group_X_open :
 						   Txt_Group_X_closed,
 				       Grp->GrpName));
    Str_FreeStrings ();
    HTM_TD_End ();
 
    /***** Group name *****/
-   HTM_TD_Begin ("class=\"%s\"",
-                 Highlight ? "LM LIGHT_BLUE" :
-		             "LM");
-      HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"%s\"",
-                       Grp->GrpCod,The_ClassDat[Gbl.Prefs.Theme]);
-	 HTM_Txt (Grp->GrpName);
-      HTM_LABEL_End ();
+   if (Highlight)
+      HTM_TD_Begin ("class=\"LM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   else
+      HTM_TD_Begin ("class=\"LM\"");
+   HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"%s\"",
+		    Grp->GrpCod,The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_Txt (Grp->GrpName);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    /***** Room *****/
-   HTM_TD_Begin ("class=\"%s %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Highlight ? "LM LIGHT_BLUE" :
-		                                           "LM");
-      HTM_Txt (Grp->Room.ShrtName);
+   if (Highlight)
+      HTM_TD_Begin ("class=\"LM %s %s\"",
+                    The_ClassDat[Gbl.Prefs.Theme],
+                    The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   else
+      HTM_TD_Begin ("class=\"LM %s\"",
+                    The_ClassDat[Gbl.Prefs.Theme]);
+   HTM_Txt (Grp->Room.ShrtName);
    HTM_TD_End ();
 
    /***** Current number of users in this group *****/
@@ -2368,31 +2382,43 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	Role >= Rol_STD;
 	Role--)
      {
-      HTM_TD_Begin ("class=\"%s %s\"",
-                    The_ClassDat[Gbl.Prefs.Theme],Highlight ? "CM LIGHT_BLUE" :
-				                              "CM");
-         HTM_Int (Grp->NumUsrs[Role]);
+      if (Highlight)
+	 HTM_TD_Begin ("class=\"CM %s %s\"",
+		       The_ClassDat[Gbl.Prefs.Theme],
+		       The_ClassBgHighlight[Gbl.Prefs.Theme]);
+      else
+	 HTM_TD_Begin ("class=\"CM %s\"",
+		       The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_Int (Grp->NumUsrs[Role]);
       HTM_TD_End ();
      }
 
    /***** Max. number of students in this group *****/
-   HTM_TD_Begin ("class=\"%s %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Highlight ? "CM LIGHT_BLUE" :
-			                                   "CM");
-      Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
-      HTM_TxtF ("%s&nbsp;",StrMaxStudents);
+   if (Highlight)
+      HTM_TD_Begin ("class=\"CM %s %s\"",
+		    The_ClassDat[Gbl.Prefs.Theme],
+		    The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   else
+      HTM_TD_Begin ("class=\"CM %s\"",
+		    The_ClassDat[Gbl.Prefs.Theme]);
+   Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
+   HTM_TxtF ("%s&nbsp;",StrMaxStudents);
    HTM_TD_End ();
 
    /***** Vacants in this group *****/
-   HTM_TD_Begin ("class=\"%s %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Highlight ? "CM LIGHT_BLUE" :
-			                                   "CM");
-      if (Grp->MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
-	{
-	 Vacant = (int) Grp->MaxStudents - (int) Grp->NumUsrs[Rol_STD];
-	 HTM_Unsigned (Vacant > 0 ? (unsigned) Vacant :
-				    0);
-	}
+   if (Highlight)
+      HTM_TD_Begin ("class=\"CM %s %s\"",
+		    The_ClassDat[Gbl.Prefs.Theme],
+		    The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   else
+      HTM_TD_Begin ("class=\"CM %s\"",
+		    The_ClassDat[Gbl.Prefs.Theme]);
+   if (Grp->MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
+     {
+      Vacant = (int) Grp->MaxStudents - (int) Grp->NumUsrs[Rol_STD];
+      HTM_Unsigned (Vacant > 0 ? (unsigned) Vacant :
+				 0);
+     }
    HTM_TD_End ();
   }
 

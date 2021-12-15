@@ -2667,7 +2667,7 @@ char *Str_BuildGoToMsg (const char *Where)
   {
    extern const char *Txt_Go_to_X;
 
-   return Str_BuildStringStr (Txt_Go_to_X,Where);
+   return Str_BuildString (Txt_Go_to_X,Where);
   }
 
 /*****************************************************************************/
@@ -2686,58 +2686,33 @@ static struct
 
 // Str_FreeStrings() must be called after calling these functions
 
-// fmt must be a string including "%s"
-char *Str_BuildStringStr (const char *fmt,const char *Str)
+char *Str_BuildString (const char *fmt,...)
   {
-   char *Ptr;
+   va_list ap;
+   int NumBytesPrinted;
+   char *Ptr = "";
 
-   if (Str_Strings.Num >= Str_MAX_STRINGS)
-      Err_NotEnoughMemoryExit ();
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 if (Str_Strings.Num >= Str_MAX_STRINGS)
+	    Err_NotEnoughMemoryExit ();
 
-   if (Str_Strings.Str[Str_Strings.Num] != NULL)
-      Err_NotEnoughMemoryExit ();
+	 if (Str_Strings.Str[Str_Strings.Num] != NULL)
+	    Err_NotEnoughMemoryExit ();
 
-   if (asprintf (&Str_Strings.Str[Str_Strings.Num],fmt,Str) < 0)
-      Err_NotEnoughMemoryExit ();
-   Ptr = Str_Strings.Str[Str_Strings.Num];
-   Str_Strings.Num++;
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Str_Strings.Str[Str_Strings.Num],fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
 
-   return Ptr;
-  }
+	 Ptr = Str_Strings.Str[Str_Strings.Num];
 
-// fmt must be a string including "%ld"
-char *Str_BuildStringLong (const char *fmt,long Num)
-  {
-   char *Ptr;
-
-   if (Str_Strings.Num >= Str_MAX_STRINGS)
-      Err_NotEnoughMemoryExit ();
-
-   if (Str_Strings.Str[Str_Strings.Num] != NULL)
-      Err_NotEnoughMemoryExit ();
-
-   if (asprintf (&Str_Strings.Str[Str_Strings.Num],fmt,Num) < 0)
-      Err_NotEnoughMemoryExit ();
-   Ptr = Str_Strings.Str[Str_Strings.Num];
-   Str_Strings.Num++;
-
-   return Ptr;
-  }
-
-char *Str_BuildStringLongStr (long Num,const char *Str)
-  {
-   char *Ptr;
-
-   if (Str_Strings.Num >= Str_MAX_STRINGS)
-      Err_NotEnoughMemoryExit ();
-
-   if (Str_Strings.Str[Str_Strings.Num] != NULL)
-      Err_NotEnoughMemoryExit ();
-
-   if (asprintf (&Str_Strings.Str[Str_Strings.Num],"%ld %s",Num,Str) < 0)
-      Err_NotEnoughMemoryExit ();
-   Ptr = Str_Strings.Str[Str_Strings.Num];
-   Str_Strings.Num++;
+         Str_Strings.Num++;
+	}
+     }
 
    return Ptr;
   }

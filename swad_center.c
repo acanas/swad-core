@@ -105,6 +105,7 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr);
 void Ctr_SeeCtrWithPendingDegs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Centers_with_pending_degrees;
    extern const char *Txt_Center;
@@ -143,7 +144,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	    /* Get center code (row[0]) */
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
+	    BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of center */
@@ -154,7 +155,10 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,
-						     "BT_LINK DAT_NOBR","CM");
+						     Str_BuildString ("BT_LINK %s NOWRAP",
+						                         The_ClassDat[Gbl.Prefs.Theme]),
+						     "CM");
+		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
@@ -246,7 +250,7 @@ static void Ctr_ListCenters (void)
    unsigned NumCtr;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Centers_of_INSTITUTION_X,
 				          Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsListingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
@@ -327,8 +331,10 @@ static void Ctr_PutIconToEditCenters (void)
 
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    struct Plc_Place Plc;
    const char *TxtClassNormal;
@@ -341,15 +347,15 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
-      TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s","DAT_LIGHT");
+      TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
-   BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
+   BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    HTM_TR_Begin (NULL);
@@ -453,7 +459,7 @@ static void Ctr_EditCentersInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Centers_of_INSTITUTION_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Centers_of_INSTITUTION_X,
 				          Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsEditingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
@@ -1831,9 +1837,10 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
      {
       /***** Begin box and table *****/
       /* Number of centers found */
-      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCtrs,
-						      (NumCtrs == 1) ? Txt_center :
-	                                                               Txt_centers),
+      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
+                                               NumCtrs,
+					       (NumCtrs == 1) ? Txt_center :
+	                                                        Txt_centers),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeStrings ();

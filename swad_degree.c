@@ -109,6 +109,7 @@ static void Deg_EditingDegreeDestructor (void);
 void Deg_SeeDegWithPendingCrss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
@@ -147,7 +148,7 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	    /* Get degree code (row[0]) */
 	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Deg.DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
+	    BgColor = (Deg.DegCod == Gbl.Hierarchy.Deg.DegCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of degree */
@@ -159,7 +160,10 @@ void Deg_SeeDegWithPendingCrss (void)
 	       /* Degree logo and full name */
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
-						     "BT_LINK DAT_NOBR","CM");
+						     Str_BuildString ("BT_LINK %s NOWRAP",
+						                         The_ClassDat[Gbl.Prefs.Theme]),
+						     "CM");
+		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
@@ -692,7 +696,7 @@ static void Deg_ListDegrees (void)
    unsigned NumDeg;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Degrees_of_CENTER_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
@@ -773,8 +777,10 @@ static void Deg_PutIconToEditDegrees (void)
 
 static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
@@ -791,15 +797,15 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
      {
-      TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s","DAT_LIGHT");
+      TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
-   BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
+   BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Begin table row *****/
@@ -885,7 +891,7 @@ static void Deg_EditDegreesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Degrees_of_CENTER_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Degrees_of_CENTER_X,
 				          Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
@@ -1791,9 +1797,10 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
      {
       /***** Begin box and table *****/
       /* Number of degrees found */
-      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumDegs,
-						      (NumDegs == 1) ? Txt_degree :
-								       Txt_degrees),
+      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
+                                               NumDegs,
+					       (NumDegs == 1) ? Txt_degree :
+								Txt_degrees),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeStrings ();

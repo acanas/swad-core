@@ -394,6 +394,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -503,7 +504,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       if (Gbl.Crs.Grps.NumGrps)
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
-      HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? "DAT_LIGHT" :
+      HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
 						     The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();

@@ -928,9 +928,9 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	       For_PutParamsForum (Forums);
 	       Ico_PutIconLink (Enabled ? "eye-green.svg" :
 					  "eye-slash-red.svg",
-				Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-							       Txt_FORUM_Post_X_banned_Click_to_unban_it,
-						     (long) PstNum));
+				Str_BuildString (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+							   Txt_FORUM_Post_X_banned_Click_to_unban_it,
+						 PstNum));
 	       Str_FreeStrings ();
 	    Frm_EndForm ();
 	   }
@@ -938,9 +938,9 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	   {
 	    Ico_PutIcon (Enabled ? "eye-green.svg" :
 				   "eye-slash-red.svg",
-			 Str_BuildStringLong (Enabled ? Txt_FORUM_Post_X_allowed :
-							Txt_FORUM_Post_X_banned,
-					      (long) PstNum),
+			 Str_BuildString (Enabled ? Txt_FORUM_Post_X_allowed :
+						    Txt_FORUM_Post_X_banned,
+					  PstNum),
 			 "ICO_HIDDEN ICO16x16");
 	    Str_FreeStrings ();
 	   }
@@ -1665,6 +1665,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
                                   unsigned Level,
                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
@@ -1680,92 +1681,94 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	                          The_ClassFormLinkInBox[Gbl.Prefs.Theme]);
 
    /***** Begin row *****/
-   HTM_LI_Begin (Highlight ? "class=\"LIGHT_BLUE\"" :
-			     NULL);
+   if (Highlight)
+      HTM_LI_Begin ("class=\"%s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   else
+      HTM_LI_Begin (NULL);
 
-      /***** Indent forum title *****/
-      Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
+   /***** Indent forum title *****/
+   Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
 
-      /***** Write paste button used to move a thread in clipboard to this forum *****/
-      if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
+   /***** Write paste button used to move a thread in clipboard to this forum *****/
+   if (Forums->Thread.ToMove >= 0) // If I have permission to paste threads and there is a thread ready to be pasted...
+     {
+      /* Check if thread to move is yet in current forum */
+      if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
+	 Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
+      else
 	{
-	 /* Check if thread to move is yet in current forum */
-	 if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
-	    Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
-	 else
-	   {
-	    Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
-				 For_FORUM_THREADS_SECTION_ID);
-	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
-					    1,	// Page of posts   = first
-					    Forums->ForumSet,
-					    Forums->ThreadsOrder,
-					    Forum->Location,
-					    Forums->Thread.ToMove,
-					    -1L);
-	       Ico_PutIconPaste ();
-	    Frm_EndForm ();
-	   }
+	 Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
+			      For_FORUM_THREADS_SECTION_ID);
+	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
+					 1,	// Page of posts   = first
+					 Forums->ForumSet,
+					 Forums->ThreadsOrder,
+					 Forum->Location,
+					 Forums->Thread.ToMove,
+					 -1L);
+	    Ico_PutIconPaste ();
+	 Frm_EndForm ();
 	}
+     }
 
-      /***** Write link to forum *****/
-      Frm_BeginFormAnchor (For_ActionsSeeFor[Forum->Type],
-			   For_FORUM_THREADS_SECTION_ID);
-	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
-				      1,	// Page of posts   = first
-				      Forums->ForumSet,
-				      Forums->ThreadsOrder,
-				      Forum->Location,
-				      -1L,
-				      -1L);
+   /***** Write link to forum *****/
+   Frm_BeginFormAnchor (For_ActionsSeeFor[Forum->Type],
+			For_FORUM_THREADS_SECTION_ID);
+      For_PutAllHiddenParamsForum (1,	// Page of threads = first
+				   1,	// Page of posts   = first
+				   Forums->ForumSet,
+				   Forums->ThreadsOrder,
+				   Forum->Location,
+				   -1L,
+				   -1L);
 
-	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
-				  Class,NULL);
+      HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),
+			       Class,NULL);
 
-	    For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
-	    switch (Forum->Type)
-	      {
-	       case For_FORUM_GLOBAL_USRS:
-	       case For_FORUM_GLOBAL_TCHS:
-		  Ico_PutIcon ("comments.svg",ForumName,"ICO16x16");
-		  break;
-	       case For_FORUM__SWAD__USRS:
-	       case For_FORUM__SWAD__TCHS:
-		  Ico_PutIcon ("swad64x64.png",ForumName,"ICO16x16");
-		  break;
-	       case For_FORUM_INSTIT_USRS:
-	       case For_FORUM_INSTIT_TCHS:
-		  Lgo_DrawLogo (HieLvl_INS,Forum->Location,ForumName,16,NULL,true);
-		  break;
-	       case For_FORUM_CENTER_USRS:
-	       case For_FORUM_CENTER_TCHS:
-		  Lgo_DrawLogo (HieLvl_CTR,Forum->Location,ForumName,16,NULL,true);
-		  break;
-	       case For_FORUM_DEGREE_USRS:
-	       case For_FORUM_DEGREE_TCHS:
-		  Lgo_DrawLogo (HieLvl_DEG,Forum->Location,ForumName,16,NULL,true);
-		  break;
-	       case For_FORUM_COURSE_USRS:
-	       case For_FORUM_COURSE_TCHS:
-		  Ico_PutIcon ("chalkboard-teacher.svg",ForumName,"ICO16x16");
-		  break;
-	       default:
-		  break;
-	      }
-	    HTM_TxtF ("&nbsp;%s",ForumName);
+	 For_SetForumName (Forum,ForumName,Gbl.Prefs.Language,true);
+	 switch (Forum->Type)
+	   {
+	    case For_FORUM_GLOBAL_USRS:
+	    case For_FORUM_GLOBAL_TCHS:
+	       Ico_PutIcon ("comments.svg",ForumName,"ICO16x16");
+	       break;
+	    case For_FORUM__SWAD__USRS:
+	    case For_FORUM__SWAD__TCHS:
+	       Ico_PutIcon ("swad64x64.png",ForumName,"ICO16x16");
+	       break;
+	    case For_FORUM_INSTIT_USRS:
+	    case For_FORUM_INSTIT_TCHS:
+	       Lgo_DrawLogo (HieLvl_INS,Forum->Location,ForumName,16,NULL,true);
+	       break;
+	    case For_FORUM_CENTER_USRS:
+	    case For_FORUM_CENTER_TCHS:
+	       Lgo_DrawLogo (HieLvl_CTR,Forum->Location,ForumName,16,NULL,true);
+	       break;
+	    case For_FORUM_DEGREE_USRS:
+	    case For_FORUM_DEGREE_TCHS:
+	       Lgo_DrawLogo (HieLvl_DEG,Forum->Location,ForumName,16,NULL,true);
+	       break;
+	    case For_FORUM_COURSE_USRS:
+	    case For_FORUM_COURSE_TCHS:
+	       Ico_PutIcon ("chalkboard-teacher.svg",ForumName,"ICO16x16");
+	       break;
+	    default:
+	       break;
+	   }
+	 HTM_TxtF ("&nbsp;%s",ForumName);
 
-	    /***** Write total number of threads and posts in this forum *****/
-	    if (NumThrs)
-	       For_WriteNumberOfThrs (NumThrs);
+	 /***** Write total number of threads and posts in this forum *****/
+	 if (NumThrs)
+	    For_WriteNumberOfThrs (NumThrs);
 
-	 /***** End row *****/
-	 HTM_BUTTON_End ();
+      /***** End row *****/
+      HTM_BUTTON_End ();
 
-      Frm_EndForm ();
+   Frm_EndForm ();
 
-      /***** Put link to register students *****/
-      if (Forum->Type == For_FORUM_COURSE_USRS)
-	 Enr_PutButtonInlineToRegisterStds (Forum->Location);
+   /***** Put link to register students *****/
+   if (Forum->Type == For_FORUM_COURSE_USRS)
+      Enr_PutButtonInlineToRegisterStds (Forum->Location);
 
    HTM_LI_End ();
   }
@@ -2129,6 +2132,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Thread_with_posts_from_you;
@@ -2175,7 +2179,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
 	                            "AUTHOR_TXT");
       BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
-	        ((Thr.ThrCod == ThrCodHighlighted)   ? "LIGHT_BLUE" :
+	        ((Thr.ThrCod == ThrCodHighlighted)   ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                        Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       HTM_TR_Begin (NULL);

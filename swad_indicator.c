@@ -428,15 +428,20 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_Indicators;
    extern const char *Txt_Courses;
    extern const char *Txt_Total;
    unsigned Ind;
    const char *Class;
-   const char *ClassNormal = "DAT_LIGHT RM";
-   const char *ClassHighlight = Str_BuildStringStr ("%s RM LIGHT_BLUE",The_ClassDat[Gbl.Prefs.Theme]);
+   const char *ClassNormal = Str_BuildString ("RM %s",
+                                                 The_ClassDatLight[Gbl.Prefs.Theme]);
+   const char *ClassHighlight = Str_BuildString ("RM %s %s",
+                                                    The_ClassDat[Gbl.Prefs.Theme],
+                                                    The_ClassBgHighlight[Gbl.Prefs.Theme]);
 
    /***** Write number of courses with each number of indicators valid *****/
    HTM_TABLE_BeginPadding (2);
@@ -495,15 +500,15 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	 if (PutForm)
 	    HTM_TD_Empty (1);
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCrss);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("(%.1f%%)",100.0);
 	 HTM_TD_End ();
 

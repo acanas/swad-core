@@ -1149,7 +1149,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	 if (Confirmed)
 	   {
 	    Ico_PutIcon ("check-circle.svg",
-			 Str_BuildStringStr (Txt_Email_X_confirmed,row[0]),
+			 Str_BuildString (Txt_Email_X_confirmed,row[0]),
 			 "ICO16x16");
 	    Str_FreeStrings ();
 	   }

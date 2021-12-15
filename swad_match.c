@@ -2375,7 +2375,7 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 
 	 HTM_BUTTON_SUBMIT_Begin (PutForm ? Txt_Countdown :
 					    NULL,
-				  Str_BuildStringStr (PutForm ? "BT_LINK MCH_BUTTON_ON %s" :
+				  Str_BuildString (PutForm ? "BT_LINK MCH_BUTTON_ON %s" :
 								"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
 						      Color),
 				  NULL);
@@ -2645,9 +2645,10 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 
 	    /* Number of columns */
 	    Ico_PutSettingIconLink (NumColsIcon[NumCols],
-				    Str_BuildStringLongStr ((long) NumCols,
-							    NumCols == 1 ? Txt_column :
-									   Txt_columns));
+				    Str_BuildString ("%u %s",
+				                     NumCols,
+						     NumCols == 1 ? Txt_column :
+								    Txt_columns));
 	    Str_FreeStrings ();
 
 	 /* End form */
@@ -2688,7 +2689,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
 	 /***** Put icon with link *****/
 	 HTM_BUTTON_SUBMIT_Begin (Txt_View_results,
-	                          Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",The_ClassDat[Gbl.Prefs.Theme]),
+	                          Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",The_ClassDat[Gbl.Prefs.Theme]),
 	                          NULL);
 	 Str_FreeStrings ();
 	    HTM_TxtF ("<i class=\"%s\"></i>",
@@ -3229,9 +3230,10 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 	 if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
 	    Err_NotEnoughMemoryExit ();
 	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,
-		  Str_BuildStringLongStr ((long) NumUsrs,
-					  NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
-							 Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
+		  Str_BuildString ("%u %s",
+		                   NumUsrs,
+				   NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
+						  Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
 		  "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
 	 Str_FreeStrings ();
 	 free (Icon);

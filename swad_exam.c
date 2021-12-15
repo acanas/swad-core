@@ -474,6 +474,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
                              struct Exa_Exam *Exam,bool ShowOnlyThisExam)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_View_exam;
    extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Maximum_grade;
@@ -613,7 +614,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR %s\"",Exam->Hidden ? "DAT_LIGHT" :
+      HTM_DIV_Begin ("class=\"PAR %s\"",Exam->Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
 						       The_ClassDat[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();

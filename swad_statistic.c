@@ -275,7 +275,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Statistics_of_visits_to_the_course_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Statistics_of_visits_to_the_course_X,
 				          Gbl.Hierarchy.Crs.ShrtName),
                  NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
@@ -1047,7 +1047,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
                                           MYSQL_RES *mysql_res)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Show_previous_X_clicks;
    extern const char *Txt_PAGES_Previous;
    extern const char *Txt_Clicks;
@@ -1132,8 +1132,8 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	       HTM_TD_Begin ("class=\"LM\"");
 		  if (FirstRow > 1)
 		    {
-		     HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_previous_X_clicks,
-								   (long) Stats->RowsPerPage),
+		     HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Show_previous_X_clicks,
+		                                               Stats->RowsPerPage),
 					      "BT_LINK TIT_TBL",NULL);
 		     Str_FreeStrings ();
 			HTM_STRONG_Begin ();
@@ -1146,7 +1146,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		  Frm_EndForm ();
 
 	       /* Write number of current page */
-	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 		  HTM_STRONG_Begin ();
 		     HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
 			       Txt_Clicks,
@@ -1170,8 +1170,8 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	       HTM_TD_Begin ("class=\"RM\"");
 		  if (LastRow < NumHits)
 		    {
-		     HTM_BUTTON_SUBMIT_Begin (Str_BuildStringLong (Txt_Show_next_X_clicks,
-								   (long) Stats->RowsPerPage),
+		     HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Show_next_X_clicks,
+		                                               Stats->RowsPerPage),
 					      "BT_LINK TIT_TBL",NULL);
 		     Str_FreeStrings ();
 			HTM_STRONG_Begin ();

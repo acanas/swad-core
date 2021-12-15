@@ -303,6 +303,7 @@ void Tst_ReceiveTestDraft (void)
 void Tst_AssessTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
    extern const char *Txt_Score;
@@ -371,7 +372,7 @@ void Tst_AssessTest (void)
 	 /***** Write total score and grade *****/
 	 if (TstVis_IsVisibleTotalScore (TstCfg_GetConfigVisibility ()))
 	   {
-	    HTM_DIV_Begin ("class=\"DAT_N_BOLD CM\"");
+	    HTM_DIV_Begin ("class=\"CM %s BOLD\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_Double2Decimals (Print.Score);
 	       HTM_BR ();

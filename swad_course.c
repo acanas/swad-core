@@ -147,6 +147,7 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
@@ -174,8 +175,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ClassHighlight[64];
 
    ClassNormal = The_ClassFormLinkInBox[Gbl.Prefs.Theme];
-   snprintf (ClassHighlight,sizeof (ClassHighlight),"%s LIGHT_BLUE",
-	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
+   snprintf (ClassHighlight,sizeof (ClassHighlight),"%s %s",
+	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+	     The_ClassBgHighlight[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
@@ -847,7 +849,7 @@ static void Crs_ListCourses (void)
    unsigned Year;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsListCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
@@ -928,8 +930,10 @@ static void Crs_PutIconToEditCourses (void)
 
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -953,17 +957,17 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 ThisYearHasCourses = true;
 	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
 	   {
-	    TxtClassNormal = "DAT_LIGHT";
-	    TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s","DAT_LIGHT");
+	    TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
+	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
 	   }
 	 else
 	   {
 	    TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-	    TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
+	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
+	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
 				                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	 HTM_TR_Begin (NULL);
@@ -1061,7 +1065,7 @@ static void Crs_EditCoursesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Courses_of_DEGREE_X,
 				          Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsEditingCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
@@ -2157,7 +2161,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
       if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
 	 Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
 
-      Btn_PutCreateButton (Str_BuildStringStr (Txt_Register_me_in_X,
+      Btn_PutCreateButton (Str_BuildString (Txt_Register_me_in_X,
 					       Crs_EditingCrs->ShrtName));
       Str_FreeStrings ();
 
@@ -2277,7 +2281,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TH_Begin (1,7,"LM");
-	       HTM_TxtColon (Str_BuildStringStr (Txt_USER_in_COURSE,
+	       HTM_TxtColon (Str_BuildString (Txt_USER_in_COURSE,
 						 Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
 								   Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
 	       Str_FreeStrings ();
@@ -2338,9 +2342,10 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
      {
       /***** Begin box and table *****/
       /* Number of courses found */
-      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCrss,
-						      (NumCrss == 1) ? Txt_course :
-								       Txt_courses),
+      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
+                                               NumCrss,
+					       (NumCrss == 1) ? Txt_course :
+								Txt_courses),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeStrings ();
@@ -2384,8 +2389,9 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -2428,16 +2434,16 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    NumUsrs = NumStds + NumNETs + NumTchs;
    if (NumUsrs)
      {
-      ClassTxt  = The_ClassDatN[Gbl.Prefs.Theme];
-      ClassLink = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
+      ClassTxt  = The_ClassDatStrong[Gbl.Prefs.Theme];
+      ClassLink = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
    else
      {
       ClassTxt  = The_ClassDat[Gbl.Prefs.Theme];
-      ClassLink = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]);
+      ClassLink = Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]);
      }
-   BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "LIGHT_BLUE" :
-                                                     Gbl.ColorRows[RowEvenOdd];
+   BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+                                                    Gbl.ColorRows[RowEvenOdd];
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);

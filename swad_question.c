@@ -518,6 +518,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor)
   {
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_Question_removed;
 
    /***** Number of question and answer type (row[1]) *****/
@@ -560,7 +561,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 	   }
 	 else
 	   {
-	    HTM_SPAN_Begin ("class=\"DAT_LIGHT\"");
+	    HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_Question_removed);
 	    HTM_SPAN_End ();
 	   }
@@ -1858,7 +1859,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    /***** Begin box *****/
    if (Question->QstCod > 0)	// The question already has assigned a code
      {
-      Box_BoxBegin (NULL,Str_BuildStringLong (Txt_Question_code_X,Question->QstCod),
+      Box_BoxBegin (NULL,Str_BuildString (Txt_Question_code_X,Question->QstCod),
 		    Qst_PutIconToRemoveOneQst,&Question->QstCod,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
       Str_FreeStrings ();

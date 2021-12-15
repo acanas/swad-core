@@ -98,6 +98,7 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty);
 void Cty_SeeCtyWithPendingInss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
@@ -143,7 +144,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	    /* Get country code (row[0]) */
 	    Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
+	    BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of country */
@@ -157,7 +158,7 @@ void Cty_SeeCtyWithPendingInss (void)
 		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL",
-						     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]));
+						     Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]));
 		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
@@ -400,11 +401,12 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 
 static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    const char *BgColor;
 
-   BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
+   BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
 							 Gbl.ColorRows[Gbl.RowEvenOdd];
 
    HTM_TR_Begin (NULL);
@@ -419,7 +421,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL",
-					    Str_BuildStringStr ("BT_LINK %s",The_ClassDatN[Gbl.Prefs.Theme]));
+					    Str_BuildString ("BT_LINK %s",The_ClassDatStrong[Gbl.Prefs.Theme]));
 	 Str_FreeStrings ();
       HTM_TD_End ();
 
@@ -553,7 +555,7 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
 		    Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	            Cty->Alpha2) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Str_BuildStringStr ("%s.png",Cty->Alpha2),
+      HTM_IMG (URL,Str_BuildString ("%s.png",Cty->Alpha2),
 	       Cty->Name[Gbl.Prefs.Language],
 	       "class=\"%s\"",Class);
       Str_FreeStrings ();
@@ -1807,9 +1809,10 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
      {
       /***** Begin box and table *****/
       /* Number of countries found */
-      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumCtys,
-						      NumCtys == 1 ? Txt_country :
-								     Txt_countries),
+      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
+                                               NumCtys,
+					       NumCtys == 1 ? Txt_country :
+							      Txt_countries),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeStrings ();

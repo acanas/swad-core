@@ -278,7 +278,7 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
 
    /***** Show timeline *****/
    Tml_ShowTimeline (Timeline,NotCod,
-                    Str_BuildStringStr (Txt_Timeline_OF_A_USER,
+                    Str_BuildString (Txt_Timeline_OF_A_USER,
 					Gbl.Usrs.Other.UsrDat.FrstName));
    Str_FreeStrings ();
 
@@ -517,13 +517,15 @@ static void Tml_PutHiddenList (const char *Id)
 
 void Tml_WriteDateTime (time_t TimeUTC)
   {
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    char IdDateTime[Frm_MAX_BYTES_ID + 1];
 
    /***** Create unique Id *****/
    Frm_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
-   HTM_DIV_Begin ("id=\"%s\" class=\"Tml_RIGHT_TIME DAT_LIGHT\"",IdDateTime);
+   HTM_DIV_Begin ("id=\"%s\" class=\"Tml_RIGHT_TIME %s\"",
+                  IdDateTime,The_ClassDatLight[Gbl.Prefs.Theme]);
    HTM_DIV_End ();
 
    /***** Script to write date and time in browser local time *****/

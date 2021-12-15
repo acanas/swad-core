@@ -313,7 +313,8 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 
 static void DegTyp_ListDegreeTypesForSeeing (void)
   {
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    unsigned NumDegTyp;
    const char *BgColor;
 
@@ -323,7 +324,7 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
 	NumDegTyp++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       BgColor = (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod ==
-	         Gbl.Hierarchy.Deg.DegTypCod) ? "LIGHT_BLUE" :
+	         Gbl.Hierarchy.Deg.DegTypCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                 Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /* Begin table row */
@@ -331,19 +332,19 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
 
 	 /* Number of degree type in this list */
 	 HTM_TD_Begin ("class=\"RM %s %s\"",
-	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
+	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (NumDegTyp + 1);
 	 HTM_TD_End ();
 
 	 /* Name of degree type */
 	 HTM_TD_Begin ("class=\"LM %s %s\"",
-	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
+	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
 	    HTM_Txt (Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
 	 HTM_TD_Begin ("class=\"RM %s %s\"",
-	               The_ClassDatN[Gbl.Prefs.Theme],BgColor);
+	               The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
 	    HTM_Unsigned (Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 

@@ -776,7 +776,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-up.svg",
-					   Str_BuildStringStr (Txt_Move_up_X,
+					   Str_BuildString (Txt_Move_up_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
@@ -789,7 +789,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-down.svg",
-					   Str_BuildStringStr (Txt_Move_down_X,
+					   Str_BuildString (Txt_Move_down_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
@@ -802,7 +802,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-left.svg",
-					   Str_BuildStringStr (Txt_Increase_level_of_X,
+					   Str_BuildString (Txt_Increase_level_of_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
@@ -815,7 +815,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-right.svg",
-					   Str_BuildStringStr (Txt_Decrease_level_of_X,
+					   Str_BuildString (Txt_Decrease_level_of_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }

@@ -316,13 +316,16 @@ void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
 static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
                                                const struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+
    /***** Begin top container *****/
    HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 
       /***** Write author's full name *****/
       Tml_Not_WriteAuthorName (UsrDat,
-                               "BT_LINK Tml_RIGHT_AUTHOR"
-                               " Tml_RIGHT_AUTHOR_WIDTH DAT_N_BOLD");
+                               Str_BuildString ("Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
+                                                   The_ClassDatStrong[Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
 
       /***** Write date and time *****/
       Tml_WriteDateTime (Not->DateTimeUTC);
@@ -683,7 +686,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
 	    HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->Type],
-				     Str_BuildStringStr ("BT_LINK %s ICO_HIGHLIGHT",
+				     Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",
 							 The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
 				     NULL);
 	    Str_FreeStrings ();

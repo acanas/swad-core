@@ -122,8 +122,9 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
@@ -143,7 +144,9 @@ void Dat_PutBoxToSelectDateFormat (void)
 		 Format++)
 	      {
 	       if (Format == Gbl.Prefs.DateFormat)
-		  HTM_LI_Begin ("class=\"%s LIGHT_BLUE\"",The_ClassDatN[Gbl.Prefs.Theme]);
+		  HTM_LI_Begin ("class=\"%s %s\"",
+		                The_ClassDatStrong[Gbl.Prefs.Theme],
+		                The_ClassBgHighlight[Gbl.Prefs.Theme]);
 	       else
 		  HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_LABEL_Begin (NULL);
@@ -190,8 +193,8 @@ void Dat_PutSpanDateFormat (Dat_Format_t Format)
 
 void Dat_PutScriptDateFormat (Dat_Format_t Format)
   {
-   Dat_WriteLocalDateHMSFromUTC (Str_BuildStringLong ("date_format_%ld",
-						      (long) Format),
+   Dat_WriteLocalDateHMSFromUTC (Str_BuildString ("date_format_%u",
+						  (unsigned) Format),
 				 Gbl.StartExecutionTimeUTC,
 				 Format,Dat_SEPARATOR_NONE,
 				 false,true,false,0x0);

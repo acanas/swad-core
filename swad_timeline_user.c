@@ -351,7 +351,7 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
    if (NumUsrs)
      {
       Ico_PutDivIcon ("Tml_ICO_DISABLED",Ico[FavSha].Icon,
-		      Str_BuildStringLong (*Ico[FavSha].Title.WithUsrs,(long) NumUsrs));
+		      Str_BuildString (*Ico[FavSha].Title.WithUsrs,NumUsrs));
       Str_FreeStrings ();
      }
    else

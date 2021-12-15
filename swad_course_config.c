@@ -250,7 +250,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
-					   Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
 		  Str_FreeStrings ();
 	      }
@@ -442,7 +442,7 @@ static void CrsCfg_Indicators (void)
 			  Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_SUBMIT_Begin (Title,
-	                             Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                             Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
 	                             NULL);
 	    Str_FreeStrings ();
 	       HTM_TxtF ("%s&nbsp;",Title);

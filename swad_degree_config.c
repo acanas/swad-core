@@ -241,7 +241,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
-					   Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
 		  Str_FreeStrings ();
 	      }
@@ -329,9 +329,9 @@ static void DegCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"LB\"");
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Courses_of_DEGREE_X,
+	    HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Courses_of_DEGREE_X,
 							 Gbl.Hierarchy.Deg.ShrtName),
-				     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+				     Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
 				     NULL);
 	    Str_FreeStrings ();
 	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));

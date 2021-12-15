@@ -790,7 +790,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
              Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
       HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,
-	       Str_BuildStringStr ("%s_map.jpg",Gbl.UniqueNameEncrypted),
+	       Str_BuildString ("%s_map.jpg",Gbl.UniqueNameEncrypted),
 	       Txt_Faces_detected,
 	       "usemap=\"#faces_map\"");
       Str_FreeStrings ();
@@ -1061,6 +1061,7 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 			    char **CaptionStr)
   {
    extern const char *Rol_Icons[Rol_NUM_ROLES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
    unsigned NumFollowing;
@@ -1090,10 +1091,11 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    if (PutZoomCode)
      {
       /* First name and surnames */
-      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE DAT_N_BOLD\">"	// Limited width
+      if (asprintf (&Caption.Name,"<div class=\"ZOOM_TXT_LINE %s BOLD\">"	// Limited width
 				     "%s<br />"
 				     "%s%s%s"
 				  "</div>",
+		    The_ClassDatStrong[Gbl.Prefs.Theme],
 		    UsrDat->FrstName,
 		    UsrDat->Surname1,
 		    UsrDat->Surname2[0] ? "&nbsp;" :
@@ -1164,21 +1166,23 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	{
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
 	 if (asprintf (&Caption.Follow,"<div class=\"ZOOM_TXT_LINE\">"
-					   "<span class=\"DAT_N_BOLD\">"
+					   "<span class=\"%s BOLD\">"
 					      "%u"
 					   "</span>"
 					   "<span class=\"DAT_SMALL\">"
 					      "&nbsp;%s&nbsp;"
 					   "</span>"
-					   "<span class=\"DAT_N_BOLD\">"
+					   "<span class=\"%s BOLD\">"
 					      "%u"
 					   "</span>"
 					   "<span class=\"DAT_SMALL\">"
 					      "&nbsp;%s"
 					   "</span>"
 					"</div>",
+		       The_ClassDatStrong[Gbl.Prefs.Theme],
 		       NumFollowing,
 		       Txt_Following,
+		       The_ClassDatStrong[Gbl.Prefs.Theme],
 		       NumFollowers,
 		       Txt_Followers) < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -2243,7 +2247,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		    {
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-							Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+							Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
 							"CT");
 		     Str_FreeStrings ();
 		    }
@@ -2345,7 +2349,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
                                            int NumStds,int NumStdsWithPhoto)
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
@@ -2410,7 +2414,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 	    Frm_SetUniqueId (IdCaption);
 	    HTM_DIV_Begin ("id=\"%s\" class=\"NOT_SHOWN\"",IdCaption);
 	       HTM_DIV_Begin ("class=\"ZOOM_TXT_LINE %s\"",
-	                      The_ClassDatN[Gbl.Prefs.Theme]);
+	                      The_ClassDatStrong[Gbl.Prefs.Theme]);
 		  HTM_Txt (PhotoCaption);
 	       HTM_DIV_End ();
 	    HTM_DIV_End ();

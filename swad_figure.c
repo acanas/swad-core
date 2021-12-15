@@ -443,12 +443,12 @@ static void Fig_GetAndShowUsersStats (void)
 static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    long Cod = Sco_GetCurrentCod ();
-   char *Class = (Role == Rol_UNK) ? Str_BuildStringStr ("RB %s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
-	                             Str_BuildStringStr ("RB %s",The_ClassDat[Gbl.Prefs.Theme]);
+   char *Class = (Role == Rol_UNK) ? Str_BuildString ("RB %s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
+	                             Str_BuildString ("RB %s",The_ClassDat[Gbl.Prefs.Theme]);
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
 	                                 (1 << Rol_NET) |
 	                                 (1 << Rol_TCH)) :
@@ -488,7 +488,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char *Class = Str_BuildStringStr ("%s RB",The_ClassDat[Gbl.Prefs.Theme]);
+   char *Class = Str_BuildString ("%s RB",The_ClassDat[Gbl.Prefs.Theme]);
 
    /***** Write the total number of users not belonging to any course *****/
    HTM_TR_Begin (NULL);
@@ -879,7 +879,7 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 
 static void Fig_GetAndShowHierarchyTotal (void)
   {
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Total;
    unsigned NumCtysTotal = 1;
    unsigned NumInssTotal = 1;
@@ -924,7 +924,7 @@ static void Fig_GetAndShowHierarchyTotal (void)
 
    /***** Write total number of elements *****/
    Fig_ShowHierarchyRow ("",Txt_Total,
-			 Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]),
+			 Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]),
                          (int) NumCtysTotal,
                          (int) NumInssTotal,
                          (int) NumCtrsTotal,
@@ -1552,12 +1552,12 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
 	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
@@ -1624,11 +1624,11 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
 	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
@@ -1681,11 +1681,11 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
                                             struct Fig_SizeOfFileZones *SizeOfFileZones)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildStringStr ("%s LINE_TOP",The_ClassDatN[Gbl.Prefs.Theme]) :
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
 	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
@@ -2008,7 +2008,7 @@ static void Fig_GetAndShowTestsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_tests;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
@@ -2101,15 +2101,15 @@ static void Fig_GetAndShowTestsStats (void)
       /***** Write stats *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Stats.NumCoursesWithQuestions);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%u (%.1f%%)",
 		      Stats.NumCoursesWithPluggableQuestions,
 		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
@@ -2117,27 +2117,27 @@ static void Fig_GetAndShowTestsStats (void)
 						      0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (Stats.NumQsts);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_UnsignedLong (Stats.NumHits);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
 	 HTM_TD_End ();
 
@@ -2263,7 +2263,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_timeline;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_Number_of_posts;
@@ -2383,25 +2383,25 @@ static void Fig_GetAndShowTimelineActivityStats (void)
       /* Write totals */
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumNotes);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrs);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
 				 0.0);
 	 HTM_TD_End ();
@@ -2748,7 +2748,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
 
 static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
   {
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Total;
    double NumThrsPerForum;
    double NumPostsPerThread;
@@ -2769,38 +2769,38 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
    HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s LINE_TOP\" style=\"width:20px;\"",
-                    The_ClassDatN[Gbl.Prefs.Theme]);
+                    The_ClassDatStrong[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt_Total);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumForums);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumThreads);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumPosts);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP RM\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP RM\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumThrsPerForum);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerThread);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Double2Decimals (NumPostsPerForum);
       HTM_TD_End ();
 
@@ -2815,7 +2815,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notifications;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
@@ -2942,25 +2942,25 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
       /***** Write total number of users who want to be notified by email on some event *****/
       HTM_TR_Begin (NULL);
 
-	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
 					   (double) NumUsrsTotal :
 					   0.0);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumEventsTotal);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMailsTotal);
 	 HTM_TD_End ();
 
@@ -2978,7 +2978,7 @@ static void Fig_GetAndShowNoticesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_notices;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
@@ -3034,7 +3034,7 @@ static void Fig_GetAndShowNoticesStats (void)
 	    HTM_Unsigned (NumNoticesDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned ( NumTotalNotices);
 	 HTM_TD_End ();
 
@@ -3056,7 +3056,7 @@ static void Fig_GetAndShowMsgsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_messages;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -3106,7 +3106,7 @@ static void Fig_GetAndShowMsgsStats (void)
 	    HTM_Unsigned (NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
 	 HTM_TD_End ();
 
@@ -3130,7 +3130,7 @@ static void Fig_GetAndShowMsgsStats (void)
 	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
 	 HTM_TD_End ();
 
@@ -3614,7 +3614,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 				FirstDayOfWeek) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  Ico_PutIcon (Icon,
-			       Str_BuildStringStr (Txt_First_day_of_the_week_X,
+			       Str_BuildString (Txt_First_day_of_the_week_X,
 						   Txt_DAYS_SMALL[FirstDayOfWeek]),
 			       "ICO40x40");
 		  Str_FreeStrings ();
@@ -3646,7 +3646,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_dates;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Format;
    extern const char *Txt_Number_of_users;
@@ -3691,7 +3691,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 	{
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       Dat_PutSpanDateFormat (Format);
 	       Dat_PutScriptDateFormat (Format);
 	    HTM_TD_End ();

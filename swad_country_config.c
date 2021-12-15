@@ -372,7 +372,7 @@ static void CtyCfg_Platform (bool PrintView)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
 	       HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
-					Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 					NULL);
 	       Str_FreeStrings ();
 	   }
@@ -395,7 +395,7 @@ static void CtyCfg_Platform (bool PrintView)
 
 static void CtyCfg_Name (bool PutLink)
   {
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Country;
 
    /***** Country name *****/
@@ -405,11 +405,11 @@ static void CtyCfg_Name (bool PutLink)
       Frm_LabelColumn ("RT",NULL,Txt_Country);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatN[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 if (PutLink)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
 			 Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
-			 The_ClassDatN[Gbl.Prefs.Theme]);
+			 The_ClassDatStrong[Gbl.Prefs.Theme]);
 	 HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 if (PutLink)
 	    HTM_A_End ();
@@ -479,9 +479,9 @@ static void CtyCfg_NumInss (void)
       HTM_TD_Begin ("class=\"LB\"");
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	    HTM_BUTTON_SUBMIT_Begin (Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
+	    HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Institutions_of_COUNTRY_X,
 							 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-				     Str_BuildStringStr ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+				     Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
 				     NULL);
 	    Str_FreeStrings ();
 	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));

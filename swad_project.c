@@ -1003,7 +1003,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 
 static void Prj_ShowTableAllProjectsHead (void)
   {
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Number_of_students;
@@ -1015,7 +1015,7 @@ static void Prj_ShowTableAllProjectsHead (void)
    extern const char *Txt_URL;
    Prj_Order_t Order;
    unsigned NumRoleToShow;
-   const char *Class = Str_BuildStringStr ("LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
+   const char *Class = Str_BuildString ("LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
 
    HTM_TR_Begin (NULL);
 
@@ -1219,6 +1219,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
                                 Prj_ProjectView_t ProjectView)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_Project_files;
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
@@ -1253,7 +1254,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 					      "ASG_TITLE";
    ClassLink  = (Prj->Hidden == Prj_HIDDEN) ? "BT_LINK LT ASG_TITLE_LIGHT" :
 					      "BT_LINK LT ASG_TITLE";
-   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Set anchor string *****/
@@ -1657,6 +1658,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
 static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
@@ -1672,7 +1674,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    /***** Set CSS classes *****/
    ClassDate = (Prj->Hidden == Prj_HIDDEN) ? "DATE_BLUE_LIGHT" :
 					     "DATE_BLUE";
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Begin row *****/
@@ -1761,12 +1763,13 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
                                           Prj_ProjectView_t ProjectView)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    struct Dpt_Department Dpt;
    bool PutLink;
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get data of department *****/
@@ -1800,11 +1803,12 @@ static void Prj_ShowOneProjectDepartment (const struct Prj_Project *Prj,
 static void Prj_ShowTableAllProjectsDepartment (const struct Prj_Project *Prj)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    struct Dpt_Department Dpt;
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get data of department *****/
@@ -1828,13 +1832,14 @@ static void Prj_ShowOneProjectTxtField (struct Prj_Project *Prj,
 					bool Warning)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    const char *ClassLabel;
    const char *ClassData;
 
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Label *****/
@@ -1897,10 +1902,11 @@ static void Prj_ShowTableAllProjectsTxtField (struct Prj_Project *Prj,
                                               char *TxtField)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Change format *****/
@@ -1922,6 +1928,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
                                    const char *id,unsigned UniqueId)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_URL;
    const char *ClassLabel;
    const char *ClassData;
@@ -1932,7 +1939,7 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Write row with label and text *****/
@@ -1982,10 +1989,11 @@ static void Prj_ShowOneProjectURL (const struct Prj_Project *Prj,
 static void Prj_ShowTableAllProjectsURL (const struct Prj_Project *Prj)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Show URL *****/
@@ -2022,6 +2030,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
                                                 Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove;
@@ -2059,7 +2068,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
 					      "ASG_LABEL";
-   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData  = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					      The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get users in project from database *****/
@@ -2173,7 +2182,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 			   Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
 						       Prj_PutCurrentParams,Projects,
-						       Str_BuildStringStr (Txt_Add_USERS,
+						       Str_BuildString (Txt_Add_USERS,
 									   Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]));
 			   Str_FreeStrings ();
 			HTM_TD_End ();
@@ -2206,6 +2215,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
                                                       Prj_RoleInProject_t RoleInPrj)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -2213,7 +2223,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Prj_Project *
    const char *ClassData;
 
    /***** Set CSS classes *****/
-   ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
+   ClassData = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					     The_ClassDat[Gbl.Prefs.Theme];
 
    /***** Get users in project from database *****/
@@ -2586,7 +2596,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	    Frm_BeginForm (ActionRemUsr[RoleInPrj]);
 	       Projects->PrjCod = Prj.PrjCod;
 	       Prj_PutCurrentParams (Projects);
-	       Btn_PutRemoveButton (Str_BuildStringStr (Txt_Remove_USER_from_this_project,
+	       Btn_PutRemoveButton (Str_BuildString (Txt_Remove_USER_from_this_project,
 							Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
 	       Str_FreeStrings ();
 	    Frm_EndForm ();

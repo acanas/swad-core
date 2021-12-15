@@ -106,6 +106,7 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
 void Ins_SeeInsWithPendingCtrs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutions_with_pending_centers;
    extern const char *Txt_Institution;
@@ -156,8 +157,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    /* Get institution code (row[0]) */
 	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
-								  Gbl.ColorRows[Gbl.RowEvenOdd];
+	    BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of institution */
 	    Ins_GetDataOfInstitByCod (&Ins);
@@ -167,7 +168,10 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
-							  "BT_LINK DAT_NOBR","CM");
+							  Str_BuildString ("BT_LINK %s NOWRAP",
+							                      The_ClassDat[Gbl.Prefs.Theme]),
+							  "CM");
+		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
@@ -282,7 +286,7 @@ static void Ins_ListInstitutions (void)
    unsigned NumIns;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Institutions_of_COUNTRY_X,
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
@@ -358,8 +362,10 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
+   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatN[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatLight[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -367,16 +373,16 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
-      TxtClassNormal = "DAT_LIGHT";
-      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s","DAT_LIGHT");
+      TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildStringStr ("BT_LINK LT %s",The_ClassDatN[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
-   BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
-                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
+   BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
 
    HTM_TR_Begin (NULL);
 
@@ -540,7 +546,7 @@ static void Ins_EditInstitutionsInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildStringStr (Txt_Institutions_of_COUNTRY_X,
+   Box_BoxBegin (NULL,Str_BuildString (Txt_Institutions_of_COUNTRY_X,
 				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
@@ -1803,9 +1809,10 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
      {
       /***** Begin box and table *****/
       /* Number of institutions found */
-      Box_BoxTableBegin (NULL,Str_BuildStringLongStr ((long) NumInss,
-						      NumInss == 1 ? Txt_institution :
-								     Txt_institutions),
+      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
+                                               NumInss,
+                                               NumInss == 1 ? Txt_institution :
+							      Txt_institutions),
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
       Str_FreeStrings ();

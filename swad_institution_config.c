@@ -342,7 +342,7 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
 		  Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-					   Str_BuildStringStr ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
 		  Str_FreeStrings ();
 	      }
