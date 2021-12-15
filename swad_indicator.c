@@ -94,6 +94,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Hlp_ANALYTICS_Indicators;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -161,10 +162,12 @@ void Ind_ReqIndicatorsCourses (void)
 	       HTM_TD_Begin ("class=\"LT\"");
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department
-					       "INDICATORS_INPUT",		// Selector class
+					       Str_BuildString ("INDICATORS_INPUT %s",
+				                                The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
 					       -1L,				// First option
 					       Txt_Any_department,		// Text when no department selected
 					       true);				// Submit on change
+		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();

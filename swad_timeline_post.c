@@ -166,6 +166,7 @@ void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
 static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_post;
 
    /***** Begin container *****/
@@ -184,7 +185,9 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
          /* Form with textarea */
 	 Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_POST);
 	    Tml_Pst_PutTextarea (Txt_New_TIMELINE_post,
-				"Tml_PST_TEXTAREA Tml_RIGHT_WIDTH");
+				 Str_BuildString ("Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
+			                          The_ClassInput[Gbl.Prefs.Theme]));
+	    Str_FreeStrings ();
 	 Tml_Frm_EndForm ();
 
       /* End container */
@@ -200,6 +203,7 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
 void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
 
@@ -222,7 +226,9 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Med_PutMediaUploader (-1,"Tml_MED_INPUT_WIDTH");
+      Med_PutMediaUploader (-1,Str_BuildString ("Tml_MED_INPUT_WIDTH %s",
+                                                The_ClassInput[Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
 
       /***** Submit button *****/
       HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);

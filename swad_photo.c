@@ -1777,6 +1777,7 @@ static void Pho_PutParamsDegPhoto (void *DegPhotos)
 static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Average_type;
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
@@ -1795,7 +1796,8 @@ static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos)
 	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			      "id=\"AvgType\" name=\"AvgType\"");
+			      "id=\"AvgType\" name=\"AvgType\" class=\"%s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (TypeOfAvg  = (Pho_AvgPhotoTypeOfAverage_t) 0;
 		    TypeOfAvg <= (Pho_AvgPhotoTypeOfAverage_t) (Pho_NUM_AVERAGE_PHOTO_TYPES - 1);
 		    TypeOfAvg++)
@@ -1841,6 +1843,7 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
 static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Size_of_photos;
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
@@ -1859,7 +1862,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *D
 	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			      "id=\"PhotoSize\" name=\"PhotoSize\"");
+			      "id=\"PhotoSize\" name=\"PhotoSize\" class=\"%s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (PhoSi  = (Pho_HowComputePhotoSize_t) 0;
 		    PhoSi <= (Pho_HowComputePhotoSize_t) (Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1);
 		    PhoSi++)
@@ -1905,6 +1909,7 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
 static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Sort_degrees_by;
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
@@ -1923,7 +1928,8 @@ static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPh
 	    Pho_PutHiddenParamPhotoSize (DegPhotos->HowComputePhotoSize);
 	    Set_PutParamsPrefsAboutUsrList ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			      "id=\"Order\" name=\"Order\"");
+			      "id=\"Order\" name=\"Order\" class=\"%s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (Order  = (Pho_HowOrderDegrees_t) 0;
 		    Order <= (Pho_HowOrderDegrees_t) (Pho_NUM_HOW_ORDER_DEGREES - 1);
 		    Order++)
@@ -1987,6 +1993,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void *DegPhotos)
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos)
   {
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
@@ -2024,7 +2031,8 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
 	    /* Selector with all degrees with students */
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "name=\"OthDegCod\"");
+			      "name=\"OthDegCod\" class=\"%s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (NumDeg = 0;
 		    NumDeg < Degs.Num;
 		    NumDeg++)

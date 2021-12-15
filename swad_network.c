@@ -193,6 +193,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
   {
    extern const char *Hlp_PROFILE_Webs;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    extern const char *Txt_Save_changes;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -241,7 +242,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
 		     HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 			HTM_INPUT_URL (StrName,URL,HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",StrName);
+				       "id=\"%s\" class=\"REC_C2_BOT_INPUT %s\"",
+				       StrName,The_ClassInput[Gbl.Prefs.Theme]);
 		     HTM_TD_End ();
 
 		  HTM_TR_End ();

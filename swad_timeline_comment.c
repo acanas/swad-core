@@ -212,6 +212,7 @@ static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
 static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	                                   long NotCod)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_comment;
 
    /***** Begin container *****/
@@ -223,7 +224,9 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 
 	 /***** Textarea and button *****/
 	 Tml_Pst_PutTextarea (Txt_New_TIMELINE_comment,
-			     "Tml_COM_TEXTAREA Tml_COMM_WIDTH");
+			      Str_BuildString ("Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
+			                       The_ClassInput[Gbl.Prefs.Theme]));
+	 Str_FreeStrings ();
 
       /***** End form *****/
       Tml_Frm_EndForm ();

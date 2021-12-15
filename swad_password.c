@@ -252,6 +252,7 @@ void Pwd_ShowFormSendNewPwd (void)
   {
    extern const char *Hlp_PROFILE_Password;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
    extern const char *Txt_Forgotten_password;
    extern const char *Txt_nick_email_or_ID;
@@ -273,7 +274,8 @@ void Pwd_ShowFormSendNewPwd (void)
 	    HTM_TxtColonNBSP (Txt_nick_email_or_ID);
 	    HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"8\" required=\"required\"");
+			    "size=\"8\" class=\"%s\" required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
@@ -580,6 +582,7 @@ void Pwd_ShowFormChgMyPwd (void)
   {
    extern const char *Hlp_PROFILE_Password;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Your_password_is_not_secure_enough;
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
@@ -628,7 +631,8 @@ void Pwd_ShowFormChgMyPwd (void)
 		  /* Data */
 		  HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		     HTM_INPUT_PASSWORD ("UsrPwd",NULL,"off",true,
-					 "id=\"UsrPwd\"");
+					 "id=\"UsrPwd\" class=\"%s\"",
+					 The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -689,6 +693,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 void Pwd_PutFormToGetNewPasswordTwice (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_password;
    extern const char *Txt_Retype_new_password;
    extern const char *Txt_HELP_password;
@@ -702,7 +707,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd1",Txt_HELP_password,NULL,true,
-			     "id=\"Paswd1\"");
+			     "id=\"Paswd1\" class=\"%s\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -716,7 +722,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
       /* Data */
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 	 HTM_INPUT_PASSWORD ("Paswd2",Txt_HELP_password,NULL,true,
-			     "id=\"Paswd2\"");
+			     "id=\"Paswd2\" class=\"%s\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
    HTM_TR_End ();

@@ -151,6 +151,7 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
@@ -307,7 +308,8 @@ static void Nck_ShowFormChangeUsrNickname (bool ItsMe,
 			       Gbl.Usrs.Me.UsrDat.Nickname);
 		     HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICK_WITHOUT_ARROBA,
 				     NickWithArr,HTM_DONT_SUBMIT_ON_CHANGE,
-				     "id=\"NewNick\" size=\"18\"");
+				     "id=\"NewNick\" class=\"%s\" size=\"18\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		     HTM_BR ();
 		     Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
 							   Txt_Save_changes);	// I have no nickname yet);

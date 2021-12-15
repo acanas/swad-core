@@ -219,6 +219,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
   {
    extern const char *Hlp_COMMUNICATION_Messages_write;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
@@ -370,7 +371,9 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	 Lay_HelpPlainEditor ();
 
 	 /***** Attached image (optional) *****/
-	 Med_PutMediaUploader (-1,"MSG_MED_INPUT");
+	 Med_PutMediaUploader (-1,Str_BuildString ("MSG_MED_INPUT %s",
+	                                           The_ClassInput[Gbl.Prefs.Theme]));
+	 Str_FreeStrings ();
 
 	 /***** Send button *****/
 	 Btn_PutCreateButton (Txt_Send_message);

@@ -113,13 +113,16 @@ static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args)
 
 void Lan_PutSelectorToSelectLanguage (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    Lan_Language_t Lan;
    unsigned LanUnsigned;
 
    Frm_BeginForm (ActReqChgLan);
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"Lan\" style=\"width:112px; margin:0;\"");
+			"name=\"Lan\" class=\"%s\""
+			" style=\"width:112px; margin:0;\"",
+			The_ClassInput[Gbl.Prefs.Theme]);
 	 for (Lan  = (Lan_Language_t) 1;
 	      Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	      Lan++)

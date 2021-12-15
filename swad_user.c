@@ -1129,6 +1129,7 @@ void Usr_PutLinkToLogin (void)
 void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Hlp_PROFILE_LogIn;
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Log_in;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_nick_email_or_ID;
@@ -1162,8 +1163,10 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
 			       "id=\"UsrId\" size=\"18\" placeholder=\"%s\""
-			       " autofocus=\"autofocus\" required=\"required\"",
-			       Txt_nick_email_or_ID);
+			       " class=\"%s\" autofocus=\"autofocus\""
+			       " required=\"required\"",
+			       Txt_nick_email_or_ID,
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_DIV_End ();
 
 	    /***** User's password *****/
@@ -1172,7 +1175,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 		  Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
-				   "id=\"UsrPwd\"");
+				   "id=\"UsrPwd\" class=\"%s\"",
+				   The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_DIV_End ();
 
 	 /***** End table, send button and end box *****/
@@ -1338,6 +1342,7 @@ void Usr_PutFormLogIn (void)
 void Usr_WriteLoggedUsrHead (void)
   {
    extern const char *The_ClassUsr[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    static const char *ClassPhoto[Pho_NUM_SHAPES] =
@@ -1367,7 +1372,10 @@ void Usr_WriteLoggedUsrHead (void)
 	 HTM_Colon ();
 	}
       else
-	 Rol_PutFormToChangeMyRole ("SEL_ROLE");
+	{
+	 Rol_PutFormToChangeMyRole (Str_BuildString ("SEL_ROLE %s",The_ClassInput[Gbl.Prefs.Theme]));
+	 Str_FreeStrings ();
+	}
       HTM_NBSP ();
 
       /***** Show my photo *****/
@@ -2033,6 +2041,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
@@ -2066,7 +2075,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	{
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Role);
-	    Rol_PutFormToChangeMyRole (NULL);
+	    Rol_PutFormToChangeMyRole (The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_LABEL_End ();
 	}
 
@@ -6246,6 +6255,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 void Usr_PutSelectorNumColsClassPhoto (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_columns;
    unsigned Cols;
 
@@ -6254,7 +6264,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
       /***** Begin selector *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"ColsClassPhoto\"");
+			"name=\"ColsClassPhoto\" class=\"%s\"",
+			The_ClassInput[Gbl.Prefs.Theme]);
 
 	 /***** Put a row in selector for every number of columns *****/
 	 for (Cols  = 1;

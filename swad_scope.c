@@ -46,6 +46,7 @@ extern struct Globals Gbl;
 
 void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnChange)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_System;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
@@ -57,7 +58,8 @@ void Sco_PutSelectorScope (const char *ParamName,HTM_SubmitOnChange_t SubmitOnCh
    bool WriteScope;
 
    HTM_SELECT_Begin (SubmitOnChange,
-		     "id=\"%s\" name=\"%s\"",ParamName,ParamName);
+		     "id=\"%s\" name=\"%s\" class=\"%s\"",
+		     ParamName,ParamName,The_ClassInput[Gbl.Prefs.Theme]);
 
       for (Scope  = (HieLvl_Level_t) 0;
 	   Scope <= (HieLvl_Level_t) (HieLvl_NUM_LEVELS - 1);

@@ -767,6 +767,7 @@ void Crs_FreeListCoursesInCurrentDegree (void)
 
 void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Course;
    unsigned NumMyCrs;
    long CrsCod;
@@ -785,7 +786,8 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
       /***** Begin selector of courses *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"my_courses\" name=\"crs\"");
+			"id=\"my_courses\" name=\"crs\" class=\"%s\"",
+			The_ClassInput[Gbl.Prefs.Theme]);
 
 	 /***** Write an option when no course selected *****/
 	 if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected

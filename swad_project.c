@@ -731,6 +731,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Any_department;
    struct Prj_Filter Filter;
 
@@ -750,10 +751,12 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 	 /***** Write selector with departments *****/
 	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
 				      Projects->Filter.DptCod,		// Selected department
-				      "TITLE_DESCRIPTION_WIDTH",	// Selector class
+				      Str_BuildString ("TITLE_DESCRIPTION_WIDTH %s",
+				                       The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
 				      -1L,				// First option
 				      Txt_Any_department,		// Text when no department selected
 				      true);				// Submit on change
+	 Str_FreeStrings ();
 
       /***** End form *****/
       Frm_EndForm ();
@@ -3275,6 +3278,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Data;
@@ -3366,10 +3370,12 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Prj->DptCod,		// Selected department
-					    "TITLE_DESCRIPTION_WIDTH",	// Selector class
+					    Str_BuildString ("TITLE_DESCRIPTION_WIDTH %s",
+				                             The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
 					    0,				// First option
 					    Txt_Another_department,	// Text when no department selected
 					    false);			// Don't submit on change
+	       Str_FreeStrings ();
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

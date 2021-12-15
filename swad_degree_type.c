@@ -98,6 +98,7 @@ static void DegTyp_EditingDegreeTypeDestructor (void);
 
 void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Any_type_of_degree;
    unsigned NumDegTyp;
 
@@ -107,7 +108,8 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 
    /* List degree types */
    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\"");
+		     "id=\"OthDegTypCod\" name=\"OthDegTypCod\" class=\"%s\"",
+		     The_ClassInput[Gbl.Prefs.Theme]);
       HTM_OPTION (HTM_Type_STRING,"-1",
 		  SelectedDegTypCod == -1L,false,
 		  "%s",Txt_Any_type_of_degree);

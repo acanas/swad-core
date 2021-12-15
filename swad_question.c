@@ -642,6 +642,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
                                 bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_No_image_video;
    extern const char *Txt_Current_image_video;
    extern const char *Txt_Change_image_video;
@@ -688,14 +689,20 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
 	    HTM_TxtColonNBSP (Txt_Change_image_video);
 	 HTM_LABEL_End ();
-	 Med_PutMediaUploader (NumMedia,"TEST_MED_INPUT");
+	 Med_PutMediaUploader (NumMedia,Str_BuildString ("TEST_MED_INPUT %s",
+	                                                 The_ClassInput[Gbl.Prefs.Theme]));
+	 Str_FreeStrings ();
 
       /***** End container *****/
       HTM_DIV_End ();
      }
    else	// No current image
+     {
       /***** Attached media *****/
-      Med_PutMediaUploader (NumMedia,"TEST_MED_INPUT");
+      Med_PutMediaUploader (NumMedia,Str_BuildString ("TEST_MED_INPUT %s",
+	                                              The_ClassInput[Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
+     }
   }
 
 /*****************************************************************************/

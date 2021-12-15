@@ -50,6 +50,14 @@ textarea
 	font-size:13pt;
 	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 	}
+.INPUT_WHITE	{}
+.INPUT_GREY	{}
+.INPUT_PURPLE	{}
+.INPUT_BLUE	{}
+.INPUT_YELLOW	{}
+.INPUT_PINK	{}
+.INPUT_DARK	{background-color:#1f1f1f;color:white;}
+
 table
 	{
 	box-sizing:border-box;
@@ -248,13 +256,13 @@ a:hover						/* Default ==> underlined */
 		text-overflow:ellipsis;
 		}
 	}
-.USR_WHITE		{color:#b0b0b0; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_GREY		{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_PURPLE		{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_BLUE		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_YELLOW		{color:#b3b0b3; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_PINK		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
-.USR_DARK		{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_WHITE	{color:#b0b0b0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_GREY	{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_PURPLE	{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_BLUE	{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_YELLOW	{color:#b3b0b3; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_PINK	{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
+.USR_DARK	{color:#e0e0e0; font-size:15pt; font-weight:bold; white-space:nowrap;}
 
 #head_row_1_right
 	{

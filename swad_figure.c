@@ -226,6 +226,7 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
   {
    extern const char *Hlp_ANALYTICS_Figures;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Figures;
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
@@ -262,7 +263,8 @@ static void Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_Statistic);
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "name=\"FigureType\"");
+			      "name=\"FigureType\" class=\"%s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (FigType  = (Fig_FigureType_t) 0;
 		    FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
 		    FigType++)

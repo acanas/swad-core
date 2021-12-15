@@ -1051,6 +1051,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 				        bool IShouldConfirmEmail)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
@@ -1199,7 +1200,8 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	   }
 	    HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
-			     "id=\"NewEmail\" size=\"18\"");
+			     "id=\"NewEmail\" class=\"%s\" size=\"18\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_BR ();
 	    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
 						   Txt_Save_changes);		// User has no email address yet

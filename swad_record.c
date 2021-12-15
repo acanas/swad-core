@@ -3038,6 +3038,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Surname_1;
 
    HTM_TR_Begin (NULL);
@@ -3057,8 +3058,9 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 	 if (PutForm)
 	    HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT\""
-			    " required=\"required\"");
+			    "id=\"Surname1\" class=\"REC_C2_BOT_INPUT %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 else if (UsrDat->Surname1[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3077,6 +3079,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Surname_2;
 
    HTM_TR_Begin (NULL);
@@ -3092,7 +3095,8 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 	    HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->Surname2,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Surname2\" class=\"REC_C2_BOT_INPUT\"");
+			    "id=\"Surname2\" class=\"REC_C2_BOT_INPUT %s\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 else if (UsrDat->Surname2[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3111,6 +3115,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,bool PutForm)
 static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_First_name;
 
    HTM_TR_Begin (NULL);
@@ -3132,8 +3137,9 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 	    HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 			    UsrDat->FrstName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"FirstName\" class=\"REC_C2_BOT_INPUT\""
-			    " required=\"required\"");
+			    "id=\"FirstName\" class=\"REC_C2_BOT_INPUT %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 else if (UsrDat->FrstName[0])
 	   {
 	    HTM_STRONG_Begin ();
@@ -3151,6 +3157,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
 
 static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
    unsigned NumCty;
@@ -3175,7 +3182,9 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
       HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT LM\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 			   "id=\"OthCtyCod\" name=\"OthCtyCod\""
-			   " class=\"REC_C2_BOT_INPUT\" required=\"required\"");
+			   " class=\"REC_C2_BOT_INPUT %s\""
+			   " required=\"required\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_OPTION (HTM_Type_STRING,"",false,false,
 			"%s",Txt_Country);
 	    HTM_OPTION (HTM_Type_STRING,"0",UsrDat->CtyCod == 0,false,
@@ -3238,6 +3247,7 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
                            unsigned NumPhone)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Phone;
    char *Name;
    char *Label;
@@ -3265,7 +3275,8 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 	    if (PutForm)
 	       HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
 			      HTM_DONT_SUBMIT_ON_CHANGE,
-			      "id=\"%s\" class=\"REC_C2_BOT_INPUT\"",Name);
+			      "id=\"%s\" class=\"REC_C2_BOT_INPUT %s\"",
+			      Name,The_ClassInput[Gbl.Prefs.Theme]);
 	    else if (UsrDat->Phone[NumPhone][0])
 	      {
 	       HTM_A_Begin ("href=\"tel:%s\" class=\"%s\"",
@@ -3292,6 +3303,7 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_USER_comments;
 
    /***** Comments *****/
@@ -3309,7 +3321,8 @@ static void Rec_ShowComments (struct UsrData *UsrDat,bool ShowData,bool PutForm)
 	    if (PutForm)
 	      {
 	       HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
-				   " rows=\"4\" class=\"REC_C2_BOT_INPUT\"");
+				   " rows=\"4\" class=\"REC_C2_BOT_INPUT %s\"",
+				   The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_Txt (UsrDat->Comments);
 	       HTM_TEXTAREA_End ();
 	      }
@@ -3741,6 +3754,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Institution_center_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
@@ -3784,7 +3798,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Frm_BeginFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"InsCtyCod\" name=\"OthCtyCod\""
-				    " class=\"REC_C2_BOT_INPUT\"");
+				    " class=\"REC_C2_BOT_INPUT %s\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 				 Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0,true,
 				 NULL);
@@ -3821,7 +3836,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Frm_BeginFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				    "id=\"OthInsCod\" name=\"OthInsCod\""
-				    " class=\"REC_C2_BOT_INPUT\"");
+				    " class=\"REC_C2_BOT_INPUT %s\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"-1",
 				 Gbl.Usrs.Me.UsrDat.InsCod < 0,true,
 				 NULL);
@@ -3862,7 +3878,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				       "id=\"OthCtrCod\" name=\"OthCtrCod\""
-				       " class=\"REC_C2_BOT_INPUT\"");
+				       " class=\"REC_C2_BOT_INPUT %s\"",
+				       The_ClassInput[Gbl.Prefs.Theme]);
 			HTM_OPTION (HTM_Type_STRING,"-1",
 				    Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0,true,
 				    NULL);
@@ -3894,10 +3911,12 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-						  "REC_C2_BOT_INPUT",			// Selector class
+						  Str_BuildString ("REC_C2_BOT_INPUT %s",
+						                   The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
 						  -1L,					// First option
 						  "",					// Text when no department selected
 						  true);				// Submit on change
+		     Str_FreeStrings ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -3914,7 +3933,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "id=\"Office\" class=\"REC_C2_BOT_INPUT\"");
+				     "id=\"Office\" class=\"REC_C2_BOT_INPUT %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -3931,7 +3951,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 		  Frm_BeginFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
 		     HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 				    HTM_SUBMIT_ON_CHANGE,
-				    "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT\"");
+				    "id=\"OfficePhone\" class=\"REC_C2_BOT_INPUT %s\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

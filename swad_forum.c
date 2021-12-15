@@ -2662,6 +2662,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    extern const char *Hlp_COMMUNICATION_Forums_new_post;
    extern const char *Hlp_COMMUNICATION_Forums_new_thread;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
@@ -2733,7 +2734,9 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Med_PutMediaUploader (-1,"FOR_MED_INPUT");
+      Med_PutMediaUploader (-1,Str_BuildString ("FOR_MED_INPUT %s",
+	                                        The_ClassInput[Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
 
       /***** Send button *****/
       Btn_PutCreateButton (Txt_Send);

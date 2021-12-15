@@ -500,6 +500,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_ID_X_not_confirmed;
@@ -627,7 +628,8 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 				  UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 						    "",	// Show the most recent ID
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "id=\"NewID\" size=\"18\"");
+				  "id=\"NewID\" class=\"%s\" size=\"18\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_BR ();
 		  Btn_PutCreateButtonInline (Txt_Add_this_ID);
 	       Frm_EndForm ();

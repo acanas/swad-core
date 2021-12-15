@@ -855,6 +855,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 		        struct Dat_Date *DateSelected,
                         bool SubmitFormOnChange,bool Disabled)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    unsigned Year;
    unsigned Month;
@@ -869,23 +870,29 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 HTM_TD_Begin ("class=\"CM\"");
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"%sYear\" name=\"%sYear\"%s"
+				 "id=\"%sYear\" name=\"%sYear\""
+	                         " class=\"%s\""
+	                         "%s"
 				 " onchange=\"adjustDateForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,Id,
+				 The_ClassInput[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id,
 				 Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"%sYear\" name=\"%sYear\"%s"
+				 "id=\"%sYear\" name=\"%sYear\""
+	                         " class=\"%s\""
+	                         "%s"
 				 " onchange=\"adjustDateForm('%s');\"",
 				 Id,Id,
+				 The_ClassInput[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id);
 	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
 			"-");
-	    for (Year = FirstYear;
+	    for (Year  = FirstYear;
 		 Year <= LastYear;
 		 Year++)
 	       HTM_OPTION (HTM_Type_UNSIGNED,&Year,
@@ -898,18 +905,24 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 HTM_TD_Begin ("class=\"CM\"");
 	    if (SubmitFormOnChange)
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"%sMonth\" name=\"%sMonth\"%s"
+				 "id=\"%sMonth\" name=\"%sMonth\""
+	                         " class=\"%s\""
+	                         "%s"
 				 " onchange=\"adjustDateForm('%s');"
 				 "document.getElementById('%s').submit();return false;\"",
 				 Id,Id,
+				 The_ClassInput[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id,
 				 Gbl.Form.Id);
 	    else
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "id=\"%sMonth\" name=\"%sMonth\"%s"
+				 "id=\"%sMonth\" name=\"%sMonth\""
+	                         " class=\"%s\""
+	                         "%s"
 				 " onchange=\"adjustDateForm('%s');\"",
 				 Id,Id,
+				 The_ClassInput[Gbl.Prefs.Theme],
 				 Disabled ? " disabled=\"disabled\"" : "",
 				 Id);
 	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
@@ -926,20 +939,23 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 /***** Day *****/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_SELECT_Begin (SubmitFormOnChange,
-			      "id=\"%sDay\" name=\"%sDay\"%s",
+			      "id=\"%sDay\" name=\"%sDay\""
+	                      " class=\"%s\""
+	                      "%s",
 			      Id,Id,
+			      The_ClassInput[Gbl.Prefs.Theme],
 			      Disabled ? " disabled=\"disabled\"" : "");
-	    HTM_OPTION (HTM_Type_STRING,"0",false,false,
-			"-");
-	    NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
-								((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
-											      Dat_NumDaysMonth[DateSelected->Month]);
-	    for (Day  = 1;
-		 Day <= NumDaysSelectedMonth;
-		 Day++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&Day,
-			   Day == DateSelected->Day,false,
-			   "%u",Day);
+	       HTM_OPTION (HTM_Type_STRING,"0",false,false,
+			   "-");
+	       NumDaysSelectedMonth = (DateSelected->Month == 0) ? 31 :
+								   ((DateSelected->Month == 2) ? Dat_GetNumDaysFebruary (DateSelected->Year) :
+												 Dat_NumDaysMonth[DateSelected->Month]);
+	       for (Day  = 1;
+		    Day <= NumDaysSelectedMonth;
+		    Day++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Day,
+			      Day == DateSelected->Day,false,
+			      "%u",Day);
 	    HTM_SELECT_End ();
 	 HTM_TD_End ();
 
