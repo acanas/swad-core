@@ -566,6 +566,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 
 static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    struct Prj_Filter Filter;
    Usr_Who_t Who;
    unsigned Mask = 1 << Usr_WHO_ME   |
@@ -578,22 +579,23 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 	Who++)
       if (Mask & (1 << Who))
 	{
-	 HTM_DIV_Begin ("class=\"%s\"",
-			(Projects->Filter.Who == Who) ? "PREF_ON" :
-						        "PREF_OFF");
-	    Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
-						     ActSeePrj);
-	       Filter.Who    = Who;
-	       Filter.Assign = Projects->Filter.Assign;
-	       Filter.Hidden = Projects->Filter.Hidden;
-	       Filter.Faulti = Projects->Filter.Faulti;
-	       Filter.DptCod = Projects->Filter.DptCod;
-	       Prj_PutParams (&Filter,
-			      Projects->SelectedOrder,
-			      Projects->CurrentPage,
-			      -1L);
-	       Usr_PutWhoIcon (Who);
-	    Frm_EndForm ();
+	 if (Who == Projects->Filter.Who)
+	    HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 else
+	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	 Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
+						  ActSeePrj);
+	    Filter.Who    = Who;
+	    Filter.Assign = Projects->Filter.Assign;
+	    Filter.Hidden = Projects->Filter.Hidden;
+	    Filter.Faulti = Projects->Filter.Faulti;
+	    Filter.DptCod = Projects->Filter.DptCod;
+	    Prj_PutParams (&Filter,
+			   Projects->SelectedOrder,
+			   Projects->CurrentPage,
+			   -1L);
+	    Usr_PutWhoIcon (Who);
+	 Frm_EndForm ();
 	 HTM_DIV_End ();
 	}
    Set_EndOneSettingSelector ();
@@ -605,6 +607,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG];
    struct Prj_Filter Filter;
    Prj_AssignedNonassig_t Assign;
@@ -614,22 +617,23 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	Assign <= (Prj_AssignedNonassig_t) (Prj_NUM_ASSIGNED_NONASSIG - 1);
 	Assign++)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-		     (Projects->Filter.Assign & (1 << Assign)) ? "PREF_ON" :
-								 "PREF_OFF");
-	 Frm_BeginForm (ActSeePrj);
-	    Filter.Who    = Projects->Filter.Who;
-	    Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
-	    Filter.Hidden = Projects->Filter.Hidden;
-	    Filter.Faulti = Projects->Filter.Faulti;
-	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
-	    Ico_PutSettingIconLink (AssignedNonassigImage[Assign],
-				    Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
-	 Frm_EndForm ();
+      if ((Projects->Filter.Assign & (1 << Assign)))
+	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      else
+	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
+      Frm_BeginForm (ActSeePrj);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign ^ (1 << Assign);	// Toggle
+	 Filter.Hidden = Projects->Filter.Hidden;
+	 Filter.Faulti = Projects->Filter.Faulti;
+	 Filter.DptCod = Projects->Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
+	 Ico_PutSettingIconLink (AssignedNonassigImage[Assign],
+				 Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
+      Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -641,6 +645,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
    struct Prj_Filter Filter;
    Prj_HiddenVisibl_t HidVis;
@@ -655,22 +660,23 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
 	HidVis++)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-		     (Projects->Filter.Hidden & (1 << HidVis)) ? "PREF_ON" :
-								 "PREF_OFF");
-	 Frm_BeginForm (ActSeePrj);
-	    Filter.Who    = Projects->Filter.Who;
-	    Filter.Assign = Projects->Filter.Assign;
-	    Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
-	    Filter.Faulti = Projects->Filter.Faulti;
-	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
-	    Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
-				    Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
-	 Frm_EndForm ();
+      if ((Projects->Filter.Hidden & (1 << HidVis)))
+	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      else
+	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
+      Frm_BeginForm (ActSeePrj);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign;
+	 Filter.Hidden = Projects->Filter.Hidden ^ (1 << HidVis);	// Toggle
+	 Filter.Faulti = Projects->Filter.Faulti;
+	 Filter.DptCod = Projects->Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
+	 Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
+				 Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
+      Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -682,6 +688,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS];
    struct Prj_Filter Filter;
    Prj_Faultiness_t Faultiness;
@@ -696,22 +703,23 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	Faultiness <= (Prj_Faultiness_t) (Prj_NUM_FAULTINESS - 1);
 	Faultiness++)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-		     (Projects->Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
-								     "PREF_OFF");
-	 Frm_BeginForm (ActSeePrj);
-	    Filter.Who    = Projects->Filter.Who;
-	    Filter.Assign = Projects->Filter.Assign;
-	    Filter.Hidden = Projects->Filter.Hidden;
-	    Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
-	    Filter.DptCod = Projects->Filter.DptCod;
-	    Prj_PutParams (&Filter,
-			   Projects->SelectedOrder,
-			   Projects->CurrentPage,
-			   -1L);
-	    Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
-				    Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
-	 Frm_EndForm ();
+      if ((Projects->Filter.Faulti & (1 << Faultiness)))
+	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      else
+	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
+      Frm_BeginForm (ActSeePrj);
+	 Filter.Who    = Projects->Filter.Who;
+	 Filter.Assign = Projects->Filter.Assign;
+	 Filter.Hidden = Projects->Filter.Hidden;
+	 Filter.Faulti = Projects->Filter.Faulti ^ (1 << Faultiness);	// Toggle
+	 Filter.DptCod = Projects->Filter.DptCod;
+	 Prj_PutParams (&Filter,
+			Projects->SelectedOrder,
+			Projects->CurrentPage,
+			-1L);
+	 Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
+				 Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
+      Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();

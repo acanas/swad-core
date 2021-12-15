@@ -206,6 +206,7 @@ void Set_SetSettingsFromIP (void)
 static void Set_PutIconsToSelectSideCols (void)
   {
    extern const char *Hlp_PROFILE_Settings_columns;
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
@@ -220,14 +221,16 @@ static void Set_PutIconsToSelectSideCols (void)
 	      SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	      SideCols++)
 	   {
-	    HTM_DIV_Begin ("class=\"%s\"",SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
-									   "PREF_OFF");
-	       Frm_BeginForm (ActChgCol);
-		  Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
-		  snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
-			    SideCols >> 1,SideCols & 1);
-		  Ico_PutSettingIconLink (Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-	       Frm_EndForm ();
+	    if (SideCols == Gbl.Prefs.SideCols)
+	       HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	    else
+	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	    Frm_BeginForm (ActChgCol);
+	       Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
+	       snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
+			 SideCols >> 1,SideCols & 1);
+	       Ico_PutSettingIconLink (Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }
 	 Set_EndOneSettingSelector ();

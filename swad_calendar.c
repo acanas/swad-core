@@ -112,30 +112,32 @@ static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
                                       void (*FuncParams) (void *Args),void *Args)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
    char Icon[32 + 1];
 
    Set_BeginOneSettingSelector ();
-      for (FirstDayOfWeek = 0;	// Monday
+      for (FirstDayOfWeek  = 0;	// Monday
 	   FirstDayOfWeek <= 6;	// Sunday
 	   FirstDayOfWeek++)
 	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	   {
-	    HTM_DIV_Begin ("class=\"%s\"",
-			   FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
-									"PREF_OFF");
-	       Frm_BeginForm (Action);
-		  Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
-		  if (FuncParams)	// Extra parameters depending on the action
-		     FuncParams (Args);
-		  snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
-		  Ico_PutSettingIconLink (Icon,
-					  Str_BuildString (Txt_First_day_of_the_week_X,
-							      Txt_DAYS_SMALL[FirstDayOfWeek]));
-		  Str_FreeStrings ();
-	       Frm_EndForm ();
+	    if (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek)
+	       HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	    else
+	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	    Frm_BeginForm (Action);
+	       Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
+	       if (FuncParams)	// Extra parameters depending on the action
+		  FuncParams (Args);
+	       snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
+	       Ico_PutSettingIconLink (Icon,
+				       Str_BuildString (Txt_First_day_of_the_week_X,
+							   Txt_DAYS_SMALL[FirstDayOfWeek]));
+	       Str_FreeStrings ();
+	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }
    Set_EndOneSettingSelector ();

@@ -206,6 +206,7 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
 
 static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2];
    Agd_Past__FutureEvents_t PstFut;
    static const char *Icon[2] =
@@ -215,23 +216,24 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
      };
 
    Set_BeginOneSettingSelector ();
-   for (PstFut = Agd_PAST___EVENTS;
+   for (PstFut  = Agd_PAST___EVENTS;
 	PstFut <= Agd_FUTURE_EVENTS;
 	PstFut++)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-	             (Agenda->Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
-							            "PREF_OFF");
-	 Frm_BeginForm (ActSeeMyAgd);
-	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
-				   Agenda->PrivatPublicEvents,
-				   Agenda->HiddenVisiblEvents,
-				   Agenda->SelectedOrder,
-				   Agenda->CurrentPage,
-				   -1L);
-	    Ico_PutSettingIconLink (Icon[PstFut],
-				    Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
-	 Frm_EndForm ();
+      if ((Agenda->Past__FutureEvents & (1 << PstFut)))
+	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      else
+	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
+      Frm_BeginForm (ActSeeMyAgd);
+	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents ^ (1 << PstFut),	// Toggle
+				Agenda->PrivatPublicEvents,
+				Agenda->HiddenVisiblEvents,
+				Agenda->SelectedOrder,
+				Agenda->CurrentPage,
+				-1L);
+	 Ico_PutSettingIconLink (Icon[PstFut],
+				 Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
+      Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -243,6 +245,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
    Agd_PrivatPublicEvents_t PrvPub;
    static const char *Icon[2] =
@@ -252,23 +255,24 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
      };
 
    Set_BeginOneSettingSelector ();
-   for (PrvPub = Agd_PRIVAT_EVENTS;
+   for (PrvPub  = Agd_PRIVAT_EVENTS;
 	PrvPub <= Agd_PUBLIC_EVENTS;
 	PrvPub++)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-	             (Agenda->PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
-							            "PREF_OFF");
-	 Frm_BeginForm (ActSeeMyAgd);
-	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-				   Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
-				   Agenda->HiddenVisiblEvents,
-				   Agenda->SelectedOrder,
-				   Agenda->CurrentPage,
-				   -1L);
-	    Ico_PutSettingIconLink (Icon[PrvPub],
-				    Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
-	 Frm_EndForm ();
+      if ((Agenda->PrivatPublicEvents & (1 << PrvPub)))
+	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      else
+	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
+      Frm_BeginForm (ActSeeMyAgd);
+	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
+				Agenda->HiddenVisiblEvents,
+				Agenda->SelectedOrder,
+				Agenda->CurrentPage,
+				-1L);
+	 Ico_PutSettingIconLink (Icon[PrvPub],
+				 Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
+      Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
@@ -280,6 +284,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
    Agd_HiddenVisiblEvents_t HidVis;
    static const char *Icon[2] =
@@ -289,23 +294,24 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
      };
 
    Set_BeginOneSettingSelector ();
-   for (HidVis = Agd_HIDDEN_EVENTS;
+   for (HidVis  = Agd_HIDDEN_EVENTS;
 	HidVis <= Agd_VISIBL_EVENTS;
 	HidVis++)
      {
-      HTM_DIV_Begin ("class=\"%s\"",
-	             (Agenda->HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
-							            "PREF_OFF");
-	 Frm_BeginForm (ActSeeMyAgd);
-	    Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
-				   Agenda->PrivatPublicEvents,
-				   Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
-				   Agenda->SelectedOrder,
-				   Agenda->CurrentPage,
-				   -1L);
-	    Ico_PutSettingIconLink (Icon[HidVis],
-				    Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
-	 Frm_EndForm ();
+      if ((Agenda->HiddenVisiblEvents & (1 << HidVis)))
+	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      else
+	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
+      Frm_BeginForm (ActSeeMyAgd);
+	 Agd_PutParamsMyAgenda (Agenda->Past__FutureEvents,
+				Agenda->PrivatPublicEvents,
+				Agenda->HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
+				Agenda->SelectedOrder,
+				Agenda->CurrentPage,
+				-1L);
+	 Ico_PutSettingIconLink (Icon[HidVis],
+				 Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
+      Frm_EndForm ();
       HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();

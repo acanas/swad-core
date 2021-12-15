@@ -3567,44 +3567,49 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+
    Set_BeginSettingsHead ();
    Set_BeginOneSettingSelector ();
 
    /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
-   HTM_DIV_Begin ("class=\"%s\"",
-		  Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
-								        "PREF_OFF");
-      Set_FormToSelectUsrListType (FuncParams,Args,
-				   Set_USR_LIST_AS_CLASS_PHOTO);
+   if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
+      HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+   else
+      HTM_DIV_Begin ("class=\"PREF_OFF\"");
+   Set_FormToSelectUsrListType (FuncParams,Args,
+				Set_USR_LIST_AS_CLASS_PHOTO);
 
-      /* Number of columns in the class photo */
-      Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
-			   Usr_USER_LIST_SECTION_ID);
-	 Grp_PutParamsCodGrps ();
-	 Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
-	 Set_PutParamListWithPhotos ();
-	 Usr_PutSelectorNumColsClassPhoto ();
-	 if (FuncParams)
-	    FuncParams (Args);
-      Frm_EndForm ();
+   /* Number of columns in the class photo */
+   Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
+			Usr_USER_LIST_SECTION_ID);
+      Grp_PutParamsCodGrps ();
+      Set_PutParamUsrListType (Set_USR_LIST_AS_CLASS_PHOTO);
+      Set_PutParamListWithPhotos ();
+      Usr_PutSelectorNumColsClassPhoto ();
+      if (FuncParams)
+	 FuncParams (Args);
+   Frm_EndForm ();
    HTM_DIV_End ();
 
    /***** Select Usr_LIST_AS_LISTING *****/
-   HTM_DIV_Begin ("class=\"%s\"",
-		  Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING ? "PREF_ON" :
-								    "PREF_OFF");
-      Set_FormToSelectUsrListType (FuncParams,Args,
-				   Set_USR_LIST_AS_LISTING);
+   if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING)
+      HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+   else
+      HTM_DIV_Begin ("class=\"PREF_OFF\"");
+   Set_FormToSelectUsrListType (FuncParams,Args,
+				Set_USR_LIST_AS_LISTING);
 
-      /* See the photos in list? */
-      Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
-			   Usr_USER_LIST_SECTION_ID);
-	 Grp_PutParamsCodGrps ();
-	 Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
-	 if (FuncParams)
-	    FuncParams (Args);
-	 Usr_PutCheckboxListWithPhotos ();
-      Frm_EndForm ();
+   /* See the photos in list? */
+   Frm_BeginFormAnchor (Gbl.Action.Act,		// Repeat current action
+			Usr_USER_LIST_SECTION_ID);
+      Grp_PutParamsCodGrps ();
+      Set_PutParamUsrListType (Set_USR_LIST_AS_LISTING);
+      if (FuncParams)
+	 FuncParams (Args);
+      Usr_PutCheckboxListWithPhotos ();
+   Frm_EndForm ();
+
    HTM_DIV_End ();
 
    Set_EndOneSettingSelector ();

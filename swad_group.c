@@ -4368,6 +4368,7 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
                                  void (*FuncParams) (void *Args),void *Args)
   {
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
@@ -4379,17 +4380,18 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	   WhichGrps <= Grp_ALL_GROUPS;
 	   WhichGrps++)
 	{
-	 HTM_DIV_Begin ("class=\"%s\"",
-			 WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
-							       "PREF_OFF");
-	    Frm_BeginForm (Action);
-	       Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
-	       if (FuncParams)	// Extra parameters depending on the action
-		  FuncParams (Args);
-	       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-								    "sitemap.svg",
-				       Txt_GROUP_WHICH_GROUPS[WhichGrps]);
-	    Frm_EndForm ();
+	 if (WhichGrps == Gbl.Crs.Grps.WhichGrps)
+	    HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 else
+	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	 Frm_BeginForm (Action);
+	    Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
+	    if (FuncParams)	// Extra parameters depending on the action
+	       FuncParams (Args);
+	    Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
+								 "sitemap.svg",
+				    Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+	 Frm_EndForm ();
 	 HTM_DIV_End ();
 	}
 

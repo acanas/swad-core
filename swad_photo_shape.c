@@ -54,6 +54,7 @@ static void Pho_PutIconsPhotoShape (__attribute__((unused)) void *Args);
 void Pho_PutIconsToSelectPhotoShape (void)
   {
    extern const char *Hlp_PROFILE_Settings_user_photos;
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_User_photos;
    extern const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES];
    static const char *ClassPhoto[Pho_NUM_SHAPES] =
@@ -74,12 +75,14 @@ void Pho_PutIconsToSelectPhotoShape (void)
 	      Shape <= (Pho_Shape_t) (Pho_NUM_SHAPES - 1);
 	      Shape++)
 	   {
-	    HTM_DIV_Begin ("class=\"%s\"",Shape == Gbl.Prefs.PhotoShape ? "PREF_ON" :
-									  "PREF_OFF");
-	       Frm_BeginForm (ActChgUsrPho);
-		  Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
-		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_PHOTO_SHAPES[Shape],ClassPhoto[Shape]);
-	       Frm_EndForm ();
+	    if (Shape == Gbl.Prefs.PhotoShape)
+	       HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	    else
+	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	    Frm_BeginForm (ActChgUsrPho);
+	       Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
+	       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",Txt_PHOTO_SHAPES[Shape],ClassPhoto[Shape]);
+	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }
 	 Set_EndOneSettingSelector ();

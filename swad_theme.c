@@ -360,6 +360,17 @@ const char *The_ClassBgHighlight[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "BG_HIGHLIGHT_DARK",
   };
 
+const char *The_ClassPrefOn[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "PREF_ON_WHITE",
+   [The_THEME_GREY  ] = "PREF_ON_GREY",
+   [The_THEME_PURPLE] = "PREF_ON_PURPLE",
+   [The_THEME_BLUE  ] = "PREF_ON_BLUE",
+   [The_THEME_YELLOW] = "PREF_ON_YELLOW",
+   [The_THEME_PINK  ] = "PREF_ON_PINK",
+   [The_THEME_DARK  ] = "PREF_ON_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -373,6 +384,7 @@ static void The_PutIconsTheme (__attribute__((unused)) void *Args);
 void The_PutIconsToSelectTheme (void)
   {
    extern const char *Hlp_PROFILE_Settings_theme;
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
    char Icon[PATH_MAX + 1];
@@ -386,14 +398,16 @@ void The_PutIconsToSelectTheme (void)
 		 Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
 		 Theme++)
 	      {
-	       HTM_DIV_Begin ("class=\"%s\"",Theme == Gbl.Prefs.Theme ? "PREF_ON" :
-									"PREF_OFF");
-		  Frm_BeginForm (ActChgThe);
-		     Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
-		     snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
-			       Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
-		     Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
-		  Frm_EndForm ();
+	       if (Theme == Gbl.Prefs.Theme)
+		  HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	       else
+		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	       Frm_BeginForm (ActChgThe);
+		  Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
+		  snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
+			    Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
+		  Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
+	       Frm_EndForm ();
 	       HTM_DIV_End ();
 	      }
 	 Set_EndOneSettingSelector ();

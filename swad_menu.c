@@ -304,6 +304,7 @@ void Mnu_WriteMenuThisTab (void)
 void Mnu_PutIconsToSelectMenu (void)
   {
    extern const char *Hlp_PROFILE_Settings_menu;
+   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_Menu;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
@@ -317,12 +318,14 @@ void Mnu_PutIconsToSelectMenu (void)
 		 Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
 		 Menu++)
 	      {
-	       HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :
-								      "PREF_OFF");
-		  Frm_BeginForm (ActChgMnu);
-		     Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
-		     Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
-		  Frm_EndForm ();
+	       if (Menu == Gbl.Prefs.Menu)
+		  HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	       else
+		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
+	       Frm_BeginForm (ActChgMnu);
+		  Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
+		  Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
+	       Frm_EndForm ();
 	       HTM_DIV_End ();
 	      }
 	 Set_EndOneSettingSelector ();
