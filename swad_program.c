@@ -1748,6 +1748,7 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
 			      const Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME],
 		              const char *Txt)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Title;
    extern const char *Txt_Description;
 
@@ -1781,7 +1782,8 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"25\""
-			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH\"");
+			     " class=\"PRG_TITLE_DESCRIPTION_WIDTH %s\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	    if (Txt)
 	       if (Txt[0])
 		  HTM_Txt (Txt);

@@ -2709,7 +2709,9 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 			       IsReply ? Subject :
 					 "",
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Subject\" class=\"MSG_SUBJECT\" required=\"required\"");
+			       "id=\"Subject\" class=\"MSG_SUBJECT %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -2722,7 +2724,9 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\" class=\"MSG_CONTENT\" rows=\"10\"");
+	       HTM_TEXTAREA_Begin ("id=\"Content\" name=\"Content\""
+			           " class=\"MSG_CONTENT %s\" rows=\"10\"",
+			           The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();
 

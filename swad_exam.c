@@ -1324,6 +1324,7 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_exam;
    extern const char *Txt_Edit_exam;
    extern const char *Txt_Title;
@@ -1403,7 +1404,8 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-			     " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			     " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();

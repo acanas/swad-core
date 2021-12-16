@@ -1645,6 +1645,7 @@ void Svy_RequestCreatOrEditSvy (void)
    extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
@@ -1773,7 +1774,8 @@ void Svy_RequestCreatOrEditSvy (void)
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+				The_ClassInput[Gbl.Prefs.Theme]);
 	       if (!ItsANewSurvey)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
@@ -2298,6 +2300,7 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
    extern const char *Txt_Wording;
@@ -2385,7 +2388,10 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Surveys,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
+	       HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\""
+			           " cols=\"60\" rows=\"4\""
+			           " class=\"%s\"",
+			           The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_Txt (Stem);
 	       HTM_TEXTAREA_End ();
 	    HTM_TD_End ();

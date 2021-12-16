@@ -2777,6 +2777,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
   {
    extern const char *Usr_StringsSexIcons[Usr_NUM_SEXS];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_Sex;
    extern const char *Txt_SEX_SINGULAR_Abc[Usr_NUM_SEXS];
@@ -2817,8 +2818,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 		  /***** Selector of role *****/
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				    "id=\"Role\" name=\"Role\"");
-		     for (Role = Rol_STD;
+				    "id=\"Role\" name=\"Role\" class=\"%s\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
+		     for (Role  = Rol_STD;
 			  Role <= Rol_TCH;
 			  Role++)
 		       {
@@ -2879,7 +2881,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 		     /***** Selector of role *****/
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"Role\" name=\"Role\"");
+				       "id=\"Role\" name=\"Role\" class=\"%s\"",
+				       The_ClassInput[Gbl.Prefs.Theme]);
 			switch (Gbl.Usrs.Me.Role.Logged)
 			  {
 			   case Rol_GST:
@@ -2920,7 +2923,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 		     /***** Selector of role *****/
 		     HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				       "id=\"Role\" name=\"Role\"");
+				       "id=\"Role\" name=\"Role\" class=\"%s\"",
+				       The_ClassInput[Gbl.Prefs.Theme]);
 			RoleUnsigned = (unsigned) DefaultRoleInForm;
 			HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,true,true,
 				    "%s",Txt_ROLES_SINGUL_Abc[DefaultRoleInForm][UsrDat->Sex]);
@@ -2955,8 +2959,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 			   /***** Selector of role *****/
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-					     "id=\"Role\" name=\"Role\"");
-			      for (Role = Rol_STD;
+					     "id=\"Role\" name=\"Role\" class=\"%s\"",
+				             The_ClassInput[Gbl.Prefs.Theme]);
+			      for (Role  = Rol_STD;
 				   Role <= Rol_TCH;
 				   Role++)
 				{
@@ -2976,7 +2981,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			case Rol_SYS_ADM:
 			   /***** Selector of role *****/
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-					     "id=\"Role\" name=\"Role\"");
+					     "id=\"Role\" name=\"Role\"  class=\"%s\"",
+				             The_ClassInput[Gbl.Prefs.Theme]);
 			      RoleUnsigned = (unsigned) Rol_GST;
 			      HTM_OPTION (HTM_Type_UNSIGNED,&RoleUnsigned,
 					  true,false,

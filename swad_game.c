@@ -1301,6 +1301,7 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_game;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
@@ -1339,7 +1340,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\" required=\"required\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			    " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();

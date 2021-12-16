@@ -331,6 +331,7 @@ static void Enr_NotifyAfterEnrolment (const struct UsrData *UsrDat,
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
@@ -348,7 +349,10 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
       /***** Input box to enter user *****/
       HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
 		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "id=\"OtherUsrIDNickOrEMail\" size=\"18\" required=\"required\"");
+		      "id=\"OtherUsrIDNickOrEMail\" size=\"18\""
+		      " class=\"%s\""
+		      " required=\"required\"",
+		      The_ClassInput[Gbl.Prefs.Theme]);
 
       /***** Send button*****/
       Btn_PutConfirmButton (Txt_Continue);

@@ -1070,6 +1070,7 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Title;
@@ -1163,7 +1164,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
 			    "id=\"Title\" required=\"required\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			    " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1201,7 +1203,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"10\""
-				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+				The_ClassInput[Gbl.Prefs.Theme]);
 	       if (!ItsANewAssignment)
 		  HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();

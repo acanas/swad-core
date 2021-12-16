@@ -406,6 +406,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
 
    /***** Subject or content *****/
    HTM_TR_Begin (NULL);
@@ -415,8 +416,10 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",
-			     Field,Field,Rows);
+	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\""
+		             " class=\"%s\"",
+			     Field,Field,Rows,
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();
 

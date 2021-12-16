@@ -1167,8 +1167,12 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
 
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
   {
-   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\"%s />",
-	     Name,Value,Attr);
+   extern const char *The_ClassInput[The_NUM_THEMES];
+
+   HTM_TxtF ("<input type=\"button\" name=\"%s\" value=\"%s\" class=\"%s\"%s />",
+	     Name,Value,
+	     The_ClassInput[Gbl.Prefs.Theme],
+	     Attr);
   }
 
 void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const char *Class)
