@@ -791,6 +791,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 void Pwd_AskForConfirmationOnDangerousAction (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_I_understand_that_this_action_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
@@ -809,7 +810,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
 	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
-			     NULL);
+			     "class=\"%s\"",The_ClassInput[Gbl.Prefs.Theme]);
       HTM_LABEL_End ();
 
    HTM_DIV_End ();

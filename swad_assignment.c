@@ -1163,8 +1163,9 @@ void Asg_RequestCreatOrEditAsg (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" required=\"required\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+			    "id=\"Title\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " required=\"required\"",
 			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
@@ -1188,7 +1189,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	       HTM_TxtColon (Txt_Folder);
 	       HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Folder\" size=\"30\"");
+			       "id=\"Folder\" size=\"30\" class=\"%s\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_LABEL_End ();
 	 HTM_TD_End ();
 

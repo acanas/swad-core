@@ -222,6 +222,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
 				  unsigned MaxSetInd)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_set_of_questions;
    extern const char *Txt_Create_set_of_questions;
 
@@ -254,8 +255,10 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" required=\"required\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Current number of questions in set *****/
@@ -267,7 +270,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("class=\"RM\"");
 	       HTM_INPUT_LONG ("NumQstsToPrint",0,UINT_MAX,(long) Set->NumQstsToPrint,
 			       HTM_DONT_SUBMIT_ON_CHANGE,false,
-				"class=\"INPUT_LONG\" required=\"required\"");
+			       "class=\"INPUT_LONG\" required=\"required\"");
 	    HTM_TD_End ();
 
 	 /***** End row *****/
@@ -709,6 +712,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
                                                 MYSQL_RES *mysql_res,
                                                 bool ICanEditSets)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Sets_of_questions;
    extern const char *Txt_Move_up_X;
    extern const char *Txt_Move_down_X;
@@ -822,8 +826,10 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 			ExaSet_PutParamsOneSet (Exams);
 			HTM_INPUT_TEXT ("Title",ExaSet_MAX_CHARS_TITLE,Set.Title,
 					HTM_SUBMIT_ON_CHANGE,
-					"id=\"Title\" required=\"required\""
-					" class=\"TITLE_DESCRIPTION_WIDTH\"");
+					"id=\"Title\""
+					" class=\"TITLE_DESCRIPTION_WIDTH %s\""
+					" required=\"required\"",
+					The_ClassInput[Gbl.Prefs.Theme]);
 		     Frm_EndForm ();
 		    }
 		  else

@@ -6843,6 +6843,7 @@ void Brw_ShowFormFileBrowser (void)
 static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Create_folder;
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
@@ -6865,7 +6866,9 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	    HTM_TxtColonNBSP (Txt_Folder);
 	    HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "size=\"30\" required=\"required\"");
+			    "size=\"30\" class=\"%s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
@@ -7014,6 +7017,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 static void Brw_PutFormToCreateALink (const char *FileNameToShow)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Create_link;
    extern const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X;
    extern const char *Txt_URL;
@@ -7045,7 +7049,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_URL ("NewLinkURL","",HTM_DONT_SUBMIT_ON_CHANGE,
-			      "size=\"30\" required=\"required\"");
+			      "size=\"30\" class=\"%s\""
+			      " required=\"required\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -7063,7 +7069,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"NewLinkName\" size=\"30\"");
+			       "id=\"NewLinkName\" size=\"30\" class=\"%s\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -10157,6 +10164,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
 void Brw_AskRemoveOldFiles (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
    extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
@@ -10179,7 +10187,8 @@ void Brw_AskRemoveOldFiles (void)
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "name=\"Months\"");
+			      "name=\"Months\" class=\"%s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
 		    Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
 		    Months++)

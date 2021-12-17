@@ -1762,8 +1762,10 @@ static void Prg_ShowFormItem (const struct Prg_Item *Item,
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_TEXT ("Title",Prg_MAX_CHARS_PROGRAM_ITEM_TITLE,Item->Title,
 			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "id=\"Title\" required=\"required\""
-			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH\"");
+			 "id=\"Title\""
+			 " class=\"PRG_TITLE_DESCRIPTION_WIDTH %s\""
+			 " required=\"required\"",
+			 The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
    HTM_TR_End ();

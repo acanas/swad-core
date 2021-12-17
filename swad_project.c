@@ -3354,8 +3354,10 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "id=\"Title\" required=\"required\""
-			       " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			       "id=\"Title\""
+			       " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3389,7 +3391,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Assigned\"");
+				 "name=\"Assigned\" class=\"%s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_OPTION (HTM_Type_STRING,"Y",Prj->Assigned == Prj_ASSIGNED,false,
 			      "%s",Txt_Yes);
 		  HTM_OPTION (HTM_Type_STRING,"N",Prj->Assigned == Prj_NONASSIG,false,
@@ -3409,7 +3412,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_LONG ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,
 			       HTM_DONT_SUBMIT_ON_CHANGE,false,
-			       NULL);
+			       "class=\"%s\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3423,7 +3427,9 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Proposal\" class=\"TITLE_DESCRIPTION_WIDTH\"");
+				 "name=\"Proposal\""
+				 " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  for (Proposal  = (Prj_Proposal_t) 0;
 		       Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 		       Proposal++)
@@ -3462,7 +3468,8 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_INPUT_URL ("URL",Prj->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"TITLE_DESCRIPTION_WIDTH\"");
+			      "class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -3489,6 +3496,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        unsigned NumRows,bool Required)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
 
    /***** Description *****/
    HTM_TR_Begin (NULL);
@@ -3498,10 +3506,12 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
-	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\"%s"
-			     " class=\"TITLE_DESCRIPTION_WIDTH\"",
-			     Id,Id,NumRows,Required ? " required=\"required\"" :
-						      "");
+	 HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" rows=\"%u\""
+			     " class=\"TITLE_DESCRIPTION_WIDTH %s\"%s",
+			     Id,Id,NumRows,
+			     The_ClassInput[Gbl.Prefs.Theme],
+			     Required ? " required=\"required\"" :
+					"");
 	    HTM_Txt (TxtField);
 	 HTM_TEXTAREA_End ();
       HTM_TD_End ();

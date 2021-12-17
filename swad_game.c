@@ -1339,8 +1339,9 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Title",Gam_MAX_CHARS_TITLE,Game->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" required=\"required\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+			    "id=\"Title\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " required=\"required\"",
 			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 

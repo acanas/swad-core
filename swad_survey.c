@@ -1754,8 +1754,10 @@ void Svy_RequestCreatOrEditSvy (void)
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" required=\"required\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			    "id=\"Title\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();

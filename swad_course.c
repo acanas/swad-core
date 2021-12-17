@@ -2551,6 +2551,7 @@ void Crs_AskRemoveOldCrss (void)
   {
    extern const char *Hlp_SYSTEM_Maintenance_eliminate_old_courses;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2;
@@ -2570,7 +2571,8 @@ void Crs_AskRemoveOldCrss (void)
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s&nbsp;",Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "name=\"Months\"");
+			   "name=\"Months\" class=\"%s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
 		 i++)

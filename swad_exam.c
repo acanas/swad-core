@@ -1362,8 +1362,10 @@ void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_INPUT_TEXT ("Title",Exa_MAX_CHARS_TITLE,Exam->Title,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "id=\"Title\" required=\"required\""
-			    " class=\"TITLE_DESCRIPTION_WIDTH\"");
+			    "id=\"Title\""
+			    " class=\"TITLE_DESCRIPTION_WIDTH %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
