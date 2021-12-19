@@ -608,6 +608,7 @@ TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta q
 /*
 // TODO: al ver los resultados de un juego como profesor, el rol del estudiante sale como desconocido y no se puede ver el DNI
 
+	Version 21.70.5:  Dec 19, 2021  Working on design of dark theme. (321748 lines)
 	Version 21.70.4:  Dec 18, 2021  Working on design of dark theme. (321634 lines)
 	Version 21.70.3:  Dec 17, 2021  Working on design of dark theme. (321559 lines)
 	Version 21.70.2:  Dec 15, 2021  Working on design of dark theme. (321449 lines)

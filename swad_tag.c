@@ -397,6 +397,7 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 void Tag_ShowFormEditTags (void)
   {
    extern const char *Hlp_ASSESSMENT_Questions_editing_tags;
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -441,7 +442,9 @@ void Tag_ShowFormEditTags (void)
 		     Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
 		     HTM_INPUT_TEXT ("NewTagTxt",Tag_MAX_CHARS_TAG,row[1],
 				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"36\" required=\"required\"");
+				     "size=\"36\" class=\"%s\""
+				     " required=\"required\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -471,7 +474,7 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-slash-red.svg",
 			  Str_BuildString (Txt_Tag_X_not_allowed_Click_to_allow_it,
-					      TagTxt));
+					   TagTxt));
 	 Str_FreeStrings ();
       Frm_EndForm ();
    HTM_TD_End ();
@@ -490,7 +493,7 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
 	 Ico_PutIconLink ("eye-green.svg",
 			  Str_BuildString (Txt_Tag_X_allowed_Click_to_disable_it,
-					      TagTxt));
+					   TagTxt));
 	 Str_FreeStrings ();
       Frm_EndForm ();
    HTM_TD_End ();

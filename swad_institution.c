@@ -857,6 +857,7 @@ void Ins_FreeListInstitutions (void)
 
 void Ins_WriteSelectorOfInstitution (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Institution;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -870,11 +871,13 @@ void Ins_WriteSelectorOfInstitution (void)
       /***** Begin selector *****/
       if (Gbl.Hierarchy.Cty.CtyCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
+			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL %s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL\""
-			   " disabled=\"disabled\"");
+			   "id=\"ins\" name=\"ins\" class=\"HIE_SEL %s\""
+			   " disabled=\"disabled\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Ins.InsCod < 0,true,

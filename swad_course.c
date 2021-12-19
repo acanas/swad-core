@@ -629,6 +629,7 @@ unsigned Crs_GetCachedNumCrssWithUsrs (Rol_Role_t Role)
 
 void Crs_WriteSelectorOfCourse (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Course;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -642,11 +643,13 @@ void Crs_WriteSelectorOfCourse (void)
       /***** Begin selector of course *****/
       if (Gbl.Hierarchy.Deg.DegCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
+			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL %s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL\""
-			   " disabled=\"disabled\"");
+			   "id=\"crs\" name=\"crs\" class=\"HIE_SEL %s\""
+			   " disabled=\"disabled\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 
       /***** Initial disabled option *****/
       HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Crs.CrsCod < 0,true,
@@ -1149,6 +1152,7 @@ static void Crs_ListCoursesForEdition (void)
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
    struct Crs_Course *Crs;
@@ -1218,8 +1222,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	       Frm_BeginForm (ActChgCrsYea);
 		  Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
-		     for (YearAux = 0;
+				    "name=\"OthCrsYear\""
+				    " class=\"HIE_SEL_NARROW %s\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
+		     for (YearAux  = 0;
 			  YearAux <= Deg_MAX_YEARS_PER_DEGREE;
 			  YearAux++)	// All the years are permitted
 					// because it's possible to move this course
@@ -1242,7 +1248,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME\"");
+				     "class=\"INPUT_SHORT_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1316,6 +1323,7 @@ static bool Crs_CheckIfICanEdit (struct Crs_Course *Crs)
 static void Crs_PutFormToCreateCourse (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_course;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Create_course;
@@ -1358,7 +1366,8 @@ static void Crs_PutFormToCreateCourse (void)
 	 /***** Year *****/
 	 HTM_TD_Begin ("class=\"CM\"");
 	    HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			      "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\"");
+			      "name=\"OthCrsYear\" class=\"HIE_SEL_NARROW %s\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       for (Year = 0;
 		    Year <= Deg_MAX_YEARS_PER_DEGREE;
 		    Year++)
@@ -1372,14 +1381,18 @@ static void Crs_PutFormToCreateCourse (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+			    "class=\"INPUT_SHORT_NAME %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Course full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME\" required=\"required\"");
+			    "class=\"INPUT_FULL_NAME %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Current number of teachers in this course *****/

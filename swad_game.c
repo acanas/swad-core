@@ -1356,7 +1356,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_FLOAT ("MaxGrade",0.0,DBL_MAX,0.01,Game->MaxGrade,false,
-			     "required=\"required\"");
+			     " class=\"%s\" required=\"required\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -1383,7 +1384,8 @@ static void Gam_PutFormsEditionGame (struct Gam_Games *Games,
 	 /* Data */
 	 HTM_TD_Begin ("class=\"LT\"");
 	    HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" rows=\"5\""
-				" class=\"TITLE_DESCRIPTION_WIDTH\"");
+				" class=\"TITLE_DESCRIPTION_WIDTH %s\"",
+				The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt);
 	    HTM_TEXTAREA_End ();
 	 HTM_TD_End ();

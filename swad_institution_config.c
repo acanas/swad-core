@@ -303,6 +303,7 @@ static void InsCfg_Map (void)
 static void InsCfg_Country (bool PrintView,bool PutForm)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Country;
    unsigned NumCty;
 
@@ -325,7 +326,8 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	    Frm_BeginForm (ActChgInsCtyCfg);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthCtyCod\" name=\"OthCtyCod\""
-				 " class=\"INPUT_SHORT_NAME\"");
+				 " class=\"INPUT_SHORT_NAME %s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  for (NumCty = 0;
 		       NumCty < Gbl.Hierarchy.Ctys.Num;
 		       NumCty++)

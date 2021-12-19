@@ -690,6 +690,7 @@ void Ctr_FreeListCenters (void)
 
 void Ctr_WriteSelectorOfCenter (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Center;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -703,11 +704,13 @@ void Ctr_WriteSelectorOfCenter (void)
       /***** Begin selector *****/
       if (Gbl.Hierarchy.Ins.InsCod > 0)
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
+			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL %s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
       else
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\""
-			   " disabled=\"disabled\"");
+			   "id=\"ctr\" name=\"ctr\" class=\"HIE_SEL %s\""
+			   " disabled=\"disabled\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
       HTM_OPTION (HTM_Type_STRING,"",
 		  Gbl.Hierarchy.Ctr.CtrCod < 0,true,
 		  "[%s]",Txt_Center);

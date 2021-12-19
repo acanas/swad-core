@@ -440,6 +440,7 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
 static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Dpt_Department *Dpt;
@@ -484,7 +485,9 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	       Frm_BeginForm (ActChgDptIns);
 		  Dpt_PutParamDptCod (&Dpt->DptCod);
 		  HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				    "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
+				    "name=\"OthInsCod\""
+				    " class=\"HIE_SEL_NARROW %s\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		     HTM_OPTION (HTM_Type_STRING,"0",Dpt->InsCod == 0,false,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
@@ -791,6 +794,7 @@ void Dpt_ContEditAfterChgDpt (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
@@ -823,7 +827,9 @@ static void Dpt_PutFormToCreateDepartment (void)
 	    /***** Institution *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"OthInsCod\" class=\"HIE_SEL_NARROW\"");
+				 "name=\"OthInsCod\""
+				 " class=\"HIE_SEL_NARROW %s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_OPTION (HTM_Type_STRING,"0",Dpt_EditingDpt->InsCod == 0,false,
 			      "%s",Txt_Another_institution);
 		  for (NumIns = 0;

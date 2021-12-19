@@ -1113,6 +1113,7 @@ void Inf_FormToSendPage (Inf_Src_t InfoSrc)
 void Inf_FormToSendURL (Inf_Src_t InfoSrc)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
    char PathFile[PATH_MAX + 1];
@@ -1139,7 +1140,8 @@ void Inf_FormToSendURL (Inf_Src_t InfoSrc)
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    HTM_TxtColonNBSP (Txt_URL);
 	    HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "size=\"50\"");
+			   "size=\"50\" class=\"%s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_LABEL_End ();
       HTM_DIV_End ();
 
@@ -1677,6 +1679,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
 void Inf_EditPlainTxtInfo (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
@@ -1716,7 +1719,8 @@ void Inf_EditPlainTxtInfo (void)
 	 /***** Edition area *****/
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_HelpPlainEditor ();
-	    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
+	    HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\" class=\"%s\"",
+		                The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_Txt (TxtHTML);
 	    HTM_TEXTAREA_End ();
 	 HTM_DIV_End ();
@@ -1732,6 +1736,7 @@ void Inf_EditPlainTxtInfo (void)
 
 void Inf_EditRichTxtInfo (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
    extern const char *Txt_Save_changes;
    struct Syl_Syllabus Syllabus;
@@ -1771,7 +1776,8 @@ void Inf_EditRichTxtInfo (void)
       /***** Edition area *****/
       HTM_DIV_Begin ("class=\"CM\"");
 	 Lay_HelpRichEditor ();
-	 HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
+	 HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\" class=\"%s\"",
+	                     The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_Txt (TxtHTML);
 	 HTM_TEXTAREA_End ();
       HTM_DIV_End ();

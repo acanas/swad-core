@@ -1828,6 +1828,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
   {
    extern const char *Hlp_ASSESSMENT_Questions_writing_a_question;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_New_question;
    extern const char *Txt_Tags;
@@ -1913,8 +1914,11 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			HTM_TD_Begin ("class=\"LM\"");
 			   HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
 					     "id=\"SelTag%u\" name=\"SelTag%u\""
-					     " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\"",
-					     IndTag,IndTag,IndTag);
+					     " class=\"TAG_SEL %s\""
+					     " onchange=\"changeTxtTag('%u')\"",
+					     IndTag,IndTag,
+					     The_ClassInput[Gbl.Prefs.Theme],
+					     IndTag);
 			      HTM_OPTION (HTM_Type_STRING,"",false,false,"&nbsp;");
 			      mysql_data_seek (mysql_res,0);
 			      TagFound = false;
@@ -1955,8 +1959,11 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			   snprintf (StrTagTxt,sizeof (StrTagTxt),"TagTxt%u",IndTag);
 			   HTM_INPUT_TEXT (StrTagTxt,Tag_MAX_CHARS_TAG,Question->Tags.Txt[IndTag],
 					   HTM_DONT_SUBMIT_ON_CHANGE,
-					   "id=\"%s\" class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
-					   StrTagTxt,IndTag);
+					   "id=\"%s\" class=\"TAG_TXT %s\""
+					   " onchange=\"changeSelTag('%u')\"",
+					   StrTagTxt,
+					   The_ClassInput[Gbl.Prefs.Theme],
+					   IndTag);
 			HTM_TD_End ();
 
 		     HTM_TR_End ();
@@ -1978,8 +1985,10 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
-				   " rows=\"5\" required=\"required\"");
+	       HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" rows=\"5\""
+			           " class=\"STEM_TEXTAREA %s\""
+				   " required=\"required\"",
+				   The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_Txt (Question->Stem);
 	       HTM_TEXTAREA_End ();
 	       HTM_BR ();
@@ -1990,7 +1999,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 	       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 		  HTM_BR ();
-		  HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
+		  HTM_TEXTAREA_Begin ("name=\"Feedback\" rows=\"2\""
+			              " class=\"STEM_TEXTAREA %s\"",
+			              The_ClassInput[Gbl.Prefs.Theme]);
 		     if (Question->Feedback[0])
 			HTM_Txt (Question->Feedback);
 		  HTM_TEXTAREA_End ();
@@ -2039,7 +2050,9 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  snprintf (StrInteger,sizeof (StrInteger),"%ld",Question->Answer.Integer);
 		  HTM_INPUT_TEXT ("AnsInt",Cns_MAX_DECIMAL_DIGITS_LONG,StrInteger,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"11\" required=\"required\"%s",
+				  "size=\"11\" class=\"%s\""
+				  " required=\"required\"%s",
+				  The_ClassInput[Gbl.Prefs.Theme],
 				  Question->Answer.Type == Qst_ANS_INT ? "" :
 									 " disabled=\"disabled\"");
 	       HTM_LABEL_End ();
@@ -2178,9 +2191,12 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 							    " style=\"display:none;\"");	// Answer does not have content ==> Hide column
 
 			   /* Answer text */
-			   HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"5\"%s",
-					       NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
-									"");
+			   HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" rows=\"5\""
+				               " class=\"ANSWER_TEXTAREA %s\"%s",
+					       NumOpt,
+					       The_ClassInput[Gbl.Prefs.Theme],
+					       OptionsDisabled ? " disabled=\"disabled\"" :
+								 "");
 			      if (AnswerHasContent)
 				 HTM_Txt (Question->Answer.Options[NumOpt].Text);
 			   HTM_TEXTAREA_End ();
@@ -2194,9 +2210,12 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 			   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 			      HTM_TxtF ("%s&nbsp;(%s):",Txt_Feedback,Txt_optional);
 			      HTM_BR ();
-			      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
-						  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
-									   "");
+			      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" rows=\"2\""
+				                  " class=\"ANSWER_TEXTAREA %s\"%s",
+						  NumOpt,
+						  The_ClassInput[Gbl.Prefs.Theme],
+						  OptionsDisabled ? " disabled=\"disabled\"" :
+								    "");
 				 if (Question->Answer.Options[NumOpt].Feedback)
 				    if (Question->Answer.Options[NumOpt].Feedback[0])
 				       HTM_Txt (Question->Answer.Options[NumOpt].Feedback);

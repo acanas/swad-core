@@ -865,6 +865,7 @@ void Cty_GetFullListOfCountries (void)
 
 void Cty_WriteSelectorOfCountry (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Country;
    unsigned NumCty;
 
@@ -876,7 +877,8 @@ void Cty_WriteSelectorOfCountry (void)
 
       /***** Begin selector of country *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"id=\"cty\" name=\"cty\" class=\"HIE_SEL\"");
+			"id=\"cty\" name=\"cty\" class=\"HIE_SEL %s\"",
+			The_ClassInput[Gbl.Prefs.Theme]);
 
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",Gbl.Hierarchy.Cty.CtyCod < 0,true,
@@ -1051,6 +1053,7 @@ void Cty_FreeListCountries (void)
 static void Cty_ListCountriesForEdition (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
    struct Cty_Countr *Cty;
@@ -1139,7 +1142,8 @@ static void Cty_ListCountriesForEdition (void)
 		     Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
 				     HTM_SUBMIT_ON_CHANGE,
-				     "size=\"15\"");
+				     "size=\"15\" class=\"%s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1149,7 +1153,9 @@ static void Cty_ListCountriesForEdition (void)
 		     Cty_PutParamOtherCtyCod (&Cty->CtyCod);
 		     Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
 		     HTM_INPUT_URL ("WWW",Cty->WWW[Lan],HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+				    "class=\"INPUT_WWW_NARROW %s\""
+				    " required=\"required\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1433,6 +1439,7 @@ static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_country;
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
@@ -1464,13 +1471,15 @@ static void Cty_PutFormToCreateCountry (void)
 	       else
 		  StrCtyCod[0] = '\0';
 	       HTM_INPUT_TEXT ("OthCtyCod",3,StrCtyCod,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"3\" required=\"required\"");
+			       "size=\"3\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
 	    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
 	       HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"2\" required=\"required\"");
+			       "size=\"2\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Empty (3);
@@ -1506,14 +1515,18 @@ static void Cty_PutFormToCreateCountry (void)
 		  snprintf (StrName,sizeof (StrName),"Name_%s",Lan_STR_LANG_ID[Lan]);
 		  HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"15\" required=\"required\"");
+				  "size=\"15\" class=\"%s\""
+				  " required=\"required\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	       /* WWW */
 	       HTM_TD_Begin ("class=\"LM\"");
 		  snprintf (StrName,sizeof (StrName),"WWW_%s",Lan_STR_LANG_ID[Lan]);
 		  HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],HTM_DONT_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+				 "class=\"INPUT_WWW_NARROW %s\""
+				 " required=\"required\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
