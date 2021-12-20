@@ -353,6 +353,7 @@ static void CtrCfg_Map (void)
 
 static void CtrCfg_Latitude (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Latitude;
 
    /***** Latitude *****/
@@ -369,7 +370,8 @@ static void CtrCfg_Latitude (void)
 			     90.0,	// North Pole
 			     0.0,	// step="any"
 			     Gbl.Hierarchy.Ctr.Coord.Latitude,false,
-			     "class=\"INPUT_COORD\" required=\"required\"");
+			     "class=\"INPUT_COORD %s\" required=\"required\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -378,6 +380,7 @@ static void CtrCfg_Latitude (void)
 
 static void CtrCfg_Longitude (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Longitude;
 
    /***** Longitude *****/
@@ -394,7 +397,8 @@ static void CtrCfg_Longitude (void)
 			     180.0,	// East
 			     0.0,	// step="any"
 			     Gbl.Hierarchy.Ctr.Coord.Longitude,false,
-			     "class=\"INPUT_COORD\" required=\"required\"");
+			     "class=\"INPUT_COORD %s\" required=\"required\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -403,6 +407,7 @@ static void CtrCfg_Longitude (void)
 
 static void CtrCfg_Altitude (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Altitude;
 
    /***** Altitude *****/
@@ -419,7 +424,8 @@ static void CtrCfg_Altitude (void)
 			     8848.0,	// Mount Everest
 			     0.0,	// step="any"
 			     Gbl.Hierarchy.Ctr.Coord.Altitude,false,
-			     "class=\"INPUT_COORD\" required=\"required\"");
+			     "class=\"INPUT_COORD %s\" required=\"required\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
 	 Frm_EndForm ();
       HTM_TD_End ();
 
@@ -548,6 +554,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 static void CtrCfg_Institution (bool PrintView,bool PutForm)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
 
@@ -570,7 +577,8 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	    Frm_BeginForm (ActChgCtrInsCfg);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 				 "id=\"OthInsCod\" name=\"OthInsCod\""
-				 " class=\"INPUT_SHORT_NAME\"");
+				 " class=\"INPUT_SHORT_NAME %s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  for (NumIns = 0;
 		       NumIns < Gbl.Hierarchy.Inss.Num;
 		       NumIns++)
@@ -639,6 +647,7 @@ static void CtrCfg_ShrtName (bool PutForm)
 static void CtrCfg_Place (bool PutForm)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Place;
    extern const char *Txt_Another_place;
    struct Plc_Places Places;
@@ -671,7 +680,8 @@ static void CtrCfg_Place (bool PutForm)
 	    /* Put form to select place */
 	    Frm_BeginForm (ActChgCtrPlcCfg);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				 "name=\"PlcCod\" class=\"INPUT_SHORT_NAME\"");
+				 "name=\"PlcCod\" class=\"INPUT_SHORT_NAME %s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  HTM_OPTION (HTM_Type_STRING,"0",
 			      Gbl.Hierarchy.Ctr.PlcCod == 0,false,
 			      "%s",Txt_Another_place);

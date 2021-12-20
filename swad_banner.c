@@ -404,6 +404,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumBan;
    struct Ban_Banner *Ban;
    char *Anchor = NULL;
@@ -462,7 +463,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME\"");
+				  "class=\"INPUT_SHORT_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -472,7 +474,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME\"");
+				  "class=\"INPUT_FULL_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -482,7 +485,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"12\"");
+				  "size=\"12\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -491,8 +495,9 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	       Frm_BeginForm (ActChgBanWWW);
 		  Ban_PutParamBanCodToEdit (&Banners->BanCodToEdit);
 		  HTM_INPUT_URL ("WWW",Ban->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW\""
-				 " required=\"required\"");
+				 "class=\"INPUT_WWW_NARROW %s\""
+				 " required=\"required\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -849,6 +854,7 @@ void Ban_ContEditAfterChgBan (void)
 static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_banner;
    extern const char *Txt_Create_banner;
 
@@ -880,30 +886,35 @@ static void Ban_PutFormToCreateBanner (const struct Ban_Banner *Ban)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME\""
-			       " required=\"required\"");
+			       "class=\"INPUT_SHORT_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /* Banner full name */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME\""
-			       " required=\"required\"");
+			       "class=\"INPUT_FULL_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /* Banner image */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"12\" required=\"required\"");
+			       "size=\"12\" class=\"%s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /* Banner WWW */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_URL ("WWW",Ban->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW_NARROW\""
-			      " required=\"required\"");
+			      "class=\"INPUT_WWW_NARROW %s\""
+			      " required=\"required\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 /* End table row */

@@ -665,6 +665,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumRoom;
    struct Roo_Room *Room;
    char *Anchor = NULL;
@@ -734,7 +735,8 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 		  Roo_PutParamRooCod (&Room->RooCod);
 		  HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Room->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\" class=\"INPUT_SHORT_NAME\"");
+				  "size=\"10\" class=\"INPUT_SHORT_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -744,7 +746,8 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 		  Roo_PutParamRooCod (&Room->RooCod);
 		  HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Room->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"20\" class=\"INPUT_FULL_NAME\"");
+				  "size=\"20\" class=\"INPUT_FULL_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -1248,6 +1251,7 @@ void Roo_ContEditAfterChgRoom (void)
 
 static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_room;
    extern const char *Txt_Create_room;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -1297,14 +1301,18 @@ static void Roo_PutFormToCreateRoom (const struct Bld_Buildings *Buildings)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("ShortName",Roo_MAX_CHARS_SHRT_NAME,Roo_EditingRoom->ShrtName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
+			       "size=\"10\" class=\"INPUT_SHORT_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Room full name *****/
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("FullName",Roo_MAX_CHARS_FULL_NAME,Roo_EditingRoom->FullName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
+			       "size=\"20\" class=\"INPUT_FULL_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Seating capacity *****/

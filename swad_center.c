@@ -755,6 +755,7 @@ void Ctr_WriteSelectorOfCenter (void)
 static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumCtr;
@@ -822,7 +823,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  Frm_BeginForm (ActChgCtrPlc);
 		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				       "name=\"PlcCod\" class=\"PLC_SEL\"");
+				       "name=\"PlcCod\" class=\"PLC_SEL %s\"",
+				       The_ClassInput[Gbl.Prefs.Theme]);
 			HTM_OPTION (HTM_Type_STRING,"0",
 				    Ctr->PlcCod == 0,false,
 				    "%s",Txt_Another_place);
@@ -851,7 +853,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME\"");
+				     "class=\"INPUT_SHORT_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -866,7 +869,8 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_FULL_NAME\"");
+				     "class=\"INPUT_FULL_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -880,7 +884,9 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 		  Frm_BeginForm (ActChgCtrWWW);
 		     Hie_PutParamOtherHieCod (&Ctr->CtrCod);
 		     HTM_INPUT_URL ("WWW",Ctr->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+				    "class=\"INPUT_WWW_NARROW %s\""
+				    " required=\"required\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1297,6 +1303,7 @@ static void Ctr_PutParamGoToCtr (void *CtrCod)
 static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_center;
    extern const char *Txt_Another_place;
    extern const char *Txt_Create_center;
@@ -1336,7 +1343,8 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       /***** Place *****/
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-			   "name=\"PlcCod\" class=\"PLC_SEL\"");
+			   "name=\"PlcCod\" class=\"PLC_SEL %s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_OPTION (HTM_Type_STRING,"0",
 			Ctr_EditingCtr->PlcCod == 0,false,
 			"%s",Txt_Another_place);
@@ -1353,20 +1361,23 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
 			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+			 "class=\"INPUT_SHORT_NAME %s\" required=\"required\"",
+			 The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Center full name *****/
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
 			 HTM_DONT_SUBMIT_ON_CHANGE,
-			 "class=\"INPUT_FULL_NAME\" required=\"required\"");
+			 "class=\"INPUT_FULL_NAME %s\" required=\"required\"",
+			 The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Center WWW *****/
       HTM_TD_Begin ("class=\"LM\"");
 	 HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			"class=\"INPUT_WWW_NARROW\" required=\"required\"");
+			"class=\"INPUT_WWW_NARROW %s\" required=\"required\"",
+			The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/

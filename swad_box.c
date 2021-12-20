@@ -64,7 +64,7 @@ void Box_BoxTableBegin (const char *Width,const char *Title,
    Box_BoxBegin (Width,Title,
                  FunctionToDrawContextualIcons,Args,
                  HelpLink,Closable);
-   HTM_TABLE_BeginWidePadding (CellPadding);
+      HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
 void Box_BoxTableShadowBegin (const char *Width,const char *Title,
@@ -75,7 +75,7 @@ void Box_BoxTableShadowBegin (const char *Width,const char *Title,
    Box_BoxShadowBegin (Width,Title,
                        FunctionToDrawContextualIcons,Args,
                        HelpLink);
-   HTM_TABLE_BeginWidePadding (CellPadding);
+      HTM_TABLE_BeginWidePadding (CellPadding);
   }
 
 void Box_BoxBegin (const char *Width,const char *Title,
@@ -115,18 +115,9 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
   {
+   extern const char *The_ClassFrameTitleColor[The_NUM_THEMES];
    extern const char *Txt_Help;
    extern const char *Txt_Close;
-   static const char *ClassFrameTitleColor[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "FRAME_TITLE_WHITE",
-      [The_THEME_GREY  ] = "FRAME_TITLE_GREY",
-      [The_THEME_PURPLE] = "FRAME_TITLE_PURPLE",
-      [The_THEME_BLUE  ] = "FRAME_TITLE_BLUE",
-      [The_THEME_YELLOW] = "FRAME_TITLE_YELLOW",
-      [The_THEME_PINK  ] = "FRAME_TITLE_PINK",
-      [The_THEME_DARK  ] = "FRAME_TITLE_DARK",
-     };
 
    /***** Check level of nesting *****/
    if (Gbl.Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
@@ -203,7 +194,7 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
       HTM_DIV_Begin ("class=\"FRAME_TITLE %s %s\"",
 	             Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
 		                      "FRAME_TITLE_BIG",
-		     ClassFrameTitleColor[Gbl.Prefs.Theme]);
+		     The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
 	 HTM_Txt (Title);
       HTM_DIV_End ();
      }
@@ -211,19 +202,19 @@ static void Box_BoxInternalBegin (const char *Width,const char *Title,
 
 void Box_BoxTableEnd (void)
   {
-   HTM_TABLE_End ();
+      HTM_TABLE_End ();
    Box_BoxEnd ();
   }
 
 void Box_BoxTableWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
   {
-   HTM_TABLE_End ();
+      HTM_TABLE_End ();
    Box_BoxWithButtonEnd (Button,TxtButton);
   }
 
 void Box_BoxWithButtonEnd (Btn_Button_t Button,const char *TxtButton)
   {
-   Btn_PutButton (Button,TxtButton);
+      Btn_PutButton (Button,TxtButton);
    Box_BoxEnd ();
   }
 

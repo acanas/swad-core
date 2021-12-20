@@ -1208,7 +1208,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		     HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 				     Crs->InstitutionalCrsCod,HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_INS_CODE\"");
+				     "class=\"INPUT_INS_CODE %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1264,7 +1265,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     Hie_PutParamOtherHieCod (&Crs->CrsCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Crs->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_FULL_NAME\"");
+				     "class=\"INPUT_FULL_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1360,7 +1362,8 @@ static void Crs_PutFormToCreateCourse (void)
 	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 			    Crs_EditingCrs->InstitutionalCrsCod,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_INS_CODE\"");
+			    "class=\"INPUT_INS_CODE %s\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Year *****/

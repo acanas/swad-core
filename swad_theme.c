@@ -382,6 +382,17 @@ const char *The_ClassInput[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "INPUT_DARK",
   };
 
+const char *The_ClassFrameTitleColor[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "FRAME_TITLE_WHITE",
+   [The_THEME_GREY  ] = "FRAME_TITLE_GREY",
+   [The_THEME_PURPLE] = "FRAME_TITLE_PURPLE",
+   [The_THEME_BLUE  ] = "FRAME_TITLE_BLUE",
+   [The_THEME_YELLOW] = "FRAME_TITLE_YELLOW",
+   [The_THEME_PINK  ] = "FRAME_TITLE_PINK",
+   [The_THEME_DARK  ] = "FRAME_TITLE_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/

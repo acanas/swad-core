@@ -925,6 +925,7 @@ void Ins_WriteSelectorOfInstitution (void)
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Ins_Instit *Ins;
@@ -992,7 +993,8 @@ static void Ins_ListInstitutionsForEdition (void)
 		     Hie_PutParamOtherHieCod (&Ins->InsCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME\"");
+				     "class=\"INPUT_SHORT_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1007,7 +1009,8 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Hie_PutParamOtherHieCod (&Ins->InsCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME\"");
+				  "class=\"INPUT_FULL_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	      }
 	    else
@@ -1021,7 +1024,9 @@ static void Ins_ListInstitutionsForEdition (void)
 		  Frm_BeginForm (ActChgInsWWW);
 		     Hie_PutParamOtherHieCod (&Ins->InsCod);
 		     HTM_INPUT_URL ("WWW",Ins->WWW,HTM_SUBMIT_ON_CHANGE,
-				    "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+				    "class=\"INPUT_WWW_NARROW %s\""
+				    " required=\"required\"",
+				    The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -1436,6 +1441,7 @@ static void Ins_PutParamGoToIns (void *InsCod)
 static void Ins_PutFormToCreateInstitution (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_institution;
    extern const char *Txt_Create_institution;
 
@@ -1474,20 +1480,26 @@ static void Ins_PutFormToCreateInstitution (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+			    "class=\"INPUT_SHORT_NAME %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Institution full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME\" required=\"required\"");
+			    "class=\"INPUT_FULL_NAME %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Institution WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+			   "class=\"INPUT_WWW_NARROW %s\""
+			   " required=\"required\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Number of users who claim to belong to this institution ****/

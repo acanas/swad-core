@@ -50,16 +50,30 @@ void HieCfg_Title (bool PutLink,
 		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
 		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
+   extern const char *The_ClassFrameTitleColor[The_NUM_THEMES];
+
+   /***** Begin container *****/
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG %s\"",
+                  The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
+
+      /* Begin link */
       if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-		      " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
-		      LogoWWW,LogoFullName);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
+		      " class=\"FRAME_TITLE_BIG %s\"",
+		      LogoWWW,
+		      LogoFullName,
+		      The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
+
+      /* Logo and name */
       Lgo_DrawLogo (LogoScope,LogoCod,LogoShrtName,64,NULL,true);
       HTM_BR ();
       HTM_Txt (TextFullName);
+
+      /* End link */
       if (PutLink)
 	 HTM_A_End ();
+
+   /***** End container *****/
    HTM_DIV_End ();
   }
 
@@ -71,6 +85,7 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 		      const char FullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
 
    /***** Full name *****/
    HTM_TR_Begin (NULL);
@@ -88,8 +103,9 @@ void HieCfg_FullName (bool PutForm,const char *Label,Act_Action_t NextAction,
 	    Frm_BeginForm (NextAction);
 	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,FullName,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"FullName\" class=\"INPUT_FULL_NAME\""
-			       " required=\"required\"");
+			       "id=\"FullName\" class=\"INPUT_FULL_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit full name
@@ -107,6 +123,7 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 		      const char ShrtName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1])
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Short_name;
 
    /***** Short name *****/
@@ -125,8 +142,9 @@ void HieCfg_ShrtName (bool PutForm,Act_Action_t NextAction,
 	    Frm_BeginForm (NextAction);
 	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,ShrtName,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "id=\"ShortName\" class=\"INPUT_SHORT_NAME\""
-			       " required=\"required\"");
+			       "id=\"ShortName\" class=\"INPUT_SHORT_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else	// I can not edit short name
@@ -144,6 +162,7 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 		 const char WWW[Cns_MAX_BYTES_WWW + 1])
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Web;
 
    /***** Web *****/
@@ -161,7 +180,9 @@ void HieCfg_WWW (bool PrintView,bool PutForm,Act_Action_t NextAction,
 	    /* Form to change web */
 	    Frm_BeginForm (NextAction);
 	       HTM_INPUT_URL ("WWW",WWW,HTM_SUBMIT_ON_CHANGE,
-			      "id=\"WWW\" class=\"INPUT_WWW_WIDE\" required=\"required\"");
+			      "id=\"WWW\" class=\"INPUT_WWW_WIDE %s\""
+			      " required=\"required\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	   }
 	 else	// I can not change web

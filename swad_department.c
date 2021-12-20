@@ -506,7 +506,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  Dpt_PutParamDptCod (&Dpt->DptCod);
 		  HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_SHORT_NAME\"");
+				  "class=\"INPUT_SHORT_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -516,7 +517,8 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 		  Dpt_PutParamDptCod (&Dpt->DptCod);
 		  HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt->FullName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "class=\"INPUT_FULL_NAME\"");
+				  "class=\"INPUT_FULL_NAME %s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -525,7 +527,9 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
 	       Frm_BeginForm (ActChgDptWWW);
 		  Dpt_PutParamDptCod (&Dpt->DptCod);
 		  HTM_INPUT_URL ("WWW",Dpt->WWW,HTM_SUBMIT_ON_CHANGE,
-				 "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+				 "class=\"INPUT_WWW_NARROW %s\""
+				 " required=\"required\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -845,20 +849,26 @@ static void Dpt_PutFormToCreateDepartment (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+			       "class=\"INPUT_SHORT_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Department full name *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"INPUT_FULL_NAME\" required=\"required\"");
+			       "class=\"INPUT_FULL_NAME %s\""
+			       " required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Department WWW *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+			      "class=\"INPUT_WWW_NARROW %s\""
+			      " required=\"required\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

@@ -376,7 +376,8 @@ static void Deg_ListDegreesForEdition (void)
 		     Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_SHORT_NAME\"");
+				     "class=\"INPUT_SHORT_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -391,7 +392,8 @@ static void Deg_ListDegreesForEdition (void)
 		     Hie_PutParamOtherHieCod (&Deg->DegCod);
 		     HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg->FullName,
 				     HTM_SUBMIT_ON_CHANGE,
-				     "class=\"INPUT_FULL_NAME\"");
+				     "class=\"INPUT_FULL_NAME %s\"",
+				     The_ClassInput[Gbl.Prefs.Theme]);
 		  Frm_EndForm ();
 		 }
 	       else
@@ -549,14 +551,18 @@ static void Deg_PutFormToCreateDegree (void)
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("ShortName",Cns_HIERARCHY_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_SHORT_NAME\" required=\"required\"");
+			    "class=\"INPUT_SHORT_NAME %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Degree full name *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("FullName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
 			    HTM_DONT_SUBMIT_ON_CHANGE,
-			    "class=\"INPUT_FULL_NAME\" required=\"required\"");
+			    "class=\"INPUT_FULL_NAME %s\""
+			    " required=\"required\"",
+			    The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Degree type *****/
@@ -580,7 +586,9 @@ static void Deg_PutFormToCreateDegree (void)
 	 /***** Degree WWW *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,HTM_DONT_SUBMIT_ON_CHANGE,
-			   "class=\"INPUT_WWW_NARROW\" required=\"required\"");
+			   "class=\"INPUT_WWW_NARROW %s\""
+			   " required=\"required\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	 HTM_TD_End ();
 
 	 /***** Number of courses in this degree *****/
