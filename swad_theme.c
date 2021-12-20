@@ -403,6 +403,16 @@ const char *The_ClassAlertBackground[The_NUM_THEMES] =
    [The_THEME_PINK  ] = "ALERT_BG_PINK",
    [The_THEME_DARK  ] = "ALERT_BG_DARK",
   };
+const char *The_ClassAlertTxtColor[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "ALERT_TXT_WHITE",
+   [The_THEME_GREY  ] = "ALERT_TXT_GREY",
+   [The_THEME_PURPLE] = "ALERT_TXT_PURPLE",
+   [The_THEME_BLUE  ] = "ALERT_TXT_BLUE",
+   [The_THEME_YELLOW] = "ALERT_TXT_YELLOW",
+   [The_THEME_PINK  ] = "ALERT_TXT_PINK",
+   [The_THEME_DARK  ] = "ALERT_TXT_DARK",
+  };
 
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/

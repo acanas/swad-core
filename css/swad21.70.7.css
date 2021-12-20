@@ -1879,10 +1879,16 @@ a:hover img.CENTER_PHOTO_SHOW
 	background-size:20px 20px;
 	background-repeat:no-repeat;
 	font-size:12pt;
-	color:#632921;
 	text-align:left;
 	overflow:hidden;
 	}
+.ALERT_TXT_WHITE	{color:#632921;}
+.ALERT_TXT_GREY		{color:#632921;}
+.ALERT_TXT_PURPLE	{color:#632921;}
+.ALERT_TXT_BLUE		{color:#632921;}
+.ALERT_TXT_YELLOW	{color:#632921;}
+.ALERT_TXT_PINK		{color:#632921;}
+.ALERT_TXT_DARK		{color:white;}
 
 /*********************************** Icons ***********************************/
 .ICOx16		{	     height:16px; vertical-align:middle;}
