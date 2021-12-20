@@ -1850,10 +1850,17 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	margin:8px auto;
 	padding:12px;
-	background-color:#fff8e5;
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 2px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 	}
+.ALERT_BG_WHITE		{background-color:#fff8e5;}
+.ALERT_BG_GREY		{background-color:#fff8e5;}
+.ALERT_BG_PURPLE	{background-color:#fff8e5;}
+.ALERT_BG_BLUE		{background-color:#fff8e5;}
+.ALERT_BG_YELLOW	{background-color:#fff8e5;}
+.ALERT_BG_PINK		{background-color:#fff8e5;}
+.ALERT_BG_DARK		{background-color:#a0a0a0;}
+
 .ALERT_CLOSE
 	{
 	float:right;

@@ -359,6 +359,7 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
 
 static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
   {
+   extern const char *The_ClassAlertBackground[The_NUM_THEMES];
    extern const char *Txt_Close;
    char IdAlert[Frm_MAX_BYTES_ID + 1];
    static const bool AlertClosable[Ale_NUM_ALERT_TYPES] =
@@ -386,7 +387,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    if (!Gbl.Layout.HTMLStartWritten)
       Lay_WriteStartOfPage ();
 
-   /***** Begin box *****/
+   /***** Begin container *****/
    if (AlertClosable[AlertType])
      {
       /* Create unique id for alert */
@@ -395,27 +396,30 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
      }
    else
       HTM_DIV_Begin ("class=\"CM\"");
-   HTM_DIV_Begin ("class=\"ALERT\"");
 
-   /***** Icon to close the alert *****/
-   if (AlertClosable[AlertType])
-     {
-      HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
-	 HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
-		      IdAlert);
-	    Ico_PutIcon ("times.svg",Txt_Close,"ICO16x16");
-	 HTM_A_End ();
+   /***** Begin box *****/
+   HTM_DIV_Begin ("class=\"ALERT %s\"",
+                  The_ClassAlertBackground[Gbl.Prefs.Theme]);
+
+      /***** Icon to close the alert *****/
+      if (AlertClosable[AlertType])
+	{
+	 HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
+	    HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
+			 IdAlert);
+	       Ico_PutIcon ("times.svg",Txt_Close,"ICO16x16");
+	    HTM_A_End ();
+	 HTM_DIV_End ();
+	}
+
+      /***** Write message *****/
+      if (AlertType == Ale_NONE)
+	 HTM_DIV_Begin ("class=\"ALERT_TXT\"");
+      else
+	 HTM_DIV_Begin ("class=\"ALERT_TXT\" style=\"background-image:url('%s/%s');\"",
+			Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
+      HTM_Txt (Txt);
       HTM_DIV_End ();
-     }
-
-   /***** Write message *****/
-   if (AlertType == Ale_NONE)
-      HTM_DIV_Begin ("class=\"ALERT_TXT\"");
-   else
-      HTM_DIV_Begin ("class=\"ALERT_TXT\" style=\"background-image:url('%s/%s');\"",
-	             Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
-   HTM_Txt (Txt);
-   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -426,28 +430,30 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
                               void (*FuncParams) (void *Args),void *Args,
                               Btn_Button_t Button,const char *TxtButton)
   {
-   /***** Optional button *****/
-   if (NextAction != ActUnk &&
-       Button != Btn_NO_BUTTON &&
-       TxtButton)
-      if (TxtButton[0])
-	{
-         /* Begin form */
-         Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
-	    if (FuncParams)
-	      {
-	       FuncParams (Args);
-	      }
+      /***** Optional button *****/
+      if (NextAction != ActUnk &&
+	  Button != Btn_NO_BUTTON &&
+	  TxtButton)
+	 if (TxtButton[0])
+	   {
+	    /* Begin form */
+	    Frm_BeginFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
+	       if (FuncParams)
+		 {
+		  FuncParams (Args);
+		 }
 
-	    /* Put button */
-	    Btn_PutButton (Button,TxtButton);
+	       /* Put button */
+	       Btn_PutButton (Button,TxtButton);
 
-         /* End form */
-	 Frm_EndForm ();
-	}
+	    /* End form */
+	    Frm_EndForm ();
+	   }
 
-   /***** End box *****/
-   HTM_DIV_End ();
+      /***** End box *****/
+      HTM_DIV_End ();
+
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

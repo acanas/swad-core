@@ -393,6 +393,17 @@ const char *The_ClassFrameTitleColor[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "FRAME_TITLE_DARK",
   };
 
+const char *The_ClassAlertBackground[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "ALERT_BG_WHITE",
+   [The_THEME_GREY  ] = "ALERT_BG_GREY",
+   [The_THEME_PURPLE] = "ALERT_BG_PURPLE",
+   [The_THEME_BLUE  ] = "ALERT_BG_BLUE",
+   [The_THEME_YELLOW] = "ALERT_BG_YELLOW",
+   [The_THEME_PINK  ] = "ALERT_BG_PINK",
+   [The_THEME_DARK  ] = "ALERT_BG_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
