@@ -602,12 +602,14 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.70.7 (2021-12-20)"
+#define Log_PLATFORM_VERSION	"SWAD 21.70.8 (2021-12-20)"
 #define CSS_FILE		"swad21.70.7.css"
 #define JS_FILE			"swad21.67.4.js"
 /*
 // TODO: al ver los resultados de un juego como profesor, el rol del estudiante sale como desconocido y no se puede ver el DNI
 
+	Version 21.70.8:  Dec 20, 2021  Fixed bug showing calendar. (321927 lines)
+	Version 21.70.7:  Dec 20, 2021  Working on design of dark theme. (321926 lines)
 	Version 21.70.7:  Dec 20, 2021  Working on design of dark theme. (321926 lines)
 	Version 21.70.6:  Dec 20, 2021  Working on design of dark theme. (321886 lines)
 	Version 21.70.5:  Dec 19, 2021  Working on design of dark theme. (321748 lines)

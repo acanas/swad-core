@@ -512,10 +512,9 @@ static void Lay_WriteScripts (void)
 
    /***** Prepare script to draw months *****/
    if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||	// Left column visible
-       (Gbl.Hierarchy.Ins.InsCod > 0 &&			// Institution selected
-        (Gbl.Action.Act == ActSeeCal ||			// Viewing calendar
-         Gbl.Action.Act == ActPrnCal ||			// Printing calendar
-         Gbl.Action.Act == ActChgCal1stDay)))		// Changing first day
+       Gbl.Action.Act == ActSeeCal ||			// Viewing calendar
+       Gbl.Action.Act == ActPrnCal ||			// Printing calendar
+       Gbl.Action.Act == ActChgCal1stDay)		// Changing first day
      {
       /***** Reset places context *****/
       Hld_ResetHolidays (&Holidays);
