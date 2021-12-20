@@ -303,7 +303,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
-                                                   Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+                                                   Usr_GET_ROLE_IN_CURRENT_CRS))
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show matches results *****/
@@ -403,7 +403,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games,long GamCod)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_GET_ROLE_IN_CURRENT_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show matches results *****/
@@ -478,7 +478,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
       if ((Gbl.Usrs.Other.UsrDat.UsrCod = DB_GetNextCode (mysql_res)) > 0)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
-	                                              Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                              Usr_GET_ROLE_IN_CURRENT_CRS))
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat))
 	      {
 	       /***** Show matches results *****/
@@ -1127,10 +1127,13 @@ void MchRes_ShowOneMchResult (void)
 	    /* Get data of the user who answer the match */
 	    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,
 	                                                  Usr_DONT_GET_PREFS,
-	                                                  Usr_DONT_GET_ROLE_IN_CURRENT_CRS))
+	                                                  Usr_GET_ROLE_IN_CURRENT_CRS))
                Err_WrongUserExit ();
 	    if (!Usr_CheckIfICanViewTstExaMchResult (UsrDat))
 	       Err_NoPermissionExit ();
+
+	    /* Get if user has accepted enrolment */
+	    UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
 	    /* User */
 	    HTM_TR_Begin (NULL);

@@ -606,8 +606,7 @@ TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta q
 #define CSS_FILE		"swad21.70.7.css"
 #define JS_FILE			"swad21.67.4.js"
 /*
-// TODO: al ver los resultados de un juego como profesor, el rol del estudiante sale como desconocido y no se puede ver el DNI
-
+	Version 21.70.9:  Dec 20, 2021  Fixed bug in user's IDs when listing match results. (321929 lines)
 	Version 21.70.8:  Dec 20, 2021  Fixed bug showing calendar. (321927 lines)
 	Version 21.70.7:  Dec 20, 2021  Working on design of dark theme. (321926 lines)
 	Version 21.70.7:  Dec 20, 2021  Working on design of dark theme. (321926 lines)
