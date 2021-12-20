@@ -453,7 +453,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 		  HTM_TR_Begin (NULL);
 
 		     /* Form to edit match */
-		     HTM_TD_Begin ("colspan=\"8\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+		     HTM_TD_Begin ("colspan=\"8\" class=\"LT %s\"",
+		                   Gbl.ColorRows[Gbl.RowEvenOdd]);
 			Mch_PutFormExistingMatch (Games,&Match,Anchor);	// Form to fill in data and edit this match
 		     HTM_TD_End ();
 
@@ -491,13 +492,13 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-      HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
-      HTM_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]);
-      HTM_TH (1,1,"LT",Txt_Match);
-      HTM_TH (1,1,"RT",Txt_Players);
-      HTM_TH (1,1,"CT",Txt_Status);
-      HTM_TH (1,1,"CT",Txt_Results);
+      HTM_TH (1,1,Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],"LT");
+      HTM_TH (1,1,Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]   ,"LT");
+      HTM_TH (1,1,Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]   ,"LT");
+      HTM_TH (1,1,Txt_Match                                     ,"LT");
+      HTM_TH (1,1,Txt_Players                                   ,"RT");
+      HTM_TH (1,1,Txt_Status                                    ,"CT");
+      HTM_TH (1,1,Txt_Results                                   ,"CT");
 
    /***** End row *****/
    HTM_TR_End ();
@@ -587,7 +588,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match)
   {
    /***** Match author (teacher) *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       Usr_WriteAuthor1Line (Match->UsrCod,false);
    HTM_TD_End ();
   }
@@ -607,11 +608,11 @@ void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned Uniqu
      {
       if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
 		    Id,
 		    Match->Status.Showing == Mch_END ? "DATE_RED" :
 						       "DATE_GREEN",
-		    Gbl.RowEvenOdd);
+		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -630,7 +631,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_ARTICLE_Begin (Anchor);
 
 	 /***** Match title *****/
@@ -720,8 +721,8 @@ void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
    extern const char *The_ClassDat[The_NUM_THEMES];
 
    /***** Number of players who have answered any question in the match ******/
-   HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s RT %s\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
@@ -736,8 +737,8 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s CT %s\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Match->Status.Showing != Mch_END)	// Match not over
 	{
@@ -777,8 +778,8 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
       [Rol_SYS_ADM] = Mch_ListOneOrMoreMatchesResultTch,
      };
 
-   HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s CT %s\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);

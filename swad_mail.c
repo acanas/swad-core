@@ -126,7 +126,7 @@ void Mai_SeeMailDomains (void)
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      for (Order = Mai_ORDER_BY_DOMAIN;
+      for (Order  = Mai_ORDER_BY_DOMAIN;
 	   Order <= Mai_ORDER_BY_USERS;
 	   Order++)
 	{
@@ -654,8 +654,8 @@ static void Mai_PutFormToCreateMailDomain (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-	    HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
+	    HTM_TH (1,1,Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],"LM");
+	    HTM_TH (1,1,Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]  ,"LM");
 	 HTM_TR_End ();
 
 	 /***** Second row *****/
@@ -696,11 +696,11 @@ static void Mai_PutHeadMailDomains (void)
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"RM",Txt_Code);
-      HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-      HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
-      HTM_TH (1,1,"RM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
+      HTM_TH (1,1,NULL                                       ,"BM");
+      HTM_TH (1,1,Txt_Code                                   ,"RM");
+      HTM_TH (1,1,Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],"LM");
+      HTM_TH (1,1,Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ],"LM");
+      HTM_TH (1,1,Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ],"RM");
    HTM_TR_End ();
   }
 

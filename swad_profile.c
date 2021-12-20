@@ -1208,10 +1208,10 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	    /***** Show row *****/
 	    HTM_TR_Begin (NULL);
 	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	       HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+	       HTM_TD_Begin ("class=\"RM %s %s\"",
 			     ItsMe ? "DAT_SMALL_N" :
 				     "DAT_SMALL",
-			     Gbl.RowEvenOdd);
+			     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_Long (Figure);
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -1276,10 +1276,10 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	    /***** Show row *****/
 	    HTM_TR_Begin (NULL);
 	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	       HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+	       HTM_TD_Begin ("class=\"RM %s %s\"",
 			     ItsMe ? "DAT_SMALL_N" :
 				     "DAT_SMALL",
-			     Gbl.RowEvenOdd);
+			     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_DoubleFewDigits (NumClicksPerDay);
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -1311,15 +1311,15 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   HTM_TD_Begin ("class=\"RM %s COLOR%u\"",
+   HTM_TD_Begin ("class=\"RM %s %s\"",
 		 ItsMe ? "DAT_SMALL_N" :
 		         "DAT_SMALL",
-                 Gbl.RowEvenOdd);
+                 Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
 
    /***** Check if I can see the public profile *****/
-   HTM_TD_Begin ("class=\"RANK_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RANK_PHOTO %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Visible)
 	 /***** User's photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
@@ -1328,7 +1328,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_End ();
 
    /***** Put form to go to public profile *****/
-   HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Visible)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);

@@ -166,6 +166,7 @@ void Set_GetSettingsFromIP (void)
 
 	 /* Get theme (row[2]) */
 	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
+	 The_SetColorRows ();
 
 	 /* Get icon set (row[3]) */
 	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);

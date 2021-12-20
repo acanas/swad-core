@@ -2216,14 +2216,12 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
 	 HTM_TR_Begin (NULL);
-
-	 HTM_TH (1,1,"RT",Txt_No_INDEX);
-	 HTM_TH (1,1,"CT",Txt_Degree);
-	 for (Sex  = (Usr_Sex_t) 0;
-	      Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
-	      Sex++)
-	    HTM_TH (1,1,"CT",Txt_SEX_PLURAL_Abc[Sex]);
-
+	    HTM_TH (1,1,Txt_No_INDEX,"RT");
+	    HTM_TH (1,1,Txt_Degree  ,"CT");
+	    for (Sex  = (Usr_Sex_t) 0;
+		 Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
+		 Sex++)
+	       HTM_TH (1,1,Txt_SEX_PLURAL_Abc[Sex],"CT");
 	 HTM_TR_End ();
 
 	 /***** Get degrees *****/
@@ -2244,14 +2242,16 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	    HTM_TR_Begin (NULL);
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s RM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],
+	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"%s LM COLOR%u\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s LM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],
+	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		    {
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
@@ -2272,7 +2272,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		 {
 		  /***** Show average photo of students belonging to this degree *****/
 		  Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-		  HTM_TD_Begin ("class=\"CLASSPHOTO RM COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"CLASSPHOTO RM %s\"",
+		                Gbl.ColorRows[Gbl.RowEvenOdd]);
 		     if (Gbl.Usrs.Listing.WithPhotos)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,

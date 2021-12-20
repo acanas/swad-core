@@ -414,6 +414,25 @@ const char *The_ClassAlertTxtColor[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "ALERT_TXT_DARK",
   };
 
+const char *The_ClassColorRows[2][The_NUM_THEMES] =
+  {
+   [0][The_THEME_WHITE ] = "COLOR0_WHITE",
+   [0][The_THEME_GREY  ] = "COLOR0_GREY",
+   [0][The_THEME_PURPLE] = "COLOR0_PURPLE",
+   [0][The_THEME_BLUE  ] = "COLOR0_BLUE",
+   [0][The_THEME_YELLOW] = "COLOR0_YELLOW",
+   [0][The_THEME_PINK  ] = "COLOR0_PINK",
+   [0][The_THEME_DARK  ] = "COLOR0_DARK",
+
+   [1][The_THEME_WHITE ] = "COLOR1_WHITE",
+   [1][The_THEME_GREY  ] = "COLOR1_GREY",
+   [1][The_THEME_PURPLE] = "COLOR1_PURPLE",
+   [1][The_THEME_BLUE  ] = "COLOR1_BLUE",
+   [1][The_THEME_YELLOW] = "COLOR1_YELLOW",
+   [1][The_THEME_PINK  ] = "COLOR1_PINK",
+   [1][The_THEME_DARK  ] = "COLOR1_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -480,6 +499,7 @@ void The_ChangeTheme (void)
 
    /***** Get param theme *****/
    Gbl.Prefs.Theme = The_GetParamTheme ();
+   The_SetColorRows ();
    snprintf (Path,sizeof (Path),"%s/%s",
              Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
    Str_Copy (Gbl.Prefs.URLTheme,Path,sizeof (Gbl.Prefs.URLTheme) - 1);
@@ -526,4 +546,16 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
 	 return Theme;
 
    return The_THEME_DEFAULT;
+  }
+
+/*****************************************************************************/
+/******** Set background colors for rows depending on selected theme *********/
+/*****************************************************************************/
+
+void The_SetColorRows (void)
+  {
+   extern const char *The_ClassColorRows[2][The_NUM_THEMES];
+
+   Gbl.ColorRows[0] = The_ClassColorRows[0][Gbl.Prefs.Theme];	// Darker
+   Gbl.ColorRows[1] = The_ClassColorRows[1][Gbl.Prefs.Theme];	// Lighter
   }

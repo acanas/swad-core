@@ -572,10 +572,10 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"CM",Txt_Code);
-      HTM_TH (1,1,"CM",Txt_Type_of_degree);
-      HTM_TH (1,1,"RM",Txt_Degrees);
+      HTM_TH (1,1,NULL              ,"BM");
+      HTM_TH (1,1,Txt_Code          ,"CM");
+      HTM_TH (1,1,Txt_Type_of_degree,"CM");
+      HTM_TH (1,1,Txt_Degrees       ,"RM");
 
    HTM_TR_End ();
   }

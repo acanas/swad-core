@@ -66,8 +66,8 @@ void HTM_TBODY_End (void);
 void HTM_TR_Begin (const char *fmt,...);
 void HTM_TR_End (void);
 
-void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt);
-void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class);
+void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *ClassFmt,...);
+void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...);
 void HTM_TH_End (void);
 void HTM_TH_Empty (unsigned NumColumns);
 

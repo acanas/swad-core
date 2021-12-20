@@ -1393,16 +1393,16 @@ static void Grp_WriteHeadingGroupTypes (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,NULL                   ,"BM");
       HTM_TH_Begin (1,1,"CM");
 	 HTM_Txt (Txt_Type_of_group);
 	 HTM_BR ();
 	 HTM_TxtF ("(%s)",Txt_eg_Lectures_Practicals);
       HTM_TH_End ();
-      HTM_TH (1,1,"CM",Txt_Mandatory_enrolment);
-      HTM_TH (1,1,"CM",Txt_Multiple_enrolment);
-      HTM_TH (1,1,"CM",Txt_Opening_of_groups);
-      HTM_TH (1,1,"CM",Txt_Number_of_BR_groups);
+      HTM_TH (1,1,Txt_Mandatory_enrolment,"CM");
+      HTM_TH (1,1,Txt_Multiple_enrolment ,"CM");
+      HTM_TH (1,1,Txt_Opening_of_groups  ,"CM");
+      HTM_TH (1,1,Txt_Number_of_BR_groups,"CM");
 
    HTM_TR_End ();
   }
@@ -1603,21 +1603,21 @@ static void Grp_WriteHeadingGroups (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"CM",Txt_Type_BR_of_group);
+      HTM_TH (1,1,NULL                ,"BM");
+      HTM_TH (1,1,NULL                ,"BM");
+      HTM_TH (1,1,NULL                ,"BM");
+      HTM_TH (1,1,Txt_Type_BR_of_group,"CM");
       HTM_TH_Begin (1,1,"CM");
 	 HTM_Txt (Txt_Group_name);
 	 HTM_BR ();
 	 HTM_TxtF ("(%s)",Txt_eg_A_B);
       HTM_TH_End ();
-      HTM_TH (1,1,"CM",Txt_Room);
-      for (Role = Rol_TCH;
+      HTM_TH (1,1,Txt_Room,"CM");
+      for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
-	 HTM_TH (1,1,"CM",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
-      HTM_TH (1,1,"CM",Txt_Max_BR_students);
+	 HTM_TH (1,1,Txt_ROLES_PLURAL_BRIEF_Abc[Role],"CM");
+      HTM_TH (1,1,Txt_Max_BR_students ,"CM");
 
    HTM_TR_End ();
   }
@@ -2326,14 +2326,14 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (2);
-      HTM_TH (1,1,"LM",Txt_Group);
-      HTM_TH (1,1,"LM",Txt_Room);
-      for (Role = Rol_TCH;
+      HTM_TH (1,1,Txt_Group          ,"LM");
+      HTM_TH (1,1,Txt_Room           ,"LM");
+      for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
-	 HTM_TH (1,1,"CM",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
-      HTM_TH (1,1,"CM",Txt_Max_BR_students);
-      HTM_TH (1,1,"CM",Txt_Vacants);
+	 HTM_TH (1,1,Txt_ROLES_PLURAL_BRIEF_Abc[Role],"CM");
+      HTM_TH (1,1,Txt_Max_BR_students,"CM");
+      HTM_TH (1,1,Txt_Vacants        ,"CM");
 
    HTM_TR_End ();
   }

@@ -270,7 +270,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 
 	       if (Gam_CheckIfICanEditGames () ||
 		   Gam_CheckIfICanListGameQuestions ())
-		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+		  HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Gam_Order_t) 0;
 		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
@@ -296,7 +296,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,"RM",Txt_Matches);
+	       HTM_TH (1,1,Txt_Matches,"RM");
 
 	    HTM_TR_End ();
 
@@ -549,7 +549,8 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 if (ShowOnlyThisGame)
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	 else
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
+	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	 if (ICanEditGames)
 	    /* Icons to remove/edit this game */
@@ -578,8 +579,8 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 			  Id,Color);
 	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-			  Id,Color,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+			  Id,Color,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (Game->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -592,7 +593,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /* Game title */
       Games->GamCod = Game->GamCod;
@@ -625,7 +626,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("class=\"RT\"");
       else
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
@@ -652,7 +653,8 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Gam_WriteAuthor (Game);
       HTM_TD_End ();
 
@@ -660,7 +662,8 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       if (ShowOnlyThisGame)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Gam_DB_GetGameTxt (Game->GamCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
@@ -1710,10 +1713,10 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
 	 HTM_TH_Empty (1);
 
-	 HTM_TH (1,1,"CT",Txt_No_INDEX);
-	 HTM_TH (1,1,"CT",Txt_Code);
-	 HTM_TH (1,1,"CT",Txt_Tags);
-	 HTM_TH (1,1,"CT",Txt_Question);
+	 HTM_TH (1,1,Txt_No_INDEX,"CT");
+	 HTM_TH (1,1,Txt_Code    ,"CT");
+	 HTM_TH (1,1,Txt_Tags    ,"CT");
+	 HTM_TH (1,1,Txt_Question,"CT");
 
       HTM_TR_End ();
 

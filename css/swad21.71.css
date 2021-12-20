@@ -56,7 +56,7 @@ textarea
 .INPUT_BLUE	{}
 .INPUT_YELLOW	{}
 .INPUT_PINK	{}
-.INPUT_DARK	{background-color:#1f1f1f;color:white;}
+.INPUT_DARK	{border-color:#505050;background-color:#1f1f1f;color:white;}
 
 table
 	{
@@ -1692,9 +1692,9 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	margin:0 auto 10px auto;
 	padding:10px;
-	background-image:-webkit-linear-gradient(rgba(238,216,108,0.8) 0%,rgba(248,237,149,0.8) 15%,rgba(250,240,152,0.8) 100%);	/* Safari */
-	background-image:linear-gradient(rgba(238,216,108,0.8) 0%,rgba(248,237,149,0.8) 15%,rgba(250,240,152,0.8) 100%);	
-	box-shadow:0 8px 10px -5px rgba(125,113,0,0.8);
+	background-image:-webkit-linear-gradient(rgba(238,216,108,0.6) 0%,rgba(248,237,149,0.6) 15%,rgba(250,240,152,0.6) 100%);	/* Safari */
+	background-image:linear-gradient(rgba(238,216,108,0.6) 0%,rgba(248,237,149,0.6) 15%,rgba(250,240,152,0.6) 100%);	
+	box-shadow:0 8px 10px -5px rgba(125,113,0,0.6);
 	text-align:left;
 	overflow:hidden;
 	}
@@ -1703,9 +1703,9 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	margin:0 auto 10px auto;
 	padding:10px;
-	background-image:-webkit-linear-gradient(rgba(238,216,108,0.4) 0%,rgba(248,237,149,0.4) 15%,rgba(250,240,152,0.4) 100%);	/* Safari */
-	background-image:linear-gradient(rgba(238,216,108,0.4) 0%,rgba(248,237,149,0.4) 15%,rgba(250,240,152,0.4) 100%);	
-	box-shadow:0 8px 10px -5px rgba(125,113,0,0.4);
+	background-image:-webkit-linear-gradient(rgba(238,216,108,0.3) 0%,rgba(248,237,149,0.3) 15%,rgba(250,240,152,0.3) 100%);	/* Safari */
+	background-image:linear-gradient(rgba(238,216,108,0.3) 0%,rgba(248,237,149,0.3) 15%,rgba(250,240,152,0.3) 100%);	
+	box-shadow:0 8px 10px -5px rgba(125,113,0,0.3);
 	text-align:left;
 	overflow:hidden;
 	}
@@ -1859,7 +1859,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .ALERT_BG_BLUE		{background-color:#fff8e5;}
 .ALERT_BG_YELLOW	{background-color:#fff8e5;}
 .ALERT_BG_PINK		{background-color:#fff8e5;}
-.ALERT_BG_DARK		{background-color:#a0a0a0;}
+.ALERT_BG_DARK		{background-color:#808080;}
 
 .ALERT_CLOSE
 	{
@@ -2350,8 +2350,22 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .RB	{text-align:right;  vertical-align:bottom;}	/* Right Bottom  */
 
 /***************** Colors used in headers, backgrounds, etc. *****************/
-.COLOR0			{background-color:#F4F2EA;}
-.COLOR1			{background-color:#FBFAF7;}
+.COLOR0_WHITE	{background-color:#f4f2ea;}
+.COLOR0_GREY	{background-color:#f4f2ea;}
+.COLOR0_PURPLE	{background-color:#f4f2ea;}
+.COLOR0_BLUE	{background-color:#f4f2ea;}
+.COLOR0_YELLOW	{background-color:#f4f2ea;}
+.COLOR0_PINK	{background-color:#f4f2ea;}
+.COLOR0_DARK	{background-color:#444444;}
+
+.COLOR1_WHITE	{background-color:#fbfaf7;}
+.COLOR1_GREY	{background-color:#fbfaf7;}
+.COLOR1_PURPLE	{background-color:#fbfaf7;}
+.COLOR1_BLUE	{background-color:#fbfaf7;}
+.COLOR1_YELLOW	{background-color:#fbfaf7;}
+.COLOR1_PINK	{background-color:#fbfaf7;}
+.COLOR1_DARK	{background-color:#4c4c4c;}
+
 .LIGHT_GREEN		{background-color:#C0FF40;}
 .VERY_LIGHT_BLUE	{background-color:#EAF3F6;}
 

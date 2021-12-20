@@ -130,7 +130,7 @@ void Hld_SeeHolidays (void)
 	    HTM_TABLE_BeginWideMarginPadding (2);
 	       HTM_TR_Begin (NULL);
 
-		  for (Order = Hld_ORDER_BY_PLACE;
+		  for (Order  = Hld_ORDER_BY_PLACE;
 		       Order <= Hld_ORDER_BY_START_DATE;
 		       Order++)
 		    {
@@ -147,12 +147,10 @@ void Hld_SeeHolidays (void)
 			Frm_EndForm ();
 		     HTM_TH_End ();
 		    }
-
 		  HTM_TH_Begin (1,1,"LM");
 		     HTM_TxtF ("&nbsp;%s&nbsp;",Txt_End_date);
 		  HTM_TH_End ();
-
-		  HTM_TH (1,1,"LM",Txt_Holiday);
+		  HTM_TH (1,1,Txt_Holiday,"LM");
 
 	       HTM_TR_End ();
 
@@ -924,11 +922,11 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,"LM",Txt_Place);
-	    HTM_TH (1,1,"LM",Txt_Type);
-	    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_STR_TIME]);
-	    HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
-	    HTM_TH (1,1,"LM",Txt_Holiday);
+	    HTM_TH (1,1,Txt_Place                       ,"LM");
+	    HTM_TH (1,1,Txt_Type                        ,"LM");
+	    HTM_TH (1,1,Txt_START_END_TIME[Dat_STR_TIME],"LM");
+	    HTM_TH (1,1,Txt_START_END_TIME[Dat_END_TIME],"LM");
+	    HTM_TH (1,1,Txt_Holiday                     ,"LM");
 	 HTM_TR_End ();
 
 	 HTM_TR_Begin (NULL);
@@ -1017,13 +1015,13 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_Holiday;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"RM",Txt_Code);
-      HTM_TH (1,1,"LM",Txt_Place);
-      HTM_TH (1,1,"LM",Txt_Type);
-      HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_STR_TIME]);
-      HTM_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
-      HTM_TH (1,1,"LM",Txt_Holiday);
+      HTM_TH (1,1,NULL                            ,"BM");
+      HTM_TH (1,1,Txt_Code                        ,"RM");
+      HTM_TH (1,1,Txt_Place                       ,"LM");
+      HTM_TH (1,1,Txt_Type                        ,"LM");
+      HTM_TH (1,1,Txt_START_END_TIME[Dat_STR_TIME],"LM");
+      HTM_TH (1,1,Txt_START_END_TIME[Dat_END_TIME],"LM");
+      HTM_TH (1,1,Txt_Holiday                     ,"LM");
    HTM_TR_End ();
   }
 

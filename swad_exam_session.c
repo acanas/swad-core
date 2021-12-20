@@ -333,7 +333,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    if (Session.SesCod == SesCodToBeEdited)
 	      {
 	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"6\" class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("colspan=\"6\" class=\"CT %s\"",
+		                Gbl.ColorRows[Gbl.RowEvenOdd]);
 		     ExaSes_PutFormSession (&Session);	// Form to edit existing session
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -367,11 +368,11 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-      HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]);
-      HTM_TH (1,1,"LT",Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]);
-      HTM_TH (1,1,"LT",Txt_Session);
-      HTM_TH (1,1,"CT",Txt_Results);
+      HTM_TH (1,1,Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],"LT");
+      HTM_TH (1,1,Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]   ,"LT");
+      HTM_TH (1,1,Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]   ,"LT");
+      HTM_TH (1,1,Txt_Session                                   ,"LT");
+      HTM_TH (1,1,Txt_Results                                   ,"CT");
 
    /***** End row *****/
    HTM_TR_End ();
@@ -466,7 +467,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session)
   {
    /***** Session author (teacher) *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
    HTM_TD_End ();
   }
@@ -493,8 +494,8 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-		    Id,Color,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+		    Id,Color,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x6);
@@ -515,7 +516,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
@@ -624,8 +625,8 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
       [Rol_SYS_ADM] = ExaSes_ListOneOrMoreSessionsResultTch,
      };
 
-   HTM_TD_Begin ("class=\"%s CT COLOR%u\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s CT %s\"",
+                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);

@@ -414,10 +414,10 @@ static void Fig_GetAndShowUsersStats (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Users);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_Average_number_of_courses_to_which_a_user_belongs);
-	 HTM_TH (1,1,"RM",Txt_Average_number_of_users_belonging_to_a_course);
+	 HTM_TH (1,1,Txt_Users                                            ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_users                                  ,"RM");
+	 HTM_TH (1,1,Txt_Average_number_of_courses_to_which_a_user_belongs,"RM");
+	 HTM_TH (1,1,Txt_Average_number_of_users_belonging_to_a_course    ,"RM");
       HTM_TR_End ();
 
       /***** Figures *****/
@@ -428,7 +428,7 @@ static void Fig_GetAndShowUsersStats (void)
 
       /***** Separator *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,4,"SEPAR_ROW",NULL);
+	 HTM_TH (1,4,NULL,"SEPAR_ROW");
       HTM_TR_End ();
 
       Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
@@ -540,13 +540,13 @@ static void Fig_GetAndShowUsersRanking (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"CM",Txt_Clicks);
-	 HTM_TH (1,1,"CM",Txt_Clicks_per_day);
-	 HTM_TH (1,1,"CM",Txt_Timeline);
-	 HTM_TH (1,1,"CM",Txt_Followers);
-	 HTM_TH (1,1,"CM",Txt_Downloads);
-	 HTM_TH (1,1,"CM",Txt_Forums);
-	 HTM_TH (1,1,"CM",Txt_Messages);
+	 HTM_TH (1,1,Txt_Clicks        ,"CM");
+	 HTM_TH (1,1,Txt_Clicks_per_day,"CM");
+	 HTM_TH (1,1,Txt_Timeline      ,"CM");
+	 HTM_TH (1,1,Txt_Followers     ,"CM");
+	 HTM_TH (1,1,Txt_Downloads     ,"CM");
+	 HTM_TH (1,1,Txt_Forums        ,"CM");
+	 HTM_TH (1,1,Txt_Messages      ,"CM");
       HTM_TR_End ();
 
       /***** Rankings *****/
@@ -1223,11 +1223,11 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	    /***** Draw institutions as a list *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH (1,1,"LM",Txt_Institution);
-	       HTM_TH (1,1,"RM",TxtFigure);
+	       HTM_TH (1,1,Txt_Institution,"LM");
+	       HTM_TH (1,1,TxtFigure,"RM");
 	    HTM_TR_End ();
 
-	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
+	    for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;
 		 NumIns <= NumInss;
 		 NumIns++)
 	      {
@@ -1468,14 +1468,14 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Size;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"LM",Txt_File_zones);
-      HTM_TH (1,1,"RM",Txt_Courses);
-      HTM_TH (1,1,"RM",Txt_Groups);
-      HTM_TH (1,1,"RM",Txt_Users);
-      HTM_TH (1,1,"RM",Txt_Max_levels);
-      HTM_TH (1,1,"RM",Txt_Folders);
-      HTM_TH (1,1,"RM",Txt_Files);
-      HTM_TH (1,1,"RM",Txt_Size);
+      HTM_TH (1,1,Txt_File_zones,"LM");
+      HTM_TH (1,1,Txt_Courses   ,"RM");
+      HTM_TH (1,1,Txt_Groups    ,"RM");
+      HTM_TH (1,1,Txt_Users     ,"RM");
+      HTM_TH (1,1,Txt_Max_levels,"RM");
+      HTM_TH (1,1,Txt_Folders   ,"RM");
+      HTM_TH (1,1,Txt_Files     ,"RM");
+      HTM_TH (1,1,Txt_Size      ,"RM");
    HTM_TR_End ();
   }
 
@@ -1489,7 +1489,7 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"LM",Txt_File_zones);
+      HTM_TH (1,1,Txt_File_zones,"LM");
 
       HTM_TH_Begin (1,1,"RM");
 	 HTM_TxtF ("%s/",Txt_Folders);
@@ -1758,9 +1758,9 @@ static void Fig_GetAndShowOERsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_License);
-	 HTM_TH (1,1,"RM",Txt_Number_of_private_files);
-	 HTM_TH (1,1,"RM",Txt_Number_of_public_files);
+	 HTM_TH (1,1,Txt_License                ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_private_files,"RM");
+	 HTM_TH (1,1,Txt_Number_of_public_files ,"RM");
       HTM_TR_End ();
 
       for (License  = (Brw_License_t) 0;
@@ -1859,9 +1859,9 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_program_items);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_program_items);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_items_BR_per_course);
+	 HTM_TH (1,1,Txt_Number_of_BR_program_items                ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_program_items,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_items_BR_per_course  ,"RM");
       HTM_TR_End ();
 
       /***** Write number of assignments *****/
@@ -1916,10 +1916,10 @@ static void Fig_GetAndShowAssignmentsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_assignments);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+	 HTM_TH (1,1,Txt_Number_of_BR_assignments                ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_assignments,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_ASSIG_BR_per_course,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications              ,"RM");
       HTM_TR_End ();
 
       /***** Write number of assignments *****/
@@ -1976,9 +1976,9 @@ static void Fig_GetAndShowProjectsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_projects);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_projects);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_projects_BR_per_course);
+	 HTM_TH (1,1,Txt_Number_of_BR_projects                      ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_projects      ,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_projects_BR_per_course,"RM");
       HTM_TR_End ();
 
       /***** Write number of projects *****/
@@ -2033,15 +2033,15 @@ static void Fig_GetAndShowTestsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Type_of_BR_answers);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
-	 HTM_TH (1,1,"RM",Txt_Number_BR_of_test_BR_questions);
-	 HTM_TH (1,1,"RM",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
-	 HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
-	 HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
-	 HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question);
+	 HTM_TH (1,1,Txt_Type_of_BR_answers                                                                     ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_BR_with_test_BR_questions                                         ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions                           ,"RM");
+	 HTM_TH (1,1,Txt_Number_BR_of_test_BR_questions                                                         ,"RM");
+	 HTM_TH (1,1,Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course                                ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded                         ,"RM");
+	 HTM_TH (1,1,Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,"RM");
+	 HTM_TH (1,1,Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded              ,"RM");
+	 HTM_TH (1,1,Txt_Average_BR_score_BR_per_question                                                       ,"RM");
       HTM_TR_End ();
 
       for (AnsType  = (Qst_AnswerType_t) 0;
@@ -2177,9 +2177,9 @@ static void Fig_GetAndShowExamsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_exams);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exams);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_exams_BR_per_course);
+	 HTM_TH (1,1,Txt_Number_of_BR_exams                      ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_exams      ,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_exams_BR_per_course,"RM");
       HTM_TR_End ();
 
       /***** Write number of exams *****/
@@ -2231,9 +2231,9 @@ static void Fig_GetAndShowGamesStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_games);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
+	 HTM_TH (1,1,Txt_Number_of_BR_games                      ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_games      ,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_games_BR_per_course,"RM");
       HTM_TR_End ();
 
       /***** Write number of games *****/
@@ -2288,11 +2288,11 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Type);
-	 HTM_TH (1,1,"RM",Txt_Number_of_posts);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-	 HTM_TH (1,1,"RM",Txt_Number_of_posts_BR_per_user);
+	 HTM_TH (1,1,Txt_Type                       ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_posts            ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_users            ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users           ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_posts_BR_per_user,"RM");
       HTM_TR_End ();
 
       /***** Get total number of users *****/
@@ -2441,9 +2441,9 @@ static void Fig_GetAndShowFollowStats (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Users);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Users           ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** Get total number of users *****/
@@ -2539,14 +2539,14 @@ static void Fig_GetAndShowForumStats (void)
 	 HTM_TH_Begin (1,1,"BT");
 	    Ico_PutIcon ("comments.svg",Txt_Scope,"ICO16x16");
 	 HTM_TH_End ();
-	 HTM_TH (1,1,"LT",Txt_Forums);
-	 HTM_TH (1,1,"RT",Txt_Number_of_forums);
-	 HTM_TH (1,1,"RT",Txt_Number_of_threads);
-	 HTM_TH (1,1,"RT",Txt_Number_of_posts);
-	 HTM_TH (1,1,"RT",Txt_Number_of_BR_notifications);
-	 HTM_TH (1,1,"RT",Txt_Number_of_threads_BR_per_forum);
-	 HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_thread);
-	 HTM_TH (1,1,"RT",Txt_Number_of_posts_BR_per_forum);
+	 HTM_TH (1,1,Txt_Forums                        ,"LT");
+	 HTM_TH (1,1,Txt_Number_of_forums              ,"RT");
+	 HTM_TH (1,1,Txt_Number_of_threads             ,"RT");
+	 HTM_TH (1,1,Txt_Number_of_posts               ,"RT");
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications    ,"RT");
+	 HTM_TH (1,1,Txt_Number_of_threads_BR_per_forum,"RT");
+	 HTM_TH (1,1,Txt_Number_of_posts_BR_per_thread ,"RT");
+	 HTM_TH (1,1,Txt_Number_of_posts_BR_per_forum  ,"RT");
       HTM_TR_End ();
 
       /***** Write a row for each type of forum *****/
@@ -2845,11 +2845,11 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Event);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-	 HTM_TH (1,1,"RM",Txt_Number_of_events);
-	 HTM_TH (1,1,"RM",Txt_Number_of_emails);
+	 HTM_TH (1,1,Txt_Event           ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
+	 HTM_TH (1,1,Txt_Number_of_events,"RM");
+	 HTM_TH (1,1,Txt_Number_of_emails,"RM");
       HTM_TR_End ();
 
       /***** Get total number of users *****/
@@ -3014,11 +3014,11 @@ static void Fig_GetAndShowNoticesStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_NOTICE_Active_BR_notices);
-	 HTM_TH (1,1,"RM",Txt_NOTICE_Obsolete_BR_notices);
-	 HTM_TH (1,1,"RM",Txt_NOTICE_Deleted_BR_notices);
-	 HTM_TH (1,1,"RM",Txt_Total);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+	 HTM_TH (1,1,Txt_NOTICE_Active_BR_notices  ,"RM");
+	 HTM_TH (1,1,Txt_NOTICE_Obsolete_BR_notices,"RM");
+	 HTM_TH (1,1,Txt_NOTICE_Deleted_BR_notices ,"RM");
+	 HTM_TH (1,1,Txt_Total                     ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications,"RM");
       HTM_TR_End ();
 
       /***** Write number of notices *****/
@@ -3086,11 +3086,11 @@ static void Fig_GetAndShowMsgsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Messages);
-	 HTM_TH (1,1,"RM",Txt_MSGS_Not_deleted);
-	 HTM_TH (1,1,"RM",Txt_MSGS_Deleted);
-	 HTM_TH (1,1,"RM",Txt_Total);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+	 HTM_TH (1,1,Txt_Messages                  ,"LM");
+	 HTM_TH (1,1,Txt_MSGS_Not_deleted          ,"RM");
+	 HTM_TH (1,1,Txt_MSGS_Deleted              ,"RM");
+	 HTM_TH (1,1,Txt_Total                     ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications,"RM");
       HTM_TR_End ();
 
       /***** Write number of messages *****/
@@ -3171,10 +3171,10 @@ static void Fig_GetAndShowAgendasStats (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_events);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
-	 HTM_TH (1,1,"RM",Txt_Number_of_events_per_user);
+	 HTM_TH (1,1,Txt_Number_of_events         ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_users          ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users         ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_events_per_user,"RM");
       HTM_TR_End ();
 
       /***** Number of agenda events *****/
@@ -3251,11 +3251,11 @@ static void Fig_GetAndShowSurveysStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_surveys);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_surveys);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_surveys_BR_per_course);
-	 HTM_TH (1,1,"RM",Txt_Average_number_BR_of_questions_BR_per_survey);
-	 HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+	 HTM_TH (1,1,Txt_Number_of_BR_surveys                        ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_surveys        ,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_surveys_BR_per_course  ,"RM");
+	 HTM_TH (1,1,Txt_Average_number_BR_of_questions_BR_per_survey,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications                  ,"RM");
       HTM_TR_End ();
 
       /***** Write number of surveys *****/
@@ -3341,9 +3341,9 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 
    /***** Heading row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"LM",TxtObject);
-      HTM_TH (1,1,"RM",Txt_Number_of_users);
-      HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+      HTM_TH (1,1,TxtObject           ,"LM");
+      HTM_TH (1,1,Txt_Number_of_users ,"RM");
+      HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
    HTM_TR_End ();
 
    /***** For each privacy option... *****/
@@ -3429,9 +3429,9 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Cookies);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Cookies         ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each option... *****/
@@ -3504,9 +3504,9 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Language);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Language        ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each language... *****/
@@ -3581,9 +3581,9 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Calendar);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Calendar,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each day... *****/
@@ -3665,9 +3665,9 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Format);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Format          ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each format... *****/
@@ -3742,9 +3742,9 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Icons);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Icons           ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each icon set... *****/
@@ -3898,9 +3898,9 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Theme_SKIN);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Theme_SKIN      ,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each theme... *****/
@@ -3978,9 +3978,9 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"CM",Txt_Columns);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Columns         ,"CM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each layout of columns... *****/
@@ -4064,9 +4064,9 @@ static void Fig_GetAndShowNumUsrsPerPhotoShape (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"CM",Txt_User_photos);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_User_photos     ,"CM");
+	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
       HTM_TR_End ();
 
       /***** For each user photo shape... *****/

@@ -2036,9 +2036,9 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	    HTM_TABLE_BeginWideMarginPadding (2);
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TH (1,1,"BT",NULL);
-		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
-		  HTM_TH (1,1,"LM",Txt_MSG_Subject);
+		  HTM_TH (1,1,NULL           ,"BT");
+		  HTM_TH (1,1,NULL           ,"CONTEXT_COL");	// Column for contextual icons
+		  HTM_TH (1,1,Txt_MSG_Subject,"LM");
 
 		  for (Order  = Dat_STR_TIME;
 		       Order <= Dat_END_TIME;
@@ -2067,10 +2067,10 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		     HTM_TH_End ();
 		    }
 
-		  HTM_TH (1,1,"RM",Txt_Number_BR_msgs);
-		  HTM_TH (1,1,"RM",Txt_Unread_BR_msgs);
-		  HTM_TH (1,1,"RM",Txt_WriBRters);
-		  HTM_TH (1,1,"RM",Txt_ReaBRders);
+		  HTM_TH (1,1,Txt_Number_BR_msgs,"RM");
+		  HTM_TH (1,1,Txt_Unread_BR_msgs,"RM");
+		  HTM_TH (1,1,Txt_WriBRters     ,"RM");
+		  HTM_TH (1,1,Txt_ReaBRders     ,"RM");
 
 	       HTM_TR_End ();
 

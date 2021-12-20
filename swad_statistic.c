@@ -1202,13 +1202,13 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"RT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_User_ID);
-      HTM_TH (1,1,"LT",Txt_Name);
-      HTM_TH (1,1,"CT",Txt_Role);
-      HTM_TH (1,1,"CT",Txt_Date);
-      HTM_TH (1,1,"LT",Txt_Action);
-      HTM_TH (1,1,"LT",Txt_LOG_More_info);
+      HTM_TH (1,1,Txt_No_INDEX     ,"RT");
+      HTM_TH (1,1,Txt_User_ID      ,"CT");
+      HTM_TH (1,1,Txt_Name         ,"LT");
+      HTM_TH (1,1,Txt_Role         ,"CT");
+      HTM_TH (1,1,Txt_Date         ,"CT");
+      HTM_TH (1,1,Txt_Action       ,"LT");
+      HTM_TH (1,1,Txt_LOG_More_info,"LT");
    HTM_TR_End ();
 
    /***** Write rows back *****/
@@ -1235,23 +1235,23 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
       HTM_TR_Begin (NULL);
 
 	 /* Write the number of row */
-	 HTM_TD_Begin ("class=\"LOG RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TxtF ("%u&nbsp;",NumRow);
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student */
-	 HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    ID_WriteUsrIDs (&UsrDat,NULL);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the first name and the surnames */
-	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
 	 HTM_TD_End ();
 
 	 /* Write the user's role */
-	 HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TxtF ("%s&nbsp;",RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
 							       "?");
 	 HTM_TD_End ();
@@ -1259,7 +1259,8 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 /* Write the date-time (row[3]) */
 	 if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("id=\"%s\" class=\"LOG RT %s\"",
+	               Id,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					  true,true,false,0x7);
@@ -1269,7 +1270,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 /* Write the action */
 	 if (sscanf (row[4],"%ld",&ActCod) != 1)
 	    Err_WrongActionExit ();
-	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    if (ActCod >= 0)
 	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
 	    else
@@ -1277,7 +1278,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 HTM_TD_End ();
 
 	 /* Write the comments of the access */
-	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Sta_WriteLogComments (LogCod);
 	 HTM_TD_End ();
 
@@ -1337,12 +1338,12 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"RT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Photo);
-      HTM_TH (1,1,"LT",Txt_ID);
-      HTM_TH (1,1,"LT",Txt_Name);
-      HTM_TH (1,1,"CT",Txt_Role);
-      HTM_TH (1,2,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_No_INDEX                       ,"RT");
+      HTM_TH (1,1,Txt_Photo                          ,"CT");
+      HTM_TH (1,1,Txt_ID                             ,"LT");
+      HTM_TH (1,1,Txt_Name                           ,"LT");
+      HTM_TH (1,1,Txt_Role                           ,"CT");
+      HTM_TH (1,2,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Write rows *****/
@@ -1361,30 +1362,30 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
       HTM_TR_Begin (NULL);
 
 	 /* Write the number of row */
-	 HTM_TD_Begin ("class=\"LOG RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TxtF ("%u&nbsp;",NumHit);
 	 HTM_TD_End ();
 
 	 /* Show the photo */
-	 HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student in current course */
-	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    ID_WriteUsrIDs (&UsrDat,NULL);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the name and the surnames */
-	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
 	 HTM_TD_End ();
 
 	 /* Write user's role */
-	 HTM_TD_Begin ("class=\"LOG CT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
 	 HTM_TD_End ();
 
@@ -1401,7 +1402,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 else
 	    BarWidth = 0;
 
-	 HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    if (BarWidth)
 	      {
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,
@@ -1450,9 +1451,9 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_Date);
-      HTM_TH (1,1,"LT",Txt_Day);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Date                           ,"CT");
+      HTM_TH (1,1,Txt_Day                            ,"LT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -1640,9 +1641,9 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (3,1,"CT",Txt_Date);
-      HTM_TH (3,1,"LT",Txt_Day);
-      HTM_TH (1,24,"LT",Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType]);
+      HTM_TH (3, 1,Txt_Date                                  ,"CT");
+      HTM_TH (3, 1,Txt_Day                                   ,"LT");
+      HTM_TH (1,24,Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType],"LT");
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
@@ -2028,8 +2029,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"LT",Txt_Week);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Week                           ,"LT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per week *****/
@@ -2127,8 +2128,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"LT",Txt_Month);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Month                          ,"LT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per month *****/
@@ -2226,8 +2227,8 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"LT",Txt_Year);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Year                           ,"LT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per year *****/
@@ -2645,8 +2646,8 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"RT",Txt_Action);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Action                         ,"RT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -2698,8 +2699,8 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"RT",Txt_Plugin);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Plugin                         ,"RT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per plugin *****/
@@ -2752,8 +2753,8 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"LT",Txt_Function);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Function                       ,"LT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per function *****/
@@ -2806,8 +2807,8 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_Banner);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_Banner                         ,"CT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of clicks per banner *****/
@@ -2876,9 +2877,9 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Country);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
+      HTM_TH (1,1,Txt_Country                        ,"CT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per country *****/
@@ -2965,9 +2966,9 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Institution);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
+      HTM_TH (1,1,Txt_Institution                    ,"CT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per institution *****/
@@ -3056,9 +3057,9 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Center);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
+      HTM_TH (1,1,Txt_Center                         ,"CT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per center *****/
@@ -3147,9 +3148,9 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Degree);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
+      HTM_TH (1,1,Txt_Degree                         ,"CT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per degree *****/
@@ -3242,11 +3243,11 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Degree);
-      HTM_TH (1,1,"CT",Txt_Year_OF_A_DEGREE);
-      HTM_TH (1,1,"CT",Txt_Course);
-      HTM_TH (1,1,"LT",Txt_STAT_TYPE_COUNT_CAPS[CountType]);
+      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
+      HTM_TH (1,1,Txt_Degree                         ,"CT");
+      HTM_TH (1,1,Txt_Year_OF_A_DEGREE               ,"CT");
+      HTM_TH (1,1,Txt_Course                         ,"CT");
+      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per course *****/

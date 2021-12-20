@@ -133,8 +133,8 @@ void Deg_SeeDegWithPendingCrss (void)
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TH (1,1,"LM",Txt_Degree);
-	    HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+	    HTM_TH (1,1,Txt_Degree              ,"LM");
+	    HTM_TH (1,1,Txt_Courses_ABBREVIATION,"RM");
 
 	 HTM_TR_End ();
 
@@ -633,15 +633,15 @@ static void Deg_PutHeadDegreesForSeeing (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,NULL                    ,"BM");
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"LM",Txt_Degree);
-      HTM_TH (1,1,"LM",Txt_Type);
-      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+      HTM_TH (1,1,Txt_Degree              ,"LM");
+      HTM_TH (1,1,Txt_Type                ,"LM");
+      HTM_TH (1,1,Txt_Courses_ABBREVIATION,"RM");
       HTM_TH_Begin (1,1,"RM");
-      HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      HTM_BR ();
-      HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_BR ();
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
       HTM_TH_Empty (1);
 
@@ -665,20 +665,20 @@ static void Deg_PutHeadDegreesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,NULL                        ,"BM");
+      HTM_TH (1,1,Txt_Code                    ,"RM");
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"LM",Txt_Short_name_of_the_degree);
-      HTM_TH (1,1,"LM",Txt_Full_name_of_the_degree);
-      HTM_TH (1,1,"LM",Txt_Type);
-      HTM_TH (1,1,"LM",Txt_WWW);
-      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+      HTM_TH (1,1,Txt_Short_name_of_the_degree,"LM");
+      HTM_TH (1,1,Txt_Full_name_of_the_degree ,"LM");
+      HTM_TH (1,1,Txt_Type                    ,"LM");
+      HTM_TH (1,1,Txt_WWW                     ,"LM");
+      HTM_TH (1,1,Txt_Courses_ABBREVIATION    ,"RM");
       HTM_TH_Begin (1,1,"RM");
-      HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      HTM_BR ();
-      HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+	 HTM_BR ();
+	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
-      HTM_TH (1,1,"LM",Txt_Requester);
+      HTM_TH (1,1,Txt_Requester               ,"LM");
       HTM_TH_Empty (1);
 
    HTM_TR_End ();

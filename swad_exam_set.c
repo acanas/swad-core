@@ -813,12 +813,13 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s\"",
+	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       Qst_WriteNumQst (Set.SetInd,"BIG_INDEX");
 	    HTM_TD_End ();
 
 	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       HTM_ARTICLE_Begin (Anchor);
 		  if (ICanEditSets)
 		    {
@@ -842,14 +843,14 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /***** Current number of questions in set *****/
-	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       HTM_SPAN_Begin ("class=\"EXA_SET_NUM_QSTS\"");
 		  HTM_Unsigned (Exa_DB_GetNumQstsInSet (Set.SetCod));
 	       HTM_SPAN_End ();
 	    HTM_TD_End ();
 
 	    /***** Number of questions to appear in exam print *****/
-	    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       if (ICanEditSets)
 		 {
 		  Frm_BeginFormAnchor (ActChgNumQstExaSet,Anchor);
@@ -874,7 +875,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Questions *****/
-	    HTM_TD_Begin ("colspan=\"3\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"3\" class=\"LT %s\"",
+	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	       /* List questions */
 	       ExaSet_ListSetQuestions (Exams,Exam,&Set);
@@ -908,10 +910,10 @@ static void ExaSet_PutTableHeadingForSets (void)
 
       /***** Header cells *****/
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"RB",Txt_No_INDEX);
-      HTM_TH (1,1,"LB",Txt_Set_of_questions);
-      HTM_TH (1,1,"RB",Txt_Number_of_questions);
-      HTM_TH (1,1,"RB",Txt_Number_of_questions_to_show);
+      HTM_TH (1,1,Txt_No_INDEX                   ,"RB");
+      HTM_TH (1,1,Txt_Set_of_questions           ,"LB");
+      HTM_TH (1,1,Txt_Number_of_questions        ,"RB");
+      HTM_TH (1,1,Txt_Number_of_questions_to_show,"RB");
 
    /***** End row *****/
    HTM_TR_End ();
@@ -971,8 +973,8 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 
 	 HTM_TH_Empty (1);
 
-	 HTM_TH (1,1,"CT",Txt_No_INDEX);
-	 HTM_TH (1,1,"CT",Txt_Question);
+	 HTM_TH (1,1,Txt_No_INDEX,"CT");
+	 HTM_TH (1,1,Txt_Question,"CT");
 
       HTM_TR_End ();
 
@@ -1207,13 +1209,13 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
      };
 
    /***** Number of question and answer type (row[1]) *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       Qst_WriteNumQst (QstInd,ClassNumQst[Question->Validity]);
       Qst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
-   HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_ARTICLE_Begin (Anchor);
 
 	 /* Write stem */

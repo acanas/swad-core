@@ -176,7 +176,7 @@ struct Globals
    struct Dat_DateTime Now;
    struct Dat_Date Yesterday;
    unsigned RowEvenOdd;	// To alternate row colors in listings
-   char *ColorRows[2];
+   const char *ColorRows[2];
    const char *XMLPtr;
    struct
      {

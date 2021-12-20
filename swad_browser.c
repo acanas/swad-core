@@ -4577,7 +4577,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Begin column */
-   HTM_TD_Begin ("class=\"NO_BR LM COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"NO_BR LM %s\" style=\"width:99%%;\"",
+                 Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       HTM_TABLE_Begin (NULL);
 	 HTM_TR_Begin (NULL);
@@ -5368,10 +5369,10 @@ static void Brw_WriteDatesAssignment (void)
    char *Id;
 
    /***** Begin table cell *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"%s RM COLOR%u\"",
+   HTM_TD_Begin ("colspan=\"2\" class=\"%s RM %s\"",
 		 Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
 					    "ASG_LST_DATE_RED",
-		 Gbl.RowEvenOdd);
+		 Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Gbl.FileBrowser.Asg.AsgCod > 0)
 	{
@@ -5422,14 +5423,14 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       Fil_WriteFileSizeBrief ((double) FileMetadata->Size,FileSizeStr);
    else
       FileSizeStr[0] = '\0';
-   HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-                 Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s RM %s\"",
+                 Gbl.FileBrowser.TxtStyle,Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_TxtF ("&nbsp;%s",FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
-   HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
-                 Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s RM %s\"",
+                 Gbl.FileBrowser.TxtStyle,Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_NBSP ();
       if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
 	  Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
@@ -9827,13 +9828,13 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,"BM",NULL);
-	    HTM_TH (1,1,"LM",Txt_Institution);
-	    HTM_TH (1,1,"LM",Txt_Center);
-	    HTM_TH (1,1,"LM",Txt_Degree);
-	    HTM_TH (1,1,"LM",Txt_Course);
-	    HTM_TH (1,1,"LM",Txt_File_zone);
-	    HTM_TH (1,1,"LM",Txt_Document);
+	    HTM_TH (1,1,NULL           ,"BM");
+	    HTM_TH (1,1,Txt_Institution,"LM");
+	    HTM_TH (1,1,Txt_Center     ,"LM");
+	    HTM_TH (1,1,Txt_Degree     ,"LM");
+	    HTM_TH (1,1,Txt_Course     ,"LM");
+	    HTM_TH (1,1,Txt_File_zone  ,"LM");
+	    HTM_TH (1,1,Txt_Document   ,"LM");
 	 HTM_TR_End ();
 
 	 /***** List documents found *****/

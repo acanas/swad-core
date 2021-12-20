@@ -775,11 +775,11 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Centers;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"RM",Txt_Code);
-      HTM_TH (1,1,"LM",Txt_Short_name);
-      HTM_TH (1,1,"LM",Txt_Full_name);
-      HTM_TH (1,1,"RM",Txt_Centers);
+      HTM_TH (1,1,NULL          ,"BM");
+      HTM_TH (1,1,Txt_Code      ,"RM");
+      HTM_TH (1,1,Txt_Short_name,"LM");
+      HTM_TH (1,1,Txt_Full_name ,"LM");
+      HTM_TH (1,1,Txt_Centers   ,"RM");
    HTM_TR_End ();
   }
 

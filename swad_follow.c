@@ -688,7 +688,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    /***** Show user's photo *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"CON_PHOTO %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (Visible)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
@@ -696,7 +696,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       HTM_TD_End ();
 
       /***** User's name *****/
-      HTM_TD_Begin ("class=\"CON_NAME_FOLLOW COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"CON_NAME_FOLLOW %s\"",
+                    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (Visible)
 	   {
 	    /* Put form to go to public profile */
@@ -713,22 +714,23 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       HTM_TD_End ();
 
       /***** Icon to follow *****/
-      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
-      if (!Gbl.Usrs.Me.Logged ||	// Not logged
-	  Usr_ItsMe (UsrDat->UsrCod))	// It's me
-	 /* Inactive icon to follow/unfollow */
-	 Fol_PutInactiveIconToFollowUnfollow ();
-      else				// It's not me
-	{
-	 /* Put form to follow / unfollow */
-	 if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                  UsrDat->UsrCod))	// I follow user
-	    /* Form to unfollow */
-	    Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
-	 else if (Visible)	// I do not follow this user and I can follow
-	    /* Form to follow */
-	    Fol_PutIconToFollow (UsrDat->EnUsrCod);
-	}
+      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM %s\"",
+                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 if (!Gbl.Usrs.Me.Logged ||	// Not logged
+	     Usr_ItsMe (UsrDat->UsrCod))	// It's me
+	    /* Inactive icon to follow/unfollow */
+	    Fol_PutInactiveIconToFollowUnfollow ();
+	 else				// It's not me
+	   {
+	    /* Put form to follow / unfollow */
+	    if (Fol_DB_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					     UsrDat->UsrCod))	// I follow user
+	       /* Form to unfollow */
+	       Fol_PutIconToUnfollow (UsrDat->EnUsrCod);
+	    else if (Visible)	// I do not follow this user and I can follow
+	       /* Form to follow */
+	       Fol_PutIconToFollow (UsrDat->EnUsrCod);
+	   }
       HTM_TD_End ();
 
    HTM_TR_End ();

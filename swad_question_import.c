@@ -837,15 +837,12 @@ static void QstImp_WriteHeadingListImportedQst (void)
 
    /***** Write the heading *****/
    HTM_TR_Begin (NULL);
-
       HTM_TH_Empty (1);
-
-      HTM_TH (1,1,"CT",Txt_No_INDEX);
-      HTM_TH (1,1,"CT",Txt_Tags);
-      HTM_TH (1,1,"CT",Txt_Type);
-      HTM_TH (1,1,"CT",Txt_Shuffle);
-      HTM_TH (1,1,"LT",Txt_Question);
-
+      HTM_TH (1,1,Txt_No_INDEX,"CT");
+      HTM_TH (1,1,Txt_Tags    ,"CT");
+      HTM_TH (1,1,Txt_Type    ,"CT");
+      HTM_TH (1,1,Txt_Shuffle ,"CT");
+      HTM_TH (1,1,Txt_Question,"LT");
    HTM_TR_End ();
   }
 
@@ -895,13 +892,13 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write number of question *****/
-      HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (!QuestionExists)
 	    HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
       HTM_TD_End ();
 
       /***** Write the question tags *****/
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	 if (Question->Tags.Num)
 	   {
@@ -935,12 +932,12 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write the question type *****/
-      HTM_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
       HTM_TD_End ();
 
       /***** Write if shuffle is enabled *****/
-      HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 	     Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	    /* Put an icon that indicates whether shuffle is enabled or not */
@@ -951,7 +948,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write the stem and the answers *****/
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Qst_WriteQstStem (Stem,ClassStem,
 			   true);	// Visible
 	 Qst_WriteQstFeedback (Feedback,"TEST_TXT_LIGHT");

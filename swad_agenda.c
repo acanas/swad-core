@@ -658,8 +658,8 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	 HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,"LM",Txt_Event);
-      HTM_TH (1,1,"LM",Txt_Location);
+      HTM_TH (1,1,Txt_Event   ,"LM");
+      HTM_TH (1,1,Txt_Location,"LM");
 
    HTM_TR_End ();
   }
@@ -814,11 +814,11 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	{
 	 if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB %s\"",
 		       Id,
 		       AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
 					 Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
-		       Gbl.RowEvenOdd);
+		       Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,true,0x6);
@@ -827,17 +827,17 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	}
 
       /* Event */
-      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+      HTM_TD_Begin ("class=\"%s LT %s\"",
 		    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 				      "ASG_TITLE",
-		    Gbl.RowEvenOdd);
+		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_ARTICLE_Begin (Anchor);
 	    HTM_Txt (AgdEvent.Event);
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Location */
-      HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_DIV_Begin ("class=\"%s\"",AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 							 "ASG_TITLE");
 	    HTM_Txt (AgdEvent.Location);
@@ -849,7 +849,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    /***** Write second row of data of this event *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 switch (AgendaType)
 	   {
 	    case Agd_MY_AGENDA_TODAY:
@@ -863,9 +863,10 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_End ();
 
       /* Text of the event */
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-	 HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
-							     The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_DIV_Begin ("class=\"PAR %s\"",
+	                AgdEvent.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
+					  The_ClassDat[Gbl.Prefs.Theme]);
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML

@@ -243,7 +243,7 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 	 HTM_TABLE_BeginWideMarginPadding (5);
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+	       HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = Dat_STR_TIME;
 		    Order <= Dat_END_TIME;
@@ -270,8 +270,8 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,"LM",Txt_Survey);
-	       HTM_TH (1,1,"CM",Txt_Status);
+	       HTM_TH (1,1,Txt_Survey,"LM");
+	       HTM_TH (1,1,Txt_Status,"CM");
 
 	    HTM_TR_End ();
 
@@ -470,7 +470,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Svy.Status.ICanEdit)
 	 Svy_PutFormsToRemEditOneSvy (Surveys,&Svy,Anchor);
       HTM_TD_End ();
@@ -487,13 +488,13 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"));
       else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
 		       Id,
 		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							       "DATE_RED") :
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"),
-		       Gbl.RowEvenOdd);
+		       Gbl.ColorRows[Gbl.RowEvenOdd]);
       Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Dat_STR_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
@@ -511,13 +512,13 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"));
       else
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
 		       Id,
 		       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							       "DATE_RED") :
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"),
-		       Gbl.RowEvenOdd);
+		       Gbl.ColorRows[Gbl.RowEvenOdd]);
       Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,false,true,0x7);
@@ -528,7 +529,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
 	    Svy_PutParamSvyCod (SvyCod);
@@ -562,7 +563,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Svy_WriteStatus (&Svy);
 
       if (!ShowOnlyThisSvyComplete)
@@ -611,7 +613,8 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Svy_WriteAuthor (&Svy);
       HTM_TD_End ();
 
@@ -619,7 +622,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /* Scope of the survey */
       HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
@@ -2786,14 +2789,13 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
       /***** Write the heading *****/
       HTM_TABLE_BeginWideMarginPadding (5);
-	 HTM_TR_Begin (NULL);
 
+	 HTM_TR_Begin (NULL);
 	    if (Svy->Status.ICanEdit)
 	       HTM_TH_Empty (1);
-	    HTM_TH (1,1,"CT",Txt_No_INDEX);
-	    HTM_TH (1,1,"CT",Txt_Type);
-	    HTM_TH (1,1,"LT",Txt_Question);
-
+	    HTM_TH (1,1,Txt_No_INDEX,"CT");
+	    HTM_TH (1,1,Txt_Type    ,"CT");
+	    HTM_TH (1,1,Txt_Question,"LT");
 	 HTM_TR_End ();
 
 	 /***** Write questions one by one *****/
@@ -2832,18 +2834,21 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 		 }
 
 	       /* Write index of question inside survey */
-	       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"DAT_SMALL CT %s\"",
+	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_Unsigned (SvyQst.QstInd + 1);
 	       HTM_TD_End ();
 
 	       /* Write the question type (row[2]) */
-	       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"DAT_SMALL CT %s\"",
+	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
 	       HTM_TD_End ();
 
 	       /* Write the stem and the answers of this question */
-	       HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s LT %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],
+	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  Svy_WriteQstStem (Stem);
 		  Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
 	       HTM_TD_End ();

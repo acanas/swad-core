@@ -406,9 +406,9 @@ static void Rec_WriteHeadingRecordFields (void)
 
    HTM_TR_Begin (NULL);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"CM",Txt_Field_BR_name);
-      HTM_TH (1,1,"CM",Txt_Number_of_BR_lines);
-      HTM_TH (1,1,"CM",Txt_Visible_by_BR_the_student);
+      HTM_TH (1,1,Txt_Field_BR_name            ,"CM");
+      HTM_TH (1,1,Txt_Number_of_BR_lines       ,"CM");
+      HTM_TH (1,1,Txt_Visible_by_BR_the_student,"CM");
    HTM_TR_End ();
   }
 
@@ -1706,10 +1706,10 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    /* Name of the field */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"REC_C1_BOT %s RT COLOR%u\"",
+	       HTM_TD_Begin ("class=\"REC_C1_BOT %s RT %s\"",
 			     ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
 						 "REC_DAT_SMALL",
-			     Gbl.RowEvenOdd);
+			     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
@@ -1734,8 +1734,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
 	       /* Write form, text, or nothing depending on
 		  the user's role and the visibility of the field */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT %s COLOR%u\"",
-	                     The_ClassDatStrong[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT %s %s\"",
+	                     The_ClassDatStrong[Gbl.Prefs.Theme],
+	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  if (ICanEditThisField)	// Show with form
 		    {
 		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""

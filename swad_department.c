@@ -819,10 +819,10 @@ static void Dpt_PutFormToCreateDepartment (void)
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TH (1,1,"LM",Txt_Institution);
-	    HTM_TH (1,1,"LM",Txt_Short_name);
-	    HTM_TH (1,1,"LM",Txt_Full_name);
-	    HTM_TH (1,1,"LM",Txt_WWW);
+	    HTM_TH (1,1,Txt_Institution,"LM");
+	    HTM_TH (1,1,Txt_Short_name ,"LM");
+	    HTM_TH (1,1,Txt_Full_name  ,"LM");
+	    HTM_TH (1,1,Txt_WWW        ,"LM");
 
 	 HTM_TR_End ();
 
@@ -896,12 +896,12 @@ static void Dpt_PutHeadDepartments (void)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"RM",Txt_Code);
-      HTM_TH (1,1,"LM",Txt_Institution);
-      HTM_TH (1,1,"LM",Txt_Short_name);
-      HTM_TH (1,1,"LM",Txt_Full_name);
-      HTM_TH (1,1,"LM",Txt_WWW);
-      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH (1,1,Txt_Code                           ,"RM");
+      HTM_TH (1,1,Txt_Institution                    ,"LM");
+      HTM_TH (1,1,Txt_Short_name                     ,"LM");
+      HTM_TH (1,1,Txt_Full_name                      ,"LM");
+      HTM_TH (1,1,Txt_WWW                            ,"LM");
+      HTM_TH (1,1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],"RM");
 
    HTM_TR_End ();
   }

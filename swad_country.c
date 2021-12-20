@@ -130,8 +130,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,"LM",Txt_Country);
-	    HTM_TH (1,1,"RM",Txt_Institutions_ABBREVIATION);
+	    HTM_TH (1,1,Txt_Country                  ,"LM");
+	    HTM_TH (1,1,Txt_Institutions_ABBREVIATION,"RM");
 	 HTM_TR_End ();
 
 	 /***** List the countries *****/
@@ -382,10 +382,10 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	 HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,"RM",Txt_Institutions_ABBREVIATION);
-      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
-      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+      HTM_TH (1,1,Txt_Institutions_ABBREVIATION,"RM");
+      HTM_TH (1,1,Txt_Centers_ABBREVIATION     ,"RM");
+      HTM_TH (1,1,Txt_Degrees_ABBREVIATION     ,"RM");
+      HTM_TH (1,1,Txt_Courses_ABBREVIATION     ,"RM");
       HTM_TH_Begin (1,1,"RM");
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
@@ -1554,14 +1554,14 @@ static void Cty_PutHeadCountriesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"BM",NULL);
-      HTM_TH (1,1,"RM",Txt_Numeric_BR_code_BR_ISO_3166_1);
-      HTM_TH (1,1,"RM",Txt_Alphabetic_BR_code_BR_ISO_3166_1);
+      HTM_TH (1,1,NULL                                ,"BM");
+      HTM_TH (1,1,Txt_Numeric_BR_code_BR_ISO_3166_1   ,"RM");
+      HTM_TH (1,1,Txt_Alphabetic_BR_code_BR_ISO_3166_1,"RM");
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"LM",Txt_Name);
-      HTM_TH (1,1,"LM",Txt_WWW);
-      HTM_TH (1,1,"RM",Txt_Users);
-      HTM_TH (1,1,"RM",Txt_Institutions_ABBREVIATION);
+      HTM_TH (1,1,Txt_Name                            ,"LM");
+      HTM_TH (1,1,Txt_WWW                             ,"LM");
+      HTM_TH (1,1,Txt_Users                           ,"RM");
+      HTM_TH (1,1,Txt_Institutions_ABBREVIATION       ,"RM");
 
    HTM_TR_End ();
   }

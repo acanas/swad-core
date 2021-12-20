@@ -143,8 +143,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,"LM",Txt_Institution);
-	    HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
+	    HTM_TH (1,1,Txt_Institution         ,"LM");
+	    HTM_TH (1,1,Txt_Centers_ABBREVIATION,"RM");
 	 HTM_TR_End ();
 
 	 /***** List the institutions *****/
@@ -491,10 +491,10 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	      }
 	 HTM_TH_End ();
 	}
-      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
-      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
-      HTM_TH (1,1,"RM",Txt_Departments_ABBREVIATION);
+      HTM_TH (1,1,Txt_Centers_ABBREVIATION    ,"RM");
+      HTM_TH (1,1,Txt_Degrees_ABBREVIATION    ,"RM");
+      HTM_TH (1,1,Txt_Courses_ABBREVIATION    ,"RM");
+      HTM_TH (1,1,Txt_Departments_ABBREVIATION,"RM");
       HTM_TH_Begin (1,1,"RM");
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
@@ -1554,19 +1554,19 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"RM",Txt_Code);
+      HTM_TH (1,1,Txt_Code                         ,"RM");
       HTM_TH_Empty (1);
-      HTM_TH (1,1,"LM",Txt_Short_name_of_the_institution);
-      HTM_TH (1,1,"LM",Txt_Full_name_of_the_institution);
-      HTM_TH (1,1,"LM",Txt_WWW);
-      HTM_TH (1,1,"RM",Txt_Users);
-      HTM_TH (1,1,"RM",Txt_Centers_ABBREVIATION);
+      HTM_TH (1,1,Txt_Short_name_of_the_institution,"LM");
+      HTM_TH (1,1,Txt_Full_name_of_the_institution ,"LM");
+      HTM_TH (1,1,Txt_WWW                          ,"LM");
+      HTM_TH (1,1,Txt_Users                        ,"RM");
+      HTM_TH (1,1,Txt_Centers_ABBREVIATION         ,"RM");
       HTM_TH_Begin (1,1,"RM");
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
-      HTM_TH (1,1,"LM",Txt_Requester);
+      HTM_TH (1,1,Txt_Requester                    ,"LM");
       HTM_TH_Empty (1);
 
    HTM_TR_End ();

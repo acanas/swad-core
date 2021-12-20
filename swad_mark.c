@@ -98,9 +98,9 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
-      HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+      HTM_TD_Begin ("class=\"%s RT %s\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
-		    Gbl.RowEvenOdd);
+		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
 						  ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
@@ -109,16 +109,16 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Header);
 	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
-			       Gbl.RowEvenOdd);
+			       "size=\"1\" class=\"LST_EDIT_ROWS %s\"",
+			       Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_LABEL_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
 
       /***** Write the number of rows of footer *****/
-      HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
+      HTM_TD_Begin ("class=\"%s RT %s\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
-		    Gbl.RowEvenOdd);
+		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Frm_BeginForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 						  ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
@@ -127,8 +127,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),"%u",Marks.Footer);
 	       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],Cns_MAX_DECIMAL_DIGITS_UINT,StrHeadOrFoot,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
-			       Gbl.RowEvenOdd);
+			       "size=\"1\" class=\"LST_EDIT_ROWS %s\"",
+			       Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_LABEL_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();

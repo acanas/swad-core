@@ -351,9 +351,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LM",Txt_Web_social_network);
-	 HTM_TH (1,1,"RM",Txt_Number_of_users);
-	 HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+	 HTM_TH (1,1,Txt_Web_social_network,"LM");
+	 HTM_TH (1,1,Txt_Number_of_users   ,"RM");
+	 HTM_TH (1,1,Txt_PERCENT_of_users  ,"RM");
       HTM_TR_End ();
 
       /***** For each web / social network... *****/

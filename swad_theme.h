@@ -54,4 +54,6 @@ void The_ChangeTheme (void);
 The_Theme_t The_GetParamTheme (void);
 The_Theme_t The_GetThemeFromStr (const char *Str);
 
+void The_SetColorRows (void);
+
 #endif

@@ -223,7 +223,7 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+      HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
       for (Order  = Dat_STR_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
@@ -263,8 +263,8 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	 /* End head cell */
 	 HTM_TH_End ();
 	}
-      HTM_TH (1,1,"LM",Txt_Assignment);
-      HTM_TH (1,1,"LM",Txt_Folder);
+      HTM_TH (1,1,Txt_Assignment,"LM");
+      HTM_TH (1,1,Txt_Folder    ,"LM");
 
    HTM_TR_End ();
   }
@@ -417,7 +417,8 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
 	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Asg_PutFormsToRemEditOneAsg (Assignments,&Asg,Anchor);
 	}
       HTM_TD_End ();
@@ -439,13 +440,13 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 				       (Asg.Open ? "DATE_GREEN" :
 						   "DATE_RED"));
 	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LB %s\"",
 			  Id,
 			  Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 						   "DATE_RED_LIGHT") :
 				       (Asg.Open ? "DATE_GREEN" :
 						   "DATE_RED"),
-			  Gbl.RowEvenOdd);
+			  Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -459,10 +460,10 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				    "ASG_TITLE");
       else
-	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
 		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				    "ASG_TITLE",
-		       Gbl.RowEvenOdd);
+		       Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_ARTICLE_Begin (Anchor);
       HTM_Txt (Asg.Title);
       HTM_ARTICLE_End ();
@@ -473,8 +474,9 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 HTM_TD_Begin ("class=\"%s LT\"",
 	               The_ClassDat[Gbl.Prefs.Theme]);
       else
-	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
-	               The_ClassDat[Gbl.Prefs.Theme],Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	               The_ClassDat[Gbl.Prefs.Theme],
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Asg.SendWork == Asg_SEND_WORK)
 	 Asg_WriteAssignmentFolder (&Asg,PrintView);
       HTM_TD_End ();
@@ -488,7 +490,8 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       if (PrintView)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Asg_WriteAsgAuthor (&Asg);
       HTM_TD_End ();
 
@@ -500,7 +503,8 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       if (PrintView)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Gbl.Crs.Grps.NumGrps)
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 

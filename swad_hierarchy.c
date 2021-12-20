@@ -666,15 +666,15 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
       HTM_TR_Begin (NULL);
 
 	 /***** Indent *****/
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
 					     "submid20x20.gif",
 			 "","ICO25x25");
 	 HTM_TD_End ();
 
 	 /***** Write institution, center, degree *****/
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
-		       ColSpan - 1,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT %s\"",
+		       ColSpan - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	    /* Get next institution, center, degree */
 	    row = mysql_fetch_row (mysql_res);

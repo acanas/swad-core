@@ -186,14 +186,14 @@ void Log_GetAndShowLastClicks (void)
 
       /* Heading row */
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,"LC_CLK",Txt_Click);		// Click
-	 HTM_TH (1,1,"LC_TIM",Txt_ELAPSED_TIME);	// Elapsed time
-	 HTM_TH (1,1,"LC_ROL",Txt_Role);		// Role
-	 HTM_TH (1,1,"LC_CTY",Txt_Country);		// Country
-	 HTM_TH (1,1,"LC_INS",Txt_Institution);		// Institution
-	 HTM_TH (1,1,"LC_CTR",Txt_Center);		// Center
-	 HTM_TH (1,1,"LC_DEG",Txt_Degree);		// Degree
-	 HTM_TH (1,1,"LC_ACT",Txt_Action);		// Action
+	 HTM_TH (1,1,Txt_Click       ,"LC_CLK");	// Click
+	 HTM_TH (1,1,Txt_ELAPSED_TIME,"LC_TIM");	// Elapsed time
+	 HTM_TH (1,1,Txt_Role        ,"LC_ROL");	// Role
+	 HTM_TH (1,1,Txt_Country     ,"LC_CTY");	// Country
+	 HTM_TH (1,1,Txt_Institution ,"LC_INS");	// Institution
+	 HTM_TH (1,1,Txt_Center      ,"LC_CTR");	// Center
+	 HTM_TH (1,1,Txt_Degree      ,"LC_DEG");	// Degree
+	 HTM_TH (1,1,Txt_Action      ,"LC_ACT");	// Action
       HTM_TR_End ();
 
       for (NumClick = 0;

@@ -538,8 +538,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    /***** Title *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Begin (1,ColSpan,Str_BuildString ("LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+      HTM_TH_Begin (1,ColSpan,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
 	 HTM_LABEL_Begin ("for=\"OtherRecipients\"");
 	    HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
 					       Txt_Recipients);

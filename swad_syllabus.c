@@ -623,7 +623,8 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	{
 	 if (NewItem)
 	   {
-	    HTM_TD_Begin ("colspan=\"5\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"5\" class=\"%s\"",
+	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TD_End ();
 	   }
 	 else
@@ -722,13 +723,14 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	 /***** Indent depending on the level *****/
 	 if (Level > 1)
 	   {
-	    HTM_TD_Begin ("colspan=\"%d\" class=\"COLOR%u\"",Level - 1,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("colspan=\"%d\" class=\"%s\"",
+	                  Level - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_TD_End ();
 	   }
 
 	 /***** Code of the item *****/
-	 HTM_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
-		       StyleSyllabus[Level],Gbl.RowEvenOdd,
+	 HTM_TD_Begin ("class=\"%s RT %s\" style=\"width:%dpx;\"",
+		       StyleSyllabus[Level],Gbl.ColorRows[Gbl.RowEvenOdd],
 		       Level * Syl_WIDTH_NUM_SYLLABUS);
 	    if (Level == 1)
 	       HTM_NBSP ();
@@ -736,10 +738,10 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	 HTM_TD_End ();
 
 	 /***** Text of the item *****/
-	 HTM_TD_Begin ("colspan=\"%d\" class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("colspan=\"%d\" class=\"%s LT %s\"",
 		       Syl_LstItemsSyllabus.NumLevels - Level + 1,
 		       StyleSyllabus[Level],
-		       Gbl.RowEvenOdd);
+		       Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_Txt (Text);
 	 HTM_TD_End ();
 	}
@@ -831,21 +833,23 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
    /***** Indent depending on the level *****/
    if (Level > 1)
      {
-      HTM_TD_Begin ("colspan=\"%d\" class=\"COLOR%u\"",Level - 1,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"%d\" class=\"%s\"",
+                    Level - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_TD_End ();
      }
 
    /***** Write the code of the item *****/
    if (NewItem)	// If the item is new (not stored in the file) ==> it has not a number
      {
-      HTM_TD_Begin ("class=\"COLOR%u\" style=\"width:%dpx;\"",
-	            Gbl.RowEvenOdd,Level * Syl_WIDTH_NUM_SYLLABUS);
+      HTM_TD_Begin ("class=\"%s\" style=\"width:%dpx;\"",
+	            Gbl.ColorRows[Gbl.RowEvenOdd],
+	            Level * Syl_WIDTH_NUM_SYLLABUS);
       HTM_TD_End ();
      }
    else
      {
-      HTM_TD_Begin ("class=\"%s LM COLOR%u\" style=\"width:%dpx;\"",
-		    StyleSyllabus[Level],Gbl.RowEvenOdd,
+      HTM_TD_Begin ("class=\"%s LM %s\" style=\"width:%dpx;\"",
+		    StyleSyllabus[Level],Gbl.ColorRows[Gbl.RowEvenOdd],
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
 	 if (Level == 1)
 	    HTM_NBSP ();
@@ -855,8 +859,9 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
      }
 
    /***** Text of the item *****/
-   HTM_TD_Begin ("colspan=\"%d\" class=\"LM COLOR%u\"",
-		 Syl_LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"%d\" class=\"LM %s\"",
+		 Syl_LstItemsSyllabus.NumLevels - Level + 1,
+		 Gbl.ColorRows[Gbl.RowEvenOdd]);
       Frm_BeginForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
 								    ActInsIteSylPra) :
 			       (Gbl.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :

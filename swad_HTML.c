@@ -77,9 +77,6 @@ static void HTM_TBODY_BeginWithoutAttr (void);
 
 static void HTM_TR_BeginWithoutAttr (void);
 
-static void HTM_TH_BeginWithoutAttr (void);
-static void HTM_TH_BeginAttr (const char *fmt,...);
-
 static void HTM_TD_BeginWithoutAttr (void);
 
 static void HTM_DIV_BeginWithoutAttr (void);
@@ -318,87 +315,123 @@ void HTM_TR_End (void)
 /***************************** Table heading cells ***************************/
 /*****************************************************************************/
 
-void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt)
-  {
-   HTM_TH_Begin (RowSpan,ColSpan,Class);
-   if (Txt)
-      if (Txt[0])
-         HTM_Txt (Txt);
-   HTM_TH_End ();
-  }
-
-void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
-  {
-   if (RowSpan > 1 && ColSpan > 1)
-     {
-      if (Class)
-	 HTM_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\" class=\"%s\"",
-		           RowSpan,ColSpan,Class);
-      else
-	 HTM_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\"",
-		           RowSpan,ColSpan);
-     }
-   else if (RowSpan > 1)
-     {
-      if (Class)
-	 HTM_TH_BeginAttr ("rowspan=\"%u\" class=\"%s\"",
-		           RowSpan,Class);
-      else
-	 HTM_TH_BeginAttr ("rowspan=\"%u\"",
-		           RowSpan);
-     }
-   else if (ColSpan > 1)
-     {
-      if (Class)
-	 HTM_TH_BeginAttr ("colspan=\"%u\" class=\"%s\"",
-		           ColSpan,Class);
-      else
-	 HTM_TH_BeginAttr ("colspan=\"%u\"",
-		           ColSpan);
-     }
-   else
-     {
-      if (Class)
-         HTM_TH_BeginAttr ("class=\"%s\"",
-		           Class);
-      else
-	 HTM_TH_BeginWithoutAttr ();
-     }
-  }
-
-static void HTM_TH_BeginAttr (const char *fmt,...)
+void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *ClassFmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
-   char *Attr;
+   char *Attr = NULL;
 
-   if (fmt)
-     {
-      if (fmt[0])
+   if (ClassFmt)
+      if (ClassFmt[0])
 	{
-	 va_start (ap,fmt);
-	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_start (ap,ClassFmt);
+	 NumBytesPrinted = vasprintf (&Attr,ClassFmt,ap);
 	 va_end (ap);
 	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
 	    Err_NotEnoughMemoryExit ();
-
-	 /***** Print HTML *****/
-	 HTM_TxtF ("<th %s>",Attr);
-
-	 free (Attr);
 	}
+
+   if (RowSpan > 1 && ColSpan > 1)
+     {
+      if (Attr)
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"%s\">",
+		   RowSpan,ColSpan,Attr);
       else
-         HTM_TH_BeginWithoutAttr ();
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\">",
+		   RowSpan,ColSpan);
+     }
+   else if (RowSpan > 1)
+     {
+      if (Attr)
+	 HTM_TxtF ("<th rowspan=\"%u\" class=\"%s\">",
+		   RowSpan,Attr);
+      else
+	 HTM_TxtF ("<th rowspan=\"%u\">",
+		   RowSpan);
+     }
+   else if (ColSpan > 1)
+     {
+      if (Attr)
+	 HTM_TxtF ("<th colspan=\"%u\" class=\"%s\">",
+		   ColSpan,Attr);
+      else
+	 HTM_TxtF ("<th colspan=\"%u\">",
+		   ColSpan);
      }
    else
-      HTM_TH_BeginWithoutAttr ();
+     {
+      if (Attr)
+         HTM_TxtF ("<th class=\"%s\">",
+		   Attr);
+      else
+         HTM_Txt ("<th>");
+     }
 
-   HTM_TH_NestingLevel++;
+   if (ClassFmt)
+      if (ClassFmt[0])
+	 free (Attr);
+
+   HTM_Txt (Txt);
+   HTM_Txt ("</th>");
   }
 
-static void HTM_TH_BeginWithoutAttr (void)
+void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...)
   {
-   HTM_Txt ("<th>");
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr = NULL;
+
+   if (ClassFmt)
+      if (ClassFmt[0])
+	{
+	 va_start (ap,ClassFmt);
+	 NumBytesPrinted = vasprintf (&Attr,ClassFmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+	}
+
+   if (RowSpan > 1 && ColSpan > 1)
+     {
+      if (Attr)
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"%s\">",
+		   RowSpan,ColSpan,Attr);
+      else
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\">",
+		   RowSpan,ColSpan);
+     }
+   else if (RowSpan > 1)
+     {
+      if (Attr)
+	 HTM_TxtF ("<th rowspan=\"%u\" class=\"%s\">",
+		   RowSpan,Attr);
+      else
+	 HTM_TxtF ("<th rowspan=\"%u\">",
+		   RowSpan);
+     }
+   else if (ColSpan > 1)
+     {
+      if (Attr)
+	 HTM_TxtF ("<th colspan=\"%u\" class=\"%s\">",
+		   ColSpan,Attr);
+      else
+	 HTM_TxtF ("<th colspan=\"%u\">",
+		   ColSpan);
+     }
+   else
+     {
+      if (Attr)
+         HTM_TxtF ("<th class=\"%s\">",
+		   Attr);
+      else
+         HTM_Txt ("<th>");
+     }
+
+   if (ClassFmt)
+      if (ClassFmt[0])
+	 free (Attr);
+
+   HTM_TH_NestingLevel++;
   }
 
 void HTM_TH_End (void)
@@ -418,10 +451,7 @@ void HTM_TH_Empty (unsigned NumColumns)
    for (NumCol = 0;
 	NumCol < NumColumns;
 	NumCol++)
-     {
-      HTM_TH_BeginAttr (NULL);
-      HTM_TH_End ();
-     }
+      HTM_Txt ("<th></th>");
   }
 
 /*****************************************************************************/
@@ -494,7 +524,7 @@ void HTM_TD_ColouredEmpty (unsigned NumColumns)
 	NumCol < NumColumns;
 	NumCol++)
      {
-      HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_TD_End ();
      }
   }

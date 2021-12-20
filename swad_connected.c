@@ -593,7 +593,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    HTM_TR_Begin (NULL);
 
       /***** Show photo *****/
-      HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"CON_PHOTO %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            true);
@@ -610,7 +610,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 ClassTxt = "CON_NAME_NARROW CON_NO_CRS";
 	 ClassLink = "BT_LINK CON_NAME_NARROW CON_NO_CRS";
 	}
-      HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 // The form must be unique because
 	 // the list of connected users
 	 // is dynamically updated via AJAX
@@ -631,7 +631,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       /***** Write time from last access *****/
       ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
 									      "CON_SINCE CON_NO_CRS");
-      HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_DIV_Begin ("id=\"hm%u\"",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
 	    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
 	 HTM_DIV_End ();						// Used for automatic update, only when displayed on right column
@@ -710,7 +710,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    HTM_TR_Begin (NULL);
 
 	       /***** Show photo *****/
-	       HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"CON_PHOTO %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
 		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 		                             false);
@@ -727,7 +727,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		  ClassTxt = "CON_NAME_WIDE CON_NO_CRS";
 		  ClassLink = "BT_LINK CON_NAME_WIDE CON_NO_CRS";
 		 }
-	       HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s %s\"",
+	                     ClassTxt,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 		  if (PutLinkToRecord)
 		    {
@@ -753,7 +754,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       /***** Write time from last access *****/
 	       ClassTxt = ThisCrs ? "CON_SINCE CON_CRS" :
 				    "CON_SINCE CON_NO_CRS";
-	       HTM_TD_Begin ("class=\"%s COLOR%u\"",ClassTxt,Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"%s %s\"",
+	                     ClassTxt,Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
 	       HTM_TD_End ();
 

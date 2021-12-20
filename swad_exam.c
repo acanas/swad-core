@@ -248,7 +248,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 HTM_TABLE_BeginWideMarginPadding (5);
 	    HTM_TR_Begin (NULL);
 	       if (Exa_CheckIfICanEditExams ())
-		  HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+		  HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Exa_Order_t) 0;
 		    Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
@@ -272,7 +272,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,"RM",Txt_Sessions);
+	       HTM_TH (1,1,Txt_Sessions,"RM");
 
 	    HTM_TR_End ();
 
@@ -503,7 +503,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 if (ShowOnlyThisExam)
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	 else
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
+	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	 /* Icons to remove/edit this exam */
 	 Exa_PutIconsToRemEditOneExam (Exams,Exam,Anchor);
@@ -527,8 +528,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
 			  Id,Color);
 	 else
-	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
-			  Id,Color,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
+			  Id,Color,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (Exam->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -541,7 +542,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       if (ShowOnlyThisExam)
 	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /* Exam title */
       Exams->ExaCod = Exam->ExaCod;
@@ -574,7 +575,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       if (ShowOnlyThisExam)
 	 HTM_TD_Begin ("class=\"RT\"");
       else
-	 HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
@@ -601,7 +602,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       if (ShowOnlyThisExam)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Exa_WriteAuthor (Exam);
       HTM_TD_End ();
 
@@ -609,7 +611,8 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       if (ShowOnlyThisExam)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       Exa_DB_GetExamTxt (Exam->ExaCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML

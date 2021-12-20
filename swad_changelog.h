@@ -602,10 +602,11 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.70.8 (2021-12-20)"
-#define CSS_FILE		"swad21.70.7.css"
+#define Log_PLATFORM_VERSION	"SWAD 21.71 (2021-12-20)"
+#define CSS_FILE		"swad21.71.css"
 #define JS_FILE			"swad21.67.4.js"
 /*
+	Version 21.71:    Dec 20, 2021  Working on design of dark theme. (322132 lines)
 	Version 21.70.9:  Dec 20, 2021  Fixed bug in user's IDs when listing match results. (321929 lines)
 	Version 21.70.8:  Dec 20, 2021  Fixed bug showing calendar. (321927 lines)
 	Version 21.70.7:  Dec 20, 2021  Working on design of dark theme. (321926 lines)
