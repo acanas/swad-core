@@ -227,7 +227,7 @@ void Lgo_PutIconToChangeLogo (HieLvl_Level_t Scope)
    /***** Link for changing / uploading the logo *****/
    Lay_PutContextualLinkOnlyIcon (Action,NULL,
                                   NULL,NULL,
-				  "shield-alt.svg",
+				  "shield-alt.svg",Ico_BLACK,
 				  LogoExists ? Txt_Change_logo :
 					       Txt_Upload_logo);
   }
@@ -335,7 +335,7 @@ static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem)
    /***** Link to request the removal of the logo *****/
    Lay_PutContextualLinkOnlyIcon (ActionRem,NULL,
                                   NULL,NULL,
-				  "trash.svg",
+				  "trash.svg",Ico_RED,
 				  Txt_Remove_logo);
   }
 

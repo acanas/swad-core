@@ -197,7 +197,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 					Highlight ? ClassHighlight :
 						    ClassNormal,
 					NULL);
-		  Ico_PutIcon ("sitemap.svg",Txt_System,"ICO16x16");
+		  Ico_PutIcon ("sitemap.svg",Ico_BLACK,Txt_System,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Txt_System);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
@@ -371,7 +371,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 								   ClassNormal,
 						       NULL);
 			      Str_FreeStrings ();
-				 Ico_PutIcon ("chalkboard-teacher.svg",Hie.Crs.FullName,"ICO16x16");
+				 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie.Crs.FullName,"ICO16x16");
 				 HTM_TxtF ("&nbsp;%s",Hie.Crs.ShrtName);
 			      HTM_BUTTON_End ();
 			   Frm_EndForm ();
@@ -1116,7 +1116,7 @@ static void Crs_PutIconToViewCourses (void)
 
    Lay_PutContextualLinkOnlyIcon (ActSeeCrs,NULL,
                                   NULL,NULL,
-                                  "chalkboard-teacher.svg",
+                                  "chalkboard-teacher.svg",Ico_BLACK,
                                   Txt_Courses);
   }
 
@@ -2215,7 +2215,7 @@ static void Crs_PutIconToSearchCourses (__attribute__((unused)) void *Args)
    /***** Put form to search / select courses *****/
    Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
 				  Sch_PutLinkToSearchCoursesParams,NULL,
-				  "search.svg",
+				  "search.svg",Ico_BLACK,
 				  Txt_Search_courses);
   }
 
@@ -2253,7 +2253,7 @@ void Crs_PutIconToSelectMyCourses (__attribute__((unused)) void *Args)
       /***** Put icon with link *****/
       Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
 				     NULL,NULL,
-				     "sitemap.svg",
+				     "sitemap.svg",Ico_BLACK,
 				     Txt_My_courses);
   }
 
@@ -2555,7 +2555,7 @@ void Crs_PutLinkToRemoveOldCrss (void)
    /***** Put form to remove old courses *****/
    Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,
                                   NULL,NULL,
-				  "trash.svg",
+				  "trash.svg",Ico_RED,
 				  Txt_Eliminate_old_courses);
   }
 

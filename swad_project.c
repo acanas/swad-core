@@ -96,15 +96,15 @@ static const char *AssignedNonassigImage[Prj_NUM_ASSIGNED_NONASSIG] =
   };
 
 /***** Locked/unlocked project edition *****/
-static const char *Prj_LockIcons[Prj_NUM_LOCKED_UNLOCKED] =
+static const struct
   {
-   [Prj_LOCKED  ] = "lock.svg",
-   [Prj_UNLOCKED] = "unlock.svg",
-  };
-static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
+   const char *Icon;
+   Ico_Color_t Color;
+   Act_Action_t Action;
+  } Prj_LockUnlock[Prj_NUM_LOCKED_UNLOCKED] =
   {
-   [Prj_LOCKED  ] = ActUnlPrj,
-   [Prj_UNLOCKED] = ActLckPrj,
+   [Prj_LOCKED  ] = {"lock.svg"  ,Ico_RED  ,ActUnlPrj},
+   [Prj_UNLOCKED] = {"unlock.svg",Ico_GREEN,ActLckPrj},
   };
 
 /***** List of users to select one or more members
@@ -631,7 +631,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 			Projects->SelectedOrder,
 			Projects->CurrentPage,
 			-1L);
-	 Ico_PutSettingIconLink (AssignedNonassigImage[Assign],
+	 Ico_PutSettingIconLink (AssignedNonassigImage[Assign],Ico_BLACK,
 				 Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Assign]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -649,10 +649,14 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
    struct Prj_Filter Filter;
    Prj_HiddenVisibl_t HidVis;
-   static const char *HiddenVisiblIcon[Prj_NUM_HIDDEN_VISIBL] =
+   static const struct
      {
-      [Prj_HIDDEN] = "eye-slash-red.svg",
-      [Prj_VISIBL] = "eye-green.svg",
+      const char *Icon;
+      Ico_Color_t Color;
+     } HiddenVisiblIcon[Prj_NUM_HIDDEN_VISIBL] =
+     {
+      [Prj_HIDDEN] = {"eye-slash.svg",Ico_RED  },
+      [Prj_VISIBL] = {"eye.svg"      ,Ico_GREEN},
      };
 
    Set_BeginOneSettingSelector ();
@@ -674,7 +678,8 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 			Projects->SelectedOrder,
 			Projects->CurrentPage,
 			-1L);
-	 Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
+	 Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis].Icon,
+	                         HiddenVisiblIcon[HidVis].Color,
 				 Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -717,7 +722,7 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 			Projects->SelectedOrder,
 			Projects->CurrentPage,
 			-1L);
-	 Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
+	 Ico_PutSettingIconLink (FaultinessIcon[Faultiness],Ico_BLACK,
 				 Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -1149,7 +1154,7 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Projects)
 
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
-			          "table.svg",
+			          "table.svg",Ico_BLACK,
 				  Txt_Show_all_data_in_a_table);
   }
 
@@ -1418,7 +1423,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 	}
 	 HTM_TxtF ("%s&nbsp;",Prj->Assigned == Prj_ASSIGNED ? Txt_Yes :
 							      Txt_No);
-	 Ico_PutIconOff (AssignedNonassigImage[Prj->Assigned],
+	 Ico_PutIconOff (AssignedNonassigImage[Prj->Assigned],Ico_BLACK,
 			 Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj->Assigned]);
 
 	 if (Faults.WrongAssigned)
@@ -1643,7 +1648,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 
 static void Prj_PutWarningIcon (void)
   {
-   Ico_PutIcon ("warning64x64.gif","","ICO16x16");
+   Ico_PutIcon ("warning64x64.gif",Ico_BLACK,"","ICO16x16");
   }
 
 /*****************************************************************************/
@@ -1660,7 +1665,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
                 " onclick=\"toggleProject('%u');return false;\"",
                Text,The_ClassFormInBox[Gbl.Prefs.Theme],
                UniqueId);
-      Ico_PutIconTextLink (Icon,Text);
+      Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_A_End ();
   }
 
@@ -2165,7 +2170,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 			   HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 			      Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInPrj],NULL,
 							     Prj_PutCurrentParams,Projects,
-							     "trash.svg",
+							     "trash.svg",Ico_RED,
 							     Txt_Remove);
 			   HTM_TD_End ();
 			  }
@@ -3859,13 +3864,13 @@ static void Prj_PutIconsToLockUnlockAllProjects (struct Prj_Projects *Projects)
    /***** Put icon to lock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqLckAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
-			          "lock.svg",
+			          "lock.svg",Ico_RED,
 				  Txt_Lock_editing);
 
    /***** Put icon to unlock all projects *****/
    Lay_PutContextualLinkOnlyIcon (ActReqUnlAllPrj,NULL,
                                   Prj_PutCurrentParams,Projects,
-			          "unlock.svg",
+			          "unlock.svg",Ico_GREEN,
 				  Txt_Unlock_editing);
   }
 
@@ -4054,12 +4059,14 @@ static void Prj_FormLockUnlock (const struct Prj_Project *Prj)
    if (asprintf (&OnSubmit,"updateDivLockUnlockProject(this,"
 			   "'act=%ld&ses=%s&PrjCod=%ld');"
 			   " return false;",	// return false is necessary to not submit form
-		 Act_GetActCod (Prj_LockActions[Prj->Locked]),
+		 Act_GetActCod (Prj_LockUnlock[Prj->Locked].Action),
 		 Gbl.Session.Id,
 		 Prj->PrjCod) < 0)
       Err_NotEnoughMemoryExit ();
    Frm_BeginFormOnSubmit (ActUnk,OnSubmit);
-      Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
+      Ico_PutIconLink (Prj_LockUnlock[Prj->Locked].Icon,
+                       Prj_LockUnlock[Prj->Locked].Color,
+                       Txt_LOCKED_UNLOCKED[Prj->Locked]);
    Frm_EndForm ();
 
    /* Free allocated memory for subquery */
@@ -4075,7 +4082,9 @@ static void Prj_PutIconOffLockedUnlocked (const struct Prj_Project *Prj)
    extern const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED];
 
    /***** Icon to inform about locked/unlocked project edition *****/
-   Ico_PutIconOff (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
+   Ico_PutIconOff (Prj_LockUnlock[Prj->Locked].Icon,
+                   Prj_LockUnlock[Prj->Locked].Color,
+                   Txt_LOCKED_UNLOCKED[Prj->Locked]);
   }
 
 /*****************************************************************************/

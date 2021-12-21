@@ -456,6 +456,7 @@ static void CrsCfg_Indicators (void)
 	       HTM_TxtF ("%s&nbsp;",Title);
 	       Ico_PutIcon ((IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
 										  "exclamation-triangle.svg",
+			    Ico_BLACK,
 			    Title,"ICO16x16");
 	    HTM_BUTTON_End ();
 	    free (Title);

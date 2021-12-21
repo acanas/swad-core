@@ -127,7 +127,8 @@ void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 		   UniqueId);
 
          /* Icon to toggle comment */
-	 Ico_PutIcon ("comment-regular.svg",Txt_Comment,"CONTEXT_ICO_16x16");
+	 Ico_PutIcon ("comment-regular.svg",Ico_BLACK,
+	              Txt_Comment,"CONTEXT_ICO_16x16");
 
       /* End anchor */
       HTM_A_End ();
@@ -149,7 +150,7 @@ void Tml_Com_PutIconCommDisabled (void)
    HTM_DIV_Begin ("class=\"Tml_ICO_COM_OFF Tml_ICO_DISABLED\"");
 
       /* Disabled icon */
-      Ico_PutIcon ("edit.svg",Txt_Comment,"ICO16x16");
+      Ico_PutIcon ("edit.svg",Ico_BLACK,Txt_Comment,"ICO16x16");
 
    /* End container */
    HTM_DIV_End ();
@@ -513,7 +514,7 @@ static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
 
    /***** Link to toggle on/off some divs *****/
    HTM_BUTTON_BUTTON_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
-      Ico_PutIconTextLink (Icon,Text);
+      Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_BUTTON_End ();
 
    /***** Free onclick text *****/
@@ -643,10 +644,12 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
 
 static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com)
   {
+   extern const char *The_TmlTxtColor[The_NUM_THEMES];
+
    /***** Write content of the comment *****/
    if (Com->Content.Txt[0])
      {
-      HTM_DIV_Begin ("class=\"Tml_TXT\"");
+      HTM_DIV_Begin ("class=\"Tml_TXT %s\"",The_TmlTxtColor[Gbl.Prefs.Theme]);
 	 Msg_WriteMsgContent (Com->Content.Txt,true,false);
       HTM_DIV_End ();
      }
@@ -704,7 +707,7 @@ static void Tml_Com_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
       Tml_Pub_PutHiddenParamPubCod (PubCod);
 
       /* Icon to remove */
-      Ico_PutIconLink ("trash.svg",Txt_Remove);
+      Ico_PutIconLink ("trash.svg",Ico_RED,Txt_Remove);
 
    /* End form */
    Tml_Frm_EndForm ();

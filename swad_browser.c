@@ -4790,7 +4790,7 @@ static void Brw_PutIconPaste (unsigned Level)
 	   }
 	 else
 	    /* Icon to paste inactive */
-	    Ico_PutIconOff ("paste.svg",Txt_Copy_not_allowed);
+	    Ico_PutIconOff ("paste.svg",Ico_BLACK,Txt_Copy_not_allowed);
 	}
 
    HTM_TD_End ();
@@ -4814,7 +4814,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
 	       switch (IconThisRow)
 		 {
 		  case Brw_ICON_TREE_NOTHING:
-		     Ico_PutIcon ("tr16x16.gif","","ICO20x20");
+		     Ico_PutIcon ("tr16x16.gif",Ico_BLACK,"","ICO20x20");
 		     break;
 		  case Brw_ICON_TREE_EXPAND:
 		     /***** Visible icon to expand folder *****/
@@ -4855,7 +4855,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i++)
      {
       HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-	 Ico_PutIcon ("tr16x16.gif","","ICO20x20");
+	 Ico_PutIcon ("tr16x16.gif",Ico_BLACK,"","ICO20x20");
       HTM_TD_End ();
      }
   }
@@ -4884,7 +4884,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-right.svg",Txt_Expand);
+      Ico_PutIconLink ("caret-right.svg",Ico_BLACK,Txt_Expand);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -4918,7 +4918,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("caret-down.svg",Txt_Contract);
+      Ico_PutIconLink ("caret-down.svg",Ico_BLACK,Txt_Contract);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -5058,6 +5058,7 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
       /***** Icon *****/
       Ico_PutIcon (Open ? "folder-open-yellow.png" :
 			  "folder-yellow.png",
+		   Ico_BLACK,
 		   Txt_Folder,"CONTEXT_OPT CONTEXT_ICO_16x16");
 
    /***** End container *****/
@@ -5097,7 +5098,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 
    /***** Icon that indicates new file *****/
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-      Ico_PutIcon ("star16x16.gif",Txt_New_FILE_OR_FOLDER,"ICO20x20");
+      Ico_PutIcon ("star16x16.gif",Ico_BLACK,Txt_New_FILE_OR_FOLDER,"ICO20x20");
    HTM_TD_End ();
   }
 
@@ -5152,7 +5153,7 @@ static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
       if (Input)
 	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,Class);
       else
-	 Ico_PutIcon ("link.svg",Txt_Link,Class);
+	 Ico_PutIcon ("link.svg",Ico_BLACK,Txt_Link,Class);
      }
    else	// FileType == Brw_IS_FILE
      {
@@ -5302,7 +5303,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 
 	 /* Put icon to make public/private file */
 	 if (IsPublic)
-	    Ico_PutIconOff ("unlock.svg",
+	    Ico_PutIconOff ("unlock.svg",Ico_GREEN,
 			    Txt_Public_open_educational_resource_OER_for_everyone);
 
       HTM_TD_End ();
@@ -5485,7 +5486,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            false);
       else
-	 Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,
+	 Ico_PutIcon ("usr_bl.jpg",Ico_BLACK,Txt_Unknown_or_without_photo,
 	              ClassPhoto[Gbl.Prefs.PhotoShape]);
 
    HTM_TD_End ();
@@ -8517,7 +8518,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
 	    /* Name of the file of marks, link end and form end */
 	    HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
-	    Ico_PutIcon ("grades32x32.gif",Txt_Check_marks_in_the_file,"ICO40x40");
+	    Ico_PutIcon ("grades32x32.gif",Ico_BLACK,Txt_Check_marks_in_the_file,"ICO40x40");
 
 	 /* End link */
 	 HTM_BUTTON_End ();
@@ -8535,7 +8536,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
 			  "ICO40x40",false);
 	 HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
-	 Ico_PutIcon ("download.svg",Title,"ICO40x40");
+	 Ico_PutIcon ("download.svg",Ico_BLACK,Title,"ICO40x40");
       HTM_A_End ();
      }
   }
@@ -10126,7 +10127,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	    Str_FreeStrings ();
 	       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 		  /* Icon with folder */
-		  Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");
+		  Ico_PutIcon ("folder-yellow.png",Ico_BLACK,Txt_Folder,"CONTEXT_ICO_16x16");
 	       else
 		  /* Icon with file type or link */
 		  Brw_PutIconFile (FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name,
@@ -10154,7 +10155,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
 
    Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
 				  Brw_PutHiddenParamFullTreeIfSelected,&Gbl.FileBrowser.FullTree,
-				  "trash.svg",
+				  "trash.svg",Ico_RED,
 				  Txt_Remove_old_files);
   }
 

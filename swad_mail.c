@@ -890,7 +890,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		      StrAddresses,
 		      Txt_Create_email_message,
 		      The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-	    Ico_PutIconTextLink ("marker.svg",
+	    Ico_PutIconTextLink ("marker.svg",Ico_BLACK,
 				 Txt_Create_email_message);
 	 HTM_A_End ();
 
@@ -1149,7 +1149,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	 /* Email confirmed? */
 	 if (Confirmed)
 	   {
-	    Ico_PutIcon ("check-circle.svg",
+	    Ico_PutIcon ("check-circle.svg",Ico_BLACK,
 			 Str_BuildString (Txt_Email_X_confirmed,row[0]),
 			 "ICO16x16");
 	    Str_FreeStrings ();

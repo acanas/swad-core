@@ -1313,7 +1313,7 @@ static void Grp_ListGroupTypesForEdition (void)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM\" style=\"width:16px;\"");
-			   Ico_PutIcon ("clock.svg",
+			   Ico_PutIcon ("clock.svg",Ico_BLACK,
 					Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
 												    Txt_The_groups_will_not_automatically_open,
 					Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "CONTEXT_ICO_16x16" :
@@ -1463,11 +1463,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
-		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
-						  "lock.svg",
-				      Str_BuildString (Grp->Open ? Txt_Group_X_open_click_to_close_it :
-								      Txt_Group_X_closed_click_to_open_it,
-							  Grp->GrpName));
+		     if (Grp->Open)
+			Ico_PutIconLink ("unlock.svg",Ico_GREEN,
+					 Str_BuildString (Txt_Group_X_open_click_to_close_it,Grp->GrpName));
+		     else
+			Ico_PutIconLink ("lock.svg",Ico_RED,
+					 Str_BuildString (Txt_Group_X_closed_click_to_open_it,Grp->GrpName));
 		     Str_FreeStrings ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
@@ -1478,11 +1479,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
-		     Ico_PutIconLink (Grp->FileZones ? "folder-open-green.svg" :
-						       "folder-red.svg",
-				      Str_BuildString (Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
-									   Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
-							  Grp->GrpName));
+		     if (Grp->FileZones)
+			Ico_PutIconLink ("folder-open.svg",Ico_GREEN,
+					 Str_BuildString (Txt_File_zones_of_the_group_X_enabled_click_to_disable_them,Grp->GrpName));
+		     else
+			Ico_PutIconLink ("folder.svg",Ico_RED,
+					 Str_BuildString (Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,Grp->GrpName));
 		     Str_FreeStrings ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
@@ -2358,11 +2360,12 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       HTM_TD_Begin ("class=\"BM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
    else
       HTM_TD_Begin ("class=\"BM\"");
-   Ico_PutIconOff (Grp->Open ? "unlock.svg" :
-        	               "lock.svg",
-	           Str_BuildString (Grp->Open ? Txt_Group_X_open :
-						   Txt_Group_X_closed,
-				       Grp->GrpName));
+   if (Grp->Open)
+      Ico_PutIconOff ("unlock.svg",Ico_GREEN,
+		      Str_BuildString (Txt_Group_X_open  ,Grp->GrpName));
+   else
+      Ico_PutIconOff ("lock.svg"  ,Ico_RED  ,
+		      Str_BuildString (Txt_Group_X_closed,Grp->GrpName));
    Str_FreeStrings ();
    HTM_TD_End ();
 
@@ -2514,7 +2517,7 @@ static void Grp_PutFormToCreateGroupType (void)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-			   Ico_PutIcon ("clock.svg",
+			   Ico_PutIcon ("clock.svg",Ico_BLACK,
 					Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
 									   Txt_The_groups_will_not_automatically_open,
 					Gbl.Crs.Grps.GrpTyp.MustBeOpened ? "CONTEXT_ICO_16x16" :
@@ -2594,12 +2597,12 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 
 	       /***** Disabled icon to open group *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Ico_PutIconOff ("lock.svg",Txt_Group_closed);
+		  Ico_PutIconOff ("lock.svg",Ico_RED,Txt_Group_closed);
 	       HTM_TD_End ();
 
 	       /***** Disabled icon for archive zone *****/
 	       HTM_TD_Begin ("class=\"BM\"");
-		  Ico_PutIconOff ("folder-red.svg",Txt_File_zones_disabled);
+		  Ico_PutIconOff ("folder.svg",Ico_RED,Txt_File_zones_disabled);
 	       HTM_TD_End ();
 
 	       /***** Group type *****/
@@ -4415,7 +4418,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	       FuncParams (Args);
 	    Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
 								 "sitemap.svg",
-				    Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+				    Ico_BLACK,Txt_GROUP_WHICH_GROUPS[WhichGrps]);
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
 	}

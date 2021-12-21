@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/*********************************** Headers *********************************/
+/*****************************************************************************/
+
+#include "swad_icon.h"
+
+/*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
@@ -70,7 +76,7 @@ void Sch_ReqSysSearch (void);
 void Sch_PutFormToSearchInPageTopHeading (void);
 
 void Sch_PutInputStringToSearch (const char *IdInputText);
-void Sch_PutMagnifyingGlassButton (const char *Icon);
+void Sch_PutMagnifyingGlassButton (Ico_Color_t Color);
 void Sch_GetParamWhatToSearch (void);
 void Sch_GetParamsSearch (void);
 void Sch_SysSearch (void);

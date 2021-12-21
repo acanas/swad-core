@@ -247,7 +247,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	 HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
 		      Report->Permalink,
 		      Txt_Report);
-	    Ico_PutIcon ("file-alt.svg",Txt_Report,"ICO64x64");
+	    Ico_PutIcon ("file-alt.svg",Ico_BLACK,Txt_Report,"ICO64x64");
 	    HTM_BR ();
 	    HTM_Txt (Report->FilenameReport);
 	 HTM_A_End ();

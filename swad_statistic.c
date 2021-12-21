@@ -622,7 +622,7 @@ void Sta_PutLinkToCourseHits (void)
 	 case Rol_SYS_ADM:
 	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,
 	                                   NULL,NULL,
-					   "chart-line.svg",
+					   "chart-line.svg",Ico_BLACK,
 					   Txt_Visits_to_course);
 	    break;
 	 default:
@@ -640,7 +640,7 @@ void Sta_PutLinkToGlobalHits (void)
 
    Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,
                                   NULL,NULL,
-				  "chart-line.svg",
+				  "chart-line.svg",Ico_BLACK,
 				  Txt_Global_visits);
   }
 
@@ -1887,7 +1887,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
 	    Sta_SetColor (ColorType,(double) NumColor,(double) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
 	    HTM_TD_Begin ("class=\"LM\" style=\"width:1px; background-color:#%02X%02X%02X;\"",
 			  R,G,B);
-	       Ico_PutIcon ("tr1x14.gif","","");
+	       Ico_PutIcon ("tr1x14.gif",Ico_BLACK,"","");
 	    HTM_TD_End ();
 	   }
 

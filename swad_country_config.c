@@ -380,7 +380,7 @@ static void CtyCfg_Platform (bool PrintView)
 					NULL);
 	       Str_FreeStrings ();
 	   }
-	 Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO20x20");
+	 Ico_PutIcon ("swad64x64.png",Ico_BLACK,Cfg_PLATFORM_FULL_NAME,"ICO20x20");
 	 HTM_NBSP ();
 	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	 if (!PrintView)

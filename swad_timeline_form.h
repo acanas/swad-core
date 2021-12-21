@@ -62,6 +62,7 @@ struct Tml_Form
    const char *ParamFormat;
    long ParamCod;
    const char *Icon;
+   Ico_Color_t Color;
    const char *Title;
   };
 

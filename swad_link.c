@@ -269,7 +269,7 @@ void Lnk_PutIconToViewLinks (void)
 
    Lay_PutContextualLinkOnlyIcon (ActSeeLnk,NULL,
                                   NULL,NULL,
-				  "link.svg",
+				  "link.svg",Ico_BLACK,
 				  Txt_Links);
   }
 

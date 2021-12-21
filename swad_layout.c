@@ -1186,7 +1186,7 @@ static void Lay_ShowRightColumn (void)
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
-				    const char *Icon,
+				    const char *Icon,Ico_Color_t Color,
 				    const char *Title)
   {
    /***** Begin form *****/
@@ -1195,7 +1195,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 	 FuncParams (Args);
 
       /***** Put icon with link *****/
-      Ico_PutIconLink (Icon,Title);
+      Ico_PutIconLink (Icon,Color,Title);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1207,7 +1207,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
-				    const char *Icon,
+				    const char *Icon,Ico_Color_t Color,
 				    const char *Text)
   {
    extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
@@ -1223,7 +1223,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 
       /***** Put icon and text with link *****/
       HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-	 Ico_PutIconTextLink (Icon,Text);
+	 Ico_PutIconTextLink (Icon,Color,Text);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -1257,7 +1257,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
 
       /***** Put icon with link *****/
       HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
-	 Ico_PutIconTextLink (Icon,Text);
+	 Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
       HTM_BUTTON_End ();
 
    /***** End form *****/
@@ -1628,12 +1628,14 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 	i++)
       Ico_PutIcon (IsLastItemInLevel[i] ? "tr20x20.gif" :
 		                          "subleft20x20.gif",
+		   Ico_BLACK,
 		   "","ICO25x25");
 
    /***** Level *****/
    if (Level)
       Ico_PutIcon (IsLastItemInLevel[Level] ? "subend20x20.gif" :
 					      "submid20x20.gif",
+		   Ico_BLACK,
 		   "","ICO25x25");
   }
 

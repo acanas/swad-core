@@ -60,7 +60,7 @@ static void Mtn_PutLinkToSetUp (void)
    /***** Put form to set up platform *****/
    Lay_PutContextualLinkIconText (ActSetUp,NULL,
                                   NULL,NULL,
-				  "bolt.svg",
+				  "bolt.svg",Ico_BLACK,
 				  Txt_Set_up);
   }
 

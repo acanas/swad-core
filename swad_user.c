@@ -1118,7 +1118,7 @@ void Usr_PutLinkToLogin (void)
 
    Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,
                                   NULL,NULL,
-				  "sign-in-alt-green.svg",
+				  "sign-in-alt.svg",Ico_GREEN,
 				  Txt_Log_in);
   }
 
@@ -1158,7 +1158,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	    /***** User's ID/nickname *****/
 	    HTM_DIV_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("for=\"UsrId\"");
-		  Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
+		  Ico_PutIcon ("user.svg",Ico_BLACK,
+		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1172,7 +1173,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	    /***** User's password *****/
 	    HTM_DIV_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("for=\"UsrPwd\"");
-		  Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
+		  Ico_PutIcon ("key.svg",Ico_BLACK,
+		               Txt_Password,"CONTEXT_ICO_16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
 				   "id=\"UsrPwd\" class=\"%s\"",
@@ -1331,7 +1333,7 @@ void Usr_PutFormLogIn (void)
 
    /***** Link to log in form *****/
    Frm_BeginForm (ActFrmLogIn);
-      Ico_PutIconLink ("sign-in-alt-white.svg",Txt_Log_in);
+      Ico_PutIconLink ("sign-in-alt.svg",Ico_WHITE,Txt_Log_in);
    Frm_EndForm ();
   }
 
@@ -1400,7 +1402,7 @@ void Usr_PutFormLogOut (void)
 
    /***** Link to log out form *****/
    Frm_BeginForm (ActLogOut);
-      Ico_PutIconLink ("sign-out-alt-white.svg",Txt_Log_out);
+      Ico_PutIconLink ("sign-out-alt.svg",Ico_WHITE,Txt_Log_out);
    Frm_EndForm ();
   }
 
@@ -2095,7 +2097,7 @@ static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
    /***** Put form to log out *****/
    Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
 				  NULL,NULL,
-				  "sign-out-alt-red.svg",
+				  "sign-out-alt.svg",Ico_RED,
 				  Txt_Log_out);
   }
 
@@ -3651,7 +3653,8 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
 			       The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
 			       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
 								NULL);
-	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Txt_USR_LIST_TYPES[ListType],"ICO20x20");
+	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
+	              Txt_USR_LIST_TYPES[ListType],"ICO20x20");
 	 HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);
       HTM_BUTTON_End ();
 
@@ -4990,7 +4993,7 @@ static void Usr_PutLinkToSeeAdmins (void)
    /***** Put form to list admins *****/
    Lay_PutContextualLinkIconText (ActLstOth,NULL,
                                   NULL,NULL,
-				  Rol_Icons[Rol_DEG_ADM],
+				  Rol_Icons[Rol_DEG_ADM],Ico_BLACK,
 				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
   }
 
@@ -5005,7 +5008,7 @@ static void Usr_PutLinkToSeeGuests (void)
    /***** Put form to list guests *****/
    Lay_PutContextualLinkIconText (ActLstGst,NULL,
                                   NULL,NULL,
-				  "users.svg",
+				  "users.svg",Ico_BLACK,
 				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
   }
 
@@ -5895,7 +5898,7 @@ static void Usr_PutIconToShowGstsAllData (void)
 
    Lay_PutContextualLinkOnlyIcon (ActLstGstAll,NULL,
                                   Usr_ShowGstsAllDataParams,NULL,
-				  "table.svg",
+				  "table.svg",Ico_BLACK,
 				  Txt_Show_all_data_in_a_table);
   }
 
@@ -5905,7 +5908,7 @@ static void Usr_PutIconToShowStdsAllData (void)
 
    Lay_PutContextualLinkOnlyIcon (ActLstStdAll,NULL,
                                   Usr_ShowStdsAllDataParams,NULL,
-			          "table.svg",
+			          "table.svg",Ico_BLACK,
 				  Txt_Show_all_data_in_a_table);
   }
 
@@ -5915,7 +5918,7 @@ static void Usr_PutIconToShowTchsAllData (void)
 
    Lay_PutContextualLinkOnlyIcon (ActLstTchAll,NULL,
                                   Usr_ShowTchsAllDataParams,NULL,
-			          "table.svg",
+			          "table.svg",Ico_BLACK,
 				  Txt_Show_all_data_in_a_table);
   }
 

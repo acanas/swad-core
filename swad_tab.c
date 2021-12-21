@@ -71,12 +71,12 @@ void Tab_DrawTabs (void)
       };
    static const char *ClassIcoTab[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
      {
-      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "",
-      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "",
-      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "",
-      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "",
-      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "",
-      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "",
+      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = " TAB_ICO_WHITE",
+      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = " TAB_ICO_GREY",
+      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = " TAB_ICO_PURPLE",
+      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = " TAB_ICO_BLUE",
+      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = " TAB_ICO_YELLOW",
+      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = " TAB_ICO_PINK",
       [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = " TAB_ICO_DARK",
 
       [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "",
@@ -196,7 +196,7 @@ static const char *Tab_GetIcon (Tab_Tab_t NumTab)
       [TabUnk] = NULL,
       [TabStr] = "house-user",
       [TabSys] = "sitemap",
-      [TabCty] = "globe",
+      [TabCty] = "globe-americas",
       [TabIns] = "university",
       [TabCtr] = "building",
       [TabDeg] = "graduation-cap",

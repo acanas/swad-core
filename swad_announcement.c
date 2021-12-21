@@ -307,7 +307,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	    /***** Put form to mark announcement as seen *****/
 	    Lay_PutContextualLinkIconText (ActAnnSee,NULL,
 					   Ann_PutParams,&AnnCod,
-					   "times.svg",
+					   "times.svg",Ico_BLACK,
 					   Txt_Do_not_show_again);
 
       /* End container for foot */

@@ -86,7 +86,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
 
    Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
 				  ZIP_PutLinkToCreateZIPAsgWrkParams,NULL,
-				  "download.svg",
+				  "download.svg",Ico_BLACK,
 				  Txt_Create_ZIP_file);
   }
 
@@ -543,7 +543,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	       HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
 			"class=\"ICO40x40\"");
 	       HTM_TxtF ("&nbsp;%s&nbsp;",FileName);
-	       Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
+	       Ico_PutIcon ("download.svg",Ico_BLACK,Txt_Download,"ICO40x40");
 	    HTM_A_End ();
 	 HTM_TD_End ();
       HTM_TR_End ();

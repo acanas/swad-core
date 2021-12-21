@@ -137,7 +137,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
 	 /***** Title of top level *****/
 	 HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
-	    Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
+	    Ico_PutIcon ("comments.svg",Ico_BLACK,Txt_Chat_rooms,"ICO16x16");
 	    HTM_TxtF ("&nbsp;%s",Txt_Chat_rooms);
 	 HTM_LI_End ();
 
@@ -147,7 +147,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",
 		   Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
 	 Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
-	    Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
+	    Ico_PutIcon ("comments.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 	 Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
 	 IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegs.Num;
@@ -158,7 +158,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 			 Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
 	       Cht_WriteLinkToChat1 ("GBL_STD",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
 				     ThisRoomFullName,1,IsLastItemInLevel);
-		  Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
+		  Ico_PutIcon ("comments.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 	       Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
 	       break;
 	    case Rol_NET:
@@ -167,7 +167,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 			 Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
 	       Cht_WriteLinkToChat1 ("GBL_TCH",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
 				     ThisRoomFullName,1,IsLastItemInLevel);
-		  Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
+		  Ico_PutIcon ("comments.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 	       Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
 	       break;
 	    default:
@@ -221,7 +221,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s %s",
 			    Txt_Course,Crs.ShrtName);
 		  Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
-		     Ico_PutIcon ("chalkboard-teacher.svg",ThisRoomFullName,"ICO16x16");
+		     Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,ThisRoomFullName,"ICO16x16");
 		  Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 		 }
 	      }

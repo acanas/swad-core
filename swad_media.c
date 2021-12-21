@@ -404,7 +404,7 @@ void Med_PutMediaUploader (int NumMedia,const char *ClassInput)
 	 HTM_A_Begin ("href=\"\""
 		      " onclick=\"mediaActivateMediaUploader('%s');return false;\"",
 		      Id);
-	    Ico_PutIcon ("paperclip.svg",Txt_Multimedia,"ICO_HIGHLIGHT ICOx16");
+	    Ico_PutIcon ("paperclip.svg",Ico_BLACK,Txt_Multimedia,"ICO_HIGHLIGHT ICOx16");
 	 HTM_A_End ();
 
       /* End container */
@@ -514,7 +514,7 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
       /* Icon to upload media */
       HTM_A_Begin ("href=\"\" onclick=\"%s('%s');return false;\"",
 		   MediaUploader->FunctionName,UniqueId);
-	 Ico_PutIcon (MediaUploader->Icon,
+	 Ico_PutIcon (MediaUploader->Icon,Ico_BLACK,
 	              MediaUploader->Title,
 	              "ICO_HIGHLIGHT ICOx16");
       HTM_A_End ();
@@ -1821,7 +1821,7 @@ static void Med_AlertThirdPartyCookies (void)
    if (!Gbl.Form.Inside)
       Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,
                                      NULL,NULL,
-				     "cog.svg",
+				     "cog.svg",Ico_BLACK,
 				     Txt_Settings);
 
    /* End alert */

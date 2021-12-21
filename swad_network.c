@@ -57,7 +57,7 @@ extern struct Globals Gbl;
 
 static const char *Net_WebsAndSocialNetworksIcons[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
-   [Net_WWW           ] = "globe.svg",
+   [Net_WWW           ] = "globe-americas.svg",
    [Net_500PX         ] = "500px-brands.svg",
    [Net_DELICIOUS     ] = "delicious-brands.svg",
    [Net_DEVIANTART    ] = "deviantart-brands.svg",
@@ -180,7 +180,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
    /***** Write link and icon *****/
    HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
       HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\"",URL,Title);
-	 Ico_PutIcon (Icon,Title,"ICO16x16");
+	 Ico_PutIcon (Icon,Ico_BLACK,Title,"ICO16x16");
       HTM_A_End ();
    HTM_DIV_End ();
   }

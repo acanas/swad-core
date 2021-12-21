@@ -417,7 +417,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.CrsCod);
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
-	       Ico_PutIcon ("rss-square.svg","RSS","ICO16x16");
+	       Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
 	    HTM_A_End ();
 	 HTM_DIV_End ();
 	 break;
@@ -652,7 +652,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	 HTM_DIV_Begin ("class=\"CM\"");
 	    Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,
 					   Not_PutParams,&NotCod,
-					   "ellipsis-h.svg",
+					   "ellipsis-h.svg",Ico_BLACK,
 					   Txt_See_full_notice);
 	 HTM_DIV_End ();
 	}

@@ -578,7 +578,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
    	        sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
       Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
       Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("folder-open-yellow-plus.png",
+      Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_BLACK,
 		       Txt_Upload_file_or_create_folder);
       Frm_EndForm ();
       switch (Gbl.Usrs.Me.Role.Logged)
@@ -595,9 +595,12 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
         }
      }
    else			// Sending of files disabled
-      Ico_PutIconOff (ICanSendFiles ? "folder-open-green.svg" :
-				      "folder-red.svg",
-		      Txt_Folder);
+     {
+      if (ICanSendFiles)
+	 Ico_PutIconOff ("folder-open.svg",Ico_GREEN,Txt_Folder);
+      else
+	 Ico_PutIconOff ("folder.svg"     ,Ico_RED  ,Txt_Folder);
+     }
 
    /***** Folder name *****/
    HTM_Txt (Asg->Folder);

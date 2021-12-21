@@ -888,6 +888,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 			     "MSG_TIT_BG");
 	 Ico_PutIcon (NewPst ? "envelope.svg" :
 			       "envelope-open-text.svg",
+		      Ico_BLACK,
 		      NewPst ? Txt_MSG_New :
 			       Txt_MSG_Open,
 		      "ICO16x16");
@@ -926,22 +927,25 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	       For_PutParamsForum (Forums);
-	       Ico_PutIconLink (Enabled ? "eye-green.svg" :
-					  "eye-slash-red.svg",
-				Str_BuildString (Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
-							   Txt_FORUM_Post_X_banned_Click_to_unban_it,
-						 PstNum));
+	       if (Enabled)
+		  Ico_PutIconLink ("eye.svg",Ico_GREEN,
+				   Str_BuildString (Txt_FORUM_Post_X_allowed_Click_to_ban_it,PstNum));
+	       else
+		  Ico_PutIconLink ("eye-slash.svg",Ico_RED,
+				   Str_BuildString (Txt_FORUM_Post_X_banned_Click_to_unban_it,PstNum));
 	       Str_FreeStrings ();
 	    Frm_EndForm ();
 	   }
 	 else
 	   {
-	    Ico_PutIcon (Enabled ? "eye-green.svg" :
-				   "eye-slash-red.svg",
-			 Str_BuildString (Enabled ? Txt_FORUM_Post_X_allowed :
-						    Txt_FORUM_Post_X_banned,
-					  PstNum),
-			 "ICO_HIDDEN ICO16x16");
+	    if (Enabled)
+	       Ico_PutIcon ("eye.svg"      ,Ico_GREEN,
+			    Str_BuildString (Txt_FORUM_Post_X_allowed,PstNum),
+			    "ICO_HIDDEN ICO16x16");
+	    else
+	       Ico_PutIcon ("eye-slash.svg",Ico_RED  ,
+			    Str_BuildString (Txt_FORUM_Post_X_banned ,PstNum),
+			    "ICO_HIDDEN ICO16x16");
 	    Str_FreeStrings ();
 	   }
 
@@ -1694,7 +1698,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
      {
       /* Check if thread to move is yet in current forum */
       if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
-	 Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
+	 Ico_PutIcon ("paste.svg",Ico_BLACK,Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
       else
 	{
 	 Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
@@ -1730,11 +1734,11 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	   {
 	    case For_FORUM_GLOBAL_USRS:
 	    case For_FORUM_GLOBAL_TCHS:
-	       Ico_PutIcon ("comments.svg",ForumName,"ICO16x16");
+	       Ico_PutIcon ("comments.svg",Ico_BLACK,ForumName,"ICO16x16");
 	       break;
 	    case For_FORUM__SWAD__USRS:
 	    case For_FORUM__SWAD__TCHS:
-	       Ico_PutIcon ("swad64x64.png",ForumName,"ICO16x16");
+	       Ico_PutIcon ("swad64x64.png",Ico_BLACK,ForumName,"ICO16x16");
 	       break;
 	    case For_FORUM_INSTIT_USRS:
 	    case For_FORUM_INSTIT_TCHS:
@@ -1750,7 +1754,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	       break;
 	    case For_FORUM_COURSE_USRS:
 	    case For_FORUM_COURSE_TCHS:
-	       Ico_PutIcon ("chalkboard-teacher.svg",ForumName,"ICO16x16");
+	       Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,ForumName,"ICO16x16");
 	       break;
 	    default:
 	       break;
@@ -2199,6 +2203,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	    /***** Put an icon with thread status *****/
 	    Ico_PutIcon (Thr.NumUnreadPosts ? "envelope.svg" :
 					      "envelope-open-text.svg",
+			 Ico_BLACK,
 			 Thr.NumUnreadPosts ? Txt_There_are_new_posts :
 					      Txt_No_new_posts,
 			 "ICO16x16");

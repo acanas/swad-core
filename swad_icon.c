@@ -135,7 +135,7 @@ void Ico_PutIconsToSelectIconSet (void)
 		  snprintf (Icon,sizeof (Icon),"%s/%s/cog.svg",
 			    Cfg_ICON_FOLDER_SETS,
 			    Ico_IconSetId[IconSet]);
-		  Ico_PutSettingIconLink (Icon,Ico_IconSetNames[IconSet]);
+		  Ico_PutSettingIconLink (Icon,Ico_BLACK,Ico_IconSetNames[IconSet]);
 	       Frm_EndForm ();
 	       HTM_DIV_End ();
 	      }
@@ -220,7 +220,7 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "plus.svg",
+				  "plus.svg",Ico_BLACK,
 				  Txt);
   }
 
@@ -231,7 +231,7 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "trash.svg",
+				  "trash.svg",Ico_BLACK,
 				  Txt_Remove);
   }
 
@@ -242,7 +242,7 @@ void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "pen.svg",
+				  "pen.svg",Ico_BLACK,
 				  Txt_Edit);
   }
 
@@ -253,7 +253,7 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "folder-open.svg",
+				  "folder-open.svg",Ico_BLACK,
 				  Txt_Files);
   }
 
@@ -264,7 +264,7 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "list.svg",
+				  "list.svg",Ico_BLACK,
 				  Txt_View);
   }
 
@@ -275,7 +275,7 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "cog.svg",
+				  "cog.svg",Ico_BLACK,
 				  Txt_Configure);
   }
 
@@ -286,7 +286,7 @@ void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "eye-green.svg",
+				  "eye.svg",Ico_GREEN,
 				  Txt_Hide);
   }
 
@@ -297,7 +297,7 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "eye-slash-red.svg",
+				  "eye-slash.svg",Ico_RED,
 				  Txt_Show);
   }
 
@@ -308,7 +308,7 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "print.svg",
+				  "print.svg",Ico_BLACK,
 				  Txt_Print);
   }
 
@@ -319,7 +319,7 @@ void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "copy.svg",
+				  "copy.svg",Ico_BLACK,
 				  Txt_Copy);
   }
 
@@ -330,7 +330,7 @@ void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "paste.svg",
+				  "paste.svg",Ico_BLACK,
 				  Txt_Paste);
   }
 
@@ -343,7 +343,7 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  Open ? "folder-open-yellow-plus.png" :
-				  	 "folder-yellow-plus.png",
+				  	 "folder-yellow-plus.png",Ico_BLACK,
 				  Txt_Upload_file_or_create_folder);
   }
 
@@ -354,7 +354,7 @@ void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anc
 
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,
                                   FuncParams,Args,
-				  "trophy.svg",
+				  "trophy.svg",Ico_BLACK,
 				  Txt_Results);
   }
 
@@ -365,7 +365,7 @@ void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "tasks.svg",
+				  "tasks.svg",Ico_BLACK,
 				  Txt_Attendance_list);
   }
 
@@ -376,7 +376,7 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
-				  "download.svg",
+				  "download.svg",Ico_BLACK,
 				  Txt_Create_ZIP_file);
   }
 
@@ -384,32 +384,21 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 /**************** Show an icon inside a div (without text) *******************/
 /*****************************************************************************/
 
-void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
+void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,const char *Title)
   {
    static const char *ClassIco[The_NUM_THEMES] =
      {
-      [The_THEME_WHITE ] = "CONTEXT_ICO_16x16",
-      [The_THEME_GREY  ] = "CONTEXT_ICO_16x16",
-      [The_THEME_PURPLE] = "CONTEXT_ICO_16x16",
-      [The_THEME_BLUE  ] = "CONTEXT_ICO_16x16",
-      [The_THEME_YELLOW] = "CONTEXT_ICO_16x16",
-      [The_THEME_PINK  ] = "CONTEXT_ICO_16x16",
-      [The_THEME_DARK  ] = "CONTEXT_ICO_16x16 CONTEXT_ICO_DARK",
+      [The_THEME_WHITE ] = "CONTEXT_ICO_16x16 BLACK_ICO_WHITE",
+      [The_THEME_GREY  ] = "CONTEXT_ICO_16x16 BLACK_ICO_GREY",
+      [The_THEME_PURPLE] = "CONTEXT_ICO_16x16 BLACK_ICO_PURPLE",
+      [The_THEME_BLUE  ] = "CONTEXT_ICO_16x16 BLACK_ICO_BLUE",
+      [The_THEME_YELLOW] = "CONTEXT_ICO_16x16 BLACK_ICO_YELLOW",
+      [The_THEME_PINK  ] = "CONTEXT_ICO_16x16 BLACK_ICO_PINK",
+      [The_THEME_DARK  ] = "CONTEXT_ICO_16x16 BLACK_ICO_DARK",
      };
 
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-      Ico_PutIcon (Icon,Title,ClassIco[Gbl.Prefs.Theme]);
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/*********** Show an icon with a link inside a div (without text) ************/
-/*****************************************************************************/
-
-void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title)
-  {
-   HTM_DIV_Begin ("class=\"%s\"",DivClass);
-      Ico_PutIconLink (Icon,Title);
+      Ico_PutIcon (Icon,Color,Title,ClassIco[Gbl.Prefs.Theme]);
    HTM_DIV_End ();
   }
 
@@ -417,42 +406,66 @@ void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title
 /****************** Show an icon with a link (without text) ******************/
 /*****************************************************************************/
 
-void Ico_PutIconLink (const char *Icon,const char *Title)
+void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   static const char *ClassIco[The_NUM_THEMES] =
+   static const char *ClassIco[Ico_NUM_COLORS][The_NUM_THEMES] =
      {
-      [The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 CONTEXT_ICO_DARK",
+      [Ico_BLACK][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_WHITE",
+      [Ico_BLACK][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_GREY",
+      [Ico_BLACK][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_PURPLE",
+      [Ico_BLACK][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_BLUE",
+      [Ico_BLACK][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_YELLOW",
+      [Ico_BLACK][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_PINK",
+      [Ico_BLACK][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_DARK",
+
+      [Ico_GREEN][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_WHITE",
+      [Ico_GREEN][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_GREY",
+      [Ico_GREEN][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_PURPLE",
+      [Ico_GREEN][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_BLUE",
+      [Ico_GREEN][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_YELLOW",
+      [Ico_GREEN][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_PINK",
+      [Ico_GREEN][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_DARK",
+
+      [Ico_RED  ][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_WHITE",
+      [Ico_RED  ][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_GREY",
+      [Ico_RED  ][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_PURPLE",
+      [Ico_RED  ][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_BLUE",
+      [Ico_RED  ][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_YELLOW",
+      [Ico_RED  ][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_PINK",
+      [Ico_RED  ][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_DARK",
+
+      [Ico_WHITE][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_WHITE",
+      [Ico_WHITE][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_GREY",
+      [Ico_WHITE][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_PURPLE",
+      [Ico_WHITE][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_BLUE",
+      [Ico_WHITE][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_YELLOW",
+      [Ico_WHITE][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_PINK",
+      [Ico_WHITE][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_DARK",
      };
 
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,ClassIco[Gbl.Prefs.Theme]);
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,ClassIco[Color][Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
 /******************* Show an icon with a link (with text) ********************/
 /*****************************************************************************/
 
-void Ico_PutIconTextLink (const char *Icon,const char *Text)
+void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
   {
    static const char *ClassIco[The_NUM_THEMES] =
      {
-      [The_THEME_WHITE ] = "CONTEXT_ICO_x16",
-      [The_THEME_GREY  ] = "CONTEXT_ICO_x16",
-      [The_THEME_PURPLE] = "CONTEXT_ICO_x16",
-      [The_THEME_BLUE  ] = "CONTEXT_ICO_x16",
-      [The_THEME_YELLOW] = "CONTEXT_ICO_x16",
-      [The_THEME_PINK  ] = "CONTEXT_ICO_x16",
-      [The_THEME_DARK  ] = "CONTEXT_ICO_x16 CONTEXT_ICO_DARK",
+      [The_THEME_WHITE ] = "CONTEXT_ICO_x16 BLACK_ICO_WHITE",
+      [The_THEME_GREY  ] = "CONTEXT_ICO_x16 BLACK_ICO_GREY",
+      [The_THEME_PURPLE] = "CONTEXT_ICO_x16 BLACK_ICO_PURPLE",
+      [The_THEME_BLUE  ] = "CONTEXT_ICO_x16 BLACK_ICO_BLUE",
+      [The_THEME_YELLOW] = "CONTEXT_ICO_x16 BLACK_ICO_YELLOW",
+      [The_THEME_PINK  ] = "CONTEXT_ICO_x16 BLACK_ICO_PINK",
+      [The_THEME_DARK  ] = "CONTEXT_ICO_x16 BLACK_ICO_DARK",
      };
 
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-      Ico_PutIcon (Icon,Text,ClassIco[Gbl.Prefs.Theme]);
+      Ico_PutIcon (Icon,Color,Text,ClassIco[Gbl.Prefs.Theme]);
       HTM_TxtF ("&nbsp;%s",Text);
    HTM_DIV_End ();
   }
@@ -461,33 +474,103 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
 /**************************** Show a setting selector *************************/
 /*****************************************************************************/
 
-void Ico_PutSettingIconLink (const char *Icon,const char *Title)
+void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,"ICO_HIGHLIGHT ICOx20");
+   static const char *ClassIco[Ico_NUM_COLORS][The_NUM_THEMES] =
+     {
+      [Ico_BLACK][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_WHITE",
+      [Ico_BLACK][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_GREY",
+      [Ico_BLACK][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_PURPLE",
+      [Ico_BLACK][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_BLUE",
+      [Ico_BLACK][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_YELLOW",
+      [Ico_BLACK][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_PINK",
+      [Ico_BLACK][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_DARK",
+
+      [Ico_GREEN][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_WHITE",
+      [Ico_GREEN][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_GREY",
+      [Ico_GREEN][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_PURPLE",
+      [Ico_GREEN][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_BLUE",
+      [Ico_GREEN][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_YELLOW",
+      [Ico_GREEN][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_PINK",
+      [Ico_GREEN][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_DARK",
+
+      [Ico_RED  ][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_WHITE",
+      [Ico_RED  ][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_GREY",
+      [Ico_RED  ][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 RED_ICO_PURPLE",
+      [Ico_RED  ][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_BLUE",
+      [Ico_RED  ][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 RED_ICO_YELLOW",
+      [Ico_RED  ][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_PINK",
+      [Ico_RED  ][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_DARK",
+
+      [Ico_WHITE][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_WHITE",
+      [Ico_WHITE][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_GREY",
+      [Ico_WHITE][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_PURPLE",
+      [Ico_WHITE][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_BLUE",
+      [Ico_WHITE][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_YELLOW",
+      [Ico_WHITE][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_PINK",
+      [Ico_WHITE][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_DARK",
+     };
+
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,ClassIco[Color][Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
 /********************* Put an active or disabled icon ************************/
 /*****************************************************************************/
 
-void Ico_PutIconOn (const char *Icon,const char *Title)
+void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Title,"CONTEXT_OPT CONTEXT_ICO_16x16");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO_16x16");
   }
 
-void Ico_PutIconOff (const char *Icon,const char *Title)
+void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Title,"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16");
   }
 
 /*****************************************************************************/
 /******************************* Put an icon *********************************/
 /*****************************************************************************/
 
-void Ico_PutIcon (const char *Icon,const char *Title,const char *Class)
+void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const char *Class)
   {
+   static const char *ClassColor[Ico_NUM_COLORS][The_NUM_THEMES] =
+     {
+      [Ico_BLACK][The_THEME_WHITE ] = "BLACK_ICO_WHITE",
+      [Ico_BLACK][The_THEME_GREY  ] = "BLACK_ICO_GREY",
+      [Ico_BLACK][The_THEME_PURPLE] = "BLACK_ICO_PURPLE",
+      [Ico_BLACK][The_THEME_BLUE  ] = "BLACK_ICO_BLUE",
+      [Ico_BLACK][The_THEME_YELLOW] = "BLACK_ICO_YELLOW",
+      [Ico_BLACK][The_THEME_PINK  ] = "BLACK_ICO_PINK",
+      [Ico_BLACK][The_THEME_DARK  ] = "BLACK_ICO_DARK",
+
+      [Ico_GREEN][The_THEME_WHITE ] = "GREEN_ICO_WHITE",
+      [Ico_GREEN][The_THEME_GREY  ] = "GREEN_ICO_GREY",
+      [Ico_GREEN][The_THEME_PURPLE] = "GREEN_ICO_PURPLE",
+      [Ico_GREEN][The_THEME_BLUE  ] = "GREEN_ICO_BLUE",
+      [Ico_GREEN][The_THEME_YELLOW] = "GREEN_ICO_YELLOW",
+      [Ico_GREEN][The_THEME_PINK  ] = "GREEN_ICO_PINK",
+      [Ico_GREEN][The_THEME_DARK  ] = "GREEN_ICO_DARK",
+
+      [Ico_RED  ][The_THEME_WHITE ] = "RED_ICO_WHITE",
+      [Ico_RED  ][The_THEME_GREY  ] = "RED_ICO_GREY",
+      [Ico_RED  ][The_THEME_PURPLE] = "RED_ICO_PURPLE",
+      [Ico_RED  ][The_THEME_BLUE  ] = "RED_ICO_BLUE",
+      [Ico_RED  ][The_THEME_YELLOW] = "RED_ICO_YELLOW",
+      [Ico_RED  ][The_THEME_PINK  ] = "RED_ICO_PINK",
+      [Ico_RED  ][The_THEME_DARK  ] = "RED_ICO_DARK",
+
+      [Ico_WHITE][The_THEME_WHITE ] = "WHITE_ICO_WHITE",
+      [Ico_WHITE][The_THEME_GREY  ] = "WHITE_ICO_GREY",
+      [Ico_WHITE][The_THEME_PURPLE] = "WHITE_ICO_PURPLE",
+      [Ico_WHITE][The_THEME_BLUE  ] = "WHITE_ICO_BLUE",
+      [Ico_WHITE][The_THEME_YELLOW] = "WHITE_ICO_YELLOW",
+      [Ico_WHITE][The_THEME_PINK  ] = "WHITE_ICO_PINK",
+      [Ico_WHITE][The_THEME_DARK  ] = "WHITE_ICO_DARK",
+     };
+
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
-	    "class=\"%s\"",Class);
+	    "class=\"%s %s\"",Class,ClassColor[Color][Gbl.Prefs.Theme]);
   }
 
 /*****************************************************************************/
@@ -547,7 +630,7 @@ void Ico_PutIconRemovalNotAllowed (void)
   {
    extern const char *Txt_Removal_not_allowed;
 
-   Ico_PutIconOff ("trash.svg",Txt_Removal_not_allowed);
+   Ico_PutIconOff ("trash.svg",Ico_RED,Txt_Removal_not_allowed);
   }
 
 /*****************************************************************************/
@@ -558,7 +641,7 @@ void Ico_PutIconCut (void)
   {
    extern const char *Txt_Cut;
 
-   Ico_PutIconLink ("cut.svg",Txt_Cut);
+   Ico_PutIconLink ("cut.svg",Ico_BLACK,Txt_Cut);
   }
 
 /*****************************************************************************/
@@ -569,7 +652,7 @@ void Ico_PutIconPaste (void)
   {
    extern const char *Txt_Paste;
 
-   Ico_PutIconLink ("paste.svg",Txt_Paste);
+   Ico_PutIconLink ("paste.svg",Ico_BLACK,Txt_Paste);
   }
 
 /*****************************************************************************/
@@ -580,5 +663,5 @@ void Ico_PutIconNotVisible (void)
   {
    extern const char *Txt_Not_visible;
 
-   Ico_PutIconOff ("eye-slash-red.svg",Txt_Not_visible);
+   Ico_PutIconOff ("eye-slash.svg",Ico_RED,Txt_Not_visible);
   }

@@ -754,7 +754,7 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
 				     NULL,
 				     Mch_PutParamsPlay,&Match->MchCod,
 				     Match->Status.Showing == Mch_END ? "flag-checkered.svg" :
-									"play.svg",
+									"play.svg",Ico_BLACK,
 				     Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									  Txt_Resume);
 
@@ -802,7 +802,7 @@ static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
       Games->MchCod.Current = Match->MchCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
-				     "trophy.svg",
+				     "trophy.svg",Ico_BLACK,
 				     Txt_Results);
      }
    else
@@ -824,26 +824,32 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
    if (Mch_CheckIfICanEditThisMatch (Match))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrMchResMch,MchRes_RESULTS_BOX_ID,
 				     Mch_PutParamsEdit,Games,
-				     "trophy.svg",
+				     "trophy.svg",Ico_BLACK,
 				     Txt_Results);
 
    /***** Check if visibility of session results can be changed *****/
    if (Mch_CheckIfVisibilityOfResultsCanBeChanged (Match))
      {
       /* I can edit visibility */
-      Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-				     Mch_PutParamsEdit,Games,
-				     Match->Status.ShowUsrResults ? "eye-green.svg" :
-								    "eye-slash-red.svg",
-				     Match->Status.ShowUsrResults ? Txt_Visible_results :
-								    Txt_Hidden_results);
+      if (Match->Status.ShowUsrResults)
+	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
+					Mch_PutParamsEdit,Games,
+					"eye.svg",Ico_GREEN,
+					Txt_Visible_results);
+      else
+	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
+					Mch_PutParamsEdit,Games,
+					"eye-slash.svg",Ico_RED,
+					Txt_Hidden_results);
      }
    else
+     {
       /* I can not edit visibility */
-      Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye-green.svg" :
-						     "eye-slash-red.svg",
-		      Match->Status.ShowUsrResults ? Txt_Visible_results :
-						     Txt_Hidden_results);
+      if (Match->Status.ShowUsrResults)
+	 Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Visible_results);
+      else
+	 Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Hidden_results );
+     }
   }
 
 /*****************************************************************************/
@@ -2651,7 +2657,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 	    Mch_PutParamNumCols (NumCols);		// Number of columns
 
 	    /* Number of columns */
-	    Ico_PutSettingIconLink (NumColsIcon[NumCols],
+	    Ico_PutSettingIconLink (NumColsIcon[NumCols],Ico_BLACK,
 				    Str_BuildString ("%u %s",
 				                     NumCols,
 						     NumCols == 1 ? Txt_column :
@@ -3345,7 +3351,7 @@ static void Mch_PutBigButtonClose (void)
 static void Mch_ShowWaitImage (const char *Txt)
   {
    HTM_DIV_Begin ("class=\"MCH_WAIT_CONT\"");
-      Ico_PutIcon ("Spin-1s-200px.gif",Txt,"MCH_WAIT_IMG");
+      Ico_PutIcon ("Spin-1s-200px.gif",Ico_BLACK,Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
   }
 

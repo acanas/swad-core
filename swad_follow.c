@@ -98,7 +98,7 @@ void Fol_PutLinkWhoToFollow (void)
 
    Lay_PutContextualLinkIconText (ActSeeSocPrf,NULL,
                                   NULL,NULL,
-				  "user-plus.svg",
+				  "user-plus.svg",Ico_BLACK,
 				  Txt_Who_to_follow);
   }
 
@@ -746,7 +746,7 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
   {
    /***** Inactive icon to follow/unfollow *****/
    HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIDDEN\"");
-      Ico_PutIcon ("user.svg","","ICO16x16");
+      Ico_PutIcon ("user.svg",Ico_BLACK,"","ICO16x16");
    HTM_DIV_End ();
    }
 

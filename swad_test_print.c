@@ -1982,7 +1982,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
 								       ActSeeOneTstResOth);
 		     TstPrn_PutParamPrnCod (Print.PrnCod);
-		     Ico_PutIconLink ("tasks.svg",Txt_View_test);
+		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,Txt_View_test);
 		  Frm_EndForm ();
 		 }
 	       else

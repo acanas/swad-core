@@ -72,7 +72,7 @@ void ExaSes_GetAndCheckParameters (struct Exa_Exams *Exams,
 long ExaSes_GetParamSesCod (void);
 
 void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod);
-void ExaSes_RequestCreatOrEditSession (void);
+void ExaSes_RequestCreatOrEditSes (void);
 void ExaSes_ReceiveFormSession (void);
 
 bool ExaSes_CheckIfICanAnswerThisSession (const struct Exa_Exam *Exam,

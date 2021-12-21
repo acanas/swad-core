@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_action.h"
+#include "swad_icon.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -50,11 +51,11 @@ void Lay_WriteEndOfPage (void);
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
-				    const char *Icon,
+				    const char *Icon,Ico_Color_t Color,
 				    const char *Title);
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
-				    const char *Icon,
+				    const char *Icon,Ico_Color_t Color,
 				    const char *Text);
 void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,
 					    void (*FuncParams) (const void *Args),const void *Args,

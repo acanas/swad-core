@@ -1056,7 +1056,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 			   Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 			break;
 		    }
-		     Ico_PutIconLink ("tasks.svg",Txt_Result);
+		     Ico_PutIconLink ("tasks.svg",Ico_BLACK,Txt_Result);
 		  Frm_EndForm ();
 		 }
 	       else

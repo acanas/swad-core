@@ -186,7 +186,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	    HTM_LABEL_End ();
 
 	    /***** Magnifying glass icon *****/
-	    Sch_PutMagnifyingGlassButton ("search.svg");
+	    Sch_PutMagnifyingGlassButton (Ico_BLACK);
 
 	    /***** Send button *****/
 	    Btn_PutButton (Btn_CONFIRM_BUTTON,Txt_Search);
@@ -240,7 +240,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
       Frm_BeginForm (ActSch);
 	 Sco_PutParamScope ("ScopeSch",HieLvl_SYS);
 	 Sch_PutInputStringToSearch ("head_search_text");
-	 Sch_PutMagnifyingGlassButton ("search-white.svg");
+	 Sch_PutMagnifyingGlassButton (Ico_WHITE);
       Frm_EndForm ();
 
    HTM_DIV_End ();	// head_row_1_search
@@ -268,12 +268,12 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
 /******************* Put magnifying glass button inside form *****************/
 /*****************************************************************************/
 
-void Sch_PutMagnifyingGlassButton (const char *Icon)
+void Sch_PutMagnifyingGlassButton (Ico_Color_t Color)
   {
    extern const char *Txt_Search;
 
    /***** Send button *****/
-   Ico_PutIconLink (Icon,Txt_Search);
+   Ico_PutIconLink ("search.svg",Color,Txt_Search);
   }
 
 /*****************************************************************************/

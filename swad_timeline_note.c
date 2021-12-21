@@ -381,6 +381,7 @@ static void Tml_Not_WriteContent (const struct Tml_Not_Note *Not)
 
 static void Tml_Not_GetAndWriteNoPost (const struct Tml_Not_Note *Not)
   {
+   extern const char *The_TmlTxtColor[The_NUM_THEMES];
    struct Hie_Hierarchy Hie;
    struct For_Forums Forums;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -405,7 +406,7 @@ static void Tml_Not_GetAndWriteNoPost (const struct Tml_Not_Note *Not)
    Tml_Not_GetNoteSummary (Not,SummaryStr);
 
    /* Write note summary */
-   HTM_DIV_Begin ("class=\"Tml_TXT\"");
+   HTM_DIV_Begin ("class=\"Tml_TXT %s\"",The_TmlTxtColor[Gbl.Prefs.Theme]);
       HTM_Txt (SummaryStr);
    HTM_DIV_End ();
   }
@@ -692,7 +693,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 	    Str_FreeStrings ();
 
 	       /* Icon and text */
-	       Ico_PutIcon (Tml_Icons[Not->Type],
+	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,
 	                    Txt_TIMELINE_NOTE[Not->Type],"CONTEXT_ICO_x16");
 	       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->Type]);
 
@@ -867,7 +868,7 @@ static void Tml_Not_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
       Tml_Not_PutHiddenParamNotCod (NotCod);
 
       /* Icon to remove */
-      Ico_PutIconLink ("trash.svg",Txt_Remove);
+      Ico_PutIconLink ("trash.svg",Ico_RED,Txt_Remove);
 
    /* End form */
    Tml_Frm_EndForm ();

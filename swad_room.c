@@ -238,7 +238,8 @@ void Roo_SeeRooms (void)
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
 	                     Gbl.ColorRows[RowEvenOdd]);
-		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
+		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Ico_BLACK,
+		                 Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
 	       HTM_TD_End ();
 
 	       /* Short name */
@@ -481,7 +482,7 @@ void Roo_PutIconToViewRooms (void)
 
    Lay_PutContextualLinkOnlyIcon (ActSeeRoo,NULL,
                                   NULL,NULL,
-                                  "classroom.svg",
+                                  "chalkboard-teacher.svg",Ico_BLACK,
                                   Txt_Rooms);
   }
 

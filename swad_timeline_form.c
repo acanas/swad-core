@@ -108,6 +108,7 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
 	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Color       = Ico_BLACK,
 	    .Title       = Txt_TIMELINE_Mark_as_favourite,
 	   },
 	 [true] = // I have faved ==> unfav
@@ -115,7 +116,8 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 	    .Action      = Tml_Frm_UNF_NOTE,
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Fav_ICON_FAVED,
+	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Color       = Ico_RED,
 	    .Title       = Txt_TIMELINE_Favourite,
 	   },
 	},
@@ -127,6 +129,7 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 	    .ParamFormat = "PubCod=%ld",
 	    .ParamCod    = Cod,
 	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Color       = Ico_BLACK,
 	    .Title       = Txt_TIMELINE_Mark_as_favourite,
 	   },
 	 [true] = // I have faved ==> unfav
@@ -134,7 +137,8 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 	    .Action      = Tml_Frm_UNF_COMM,
 	    .ParamFormat = "PubCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Fav_ICON_FAVED,
+	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Color       = Ico_RED,
 	    .Title       = Txt_TIMELINE_Favourite,
 	   },
 	},
@@ -146,6 +150,7 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
 	    .Icon        = Tml_Sha_ICON_SHARE,
+	    .Color       = Ico_BLACK,
 	    .Title       = Txt_TIMELINE_Share,
 	   },
 	 [true] = // I have shared ==> unshare
@@ -153,7 +158,8 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
 	    .Action      = Tml_Frm_UNS_NOTE,
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Sha_ICON_SHARED,
+	    .Icon        = Tml_Sha_ICON_SHARE,
+	    .Color       = Ico_GREEN,
 	    .Title       = Txt_TIMELINE_Shared,
 	   },
 	},
@@ -217,7 +223,7 @@ void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
 	 break;
       case Tml_Usr_SHOW_ALL_USRS:
 	 /***** Disabled icon *****/
-         Ico_PutIconOff (Tml_Frm_ICON_ELLIPSIS,Txt_View_all_USERS);
+         Ico_PutIconOff (Tml_Frm_ICON_ELLIPSIS,Ico_BLACK,Txt_View_all_USERS);
 	 break;
      }
   }
@@ -277,7 +283,7 @@ void Tml_Frm_FormFavSha (const struct Tml_Form *Form)
      }
    Frm_BeginFormUniqueAnchorOnSubmit (ActUnk,Anchor,OnSubmit);
    free (OnSubmit);
-      Ico_PutIconLink (Form->Icon,Form->Title);
+      Ico_PutIconLink (Form->Icon,Form->Color,Form->Title);
    Frm_EndForm ();
   }
 
@@ -339,7 +345,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 
 	    /* Put icon and text with link to show the first hidden comments */
 	    HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
-	       Ico_PutIconTextLink ("angle-up.svg",
+	       Ico_PutIconTextLink ("angle-up.svg",Ico_BLACK,
 				    Str_BuildString (Txt_See_the_previous_X_COMMENTS,
 				                     NumInitialComms));
 	       Str_FreeStrings ();

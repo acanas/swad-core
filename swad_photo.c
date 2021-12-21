@@ -196,7 +196,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
 			                      Txt_Upload_photo;
       Lay_PutContextualLinkOnlyIcon (ActReqMyPho,NULL,
                                      NULL,NULL,
-				     "camera.svg",
+				     "camera.svg",Ico_BLACK,
 				     TitleText);
      }
    else	// Not me
@@ -207,7 +207,7 @@ void Pho_PutIconToChangeUsrPhoto (void)
 				   Txt_Upload_photo;
 	 Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Record.UsrDat->Roles.InCurrentCrs],NULL,
 				        Rec_PutParamUsrCodEncrypted,NULL,
-	                                "camera.svg",
+	                                "camera.svg",Ico_BLACK,
 				        TitleText);
 	}
   }
@@ -224,7 +224,7 @@ static void Pho_PutIconToRequestRemoveMyPhoto (__attribute__((unused)) void *Arg
    if (Gbl.Usrs.Me.MyPhotoExists)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
 				     NULL,NULL,
-				     "trash.svg",
+				     "trash.svg",Ico_RED,
 				     Txt_Remove_photo);
   }
 
@@ -256,7 +256,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (__attribute__((unused)) voi
    if (PhotoExists)
       Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
 				     Usr_PutParamOtherUsrCodEncrypted,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-				     "trash.svg",
+				     "trash.svg",Ico_RED,
 				     Txt_Remove_photo);
   }
 

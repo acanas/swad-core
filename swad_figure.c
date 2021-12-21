@@ -302,7 +302,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
    Figures.FigureType = FigureType;
    Lay_PutContextualLinkOnlyIcon (ActSeeUseGbl,NULL,
                                   Fig_PutHiddenParamFigures,&Figures,
-				  "chart-pie.svg",
+				  "chart-pie.svg",Ico_BLACK,
 				  Txt_Show_statistic);
   }
 
@@ -634,31 +634,31 @@ static void Fig_WriteHeadHierarchy (void)
       HTM_TH_Empty (1);
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("globe.svg",Txt_Countries,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("globe-americas.svg",Ico_BLACK,Txt_Countries,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Countries);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("university.svg",Txt_Institutions,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("university.svg",Ico_BLACK,Txt_Institutions,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Institutions);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("building.svg",Txt_Centers,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("building.svg",Ico_BLACK,Txt_Centers,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Centers);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("graduation-cap.svg",Txt_Degrees,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("graduation-cap.svg",Ico_BLACK,Txt_Degrees,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Degrees);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("chalkboard-teacher.svg",Txt_Courses,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Txt_Courses,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Courses);
       HTM_TH_End ();
@@ -2537,7 +2537,7 @@ static void Fig_GetAndShowForumStats (void)
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
 	 HTM_TH_Begin (1,1,"BT");
-	    Ico_PutIcon ("comments.svg",Txt_Scope,"ICO16x16");
+	    Ico_PutIcon ("comments.svg",Ico_BLACK,Txt_Scope,"ICO16x16");
 	 HTM_TH_End ();
 	 HTM_TH (1,1,Txt_Forums                        ,"LT");
 	 HTM_TH (1,1,Txt_Number_of_forums              ,"RT");
@@ -2704,7 +2704,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
 	 if (asprintf (&ForumName,"%s%s",
 		       ForumName1,ForumName2) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Ico_PutIcon (Icon,ForumName,"ICO16x16");
+	 Ico_PutIcon (Icon,Ico_BLACK,ForumName,"ICO16x16");
 	 free (ForumName);
       HTM_TD_End ();
 
@@ -3615,9 +3615,9 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  if (asprintf (&Icon,"first-day-of-week-%u.png",
 				FirstDayOfWeek) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  Ico_PutIcon (Icon,
+		  Ico_PutIcon (Icon,Ico_BLACK,
 			       Str_BuildString (Txt_First_day_of_the_week_X,
-						   Txt_DAYS_SMALL[FirstDayOfWeek]),
+						Txt_DAYS_SMALL[FirstDayOfWeek]),
 			       "ICO40x40");
 		  Str_FreeStrings ();
 		  free (Icon);
@@ -3851,7 +3851,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"CM\"");
-	       Ico_PutIcon (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],"ICO40x40");
+	       Ico_PutIcon (Mnu_MenuIcons[Menu],Ico_BLACK,Txt_MENU_NAMES[Menu],"ICO40x40");
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);

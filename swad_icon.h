@@ -40,6 +40,15 @@ typedef enum
    } Ico_IconSet_t;
 #define Ico_ICON_SET_DEFAULT Ico_ICON_SET_AWESOME
 
+#define Ico_NUM_COLORS 4
+typedef enum
+  {
+   Ico_BLACK = 0,
+   Ico_GREEN = 1,
+   Ico_RED   = 2,
+   Ico_WHITE = 3,
+  } Ico_Color_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -84,14 +93,13 @@ void Ico_PutContextualIconToShowAttendanceList (Act_Action_t NextAction,
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
                                  void (*FuncParams) (void *Args),void *Args);
 
-void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title);
-void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title);
-void Ico_PutIconLink (const char *Icon,const char *Title);
-void Ico_PutIconTextLink (const char *Icon,const char *Text);
-void Ico_PutSettingIconLink (const char *Icon,const char *Title);
-void Ico_PutIconOn (const char *Icon,const char *Title);
-void Ico_PutIconOff (const char *Icon,const char *Title);
-void Ico_PutIcon (const char *Icon,const char *Title,const char *Class);
+void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,const char *Title);
+void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title);
+void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text);
+void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title);
+void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title);
+void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title);
+void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const char *Class);
 
 void Ico_PutCalculateIcon (const char *Title);
 void Ico_PutCalculateIconWithText (const char *Text);

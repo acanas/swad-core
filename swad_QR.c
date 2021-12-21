@@ -62,7 +62,7 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,
    /***** Link to print QR *****/
    Lay_PutContextualLinkOnlyIcon (Action,NULL,
                                   FuncParams,Args,
-				  "qrcode.svg",
+				  "qrcode.svg",Ico_BLACK,
 				  Txt_QR_code);
   }
 

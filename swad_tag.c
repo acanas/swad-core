@@ -97,7 +97,7 @@ void Tag_PutIconToEditTags (void)
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActEdiTag,NULL,
                                   NULL,NULL,
-				  "tag.svg",
+				  "tag.svg",Ico_BLACK,
 				  Txt_Edit_tags);
   }
 
@@ -348,10 +348,10 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,
 		 {
 		  TagHidden = (row[2][0] == 'Y');
 		  HTM_TD_Begin ("class=\"LM\"");
-		     Ico_PutIconOff (TagHidden ? "eye-slash-red.svg" :
-						 "eye-green.svg",
-				     TagHidden ? Txt_Tag_not_allowed :
-						 Txt_Tag_allowed);
+		     if (TagHidden)
+			Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Tag_not_allowed);
+		     else
+			Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Tag_allowed    );
 		  HTM_TD_End ();
 		 }
 
@@ -472,7 +472,7 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-	 Ico_PutIconLink ("eye-slash-red.svg",
+	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,
 			  Str_BuildString (Txt_Tag_X_not_allowed_Click_to_allow_it,
 					   TagTxt));
 	 Str_FreeStrings ();
@@ -491,7 +491,7 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-	 Ico_PutIconLink ("eye-green.svg",
+	 Ico_PutIconLink ("eye.svg",Ico_GREEN,
 			  Str_BuildString (Txt_Tag_X_allowed_Click_to_disable_it,
 					   TagTxt));
 	 Str_FreeStrings ();

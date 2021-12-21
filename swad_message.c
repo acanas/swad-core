@@ -1611,7 +1611,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
 
    Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,
                                   NULL,NULL,
-				  "lock.svg",
+				  "lock.svg",Ico_RED,
 				  Txt_Banned_users);
   }
 
@@ -1714,7 +1714,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	 case Msg_SENT:
 	    Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
-					   "marker.svg",
+					   "marker.svg",Ico_BLACK,
 					   Txt_MSGS_Write);
 	    break;
 	 default:
@@ -1728,7 +1728,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	 case Msg_SENT:
 	    Lay_PutContextualLinkOnlyIcon (ActSeeRcvMsg,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
-					   "inbox.svg",
+					   "inbox.svg",Ico_BLACK,
 					   Txt_MSGS_Received);
 	    break;
 	 default:
@@ -1742,7 +1742,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 	 case Msg_RECEIVED:
 	    Lay_PutContextualLinkOnlyIcon (ActSeeSntMsg,NULL,
 					   Msg_PutHiddenParamsMsgsFilters,Messages,
-					   "share.svg",
+					   "share.svg",Ico_BLACK,
 					   Txt_MSGS_Sent);
 	    break;
 	 default:
@@ -2086,7 +2086,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 										    "envelope-open-text.svg") :
 									 "envelope.svg") :
 								 "share.svg",
-		      Title,"ICO16x16");
+		      Ico_BLACK,Title,"ICO16x16");
 
 	 /***** Form to delete message *****/
 	 HTM_BR ();
@@ -2338,7 +2338,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 else
-	    Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,
+	    Ico_PutIcon ("usr_bl.jpg",Ico_BLACK,Txt_Unknown_or_without_photo,
 	                 ClassPhoto[Gbl.Prefs.PhotoShape]);
 
 	 HTM_TD_End ();
@@ -2455,7 +2455,7 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
       Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
 
       /****** Link *****/
-      Ico_PutIconLink ("reply.svg",
+      Ico_PutIconLink ("reply.svg",Ico_BLACK,
 		       FromThisCrs ? (Replied ? Txt_Reply_again :
 						Txt_Reply) :
 				     (Replied ? Txt_Go_to_course_and_reply_again :
@@ -2488,11 +2488,10 @@ static void Msg_WriteMsgFrom (struct Msg_Messages *Messages,
 
 	 /***** Put an icon to show if user has read the message *****/
 	 HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-	    Ico_PutIcon (Deleted ? "share-red.svg" :
-				   "share.svg",
-			 Deleted ? Txt_MSG_Sent_and_deleted :
-				   Txt_MSG_Sent,
-			 "ICO16x16");
+	    if (Deleted)
+	       Ico_PutIcon ("share.svg",Ico_RED  ,Txt_MSG_Sent_and_deleted,"ICO16x16");
+	    else
+	       Ico_PutIcon ("share.svg",Ico_BLACK,Txt_MSG_Sent            ,"ICO16x16");
 	 HTM_TD_End ();
 
 	 /***** Put user's photo *****/
@@ -2626,11 +2625,14 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-		  Ico_PutIcon (OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
-						      "envelope-open-text.svg") :
-					   (Deleted ? "envelope-red.svg" :
-						      "envelope.svg"),
-			       Title,"ICO16x16");
+	          if (OpenByDst)
+	             Ico_PutIcon ("envelope-open-text.svg",Deleted ? Ico_RED :
+				                                     Ico_BLACK,
+				  Title,"ICO16x16");
+	          else
+		     Ico_PutIcon ("envelope.svg"          ,Deleted ? Ico_RED :
+			                                             Ico_BLACK,
+				  Title,"ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Put user's photo */
@@ -2783,7 +2785,8 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
 				Messages->CurrentPage);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutHiddenParamsMsgsFilters (Messages);
-	 Ico_PutIconLink ("unlock.svg",Txt_Sender_permitted_click_to_ban_him);
+	 Ico_PutIconLink ("unlock.svg",Ico_GREEN,
+	                  Txt_Sender_permitted_click_to_ban_him);
    Frm_EndForm ();
   }
 
@@ -2801,7 +2804,8 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
 				Messages->CurrentPage);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutHiddenParamsMsgsFilters (Messages);
-	 Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
+	 Ico_PutIconLink ("lock.svg",Ico_RED,
+	                  Txt_Sender_banned_click_to_unban_him);
    Frm_EndForm ();
   }
 
@@ -2938,7 +2942,8 @@ void Msg_ListBannedUsrs (void)
 		  HTM_TD_Begin ("class=\"BM\"");
 		     Frm_BeginForm (ActUnbUsrLst);
 			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
-			Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
+			Ico_PutIconLink ("lock.svg",Ico_RED,
+			                 Txt_Sender_banned_click_to_unban_him);
 		     Frm_EndForm ();
 		  HTM_TD_End ();
 

@@ -121,10 +121,12 @@ static void Tml_Pst_GetPostContent (long PstCod,struct Tml_Pst_Content *Content)
 
 static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
   {
+   extern const char *The_TmlTxtColor[The_NUM_THEMES];
+
    /***** Write content text *****/
    if (Content->Txt[0])
      {
-      HTM_DIV_Begin ("class=\"Tml_TXT\"");
+      HTM_DIV_Begin ("class=\"Tml_TXT %s\"",The_TmlTxtColor[Gbl.Prefs.Theme]);
 	 Msg_WriteMsgContent (Content->Txt,true,false);
       HTM_DIV_End ();
      }

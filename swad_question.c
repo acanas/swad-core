@@ -1498,7 +1498,8 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
 	    /* Put an icon that indicates whether the answer is correct or wrong */
 	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 	       if (Question->Answer.Options[NumOpt].Correct)
-		  Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
+		  Ico_PutIcon ("check.svg",Ico_BLACK,
+		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
 	    HTM_TD_End ();
 
 	    /* Write the number of option */
@@ -2161,7 +2162,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				     NumOpt);
 			   if (asprintf (&Title,"%s %c)",Txt_Expand,'a' + (char) NumOpt) < 0)
 			      Err_NotEnoughMemoryExit ();
-			   Ico_PutIcon ("caret-right.svg",Title,"ICO16x16");
+			   Ico_PutIcon ("caret-right.svg",Ico_BLACK,Title,"ICO16x16");
 			   free (Title);
 			HTM_A_End ();
 
@@ -2174,7 +2175,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				     NumOpt);
 			   if (asprintf (&Title,"%s %c)",Txt_Contract,'a' + (char) NumOpt) < 0)
 			      Err_NotEnoughMemoryExit ();
-			   Ico_PutIcon ("caret-down.svg",Title,"ICO16x16");
+			   Ico_PutIcon ("caret-down.svg",Ico_BLACK,Title,"ICO16x16");
 			   free (Title);
 			HTM_A_End ();
 

@@ -360,15 +360,15 @@ void Ntf_ShowMyNotifications (void)
       if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
 	 Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,
 					NULL,NULL,
-					"eye.svg",
+					"eye.svg",Ico_BLACK,
 					Txt_Mark_all_NOTIFICATIONS_as_read);	// Mark notifications as read
       Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
 				     NULL,NULL,
-				     "cog.svg",
+				     "cog.svg",Ico_BLACK,
 				     Txt_Settings);	// Change notification settings
       Lay_PutContextualLinkIconText (ActSeeMai,NULL,
 				     NULL,NULL,
-				     "envelope.svg",
+				     "envelope.svg",Ico_BLACK,
 				     Txt_Domains);	// View allowed mail domains
    Mnu_ContextMenuEnd ();
 
@@ -484,12 +484,12 @@ void Ntf_ShowMyNotifications (void)
 
 		     if (PutLink)
 		       {
-			Ico_PutIconLink (Ntf_Icons[NotifyEvent],
+			Ico_PutIconLink (Ntf_Icons[NotifyEvent],Ico_BLACK,
 					 Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 			Frm_EndForm ();
 		       }
 		     else
-			Ico_PutIconOff (Ntf_Icons[NotifyEvent],
+			Ico_PutIconOff (Ntf_Icons[NotifyEvent],Ico_BLACK,
 					Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 		  HTM_TD_End ();
 

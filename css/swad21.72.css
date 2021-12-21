@@ -813,7 +813,14 @@ a:hover						/* Default ==> underlined */
 	vertical-align:middle;
 	padding:4px 0;
 	}
-
+/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+.TAB_ICO_WHITE	{}	/* #000000 */
+.TAB_ICO_GREY	{}	/* #000000 */
+.TAB_ICO_PURPLE	{}	/* #000000 */
+.TAB_ICO_BLUE	{}	/* #000000 */
+.TAB_ICO_YELLOW	{}	/* #000000 */
+.TAB_ICO_PINK	{}	/* #000000 */
+/* .TAB_ICO_DARK	{filter: invert(100%) sepia(0%) saturate(7483%) hue-rotate(109deg) brightness(106%) contrast(106%);} */	/* #ffffff */
 .TAB_ICO_DARK	{filter:invert(1);}
 
 /*********************** Layout (fourth row, main zone) **********************/
@@ -953,7 +960,7 @@ a:hover						/* Default ==> underlined */
 	}
 #main_horizontal .MENU_OPT_OFF
 	{
-	opacity:0.67;
+	opacity:0.6;
 	}
 #main_horizontal .MENU_OPT_OFF:hover, #main_horizontal .MENU_OPT_ON
 	{
@@ -1016,7 +1023,7 @@ a:hover						/* Default ==> underlined */
 		}
 	#main_vertical .MENU_OPT_OFF
 		{
-		opacity:0.67;
+		opacity:0.6;
 		}
 	#main_vertical .MENU_OPT_OFF:hover, #main_vertical .MENU_OPT_ON
 		{
@@ -1076,7 +1083,7 @@ a:hover						/* Default ==> underlined */
 		}
 	#main_vertical .MENU_OPT_OFF
 		{
-		opacity:0.67;
+		opacity:0.6;
 		}
 	#main_vertical .MENU_OPT_OFF:hover, #main_vertical .MENU_OPT_ON
 		{
@@ -1122,8 +1129,15 @@ a:hover						/* Default ==> underlined */
 		overflow:hidden;
 		}
 	}
-	
-.MENU_ICO_DARK	{filter:invert(1);}
+/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+.MENU_ICO_WHITE		{}	/* #000000 */
+.MENU_ICO_GREY		{}	/* #000000 */
+.MENU_ICO_PURPLE	{}	/* #000000 */
+.MENU_ICO_BLUE		{}	/* #000000 */
+.MENU_ICO_YELLOW	{}	/* #000000 */
+.MENU_ICO_PINK		{}	/* #000000 */
+/* .MENU_ICO_DARK		{filter: invert(100%) sepia(0%) saturate(7483%) hue-rotate(109deg) brightness(106%) contrast(106%);} */	/* #ffffff */
+.MENU_ICO_DARK		{filter:invert(1);}
 
 /********************************* Menu fonts ********************************/
 @media only screen and (max-width: 800px)
@@ -1944,7 +1958,38 @@ a:hover img.CENTER_PHOTO_SHOW
 	margin-top:-2px;
 	vertical-align:middle;
 	}
-.CONTEXT_ICO_DARK	{filter:invert(1);}
+/* Creating filter from RGB: https://codepen.io/sosuke/pen/Pjoqqp */
+.BLACK_ICO_WHITE	{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.BLACK_ICO_GREY		{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.BLACK_ICO_PURPLE	{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.BLACK_ICO_BLUE		{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.BLACK_ICO_YELLOW	{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.BLACK_ICO_PINK		{filter: invert(26%) sepia(0%) saturate(1%) hue-rotate(288deg) brightness(97%) contrast(102%);}		/* #404040 */
+.BLACK_ICO_DARK		{filter: invert(92%) sepia(44%) saturate(2%) hue-rotate(176deg) brightness(110%) contrast(88%);}	/* #f0f0f0 */
+
+.GREEN_ICO_WHITE	{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_GREY		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_PURPLE	{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_BLUE		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_YELLOW	{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_PINK		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_DARK		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+
+.RED_ICO_WHITE		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_GREY		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_PURPLE		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_BLUE		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_YELLOW		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_PINK		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_DARK		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+
+.WHITE_ICO_WHITE	{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.WHITE_ICO_GREY		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.WHITE_ICO_PURPLE	{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.WHITE_ICO_BLUE		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.WHITE_ICO_YELLOW	{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.WHITE_ICO_PINK		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
+.WHITE_ICO_DARK		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
 
 /********************************** Frame ************************************/
 .FRAME_INLINE
@@ -3787,12 +3832,19 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	text-align:left;
 	padding-top:5px;
-	color:#202020;
 	font-size:13pt;
  	line-height:1.4;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
+.Tml_TXT_WHITE	{color:#202020;}
+.Tml_TXT_GREY	{color:#202020;}
+.Tml_TXT_PURPLE	{color:#202020;}
+.Tml_TXT_BLUE	{color:#202020;}
+.Tml_TXT_YELLOW	{color:#202020;}
+.Tml_TXT_PINK	{color:#202020;}
+.Tml_TXT_DARK	{color:#e0e0e0;}
+
 .Tml_EXPAND_COM
 	{
 	text-align:center;

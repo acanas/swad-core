@@ -649,7 +649,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
       Exams->SesCod = Session->SesCod;
       Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
-				     "trophy.svg",
+				     "trophy.svg",Ico_BLACK,
 				     Txt_Results);
      }
    else
@@ -671,26 +671,32 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod))
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
 				     ExaSes_PutParamsEdit,Exams,
-				     "trophy.svg",
+				     "trophy.svg",Ico_BLACK,
 				     Txt_Results);
 
    /***** Check if visibility of session results can be changed *****/
    if (ExaSes_CheckIfVisibilityOfResultsCanBeChanged (Session))
      {
       /***** Put form to change visibility of session results *****/
-      Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
-				     ExaSes_PutParamsEdit,Exams,
-				     Session->ShowUsrResults ? "eye-green.svg" :
-							       "eye-slash-red.svg",
-				     Session->ShowUsrResults ? Txt_Visible_results :
-							       Txt_Hidden_results);
+      if (Session->ShowUsrResults)
+	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
+					ExaSes_PutParamsEdit,Exams,
+					"eye.svg",Ico_GREEN,
+					Txt_Visible_results);
+      else
+	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
+					ExaSes_PutParamsEdit,Exams,
+					"eye-slash.svg",Ico_RED,
+					Txt_Hidden_results);
      }
    else	// Don't put form
+     {
       /***** Put icon showing the current visibility of session results *****/
-      Ico_PutIconOff (Session->ShowUsrResults ? "eye-green.svg" :
-					        "eye-slash-red.svg",
-		      Session->ShowUsrResults ? Txt_Visible_results :
-					        Txt_Hidden_results);
+      if (Session->ShowUsrResults)
+	 Ico_PutIconOff ("eye.svg"      ,Ico_GREEN,Txt_Visible_results);
+      else
+	 Ico_PutIconOff ("eye-slash.svg",Ico_RED  ,Txt_Hidden_results);
+     }
   }
 
 /*****************************************************************************/
@@ -1140,7 +1146,7 @@ void ExaSes_PutButtonNewSession (struct Exa_Exams *Exams,long ExaCod)
 /****************** Request the creation of a new session ********************/
 /*****************************************************************************/
 
-void ExaSes_RequestCreatOrEditSession (void)
+void ExaSes_RequestCreatOrEditSes (void)
   {
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;

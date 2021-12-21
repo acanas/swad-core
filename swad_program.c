@@ -776,52 +776,52 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-up.svg",
+					   "arrow-up.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Move_up_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
-	    Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Put icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-down.svg",
+					   "arrow-down.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Move_down_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
-	    Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-left.svg",
+					   "arrow-left.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Increase_level_of_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
-            Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
 
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	   {
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-right.svg",
+					   "arrow-right.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Decrease_level_of_X,
 							       StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
-            Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
+            Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);
 	 break;
       case Rol_STD:
       case Rol_NET:

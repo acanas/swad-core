@@ -37,7 +37,7 @@ void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions);
 bool QstImp_GetCreateXMLParamFromForm (void);
 void QstImp_PutIconToImportQuestions (void);
 void QstImp_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res);
-void QstImp_ShowFormImportQstsFromXML (void);
-void QstImp_ImportQstsFromXML (void);
+void QstImp_ShowFormImpQstsFromXML (void);
+void QstImp_ImpQstsFromXML (void);
 
 #endif

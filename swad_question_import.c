@@ -81,7 +81,7 @@ void QstImp_PutIconToExportQuestions (struct Qst_Questions *Questions)
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActLstTstQst,NULL,
                                   QstImp_PutParamsExportQsts,Questions,
-				  "file-import.svg",
+				  "file-import.svg",Ico_BLACK,
 				  Txt_Export_questions);
   }
 
@@ -125,7 +125,7 @@ void QstImp_PutIconToImportQuestions (void)
    /***** Put a link to create a file with questions *****/
    Lay_PutContextualLinkOnlyIcon (ActReqImpTstQst,NULL,
                                   NULL,NULL,
-				  "file-export.svg",
+				  "file-export.svg",Ico_BLACK,
 				  Txt_Import_questions);
   }
 
@@ -133,7 +133,7 @@ void QstImp_PutIconToImportQuestions (void)
 /*********** Show form to import test questions from an XML file *************/
 /*****************************************************************************/
 
-void QstImp_ShowFormImportQstsFromXML (void)
+void QstImp_ShowFormImpQstsFromXML (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -228,8 +228,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 	        Gbl.FileBrowser.TmpPubDir.L,
 	        Gbl.FileBrowser.TmpPubDir.R,
 	        The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-      Ico_PutIconTextLink ("file.svg",
-			   Txt_XML_file);
+      Ico_PutIconTextLink ("file.svg",Ico_BLACK,Txt_XML_file);
    HTM_A_End ();
   }
 
@@ -379,7 +378,7 @@ static void QstImp_WriteAnswersOfAQstXML (const struct Qst_Question *Question,
 /************ Get questions from XML and store them in database **************/
 /*****************************************************************************/
 
-void QstImp_ImportQstsFromXML (void)
+void QstImp_ImpQstsFromXML (void)
   {
    extern const char *Txt_The_file_is_not_X;
    struct Param *Param;
@@ -886,6 +885,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_Begin ("class=\"BT%u CT\"",Gbl.RowEvenOdd);
 	 Ico_PutIcon (QuestionExists ? "tr16x16.gif" :
 				       "check-circle.svg",
+		      Ico_BLACK,
 		      QuestionExists ? Txt_Existing_question :
 				       Txt_New_question,
 		      "CONTEXT_ICO_16x16");
@@ -942,7 +942,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 	     Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	    /* Put an icon that indicates whether shuffle is enabled or not */
 	    if (Question->Answer.Shuffle)
-	       Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
+	       Ico_PutIcon ("check.svg",Ico_BLACK,
+	                    Txt_TST_Answer_given_by_the_teachers,
 			    QuestionExists ? "ICO_HIDDEN ICO16x16" :
 					     "ICO16x16");
       HTM_TD_End ();
@@ -1015,7 +1016,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			/* Put an icon that indicates whether the answer is correct or wrong */
 			HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 			   if (Question->Answer.Options[NumOpt].Correct)
-			      Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
+			      Ico_PutIcon ("check.svg",Ico_BLACK,
+			                   Txt_TST_Answer_given_by_the_teachers,
 					   QuestionExists ? "ICO_HIDDEN CONTEXT_ICO_16x16" :
 							    "CONTEXT_ICO_16x16");
 			HTM_TD_End ();

@@ -425,7 +425,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 
       /***** Put link *****/
       HTM_BUTTON_SUBMIT_Begin (Txt_Confirm_ID,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-	 Ico_PutIconTextLink ("check.svg",Txt_Confirm_ID);
+	 Ico_PutIconTextLink ("check.svg",Ico_BLACK,Txt_Confirm_ID);
       HTM_BUTTON_End ();
 
    /***** End form *****/

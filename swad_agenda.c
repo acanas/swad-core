@@ -231,7 +231,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 				Agenda->SelectedOrder,
 				Agenda->CurrentPage,
 				-1L);
-	 Ico_PutSettingIconLink (Icon[PstFut],
+	 Ico_PutSettingIconLink (Icon[PstFut],Ico_BLACK,
 				 Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -248,10 +248,14 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
    extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
    Agd_PrivatPublicEvents_t PrvPub;
-   static const char *Icon[2] =
+   static const struct
      {
-      [Agd_PRIVAT_EVENTS] = "lock.svg",
-      [Agd_PUBLIC_EVENTS] = "unlock.svg",
+      const char *Icon;
+      Ico_Color_t Color;
+     } Icon[2] =
+     {
+      [Agd_PRIVAT_EVENTS] = {"lock.svg"  ,Ico_RED  },
+      [Agd_PUBLIC_EVENTS] = {"unlock.svg",Ico_GREEN},
      };
 
    Set_BeginOneSettingSelector ();
@@ -270,7 +274,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 				Agenda->SelectedOrder,
 				Agenda->CurrentPage,
 				-1L);
-	 Ico_PutSettingIconLink (Icon[PrvPub],
+	 Ico_PutSettingIconLink (Icon[PrvPub].Icon,Icon[PrvPub].Color,
 				 Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -287,10 +291,14 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
    extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
    Agd_HiddenVisiblEvents_t HidVis;
-   static const char *Icon[2] =
+   static const struct
      {
-      [Agd_HIDDEN_EVENTS] = "eye-slash-red.svg",
-      [Agd_VISIBL_EVENTS] = "eye-green.svg",
+      const char *Icon;
+      Ico_Color_t Color;
+     } Icon[2] =
+     {
+      [Agd_HIDDEN_EVENTS] = {"eye-slash.svg",Ico_RED  },
+      [Agd_VISIBL_EVENTS] = {"eye.svg"      ,Ico_GREEN},
      };
 
    Set_BeginOneSettingSelector ();
@@ -309,7 +317,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
 				Agenda->SelectedOrder,
 				Agenda->CurrentPage,
 				-1L);
-	 Ico_PutSettingIconLink (Icon[HidVis],
+	 Ico_PutSettingIconLink (Icon[HidVis].Icon,Icon[HidVis].Color,
 				 Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -726,7 +734,7 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "user.svg",
+			             "user.svg",Ico_BLACK,
 			             Txt_Another_user_s_profile);
 
    /***** Button to view user's record card *****/
@@ -734,12 +742,12 @@ static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
       /* View student's records: common record card and course record card */
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneStd,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "address-card.svg",
+			             "address-card.svg",Ico_BLACK,
 			             Txt_View_record_for_this_course);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeRecOneTch,NULL,
 			             Usr_PutParamOtherUsrCodEncrypted,EncryptedUsrCod,
-			             "address-card.svg",
+			             "address-card.svg",Ico_BLACK,
 			             Txt_View_record_and_office_hours);
   }
 
@@ -916,12 +924,12 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
    if (AgdEvent->Public)
       Lay_PutContextualLinkOnlyIcon (ActPrvEvtMyAgd,NULL,
 				     Agd_PutCurrentParamsMyAgenda,Agenda,
-			             "unlock.svg",
+			             "unlock.svg",Ico_GREEN,
 			             Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private);
    else
       Lay_PutContextualLinkOnlyIcon (ActPubEvtMyAgd,NULL,
 	                             Agd_PutCurrentParamsMyAgenda,Agenda,
-			             "lock.svg",
+			             "lock.svg",Ico_RED,
 			             Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses);
   }
 

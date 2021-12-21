@@ -133,9 +133,9 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	       if (FuncParams)	// Extra parameters depending on the action
 		  FuncParams (Args);
 	       snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
-	       Ico_PutSettingIconLink (Icon,
+	       Ico_PutSettingIconLink (Icon,Ico_BLACK,
 				       Str_BuildString (Txt_First_day_of_the_week_X,
-							   Txt_DAYS_SMALL[FirstDayOfWeek]));
+							Txt_DAYS_SMALL[FirstDayOfWeek]));
 	       Str_FreeStrings ();
 	    Frm_EndForm ();
 	    HTM_DIV_End ();
@@ -323,6 +323,6 @@ void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args)
 
    Lay_PutContextualLinkOnlyIcon (ActSeeCal,NULL,
 				  NULL,NULL,
-				  "calendar.svg",
+				  "calendar.svg",Ico_BLACK,
 				  Txt_Calendar);
   }

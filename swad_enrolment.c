@@ -195,7 +195,7 @@ void Enr_PutLinkToRequestSignUp (void)
    /***** Show the form *****/
    Lay_PutContextualLinkIconText (ActReqSignUp,NULL,
                                   NULL,NULL,
-				  "hand-point-up.svg",
+				  "hand-point-up.svg",Ico_BLACK,
 				  Txt_Sign_up);
   }
 
@@ -646,7 +646,7 @@ void Enr_PutLinkToRemOldUsrs (void)
    /***** Put form to remove old users *****/
    Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,
                                   NULL,NULL,
-				  "trash.svg",
+				  "trash.svg",Ico_RED,
 				  Txt_Eliminate_old_users);
   }
 
@@ -1683,7 +1683,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    /***** Put form to remove all students in the current course *****/
    Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,
                                   NULL,NULL,
-				  "trash.svg",
+				  "trash.svg",Ico_RED,
 				  Txt_Remove_all_students);
   }
 
@@ -2361,7 +2361,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 
    Lay_PutContextualLinkIconText (NextAction,NULL,
                                   NULL,NULL,
-				  "user-cog.svg",
+				  "user-cog.svg",Ico_BLACK,
 				  TitleText);
   }
 
@@ -2389,7 +2389,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
       Err_WrongRoleExit ();
    Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,
                                   NULL,NULL,
-				  "users-cog.svg",
+				  "users-cog.svg",Ico_BLACK,
 				  *WhatToDo[Role].Title);
   }
 

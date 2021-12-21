@@ -290,7 +290,7 @@ static void CtrCfg_PutIconToChangePhoto (void)
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
    Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,
                                   NULL,NULL,
-			          "camera.svg",
+			          "camera.svg",Ico_BLACK,
 			          PhotoExists ? Txt_Change_photo :
 				                Txt_Upload_photo);
   }

@@ -789,26 +789,28 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 		 {
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
-						 "arrow-up.svg",
+						 "arrow-up.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_up_X,
 								     StrSetInd));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to move down the set */
 	       if (ICanEditSets && Set.SetInd < MaxSetInd)
 		 {
 		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
-						 "arrow-down.svg",
+						 "arrow-down.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_down_X,
 								     StrSetInd));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 
 	    HTM_TD_End ();
 
@@ -949,20 +951,16 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
    unsigned QstInd;
    struct Qst_Question Question;
    char *Anchor;
-   static Act_Action_t NextAction[Qst_NUM_VALIDITIES] =
+   static const struct
      {
-      [Qst_INVALID_QUESTION] = ActValSetQst,	// Validate question (set it as valid question)
-      [Qst_VALID_QUESTION  ] = ActInvSetQst,	// Invalidated question (set it as canceled question)
-     };
-   static const char *Icon[Qst_NUM_VALIDITIES] =
+      Act_Action_t NextAction;
+      const char *Icon;
+      Ico_Color_t Color;
+      const char **Title;
+     } ValInv[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "times-red.svg",
-      [Qst_VALID_QUESTION  ] = "check-green.svg",
-     };
-   static const char **Title[Qst_NUM_VALIDITIES] =
-     {
-      [Qst_INVALID_QUESTION] = &Txt_Invalid_question,
-      [Qst_VALID_QUESTION  ] = &Txt_Valid_question,
+      [Qst_INVALID_QUESTION] = {ActValSetQst,"times.svg",Ico_RED  ,&Txt_Invalid_question},	// Validate question (set it as valid question)
+      [Qst_VALID_QUESTION  ] = {ActInvSetQst,"check.svg",Ico_GREEN,&Txt_Valid_question  },	// Invalidated question (set it as canceled question)
      };
 
    /***** Begin table *****/
@@ -1010,10 +1008,11 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 		  Ico_PutIconRemovalNotAllowed ();
 
 	       /* Put icon to cancel the question */
-	       Lay_PutContextualLinkOnlyIcon (NextAction[Question.Validity],Anchor,
-					      ExaSet_PutParamsOneQst,Exams,
-					      Icon[Question.Validity],
-					      *Title[Question.Validity]);
+	       Lay_PutContextualLinkOnlyIcon ( ValInv[Question.Validity].NextAction,Anchor,
+					       ExaSet_PutParamsOneQst,Exams,
+					       ValInv[Question.Validity].Icon,
+					       ValInv[Question.Validity].Color,
+					      *ValInv[Question.Validity].Title);
 
 	    HTM_TD_End ();
 

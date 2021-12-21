@@ -1768,26 +1768,28 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		 {
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
-						 "arrow-up.svg",
+						 "arrow-up.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_up_X,
 								     StrQstInd));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to move down the question */
 	       if (ICanEditQuestions && QstInd < MaxQstInd)
 		 {
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
-						 "arrow-down.svg",
+						 "arrow-down.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_down_X,
 								     StrQstInd));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 
 	       /* Put icon to edit the question */
 	       if (ICanEditQuestions)

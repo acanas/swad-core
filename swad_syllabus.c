@@ -648,14 +648,15 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActUp_IteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-up.svg",
+						 "arrow-up.svg",Ico_BLACK,
 						 Str_BuildString (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
 														     Txt_Move_up_X,
 								     StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 	    HTM_TD_End ();
 
 	    /***** Icon to get down item *****/
@@ -667,14 +668,15 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActDwnIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-down.svg",
+						 "arrow-down.svg",Ico_BLACK,
 						 Str_BuildString (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
 														     Txt_Move_down_X,
 								     StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 	    HTM_TD_End ();
 
 	    /***** Icon to increase the level of an item *****/
@@ -685,13 +687,14 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActRgtIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-left.svg",
+						 "arrow-left.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Increase_level_of_X,
 								     StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 	    HTM_TD_End ();
 
 	    /***** Icon to decrease level item *****/
@@ -703,13 +706,14 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 										     ActLftIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-right.svg",
+						 "arrow-right.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Decrease_level_of_X,
 								     StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
-		  Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
+		  Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,
+		                  Txt_Movement_not_allowed);
 	    HTM_TD_End ();
 
 	    LastLevel = Level;

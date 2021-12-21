@@ -433,6 +433,17 @@ const char *The_ClassColorRows[2][The_NUM_THEMES] =
    [1][The_THEME_DARK  ] = "COLOR1_DARK",
   };
 
+const char *The_TmlTxtColor[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "Tml_TXT_WHITE",
+   [The_THEME_GREY  ] = "Tml_TXT_GREY",
+   [The_THEME_PURPLE] = "Tml_TXT_PURPLE",
+   [The_THEME_BLUE  ] = "Tml_TXT_BLUE",
+   [The_THEME_YELLOW] = "Tml_TXT_YELLOW",
+   [The_THEME_PINK  ] = "Tml_TXT_PINK",
+   [The_THEME_DARK  ] = "Tml_TXT_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -468,7 +479,7 @@ void The_PutIconsToSelectTheme (void)
 		  Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
 		  snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
 			    Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
-		  Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
+		  Ico_PutSettingIconLink (Icon,Ico_BLACK,The_ThemeNames[Theme]);
 	       Frm_EndForm ();
 	       HTM_DIV_End ();
 	      }
