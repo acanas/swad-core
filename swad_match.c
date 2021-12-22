@@ -2389,8 +2389,8 @@ static void Mch_PutFormCountdown (struct Mch_Match *Match,long Seconds,const cha
 	 HTM_BUTTON_SUBMIT_Begin (PutForm ? Txt_Countdown :
 					    NULL,
 				  Str_BuildString (PutForm ? "BT_LINK MCH_BUTTON_ON %s" :
-								"BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
-						      Color),
+							     "BT_LINK_OFF MCH_BUTTON_HIDDEN %s",
+						   Color),
 				  NULL);
 	 Str_FreeStrings ();
 
@@ -2702,7 +2702,8 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
 	 /***** Put icon with link *****/
 	 HTM_BUTTON_SUBMIT_Begin (Txt_View_results,
-	                          Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",The_ClassDat[Gbl.Prefs.Theme]),
+	                          Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",
+	                                           The_ClassDat[Gbl.Prefs.Theme]),
 	                          NULL);
 	 Str_FreeStrings ();
 	    HTM_TxtF ("<i class=\"%s\"></i>",
@@ -3351,7 +3352,7 @@ static void Mch_PutBigButtonClose (void)
 static void Mch_ShowWaitImage (const char *Txt)
   {
    HTM_DIV_Begin ("class=\"MCH_WAIT_CONT\"");
-      Ico_PutIcon ("Spin-1s-200px.gif",Ico_BLACK,Txt,"MCH_WAIT_IMG");
+      Ico_PutIcon ("Spin-1s-200px.gif",Ico_UNCHANGED,Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
   }
 

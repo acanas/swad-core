@@ -883,12 +883,12 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Put icon to indicate that a question does not exist in database *****/
       HTM_TD_Begin ("class=\"BT%u CT\"",Gbl.RowEvenOdd);
-	 Ico_PutIcon (QuestionExists ? "tr16x16.gif" :
-				       "check-circle.svg",
-		      Ico_BLACK,
-		      QuestionExists ? Txt_Existing_question :
-				       Txt_New_question,
-		      "CONTEXT_ICO_16x16");
+         if (QuestionExists)
+	    Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
+			 Txt_Existing_question,"CONTEXT_ICO_16x16");
+         else
+	    Ico_PutIcon ("check-circle.svg",Ico_GREEN    ,
+			 Txt_New_question     ,"CONTEXT_ICO_16x16");
       HTM_TD_End ();
 
       /***** Write number of question *****/

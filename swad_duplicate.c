@@ -97,7 +97,7 @@ void Dup_PutLinkToListDupUsrs (void)
    Lay_PutContextualLinkIconText (ActLstDupUsr,NULL,
                                   NULL,NULL,
 				  "user-friends.svg",Ico_BLACK,
-				  Txt_Duplicate_USERS);
+				  Txt_Duplicate_USERS,NULL);
   }
 
 /*****************************************************************************/

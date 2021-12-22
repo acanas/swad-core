@@ -1939,7 +1939,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
       Par_GetParToHTML (Str_BuildString ("CommentStd%s",
-					    Gbl.Usrs.Me.UsrDat.EnUsrCod),
+					 Gbl.Usrs.Me.UsrDat.EnUsrCod),
 			CommentStd,Cns_MAX_BYTES_TEXT);
       Str_FreeStrings ();
 
@@ -2056,7 +2056,7 @@ void Att_RegisterStudentsInAttEvent (void)
 	 /***** Get comments for this student *****/
 	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
 	 Par_GetParToHTML (Str_BuildString ("CommentTch%s",
-					       Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EnUsrCod),
+					    Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EnUsrCod),
 			   CommentTch,Cns_MAX_BYTES_TEXT);
 	 Str_FreeStrings ();
 

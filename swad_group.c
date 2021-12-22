@@ -1313,11 +1313,14 @@ static void Grp_ListGroupTypesForEdition (void)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM\" style=\"width:16px;\"");
-			   Ico_PutIcon ("clock.svg",Ico_BLACK,
-					Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
-												    Txt_The_groups_will_not_automatically_open,
-					Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "CONTEXT_ICO_16x16" :
-												    "ICO_HIDDEN CONTEXT_ICO_16x16");
+			   if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened)
+			      Ico_PutIconOn ("clock.svg",Ico_BLACK,
+			                     Txt_The_groups_will_automatically_open);
+
+			   else
+			      Ico_PutIconOff ("clock.svg",Ico_BLACK,
+			                      Txt_The_groups_will_not_automatically_open);
+
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM\"");
@@ -1465,10 +1468,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     if (Grp->Open)
 			Ico_PutIconLink ("unlock.svg",Ico_GREEN,
-					 Str_BuildString (Txt_Group_X_open_click_to_close_it,Grp->GrpName));
+					 Str_BuildString (Txt_Group_X_open_click_to_close_it,
+					                  Grp->GrpName));
 		     else
 			Ico_PutIconLink ("lock.svg",Ico_RED,
-					 Str_BuildString (Txt_Group_X_closed_click_to_open_it,Grp->GrpName));
+					 Str_BuildString (Txt_Group_X_closed_click_to_open_it,
+					                  Grp->GrpName));
 		     Str_FreeStrings ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
@@ -1481,10 +1486,12 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
 		     if (Grp->FileZones)
 			Ico_PutIconLink ("folder-open.svg",Ico_GREEN,
-					 Str_BuildString (Txt_File_zones_of_the_group_X_enabled_click_to_disable_them,Grp->GrpName));
+					 Str_BuildString (Txt_File_zones_of_the_group_X_enabled_click_to_disable_them,
+					                  Grp->GrpName));
 		     else
 			Ico_PutIconLink ("folder.svg",Ico_RED,
-					 Str_BuildString (Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,Grp->GrpName));
+					 Str_BuildString (Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
+					                  Grp->GrpName));
 		     Str_FreeStrings ();
 		  Frm_EndForm ();
 	       HTM_TD_End ();
@@ -2517,11 +2524,12 @@ static void Grp_PutFormToCreateGroupType (void)
 		     HTM_TR_Begin (NULL);
 
 			HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-			   Ico_PutIcon ("clock.svg",Ico_BLACK,
-					Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
-									   Txt_The_groups_will_not_automatically_open,
-					Gbl.Crs.Grps.GrpTyp.MustBeOpened ? "CONTEXT_ICO_16x16" :
-									   "ICO_HIDDEN CONTEXT_ICO_16x16");
+			   if (Gbl.Crs.Grps.GrpTyp.MustBeOpened)
+			      Ico_PutIconOn ("clock.svg",Ico_BLACK,
+			                     Txt_The_groups_will_automatically_open);
+			   else
+			      Ico_PutIconOff ("clock.svg",Ico_BLACK,
+			                      Txt_The_groups_will_not_automatically_open);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"LM\"");

@@ -114,8 +114,8 @@ static bool Msg_GetParamOnlyUnreadMsgs (void);
 static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
                                             long MsgNum,long MsgCod);
 static long Msg_GetParamMsgCod (void);
-static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages *Messages);
-static void Msg_PutParamsShowMorePotentialRecipients (const void *Messages);
+static void Msg_PutLinkToShowMorePotentialRecipients (struct Msg_Messages *Messages);
+static void Msg_PutParamsShowMorePotentialRecipients (void *Messages);
 static void Msg_PutParamsWriteMsg (void *Messages);
 static void Msg_PutHiddenParamsSubjectAndContent (void);
 static void Msg_ShowOneUniqueRecipient (void);
@@ -406,17 +406,17 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 /********** Put contextual link to show more potential recipients ************/
 /*****************************************************************************/
 
-static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages *Messages)
+static void Msg_PutLinkToShowMorePotentialRecipients (struct Msg_Messages *Messages)
   {
    extern const char *Txt_Show_more_recipients;
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-      Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
-					     Msg_PutParamsShowMorePotentialRecipients,Messages,
-					     "users.svg",
-					     Txt_Show_more_recipients,
-					     "CopyMessageToHiddenFields();");	// Shor more potential recipients
+      Lay_PutContextualLinkIconText (ActReqMsgUsr,NULL,
+				     Msg_PutParamsShowMorePotentialRecipients,Messages,
+				     "users.svg",Ico_BLACK,
+				     Txt_Show_more_recipients,
+				     "CopyMessageToHiddenFields();");	// Show more potential recipients
    Mnu_ContextMenuEnd ();
   }
 
@@ -424,7 +424,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (const struct Msg_Messages 
 /************ Put parameters to show more potential recipients ***************/
 /*****************************************************************************/
 
-static void Msg_PutParamsShowMorePotentialRecipients (const void *Messages)
+static void Msg_PutParamsShowMorePotentialRecipients (void *Messages)
   {
    if (((struct Msg_Messages *) Messages)->Reply.IsReply)
      {
@@ -1612,7 +1612,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
    Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,
                                   NULL,NULL,
 				  "lock.svg",Ico_RED,
-				  Txt_Banned_users);
+				  Txt_Banned_users,NULL);
   }
 
 /*****************************************************************************/
@@ -2338,7 +2338,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 else
-	    Ico_PutIcon ("usr_bl.jpg",Ico_BLACK,Txt_Unknown_or_without_photo,
+	    Ico_PutIcon ("usr_bl.jpg",Ico_UNCHANGED,Txt_Unknown_or_without_photo,
 	                 ClassPhoto[Gbl.Prefs.PhotoShape]);
 
 	 HTM_TD_End ();

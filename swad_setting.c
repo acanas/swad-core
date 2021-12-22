@@ -230,7 +230,7 @@ static void Set_PutIconsToSelectSideCols (void)
 	       Par_PutHiddenParamUnsigned (NULL,"SideCols",SideCols);
 	       snprintf (Icon,sizeof (Icon),"layout%u%u_32x20.gif",
 			 SideCols >> 1,SideCols & 1);
-	       Ico_PutSettingIconLink (Icon,Ico_BLACK,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+	       Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
 	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }

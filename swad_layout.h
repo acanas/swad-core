@@ -56,12 +56,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color,
-				    const char *Text);
-void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,
-					    void (*FuncParams) (const void *Args),const void *Args,
-					    const char *Icon,
-					    const char *Text,
-					    const char *OnSubmit);
+				    const char *Text,const char *OnSubmit);
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 void (*FuncParams) (void),
                                 const char *CheckboxName,

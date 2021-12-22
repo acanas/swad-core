@@ -125,12 +125,12 @@ void Dpt_SeeDepts (void)
    /***** Begin box and table *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Box_BoxTableBegin (NULL,Str_BuildString (Txt_Departments_of_INSTITUTION_X,
-						  Gbl.Hierarchy.Ins.FullName),
+					       Gbl.Hierarchy.Ins.FullName),
 			 Dpt_PutIconToEditDpts,NULL,
 			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    else
       Box_BoxTableBegin (NULL,Str_BuildString (Txt_Departments_of_INSTITUTION_X,
-						  Gbl.Hierarchy.Ins.FullName),
+					       Gbl.Hierarchy.Ins.FullName),
 			 NULL,NULL,
 			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
    Str_FreeStrings ();
@@ -286,7 +286,7 @@ static void Dpt_EditDepartmentsInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Departments_of_INSTITUTION_X,
-				          Gbl.Hierarchy.Ins.FullName),
+				       Gbl.Hierarchy.Ins.FullName),
                  NULL,NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

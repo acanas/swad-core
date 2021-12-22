@@ -169,7 +169,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
 							  Str_BuildString ("BT_LINK %s NOWRAP",
-							                      The_ClassDat[Gbl.Prefs.Theme]),
+							                   The_ClassDat[Gbl.Prefs.Theme]),
 							  "CM");
 		  Str_FreeStrings ();
 	       HTM_TD_End ();
@@ -287,7 +287,7 @@ static void Ins_ListInstitutions (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Institutions_of_COUNTRY_X,
-				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
@@ -374,12 +374,14 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
    if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+                                        The_ClassDatLight[Gbl.Prefs.Theme]);
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+                                        The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -547,7 +549,7 @@ static void Ins_EditInstitutionsInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Institutions_of_COUNTRY_X,
-				          Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 		 Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

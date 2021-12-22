@@ -441,10 +441,10 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
    unsigned Ind;
    const char *Class;
    const char *ClassNormal = Str_BuildString ("RM %s",
-                                                 The_ClassDatLight[Gbl.Prefs.Theme]);
+                                              The_ClassDatLight[Gbl.Prefs.Theme]);
    const char *ClassHighlight = Str_BuildString ("RM %s %s",
-                                                    The_ClassDat[Gbl.Prefs.Theme],
-                                                    The_ClassBgHighlight[Gbl.Prefs.Theme]);
+                                                 The_ClassDat[Gbl.Prefs.Theme],
+                                                 The_ClassBgHighlight[Gbl.Prefs.Theme]);
 
    /***** Write number of courses with each number of indicators valid *****/
    HTM_TABLE_BeginPadding (2);

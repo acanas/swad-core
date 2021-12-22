@@ -121,7 +121,7 @@ void Log_PutLinkToLastClicks (void)
    Lay_PutContextualLinkIconText (ActLstClk,NULL,
                                   NULL,NULL,
 				  "mouse-pointer.svg",Ico_BLACK,
-				  Txt_Last_clicks);
+				  Txt_Last_clicks,NULL);
   }
 
 /*****************************************************************************/

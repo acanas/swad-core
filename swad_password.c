@@ -235,7 +235,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
    Lay_PutContextualLinkIconText (ActReqSndNewPwd,NULL,
 				  Pwd_PutLinkToSendNewPasswdParams,Gbl.Usrs.Me.UsrIdLogin,
 				  "key.svg",Ico_BLACK,
-				  Txt_Forgotten_password);
+				  Txt_Forgotten_password,NULL);
   }
 
 static void Pwd_PutLinkToSendNewPasswdParams (void *UsrIdLogin)

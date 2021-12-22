@@ -1119,7 +1119,7 @@ void Usr_PutLinkToLogin (void)
    Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,
                                   NULL,NULL,
 				  "sign-in-alt.svg",Ico_GREEN,
-				  Txt_Log_in);
+				  Txt_Log_in,NULL);
   }
 
 /*****************************************************************************/
@@ -1364,7 +1364,7 @@ void Usr_WriteLoggedUsrHead (void)
 	 Frm_BeginForm (ActFrmRolSes);
 	    HTM_BUTTON_SUBMIT_Begin (Txt_Role,
 				     Str_BuildString ("BT_LINK %s",
-							 The_ClassUsr[Gbl.Prefs.Theme]),
+						      The_ClassUsr[Gbl.Prefs.Theme]),
 				     NULL);
 	    Str_FreeStrings ();
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
@@ -1375,7 +1375,8 @@ void Usr_WriteLoggedUsrHead (void)
 	}
       else
 	{
-	 Rol_PutFormToChangeMyRole (Str_BuildString ("SEL_ROLE %s",The_ClassInput[Gbl.Prefs.Theme]));
+	 Rol_PutFormToChangeMyRole (Str_BuildString ("SEL_ROLE %s",
+	                                             The_ClassInput[Gbl.Prefs.Theme]));
 	 Str_FreeStrings ();
 	}
       HTM_NBSP ();
@@ -4994,7 +4995,7 @@ static void Usr_PutLinkToSeeAdmins (void)
    Lay_PutContextualLinkIconText (ActLstOth,NULL,
                                   NULL,NULL,
 				  Rol_Icons[Rol_DEG_ADM],Ico_BLACK,
-				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
+				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL);
   }
 
 /*****************************************************************************/
@@ -5009,7 +5010,7 @@ static void Usr_PutLinkToSeeGuests (void)
    Lay_PutContextualLinkIconText (ActLstGst,NULL,
                                   NULL,NULL,
 				  "users.svg",Ico_BLACK,
-				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],NULL);
   }
 
 /*****************************************************************************/

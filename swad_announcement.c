@@ -308,7 +308,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	    Lay_PutContextualLinkIconText (ActAnnSee,NULL,
 					   Ann_PutParams,&AnnCod,
 					   "times.svg",Ico_BLACK,
-					   Txt_Do_not_show_again);
+					   Txt_Do_not_show_again,NULL);
 
       /* End container for foot */
       HTM_DIV_End ();

@@ -479,7 +479,7 @@ void The_PutIconsToSelectTheme (void)
 		  Par_PutHiddenParamString (NULL,"Theme",The_ThemeId[Theme]);
 		  snprintf (Icon,sizeof (Icon),"%s/%s/theme_32x20.gif",
 			    Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme]);
-		  Ico_PutSettingIconLink (Icon,Ico_BLACK,The_ThemeNames[Theme]);
+		  Ico_PutSettingIconLink (Icon,Ico_UNCHANGED,The_ThemeNames[Theme]);
 	       Frm_EndForm ();
 	       HTM_DIV_End ();
 	      }

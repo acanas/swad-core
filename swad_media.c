@@ -1822,7 +1822,7 @@ static void Med_AlertThirdPartyCookies (void)
       Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,
                                      NULL,NULL,
 				     "cog.svg",Ico_BLACK,
-				     Txt_Settings);
+				     Txt_Settings,NULL);
 
    /* End alert */
    Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,

@@ -312,7 +312,8 @@ static void SysCfg_NumCtys (void)
       HTM_TD_Begin ("class=\"LB\"");
 	 Frm_BeginFormGoTo (ActSeeCty);
 	    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,
-	                             Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                             Str_BuildString ("BT_LINK %s",
+	                                              The_ClassDat[Gbl.Prefs.Theme]),
 	                             NULL);
 	    Str_FreeStrings ();
 	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());

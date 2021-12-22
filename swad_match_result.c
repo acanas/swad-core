@@ -221,7 +221,8 @@ void MchRes_ShowMyMchResultsInMch (void)
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in match *****/
-   MchRes_ShowResultsBegin (&Games,Str_BuildString (Txt_Results_of_match_X,Match.Title),
+   MchRes_ShowResultsBegin (&Games,Str_BuildString (Txt_Results_of_match_X,
+                                                    Match.Title),
 			    false);	// Do not list games to select
    Str_FreeStrings ();
       MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);

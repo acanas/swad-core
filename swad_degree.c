@@ -161,7 +161,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
 						     Str_BuildString ("BT_LINK %s NOWRAP",
-						                         The_ClassDat[Gbl.Prefs.Theme]),
+						                      The_ClassDat[Gbl.Prefs.Theme]),
 						     "CM");
 		  Str_FreeStrings ();
 	       HTM_TD_End ();
@@ -716,7 +716,7 @@ static void Deg_ListDegrees (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Degrees_of_CENTER_X,
-				          Gbl.Hierarchy.Ctr.ShrtName),
+				       Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
@@ -817,12 +817,14 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+                                        The_ClassDatLight[Gbl.Prefs.Theme]);
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+                                        The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -911,7 +913,7 @@ static void Deg_EditDegreesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Degrees_of_CENTER_X,
-				          Gbl.Hierarchy.Ctr.ShrtName),
+				       Gbl.Hierarchy.Ctr.ShrtName),
 		 Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

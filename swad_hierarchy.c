@@ -409,7 +409,8 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    switch (Gbl.Hierarchy.Level)
      {
       case HieLvl_SYS:	// System
-	 Ico_PutIcon ("swad64x64.png",Ico_BLACK,Cfg_PLATFORM_FULL_NAME,"ICO40x40 TOP_LOGO");
+	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
+	              Cfg_PLATFORM_FULL_NAME,"ICO40x40 TOP_LOGO");
          break;
       case HieLvl_CTY:	// Country
          Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TITLE");
@@ -683,7 +684,8 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	    switch (Sco_GetScopeFromUnsignedStr (row[0]))
 	      {
 	       case HieLvl_SYS:	// System
-		  Ico_PutIcon ("swad64x64.png",Ico_BLACK,Txt_all_degrees,"ICO16x16");
+		  Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,
+		               Txt_all_degrees,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
 		  break;
 	       case HieLvl_INS:	// Institution

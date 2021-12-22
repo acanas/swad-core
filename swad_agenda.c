@@ -401,12 +401,12 @@ void Agd_ShowUsrAgenda (void)
 	 /***** Begin box *****/
 	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	    Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-						     Gbl.Usrs.Me.UsrDat.FullName),
+						  Gbl.Usrs.Me.UsrDat.FullName),
 			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	 else
 	    Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-						     Gbl.Usrs.Other.UsrDat.FullName),
+						  Gbl.Usrs.Other.UsrDat.FullName),
 			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
          Str_FreeStrings ();
@@ -453,12 +453,12 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    /***** Begin box *****/
 	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
 	       Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-							Gbl.Usrs.Me.UsrDat.FullName),
+						     Gbl.Usrs.Me.UsrDat.FullName),
 			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
 	    else
 	       Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-							Gbl.Usrs.Other.UsrDat.FullName),
+						     Gbl.Usrs.Other.UsrDat.FullName),
 			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
 			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
             Str_FreeStrings ();
@@ -1637,7 +1637,7 @@ void Agd_PrintAgdQRCode (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Where_s_USER,
-	                                  Gbl.Usrs.Me.UsrDat.FullName),
+	                               Gbl.Usrs.Me.UsrDat.FullName),
                  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

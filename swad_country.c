@@ -158,7 +158,8 @@ void Cty_SeeCtyWithPendingInss (void)
 		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL",
-						     Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]));
+						     Str_BuildString ("BT_LINK %s",
+						                      The_ClassDat[Gbl.Prefs.Theme]));
 		  Str_FreeStrings ();
 	       HTM_TD_End ();
 
@@ -421,7 +422,8 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL",
-					    Str_BuildString ("BT_LINK %s",The_ClassDatStrong[Gbl.Prefs.Theme]));
+					    Str_BuildString ("BT_LINK %s",
+					                     The_ClassDatStrong[Gbl.Prefs.Theme]));
 	 Str_FreeStrings ();
       HTM_TD_End ();
 
@@ -562,7 +564,8 @@ void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
       free (URL);
      }
    else
-      Ico_PutIcon ("tr16x16.gif",Ico_BLACK,Cty->Name[Gbl.Prefs.Language],Class);
+      Ico_PutIcon ("tr16x16.gif",Ico_UNCHANGED,
+                   Cty->Name[Gbl.Prefs.Language],Class);
   }
 
 /*****************************************************************************/

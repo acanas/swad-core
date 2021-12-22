@@ -361,15 +361,15 @@ void Ntf_ShowMyNotifications (void)
 	 Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,
 					NULL,NULL,
 					"eye.svg",Ico_BLACK,
-					Txt_Mark_all_NOTIFICATIONS_as_read);	// Mark notifications as read
+					Txt_Mark_all_NOTIFICATIONS_as_read,NULL);	// Mark notifications as read
       Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,
 				     NULL,NULL,
 				     "cog.svg",Ico_BLACK,
-				     Txt_Settings);	// Change notification settings
+				     Txt_Settings,NULL);	// Change notification settings
       Lay_PutContextualLinkIconText (ActSeeMai,NULL,
 				     NULL,NULL,
 				     "envelope.svg",Ico_BLACK,
-				     Txt_Domains);	// View allowed mail domains
+				     Txt_Domains,NULL);	// View allowed mail domains
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/

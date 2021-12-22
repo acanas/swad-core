@@ -125,7 +125,7 @@ void Rep_ReqMyUsageReport (void)
 
       /***** Begin box *****/
       Box_BoxBegin (NULL,Str_BuildString (Txt_Report_of_use_of_PLATFORM,
-					     Cfg_PLATFORM_SHORT_NAME),
+					  Cfg_PLATFORM_SHORT_NAME),
 		    NULL,NULL,
 		    Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
       Str_FreeStrings ();
@@ -234,7 +234,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Report_of_use_of_PLATFORM,
-				          Cfg_PLATFORM_SHORT_NAME),
+				       Cfg_PLATFORM_SHORT_NAME),
                  NULL,NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

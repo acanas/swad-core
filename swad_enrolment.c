@@ -196,7 +196,7 @@ void Enr_PutLinkToRequestSignUp (void)
    Lay_PutContextualLinkIconText (ActReqSignUp,NULL,
                                   NULL,NULL,
 				  "hand-point-up.svg",Ico_BLACK,
-				  Txt_Sign_up);
+				  Txt_Sign_up,NULL);
   }
 
 /*****************************************************************************/
@@ -647,7 +647,7 @@ void Enr_PutLinkToRemOldUsrs (void)
    Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,
                                   NULL,NULL,
 				  "trash.svg",Ico_RED,
-				  Txt_Eliminate_old_users);
+				  Txt_Eliminate_old_users,NULL);
   }
 
 /*****************************************************************************/
@@ -1684,7 +1684,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,
                                   NULL,NULL,
 				  "trash.svg",Ico_RED,
-				  Txt_Remove_all_students);
+				  Txt_Remove_all_students,NULL);
   }
 
 /*****************************************************************************/
@@ -2238,7 +2238,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   Crs_PutParamCrsCod (Crs.CrsCod);
 			   HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs.FullName),
-						    Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+						    Str_BuildString ("BT_LINK LT %s",
+						                     The_ClassDat[Gbl.Prefs.Theme]),
 						    NULL);
 			   Str_FreeStrings ();
 			      HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
@@ -2362,7 +2363,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    Lay_PutContextualLinkIconText (NextAction,NULL,
                                   NULL,NULL,
 				  "user-cog.svg",Ico_BLACK,
-				  TitleText);
+				  TitleText,NULL);
   }
 
 /*****************************************************************************/
@@ -2390,7 +2391,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
    Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,
                                   NULL,NULL,
 				  "users-cog.svg",Ico_BLACK,
-				  *WhatToDo[Role].Title);
+				  *WhatToDo[Role].Title,NULL);
   }
 
 /*****************************************************************************/

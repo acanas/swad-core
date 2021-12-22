@@ -324,7 +324,7 @@ void Mnu_PutIconsToSelectMenu (void)
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgMnu);
 		  Par_PutHiddenParamUnsigned (NULL,"Menu",(unsigned) Menu);
-		  Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Ico_BLACK,
+		  Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Ico_UNCHANGED,
 		                          Txt_MENU_NAMES[Menu]);
 	       Frm_EndForm ();
 	       HTM_DIV_End ();

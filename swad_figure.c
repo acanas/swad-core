@@ -449,8 +449,10 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    long Cod = Sco_GetCurrentCod ();
-   char *Class = (Role == Rol_UNK) ? Str_BuildString ("RB %s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
-	                             Str_BuildString ("RB %s",The_ClassDat[Gbl.Prefs.Theme]);
+   char *Class = (Role == Rol_UNK) ? Str_BuildString ("RB %s LINE_TOP",
+                                                      The_ClassDatStrong[Gbl.Prefs.Theme]) :
+	                             Str_BuildString ("RB %s",
+	                                              The_ClassDat[Gbl.Prefs.Theme]);
    unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
 	                                 (1 << Rol_NET) |
 	                                 (1 << Rol_TCH)) :
@@ -634,31 +636,36 @@ static void Fig_WriteHeadHierarchy (void)
       HTM_TH_Empty (1);
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("globe-americas.svg",Ico_BLACK,Txt_Countries,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("globe-americas.svg",Ico_BLACK,
+	              Txt_Countries,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Countries);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("university.svg",Ico_BLACK,Txt_Institutions,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("university.svg",Ico_BLACK,
+	              Txt_Institutions,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Institutions);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("building.svg",Ico_BLACK,Txt_Centers,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("building.svg",Ico_BLACK,
+	              Txt_Centers,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Centers);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("graduation-cap.svg",Ico_BLACK,Txt_Degrees,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("graduation-cap.svg",Ico_BLACK,
+	              Txt_Degrees,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Degrees);
       HTM_TH_End ();
 
       HTM_TH_Begin (1,1,"RM");
-	 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Txt_Courses,"CONTEXT_ICO_x16");
+	 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,
+	              Txt_Courses,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Courses);
       HTM_TH_End ();
@@ -926,7 +933,8 @@ static void Fig_GetAndShowHierarchyTotal (void)
 
    /***** Write total number of elements *****/
    Fig_ShowHierarchyRow ("",Txt_Total,
-			 Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]),
+			 Str_BuildString ("%s LINE_TOP",
+			                  The_ClassDatStrong[Gbl.Prefs.Theme]),
                          (int) NumCtysTotal,
                          (int) NumInssTotal,
                          (int) NumCtrsTotal,
@@ -1559,7 +1567,8 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",
+                                                                    The_ClassDatStrong[Gbl.Prefs.Theme]) :
 	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
@@ -1630,7 +1639,8 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",
+                                                                    The_ClassDatStrong[Gbl.Prefs.Theme]) :
 	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
@@ -1687,7 +1697,8 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) :
+   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",
+                                                                    The_ClassDatStrong[Gbl.Prefs.Theme]) :
 	                                           The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable

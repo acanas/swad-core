@@ -252,7 +252,8 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
-					   Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+					   Str_BuildString ("BT_LINK LT %s",
+					                    The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
 		  Str_FreeStrings ();
 	      }
@@ -450,14 +451,17 @@ static void CrsCfg_Indicators (void)
 			  Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_SUBMIT_Begin (Title,
-	                             Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                             Str_BuildString ("BT_LINK %s",
+	                                              The_ClassDat[Gbl.Prefs.Theme]),
 	                             NULL);
 	    Str_FreeStrings ();
 	       HTM_TxtF ("%s&nbsp;",Title);
-	       Ico_PutIcon ((IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
-										  "exclamation-triangle.svg",
-			    Ico_BLACK,
-			    Title,"ICO16x16");
+	       if (IndicatorsCrs.NumIndicators == Ind_NUM_INDICATORS)
+		  Ico_PutIcon ("check-circle.svg",Ico_GREEN,
+			       Title,"ICO16x16");
+	       else
+		  Ico_PutIcon ("exclamation-triangle.svg",Ico_RED,	// TODO: Change to Ico_YELLOW
+			       Title,"ICO16x16");
 	    HTM_BUTTON_End ();
 	    free (Title);
 	 Frm_EndForm ();

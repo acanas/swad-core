@@ -855,7 +855,7 @@ static void Crs_ListCourses (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Courses_of_DEGREE_X,
-				          Gbl.Hierarchy.Deg.ShrtName),
+				       Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsListCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
@@ -963,12 +963,14 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
 	   {
 	    TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
+	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+	                                      The_ClassDatLight[Gbl.Prefs.Theme]);
 	   }
 	 else
 	   {
 	    TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+	                                      The_ClassDatStrong[Gbl.Prefs.Theme]);
 	   }
 
 	 /* Check if this course is one of my courses */
@@ -1071,7 +1073,7 @@ static void Crs_EditCoursesInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Courses_of_DEGREE_X,
-				          Gbl.Hierarchy.Deg.ShrtName),
+				       Gbl.Hierarchy.Deg.ShrtName),
 		 Crs_PutIconsEditingCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
@@ -2180,7 +2182,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
 	 Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
 
       Btn_PutCreateButton (Str_BuildString (Txt_Register_me_in_X,
-					       Crs_EditingCrs->ShrtName));
+					    Crs_EditingCrs->ShrtName));
       Str_FreeStrings ();
 
    Frm_EndForm ();
@@ -2300,8 +2302,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 
 	    HTM_TH_Begin (1,7,"LM");
 	       HTM_TxtColon (Str_BuildString (Txt_USER_in_COURSE,
-						 Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-								   Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
+					      Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+								Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
 	       Str_FreeStrings ();
 	    HTM_TH_End ();
 
@@ -2453,12 +2455,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    if (NumUsrs)
      {
       ClassTxt  = The_ClassDatStrong[Gbl.Prefs.Theme];
-      ClassLink = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      ClassLink = Str_BuildString ("BT_LINK LT %s",
+                                   The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
    else
      {
       ClassTxt  = The_ClassDat[Gbl.Prefs.Theme];
-      ClassLink = Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]);
+      ClassLink = Str_BuildString ("BT_LINK LT %s",
+                                   The_ClassDat[Gbl.Prefs.Theme]);
      }
    BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                     Gbl.ColorRows[RowEvenOdd];
@@ -2556,7 +2560,7 @@ void Crs_PutLinkToRemoveOldCrss (void)
    Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,
                                   NULL,NULL,
 				  "trash.svg",Ico_RED,
-				  Txt_Eliminate_old_courses);
+				  Txt_Eliminate_old_courses,NULL);
   }
 
 /*****************************************************************************/

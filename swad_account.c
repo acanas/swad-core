@@ -110,7 +110,7 @@ void Acc_PutLinkToCreateAccount (void)
    Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
                                   NULL,NULL,
 				  "at.svg",Ico_BLACK,
-				  Txt_Create_account);
+				  Txt_Create_account,NULL);
   }
 
 /*****************************************************************************/
@@ -439,7 +439,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_New_on_PLATFORM_Sign_up,
-				          Cfg_PLATFORM_SHORT_NAME),
+				       Cfg_PLATFORM_SHORT_NAME),
                  NULL,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

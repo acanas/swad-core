@@ -791,7 +791,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-up.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_up_X,
-								     StrSetInd));
+								  StrSetInd));
 		  Str_FreeStrings ();
 		 }
 	       else
@@ -805,7 +805,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-down.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_down_X,
-								     StrSetInd));
+								  StrSetInd));
 		  Str_FreeStrings ();
 		 }
 	       else

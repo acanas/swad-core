@@ -128,7 +128,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		    {
 		     /* Request my removing from this course */
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_Remove_me_from_THE_COURSE_X,
-									      Gbl.Hierarchy.Crs.ShrtName),
+									   Gbl.Hierarchy.Crs.ShrtName),
 							  ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
 							  Btn_REMOVE_BUTTON,Txt_Remove_me);
 		     Str_FreeStrings ();
@@ -138,7 +138,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	      {
 	       /* Request my registration in this course */
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_Register_me_in_X,
-									Gbl.Hierarchy.Crs.ShrtName),
+								     Gbl.Hierarchy.Crs.ShrtName),
 						    ActReqSignUp,
 						    Btn_CREATE_BUTTON,Txt_Sign_up);
 	       Str_FreeStrings ();
@@ -154,7 +154,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		 {
 		  /* Request students enrolment */
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_Register_students_in_COURSE_X,
-									   Gbl.Hierarchy.Crs.ShrtName),
+									Gbl.Hierarchy.Crs.ShrtName),
 						       ActReqEnrSevStd,
 						       Btn_CREATE_BUTTON,Txt_Register_students);
 		  Str_FreeStrings ();
@@ -172,7 +172,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    /* Select a course */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
 												      Txt_Select_or_create_one_course_in_X,
-								     Gbl.Hierarchy.Deg.ShrtName),
+								  Gbl.Hierarchy.Deg.ShrtName),
 						 ActSeeCrs,
 						 Btn_CONFIRM_BUTTON,Txt_Courses);
 	    Str_FreeStrings ();
@@ -182,7 +182,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    /* Select a degree */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
 												    Txt_Select_or_create_one_degree_in_X,
-								     Gbl.Hierarchy.Ctr.ShrtName),
+								  Gbl.Hierarchy.Ctr.ShrtName),
 						 ActSeeDeg,
 						 Btn_CONFIRM_BUTTON,Txt_Degrees);
 	    Str_FreeStrings ();
@@ -192,7 +192,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    /* Select a center */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_center_in_X :
 												    Txt_Select_or_create_one_center_in_X,
-								     Gbl.Hierarchy.Ins.ShrtName),
+								  Gbl.Hierarchy.Ins.ShrtName),
 						 ActSeeCtr,
 						 Btn_CONFIRM_BUTTON,Txt_Centers);
 	    Str_FreeStrings ();
@@ -202,7 +202,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    /* Select an institution */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
 												    Txt_Select_or_create_one_institution_in_X,
-								     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+								  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 						 ActSeeIns,
 						 Btn_CONFIRM_BUTTON,Txt_Institutions);
 	    Str_FreeStrings ();
@@ -228,7 +228,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	 /* Sign up */
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_New_on_PLATFORM_Sign_up,
-								  Cfg_PLATFORM_SHORT_NAME),
+							       Cfg_PLATFORM_SHORT_NAME),
 					      ActFrmMyAcc,
 					      Btn_CREATE_BUTTON,Txt_Create_account);
 	 Str_FreeStrings ();

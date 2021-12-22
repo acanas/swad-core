@@ -61,7 +61,7 @@ static void Mtn_PutLinkToSetUp (void)
    Lay_PutContextualLinkIconText (ActSetUp,NULL,
                                   NULL,NULL,
 				  "bolt.svg",Ico_BLACK,
-				  Txt_Set_up);
+				  Txt_Set_up,NULL);
   }
 
 /*****************************************************************************/

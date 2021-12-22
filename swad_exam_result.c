@@ -258,7 +258,8 @@ void ExaRes_ShowMyResultsInSes (void)
 	                     false);	// Do not put form to start new session
 
    /***** List my sessions results in session *****/
-   ExaRes_ShowResultsBegin (&Exams,Str_BuildString (Txt_Results_of_session_X,Session.Title),
+   ExaRes_ShowResultsBegin (&Exams,Str_BuildString (Txt_Results_of_session_X,
+                                                    Session.Title),
 			    false);	// Do not list exams to select
    Str_FreeStrings ();
    ExaRes_ListMyResultsInSes (&Exams,Session.SesCod);

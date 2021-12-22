@@ -650,8 +650,8 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
 						 "arrow-up.svg",Ico_BLACK,
 						 Str_BuildString (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-														     Txt_Move_up_X,
-								     StrItemCod));
+														  Txt_Move_up_X,
+								  StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
@@ -670,8 +670,8 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
 						 "arrow-down.svg",Ico_BLACK,
 						 Str_BuildString (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-														     Txt_Move_down_X,
-								     StrItemCod));
+														  Txt_Move_down_X,
+								  StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
@@ -689,7 +689,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
 						 "arrow-left.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Increase_level_of_X,
-								     StrItemCod));
+								  StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else
@@ -708,7 +708,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
 						 "arrow-right.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Decrease_level_of_X,
-								     StrItemCod));
+								  StrItemCod));
 		  Str_FreeStrings ();
 		 }
 	       else

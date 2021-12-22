@@ -697,10 +697,14 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
    extern const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS];
    struct Prj_Filter Filter;
    Prj_Faultiness_t Faultiness;
-   static const char *FaultinessIcon[Prj_NUM_FAULTINESS] =
+   struct
      {
-      [Prj_FAULTY   ] = "exclamation-triangle.svg",
-      [Prj_FAULTLESS] = "check-circle.svg",
+      const char *Icon;
+      Ico_Color_t Color;
+     } FaultinessIcon[Prj_NUM_FAULTINESS] =
+     {
+      [Prj_FAULTY   ] = {"exclamation-triangle.svg",Ico_RED  },
+      [Prj_FAULTLESS] = {"check-circle.svg"        ,Ico_GREEN},
      };
 
    Set_BeginOneSettingSelector ();
@@ -722,7 +726,8 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 			Projects->SelectedOrder,
 			Projects->CurrentPage,
 			-1L);
-	 Ico_PutSettingIconLink (FaultinessIcon[Faultiness],Ico_BLACK,
+	 Ico_PutSettingIconLink (FaultinessIcon[Faultiness].Icon,
+	                         FaultinessIcon[Faultiness].Color,
 				 Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -1648,7 +1653,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 
 static void Prj_PutWarningIcon (void)
   {
-   Ico_PutIcon ("warning64x64.gif",Ico_BLACK,"","ICO16x16");
+   Ico_PutIcon ("warning64x64.gif",Ico_UNCHANGED,"","ICO16x16");
   }
 
 /*****************************************************************************/
@@ -2202,7 +2207,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
 						       Prj_PutCurrentParams,Projects,
 						       Str_BuildString (Txt_Add_USERS,
-									   Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]));
+									Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]));
 			   Str_FreeStrings ();
 			HTM_TD_End ();
 
@@ -2616,7 +2621,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	       Projects->PrjCod = Prj.PrjCod;
 	       Prj_PutCurrentParams (Projects);
 	       Btn_PutRemoveButton (Str_BuildString (Txt_Remove_USER_from_this_project,
-							Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
+						     Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
 	       Str_FreeStrings ();
 	    Frm_EndForm ();
 

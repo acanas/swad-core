@@ -629,7 +629,7 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							    Txt_Another_user_s_profile,
 			       Str_BuildString ("Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
-			                           The_ClassDat[Gbl.Prefs.Theme]),
+			                        The_ClassDat[Gbl.Prefs.Theme]),
 			       NULL);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();

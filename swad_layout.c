@@ -1208,7 +1208,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncParams) (void *Args),void *Args,
 				    const char *Icon,Ico_Color_t Color,
-				    const char *Text)
+				    const char *Text,const char *OnSubmit)
   {
    extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
 
@@ -1222,42 +1222,8 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 	 FuncParams (Args);
 
       /***** Put icon and text with link *****/
-      HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
-	 Ico_PutIconTextLink (Icon,Color,Text);
-      HTM_BUTTON_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
-
-   /***** Separator *****/
-   HTM_Txt (" ");	// This space is necessary to enable
-			// jumping to the next line on narrow screens
-  }
-
-/*****************************************************************************/
-/**************** Show an icon with a link in contextual menu ****************/
-/*****************************************************************************/
-
-void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *Anchor,
-					    void (*FuncParams) (const void *Args),const void *Args,
-					    const char *Icon,
-					    const char *Text,
-					    const char *OnSubmit)
-  {
-   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
-
-   /***** Separator *****/
-   HTM_Txt (" ");	// This space is necessary to enable
-			// jumping to the next line on narrow screens
-
-   /***** Begin form *****/
-   Frm_BeginFormAnchor (NextAction,Anchor);
-      if (FuncParams)
-	 FuncParams (Args);
-
-      /***** Put icon with link *****/
       HTM_BUTTON_SUBMIT_Begin (Text,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
-	 Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
+	 Ico_PutIconTextLink (Icon,Color,Text);
       HTM_BUTTON_End ();
 
    /***** End form *****/

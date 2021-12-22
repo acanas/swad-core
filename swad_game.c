@@ -1770,7 +1770,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-up.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_up_X,
-								     StrQstInd));
+								  StrQstInd));
 		  Str_FreeStrings ();
 		 }
 	       else
@@ -1784,7 +1784,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-down.svg",Ico_BLACK,
 						 Str_BuildString (Txt_Move_down_X,
-								     StrQstInd));
+								  StrQstInd));
 		  Str_FreeStrings ();
 		 }
 	       else

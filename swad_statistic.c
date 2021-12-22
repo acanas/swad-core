@@ -277,7 +277,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Statistics_of_visits_to_the_course_X,
-				          Gbl.Hierarchy.Crs.ShrtName),
+				       Gbl.Hierarchy.Crs.ShrtName),
                  NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
@@ -623,7 +623,7 @@ void Sta_PutLinkToCourseHits (void)
 	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,
 	                                   NULL,NULL,
 					   "chart-line.svg",Ico_BLACK,
-					   Txt_Visits_to_course);
+					   Txt_Visits_to_course,NULL);
 	    break;
 	 default:
 	    break;
@@ -641,7 +641,7 @@ void Sta_PutLinkToGlobalHits (void)
    Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,
                                   NULL,NULL,
 				  "chart-line.svg",Ico_BLACK,
-				  Txt_Global_visits);
+				  Txt_Global_visits,NULL);
   }
 
 /*****************************************************************************/
@@ -1887,7 +1887,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,double HitsMax)
 	    Sta_SetColor (ColorType,(double) NumColor,(double) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
 	    HTM_TD_Begin ("class=\"LM\" style=\"width:1px; background-color:#%02X%02X%02X;\"",
 			  R,G,B);
-	       Ico_PutIcon ("tr1x14.gif",Ico_BLACK,"","");
+	       Ico_PutIcon ("tr1x14.gif",Ico_UNCHANGED,"","");
 	    HTM_TD_End ();
 	   }
 

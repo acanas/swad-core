@@ -843,7 +843,7 @@ void Rec_PutLinkToEditRecordFields (void)
    Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,
                                   NULL,NULL,
 				  "pen.svg",Ico_BLACK,
-				  Txt_Edit_record_fields);
+				  Txt_Edit_record_fields,NULL);
   }
 
 /*****************************************************************************/
@@ -2691,7 +2691,8 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
 	{
 	 /* Link to see country information */
 	 Cty_WriteCountryName (UsrDat->CtyCod,
-			       Str_BuildString ("BT_LINK %s",The_ClassDatStrong[Gbl.Prefs.Theme]));	// Put link to country
+			       Str_BuildString ("BT_LINK %s",
+			                        The_ClassDatStrong[Gbl.Prefs.Theme]));	// Put link to country
 	 Str_FreeStrings ();
 	}
    HTM_TD_End ();

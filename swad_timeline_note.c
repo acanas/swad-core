@@ -324,7 +324,7 @@ static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
       /***** Write author's full name *****/
       Tml_Not_WriteAuthorName (UsrDat,
                                Str_BuildString ("Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
-                                                   The_ClassDatStrong[Gbl.Prefs.Theme]));
+                                                The_ClassDatStrong[Gbl.Prefs.Theme]));
       Str_FreeStrings ();
 
       /***** Write date and time *****/
@@ -688,7 +688,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 	    /* Begin button */
 	    HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->Type],
 				     Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",
-							 The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
+						      The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
 				     NULL);
 	    Str_FreeStrings ();
 

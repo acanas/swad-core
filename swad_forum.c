@@ -929,10 +929,12 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 	       For_PutParamsForum (Forums);
 	       if (Enabled)
 		  Ico_PutIconLink ("eye.svg",Ico_GREEN,
-				   Str_BuildString (Txt_FORUM_Post_X_allowed_Click_to_ban_it,PstNum));
+				   Str_BuildString (Txt_FORUM_Post_X_allowed_Click_to_ban_it,
+				                    PstNum));
 	       else
 		  Ico_PutIconLink ("eye-slash.svg",Ico_RED,
-				   Str_BuildString (Txt_FORUM_Post_X_banned_Click_to_unban_it,PstNum));
+				   Str_BuildString (Txt_FORUM_Post_X_banned_Click_to_unban_it,
+				                    PstNum));
 	       Str_FreeStrings ();
 	    Frm_EndForm ();
 	   }
@@ -1698,7 +1700,8 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
      {
       /* Check if thread to move is yet in current forum */
       if (For_DB_CheckIfThrBelongsToForum (Forums->Thread.ToMove,Forum))
-	 Ico_PutIcon ("paste.svg",Ico_BLACK,Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
+	 Ico_PutIcon ("paste.svg",Ico_BLACK,
+	              Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
       else
 	{
 	 Frm_BeginFormAnchor (For_ActionsPasThrFor[Forum->Type],
@@ -1738,7 +1741,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 	       break;
 	    case For_FORUM__SWAD__USRS:
 	    case For_FORUM__SWAD__TCHS:
-	       Ico_PutIcon ("swad64x64.png",Ico_BLACK,ForumName,"ICO16x16");
+	       Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,ForumName,"ICO16x16");
 	       break;
 	    case For_FORUM_INSTIT_USRS:
 	    case For_FORUM_INSTIT_TCHS:
@@ -2201,12 +2204,12 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
 	 HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
 	    /***** Put an icon with thread status *****/
-	    Ico_PutIcon (Thr.NumUnreadPosts ? "envelope.svg" :
-					      "envelope-open-text.svg",
-			 Ico_BLACK,
-			 Thr.NumUnreadPosts ? Txt_There_are_new_posts :
-					      Txt_No_new_posts,
-			 "ICO16x16");
+	    if (Thr.NumUnreadPosts)
+	       Ico_PutIcon ("envelope.svg",Ico_BLACK,
+			    Txt_There_are_new_posts,"ICO16x16");
+	    else
+	       Ico_PutIcon ("envelope-open-text.svg",Ico_BLACK,
+			    Txt_No_new_posts,"ICO16x16");
 
 	    /***** Put button to remove the thread *****/
 	    if (PermissionThreadDeletion[Forums->Forum.Type] &

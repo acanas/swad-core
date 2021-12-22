@@ -99,7 +99,7 @@ void Fol_PutLinkWhoToFollow (void)
    Lay_PutContextualLinkIconText (ActSeeSocPrf,NULL,
                                   NULL,NULL,
 				  "user-plus.svg",Ico_BLACK,
-				  Txt_Who_to_follow);
+				  Txt_Who_to_follow,NULL);
   }
 
 /*****************************************************************************/
@@ -641,7 +641,8 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
 	       HTM_BUTTON_SUBMIT_Begin (Txt_Another_user_s_profile,
-	                                Str_BuildString ("BT_LINK LT %s",The_ClassDat[Gbl.Prefs.Theme]),
+	                                Str_BuildString ("BT_LINK LT %s",
+	                                                 The_ClassDat[Gbl.Prefs.Theme]),
 	                                NULL);
 	       Str_FreeStrings ();
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
@@ -739,7 +740,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*********************** Put icon to unfollow another user *********************/
+/************* Put inactive icon to follow/unfollow another user *************/
 /*****************************************************************************/
 
 static void Fol_PutInactiveIconToFollowUnfollow (void)

@@ -177,7 +177,7 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
       /***** Author name *****/
       Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,
                                Str_BuildString ("Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
-                                                   The_ClassDatStrong[Gbl.Prefs.Theme]));
+                                                The_ClassDatStrong[Gbl.Prefs.Theme]));
       Str_FreeStrings ();
 
       /***** Form to write the post *****/

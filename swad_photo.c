@@ -2255,7 +2255,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		    {
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-							Str_BuildString ("BT_LINK %s",The_ClassDat[Gbl.Prefs.Theme]),
+							Str_BuildString ("BT_LINK %s",
+							                 The_ClassDat[Gbl.Prefs.Theme]),
 							"CT");
 		     Str_FreeStrings ();
 		    }

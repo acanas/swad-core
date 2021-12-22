@@ -40,13 +40,14 @@ typedef enum
    } Ico_IconSet_t;
 #define Ico_ICON_SET_DEFAULT Ico_ICON_SET_AWESOME
 
-#define Ico_NUM_COLORS 4
+#define Ico_NUM_COLORS 5
 typedef enum
   {
-   Ico_BLACK = 0,
-   Ico_GREEN = 1,
-   Ico_RED   = 2,
-   Ico_WHITE = 3,
+   Ico_UNCHANGED = 0,
+   Ico_BLACK     = 1,
+   Ico_GREEN     = 2,
+   Ico_RED       = 3,
+   Ico_WHITE     = 4,
   } Ico_Color_t;
 
 /*****************************************************************************/

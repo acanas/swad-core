@@ -156,7 +156,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,
 						     Str_BuildString ("BT_LINK %s NOWRAP",
-						                         The_ClassDat[Gbl.Prefs.Theme]),
+						                      The_ClassDat[Gbl.Prefs.Theme]),
 						     "CM");
 		  Str_FreeStrings ();
 	       HTM_TD_End ();
@@ -251,7 +251,7 @@ static void Ctr_ListCenters (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Centers_of_INSTITUTION_X,
-				          Gbl.Hierarchy.Ins.FullName),
+				       Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsListingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
@@ -348,12 +348,14 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatLight[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+                                        The_ClassDatLight[Gbl.Prefs.Theme]);
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
+      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
+                                        The_ClassDatStrong[Gbl.Prefs.Theme]);
      }
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -460,7 +462,7 @@ static void Ctr_EditCentersInternal (void)
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Str_BuildString (Txt_Centers_of_INSTITUTION_X,
-				          Gbl.Hierarchy.Ins.FullName),
+				       Gbl.Hierarchy.Ins.FullName),
 		 Ctr_PutIconsEditingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    Str_FreeStrings ();

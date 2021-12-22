@@ -579,8 +579,8 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 			    UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 								"USR_ID_NC",
 			    Str_BuildString (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-										    Txt_ID_X_not_confirmed,
-						UsrDat->IDs.List[NumID].ID));
+										 Txt_ID_X_not_confirmed,
+					     UsrDat->IDs.List[NumID].ID));
 	    Str_FreeStrings ();
 	       HTM_Txt (UsrDat->IDs.List[NumID].ID);
 	       HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :

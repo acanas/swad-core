@@ -778,7 +778,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-up.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Move_up_X,
-							       StrItemIndex));
+							    StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
@@ -791,7 +791,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-down.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Move_down_X,
-							       StrItemIndex));
+							    StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
@@ -804,7 +804,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-left.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Increase_level_of_X,
-							       StrItemIndex));
+							    StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
@@ -817,7 +817,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
 					   "arrow-right.svg",Ico_BLACK,
 					   Str_BuildString (Txt_Decrease_level_of_X,
-							       StrItemIndex));
+							    StrItemIndex));
 	    Str_FreeStrings ();
 	   }
 	 else
