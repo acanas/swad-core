@@ -1327,7 +1327,7 @@ a:hover						/* Default ==> underlined */
 	{
 	width:40px;
 	height:40px;
-	margin:1px 4px 1px 0;
+	margin:2px 4px 2px 0;
 	vertical-align:middle;
 	}
 
@@ -2371,7 +2371,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_IN_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_IN_YELLOW		{color:#7c4d2a; font-size:13pt;}
 .FORM_IN_PINK		{color:#4d88a1; font-size:13pt;}
-.FORM_IN_DARK		{color:#c0e0ff; font-size:13pt;}
+.FORM_IN_DARK		{color:#a6c4d0; font-size:13pt;}
 
 /* Outside white box */
 .FORM_OUT_WHITE		{color:#4d88a1; font-size:13pt;}
@@ -2380,7 +2380,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_OUT_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_OUT_YELLOW	{color:#7c4d2a; font-size:13pt;}
 .FORM_OUT_PINK		{color:#63474e; font-size:13pt;}
-.FORM_OUT_DARK		{color:#c0e0ff; font-size:13pt;}
+.FORM_OUT_DARK		{color:#a6c4d0; font-size:13pt;}
 
 /****************************** Placing of objects ***************************/
 .LT	{text-align:left;   vertical-align:top;   }	/* Left Top      */
@@ -2720,13 +2720,11 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 /******************************** Class photo ********************************/
 .CLASSPHOTO_TITLE
 	{
-	color:#404040;
 	font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
 	font-size:13pt;
 	}
 .CLASSPHOTO
 	{
-	color:#404040;
 	font-size:10pt;
 	line-height:110%;
 	white-space:nowrap;
@@ -2741,6 +2739,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-overflow:ellipsis;
 	margin:0 auto;
 	}
+.CLASSPHOTO_WHITE	{color:#404040;}
+.CLASSPHOTO_GREY	{color:#404040;}
+.CLASSPHOTO_PURPLE	{color:#404040;}
+.CLASSPHOTO_BLUE	{color:#404040;}
+.CLASSPHOTO_YELLOW	{color:#404040;}
+.CLASSPHOTO_PINK	{color:#404040;}
+.CLASSPHOTO_DARK	{color:#d0d0d0;}
 
 /************************** Left column menu *********************************/
 .LINK_TITLE, .MFU_TITLE	{color:#4D88A1;}

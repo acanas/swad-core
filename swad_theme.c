@@ -444,6 +444,17 @@ const char *The_TmlTxtColor[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "Tml_TXT_DARK",
   };
 
+const char *The_ClassPhoto[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "CLASSPHOTO_WHITE",
+   [The_THEME_GREY  ] = "CLASSPHOTO_GREY",
+   [The_THEME_PURPLE] = "CLASSPHOTO_PURPLE",
+   [The_THEME_BLUE  ] = "CLASSPHOTO_BLUE",
+   [The_THEME_YELLOW] = "CLASSPHOTO_YELLOW",
+   [The_THEME_PINK  ] = "CLASSPHOTO_PINK",
+   [The_THEME_DARK  ] = "CLASSPHOTO_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/

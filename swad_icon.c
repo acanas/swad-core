@@ -64,6 +64,49 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
    [Ico_ICON_SET_NUVOLA ] = "Nuvola",
   };
 
+const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES] =
+     {
+      [Ico_UNCHANGED][The_THEME_WHITE ] = "",
+      [Ico_UNCHANGED][The_THEME_GREY  ] = "",
+      [Ico_UNCHANGED][The_THEME_PURPLE] = "",
+      [Ico_UNCHANGED][The_THEME_BLUE  ] = "",
+      [Ico_UNCHANGED][The_THEME_YELLOW] = "",
+      [Ico_UNCHANGED][The_THEME_PINK  ] = "",
+      [Ico_UNCHANGED][The_THEME_DARK  ] = "",
+
+      [Ico_BLACK    ][The_THEME_WHITE ] = "BLACK_ICO_WHITE",
+      [Ico_BLACK    ][The_THEME_GREY  ] = "BLACK_ICO_GREY",
+      [Ico_BLACK    ][The_THEME_PURPLE] = "BLACK_ICO_PURPLE",
+      [Ico_BLACK    ][The_THEME_BLUE  ] = "BLACK_ICO_BLUE",
+      [Ico_BLACK    ][The_THEME_YELLOW] = "BLACK_ICO_YELLOW",
+      [Ico_BLACK    ][The_THEME_PINK  ] = "BLACK_ICO_PINK",
+      [Ico_BLACK    ][The_THEME_DARK  ] = "BLACK_ICO_DARK",
+
+      [Ico_GREEN    ][The_THEME_WHITE ] = "GREEN_ICO_WHITE",
+      [Ico_GREEN    ][The_THEME_GREY  ] = "GREEN_ICO_GREY",
+      [Ico_GREEN    ][The_THEME_PURPLE] = "GREEN_ICO_PURPLE",
+      [Ico_GREEN    ][The_THEME_BLUE  ] = "GREEN_ICO_BLUE",
+      [Ico_GREEN    ][The_THEME_YELLOW] = "GREEN_ICO_YELLOW",
+      [Ico_GREEN    ][The_THEME_PINK  ] = "GREEN_ICO_PINK",
+      [Ico_GREEN    ][The_THEME_DARK  ] = "GREEN_ICO_DARK",
+
+      [Ico_RED      ][The_THEME_WHITE ] = "RED_ICO_WHITE",
+      [Ico_RED      ][The_THEME_GREY  ] = "RED_ICO_GREY",
+      [Ico_RED      ][The_THEME_PURPLE] = "RED_ICO_PURPLE",
+      [Ico_RED      ][The_THEME_BLUE  ] = "RED_ICO_BLUE",
+      [Ico_RED      ][The_THEME_YELLOW] = "RED_ICO_YELLOW",
+      [Ico_RED      ][The_THEME_PINK  ] = "RED_ICO_PINK",
+      [Ico_RED      ][The_THEME_DARK  ] = "RED_ICO_DARK",
+
+      [Ico_WHITE    ][The_THEME_WHITE ] = "WHITE_ICO_WHITE",
+      [Ico_WHITE    ][The_THEME_GREY  ] = "WHITE_ICO_GREY",
+      [Ico_WHITE    ][The_THEME_PURPLE] = "WHITE_ICO_PURPLE",
+      [Ico_WHITE    ][The_THEME_BLUE  ] = "WHITE_ICO_BLUE",
+      [Ico_WHITE    ][The_THEME_YELLOW] = "WHITE_ICO_YELLOW",
+      [Ico_WHITE    ][The_THEME_PINK  ] = "WHITE_ICO_PINK",
+      [Ico_WHITE    ][The_THEME_DARK  ] = "WHITE_ICO_DARK",
+     };
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -343,7 +386,8 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,
                                   FuncParams,Args,
 				  Open ? "folder-open-yellow-plus.png" :
-				  	 "folder-yellow-plus.png",Ico_UNCHANGED,
+				  	 "folder-yellow-plus.png",
+				  Ico_UNCHANGED,
 				  Txt_Upload_file_or_create_folder);
   }
 
@@ -386,19 +430,11 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   static const char *ClassIco[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "CONTEXT_ICO_16x16 BLACK_ICO_WHITE",
-      [The_THEME_GREY  ] = "CONTEXT_ICO_16x16 BLACK_ICO_GREY",
-      [The_THEME_PURPLE] = "CONTEXT_ICO_16x16 BLACK_ICO_PURPLE",
-      [The_THEME_BLUE  ] = "CONTEXT_ICO_16x16 BLACK_ICO_BLUE",
-      [The_THEME_YELLOW] = "CONTEXT_ICO_16x16 BLACK_ICO_YELLOW",
-      [The_THEME_PINK  ] = "CONTEXT_ICO_16x16 BLACK_ICO_PINK",
-      [The_THEME_DARK  ] = "CONTEXT_ICO_16x16 BLACK_ICO_DARK",
-     };
-
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-      Ico_PutIcon (Icon,Color,Title,ClassIco[Gbl.Prefs.Theme]);
+      Ico_PutIcon (Icon,Color,Title,
+                   Str_BuildString ("CONTEXT_ICO_16x16 %s",
+                                    Ico_ClassColor[Color][Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
    HTM_DIV_End ();
   }
 
@@ -408,50 +444,10 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,con
 
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   static const char *ClassIco[Ico_NUM_COLORS][The_NUM_THEMES] =
-     {
-      [Ico_UNCHANGED][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [Ico_UNCHANGED][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [Ico_UNCHANGED][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [Ico_UNCHANGED][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [Ico_UNCHANGED][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [Ico_UNCHANGED][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-      [Ico_UNCHANGED][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",
-
-      [Ico_BLACK    ][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_WHITE",
-      [Ico_BLACK    ][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_GREY",
-      [Ico_BLACK    ][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_PURPLE",
-      [Ico_BLACK    ][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_BLUE",
-      [Ico_BLACK    ][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_YELLOW",
-      [Ico_BLACK    ][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_PINK",
-      [Ico_BLACK    ][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 BLACK_ICO_DARK",
-
-      [Ico_GREEN    ][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_WHITE",
-      [Ico_GREEN    ][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_GREY",
-      [Ico_GREEN    ][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_PURPLE",
-      [Ico_GREEN    ][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_BLUE",
-      [Ico_GREEN    ][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_YELLOW",
-      [Ico_GREEN    ][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_PINK",
-      [Ico_GREEN    ][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 GREEN_ICO_DARK",
-
-      [Ico_RED      ][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_WHITE",
-      [Ico_RED      ][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_GREY",
-      [Ico_RED      ][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_PURPLE",
-      [Ico_RED      ][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_BLUE",
-      [Ico_RED      ][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_YELLOW",
-      [Ico_RED      ][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_PINK",
-      [Ico_RED      ][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 RED_ICO_DARK",
-
-      [Ico_WHITE    ][The_THEME_WHITE ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_WHITE",
-      [Ico_WHITE    ][The_THEME_GREY  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_GREY",
-      [Ico_WHITE    ][The_THEME_PURPLE] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_PURPLE",
-      [Ico_WHITE    ][The_THEME_BLUE  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_BLUE",
-      [Ico_WHITE    ][The_THEME_YELLOW] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_YELLOW",
-      [Ico_WHITE    ][The_THEME_PINK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_PINK",
-      [Ico_WHITE    ][The_THEME_DARK  ] = "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 WHITE_ICO_DARK",
-     };
-
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,ClassIco[Color][Gbl.Prefs.Theme]);
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+                    Str_BuildString ("CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 %s",
+                                     Ico_ClassColor[Color][Gbl.Prefs.Theme]));
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -460,20 +456,12 @@ void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
   {
-   static const char *ClassIco[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "CONTEXT_ICO_x16 BLACK_ICO_WHITE",
-      [The_THEME_GREY  ] = "CONTEXT_ICO_x16 BLACK_ICO_GREY",
-      [The_THEME_PURPLE] = "CONTEXT_ICO_x16 BLACK_ICO_PURPLE",
-      [The_THEME_BLUE  ] = "CONTEXT_ICO_x16 BLACK_ICO_BLUE",
-      [The_THEME_YELLOW] = "CONTEXT_ICO_x16 BLACK_ICO_YELLOW",
-      [The_THEME_PINK  ] = "CONTEXT_ICO_x16 BLACK_ICO_PINK",
-      [The_THEME_DARK  ] = "CONTEXT_ICO_x16 BLACK_ICO_DARK",
-     };
-
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-      Ico_PutIcon (Icon,Color,Text,ClassIco[Gbl.Prefs.Theme]);
+      Ico_PutIcon (Icon,Color,Text,
+                   Str_BuildString ("CONTEXT_ICO_x16 %s",
+                                    Ico_ClassColor[Color][Gbl.Prefs.Theme]));
+      Str_FreeStrings ();
       HTM_TxtF ("&nbsp;%s",Text);
    HTM_DIV_End ();
   }
@@ -484,50 +472,10 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
 
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   static const char *ClassIco[Ico_NUM_COLORS][The_NUM_THEMES] =
-     {
-      [Ico_UNCHANGED][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20",
-      [Ico_UNCHANGED][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20",
-      [Ico_UNCHANGED][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20",
-      [Ico_UNCHANGED][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20",
-      [Ico_UNCHANGED][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20",
-      [Ico_UNCHANGED][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20",
-      [Ico_UNCHANGED][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20",
-
-      [Ico_BLACK    ][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_WHITE",
-      [Ico_BLACK    ][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_GREY",
-      [Ico_BLACK    ][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_PURPLE",
-      [Ico_BLACK    ][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_BLUE",
-      [Ico_BLACK    ][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_YELLOW",
-      [Ico_BLACK    ][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_PINK",
-      [Ico_BLACK    ][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 BLACK_ICO_DARK",
-
-      [Ico_GREEN    ][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_WHITE",
-      [Ico_GREEN    ][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_GREY",
-      [Ico_GREEN    ][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_PURPLE",
-      [Ico_GREEN    ][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_BLUE",
-      [Ico_GREEN    ][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_YELLOW",
-      [Ico_GREEN    ][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_PINK",
-      [Ico_GREEN    ][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 GREEN_ICO_DARK",
-
-      [Ico_RED      ][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_WHITE",
-      [Ico_RED      ][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_GREY",
-      [Ico_RED      ][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 RED_ICO_PURPLE",
-      [Ico_RED      ][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_BLUE",
-      [Ico_RED      ][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 RED_ICO_YELLOW",
-      [Ico_RED      ][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_PINK",
-      [Ico_RED      ][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 RED_ICO_DARK",
-
-      [Ico_WHITE    ][The_THEME_WHITE ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_WHITE",
-      [Ico_WHITE    ][The_THEME_GREY  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_GREY",
-      [Ico_WHITE    ][The_THEME_PURPLE] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_PURPLE",
-      [Ico_WHITE    ][The_THEME_BLUE  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_BLUE",
-      [Ico_WHITE    ][The_THEME_YELLOW] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_YELLOW",
-      [Ico_WHITE    ][The_THEME_PINK  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_PINK",
-      [Ico_WHITE    ][The_THEME_DARK  ] = "ICO_HIGHLIGHT ICOx20 WHITE_ICO_DARK",
-     };
-
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,ClassIco[Color][Gbl.Prefs.Theme]);
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
+                    Str_BuildString ("ICO_HIGHLIGHT ICOx20 %s",
+                                     Ico_ClassColor[Color][Gbl.Prefs.Theme]));
+   Str_FreeStrings ();
   }
 
 /*****************************************************************************/
@@ -550,55 +498,10 @@ void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const char *Class)
   {
-   static const char *ClassColor[Ico_NUM_COLORS][The_NUM_THEMES] =
-     {
-      [Ico_UNCHANGED][The_THEME_WHITE ] = NULL,
-      [Ico_UNCHANGED][The_THEME_GREY  ] = NULL,
-      [Ico_UNCHANGED][The_THEME_PURPLE] = NULL,
-      [Ico_UNCHANGED][The_THEME_BLUE  ] = NULL,
-      [Ico_UNCHANGED][The_THEME_YELLOW] = NULL,
-      [Ico_UNCHANGED][The_THEME_PINK  ] = NULL,
-      [Ico_UNCHANGED][The_THEME_DARK  ] = NULL,
-
-      [Ico_BLACK    ][The_THEME_WHITE ] = "BLACK_ICO_WHITE",
-      [Ico_BLACK    ][The_THEME_GREY  ] = "BLACK_ICO_GREY",
-      [Ico_BLACK    ][The_THEME_PURPLE] = "BLACK_ICO_PURPLE",
-      [Ico_BLACK    ][The_THEME_BLUE  ] = "BLACK_ICO_BLUE",
-      [Ico_BLACK    ][The_THEME_YELLOW] = "BLACK_ICO_YELLOW",
-      [Ico_BLACK    ][The_THEME_PINK  ] = "BLACK_ICO_PINK",
-      [Ico_BLACK    ][The_THEME_DARK  ] = "BLACK_ICO_DARK",
-
-      [Ico_GREEN    ][The_THEME_WHITE ] = "GREEN_ICO_WHITE",
-      [Ico_GREEN    ][The_THEME_GREY  ] = "GREEN_ICO_GREY",
-      [Ico_GREEN    ][The_THEME_PURPLE] = "GREEN_ICO_PURPLE",
-      [Ico_GREEN    ][The_THEME_BLUE  ] = "GREEN_ICO_BLUE",
-      [Ico_GREEN    ][The_THEME_YELLOW] = "GREEN_ICO_YELLOW",
-      [Ico_GREEN    ][The_THEME_PINK  ] = "GREEN_ICO_PINK",
-      [Ico_GREEN    ][The_THEME_DARK  ] = "GREEN_ICO_DARK",
-
-      [Ico_RED      ][The_THEME_WHITE ] = "RED_ICO_WHITE",
-      [Ico_RED      ][The_THEME_GREY  ] = "RED_ICO_GREY",
-      [Ico_RED      ][The_THEME_PURPLE] = "RED_ICO_PURPLE",
-      [Ico_RED      ][The_THEME_BLUE  ] = "RED_ICO_BLUE",
-      [Ico_RED      ][The_THEME_YELLOW] = "RED_ICO_YELLOW",
-      [Ico_RED      ][The_THEME_PINK  ] = "RED_ICO_PINK",
-      [Ico_RED      ][The_THEME_DARK  ] = "RED_ICO_DARK",
-
-      [Ico_WHITE    ][The_THEME_WHITE ] = "WHITE_ICO_WHITE",
-      [Ico_WHITE    ][The_THEME_GREY  ] = "WHITE_ICO_GREY",
-      [Ico_WHITE    ][The_THEME_PURPLE] = "WHITE_ICO_PURPLE",
-      [Ico_WHITE    ][The_THEME_BLUE  ] = "WHITE_ICO_BLUE",
-      [Ico_WHITE    ][The_THEME_YELLOW] = "WHITE_ICO_YELLOW",
-      [Ico_WHITE    ][The_THEME_PINK  ] = "WHITE_ICO_PINK",
-      [Ico_WHITE    ][The_THEME_DARK  ] = "WHITE_ICO_DARK",
-     };
-   const char *CC = ClassColor[Color][Gbl.Prefs.Theme];
+   const char *CC = Ico_ClassColor[Color][Gbl.Prefs.Theme];
 
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
-	    "class=\"%s%s%s\"",
-	    Class,
-	    CC ? " " : "",
-	    CC ? CC : "");
+	    "class=\"%s%s%s\"",Class,CC[0] ? " " : "",CC);
   }
 
 /*****************************************************************************/

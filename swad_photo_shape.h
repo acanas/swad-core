@@ -48,4 +48,6 @@ void Pho_ChangePhotoShape (void);
 Pho_Shape_t Pho_GetParamPhotoShape (void);
 Pho_Shape_t Pho_GetShapeFromStr (const char *Str);
 
+void Fig_GetAndShowNumUsrsPerPhotoShape (void);
+
 #endif

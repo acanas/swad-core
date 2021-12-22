@@ -231,12 +231,10 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 		     HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
 			HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
 					 StrName,The_ClassFormInBox[Gbl.Prefs.Theme]);
-			   HTM_IMG (Cfg_URL_ICON_PUBLIC,
-			            Net_WebsAndSocialNetworksIcons[NumURL],
-			            Net_WebsAndSocialNetworksTitle[NumURL],
-				    "class=\"CONTEXT_ICO_16x16\""
-				    " style=\"margin-right:6px;\"");
-			   HTM_TxtColon (Net_WebsAndSocialNetworksTitle[NumURL]);
+			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
+			                Net_WebsAndSocialNetworksTitle[NumURL],
+			                "CONTEXT_OPT CONTEXT_ICO_16x16");
+			   HTM_TxtF ("&nbsp;%s:",Net_WebsAndSocialNetworksTitle[NumURL]);
 			HTM_LABEL_End ();
 		     HTM_TD_End ();
 

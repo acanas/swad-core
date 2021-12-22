@@ -6118,6 +6118,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr)
   {
+   extern const char *The_ClassPhoto[The_NUM_THEMES];
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][Pho_NUM_SHAPES] =
      {
       [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -6168,12 +6169,14 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	     UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	   {
 	    UsrIsTheMsgSender = true;
-	    HTM_TD_Begin ("class=\"CLASSPHOTO CB LIGHT_GREEN\"");
+	    HTM_TD_Begin ("class=\"CLASSPHOTO %s CB LIGHT_GREEN\"",
+	                  The_ClassPhoto[Gbl.Prefs.Theme]);
 	   }
 	 else
 	   {
 	    UsrIsTheMsgSender = false;
-	    HTM_TD_Begin ("class=\"CLASSPHOTO CB\"");
+	    HTM_TD_Begin ("class=\"CLASSPHOTO %s CB\"",
+	                  The_ClassPhoto[Gbl.Prefs.Theme]);
 	   }
 
 	 /***** Checkbox to select this user *****/
@@ -6187,7 +6190,8 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	                            false);
 
 	 /***** Photo foot *****/
-	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
+	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION %s\"",
+	                The_ClassPhoto[Gbl.Prefs.Theme]);
 
 	    /* Name */
 	    if (UsrDat.FrstName[0])

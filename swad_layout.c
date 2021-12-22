@@ -1454,6 +1454,7 @@ static void Lay_WriteFootFromHTMLFile (void)
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
+   extern const char *The_ClassPhoto[The_NUM_THEMES];
    struct Hie_Hierarchy Hie;
 
    /***** Get data of institution *****/
@@ -1486,12 +1487,14 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	 HTM_TD_End ();
 
 	 /***** Second column: class photo title *****/
-	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
+	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE %s CM\"",
+	               The_ClassPhoto[Gbl.Prefs.Theme]);
 	    if (InsCod > 0)
 	      {
 	       if (!PrintView)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
-			       Hie.Ins.WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+			       " class=\"CLASSPHOTO_TITLE %s\"",
+			       Hie.Ins.WWW,The_ClassPhoto[Gbl.Prefs.Theme]);
 	       HTM_Txt (Hie.Ins.FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1501,8 +1504,9 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	       if (Hie.Ins.InsCod > 0)
 		  HTM_Txt (" - ");
 	       if (!PrintView)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
-			       Hie.Deg.WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+			       " class=\"CLASSPHOTO_TITLE %s\"",
+			       Hie.Deg.WWW,The_ClassPhoto[Gbl.Prefs.Theme]);
 	       HTM_Txt (Hie.Deg.FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1524,8 +1528,9 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	    if (DegCod > 0)
 	      {
 	       if (!PrintView)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
-			       Hie.Deg.WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+			       " class=\"CLASSPHOTO_TITLE %s\"",
+			       Hie.Deg.WWW,The_ClassPhoto[Gbl.Prefs.Theme]);
 	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL,true);
 	       if (!PrintView)
 		  HTM_A_End ();

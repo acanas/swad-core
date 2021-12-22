@@ -602,10 +602,23 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.72.1 (2021-12-22)"
-#define CSS_FILE		"swad21.72.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 21.73 (2021-12-23)"
+#define CSS_FILE		"swad21.73.css"
 #define JS_FILE			"swad21.67.4.js"
 /*
+	Version 21.73:    Dec 23, 2021  Working on design of dark theme. (322591 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/first-day-of-week-0.png /var/www/html/swad/icon/
+sudo cp icon/first-day-of-week-6.png /var/www/html/swad/icon/
+sudo cp icon/edmodo64x64.png /var/www/html/swad/icon/
+sudo cp icon/gnusocial64x64.png /var/www/html/swad/icon/
+sudo cp icon/identica64x64.png /var/www/html/swad/icon/
+sudo cp icon/orcid64x64.png /var/www/html/swad/icon/
+sudo cp icon/paperli64x64.png /var/www/html/swad/icon/
+sudo cp icon/researcherid64x64.png /var/www/html/swad/icon/
+sudo cp icon/scoopit64x64.png /var/www/html/swad/icon/
+sudo cp icon/storify64x64.png /var/www/html/swad/icon/
+
 	Version 21.72.1:  Dec 22, 2021  Working on design of dark theme. (322622 lines)
 	Version 21.72:    Dec 21, 2021  Working on design of dark theme. (322560 lines)
 Copy the following icons to icon public directory:

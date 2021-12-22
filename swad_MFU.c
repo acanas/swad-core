@@ -180,6 +180,7 @@ void MFU_ShowMyMFUActions (void)
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
+   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -220,7 +221,8 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		     Frm_BeginForm (Action);
 			HTM_BUTTON_SUBMIT_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
 			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-				    NULL);
+				    "class=\"%s\"",
+				    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
 			   HTM_TxtF ("&nbsp;%s",TabMenuStr);
 			HTM_BUTTON_End ();
 		     Frm_EndForm ();
