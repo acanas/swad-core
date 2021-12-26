@@ -455,6 +455,17 @@ const char *The_ClassPhoto[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "CLASSPHOTO_DARK",
   };
 
+const char *The_ClassNoticeTextColor[The_NUM_THEMES] =
+  {
+   [The_THEME_WHITE ] = "NOTICE_TEXT_WHITE",
+   [The_THEME_GREY  ] = "NOTICE_TEXT_GREY",
+   [The_THEME_PURPLE] = "NOTICE_TEXT_PURPLE",
+   [The_THEME_BLUE  ] = "NOTICE_TEXT_BLUE",
+   [The_THEME_YELLOW] = "NOTICE_TEXT_YELLOW",
+   [The_THEME_PINK  ] = "NOTICE_TEXT_PINK",
+   [The_THEME_DARK  ] = "NOTICE_TEXT_DARK",
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/

@@ -353,7 +353,7 @@ void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+      HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							    Txt_Another_user_s_profile,
 			       Class,NULL);
 	 HTM_Txt (UsrDat->FullName);
@@ -686,10 +686,10 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
-	    HTM_BUTTON_SUBMIT_Begin (Txt_TIMELINE_NOTE[Not->Type],
-				     Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",
-						      The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
-				     NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_TIMELINE_NOTE[Not->Type],
+				       Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",
+						        The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
+				       NULL);
 	    Str_FreeStrings ();
 
 	       /* Icon and text */

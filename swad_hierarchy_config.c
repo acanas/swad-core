@@ -261,16 +261,15 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
       Frm_LabelColumn ("RT",NULL,Txt_Centers);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
 	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-	       HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Centers_of_INSTITUTION_X,
-							 Gbl.Hierarchy.Ins.ShrtName),
-	                                Str_BuildString ("BT_LINK %s",
-	                                                 The_ClassDat[Gbl.Prefs.Theme]),
-					NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Centers_of_INSTITUTION_X,
+							   Gbl.Hierarchy.Ins.ShrtName),
+	                                  "BT_LINK",
+					  NULL);
 	       Str_FreeStrings ();
 	   }
 	 HTM_Unsigned (NumCtrs);

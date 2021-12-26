@@ -597,10 +597,8 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
-		                           Str_BuildString ("BT_LINK LT %s",
-		                                            The_ClassDat[Gbl.Prefs.Theme]),
-					   NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
+		                             "BT_LINK LT",NULL);
 		  Str_FreeStrings ();
 	      }
 
@@ -772,14 +770,12 @@ static void CtrCfg_NumDegs (void)
       Frm_LabelColumn ("RT",NULL,Txt_Degrees);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	    HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Degrees_of_CENTER_X,
-						      Gbl.Hierarchy.Ctr.ShrtName),
-				     Str_BuildString ("BT_LINK %s",
-				                      The_ClassDat[Gbl.Prefs.Theme]),
-				     NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Degrees_of_CENTER_X,
+						        Gbl.Hierarchy.Ctr.ShrtName),
+				       "BT_LINK",NULL);
 	    Str_FreeStrings ();
 	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
 	    HTM_BUTTON_End ();

@@ -164,14 +164,11 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    Ins_GetDataOfInstitByCod (&Ins);
 
 	    /* Institution logo and name */
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("%s",The_ClassDat[Gbl.Prefs.Theme]);
 
 	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
-							  Str_BuildString ("BT_LINK %s NOWRAP",
-							                   The_ClassDat[Gbl.Prefs.Theme]),
-							  "CM");
-		  Str_FreeStrings ();
+							  "BT_LINK NOWRAP","CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
@@ -207,7 +204,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
      {
       Frm_BeginForm (ActSeeInsInf);
 	 Ins_PutParamInsCod (Ins->InsCod);
-	 HTM_BUTTON_SUBMIT_Begin (Ins->FullName,"BT_LINK",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Ins->FullName,"BT_LINK",NULL);
      }
    Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
@@ -230,7 +227,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t
       Ins_PutParamInsCod (Ins->InsCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
       Str_FreeStrings ();
 
 	 /***** Institution logo and name *****/
@@ -373,15 +370,13 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
-      TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-                                        The_ClassDatLight[Gbl.Prefs.Theme]);
+      TxtClassNormal =
+      TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-                                        The_ClassDatStrong[Gbl.Prefs.Theme]);
+      TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -396,7 +391,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
       /***** Institution logo and name *****/
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
 	 Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
-						 TxtClassStrong,"CM");
+						 "BT_LINK","CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
@@ -458,13 +453,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    Ins_Order_t Order;
    static const char *ClassTH[Ins_NUM_ORDERS] =
      {
-      [Ins_ORDER_BY_INSTITUTION] = "LM",
-      [Ins_ORDER_BY_NUM_USRS   ] = "RM"
-     };
-   static const char *ClassButton[Ins_NUM_ORDERS] =
-     {
-      [Ins_ORDER_BY_INSTITUTION] = "BT_LINK LM TIT_TBL",
-      [Ins_ORDER_BY_NUM_USRS   ] = "BT_LINK RM TIT_TBL"
+      [Ins_ORDER_BY_INSTITUTION] = "TIT_TBL LM",
+      [Ins_ORDER_BY_NUM_USRS   ] = "TIT_TBL RM"
      };
 
    HTM_TR_Begin (NULL);
@@ -479,7 +469,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_SUBMIT_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],ClassButton[Order],NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_INSTITUTIONS_HELP_ORDER[Order],
+		                             "BT_LINK",NULL);
 		     if (Order == Gbl.Hierarchy.Inss.SelectedOrder)
 			HTM_U_Begin ();
 	      }

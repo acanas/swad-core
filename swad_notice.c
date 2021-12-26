@@ -546,31 +546,37 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long UsrCod,
                              Not_Status_t Status)
   {
+   extern const char *The_ClassNoticeTextColor[The_NUM_THEMES];
    extern const char *Txt_See_full_notice;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
-      [Not_ACTIVE_NOTICE  ] = "NOTICE_CONT_ACTIVE",
-      [Not_OBSOLETE_NOTICE] = "NOTICE_CONT_OBSOLETE",
+      [Not_ACTIVE_NOTICE  ] = "NOTICE_CONT",
+      [Not_OBSOLETE_NOTICE] = "NOTICE_CONT LIGHT",
      };
    static const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
      {
       [Not_LIST_BRIEF_NOTICES] = "NOTICE_CONT_NARROW",
       [Not_LIST_FULL_NOTICES ] = "NOTICE_CONT_WIDE",
      };
-   static const char *DateClass[Not_NUM_STATUS] =
+   static const char *The_ClassNoticeDateColor[The_NUM_THEMES] =
      {
-      [Not_ACTIVE_NOTICE  ] = "NOTICE_DATE_ACTIVE",
-      [Not_OBSOLETE_NOTICE] = "NOTICE_DATE_OBSOLETE",
+      [The_THEME_WHITE ] = "NOTICE_DATE_WHITE",
+      [The_THEME_GREY  ] = "NOTICE_DATE_GREY",
+      [The_THEME_PURPLE] = "NOTICE_DATE_PURPLE",
+      [The_THEME_BLUE  ] = "NOTICE_DATE_BLUE",
+      [The_THEME_YELLOW] = "NOTICE_DATE_YELLOW",
+      [The_THEME_PINK  ] = "NOTICE_DATE_PINK",
+      [The_THEME_DARK  ] = "NOTICE_DATE_DARK",
      };
-   static const char *TextClass[Not_NUM_STATUS] =
+   static const char *The_ClassNoticeAuthorColor[The_NUM_THEMES] =
      {
-      [Not_ACTIVE_NOTICE  ] = "NOTICE_TEXT_ACTIVE",
-      [Not_OBSOLETE_NOTICE] = "NOTICE_TEXT_OBSOLETE",
-     };
-   static const char *AuthorClass[Not_NUM_STATUS] =
-     {
-      [Not_ACTIVE_NOTICE  ] = "NOTICE_AUTHOR_ACTIVE",
-      [Not_OBSOLETE_NOTICE] = "NOTICE_AUTHOR_OBSOLETE",
+      [The_THEME_WHITE ] = "NOTICE_AUTHOR_WHITE",
+      [The_THEME_GREY  ] = "NOTICE_AUTHOR_GREY",
+      [The_THEME_PURPLE] = "NOTICE_AUTHOR_PURPLE",
+      [The_THEME_BLUE  ] = "NOTICE_AUTHOR_BLUE",
+      [The_THEME_YELLOW] = "NOTICE_AUTHOR_YELLOW",
+      [The_THEME_PINK  ] = "NOTICE_AUTHOR_PINK",
+      [The_THEME_DARK  ] = "NOTICE_AUTHOR_DARK",
      };
    static unsigned UniqueId = 0;
    char *Id;
@@ -618,13 +624,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Write the date */
       UniqueId++;
-      HTM_DIV_Begin ("class=\"%s\"",DateClass[Status]);
+      HTM_DIV_Begin ("class=\"NOTICE_DATE %s\"",
+                     The_ClassNoticeDateColor[Gbl.Prefs.Theme]);
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	   {
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
 	       Not_PutHiddenParamNotCod (NotCod);
-	       HTM_BUTTON_SUBMIT_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
 	   }
 	 if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
@@ -644,7 +651,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       /***** Write the content of the notice *****/
       if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	{
-	 HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF\"");
+	 HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF %s\"",
+                        The_ClassNoticeTextColor[Gbl.Prefs.Theme]);
 	    HTM_Txt (Content);
 	 HTM_DIV_End ();
 
@@ -658,14 +666,15 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	}
       else
 	{
-	 HTM_DIV_Begin ("class=\"%s\"",TextClass[Status]);
-	    HTM_Txt (Content);
+         HTM_DIV_Begin ("class=\"NOTICE_TEXT %s\"",
+                        The_ClassNoticeTextColor[Gbl.Prefs.Theme]);
+            HTM_Txt (Content);
 	 HTM_DIV_End ();
 	}
 
       /***** Write the author *****/
       HTM_DIV_Begin ("class=\"NOTICE_AUTHOR %s\"",	// Limited width
-		     AuthorClass[Status]);
+                     The_ClassNoticeAuthorColor[Gbl.Prefs.Theme]);
 	 Usr_UsrDataConstructor (&UsrDat);
 	 UsrDat.UsrCod = UsrCod;
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get author's data from database

@@ -1284,7 +1284,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       else
 	 Frm_BeginForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_SUBMIT_Begin (NULL,"BT_LINK",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (NULL,"BT_LINK",NULL);
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
@@ -2256,13 +2256,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	                     The_ClassDat[Gbl.Prefs.Theme],
 	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
-		    {
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-							Str_BuildString ("BT_LINK %s",
-							                 The_ClassDat[Gbl.Prefs.Theme]),
-							"CT");
-		     Str_FreeStrings ();
-		    }
+							"BT_LINK","CT");
 		  else	// Pho_DEGREES_PRINT
 		    {
 		     Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
@@ -2391,7 +2386,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
 	 Deg_PutParamDegCod (Deg->DegCod);
-	 HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Deg->FullName),"BT_LINK",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Deg->FullName),
+	                            "BT_LINK",NULL);
 	 Str_FreeStrings ();
      }
 

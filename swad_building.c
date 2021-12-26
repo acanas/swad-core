@@ -126,10 +126,10 @@ void Bld_SeeBuildings (void)
 		 Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
 		 Order++)
 	      {
-	       HTM_TH_Begin (1,1,"LM");
+	       HTM_TH_Begin (1,1,"TIT_TBL LM");
 		  Frm_BeginForm (ActSeeBld);
 		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		     HTM_BUTTON_SUBMIT_Begin (Txt_BUILDINGS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],"BT_LINK",NULL);
 			if (Order == Buildings.SelectedOrder)
 			   HTM_U_Begin ();
 			HTM_Txt (Txt_BUILDINGS_ORDER[Order]);

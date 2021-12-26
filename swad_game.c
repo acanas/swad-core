@@ -283,7 +283,8 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 			Pag_PutHiddenParamPagNum (Pag_GAMES,Games->CurrentPage);
 			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
-			HTM_BUTTON_SUBMIT_Begin (Txt_GAMES_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_GAMES_ORDER_HELP[Order],
+			                           "BT_LINK TIT_TBL",NULL);
 			   if (Order == Games->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_GAMES_ORDER[Order]);
@@ -600,10 +601,10 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
 	    Gam_PutParams (Games);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_View_game,
-				     Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-						    "BT_LINK LT ASG_TITLE",
-				     NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_View_game,
+				       Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+						      "BT_LINK LT ASG_TITLE",
+				       NULL);
 	       HTM_Txt (Game->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -631,10 +632,10 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
 	 Gam_PutParams (Games);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Matches,
-				  Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-						 "BT_LINK LT ASG_TITLE",
-				  NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Matches,
+				    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+						   "BT_LINK LT ASG_TITLE",
+				    NULL);
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
 	    HTM_Unsigned (Game->NumMchs);

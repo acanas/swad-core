@@ -146,12 +146,13 @@ void Dpt_SeeDepts (void)
 
 	       Frm_BeginForm (ActSeeDpt);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_SUBMIT_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-		  if (Order == Departments.SelectedOrder)
-		     HTM_U_Begin ();
-		  HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
-		  if (Order == Departments.SelectedOrder)
-		     HTM_U_End ();
+		  HTM_BUTTON_OnSubmit_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],
+		                             "BT_LINK TIT_TBL",NULL);
+		     if (Order == Departments.SelectedOrder)
+			HTM_U_Begin ();
+		     HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);
+		     if (Order == Departments.SelectedOrder)
+			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
 

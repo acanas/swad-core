@@ -186,11 +186,6 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    extern const char *Txt_Center;
    extern const char *Txt_Degree;
    const char *ClassTxt = The_ClassBreadcrumb[Gbl.Prefs.Theme];
-   char *ClassLink;
-
-   /***** Create CSS class of links *****/
-   if (asprintf (&ClassLink,"BT_LINK %s",ClassTxt) < 0)
-      Err_NotEnoughMemoryExit ();
 
    /***** Form to go to the system *****/
    HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
@@ -199,7 +194,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
       Frm_BeginFormGoTo (ActMnu);
 	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_System,ClassLink,NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_System,"BT_LINK",NULL);
 	    HTM_Txt (Txt_System);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -216,7 +211,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to go to see institutions of this country *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
+	                               "BT_LINK",NULL);
 	       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -232,7 +228,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select countries *****/
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Country,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Country,"BT_LINK",NULL);
 	       HTM_Txt (Txt_Country);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -250,7 +246,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to see centers of this institution *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
 	    Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ins.FullName,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Ins.FullName,
+	                               "BT_LINK",NULL);
 	       HTM_Txt (Gbl.Hierarchy.Ins.ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -266,7 +263,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select institutions *****/
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Institution,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Institution,"BT_LINK",NULL);
 	       HTM_Txt (Txt_Institution);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -296,7 +293,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to see degrees of this center *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Ctr.FullName,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Ctr.FullName,
+	                               "BT_LINK",NULL);
 	       HTM_Txt (Gbl.Hierarchy.Ctr.ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -312,7 +310,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select centers *****/
 	 Frm_BeginFormGoTo (ActSeeCtr);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Center,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Center,"BT_LINK",NULL);
 	       HTM_Txt (Txt_Center);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -342,7 +340,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 	 /***** Form to go to see courses of this degree *****/
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-	    HTM_BUTTON_SUBMIT_Begin (Gbl.Hierarchy.Deg.FullName,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Gbl.Hierarchy.Deg.FullName,
+	                               "BT_LINK",NULL);
 	       HTM_Txt (Gbl.Hierarchy.Deg.ShrtName);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -358,7 +357,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 	 /***** Form to go to select degrees *****/
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Degree,ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Degree,"BT_LINK",NULL);
 	       HTM_Txt (Txt_Degree);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -388,9 +387,6 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_Txt ("&nbsp;&gt;&nbsp;");
 
    HTM_DIV_End ();
-
-   /***** Free memory used for CSS class of links *****/
-   free (ClassLink);
   }
 
 /*****************************************************************************/

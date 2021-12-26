@@ -991,7 +991,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 	    switch (ProjectView)
 	      {
@@ -1002,7 +1002,8 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 				    Order,
 				    Projects->CurrentPage,
 				    -1L);
-		     HTM_BUTTON_SUBMIT_Begin (Txt_PROJECT_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_PROJECT_ORDER_HELP[Order],
+		                                "BT_LINK",NULL);
 			if (Order == Projects->SelectedOrder)
 			   HTM_U_Begin ();
 			HTM_Txt (Txt_PROJECT_ORDER[Order]);
@@ -1257,7 +1258,6 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    const char *ClassLabel;
    const char *ClassDate;
    const char *ClassTitle;
-   const char *ClassLink;
    const char *ClassData;
    struct Prj_Faults Faults;
    bool PrjIsFaulty;
@@ -1271,8 +1271,6 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 					      "DATE_BLUE";
    ClassTitle = (Prj->Hidden == Prj_HIDDEN) ? "ASG_TITLE_LIGHT" :
 					      "ASG_TITLE";
-   ClassLink  = (Prj->Hidden == Prj_HIDDEN) ? "BT_LINK LT ASG_TITLE_LIGHT" :
-					      "BT_LINK LT ASG_TITLE";
    ClassData  = (Prj->Hidden == Prj_HIDDEN) ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					      The_ClassDat[Gbl.Prefs.Theme];
 
@@ -1382,7 +1380,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		 {
 		  Frm_BeginForm (ActAdmDocPrj);
 		     Prj_PutCurrentParams (Projects);
-		     HTM_BUTTON_SUBMIT_Begin (Txt_Project_files,ClassLink,NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_Project_files,"BT_LINK",NULL);
 			HTM_Txt (Prj->Title);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();

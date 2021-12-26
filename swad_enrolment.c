@@ -2229,7 +2229,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Link to course *****/
-		     HTM_TD_Begin (NULL);
+		     HTM_TD_Begin ("%s LT",The_ClassDat[Gbl.Prefs.Theme]);
 
 			Crs_GetDataOfCourseByCod (&Crs);
 			Deg.DegCod = Crs.DegCod;
@@ -2237,10 +2237,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   Crs_PutParamCrsCod (Crs.CrsCod);
-			   HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs.FullName),
-						    Str_BuildString ("BT_LINK LT %s",
-						                     The_ClassDat[Gbl.Prefs.Theme]),
-						    NULL);
+			   HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs.FullName),
+						      "BT_LINK",NULL);
 			   Str_FreeStrings ();
 			      HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
 			   HTM_BUTTON_End ();

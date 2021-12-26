@@ -68,7 +68,7 @@ void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton)
 void Btn_PutCreateButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_CREATE",NULL);
+      HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT BT_CREATE",NULL);
 	 HTM_Txt (TxtButton);
       HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -76,7 +76,7 @@ void Btn_PutCreateButton (const char *TxtButton)
 
 void Btn_PutCreateButtonInline (const char *TxtButton)
   {
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
+   HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
       HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }
@@ -84,7 +84,7 @@ void Btn_PutCreateButtonInline (const char *TxtButton)
 void Btn_PutConfirmButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_CONFIRM",NULL);
+      HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT BT_CONFIRM",NULL);
 	 HTM_Txt (TxtButton);
       HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -92,7 +92,7 @@ void Btn_PutConfirmButton (const char *TxtButton)
 
 void Btn_PutConfirmButtonInline (const char *TxtButton)
   {
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CONFIRM",NULL);
+   HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT_INLINE BT_CONFIRM",NULL);
       HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }
@@ -100,7 +100,7 @@ void Btn_PutConfirmButtonInline (const char *TxtButton)
 void Btn_PutRemoveButton (const char *TxtButton)
   {
    HTM_DIV_Begin ("class=\"CM\"");
-      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT BT_REMOVE",NULL);
+      HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT BT_REMOVE",NULL);
 	 HTM_Txt (TxtButton);
       HTM_BUTTON_End ();
    HTM_DIV_End ();
@@ -108,7 +108,7 @@ void Btn_PutRemoveButton (const char *TxtButton)
 
 void Btn_PutRemoveButtonInline (const char *TxtButton)
   {
-   HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_REMOVE",NULL);
+   HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT_INLINE BT_REMOVE",NULL);
       HTM_Txt (TxtButton);
    HTM_BUTTON_End ();
   }

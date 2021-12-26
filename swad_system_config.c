@@ -309,13 +309,9 @@ static void SysCfg_NumCtys (void)
       Frm_LabelColumn ("RT",NULL,Txt_Countries);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeCty);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Countries,
-	                             Str_BuildString ("BT_LINK %s",
-	                                              The_ClassDat[Gbl.Prefs.Theme]),
-	                             NULL);
-	    Str_FreeStrings ();
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Countries,"BT_LINK",NULL);
 	       HTM_Unsigned (Cty_GetCachedNumCtysInSys ());
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

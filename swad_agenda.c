@@ -652,7 +652,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 				   Agenda->CurrentPage,
 				   -1L);
 
-	       HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 		  if (Order == Agenda->SelectedOrder)
 		     HTM_U_Begin ();
 

@@ -130,11 +130,12 @@ void Mai_SeeMailDomains (void)
 	   Order <= Mai_ORDER_BY_USERS;
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 	    Frm_BeginForm (ActSeeMai);
 	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	       HTM_BUTTON_SUBMIT_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],
+	                                  "BT_LINK",NULL);
 		  if (Order == Gbl.Mails.SelectedOrder)
 		     HTM_U_Begin ();
 		  HTM_Txt (Txt_EMAIL_DOMAIN_ORDER[Order]);

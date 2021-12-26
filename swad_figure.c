@@ -1256,7 +1256,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		     /* Icon and name of this institution */
 		     Frm_BeginForm (ActSeeInsInf);
 			Ins_PutParamInsCod (Ins.InsCod);
-			HTM_BUTTON_SUBMIT_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+			HTM_BUTTON_OnSubmit_Begin (Ins.ShrtName,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
 			   if (Gbl.Usrs.Listing.WithPhotos)
 			     {
 			      Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,

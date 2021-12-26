@@ -154,13 +154,12 @@ void Cty_SeeCtyWithPendingInss (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Country map */
-	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"%s LM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL",
-						     Str_BuildString ("BT_LINK %s",
-						                      The_ClassDat[Gbl.Prefs.Theme]));
-		  Str_FreeStrings ();
+						     "BT_LINK");
 	       HTM_TD_End ();
 
 	       /* Number of pending institutions (row[1]) */
@@ -368,7 +367,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	   {
 	    Frm_BeginForm (ActSeeCty);
 	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	       HTM_BUTTON_SUBMIT_Begin (Txt_COUNTRIES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
 		  if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
 		     HTM_U_Begin ();
 	   }
@@ -418,13 +417,12 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
       HTM_TD_End ();
 
       /***** Country map (and link to WWW if exists) *****/
-      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s LM %s\"",
+                    The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL",
-					    Str_BuildString ("BT_LINK %s",
-					                     The_ClassDatStrong[Gbl.Prefs.Theme]));
-	 Str_FreeStrings ();
+					    "BT_LINK");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this country *****/
@@ -517,7 +515,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
 	 /***** Link to action *****/
-	 HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
+	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
 				  ClassLink,NULL);
 	 Str_FreeStrings ();
 
@@ -924,7 +922,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       /***** Write country name with link to country information *****/
       Frm_BeginForm (ActSeeCtyInf);
 	 Cty_PutParamCtyCod (CtyCod);
-	 HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeCtyInf),ClassLink,NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtyInf),ClassLink,NULL);
 	    HTM_Txt (CtyName);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();

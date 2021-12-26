@@ -1419,7 +1419,7 @@ void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class)
    HTM_BUTTON_NestingLevel++;
   }
 
-void HTM_BUTTON_SUBMIT_Begin (const char *Title,const char *Class,const char *OnSubmit)
+void HTM_BUTTON_OnSubmit_Begin (const char *Title,const char *Class,const char *OnSubmit)
   {
    HTM_Txt ("<button type=\"submit\"");
    if (Title)
@@ -1436,7 +1436,7 @@ void HTM_BUTTON_SUBMIT_Begin (const char *Title,const char *Class,const char *On
    HTM_BUTTON_NestingLevel++;
   }
 
-void HTM_BUTTON_BUTTON_Begin (const char *Title,const char *Class,const char *OnClick)
+void HTM_BUTTON_OnClick_Begin (const char *Title,const char *Class,const char *OnClick)
   {
    HTM_Txt ("<button type=\"button\"");
    if (Title)
@@ -1852,8 +1852,8 @@ void HTM_Unsigned (unsigned Num)
 
 void HTM_Light0 (void)
   {
-   HTM_SPAN_Begin ("class=\"LIGHT\"");
-   HTM_Txt ("0");
+   HTM_SPAN_Begin ("class=\"VERY_LIGHT\"");
+      HTM_Txt ("0");
    HTM_SPAN_End ();
   }
 

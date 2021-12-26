@@ -270,7 +270,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 			Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 			Dat_PutHiddenParamOrder (Order);
 
-			HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
 
 			   if (Order == Events->SelectedOrder)
 			      HTM_U_Begin ();
@@ -1849,7 +1849,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
       Att_PutParamsCodGrps (AttEvent->AttCod);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_SUBMIT_Begin (Title,Class,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Title,Class,NULL);
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();
 

@@ -249,7 +249,7 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		    Order <= Dat_END_TIME;
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllSvy);
@@ -257,8 +257,8 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 			Grp_PutParamWhichGroups (&WhichGroups);
 			Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
 			Dat_PutHiddenParamOrder (Order);
-			HTM_BUTTON_SUBMIT_Begin (Txt_START_END_TIME_HELP[Order],
-						 "BT_LINK TIT_TBL",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],
+						   "BT_LINK",NULL);
 			   if (Order == Surveys->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_START_END_TIME[Order]);
@@ -537,10 +537,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	    WhichGroups = Grp_GetParamWhichGroups ();
 	    Grp_PutParamWhichGroups (&WhichGroups);
 	    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Surveys->CurrentPage);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_View_survey,
-				     Svy.Status.Visible ? "BT_LINK LT ASG_TITLE" :
-							  "BT_LINK LT ASG_TITLE_LIGHT",
-				     NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_View_survey,
+				       Svy.Status.Visible ? "BT_LINK ASG_TITLE" :
+							    "BT_LINK ASG_TITLE_LIGHT",
+				       NULL);
 	       HTM_Txt (Svy.Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

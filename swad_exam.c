@@ -260,7 +260,8 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 		     Frm_BeginForm (ActSeeAllExa);
 			Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
 			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-			HTM_BUTTON_SUBMIT_Begin (Txt_EXAMS_ORDER_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_EXAMS_ORDER_HELP[Order],
+			                           "BT_LINK TIT_TBL",NULL);
 			   if (Order == Exams->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_EXAMS_ORDER[Order]);
@@ -549,10 +550,10 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeExa);
 	    Exa_PutParams (Exams);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_View_exam,
-				     Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-						    "BT_LINK LT ASG_TITLE",
-				     NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_View_exam,
+				       Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
+						      "BT_LINK LT ASG_TITLE",
+				       NULL);
 	       HTM_Txt (Exam->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -580,10 +581,10 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
       Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
 	 Exa_PutParams (Exams);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Sessions,
-				  Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-						 "BT_LINK LT ASG_TITLE",
-				  NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Sessions,
+				    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
+						   "BT_LINK LT ASG_TITLE",
+				    NULL);
 	    if (ShowOnlyThisExam)
 	       HTM_TxtColonNBSP (Txt_Sessions);
 	    HTM_Unsigned (Exam->NumSess);

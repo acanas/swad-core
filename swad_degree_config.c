@@ -242,7 +242,7 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
 					   Str_BuildString ("BT_LINK LT %s",
 					                    The_ClassDat[Gbl.Prefs.Theme]),
 					   NULL);
@@ -329,14 +329,12 @@ static void DegCfg_NumCrss (void)
       Frm_LabelColumn ("RT",NULL,Txt_Courses);
 
       /* Data */
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-	    HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Courses_of_DEGREE_X,
+	    HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Courses_of_DEGREE_X,
 						      Gbl.Hierarchy.Deg.ShrtName),
-				     Str_BuildString ("BT_LINK %s",
-				                      The_ClassDat[Gbl.Prefs.Theme]),
-				     NULL);
+				       "BT_LINK",NULL);
 	    Str_FreeStrings ();
 	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
 	    HTM_BUTTON_End ();

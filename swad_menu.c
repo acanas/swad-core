@@ -261,10 +261,10 @@ void Mnu_WriteMenuThisTab (void)
 		  Frm_BeginForm (NumAct);
 
 		     /***** Begin link *****/
-		     HTM_BUTTON_SUBMIT_Begin (Title,
-					      IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
-								    "BT_LINK MENU_OPT_OFF",
-					      NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Title,
+					        IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
+								      "BT_LINK MENU_OPT_OFF",
+					        NULL);
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");

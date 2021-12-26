@@ -1362,11 +1362,7 @@ void Usr_WriteLoggedUsrHead (void)
       if (NumAvailableRoles == 1)
 	{
 	 Frm_BeginForm (ActFrmRolSes);
-	    HTM_BUTTON_SUBMIT_Begin (Txt_Role,
-				     Str_BuildString ("BT_LINK %s",
-						      The_ClassUsr[Gbl.Prefs.Theme]),
-				     NULL);
-	    Str_FreeStrings ();
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Role,"BT_LINK",NULL);
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -3650,7 +3646,7 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
 	 FuncParams (Args);
 
       /***** Link and image *****/
-      HTM_BUTTON_SUBMIT_Begin (Txt_USR_LIST_TYPES[ListType],
+      HTM_BUTTON_OnSubmit_Begin (Txt_USR_LIST_TYPES[ListType],
 			       The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
 			       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
 								NULL);
@@ -6437,13 +6433,13 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    /* Action to go to user's record depending on role in course */
    if (!NextAction[UsrDat->Roles.InCurrentCrs])
       /* Begin div */
-      HTM_DIV_Begin ("class=\"LT AUTHOR_TXT\"");
+      HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
    else
      {
       /* Begin form to go to user's record card */
       Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	 HTM_BUTTON_SUBMIT_Begin (UsrDat->FullName,"BT_LINK LT AUTHOR_TXT",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (UsrDat->FullName,"BT_LINK AUTHOR_TXT",NULL);
      }
 
    /* User's ID */

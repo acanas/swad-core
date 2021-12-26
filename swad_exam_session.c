@@ -525,19 +525,19 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	    Frm_BeginForm (ActSeeExaPrn);
 	       Exa_PutParams (Exams);
 	       ExaSes_PutParamSesCod (Session->SesCod);
-	       HTM_BUTTON_SUBMIT_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
-									     Txt_Resume,
-					Session->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-							  "BT_LINK LT ASG_TITLE",
-					NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
+									       Txt_Resume,
+					  Session->Hidden ? "BT_LINK ASG_TITLE_LIGHT":
+							    "BT_LINK ASG_TITLE",
+					  NULL);
 		  HTM_Txt (Session->Title);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
 	 else
 	   {
-	    HTM_SPAN_Begin ("class=\"%s\"",Session->Hidden ? "LT ASG_TITLE_LIGHT":
-							     "LT ASG_TITLE");
+	    HTM_SPAN_Begin ("class=\"%s\"",Session->Hidden ? "ASG_TITLE_LIGHT":
+							     "ASG_TITLE");
 	       HTM_Txt (Session->Title);
 	    HTM_SPAN_End ();
 	   }

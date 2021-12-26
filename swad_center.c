@@ -153,12 +153,9 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"%s LM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,
-						     Str_BuildString ("BT_LINK %s NOWRAP",
-						                      The_ClassDat[Gbl.Prefs.Theme]),
-						     "CM");
-		  Str_FreeStrings ();
+						     "BT_LINK NOWRAP","CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
@@ -192,7 +189,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
       Ctr_PutParamCtrCod (Ctr->CtrCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
       Str_FreeStrings ();
 
 	 /***** Center logo and name *****/
@@ -347,15 +344,13 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
-      TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-                                        The_ClassDatLight[Gbl.Prefs.Theme]);
+      TxtClassNormal =
+      TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-                                        The_ClassDatStrong[Gbl.Prefs.Theme]);
+      TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -368,9 +363,9 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       HTM_TD_End ();
 
       /***** Center logo and name *****/
-      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
 	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,
-					    TxtClassStrong,"CM");
+					    "BT_LINK LT","CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
@@ -406,7 +401,6 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
@@ -1438,16 +1432,14 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	   Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTER ? "LM" :
-							  "RM");
+	 HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTER ? "TIT_TBL LM" :
+							  "TIT_TBL RM");
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-		  HTM_BUTTON_SUBMIT_Begin (Txt_CENTERS_HELP_ORDER[Order],
-					   Order == Ctr_ORDER_BY_CENTER ? "BT_LINK LM TIT_TBL" :
-									  "BT_LINK RM TIT_TBL",
-					   NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_CENTERS_HELP_ORDER[Order],
+					     "BT_LINK",NULL);
 		     if (Order == Gbl.Hierarchy.Ctrs.SelectedOrder)
 			HTM_U_Begin ();
 	      }

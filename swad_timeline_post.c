@@ -233,7 +233,7 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
       Str_FreeStrings ();
 
       /***** Submit button *****/
-      HTM_BUTTON_SUBMIT_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
+      HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);
 	 HTM_Txt (Txt_Post);
       HTM_BUTTON_End ();
 

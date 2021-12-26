@@ -498,7 +498,7 @@ void Ntf_ShowMyNotifications (void)
 		     if (PutLink)
 		       {
 			PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
-			   HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
+			   HTM_BUTTON_OnSubmit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
 			      HTM_Txt (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
@@ -525,7 +525,7 @@ void Ntf_ShowMyNotifications (void)
 			   PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
 			if (PutLink)
-			   HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
+			   HTM_BUTTON_OnSubmit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
 			else
 			   HTM_SPAN_Begin ("class=\"%s\"",ClassText);
 			HTM_TxtF ("%s:&nbsp;%s",Txt_Forum,ForumName);
@@ -543,7 +543,7 @@ void Ntf_ShowMyNotifications (void)
 			   PutLink = Ntf_StartFormGoToAction (NotifyEvent,Hie.Crs.CrsCod,&UsrDat,Cod,&Forums);
 
 			if (PutLink)
-			   HTM_BUTTON_SUBMIT_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
+			   HTM_BUTTON_OnSubmit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassLink,NULL);
 			else
 			   HTM_SPAN_Begin ("class=\"%s\"",ClassText);
 
@@ -1640,7 +1640,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    Frm_BeginFormId (ActSeeNewNtf,"form_ntf");
 
       /***** Begin link *****/
-      HTM_BUTTON_SUBMIT_Begin (Txt_See_notifications,The_ClassNotif[Gbl.Prefs.Theme],NULL);
+      HTM_BUTTON_OnSubmit_Begin (Txt_See_notifications,The_ClassNotif[Gbl.Prefs.Theme],NULL);
 
 	 /***** Number of unseen notifications *****/
 	 HTM_SPAN_Begin ("id=\"notif_all\"");

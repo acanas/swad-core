@@ -158,12 +158,10 @@ void Deg_SeeDegWithPendingCrss (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Degree logo and full name */
-	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+	       HTM_TD_Begin ("class=\"%s LM %s\"",
+	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
-						     Str_BuildString ("BT_LINK %s NOWRAP",
-						                      The_ClassDat[Gbl.Prefs.Theme]),
-						     "CM");
-		  Str_FreeStrings ();
+						     "BT_LINK NOWRAP","CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
@@ -198,7 +196,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
       Deg_PutParamDegCod (Deg->DegCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Deg->FullName),ClassLink,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Deg->FullName),ClassLink,NULL);
       Str_FreeStrings ();
 
 	 /***** Degree logo and name *****/
@@ -816,15 +814,13 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
      {
-      TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-                                        The_ClassDatLight[Gbl.Prefs.Theme]);
+      TxtClassNormal =
+      TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
      }
    else
      {
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-                                        The_ClassDatStrong[Gbl.Prefs.Theme]);
+      TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
@@ -847,9 +843,9 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
       HTM_TD_End ();
 
       /***** Degree logo and name *****/
-      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
 	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,
-					    TxtClassStrong,"CM");
+					    "BT_LINK","CM");
       HTM_TD_End ();
 
       /***** Type of degree *****/

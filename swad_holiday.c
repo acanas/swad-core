@@ -134,10 +134,11 @@ void Hld_SeeHolidays (void)
 		       Order <= Hld_ORDER_BY_START_DATE;
 		       Order++)
 		    {
-		     HTM_TH_Begin (1,1,"LM");
+		     HTM_TH_Begin (1,1,"TIT_TBL LM");
 			Frm_BeginForm (ActSeeHld);
 			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-			   HTM_BUTTON_SUBMIT_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
+			   HTM_BUTTON_OnSubmit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],
+			                              "BT_LINK",NULL);
 			      if (Order == Holidays.SelectedOrder)
 				 HTM_U_Begin ();
 			      HTM_Txt (Txt_HOLIDAYS_ORDER[Order]);

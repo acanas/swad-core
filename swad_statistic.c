@@ -1141,12 +1141,12 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-	       HTM_TD_Begin ("class=\"LM\"");
+	       HTM_TD_Begin ("class=\"TIT_TBL LM\"");
 		  if (FirstRow > 1)
 		    {
-		     HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Show_previous_X_clicks,
-		                                               Stats->RowsPerPage),
-					      "BT_LINK TIT_TBL",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Show_previous_X_clicks,
+		                                                 Stats->RowsPerPage),
+					        "BT_LINK",NULL);
 		     Str_FreeStrings ();
 			HTM_STRONG_Begin ();
 			   HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
@@ -1179,12 +1179,12 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-	       HTM_TD_Begin ("class=\"RM\"");
+	       HTM_TD_Begin ("class=\"TIT_TBL RM\"");
 		  if (LastRow < NumHits)
 		    {
-		     HTM_BUTTON_SUBMIT_Begin (Str_BuildString (Txt_Show_next_X_clicks,
-		                                               Stats->RowsPerPage),
-					      "BT_LINK TIT_TBL",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Show_next_X_clicks,
+		                                                 Stats->RowsPerPage),
+					        "BT_LINK",NULL);
 		     Str_FreeStrings ();
 			HTM_STRONG_Begin ();
 			   HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
@@ -2937,7 +2937,7 @@ static void Sta_WriteCountry (long CtyCod)
 	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
 					    "COUNTRY_TINY",
 					    "COUNTRY_MAP_TINY",
-					    "BT_LINK LT LOG");
+					    "BT_LINK");
 	}
       else			// Hit with no country selected
 	 /***** No country selected *****/
@@ -3025,7 +3025,7 @@ static void Sta_WriteInstit (long InsCod)
 
 	 /***** Form to go to institution *****/
 	 Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
-						 "BT_LINK LT LOG","CT");
+						 "BT_LINK","CT");
      }
    else			// Hit with no institution selected
      {
@@ -3116,7 +3116,7 @@ static void Sta_WriteCenter (long CtrCod)
 
 	 /***** Form to go to center *****/
 	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
-					    "BT_LINK LT LOG","CT");
+					    "BT_LINK","CT");
      }
    else			// Hit with no center selected
      {
@@ -3207,7 +3207,7 @@ static void Sta_WriteDegree (long DegCod)
 
 	 /***** Form to go to degree *****/
 	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-					    "BT_LINK LT LOG","CT");
+					    "BT_LINK","CT");
      }
    else			// Hit with no degree selected
      {
@@ -3295,7 +3295,8 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs.FullName),"BT_LINK LT LOG",NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs.FullName),
+		                             "BT_LINK",NULL);
 		  Str_FreeStrings ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();

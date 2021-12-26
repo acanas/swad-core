@@ -225,28 +225,24 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit)
   {
+   extern const char *The_ClassNoticeTextColor[The_NUM_THEMES];
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Do_not_show_again;
    static const char *ContainerClass[Ann_NUM_STATUS] =
      {
-      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_CONT_ACTIVE NOTICE_CONT_WIDE",
-      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_CONT_OBSOLETE NOTICE_CONT_WIDE",
+      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_CONT NOTICE_CONT_WIDE",
+      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_CONT NOTICE_CONT_WIDE LIGHT",
      };
-   static const char *SubjectClass[Ann_NUM_STATUS] =
+   static const char *The_ClassNoticeSubjectColor[The_NUM_THEMES] =
      {
-      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_SUBJECT_ACTIVE",
-      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_SUBJECT_OBSOLETE",
-     };
-   static const char *ContentClass[Ann_NUM_STATUS] =
-     {
-      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_TEXT_ACTIVE",
-      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_TEXT_OBSOLETE",
-     };
-   static const char *UsersClass[Ann_NUM_STATUS] =
-     {
-      [Ann_ACTIVE_ANNOUNCEMENT  ] = "NOTICE_USERS_ACTIVE",
-      [Ann_OBSOLETE_ANNOUNCEMENT] = "NOTICE_USERS_OBSOLETE",
+      [The_THEME_WHITE ] = "NOTICE_SUBJECT_WHITE",
+      [The_THEME_GREY  ] = "NOTICE_SUBJECT_GREY",
+      [The_THEME_PURPLE] = "NOTICE_SUBJECT_PURPLE",
+      [The_THEME_BLUE  ] = "NOTICE_SUBJECT_BLUE",
+      [The_THEME_YELLOW] = "NOTICE_SUBJECT_YELLOW",
+      [The_THEME_PINK  ] = "NOTICE_SUBJECT_PINK",
+      [The_THEME_DARK  ] = "NOTICE_SUBJECT_DARK",
      };
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
@@ -275,18 +271,19 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	}
 
       /***** Write the subject of the announcement *****/
-      HTM_DIV_Begin ("class=\"%s\"",SubjectClass[Status]);
+      HTM_DIV_Begin ("class=\"NOTICE_SUBJECT %s\"",The_ClassNoticeSubjectColor[Gbl.Prefs.Theme]);
 	 HTM_Txt (Subject);
       HTM_DIV_End ();
 
       /***** Write the content of the announcement *****/
-      HTM_DIV_Begin ("class=\"%s\"",ContentClass[Status]);
+      HTM_DIV_Begin ("class=\"NOTICE_TEXT %s\"",
+                     The_ClassNoticeTextColor[Gbl.Prefs.Theme]);
 	 HTM_Txt (Content);
       HTM_DIV_End ();
 
       /***** Write announcement foot *****/
       /* Begin container for foot */
-      HTM_DIV_Begin ("class=\"NOTICE_USERS %s\"",UsersClass[Status]);
+      HTM_DIV_Begin ("class=\"NOTICE_USERS\"");
 
 	 if (ShowAllAnnouncements)
 	   {

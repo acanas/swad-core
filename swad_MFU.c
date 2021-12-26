@@ -219,7 +219,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  /* Icon and text */
 		  HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		     Frm_BeginForm (Action);
-			HTM_BUTTON_SUBMIT_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
+			HTM_BUTTON_OnSubmit_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
 			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 				    "class=\"%s\"",
 				    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
@@ -260,7 +260,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    HTM_DIV_Begin ("id=\"MFU_actions\"");
 
       Frm_BeginForm (ActMFUAct);
-	 HTM_BUTTON_SUBMIT_Begin (Txt_My_frequent_actions,"BT_LINK MFU_TITLE",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_My_frequent_actions,
+	                            "BT_LINK MFU_TITLE",NULL);
 	    HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
@@ -285,7 +286,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	       /* Icon and text */
 	       HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		  Frm_BeginForm (Action);
-		     HTM_BUTTON_SUBMIT_Begin (TabMenuStr,"BT_LINK",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (TabMenuStr,"BT_LINK",NULL);
 			HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 				 NULL);
 			HTM_TxtF ("&nbsp;%s",MenuStr);

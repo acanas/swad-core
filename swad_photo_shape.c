@@ -31,11 +31,13 @@
 
 #include "swad_action.h"
 #include "swad_config.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_photo_shape.h"
 #include "swad_setting_database.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

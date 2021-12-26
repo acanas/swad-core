@@ -193,7 +193,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 						  ClassNormal);
 	    Frm_BeginForm (ActMyCrs);
 	       Cty_PutParamCtyCod (-1L);
-	       HTM_BUTTON_SUBMIT_Begin (Txt_System,
+	       HTM_BUTTON_OnSubmit_Begin (Txt_System,
 					Highlight ? ClassHighlight :
 						    ClassNormal,
 					NULL);
@@ -226,7 +226,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
 	       Frm_BeginForm (ActMyCrs);
 		  Cty_PutParamCtyCod (Hie.Cty.CtyCod);
-		  HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeCtyInf),
+		  HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtyInf),
 					   Highlight ? ClassHighlight :
 						       ClassNormal,
 					   NULL);
@@ -261,7 +261,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
 		  Frm_BeginForm (ActMyCrs);
 		     Ins_PutParamInsCod (Hie.Ins.InsCod);
-		     HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeInsInf),
+		     HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeInsInf),
 					      Highlight ? ClassHighlight :
 							  ClassNormal,
 					      NULL);
@@ -296,7 +296,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
 		     Frm_BeginForm (ActMyCrs);
 			Ctr_PutParamCtrCod (Hie.Ctr.CtrCod);
-			HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeCtrInf),
+			HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtrInf),
 						 Highlight ? ClassHighlight :
 							     ClassNormal,
 						 NULL);
@@ -331,7 +331,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
 			Frm_BeginForm (ActMyCrs);
 			   Deg_PutParamDegCod (Hie.Deg.DegCod);
-			   HTM_BUTTON_SUBMIT_Begin (Act_GetActionText (ActSeeDegInf),
+			   HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeDegInf),
 						    Highlight ? ClassHighlight :
 								ClassNormal,
 						    NULL);
@@ -366,7 +366,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
 			   Frm_BeginForm (ActMyCrs);
 			      Crs_PutParamCrsCod (Hie.Crs.CrsCod);
-			      HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Hie.Crs.ShrtName),
+			      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Hie.Crs.ShrtName),
 						       Highlight ? ClassHighlight :
 								   ClassNormal,
 						       NULL);
@@ -962,15 +962,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 ThisYearHasCourses = true;
 	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
 	   {
-	    TxtClassNormal = The_ClassDatLight[Gbl.Prefs.Theme];
-	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-	                                      The_ClassDatLight[Gbl.Prefs.Theme]);
+	    TxtClassNormal =
+	    TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
 	   }
 	 else
 	   {
 	    TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-	    TxtClassStrong = Str_BuildString ("BT_LINK LT %s",
-	                                      The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
 	   }
 
 	 /* Check if this course is one of my courses */
@@ -1010,8 +1008,8 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs->CrsCod);
-		  HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (Crs->FullName),
-					   TxtClassStrong,NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs->FullName),
+					     "BT_LINK",NULL);
 		  Str_FreeStrings ();
 		     HTM_Txt (Crs->FullName);
 		  HTM_BUTTON_End ();
@@ -1033,8 +1031,6 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
             Hie_WriteStatusCell (Crs->Status,TxtClassNormal,BgColor,Txt_COURSE_STATUS);
 
 	 HTM_TR_End ();
-
-	 Str_FreeStrings ();
 	}
      }
 
@@ -2422,7 +2418,6 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    unsigned NumTchs;
    unsigned NumUsrs;
    const char *ClassTxt;
-   const char *ClassLink;
    const char *BgColor;
    bool Accepted;
    static unsigned RowEvenOdd = 1;
@@ -2452,18 +2447,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    NumNETs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_NET);
    NumTchs = Enr_GetNumUsrsInCrss (HieLvl_CRS,CrsCod,1 << Rol_TCH);
    NumUsrs = NumStds + NumNETs + NumTchs;
-   if (NumUsrs)
-     {
-      ClassTxt  = The_ClassDatStrong[Gbl.Prefs.Theme];
-      ClassLink = Str_BuildString ("BT_LINK LT %s",
-                                   The_ClassDatStrong[Gbl.Prefs.Theme]);
-     }
-   else
-     {
-      ClassTxt  = The_ClassDat[Gbl.Prefs.Theme];
-      ClassLink = Str_BuildString ("BT_LINK LT %s",
-                                   The_ClassDat[Gbl.Prefs.Theme]);
-     }
+   ClassTxt = NumUsrs ? The_ClassDatStrong[Gbl.Prefs.Theme] :
+	                The_ClassDat[Gbl.Prefs.Theme];
    BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
                                                     Gbl.ColorRows[RowEvenOdd];
 
@@ -2490,10 +2475,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
       /***** Write degree logo, degree short name (row[2])
 	     and center short name (row[6]) *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s LT %s\"",ClassTxt,BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    Deg_PutParamDegCod (Deg.DegCod);
-	    HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (row[2]),ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (row[2]),"BT_LINK",NULL);
+            Str_FreeStrings ();
 	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
 	    HTM_BUTTON_End ();
@@ -2506,10 +2492,11 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_End ();
 
       /***** Write course full name (row[5]) *****/
-      HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s LT %s\"",ClassTxt,BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    Crs_PutParamCrsCod (CrsCod);
-	    HTM_BUTTON_SUBMIT_Begin (Str_BuildGoToMsg (row[5]),ClassLink,NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (row[5]),"BT_LINK",NULL);
+            Str_FreeStrings ();
 	       HTM_Txt (row[5]);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -2532,7 +2519,6 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
    RowEvenOdd = 1 - RowEvenOdd;
   }
 

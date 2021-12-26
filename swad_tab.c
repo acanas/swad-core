@@ -123,10 +123,8 @@ void Tab_DrawTabs (void)
 
 		  Frm_BeginForm (ActMnu);
 		     Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
-		     HTM_BUTTON_SUBMIT_Begin (Txt_TABS_TXT[NumTab],
-					      NumTab == Gbl.Action.Tab ? "BT_LINK" :
-									 "BT_LINK",
-					      NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_TABS_TXT[NumTab],
+		                                "BT_LINK",NULL);
 			HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
 				 "class=\"TAB_ICO%s\"",ClassIcoTab[Gbl.Prefs.IconSet][Gbl.Prefs.Theme]);
 			HTM_DIV_Begin ("class=\"TAB_TXT %s\"",

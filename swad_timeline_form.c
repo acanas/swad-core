@@ -344,7 +344,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 	 free (OnSubmit);
 
 	    /* Put icon and text with link to show the first hidden comments */
-	    HTM_BUTTON_SUBMIT_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
+	    HTM_BUTTON_OnSubmit_Begin (NULL,The_ClassFormLinkInBox[Gbl.Prefs.Theme],NULL);
 	       Ico_PutIconTextLink ("angle-up.svg",Ico_BLACK,
 				    Str_BuildString (Txt_See_the_previous_X_COMMENTS,
 				                     NumInitialComms));

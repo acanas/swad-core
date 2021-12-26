@@ -513,7 +513,7 @@ static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
       Err_NotEnoughMemoryExit ();
 
    /***** Link to toggle on/off some divs *****/
-   HTM_BUTTON_BUTTON_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
+   HTM_BUTTON_OnClick_Begin (Text,The_ClassFormLinkInBox[Gbl.Prefs.Theme],OnClick);
       Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
    HTM_BUTTON_End ();
 
@@ -626,11 +626,12 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      HTM_BUTTON_SUBMIT_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-							    Txt_Another_user_s_profile,
-			       Str_BuildString ("Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
-			                        The_ClassDat[Gbl.Prefs.Theme]),
-			       NULL);
+      HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
+							      Txt_Another_user_s_profile,
+			         Str_BuildString ("Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
+			                          The_ClassDat[Gbl.Prefs.Theme]),
+			         NULL);
+      Str_FreeStrings ();
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 

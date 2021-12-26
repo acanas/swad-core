@@ -781,7 +781,7 @@ a:hover						/* Default ==> underlined */
 .TAB_ON_BLUE	{background-color:#e8f3f6;}
 .TAB_ON_YELLOW	{background-color:#faf0da;}
 .TAB_ON_PINK	{background-color:#faf0e8;}
-.TAB_ON_DARK	{background-color:#606060;}
+.TAB_ON_DARK	{background-color:#585858;}
 
 .TAB_OFF_WHITE	{background-color:#d4d4d4;}
 .TAB_OFF_GREY	{background-color:#aea79f;}
@@ -1626,10 +1626,12 @@ a:hover img.CENTER_PHOTO_SHOW
 	border:none;
 	padding:0;
 	font:inherit;
+	color:inherit;
 	}
 .BT_LINK:hover
 	{
 	cursor:pointer;
+	text-decoration:underline;
 	}
 
 /****************************** Course program *******************************/
@@ -1700,87 +1702,68 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	to {background-color:white;}
 	}
-.NOTICE_CONT_ACTIVE
+.NOTICE_CONT
 	{
 	box-sizing:border-box;
 	margin:0 auto 10px auto;
 	padding:10px;
-	background-image:-webkit-linear-gradient(rgba(238,216,108,0.6) 0%,rgba(248,237,149,0.6) 15%,rgba(250,240,152,0.6) 100%);	/* Safari */
-	background-image:linear-gradient(rgba(238,216,108,0.6) 0%,rgba(248,237,149,0.6) 15%,rgba(250,240,152,0.6) 100%);	
-	box-shadow:0 8px 10px -5px rgba(125,113,0,0.6);
-	text-align:left;
-	overflow:hidden;
-	}
-.NOTICE_CONT_OBSOLETE
-	{
-	box-sizing:border-box;
-	margin:0 auto 10px auto;
-	padding:10px;
-	background-image:-webkit-linear-gradient(rgba(238,216,108,0.3) 0%,rgba(248,237,149,0.3) 15%,rgba(250,240,152,0.3) 100%);	/* Safari */
-	background-image:linear-gradient(rgba(238,216,108,0.3) 0%,rgba(248,237,149,0.3) 15%,rgba(250,240,152,0.3) 100%);	
-	box-shadow:0 8px 10px -5px rgba(125,113,0,0.3);
+	background-image:-webkit-linear-gradient(rgba(238,216,108,0.5) 0%,rgba(248,237,149,0.5) 15%,rgba(250,240,152,0.5) 100%);	/* Safari */
+	background-image:linear-gradient(rgba(238,216,108,0.5) 0%,rgba(248,237,149,0.5) 15%,rgba(250,240,152,0.5) 100%);	
+	box-shadow:0 8px 10px -5px rgba(125,113,0,0.5);
 	text-align:left;
 	overflow:hidden;
 	}
 .NOTICE_CONT_NARROW	{width:148px;}
 .NOTICE_CONT_WIDE	{width:500px;}
-.NOTICE_DATE_ACTIVE
+.NOTICE_DATE
 	{
 	float:right;
 	font-size:12pt;
-	color:#202020;
 	text-align:right;
 	overflow:hidden;
 	}
-.NOTICE_DATE_OBSOLETE
-	{
-	float:right;
-	font-size:12pt;
-	color:#808080;
-	text-align:right;
-	overflow:hidden;
-	}
-.NOTICE_SUBJECT_ACTIVE
+.NOTICE_DATE_WHITE	{color:#202020;}
+.NOTICE_DATE_GREY	{color:#202020;}
+.NOTICE_DATE_PURPLE	{color:#202020;}
+.NOTICE_DATE_BLUE	{color:#202020;}
+.NOTICE_DATE_YELLOW	{color:#202020;}
+.NOTICE_DATE_PINK	{color:#202020;}
+.NOTICE_DATE_DARK	{color:white;}
+.NOTICE_SUBJECT
 	{
 	margin:12px auto;
 	font-size:15pt;
 	font-weight:bold;
-	color:#202020;
 	text-align:center;
 	overflow:hidden;
 	}
-.NOTICE_SUBJECT_OBSOLETE
-	{
-	margin:12px auto;
-	font-size:15pt;
-	font-weight:bold;
-	color:#808080;
-	text-align:center;
-	overflow:hidden;
-	}
+.NOTICE_SUBJECT_WHITE	{color:#202020;}
+.NOTICE_SUBJECT_GREY	{color:#202020;}
+.NOTICE_SUBJECT_PURPLE	{color:#202020;}
+.NOTICE_SUBJECT_BLUE	{color:#202020;}
+.NOTICE_SUBJECT_YELLOW	{color:#202020;}
+.NOTICE_SUBJECT_PINK	{color:#202020;}
+.NOTICE_SUBJECT_DARK	{color:white;}
 .NOTICE_TEXT_BRIEF
 	{
 	clear:both;
 	font-size:12pt;
-	color:#204080;
 	overflow:hidden;
 	}
-.NOTICE_TEXT_ACTIVE
+.NOTICE_TEXT
 	{
 	padding:10px 20px;
 	clear:both;
 	font-size:12pt;
-	color:#204080;
 	overflow:hidden;
 	}
-.NOTICE_TEXT_OBSOLETE
-	{
-	padding:10px 20px;
-	clear:both;
-	font-size:12pt;
-	color:#4070A0;
-	overflow:hidden;
-	}
+.NOTICE_TEXT_WHITE	{color:#204080;}
+.NOTICE_TEXT_GREY	{color:#204080;}
+.NOTICE_TEXT_PURPLE	{color:#204080;}
+.NOTICE_TEXT_BLUE	{color:#204080;}
+.NOTICE_TEXT_YELLOW	{color:#204080;}
+.NOTICE_TEXT_PINK	{color:#204080;}
+.NOTICE_TEXT_DARK	{color:#f0f8ff;}
 .NOTICE_AUTHOR
 	{
 	box-sizing:border-box;
@@ -1793,28 +1776,21 @@ a:hover img.CENTER_PHOTO_SHOW
 	text-overflow:ellipsis;
 	font-size:12pt;
 	}
-.NOTICE_AUTHOR_ACTIVE
-	{
-	color:#202020;
-	}
-.NOTICE_AUTHOR_OBSOLETE
-	{
-	color:#808080;
-	}
+.NOTICE_AUTHOR_WHITE	{color:#202020;}
+.NOTICE_AUTHOR_GREY	{color:#202020;}
+.NOTICE_AUTHOR_PURPLE	{color:#202020;}
+.NOTICE_AUTHOR_BLUE	{color:#202020;}
+.NOTICE_AUTHOR_YELLOW	{color:#202020;}
+.NOTICE_AUTHOR_PINK	{color:#202020;}
+.NOTICE_AUTHOR_DARK	{color:white;}
 .NOTICE_USERS
 	{
 	box-sizing:border-box;
 	text-align:center;
 	vertical-align:middle;
 	margin:12px;
-	}
-.NOTICE_USERS_ACTIVE
-	{
+	font-size:12pt;
 	color:#202020;
-	}
-.NOTICE_USERS_OBSOLETE
-	{
-	color:#808080;
 	}
 
 /**************************** Institutional links ****************************/
@@ -2380,7 +2356,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_OUT_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_OUT_YELLOW	{color:#7c4d2a; font-size:13pt;}
 .FORM_OUT_PINK		{color:#63474e; font-size:13pt;}
-.FORM_OUT_DARK		{color:#a6c4d0; font-size:13pt;}
+.FORM_OUT_DARK		{color:#d3e2e8; font-size:13pt;}
 
 /****************************** Placing of objects ***************************/
 .LT	{text-align:left;   vertical-align:top;   }	/* Left Top      */
@@ -4418,6 +4394,10 @@ a.PAG:hover, .PAG_CUR
 
 /************ Something that takes up space but which is invisible ***********/
 .LIGHT
+	{
+	opacity:0.5;
+	}
+.VERY_LIGHT
 	{
 	opacity:0.2;
 	}

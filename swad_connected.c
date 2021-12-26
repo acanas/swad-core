@@ -180,7 +180,7 @@ void Con_ShowGlobalConnectedUsrs (void)
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
 
 	    /* Write total number of sessions */
 	    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
@@ -330,7 +330,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					   // the list of connected users
 					   // is dynamically updated via AJAX
-	 HTM_BUTTON_SUBMIT_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
 	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
 	    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
 	    HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
@@ -564,7 +564,6 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    const char *ClassTxt;
-   const char *ClassLink;
    long UsrCod;
    bool ItsMe;
    struct UsrData *UsrDat;
@@ -600,16 +599,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       HTM_TD_End ();
 
       /***** Write full name and link *****/
-      if (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs)
-	{
-	 ClassTxt = "CON_NAME_NARROW CON_CRS";
-	 ClassLink = "BT_LINK CON_NAME_NARROW CON_CRS";
-	}
-      else
-	{
-	 ClassTxt = "CON_NAME_NARROW CON_NO_CRS";
-	 ClassLink = "BT_LINK CON_NAME_NARROW CON_NO_CRS";
-	}
+      ClassTxt = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs) ? "CON_NAME_NARROW CON_CRS" :
+									       "CON_NAME_NARROW CON_NO_CRS";
       HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 // The form must be unique because
 	 // the list of connected users
@@ -620,7 +611,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-	       HTM_BUTTON_SUBMIT_Begin (Txt_View_record_for_this_course,ClassLink,NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_View_record_for_this_course,
+	                                  "BT_LINK",NULL);
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
@@ -672,7 +664,6 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    bool ThisCrs;
    time_t TimeDiff;
    const char *ClassTxt;
-   const char *ClassLink;
    struct UsrData UsrDat;
    bool PutLinkToRecord = (Gbl.Hierarchy.Level == HieLvl_CRS &&	// Course selected
 	                   Gbl.Scope.Current   == HieLvl_CRS &&	// Scope is current course
@@ -717,16 +708,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       HTM_TD_End ();
 
 	       /***** Write full name and link *****/
-	       if (ThisCrs)
-		 {
-		  ClassTxt = "CON_NAME_WIDE CON_CRS";
-		  ClassLink = "BT_LINK CON_NAME_WIDE CON_CRS";
-		 }
-	       else
-		 {
-		  ClassTxt = "CON_NAME_WIDE CON_NO_CRS";
-		  ClassLink = "BT_LINK CON_NAME_WIDE CON_NO_CRS";
-		 }
+	       ClassTxt = ThisCrs ? "CON_NAME_WIDE CON_CRS" :
+			            "CON_NAME_WIDE CON_NO_CRS";
 	       HTM_TD_Begin ("class=\"%s %s\"",
 	                     ClassTxt,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
@@ -740,7 +723,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 		  HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
 		     if (PutLinkToRecord)
-			HTM_BUTTON_SUBMIT_Begin (UsrDat.FullName,ClassLink,NULL);
+			HTM_BUTTON_OnSubmit_Begin (UsrDat.FullName,"BT_LINK",NULL);
 		     Usr_WriteFirstNameBRSurnames (&UsrDat);
 		     if (PutLinkToRecord)
 			HTM_BUTTON_End ();
