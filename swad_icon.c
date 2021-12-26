@@ -493,6 +493,7 @@ void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Titl
 
    if (asprintf (&Class,"ICO_HIGHLIGHT ICOx20 %s",
 		 Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,Class);
    free (Class);
   }
