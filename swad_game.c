@@ -276,7 +276,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllGam);
@@ -284,7 +284,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
 			HTM_BUTTON_OnSubmit_Begin (Txt_GAMES_ORDER_HELP[Order],
-			                           "BT_LINK TIT_TBL",NULL);
+			                           "BT_LINK",NULL);
 			   if (Order == Games->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_GAMES_ORDER[Order]);
@@ -592,19 +592,21 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       /***** Game title and main data *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",
+	               Game->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE");
       else
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	               Game->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /* Game title */
       Games->GamCod = Game->GamCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeGam);
 	    Gam_PutParams (Games);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_View_game,
-				       Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-						      "BT_LINK LT ASG_TITLE",
-				       NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_View_game,"BT_LINK",NULL);
 	       HTM_Txt (Game->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -625,17 +627,19 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 
       /***** Number of matches in game *****/
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("class=\"RT\"");
+	 HTM_TD_Begin ("class=\"%s RT\"",
+	               Game->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE");
       else
-	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s RT %s\"",
+	               Game->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
 	 Gam_PutParams (Games);
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Matches,
-				    Game->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-						   "BT_LINK LT ASG_TITLE",
-				    NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Matches,"BT_LINK",NULL);
 	    if (ShowOnlyThisGame)
 	       HTM_TxtColonNBSP (Txt_Matches);
 	    HTM_Unsigned (Game->NumMchs);

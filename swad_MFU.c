@@ -219,7 +219,9 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  /* Icon and text */
 		  HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
 		     Frm_BeginForm (Action);
-			HTM_BUTTON_OnSubmit_Begin (TabMenuStr,The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],NULL);
+			HTM_BUTTON_OnSubmit_Begin (TabMenuStr,
+			                           The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
+			                           NULL);
 			   HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
 				    "class=\"%s\"",
 				    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);

@@ -241,7 +241,7 @@ static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherC
       HTM_DIV_Begin ("class=\"Tml_TOP_CONT Tml_TOP_PUBLISHER Tml_WIDTH\"");
 
 	 /***** Show publisher's name inside form to go to user's public profile *****/
-         Tml_Not_WriteAuthorName (&PublisherDat,"BT_LINK Tml_TOP_PUBLISHER");
+         Tml_Not_WriteAuthorName (&PublisherDat,"BT_LINK");
 
 	 /***** Show action made *****/
 	 HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
@@ -354,8 +354,8 @@ void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
 
       /* Author's name */
       HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
-							    Txt_Another_user_s_profile,
-			       Class,NULL);
+							      Txt_Another_user_s_profile,
+			         Class,NULL);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 

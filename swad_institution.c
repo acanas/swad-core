@@ -166,9 +166,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    /* Institution logo and name */
 	    HTM_TR_Begin ("%s",The_ClassDat[Gbl.Prefs.Theme]);
 
-	       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-		  Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
-							  "BT_LINK NOWRAP","CM");
+	       HTM_TD_Begin ("class=\"NOWRAP LM %s\"",BgColor);
+		   Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeCtr,"CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
@@ -219,15 +218,16 @@ void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size)
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
-                                             const char *ClassLink,const char *ClassLogo)
+void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
+                                        const char *ClassLogo)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
       Ins_PutParamInsCod (Ins->InsCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ins->FullName),ClassLink,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ins->FullName),
+                                 "BT_LINK",NULL);
       Str_FreeStrings ();
 
 	 /***** Institution logo and name *****/
@@ -390,8 +390,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
       /***** Institution logo and name *****/
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-	 Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
-						 "BT_LINK","CM");
+	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/

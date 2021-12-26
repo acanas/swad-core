@@ -158,10 +158,9 @@ void Deg_SeeDegWithPendingCrss (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Degree logo and full name */
-	       HTM_TD_Begin ("class=\"%s LM %s\"",
+	       HTM_TD_Begin ("class=\"%s NOWRAP LM %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
-		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
-						     "BT_LINK NOWRAP","CM");
+		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,"CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
@@ -189,14 +188,15 @@ void Deg_SeeDegWithPendingCrss (void)
 /*****************************************************************************/
 
 void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Action,
-                                        const char *ClassLink,const char *ClassLogo)
+                                        const char *ClassLogo)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
       Deg_PutParamDegCod (Deg->DegCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Deg->FullName),ClassLink,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Deg->FullName),
+                                 "BT_LINK",NULL);
       Str_FreeStrings ();
 
 	 /***** Degree logo and name *****/
@@ -844,8 +844,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
 
       /***** Degree logo and name *****/
       HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
-	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,
-					    "BT_LINK","CM");
+	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM");
       HTM_TD_End ();
 
       /***** Type of degree *****/

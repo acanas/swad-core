@@ -87,8 +87,7 @@ bool Cty_CheckIfICanEditCountries (void);
 
 void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
-                                        const char *ClassMap,
-                                        const char *ClassLink);
+                                        const char *ClassMap);
 void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class);
 bool Cty_CheckIfCountryPhotoExists (struct Cty_Countr *Cty);
 
@@ -99,7 +98,7 @@ void Cty_GetBasicListOfCountries (void);
 void Cty_GetFullListOfCountries (void);
 void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
-void Cty_WriteCountryName (long CtyCod,const char *ClassLink);
+void Cty_WriteCountryName (long CtyCod);
 bool Cty_GetDataOfCountryByCod (struct Cty_Countr *Cty);
 void Cty_FlushCacheCountryName (void);
 void Cty_GetCountryName (long CtyCod,Lan_Language_t Language,

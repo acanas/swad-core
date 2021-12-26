@@ -75,8 +75,8 @@ struct ListInstits
 void Ins_SeeInsWithPendingCtrs (void);
 
 void Ins_DrawInstitutionLogoWithLink (struct Ins_Instit *Ins,unsigned Size);
-void Ins_DrawInstitutionLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
-                                             const char *ClassLink,const char *ClassLogo);
+void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Action,
+                                        const char *ClassLogo);
 
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);

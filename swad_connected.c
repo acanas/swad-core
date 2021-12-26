@@ -328,8 +328,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       /***** Number of connected users who belong to course *****/
       /* Link to view more details about connected users */
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
-					   // the list of connected users
-					   // is dynamically updated via AJAX
+					// the list of connected users
+					// is dynamically updated via AJAX
 	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
 	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
 	    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
@@ -612,7 +612,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
 	       HTM_BUTTON_OnSubmit_Begin (Txt_View_record_for_this_course,
-	                                  "BT_LINK",NULL);
+	                                  "BT_LINK LT",NULL);
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
@@ -723,7 +723,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 		  HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
 		     if (PutLinkToRecord)
-			HTM_BUTTON_OnSubmit_Begin (UsrDat.FullName,"BT_LINK",NULL);
+			HTM_BUTTON_OnSubmit_Begin (UsrDat.FullName,
+			                           "BT_LINK",NULL);
 		     Usr_WriteFirstNameBRSurnames (&UsrDat);
 		     if (PutLinkToRecord)
 			HTM_BUTTON_End ();

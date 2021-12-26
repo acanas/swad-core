@@ -516,7 +516,10 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"%s LT %s\"",
+                 Session->Hidden ? "ASG_TITLE_LIGHT":
+				   "ASG_TITLE",
+		 Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
@@ -527,20 +530,13 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
 	       ExaSes_PutParamSesCod (Session->SesCod);
 	       HTM_BUTTON_OnSubmit_Begin (Gbl.Usrs.Me.Role.Logged == Rol_STD ? Txt_Play :
 									       Txt_Resume,
-					  Session->Hidden ? "BT_LINK ASG_TITLE_LIGHT":
-							    "BT_LINK ASG_TITLE",
-					  NULL);
+					  "BT_LINK",NULL);
 		  HTM_Txt (Session->Title);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	   }
 	 else
-	   {
-	    HTM_SPAN_Begin ("class=\"%s\"",Session->Hidden ? "ASG_TITLE_LIGHT":
-							     "ASG_TITLE");
-	       HTM_Txt (Session->Title);
-	    HTM_SPAN_End ();
-	   }
+	    HTM_Txt (Session->Title);
       HTM_ARTICLE_End ();
 
       /***** Groups whose students can answer this exam session *****/

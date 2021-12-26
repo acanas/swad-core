@@ -444,10 +444,10 @@ void Acc_ShowFormGoToRequestNewAccount (void)
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
    Str_FreeStrings ();
 
-   /***** Button to go to request the creation of a new account *****/
-   Frm_BeginForm (ActFrmMyAcc);
-      Btn_PutCreateButton (Txt_Create_account);
-   Frm_EndForm ();
+      /***** Button to go to request the creation of a new account *****/
+      Frm_BeginForm (ActFrmMyAcc);
+	 Btn_PutCreateButton (Txt_Create_account);
+      Frm_EndForm ();
 
    /***** End box *****/
    Box_BoxEnd ();

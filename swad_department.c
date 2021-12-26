@@ -141,13 +141,13 @@ void Dpt_SeeDepts (void)
 	      Order <= Dpt_ORDER_BY_NUM_TCHS;
 	      Order++)
 	   {
-	    HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "RM" :
-							       "LM");
+	    HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "TIT_TBL RM" :
+							       "TIT_TBL LM");
 
 	       Frm_BeginForm (ActSeeDpt);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_OnSubmit_Begin (Txt_DEPARTMENTS_HELP_ORDER[Order],
-		                             "BT_LINK TIT_TBL",NULL);
+		                             "BT_LINK",NULL);
 		     if (Order == Departments.SelectedOrder)
 			HTM_U_Begin ();
 		     HTM_Txt (Txt_DEPARTMENTS_ORDER[Order]);

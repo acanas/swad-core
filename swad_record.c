@@ -1396,7 +1396,9 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   HTM_BUTTON_OnSubmit_Begin (Txt_Print,The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],NULL);
+   HTM_BUTTON_OnSubmit_Begin (Txt_Print,
+                              The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
+                              NULL);
       Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
    HTM_BUTTON_End ();
 
@@ -2689,7 +2691,7 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
                  The_ClassDatStrong[Gbl.Prefs.Theme]);
       if (ShowData && UsrDat->CtyCod > 0)
 	 /* Link to see country information */
-	 Cty_WriteCountryName (UsrDat->CtyCod,"BT_LINK");	// Put link to country
+	 Cty_WriteCountryName (UsrDat->CtyCod);	// Put link to country
    HTM_TD_End ();
   }
 

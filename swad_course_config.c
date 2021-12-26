@@ -221,7 +221,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 		       Txt_Degree);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of degrees of the current center */
@@ -252,7 +252,7 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
 		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
-					     "BT_LINK LT",NULL);
+					     "BT_LINK",NULL);
 		  Str_FreeStrings ();
 	      }
 	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,

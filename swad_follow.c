@@ -196,12 +196,11 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
                                           &mysql_res)))
      {
       /***** Begin container *****/
-      HTM_DIV_Begin ("class=\"CONNECTED\"");
+      HTM_DIV_Begin ("class=\"CONNECTED CONNECTED_TXT\"");
 
 	 /***** Title with link to suggest more users to follow *****/
 	 Frm_BeginForm (ActSeeSocPrf);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Who_to_follow,
-	                               "BT_LINK CONNECTED_TXT",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Who_to_follow,"BT_LINK",NULL);
 	       HTM_Txt (Txt_Who_to_follow);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -390,11 +389,11 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
   {
    extern const char *The_ClassFormOutBox[The_NUM_THEMES];
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
-   extern const char *The_ClassFormLinkOutBox[The_NUM_THEMES];
-   extern const char *The_ClassFormLinkOutBoxBold[The_NUM_THEMES];
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"FOLLOW_BOX\"");
+   HTM_DIV_Begin ("class=\"FOLLOW_BOX %s\"",
+                  (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
+					       "FOLLOW_NUM");
 
       /***** Number *****/
       if (NumUsrs)
@@ -402,22 +401,14 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 	 /* Form to list users */
 	 Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_BUTTON_OnSubmit_Begin (Title,
-				       (Gbl.Action.Act == Action) ? "BT_LINK FOLLOW_NUM_B" :
-								    "BT_LINK FOLLOW_NUM",
-				       NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
 	}
-      else
-	 HTM_SPAN_Begin ("class=\"%s\"",(Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
-								     "FOLLOW_NUM");
       HTM_Unsigned (NumUsrs);
       if (NumUsrs)
 	{
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}
-      else
-	 HTM_SPAN_End ();
 
       /***** Text *****/
       HTM_DIV_Begin ("class=\"%s\"",
@@ -428,10 +419,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 	    /* Form to list users */
 	    Frm_BeginFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	       HTM_BUTTON_OnSubmit_Begin (Title,
-					(Gbl.Action.Act == Action) ? The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme] :
-								     The_ClassFormLinkOutBox    [Gbl.Prefs.Theme],
-					NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
 	   }
 	 HTM_Txt (Title);
 	 if (NumUsrs)
@@ -643,7 +631,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	    HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME %s LT\"",	// Limited width
 	                   The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_BUTTON_OnSubmit_Begin (Txt_Another_user_s_profile,
-	                                  "BT_LINK",NULL);
+	                                  "BT_LINK LT",NULL);
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();
 	    HTM_DIV_End ();
@@ -703,9 +691,9 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	    /* Put form to go to public profile */
 	    Frm_BeginForm (ActSeeOthPubPrf);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
-	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
+	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW CON_CRS LT\"");	// Limited width
 		  HTM_BUTTON_OnSubmit_Begin (Txt_Another_user_s_profile,
-		                             "BT_LINK CON_CRS",NULL);
+		                             "BT_LINK LT",NULL);
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();
 	       HTM_DIV_End ();

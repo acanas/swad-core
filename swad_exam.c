@@ -254,14 +254,14 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 		    Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllExa);
 			Pag_PutHiddenParamPagNum (Pag_EXAMS,Exams->CurrentPage);
 			Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 			HTM_BUTTON_OnSubmit_Begin (Txt_EXAMS_ORDER_HELP[Order],
-			                           "BT_LINK TIT_TBL",NULL);
+			                           "BT_LINK",NULL);
 			   if (Order == Exams->SelectedOrder)
 			      HTM_U_Begin ();
 			   HTM_Txt (Txt_EXAMS_ORDER[Order]);
@@ -541,19 +541,21 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
       /***** Exam title and main data *****/
       if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",
+	               Exam->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE");
       else
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	               Exam->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /* Exam title */
       Exams->ExaCod = Exam->ExaCod;
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeExa);
 	    Exa_PutParams (Exams);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_View_exam,
-				       Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT":
-						      "BT_LINK LT ASG_TITLE",
-				       NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_View_exam,"BT_LINK",NULL);
 	       HTM_Txt (Exam->Title);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
@@ -574,17 +576,19 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 
       /***** Number of sessions in exam *****/
       if (ShowOnlyThisExam)
-	 HTM_TD_Begin ("class=\"RT\"");
+	 HTM_TD_Begin ("class=\"%s RT\"",
+	               Exam->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE");
       else
-	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s RT %s\"",
+	               Exam->Hidden ? "ASG_TITLE_LIGHT":
+				      "ASG_TITLE",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
 	 Exa_PutParams (Exams);
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Sessions,
-				    Exam->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-						   "BT_LINK LT ASG_TITLE",
-				    NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Sessions,"BT_LINK",NULL);
 	    if (ShowOnlyThisExam)
 	       HTM_TxtColonNBSP (Txt_Sessions);
 	    HTM_Unsigned (Exam->NumSess);

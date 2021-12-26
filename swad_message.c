@@ -2267,8 +2267,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    extern const char *Txt_no_subject;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
-        	                          "MSG_TIT_BG_NEW");
+   HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT MSG_TIT_BG" :
+        	                          "MSG_TIT_NEW MSG_TIT_BG_NEW");
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Messages->TypeOfMessages == Msg_RECEIVED ? (Expanded ? ActConRcvMsg :
@@ -2280,9 +2280,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
 
 	 HTM_BUTTON_OnSubmit_Begin (Expanded ? Txt_Hide_message :
 					       Txt_See_message,
-				    Open ? "BT_LINK LT MSG_TIT" :
-					   "BT_LINK LT MSG_TIT_NEW",
-				    NULL);
+				    "BT_LINK",NULL);
 
 	    /***** Write subject *****/
 	    if (Subject[0])
@@ -2407,7 +2405,7 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
 		  HTM_Txt ("(");
 		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs.FullName),
-					     "BT_LINK AUTHOR_TXT",NULL);
+					     "BT_LINK",NULL);
 		  Str_FreeStrings ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();

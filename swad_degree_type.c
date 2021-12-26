@@ -528,8 +528,8 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 	   Order <= DegTyp_ORDER_BY_NUM_DEGREES;
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == DegTyp_ORDER_BY_DEGREE_TYPE ? "LM" :
-							          "RM");
+	 HTM_TH_Begin (1,1,Order == DegTyp_ORDER_BY_DEGREE_TYPE ? "TIT_TBL LM" :
+							          "TIT_TBL RM");
 
 	    /* Begin form to change order */
 	    Frm_BeginForm (NextAction);
@@ -543,7 +543,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 
 	       /* Link with the head of this column */
 	       HTM_BUTTON_OnSubmit_Begin (Txt_DEGREE_TYPES_HELP_ORDER[Order],
-	                                  "BT_LINK TIT_TBL",NULL);
+	                                  "BT_LINK",NULL);
 		  if (Order == SelectedOrder)
 		     HTM_U_Begin ();
 		  HTM_Txt (Txt_DEGREE_TYPES_ORDER[Order]);

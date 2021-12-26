@@ -630,7 +630,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL LM");
 	    switch (AgendaType)
 	      {
 	       case Agd_MY_AGENDA_TODAY:
@@ -652,7 +652,8 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 				   Agenda->CurrentPage,
 				   -1L);
 
-	       HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],
+	                                  "BT_LINK",NULL);
 		  if (Order == Agenda->SelectedOrder)
 		     HTM_U_Begin ();
 

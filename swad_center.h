@@ -81,7 +81,7 @@ struct ListCenters
 void Ctr_SeeCtrWithPendingDegs (void);
 
 void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Action,
-                                        const char *ClassLink,const char *ClassLogo);
+                                        const char *ClassLogo);
 
 void Ctr_ShowCtrsOfCurrentIns (void);
 void Ctr_EditCenters (void);

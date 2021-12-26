@@ -255,16 +255,15 @@ void Mnu_WriteMenuThisTab (void)
 	       Title = Act_GetSubtitleAction (NumAct);
 
 	       /***** Begin option *****/
-	       HTM_LI_Begin ("class=\"MENU_LIST_ITEM\"");
+	       HTM_LI_Begin ("class=\"MENU_LIST_ITEM %s\"",
+	                     IsTheSelectedAction ? "MENU_OPT_ON" :
+						   "MENU_OPT_OFF");
 
 		  /***** Begin form *****/
 		  Frm_BeginForm (NumAct);
 
 		     /***** Begin link *****/
-		     HTM_BUTTON_OnSubmit_Begin (Title,
-					        IsTheSelectedAction ? "BT_LINK MENU_OPT_ON" :
-								      "BT_LINK MENU_OPT_OFF",
-					        NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
 
 			/***** Icon and text *****/
 			HTM_DIV_Begin ("class=\"MENU_ICO_TXT\"");

@@ -567,7 +567,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 		       Txt_Institution);
 
       /* Data */
-      HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 if (PutForm)
 	   {
 	    /* Get list of institutions of the current country */
@@ -598,7 +598,7 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
-		                             "BT_LINK LT",NULL);
+		                             "BT_LINK",NULL);
 		  Str_FreeStrings ();
 	      }
 

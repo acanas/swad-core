@@ -25,11 +25,14 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>
 
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -430,11 +433,16 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,const char *Title)
   {
+   char *Class;
+
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-      Ico_PutIcon (Icon,Color,Title,
-                   Str_BuildString ("CONTEXT_ICO_16x16 %s",
-                                    Ico_ClassColor[Color][Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+
+      if (asprintf (&Class,"CONTEXT_ICO_16x16 %s",
+                    Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Ico_PutIcon (Icon,Color,Title,Class);
+      free (Class);
+
    HTM_DIV_End ();
   }
 
@@ -444,10 +452,13 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,con
 
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
-                    Str_BuildString ("CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 %s",
-                                     Ico_ClassColor[Color][Gbl.Prefs.Theme]));
-   Str_FreeStrings ();
+   char *Class;
+
+   if (asprintf (&Class,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 %s",
+		 Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,Class);
+   free (Class);
   }
 
 /*****************************************************************************/
@@ -456,13 +467,19 @@ void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
   {
+   char *Class;
+
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-      Ico_PutIcon (Icon,Color,Text,
-                   Str_BuildString ("CONTEXT_ICO_x16 %s",
-                                    Ico_ClassColor[Color][Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+
+      if (asprintf (&Class,"CONTEXT_ICO_x16 %s",
+		    Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Ico_PutIcon (Icon,Color,Text,Class);
+      free (Class);
+
       HTM_TxtF ("&nbsp;%s",Text);
+
    HTM_DIV_End ();
   }
 
@@ -472,10 +489,12 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
 
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,
-                    Str_BuildString ("ICO_HIGHLIGHT ICOx20 %s",
-                                     Ico_ClassColor[Color][Gbl.Prefs.Theme]));
-   Str_FreeStrings ();
+   char *Class;
+
+   if (asprintf (&Class,"ICO_HIGHLIGHT ICOx20 %s",
+		 Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,Class);
+   free (Class);
   }
 
 /*****************************************************************************/

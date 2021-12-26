@@ -685,39 +685,33 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		  HTM_TxtF ("&nbsp;%s",Txt_all_degrees);
 		  break;
 	       case HieLvl_INS:	// Institution
-		  Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
-		  if (Hie.Ins.InsCod > 0)
+		  if ((Hie.Ins.InsCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of institution */
 		     Ins_GetDataOfInstitByCod (&Hie.Ins);
 
 		     /* Write institution logo and name */
-		     Ins_DrawInstitutionLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,
-							     "BT_LINK DAT_SMALL_NOBR","LT");
+		     Ins_DrawInstitLogoAndNameWithLink (&Hie.Ins,ActSeeInsInf,"LT");
 		    }
 		  break;
 	       case HieLvl_CTR:	// Center
-		  Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
-		  if (Hie.Ctr.CtrCod > 0)
+		  if ((Hie.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of center */
 		     Ctr_GetDataOfCenterByCod (&Hie.Ctr);
 
 		     /* Write center logo and name */
-		     Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,
-							"BT_LINK DAT_SMALL_NOBR","LT");
+		     Ctr_DrawCenterLogoAndNameWithLink (&Hie.Ctr,ActSeeCtrInf,"LT");
 		    }
 		  break;
 	       case HieLvl_DEG:	// Degree
-		  Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
-		  if (Hie.Deg.DegCod > 0)
+		  if ((Hie.Deg.DegCod = Str_ConvertStrCodToLongCod (row[1])) > 0)
 		    {
 		     /* Get data of degree */
 		     Deg_GetDataOfDegreeByCod (&Hie.Deg);
 
 		     /* Write degree logo and name */
-		     Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,
-							"BT_LINK DAT_SMALL_NOBR","LT");
+		     Deg_DrawDegreeLogoAndNameWithLink (&Hie.Deg,ActSeeDegInf,"LT");
 		    }
 		  break;
 	       default:	// There are no administrators in other scopes

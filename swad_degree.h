@@ -72,7 +72,7 @@ struct ListDegrees
 void Deg_SeeDegWithPendingCrss (void);
 
 void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Action,
-                                        const char *ClassLink,const char *ClassLogo);
+                                        const char *ClassLogo);
 
 void Deg_WriteSelectorOfDegree (void);
 

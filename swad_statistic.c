@@ -2936,8 +2936,7 @@ static void Sta_WriteCountry (long CtyCod)
 	 /***** Form to go to country *****/
 	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
 					    "COUNTRY_TINY",
-					    "COUNTRY_MAP_TINY",
-					    "BT_LINK");
+					    "COUNTRY_MAP_TINY");
 	}
       else			// Hit with no country selected
 	 /***** No country selected *****/
@@ -3024,8 +3023,7 @@ static void Sta_WriteInstit (long InsCod)
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ins.FullName);
 
 	 /***** Form to go to institution *****/
-	 Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
-						 "BT_LINK","CT");
+	 Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeInsInf,"CT");
      }
    else			// Hit with no institution selected
      {
@@ -3115,8 +3113,7 @@ static void Sta_WriteCenter (long CtrCod)
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Ctr.FullName);
 
 	 /***** Form to go to center *****/
-	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
-					    "BT_LINK","CT");
+	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,"CT");
      }
    else			// Hit with no center selected
      {
@@ -3206,8 +3203,7 @@ static void Sta_WriteDegree (long DegCod)
       HTM_TD_Begin ("class=\"LOG LM\" title=\"%s\"",Deg.FullName);
 
 	 /***** Form to go to degree *****/
-	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-					    "BT_LINK","CT");
+	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
      }
    else			// Hit with no degree selected
      {

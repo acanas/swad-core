@@ -858,7 +858,8 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
       if (asprintf (&Title,"#%u %s %u",
 		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_BUTTON_OnSubmit_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],NULL);
+      HTM_BUTTON_OnSubmit_Begin (Title,The_ClassFormLinkOutBox[Gbl.Prefs.Theme],
+                                 NULL);
       free (Title);
 	 HTM_TxtF ("#%u",Rank);
       HTM_BUTTON_End ();
@@ -1328,15 +1329,16 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_End ();
 
    /***** Put form to go to public profile *****/
-   HTM_TD_Begin ("class=\"RANK_USR %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"RANK_USR %s %s\"",	// Limited width
+                 ItsMe ? "DAT_SMALL_N" :
+			 "DAT_SMALL",
+                 Gbl.ColorRows[Gbl.RowEvenOdd]);
       if (Visible)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    HTM_BUTTON_OnSubmit_Begin (Txt_Another_user_s_profile,
-				       ItsMe ? "BT_LINK DAT_SMALL_N" :
-					       "BT_LINK DAT_SMALL",
-				       NULL);	// Limited width
+				       "BT_LINK",NULL);
 	       Usr_WriteFirstNameBRSurnames (UsrDat);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

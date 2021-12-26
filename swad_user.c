@@ -3647,9 +3647,9 @@ static void Set_FormToSelectUsrListType (void (*FuncParams) (void *Args),void *A
 
       /***** Link and image *****/
       HTM_BUTTON_OnSubmit_Begin (Txt_USR_LIST_TYPES[ListType],
-			       The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
-			       Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
-								NULL);
+			         The_ClassFormLinkInBoxNoWrap[Gbl.Prefs.Theme],
+			         Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
+								  NULL);
 	 Ico_PutIcon (Usr_IconsClassPhotoOrList[ListType],Ico_BLACK,
 	              Txt_USR_LIST_TYPES[ListType],"ICO20x20");
 	 HTM_TxtF ("&nbsp;%s",Txt_USR_LIST_TYPES[ListType]);

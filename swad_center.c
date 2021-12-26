@@ -153,9 +153,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    /* Center logo and full name */
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s LM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
-		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,
-						     "BT_LINK NOWRAP","CM");
+	       HTM_TD_Begin ("class=\"%s NOWRAP LM %s\"",The_ClassDat[Gbl.Prefs.Theme],BgColor);
+		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
@@ -182,14 +181,14 @@ void Ctr_SeeCtrWithPendingDegs (void)
 /*****************************************************************************/
 
 void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Action,
-                                        const char *ClassLink,const char *ClassLogo)
+                                        const char *ClassLogo)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
       Ctr_PutParamCtrCod (Ctr->CtrCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ctr->FullName),ClassLink,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ctr->FullName),"BT_LINK",NULL);
       Str_FreeStrings ();
 
 	 /***** Center logo and name *****/
@@ -364,8 +363,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
       /***** Center logo and name *****/
       HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
-	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,
-					    "BT_LINK LT","CM");
+	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/

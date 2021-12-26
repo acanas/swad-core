@@ -1380,7 +1380,8 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
 		 {
 		  Frm_BeginForm (ActAdmDocPrj);
 		     Prj_PutCurrentParams (Projects);
-		     HTM_BUTTON_OnSubmit_Begin (Txt_Project_files,"BT_LINK",NULL);
+		     HTM_BUTTON_OnSubmit_Begin (Txt_Project_files,
+		                                "BT_LINK",NULL);
 			HTM_Txt (Prj->Title);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();

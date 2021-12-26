@@ -3335,7 +3335,7 @@ static void Mch_PutBigButtonClose (void)
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BIGBUTTON_CONT\"");
       HTM_BUTTON_OnClick_Begin (Txt_Close,"BT_LINK MCH_BUTTON_ON ICO_DARKRED",
-                                "window.close();");
+                               "window.close();");
 	 HTM_TxtF ("<i class=\"%s\"></i>",Mch_ICON_CLOSE);
       HTM_BUTTON_End ();
    HTM_DIV_End ();

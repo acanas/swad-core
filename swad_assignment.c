@@ -229,7 +229,7 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	   Order++)
 	{
 	 /* Begin head cell */
-	 HTM_TH_Begin (1,1,"LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 	    if (!PrintView)
 	      {
@@ -241,7 +241,8 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 		  Dat_PutHiddenParamOrder (Order);
 
 	          /* Begin link to select order */
-		  HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],
+		                             "BT_LINK",NULL);
 		  if (Order == Assignments->SelectedOrder)
 		     HTM_U_Begin ();
 	      }

@@ -268,8 +268,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
 	       HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Centers_of_INSTITUTION_X,
 							   Gbl.Hierarchy.Ins.ShrtName),
-	                                  "BT_LINK",
-					  NULL);
+	                                  "BT_LINK",NULL);
 	       Str_FreeStrings ();
 	   }
 	 HTM_Unsigned (NumCtrs);

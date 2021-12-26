@@ -624,14 +624,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Write the date */
       UniqueId++;
-      HTM_DIV_Begin ("class=\"NOTICE_DATE %s\"",
+      HTM_DIV_Begin ("class=\"NOTICE_DATE %s RT\"",
                      The_ClassNoticeDateColor[Gbl.Prefs.Theme]);
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
 	   {
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
 	       Not_PutHiddenParamNotCod (NotCod);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_See_full_notice,"BT_LINK",NULL);
 	   }
 	 if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();

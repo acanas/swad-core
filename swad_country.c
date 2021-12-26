@@ -158,8 +158,7 @@ void Cty_SeeCtyWithPendingInss (void)
 	                     The_ClassDat[Gbl.Prefs.Theme],BgColor);
 		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
-						     "COUNTRY_MAP_SMALL",
-						     "BT_LINK");
+						     "COUNTRY_MAP_SMALL");
 	       HTM_TD_End ();
 
 	       /* Number of pending institutions (row[1]) */
@@ -361,24 +360,25 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	   Order <= Cty_ORDER_BY_NUM_USRS;
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == Cty_ORDER_BY_COUNTRY ? "LM" :
-							   "RM");
-	 if (OrderSelectable)
-	   {
-	    Frm_BeginForm (ActSeeCty);
-	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],"BT_LINK TIT_TBL",NULL);
-		  if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
-		     HTM_U_Begin ();
-	   }
-	 HTM_Txt (Txt_COUNTRIES_ORDER[Order]);
-	 if (OrderSelectable)
-	   {
-		  if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
-		     HTM_U_End ();
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
+	 HTM_TH_Begin (1,1,Order == Cty_ORDER_BY_COUNTRY ? "TIT_TBL LM" :
+							   "TIT_TBL RM");
+	    if (OrderSelectable)
+	      {
+	       Frm_BeginForm (ActSeeCty);
+		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],
+					     "BT_LINK",NULL);
+		     if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
+			HTM_U_Begin ();
+	      }
+	    HTM_Txt (Txt_COUNTRIES_ORDER[Order]);
+	    if (OrderSelectable)
+	      {
+		     if (Order == Gbl.Hierarchy.Ctys.SelectedOrder)
+			HTM_U_End ();
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
 	 HTM_TH_End ();
 	}
 
@@ -421,8 +421,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
                     The_ClassDatStrong[Gbl.Prefs.Theme],BgColor);
 	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
-					    "COUNTRY_MAP_SMALL",
-					    "BT_LINK");
+					    "COUNTRY_MAP_SMALL");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this country *****/
@@ -502,8 +501,7 @@ static void Cty_PutIconToEditCountries (void)
 
 void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Action,
                                         const char *ClassContainer,
-                                        const char *ClassMap,
-                                        const char *ClassLink)
+                                        const char *ClassMap)
   {
    char CountryName[Cty_MAX_BYTES_NAME + 1];
 
@@ -516,7 +514,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 
 	 /***** Link to action *****/
 	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
-				  ClassLink,NULL);
+				    "BT_LINK",NULL);
 	 Str_FreeStrings ();
 
 	    /***** Draw country map *****/
@@ -907,11 +905,10 @@ void Cty_WriteSelectorOfCountry (void)
 /*****************************************************************************/
 // If ClassLink == NULL ==> do not put link
 
-void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
+void Cty_WriteCountryName (long CtyCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
-   bool PutForm = ClassLink &&
-	          !Gbl.Form.Inside &&						// Only if not inside another form
+   bool PutForm = !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;	// Only in main browser tab
 
    /***** Get country name *****/
@@ -922,7 +919,8 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       /***** Write country name with link to country information *****/
       Frm_BeginForm (ActSeeCtyInf);
 	 Cty_PutParamCtyCod (CtyCod);
-	 HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtyInf),ClassLink,NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtyInf),
+	                            "BT_LINK",NULL);
 	    HTM_Txt (CtyName);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();

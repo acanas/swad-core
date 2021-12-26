@@ -124,8 +124,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct UsrData *UsrDat,
                                           struct Att_Event *Event);
 static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
-				 const char *Title,const char *Txt,
-				 const char *Class);
+				 const char *Title,const char *Txt);
 static void Att_PutParamsCodGrps (long AttCod);
 static unsigned Att_GetNumUsrsFromAListWhoAreInAttEvent (long AttCod,
 						         long LstSelectedUsrCods[],
@@ -262,7 +261,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 		    Order <= Dat_END_TIME;
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL LM");
 
 		     Frm_BeginForm (ActSeeAtt);
 			WhichGroups = Grp_GetParamWhichGroups ();
@@ -270,7 +269,8 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 			Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
 			Dat_PutHiddenParamOrder (Order);
 
-			HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],"BT_LINK TIT_TBL",NULL);
+			HTM_BUTTON_OnSubmit_Begin (Txt_START_END_TIME_HELP[Order],
+			                           "BT_LINK",NULL);
 
 			   if (Order == Events->SelectedOrder)
 			      HTM_U_Begin ();
@@ -515,13 +515,16 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 
       /* Attendance event title */
       if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("class=\"LT\"");
+	 HTM_TD_Begin ("class=\"%s LT\"",
+	               Event->Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE");
       else
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LT %s\"",
+	               Event->Hidden ? "ASG_TITLE_LIGHT" :
+				       "ASG_TITLE",
+	               Gbl.ColorRows[Gbl.RowEvenOdd]);
       HTM_ARTICLE_Begin (Anchor);
-      Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title,
-			   Event->Hidden ? "BT_LINK LT ASG_TITLE_LIGHT" :
-					   "BT_LINK LT ASG_TITLE");
+	 Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title);
       HTM_ARTICLE_End ();
       HTM_TD_End ();
 
@@ -1840,8 +1843,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 /*****************************************************************************/
 
 static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
-				 const char *Title,const char *Txt,
-				 const char *Class)
+				 const char *Title,const char *Txt)
   {
    /***** Begin form *****/
    Frm_BeginForm (ActSeeOneAtt);
@@ -1849,7 +1851,7 @@ static void Att_PutLinkAttEvent (struct Att_Event *AttEvent,
       Att_PutParamsCodGrps (AttEvent->AttCod);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_OnSubmit_Begin (Title,Class,NULL);
+      HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();
 
@@ -2923,12 +2925,11 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 	    Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
 
 	    /***** Put link to this attendance event *****/
-	    HTM_TH_Begin (1,1,"CM");
+	    HTM_TH_Begin (1,1,"TIT_TBL CM");
 	       snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),"%u",NumAttEvent + 1);
 	       Att_PutLinkAttEvent (&Events->Lst[NumAttEvent],
 				    Events->Lst[NumAttEvent].Title,
-				    StrNumAttEvent,
-				    "BT_LINK TIT_TBL");
+				    StrNumAttEvent);
 	    HTM_TH_End ();
 	   }
 

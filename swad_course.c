@@ -193,10 +193,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 						  ClassNormal);
 	    Frm_BeginForm (ActMyCrs);
 	       Cty_PutParamCtyCod (-1L);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_System,
-					Highlight ? ClassHighlight :
-						    ClassNormal,
-					NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_System,"BT_LINK",NULL);
 		  Ico_PutIcon ("sitemap.svg",Ico_BLACK,Txt_System,"ICO16x16");
 		  HTM_TxtF ("&nbsp;%s",Txt_System);
 	       HTM_BUTTON_End ();
@@ -227,9 +224,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Frm_BeginForm (ActMyCrs);
 		  Cty_PutParamCtyCod (Hie.Cty.CtyCod);
 		  HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtyInf),
-					   Highlight ? ClassHighlight :
-						       ClassNormal,
-					   NULL);
+					     "BT_LINK",NULL);
 		     Cty_DrawCountryMap (&Hie.Cty,"ICO16x16");
 		     HTM_TxtF ("&nbsp;%s",Hie.Cty.Name[Gbl.Prefs.Language]);
 		  HTM_BUTTON_End ();
@@ -262,9 +257,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Frm_BeginForm (ActMyCrs);
 		     Ins_PutParamInsCod (Hie.Ins.InsCod);
 		     HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeInsInf),
-					      Highlight ? ClassHighlight :
-							  ClassNormal,
-					      NULL);
+					        "BT_LINK",NULL);
 			Lgo_DrawLogo (HieLvl_INS,Hie.Ins.InsCod,Hie.Ins.ShrtName,16,NULL,true);
 			HTM_TxtF ("&nbsp;%s",Hie.Ins.ShrtName);
 		     HTM_BUTTON_End ();
@@ -297,9 +290,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Frm_BeginForm (ActMyCrs);
 			Ctr_PutParamCtrCod (Hie.Ctr.CtrCod);
 			HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeCtrInf),
-						 Highlight ? ClassHighlight :
-							     ClassNormal,
-						 NULL);
+						   "BT_LINK",NULL);
 			   Lgo_DrawLogo (HieLvl_CTR,Hie.Ctr.CtrCod,Hie.Ctr.ShrtName,16,NULL,true);
 			   HTM_TxtF ("&nbsp;%s",Hie.Ctr.ShrtName);
 			HTM_BUTTON_End ();
@@ -332,9 +323,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			Frm_BeginForm (ActMyCrs);
 			   Deg_PutParamDegCod (Hie.Deg.DegCod);
 			   HTM_BUTTON_OnSubmit_Begin (Act_GetActionText (ActSeeDegInf),
-						    Highlight ? ClassHighlight :
-								ClassNormal,
-						    NULL);
+						      "BT_LINK",NULL);
 			      Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,16,NULL,true);
 			      HTM_TxtF ("&nbsp;%s",Hie.Deg.ShrtName);
 			   HTM_BUTTON_End ();
@@ -367,9 +356,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			   Frm_BeginForm (ActMyCrs);
 			      Crs_PutParamCrsCod (Hie.Crs.CrsCod);
 			      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Hie.Crs.ShrtName),
-						       Highlight ? ClassHighlight :
-								   ClassNormal,
-						       NULL);
+						         "BT_LINK",NULL);
 			      Str_FreeStrings ();
 				 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,Hie.Crs.FullName,"ICO16x16");
 				 HTM_TxtF ("&nbsp;%s",Hie.Crs.ShrtName);
@@ -2478,7 +2465,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"%s LT %s\"",ClassTxt,BgColor);
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    Deg_PutParamDegCod (Deg.DegCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (row[2]),"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (row[2]),
+	                               "BT_LINK",NULL);
             Str_FreeStrings ();
 	       Lgo_DrawLogo (HieLvl_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	       HTM_TxtF ("&nbsp;%s&nbsp;(%s)",row[2],row[6]);
@@ -2495,7 +2483,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       HTM_TD_Begin ("class=\"%s LT %s\"",ClassTxt,BgColor);
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    Crs_PutParamCrsCod (CrsCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (row[5]),"BT_LINK",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (row[5]),
+	                               "BT_LINK",NULL);
             Str_FreeStrings ();
 	       HTM_Txt (row[5]);
 	    HTM_BUTTON_End ();
