@@ -248,6 +248,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
+   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -290,7 +291,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  Frm_BeginForm (Action);
 		     HTM_BUTTON_OnSubmit_Begin (TabMenuStr,"BT_LINK",NULL);
 			HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-				 NULL);
+				 "class=\"%s\"",
+				 Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
 			HTM_TxtF ("&nbsp;%s",MenuStr);
 		     HTM_BUTTON_End ();
 		  Frm_EndForm ();

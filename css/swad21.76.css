@@ -150,8 +150,8 @@ a:hover						/* Default ==> underlined */
 	}
 .HEAD_ROW_1_PINK
 	{
-	background-image:-webkit-linear-gradient(#bf667f 0,#c86b85 100%);	/* Safari */
-	background-image:linear-gradient(#bf667f 0,#c86b85 100%);
+	background-image:-webkit-linear-gradient(#8e5e8f 0,#ab5c84 100%);	/* Safari */
+	background-image:linear-gradient(#8e5e8f 0,#ab5c84 100%);
 	background-repeat:no-repeat;
 	}
 .HEAD_ROW_1_DARK
@@ -1180,7 +1180,6 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	margin:0 auto;
-	background:white;
 	border-style:solid;
 	border-width:1px;
 	border-color:#80C040;
@@ -1281,14 +1280,13 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	width:148px;
-	background:white;
 	border-style:solid;
 	border-width:1px;
-	border-color:#8CBCCE;
+	border-color:#8cbcce;
 	padding:5px;
 	border-radius:2px;
 	font-size:11pt;
-	color:#4D88A1;
+	color:#4d88a1;
 	}
 #MFU_actions ul
 	{
@@ -1299,7 +1297,7 @@ a:hover						/* Default ==> underlined */
 	padding:2px 0 0 0;
 	border-style:solid;
 	border-width:1px 0 0 0;
-	border-color:#DDECF1;
+	border-color:rgba(140,188,206,0.2);
 	list-style-type:none;
 	text-align:left;
 	vertical-align:middle;
@@ -1462,10 +1460,9 @@ a:hover img.CENTER_PHOTO_SHOW
 	width:148px;
 	margin:6px 0;
 	padding:5px;
-	background:white;
 	border-style:solid;
 	border-width:1px;
-	border-color:#8CBCCE;
+	border-color:#8cbcce;
 	border-radius:2px;
 	text-align:center;
 	overflow:hidden;
@@ -1478,18 +1475,18 @@ a:hover img.CENTER_PHOTO_SHOW
 	padding-top:2px;
 	border-style:solid;
 	border-width:1px 0 0 0;
-	border-color:#DDECF1;
+	border-color:rgba(140,188,206,0.2);
 	}
 .MONTH
 	{
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:9pt;
 	white-space:nowrap;
 	text-transform:uppercase;
 	}
 .DAY_WRK_HEAD
 	{
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:9pt;
 	text-align:center;
 	}
@@ -1507,7 +1504,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 .DAY_NO_WORK
 	{
-	color:#C04080;
+	color:#c04080;
 	font-size:9pt;
 	text-align:center;
 	}
@@ -1519,64 +1516,64 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 .DAY_WRK_LIGHT
 	{
-	color:#E0E0E0;
+	color:#e0e0e0;
 	font-size:9pt;
 	text-align:center;
 	}
 .DAY_NO_WORK_LIGHT
 	{
-	color:#FFE0FF;
+	color:#ffe0ff;
 	font-size:9pt;
 	text-align:center;
 	}
 .DAY_HLD_LIGHT
 	{
-	color:#FFE0E0;
+	color:#ffe0e0;
 	font-size:9pt;
 	text-align:center;
 	}
 .DAY
 	{
 	border:solid 1px;
-	border-color:white;
+	border-color:transparent;
 	text-align:center;
 	}
 .TODAY
 	{
 	border:solid 1px;
-	border-color:#50B800;
+	border-color:#50b800;
 	text-align:center;
 	}
 .DAY_EVENT
 	{
 	border:solid 1px;
 	border-color:white;
-	background-color:#FFF080;
+	background-color:#fff080;
 	text-align:center;
 	}
 .TODAY_EVENT
 	{
 	border:solid 1px;
-	border-color:#50B800;
-	background-color:#FFF080;
+	border-color:#50b800;
+	background-color:#fff080;
 	text-align:center;
 	}
 
 /********************************* Buttons ***********************************/
 .BT_CREATE
 	{
-	background-color:#5BC33B;
+	background-color:#5bc33b;
 	border-color:#518741;
 	}
 .BT_CONFIRM
 	{
-	background-color:#55ACEE;
-	border-color:#3B88C3;
+	background-color:#55acee;
+	border-color:#3b88c3;
 	}
 .BT_REMOVE
 	{
-	background-color:#EF5555;
-	border-color:#C33B3B;
+	background-color:#ef5555;
+	border-color:#c33b3b;
 	}
 .BT_SUBMIT
 	{
@@ -1804,10 +1801,9 @@ a:hover img.CENTER_PHOTO_SHOW
 	box-sizing:border-box;
 	width:148px;
 	margin:0;
-	background:white;
 	border-style:solid;
 	border-width:1px;
-	border-color:#8CBCCE;
+	border-color:#8cbcce;
 	padding:5px;
 	border-radius:2px;
 	font-size:11pt;
@@ -1821,7 +1817,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	padding-top:2px;
 	border-style:solid;
 	border-width:1px 0 0 0;
-	border-color:#DDECF1;
+	border-color:rgba(140,188,206,0.2);
 	}
 #institutional_links li
 	{
