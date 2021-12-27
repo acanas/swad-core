@@ -963,6 +963,7 @@ static void Lay_WriteScriptCustomDropzone (void)
 
 static void Lay_WritePageTopHeading (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
    static const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -985,16 +986,6 @@ static void Lay_WritePageTopHeading (void)
       [The_THEME_PINK  ] = "HEAD_ROW_2_PINK",
       [The_THEME_DARK  ] = "HEAD_ROW_2_DARK",
       };
-   static const char *ClassTagline[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "BT_LINK TAGLINE_WHITE",
-      [The_THEME_GREY  ] = "BT_LINK TAGLINE_GREY",
-      [The_THEME_PURPLE] = "BT_LINK TAGLINE_PURPLE",
-      [The_THEME_BLUE  ] = "BT_LINK TAGLINE_BLUE",
-      [The_THEME_YELLOW] = "BT_LINK TAGLINE_YELLOW",
-      [The_THEME_PINK  ] = "BT_LINK TAGLINE_PINK",
-      [The_THEME_DARK  ] = "BT_LINK TAGLINE_DARK",
-     };
 
    /***** Begin header *****/
    HTM_Txt ("<header>");
@@ -1020,10 +1011,9 @@ static void Lay_WritePageTopHeading (void)
 				   Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_BIG_CLASS);
 	       HTM_DIV_End ();	// head_row_1_logo_big
 
-	       HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
-		  HTM_BUTTON_OnSubmit_Begin (Txt_TAGLINE,
-		                             ClassTagline[Gbl.Prefs.Theme],
-		                             NULL);
+	       HTM_DIV_Begin ("id=\"head_row_1_tagline\" class=\"TAGLINE_%s\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
+		  HTM_BUTTON_OnSubmit_Begin (Txt_TAGLINE,"BT_LINK",NULL);
 		     HTM_Txt (Txt_TAGLINE_BR);
 		  HTM_BUTTON_End ();
 	       HTM_DIV_End ();	// head_row_1_tagline
@@ -1074,10 +1064,11 @@ static void Lay_WritePageTopHeading (void)
 	 HTM_DIV_End ();
 
 	 /* 2nd. row, 3rd. column */
-	 HTM_DIV_Begin ("id=\"msg\"");	// Used for AJAX based refresh
+	 HTM_DIV_Begin ("id=\"msg\" class=\"NOTIF_%s\"",	// Used for AJAX based refresh
+	                The_Colors[Gbl.Prefs.Theme]);
 	    if (Gbl.Usrs.Me.Logged)
 	       Ntf_WriteNumberOfNewNtfs ();
-	 HTM_DIV_End ();		// Used for AJAX based refresh
+	 HTM_DIV_End ();					// Used for AJAX based refresh
 
       /* End 2nd. row */
       HTM_DIV_End ();

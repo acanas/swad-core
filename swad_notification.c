@@ -1631,16 +1631,6 @@ void Ntf_WriteNumberOfNewNtfs (void)
    extern const char *Txt_Notifications;
    extern const char *Txt_NOTIF_new_SINGULAR;
    extern const char *Txt_NOTIF_new_PLURAL;
-   static const char *ClassNotif[The_NUM_THEMES] =
-     {
-      [The_THEME_WHITE ] = "BT_LINK NOTIF_WHITE",
-      [The_THEME_GREY  ] = "BT_LINK NOTIF_GREY",
-      [The_THEME_PURPLE] = "BT_LINK NOTIF_PURPLE",
-      [The_THEME_BLUE  ] = "BT_LINK NOTIF_BLUE",
-      [The_THEME_YELLOW] = "BT_LINK NOTIF_YELLOW",
-      [The_THEME_PINK  ] = "BT_LINK NOTIF_PINK",
-      [The_THEME_DARK  ] = "BT_LINK NOTIF_DARK",
-     };
    unsigned NumUnseenNtfs;
    unsigned NumNewNtfs = 0;
 
@@ -1652,8 +1642,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    Frm_BeginFormId (ActSeeNewNtf,"form_ntf");
 
       /***** Begin link *****/
-      HTM_BUTTON_OnSubmit_Begin (Txt_See_notifications,
-                                 ClassNotif[Gbl.Prefs.Theme],NULL);
+      HTM_BUTTON_OnSubmit_Begin (Txt_See_notifications,"BT_LINK",NULL);
 
 	 /***** Number of unseen notifications *****/
 	 HTM_SPAN_Begin ("id=\"notif_all\"");
