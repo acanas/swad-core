@@ -62,7 +62,7 @@ static void Tml_Who_ShowWarningYouDontFollowAnyUser (void);
 
 void Tml_Who_PutFormWho (struct Tml_Timeline *Timeline)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    Usr_Who_t Who;
    unsigned Mask = 1 << Usr_WHO_ME       |
 	           1 << Usr_WHO_FOLLOWED |
@@ -78,7 +78,8 @@ void Tml_Who_PutFormWho (struct Tml_Timeline *Timeline)
 	      {
 	       /* Begin container */
 	       if (Who == Timeline->Who)
-		  HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+		                 The_Colors[Gbl.Prefs.Theme]);
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 

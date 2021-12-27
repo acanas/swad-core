@@ -215,19 +215,19 @@ static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args)
 
 static void CtyCfg_Title (bool PutLink)
   {
-   extern const char *The_ClassFrameTitleColor[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG %s\"",
-                  The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /* Begin link */
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
-		      " class=\"FRAME_TITLE_BIG %s\"",
+		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
 		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
 		      Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],
-		      The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
+		      The_Colors[Gbl.Prefs.Theme]);
 
       /* Country name */
       HTM_Txt (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);

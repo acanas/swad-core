@@ -2115,7 +2115,7 @@ static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos)
 static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
                                               Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *The_ClassPhoto[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    unsigned long NumDeg;
    unsigned long NumDegs;
@@ -2158,8 +2158,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (struct Pho_DegPhotos *DegPhotos,
 		 }
 
 	       /***** Show average photo of students belonging to this degree *****/
-	       HTM_TD_Begin ("class=\"CLASSPHOTO %s CM\"",
-	                     The_ClassPhoto[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CM\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						 SeeOrPrint,
 						 Usr_SEX_ALL,
@@ -2194,7 +2194,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
                                         Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassPhoto[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -2270,8 +2270,8 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		 {
 		  /***** Show average photo of students belonging to this degree *****/
 		  Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-		  HTM_TD_Begin ("class=\"CLASSPHOTO %s RM %s\"",
-		                The_ClassPhoto[Gbl.Prefs.Theme],
+		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
+		                The_Colors[Gbl.Prefs.Theme],
 		                Gbl.ColorRows[Gbl.RowEvenOdd]);
 		     if (Gbl.Usrs.Listing.WithPhotos)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
@@ -2358,7 +2358,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassPhoto[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_photos;
@@ -2453,8 +2453,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
 	       PhotoWidth,PhotoHeight);
 
    /***** Caption *****/
-   HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION %s\"",
-                  The_ClassPhoto[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt (Deg->ShrtName);
       HTM_BR ();
       HTM_TxtF ("%d&nbsp;%s",NumStds,Txt_students_ABBREVIATION);

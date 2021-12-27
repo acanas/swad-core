@@ -566,7 +566,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 
 static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    struct Prj_Filter Filter;
    Usr_Who_t Who;
    unsigned Mask = 1 << Usr_WHO_ME   |
@@ -580,7 +580,8 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
       if (Mask & (1 << Who))
 	{
 	 if (Who == Projects->Filter.Who)
-	    HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	 else
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	 Frm_BeginForm (Who == Usr_WHO_SELECTED ? ActReqUsrPrj :
@@ -607,7 +608,7 @@ static void Prj_ShowFormToFilterByMy_All (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG];
    struct Prj_Filter Filter;
    Prj_AssignedNonassig_t Assign;
@@ -618,7 +619,8 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 	Assign++)
      {
       if ((Projects->Filter.Assign & (1 << Assign)))
-	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                The_Colors[Gbl.Prefs.Theme]);
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeePrj);
@@ -645,7 +647,7 @@ static void Prj_ShowFormToFilterByAssign (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
    struct Prj_Filter Filter;
    Prj_HiddenVisibl_t HidVis;
@@ -665,7 +667,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 	HidVis++)
      {
       if ((Projects->Filter.Hidden & (1 << HidVis)))
-	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",The_Colors[Gbl.Prefs.Theme]);
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeePrj);
@@ -693,7 +695,7 @@ static void Prj_ShowFormToFilterByHidden (const struct Prj_Projects *Projects)
 
 static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS];
    struct Prj_Filter Filter;
    Prj_Faultiness_t Faultiness;
@@ -713,7 +715,8 @@ static void Prj_ShowFormToFilterByWarning (const struct Prj_Projects *Projects)
 	Faultiness++)
      {
       if ((Projects->Filter.Faulti & (1 << Faultiness)))
-	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                The_Colors[Gbl.Prefs.Theme]);
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeePrj);

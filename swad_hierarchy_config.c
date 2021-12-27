@@ -50,19 +50,17 @@ void HieCfg_Title (bool PutLink,
 		   char LogoWWW[Cns_MAX_BYTES_WWW + 1],
 		   char TextFullName[Cns_HIERARCHY_MAX_BYTES_FULL_NAME + 1])
   {
-   extern const char *The_ClassFrameTitleColor[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG %s\"",
-                  The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG FRAME_TITLE_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /* Begin link */
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
-		      " class=\"FRAME_TITLE_BIG %s\"",
-		      LogoWWW,
-		      LogoFullName,
-		      The_ClassFrameTitleColor[Gbl.Prefs.Theme]);
+		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
+		      LogoWWW,LogoFullName,The_Colors[Gbl.Prefs.Theme]);
 
       /* Logo and name */
       Lgo_DrawLogo (LogoScope,LogoCod,LogoShrtName,64,NULL,true);

@@ -157,7 +157,7 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
 
 void Ico_PutIconsToSelectIconSet (void)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Hlp_PROFILE_Settings_icons;
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
@@ -173,7 +173,8 @@ void Ico_PutIconsToSelectIconSet (void)
 		 IconSet++)
 	      {
 	       if (IconSet == Gbl.Prefs.IconSet)
-		  HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+		                 The_Colors[Gbl.Prefs.Theme]);
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgIco);

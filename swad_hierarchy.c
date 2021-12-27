@@ -179,16 +179,15 @@ void Hie_WriteMenuHierarchy (void)
 
 void Hie_WriteHierarchyInBreadcrumb (void)
   {
-   extern const char *The_ClassBreadcrumb[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_System;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Center;
    extern const char *Txt_Degree;
-   const char *ClassTxt = The_ClassBreadcrumb[Gbl.Prefs.Theme];
 
    /***** Form to go to the system *****/
-   HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
+   HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       HTM_NBSP ();
 
@@ -203,7 +202,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)		// Country selected...
      {
-      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -221,7 +220,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -238,7 +237,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected...
      {
-      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -256,7 +255,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -272,7 +271,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -285,7 +284,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected...
      {
-      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -303,7 +302,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -319,7 +318,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -332,7 +331,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected...
      {
-      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -350,7 +349,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -366,7 +365,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_OFF BC_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Separator *****/
 	 HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -377,11 +376,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_End ();
      }
 
-   HTM_DIV_Begin ("class=\"BC%s %s\"",
+   HTM_DIV_Begin ("class=\"BC%s BC_%s\"",
 		   (Gbl.Hierarchy.Level == HieLvl_CRS) ? "" :
 		  ((Gbl.Hierarchy.Deg.DegCod > 0) ? " BC_SEMIOFF" :
 						    " BC_OFF"),
-		  ClassTxt);
+		  The_Colors[Gbl.Prefs.Theme]);
 
       /***** Separator *****/
       HTM_Txt ("&nbsp;&gt;&nbsp;");
@@ -395,11 +394,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
 void Hie_WriteBigNameCtyInsCtrDegCrs (void)
   {
-   extern const char *The_ClassCourse[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
 
-   HTM_TxtF ("<h1 id=\"main_title\" class=\"%s\">",
-	     The_ClassCourse[Gbl.Prefs.Theme]);
+   HTM_TxtF ("<h1 id=\"main_title\" class=\"MAIN_TITLE_%s\">",
+	     The_Colors[Gbl.Prefs.Theme]);
 
    /***** Logo *****/
    switch (Gbl.Hierarchy.Level)

@@ -645,12 +645,13 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
 
 static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com)
   {
-   extern const char *The_TmlTxtColor[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Write content of the comment *****/
    if (Com->Content.Txt[0])
      {
-      HTM_DIV_Begin ("class=\"Tml_TXT %s\"",The_TmlTxtColor[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",
+                     The_Colors[Gbl.Prefs.Theme]);
 	 Msg_WriteMsgContent (Com->Content.Txt,true,false);
       HTM_DIV_End ();
      }

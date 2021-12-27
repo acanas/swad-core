@@ -112,7 +112,7 @@ static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
                                       void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
@@ -125,7 +125,8 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	   {
 	    if (FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek)
-	       HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
 	    else
 	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	    Frm_BeginForm (Action);

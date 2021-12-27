@@ -212,12 +212,12 @@ static void Tmt_FreeTimeTable (void)
 
 static void Tmt_ShowTimeTableGrpsSelected (void)
   {
-   extern const char *The_ClassPhoto[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
 
-   HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE %s CM\"",
-                  The_ClassPhoto[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       switch (Gbl.Crs.Grps.WhichGrps)
 	{

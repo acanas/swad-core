@@ -51,10 +51,7 @@ static const char *Tab_GetIcon (Tab_Tab_t Tab);
 
 void Tab_DrawTabs (void)
   {
-   extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   extern const char *The_ClassTxtTabOff[The_NUM_THEMES];
-   extern const char *The_TabOnBgColors[The_NUM_THEMES];
-   extern const char *The_TabOffBgColors[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
@@ -110,11 +107,10 @@ void Tab_DrawTabs (void)
 	    if (ICanViewTab)	// Don't show the first hidden tabs
 	      {
 	       /* Form, icon (at top) and text (at bottom) of the tab */
-	       HTM_LI_Begin ("class=\"%s %s\"",
-			     NumTab == Gbl.Action.Tab ? "TAB_ON" :
-							"TAB_OFF",
-			     NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
-							The_TabOffBgColors[Gbl.Prefs.Theme]);
+	       HTM_LI_Begin ("class=\"%s%s\"",
+			     NumTab == Gbl.Action.Tab ? "TAB_ON TAB_ON_" :
+							"TAB_OFF TAB_OFF_",
+			     The_Colors[Gbl.Prefs.Theme]);
 
 		  if (NumTab == Gbl.Action.Tab)
 		     HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
@@ -127,9 +123,10 @@ void Tab_DrawTabs (void)
 		                                "BT_LINK",NULL);
 			HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
 				 "class=\"TAB_ICO%s\"",ClassIcoTab[Gbl.Prefs.IconSet][Gbl.Prefs.Theme]);
-			HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
-				       NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-								  The_ClassTxtTabOff[Gbl.Prefs.Theme]);
+			HTM_DIV_Begin ("class=\"TAB_TXT TAB_%s_TXT_%s\"",
+				       NumTab == Gbl.Action.Tab ? "ON" :
+								  "OFF",
+				       The_Colors[Gbl.Prefs.Theme]);
 			   HTM_Txt (Txt_TABS_TXT[NumTab]);
 			HTM_DIV_End ();
 		     HTM_BUTTON_End ();

@@ -209,7 +209,7 @@ Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
 
 void Mnu_WriteMenuThisTab (void)
   {
-   extern const char *The_ClassTxtMenu[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    static const char *ClassIcoMenu[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
      {
@@ -272,8 +272,8 @@ void Mnu_WriteMenuThisTab (void)
 					  Gbl.Prefs.URLIconSet,
 					  Act_GetIcon (NumAct));
 			   HTM_DIV_End ();
-			   HTM_DIV_Begin ("class=\"MENU_TXT %s\"",
-			                  The_ClassTxtMenu[Gbl.Prefs.Theme]);
+			   HTM_DIV_Begin ("class=\"MENU_TXT MENU_TXT_%s\"",
+			                  The_Colors[Gbl.Prefs.Theme]);
 			      HTM_Txt (Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 			   HTM_DIV_End ();
 			HTM_DIV_End ();
@@ -303,7 +303,7 @@ void Mnu_WriteMenuThisTab (void)
 void Mnu_PutIconsToSelectMenu (void)
   {
    extern const char *Hlp_PROFILE_Settings_menu;
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Menu;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
@@ -318,7 +318,8 @@ void Mnu_PutIconsToSelectMenu (void)
 		 Menu++)
 	      {
 	       if (Menu == Gbl.Prefs.Menu)
-		  HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+		                 The_Colors[Gbl.Prefs.Theme]);
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgMnu);

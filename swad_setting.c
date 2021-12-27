@@ -207,7 +207,7 @@ void Set_SetSettingsFromIP (void)
 static void Set_PutIconsToSelectSideCols (void)
   {
    extern const char *Hlp_PROFILE_Settings_columns;
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
@@ -223,7 +223,8 @@ static void Set_PutIconsToSelectSideCols (void)
 	      SideCols++)
 	   {
 	    if (SideCols == Gbl.Prefs.SideCols)
-	       HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
 	    else
 	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	    Frm_BeginForm (ActChgCol);

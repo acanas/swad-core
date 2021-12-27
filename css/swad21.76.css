@@ -1692,17 +1692,22 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 
 /********************************** Notice ***********************************/
-.NOTICE_HIGHLIGHT
+.NOTICE_CONT
 	{
 	padding:10px 0;
-	background-color:#ddecf1;
-	animation:fadein 2s linear forwards;
 	}
-@keyframes fadein
-	{
-	to {background-color:white;}
-	}
-.NOTICE_CONT
+
+.NOTICE_HIGHLIGHT_WHITE		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
+.NOTICE_HIGHLIGHT_GREY		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
+.NOTICE_HIGHLIGHT_PURPLE	{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
+.NOTICE_HIGHLIGHT_BLUE		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
+.NOTICE_HIGHLIGHT_YELLOW	{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
+.NOTICE_HIGHLIGHT_PINK		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
+.NOTICE_HIGHLIGHT_DARK		{background-color:#808080; animation:fadeinnoticedark 2s linear forwards;}
+@keyframes fadeinnoticelight	{to {background-color:white;}}
+@keyframes fadeinnoticedark	{to {background-color:#484848;}}
+
+.NOTICE_BOX
 	{
 	box-sizing:border-box;
 	margin:0 auto 10px auto;
@@ -1713,8 +1718,8 @@ a:hover img.CENTER_PHOTO_SHOW
 	text-align:left;
 	overflow:hidden;
 	}
-.NOTICE_CONT_NARROW	{width:148px;}
-.NOTICE_CONT_WIDE	{width:500px;}
+.NOTICE_BOX_NARROW	{width:148px;}
+.NOTICE_BOX_WIDE	{width:500px;}
 .NOTICE_DATE
 	{
 	float:right;

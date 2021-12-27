@@ -526,7 +526,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_multiple_users;
-   extern const char *The_ClassTitle[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Administer_multiple_students;
    extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
@@ -592,7 +592,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 		    Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
 	 /***** Step 1: List of students to be enroled / removed *****/
-	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Step_1_Provide_a_list_of_users);
 	 HTM_DIV_End ();
 
@@ -600,13 +600,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	 Enr_PutAreaToEnterUsrsIDs ();
 
 	 /***** Step 2: Put different actions to register/remove users to/from current course *****/
-	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Step_2_Select_the_desired_action);
 	 HTM_DIV_End ();
 	 Enr_PutActionsRegRemSeveralUsrs ();
 
 	 /***** Step 3: Select groups in which register / remove users *****/
-	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Step_3_Optionally_select_groups);
 	 HTM_DIV_End ();
 	 if (Gbl.Hierarchy.Level == HieLvl_CRS)	// Course selected
@@ -623,7 +623,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	   }
 
 	 /***** Step 4: Confirm register / remove students *****/
-	 HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TITLE_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Step_4_Confirm_the_enrolment_removing);
 	 HTM_DIV_End ();
 	 Pwd_AskForConfirmationOnDangerousAction ();

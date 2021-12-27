@@ -4404,7 +4404,7 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
                                  void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
@@ -4417,7 +4417,8 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,
 	   WhichGrps++)
 	{
 	 if (WhichGrps == Gbl.Crs.Grps.WhichGrps)
-	    HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	 else
 	    HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	 Frm_BeginForm (Action);

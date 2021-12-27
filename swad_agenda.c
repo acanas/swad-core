@@ -206,7 +206,7 @@ static void Agd_ShowMyAgenda (struct Agd_Agenda *Agenda)
 
 static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2];
    Agd_Past__FutureEvents_t PstFut;
    static const char *Icon[2] =
@@ -221,7 +221,8 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 	PstFut++)
      {
       if ((Agenda->Past__FutureEvents & (1 << PstFut)))
-	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                The_Colors[Gbl.Prefs.Theme]);
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeeMyAgd);
@@ -245,7 +246,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
    Agd_PrivatPublicEvents_t PrvPub;
    static const struct
@@ -264,7 +265,8 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 	PrvPub++)
      {
       if ((Agenda->PrivatPublicEvents & (1 << PrvPub)))
-	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                The_Colors[Gbl.Prefs.Theme]);
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeeMyAgd);
@@ -288,7 +290,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 
 static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
    Agd_HiddenVisiblEvents_t HidVis;
    static const struct
@@ -307,7 +309,8 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
 	HidVis++)
      {
       if ((Agenda->HiddenVisiblEvents & (1 << HidVis)))
-	 HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                The_Colors[Gbl.Prefs.Theme]);
       else
 	 HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_BeginForm (ActSeeMyAgd);

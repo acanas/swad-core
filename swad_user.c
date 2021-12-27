@@ -1343,7 +1343,7 @@ void Usr_PutFormLogIn (void)
 
 void Usr_WriteLoggedUsrHead (void)
   {
-   extern const char *The_ClassUsr[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1356,7 +1356,7 @@ void Usr_WriteLoggedUsrHead (void)
      };
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
 
-   HTM_DIV_Begin ("class=\"HEAD_USR %s\"",The_ClassUsr[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"HEAD_USR USR_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
       /***** User's role *****/
       if (NumAvailableRoles == 1)
@@ -3577,14 +3577,15 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Args)
   {
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
 
    Set_BeginSettingsHead ();
    Set_BeginOneSettingSelector ();
 
    /***** Select Set_USR_LIST_AS_CLASS_PHOTO *****/
    if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_CLASS_PHOTO)
-      HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+                     The_Colors[Gbl.Prefs.Theme]);
    else
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
    Set_FormToSelectUsrListType (FuncParams,Args,
@@ -3604,7 +3605,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void *Args),void *Arg
 
    /***** Select Usr_LIST_AS_LISTING *****/
    if (Gbl.Usrs.Me.ListType == Set_USR_LIST_AS_LISTING)
-      HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",The_Colors[Gbl.Prefs.Theme]);
    else
       HTM_DIV_Begin ("class=\"PREF_OFF\"");
    Set_FormToSelectUsrListType (FuncParams,Args,
@@ -6114,7 +6115,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_ClassPhoto[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][Pho_NUM_SHAPES] =
      {
       [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -6165,14 +6166,14 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	     UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	   {
 	    UsrIsTheMsgSender = true;
-	    HTM_TD_Begin ("class=\"CLASSPHOTO %s CB LIGHT_GREEN\"",
-	                  The_ClassPhoto[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB LIGHT_GREEN\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	   }
 	 else
 	   {
 	    UsrIsTheMsgSender = false;
-	    HTM_TD_Begin ("class=\"CLASSPHOTO %s CB\"",
-	                  The_ClassPhoto[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s CB\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	   }
 
 	 /***** Checkbox to select this user *****/
@@ -6186,8 +6187,8 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	                            false);
 
 	 /***** Photo foot *****/
-	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION %s\"",
-	                The_ClassPhoto[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION CLASSPHOTO_%s\"",
+	                The_Colors[Gbl.Prefs.Theme]);
 
 	    /* Name */
 	    if (UsrDat.FrstName[0])

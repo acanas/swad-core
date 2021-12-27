@@ -59,7 +59,7 @@ void Pho_PutIconsToSelectPhotoShape (void)
   {
    extern const char *Hlp_PROFILE_Settings_user_photos;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_User_photos;
    extern const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES];
    static const char *ClassPhoto[Pho_NUM_SHAPES] =
@@ -81,7 +81,8 @@ void Pho_PutIconsToSelectPhotoShape (void)
 	      Shape++)
 	   {
 	    if (Shape == Gbl.Prefs.PhotoShape)
-	       HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+	       HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+	                      The_Colors[Gbl.Prefs.Theme]);
 	    else
 	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	    Frm_BeginForm (ActChgUsrPho);

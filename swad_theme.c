@@ -74,138 +74,6 @@ const char *The_ThemeNames[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "Dark",
   };
 
-const char *The_ClassBodyBG[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "BODY_BG_WHITE",
-   [The_THEME_GREY  ] = "BODY_BG_GREY",
-   [The_THEME_PURPLE] = "BODY_BG_PURPLE",
-   [The_THEME_BLUE  ] = "BODY_BG_BLUE",
-   [The_THEME_YELLOW] = "BODY_BG_YELLOW",
-   [The_THEME_PINK  ] = "BODY_BG_PINK",
-   [The_THEME_DARK  ] = "BODY_BG_DARK",
-  };
-
-const char *The_TabOnBgColors[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "TAB_ON_WHITE",
-   [The_THEME_GREY  ] = "TAB_ON_GREY",
-   [The_THEME_PURPLE] = "TAB_ON_PURPLE",
-   [The_THEME_BLUE  ] = "TAB_ON_BLUE",
-   [The_THEME_YELLOW] = "TAB_ON_YELLOW",
-   [The_THEME_PINK  ] = "TAB_ON_PINK",
-   [The_THEME_DARK  ] = "TAB_ON_DARK",
-  };
-
-const char *The_TabOffBgColors[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "TAB_OFF_WHITE",
-   [The_THEME_GREY  ] = "TAB_OFF_GREY",
-   [The_THEME_PURPLE] = "TAB_OFF_PURPLE",
-   [The_THEME_BLUE  ] = "TAB_OFF_BLUE",
-   [The_THEME_YELLOW] = "TAB_OFF_YELLOW",
-   [The_THEME_PINK  ] = "TAB_OFF_PINK",
-   [The_THEME_DARK  ] = "TAB_OFF_DARK",
-  };
-
-const char *The_ClassTagline[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "BT_LINK TAGLINE_WHITE",
-   [The_THEME_GREY  ] = "BT_LINK TAGLINE_GREY",
-   [The_THEME_PURPLE] = "BT_LINK TAGLINE_PURPLE",
-   [The_THEME_BLUE  ] = "BT_LINK TAGLINE_BLUE",
-   [The_THEME_YELLOW] = "BT_LINK TAGLINE_YELLOW",
-   [The_THEME_PINK  ] = "BT_LINK TAGLINE_PINK",
-   [The_THEME_DARK  ] = "BT_LINK TAGLINE_DARK",
-  };
-
-const char *The_ClassNotif[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "BT_LINK NOTIF_WHITE",
-   [The_THEME_GREY  ] = "BT_LINK NOTIF_GREY",
-   [The_THEME_PURPLE] = "BT_LINK NOTIF_PURPLE",
-   [The_THEME_BLUE  ] = "BT_LINK NOTIF_BLUE",
-   [The_THEME_YELLOW] = "BT_LINK NOTIF_YELLOW",
-   [The_THEME_PINK  ] = "BT_LINK NOTIF_PINK",
-   [The_THEME_DARK  ] = "BT_LINK NOTIF_DARK",
-  };
-
-const char *The_ClassUsr[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "USR_WHITE",
-   [The_THEME_GREY  ] = "USR_GREY",
-   [The_THEME_PURPLE] = "USR_PURPLE",
-   [The_THEME_BLUE  ] = "USR_BLUE",
-   [The_THEME_YELLOW] = "USR_YELLOW",
-   [The_THEME_PINK  ] = "USR_PINK",
-   [The_THEME_DARK  ] = "USR_DARK",
-  };
-
-const char *The_ClassBreadcrumb[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "BC_WHITE",
-   [The_THEME_GREY  ] = "BC_GREY",
-   [The_THEME_PURPLE] = "BC_PURPLE",
-   [The_THEME_BLUE  ] = "BC_BLUE",
-   [The_THEME_YELLOW] = "BC_YELLOW",
-   [The_THEME_PINK  ] = "BC_PINK",
-   [The_THEME_DARK  ] = "BC_DARK",
-  };
-
-const char *The_ClassCourse[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "MAIN_TITLE_WHITE",
-   [The_THEME_GREY  ] = "MAIN_TITLE_GREY",
-   [The_THEME_PURPLE] = "MAIN_TITLE_PURPLE",
-   [The_THEME_BLUE  ] = "MAIN_TITLE_BLUE",
-   [The_THEME_YELLOW] = "MAIN_TITLE_YELLOW",
-   [The_THEME_PINK  ] = "MAIN_TITLE_PINK",
-   [The_THEME_DARK  ] = "MAIN_TITLE_DARK",
-  };
-
-const char *The_ClassTxtMenu[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "MENU_TXT_WHITE",
-   [The_THEME_GREY  ] = "MENU_TXT_GREY",
-   [The_THEME_PURPLE] = "MENU_TXT_PURPLE",
-   [The_THEME_BLUE  ] = "MENU_TXT_BLUE",
-   [The_THEME_YELLOW] = "MENU_TXT_YELLOW",
-   [The_THEME_PINK  ] = "MENU_TXT_PINK",
-   [The_THEME_DARK  ] = "MENU_TXT_DARK",
-  };
-
-const char *The_ClassTxtTabOff[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "TAB_OFF_TXT_WHITE",
-   [The_THEME_GREY  ] = "TAB_OFF_TXT_GREY",
-   [The_THEME_PURPLE] = "TAB_OFF_TXT_PURPLE",
-   [The_THEME_BLUE  ] = "TAB_OFF_TXT_BLUE",
-   [The_THEME_YELLOW] = "TAB_OFF_TXT_YELLOW",
-   [The_THEME_PINK  ] = "TAB_OFF_TXT_PINK",
-   [The_THEME_DARK  ] = "TAB_OFF_TXT_DARK",
-  };
-
-const char *The_ClassTxtTabOn[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "TAB_ON_TXT_WHITE",
-   [The_THEME_GREY  ] = "TAB_ON_TXT_GREY",
-   [The_THEME_PURPLE] = "TAB_ON_TXT_PURPLE",
-   [The_THEME_BLUE  ] = "TAB_ON_TXT_BLUE",
-   [The_THEME_YELLOW] = "TAB_ON_TXT_YELLOW",
-   [The_THEME_PINK  ] = "TAB_ON_TXT_PINK",
-   [The_THEME_DARK  ] = "TAB_ON_TXT_DARK",
-  };
-
-const char *The_ClassTitle[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "TITLE_WHITE",
-   [The_THEME_GREY  ] = "TITLE_GREY",
-   [The_THEME_PURPLE] = "TITLE_PURPLE",
-   [The_THEME_BLUE  ] = "TITLE_BLUE",
-   [The_THEME_YELLOW] = "TITLE_YELLOW",
-   [The_THEME_PINK  ] = "TITLE_PINK",
-   [The_THEME_DARK  ] = "TITLE_DARK",
-  };
-
 const char *The_ClassFormLinkInBox[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "BT_LINK FORM_IN_WHITE",
@@ -360,17 +228,6 @@ const char *The_ClassBgHighlight[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "BG_HIGHLIGHT_DARK",
   };
 
-const char *The_ClassPrefOn[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "PREF_ON_WHITE",
-   [The_THEME_GREY  ] = "PREF_ON_GREY",
-   [The_THEME_PURPLE] = "PREF_ON_PURPLE",
-   [The_THEME_BLUE  ] = "PREF_ON_BLUE",
-   [The_THEME_YELLOW] = "PREF_ON_YELLOW",
-   [The_THEME_PINK  ] = "PREF_ON_PINK",
-   [The_THEME_DARK  ] = "PREF_ON_DARK",
-  };
-
 const char *The_ClassInput[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "INPUT_WHITE",
@@ -382,88 +239,15 @@ const char *The_ClassInput[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "INPUT_DARK",
   };
 
-const char *The_ClassFrameTitleColor[The_NUM_THEMES] =
+const char *The_Colors[The_NUM_THEMES] =
   {
-   [The_THEME_WHITE ] = "FRAME_TITLE_WHITE",
-   [The_THEME_GREY  ] = "FRAME_TITLE_GREY",
-   [The_THEME_PURPLE] = "FRAME_TITLE_PURPLE",
-   [The_THEME_BLUE  ] = "FRAME_TITLE_BLUE",
-   [The_THEME_YELLOW] = "FRAME_TITLE_YELLOW",
-   [The_THEME_PINK  ] = "FRAME_TITLE_PINK",
-   [The_THEME_DARK  ] = "FRAME_TITLE_DARK",
-  };
-
-const char *The_ClassAlertBackground[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "ALERT_BG_WHITE",
-   [The_THEME_GREY  ] = "ALERT_BG_GREY",
-   [The_THEME_PURPLE] = "ALERT_BG_PURPLE",
-   [The_THEME_BLUE  ] = "ALERT_BG_BLUE",
-   [The_THEME_YELLOW] = "ALERT_BG_YELLOW",
-   [The_THEME_PINK  ] = "ALERT_BG_PINK",
-   [The_THEME_DARK  ] = "ALERT_BG_DARK",
-  };
-const char *The_ClassAlertTxtColor[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "ALERT_TXT_WHITE",
-   [The_THEME_GREY  ] = "ALERT_TXT_GREY",
-   [The_THEME_PURPLE] = "ALERT_TXT_PURPLE",
-   [The_THEME_BLUE  ] = "ALERT_TXT_BLUE",
-   [The_THEME_YELLOW] = "ALERT_TXT_YELLOW",
-   [The_THEME_PINK  ] = "ALERT_TXT_PINK",
-   [The_THEME_DARK  ] = "ALERT_TXT_DARK",
-  };
-
-const char *The_ClassColorRows[2][The_NUM_THEMES] =
-  {
-   [0][The_THEME_WHITE ] = "COLOR0_WHITE",
-   [0][The_THEME_GREY  ] = "COLOR0_GREY",
-   [0][The_THEME_PURPLE] = "COLOR0_PURPLE",
-   [0][The_THEME_BLUE  ] = "COLOR0_BLUE",
-   [0][The_THEME_YELLOW] = "COLOR0_YELLOW",
-   [0][The_THEME_PINK  ] = "COLOR0_PINK",
-   [0][The_THEME_DARK  ] = "COLOR0_DARK",
-
-   [1][The_THEME_WHITE ] = "COLOR1_WHITE",
-   [1][The_THEME_GREY  ] = "COLOR1_GREY",
-   [1][The_THEME_PURPLE] = "COLOR1_PURPLE",
-   [1][The_THEME_BLUE  ] = "COLOR1_BLUE",
-   [1][The_THEME_YELLOW] = "COLOR1_YELLOW",
-   [1][The_THEME_PINK  ] = "COLOR1_PINK",
-   [1][The_THEME_DARK  ] = "COLOR1_DARK",
-  };
-
-const char *The_TmlTxtColor[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "Tml_TXT_WHITE",
-   [The_THEME_GREY  ] = "Tml_TXT_GREY",
-   [The_THEME_PURPLE] = "Tml_TXT_PURPLE",
-   [The_THEME_BLUE  ] = "Tml_TXT_BLUE",
-   [The_THEME_YELLOW] = "Tml_TXT_YELLOW",
-   [The_THEME_PINK  ] = "Tml_TXT_PINK",
-   [The_THEME_DARK  ] = "Tml_TXT_DARK",
-  };
-
-const char *The_ClassPhoto[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "CLASSPHOTO_WHITE",
-   [The_THEME_GREY  ] = "CLASSPHOTO_GREY",
-   [The_THEME_PURPLE] = "CLASSPHOTO_PURPLE",
-   [The_THEME_BLUE  ] = "CLASSPHOTO_BLUE",
-   [The_THEME_YELLOW] = "CLASSPHOTO_YELLOW",
-   [The_THEME_PINK  ] = "CLASSPHOTO_PINK",
-   [The_THEME_DARK  ] = "CLASSPHOTO_DARK",
-  };
-
-const char *The_ClassNoticeTextColor[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "NOTICE_TEXT_WHITE",
-   [The_THEME_GREY  ] = "NOTICE_TEXT_GREY",
-   [The_THEME_PURPLE] = "NOTICE_TEXT_PURPLE",
-   [The_THEME_BLUE  ] = "NOTICE_TEXT_BLUE",
-   [The_THEME_YELLOW] = "NOTICE_TEXT_YELLOW",
-   [The_THEME_PINK  ] = "NOTICE_TEXT_PINK",
-   [The_THEME_DARK  ] = "NOTICE_TEXT_DARK",
+   [The_THEME_WHITE ] = "WHITE",
+   [The_THEME_GREY  ] = "GREY",
+   [The_THEME_PURPLE] = "PURPLE",
+   [The_THEME_BLUE  ] = "BLUE",
+   [The_THEME_YELLOW] = "YELLOW",
+   [The_THEME_PINK  ] = "PINK",
+   [The_THEME_DARK  ] = "DARK",
   };
 
 /*****************************************************************************/
@@ -479,7 +263,6 @@ static void The_PutIconsTheme (__attribute__((unused)) void *Args);
 void The_PutIconsToSelectTheme (void)
   {
    extern const char *Hlp_PROFILE_Settings_theme;
-   extern const char *The_ClassPrefOn[The_NUM_THEMES];
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
    char Icon[PATH_MAX + 1];
@@ -494,7 +277,8 @@ void The_PutIconsToSelectTheme (void)
 		 Theme++)
 	      {
 	       if (Theme == Gbl.Prefs.Theme)
-		  HTM_DIV_Begin ("class=\"PREF_ON %s\"",The_ClassPrefOn[Gbl.Prefs.Theme]);
+		  HTM_DIV_Begin ("class=\"PREF_ON PREF_ON_%s\"",
+		                 The_Colors[Gbl.Prefs.Theme]);
 	       else
 		  HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	       Frm_BeginForm (ActChgThe);
@@ -587,7 +371,24 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
 
 void The_SetColorRows (void)
   {
-   extern const char *The_ClassColorRows[2][The_NUM_THEMES];
+   static const char *The_ClassColorRows[2][The_NUM_THEMES] =
+     {
+      [0][The_THEME_WHITE ] = "COLOR0_WHITE",
+      [0][The_THEME_GREY  ] = "COLOR0_GREY",
+      [0][The_THEME_PURPLE] = "COLOR0_PURPLE",
+      [0][The_THEME_BLUE  ] = "COLOR0_BLUE",
+      [0][The_THEME_YELLOW] = "COLOR0_YELLOW",
+      [0][The_THEME_PINK  ] = "COLOR0_PINK",
+      [0][The_THEME_DARK  ] = "COLOR0_DARK",
+
+      [1][The_THEME_WHITE ] = "COLOR1_WHITE",
+      [1][The_THEME_GREY  ] = "COLOR1_GREY",
+      [1][The_THEME_PURPLE] = "COLOR1_PURPLE",
+      [1][The_THEME_BLUE  ] = "COLOR1_BLUE",
+      [1][The_THEME_YELLOW] = "COLOR1_YELLOW",
+      [1][The_THEME_PINK  ] = "COLOR1_PINK",
+      [1][The_THEME_DARK  ] = "COLOR1_DARK",
+     };
 
    Gbl.ColorRows[0] = The_ClassColorRows[0][Gbl.Prefs.Theme];	// Darker
    Gbl.ColorRows[1] = The_ClassColorRows[1][Gbl.Prefs.Theme];	// Lighter

@@ -106,8 +106,7 @@ void Lay_WriteStartOfPage (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
-   extern const char *The_ClassBodyBG[The_NUM_THEMES];
-   extern const char *The_TabOnBgColors[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *LayoutMainZone[Mnu_NUM_MENUS] =
      {
       [Mnu_MENU_HORIZONTAL] = "main_horizontal",
@@ -258,8 +257,8 @@ void Lay_WriteStartOfPage (void)
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
-	       HTM_TxtF ("<body class=\"%s\" onload=\"init();\">\n",
-	                 The_ClassBodyBG[Gbl.Prefs.Theme]);
+	       HTM_TxtF ("<body class=\"BODY_BG_%s\" onload=\"init();\">\n",
+	                 The_Colors[Gbl.Prefs.Theme]);
 	       HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
 		  HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
 			   "class=\"IMG_USR\" id=\"zoomImg\"");
@@ -346,8 +345,8 @@ void Lay_WriteStartOfPage (void)
 	       HTM_DIV_Begin ("id=\"main_zone_central_both\"");
 	       break;
 	   }
-	    HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"%s\"",
-			   The_TabOnBgColors[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"TAB_ON_%s\"",
+			   The_Colors[Gbl.Prefs.Theme]);
 
 	       /* Layout with horizontal or vertical menu */
 	       HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
@@ -964,7 +963,6 @@ static void Lay_WriteScriptCustomDropzone (void)
 
 static void Lay_WritePageTopHeading (void)
   {
-   extern const char *The_ClassTagline[The_NUM_THEMES];
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
    static const char *ClassHeadRow1[The_NUM_THEMES] =
@@ -987,6 +985,16 @@ static void Lay_WritePageTopHeading (void)
       [The_THEME_PINK  ] = "HEAD_ROW_2_PINK",
       [The_THEME_DARK  ] = "HEAD_ROW_2_DARK",
       };
+   static const char *ClassTagline[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "BT_LINK TAGLINE_WHITE",
+      [The_THEME_GREY  ] = "BT_LINK TAGLINE_GREY",
+      [The_THEME_PURPLE] = "BT_LINK TAGLINE_PURPLE",
+      [The_THEME_BLUE  ] = "BT_LINK TAGLINE_BLUE",
+      [The_THEME_YELLOW] = "BT_LINK TAGLINE_YELLOW",
+      [The_THEME_PINK  ] = "BT_LINK TAGLINE_PINK",
+      [The_THEME_DARK  ] = "BT_LINK TAGLINE_DARK",
+     };
 
    /***** Begin header *****/
    HTM_Txt ("<header>");
@@ -1014,7 +1022,7 @@ static void Lay_WritePageTopHeading (void)
 
 	       HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
 		  HTM_BUTTON_OnSubmit_Begin (Txt_TAGLINE,
-		                             The_ClassTagline[Gbl.Prefs.Theme],
+		                             ClassTagline[Gbl.Prefs.Theme],
 		                             NULL);
 		     HTM_Txt (Txt_TAGLINE_BR);
 		  HTM_BUTTON_End ();
@@ -1050,7 +1058,8 @@ static void Lay_WritePageTopHeading (void)
 
       /***** 2nd. row *****/
       /* Begin second row */
-      HTM_DIV_Begin ("id=\"head_row_2\" class=\"%s\"",ClassHeadRow2[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("id=\"head_row_2\" class=\"%s\"",
+                     ClassHeadRow2[Gbl.Prefs.Theme]);
 
 	 /* 2nd. row, 1st. column
 	    Clock with hour:minute (server hour is shown) */
@@ -1458,7 +1467,7 @@ static void Lay_WriteFootFromHTMLFile (void)
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
-   extern const char *The_ClassPhoto[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    struct Hie_Hierarchy Hie;
 
    /***** Get data of institution *****/
@@ -1491,14 +1500,14 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	 HTM_TD_End ();
 
 	 /***** Second column: class photo title *****/
-	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE %s CM\"",
-	               The_ClassPhoto[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
+	               The_Colors[Gbl.Prefs.Theme]);
 	    if (InsCod > 0)
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"CLASSPHOTO_TITLE %s\"",
-			       Hie.Ins.WWW,The_ClassPhoto[Gbl.Prefs.Theme]);
+			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+			       Hie.Ins.WWW,The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Hie.Ins.FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1509,8 +1518,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 		  HTM_Txt (" - ");
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"CLASSPHOTO_TITLE %s\"",
-			       Hie.Deg.WWW,The_ClassPhoto[Gbl.Prefs.Theme]);
+			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+			       Hie.Deg.WWW,The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Hie.Deg.FullName);
 	       if (!PrintView)
 		  HTM_A_End ();
@@ -1533,8 +1542,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 	      {
 	       if (!PrintView)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
-			       " class=\"CLASSPHOTO_TITLE %s\"",
-			       Hie.Deg.WWW,The_ClassPhoto[Gbl.Prefs.Theme]);
+			       " class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s\"",
+			       Hie.Deg.WWW,The_Colors[Gbl.Prefs.Theme]);
 	       Lgo_DrawLogo (HieLvl_DEG,Hie.Deg.DegCod,Hie.Deg.ShrtName,40,NULL,true);
 	       if (!PrintView)
 		  HTM_A_End ();
