@@ -25,7 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
@@ -264,11 +266,10 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
   {
    extern const char *Txt_Update;
 
-   Frm_BeginForm (ActSeeSocPrf);
-      HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
-	 Ico_PutCalculateIcon (Txt_Update);
-      HTM_BUTTON_End ();
-   Frm_EndForm ();
+   Lay_PutContextualLinkOnlyIcon (ActSeeSocPrf,NULL,
+                                  NULL,NULL,
+				  "recycle.svg",Ico_BLACK,
+				  Txt_Update);
   }
 
 /*****************************************************************************/
@@ -744,13 +745,18 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
 
 static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
+   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_Follow;
+   char *Class;
 
    /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
-		       Txt_Follow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
+      if (asprintf (&Class,"FOLLOW_USR_ICO %s ICO_HIGHLIGHT ICO16x16",
+		    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",Txt_Follow,Class);
+      free (Class);
    Frm_EndForm ();
   }
 

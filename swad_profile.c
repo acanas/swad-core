@@ -756,10 +756,10 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
 
 static void Prf_BeginListItem (const char *Title,const char *Icon)
   {
-   HTM_LI_Begin ("title=\"%s\" class=\"PRF_FIG_LI\""
-		 " style=\"background-image:url('%s/%s');\"",
-		 Title,
-		 Cfg_URL_ICON_PUBLIC,Icon);
+   HTM_LI_Begin ("title=\"%s\" class=\"PRF_FIG_LI\"",Title);
+      HTM_DIV_Begin ("class=\"PRF_FIG_ICO\"");
+	 Ico_PutIcon (Icon,Ico_BLACK,Title,"CONTEXT_ICO_x16");
+      HTM_DIV_End ();
   }
 
 static void Prf_EndListItem (void)

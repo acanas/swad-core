@@ -4070,14 +4070,12 @@ a.PAG:hover, .PAG_CUR
 /***************************** Calls for exams *******************************/
 .EXAM_TIT
 	{
-	/* font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif; */
  	color:#202020;
  	font-weight:bold;
  	font-size:18pt;
  	}
 .EXAM
 	{
-	/* font-family:Garamond,"DejaVu LGC Serif","Bitstream Vera Serif",serif; */
 	color:#202020;
 	font-size:13pt;
 	}
@@ -4130,11 +4128,14 @@ a.PAG:hover, .PAG_CUR
 	}
 .PRF_FIG_LI
 	{
-	padding:0 0 0 20px;
-	background-size:16px 16px;
-	background-repeat:no-repeat;
-	background-position:left center;
 	opacity:0.7;
+	}
+.PRF_FIG_ICO
+	{
+	display:inline-block;
+	width:30px;
+	text-align:center;
+	vertical-align:middle;
 	}
 
 #following_side
