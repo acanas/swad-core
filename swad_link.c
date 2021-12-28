@@ -60,7 +60,7 @@ static struct Lnk_Link *Lnk_EditingLnk = NULL;	// Static variable to keep the li
 
 static void Lnk_PutIconsListingLinks (__attribute__((unused)) void *Args);
 static void Lnk_PutIconToEditLinks (void);
-static void Lnk_WriteListOfLinks (void);
+static void Lnk_WriteListOfLinks (const char *Class);
 
 static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
@@ -99,7 +99,7 @@ void Lnk_SeeLinks (void)
 
       /***** Write all links *****/
       if (Gbl.Links.Num)	// There are links
-	 Lnk_WriteListOfLinks ();
+	 Lnk_WriteListOfLinks ("class=\"LIST_LEFT\"");
       else			// No links created
 	 Ale_ShowAlert (Ale_INFO,Txt_No_links);
 
@@ -148,6 +148,7 @@ static void Lnk_PutIconToEditLinks (void)
 
 void Lnk_WriteMenuWithInstitutionalLinks (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Links;
 
    /***** Get list of links *****/
@@ -156,15 +157,16 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    /***** Write all links *****/
    if (Gbl.Links.Num)
      {
-      HTM_DIV_Begin ("id=\"institutional_links\"");
+      HTM_DIV_Begin ("id=\"institutional_links\" class=\"INS_LNK_%s\"",
+                     The_Colors[Gbl.Prefs.Theme]);
 
 	 Frm_BeginForm (ActSeeLnk);
-	    HTM_BUTTON_OnSubmit_Begin (Txt_Links,"BT_LINK LINK_TITLE",NULL);
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Links,"BT_LINK",NULL);
 	       HTM_TxtF ("%s",Txt_Links);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 
-	 Lnk_WriteListOfLinks ();
+	 Lnk_WriteListOfLinks (NULL);
 
       HTM_DIV_End ();
      }
@@ -177,12 +179,13 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
 /*************************** Write list of links *****************************/
 /*****************************************************************************/
 
-static void Lnk_WriteListOfLinks (void)
+static void Lnk_WriteListOfLinks (const char *Class)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumLnk;
 
    /***** List start *****/
-   HTM_UL_Begin ("class=\"LIST_LEFT\"");
+   HTM_UL_Begin (Class);
 
       /***** Write all links *****/
       for (NumLnk = 0;
@@ -190,10 +193,12 @@ static void Lnk_WriteListOfLinks (void)
 	   NumLnk++)
 	{
 	 /* Write data of this link */
-	 HTM_LI_Begin ("class=\"INS_LNK\"");
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"INS_LNK\" target=\"_blank\"",
+	 HTM_LI_Begin ("class=\"ICO_HIGHLIGHT INS_LNK\"");
+	    HTM_A_Begin ("href=\"%s\" title=\"%s\""
+		         " class=\"INS_LNK_%s\" target=\"_blank\"",
 			 Gbl.Links.Lst[NumLnk].WWW,
-			 Gbl.Links.Lst[NumLnk].FullName);
+			 Gbl.Links.Lst[NumLnk].FullName,
+			 The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Gbl.Links.Lst[NumLnk].ShrtName);
 	    HTM_A_End ();
 	 HTM_LI_End ();

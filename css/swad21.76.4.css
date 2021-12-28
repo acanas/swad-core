@@ -69,7 +69,7 @@ table th
 	{
 	box-sizing:border-box;
 	padding:0;
-	color:#4D88A1;
+	color:#4d88a1;
 	font-weight:bold;
 	}
 table td
@@ -1286,7 +1286,6 @@ a:hover						/* Default ==> underlined */
 	padding:5px;
 	border-radius:2px;
 	font-size:11pt;
-	color:#4d88a1;
 	}
 #MFU_actions ul
 	{
@@ -1294,7 +1293,7 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	width:138px;
 	margin:2px 0;
-	padding:2px 0 0 0;
+	padding:6px 0 0 0;
 	border-style:solid;
 	border-width:1px 0 0 0;
 	border-color:rgba(140,188,206,0.2);
@@ -1807,17 +1806,20 @@ a:hover img.CENTER_PHOTO_SHOW
 	padding:5px;
 	border-radius:2px;
 	font-size:11pt;
-	color:#4D88A1;
 	}
 #institutional_links ul
 	{
+	display:inline-block;
 	box-sizing:border-box;
 	width:138px;
-	margin-top:2px;
-	padding-top:2px;
+	margin:2px 0;
+	padding:6px 0 0 0;
 	border-style:solid;
 	border-width:1px 0 0 0;
 	border-color:rgba(140,188,206,0.2);
+	list-style-type:none;
+	text-align:left;
+	vertical-align:middle;
 	}
 #institutional_links li
 	{
@@ -1829,8 +1831,6 @@ a:hover img.CENTER_PHOTO_SHOW
 .INS_LNK
 	{
 	padding:1px;
-	font-size:11pt;
-	color:#4D88A1;
 	}
 
 /*********************************** Alerts **********************************/
@@ -2311,7 +2311,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .TITLE_WHITE	{color:#505050; font-size:18pt;}
 .TITLE_GREY	{color:#505050; font-size:18pt;}
 .TITLE_PURPLE	{color:#573c4d; font-size:18pt;}
-.TITLE_BLUE	{color:#4D88A1; font-size:18pt;}
+.TITLE_BLUE	{color:#4d88a1; font-size:18pt;}
 .TITLE_YELLOW	{color:#7c4d2a; font-size:18pt;}
 .TITLE_PINK	{color:#63474e; font-size:18pt;}
 .TITLE_DARK	{color:#505050; font-size:18pt;}
@@ -2725,26 +2725,32 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .CLASSPHOTO_DARK	{color:#d0d0d0;}
 
 /************************** Left column menu *********************************/
-.LINK_TITLE, .MFU_TITLE	{color:#4D88A1;}
+.INS_LNK_WHITE,		.MFU_WHITE	{color:#4d88a1;}
+.INS_LNK_GREY,		.MFU_GREY	{color:#4d88a1;}
+.INS_LNK_PURPLE,	.MFU_PURPLE	{color:#4d88a1;}
+.INS_LNK_BLUE,		.MFU_BLUE	{color:#4d88a1;}
+.INS_LNK_YELLOW,	.MFU_YELLOW	{color:#4d88a1;}
+.INS_LNK_PINK,		.MFU_PINK	{color:#4d88a1;}
+.INS_LNK_DARK,		.MFU_DARK	{color:#a6c4d0;}
 
 /*****************************************************************************/
 .MSJ_AVISO		{color:#632921; font-size:12pt;}
-.TIT_TBL		{color:#4D88A1; font-size:12pt; font-weight:bold;}
+.TIT_TBL		{color:#4d88a1; font-size:12pt; font-weight:bold;}
 
-.GRP_TITLE		{color:#4D88A1; font-size:15pt; font-weight:bold;}
+.GRP_TITLE		{color:#4d88a1; font-size:15pt; font-weight:bold;}
 
-.ASG_TITLE		{color:#4D88A1; font-size:15pt; font-weight:bold;}
+.ASG_TITLE		{color:#4d88a1; font-size:15pt; font-weight:bold;}
 .ASG_TITLE_LIGHT	{color:#AFC4CC; font-size:15pt; font-weight:bold;}
-.ASG_LABEL		{color:#4D88A1; font-size:13pt;}
+.ASG_LABEL		{color:#4d88a1; font-size:13pt;}
 .ASG_LABEL_LIGHT	{color:#AFC4CC; font-size:13pt;}
-.ASG_GRP		{color:#4D88A1; font-size:12pt;}
+.ASG_GRP		{color:#4d88a1; font-size:12pt;}
 .ASG_GRP_LIGHT		{color:#AFC4CC; font-size:12pt;}
 
 .DATE_RED		{color:#660000; font-size:13pt;}
 .DATE_RED_LIGHT		{color:#f98a8a; font-size:13pt;}
 .DATE_GREEN		{color:#008000; font-size:13pt;}
 .DATE_GREEN_LIGHT	{color:#89BE87; font-size:13pt;}
-.DATE_BLUE		{color:#4D88A1; font-size:13pt;}
+.DATE_BLUE		{color:#4d88a1; font-size:13pt;}
 .DATE_BLUE_LIGHT	{color:#AFC4CC; font-size:13pt;}
 
 .ASG_LST_DATE_GREEN	{color:#008000; font-size:11pt; white-space:nowrap;}
@@ -2781,7 +2787,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	text-align:left;
 	vertical-align:middle;
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:11pt;
 	}
 
@@ -3535,9 +3541,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.AUTHOR_TXT			{color:#4D88A1; font-size:11pt;}
+.AUTHOR_TXT		{color:#4d88a1; font-size:11pt;}
 .AUTHOR_TXT_LIGHT	{color:#AFC4CC; font-size:11pt;}
-.AUTHOR_TXT_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
+.AUTHOR_TXT_NEW		{color:#4d88a1; font-size:11pt; font-weight:bold;}
 
 /************************** Owner of assignments and works *******************/
 .OWNER_WORKS_PHOTO
@@ -3969,15 +3975,15 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	font-size:13pt;
  	line-height:1.4;
 	}
-.MSG_TIT	{color:#4D88A1; font-size:13pt;}
-.MSG_TIT_NEW	{color:#4D88A1; font-size:13pt; font-weight:bold;}
+.MSG_TIT	{color:#4d88a1; font-size:13pt;}
+.MSG_TIT_NEW	{color:#4d88a1; font-size:13pt; font-weight:bold;}
 .MSG_TIT_REM	{color:#AFC4CC; font-size:13pt;}
 .MSG_TIT_BG
 	{
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:13pt;
 	}
 .MSG_TIT_BG_NEW
@@ -3985,7 +3991,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:13pt;
 	font-weight:bold;
 	}
@@ -4002,7 +4008,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:11pt;
 	}
 .MSG_AUT_BG_NEW
@@ -4010,7 +4016,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	background-image:-webkit-linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f5ffd7 0,#f5ffd7 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:11pt;
 	font-weight:bold;
 	}
@@ -4022,8 +4028,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	color:#AFC4CC;
 	font-size:11pt;
 	}
-.MSG_DATE	{color:#4D88A1; font-size:11pt;}
-.MSG_DATE_NEW	{color:#4D88A1; font-size:11pt; font-weight:bold;}
+.MSG_DATE	{color:#4d88a1; font-size:11pt;}
+.MSG_DATE_NEW	{color:#4d88a1; font-size:11pt; font-weight:bold;}
 
 .BT		{width:20px; text-align:center; vertical-align:top;}
 .BT0		{width:20px; text-align:center; vertical-align:top; background-color:#F4F2EA;}
@@ -4064,7 +4070,7 @@ a.PAG:hover, .PAG_CUR
 	{
 	font-size:13pt;
 	font-weight:bold;
-	color:#4D88A1;
+	color:#4d88a1;
 	}
 
 /***************************** Calls for exams *******************************/
@@ -4253,7 +4259,7 @@ a.PAG:hover, .PAG_CUR
 	}
 .INDICATORS th
 	{
-	color:#4D88A1;
+	color:#4d88a1;
 	font-size:12pt;
 	font-weight:bold;
 	}

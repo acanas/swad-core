@@ -249,6 +249,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
@@ -260,11 +261,11 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
    /***** Begin div and link *****/
-   HTM_DIV_Begin ("id=\"MFU_actions\"");
+   HTM_DIV_Begin ("id=\"MFU_actions\" class=\"MFU_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       Frm_BeginForm (ActMFUAct);
-	 HTM_BUTTON_OnSubmit_Begin (Txt_My_frequent_actions,
-	                            "BT_LINK MFU_TITLE",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_My_frequent_actions,"BT_LINK",NULL);
 	    HTM_TxtF ("%s",Txt_Frequent_ACTIONS);
 	 HTM_BUTTON_End ();
       Frm_EndForm ();
