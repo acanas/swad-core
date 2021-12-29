@@ -184,6 +184,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
 void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Who_to_follow;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
@@ -198,7 +199,8 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
                                           &mysql_res)))
      {
       /***** Begin container *****/
-      HTM_DIV_Begin ("class=\"CONNECTED CONNECTED_TXT\"");
+      HTM_DIV_Begin ("class=\"CON CON_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
 	 /***** Title with link to suggest more users to follow *****/
 	 Frm_BeginForm (ActSeeSocPrf);

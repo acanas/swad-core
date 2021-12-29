@@ -60,6 +60,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args);
+static void Con_PutParamScope (__attribute__((unused)) void *Args);
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
 
@@ -135,17 +136,15 @@ static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
   {
    extern const char *Txt_Update;
 
-   /***** Begin form *****/
-   Frm_BeginForm (ActLstCon);
+   Lay_PutContextualLinkOnlyIcon (ActLstCon,NULL,
+                                  Con_PutParamScope,NULL,
+				  "recycle.svg",Ico_BLACK,
+				  Txt_Update);
+  }
+
+static void Con_PutParamScope (__attribute__((unused)) void *Args)
+  {
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-
-      /* Button */
-      HTM_BUTTON_Animated_Begin (Txt_Update,"BT_LINK",NULL);
-	 Ico_PutCalculateIcon (Txt_Update);
-      HTM_BUTTON_End ();
-
-   /***** End form *****/
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -154,6 +153,7 @@ static void Con_PutIconToUpdateConnected (__attribute__((unused)) void *Args)
 
 void Con_ShowGlobalConnectedUsrs (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_session;
    extern const char *Txt_sessions;
@@ -173,14 +173,15 @@ void Con_ShowGlobalConnectedUsrs (void)
      }
 
    /***** Container start *****/
-   HTM_DIV_Begin ("class=\"CONNECTED\"");
+   HTM_DIV_Begin ("class=\"CON CON_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /***** Number of sessions *****/
       /* Link to view more details about connected users */
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK",NULL);
 
 	    /* Write total number of sessions */
 	    HTM_TxtF ("%u&nbsp;%s",Gbl.Session.NumSessions,
@@ -192,7 +193,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
       if (NumUsrsTotal)
 	{
-	 HTM_DIV_Begin ("class=\"CONNECTED_LIST\"");
+	 HTM_DIV_Begin ("class=\"CON_LIST\"");
 
 	    /***** Write total number of users *****/
 	    HTM_TxtF ("%u&nbsp;%s:",NumUsrsTotal,
@@ -271,15 +272,17 @@ static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t R
 
 static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_from;
    struct ConnectedUsrs Usrs;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"CONNECTED\"");
+   HTM_DIV_Begin ("class=\"CON CON_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /***** Number of connected users who belong to scope *****/
       Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
-      HTM_DIV_Begin ("class=\"CONNECTED_TXT\"");
+      HTM_DIV_Begin (NULL);
 
          /* Write number of connected users */
 	 HTM_TxtF ("%u %s ",Usrs.NumUsrs,Txt_from);
@@ -292,7 +295,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
       HTM_DIV_End ();
 
       /***** Number of teachers and students *****/
-      HTM_TABLE_Begin ("CONNECTED_LIST");
+      HTM_TABLE_Begin ("CON_LIST");
 	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
 	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
 	 Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
@@ -313,6 +316,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
 void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
    char CourseName[Cns_HIERARCHY_MAX_BYTES_SHRT_NAME + 1];
@@ -323,14 +327,15 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       return;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"CONNECTED\"");
+   HTM_DIV_Begin ("class=\"CON CON_%s\"",
+                  The_Colors[Gbl.Prefs.Theme]);
 
       /***** Number of connected users who belong to course *****/
       /* Link to view more details about connected users */
       Frm_BeginFormUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK CONNECTED_TXT",NULL);
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Connected_users,"BT_LINK",NULL);
 	    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,sizeof (CourseName) - 1);
 	    Con_GetNumConnectedWithARoleBelongingToCurrentScope (Rol_UNK,&Usrs);
 	    HTM_TxtF ("%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
@@ -338,7 +343,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       Frm_EndForm ();
 
       /***** Number of teachers and students *****/
-      HTM_TABLE_Begin ("CONNECTED_LIST");
+      HTM_TABLE_Begin ("CON_LIST");
 	 Gbl.Usrs.Connected.NumUsr        = 0;
 	 Gbl.Usrs.Connected.NumUsrs       = 0;
 	 Gbl.Usrs.Connected.NumUsrsToList = 0;
@@ -367,9 +372,10 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
      {
       HTM_TR_Begin (NULL);
 	 HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
-	    HTM_TxtF ("%u&nbsp;%s",Usrs.NumUsrs,
-				   Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
-						       Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
+	    HTM_TxtF ("%u&nbsp;%s",
+	              Usrs.NumUsrs,
+		      Usrs.NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
+					  Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
 	 HTM_TD_End ();
       HTM_TR_End ();
 
@@ -672,8 +678,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	                    Role == Rol_TCH));				// ...or teacher
 
    /***** Get connected users who belong to current location from database *****/
-   NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role);
-   if (NumUsrs)
+   if ((NumUsrs = Con_DB_GetConnectedFromCurrentLocation (&mysql_res,Role)))
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -721,14 +726,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			Usr_PutParamUsrCodEncrypted (UsrDat.EnUsrCod);
 		    }
 
-		  HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
-		     if (PutLinkToRecord)
-			HTM_BUTTON_OnSubmit_Begin (UsrDat.FullName,
-			                           "BT_LINK",NULL);
-		     Usr_WriteFirstNameBRSurnames (&UsrDat);
-		     if (PutLinkToRecord)
-			HTM_BUTTON_End ();
-		  HTM_DIV_End ();
+		  if (PutLinkToRecord)
+		     HTM_BUTTON_OnSubmit_Begin (UsrDat.FullName,
+						"BT_LINK LT",NULL);
+		  Usr_WriteFirstNameBRSurnames (&UsrDat);
+		  if (PutLinkToRecord)
+		     HTM_BUTTON_End ();
 
 		  if (PutLinkToRecord)
 		     Frm_EndForm ();

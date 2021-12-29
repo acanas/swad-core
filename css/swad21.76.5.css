@@ -1176,38 +1176,38 @@ a:hover						/* Default ==> underlined */
 .MENU_TXT_DARK		{color:#d0d0d0;}
 
 /***************************** Users connected *******************************/
-.CONNECTED
+.CON
 	{
 	box-sizing:border-box;
 	margin:0 auto;
 	border-style:solid;
 	border-width:1px;
-	border-color:#80C040;
+	border-color:#80c040;
 	margin:6px 0;
 	padding:5px;
 	border-radius:2px;
-	font-size:12pt;
-	color:#398000;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.CONNECTED_LIST
+.CON_WHITE	{color:#398000;}
+.CON_GREY	{color:#398000;}
+.CON_PURPLE	{color:#398000;}
+.CON_BLUE	{color:#398000;}
+.CON_YELLOW	{color:#398000;}
+.CON_PINK	{color:#398000;}
+.CON_DARK	{color:#80c040;}
+.CON_LIST
 	{
 	box-sizing:border-box;
 	width:100%;
 	margin-top:2px;
-	padding-top:2px;
+	padding:6px 0 0 0;
 	border-style:solid;
 	border-width:1px 0 0 0;
-	border-color:#BFDF9F;
+	border-color:rgba(128,192,64,0.2);
 	white-space:nowrap;
 	overflow:hidden;
-	}
-.CONNECTED_TXT
-	{
-	color:#398000;
-	font-size:12pt;
 	}
 .CON_USR_NARROW_TIT
 	{
@@ -1220,8 +1220,8 @@ a:hover						/* Default ==> underlined */
 	}
 
 /* Connected to the current course? */
-.CON_NO_CRS	{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
-.CON_CRS	{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
+.CON_CRS	{font-size:10pt; line-height:110%; white-space:nowrap;}
+.CON_NO_CRS	{font-size:10pt; line-height:110%; white-space:nowrap; opacity:0.5;}
 
 /* 1st. column */
 .CON_PHOTO
@@ -2731,7 +2731,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .INS_LNK_BLUE,		.MFU_BLUE	{color:#4d88a1;}
 .INS_LNK_YELLOW,	.MFU_YELLOW	{color:#4d88a1;}
 .INS_LNK_PINK,		.MFU_PINK	{color:#4d88a1;}
-.INS_LNK_DARK,		.MFU_DARK	{color:#a6c4d0;}
+.INS_LNK_DARK,		.MFU_DARK	{color:#8cbcce;}
 
 /*****************************************************************************/
 .MSJ_AVISO		{color:#632921; font-size:12pt;}
