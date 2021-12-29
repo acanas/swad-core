@@ -1704,6 +1704,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    char StrQstInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    bool QuestionExists;
    char *Anchor = NULL;
+   char *Title;
 
    /***** Trivial check *****/
    if (!NumQsts)
@@ -1771,12 +1772,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	       /* Put icon to move up the question */
 	       if (ICanEditQuestions && QstInd > 1)
 		 {
+		  if (asprintf (&Title,Txt_Move_up_X,StrQstInd) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-up.svg",Ico_BLACK,
-						 Str_BuildString (Txt_Move_up_X,
-								  StrQstInd));
-		  Str_FreeStrings ();
+						 Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -1785,12 +1787,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	       /* Put icon to move down the question */
 	       if (ICanEditQuestions && QstInd < MaxQstInd)
 		 {
+		  if (asprintf (&Title,Txt_Move_down_X,StrQstInd) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						 Gam_PutParamsOneQst,Games,
 						 "arrow-down.svg",Ico_BLACK,
-						 Str_BuildString (Txt_Move_down_X,
-								  StrQstInd));
-		  Str_FreeStrings ();
+						 Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,

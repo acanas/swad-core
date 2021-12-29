@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -104,6 +106,7 @@ void Dpt_SeeDepts (void)
    extern const char *Txt_Other_departments;
    extern const char *Txt_Department_unspecified;
    struct Dpt_Departments Departments;
+   char *Title;
    Dpt_Order_t Order;
    unsigned NumDpt;
    unsigned NumTchsInsInOtherDpts;
@@ -123,17 +126,14 @@ void Dpt_SeeDepts (void)
    Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box and table *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Box_BoxTableBegin (NULL,Str_BuildString (Txt_Departments_of_INSTITUTION_X,
-					       Gbl.Hierarchy.Ins.FullName),
-			 Dpt_PutIconToEditDpts,NULL,
-			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,Str_BuildString (Txt_Departments_of_INSTITUTION_X,
-					       Gbl.Hierarchy.Ins.FullName),
-			 NULL,NULL,
-			 Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxTableBegin (NULL,Title,
+		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
+							       NULL,
+		      NULL,
+		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
+   free (Title);
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
@@ -271,6 +271,7 @@ static void Dpt_EditDepartmentsInternal (void)
    extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_Departments_of_INSTITUTION_X;
    struct Dpt_Departments Departments;
+   char *Title;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ins.InsCod <= 0)	// An institution must be selected
@@ -286,11 +287,11 @@ static void Dpt_EditDepartmentsInternal (void)
    Dpt_GetListDepartments (&Departments,Gbl.Hierarchy.Ins.InsCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Departments_of_INSTITUTION_X,
-				       Gbl.Hierarchy.Ins.FullName),
-                 NULL,NULL,
+   if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,NULL,NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       /***** Put a form to create a new department *****/
       Dpt_PutFormToCreateDepartment ();

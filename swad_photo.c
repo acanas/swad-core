@@ -626,6 +626,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
       [Rol_SYS_ADM] = ActUpdOthPho,
      };
    char ErrorTxt[256];
+   char *Icon;
 
    /***** Creates directories if not exist *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PRIVATE);
@@ -789,11 +790,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    snprintf (FileNamePhotoMap,sizeof (FileNamePhotoMap),"%s/%s_map.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,Gbl.UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
-      HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,
-	       Str_BuildString ("%s_map.jpg",Gbl.UniqueNameEncrypted),
-	       Txt_Faces_detected,
-	       "usemap=\"#faces_map\"");
-      Str_FreeStrings ();
+      if (asprintf (&Icon,"%s_map.jpg",Gbl.UniqueNameEncrypted) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Icon,Txt_Faces_detected,"usemap=\"#faces_map\"");
+      free (Icon);
    HTM_DIV_End ();
 
    /***** End alert *****/

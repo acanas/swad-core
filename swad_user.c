@@ -1355,6 +1355,7 @@ void Usr_WriteLoggedUsrHead (void)
       [Pho_SHAPE_RECTANGLE] = "PHOTOR18x24",
      };
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
+   char *ClassSelect;
 
    HTM_DIV_Begin ("class=\"HEAD_USR USR_%s\"",The_Colors[Gbl.Prefs.Theme]);
 
@@ -1371,9 +1372,10 @@ void Usr_WriteLoggedUsrHead (void)
 	}
       else
 	{
-	 Rol_PutFormToChangeMyRole (Str_BuildString ("SEL_ROLE %s",
-	                                             The_ClassInput[Gbl.Prefs.Theme]));
-	 Str_FreeStrings ();
+	 if (asprintf (&ClassSelect,"SEL_ROLE %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Rol_PutFormToChangeMyRole (ClassSelect);
+	 free (ClassSelect);
 	}
       HTM_NBSP ();
 
@@ -4728,6 +4730,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumUsrs;
    unsigned NumUsr;
+   char *Title;
    struct UsrData UsrDat;
    Usr_Sex_t Sex;
    struct UsrInList *UsrInList;
@@ -4746,14 +4749,14 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
       /***** Begin box and table *****/
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",NumUsrs,
-					       (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
-										     Txt_users[Sex]) :
-								   ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-										     Txt_ROLES_PLURAL_abc[Role][Sex])),
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      if (asprintf (&Title,"%u %s",NumUsrs,
+				   (Role == Rol_UNK) ? (NumUsrs == 1 ? Txt_user[Sex] :
+								       Txt_users[Sex]) :
+						       (NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+								       Txt_ROLES_PLURAL_abc[Role][Sex])) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      free (Title);
 
 	 /***** Heading row with column names *****/
 	 Gbl.Usrs.Listing.WithPhotos = true;

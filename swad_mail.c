@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -1069,6 +1071,7 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
    unsigned NumEmails;
    unsigned NumEmail;
    bool Confirmed;
+   char *Icon;
    static const struct
      {
       Act_Action_t Remove;
@@ -1150,10 +1153,10 @@ static void Mai_ShowFormChangeUsrEmail (bool ItsMe,
 	 /* Email confirmed? */
 	 if (Confirmed)
 	   {
-	    Ico_PutIcon ("check-circle.svg",Ico_GREEN,
-			 Str_BuildString (Txt_Email_X_confirmed,row[0]),
-			 "ICO16x16");
-	    Str_FreeStrings ();
+	    if (asprintf (&Icon,Txt_Email_X_confirmed,row[0]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Ico_PutIcon ("check-circle.svg",Ico_GREEN,Icon,"ICO16x16");
+	    free (Icon);
 	   }
 
 	 /* Form to change user's email */

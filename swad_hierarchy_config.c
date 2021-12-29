@@ -25,6 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
+#include "swad_error.h"
 #include "swad_figure_cache.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -251,6 +255,7 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
+   char *Title;
 
    /***** Number of centers *****/
    HTM_TR_Begin (NULL);
@@ -264,10 +269,11 @@ void HieCfg_NumCtrs (unsigned NumCtrs,bool PutForm)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
 	       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-	       HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Centers_of_INSTITUTION_X,
-							   Gbl.Hierarchy.Ins.ShrtName),
-	                                  "BT_LINK",NULL);
-	       Str_FreeStrings ();
+	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
+	                     Gbl.Hierarchy.Ins.ShrtName) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+	       free (Title);
 	   }
 	 HTM_Unsigned (NumCtrs);
 	 if (PutForm)

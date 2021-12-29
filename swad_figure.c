@@ -448,14 +448,24 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    extern const char *Txt_Total;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    long Cod = Sco_GetCurrentCod ();
-   char *Class = (Role == Rol_UNK) ? Str_BuildString ("RB %s LINE_TOP",
-                                                      The_ClassDatStrong[Gbl.Prefs.Theme]) :
-	                             Str_BuildString ("RB %s",
-	                                              The_ClassDat[Gbl.Prefs.Theme]);
-   unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
-	                                 (1 << Rol_NET) |
-	                                 (1 << Rol_TCH)) :
-	                                 (1 << Role);
+   char *Class;
+   unsigned Roles;
+
+   /***** Initializations depending on role *****/
+   if (Role == Rol_UNK)
+     {
+      if (asprintf (&Class,"RB %s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Roles = (1 << Rol_STD) |
+	      (1 << Rol_NET) |
+	      (1 << Rol_TCH);
+     }
+   else
+     {
+      if (asprintf (&Class,"RB %s",The_ClassDat[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Roles = (1 << Role);
+     }
 
    /***** Write the total number of users *****/
    HTM_TR_Begin (NULL);
@@ -480,7 +490,7 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
+   free (Class);
   }
 
 /*****************************************************************************/
@@ -491,7 +501,10 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   char *Class = Str_BuildString ("%s RB",The_ClassDat[Gbl.Prefs.Theme]);
+   char *Class;
+
+   if (asprintf (&Class,"%s RB",The_ClassDat[Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
 
    /***** Write the total number of users not belonging to any course *****/
    HTM_TR_Begin (NULL);
@@ -514,7 +527,7 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
+   free (Class);
   }
 
 /*****************************************************************************/
@@ -889,6 +902,7 @@ static void Fig_GetAndShowHierarchyTotal (void)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Total;
+   char *ClassTxt;
    unsigned NumCtysTotal = 1;
    unsigned NumInssTotal = 1;
    unsigned NumCtrsTotal = 1;
@@ -931,15 +945,15 @@ static void Fig_GetAndShowHierarchyTotal (void)
      }
 
    /***** Write total number of elements *****/
-   Fig_ShowHierarchyRow ("",Txt_Total,
-			 Str_BuildString ("%s LINE_TOP",
-			                  The_ClassDatStrong[Gbl.Prefs.Theme]),
+   if (asprintf (&ClassTxt,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
+   Fig_ShowHierarchyRow ("",Txt_Total,ClassTxt,
                          (int) NumCtysTotal,
                          (int) NumInssTotal,
                          (int) NumCtrsTotal,
                          (int) NumDegsTotal,
 			 (int) NumCrssTotal);
-   Str_FreeStrings ();
+   free (ClassTxt);
   }
 
 /*****************************************************************************/
@@ -1565,9 +1579,17 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
    char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",
-                                                                    The_ClassDatStrong[Gbl.Prefs.Theme]) :
-	                                           The_ClassDat[Gbl.Prefs.Theme];
+   char *Cl;
+   const char *Class;
+
+   if (FileZone == Brw_UNKNOWN)
+     {
+      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Class = Cl;
+     }
+   else
+      Class = The_ClassDat[Gbl.Prefs.Theme];
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
 
@@ -1625,7 +1647,8 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
+   if (FileZone == Brw_UNKNOWN)
+      free (Cl);
   }
 
 static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
@@ -1637,9 +1660,17 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
    char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",
-                                                                    The_ClassDatStrong[Gbl.Prefs.Theme]) :
-	                                           The_ClassDat[Gbl.Prefs.Theme];
+   char *Cl;
+   const char *Class;
+
+   if (FileZone == Brw_UNKNOWN)
+     {
+      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Class = Cl;
+     }
+   else
+      Class = The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumCrss == -1)	// Not applicable
      {
@@ -1683,7 +1714,8 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
+   if (FileZone == Brw_UNKNOWN)
+      free (Cl);
   }
 
 static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
@@ -1695,9 +1727,17 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
    char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-   const char *Class = (FileZone == Brw_UNKNOWN) ? Str_BuildString ("%s LINE_TOP",
-                                                                    The_ClassDatStrong[Gbl.Prefs.Theme]) :
-	                                           The_ClassDat[Gbl.Prefs.Theme];
+   char *Cl;
+   const char *Class;
+
+   if (FileZone == Brw_UNKNOWN)
+     {
+      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Class = Cl;
+     }
+   else
+      Class = The_ClassDat[Gbl.Prefs.Theme];
 
    if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
      {
@@ -1741,7 +1781,8 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
+   if (FileZone == Brw_UNKNOWN)
+      free (Cl);
   }
 
 /*****************************************************************************/
@@ -3580,6 +3621,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    unsigned FirstDayOfWeek;
    char *SubQuery;
    char *Icon;
+   char *Title;
    unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
@@ -3624,11 +3666,11 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  if (asprintf (&Icon,"first-day-of-week-%u.png",
 				FirstDayOfWeek) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  Ico_PutIcon (Icon,Ico_BLACK,
-			       Str_BuildString (Txt_First_day_of_the_week_X,
-						Txt_DAYS_SMALL[FirstDayOfWeek]),
-			       "ICO40x40");
-		  Str_FreeStrings ();
+		  if (asprintf (&Title,Txt_First_day_of_the_week_X,
+		                Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Ico_PutIcon (Icon,Ico_BLACK,Title,"ICO40x40");
+		  free (Title);
 		  free (Icon);
 	       HTM_TD_End ();
 

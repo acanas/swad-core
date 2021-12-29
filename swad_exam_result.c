@@ -184,6 +184,7 @@ void ExaRes_ShowMyResultsInExa (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
+   char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -205,10 +206,10 @@ void ExaRes_ShowMyResultsInExa (void)
 	                     false);	// Do not put form to start new session
 
    /***** List my sessions results in exam *****/
-   ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildString (Txt_Results_of_exam_X,Exam.Title),
-			    false);	// Do not list exams to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_exam_X,Exam.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+   free (Title);
    ExaRes_ListMyResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
@@ -236,6 +237,7 @@ void ExaRes_ShowMyResultsInSes (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
+   char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -258,10 +260,10 @@ void ExaRes_ShowMyResultsInSes (void)
 	                     false);	// Do not put form to start new session
 
    /***** List my sessions results in session *****/
-   ExaRes_ShowResultsBegin (&Exams,Str_BuildString (Txt_Results_of_session_X,
-                                                    Session.Title),
-			    false);	// Do not list exams to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+   free (Title);
    ExaRes_ListMyResultsInSes (&Exams,Session.SesCod);
    ExaRes_ShowResultsEnd ();
 
@@ -387,6 +389,7 @@ void ExaRes_ShowAllResultsInExa (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
+   char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -406,10 +409,10 @@ void ExaRes_ShowAllResultsInExa (void)
 	                     false);	// Do not put form to start new session
 
    /***** List sessions results in exam *****/
-   ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildString (Txt_Results_of_exam_X,Exam.Title),
-			    false);	// Do not list exams to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_exam_X,Exam.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+   free (Title);
    ExaRes_ListAllResultsInExa (&Exams,Exam.ExaCod);
    ExaRes_ShowResultsEnd ();
 
@@ -459,6 +462,7 @@ void ExaRes_ShowAllResultsInSes (void)
    struct Exa_Exams Exams;
    struct Exa_Exam Exam;
    struct ExaSes_Session Session;
+   char *Title;
 
    /***** Reset exams context *****/
    Exa_ResetExams (&Exams);
@@ -483,10 +487,10 @@ void ExaRes_ShowAllResultsInSes (void)
 	                     false);	// Do not put form to start new session
 
    /***** List sessions results in session *****/
-   ExaRes_ShowResultsBegin (&Exams,
-                            Str_BuildString (Txt_Results_of_session_X,Session.Title),
-			    false);	// Do not list exams to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_session_X,Session.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   ExaRes_ShowResultsBegin (&Exams,Title,false);	// Do not list exams to select
+   free (Title);
    ExaRes_ListAllResultsInSes (&Exams,Session.SesCod);
    ExaRes_ShowResultsEnd ();
 

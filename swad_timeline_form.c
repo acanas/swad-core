@@ -299,6 +299,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
    extern const char *Txt_See_the_previous_X_COMMENTS;
    char *OnSubmit;
    const char *Anchor;
+   char *Text;
 
    /***** Begin container which content will be updated via AJAX *****/
    HTM_DIV_Begin ("id=\"%s\" class=\"Tml_RIGHT_WIDTH\"",IdComms);
@@ -347,10 +348,10 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 	    HTM_BUTTON_OnSubmit_Begin (NULL,
 	                               The_ClassFormLinkInBox[Gbl.Prefs.Theme],
 	                               NULL);
-	       Ico_PutIconTextLink ("angle-up.svg",Ico_BLACK,
-				    Str_BuildString (Txt_See_the_previous_X_COMMENTS,
-				                     NumInitialComms));
-	       Str_FreeStrings ();
+	       if (asprintf (&Text,Txt_See_the_previous_X_COMMENTS,NumInitialComms) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Ico_PutIconTextLink ("angle-up.svg",Ico_BLACK,Text);
+	       free (Text);
 	    HTM_BUTTON_End ();
 
 	 /* End form */

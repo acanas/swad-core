@@ -346,13 +346,15 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
 	    },
 	 },
      };
+   char *Title;
 
    /***** Disabled icon to fav/share *****/
    if (NumUsrs)
      {
-      Ico_PutDivIcon ("Tml_ICO_DISABLED",Ico[FavSha].Icon,Ico_BLACK,
-		      Str_BuildString (*Ico[FavSha].Title.WithUsrs,NumUsrs));
-      Str_FreeStrings ();
+      if (asprintf (&Title,*Ico[FavSha].Title.WithUsrs,NumUsrs) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Ico_PutDivIcon ("Tml_ICO_DISABLED",Ico[FavSha].Icon,Ico_BLACK,Title);
+      free (Title);
      }
    else
       Ico_PutDivIcon ("Tml_ICO_DISABLED",Ico[FavSha].Icon,Ico_BLACK,

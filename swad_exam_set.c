@@ -722,6 +722,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    MYSQL_ROW row;
    char *Anchor;
    char StrSetInd[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char *Title;
 
    /***** Trivial check *****/
    if (!NumSets)
@@ -787,12 +788,13 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to move up the question */
 	       if (ICanEditSets && Set.SetInd > 1)
 		 {
+		  if (asprintf (&Title,Txt_Move_up_X,StrSetInd) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActUp_ExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-up.svg",Ico_BLACK,
-						 Str_BuildString (Txt_Move_up_X,
-								  StrSetInd));
-		  Str_FreeStrings ();
+						 Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -801,12 +803,13 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	       /* Put icon to move down the set */
 	       if (ICanEditSets && Set.SetInd < MaxSetInd)
 		 {
+		  if (asprintf (&Title,Txt_Move_down_X,StrSetInd) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (ActDwnExaSet,Anchor,
 						 ExaSet_PutParamsOneSet,Exams,
 						 "arrow-down.svg",Ico_BLACK,
-						 Str_BuildString (Txt_Move_down_X,
-								  StrSetInd));
-		  Str_FreeStrings ();
+						 Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,

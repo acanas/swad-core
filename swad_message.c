@@ -227,6 +227,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
+   char *ClassInput;
 
    Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs =
@@ -371,9 +372,11 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages,
 	 Lay_HelpPlainEditor ();
 
 	 /***** Attached image (optional) *****/
-	 Med_PutMediaUploader (-1,Str_BuildString ("MSG_MED_INPUT %s",
-	                                           The_ClassInput[Gbl.Prefs.Theme]));
-	 Str_FreeStrings ();
+	 if (asprintf (&ClassInput,"MSG_MED_INPUT %s",
+	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Med_PutMediaUploader (-1,ClassInput);
+	 free (ClassInput);
 
 	 /***** Send button *****/
 	 Btn_PutCreateButton (Txt_Send_message);

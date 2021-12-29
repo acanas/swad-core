@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <ctype.h>		// For isalnum, isdigit, etc.
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
 
@@ -510,6 +512,7 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
    extern const char *Txt_Add_this_ID;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
+   char *Title;
    static const struct
      {
       Act_Action_t Remove;
@@ -576,13 +579,15 @@ static void ID_ShowFormChangeUsrID (bool ItsMe,bool IShouldFillInID)
 	   }
 
 	    /* User's ID */
+	    if (asprintf (&Title,UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
+								     Txt_ID_X_not_confirmed,
+			  UsrDat->IDs.List[NumID].ID) < 0)
+	       Err_NotEnoughMemoryExit ();
 	    HTM_SPAN_Begin ("class=\"%s\" title=\"%s\"",
 			    UsrDat->IDs.List[NumID].Confirmed ? "USR_ID_C" :
 								"USR_ID_NC",
-			    Str_BuildString (UsrDat->IDs.List[NumID].Confirmed ? Txt_ID_X_confirmed :
-										 Txt_ID_X_not_confirmed,
-					     UsrDat->IDs.List[NumID].ID));
-	    Str_FreeStrings ();
+			    Title);
+	    free (Title);
 	       HTM_Txt (UsrDat->IDs.List[NumID].ID);
 	       HTM_Txt (UsrDat->IDs.List[NumID].Confirmed ? "&check;" :
 							     "");

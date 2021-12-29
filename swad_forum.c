@@ -862,6 +862,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
    bool Enabled;
+   char *Title;
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -927,28 +928,31 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 					   For_ActionsEnbPstFor[Forums->Forum.Type],
 				 For_FORUM_POSTS_SECTION_ID);
 	       For_PutParamsForum (Forums);
-	       if (Enabled)
-		  Ico_PutIconLink ("eye.svg",Ico_GREEN,
-				   Str_BuildString (Txt_FORUM_Post_X_allowed_Click_to_ban_it,
-				                    PstNum));
-	       else
-		  Ico_PutIconLink ("eye-slash.svg",Ico_RED,
-				   Str_BuildString (Txt_FORUM_Post_X_banned_Click_to_unban_it,
-				                    PstNum));
-	       Str_FreeStrings ();
+	       if (asprintf (&Title,Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+			                      Txt_FORUM_Post_X_banned_Click_to_unban_it,
+			     PstNum) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Ico_PutIconLink (Enabled ? "eye.svg" :
+					  "eye-slash.svg",
+				Enabled ? Ico_GREEN :
+					  Ico_RED,
+				Title);
+	       free (Title);
 	    Frm_EndForm ();
 	   }
 	 else
 	   {
-	    if (Enabled)
-	       Ico_PutIcon ("eye.svg"      ,Ico_GREEN,
-			    Str_BuildString (Txt_FORUM_Post_X_allowed,PstNum),
-			    "ICO_HIDDEN ICO16x16");
-	    else
-	       Ico_PutIcon ("eye-slash.svg",Ico_RED  ,
-			    Str_BuildString (Txt_FORUM_Post_X_banned ,PstNum),
-			    "ICO_HIDDEN ICO16x16");
-	    Str_FreeStrings ();
+	    if (asprintf (&Title,Enabled ? Txt_FORUM_Post_X_allowed :
+					   Txt_FORUM_Post_X_banned,
+			  PstNum) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Ico_PutIcon (Enabled ? "eye.svg" :
+				   "eye-slash.svg",
+			 Enabled ? Ico_GREEN :
+				   Ico_RED,
+			 Title,
+			 "ICO_HIDDEN ICO16x16");
+	    free (Title);
 	   }
 
 	 /***** Form to remove post *****/
@@ -2673,6 +2677,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Send;
+   char *ClassInput;
 
    /***** Begin box *****/
    if (IsReply)
@@ -2743,9 +2748,10 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Med_PutMediaUploader (-1,Str_BuildString ("FOR_MED_INPUT %s",
-	                                        The_ClassInput[Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+      if (asprintf (&ClassInput,"FOR_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Med_PutMediaUploader (-1,ClassInput);
+      free (ClassInput);
 
       /***** Send button *****/
       Btn_PutCreateButton (Txt_Send);

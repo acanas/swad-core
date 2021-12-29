@@ -25,11 +25,14 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 
 #include "swad_database.h"
 #include "swad_degree_config.h"
 #include "swad_degree_database.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"

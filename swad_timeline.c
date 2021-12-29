@@ -127,6 +127,7 @@ mysql> SHOW TABLES LIKE 'tml_%';
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdio.h>		// For asprintf
 
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_global.h"
 #include "swad_message.h"
@@ -270,6 +271,7 @@ void Tml_ShowTimelineUsr (struct Tml_Timeline *Timeline)
 void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
   {
    extern const char *Txt_Timeline_OF_A_USER;
+   char *Title;
 
    /***** Get list of pubications to show in timeline *****/
    Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_USR;
@@ -277,10 +279,10 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
    Tml_Pub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
-   Tml_ShowTimeline (Timeline,NotCod,
-                    Str_BuildString (Txt_Timeline_OF_A_USER,
-				     Gbl.Usrs.Other.UsrDat.FrstName));
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Timeline_OF_A_USER,Gbl.Usrs.Other.UsrDat.FrstName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Tml_ShowTimeline (Timeline,NotCod,Title);
+   free (Title);
 
    /***** Free chained list of publications *****/
    Tml_Pub_FreeListPubs (Timeline);

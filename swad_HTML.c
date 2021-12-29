@@ -1205,7 +1205,8 @@ void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
 	     Attr);
   }
 
-void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,const char *Class)
+void HTM_INPUT_IMAGE (const char *URL,const char *Icon,
+                      const char *Title,const char *Class)
   {
    HTM_TxtF ("<input type=\"image\" src=\"%s",URL);
    if (Icon)
