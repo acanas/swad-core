@@ -2014,7 +2014,7 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
       Deg_GetDataOfDegreeByCod (&Deg);
 
       /***** Contextual menu *****/
-      Mnu_ContextMenuBegin ();
+      HTM_DIV_Begin ("class=\"UPD\"");
 
 	 /* Begin form */
 	 Frm_BeginForm (ActCalPhoDeg);
@@ -2023,10 +2023,11 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 	    Pho_PutHiddenParamOrderDegrees (DegPhotos->HowOrderDegrees);
 	    Set_PutParamsPrefsAboutUsrList ();
 
-	    HTM_BUTTON_Animated_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
+	    /***** Put button to refresh *****/
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Calculate_average_photo_of_THE_DEGREE_X,
 				       The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
 				       NULL);
-	       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
+	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate_average_photo_of_THE_DEGREE_X);
 	    HTM_BUTTON_End ();
 
 	    /* Selector with all degrees with students */
@@ -2062,7 +2063,8 @@ static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPh
 
 	 /* End form and contextual menu */
 	 Frm_EndForm ();
-      Mnu_ContextMenuEnd ();
+
+      HTM_DIV_End ();
 
       /***** Free list of all degrees with students *****/
       Deg_FreeListDegs (&Degs);

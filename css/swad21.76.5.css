@@ -2765,6 +2765,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .BIG_INDEX	{color:#808080; font-size:20pt; font-weight:bold;}
 .BIG_INDEX_RED	{color:#660000; font-size:20pt; font-weight:bold;}
 
+/******************************** Update links *******************************/
+.UPD
+	{
+	padding-top:12px;
+	text-align:center;
+	vertical-align:middle;
+	}
+
 /******************************** Projects ***********************************/
 .PRJ_LST_USR
 	{

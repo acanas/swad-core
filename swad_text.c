@@ -3410,25 +3410,25 @@ const char *Txt_Calculate =
 	"Calcular";
 #endif
 
-const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =
+const char *Txt_Calculate_average_photo_of_THE_DEGREE_X =	// Warning: should end in space
 #if   L==1	// ca
-	"Calcular fotografia mitjana de";
+	"Calcular fotografia mitjana de ";
 #elif L==2	// de
-	"Calculate average photo of";			// Need Übersetzung
+	"Berechnen Sie das durchschnittliche Foto von ";
 #elif L==3	// en
-	"Calculate average photo of";
+	"Calculate average photo of ";
 #elif L==4	// es
-	"Calcular fotograf&iacute;a promedio de";
+	"Calcular fotograf&iacute;a promedio de ";
 #elif L==5	// fr
-	"Calculate average photo of";			// Besoin de traduction
+	"Calculer la photo moyenne de ";
 #elif L==6	// gn
-	"Calcular fotograf&iacute;a promedio de";	// Okoteve traducción
+	"Calcular fotograf&iacute;a promedio de ";	// Okoteve traducción
 #elif L==7	// it
-	"Calcolare la media della foto di";
+	"Calcolare la media della foto di ";
 #elif L==8	// pl
-	"Obliczyc &sacute;rednia zdjecie";
+	"Obliczyc &sacute;rednia zdjecie ";
 #elif L==9	// pt
-	"Calcular a foto m&eacute;dia de";
+	"Calcular a foto m&eacute;dia de ";
 #endif
 
 const char *Txt_Calendar =

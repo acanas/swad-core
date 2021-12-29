@@ -102,9 +102,6 @@ void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const char *Class);
 
-void Ico_PutCalculateIcon (const char *Title);
-void Ico_PutCalculateIconWithText (const char *Text);
-
 void Ico_PutIconRemovalNotAllowed (void);
 
 void Ico_PutIconCut (void);

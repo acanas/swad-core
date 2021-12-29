@@ -509,7 +509,7 @@ static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
    char *OnClick;
 
    /***** Build onclick text *****/
-   if (asprintf (&OnClick,"toggleComments('%s')",UniqueId) < 0)
+   if (asprintf (&OnClick,"toggleComments('%s');return false;",UniqueId) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Link to toggle on/off some divs *****/

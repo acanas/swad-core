@@ -151,7 +151,6 @@ void HTM_INPUT_CHECKBOX (const char *Name,HTM_SubmitOnChange_t SubmitOnChange,
 void HTM_BUTTON_OnMouseDown_Begin (const char *Title,const char *Class);
 void HTM_BUTTON_OnSubmit_Begin (const char *Title,const char *Class,const char *OnSubmit);
 void HTM_BUTTON_OnClick_Begin (const char *Title,const char *Class,const char *OnClick);
-void HTM_BUTTON_Animated_Begin (const char *Title,const char *Class,const char *OnClick);
 void HTM_BUTTON_End (void);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);

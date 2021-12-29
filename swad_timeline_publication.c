@@ -493,35 +493,23 @@ void Tml_Pub_PutLinkToViewNewPubs (void)
 
 void Tml_Pub_PutLinkToViewOldPubs (void)
   {
-   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
 
-   /***** Animated link to view old publications *****/
-   /* Begin container */
+   /***** Begin container *****/
    HTM_DIV_Begin ("id=\"view_old_pubs_container\""
 	          " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\"");
 
-      /* Begin anchor */
-      HTM_A_Begin ("href=\"\" class=\"%s\" onclick=\""
-		   "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
-		   "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
-		   "refreshOldTimeline();"
-		   "return false;\"",
-		   The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
 
-         /* Icon and text */
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-		  "class=\"ICO20x20\" id=\"get_old_timeline\"");
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Txt_See_more,
-		  "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-		  "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
-	 HTM_TxtF ("&nbsp;%s",Txt_See_more);
+      /***** Put button to refresh *****/
+      HTM_BUTTON_OnClick_Begin (Txt_See_more,
+				The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				"refreshOldTimeline();"
+				"return false;");
+	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_See_more);
+      HTM_BUTTON_End ();
 
-      /* End anchor */
-      HTM_A_End ();
-
-   /* End container */
+   /***** End container *****/
    HTM_DIV_End ();
   }
 

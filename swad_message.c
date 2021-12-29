@@ -1520,14 +1520,14 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 
 	    Msg_ShowFormToFilterMsgs (Messages);
 
-	    /***** Contextual menu *****/
-	    Mnu_ContextMenuBegin ();
-	       HTM_BUTTON_Animated_Begin (Txt_Update_messages,
+	    /***** Put button to refresh *****/
+	    HTM_DIV_Begin ("class=\"UPD\"");
+	       HTM_BUTTON_OnSubmit_Begin (Txt_Update_messages,
 					  The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
 					  NULL);
-		  Ico_PutCalculateIconWithText (Txt_Update_messages);	// Animated icon to update messages
+		  Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_messages);
 	       HTM_BUTTON_End ();
-	    Mnu_ContextMenuEnd ();
+	    HTM_DIV_End ();
 
 	 Frm_EndForm ();
 

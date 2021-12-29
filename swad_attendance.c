@@ -2758,24 +2758,20 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	    HTM_TR_End ();
 	   }
 
-	 /***** Put button to refresh *****/
-	 if (NormalView)
-	   {
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
-		  HTM_BUTTON_Animated_Begin (Txt_Update_attendance,
-					     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-					     NULL);
-		     Ico_PutCalculateIconWithText (Txt_Update_attendance);
-		  HTM_BUTTON_End ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-	   }
-
       /***** End table *****/
       HTM_TABLE_End ();
+
+      /***** Put button to refresh *****/
+      if (NormalView)
+	{
+	 HTM_DIV_Begin ("class=\"UPD\"");
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Update_attendance,
+				       The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				       NULL);
+	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_attendance);
+	    HTM_BUTTON_End ();
+	 HTM_DIV_End ();
+	}
 
       /***** End form *****/
       if (NormalView)

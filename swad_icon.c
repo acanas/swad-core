@@ -526,55 +526,6 @@ void Ico_PutIcon (const char *Icon,Ico_Color_t Color,const char *Title,const cha
   }
 
 /*****************************************************************************/
-/********** Put a icon to submit a form.                            **********/
-/********** When clicked, the icon will be replaced by an animation **********/
-/*****************************************************************************/
-
-void Ico_PutCalculateIcon (const char *Title)
-  {
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-
-      /***** Static icon *****/
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif",Title,		// TODO: change name and resolution to refresh64x64.png
-	       "class=\"CONTEXT_ICO_16x16\" id=\"update_%d\"",Gbl.Form.Num);
-
-      /***** Animated icon *****/
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Title,		// TODO: change name and resolution to refreshing64x64.gif
-	       "class=\"CONTEXT_ICO_16x16\" style=\"display:none;\""	// Animated icon hidden
-	       " id=\"updating_%d\"",Gbl.Form.Num);
-
-   /***** End container *****/
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
-/********** Put a icon with a text to submit a form.                **********/
-/********** When clicked, the icon will be replaced by an animation **********/
-/*****************************************************************************/
-
-void Ico_PutCalculateIconWithText (const char *Text)
-  {
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"margin:0 6px 0 0; display:inline;\"");
-
-      /***** Static icon *****/
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif",Text,
-	       "class=\"ICO20x20\" id=\"update_%d\"",Gbl.Form.Num);
-
-      /***** Animated icon *****/
-      HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Text,	// Animated icon
-	       "class=\"ICO20x20\" style=\"display:none;\""	// hidden
-	       " id=\"updating_%d\"",Gbl.Form.Num);
-
-      /***** Text *****/
-      HTM_TxtF ("&nbsp;%s",Text);
-
-   /***** End container *****/
-   HTM_DIV_End ();
-  }
-
-/*****************************************************************************/
 /******** Put a disabled icon indicating that removal is not allowed *********/
 /*****************************************************************************/
 

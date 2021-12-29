@@ -603,21 +603,17 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	       HTM_TR_End ();
 	      }
 
-	    /***** Put button to refresh *****/
-	    HTM_TR_Begin (NULL);
-
-	       HTM_TD_Begin ("colspan=\"3\" class=\"CM\"");
-		  HTM_BUTTON_Animated_Begin (Txt_Update_results,
-					     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-					     NULL);
-		     Ico_PutCalculateIconWithText (Txt_Update_results);
-		  HTM_BUTTON_End ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
-
 	 /***** End table *****/
 	 HTM_TABLE_End ();
+
+	 /***** Put button to refresh *****/
+	 HTM_DIV_Begin ("class=\"UPD\"");
+	    HTM_BUTTON_OnSubmit_Begin (Txt_Update_results,
+				       The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
+				       NULL);
+	       Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_results);
+	    HTM_BUTTON_End ();
+	 HTM_DIV_End ();
 
       /***** End form *****/
       Frm_EndForm ();

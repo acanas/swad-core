@@ -408,12 +408,12 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void *Args),void *Ar
       Grp_FreeListGrpTypesAndGrps ();
 
       /***** Submit button *****/
-      HTM_DIV_Begin ("class=\"CM\" style=\"padding-top:12px;\"");
-	 HTM_BUTTON_Animated_Begin (Txt_Update_users,
+      HTM_DIV_Begin ("class=\"UPD\"");
+	 HTM_BUTTON_OnSubmit_Begin (Txt_Update_users,
 				    The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
 				    Gbl.Action.Act == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
 								     NULL);
-	    Ico_PutCalculateIconWithText (Txt_Update_users);
+	    Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Update_users);
 	 HTM_BUTTON_End ();
       HTM_DIV_End ();
 

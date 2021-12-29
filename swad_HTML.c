@@ -1453,24 +1453,6 @@ void HTM_BUTTON_OnClick_Begin (const char *Title,const char *Class,const char *O
    HTM_BUTTON_NestingLevel++;
   }
 
-void HTM_BUTTON_Animated_Begin (const char *Title,const char *Class,const char *OnClick)
-  {
-   HTM_Txt ("<button type=\"submit\"");
-   if (Title)
-      if (Title[0])
-         HTM_TxtF (" title=\"%s\"",Title);
-   if (Class)
-      if (Class[0])
-         HTM_TxtF (" class=\"%s\"",Class);
-   HTM_Txt (" onclick=\"");
-   if (OnClick)	// JavaScript function to be called before when clicking the button
-      if (OnClick[0])
-         HTM_TxtF ("%s",OnClick);
-   HTM_TxtF ("AnimateIcon(%d);\">",Gbl.Form.Num);
-
-   HTM_BUTTON_NestingLevel++;
-  }
-
 void HTM_BUTTON_End (void)
   {
    if (HTM_BUTTON_NestingLevel == 0)	// No BUTTON open

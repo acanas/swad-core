@@ -778,11 +778,14 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
 
    Frm_BeginForm (ActCalFig);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-      HTM_BUTTON_Animated_Begin (Txt_Calculate,
+
+      /***** Put button to refresh *****/
+      HTM_BUTTON_OnSubmit_Begin (Txt_Calculate,
 				 The_ClassFormLinkOutBoxBold[Gbl.Prefs.Theme],
 				 NULL);
-	 Ico_PutCalculateIconWithText (Txt_Calculate);
+	 Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Txt_Calculate);
       HTM_BUTTON_End ();
+
    Frm_EndForm ();
   }
 
