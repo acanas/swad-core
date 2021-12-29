@@ -122,7 +122,6 @@ void Dat_ResetHour (struct Dat_Hour *Hour)
 void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Settings_dates;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Dates;
@@ -144,11 +143,11 @@ void Dat_PutBoxToSelectDateFormat (void)
 		 Format++)
 	      {
 	       if (Format == Gbl.Prefs.DateFormat)
-		  HTM_LI_Begin ("class=\"%s %s\"",
-		                The_ClassDatStrong[Gbl.Prefs.Theme],
-		                The_ClassBgHighlight[Gbl.Prefs.Theme]);
+		  HTM_LI_Begin ("class=\"%s BG_HIGHLIGHT\"",
+		                The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       else
-		  HTM_LI_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_LI_Begin ("class=\"%s\"",
+		                The_ClassDat[Gbl.Prefs.Theme]);
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("DateFormat",true,
 				   " value=\"%u\"%s",

@@ -106,7 +106,6 @@ static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
 void Ins_SeeInsWithPendingCtrs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutions_with_pending_centers;
    extern const char *Txt_Institution;
@@ -157,7 +156,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    /* Get institution code (row[0]) */
 	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+	    BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? "BG_HIGHLIGHT" :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of institution */
@@ -359,7 +358,6 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
@@ -378,7 +376,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
       TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
-   BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+   BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "BG_HIGHLIGHT" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    HTM_TR_Begin (NULL);

@@ -465,7 +465,7 @@ void Tml_Pub_PutLinkToViewNewPubs (void)
    /* Begin container */
    // div is hidden. When new notes arrive to the client via AJAX, div is shown
    HTM_DIV_Begin ("id=\"view_new_container\""
-		  " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\""
+		  " class=\"Tml_WIDTH Tml_SEP BG_HIGHLIGHT\""
 		  " style=\"display:none;\"");
 
       /* Begin anchor */
@@ -498,7 +498,7 @@ void Tml_Pub_PutLinkToViewOldPubs (void)
 
    /***** Begin container *****/
    HTM_DIV_Begin ("id=\"view_old_pubs_container\""
-	          " class=\"Tml_WIDTH Tml_SEP VERY_LIGHT_BLUE\"");
+	          " class=\"Tml_WIDTH Tml_SEP BG_HIGHLIGHT\"");
 
 
       /***** Put button to refresh *****/

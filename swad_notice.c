@@ -570,11 +570,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
       HTM_ARTICLE_Begin (Anchor);
-      if (Highlight)
-	 HTM_DIV_Begin ("class=\"NOTICE_CONT NOTICE_HIGHLIGHT_%s\"",
-	                The_Colors[Gbl.Prefs.Theme]);
-      else
-	 HTM_DIV_Begin ("class=\"NOTICE_CONT\"");
+         HTM_DIV_Begin ("class=\"NOTICE_CONT%s\"",
+                        Highlight ? " NOTICE_HIGHLIGHT" :
+                        	    "");
      }
 
    /***** Begin yellow note *****/
@@ -614,7 +612,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	    /* Form to view full notice */
 	    Frm_BeginFormAnchor (ActSeeOneNot,Anchor);
 	       Not_PutHiddenParamNotCod (NotCod);
-	       HTM_BUTTON_OnSubmit_Begin (Txt_See_full_notice,"BT_LINK",NULL);
+	       HTM_BUTTON_OnSubmit_Begin (Txt_See_full_notice,"BT_LINK RT",NULL);
 	   }
 	 if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();

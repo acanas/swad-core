@@ -105,7 +105,6 @@ static void Ctr_FormToGoToMap (struct Ctr_Center *Ctr);
 void Ctr_SeeCtrWithPendingDegs (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Centers_with_pending_degrees;
    extern const char *Txt_Center;
@@ -144,7 +143,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	    /* Get center code (row[0]) */
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+	    BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "BG_HIGHLIGHT" :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of center */
@@ -327,7 +326,6 @@ static void Ctr_PutIconToEditCenters (void)
 
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
@@ -351,7 +349,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
       TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
-   BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+   BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "BG_HIGHLIGHT" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    HTM_TR_Begin (NULL);

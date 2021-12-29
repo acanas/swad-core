@@ -153,7 +153,6 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
@@ -179,8 +178,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	       if (MaskAllowedVisibility & (1 << Visibility))
 		 {
 		  if (Visibility == CurrentVisibilityInDB)
-		     HTM_LI_Begin ("class=\"%s %s\"",
-		                   The_ClassDatStrong[Gbl.Prefs.Theme],The_ClassBgHighlight[Gbl.Prefs.Theme]);
+		     HTM_LI_Begin ("class=\"%s BG_HIGHLIGHT\"",
+		                   The_ClassDatStrong[Gbl.Prefs.Theme]);
 		  else
 		     HTM_LI_Begin ("class=\"%s\"",
 		                   The_ClassDat[Gbl.Prefs.Theme]);

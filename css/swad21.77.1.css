@@ -1692,16 +1692,12 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	padding:10px 0;
 	}
-
-.NOTICE_HIGHLIGHT_WHITE		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
-.NOTICE_HIGHLIGHT_GREY		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
-.NOTICE_HIGHLIGHT_PURPLE	{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
-.NOTICE_HIGHLIGHT_BLUE		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
-.NOTICE_HIGHLIGHT_YELLOW	{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
-.NOTICE_HIGHLIGHT_PINK		{background-color:#ddecf1; animation:fadeinnoticelight 2s linear forwards;}
-.NOTICE_HIGHLIGHT_DARK		{background-color:#808080; animation:fadeinnoticedark 2s linear forwards;}
-@keyframes fadeinnoticelight	{to {background-color:white;}}
-@keyframes fadeinnoticedark	{to {background-color:#484848;}}
+.NOTICE_HIGHLIGHT	{animation:fadeinnotice 2s linear forwards;}
+@keyframes fadeinnotice
+	{
+	from	{background-color:rgba(166,196,208,0.33);}
+	to	{background-color:rgba(166,196,208,0);}
+	}
 
 .NOTICE_BOX
 	{
@@ -2387,16 +2383,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .COLOR1_PINK	{background-color:#fbfaf7;}
 .COLOR1_DARK	{background-color:#4c4c4c;}
 
-.LIGHT_GREEN		{background-color:#C0FF40;}
-.VERY_LIGHT_BLUE	{background-color:#EAF3F6;}
+.LIGHT_GREEN	{background-color:#C0FF40;}
 
-.BG_HIGHLIGHT_WHITE	{background-color:#ddecf1;}
-.BG_HIGHLIGHT_GREY	{background-color:#ddecf1;}
-.BG_HIGHLIGHT_PURPLE	{background-color:#ddecf1;}
-.BG_HIGHLIGHT_BLUE	{background-color:#ddecf1;}
-.BG_HIGHLIGHT_YELLOW	{background-color:#ddecf1;}
-.BG_HIGHLIGHT_PINK	{background-color:#ddecf1;}
-.BG_HIGHLIGHT_DARK	{background-color:#707070;}
+.BG_HIGHLIGHT	{background-color:rgba(166,196,208,0.33);}
 
 /********************************* Course info *******************************/
 #crs_info

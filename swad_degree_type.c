@@ -315,7 +315,6 @@ void DegTyp_PutIconToViewDegreeTypes (void)
 
 static void DegTyp_ListDegreeTypesForSeeing (void)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    unsigned NumDegTyp;
    const char *BgColor;
@@ -326,7 +325,7 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
 	NumDegTyp++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       BgColor = (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod ==
-	         Gbl.Hierarchy.Deg.DegTypCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+	         Gbl.Hierarchy.Deg.DegTypCod) ? "BG_HIGHLIGHT" :
                                                 Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /* Begin table row */

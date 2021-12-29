@@ -98,7 +98,6 @@ static void Cty_FormToGoToMap (struct Cty_Countr *Cty);
 void Cty_SeeCtyWithPendingInss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
@@ -144,7 +143,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	    /* Get country code (row[0]) */
 	    Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+	    BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of country */
@@ -401,12 +400,11 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 
 static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    const char *BgColor;
 
-   BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+   BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
 							 Gbl.ColorRows[Gbl.RowEvenOdd];
 
    HTM_TR_Begin (NULL);

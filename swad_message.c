@@ -519,7 +519,6 @@ static void Msg_ShowOneUniqueRecipient (void)
 
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
@@ -538,7 +537,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    /***** Title *****/
    HTM_TR_Begin (NULL);
-      HTM_TH_Begin (1,ColSpan,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+      HTM_TH_Begin (1,ColSpan,"LM BG_HIGHLIGHT");
 	 HTM_LABEL_Begin ("for=\"OtherRecipients\"");
 	    HTM_TxtColon (StdsAndTchsWritten ? Txt_Other_recipients :
 					       Txt_Recipients);

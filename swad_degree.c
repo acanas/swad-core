@@ -109,7 +109,6 @@ static void Deg_EditingDegreeDestructor (void);
 void Deg_SeeDegWithPendingCrss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
@@ -148,7 +147,7 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	    /* Get degree code (row[0]) */
 	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = (Deg.DegCod == Gbl.Hierarchy.Deg.DegCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+	    BgColor = (Deg.DegCod == Gbl.Hierarchy.Deg.DegCod) ? "BG_HIGHLIGHT" :
 								 Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	    /* Get data of degree */
@@ -794,7 +793,6 @@ static void Deg_PutIconToEditDegrees (void)
 
 static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
@@ -822,7 +820,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
       TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
       TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
-   BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+   BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "BG_HIGHLIGHT" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Begin table row *****/

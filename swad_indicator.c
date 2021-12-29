@@ -431,7 +431,6 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
                                               unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
@@ -442,9 +441,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
    const char *Class;
    const char *ClassNormal = Str_BuildString ("RM %s",
                                               The_ClassDatLight[Gbl.Prefs.Theme]);
-   const char *ClassHighlight = Str_BuildString ("RM %s %s",
-                                                 The_ClassDat[Gbl.Prefs.Theme],
-                                                 The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   const char *ClassHighlight = Str_BuildString ("RM %s BG_HIGHLIGHT",
+                                                 The_ClassDat[Gbl.Prefs.Theme]);
 
    /***** Write number of courses with each number of indicators valid *****/
    HTM_TABLE_BeginPadding (2);

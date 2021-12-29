@@ -3851,7 +3851,6 @@ void Usr_ListUsersToSelect (Rol_Role_t Role,struct SelectedUsrs *SelectedUsrs)
 static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
 			                     struct SelectedUsrs *SelectedUsrs)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *ParamName;
@@ -3859,7 +3858,7 @@ static void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH_Begin (1,Usr_GetColumnsForSelectUsrs (),"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+      HTM_TH_Begin (1,Usr_GetColumnsForSelectUsrs (),"LM BG_HIGHLIGHT");
 
 	 HTM_LABEL_Begin (NULL);
 	    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
@@ -4006,21 +4005,20 @@ void Usr_SetUsrDatMainFieldNames (void)
 
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    unsigned NumCol;
 
    HTM_TR_Begin (NULL);
 
       /***** First column used for selection *****/
       if (PutCheckBoxToSelectUsr)
-	 HTM_TH (1,1,NULL,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,NULL,"LM BG_HIGHLIGHT");
 
       /***** Columns for user's data fields *****/
       for (NumCol = 0;
 	   NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
 	   NumCol++)
 	 if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-	    HTM_TH (1,1,Usr_UsrDatMainFieldNames[NumCol],"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	    HTM_TH (1,1,Usr_UsrDatMainFieldNames[NumCol],"LM BG_HIGHLIGHT");
 
    HTM_TR_End ();
   }
@@ -4160,7 +4158,6 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 static void Usr_ListMainDataTchs (Rol_Role_t Role,
 				  bool PutCheckBoxToSelectUsr)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -4177,14 +4174,14 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 
 	 /* First column used for selection  */
 	 if (PutCheckBoxToSelectUsr)
-	    HTM_TH (1,1,NULL,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	    HTM_TH (1,1,NULL,"LM BG_HIGHLIGHT");
 
 	 /* Columns for the data */
 	 for (NumCol = 0;
 	      NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
 	      NumCol++)
 	    if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-	       HTM_TH (1,1,Usr_UsrDatMainFieldNames[NumCol],"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	       HTM_TH (1,1,Usr_UsrDatMainFieldNames[NumCol],"LM BG_HIGHLIGHT");
 
       /* End row */
       HTM_TR_End ();
@@ -4220,7 +4217,6 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
 
 void Usr_ListAllDataGsts (void)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_ID;
    extern const char *Txt_Surname_1;
@@ -4283,7 +4279,7 @@ void Usr_ListAllDataGsts (void)
 							 1);
 		 NumCol < NumColumnsCommonCard;
 		 NumCol++)
-	       HTM_TH (1,1,FieldNames[NumCol],"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	       HTM_TH (1,1,FieldNames[NumCol],"LM BG_HIGHLIGHT");
 
 	 /* End row */
 	 HTM_TR_End ();
@@ -4330,7 +4326,6 @@ void Usr_ListAllDataGsts (void)
 
 void Usr_ListAllDataStds (void)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_ID;
    extern const char *Txt_Surname_1;
@@ -4436,7 +4431,7 @@ void Usr_ListAllDataStds (void)
 							 1);
 		 NumCol < NumColsCommonRecord;
 		 NumCol++)
-	       HTM_TH (1,1,FieldNames[NumCol],"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	       HTM_TH (1,1,FieldNames[NumCol],"LM BG_HIGHLIGHT");
 
 	    /* 2. Columns for the groups */
 	    if (Gbl.Scope.Current == HieLvl_CRS)
@@ -4447,7 +4442,7 @@ void Usr_ListAllDataStds (void)
 		       NumGrpTyp++)
 		     if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
 		       {
-			HTM_TH_Begin (1,1,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+			HTM_TH_Begin (1,1,"LM BG_HIGHLIGHT");
 			   HTM_TxtF ("%s&nbsp;%s",
 				     Txt_Group,
 				     Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
@@ -4460,7 +4455,8 @@ void Usr_ListAllDataStds (void)
 		  for (NumField = 0;
 		       NumField < Gbl.Crs.Records.LstFields.Num;
 		       NumField++)
-		     HTM_TH (1,1,Gbl.Crs.Records.LstFields.Lst[NumField].Name,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+		     HTM_TH (1,1,Gbl.Crs.Records.LstFields.Lst[NumField].Name,
+		             "LM BG_HIGHLIGHT");
 
 		  /* 4. Visibility type for the record fields that depend on the course, in other row */
 		  HTM_TR_End ();
@@ -4472,14 +4468,14 @@ void Usr_ListAllDataStds (void)
 			  NumCol++)
 			if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want it in listing
 			  {
-			   HTM_TD_Begin ("class=\"LM %s\"",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+			   HTM_TD_Begin ("class=\"LM BG_HIGHLIGHT\"");
 			   HTM_TD_End ();
 			  }
 		     for (NumField = 0;
 			  NumField < Gbl.Crs.Records.LstFields.Num;
 			  NumField++)
 		       {
-			HTM_TH_Begin (1,1,"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+			HTM_TH_Begin (1,1,"LM BG_HIGHLIGHT");
 			   HTM_TxtF ("(%s)",
 			             Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
 			HTM_TH_End ();
@@ -4678,7 +4674,6 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
                                      unsigned NumColumns)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    unsigned NumCol;
    struct UsrData UsrDat;
    unsigned NumUsr;
@@ -4690,7 +4685,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 						   1);
 	   NumCol < NumColumns;
 	   NumCol++)
-	 HTM_TH (1,1,FieldNames[NumCol],"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,FieldNames[NumCol],"LM BG_HIGHLIGHT");
 
    HTM_TR_End ();
 
@@ -4836,7 +4831,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 void Usr_ListDataAdms (void)
   {
    extern const char *Hlp_USERS_Administrators;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -4939,7 +4933,7 @@ void Usr_ListDataAdms (void)
 		    NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
 		    NumCol++)
 		  if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-		     HTM_TH (1,1,FieldNames[NumCol],"LM %s",The_ClassBgHighlight[Gbl.Prefs.Theme]);
+		     HTM_TH (1,1,FieldNames[NumCol],"LM BG_HIGHLIGHT");
 
 	    HTM_TR_End ();
 

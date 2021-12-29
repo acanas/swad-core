@@ -147,7 +147,6 @@ void Crs_ShowIntroduction (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *The_ClassFormLinkInBoxBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
@@ -175,9 +174,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ClassHighlight[64];
 
    ClassNormal = The_ClassFormLinkInBox[Gbl.Prefs.Theme];
-   snprintf (ClassHighlight,sizeof (ClassHighlight),"%s %s",
-	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme],
-	     The_ClassBgHighlight[Gbl.Prefs.Theme]);
+   snprintf (ClassHighlight,sizeof (ClassHighlight),"%s BG_HIGHLIGHT",
+	     The_ClassFormLinkInBoxBold[Gbl.Prefs.Theme]);
 
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,
@@ -922,7 +920,6 @@ static void Crs_PutIconToEditCourses (void)
 
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
@@ -959,7 +956,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "BG_HIGHLIGHT" :
 				                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
 	 HTM_TR_Begin (NULL);
@@ -2392,7 +2389,6 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
   {
-   extern const char *The_ClassBgHighlight[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
@@ -2436,7 +2432,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    NumUsrs = NumStds + NumNETs + NumTchs;
    ClassTxt = NumUsrs ? The_ClassDatStrong[Gbl.Prefs.Theme] :
 	                The_ClassDat[Gbl.Prefs.Theme];
-   BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? The_ClassBgHighlight[Gbl.Prefs.Theme] :
+   BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "BG_HIGHLIGHT" :
                                                     Gbl.ColorRows[RowEvenOdd];
 
    /***** Begin row *****/

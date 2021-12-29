@@ -217,17 +217,6 @@ const char *The_ClassDatLight[The_NUM_THEMES] =
    [The_THEME_DARK  ] = "DAT_LIGHT_DARK",
   };
 
-const char *The_ClassBgHighlight[The_NUM_THEMES] =
-  {
-   [The_THEME_WHITE ] = "BG_HIGHLIGHT_WHITE",
-   [The_THEME_GREY  ] = "BG_HIGHLIGHT_GREY",
-   [The_THEME_PURPLE] = "BG_HIGHLIGHT_PURPLE",
-   [The_THEME_BLUE  ] = "BG_HIGHLIGHT_BLUE",
-   [The_THEME_YELLOW] = "BG_HIGHLIGHT_YELLOW",
-   [The_THEME_PINK  ] = "BG_HIGHLIGHT_PINK",
-   [The_THEME_DARK  ] = "BG_HIGHLIGHT_DARK",
-  };
-
 const char *The_ClassInput[The_NUM_THEMES] =
   {
    [The_THEME_WHITE ] = "INPUT_WHITE",
