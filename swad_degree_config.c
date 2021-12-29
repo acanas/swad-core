@@ -318,6 +318,7 @@ static void DegCfg_NumCrss (void)
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
+   char *Title;
 
    /***** Number of courses *****/
    /* Begin table row */
@@ -330,10 +331,10 @@ static void DegCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeCrs);
 	    Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Courses_of_DEGREE_X,
-						        Gbl.Hierarchy.Deg.ShrtName),
-				       "BT_LINK",NULL);
-	    Str_FreeStrings ();
+	    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+	    free (Title);
 	       HTM_Unsigned (Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

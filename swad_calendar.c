@@ -25,12 +25,15 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_call_for_exam.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -116,6 +119,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
+   char *Title;
    char Icon[32 + 1];
 
    Set_BeginOneSettingSelector ();
@@ -134,10 +138,11 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
 	       if (FuncParams)	// Extra parameters depending on the action
 		  FuncParams (Args);
 	       snprintf (Icon,sizeof (Icon),"first-day-of-week-%u.png",FirstDayOfWeek);
-	       Ico_PutSettingIconLink (Icon,Ico_BLACK,
-				       Str_BuildString (Txt_First_day_of_the_week_X,
-							Txt_DAYS_SMALL[FirstDayOfWeek]));
-	       Str_FreeStrings ();
+	       if (asprintf (&Title,Txt_First_day_of_the_week_X,
+	                     Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Ico_PutSettingIconLink (Icon,Ico_BLACK,Title);
+	       free (Title);
 	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }

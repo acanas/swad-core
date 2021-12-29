@@ -192,12 +192,14 @@ void Dat_PutSpanDateFormat (Dat_Format_t Format)
 
 void Dat_PutScriptDateFormat (Dat_Format_t Format)
   {
-   Dat_WriteLocalDateHMSFromUTC (Str_BuildString ("date_format_%u",
-						  (unsigned) Format),
-				 Gbl.StartExecutionTimeUTC,
+   char *Id;
+
+   if (asprintf (&Id,"date_format_%u",(unsigned) Format) < 0)
+      Err_NotEnoughMemoryExit ();
+   Dat_WriteLocalDateHMSFromUTC (Id,Gbl.StartExecutionTimeUTC,
 				 Format,Dat_SEPARATOR_NONE,
 				 false,true,false,0x0);
-   Str_FreeStrings ();
+   free (Id);
   }
 
 /*****************************************************************************/

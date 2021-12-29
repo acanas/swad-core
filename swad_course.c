@@ -836,14 +836,15 @@ static void Crs_ListCourses (void)
    extern const char *Txt_No_courses;
    extern const char *Txt_Create_another_course;
    extern const char *Txt_Create_course;
+   char *Title;
    unsigned Year;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Courses_of_DEGREE_X,
-				       Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsListCourses,NULL,
+   if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Crs_PutIconsListCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       if (Gbl.Hierarchy.Crss.Num)	// There are courses in the current degree
 	{
@@ -1041,6 +1042,7 @@ static void Crs_EditCoursesInternal (void)
   {
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
+   char *Title;
 
    /***** Get list of degrees in this center *****/
    Deg_GetListDegsInCurrentCtr ();
@@ -1052,11 +1054,11 @@ static void Crs_EditCoursesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Courses_of_DEGREE_X,
-				       Gbl.Hierarchy.Deg.ShrtName),
-		 Crs_PutIconsEditingCourses,NULL,
+   if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Deg.ShrtName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Crs_PutIconsEditingCourses,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       /***** Put a form to create or request a new course *****/
       Crs_PutFormToCreateCourse ();
@@ -2155,15 +2157,17 @@ static void Crs_PutButtonToGoToCrs (void)
 static void Crs_PutButtonToRegisterInCrs (void)
   {
    extern const char *Txt_Register_me_in_X;
+   char *TxtButton;
 
    Frm_BeginForm (ActReqSignUp);
       // If the course being edited is different to the current one...
       if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
 	 Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
 
-      Btn_PutCreateButton (Str_BuildString (Txt_Register_me_in_X,
-					    Crs_EditingCrs->ShrtName));
-      Str_FreeStrings ();
+      if (asprintf (&TxtButton,Txt_Register_me_in_X,Crs_EditingCrs->ShrtName) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Btn_PutCreateButton (TxtButton);
+      free (TxtButton);
 
    Frm_EndForm ();
   }
@@ -2265,6 +2269,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    MYSQL_ROW row;
    unsigned NumCrss;
    unsigned NumCrs;
+   char *Txt;
 
    /***** Get courses of a user from database *****/
    NumCrss = Crs_DB_GetCrssOfAUsr (&mysql_res,UsrDat->UsrCod,Role);
@@ -2281,10 +2286,12 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TH_Begin (1,7,"LM");
-	       HTM_TxtColon (Str_BuildString (Txt_USER_in_COURSE,
-					      Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
-								Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]));
-	       Str_FreeStrings ();
+	       if (asprintf (&Txt,Txt_USER_in_COURSE,
+				  Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
+						    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_TxtColon (Txt);
+	       free (Txt);
 	    HTM_TH_End ();
 
 	 HTM_TR_End ();
@@ -2334,6 +2341,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
+   char *Title;
    MYSQL_ROW row;
    unsigned NumCrs;
 
@@ -2342,13 +2350,12 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
      {
       /***** Begin box and table *****/
       /* Number of courses found */
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
-                                               NumCrss,
-					       (NumCrss == 1) ? Txt_course :
-								Txt_courses),
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      if (asprintf (&Title,"%u %s",NumCrss,
+				   NumCrss == 1 ? Txt_course :
+						  Txt_courses) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      free (Title);
 
 	 /***** Heading row *****/
 	 HTM_TR_Begin (NULL);

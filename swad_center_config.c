@@ -762,6 +762,7 @@ static void CtrCfg_NumDegs (void)
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
+   char *Title;
 
    /***** Number of degrees *****/
    HTM_TR_Begin (NULL);
@@ -773,10 +774,10 @@ static void CtrCfg_NumDegs (void)
       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeDeg);
 	    Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Degrees_of_CENTER_X,
-						        Gbl.Hierarchy.Ctr.ShrtName),
-				       "BT_LINK",NULL);
-	    Str_FreeStrings ();
+	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+	    free (Title);
 	       HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

@@ -471,6 +471,7 @@ static void CtyCfg_NumInss (void)
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
+   char *Title;
 
    /***** Number of institutions ******/
    HTM_TR_Begin (NULL);
@@ -482,10 +483,11 @@ static void CtyCfg_NumInss (void)
       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
 	 Frm_BeginFormGoTo (ActSeeIns);
 	    Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-	    HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Institutions_of_COUNTRY_X,
-						        Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-				       "BT_LINK",NULL);
-	    Str_FreeStrings ();
+	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
+	                  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+	    free (Title);
 	       HTM_Unsigned (Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();

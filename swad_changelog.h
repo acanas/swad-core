@@ -602,10 +602,11 @@ TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates()
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.77.1 (2021-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 21.77.2 (2021-12-29)"
 #define CSS_FILE		"swad21.77.1.css"
 #define JS_FILE			"swad21.67.4.js"
 /*
+	Version 21.77.2:  Dec 29, 2021  Changing Str_BuildString for asprintf. (322199 lines)
 	Version 21.77.1:  Dec 29, 2021  Working on design of dark theme. (322161 lines)
 	Version 21.77:    Dec 29, 2021  Animated recycle icon is changed by static icon. (322250 lines)
 	Version 21.76.5:  Dec 29, 2021  Working on design of dark theme. (322313 lines)

@@ -391,6 +391,8 @@ void Agd_ShowUsrAgenda (void)
    extern const char *Txt_Public_agenda_USER;
    struct Agd_Agenda Agenda;
    bool Error = true;
+   bool ItsMe;
+   char *Title;
 
    /***** Get user *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -402,17 +404,18 @@ void Agd_ShowUsrAgenda (void)
 	 Agd_ResetAgenda (&Agenda);
 
 	 /***** Begin box *****/
-	 if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-	    Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-						  Gbl.Usrs.Me.UsrDat.FullName),
-			  Agd_PutIconsMyPublicAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
-			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-	 else
-	    Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-						  Gbl.Usrs.Other.UsrDat.FullName),
-			  Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-         Str_FreeStrings ();
+	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	 if (asprintf (&Title,Txt_Public_agenda_USER,
+	               ItsMe ? Gbl.Usrs.Me.UsrDat.FullName :
+	        	       Gbl.Usrs.Other.UsrDat.FullName) < 0)
+            Err_NotEnoughMemoryExit ();
+	 Box_BoxBegin ("100%",Title,
+		       ItsMe ? Agd_PutIconsMyPublicAgenda :
+			       Agd_PutIconsOtherPublicAgenda,
+		       ItsMe ? Gbl.Usrs.Me.UsrDat.EnUsrCod :
+			       Gbl.Usrs.Other.UsrDat.EnUsrCod,
+		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+         free (Title);
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
@@ -439,6 +442,8 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_Switching_to_LANGUAGE[1 + Lan_NUM_LANGUAGES];
    struct Agd_Agenda Agenda;
+   bool ItsMe;
+   char *Title;
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -454,17 +459,18 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Agd_ResetAgenda (&Agenda);
 
 	    /***** Begin box *****/
-	    if (Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-	       Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-						     Gbl.Usrs.Me.UsrDat.FullName),
-			     Agd_PutIconToViewEditMyFullAgenda,Gbl.Usrs.Me.UsrDat.EnUsrCod,
-			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-	    else
-	       Box_BoxBegin ("100%",Str_BuildString (Txt_Public_agenda_USER,
-						     Gbl.Usrs.Other.UsrDat.FullName),
-			     Agd_PutIconsOtherPublicAgenda,Gbl.Usrs.Other.UsrDat.EnUsrCod,
-			     Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
-            Str_FreeStrings ();
+	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+	    if (asprintf (&Title,Txt_Public_agenda_USER,
+			  ItsMe ? Gbl.Usrs.Me.UsrDat.FullName :
+				  Gbl.Usrs.Other.UsrDat.FullName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Box_BoxBegin ("100%",Title,
+			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
+				  Agd_PutIconsOtherPublicAgenda,
+			  ItsMe ? Gbl.Usrs.Me.UsrDat.EnUsrCod :
+				  Gbl.Usrs.Other.UsrDat.EnUsrCod,
+			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
+            free (Title);
 
 	       /***** Show the current events in the user's agenda *****/
 	       Agd_ShowEventsToday (&Agenda,Agd_ANOTHER_AGENDA_TODAY);
@@ -1638,13 +1644,13 @@ void Agd_ReceiveFormEvent (void)
 void Agd_PrintAgdQRCode (void)
   {
    extern const char *Txt_Where_s_USER;
+   char *Title;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Where_s_USER,
-	                               Gbl.Usrs.Me.UsrDat.FullName),
-                 NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+   free (Title);
 
       /***** Print QR code ****/
       QR_PrintQRCode ();

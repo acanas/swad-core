@@ -709,14 +709,15 @@ static void Deg_ListDegrees (void)
    extern const char *Txt_No_degrees;
    extern const char *Txt_Create_another_degree;
    extern const char *Txt_Create_degree;
+   char *Title;
    unsigned NumDeg;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Degrees_of_CENTER_X,
-				       Gbl.Hierarchy.Ctr.ShrtName),
-		 Deg_PutIconsListingDegrees,NULL,
+   if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Deg_PutIconsListingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       if (Gbl.Hierarchy.Degs.Num)	// There are degrees in the current center
 	{
@@ -894,6 +895,7 @@ static void Deg_EditDegreesInternal (void)
    extern const char *Hlp_CENTER_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
    extern const char *Txt_No_types_of_degree;
+   char *Title;
 
    /***** Get list of degrees in the current center *****/
    Deg_GetListDegsInCurrentCtr ();
@@ -905,11 +907,11 @@ static void Deg_EditDegreesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Degrees_of_CENTER_X,
-				       Gbl.Hierarchy.Ctr.ShrtName),
-		 Deg_PutIconsEditingDegrees,NULL,
+   if (asprintf (&Title,Txt_Degrees_of_CENTER_X,Gbl.Hierarchy.Ctr.ShrtName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Deg_PutIconsEditingDegrees,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       if (Gbl.DegTypes.Num)
 	{
@@ -1803,6 +1805,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
   {
    extern const char *Txt_degree;
    extern const char *Txt_degrees;
+   char *Title;
    unsigned NumDeg;
    struct Deg_Degree Deg;
 
@@ -1811,13 +1814,12 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
      {
       /***** Begin box and table *****/
       /* Number of degrees found */
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
-                                               NumDegs,
-					       (NumDegs == 1) ? Txt_degree :
-								Txt_degrees),
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      if (asprintf (&Title,"%u %s",NumDegs,
+				   NumDegs == 1 ? Txt_degree :
+						  Txt_degrees) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      free (Title);
 
 	 /***** Write heading *****/
 	 Deg_PutHeadDegreesForSeeing ();

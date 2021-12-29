@@ -1924,6 +1924,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
    struct Att_Events Events;
    struct Att_Event Event;
    bool Present;
+   char *ParamName;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
@@ -1940,10 +1941,10 @@ void Att_RegisterMeAsStdInAttEvent (void)
       /***** Get comments for this student *****/
       Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                                                         CommentStd,CommentTch);
-      Par_GetParToHTML (Str_BuildString ("CommentStd%s",
-					 Gbl.Usrs.Me.UsrDat.EnUsrCod),
-			CommentStd,Cns_MAX_BYTES_TEXT);
-      Str_FreeStrings ();
+      if (asprintf (&ParamName,"CommentStd%s",Gbl.Usrs.Me.UsrDat.EnUsrCod) < 0)
+         Err_NotEnoughMemoryExit ();
+      Par_GetParToHTML (ParamName,CommentStd,Cns_MAX_BYTES_TEXT);
+      free (ParamName);
 
       if (Present ||
 	  CommentStd[0] ||
@@ -1986,6 +1987,7 @@ void Att_RegisterStudentsInAttEvent (void)
    unsigned NumUsr;
    const char *Ptr;
    bool Present;
+   char *ParamName;
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
    struct UsrData UsrData;
@@ -2056,11 +2058,15 @@ void Att_RegisterStudentsInAttEvent (void)
 	   NumUsr++)
 	{
 	 /***** Get comments for this student *****/
-	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,CommentStd,CommentTch);
-	 Par_GetParToHTML (Str_BuildString ("CommentTch%s",
-					    Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EnUsrCod),
-			   CommentTch,Cns_MAX_BYTES_TEXT);
-	 Str_FreeStrings ();
+	 Att_CheckIfUsrIsPresentInAttEventAndGetComments (Event.AttCod,
+	                                                  Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod,
+	                                                  CommentStd,
+	                                                  CommentTch);
+	 if (asprintf (&ParamName,"CommentTch%s",
+	               Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].EnUsrCod) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Par_GetParToHTML (ParamName,CommentTch,Cns_MAX_BYTES_TEXT);
+	 free (ParamName);
 
 	 Present = !Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Remove;
 

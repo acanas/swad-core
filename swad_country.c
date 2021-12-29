@@ -543,18 +543,17 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
 void Cty_DrawCountryMap (struct Cty_Countr *Cty,const char *Class)
   {
    char *URL;
+   char *Icon;
 
    /***** Draw country map *****/
    if (Cty_CheckIfCountryPhotoExists (Cty))
      {
-      if (asprintf (&URL,"%s/%s",
-		    Cfg_URL_ICON_COUNTRIES_PUBLIC,
-	            Cty->Alpha2) < 0)
+      if (asprintf (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->Alpha2) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Str_BuildString ("%s.png",Cty->Alpha2),
-	       Cty->Name[Gbl.Prefs.Language],
-	       "class=\"%s\"",Class);
-      Str_FreeStrings ();
+      if (asprintf (&Icon,"%s.png",Cty->Alpha2) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_IMG (URL,Icon,Cty->Name[Gbl.Prefs.Language],"class=\"%s\"",Class);
+      free (Icon);
       free (URL);
      }
    else
@@ -1811,6 +1810,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
   {
    extern const char *Txt_country;
    extern const char *Txt_countries;
+   char *Title;
    unsigned NumCty;
    struct Cty_Countr Cty;
 
@@ -1819,13 +1819,14 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
      {
       /***** Begin box and table *****/
       /* Number of countries found */
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
-                                               NumCtys,
-					       NumCtys == 1 ? Txt_country :
-							      Txt_countries),
+      if (asprintf (&Title,"%u %s",NumCtys,
+				   NumCtys == 1 ? Txt_country :
+						  Txt_countries) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,
 			 NULL,NULL,
 			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      free (Title);
 
 	 /***** Write heading *****/
 	 Cty_PutHeadCountriesForSeeing (false);	// Order not selectable

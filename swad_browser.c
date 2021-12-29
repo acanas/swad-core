@@ -9805,6 +9805,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
    extern const char *Txt_hidden_document;
    extern const char *Txt_hidden_documents;
    MYSQL_ROW row;
+   char *Title;
    unsigned NumDoc;
    unsigned NumDocsNotHidden = 0;
    unsigned NumDocsHidden;
@@ -9814,13 +9815,11 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
      {
       /***** Begin box and table *****/
       /* Number of documents found */
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
-                                               NumDocs,
-					       (NumDocs == 1) ? TitleSingular :
-								TitlePlural),
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      if (asprintf (&Title,"%u %s",NumDocs,NumDocs == 1 ? TitleSingular :
+							  TitlePlural) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      free (Title);
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);

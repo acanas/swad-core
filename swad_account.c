@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -436,13 +438,13 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
+   char *Title;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_New_on_PLATFORM_Sign_up,
-				       Cfg_PLATFORM_SHORT_NAME),
-                 NULL,NULL,
-                 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,NULL,NULL,Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
+   free (Title);
 
       /***** Button to go to request the creation of a new account *****/
       Frm_BeginForm (ActFrmMyAcc);

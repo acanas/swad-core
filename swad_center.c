@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
@@ -242,14 +244,15 @@ static void Ctr_ListCenters (void)
    extern const char *Txt_No_centers;
    extern const char *Txt_Create_another_center;
    extern const char *Txt_Create_center;
+   char *Title;
    unsigned NumCtr;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Centers_of_INSTITUTION_X,
-				       Gbl.Hierarchy.Ins.FullName),
-		 Ctr_PutIconsListingCenters,NULL,
+   if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Ctr_PutIconsListingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       if (Gbl.Hierarchy.Ctrs.Num)	// There are centers in the current institution
 	{
@@ -434,6 +437,7 @@ static void Ctr_EditCentersInternal (void)
    extern const char *Hlp_INSTITUTION_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
    struct Plc_Places Places;
+   char *Title;
 
    /***** Reset places context *****/
    Plc_ResetPlaces (&Places);
@@ -451,11 +455,11 @@ static void Ctr_EditCentersInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Centers_of_INSTITUTION_X,
-				       Gbl.Hierarchy.Ins.FullName),
-		 Ctr_PutIconsEditingCenters,NULL,
+   if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,Gbl.Hierarchy.Ins.FullName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Ctr_PutIconsEditingCenters,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       /***** Put a form to create a new center *****/
       Ctr_PutFormToCreateCenter (&Places);
@@ -1834,6 +1838,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
    extern const char *Txt_center;
    extern const char *Txt_centers;
    unsigned NumCtr;
+   char *Title;
    struct Ctr_Center Ctr;
 
    /***** Query database *****/
@@ -1841,19 +1846,18 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
      {
       /***** Begin box and table *****/
       /* Number of centers found */
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
-                                               NumCtrs,
-					       (NumCtrs == 1) ? Txt_center :
-	                                                        Txt_centers),
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      if (asprintf (&Title,"%u %s",NumCtrs,
+				   NumCtrs == 1 ? Txt_center :
+	                                          Txt_centers) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      free (Title);
 
 	 /***** Write heading *****/
 	 Ctr_PutHeadCentersForSeeing (false);	// Order not selectable
 
 	 /***** List the centers (one row per center) *****/
-	 for (NumCtr = 1;
+	 for (NumCtr  = 1;
 	      NumCtr <= NumCtrs;
 	      NumCtr++)
 	   {
