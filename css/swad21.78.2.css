@@ -1478,83 +1478,103 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 .MONTH
 	{
-	color:#4d88a1;
 	font-size:9pt;
 	white-space:nowrap;
 	text-transform:uppercase;
 	}
-.DAY_WRK_HEAD
-	{
-	color:#4d88a1;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_NO_WRK_HEAD
-	{
-	color:red;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_WRK
-	{
-	color:#202020;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_NO_WORK
-	{
-	color:#c04080;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_HLD
-	{
-	color:red;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_WRK_LIGHT
-	{
-	color:#e0e0e0;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_NO_WORK_LIGHT
-	{
-	color:#ffe0ff;
-	font-size:9pt;
-	text-align:center;
-	}
-.DAY_HLD_LIGHT
-	{
-	color:#ffe0e0;
-	font-size:9pt;
-	text-align:center;
-	}
+
+.DAY_WRK_HEAD_WHITE	{color:#4d88a1;}
+.DAY_WRK_HEAD_GREY	{color:#4d88a1;}
+.DAY_WRK_HEAD_PURPLE	{color:#4d88a1;}
+.DAY_WRK_HEAD_BLUE	{color:#4d88a1;}
+.DAY_WRK_HEAD_YELLOW	{color:#4d88a1;}
+.DAY_WRK_HEAD_PINK	{color:#4d88a1;}
+.DAY_WRK_HEAD_DARK	{color:#8cbcce;}
+
+.DAY_NO_WRK_HEAD_WHITE	{color:red;}
+.DAY_NO_WRK_HEAD_GREY	{color:red;}
+.DAY_NO_WRK_HEAD_PURPLE	{color:red;}
+.DAY_NO_WRK_HEAD_BLUE	{color:red;}
+.DAY_NO_WRK_HEAD_YELLOW	{color:red;}
+.DAY_NO_WRK_HEAD_PINK	{color:red;}
+.DAY_NO_WRK_HEAD_DARK	{color:#ff8080;}
+
+.DAY_WRK_WHITE	{color:#202020;}
+.DAY_WRK_GREY	{color:#202020;}
+.DAY_WRK_PURPLE	{color:#202020;}
+.DAY_WRK_BLUE	{color:#202020;}
+.DAY_WRK_YELLOW	{color:#202020;}
+.DAY_WRK_PINK	{color:#202020;}
+.DAY_WRK_DARK	{color:white;}
+
+.DAY_NO_WORK_WHITE	{color:#c04080;}
+.DAY_NO_WORK_GREY	{color:#c04080;}
+.DAY_NO_WORK_PURPLE	{color:#c04080;}
+.DAY_NO_WORK_BLUE	{color:#c04080;}
+.DAY_NO_WORK_YELLOW	{color:#c04080;}
+.DAY_NO_WORK_PINK	{color:#c04080;}
+.DAY_NO_WORK_DARK	{color:#e0a0c0;}
+
+.DAY_HLD_WHITE	{color:red;}
+.DAY_HLD_GREY	{color:red;}
+.DAY_HLD_PURPLE	{color:red;}
+.DAY_HLD_BLUE	{color:red;}
+.DAY_HLD_YELLOW	{color:red;}
+.DAY_HLD_PINK	{color:red;}
+.DAY_HLD_DARK	{color:#ff8080;}
+
+.DAY_WRK_LIGHT_WHITE	{color:#e0e0e0;}
+.DAY_WRK_LIGHT_GREY	{color:#e0e0e0;}
+.DAY_WRK_LIGHT_PURPLE	{color:#e0e0e0;}
+.DAY_WRK_LIGHT_BLUE	{color:#e0e0e0;}
+.DAY_WRK_LIGHT_YELLOW	{color:#e0e0e0;}
+.DAY_WRK_LIGHT_PINK	{color:#e0e0e0;}
+.DAY_WRK_LIGHT_DARK	{color:#606060;}
+
+.DAY_NO_WORK_LIGHT_WHITE	{color:#ffe0ff;}
+.DAY_NO_WORK_LIGHT_GREY		{color:#ffe0ff;}
+.DAY_NO_WORK_LIGHT_PURPLE	{color:#ffe0ff;}
+.DAY_NO_WORK_LIGHT_BLUE		{color:#ffe0ff;}
+.DAY_NO_WORK_LIGHT_YELLOW	{color:#ffe0ff;}
+.DAY_NO_WORK_LIGHT_PINK		{color:#ffe0ff;}
+.DAY_NO_WORK_LIGHT_DARK		{color:#807080;}
+
+.DAY_HLD_LIGHT_WHITE	{color:#ffe0e0;}
+.DAY_HLD_LIGHT_GREY	{color:#ffe0e0;}
+.DAY_HLD_LIGHT_PURPLE	{color:#ffe0e0;}
+.DAY_HLD_LIGHT_BLUE	{color:#ffe0e0;}
+.DAY_HLD_LIGHT_YELLOW	{color:#ffe0e0;}
+.DAY_HLD_LIGHT_PINK	{color:#ffe0e0;}
+.DAY_HLD_LIGHT_DARK	{color:#807070;}
+
 .DAY
 	{
 	border:solid 1px;
 	border-color:transparent;
+	font-size:9pt;
 	text-align:center;
 	}
 .TODAY
 	{
 	border:solid 1px;
 	border-color:#50b800;
+	font-size:9pt;
 	text-align:center;
 	}
 .DAY_EVENT
 	{
 	border:solid 1px;
-	border-color:white;
-	background-color:#fff080;
+	border-color:rgba(255,255,255,0.5);
+	background-color:rgba(255,240,128,0.5);
+	font-size:9pt;
 	text-align:center;
 	}
 .TODAY_EVENT
 	{
 	border:solid 1px;
 	border-color:#50b800;
-	background-color:#fff080;
+	background-color:rgba(255,240,128,0.5);
+	font-size:9pt;
 	text-align:center;
 	}
 
@@ -1995,7 +2015,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .FRAME_BLUE	{background-color:white;}
 .FRAME_YELLOW	{background-color:white;}
 .FRAME_PINK	{background-color:white;}
-.FRAME_DARK	{background-color:#484848;}
+.FRAME_DARK	{background-color:#444444;}
 
 .FRAME_SHADOW
 	{
@@ -2373,7 +2393,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .COLOR0_BLUE	{background-color:#f4f2ea;}
 .COLOR0_YELLOW	{background-color:#f4f2ea;}
 .COLOR0_PINK	{background-color:#f4f2ea;}
-.COLOR0_DARK	{background-color:#444444;}
+.COLOR0_DARK	{background-color:#404040;}
 
 .COLOR1_WHITE	{background-color:#fbfaf7;}
 .COLOR1_GREY	{background-color:#fbfaf7;}
@@ -2381,7 +2401,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .COLOR1_BLUE	{background-color:#fbfaf7;}
 .COLOR1_YELLOW	{background-color:#fbfaf7;}
 .COLOR1_PINK	{background-color:#fbfaf7;}
-.COLOR1_DARK	{background-color:#4c4c4c;}
+.COLOR1_DARK	{background-color:#484848;}
 
 .LIGHT_GREEN	{background-color:#C0FF40;}
 
@@ -2714,13 +2734,13 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .CLASSPHOTO_DARK	{color:#d0d0d0;}
 
 /************************** Left column menu *********************************/
-.INS_LNK_WHITE,		.MFU_WHITE	{color:#4d88a1;}
-.INS_LNK_GREY,		.MFU_GREY	{color:#4d88a1;}
-.INS_LNK_PURPLE,	.MFU_PURPLE	{color:#4d88a1;}
-.INS_LNK_BLUE,		.MFU_BLUE	{color:#4d88a1;}
-.INS_LNK_YELLOW,	.MFU_YELLOW	{color:#4d88a1;}
-.INS_LNK_PINK,		.MFU_PINK	{color:#4d88a1;}
-.INS_LNK_DARK,		.MFU_DARK	{color:#8cbcce;}
+.INS_LNK_WHITE,		.MFU_WHITE,	.MONTH_WHITE	{color:#4d88a1;}
+.INS_LNK_GREY,		.MFU_GREY,	.MONTH_GREY	{color:#4d88a1;}
+.INS_LNK_PURPLE,	.MFU_PURPLE,	.MONTH_PURPLE	{color:#4d88a1;}
+.INS_LNK_BLUE,		.MFU_BLUE,	.MONTH_BLUE	{color:#4d88a1;}
+.INS_LNK_YELLOW,	.MFU_YELLOW,	.MONTH_YELLOW	{color:#4d88a1;}
+.INS_LNK_PINK,		.MFU_PINK,	.MONTH_PINK	{color:#4d88a1;}
+.INS_LNK_DARK,		.MFU_DARK,	.MONTH_DARK	{color:#8cbcce;}
 
 /*****************************************************************************/
 .MSJ_AVISO		{color:#632921; font-size:12pt;}

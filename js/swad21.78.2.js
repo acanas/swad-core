@@ -1729,8 +1729,9 @@ function disableDetailedClicks () {
 /************************* Draw an academic calendar *************************/
 /*****************************************************************************/
 
-function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
-						   CGI,FormGoToCalendarParams,FormEventParams) {
+function Cal_DrawCalendar (id,FirstDayOfWeek,
+							TimeUTC,CurrentPlcCod,PrintView,Theme,
+							CGI,FormGoToCalendarParams,FormEventParams) {
 	var StartingMonth = [	// Calendar starts one row before current month
 		10,	// January   --> October
 		10,	// February  --> October
@@ -1772,9 +1773,11 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 			MonthId = id + '_month_' + MonthIdNum;
 
 			Gbl_HTMLContent += '<td class="CT" style="width:150px;">';
-			DrawMonth (MonthId,FirstDayOfWeek,Year,Month,CurrentMonth,CurrentDay,
-						CurrentPlcCod,true,PrintView,CGI,
-						FormGoToCalendarParams,FormEventParams);
+			DrawMonth (MonthId,FirstDayOfWeek,
+						Year,Month,
+						CurrentMonth,CurrentDay,
+						CurrentPlcCod,true,PrintView,Theme,
+						CGI,FormGoToCalendarParams,FormEventParams);
 			Gbl_HTMLContent += '</td>';
 			if (++Month == 13) {
 				Month = 1;
@@ -1792,7 +1795,7 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 /***************************** Draw current month ****************************/
 /*****************************************************************************/
 
-function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
+function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,Theme,
 						   CGI,FormGoToCalendarParams,FormEventParams) {
 	var d = new Date();
 	d.setTime(TimeUTC * 1000);
@@ -1800,8 +1803,10 @@ function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
 	var Month = d.getMonth() + 1;
 	var CurrentDay = d.getDate();
 
-	DrawMonth (id,FirstDayOfWeek,Year,Month,Month,CurrentDay,
-				CurrentPlcCod,false,false,
+	DrawMonth (id,FirstDayOfWeek,
+				Year,Month,
+				Month,CurrentDay,
+				CurrentPlcCod,false,false,Theme,
 				CGI,FormGoToCalendarParams,FormEventParams);
 	document.getElementById(id).innerHTML = Gbl_HTMLContent;
 }
@@ -1812,8 +1817,10 @@ function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
 // FirstDayOfWeek == 0 ==> Weeks from Monday to Sunday
 // FirstDayOfWeek == 6 ==> Weeks from Sunday to Saturday
 
-function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
-					CurrentPlcCod,DrawingCalendar,PrintView,
+function DrawMonth (id,FirstDayOfWeek,
+					YearToDraw,MonthToDraw,
+					CurrentMonth,CurrentDay,
+					CurrentPlcCod,DrawingCalendar,PrintView,Theme,
 					CGI,FormGoToCalendarParams,FormEventParams) {
 	var Hld_HOLIDAY = 0;
 	var Hld_NON_SCHOOL_PERIOD = 1;
@@ -1866,13 +1873,14 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 
 	/***** Month name *****/
 	if (DrawingCalendar)
-		Gbl_HTMLContent += '<div class="MONTH">';
+		Gbl_HTMLContent += '<div class="MONTH MONTH_' + Colors[Theme] + '">';
 	else {
 		FormId = id + '_show_calendar';
 		Gbl_HTMLContent += '<form method="post" action="' + CGI + '" id="' + FormId + '">' +
 							FormGoToCalendarParams +
 							'<div class="MONTH">' +
-							'<a href="" class="MONTH" onclick="document.getElementById(\'' + FormId +
+							'<a href="" class="MONTH_' + Colors[Theme] +
+							'" onclick="document.getElementById(\'' + FormId +
 							'\').submit();return false;">';
 	}
 	Gbl_HTMLContent += Months[MonthToDraw - 1] + ' ' + YearToDraw;
@@ -1885,8 +1893,8 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 	Gbl_HTMLContent += '<table class="MONTH_TABLE_DAYS">' + '<tr>';
 	for (DayOfWeek = 0; DayOfWeek < 7; DayOfWeek++)
 		Gbl_HTMLContent += '<td class="' +
-						   ((DayOfWeek == 6 - FirstDayOfWeek) ? 'DAY_NO_WRK_HEAD' :
-													            'DAY_WRK_HEAD') +
+						   ((DayOfWeek == 6 - FirstDayOfWeek) ? 'DAY DAY_NO_WRK_HEAD_' + Colors[Theme] :
+													            'DAY DAY_WRK_HEAD_' + Colors[Theme]) +
 						   '">' +
 						   DAYS_CAPS[(DayOfWeek + FirstDayOfWeek) % 7] +
 						   '</td>';
@@ -1903,8 +1911,8 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 			 DayOfWeek < 7;
 			 DayOfWeek++) {
 			/***** Set class for day being drawn *****/
-			ClassForDay = ((Mon == MonthToDraw) ? 'DAY_WRK' :
-												  'DAY_WRK_LIGHT');
+			ClassForDay = ((Mon == MonthToDraw) ? 'DAY_WRK_' + Colors[Theme] :
+												  'DAY_WRK_LIGHT_' + Colors[Theme]);
 			TextForDay = '';
 
 			/* Check if day is a holiday or a school day */
@@ -1921,16 +1929,16 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 						switch (Hlds[NumHld].HldTyp) {
 							case Hld_HOLIDAY:
 								if (Hlds[NumHld].StartDate == YYYYMMDD) {	// If start date == date being drawn
-									ClassForDay = ((Mon == MonthToDraw) ? 'DAY_HLD' :
-																		  'DAY_HLD_LIGHT');
+									ClassForDay = ((Mon == MonthToDraw) ? 'DAY_HLD_' + Colors[Theme] :
+																		  'DAY_HLD_LIGHT_' + Colors[Theme]);
 									TextForDay = Hlds[NumHld].Name;
 									ContinueSearching = false;
 								}
 								break;
 							case Hld_NON_SCHOOL_PERIOD:
 								if (Hlds[NumHld].EndDate >= YYYYMMDD) {	// If start date <= date being drawn <= end date
-									ClassForDay = ((Mon == MonthToDraw) ? 'DAY_NO_WORK' :
-																		  'DAY_NO_WORK_LIGHT');
+									ClassForDay = ((Mon == MonthToDraw) ? 'DAY_NO_WORK_' + Colors[Theme] :
+																		  'DAY_NO_WORK_LIGHT_' + Colors[Theme]);
 									TextForDay = Hlds[NumHld].Name;
 								}
 								break;
@@ -1939,8 +1947,8 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 
 			/* Day being drawn is sunday? */
 			if (DayOfWeek == 6 - FirstDayOfWeek) // All the sundays are holidays
-				ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD' :
-													 'DAY_HLD_LIGHT';
+				ClassForDay = (Mon == MonthToDraw) ? 'DAY_HLD_' + Colors[Theme] :
+													 'DAY_HLD_LIGHT_' + Colors[Theme];
 
 			/* Date being drawn is today? */
 			IsToday = (Yea == YearToDraw   &&

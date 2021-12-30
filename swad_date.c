@@ -1630,10 +1630,13 @@ void Dat_AssignDate (struct Dat_Date *DateDst,struct Dat_Date *DateSrc)
 
 void Dat_WriteScriptMonths (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_MONTHS_SMALL[12];
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    unsigned NumMonth;
+   The_Theme_t Theme;
 
+   /***** Month names (full) *****/
    HTM_Txt ("\tvar Months = [");
    for (NumMonth = 0;
 	NumMonth < 12;
@@ -1645,6 +1648,7 @@ void Dat_WriteScriptMonths (void)
      }
    HTM_Txt ("];\n");
 
+   /***** Month names (short) *****/
    HTM_Txt ("\tvar MonthsShort = [");
    for (NumMonth = 0;
 	NumMonth < 12;
@@ -1653,6 +1657,18 @@ void Dat_WriteScriptMonths (void)
       if (NumMonth)
 	 HTM_Comma ();
       HTM_TxtF ("'%s'",Txt_MONTHS_SMALL_SHORT[NumMonth]);
+     }
+   HTM_Txt ("];\n");
+
+   /***** Colors for each theme *****/
+   HTM_Txt ("\tvar Colors = [");
+   for (Theme  = (The_Theme_t) 0;
+	Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
+	Theme++)
+     {
+      if (Theme)
+	 HTM_Comma ();
+      HTM_TxtF ("'%s'",The_Colors[Theme]);
      }
    HTM_Txt ("];\n");
   }

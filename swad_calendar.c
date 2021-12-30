@@ -217,12 +217,12 @@ void Cal_DrawCurrentMonth (void)
    /* Write script to draw the month */
    HTM_SCRIPT_Begin (NULL,NULL);
       HTM_Txt ("\tGbl_HTMLContent = '';");
-      HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
+      HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,%u,'%s/%s',",
 		Gbl.Prefs.FirstDayOfWeek,
 		(long) Gbl.StartExecutionTimeUTC,
 		Gbl.Hierarchy.Ctr.PlcCod,
-		Cfg_URL_SWAD_CGI,
-		Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+		Gbl.Prefs.Theme,
+		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
       Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
       HTM_TxtF ("'%s',",ParamsStr);
       Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
@@ -286,14 +286,14 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
       /* Write script to draw the month */
       HTM_SCRIPT_Begin (NULL,NULL);
 	 HTM_Txt ("\tGbl_HTMLContent = '';");
-	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
+	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,%u,'%s/%s',",
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (long) Gbl.StartExecutionTimeUTC,
 		   Gbl.Hierarchy.Ctr.PlcCod,
 		   PrintView ? "true" :
 			       "false",
-		   Cfg_URL_SWAD_CGI,
-		   Lan_STR_LANG_ID[Gbl.Prefs.Language]);
+		   Gbl.Prefs.Theme,
+		   Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 Frm_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
 	 HTM_TxtF ("'%s',",ParamsStr);
 	 Frm_SetParamsForm (ParamsStr,ActSeeDatCfe,true);
