@@ -93,6 +93,7 @@ void Bld_SeeBuildings (void)
   {
    extern const char *Hlp_CENTER_Buildings;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Buildings;
    extern const char *Txt_BUILDINGS_HELP_ORDER[Bld_NUM_ORDERS];
    extern const char *Txt_BUILDINGS_ORDER[Bld_NUM_ORDERS];
@@ -126,7 +127,7 @@ void Bld_SeeBuildings (void)
 		 Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
 		 Order++)
 	      {
-	       HTM_TH_Begin (1,1,"TIT_TBL LM");
+	       HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 		  Frm_BeginForm (ActSeeBld);
 		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		     HTM_BUTTON_OnSubmit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],

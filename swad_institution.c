@@ -443,6 +443,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
@@ -453,8 +454,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    Ins_Order_t Order;
    static const char *ClassTH[Ins_NUM_ORDERS] =
      {
-      [Ins_ORDER_BY_INSTITUTION] = "TIT_TBL LM",
-      [Ins_ORDER_BY_NUM_USRS   ] = "TIT_TBL RM"
+      [Ins_ORDER_BY_INSTITUTION] = "TIT_TBL_%s LM",
+      [Ins_ORDER_BY_NUM_USRS   ] = "TIT_TBL_%s RM"
      };
 
    HTM_TR_Begin (NULL);
@@ -464,7 +465,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	   Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,ClassTH[Order]);
+	 HTM_TH_Begin (1,1,ClassTH[Order],The_Colors[Gbl.Prefs.Theme]);
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);

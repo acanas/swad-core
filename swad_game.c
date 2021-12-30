@@ -225,6 +225,7 @@ void Gam_SeeAllGames (void)
 static void Gam_ListAllGames (struct Gam_Games *Games)
   {
    extern const char *Hlp_ASSESSMENT_Games;
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Games;
    extern const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS];
    extern const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS];
@@ -276,7 +277,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"TIT_TBL LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllGam);
@@ -297,7 +298,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,Txt_Matches,"RM");
+	       HTM_TH (1,1,Txt_Matches,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 
 	    HTM_TR_End ();
 

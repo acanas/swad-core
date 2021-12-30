@@ -508,7 +508,7 @@ static void Prj_ShowPrjsInCurrentPage (void *Projects)
 	       Prj_ShowProjectsHead ((struct Prj_Projects *) Projects,Prj_LIST_PROJECTS);
 
 	       /***** Write all projects *****/
-	       for (NumPrj = Pagination.FirstItemVisible;
+	       for (NumPrj  = Pagination.FirstItemVisible;
 		    NumPrj <= Pagination.LastItemVisible;
 		    NumPrj++)
 		 {
@@ -964,6 +964,7 @@ static Usr_Who_t Prj_GetParamWho (void)
 static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
                                   Prj_ProjectView_t ProjectView)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS];
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
@@ -975,7 +976,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TH (1,1,Txt_No_INDEX,"CM");
+	    HTM_TH (1,1,Txt_No_INDEX,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
 	    break;
 	 default:
 	    break;
@@ -997,7 +998,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"TIT_TBL LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
 	    switch (ProjectView)
 	      {

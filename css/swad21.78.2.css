@@ -1965,7 +1965,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .GREEN_ICO_BLUE		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
 .GREEN_ICO_YELLOW	{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
 .GREEN_ICO_PINK		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
-.GREEN_ICO_DARK		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
+.GREEN_ICO_DARK		{filter: invert(49%) sepia(97%) saturate(781%) hue-rotate(55deg) brightness(95%) contrast(104%);}	/* #50b800 */
 
 .RED_ICO_WHITE		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
 .RED_ICO_GREY		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
@@ -1973,7 +1973,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .RED_ICO_BLUE		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
 .RED_ICO_YELLOW		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
 .RED_ICO_PINK		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
-.RED_ICO_DARK		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
+.RED_ICO_DARK		{filter: invert(51%) sepia(58%) saturate(1457%) hue-rotate(320deg) brightness(126%) contrast(104%);}	/* #ff8080 */
 
 .WHITE_ICO_WHITE	{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
 .WHITE_ICO_GREY		{filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(194deg) brightness(106%) contrast(105%);}	/* #ffffff */
@@ -2504,11 +2504,11 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .LST			{color:#202020; font-size:11pt; white-space:nowrap;}
 .LST_HID		{color:#A0A0A0; font-size:11pt; white-space:nowrap;}
 .LST_REC		{color:#008000; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#89BE87; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#89be87; font-size:11pt; white-space:nowrap;}
 .LST_EDIT		{width:250px; color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_HID		{width:250px; color:#A0A0A0; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_REC		{width:250px; color:#008000; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_REC_HID	{width:250px; color:#89BE87; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_REC_HID	{width:250px; color:#89be87; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_ROWS		{width:30px;  color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 
 .PUBLIC_FILE	{max-width:400px;}
@@ -2743,30 +2743,35 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .INS_LNK_DARK,		.MFU_DARK,	.MONTH_DARK	{color:#8cbcce;}
 
 /*****************************************************************************/
-.MSJ_AVISO		{color:#632921; font-size:12pt;}
-.TIT_TBL		{color:#4d88a1; font-size:12pt; font-weight:bold;}
+.TIT_TBL_WHITE		{color:#4d88a1;}
+.TIT_TBL_GREY		{color:#4d88a1;}
+.TIT_TBL_PURPLE		{color:#4d88a1;}
+.TIT_TBL_BLUE		{color:#4d88a1;}
+.TIT_TBL_YELLOW		{color:#4d88a1;}
+.TIT_TBL_PINK		{color:#4d88a1;}
+.TIT_TBL_DARK		{color:#8cbcce;}
 
 .GRP_TITLE		{color:#4d88a1; font-size:15pt; font-weight:bold;}
 
 .ASG_TITLE		{color:#4d88a1; font-size:15pt; font-weight:bold;}
-.ASG_TITLE_LIGHT	{color:#AFC4CC; font-size:15pt; font-weight:bold;}
+.ASG_TITLE_LIGHT	{color:#afc4cc; font-size:15pt; font-weight:bold;}
 .ASG_LABEL		{color:#4d88a1; font-size:13pt;}
-.ASG_LABEL_LIGHT	{color:#AFC4CC; font-size:13pt;}
+.ASG_LABEL_LIGHT	{color:#afc4cc; font-size:13pt;}
 .ASG_GRP		{color:#4d88a1; font-size:12pt;}
-.ASG_GRP_LIGHT		{color:#AFC4CC; font-size:12pt;}
+.ASG_GRP_LIGHT		{color:#afc4cc; font-size:12pt;}
 
 .DATE_RED		{color:#660000; font-size:13pt;}
 .DATE_RED_LIGHT		{color:#f98a8a; font-size:13pt;}
 .DATE_GREEN		{color:#008000; font-size:13pt;}
-.DATE_GREEN_LIGHT	{color:#89BE87; font-size:13pt;}
+.DATE_GREEN_LIGHT	{color:#89be87; font-size:13pt;}
 .DATE_BLUE		{color:#4d88a1; font-size:13pt;}
-.DATE_BLUE_LIGHT	{color:#AFC4CC; font-size:13pt;}
+.DATE_BLUE_LIGHT	{color:#afc4cc; font-size:13pt;}
 
 .ASG_LST_DATE_GREEN	{color:#008000; font-size:11pt; white-space:nowrap;}
 .ASG_LST_DATE_RED	{color:#660000; font-size:11pt; white-space:nowrap;}
 
 .STATUS_GREEN		{color:#008000; font-size:12pt;}
-.STATUS_GREEN_LIGHT	{color:#89BE87; font-size:12pt;}
+.STATUS_GREEN_LIGHT	{color:#89be87; font-size:12pt;}
 .STATUS_RED		{color:#660000; font-size:12pt;}
 .STATUS_RED_LIGHT	{color:#f98a8a; font-size:12pt;}
 
@@ -3559,7 +3564,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-overflow:ellipsis;
 	}
 .AUTHOR_TXT		{color:#4d88a1; font-size:11pt;}
-.AUTHOR_TXT_LIGHT	{color:#AFC4CC; font-size:11pt;}
+.AUTHOR_TXT_LIGHT	{color:#afc4cc; font-size:11pt;}
 .AUTHOR_TXT_NEW		{color:#4d88a1; font-size:11pt; font-weight:bold;}
 
 /************************** Owner of assignments and works *******************/
@@ -3994,7 +3999,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 .MSG_TIT	{color:#4d88a1; font-size:13pt;}
 .MSG_TIT_NEW	{color:#4d88a1; font-size:13pt; font-weight:bold;}
-.MSG_TIT_REM	{color:#AFC4CC; font-size:13pt;}
+.MSG_TIT_REM	{color:#afc4cc; font-size:13pt;}
 .MSG_TIT_BG
 	{
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */
@@ -4017,7 +4022,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#AFC4CC;
+	color:#afc4cc;
 	font-size:13pt;
 	}
 .MSG_AUT_BG
@@ -4042,7 +4047,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	background-image:-webkit-linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);	/* Safari */
 	background-image:linear-gradient(#f3fcff 0,#f3fcff 80%,white 100%);
 	background-repeat:no-repeat;
-	color:#AFC4CC;
+	color:#afc4cc;
 	font-size:11pt;
 	}
 .MSG_DATE	{color:#4d88a1; font-size:11pt;}
@@ -4273,12 +4278,6 @@ a.PAG:hover, .PAG_CUR
 	border:1px solid silver;
 	border-collapse:collapse;
 	padding:1px;
-	}
-.INDICATORS th
-	{
-	color:#4d88a1;
-	font-size:12pt;
-	font-weight:bold;
 	}
 .INDICATORS_INPUT
 	{

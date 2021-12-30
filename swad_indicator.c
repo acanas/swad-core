@@ -448,9 +448,9 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
    unsigned Ind;
 
    /***** Initialize classes *****/
-   if (asprintf (&ClassNormal   ,"RM %s"             ,The_ClassDatLight[Gbl.Prefs.Theme]) < 0)
+   if (asprintf (&ClassNormal   ,"%s RM"             ,The_ClassDatLight[Gbl.Prefs.Theme]) < 0)
       Err_NotEnoughMemoryExit ();
-   if (asprintf (&ClassHighlight,"RM %s BG_HIGHLIGHT",The_ClassDat     [Gbl.Prefs.Theme]) < 0)
+   if (asprintf (&ClassHighlight,"%s RM BG_HIGHLIGHT",The_ClassDat     [Gbl.Prefs.Theme]) < 0)
       Err_NotEnoughMemoryExit ();
 
    /***** Write number of courses with each number of indicators valid *****/
@@ -509,15 +509,15 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 	 if (PutForm)
 	    HTM_TD_Empty (1);
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Txt (Txt_Total);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_Unsigned (NumCrss);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("(%.1f%%)",100.0);
 	 HTM_TD_End ();
 
@@ -537,6 +537,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Institutional_BR_code;
@@ -570,115 +571,122 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    unsigned NumIndicators;
    struct Ind_IndicatorsCrs IndicatorsCrs;
    long ActCod;
+   char *ClassHead;
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("INDICATORS");
 
       /***** Write table heading *****/
+      if (asprintf (&ClassHead,"TIT_TBL_%s %s",
+		    The_Colors[Gbl.Prefs.Theme],Gbl.ColorRows[0]) < 0)
+	 Err_NotEnoughMemoryExit ();
+
       switch (IndicatorsLayout)
 	{
 	 case Ind_INDICATORS_BRIEF:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (3, 1,Txt_Degree                ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_Course                ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_Institutional_BR_code ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_Web_page_of_the_course,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,11,Txt_Indicators            ,"CM %s",Gbl.ColorRows[0]);
+	       HTM_TH (3, 1,Txt_Degree                ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_Course                ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_Institutional_BR_code ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_Web_page_of_the_course,"%s LM",ClassHead);
+	       HTM_TH (1,11,Txt_Indicators            ,"%s CM",ClassHead);
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (2,1,Txt_No_INDEX,"CT %s",Gbl.ColorRows[0]);
-	       HTM_TH_Begin (1,2,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH (2,1,Txt_No_INDEX,"%s CT",ClassHead);
+	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
 		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
 		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
 		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
 		  HTM_TxtF ("(D) %s",Txt_Materials);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
 		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
 	       HTM_TH_End ();
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (1,1,Txt_YES,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO ,"CM %s",Gbl.ColorRows[0]);
+	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
 	    HTM_TR_End ();
 	    break;
 	 case Ind_INDICATORS_FULL:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (3, 1,Txt_Degree                         ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_Course                         ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_Institutional_BR_code          ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_Web_page_of_the_course         ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (3, 1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,24,Txt_Indicators                     ,"CM %s",Gbl.ColorRows[0]);
+	       HTM_TH (3, 1,Txt_Degree                         ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_Course                         ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_Institutional_BR_code          ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_Web_page_of_the_course         ,"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],"%s LM",ClassHead);
+	       HTM_TH (3, 1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],"%s LM",ClassHead);
+	       HTM_TH (1,24,Txt_Indicators                     ,"%s CM",ClassHead);
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (2,1,Txt_No_INDEX,"CT %s",Gbl.ColorRows[0]);
-	       HTM_TH_Begin (1,5,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH (2,1,Txt_No_INDEX,"CT %s",ClassHead);
+	       HTM_TH_Begin (1,5,"CT %s",ClassHead);
 		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,5,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,5,"CT %s",ClassHead);
 		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,5,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,5,"CT %s",ClassHead);
 		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,4,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,4,"CT %s",ClassHead);
 		  HTM_TxtF ("(D) %s",Txt_Materials);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,4,"CT %s",Gbl.ColorRows[0]);
+	       HTM_TH_Begin (1,4,"CT %s",ClassHead);
 		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
 	       HTM_TH_End ();
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (1,1,Txt_YES                           ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO                            ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_LECTURES]      ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_PRACTICALS]    ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_TEACHING_GUIDE],"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES                           ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO                            ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Assignments                   ,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Files_assignments             ,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Files_works                   ,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES                           ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO                            ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Forum_threads                 ,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Forum_posts                   ,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Messages_sent_by_teachers     ,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES                           ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO                            ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Number_of_files_in_DOCUM_zones,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_Number_of_files_in_SHARE_zones,"RM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_YES                           ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_NO                            ,"CM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_ASSESSMENT]    ,"LM %s",Gbl.ColorRows[0]);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_TEACHING_GUIDE],"LM %s",Gbl.ColorRows[0]);
+	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_LECTURES]      ,"%s LM",ClassHead);
+	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_PRACTICALS]    ,"%s LM",ClassHead);
+	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_TEACHING_GUIDE],"%s LM",ClassHead);
+	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_Assignments                   ,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_Files_assignments             ,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_Files_works                   ,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_Forum_threads                 ,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_Forum_posts                   ,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_Messages_sent_by_teachers     ,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_Number_of_files_in_DOCUM_zones,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_Number_of_files_in_SHARE_zones,"%s RM",ClassHead);
+	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
+	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_ASSESSMENT]    ,"%s LM",ClassHead);
+	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_TEACHING_GUIDE],"%s LM",ClassHead);
 	    HTM_TR_End ();
 	 break;
 	}
 
+      free (ClassHead);
+
       /***** List courses *****/
       mysql_data_seek (mysql_res,0);
-      for (Gbl.RowEvenOdd = 1, NumCrs = 0;
+      for (NumCrs = 0, Gbl.RowEvenOdd = 1;
 	   NumCrs < NumCrss;
 	   NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	{
@@ -707,7 +715,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 		  case Ind_INDICATORS_BRIEF:
 		     HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -715,7 +723,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -723,7 +731,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -731,7 +739,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL LM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL %s LM\"",
 			              Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
@@ -740,7 +748,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_A_End ();
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -748,61 +756,61 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_NO);
@@ -820,7 +828,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
 		     HTM_TR_Begin (NULL);
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -828,7 +836,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -836,7 +844,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -844,7 +852,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL LM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL %s LM\"",
 			              Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
@@ -853,21 +861,21 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_A_End ();
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      NumTchs != 0 ? "DAT_SMALL_GREEN" :
 						     "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (NumTchs);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      NumStds != 0 ? "DAT_SMALL_GREEN" :
 						     "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (NumStds);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      IndicatorsCrs.CourseAllOK ? "DAT_SMALL_GREEN" :
 				      (IndicatorsCrs.CoursePartiallyOK ? "DAT_SMALL" :
 									 "DAT_SMALL_RED"),
@@ -875,151 +883,151 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										   "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										   "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
 									    "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumAssignments);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
 										 "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumFilesAssignments);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
 									   "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumFilesWorks);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumThreads != 0) ? "DAT_SMALL_GREEN" :
 									"DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumThreads);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumPosts != 0) ? "DAT_SMALL_GREEN" :
 								      "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumPosts);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
 									       "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumMsgsSentByTchs);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInDocumentZones);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s RM %s\"",
+			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
 										   "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInSharedZones);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_GREEN %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"DAT_SMALL_RED CM %s\"",
+			HTM_TD_Begin ("class=\"DAT_SMALL_RED %s CM\"",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (!IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.AssessmentSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										  "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("class=\"%s LM %s\"",
+			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? "DAT_SMALL_GREEN" :
 										     "DAT_SMALL_RED",
 				      Gbl.ColorRows[Gbl.RowEvenOdd]);

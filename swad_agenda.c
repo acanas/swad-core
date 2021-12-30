@@ -626,6 +626,7 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
                                        Agd_AgendaType_t AgendaType)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME_HELP[2];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Event;
@@ -639,7 +640,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"TIT_TBL LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 	    switch (AgendaType)
 	      {
 	       case Agd_MY_AGENDA_TODAY:
@@ -676,8 +677,8 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	 HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,Txt_Event   ,"LM");
-      HTM_TH (1,1,Txt_Location,"LM");
+      HTM_TH (1,1,Txt_Event   ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Location,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
    HTM_TR_End ();
   }

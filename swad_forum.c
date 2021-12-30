@@ -1976,6 +1976,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
                                                        Ale_AlertType_t AlertType,const char *Message)
   {
    extern const char *Hlp_COMMUNICATION_Forums_threads;
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME];
@@ -2052,7 +2053,7 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		       Order <= Dat_END_TIME;
 		       Order++)
 		    {
-		     HTM_TH_Begin (1,2,"TIT_TBL CM");
+		     HTM_TH_Begin (1,2,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
 
 			Frm_BeginFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
 					     For_FORUM_THREADS_SECTION_ID);
@@ -2076,10 +2077,10 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		     HTM_TH_End ();
 		    }
 
-		  HTM_TH (1,1,Txt_Number_BR_msgs,"RM");
-		  HTM_TH (1,1,Txt_Unread_BR_msgs,"RM");
-		  HTM_TH (1,1,Txt_WriBRters     ,"RM");
-		  HTM_TH (1,1,Txt_ReaBRders     ,"RM");
+		  HTM_TH (1,1,Txt_Number_BR_msgs,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+		  HTM_TH (1,1,Txt_Unread_BR_msgs,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+		  HTM_TH (1,1,Txt_WriBRters     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+		  HTM_TH (1,1,Txt_ReaBRders     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 
 	       HTM_TR_End ();
 

@@ -514,6 +514,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
                                                 HieLvl_Level_t Scope,
                                                 DegTyp_Order_t SelectedOrder)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS];
    extern const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS];
    DegTyp_Order_t Order;
@@ -527,8 +528,8 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 	   Order <= DegTyp_ORDER_BY_NUM_DEGREES;
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == DegTyp_ORDER_BY_DEGREE_TYPE ? "TIT_TBL LM" :
-							          "TIT_TBL RM");
+	 HTM_TH_Begin (1,1,Order == DegTyp_ORDER_BY_DEGREE_TYPE ? "TIT_TBL_%s LM" :
+							          "TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 
 	    /* Begin form to change order */
 	    Frm_BeginForm (NextAction);

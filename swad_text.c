@@ -28548,7 +28548,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==7	// it
 	"Sondaggio"
 #elif L==8	// pl
-	"Badania"
+	"Ankieta"
 #elif L==9	// pt
 	"Inqu&eacute;rito"
 #endif
@@ -44355,7 +44355,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #elif L==7	// it
 	"Sondaggi"
 #elif L==8	// pl
-	"Badania"
+	"Ankieta"
 #elif L==9	// pt
 	"Inqu&eacute;ritos"
 #endif
@@ -45098,7 +45098,7 @@ const char *Txt_Surname_2 =
 
 const char *Txt_Survey =
 #if   L==1	// ca
-	"Encuesta";	// Necessita traduccio
+	"Enquesta";
 #elif L==2	// de
 	"Umfrage";
 #elif L==3	// en
@@ -45112,7 +45112,7 @@ const char *Txt_Survey =
 #elif L==7	// it
 	"Sondaggio";
 #elif L==8	// pl
-	"Survey";	// Potrzebujesz tlumaczenie
+	"Ankieta";
 #elif L==9	// pt
 	"Inqu&eacute;rito";
 #endif
@@ -45259,7 +45259,7 @@ const char *Txt_Survey_X_removed =	// Warning: it is very important to include %
 #elif L==7	// it
 	"Sondaggio <strong>%s</strong> rimosso.";
 #elif L==8	// pl
-	"Badanie <strong>%s</strong> usuni&eogon;te.";
+	"Ankieta <strong>%s</strong> usuni&eogon;te.";
 #elif L==9	// pt
 	"Inqu&eacute;rito <strong>%s</strong> removido.";
 #endif
@@ -45280,7 +45280,7 @@ const char *Txt_Survey_X_reset =	// Warning: it is very important to include %s 
 #elif L==7	// it
 	"Sondaggio <strong>%s</strong> resettato.";
 #elif L==8	// pl
-	"Badanie <strong>%s</strong> zresetowane.";
+	"Ankieta <strong>%s</strong> zresetowane.";
 #elif L==9	// pt
 	"Inqu&eacute;rito <strong>%s</strong> fixado em zero.";
 #endif

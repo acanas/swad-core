@@ -400,6 +400,7 @@ void Fig_ShowFigures (void)
 static void Fig_GetAndShowUsersStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_users;
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_Number_of_users;
@@ -413,10 +414,10 @@ static void Fig_GetAndShowUsersStats (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Users                                            ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_users                                  ,"RM");
-	 HTM_TH (1,1,Txt_Average_number_of_courses_to_which_a_user_belongs,"RM");
-	 HTM_TH (1,1,Txt_Average_number_of_users_belonging_to_a_course    ,"RM");
+	 HTM_TH (1,1,Txt_Users                                            ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_users                                  ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_of_courses_to_which_a_user_belongs,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_of_users_belonging_to_a_course    ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Figures *****/
@@ -538,6 +539,7 @@ static void Fig_GetAndShowUsersRanking (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_ranking;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
@@ -554,13 +556,13 @@ static void Fig_GetAndShowUsersRanking (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Clicks        ,"CM");
-	 HTM_TH (1,1,Txt_Clicks_per_day,"CM");
-	 HTM_TH (1,1,Txt_Timeline      ,"CM");
-	 HTM_TH (1,1,Txt_Followers     ,"CM");
-	 HTM_TH (1,1,Txt_Downloads     ,"CM");
-	 HTM_TH (1,1,Txt_Forums        ,"CM");
-	 HTM_TH (1,1,Txt_Messages      ,"CM");
+	 HTM_TH (1,1,Txt_Clicks        ,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Clicks_per_day,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Timeline      ,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Followers     ,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Downloads     ,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Forums        ,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Messages      ,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Rankings *****/
@@ -621,7 +623,7 @@ static void Fig_GetAndShowHierarchyStats (void)
       Fig_GetAndShowHierarchyWithCtrs ();
       Fig_GetAndShowHierarchyWithDegs ();
       Fig_GetAndShowHierarchyWithCrss ();
-      for (Role =  Rol_TCH;
+      for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
 	 Fig_GetAndShowHierarchyWithUsrs (Role);
@@ -637,6 +639,7 @@ static void Fig_GetAndShowHierarchyStats (void)
 
 static void Fig_WriteHeadHierarchy (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Countries;
    extern const char *Txt_Institutions;
    extern const char *Txt_Centers;
@@ -647,35 +650,35 @@ static void Fig_WriteHeadHierarchy (void)
 
       HTM_TH_Empty (1);
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIcon ("globe-americas.svg",Ico_BLACK,
 	              Txt_Countries,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Countries);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIcon ("university.svg",Ico_BLACK,
 	              Txt_Institutions,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Institutions);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIcon ("building.svg",Ico_BLACK,
 	              Txt_Centers,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Centers);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIcon ("graduation-cap.svg",Ico_BLACK,
 	              Txt_Degrees,"CONTEXT_ICO_x16");
 	 HTM_BR ();
 	 HTM_Txt (Txt_Degrees);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,
 	              Txt_Courses,"CONTEXT_ICO_x16");
 	 HTM_BR ();
@@ -1194,6 +1197,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
    unsigned NumOrder;
@@ -1243,8 +1247,8 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	    /***** Draw institutions as a list *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH (1,1,Txt_Institution,"LM");
-	       HTM_TH (1,1,TxtFigure,"RM");
+	       HTM_TH (1,1,Txt_Institution,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TH (1,1,TxtFigure,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TR_End ();
 
 	    for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;
@@ -1478,6 +1482,7 @@ static void Fig_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
 
 static void Fig_WriteStatsExpTreesTableHead1 (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_File_zones;
    extern const char *Txt_Courses;
    extern const char *Txt_Groups;
@@ -1488,19 +1493,20 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Size;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_File_zones,"LM");
-      HTM_TH (1,1,Txt_Courses   ,"RM");
-      HTM_TH (1,1,Txt_Groups    ,"RM");
-      HTM_TH (1,1,Txt_Users     ,"RM");
-      HTM_TH (1,1,Txt_Max_levels,"RM");
-      HTM_TH (1,1,Txt_Folders   ,"RM");
-      HTM_TH (1,1,Txt_Files     ,"RM");
-      HTM_TH (1,1,Txt_Size      ,"RM");
+      HTM_TH (1,1,Txt_File_zones,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Courses   ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Groups    ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Users     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Max_levels,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Folders   ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Files     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Size      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
    HTM_TR_End ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead2 (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_File_zones;
    extern const char *Txt_Folders;
    extern const char *Txt_Files;
@@ -1509,21 +1515,21 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,Txt_File_zones,"LM");
+      HTM_TH (1,1,Txt_File_zones,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s/",Txt_Folders);
 	 HTM_BR ();
 	 HTM_Txt (Txt_course);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s/",Txt_Files);
 	 HTM_BR ();
 	 HTM_Txt (Txt_course);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s/",Txt_Size);
 	 HTM_BR ();
 	 HTM_Txt (Txt_course);
@@ -1534,6 +1540,7 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
 
 static void Fig_WriteStatsExpTreesTableHead3 (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_File_zones;
    extern const char *Txt_Folders;
    extern const char *Txt_Files;
@@ -1542,21 +1549,21 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,"LM",Txt_File_zones);
+      HTM_TH (1,1,Txt_File_zones,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s/",Txt_Folders);
 	 HTM_BR ();
 	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s/",Txt_Files);
 	 HTM_BR ();
 	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
       HTM_TH_End ();
 
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("%s/",Txt_Size);
 	 HTM_BR ();
 	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
@@ -1793,6 +1800,7 @@ static void Fig_GetAndShowOERsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_License;
    extern const char *Txt_Number_of_private_files;
@@ -1808,9 +1816,9 @@ static void Fig_GetAndShowOERsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_License                ,"LM");
-	 HTM_TH (1,1,Txt_Number_of_private_files,"RM");
-	 HTM_TH (1,1,Txt_Number_of_public_files ,"RM");
+	 HTM_TH (1,1,Txt_License                ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_private_files,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_public_files ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       for (License  = (Brw_License_t) 0;
@@ -1888,6 +1896,7 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
   {
    extern const char *Hlp_ANALYTICS_Figures_course_programs;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_program_items;
    extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
@@ -1909,9 +1918,9 @@ static void Fig_GetAndShowCourseProgramStats (void)	// TODO: Change function fro
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Number_of_BR_program_items                ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_program_items,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_items_BR_per_course  ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_program_items                ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_program_items,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_items_BR_per_course  ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Write number of assignments *****/
@@ -1943,6 +1952,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_assignments;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
@@ -1966,10 +1976,10 @@ static void Fig_GetAndShowAssignmentsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Number_of_BR_assignments                ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_assignments,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_ASSIG_BR_per_course,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_notifications              ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_assignments                ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_assignments,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_ASSIG_BR_per_course,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications              ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Write number of assignments *****/
@@ -2005,6 +2015,7 @@ static void Fig_GetAndShowProjectsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_projects;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_projects;
    extern const char *Txt_Number_of_BR_courses_with_BR_projects;
@@ -2026,9 +2037,9 @@ static void Fig_GetAndShowProjectsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Number_of_BR_projects                      ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_projects      ,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_projects_BR_per_course,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_projects                      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_projects      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_projects_BR_per_course,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Write number of projects *****/
@@ -2061,6 +2072,7 @@ static void Fig_GetAndShowTestsStats (void)
    extern const char *Hlp_ANALYTICS_Figures_tests;
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
@@ -2083,15 +2095,15 @@ static void Fig_GetAndShowTestsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Type_of_BR_answers                                                                     ,"LM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_BR_with_test_BR_questions                                         ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions                           ,"RM");
-	 HTM_TH (1,1,Txt_Number_BR_of_test_BR_questions                                                         ,"RM");
-	 HTM_TH (1,1,Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course                                ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded                         ,"RM");
-	 HTM_TH (1,1,Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,"RM");
-	 HTM_TH (1,1,Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded              ,"RM");
-	 HTM_TH (1,1,Txt_Average_BR_score_BR_per_question                                                       ,"RM");
+	 HTM_TH (1,1,Txt_Type_of_BR_answers                                                                     ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_BR_with_test_BR_questions                                         ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions                           ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_BR_of_test_BR_questions                                                         ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course                                ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded                         ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded              ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_BR_score_BR_per_question                                                       ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       for (AnsType  = (Qst_AnswerType_t) 0;
@@ -2207,6 +2219,7 @@ static void Fig_GetAndShowExamsStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_exams;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_exams;
    extern const char *Txt_Number_of_BR_courses_with_BR_exams;
@@ -2227,9 +2240,9 @@ static void Fig_GetAndShowExamsStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Number_of_BR_exams                      ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_exams      ,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_exams_BR_per_course,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_exams                      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_exams      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_exams_BR_per_course,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Write number of exams *****/
@@ -2261,6 +2274,7 @@ static void Fig_GetAndShowGamesStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_games;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_games;
    extern const char *Txt_Number_of_BR_courses_with_BR_games;
@@ -2281,9 +2295,9 @@ static void Fig_GetAndShowGamesStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Number_of_BR_games                      ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_games      ,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_games_BR_per_course,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_games                      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_games      ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_games_BR_per_course,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Write number of games *****/
@@ -2316,6 +2330,7 @@ static void Fig_GetAndShowTimelineActivityStats (void)
    extern const char *Hlp_ANALYTICS_Figures_timeline;
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_Number_of_posts;
@@ -2338,11 +2353,11 @@ static void Fig_GetAndShowTimelineActivityStats (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Type                       ,"LM");
-	 HTM_TH (1,1,Txt_Number_of_posts            ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_users            ,"RM");
-	 HTM_TH (1,1,Txt_PERCENT_of_users           ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_posts_BR_per_user,"RM");
+	 HTM_TH (1,1,Txt_Type                       ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_posts            ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_users            ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_PERCENT_of_users           ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_posts_BR_per_user,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Get total number of users *****/
@@ -2472,6 +2487,7 @@ static void Fig_GetAndShowFollowStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_followed_followers;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_Number_of_users;
@@ -2491,9 +2507,9 @@ static void Fig_GetAndShowFollowStats (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Users           ,"LM");
-	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
-	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
+	 HTM_TH (1,1,Txt_Users           ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_users ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_PERCENT_of_users,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Get total number of users *****/
@@ -3273,6 +3289,7 @@ static void Fig_GetAndShowSurveysStats (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_surveys;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_surveys;
    extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
@@ -3301,11 +3318,11 @@ static void Fig_GetAndShowSurveysStats (void)
 
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Number_of_BR_surveys                        ,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_surveys        ,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_surveys_BR_per_course  ,"RM");
-	 HTM_TH (1,1,Txt_Average_number_BR_of_questions_BR_per_survey,"RM");
-	 HTM_TH (1,1,Txt_Number_of_BR_notifications                  ,"RM");
+	 HTM_TH (1,1,Txt_Number_of_BR_surveys                        ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_courses_with_BR_surveys        ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_surveys_BR_per_course  ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Average_number_BR_of_questions_BR_per_survey,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	 HTM_TH (1,1,Txt_Number_of_BR_notifications                  ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
       HTM_TR_End ();
 
       /***** Write number of surveys *****/

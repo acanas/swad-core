@@ -195,6 +195,7 @@ void Svy_SeeAllSurveys (void)
 static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
   {
    extern const char *Hlp_ASSESSMENT_Surveys;
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Surveys;
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -249,7 +250,7 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		    Order <= Dat_END_TIME;
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"TIT_TBL LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllSvy);
@@ -270,13 +271,13 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,Txt_Survey,"LM");
-	       HTM_TH (1,1,Txt_Status,"CM");
+	       HTM_TH (1,1,Txt_Survey,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TH (1,1,Txt_Status,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
 
 	    HTM_TR_End ();
 
 	    /***** Write all surveys *****/
-	    for (NumSvy = Pagination.FirstItemVisible;
+	    for (NumSvy  = Pagination.FirstItemVisible;
 		 NumSvy <= Pagination.LastItemVisible;
 		 NumSvy++)
 	       Svy_ShowOneSurvey (Surveys,Surveys->LstSvyCods[NumSvy - 1],false);

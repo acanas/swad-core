@@ -214,6 +214,7 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
                                   bool PrintView)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Assignment;
@@ -229,7 +230,7 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	   Order++)
 	{
 	 /* Begin head cell */
-	 HTM_TH_Begin (1,1,"TIT_TBL LM");
+	 HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
 	    if (!PrintView)
 	      {
@@ -264,8 +265,8 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	 /* End head cell */
 	 HTM_TH_End ();
 	}
-      HTM_TH (1,1,Txt_Assignment,"LM");
-      HTM_TH (1,1,Txt_Folder    ,"LM");
+      HTM_TH (1,1,Txt_Assignment,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH (1,1,Txt_Folder    ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
    HTM_TR_End ();
   }

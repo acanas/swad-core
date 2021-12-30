@@ -1062,6 +1062,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Show_previous_X_clicks;
    extern const char *Txt_PAGES_Previous;
    extern const char *Txt_Clicks;
@@ -1144,7 +1145,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-	       HTM_TD_Begin ("class=\"TIT_TBL LM\"");
+	       HTM_TD_Begin ("class=\"TIT_TBL_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
 		  if (FirstRow > 1)
 		    {
 		     if (asprintf (&Title,Txt_Show_previous_X_clicks,Stats->RowsPerPage) < 0)
@@ -1182,7 +1183,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-	       HTM_TD_Begin ("class=\"TIT_TBL RM\"");
+	       HTM_TD_Begin ("class=\"TIT_TBL_%s RM\"",The_Colors[Gbl.Prefs.Theme]);
 		  if (LastRow < NumHits)
 		    {
 		     if (asprintf (&Title,Txt_Show_next_X_clicks,Stats->RowsPerPage) < 0)

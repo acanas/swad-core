@@ -96,6 +96,7 @@ void Hld_SeeHolidays (void)
   {
    extern const char *Hlp_INSTITUTION_Holidays;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Holidays;
    extern const char *Txt_HOLIDAYS_HELP_ORDER[2];
    extern const char *Txt_HOLIDAYS_ORDER[2];
@@ -134,7 +135,7 @@ void Hld_SeeHolidays (void)
 		       Order <= Hld_ORDER_BY_START_DATE;
 		       Order++)
 		    {
-		     HTM_TH_Begin (1,1,"TIT_TBL LM");
+		     HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 			Frm_BeginForm (ActSeeHld);
 			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 			   HTM_BUTTON_OnSubmit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],
@@ -148,10 +149,10 @@ void Hld_SeeHolidays (void)
 			Frm_EndForm ();
 		     HTM_TH_End ();
 		    }
-		  HTM_TH_Begin (1,1,"LM");
+		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 		     HTM_TxtF ("&nbsp;%s&nbsp;",Txt_End_date);
 		  HTM_TH_End ();
-		  HTM_TH (1,1,Txt_Holiday,"LM");
+		  HTM_TH (1,1,Txt_Holiday,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
 	       HTM_TR_End ();
 

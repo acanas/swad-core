@@ -100,6 +100,7 @@ void Dpt_SeeDepts (void)
   {
    extern const char *Hlp_INSTITUTION_Departments;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Departments_of_INSTITUTION_X;
    extern const char *Txt_DEPARTMENTS_HELP_ORDER[2];
    extern const char *Txt_DEPARTMENTS_ORDER[2];
@@ -141,8 +142,8 @@ void Dpt_SeeDepts (void)
 	      Order <= Dpt_ORDER_BY_NUM_TCHS;
 	      Order++)
 	   {
-	    HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "TIT_TBL RM" :
-							       "TIT_TBL LM");
+	    HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "TIT_TBL_%s RM" :
+							       "TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
 
 	       Frm_BeginForm (ActSeeDpt);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);

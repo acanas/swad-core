@@ -901,6 +901,7 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
 
 void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
    extern const char *Txt_Date;
@@ -929,7 +930,7 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	   Order <= (Qst_QuestionsOrder_t) (Qst_NUM_TYPES_ORDER_QST - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"TIT_TBL LT");
+	 HTM_TH_Begin (1,1,"TIT_TBL_%s LT",The_Colors[Gbl.Prefs.Theme]);
 
 	    if (Questions->NumQsts > 1)
 	      {
