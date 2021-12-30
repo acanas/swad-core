@@ -6475,7 +6475,17 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
 void Usr_PutWhoIcon (Usr_Who_t Who)
   {
+   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_WHO[Usr_NUM_WHO];
+   static char *Icon[Usr_NUM_WHO] =
+     {
+      [Usr_WHO_UNKNOWN ] = NULL,
+      [Usr_WHO_ME      ] = NULL,
+      [Usr_WHO_SELECTED] = "search.svg",
+      [Usr_WHO_FOLLOWED] = "user-check.svg",
+      [Usr_WHO_ALL     ] = "users.svg",
+     };
+   char *Class;
 
    switch (Who)
      {
@@ -6490,23 +6500,17 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 	                  "ICO_HIGHLIGHT PHOTOR15x20");
 	 break;
       case Usr_WHO_SELECTED:
-         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"search.svg",
-			  Txt_WHO[Who],
-			  "ICO_HIGHLIGHT ICOx20");
-	 break;
       case Usr_WHO_FOLLOWED:
-         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-			  Txt_WHO[Who],
-			  "ICO_HIGHLIGHT ICOx20");
-	 break;
       case Usr_WHO_ALL:
-         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"users.svg",
-			  Txt_WHO[Who],
-			  "ICO_HIGHLIGHT ICOx20");
-	 break;
+	 if (asprintf (&Class,"ICO_HIGHLIGHT ICOx20 %s",
+		       Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon[Who],Txt_WHO[Who],Class);
+         free (Class);
+         break;
       default:
-	Err_WrongWhoExit ();
-	break;
+	 Err_WrongWhoExit ();
+	 break;
      }
   }
 

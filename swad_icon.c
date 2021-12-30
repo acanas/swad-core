@@ -468,19 +468,10 @@ void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
   {
-   char *Class;
-
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-
-      if (asprintf (&Class,"CONTEXT_ICO_x16 %s",
-		    Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      Ico_PutIcon (Icon,Color,Text,Class);
-      free (Class);
-
+      Ico_PutIcon (Icon,Color,Text,"CONTEXT_ICO_x16");
       HTM_TxtF ("&nbsp;%s",Text);
-
    HTM_DIV_End ();
   }
 
@@ -510,7 +501,7 @@ void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title)
 
 void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO_16x16 ICO_HIDDEN");
   }
 
 /*****************************************************************************/
