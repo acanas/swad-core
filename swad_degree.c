@@ -196,9 +196,9 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Deg_Degree *Deg,Act_Action_t Acti
       Deg_PutParamDegCod (Deg->DegCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Deg->FullName),
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Deg->FullName),
                                  "BT_LINK",NULL);
-      Str_FreeStrings ();
+      Str_FreeGoToTitle ();
 
 	 /***** Degree logo and name *****/
 	 Lgo_DrawLogo (HieLvl_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
@@ -872,7 +872,6 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    /***** End table row *****/
    HTM_TR_End ();
 
-   Str_FreeStrings ();
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
@@ -1564,8 +1563,8 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void)
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,
                                   Deg_PutParamGoToDeg,&Deg_EditingDeg->DegCod,
                                   Btn_CONFIRM_BUTTON,
-				  Str_BuildGoToMsg (Deg_EditingDeg->ShrtName));
-      Str_FreeStrings ();
+				  Str_BuildGoToTitle (Deg_EditingDeg->ShrtName));
+      Str_FreeGoToTitle ();
      }
    else
       /***** Alert *****/

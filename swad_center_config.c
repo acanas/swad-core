@@ -597,9 +597,9 @@ static void CtrCfg_Institution (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ins.ShrtName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ins.ShrtName),
 		                             "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 	      }
 
 	    Lgo_DrawLogo (HieLvl_INS,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Ins.ShrtName,

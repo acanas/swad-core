@@ -375,9 +375,9 @@ static void CtyCfg_Platform (bool PrintView)
 	 if (!PrintView)
 	   {
 	    Frm_BeginFormGoTo (ActSeeSysInf);
-	       HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Cfg_PLATFORM_SHORT_NAME),
+	       HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Cfg_PLATFORM_SHORT_NAME),
 					  "BT_LINK",NULL);
-	       Str_FreeStrings ();
+	       Str_FreeGoToTitle ();
 	   }
 	 Ico_PutIcon ("swad64x64.png",Ico_UNCHANGED,Cfg_PLATFORM_FULL_NAME,"ICO20x20");
 	 HTM_NBSP ();

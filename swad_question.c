@@ -648,6 +648,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
    extern const char *Txt_Change_image_video;
    static unsigned UniqueId = 0;
    struct ParamUploadMedia ParamUploadMedia;
+   char *ClassInput;
 
    if (Media->Name[0])
      {
@@ -689,9 +690,10 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
 	    HTM_TxtColonNBSP (Txt_Change_image_video);
 	 HTM_LABEL_End ();
-	 Med_PutMediaUploader (NumMedia,Str_BuildString ("TEST_MED_INPUT %s",
-	                                                 The_ClassInput[Gbl.Prefs.Theme]));
-	 Str_FreeStrings ();
+	 if (asprintf (&ClassInput,"TEST_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Med_PutMediaUploader (NumMedia,ClassInput);
+	 free (ClassInput);
 
       /***** End container *****/
       HTM_DIV_End ();
@@ -699,9 +701,10 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
    else	// No current image
      {
       /***** Attached media *****/
-      Med_PutMediaUploader (NumMedia,Str_BuildString ("TEST_MED_INPUT %s",
-	                                              The_ClassInput[Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+      if (asprintf (&ClassInput,"TEST_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Med_PutMediaUploader (NumMedia,ClassInput);
+      free (ClassInput);
      }
   }
 
@@ -1864,10 +1867,11 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
    /***** Begin box *****/
    if (Question->QstCod > 0)	// The question already has assigned a code
      {
-      Box_BoxBegin (NULL,Str_BuildString (Txt_Question_code_X,Question->QstCod),
-		    Qst_PutIconToRemoveOneQst,&Question->QstCod,
+      if (asprintf (&Title,Txt_Question_code_X,Question->QstCod) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxBegin (NULL,Title,Qst_PutIconToRemoveOneQst,&Question->QstCod,
                     Hlp_ASSESSMENT_Questions_writing_a_question,Box_NOT_CLOSABLE);
-      Str_FreeStrings ();
+      free (Title);
      }
    else
       Box_BoxBegin (NULL,Txt_New_question,

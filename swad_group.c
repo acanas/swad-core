@@ -1431,6 +1431,7 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
    struct GroupType *GrpTyp;
    struct GroupType *GrpTypAux;
    struct Group *Grp;
+   char *Title;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
@@ -1466,15 +1467,16 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 						   ActOpeGrp,
 				       Grp_GROUPS_SECTION_ID);
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
-		     if (Grp->Open)
-			Ico_PutIconLink ("unlock.svg",Ico_GREEN,
-					 Str_BuildString (Txt_Group_X_open_click_to_close_it,
-					                  Grp->GrpName));
-		     else
-			Ico_PutIconLink ("lock.svg",Ico_RED,
-					 Str_BuildString (Txt_Group_X_closed_click_to_open_it,
-					                  Grp->GrpName));
-		     Str_FreeStrings ();
+		     if (asprintf (&Title,Grp->Open ? Txt_Group_X_open_click_to_close_it :
+			                              Txt_Group_X_closed_click_to_open_it,
+			           Grp->GrpName) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Ico_PutIconLink (Grp->Open ? "unlock.svg" :
+			                          "lock.svg",
+			              Grp->Open ? Ico_GREEN :
+			        	          Ico_RED,
+			              Title);
+		     free (Title);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -1484,15 +1486,16 @@ static void Grp_ListGroupsForEdition (const struct Roo_Rooms *Rooms)
 							ActEnaFilZonGrp,
 				       Grp_GROUPS_SECTION_ID);
 		     Grp_PutParamGrpCod (&Grp->GrpCod);
-		     if (Grp->FileZones)
-			Ico_PutIconLink ("folder-open.svg",Ico_GREEN,
-					 Str_BuildString (Txt_File_zones_of_the_group_X_enabled_click_to_disable_them,
-					                  Grp->GrpName));
-		     else
-			Ico_PutIconLink ("folder.svg",Ico_RED,
-					 Str_BuildString (Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
-					                  Grp->GrpName));
-		     Str_FreeStrings ();
+		     if (asprintf (&Title,Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
+			                                   Txt_File_zones_of_the_group_X_disabled_click_to_enable_them,
+			           Grp->GrpName) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Ico_PutIconLink (Grp->FileZones ? "folder-open.svg" :
+			                               "folder.svg",
+			              Grp->FileZones ? Ico_GREEN :
+			        	               Ico_RED,
+			              Title);
+		     free (Title);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 
@@ -2344,6 +2347,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Group_X_open;
    extern const char *Txt_Group_X_closed;
+   char *Title;
    int Vacant;
    Rol_Role_t Role;
    char StrMaxStudents[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
@@ -2351,13 +2355,16 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    /***** Write icon to show if group is open or closed *****/
    HTM_TD_Begin (Highlight ? "class=\"BM BG_HIGHLIGHT\"" :
 			     "class=\"BM\"");
-      if (Grp->Open)
-	 Ico_PutIconOff ("unlock.svg",Ico_GREEN,
-			 Str_BuildString (Txt_Group_X_open  ,Grp->GrpName));
-      else
-	 Ico_PutIconOff ("lock.svg"  ,Ico_RED  ,
-			 Str_BuildString (Txt_Group_X_closed,Grp->GrpName));
-      Str_FreeStrings ();
+      if (asprintf (&Title,Grp->Open ? Txt_Group_X_open :
+				       Txt_Group_X_closed,
+		    Grp->GrpName) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Ico_PutIconOff (Grp->Open ? "unlock.svg" :
+	                          "lock.svg",
+	              Grp->Open ? Ico_GREEN :
+	        	          Ico_RED,
+	              Title);
+      free (Title);
    HTM_TD_End ();
 
    /***** Group name *****/

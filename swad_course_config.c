@@ -251,9 +251,9 @@ static void CrsCfg_Degree (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Deg.ShrtName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Deg.ShrtName),
 					     "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_DEG,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Deg.ShrtName,
 			  20,"LM",true);

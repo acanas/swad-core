@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stddef.h>		// For NULL
+#define _GNU_SOURCE 		// For asprintf
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 
 #include "swad_action.h"
 #include "swad_assignment_database.h"
@@ -104,6 +106,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_Indicators_of_courses;
    extern const char *Txt_Show_more_details;
    struct Ind_Indicators Indicators;
+   char *SelectClass;
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
    unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
@@ -160,14 +163,16 @@ void Ind_ReqIndicatorsCourses (void)
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"LT\"");
+		  if (asprintf (&SelectClass,"INDICATORS_INPUT %s",
+		                The_ClassInput[Gbl.Prefs.Theme]) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
 					       Indicators.DptCod,		// Selected department
-					       Str_BuildString ("INDICATORS_INPUT %s",
-				                                The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
+					       SelectClass,			// Selector class
 					       -1L,				// First option
 					       Txt_Any_department,		// Text when no department selected
 					       true);				// Submit on change
-		  Str_FreeStrings ();
+		  free (SelectClass);
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
@@ -437,12 +442,16 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
    extern const char *Txt_Indicators;
    extern const char *Txt_Courses;
    extern const char *Txt_Total;
-   unsigned Ind;
+   char *ClassNormal;
+   char *ClassHighlight;
    const char *Class;
-   const char *ClassNormal = Str_BuildString ("RM %s",
-                                              The_ClassDatLight[Gbl.Prefs.Theme]);
-   const char *ClassHighlight = Str_BuildString ("RM %s BG_HIGHLIGHT",
-                                                 The_ClassDat[Gbl.Prefs.Theme]);
+   unsigned Ind;
+
+   /***** Initialize classes *****/
+   if (asprintf (&ClassNormal   ,"RM %s"             ,The_ClassDatLight[Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
+   if (asprintf (&ClassHighlight,"RM %s BG_HIGHLIGHT",The_ClassDat     [Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
 
    /***** Write number of courses with each number of indicators valid *****/
    HTM_TABLE_BeginPadding (2);
@@ -516,7 +525,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
 
    HTM_TABLE_End ();
 
-   Str_FreeStrings ();
+   free (ClassHighlight);
+   free (ClassNormal);
   }
 
 /*****************************************************************************/

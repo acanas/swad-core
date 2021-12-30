@@ -215,6 +215,7 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
   {
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_comment;
+   char *ClassTextArea;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
@@ -224,10 +225,11 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	 Tml_Not_PutHiddenParamNotCod (NotCod);
 
 	 /***** Textarea and button *****/
-	 Tml_Pst_PutTextarea (Txt_New_TIMELINE_comment,
-			      Str_BuildString ("Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
-			                       The_ClassInput[Gbl.Prefs.Theme]));
-	 Str_FreeStrings ();
+	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
+	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Tml_Pst_PutTextarea (Txt_New_TIMELINE_comment,ClassTextArea);
+	 free (ClassTextArea);
 
       /***** End form *****/
       Tml_Frm_EndForm ();
@@ -482,6 +484,7 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
 	   .Text = &Txt_See_the_previous_X_COMMENTS,
 	  },
      };
+   char *Text;
 
    /***** Link (icon and text) to show comments ****/
    /* Begin container */
@@ -490,9 +493,10 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
 		  Link[ConExp].Id,IdComms);
 
       /* Icon and text */
-      Tml_Com_PutIconToToggleComms (IdComms,Link[ConExp].Icon,
-				    Str_BuildString (*Link[ConExp].Text,NumComms));
-      Str_FreeStrings ();
+      if (asprintf (&Text,*Link[ConExp].Text,NumComms) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Tml_Com_PutIconToToggleComms (IdComms,Link[ConExp].Icon,Text);
+      free (Text);
 
    /* End container */
    HTM_DIV_End ();
@@ -619,6 +623,7 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
+   char *Class;
 
    /***** Show user's name inside form to go to user's public profile *****/
    /* Begin form */
@@ -626,12 +631,13 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
+      if (asprintf (&Class,"Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
+                    The_ClassDat[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
 							      Txt_Another_user_s_profile,
-			         Str_BuildString ("Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
-			                          The_ClassDat[Gbl.Prefs.Theme]),
-			         NULL);
-      Str_FreeStrings ();
+			         Class,NULL);
+      free (Class);
 	 HTM_Txt (UsrDat->FullName);
       HTM_BUTTON_End ();
 

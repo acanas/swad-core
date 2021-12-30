@@ -747,6 +747,7 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Any_department;
    struct Prj_Filter Filter;
+   char *SelectClass;
 
    /***** Begin form *****/
    HTM_DIV_Begin (NULL);
@@ -762,14 +763,16 @@ static void Prj_ShowFormToFilterByDpt (const struct Prj_Projects *Projects)
 			-1L);
 
 	 /***** Write selector with departments *****/
-	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,		// Departments in current insitution
-				      Projects->Filter.DptCod,		// Selected department
-				      Str_BuildString ("TITLE_DESCRIPTION_WIDTH %s",
-				                       The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
-				      -1L,				// First option
-				      Txt_Any_department,		// Text when no department selected
-				      true);				// Submit on change
-	 Str_FreeStrings ();
+	 if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH %s",
+	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
+				      Projects->Filter.DptCod,	// Selected department
+				      SelectClass,		// Selector class
+				      -1L,			// First option
+				      Txt_Any_department,	// Text when no department selected
+				      true);			// Submit on change
+	 free (SelectClass);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -1040,7 +1043,10 @@ static void Prj_ShowTableAllProjectsHead (void)
    extern const char *Txt_URL;
    Prj_Order_t Order;
    unsigned NumRoleToShow;
-   const char *Class = Str_BuildString ("LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]);
+   char *Class;
+
+   if (asprintf (&Class,"LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
 
    HTM_TR_Begin (NULL);
       for (Order  = (Prj_Order_t) 0;
@@ -1060,7 +1066,7 @@ static void Prj_ShowTableAllProjectsHead (void)
       HTM_TH (1,1,Txt_URL               ,Class);
    HTM_TR_End ();
 
-   Str_FreeStrings ();
+   free (Class);
   }
 
 /*****************************************************************************/
@@ -2090,6 +2096,7 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
    unsigned NumUsrs;
    const char *ClassLabel;
    const char *ClassData;
+   char *Txt;
 
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
@@ -2206,11 +2213,12 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
 		     HTM_TR_Begin (NULL);
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 			   Projects->PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
+			   if (asprintf (&Txt,Txt_Add_USERS,
+			                 Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]) < 0)
+			      Err_NotEnoughMemoryExit ();
 			   Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInPrj],NULL,
-						       Prj_PutCurrentParams,Projects,
-						       Str_BuildString (Txt_Add_USERS,
-									Txt_PROJECT_ROLES_PLURAL_abc[RoleInPrj]));
-			   Str_FreeStrings ();
+						       Prj_PutCurrentParams,Projects,Txt);
+			   free (Txt);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
@@ -2591,6 +2599,7 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
       [Prj_ROLE_EVL] = ActRemEvlPrj,	// Evaluator
      };
    struct Prj_Project Prj;
+   char *TxtButton;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemProject (&Prj);
@@ -2622,15 +2631,15 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Projects,
 	    Frm_BeginForm (ActionRemUsr[RoleInPrj]);
 	       Projects->PrjCod = Prj.PrjCod;
 	       Prj_PutCurrentParams (Projects);
-	       Btn_PutRemoveButton (Str_BuildString (Txt_Remove_USER_from_this_project,
-						     Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]));
-	       Str_FreeStrings ();
+	       if (asprintf (&TxtButton,Txt_Remove_USER_from_this_project,
+	                     Txt_PROJECT_ROLES_SINGUL_abc[RoleInPrj][Gbl.Usrs.Other.UsrDat.Sex]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Btn_PutRemoveButton (TxtButton);
+	       free (TxtButton);
 	    Frm_EndForm ();
 
 	 /* End alert */
-	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,
-	                          NULL,NULL,
-	                          Btn_NO_BUTTON,NULL);
+	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 	}
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -3316,6 +3325,7 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
    Prj_Proposal_t Proposal;
    unsigned ProposalUnsigned;
    unsigned NumRoleToShow;
+   char *SelectClass;
 
    /***** Begin project box *****/
    if (ItsANewProject)
@@ -3385,14 +3395,16 @@ static void Prj_PutFormProject (struct Prj_Projects *Projects,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"LT\"");
+	       if (asprintf (&SelectClass,"TITLE_DESCRIPTION_WIDTH %s",
+	                     The_ClassInput[Gbl.Prefs.Theme]) < 0)
+		  Err_NotEnoughMemoryExit ();
 	       Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
 					    Prj->DptCod,		// Selected department
-					    Str_BuildString ("TITLE_DESCRIPTION_WIDTH %s",
-				                             The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
+					    SelectClass,		// Selector class
 					    0,				// First option
 					    Txt_Another_department,	// Text when no department selected
 					    false);			// Don't submit on change
-	       Str_FreeStrings ();
+	       free (SelectClass);
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

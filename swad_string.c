@@ -2658,76 +2658,28 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
   }
 
 /*****************************************************************************/
-/********************* Build a "Go to <where>" message ***********************/
+/********************** Build a "Go to <where>" title ************************/
 /*****************************************************************************/
 // Where is a hierarchy member (country, institution, center, degree or course
-// Str_FreeStrings() must be called after calling this function
+// Str_FreeGoToTitle() must be called after calling this function
 
-char *Str_BuildGoToMsg (const char *Where)
+static char *Str_Title = NULL;
+
+char *Str_BuildGoToTitle (const char *Where)
   {
    extern const char *Txt_Go_to_X;
 
-   return Str_BuildString (Txt_Go_to_X,Where);
+   if (Str_Title != NULL)
+      Err_ShowErrorAndExit ("Can not build go to title.");
+
+   if (asprintf (&Str_Title,Txt_Go_to_X,Where) < 0)
+      Err_NotEnoughMemoryExit ();
+
+   return Str_Title;
   }
 
-/*****************************************************************************/
-/******************** Build and free a text with format **********************/
-/*****************************************************************************/
-
-#define Str_MAX_STRINGS 10
-static struct
+void Str_FreeGoToTitle (void)
   {
-   size_t Num;
-   char *Str[Str_MAX_STRINGS];
-  } Str_Strings =
-  {
-   .Num = 0,
-  };
-
-// Str_FreeStrings() must be called after calling these functions
-
-char *Str_BuildString (const char *fmt,...)
-  {
-   va_list ap;
-   int NumBytesPrinted;
-   char *Ptr = "";
-
-   if (fmt)
-     {
-      if (fmt[0])
-	{
-	 if (Str_Strings.Num >= Str_MAX_STRINGS)
-	    Err_NotEnoughMemoryExit ();
-
-	 if (Str_Strings.Str[Str_Strings.Num] != NULL)
-	    Err_NotEnoughMemoryExit ();
-
-	 va_start (ap,fmt);
-	 NumBytesPrinted = vasprintf (&Str_Strings.Str[Str_Strings.Num],fmt,ap);
-	 va_end (ap);
-	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
-	    Err_NotEnoughMemoryExit ();
-
-	 Ptr = Str_Strings.Str[Str_Strings.Num];
-
-         Str_Strings.Num++;
-	}
-     }
-
-   return Ptr;
-  }
-
-void Str_FreeStrings (void)
-  {
-   size_t i;
-
-   for (i  = Str_Strings.Num;
-	i != 0;
-	i--)
-     {
-      free (Str_Strings.Str[i - 1]);
-      Str_Strings.Str[i - 1] = NULL;
-     }
-
-   Str_Strings.Num = 0;
+   free (Str_Title);
+   Str_Title = NULL;
   }

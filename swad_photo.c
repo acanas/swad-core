@@ -2387,9 +2387,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (const struct Deg_Degree *Deg,
      {
       Frm_BeginFormGoTo (ActSeeDegInf);
 	 Deg_PutParamDegCod (Deg->DegCod);
-	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Deg->FullName),
+	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Deg->FullName),
 	                            "BT_LINK",NULL);
-	 Str_FreeStrings ();
+	 Str_FreeGoToTitle ();
      }
 
    /***** Check if photo of degree can be shown *****/

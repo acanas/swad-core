@@ -2789,6 +2789,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
    Rol_Role_t Role;
    unsigned RoleUnsigned;
    Usr_Sex_t Sex;
+   char *Label;
 
    HTM_TR_Begin (NULL);
 
@@ -3001,9 +3002,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	{
 	 /***** Form to select a sex *****/
 	 /* Label */
-	 Frm_LabelColumn ("REC_C1_BOT RM","",
-			  Str_BuildString ("%s*",Txt_Sex));
-	 Str_FreeStrings ();
+	 if (asprintf (&Label,"%s*",Txt_Sex) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Frm_LabelColumn ("REC_C1_BOT RM","",Label);
+	 free (Label);
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3045,15 +3047,17 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,bool PutForm)
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Surname_1;
+   char *Label;
 
    HTM_TR_Begin (NULL);
 
       /* Label */
       if (PutForm)
 	{
-	 Frm_LabelColumn ("REC_C1_BOT RM","Surname1",
-			  Str_BuildString ("%s*",Txt_Surname_1));
-	 Str_FreeStrings ();
+	 if (asprintf (&Label,"%s*",Txt_Surname_1) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Frm_LabelColumn ("REC_C1_BOT RM","Surname1",Label);
+	 free (Label);
 	}
       else
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Surname_1);
@@ -3122,15 +3126,17 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,bool PutForm)
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_First_name;
+   char *Label;
 
    HTM_TR_Begin (NULL);
 
       /* Label */
       if (PutForm)
 	{
-	 Frm_LabelColumn ("REC_C1_BOT RM","FirstName",
-			  Str_BuildString ("%s*",Txt_First_name));
-	 Str_FreeStrings ();
+	 if (asprintf (&Label,"%s*",Txt_First_name) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Frm_LabelColumn ("REC_C1_BOT RM","FirstName",Label);
+	 free (Label);
 	}
       else
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_First_name);
@@ -3165,6 +3171,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Another_country;
+   char *Label;
    unsigned NumCty;
 
    /***** If list of countries is empty, try to get it *****/
@@ -3176,9 +3183,10 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,bool PutForm)
       /* Label */
       if (PutForm)
 	{
-	 Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",
-			  Str_BuildString ("%s*",Txt_Country));
-	 Str_FreeStrings ();
+	 if (asprintf (&Label,"%s*",Txt_Country) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Frm_LabelColumn ("REC_C1_BOT RM","OthCtyCod",Label);
+	 free (Label);
 	}
       else
 	 Frm_LabelColumn ("REC_C1_BOT RM",NULL,Txt_Country);
@@ -3773,6 +3781,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    unsigned NumIns;
    unsigned NumCtr;
    char StrRecordWidth[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char *Label;
+   char *SelectClass;
 
    /***** Get list of countries *****/
    Cty_GetBasicListOfCountries ();
@@ -3792,9 +3802,10 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",
-			     Str_BuildString ("%s*",Txt_Country));
-	    Str_FreeStrings ();
+	    if (asprintf (&Label,"%s*",Txt_Country) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM","InsCtyCod",Label);
+	    free (Label);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3825,9 +3836,10 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	 HTM_TR_Begin (NULL);
 
 	    /* Label */
-	    Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",
-			     Str_BuildString ("%s*",Txt_Institution));
-	    Str_FreeStrings ();
+	    if (asprintf (&Label,"%s*",Txt_Institution) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Frm_LabelColumn ("REC_C1_BOT RM","OthInsCod",Label);
+	    free (Label);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3867,9 +3879,10 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",
-				Str_BuildString ("%s*",Txt_Center));
-	       Str_FreeStrings ();
+	       if (asprintf (&Label,"%s*",Txt_Center) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Frm_LabelColumn ("REC_C1_BOT RM","OthCtrCod",Label);
+	       free (Label);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
@@ -3907,21 +3920,24 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,
-				Str_BuildString ("%s*",Txt_Department));
-	       Str_FreeStrings ();
+	       if (asprintf (&Label,"%s*",Txt_Department) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Frm_LabelColumn ("REC_C1_BOT RM",Dpt_PARAM_DPT_COD_NAME,Label);
+	       free (Label);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
 		  Frm_BeginFormAnchor (ActChgMyDpt,Rec_MY_INS_CTR_DPT_ID);
+		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT %s",
+		                   The_ClassInput[Gbl.Prefs.Theme]) < 0)
+			Err_NotEnoughMemoryExit ();
 		     Dpt_WriteSelectorDepartment (Gbl.Usrs.Me.UsrDat.InsCod,		// Departments in my institution
 						  Gbl.Usrs.Me.UsrDat.Tch.DptCod,	// Selected department
-						  Str_BuildString ("REC_C2_BOT_INPUT %s",
-						                   The_ClassInput[Gbl.Prefs.Theme]),	// Selector class
+						  SelectClass,				// Selector class
 						  -1L,					// First option
 						  "",					// Text when no department selected
 						  true);				// Submit on change
-		     Str_FreeStrings ();
+		     free (SelectClass);
 		  Frm_EndForm ();
 	       HTM_TD_End ();
 

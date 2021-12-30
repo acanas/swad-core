@@ -25,8 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
@@ -468,14 +470,15 @@ void Tag_ShowFormEditTags (void)
 static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
   {
    extern const char *Txt_Tag_X_not_allowed_Click_to_allow_it;
+   char *Title;
 
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActEnaTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,
-			  Str_BuildString (Txt_Tag_X_not_allowed_Click_to_allow_it,
-					   TagTxt));
-	 Str_FreeStrings ();
+	 if (asprintf (&Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Ico_PutIconLink ("eye-slash.svg",Ico_RED,Title);
+	 free (Title);
       Frm_EndForm ();
    HTM_TD_End ();
   }
@@ -487,14 +490,15 @@ static void Tag_PutIconEnable (long TagCod,const char *TagTxt)
 static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
   {
    extern const char *Txt_Tag_X_allowed_Click_to_disable_it;
+   char *Title;
 
    HTM_TD_Begin ("class=\"BM\"");
       Frm_BeginForm (ActDisTag);
 	 Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
-	 Ico_PutIconLink ("eye.svg",Ico_GREEN,
-			  Str_BuildString (Txt_Tag_X_allowed_Click_to_disable_it,
-					   TagTxt));
-	 Str_FreeStrings ();
+	 if (asprintf (&Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Ico_PutIconLink ("eye.svg",Ico_GREEN,Title);
+	 free (Title);
       Frm_EndForm ();
    HTM_TD_End ();
   }

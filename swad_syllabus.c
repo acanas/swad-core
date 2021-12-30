@@ -25,13 +25,15 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <unistd.h>		// For SEEK_SET
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free ()
 #include <stdsoap2.h>		// For SOAP_OK and soap functions
 #include <string.h>		// For string functions
 #include <time.h>		// For time ()
+#include <unistd.h>		// For SEEK_SET
 
 #include "swad_box.h"
 #include "swad_changelog.h"
@@ -606,6 +608,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
    static int LastLevel = 0;
    char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
    struct MoveSubtrees Subtree;
+   char *Title;
 
    Subtree.ToGetUp.Ini   = Subtree.ToGetUp.End   = 0;
    Subtree.ToGetDown.Ini = Subtree.ToGetDown.End = 0;
@@ -644,15 +647,16 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 	       if (Subtree.MovAllowed)
 		 {
+		  if (asprintf (&Title,Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
+										       Txt_Move_up_X,
+				StrItemCod) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 										     ActUp_IteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-up.svg",Ico_BLACK,
-						 Str_BuildString (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
-														  Txt_Move_up_X,
-								  StrItemCod));
-		  Str_FreeStrings ();
+						 "arrow-up.svg",Ico_BLACK,Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,
@@ -664,15 +668,16 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 	       if (Subtree.MovAllowed)
 		 {
+		  if (asprintf (&Title,Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
+										       Txt_Move_down_X,
+				StrItemCod) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 										     ActDwnIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-down.svg",Ico_BLACK,
-						 Str_BuildString (Syl_LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
-														  Txt_Move_down_X,
-								  StrItemCod));
-		  Str_FreeStrings ();
+						 "arrow-down.svg",Ico_BLACK,Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,
@@ -683,14 +688,14 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 	       if (Level > 1)
 		 {
+		  if (asprintf (&Title,Txt_Increase_level_of_X,StrItemCod) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 										     ActRgtIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-left.svg",Ico_BLACK,
-						 Str_BuildString (Txt_Increase_level_of_X,
-								  StrItemCod));
-		  Str_FreeStrings ();
+						 "arrow-left.svg",Ico_BLACK,Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,
@@ -702,14 +707,14 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
 	       if (Level < LastLevel + 1 &&
 		   Level < Syl_MAX_LEVELS_SYLLABUS)
 		 {
+		  if (asprintf (&Title,Txt_Decrease_level_of_X,StrItemCod) < 0)
+		     Err_NotEnoughMemoryExit ();
 		  Lay_PutContextualLinkOnlyIcon (Gbl.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 										     ActLftIteSylPra,
 						 NULL,
 						 Syl_PutParamNumItem,&Syllabus->ParamNumItem,
-						 "arrow-right.svg",Ico_BLACK,
-						 Str_BuildString (Txt_Decrease_level_of_X,
-								  StrItemCod));
-		  Str_FreeStrings ();
+						 "arrow-right.svg",Ico_BLACK,Title);
+		  free (Title);
 		 }
 	       else
 		  Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,

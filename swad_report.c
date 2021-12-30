@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <sys/stat.h>		// For mkdir
 #include <sys/types.h>		// For mkdir
@@ -119,16 +121,16 @@ void Rep_ReqMyUsageReport (void)
    extern const char *Hlp_ANALYTICS_Report;
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Generate_report;
+   char *Title;
 
    /***** Form to show my usage report *****/
    Frm_BeginForm (ActSeeMyUsgRep);
 
       /***** Begin box *****/
-      Box_BoxBegin (NULL,Str_BuildString (Txt_Report_of_use_of_PLATFORM,
-					  Cfg_PLATFORM_SHORT_NAME),
-		    NULL,NULL,
-		    Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-      Str_FreeStrings ();
+      if (asprintf (&Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxBegin (NULL,Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
+      free (Title);
 
 	 /***** Header *****/
 	 Rep_TitleReport (NULL);	// NULL means do not write date
@@ -231,13 +233,13 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
+   char *Title;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Report_of_use_of_PLATFORM,
-				       Cfg_PLATFORM_SHORT_NAME),
-                 NULL,NULL,
-                 Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
+   free (Title);
 
       /***** Header *****/
       Rep_TitleReport (&Report->CurrentTimeUTC);

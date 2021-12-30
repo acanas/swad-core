@@ -247,8 +247,9 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
       Sta_MAX_ROWS_PER_PAGE,
      };
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
-   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    unsigned NumTotalUsrs;
+   char *Title;
+   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
    size_t i;
@@ -276,11 +277,12 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Statistics_of_visits_to_the_course_X,
-				       Gbl.Hierarchy.Crs.ShrtName),
-                 NULL,NULL,
+   if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
+                 Gbl.Hierarchy.Crs.ShrtName) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       /***** Show form to select the groups *****/
       Grp_ShowFormToSelectSeveralGroups (NULL,NULL,
@@ -1081,6 +1083,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    unsigned NumPagesBefore;
    unsigned NumPagesAfter;
    unsigned NumPagsTotal;
+   char *Title;
    struct UsrData UsrDat;
    MYSQL_ROW row;
    long LogCod;
@@ -1144,10 +1147,10 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	       HTM_TD_Begin ("class=\"TIT_TBL LM\"");
 		  if (FirstRow > 1)
 		    {
-		     HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Show_previous_X_clicks,
-		                                                 Stats->RowsPerPage),
-					        "BT_LINK",NULL);
-		     Str_FreeStrings ();
+		     if (asprintf (&Title,Txt_Show_previous_X_clicks,Stats->RowsPerPage) < 0)
+			Err_NotEnoughMemoryExit ();
+		     HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+		     free (Title);
 			HTM_STRONG_Begin ();
 			   HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
 			HTM_STRONG_End ();
@@ -1182,10 +1185,10 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	       HTM_TD_Begin ("class=\"TIT_TBL RM\"");
 		  if (LastRow < NumHits)
 		    {
-		     HTM_BUTTON_OnSubmit_Begin (Str_BuildString (Txt_Show_next_X_clicks,
-		                                                 Stats->RowsPerPage),
-					        "BT_LINK",NULL);
-		     Str_FreeStrings ();
+		     if (asprintf (&Title,Txt_Show_next_X_clicks,Stats->RowsPerPage) < 0)
+			Err_NotEnoughMemoryExit ();
+		     HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
+		     free (Title);
 			HTM_STRONG_Begin ();
 			   HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
 			HTM_STRONG_End ();
@@ -3291,9 +3294,9 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs.FullName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs.FullName),
 		                             "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();
 	      }

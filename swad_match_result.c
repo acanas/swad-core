@@ -150,6 +150,7 @@ void MchRes_ShowMyMchResultsInGam (void)
    extern const char *Txt_Results_of_game_X;
    struct Gam_Games Games;
    struct Gam_Game Game;
+   char *Title;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -168,10 +169,10 @@ void MchRes_ShowMyMchResultsInGam (void)
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in game *****/
-   MchRes_ShowResultsBegin (&Games,
-                            Str_BuildString (Txt_Results_of_game_X,Game.Title),
-			    false);	// Do not list games to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_game_X,Game.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   free (Title);
       MchRes_ListMyMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
@@ -199,6 +200,7 @@ void MchRes_ShowMyMchResultsInMch (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
    struct Mch_Match Match;
+   char *Title;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -221,10 +223,10 @@ void MchRes_ShowMyMchResultsInMch (void)
 	                     false);	// Do not put form to start new match
 
    /***** List my matches results in match *****/
-   MchRes_ShowResultsBegin (&Games,Str_BuildString (Txt_Results_of_match_X,
-                                                    Match.Title),
-			    false);	// Do not list games to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   free (Title);
       MchRes_ListMyMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 
@@ -355,6 +357,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    extern const char *Txt_Results_of_game_X;
    struct Gam_Games Games;
    struct Gam_Game Game;
+   char *Title;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -373,10 +376,10 @@ void MchRes_ShowAllMchResultsInGam (void)
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in game *****/
-   MchRes_ShowResultsBegin (&Games,
-                            Str_BuildString (Txt_Results_of_game_X,Game.Title),
-			    false);	// Do not list games to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_game_X,Game.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   free (Title);
       MchRes_ListAllMchResultsInGam (&Games,Game.GamCod);
    MchRes_ShowResultsEnd ();
 
@@ -426,6 +429,7 @@ void MchRes_ShowAllMchResultsInMch (void)
    struct Gam_Games Games;
    struct Gam_Game Game;
    struct Mch_Match Match;
+   char *Title;
 
    /***** Reset games context *****/
    Gam_ResetGames (&Games);
@@ -448,10 +452,10 @@ void MchRes_ShowAllMchResultsInMch (void)
 	                     false);	// Do not put form to start new match
 
    /***** List matches results in match *****/
-   MchRes_ShowResultsBegin (&Games,
-                            Str_BuildString (Txt_Results_of_match_X,Match.Title),
-			    false);	// Do not list games to select
-   Str_FreeStrings ();
+   if (asprintf (&Title,Txt_Results_of_match_X,Match.Title) < 0)
+      Err_NotEnoughMemoryExit ();
+   MchRes_ShowResultsBegin (&Games,Title,false);	// Do not list games to select
+   free (Title);
       MchRes_ListAllMchResultsInMch (&Games,Match.MchCod);
    MchRes_ShowResultsEnd ();
 

@@ -189,8 +189,8 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Ctr_Center *Ctr,Act_Action_t Acti
       Ctr_PutParamCtrCod (Ctr->CtrCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ctr->FullName),"BT_LINK",NULL);
-      Str_FreeStrings ();
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Ctr->FullName),"BT_LINK",NULL);
+      Str_FreeGoToTitle ();
 
 	 /***** Center logo and name *****/
 	 Lgo_DrawLogo (HieLvl_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
@@ -1278,8 +1278,8 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
       Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,
                                   Ctr_PutParamGoToCtr,&Ctr_EditingCtr->CtrCod,
                                   Btn_CONFIRM_BUTTON,
-                                  Str_BuildGoToMsg (Ctr_EditingCtr->ShrtName));
-      Str_FreeStrings ();
+                                  Str_BuildGoToTitle (Ctr_EditingCtr->ShrtName));
+      Str_FreeGoToTitle ();
      }
    else
       /***** Alert *****/

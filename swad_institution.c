@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 
@@ -225,9 +227,9 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Acti
       Ins_PutParamInsCod (Ins->InsCod);
 
       /***** Link to action *****/
-      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Ins->FullName),
+      HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Ins->FullName),
                                  "BT_LINK",NULL);
-      Str_FreeStrings ();
+      Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
 	 Lgo_DrawLogo (HieLvl_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
@@ -279,14 +281,16 @@ static void Ins_ListInstitutions (void)
    extern const char *Txt_No_institutions;
    extern const char *Txt_Create_another_institution;
    extern const char *Txt_Create_institution;
+   char *Title;
    unsigned NumIns;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Institutions_of_COUNTRY_X,
-				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-		 Ins_PutIconsListingInstitutions,NULL,
+   if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
+                 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Ins_PutIconsListingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       if (Gbl.Hierarchy.Inss.Num)	// There are institutions in the current country
 	{
@@ -430,7 +434,6 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    HTM_TR_End ();
 
-   Str_FreeStrings ();
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
@@ -528,6 +531,7 @@ static void Ins_EditInstitutionsInternal (void)
   {
    extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
+   char *Title;
 
    /***** Get list of institutions *****/
    Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Cty.CtyCod);
@@ -536,11 +540,12 @@ static void Ins_EditInstitutionsInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,Str_BuildString (Txt_Institutions_of_COUNTRY_X,
-				       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
-		 Ins_PutIconsEditingInstitutions,NULL,
+   if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
+                 Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxBegin (NULL,Title,Ins_PutIconsEditingInstitutions,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
-   Str_FreeStrings ();
+   free (Title);
 
       /***** Put a form to create a new institution *****/
       Ins_PutFormToCreateInstitution ();
@@ -1409,8 +1414,8 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,
                                   Ins_PutParamGoToIns,&Ins_EditingIns->InsCod,
                                   Btn_CONFIRM_BUTTON,
-				  Str_BuildGoToMsg (Ins_EditingIns->ShrtName));
-      Str_FreeStrings ();
+				  Str_BuildGoToTitle (Ins_EditingIns->ShrtName));
+      Str_FreeGoToTitle ();
      }
    else
       /***** Alert *****/
@@ -1806,6 +1811,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
   {
    extern const char *Txt_institution;
    extern const char *Txt_institutions;
+   char *Title;
    unsigned NumIns;
    struct Ins_Instit Ins;
 
@@ -1814,13 +1820,12 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
      {
       /***** Begin box and table *****/
       /* Number of institutions found */
-      Box_BoxTableBegin (NULL,Str_BuildString ("%u %s",
-                                               NumInss,
-                                               NumInss == 1 ? Txt_institution :
-							      Txt_institutions),
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-      Str_FreeStrings ();
+      if (asprintf (&Title,"%u %s",NumInss,
+                                   NumInss == 1 ? Txt_institution :
+						  Txt_institutions) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Box_BoxTableBegin (NULL,Title,NULL,NULL,NULL,Box_NOT_CLOSABLE,2);
+      free (Title);
 
       /***** Write heading *****/
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable

@@ -28,8 +28,10 @@ TODO: Check if web service is called from an authorized IP.
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stdbool.h>		// For boolean type
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
@@ -89,6 +91,7 @@ void Plg_ListPlugins (void)
    unsigned NumPlg;
    struct Plugin *Plg;
    char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
+   char *Icon;
 
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
      {
@@ -100,55 +103,52 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins ();
 
    /***** Begin box and table *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Box_BoxTableBegin (NULL,Txt_Plugins,
-			 Plg_PutIconToEditPlugins,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
-   else
-      Box_BoxTableBegin (NULL,Txt_Plugins,
-			 NULL,NULL,
-			 NULL,Box_NOT_CLOSABLE,2);
+   Box_BoxTableBegin (NULL,Txt_Plugins,
+		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
+							       NULL,
+		      NULL,
+		      NULL,Box_NOT_CLOSABLE,2);
 
-   /***** Write table heading *****/
-   HTM_TR_Begin (NULL);
-      HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Plugin,"LM");
-   HTM_TR_End ();
-
-   /***** Write all plugins *****/
-   for (NumPlg = 0;
-	NumPlg < Gbl.Plugins.Num;
-	NumPlg++)
-     {
-      Plg = &(Gbl.Plugins.Lst[NumPlg]);
-
-      snprintf (URL,sizeof (URL),"%s%s",Plg->URL,Gbl.Session.Id);
-
-      /* Plugin logo */
-      // TODO: Change plugin icons to 32x32
+      /***** Write table heading *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:45px;\"",
-	               The_ClassDat[Gbl.Prefs.Theme]);
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
-			 URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
-	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
-			Str_BuildString ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
-			Plg->Name,
-			"class=\"ICO40x40\"");
-	       Str_FreeStrings ();
-	    HTM_A_End ();
-	 HTM_TD_End ();
-
-	 HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
-	    HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
-			 URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
-	       HTM_Txt (Plg->Name);
-	    HTM_A_End ();
-	 HTM_TD_End ();
-
+	 HTM_TH_Empty (1);
+	 HTM_TH (1,1,Txt_Plugin,"LM");
       HTM_TR_End ();
-     }
+
+      /***** Write all plugins *****/
+      for (NumPlg = 0;
+	   NumPlg < Gbl.Plugins.Num;
+	   NumPlg++)
+	{
+	 Plg = &(Gbl.Plugins.Lst[NumPlg]);
+
+	 snprintf (URL,sizeof (URL),"%s%s",Plg->URL,Gbl.Session.Id);
+
+	 /* Plugin logo */
+	 // TODO: Change plugin icons to 32x32
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\" style=\"width:45px;\"",
+			  The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+			    URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
+		  if (asprintf (&Icon,"%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
+			   "class=\"ICO40x40\"");
+		  free (Icon);
+	       HTM_A_End ();
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"%s\" target=\"_blank\"",
+			    URL,Plg->Name,The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_Txt (Plg->Name);
+	       HTM_A_End ();
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
@@ -329,6 +329,7 @@ static void Plg_ListPluginsForEdition (void)
    extern const char *The_ClassDat[The_NUM_THEMES];
    unsigned NumPlg;
    struct Plugin *Plg;
+   char *Icon;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -360,11 +361,11 @@ static void Plg_ListPluginsForEdition (void)
 	    /* Plugin logo */
 	    // TODO: Change plugin icons to 32x32
 	    HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
-	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,
-			Str_BuildString ("%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo),
-			Gbl.Plugins.Lst[NumPlg].Name,
+	       if (asprintf (&Icon,"%s24x24.gif",Gbl.Plugins.Lst[NumPlg].Logo) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Gbl.Plugins.Lst[NumPlg].Name,
 			"class=\"ICO40x40\"");
-	       Str_FreeStrings ();
+	       free (Icon);
 	    HTM_TD_End ();
 
 	    /* Plugin name */

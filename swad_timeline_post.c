@@ -25,7 +25,11 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_global.h"
 #include "swad_info.h"
 #include "swad_media.h"
@@ -171,15 +175,17 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_post;
+   char *Class;
 
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 
       /***** Author name *****/
-      Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,
-                               Str_BuildString ("Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
-                                                The_ClassDatStrong[Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+      if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
+                    The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,Class);
+      free (Class);
 
       /***** Form to write the post *****/
       /* Begin container */
@@ -187,10 +193,11 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
          /* Form with textarea */
 	 Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_POST);
-	    Tml_Pst_PutTextarea (Txt_New_TIMELINE_post,
-				 Str_BuildString ("Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
-			                          The_ClassInput[Gbl.Prefs.Theme]));
-	    Str_FreeStrings ();
+	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
+	                  The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Tml_Pst_PutTextarea (Txt_New_TIMELINE_post,Class);
+	    free (Class);
 	 Tml_Frm_EndForm ();
 
       /* End container */
@@ -209,6 +216,7 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
+   char *ClassInput;
 
    /***** Set unique id for the hidden div *****/
    Frm_SetUniqueId (IdDivImgButton);
@@ -229,9 +237,10 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
       Lay_HelpPlainEditor ();
 
       /***** Attached image (optional) *****/
-      Med_PutMediaUploader (-1,Str_BuildString ("Tml_MED_INPUT_WIDTH %s",
-                                                The_ClassInput[Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+      if (asprintf (&ClassInput,"Tml_MED_INPUT_WIDTH %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Med_PutMediaUploader (-1,ClassInput);
+      free (ClassInput);
 
       /***** Submit button *****/
       HTM_BUTTON_OnSubmit_Begin (NULL,"BT_SUBMIT_INLINE BT_CREATE",NULL);

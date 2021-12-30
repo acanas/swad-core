@@ -25,9 +25,13 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_config.h"
+#include "swad_error.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -101,6 +105,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       [Rol_INS_ADM] = ActUnk,
       [Rol_SYS_ADM] = ActUnk,
      };
+   char *Description;
 
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
@@ -127,21 +132,25 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
 		    {
 		     /* Request my removing from this course */
-		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_Remove_me_from_THE_COURSE_X,
-									   Gbl.Hierarchy.Crs.ShrtName),
+		     if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
+		                   Gbl.Hierarchy.Crs.ShrtName) < 0)
+			Err_NotEnoughMemoryExit ();
+		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 							  ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
 							  Btn_REMOVE_BUTTON,Txt_Remove_me);
-		     Str_FreeStrings ();
+		     free (Description);
 		    }
 	      }
 	    else					// I do not belong to this course
 	      {
 	       /* Request my registration in this course */
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_Register_me_in_X,
-								     Gbl.Hierarchy.Crs.ShrtName),
+	       if (asprintf (&Description,Txt_Register_me_in_X,
+			     Gbl.Hierarchy.Crs.ShrtName) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						    ActReqSignUp,
 						    Btn_CREATE_BUTTON,Txt_Sign_up);
-	       Str_FreeStrings ();
+	       free (Description);
 	      }
 	   }
 
@@ -153,11 +162,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						1 << Rol_STD))		// Current course probably has no students
 		 {
 		  /* Request students enrolment */
-		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_Register_students_in_COURSE_X,
-									Gbl.Hierarchy.Crs.ShrtName),
+		  if (asprintf (&Description,Txt_Register_students_in_COURSE_X,
+				Gbl.Hierarchy.Crs.ShrtName) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						       ActReqEnrSevStd,
 						       Btn_CREATE_BUTTON,Txt_Register_students);
-		  Str_FreeStrings ();
+		  free (Description);
 		 }
 
 	    if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
@@ -170,47 +181,55 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	 if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
 	   {
 	    /* Select a course */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
-												      Txt_Select_or_create_one_course_in_X,
-								  Gbl.Hierarchy.Deg.ShrtName),
+	    if (asprintf (&Description,Gbl.Hierarchy.Level == HieLvl_CRS ? Txt_Select_create_course_in_X :
+									   Txt_Select_or_create_one_course_in_X,
+			  Gbl.Hierarchy.Deg.ShrtName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActSeeCrs,
 						 Btn_CONFIRM_BUTTON,Txt_Courses);
-	    Str_FreeStrings ();
+	    free (Description);
 	   }
 	 else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Center selected
 	   {
 	    /* Select a degree */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
-												    Txt_Select_or_create_one_degree_in_X,
-								  Gbl.Hierarchy.Ctr.ShrtName),
+	    if (asprintf (&Description,Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
+								      Txt_Select_or_create_one_degree_in_X,
+			  Gbl.Hierarchy.Ctr.ShrtName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActSeeDeg,
 						 Btn_CONFIRM_BUTTON,Txt_Degrees);
-	    Str_FreeStrings ();
+	    free (Description);
 	   }
 	 else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
 	   {
 	    /* Select a center */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_center_in_X :
-												    Txt_Select_or_create_one_center_in_X,
-								  Gbl.Hierarchy.Ins.ShrtName),
+	    if (asprintf (&Description,Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_center_in_X :
+								      Txt_Select_or_create_one_center_in_X,
+			  Gbl.Hierarchy.Ins.ShrtName) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActSeeCtr,
 						 Btn_CONFIRM_BUTTON,Txt_Centers);
-	    Str_FreeStrings ();
+	    free (Description);
 	   }
 	 else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
 	   {
 	    /* Select an institution */
-	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Gbl.Hierarchy.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
-												    Txt_Select_or_create_one_institution_in_X,
-								  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+	    if (asprintf (&Description,Gbl.Hierarchy.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
+								      Txt_Select_or_create_one_institution_in_X,
+			  Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 						 ActSeeIns,
 						 Btn_CONFIRM_BUTTON,Txt_Institutions);
-	    Str_FreeStrings ();
+	    free (Description);
 	   }
 	 else
 	    /* Select a country */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Cty.CtyCod > 0 ? Txt_Select_another_country :
-										 Txt_Select_one_country,
+										Txt_Select_one_country,
 						 ActSeeCty,
 						 Btn_CONFIRM_BUTTON,Txt_Countries);
 
@@ -227,11 +246,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 					      Btn_CONFIRM_BUTTON,Txt_Log_in);
 
 	 /* Sign up */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Str_BuildString (Txt_New_on_PLATFORM_Sign_up,
-							       Cfg_PLATFORM_SHORT_NAME),
+	 if (asprintf (&Description,Txt_New_on_PLATFORM_Sign_up,
+	               Cfg_PLATFORM_SHORT_NAME) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 					      ActFrmMyAcc,
 					      Btn_CREATE_BUTTON,Txt_Create_account);
-	 Str_FreeStrings ();
+	 free (Description);
 	}
 
    /***** End table and box *****/

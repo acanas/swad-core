@@ -245,9 +245,9 @@ static void DegCfg_Center (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Ctr.ShrtName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Ctr.ShrtName),
 					     "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 	      }
 	    Lgo_DrawLogo (HieLvl_CTR,Gbl.Hierarchy.Ctr.CtrCod,Gbl.Hierarchy.Ctr.ShrtName,
 			  20,"LM",true);

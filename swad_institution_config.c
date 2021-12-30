@@ -343,9 +343,9 @@ static void InsCfg_Country (bool PrintView,bool PutForm)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtyInf);
 		  Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]),
 					     "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 	      }
 	    Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TINY");
 	    HTM_NBSP ();

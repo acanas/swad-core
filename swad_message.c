@@ -2406,9 +2406,9 @@ static bool Msg_WriteCrsOrgMsg (long CrsCod)
 	       Crs_PutParamCrsCod (Crs.CrsCod);
 	       HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
 		  HTM_Txt ("(");
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs.FullName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs.FullName),
 					     "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 		     HTM_Txt (Crs.ShrtName);
 		  HTM_BUTTON_End ();
 		  HTM_Txt (")");

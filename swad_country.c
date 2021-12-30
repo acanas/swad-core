@@ -511,9 +511,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Cty_Countr *Cty,Act_Action_t Acti
       HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
 	 /***** Link to action *****/
-	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Cty->Name[Gbl.Prefs.Language]),
+	 HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Cty->Name[Gbl.Prefs.Language]),
 				    "BT_LINK",NULL);
-	 Str_FreeStrings ();
+	 Str_FreeGoToTitle ();
 
 	    /***** Draw country map *****/
 	    Cty_DrawCountryMap (Cty,ClassMap);
@@ -1412,8 +1412,8 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,
                                   Cty_PutParamGoToCty,&Cty_EditingCty->CtyCod,
                                   Btn_CONFIRM_BUTTON,
-				  Str_BuildGoToMsg (Cty_EditingCty->Name[Gbl.Prefs.Language]));
-      Str_FreeStrings ();
+				  Str_BuildGoToTitle (Cty_EditingCty->Name[Gbl.Prefs.Language]));
+      Str_FreeGoToTitle ();
      }
    else
       /***** Alert *****/

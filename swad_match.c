@@ -2627,6 +2627,7 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
   {
    extern const char *Txt_column;
    extern const char *Txt_columns;
+   char *Title;
    unsigned NumCols;
    static const char *NumColsIcon[1 + Mch_MAX_COLS] =
      {
@@ -2655,12 +2656,12 @@ static void Mch_ShowFormColumns (const struct Mch_Match *Match)
 	    Mch_PutParamNumCols (NumCols);		// Number of columns
 
 	    /* Number of columns */
-	    Ico_PutSettingIconLink (NumColsIcon[NumCols],Ico_BLACK,
-				    Str_BuildString ("%u %s",
-				                     NumCols,
-						     NumCols == 1 ? Txt_column :
-								    Txt_columns));
-	    Str_FreeStrings ();
+	    if (asprintf (&Title,"%u %s",NumCols,
+					 NumCols == 1 ? Txt_column :
+							Txt_columns) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    Ico_PutSettingIconLink (NumColsIcon[NumCols],Ico_BLACK,Title);
+	    free (Title);
 
 	 /* End form */
 	 Frm_EndForm ();
@@ -3187,6 +3188,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    unsigned Color;
    unsigned BarWidth;
    char *Icon;
+   char *Title;
 
    /***** Compute color *****/
    /*
@@ -3239,13 +3241,13 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
       HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
 	 if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
 	    Err_NotEnoughMemoryExit ();
-	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,
-		  Str_BuildString ("%u %s",
-		                   NumUsrs,
-				   NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
-						  Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]),
+	 if (asprintf (&Title,"%u %s",NumUsrs,
+				      NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
+						     Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
 		  "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
-	 Str_FreeStrings ();
+	 free (Title);
 	 free (Icon);
 	 HTM_TxtF ("&nbsp;%u",NumUsrs);
       HTM_TD_End ();

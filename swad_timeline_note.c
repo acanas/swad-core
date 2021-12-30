@@ -317,15 +317,17 @@ static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
                                                const struct UsrData *UsrDat)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   char *Class;
 
    /***** Begin top container *****/
    HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
 
       /***** Write author's full name *****/
-      Tml_Not_WriteAuthorName (UsrDat,
-                               Str_BuildString ("Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
-                                                The_ClassDatStrong[Gbl.Prefs.Theme]));
-      Str_FreeStrings ();
+      if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
+                    The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Tml_Not_WriteAuthorName (UsrDat,Class);
+      free (Class);
 
       /***** Write date and time *****/
       Tml_WriteDateTime (Not->DateTimeUTC);
@@ -596,6 +598,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
       /* Analytics tab */
       /* Profile tab */
      };
+   char *Class;
 
    if (Not->Unavailable ||	// File/notice... pointed by this note is unavailable
        Gbl.Form.Inside)		// Inside another form
@@ -686,11 +689,11 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 
 	    /***** Icon and link to go to action *****/
 	    /* Begin button */
-	    HTM_BUTTON_OnSubmit_Begin (Txt_TIMELINE_NOTE[Not->Type],
-				       Str_BuildString ("BT_LINK %s ICO_HIGHLIGHT",
-						        The_ClassFormInBoxBold[Gbl.Prefs.Theme]),
-				       NULL);
-	    Str_FreeStrings ();
+	    if (asprintf (&Class,"BT_LINK %s ICO_HIGHLIGHT",
+	                  The_ClassFormInBoxBold[Gbl.Prefs.Theme]) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_BUTTON_OnSubmit_Begin (Txt_TIMELINE_NOTE[Not->Type],Class,NULL);
+	    free (Class);
 
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,

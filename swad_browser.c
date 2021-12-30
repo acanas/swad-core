@@ -9956,9 +9956,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeInsInf);
 		  Deg_PutParamDegCod (InsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (InsShortName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (InsShortName),
 		                             "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 		     Lgo_DrawLogo (HieLvl_INS,InsCod,InsShortName,20,"BT_LINK LT",true);
 		     HTM_TxtF ("&nbsp;%s",InsShortName);
 		  HTM_BUTTON_End ();
@@ -9972,9 +9972,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCtrInf);
 		  Deg_PutParamDegCod (CtrCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (CtrShortName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (CtrShortName),
 		                             "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 		     Lgo_DrawLogo (HieLvl_CTR,CtrCod,CtrShortName,20,"LT",true);
 		     HTM_TxtF ("&nbsp;%s",CtrShortName);
 		  HTM_BUTTON_End ();
@@ -9988,9 +9988,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeDegInf);
 		  Deg_PutParamDegCod (DegCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (DegShortName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (DegShortName),
 		                             "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 		     Lgo_DrawLogo (HieLvl_DEG,DegCod,DegShortName,20,"LT",true);
 		     HTM_TxtF ("&nbsp;%s",DegShortName);
 		  HTM_BUTTON_End ();
@@ -10004,9 +10004,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (CrsCod);
-		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (CrsShortName),
+		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (CrsShortName),
 		                             "BT_LINK",NULL);
-		  Str_FreeStrings ();
+		  Str_FreeGoToTitle ();
 		     HTM_Txt (CrsShortName);
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();

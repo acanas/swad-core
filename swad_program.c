@@ -740,6 +740,7 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
    extern const char *Txt_Decrease_level_of_X;
    extern const char *Txt_Movement_not_allowed;
    char StrItemIndex[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char *Title;
 
    /***** Initialize item index string *****/
    snprintf (StrItemIndex,sizeof (StrItemIndex),"%u",Item->Hierarchy.Index);
@@ -774,12 +775,12 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Put icon to move up the item *****/
 	 if (Prg_CheckIfMoveUpIsAllowed (NumItem))
 	   {
+	    if (asprintf (&Title,Txt_Move_up_X,StrItemIndex) < 0)
+	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActUp_PrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-up.svg",Ico_BLACK,
-					   Str_BuildString (Txt_Move_up_X,
-							    StrItemIndex));
-	    Str_FreeStrings ();
+					   "arrow-up.svg",Ico_BLACK,Title);
+	    free (Title);
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-up.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -787,12 +788,12 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Put icon to move down the item *****/
 	 if (Prg_CheckIfMoveDownIsAllowed (NumItem))
 	   {
+	    if (asprintf (&Title,Txt_Move_down_X,StrItemIndex) < 0)
+	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActDwnPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-down.svg",Ico_BLACK,
-					   Str_BuildString (Txt_Move_down_X,
-							    StrItemIndex));
-	    Str_FreeStrings ();
+					   "arrow-down.svg",Ico_BLACK,Title);
+	    free (Title);
 	   }
 	 else
 	    Ico_PutIconOff ("arrow-down.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -800,12 +801,12 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Icon to move left item (increase level) *****/
 	 if (Prg_CheckIfMoveLeftIsAllowed (NumItem))
 	   {
+	    if (asprintf (&Title,Txt_Increase_level_of_X,StrItemIndex) < 0)
+	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActLftPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-left.svg",Ico_BLACK,
-					   Str_BuildString (Txt_Increase_level_of_X,
-							    StrItemIndex));
-	    Str_FreeStrings ();
+					   "arrow-left.svg",Ico_BLACK,Title);
+	    free (Title);
 	   }
 	 else
             Ico_PutIconOff ("arrow-left.svg",Ico_BLACK,Txt_Movement_not_allowed);
@@ -813,12 +814,12 @@ static void Prg_PutFormsToRemEditOneItem (unsigned NumItem,
 	 /***** Icon to move right item (indent, decrease level) *****/
 	 if (Prg_CheckIfMoveRightIsAllowed (NumItem))
 	   {
+	    if (asprintf (&Title,Txt_Decrease_level_of_X,StrItemIndex) < 0)
+	       Err_NotEnoughMemoryExit ();
 	    Lay_PutContextualLinkOnlyIcon (ActRgtPrgItm,"prg_highlighted",
 	                                   Prg_PutParams,&Item->Hierarchy.ItmCod,
-					   "arrow-right.svg",Ico_BLACK,
-					   Str_BuildString (Txt_Decrease_level_of_X,
-							    StrItemIndex));
-	    Str_FreeStrings ();
+					   "arrow-right.svg",Ico_BLACK,Title);
+	    free (Title);
 	   }
 	 else
             Ico_PutIconOff ("arrow-right.svg",Ico_BLACK,Txt_Movement_not_allowed);

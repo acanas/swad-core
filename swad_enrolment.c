@@ -2237,9 +2237,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
 			Frm_BeginFormGoTo (ActSeeCrsInf);
 			   Crs_PutParamCrsCod (Crs.CrsCod);
-			   HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToMsg (Crs.FullName),
+			   HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs.FullName),
 						      "BT_LINK",NULL);
-			   Str_FreeStrings ();
+			   Str_FreeGoToTitle ();
 			      HTM_TxtF ("%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
 			   HTM_BUTTON_End ();
 			Frm_EndForm ();
