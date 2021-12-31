@@ -27,7 +27,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct Tml_Pst_Content
+struct TmlPst_Content
   {
    char Txt[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
@@ -37,12 +37,12 @@ struct Tml_Pst_Content
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Pst_GetAndWritePost (long PstCod);
-void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline);
+void TmlPst_GetAndWritePost (long PstCod);
+void TmlPst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline);
 
-void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea);
+void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
-void Tml_Pst_ReceivePostUsr (void);
-void Tml_Pst_ReceivePostGbl (void);
+void TmlPst_ReceivePostUsr (void);
+void TmlPst_ReceivePostGbl (void);
 
 #endif

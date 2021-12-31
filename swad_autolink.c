@@ -461,12 +461,12 @@ static ALn_LinkType_t ALn_CheckNickname (char **PtrSrc,char PrevCh,
                                          struct ALn_Link **LastLink)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC12x16",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE12x16",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO12x16",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR12x16",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC12x16",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE12x16",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO12x16",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
    char Ch;
    size_t Length;

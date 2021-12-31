@@ -1324,12 +1324,12 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    extern const char *Txt_Role;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    MYSQL_ROW row;
    unsigned NumHit;

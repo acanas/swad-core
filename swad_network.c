@@ -233,7 +233,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 					 StrName,The_ClassFormInBox[Gbl.Prefs.Theme]);
 			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
 			                Net_WebsAndSocialNetworksTitle[NumURL],
-			                "CONTEXT_OPT CONTEXT_ICO_16x16");
+			                "CONTEXT_OPT CONTEXT_ICO16x16");
 			   HTM_TxtF ("&nbsp;%s:",Net_WebsAndSocialNetworksTitle[NumURL]);
 			HTM_LABEL_End ();
 		     HTM_TD_End ();
@@ -349,9 +349,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Web_social_network,"LM");
-	 HTM_TH (1,1,Txt_Number_of_users   ,"RM");
-	 HTM_TH (1,1,Txt_PERCENT_of_users  ,"RM");
+	 Fig_TH (Txt_Web_social_network,Fig_HEAD_RIGHT);
+	 Fig_TH (Txt_Number_of_users   ,Fig_HEAD_RIGHT);
+	 Fig_TH (Txt_PERCENT_of_users  ,Fig_HEAD_RIGHT);
       HTM_TR_End ();
 
       /***** For each web / social network... *****/
@@ -378,12 +378,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
-		  HTM_IMG (Cfg_URL_ICON_PUBLIC,
-		           Net_WebsAndSocialNetworksIcons[Web],
-		           Net_WebsAndSocialNetworksTitle[Web],
-			   "class=\"CONTEXT_ICO_16x16\""
-			   " style=\"margin-right:6px;\"");
-		  HTM_Txt (Net_WebsAndSocialNetworksTitle[Web]);
+	          Ico_PutIcon (Net_WebsAndSocialNetworksIcons[Web],Ico_BLACK,
+	                       Net_WebsAndSocialNetworksTitle[Web],"ICOx16");
+	          HTM_TxtF ("&nbsp;%s",Net_WebsAndSocialNetworksTitle[Web]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);

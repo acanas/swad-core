@@ -47,14 +47,14 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define Tml_Com_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
+#define TmlCom_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
 
-#define Tml_Com_NUM_CONTRACT_EXPAND	2
+#define TmlCom_NUM_CONTRACT_EXPAND	2
 typedef enum
   {
-   Tml_Com_CONTRACT = 0,
-   Tml_Com_EXPAND   = 1,
-  } Tml_Com_ContractExpand_t;
+   TmlCom_CONTRACT = 0,
+   TmlCom_EXPAND   = 1,
+  } TmlCom_ContractExpand_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -66,54 +66,54 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat);
-static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
-	                                   long NotCod);
+static void TmlCom_ShowAuthorPhoto (struct UsrData *UsrDat);
+static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
+	                                  long NotCod);
 
-static unsigned Tml_Com_WriteHiddenComms (struct Tml_Timeline *Timeline,
-                                          long NotCod,
-				          char IdComms[Frm_MAX_BYTES_ID + 1],
-					  unsigned NumInitialCommsToGet);
-static void Tml_Com_ListComms (const struct Tml_Timeline *Timeline,
-                               unsigned NumComms,MYSQL_RES *mysql_res);
-static void Tml_Com_WriteOneCommInList (const struct Tml_Timeline *Timeline,
-                                        MYSQL_RES *mysql_res);
-static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
-                                     const char IdComms[Frm_MAX_BYTES_ID + 1],
-                                     unsigned NumComms);
-static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
-                                          const char *Icon,const char *Text);
-static void Tml_Com_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
-	                               struct Tml_Com_Comment *Com);
-static void Tml_Com_WriteComm (const struct Tml_Timeline *Timeline,
-	                       struct Tml_Com_Comment *Com);
-static void Tml_Com_WriteAuthorTimeAndContent (struct Tml_Com_Comment *Com,
-                                               const struct UsrData *UsrDat);
-static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat);
-static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com);
-static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
-	                          const struct Tml_Com_Comment *Com,
-                                  const struct UsrData *UsrDat);
+static unsigned TmlCom_WriteHiddenComms (struct Tml_Timeline *Timeline,
+                                         long NotCod,
+				         char IdComms[Frm_MAX_BYTES_ID + 1],
+					 unsigned NumInitialCommsToGet);
+static void TmlCom_ListComms (const struct Tml_Timeline *Timeline,
+                              unsigned NumComms,MYSQL_RES *mysql_res);
+static void TmlCom_WriteOneCommInList (const struct Tml_Timeline *Timeline,
+                                       MYSQL_RES *mysql_res);
+static void TmlCom_LinkToShowComms (TmlCom_ContractExpand_t ConExp,
+                                    const char IdComms[Frm_MAX_BYTES_ID + 1],
+                                    unsigned NumComms);
+static void TmlCom_PutIconToToggleComms (const char *UniqueId,
+                                         const char *Icon,const char *Text);
+static void TmlCom_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
+	                              struct TmlCom_Comment *Com);
+static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
+	                      struct TmlCom_Comment *Com);
+static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
+                                              const struct UsrData *UsrDat);
+static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat);
+static void TmlCom_WriteContent (struct TmlCom_Comment *Com);
+static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
+	                         const struct TmlCom_Comment *Com,
+                                 const struct UsrData *UsrDat);
 
-static void Tml_Com_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
-	                                 long PubCod);
+static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
+	                                long PubCod);
 
-static long Tml_Com_ReceiveComm (void);
+static long TmlCom_ReceiveComm (void);
 
-static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline);
-static void Tml_Com_PutParamsRemoveComm (void *Timeline);
-static void Tml_Com_RemoveComm (void);
+static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline);
+static void TmlCom_PutParamsRemoveComm (void *Timeline);
+static void TmlCom_RemoveComm (void);
 
-static void Tml_Com_GetDataOfCommFromRow (MYSQL_ROW row,
-                                          struct Tml_Com_Comment *Com);
+static void TmlCom_GetDataOfCommFromRow (MYSQL_ROW row,
+                                         struct TmlCom_Comment *Com);
 
-static void Tml_Com_ResetComm (struct Tml_Com_Comment *Com);
+static void TmlCom_ResetComm (struct TmlCom_Comment *Com);
 
 /*****************************************************************************/
 /********* Put an icon to toggle on/off the form to comment a note ***********/
 /*****************************************************************************/
 
-void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
+void TmlCom_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_Comment;
 
@@ -128,7 +128,7 @@ void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 
          /* Icon to toggle comment */
 	 Ico_PutIcon ("comment-regular.svg",Ico_BLACK,
-	              Txt_Comment,"CONTEXT_ICO_16x16");
+	              Txt_Comment,"CONTEXT_ICO16x16");
 
       /* End anchor */
       HTM_A_End ();
@@ -141,7 +141,7 @@ void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1])
 /********** Put an icon to toggle on/off the form to comment a note **********/
 /*****************************************************************************/
 
-void Tml_Com_PutIconCommDisabled (void)
+void TmlCom_PutIconCommDisabled (void)
   {
    extern const char *Txt_Comment;
 
@@ -160,9 +160,9 @@ void Tml_Com_PutIconCommDisabled (void)
 /************************* Form to comment a note ****************************/
 /*****************************************************************************/
 
-void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
-	                                    long NotCod,
-                                            const char IdNewComm[Frm_MAX_BYTES_ID + 1])
+void TmlCom_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
+	                                   long NotCod,
+                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("id=\"%s\" class=\"Tml_FORM_NEW_COM Tml_RIGHT_WIDTH\""
@@ -170,10 +170,10 @@ void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 	          IdNewComm);
 
       /***** Left: write author's photo (my photo) *****/
-      Tml_Com_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat);
+      TmlCom_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat);
 
       /***** Right: form to write the comment *****/
-      Tml_Com_PutFormToWriteNewComm (Timeline,NotCod);
+      TmlCom_PutFormToWriteNewComm (Timeline,NotCod);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -183,14 +183,14 @@ void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 /********************* Show photo of author of a comment *********************/
 /*****************************************************************************/
 
-static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
+static void TmlCom_ShowAuthorPhoto (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC30x40",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO30x40",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR30x40",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC30x40",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
 
    /***** Show author's photo *****/
@@ -210,8 +210,8 @@ static void Tml_Com_ShowAuthorPhoto (struct UsrData *UsrDat)
 /**************************** Form with textarea *****************************/
 /*****************************************************************************/
 
-static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
-	                                   long NotCod)
+static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
+	                                  long NotCod)
   {
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_TIMELINE_comment;
@@ -221,18 +221,18 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
    HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
 
       /***** Begin form to write the post *****/
-      Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_COMM);
-	 Tml_Not_PutHiddenParamNotCod (NotCod);
+      TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_COMM);
+	 TmlNot_PutHiddenParamNotCod (NotCod);
 
 	 /***** Textarea and button *****/
 	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
 	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 Tml_Pst_PutTextarea (Txt_New_TIMELINE_comment,ClassTextArea);
+	 TmlPst_PutTextarea (Txt_New_TIMELINE_comment,ClassTextArea);
 	 free (ClassTextArea);
 
       /***** End form *****/
-      Tml_Frm_EndForm ();
+      TmlFrm_EndForm ();
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -242,8 +242,8 @@ static void Tml_Com_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 
-void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
-			       const struct Tml_Not_Note *Not)
+void TmlCom_WriteCommsInNote (const struct Tml_Timeline *Timeline,
+			      const struct TmlNot_Note *Not)
   {
    MYSQL_RES *mysql_res;
    unsigned NumComms;
@@ -263,15 +263,15 @@ void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
           and how many final comments will be visible *****/
    // Never hide only one comment
    // So, the number of comments initially hidden must be 0 or >= 2
-   if (NumComms <= Tml_Com_NUM_VISIBLE_COMMENTS + 1)
+   if (NumComms <= TmlCom_NUM_VISIBLE_COMMENTS + 1)
      {
       NumInitialComms    = 0;
       NumFinalCommsToGet = NumComms;
      }
    else
      {
-      NumInitialComms    = NumComms - Tml_Com_NUM_VISIBLE_COMMENTS;
-      NumFinalCommsToGet = Tml_Com_NUM_VISIBLE_COMMENTS;
+      NumInitialComms    = NumComms - TmlCom_NUM_VISIBLE_COMMENTS;
+      NumFinalCommsToGet = TmlCom_NUM_VISIBLE_COMMENTS;
      }
 
    /***** Get final comments of this note from database *****/
@@ -326,18 +326,18 @@ void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
       Frm_SetUniqueId (IdComms);
 
       /***** Link (initially hidden) to show only the latest comments *****/
-      Tml_Com_LinkToShowComms (Tml_Com_CONTRACT,IdComms,NumFinalComms);
+      TmlCom_LinkToShowComms (TmlCom_CONTRACT,IdComms,NumFinalComms);
 
       /***** Div with form to show hidden coments,
              which content will be updated via AJAX *****/
-      Tml_Frm_FormToShowHiddenComms (Not->NotCod,IdComms,NumInitialComms);
+      TmlFrm_FormToShowHiddenComms (Not->NotCod,IdComms,NumInitialComms);
      }
 
    /***** List final visible comments *****/
    if (NumFinalComms)
      {
       HTM_UL_Begin ("class=\"Tml_LIST\"");	// Never hidden, always visible
-	 Tml_Com_ListComms (Timeline,NumFinalComms,mysql_res);
+	 TmlCom_ListComms (Timeline,NumFinalComms,mysql_res);
       HTM_UL_End ();
      }
 
@@ -349,16 +349,16 @@ void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
 /********************** Write hidden comments via AJAX ***********************/
 /*****************************************************************************/
 
-void Tml_Com_ShowHiddenCommsUsr (void)
+void TmlCom_ShowHiddenCommsUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Show hidden comments *****/
-   Tml_Com_ShowHiddenCommsGbl ();
+   TmlCom_ShowHiddenCommsGbl ();
   }
 
-void Tml_Com_ShowHiddenCommsGbl (void)
+void TmlCom_ShowHiddenCommsGbl (void)
   {
    struct Tml_Timeline Timeline;
    long NotCod;
@@ -371,16 +371,16 @@ void Tml_Com_ShowHiddenCommsGbl (void)
 
    /***** Get parameters *****/
    /* Get note code, identifier and number of comments to get */
-   NotCod = Tml_Not_GetParamNotCod ();
+   NotCod = TmlNot_GetParamNotCod ();
    Par_GetParToText ("IdComments",IdComms,Frm_MAX_BYTES_ID);
    NumInitialCommsToGet = (unsigned) Par_GetParToLong ("NumHidCom");
 
    /***** Write HTML inside DIV with hidden comments *****/
    NumInitialCommsGot =
-   Tml_Com_WriteHiddenComms (&Timeline,NotCod,IdComms,NumInitialCommsToGet);
+   TmlCom_WriteHiddenComms (&Timeline,NotCod,IdComms,NumInitialCommsToGet);
 
    /***** Link to show the first comments *****/
-   Tml_Com_LinkToShowComms (Tml_Com_EXPAND,IdComms,NumInitialCommsGot);
+   TmlCom_LinkToShowComms (TmlCom_EXPAND,IdComms,NumInitialCommsGot);
   }
 
 /*****************************************************************************/
@@ -388,10 +388,10 @@ void Tml_Com_ShowHiddenCommsGbl (void)
 /*****************************************************************************/
 // Returns the number of comments got
 
-static unsigned Tml_Com_WriteHiddenComms (struct Tml_Timeline *Timeline,
-                                          long NotCod,
-				          char IdComms[Frm_MAX_BYTES_ID + 1],
-					  unsigned NumInitialCommsToGet)
+static unsigned TmlCom_WriteHiddenComms (struct Tml_Timeline *Timeline,
+                                         long NotCod,
+				         char IdComms[Frm_MAX_BYTES_ID + 1],
+					 unsigned NumInitialCommsToGet)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumInitialCommsGot;
@@ -403,7 +403,7 @@ static unsigned Tml_Com_WriteHiddenComms (struct Tml_Timeline *Timeline,
 
    /***** List comments *****/
    HTM_UL_Begin ("id=\"com_%s\" class=\"Tml_LIST\"",IdComms);
-      Tml_Com_ListComms (Timeline,NumInitialCommsGot,mysql_res);
+      TmlCom_ListComms (Timeline,NumInitialCommsGot,mysql_res);
    HTM_UL_End ();
 
    /***** Free structure that stores the query result *****/
@@ -416,8 +416,8 @@ static unsigned Tml_Com_WriteHiddenComms (struct Tml_Timeline *Timeline,
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 
-static void Tml_Com_ListComms (const struct Tml_Timeline *Timeline,
-                               unsigned NumComms,MYSQL_RES *mysql_res)
+static void TmlCom_ListComms (const struct Tml_Timeline *Timeline,
+                              unsigned NumComms,MYSQL_RES *mysql_res)
   {
    unsigned NumCom;
 
@@ -425,29 +425,29 @@ static void Tml_Com_ListComms (const struct Tml_Timeline *Timeline,
    for (NumCom = 0;
 	NumCom < NumComms;
 	NumCom++)
-      Tml_Com_WriteOneCommInList (Timeline,mysql_res);
+      TmlCom_WriteOneCommInList (Timeline,mysql_res);
   }
 
 /*****************************************************************************/
 /************************* Write a comment in list ***************************/
 /*****************************************************************************/
 
-static void Tml_Com_WriteOneCommInList (const struct Tml_Timeline *Timeline,
-                                        MYSQL_RES *mysql_res)
+static void TmlCom_WriteOneCommInList (const struct Tml_Timeline *Timeline,
+                                       MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
-   struct Tml_Com_Comment Com;
+   struct TmlCom_Comment Com;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
    row = mysql_fetch_row (mysql_res);
-   Tml_Com_GetDataOfCommFromRow (row,&Com);
+   TmlCom_GetDataOfCommFromRow (row,&Com);
 
    /***** Write comment *****/
    HTM_LI_Begin ("class=\"Tml_COM\"");
-      Tml_Com_CheckAndWriteComm (Timeline,&Com);
+      TmlCom_CheckAndWriteComm (Timeline,&Com);
    HTM_LI_End ();
 
    /***** Free image *****/
@@ -458,9 +458,9 @@ static void Tml_Com_WriteOneCommInList (const struct Tml_Timeline *Timeline,
 /**** Link to "show only the latest comments" / "show the first comments" ****/
 /*****************************************************************************/
 
-static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
-                                     const char IdComms[Frm_MAX_BYTES_ID + 1],
-                                     unsigned NumComms)
+static void TmlCom_LinkToShowComms (TmlCom_ContractExpand_t ConExp,
+                                    const char IdComms[Frm_MAX_BYTES_ID + 1],
+                                    unsigned NumComms)
   {
    extern const char *Txt_See_only_the_latest_X_COMMENTS;
    extern const char *Txt_See_the_previous_X_COMMENTS;
@@ -469,15 +469,15 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
       const char *Id;
       const char *Icon;
       const char **Text;
-     } Link[Tml_Com_NUM_CONTRACT_EXPAND] =
+     } Link[TmlCom_NUM_CONTRACT_EXPAND] =
      {
-	[Tml_Com_CONTRACT] =
+	[TmlCom_CONTRACT] =
 	  {
 	   .Id   = "con",
 	   .Icon = "angle-down.svg",
 	   .Text = &Txt_See_only_the_latest_X_COMMENTS,
 	  },
-	[Tml_Com_EXPAND] =
+	[TmlCom_EXPAND] =
 	  {
 	   .Id   = "exp",
 	   .Icon = "angle-up.svg",
@@ -495,7 +495,7 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
       /* Icon and text */
       if (asprintf (&Text,*Link[ConExp].Text,NumComms) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Tml_Com_PutIconToToggleComms (IdComms,Link[ConExp].Icon,Text);
+      TmlCom_PutIconToToggleComms (IdComms,Link[ConExp].Icon,Text);
       free (Text);
 
    /* End container */
@@ -506,8 +506,8 @@ static void Tml_Com_LinkToShowComms (Tml_Com_ContractExpand_t ConExp,
 /********** Put an icon to toggle on/off comments in a publication ***********/
 /*****************************************************************************/
 
-static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
-                                          const char *Icon,const char *Text)
+static void TmlCom_PutIconToToggleComms (const char *UniqueId,
+                                         const char *Icon,const char *Text)
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    char *OnClick;
@@ -529,8 +529,8 @@ static void Tml_Com_PutIconToToggleComms (const char *UniqueId,
 /************************** Check and write comment **************************/
 /*****************************************************************************/
 
-static void Tml_Com_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
-	                               struct Tml_Com_Comment *Com)
+static void TmlCom_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
+	                              struct TmlCom_Comment *Com)
   {
    /*
     ___________________________________________
@@ -558,15 +558,15 @@ static void Tml_Com_CheckAndWriteComm (const struct Tml_Timeline *Timeline,
      }
 
    /***** Write comment *****/
-   Tml_Com_WriteComm (Timeline,Com);
+   TmlCom_WriteComm (Timeline,Com);
   }
 
 /*****************************************************************************/
 /******************************** Write comment ******************************/
 /*****************************************************************************/
 
-static void Tml_Com_WriteComm (const struct Tml_Timeline *Timeline,
-	                       struct Tml_Com_Comment *Com)
+static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
+	                      struct TmlCom_Comment *Com)
   {
    struct UsrData UsrDat;	// Author of the comment
 
@@ -578,17 +578,17 @@ static void Tml_Com_WriteComm (const struct Tml_Timeline *Timeline,
                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Left: author's photo *****/
-   Tml_Com_ShowAuthorPhoto (&UsrDat);
+   TmlCom_ShowAuthorPhoto (&UsrDat);
 
    /***** Right: author's name, time, content, and buttons *****/
    /* Begin container */
    HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
 
       /* Right top: author's name, time, and content */
-      Tml_Com_WriteAuthorTimeAndContent (Com,&UsrDat);
+      TmlCom_WriteAuthorTimeAndContent (Com,&UsrDat);
 
       /* Right bottom: buttons */
-      Tml_Com_WriteButtons (Timeline,Com,&UsrDat);
+      TmlCom_WriteButtons (Timeline,Com,&UsrDat);
 
    /* End container */
    HTM_DIV_End ();
@@ -601,24 +601,24 @@ static void Tml_Com_WriteComm (const struct Tml_Timeline *Timeline,
 /**** Write top right part of a note: author's name, time and note content ***/
 /*****************************************************************************/
 
-static void Tml_Com_WriteAuthorTimeAndContent (struct Tml_Com_Comment *Com,
-                                               const struct UsrData *UsrDat)	// Author
+static void TmlCom_WriteAuthorTimeAndContent (struct TmlCom_Comment *Com,
+                                              const struct UsrData *UsrDat)	// Author
   {
    /***** Write author's full name and nickname *****/
-   Tml_Com_WriteAuthorName (UsrDat);
+   TmlCom_WriteAuthorName (UsrDat);
 
    /***** Write date and time *****/
    Tml_WriteDateTime (Com->DateTimeUTC);
 
    /***** Write content of the comment *****/
-   Tml_Com_WriteContent (Com);
+   TmlCom_WriteContent (Com);
   }
 
 /*****************************************************************************/
 /*************** Write name of author of a comment to a note *****************/
 /*****************************************************************************/
 
-static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
+static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_My_public_profile;
@@ -649,7 +649,7 @@ static void Tml_Com_WriteAuthorName (const struct UsrData *UsrDat)	// Author
 /************************* Write content of comment **************************/
 /*****************************************************************************/
 
-static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com)
+static void TmlCom_WriteContent (struct TmlCom_Comment *Com)
   {
    extern const char *The_Colors[The_NUM_THEMES];
 
@@ -671,9 +671,9 @@ static void Tml_Com_WriteContent (struct Tml_Com_Comment *Com)
 /********************* Write bottom part of a comment ************************/
 /*****************************************************************************/
 
-static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
-	                          const struct Tml_Com_Comment *Com,
-                                  const struct UsrData *UsrDat)	// Author
+static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
+	                         const struct TmlCom_Comment *Com,
+                                 const struct UsrData *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav
 
@@ -685,15 +685,15 @@ static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
       /***** Foot column 1: fav zone *****/
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"Tml_FAV_COM Tml_FAV_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_COMM,
+	 TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_COMM,
 	                        Com->PubCod,Com->UsrCod,Com->NumFavs,
-			        Tml_Usr_SHOW_FEW_USRS);
+			        TmlUsr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: icon to remove this comment *****/
       HTM_DIV_Begin ("class=\"Tml_REM\"");
 	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
-	    Tml_Com_PutFormToRemoveComm (Timeline,Com->PubCod);
+	    TmlCom_PutFormToRemoveComm (Timeline,Com->PubCod);
       HTM_DIV_End ();
 
    /***** End buttons container *****/
@@ -704,28 +704,28 @@ static void Tml_Com_WriteButtons (const struct Tml_Timeline *Timeline,
 /************************* Form to remove comment ****************************/
 /*****************************************************************************/
 
-static void Tml_Com_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
-	                                 long PubCod)
+static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
+	                                long PubCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
    /* Begin form */
-   Tml_Frm_BeginForm (Timeline,Tml_Frm_REQ_REM_COMM);
-      Tml_Pub_PutHiddenParamPubCod (PubCod);
+   TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_COMM);
+      TmlPub_PutHiddenParamPubCod (PubCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,Txt_Remove);
 
    /* End form */
-   Tml_Frm_EndForm ();
+   TmlFrm_EndForm ();
   }
 
 /*****************************************************************************/
 /******************************* Comment a note ******************************/
 /*****************************************************************************/
 
-void Tml_Com_ReceiveCommUsr (void)
+void TmlCom_ReceiveCommUsr (void)
   {
    struct Tml_Timeline Timeline;
    long NotCod;
@@ -744,14 +744,14 @@ void Tml_Com_ReceiveCommUsr (void)
 
       /***** Receive comment in a note
 	     and write updated timeline after commenting (user) *****/
-      NotCod = Tml_Com_ReceiveComm ();
+      NotCod = TmlCom_ReceiveComm ();
       Tml_ShowTimelineUsrHighlighting (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
   }
 
-void Tml_Com_ReceiveCommGbl (void)
+void TmlCom_ReceiveCommGbl (void)
   {
    struct Tml_Timeline Timeline;
    long NotCod;
@@ -760,22 +760,22 @@ void Tml_Com_ReceiveCommGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Receive comment in a note *****/
-   NotCod = Tml_Com_ReceiveComm ();
+   NotCod = TmlCom_ReceiveComm ();
 
    /***** Write updated timeline after commenting (global) *****/
    Tml_ShowTimelineGblHighlighting (&Timeline,NotCod);
   }
 
-static long Tml_Com_ReceiveComm (void)
+static long TmlCom_ReceiveComm (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
-   struct Tml_Pst_Content Content;
-   struct Tml_Not_Note Not;
-   struct Tml_Pub_Publication Pub;
+   struct TmlPst_Content Content;
+   struct TmlNot_Note Not;
+   struct TmlPub_Publication Pub;
 
    /***** Get data of note *****/
-   Not.NotCod = Tml_Not_GetParamNotCod ();
-   Tml_Not_GetDataOfNoteByCod (&Not);
+   Not.NotCod = TmlNot_GetParamNotCod ();
+   TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Trivial check: note code *****/
    if (Not.NotCod <= 0)
@@ -808,8 +808,8 @@ static long Tml_Com_ReceiveComm (void)
       /* Insert into publications */
       Pub.NotCod       = Not.NotCod;
       Pub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Pub.Type         = Tml_Pub_COMMENT_TO_NOTE;
-      Tml_Pub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
+      Pub.Type         = TmlPub_COMMENT_TO_NOTE;
+      TmlPub_PublishPubInTimeline (&Pub);	// Set Pub.PubCod
 
       /* Insert comment content in the database */
       Tml_DB_InsertCommContent (Pub.PubCod,&Content);
@@ -831,7 +831,7 @@ static long Tml_Com_ReceiveComm (void)
 /**************** Request the removal of a comment in a note *****************/
 /*****************************************************************************/
 
-void Tml_Com_RequestRemComUsr (void)
+void TmlCom_RequestRemComUsr (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -848,7 +848,7 @@ void Tml_Com_RequestRemComUsr (void)
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Request the removal of comment in note *****/
-      Tml_Com_RequestRemovalComm (&Timeline);
+      TmlCom_RequestRemovalComm (&Timeline);
 
       /***** Write timeline again (user) *****/
       Tml_ShowTimelineUsr (&Timeline);
@@ -857,7 +857,7 @@ void Tml_Com_RequestRemComUsr (void)
    HTM_SECTION_End ();
   }
 
-void Tml_Com_RequestRemComGbl (void)
+void TmlCom_RequestRemComGbl (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -865,26 +865,26 @@ void Tml_Com_RequestRemComGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Request the removal of comment in note *****/
-   Tml_Com_RequestRemovalComm (&Timeline);
+   TmlCom_RequestRemovalComm (&Timeline);
 
    /***** Write timeline again (global) *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline)
+static void TmlCom_RequestRemovalComm (struct Tml_Timeline *Timeline)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
-   struct Tml_Com_Comment Com;
+   struct TmlCom_Comment Com;
 
    /***** Initialize media *****/
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = Tml_Pub_GetParamPubCod ();
-   Tml_Com_GetDataOfCommByCod (&Com);
+   Com.PubCod = TmlPub_GetParamPubCod ();
+   TmlCom_GetDataOfCommByCod (&Com);
 
    /***** Do some checks *****/
-   if (!Tml_Usr_CheckIfICanRemove (Com.PubCod,Com.UsrCod))
+   if (!TmlUsr_CheckIfICanRemove (Com.PubCod,Com.UsrCod))
      {
       Med_MediaDestructor (&Com.Content.Media);
       return;
@@ -892,7 +892,7 @@ static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline)
 
    /***** Show question and button to remove comment *****/
    /* Begin alert */
-   Tml_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
+   TmlFrm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_comment);
 
       /* Begin box for the comment */
       Box_BoxBegin (NULL,NULL,
@@ -905,7 +905,7 @@ static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline)
 
 	 /* Show the comment */
 	 HTM_DIV_Begin ("class=\"Tml_RIGHT_CONT Tml_RIGHT_WIDTH\"");
-	    Tml_Com_CheckAndWriteComm (Timeline,&Com);
+	    TmlCom_CheckAndWriteComm (Timeline,&Com);
 	 HTM_DIV_End ();
 
       /* End box */
@@ -913,8 +913,8 @@ static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline)
 
    /* End alert */
    Timeline->PubCod = Com.PubCod;	// Publication to be removed
-   Tml_Frm_EndAlertRemove (Timeline,Tml_Frm_REM_COMM,
-			  Tml_Com_PutParamsRemoveComm);
+   TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_COMM,
+			  TmlCom_PutParamsRemoveComm);
 
    /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
@@ -924,7 +924,7 @@ static void Tml_Com_RequestRemovalComm (struct Tml_Timeline *Timeline)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void Tml_Com_PutParamsRemoveComm (void *Timeline)
+static void TmlCom_PutParamsRemoveComm (void *Timeline)
   {
    if (Timeline)
      {
@@ -932,7 +932,7 @@ static void Tml_Com_PutParamsRemoveComm (void *Timeline)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
-      Tml_Pub_PutHiddenParamPubCod (((struct Tml_Timeline *) Timeline)->PubCod);
+      TmlPub_PutHiddenParamPubCod (((struct Tml_Timeline *) Timeline)->PubCod);
      }
   }
 
@@ -940,7 +940,7 @@ static void Tml_Com_PutParamsRemoveComm (void *Timeline)
 /***************************** Remove a comment ******************************/
 /*****************************************************************************/
 
-void Tml_Com_RemoveComUsr (void)
+void TmlCom_RemoveComUsr (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -957,7 +957,7 @@ void Tml_Com_RemoveComUsr (void)
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Remove a comment *****/
-      Tml_Com_RemoveComm ();
+      TmlCom_RemoveComm ();
 
       /***** Write updated timeline after removing (user) *****/
       Tml_ShowTimelineUsr (&Timeline);
@@ -966,7 +966,7 @@ void Tml_Com_RemoveComUsr (void)
    HTM_SECTION_End ();
   }
 
-void Tml_Com_RemoveComGbl (void)
+void TmlCom_RemoveComGbl (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -974,24 +974,24 @@ void Tml_Com_RemoveComGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Remove a comment *****/
-   Tml_Com_RemoveComm ();
+   TmlCom_RemoveComm ();
 
    /***** Write updated timeline after removing (global) *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void Tml_Com_RemoveComm (void)
+static void TmlCom_RemoveComm (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_Comment_removed;
-   struct Tml_Com_Comment Com;
+   struct TmlCom_Comment Com;
 
    /***** Initialize media *****/
    Med_MediaConstructor (&Com.Content.Media);
 
    /***** Get data of comment *****/
-   Com.PubCod = Tml_Pub_GetParamPubCod ();
-   Tml_Com_GetDataOfCommByCod (&Com);
+   Com.PubCod = TmlPub_GetParamPubCod ();
+   TmlCom_GetDataOfCommByCod (&Com);
 
    /***** Trivial check 1: publication code *****/
    if (Com.PubCod <= 0)
@@ -1011,13 +1011,13 @@ static void Tml_Com_RemoveComm (void)
 
    /***** Remove media associated to comment
 	  and delete comment from database *****/
-   Tml_Com_RemoveCommMediaAndDBEntries (Com.PubCod);
+   TmlCom_RemoveCommMediaAndDBEntries (Com.PubCod);
 
    /***** Free media *****/
    Med_MediaDestructor (&Com.Content.Media);
 
    /***** Reset fields of comment *****/
-   Tml_Com_ResetComm (&Com);
+   TmlCom_ResetComm (&Com);
 
    /***** Message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
@@ -1027,7 +1027,7 @@ static void Tml_Com_RemoveComm (void)
 /*************** Remove comment media and database entries *******************/
 /*****************************************************************************/
 
-void Tml_Com_RemoveCommMediaAndDBEntries (long PubCod)
+void TmlCom_RemoveCommMediaAndDBEntries (long PubCod)
   {
    /***** Remove media associated to comment *****/
    Med_RemoveMedia (Tml_DB_GetMedCodFromComm (PubCod));
@@ -1051,7 +1051,7 @@ void Tml_Com_RemoveCommMediaAndDBEntries (long PubCod)
 /******************* Get data of comment using its code **********************/
 /*****************************************************************************/
 
-void Tml_Com_GetDataOfCommByCod (struct Tml_Com_Comment *Com)
+void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1060,7 +1060,7 @@ void Tml_Com_GetDataOfCommByCod (struct Tml_Com_Comment *Com)
    if (Com->PubCod <= 0)
      {
       /***** Reset fields of comment *****/
-      Tml_Com_ResetComm (Com);
+      TmlCom_ResetComm (Com);
       return;
      }
 
@@ -1069,11 +1069,11 @@ void Tml_Com_GetDataOfCommByCod (struct Tml_Com_Comment *Com)
      {
       /* Get data of comment */
       row = mysql_fetch_row (mysql_res);
-      Tml_Com_GetDataOfCommFromRow (row,Com);
+      TmlCom_GetDataOfCommFromRow (row,Com);
      }
    else
       /* Reset fields of comment */
-      Tml_Com_ResetComm (Com);
+      TmlCom_ResetComm (Com);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1083,8 +1083,8 @@ void Tml_Com_GetDataOfCommByCod (struct Tml_Com_Comment *Com)
 /********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void Tml_Com_GetDataOfCommFromRow (MYSQL_ROW row,
-                                          struct Tml_Com_Comment *Com)
+static void TmlCom_GetDataOfCommFromRow (MYSQL_ROW row,
+                                         struct TmlCom_Comment *Com)
   {
    /*
    row[0]: PubCod
@@ -1109,7 +1109,7 @@ static void Tml_Com_GetDataOfCommFromRow (MYSQL_ROW row,
    Med_GetMediaDataByCod (&Com->Content.Media);
 
    /***** Get number of times this comment has been favourited *****/
-   Com->NumFavs = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_COMM,
+   Com->NumFavs = Tml_DB_GetNumFavers (TmlUsr_FAV_UNF_COMM,
                                       Com->PubCod,Com->UsrCod);
   }
 
@@ -1117,7 +1117,7 @@ static void Tml_Com_GetDataOfCommFromRow (MYSQL_ROW row,
 /************************** Reset fields of comment **************************/
 /*****************************************************************************/
 
-static void Tml_Com_ResetComm (struct Tml_Com_Comment *Com)
+static void TmlCom_ResetComm (struct TmlCom_Comment *Com)
   {
    Com->PubCod         =
    Com->UsrCod         =

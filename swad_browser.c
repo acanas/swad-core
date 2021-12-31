@@ -3229,12 +3229,12 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC60x80",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE60x80",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO60x80",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR60x80",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC60x80",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE60x80",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO60x80",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR60x80",
      };
 
    /***** Show user's photo *****/
@@ -5060,7 +5060,7 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
       Ico_PutIcon (Open ? "folder-open-yellow.png" :
 			  "folder-yellow.png",
 		   Ico_UNCHANGED,
-		   Txt_Folder,"CONTEXT_OPT CONTEXT_ICO_16x16");
+		   Txt_Folder,"CONTEXT_OPT CONTEXT_ICO16x16");
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -5122,7 +5122,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMeta
 
 	 /***** Icon depending on the file extension *****/
 	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16",true);
+			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",true);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -5453,12 +5453,12 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
   {
    extern const char *Txt_Unknown_or_without_photo;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20B",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20B",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20B",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20B",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20B",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20B",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20B",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
    bool ShowUsr = false;
    struct UsrData UsrDat;
@@ -7854,12 +7854,12 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
    extern const char *Txt_Save_file_properties;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    struct FileMetadata FileMetadata;
    struct UsrData PublisherUsrDat;
@@ -8709,28 +8709,28 @@ void Brw_ChgFileMetadata (void)
 	    switch (Gbl.FileBrowser.Type)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  Tml_Not_StoreAndPublishNote (Tml_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
+		  TmlNot_StoreAndPublishNote (Tml_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod);
 		  break;
 	       default:
 		  break;
@@ -9285,7 +9285,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social note as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifOneFileAsRemoved (Path);
-   Tml_Not_MarkNoteOneFileAsUnavailable (Path);
+   TmlNot_MarkNoteOneFileAsUnavailable (Path);
 
    /***** Remove from database the entries that store
           the marks properties, file views and file data *****/
@@ -9302,7 +9302,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social notes as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifChildrenOfFolderAsRemoved (Path);
-   Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (Path);
+   TmlNot_MarkNotesChildrenOfFolderAsUnavailable (Path);
 
    /***** Remove from database the entries that store
           the marks properties, file views and file data *****/
@@ -10114,11 +10114,11 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 		  /* Icon with folder */
 		  Ico_PutIcon ("folder-yellow.png",Ico_UNCHANGED,
-		               Txt_Folder,"CONTEXT_ICO_16x16");
+		               Txt_Folder,"CONTEXT_ICO16x16");
 	       else
 		  /* Icon with file type or link */
 		  Brw_PutIconFile (FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name,
-				   "CONTEXT_ICO_16x16",false);
+				   "CONTEXT_ICO16x16",false);
 	       HTM_TxtF ("&nbsp;%s",FileNameToShow);
 	    HTM_BUTTON_End ();
 

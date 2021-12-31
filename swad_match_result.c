@@ -1072,12 +1072,12 @@ void MchRes_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_Grade;
    extern const char *Txt_Tags;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    struct Gam_Games Games;
    struct Gam_Game Game;

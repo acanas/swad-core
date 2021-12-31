@@ -33,13 +33,13 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                  Ntf_NotifyEvent_t NotifyEvent);
+void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                                 Ntf_NotifyEvent_t NotifyEvent);
 
-void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                  char **ContentStr,
-                                  long PubCod,bool GetContent);
+void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                 char **ContentStr,
+                                 long PubCod,bool GetContent);
 
-void Tml_Ntf_MarkMyNotifAsSeen (void);
+void TmlNtf_MarkMyNotifAsSeen (void);
 
 #endif

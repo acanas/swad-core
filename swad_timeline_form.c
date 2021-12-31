@@ -41,45 +41,45 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define Tml_Frm_ICON_ELLIPSIS	"ellipsis-h.svg"
+#define TmlFrm_ICON_ELLIPSIS	"ellipsis-h.svg"
 
-const Act_Action_t Tml_Frm_ActionGbl[Tml_Frm_NUM_ACTIONS] =
+const Act_Action_t TmlFrm_ActionGbl[TmlFrm_NUM_ACTIONS] =
   {
-   [Tml_Frm_RECEIVE_POST] = ActRcvPstGblTL,
-   [Tml_Frm_RECEIVE_COMM] = ActRcvComGblTL,
-   [Tml_Frm_REQ_REM_NOTE] = ActReqRemPubGblTL,
-   [Tml_Frm_REQ_REM_COMM] = ActReqRemComGblTL,
-   [Tml_Frm_REM_NOTE    ] = ActRemPubGblTL,
-   [Tml_Frm_REM_COMM    ] = ActRemComGblTL,
-   [Tml_Frm_SHA_NOTE    ] = ActShaNotGblTL,
-   [Tml_Frm_UNS_NOTE    ] = ActUnsNotGblTL,
-   [Tml_Frm_FAV_NOTE    ] = ActFavNotGblTL,
-   [Tml_Frm_FAV_COMM    ] = ActFavComGblTL,
-   [Tml_Frm_UNF_NOTE    ] = ActUnfNotGblTL,
-   [Tml_Frm_UNF_COMM    ] = ActUnfComGblTL,
-   [Tml_Frm_ALL_SHA_NOTE] = ActAllShaNotGblTL,
-   [Tml_Frm_ALL_FAV_NOTE] = ActAllFavNotGblTL,
-   [Tml_Frm_ALL_FAV_COMM] = ActAllFavComGblTL,
-   [Tml_Frm_SHO_HID_COMM] = ActShoHidComGblTL,
+   [TmlFrm_RECEIVE_POST] = ActRcvPstGblTL,
+   [TmlFrm_RECEIVE_COMM] = ActRcvComGblTL,
+   [TmlFrm_REQ_REM_NOTE] = ActReqRemPubGblTL,
+   [TmlFrm_REQ_REM_COMM] = ActReqRemComGblTL,
+   [TmlFrm_REM_NOTE    ] = ActRemPubGblTL,
+   [TmlFrm_REM_COMM    ] = ActRemComGblTL,
+   [TmlFrm_SHA_NOTE    ] = ActShaNotGblTL,
+   [TmlFrm_UNS_NOTE    ] = ActUnsNotGblTL,
+   [TmlFrm_FAV_NOTE    ] = ActFavNotGblTL,
+   [TmlFrm_FAV_COMM    ] = ActFavComGblTL,
+   [TmlFrm_UNF_NOTE    ] = ActUnfNotGblTL,
+   [TmlFrm_UNF_COMM    ] = ActUnfComGblTL,
+   [TmlFrm_ALL_SHA_NOTE] = ActAllShaNotGblTL,
+   [TmlFrm_ALL_FAV_NOTE] = ActAllFavNotGblTL,
+   [TmlFrm_ALL_FAV_COMM] = ActAllFavComGblTL,
+   [TmlFrm_SHO_HID_COMM] = ActShoHidComGblTL,
   };
-const Act_Action_t Tml_Frm_ActionUsr[Tml_Frm_NUM_ACTIONS] =
+const Act_Action_t TmlFrm_ActionUsr[TmlFrm_NUM_ACTIONS] =
   {
-   [Tml_Frm_RECEIVE_POST] = ActRcvPstUsrTL,
-   [Tml_Frm_RECEIVE_COMM] = ActRcvComUsrTL,
-   [Tml_Frm_REQ_REM_NOTE] = ActReqRemPubUsrTL,
-   [Tml_Frm_REQ_REM_COMM] = ActReqRemComUsrTL,
-   [Tml_Frm_REM_NOTE    ] = ActRemPubUsrTL,
-   [Tml_Frm_REM_COMM    ] = ActRemComUsrTL,
-   [Tml_Frm_SHA_NOTE    ] = ActShaNotUsrTL,
-   [Tml_Frm_UNS_NOTE    ] = ActUnsNotUsrTL,
-   [Tml_Frm_FAV_NOTE    ] = ActFavNotUsrTL,
-   [Tml_Frm_FAV_COMM    ] = ActFavComUsrTL,
-   [Tml_Frm_UNF_NOTE    ] = ActUnfNotUsrTL,
-   [Tml_Frm_UNF_COMM    ] = ActUnfComUsrTL,
-   [Tml_Frm_ALL_SHA_NOTE] = ActAllShaNotUsrTL,
-   [Tml_Frm_ALL_FAV_NOTE] = ActAllFavNotUsrTL,
-   [Tml_Frm_ALL_FAV_COMM] = ActAllFavComUsrTL,
-   [Tml_Frm_SHO_HID_COMM] = ActShoHidComUsrTL,
+   [TmlFrm_RECEIVE_POST] = ActRcvPstUsrTL,
+   [TmlFrm_RECEIVE_COMM] = ActRcvComUsrTL,
+   [TmlFrm_REQ_REM_NOTE] = ActReqRemPubUsrTL,
+   [TmlFrm_REQ_REM_COMM] = ActReqRemComUsrTL,
+   [TmlFrm_REM_NOTE    ] = ActRemPubUsrTL,
+   [TmlFrm_REM_COMM    ] = ActRemComUsrTL,
+   [TmlFrm_SHA_NOTE    ] = ActShaNotUsrTL,
+   [TmlFrm_UNS_NOTE    ] = ActUnsNotUsrTL,
+   [TmlFrm_FAV_NOTE    ] = ActFavNotUsrTL,
+   [TmlFrm_FAV_COMM    ] = ActFavComUsrTL,
+   [TmlFrm_UNF_NOTE    ] = ActUnfNotUsrTL,
+   [TmlFrm_UNF_COMM    ] = ActUnfComUsrTL,
+   [TmlFrm_ALL_SHA_NOTE] = ActAllShaNotUsrTL,
+   [TmlFrm_ALL_FAV_NOTE] = ActAllFavNotUsrTL,
+   [TmlFrm_ALL_FAV_COMM] = ActAllFavComUsrTL,
+   [TmlFrm_SHO_HID_COMM] = ActShoHidComUsrTL,
   };
 
 /*****************************************************************************/
@@ -92,73 +92,73 @@ extern struct Globals Gbl;
 /******************** Form to fav/unfav or share/unshare *********************/
 /*****************************************************************************/
 
-void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
+void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod)
   {
    extern const char *Txt_TIMELINE_Mark_as_favourite;
    extern const char *Txt_TIMELINE_Favourite;
    extern const char *Txt_TIMELINE_Share;
    extern const char *Txt_TIMELINE_Shared;
-   struct Tml_Form Form[Tml_Usr_NUM_FAV_SHA][2] =
+   struct Tml_Form Form[TmlUsr_NUM_FAV_SHA][2] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] =
+      [TmlUsr_FAV_UNF_NOTE] =
 	{
 	 [false] = // I have not faved ==> fav
 	   {
-	    .Action      = Tml_Frm_FAV_NOTE,
+	    .Action      = TmlFrm_FAV_NOTE,
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_BLACK,
 	    .Title       = Txt_TIMELINE_Mark_as_favourite,
 	   },
 	 [true] = // I have faved ==> unfav
 	   {
-	    .Action      = Tml_Frm_UNF_NOTE,
+	    .Action      = TmlFrm_UNF_NOTE,
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_RED,
 	    .Title       = Txt_TIMELINE_Favourite,
 	   },
 	},
-      [Tml_Usr_FAV_UNF_COMM] =
+      [TmlUsr_FAV_UNF_COMM] =
 	{
 	 [false] = // I have not faved ==> fav
 	   {
-	    .Action      = Tml_Frm_FAV_COMM,
+	    .Action      = TmlFrm_FAV_COMM,
 	    .ParamFormat = "PubCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_BLACK,
 	    .Title       = Txt_TIMELINE_Mark_as_favourite,
 	   },
 	 [true] = // I have faved ==> unfav
 	   {
-	    .Action      = Tml_Frm_UNF_COMM,
+	    .Action      = TmlFrm_UNF_COMM,
 	    .ParamFormat = "PubCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Fav_ICON_FAV,
+	    .Icon        = TmlFav_ICON_FAV,
 	    .Color       = Ico_RED,
 	    .Title       = Txt_TIMELINE_Favourite,
 	   },
 	},
-      [Tml_Usr_SHA_UNS_NOTE] =
+      [TmlUsr_SHA_UNS_NOTE] =
 	{
 	 [false] = // I have not shared ==> share
 	   {
-	    .Action      = Tml_Frm_SHA_NOTE,
+	    .Action      = TmlFrm_SHA_NOTE,
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Sha_ICON_SHARE,
+	    .Icon        = TmlSha_ICON_SHARE,
 	    .Color       = Ico_BLACK,
 	    .Title       = Txt_TIMELINE_Share,
 	   },
 	 [true] = // I have shared ==> unshare
 	   {
-	    .Action      = Tml_Frm_UNS_NOTE,
+	    .Action      = TmlFrm_UNS_NOTE,
 	    .ParamFormat = "NotCod=%ld",
 	    .ParamCod    = Cod,
-	    .Icon        = Tml_Sha_ICON_SHARE,
+	    .Icon        = TmlSha_ICON_SHARE,
 	    .Color       = Ico_GREEN,
 	    .Title       = Txt_TIMELINE_Shared,
 	   },
@@ -167,32 +167,32 @@ void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod)
    bool FavedShared;
 
    /***** Form and icon to fav/unfav note *****/
-   FavedShared = Tml_Usr_CheckIfFavedSharedByUsr (FavSha,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   Tml_Frm_FormFavSha (&Form[FavSha][FavedShared]);
+   FavedShared = TmlUsr_CheckIfFavedSharedByUsr (FavSha,Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   TmlFrm_FormFavSha (&Form[FavSha][FavedShared]);
   }
 
 /*****************************************************************************/
 /***************** Begin a form in global or user timeline *******************/
 /*****************************************************************************/
 
-void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,
-                        Tml_Frm_Action_t Action)
+void TmlFrm_BeginForm (const struct Tml_Timeline *Timeline,
+                       TmlFrm_Action_t Action)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** Begin form in user timeline *****/
-      Frm_BeginFormAnchor (Tml_Frm_ActionUsr[Action],"timeline");
+      Frm_BeginFormAnchor (TmlFrm_ActionUsr[Action],"timeline");
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
    else
      {
       /***** Begin form in global timeline *****/
-      Frm_BeginForm (Tml_Frm_ActionGbl[Action]);
+      Frm_BeginForm (TmlFrm_ActionGbl[Action]);
 	 Usr_PutHiddenParamWho (Timeline->Who);
      }
   }
 
-void Tml_Frm_EndForm (void)
+void TmlFrm_EndForm (void)
   {
    Frm_EndForm ();
   }
@@ -201,9 +201,9 @@ void Tml_Frm_EndForm (void)
 /********************* Form to show all favers/sharers ***********************/
 /*****************************************************************************/
 
-void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
-		                           const char *ParamFormat,long ParamCod,
-                                           Tml_Usr_HowManyUsrs_t HowManyUsrs)
+void TmlFrm_PutFormToSeeAllFaversSharers (TmlFrm_Action_t Action,
+		                          const char *ParamFormat,long ParamCod,
+                                          TmlUsr_HowManyUsrs_t HowManyUsrs)
   {
    extern const char *Txt_View_all_USERS;
    struct Tml_Form Form =
@@ -211,19 +211,19 @@ void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
       .Action      = Action,
       .ParamFormat = ParamFormat,
       .ParamCod    = ParamCod,
-      .Icon        = Tml_Frm_ICON_ELLIPSIS,
+      .Icon        = TmlFrm_ICON_ELLIPSIS,
       .Title       = Txt_View_all_USERS,
      };
 
    switch (HowManyUsrs)
      {
-      case Tml_Usr_SHOW_FEW_USRS:
+      case TmlUsr_SHOW_FEW_USRS:
 	 /***** Form and icon to view all users *****/
-	 Tml_Frm_FormFavSha (&Form);
+	 TmlFrm_FormFavSha (&Form);
 	 break;
-      case Tml_Usr_SHOW_ALL_USRS:
+      case TmlUsr_SHOW_ALL_USRS:
 	 /***** Disabled icon *****/
-         Ico_PutIconOff (Tml_Frm_ICON_ELLIPSIS,Ico_BLACK,Txt_View_all_USERS);
+         Ico_PutIconOff (TmlFrm_ICON_ELLIPSIS,Ico_BLACK,Txt_View_all_USERS);
 	 break;
      }
   }
@@ -232,7 +232,7 @@ void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
-void Tml_Frm_FormFavSha (const struct Tml_Form *Form)
+void TmlFrm_FormFavSha (const struct Tml_Form *Form)
   {
    char *OnSubmit;
    const char *Anchor;
@@ -263,7 +263,7 @@ void Tml_Frm_FormFavSha (const struct Tml_Form *Form)
       if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
 			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (Tml_Frm_ActionUsr[Form->Action]),
+		    Act_GetActCod (TmlFrm_ActionUsr[Form->Action]),
 		    Gbl.Session.Id,
 		    ParamStr,
 		    Gbl.Usrs.Other.UsrDat.EnUsrCod) < 0)
@@ -275,7 +275,7 @@ void Tml_Frm_FormFavSha (const struct Tml_Form *Form)
       if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
 			      "'act=%ld&ses=%s&%s');"
 			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (Tml_Frm_ActionGbl[Form->Action]),
+		    Act_GetActCod (TmlFrm_ActionGbl[Form->Action]),
 		    Gbl.Session.Id,
 		    ParamStr) < 0)
 	 Err_NotEnoughMemoryExit ();
@@ -291,9 +291,9 @@ void Tml_Frm_FormFavSha (const struct Tml_Form *Form)
 /********** Form to show hidden coments in global or user timeline ***********/
 /*****************************************************************************/
 
-void Tml_Frm_FormToShowHiddenComms (long NotCod,
-				    char IdComms[Frm_MAX_BYTES_ID + 1],
-				    unsigned NumInitialComms)
+void TmlFrm_FormToShowHiddenComms (long NotCod,
+				   char IdComms[Frm_MAX_BYTES_ID + 1],
+				   unsigned NumInitialComms)
   {
    extern const char *The_ClassFormLinkInBox[The_NUM_THEMES];
    extern const char *Txt_See_the_previous_X_COMMENTS;
@@ -317,7 +317,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 				    "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u&OtherUsrCod=%s');"
 				    " return false;",	// return false is necessary to not submit form
 			  IdComms,
-			  Act_GetActCod (Tml_Frm_ActionUsr[Tml_Frm_SHO_HID_COMM]),
+			  Act_GetActCod (TmlFrm_ActionUsr[TmlFrm_SHO_HID_COMM]),
 			  Gbl.Session.Id,
 			  NotCod,
 			  IdComms,
@@ -333,7 +333,7 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 				    "'act=%ld&ses=%s&NotCod=%ld&IdComments=%s&NumHidCom=%u');"
 				    " return false;",	// return false is necessary to not submit form
 			  IdComms,
-			  Act_GetActCod (Tml_Frm_ActionGbl[Tml_Frm_SHO_HID_COMM]),
+			  Act_GetActCod (TmlFrm_ActionGbl[TmlFrm_SHO_HID_COMM]),
 			  Gbl.Session.Id,
 			  NotCod,
 			  IdComms,
@@ -368,23 +368,23 @@ void Tml_Frm_FormToShowHiddenComms (long NotCod,
 /********************** Form to remove note / comment ************************/
 /*****************************************************************************/
 
-void Tml_Frm_BeginAlertRemove (const char *QuestionTxt)
+void TmlFrm_BeginAlertRemove (const char *QuestionTxt)
   {
    Ale_ShowAlertAndButton1 (Ale_QUESTION,QuestionTxt);
   }
 
-void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,
-                             Tml_Frm_Action_t Action,
-                             void (*FuncParams) (void *Args))
+void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
+                            TmlFrm_Action_t Action,
+                            void (*FuncParams) (void *Args))
   {
    extern const char *Txt_Remove;
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-      Ale_ShowAlertAndButton2 (Tml_Frm_ActionUsr[Action],"timeline",NULL,
+      Ale_ShowAlertAndButton2 (TmlFrm_ActionUsr[Action],"timeline",NULL,
 			       FuncParams,Timeline,
 			       Btn_REMOVE_BUTTON,Txt_Remove);
    else
-      Ale_ShowAlertAndButton2 (Tml_Frm_ActionGbl[Action],NULL,NULL,
+      Ale_ShowAlertAndButton2 (TmlFrm_ActionGbl[Action],NULL,NULL,
 			       FuncParams,Timeline,
 			       Btn_REMOVE_BUTTON,Txt_Remove);
   }

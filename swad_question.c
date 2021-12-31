@@ -1504,7 +1504,7 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
 	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 	       if (Question->Answer.Options[NumOpt].Correct)
 		  Ico_PutIcon ("check.svg",Ico_BLACK,
-		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
+		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
 	    HTM_TD_End ();
 
 	    /* Write the number of option */

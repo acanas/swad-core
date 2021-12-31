@@ -29,25 +29,25 @@
 /*****************************************************************************/
 
 // Related with user photo shape
-#define Pho_NUM_SHAPES 4
+#define PhoSha_NUM_SHAPES 4
 typedef enum
   {
-   Pho_SHAPE_CIRCLE    = 0,
-   Pho_SHAPE_ELLIPSE   = 1,
-   Pho_SHAPE_OVAL      = 2,
-   Pho_SHAPE_RECTANGLE = 3,
-  } Pho_Shape_t;
-#define Pho_SHAPE_DEFAULT Pho_SHAPE_CIRCLE
+   PhoSha_SHAPE_CIRCLE    = 0,
+   PhoSha_SHAPE_ELLIPSE   = 1,
+   PhoSha_SHAPE_OVAL      = 2,
+   PhoSha_SHAPE_RECTANGLE = 3,
+  } PhoSha_Shape_t;
+#define PhoSha_SHAPE_DEFAULT PhoSha_SHAPE_CIRCLE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Pho_PutIconsToSelectPhotoShape (void);
-void Pho_ChangePhotoShape (void);
-Pho_Shape_t Pho_GetParamPhotoShape (void);
-Pho_Shape_t Pho_GetShapeFromStr (const char *Str);
+void PhoSha_PutIconsToSelectPhotoShape (void);
+void PhoSha_ChangePhotoShape (void);
+PhoSha_Shape_t PhoSha_GetParamPhotoShape (void);
+PhoSha_Shape_t PhoSha_GetShapeFromStr (const char *Str);
 
-void Fig_GetAndShowNumUsrsPerPhotoShape (void);
+void PhoSha_GetAndShowNumUsrsPerPhotoShape (void);
 
 #endif

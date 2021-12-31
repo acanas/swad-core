@@ -33,18 +33,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Tml_Who_DEFAULT_WHO	Usr_WHO_FOLLOWED
+#define TmlWho_DEFAULT_WHO	Usr_WHO_FOLLOWED
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Who_PutFormWho (struct Tml_Timeline *Timeline);
+void TmlWho_PutFormWho (struct Tml_Timeline *Timeline);
 
-void Tml_Who_GetParamWho (void);
+void TmlWho_GetParamWho (void);
 
-void Tml_Who_SaveWhoInDB (struct Tml_Timeline *Timeline);
+void TmlWho_SaveWhoInDB (struct Tml_Timeline *Timeline);
 
-Usr_Who_t Tml_Who_GetGlobalWho (void);
+Usr_Who_t TmlWho_GetGlobalWho (void);
 
 #endif

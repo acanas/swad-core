@@ -49,36 +49,36 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pho_PutIconsPhotoShape (__attribute__((unused)) void *Args);
+static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) void *Args);
 
 /*****************************************************************************/
 /******************* Put icons to select user photo shape ********************/
 /*****************************************************************************/
 
-void Pho_PutIconsToSelectPhotoShape (void)
+void PhoSha_PutIconsToSelectPhotoShape (void)
   {
    extern const char *Hlp_PROFILE_Settings_user_photos;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_User_photos;
-   extern const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   extern const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES];
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "ICO_HIGHLIGHT PHOTOC15x20B",
-      [Pho_SHAPE_ELLIPSE  ] = "ICO_HIGHLIGHT PHOTOE15x20B",
-      [Pho_SHAPE_OVAL     ] = "ICO_HIGHLIGHT PHOTOO15x20B",
-      [Pho_SHAPE_RECTANGLE] = "ICO_HIGHLIGHT PHOTOR15x20B",
+      [PhoSha_SHAPE_CIRCLE   ] = "ICO_HIGHLIGHT PHOTOC15x20B",
+      [PhoSha_SHAPE_ELLIPSE  ] = "ICO_HIGHLIGHT PHOTOE15x20B",
+      [PhoSha_SHAPE_OVAL     ] = "ICO_HIGHLIGHT PHOTOO15x20B",
+      [PhoSha_SHAPE_RECTANGLE] = "ICO_HIGHLIGHT PHOTOR15x20B",
      };
-   Pho_Shape_t Shape;
+   PhoSha_Shape_t Shape;
    char *Class;
 
    Box_BoxBegin (NULL,Txt_User_photos,
-                 Pho_PutIconsPhotoShape,NULL,
+                 PhoSha_PutIconsPhotoShape,NULL,
                  Hlp_PROFILE_Settings_user_photos,Box_NOT_CLOSABLE);
       Set_BeginSettingsHead ();
 	 Set_BeginOneSettingSelector ();
-	 for (Shape  = (Pho_Shape_t) 0;
-	      Shape <= (Pho_Shape_t) (Pho_NUM_SHAPES - 1);
+	 for (Shape  = (PhoSha_Shape_t) 0;
+	      Shape <= (PhoSha_Shape_t) (PhoSha_NUM_SHAPES - 1);
 	      Shape++)
 	   {
 	    if (Shape == Gbl.Prefs.PhotoShape)
@@ -107,7 +107,7 @@ void Pho_PutIconsToSelectPhotoShape (void)
 /************** Put contextual icons in side-columns setting *****************/
 /*****************************************************************************/
 
-static void Pho_PutIconsPhotoShape (__attribute__((unused)) void *Args)
+static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_PHOTO_SHAPES);
@@ -117,10 +117,10 @@ static void Pho_PutIconsPhotoShape (__attribute__((unused)) void *Args)
 /************************** Change user photo shape **************************/
 /*****************************************************************************/
 
-void Pho_ChangePhotoShape (void)
+void PhoSha_ChangePhotoShape (void)
   {
    /***** Get param with user photo shape *****/
-   Gbl.Prefs.PhotoShape = Pho_GetParamPhotoShape ();
+   Gbl.Prefs.PhotoShape = PhoSha_GetParamPhotoShape ();
 
    /***** Store side colums in database *****/
    if (Gbl.Usrs.Me.Logged)
@@ -134,34 +134,34 @@ void Pho_ChangePhotoShape (void)
 /************** Get parameter used to change user photo shape ****************/
 /*****************************************************************************/
 
-Pho_Shape_t Pho_GetParamPhotoShape (void)
+PhoSha_Shape_t PhoSha_GetParamPhotoShape (void)
   {
-   return (Pho_Shape_t) Par_GetParToUnsignedLong ("PhotoShape",
-						  (Pho_Shape_t) 0,
-						  (Pho_Shape_t) (Pho_NUM_SHAPES - 1),
-						  Pho_SHAPE_DEFAULT);
+   return (PhoSha_Shape_t) Par_GetParToUnsignedLong ("PhotoShape",
+						  (PhoSha_Shape_t) 0,
+						  (PhoSha_Shape_t) (PhoSha_NUM_SHAPES - 1),
+						  PhoSha_SHAPE_DEFAULT);
   }
 
 /*****************************************************************************/
 /*********************** Get photo shape from string *************************/
 /*****************************************************************************/
 
-Pho_Shape_t Pho_GetShapeFromStr (const char *Str)
+PhoSha_Shape_t PhoSha_GetShapeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Pho_NUM_SHAPES)
-	 return (Pho_Shape_t) UnsignedNum;
+      if (UnsignedNum < PhoSha_NUM_SHAPES)
+	 return (PhoSha_Shape_t) UnsignedNum;
 
-   return Pho_SHAPE_DEFAULT;
+   return PhoSha_SHAPE_DEFAULT;
   }
 
 /*****************************************************************************/
 /****** Get and show number of users who have chosen a user photo shape ******/
 /*****************************************************************************/
 
-void Fig_GetAndShowNumUsrsPerPhotoShape (void)
+void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_user_photos;
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
@@ -170,17 +170,17 @@ void Fig_GetAndShowNumUsrsPerPhotoShape (void)
    extern const char *Txt_User_photos;
    extern const char *Txt_Number_of_users;
    extern const char *Txt_PERCENT_of_users;
-   extern const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   extern const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES];
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20B",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20B",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20B",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20B",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20B",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20B",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20B",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20B",
      };
-   Pho_Shape_t Shape;
+   PhoSha_Shape_t Shape;
    char *SubQuery;
-   unsigned NumUsrs[Pho_NUM_SHAPES];
+   unsigned NumUsrs[PhoSha_NUM_SHAPES];
    unsigned NumUsrsTotal = 0;
 
    /***** Begin box and table *****/
@@ -190,14 +190,14 @@ void Fig_GetAndShowNumUsrsPerPhotoShape (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_User_photos     ,"CM");
-	 HTM_TH (1,1,Txt_Number_of_users ,"RM");
-	 HTM_TH (1,1,Txt_PERCENT_of_users,"RM");
+	 Fig_TH (Txt_User_photos     ,Fig_HEAD_CENTER);
+	 Fig_TH (Txt_Number_of_users ,Fig_HEAD_RIGHT);
+	 Fig_TH (Txt_PERCENT_of_users,Fig_HEAD_RIGHT);
       HTM_TR_End ();
 
       /***** For each user photo shape... *****/
-      for (Shape  = (Pho_Shape_t) 0;
-	   Shape <= (Pho_Shape_t) (Pho_NUM_SHAPES - 1);
+      for (Shape  = (PhoSha_Shape_t) 0;
+	   Shape <= (PhoSha_Shape_t) (PhoSha_NUM_SHAPES - 1);
 	   Shape++)
 	{
 	 /* Get the number of users who have chosen this layout of columns from database */
@@ -212,8 +212,8 @@ void Fig_GetAndShowNumUsrsPerPhotoShape (void)
 	}
 
       /***** Write number of users who have chosen this user photo shape *****/
-      for (Shape  = (Pho_Shape_t) 0;
-	   Shape <= (Pho_Shape_t) (Pho_NUM_SHAPES - 1);
+      for (Shape  = (PhoSha_Shape_t) 0;
+	   Shape <= (PhoSha_Shape_t) (PhoSha_NUM_SHAPES - 1);
 	   Shape++)
 	{
 	 HTM_TR_Begin (NULL);

@@ -27,38 +27,38 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Tml_Frm_NUM_ACTIONS 16
+#define TmlFrm_NUM_ACTIONS 16
 typedef enum
   {
-   Tml_Frm_RECEIVE_POST,	// Receive post
-   Tml_Frm_RECEIVE_COMM,	// Receive comment
+   TmlFrm_RECEIVE_POST,	// Receive post
+   TmlFrm_RECEIVE_COMM,	// Receive comment
 
-   Tml_Frm_REQ_REM_NOTE,	// Request removal note
-   Tml_Frm_REQ_REM_COMM,	// Request removal comment
+   TmlFrm_REQ_REM_NOTE,	// Request removal note
+   TmlFrm_REQ_REM_COMM,	// Request removal comment
 
-   Tml_Frm_REM_NOTE,	// Remove note
-   Tml_Frm_REM_COMM,	// Remove comment
+   TmlFrm_REM_NOTE,	// Remove note
+   TmlFrm_REM_COMM,	// Remove comment
 
-   Tml_Frm_SHA_NOTE,	// Share a note
-   Tml_Frm_UNS_NOTE,	// Unshare a note
+   TmlFrm_SHA_NOTE,	// Share a note
+   TmlFrm_UNS_NOTE,	// Unshare a note
 
-   Tml_Frm_FAV_NOTE,     // Favourite a note
-   Tml_Frm_FAV_COMM,	// Favourite a comment
+   TmlFrm_FAV_NOTE,     // Favourite a note
+   TmlFrm_FAV_COMM,	// Favourite a comment
 
-   Tml_Frm_UNF_NOTE,	// Unfavourite a note
-   Tml_Frm_UNF_COMM,	// Unfavourite a comment
+   TmlFrm_UNF_NOTE,	// Unfavourite a note
+   TmlFrm_UNF_COMM,	// Unfavourite a comment
 
-   Tml_Frm_ALL_SHA_NOTE,	// Show all sharers of note
+   TmlFrm_ALL_SHA_NOTE,	// Show all sharers of note
 
-   Tml_Frm_ALL_FAV_NOTE,	// Show all favouriters of note
-   Tml_Frm_ALL_FAV_COMM,	// Show all favouriters of comment
+   TmlFrm_ALL_FAV_NOTE,	// Show all favouriters of note
+   TmlFrm_ALL_FAV_COMM,	// Show all favouriters of comment
 
-   Tml_Frm_SHO_HID_COMM,	// Show / hide comments
-  } Tml_Frm_Action_t;
+   TmlFrm_SHO_HID_COMM,	// Show / hide comments
+  } TmlFrm_Action_t;
 
 struct Tml_Form
   {
-   Tml_Frm_Action_t Action;
+   TmlFrm_Action_t Action;
    const char *ParamFormat;
    long ParamCod;
    const char *Icon;
@@ -70,24 +70,24 @@ struct Tml_Form
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Frm_PutFormToFavUnfShaUns (Tml_Usr_FavSha_t FavSha,long Cod);
+void TmlFrm_PutFormToFavUnfShaUns (TmlUsr_FavSha_t FavSha,long Cod);
 
-void Tml_Frm_BeginForm (const struct Tml_Timeline *Timeline,
-                        Tml_Frm_Action_t Action);
-void Tml_Frm_EndForm (void);
+void TmlFrm_BeginForm (const struct Tml_Timeline *Timeline,
+                       TmlFrm_Action_t Action);
+void TmlFrm_EndForm (void);
 
-void Tml_Frm_PutFormToSeeAllFaversSharers (Tml_Frm_Action_t Action,
-		                           const char *ParamFormat,long ParamCod,
-                                           Tml_Usr_HowManyUsrs_t HowManyUsrs);
-void Tml_Frm_FormFavSha (const struct Tml_Form *Form);
+void TmlFrm_PutFormToSeeAllFaversSharers (TmlFrm_Action_t Action,
+		                          const char *ParamFormat,long ParamCod,
+                                          TmlUsr_HowManyUsrs_t HowManyUsrs);
+void TmlFrm_FormFavSha (const struct Tml_Form *Form);
 
-void Tml_Frm_FormToShowHiddenComms (long NotCod,
-				    char IdComms[Frm_MAX_BYTES_ID + 1],
-				    unsigned NumInitialComms);
+void TmlFrm_FormToShowHiddenComms (long NotCod,
+				   char IdComms[Frm_MAX_BYTES_ID + 1],
+				   unsigned NumInitialComms);
 
-void Tml_Frm_BeginAlertRemove (const char *QuestionTxt);
-void Tml_Frm_EndAlertRemove (struct Tml_Timeline *Timeline,
-                             Tml_Frm_Action_t Action,
-                             void (*FuncParams) (void *Args));
+void TmlFrm_BeginAlertRemove (const char *QuestionTxt);
+void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
+                            TmlFrm_Action_t Action,
+                            void (*FuncParams) (void *Args));
 
 #endif

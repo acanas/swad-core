@@ -1699,12 +1699,12 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    bool Present;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
@@ -2953,12 +2953,12 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;
    bool Present;
@@ -3118,12 +3118,12 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumAttEvent;
    unsigned UniqueId;

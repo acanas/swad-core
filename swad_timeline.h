@@ -79,13 +79,13 @@ typedef enum
 
 struct Tml_Timeline
   {
-   Tml_Usr_UsrOrGbl_t UsrOrGbl;
+   TmlUsr_UsrOrGbl_t UsrOrGbl;
    Usr_Who_t Who;
    Tml_WhatToGet_t WhatToGet;
    struct
      {
-      struct Tml_Pub_Publication *Top;	// Points to first element in list of publications
-      struct Tml_Pub_Publication *Bottom;	// Points to last  element in list of publications
+      struct TmlPub_Publication *Top;	// Points to first element in list of publications
+      struct TmlPub_Publication *Bottom;	// Points to last  element in list of publications
      } Pubs;
    long NotCod;		// Used as parameter about social note to be edited, removed...
    long PubCod;		// Used as parameter about social publishing to be edited, removed...

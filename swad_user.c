@@ -340,7 +340,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.IconSet	= Ico_ICON_SET_DEFAULT;
    UsrDat->Prefs.Menu		= Mnu_MENU_DEFAULT;
    UsrDat->Prefs.SideCols	= Cfg_DEFAULT_COLUMNS;
-   UsrDat->Prefs.PhotoShape	= Pho_SHAPE_DEFAULT;
+   UsrDat->Prefs.PhotoShape	= PhoSha_SHAPE_DEFAULT;
    UsrDat->Prefs.AcceptCookies	= false;	// By default, don't accept third party cookies
    UsrDat->NtfEvents.SendEmail	= 0;       	// By default, don't notify anything
   }
@@ -552,7 +552,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,
 	 UsrDat->Prefs.IconSet        = Ico_GetIconSetFromStr (row[27]);
 	 UsrDat->Prefs.Menu           = Mnu_GetMenuFromStr (row[28]);
 	 UsrDat->Prefs.SideCols       = Set_GetSideColsFromStr (row[29]);
-	 UsrDat->Prefs.PhotoShape     = Pho_GetShapeFromStr (row[30]);
+	 UsrDat->Prefs.PhotoShape     = PhoSha_GetShapeFromStr (row[30]);
 	 UsrDat->Prefs.AcceptCookies  = (row[31][0] == 'Y');
 	}
      }
@@ -1159,7 +1159,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	    HTM_DIV_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("for=\"UsrId\"");
 		  Ico_PutIcon ("user.svg",Ico_BLACK,
-		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
+		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1174,7 +1174,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	    HTM_DIV_Begin ("class=\"LM\"");
 	       HTM_LABEL_Begin ("for=\"UsrPwd\"");
 		  Ico_PutIcon ("key.svg",Ico_BLACK,
-		               Txt_Password,"CONTEXT_ICO_16x16");
+		               Txt_Password,"CONTEXT_ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false,
 				   "id=\"UsrPwd\" class=\"%s\"",
@@ -1347,12 +1347,12 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC18x24",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE18x24",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO18x24",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR18x24",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC18x24",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE18x24",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO18x24",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR18x24",
      };
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
    char *ClassSelect;
@@ -2152,12 +2152,12 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
@@ -2245,12 +2245,12 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
@@ -2334,12 +2334,12 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumGrpTyp,NumField;
    MYSQL_RES *mysql_res;
@@ -2445,12 +2445,12 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
    struct Ctr_Center Ctr;
@@ -2526,12 +2526,12 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    struct Ins_Instit Ins;
 
@@ -6113,20 +6113,20 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 				bool PutCheckBoxToSelectUsr)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
      {
-      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Usr_CLASS_PHOTO_SEL    ][Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
-      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_SEL_SEE][Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_PRN    ][Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Usr_CLASS_PHOTO_SEL    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_SEL_SEE][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
    bool TRIsOpen = false;
@@ -6353,12 +6353,12 @@ unsigned Usr_GetTotalNumberOfUsers (void)
 
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
@@ -6401,12 +6401,12 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
 
    /***** Show user's photo *****/

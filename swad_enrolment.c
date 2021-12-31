@@ -2085,12 +2085,12 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
    extern const char *Txt_No_enrolment_requests;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

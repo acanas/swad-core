@@ -30585,7 +30585,7 @@ const char *Txt_PHOTO_PROCESSING_CAPTIONS[3] =
 #endif
 	};
 
-const char *Txt_PHOTO_SHAPES[Pho_NUM_SHAPES] =
+const char *Txt_PHOTO_SHAPES[PhoSha_NUM_SHAPES] =
 	{
 #if   L==1	// ca
 	"Cercle"

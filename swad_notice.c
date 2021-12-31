@@ -164,7 +164,7 @@ void Not_ReceiveNotice (void)
       Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
-   Tml_Not_StoreAndPublishNote (Tml_NOTE_NOTICE,NotCod);
+   TmlNot_StoreAndPublishNote (Tml_NOTE_NOTICE,NotCod);
 
    /***** Set notice to be highlighted *****/
    Gbl.Crs.Notices.HighlightNotCod = NotCod;

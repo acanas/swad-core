@@ -79,6 +79,14 @@ struct Fig_Figures
    Fig_FigureType_t FigureType;
   };
 
+#define Fig_NUM_HEAD_ALIGN 3
+typedef enum
+  {
+   Fig_HEAD_LEFT   = 0,
+   Fig_HEAD_CENTER = 1,
+   Fig_HEAD_RIGHT  = 2,
+  } Fig_HeadAlign;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -87,5 +95,8 @@ void Fig_ReqShowFigures (void);
 void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType);
 void Fig_PutHiddenParamFigures (void *Figures);
 void Fig_ShowFigures (void);
+
+void Fig_TH (const char *Txt,Fig_HeadAlign HeadAlign);
+void Fig_TH_Begin (Fig_HeadAlign HeadAlign);
 
 #endif

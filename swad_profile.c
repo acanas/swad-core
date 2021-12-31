@@ -758,7 +758,7 @@ static void Prf_BeginListItem (const char *Title,const char *Icon)
   {
    HTM_LI_Begin ("title=\"%s\" class=\"PRF_FIG_LI\"",Title);
       HTM_DIV_Begin ("class=\"PRF_FIG_ICO\"");
-	 Ico_PutIcon (Icon,Ico_BLACK,Title,"CONTEXT_ICO_x16");
+	 Ico_PutIcon (Icon,Ico_BLACK,Title,"CONTEXT_ICOx16");
       HTM_DIV_End ();
   }
 
@@ -1306,12 +1306,12 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
    extern const char *Txt_Another_user_s_profile;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC30x40",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO30x40",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR30x40",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC30x40",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE30x40",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO30x40",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR30x40",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 

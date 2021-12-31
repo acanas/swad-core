@@ -46,7 +46,7 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-#define Tml_Pst_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
+#define TmlPst_MAX_CHARS_IN_POST	1000	// Maximum number of characters in a post
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -58,29 +58,29 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tml_Pst_GetPostContent (long PstCod,struct Tml_Pst_Content *Content);
-static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content);
+static void TmlPst_GetPostContent (long PstCod,struct TmlPst_Content *Content);
+static void TmlPst_ShowPostContent (struct TmlPst_Content *Content);
 
-static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline);
+static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline);
 
-static long Tml_Pst_ReceivePost (void);
+static long TmlPst_ReceivePost (void);
 
 /*****************************************************************************/
 /***************** Get from database and write public post *******************/
 /*****************************************************************************/
 
-void Tml_Pst_GetAndWritePost (long PstCod)
+void TmlPst_GetAndWritePost (long PstCod)
   {
-   struct Tml_Pst_Content Content;
+   struct TmlPst_Content Content;
 
    /***** Initialize media *****/
    Med_MediaConstructor (&Content.Media);
 
    /***** Get post content from database *****/
-   Tml_Pst_GetPostContent (PstCod,&Content);
+   TmlPst_GetPostContent (PstCod,&Content);
 
    /***** Show post content *****/
-   Tml_Pst_ShowPostContent (&Content);
+   TmlPst_ShowPostContent (&Content);
 
    /***** Free media *****/
    Med_MediaDestructor (&Content.Media);
@@ -91,7 +91,7 @@ void Tml_Pst_GetAndWritePost (long PstCod)
 /*****************************************************************************/
 // Media must be initialized before calling this function
 
-static void Tml_Pst_GetPostContent (long PstCod,struct Tml_Pst_Content *Content)
+static void TmlPst_GetPostContent (long PstCod,struct TmlPst_Content *Content)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -123,7 +123,7 @@ static void Tml_Pst_GetPostContent (long PstCod,struct Tml_Pst_Content *Content)
 /****************************** Get post content *****************************/
 /*****************************************************************************/
 
-static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
+static void TmlPst_ShowPostContent (struct TmlPst_Content *Content)
   {
    extern const char *The_Colors[The_NUM_THEMES];
 
@@ -145,7 +145,7 @@ static void Tml_Pst_ShowPostContent (struct Tml_Pst_Content *Content)
 /********************** Form to write a new publication **********************/
 /*****************************************************************************/
 
-void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
+void TmlPst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    /***** Begin list *****/
    HTM_UL_Begin ("class=\"Tml_LIST\"");
@@ -154,10 +154,10 @@ void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
       HTM_LI_Begin ("class=\"Tml_WIDTH\"");
 
 	 /***** Left: write author's photo (my photo) *****/
-         Tml_Not_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
+         TmlNot_ShowAuthorPhoto (&Gbl.Usrs.Me.UsrDat,false);	// Don't use unique id
 
 	 /***** Right: author's name, time, textarea *****/
-         Tml_Pst_PutFormToWriteNewPost (Timeline);
+         TmlPst_PutFormToWriteNewPost (Timeline);
 
       /***** End list item *****/
       HTM_LI_End ();
@@ -170,7 +170,7 @@ void Tml_Pst_PutPhotoAndFormToWriteNewPost (struct Tml_Timeline *Timeline)
 /**************** Author's name, time, and form with textarea ****************/
 /*****************************************************************************/
 
-static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
+static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
@@ -184,7 +184,7 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
       if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
                     The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Tml_Not_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,Class);
+      TmlNot_WriteAuthorName (&Gbl.Usrs.Me.UsrDat,Class);
       free (Class);
 
       /***** Form to write the post *****/
@@ -192,13 +192,13 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
       HTM_DIV_Begin ("class=\"Tml_FORM_NEW_PST Tml_RIGHT_WIDTH\"");
 
          /* Form with textarea */
-	 Tml_Frm_BeginForm (Timeline,Tml_Frm_RECEIVE_POST);
+	 TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_POST);
 	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
 	                  The_ClassInput[Gbl.Prefs.Theme]) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    Tml_Pst_PutTextarea (Txt_New_TIMELINE_post,Class);
+	    TmlPst_PutTextarea (Txt_New_TIMELINE_post,Class);
 	    free (Class);
-	 Tml_Frm_EndForm ();
+	 TmlFrm_EndForm ();
 
       /* End container */
       HTM_DIV_End ();
@@ -211,7 +211,7 @@ static void Tml_Pst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
+void TmlPst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Post;
@@ -225,7 +225,7 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    HTM_TEXTAREA_Begin ("name=\"Txt\" rows=\"1\" maxlength=\"%u\""
                        " placeholder=\"%s&hellip;\" class=\"%s\""
 	               " onfocus=\"expandTextarea(this,'%s','6');\"",
-		       Tml_Pst_MAX_CHARS_IN_POST,
+		       TmlPst_MAX_CHARS_IN_POST,
 		       Placeholder,ClassTextArea,
 		       IdDivImgButton);
    HTM_TEXTAREA_End ();
@@ -255,7 +255,7 @@ void Tml_Pst_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 /******************* Receive and store a new public post *********************/
 /*****************************************************************************/
 
-void Tml_Pst_ReceivePostUsr (void)
+void TmlPst_ReceivePostUsr (void)
   {
    struct Tml_Timeline Timeline;
    long NotCod;
@@ -274,14 +274,14 @@ void Tml_Pst_ReceivePostUsr (void)
 
       /***** Receive and store post, and
 	     write updated timeline after publication (user) *****/
-      NotCod = Tml_Pst_ReceivePost ();
+      NotCod = TmlPst_ReceivePost ();
       Tml_ShowTimelineUsrHighlighting (&Timeline,NotCod);
 
    /***** End section *****/
    HTM_SECTION_End ();
   }
 
-void Tml_Pst_ReceivePostGbl (void)
+void TmlPst_ReceivePostGbl (void)
   {
    struct Tml_Timeline Timeline;
    long NotCod;
@@ -290,18 +290,18 @@ void Tml_Pst_ReceivePostGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Receive and store post *****/
-   NotCod = Tml_Pst_ReceivePost ();
+   NotCod = TmlPst_ReceivePost ();
 
    /***** Write updated timeline after publication (global) *****/
    Tml_ShowTimelineGblHighlighting (&Timeline,NotCod);
   }
 
 // Returns the code of the note just created
-static long Tml_Pst_ReceivePost (void)
+static long TmlPst_ReceivePost (void)
   {
-   struct Tml_Pst_Content Content;
+   struct TmlPst_Content Content;
    long PstCod;
-   struct Tml_Pub_Publication Pub;
+   struct TmlPub_Publication Pub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Txt",Content.Txt,Cns_MAX_BYTES_LONG_TEXT,
@@ -328,7 +328,7 @@ static long Tml_Pst_ReceivePost (void)
       PstCod = Tml_DB_CreateNewPost (&Content);
 
       /* Insert post in notes */
-      Tml_Not_StoreAndPublishNoteInternal (Tml_NOTE_POST,PstCod,&Pub);
+      TmlNot_StoreAndPublishNoteInternal (Tml_NOTE_POST,PstCod,&Pub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (Pub.PubCod,Content.Txt);

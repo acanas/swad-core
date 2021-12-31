@@ -885,10 +885,10 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_Begin ("class=\"BT%u CT\"",Gbl.RowEvenOdd);
          if (QuestionExists)
 	    Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
-			 Txt_Existing_question,"CONTEXT_ICO_16x16");
+			 Txt_Existing_question,"CONTEXT_ICO16x16");
          else
 	    Ico_PutIcon ("check-circle.svg",Ico_GREEN    ,
-			 Txt_New_question     ,"CONTEXT_ICO_16x16");
+			 Txt_New_question     ,"CONTEXT_ICO16x16");
       HTM_TD_End ();
 
       /***** Write number of question *****/
@@ -1018,8 +1018,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			   if (Question->Answer.Options[NumOpt].Correct)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,
-					   QuestionExists ? "ICO_HIDDEN CONTEXT_ICO_16x16" :
-							    "CONTEXT_ICO_16x16");
+					   QuestionExists ? "ICO_HIDDEN CONTEXT_ICO16x16" :
+							    "CONTEXT_ICO16x16");
 			HTM_TD_End ();
 
 			/* Write the number of option */

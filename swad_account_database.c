@@ -150,7 +150,7 @@ long Acc_DB_CreateNewUsr (const struct UsrData *UsrDat)
 						   "",
 				(unsigned) Mnu_MENU_DEFAULT,
 				(unsigned) Cfg_DEFAULT_COLUMNS,
-				(unsigned) Pho_SHAPE_DEFAULT);
+				(unsigned) PhoSha_SHAPE_DEFAULT);
   }
 
 /*****************************************************************************/

@@ -1546,12 +1546,12 @@ void ExaRes_ShowExamResultUser (struct UsrData *UsrDat)
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
 
    /***** Row begin *****/

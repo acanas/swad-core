@@ -57,7 +57,7 @@ extern struct Globals Gbl;
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-static const Tml_Not_Type_t Tml_Not_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
+static const TmlNot_Type_t TmlNot_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
   {
    [Brw_ADMI_DOC_INS] = Tml_NOTE_INS_DOC_PUB_FILE,
    [Brw_ADMI_SHR_INS] = Tml_NOTE_INS_SHA_PUB_FILE,
@@ -73,57 +73,57 @@ static const Tml_Not_Type_t Tml_Not_NoteType[Brw_NUM_TYPES_FILE_BROWSER] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCod);
-static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
-                               const struct Tml_Not_Note *Not);
-static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
-                                               const struct UsrData *UsrDat);
+static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCod);
+static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
+                              const struct TmlNot_Note *Not);
+static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
+                                              const struct UsrData *UsrDat);
 
-static void Tml_Not_WriteContent (const struct Tml_Not_Note *Not);
-static void Tml_Not_GetAndWriteNoPost (const struct Tml_Not_Note *Not);
-static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
-                                            struct Hie_Hierarchy *Hie,
-                                            struct For_Forum *Forum,
-                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
-static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
-	                                      const struct Hie_Hierarchy *Hie,
-                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
+static void TmlNot_WriteContent (const struct TmlNot_Note *Not);
+static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not);
+static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
+                                           struct Hie_Hierarchy *Hie,
+                                           struct For_Forum *Forum,
+                                           char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
+static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
+	                                     const struct Hie_Hierarchy *Hie,
+                                             const char ForumName[For_MAX_BYTES_FORUM_NAME + 1]);
 
-static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
-                                       const struct For_Forums *Forums);
+static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
+                                      const struct For_Forums *Forums);
 
-static void Tml_Not_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
-                                          const struct Tml_Not_Note *Not,
-                                          const struct UsrData *UsrDat);
-static void Tml_Not_WriteButtonToAddAComm (const struct Tml_Not_Note *Not,
-                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
-static void Tml_Not_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
-					    const struct Tml_Not_Note *Not,
-					    const struct UsrData *UsrDat);
-static void Tml_Not_WriteFavShaRem (const struct Tml_Timeline *Timeline,
-                                    const struct Tml_Not_Note *Not,
-                                    const struct UsrData *UsrDat);
+static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
+                                         const struct TmlNot_Note *Not,
+                                         const struct UsrData *UsrDat);
+static void TmlNot_WriteButtonToAddAComm (const struct TmlNot_Note *Not,
+                                          const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
+static void TmlNot_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
+					   const struct TmlNot_Note *Not,
+					   const struct UsrData *UsrDat);
+static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
+                                   const struct TmlNot_Note *Not,
+                                   const struct UsrData *UsrDat);
 
-static void Tml_Not_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
-                                         long NotCod);
+static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
+                                        long NotCod);
 
-static void Tml_Not_RequestRemovalNote (struct Tml_Timeline *Timeline);
-static void Tml_Not_PutParamsRemoveNote (void *Timeline);
-static void Tml_Not_RemoveNote (void);
-static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not);
+static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline);
+static void TmlNot_PutParamsRemoveNote (void *Timeline);
+static void TmlNot_RemoveNote (void);
+static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not);
 
-static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not);
+static void TmlNot_GetDataOfNoteFromRow (MYSQL_ROW row,struct TmlNot_Note *Not);
 
-static Tml_Not_Type_t Tml_Not_GetNoteTypeFromStr (const char *Str);
+static TmlNot_Type_t TmlNot_GetNoteTypeFromStr (const char *Str);
 
-static void Tml_Not_ResetNote (struct Tml_Not_Note *Not);
+static void TmlNot_ResetNote (struct TmlNot_Note *Not);
 
 /*****************************************************************************/
 /****************** Show highlighted note above timeline *********************/
 /*****************************************************************************/
 
-void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
-                                  struct Tml_Not_Note *Not)
+void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
+                                  struct TmlNot_Note *Not)
   {
    struct UsrData PublisherDat;
    Ntf_NotifyEvent_t NotifyEvent;
@@ -144,7 +144,7 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
    NotifyEvent = Ntf_GetParamNotifyEvent ();
 
    /***** Get data of the note *****/
-   Tml_Not_GetDataOfNoteByCod (Not);
+   TmlNot_GetDataOfNoteByCod (Not);
 
    /***** Show the note highlighted *****/
    /* Begin box */
@@ -156,7 +156,7 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
       HTM_DIV_Begin ("class=\"Tml_WIDTH Tml_NEW_PUB\"");
 
          /* Check and write note with top message */
-	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,Not,
+	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,Not,
 					      TopMessages[NotifyEvent],
 					      PublisherDat.UsrCod);
 
@@ -171,8 +171,8 @@ void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
 /****************** Check and write note with top message ********************/
 /*****************************************************************************/
 
-void Tml_Not_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
-	                                  const struct Tml_Not_Note *Not,
+void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
+	                                  const struct TmlNot_Note *Not,
                                           Tml_TopMessage_t TopMessage,
                                           long PublisherCod)	// Who did the action (publication, commenting, faving, sharing, mentioning)
   {
@@ -213,17 +213,17 @@ void Tml_Not_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
 
    /***** Write sharer/commenter if distinct to author *****/
    if (TopMessage != Tml_TOP_MESSAGE_NONE)
-      Tml_Not_WriteTopMessage (TopMessage,PublisherCod);
+      TmlNot_WriteTopMessage (TopMessage,PublisherCod);
 
    /***** Write note *****/
-   Tml_Not_WriteNote (Timeline,Not);
+   TmlNot_WriteNote (Timeline,Not);
   }
 
 /*****************************************************************************/
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCod)
+static void TmlNot_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherCod)
   {
    extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[Tml_NUM_TOP_MESSAGES];
    struct UsrData PublisherDat;
@@ -241,7 +241,7 @@ static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherC
       HTM_DIV_Begin ("class=\"Tml_TOP_CONT Tml_TOP_PUBLISHER Tml_WIDTH\"");
 
 	 /***** Show publisher's name inside form to go to user's public profile *****/
-         Tml_Not_WriteAuthorName (&PublisherDat,"BT_LINK");
+         TmlNot_WriteAuthorName (&PublisherDat,"BT_LINK");
 
 	 /***** Show action made *****/
 	 HTM_TxtF (" %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
@@ -258,8 +258,8 @@ static void Tml_Not_WriteTopMessage (Tml_TopMessage_t TopMessage,long PublisherC
 /********************************* Show note *********************************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
-                               const struct Tml_Not_Note *Not)
+static void TmlNot_WriteNote (const struct Tml_Timeline *Timeline,
+                              const struct TmlNot_Note *Not)
   {
    struct UsrData UsrDat;	// Author of the note
 
@@ -271,13 +271,13 @@ static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
                                             Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
 
    /***** Left top: author's photo *****/
-   Tml_Not_ShowAuthorPhoto (&UsrDat,true);	// Use unique id
+   TmlNot_ShowAuthorPhoto (&UsrDat,true);	// Use unique id
 
    /***** Right top: author's name, time, and content *****/
-   Tml_Not_WriteAuthorTimeAndContent (Not,&UsrDat);
+   TmlNot_WriteAuthorTimeAndContent (Not,&UsrDat);
 
    /***** Bottom: buttons and comments *****/
-   Tml_Not_WriteButtonsAndComms (Timeline,Not,&UsrDat);
+   TmlNot_WriteButtonsAndComms (Timeline,Not,&UsrDat);
 
    /***** Free memory used for author's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -287,14 +287,14 @@ static void Tml_Not_WriteNote (const struct Tml_Timeline *Timeline,
 /*********************** Show photo of author of a note **********************/
 /*****************************************************************************/
 
-void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
+void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
 
    /***** Begin container *****/
@@ -313,8 +313,8 @@ void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique)
 /**** Write top right part of a note: author's name, time and note content ***/
 /*****************************************************************************/
 
-static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
-                                               const struct UsrData *UsrDat)
+static void TmlNot_WriteAuthorTimeAndContent (const struct TmlNot_Note *Not,
+                                              const struct UsrData *UsrDat)
   {
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    char *Class;
@@ -326,14 +326,14 @@ static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
       if (asprintf (&Class,"Tml_RIGHT_AUTHOR Tml_RIGHT_AUTHOR_WIDTH BT_LINK %s BOLD",
                     The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Tml_Not_WriteAuthorName (UsrDat,Class);
+      TmlNot_WriteAuthorName (UsrDat,Class);
       free (Class);
 
       /***** Write date and time *****/
       Tml_WriteDateTime (Not->DateTimeUTC);
 
       /***** Write content of the note *****/
-      Tml_Not_WriteContent (Not);
+      TmlNot_WriteContent (Not);
 
    /***** End top container *****/
    HTM_DIV_End ();
@@ -343,7 +343,7 @@ static void Tml_Not_WriteAuthorTimeAndContent (const struct Tml_Not_Note *Not,
 /*************** Write name and nickname of author of a note *****************/
 /*****************************************************************************/
 
-void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
+void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
                               const char *Class)
   {
    extern const char *Txt_My_public_profile;
@@ -369,19 +369,19 @@ void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
 /*********************** Get and write a note content ************************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteContent (const struct Tml_Not_Note *Not)
+static void TmlNot_WriteContent (const struct TmlNot_Note *Not)
   {
    if (Not->Type == Tml_NOTE_POST)	// It's a post
-      Tml_Pst_GetAndWritePost (Not->Cod);
+      TmlPst_GetAndWritePost (Not->Cod);
    else					// Not a post
-      Tml_Not_GetAndWriteNoPost (Not);
+      TmlNot_GetAndWriteNoPost (Not);
   }
 
 /*****************************************************************************/
 /***************** Get and write a note which is not a post ******************/
 /*****************************************************************************/
 
-static void Tml_Not_GetAndWriteNoPost (const struct Tml_Not_Note *Not)
+static void TmlNot_GetAndWriteNoPost (const struct TmlNot_Note *Not)
   {
    extern const char *The_Colors[The_NUM_THEMES];
    struct Hie_Hierarchy Hie;
@@ -394,18 +394,18 @@ static void Tml_Not_GetAndWriteNoPost (const struct Tml_Not_Note *Not)
 
    /***** Get location in hierarchy *****/
    if (!Not->Unavailable)
-      Tml_Not_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
+      TmlNot_GetLocationInHierarchy (Not,&Hie,&Forums.Forum,ForumName);
 
    /***** Write note type *****/
-   Tml_Not_PutFormGoToAction (Not,&Forums);
+   TmlNot_PutFormGoToAction (Not,&Forums);
 
    /***** Write location in hierarchy *****/
    if (!Not->Unavailable)
-      Tml_Not_WriteLocationInHierarchy (Not,&Hie,ForumName);
+      TmlNot_WriteLocationInHierarchy (Not,&Hie,ForumName);
 
    /***** Get and write note summary *****/
    /* Get note summary */
-   Tml_Not_GetNoteSummary (Not,SummaryStr);
+   TmlNot_GetNoteSummary (Not,SummaryStr);
 
    /* Write note summary */
    HTM_DIV_Begin ("class=\"Tml_TXT Tml_TXT_%s\"",The_Colors[Gbl.Prefs.Theme]);
@@ -417,10 +417,10 @@ static void Tml_Not_GetAndWriteNoPost (const struct Tml_Not_Note *Not)
 /************************ Get location in hierarchy **************************/
 /*****************************************************************************/
 
-static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
-                                            struct Hie_Hierarchy *Hie,
-                                            struct For_Forum *Forum,
-                                            char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
+static void TmlNot_GetLocationInHierarchy (const struct TmlNot_Note *Not,
+                                           struct Hie_Hierarchy *Hie,
+                                           struct For_Forum *Forum,
+                                           char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
    /***** Initialize location in hierarchy *****/
    Hie->Cty.CtyCod =
@@ -474,9 +474,9 @@ static void Tml_Not_GetLocationInHierarchy (const struct Tml_Not_Note *Not,
 /*********************** Write location in hierarchy *************************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
-	                                      const struct Hie_Hierarchy *Hie,
-                                              const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
+static void TmlNot_WriteLocationInHierarchy (const struct TmlNot_Note *Not,
+	                                     const struct Hie_Hierarchy *Hie,
+                                             const char ForumName[For_MAX_BYTES_FORUM_NAME + 1])
   {
    extern const char *Txt_Institution;
    extern const char *Txt_Center;
@@ -538,8 +538,8 @@ static void Tml_Not_WriteLocationInHierarchy (const struct Tml_Not_Note *Not,
 /************* Put form to go to an action depending on the note *************/
 /*****************************************************************************/
 
-static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
-                                       const struct For_Forums *Forums)
+static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
+                                      const struct For_Forums *Forums)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
@@ -697,7 +697,7 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 
 	       /* Icon and text */
 	       Ico_PutIcon (Tml_Icons[Not->Type],Ico_BLACK,
-	                    Txt_TIMELINE_NOTE[Not->Type],"CONTEXT_ICO_x16");
+	                    Txt_TIMELINE_NOTE[Not->Type],"CONTEXT_ICOx16");
 	       HTM_TxtF ("&nbsp;%s",Txt_TIMELINE_NOTE[Not->Type]);
 
 	    /* End button */
@@ -715,8 +715,8 @@ static void Tml_Not_PutFormGoToAction (const struct Tml_Not_Note *Not,
 /********************** Get note summary and content *************************/
 /*****************************************************************************/
 
-void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
-                             char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
+void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
+                            char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
   {
    SummaryStr[0] = '\0';
 
@@ -753,9 +753,9 @@ void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
 /************************ Write bottom part of a note ************************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
-                                          const struct Tml_Not_Note *Not,
-                                          const struct UsrData *UsrDat)	// Author
+static void TmlNot_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
+                                         const struct TmlNot_Note *Not,
+                                         const struct UsrData *UsrDat)	// Author
   {
    char IdNewComm[Frm_MAX_BYTES_ID + 1];
 
@@ -763,30 +763,30 @@ static void Tml_Not_WriteButtonsAndComms (const struct Tml_Timeline *Timeline,
    Frm_SetUniqueId (IdNewComm);
 
    /***** Left: button to add a comment *****/
-   Tml_Not_WriteButtonToAddAComm (Not,IdNewComm);
+   TmlNot_WriteButtonToAddAComm (Not,IdNewComm);
 
    /***** Right: write favs, shared and remove buttons, and comments *****/
-   Tml_Not_WriteFavShaRemAndComms (Timeline,Not,UsrDat);
+   TmlNot_WriteFavShaRemAndComms (Timeline,Not,UsrDat);
 
    /***** Put hidden form to write a new comment *****/
-   Tml_Com_PutPhotoAndFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
+   TmlCom_PutPhotoAndFormToWriteNewComm (Timeline,Not->NotCod,IdNewComm);
   }
 
 /*****************************************************************************/
 /********************** Write button to add a comment ************************/
 /*****************************************************************************/
 
-static void Tml_Not_WriteButtonToAddAComm (const struct Tml_Not_Note *Not,
-                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1])
+static void TmlNot_WriteButtonToAddAComm (const struct TmlNot_Note *Not,
+                                          const char IdNewComm[Frm_MAX_BYTES_ID + 1])
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"Tml_BOTTOM_LEFT\"");
 
       /***** Button to add a comment *****/
       if (Not->Unavailable)	// Unavailable notes can not be commented
-	 Tml_Com_PutIconCommDisabled ();
+	 TmlCom_PutIconCommDisabled ();
       else
-	 Tml_Com_PutIconToToggleComm (IdNewComm);
+	 TmlCom_PutIconToToggleComm (IdNewComm);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -796,18 +796,18 @@ static void Tml_Not_WriteButtonToAddAComm (const struct Tml_Not_Note *Not,
 /******* Write favs, shared and remove buttons, and comments of a note *******/
 /*****************************************************************************/
 
-static void Tml_Not_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
-					    const struct Tml_Not_Note *Not,
-					    const struct UsrData *UsrDat)	// Author
+static void TmlNot_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
+					   const struct TmlNot_Note *Not,
+					   const struct UsrData *UsrDat)	// Author
   {
    /***** Begin container *****/
    HTM_DIV_Begin ("class=\"Tml_BOTTOM_RIGHT Tml_RIGHT_WIDTH\"");
 
       /***** Write favs, shared and remove buttons int the foot of a note *****/
-      Tml_Not_WriteFavShaRem (Timeline,Not,UsrDat);
+      TmlNot_WriteFavShaRem (Timeline,Not,UsrDat);
 
       /***** Comments *****/
-      Tml_Com_WriteCommsInNote (Timeline,Not);
+      TmlCom_WriteCommsInNote (Timeline,Not);
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -817,9 +817,9 @@ static void Tml_Not_WriteFavShaRemAndComms (const struct Tml_Timeline *Timeline,
 /******* Write favs, shared and remove buttons in the foot of a note *********/
 /*****************************************************************************/
 
-static void Tml_Not_WriteFavShaRem (const struct Tml_Timeline *Timeline,
-                                    const struct Tml_Not_Note *Not,
-                                    const struct UsrData *UsrDat)	// Author
+static void TmlNot_WriteFavShaRem (const struct Tml_Timeline *Timeline,
+                                   const struct TmlNot_Note *Not,
+                                   const struct UsrData *UsrDat)	// Author
   {
    static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
 
@@ -832,24 +832,24 @@ static void Tml_Not_WriteFavShaRem (const struct Tml_Timeline *Timeline,
       HTM_DIV_Begin ("id=\"fav_not_%s_%u\""
 	             " class=\"Tml_FAV_NOT Tml_FAV_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 Tml_Usr_PutIconFavSha (Tml_Usr_FAV_UNF_NOTE,
+	 TmlUsr_PutIconFavSha (TmlUsr_FAV_UNF_NOTE,
 	                        Not->NotCod,Not->UsrCod,Not->NumFavs,
-			        Tml_Usr_SHOW_FEW_USRS);
+			        TmlUsr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 2: share zone *****/
       HTM_DIV_Begin ("id=\"sha_not_%s_%u\""
 	             " class=\"Tml_SHA_NOT Tml_SHA_NOT_WIDTH\"",
 		     Gbl.UniqueNameEncrypted,NumDiv);
-	 Tml_Usr_PutIconFavSha (Tml_Usr_SHA_UNS_NOTE,
+	 TmlUsr_PutIconFavSha (TmlUsr_SHA_UNS_NOTE,
 	                        Not->NotCod,Not->UsrCod,Not->NumShared,
-	                        Tml_Usr_SHOW_FEW_USRS);
+	                        TmlUsr_SHOW_FEW_USRS);
       HTM_DIV_End ();
 
       /***** Foot column 3: icon to remove this note *****/
       HTM_DIV_Begin ("class=\"Tml_REM\"");
 	 if (Usr_ItsMe (UsrDat->UsrCod))	// I am the author
-	    Tml_Not_PutFormToRemoveNote (Timeline,Not->NotCod);
+	    TmlNot_PutFormToRemoveNote (Timeline,Not->NotCod);
       HTM_DIV_End ();
 
    /***** End foot container *****/
@@ -860,36 +860,36 @@ static void Tml_Not_WriteFavShaRem (const struct Tml_Timeline *Timeline,
 /**************************** Form to remove note ****************************/
 /*****************************************************************************/
 
-static void Tml_Not_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
+static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
    /* Begin form */
-   Tml_Frm_BeginForm (Timeline,Tml_Frm_REQ_REM_NOTE);
-      Tml_Not_PutHiddenParamNotCod (NotCod);
+   TmlFrm_BeginForm (Timeline,TmlFrm_REQ_REM_NOTE);
+      TmlNot_PutHiddenParamNotCod (NotCod);
 
       /* Icon to remove */
       Ico_PutIconLink ("trash.svg",Ico_RED,Txt_Remove);
 
    /* End form */
-   Tml_Frm_EndForm ();
+   TmlFrm_EndForm ();
   }
 
 /*****************************************************************************/
 /***************** Store and publish a note into database ********************/
 /*****************************************************************************/
 
-void Tml_Not_StoreAndPublishNote (Tml_Not_Type_t NoteType,long Cod)
+void TmlNot_StoreAndPublishNote (TmlNot_Type_t NoteType,long Cod)
   {
-   struct Tml_Pub_Publication Pub;
+   struct TmlPub_Publication Pub;
 
-   Tml_Not_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
+   TmlNot_StoreAndPublishNoteInternal (NoteType,Cod,&Pub);
   }
 
-void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_Type_t NoteType,long Cod,
-                                          struct Tml_Pub_Publication *Pub)
+void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
+                                         struct TmlPub_Publication *Pub)
   {
    long HieCod;	// Hierarchy code (institution/center/degree/course)
 
@@ -921,39 +921,39 @@ void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_Type_t NoteType,long Cod,
    /***** Publish note in timeline *****/
    Pub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Pub->NotCod       = Tml_DB_CreateNewNote (NoteType,Cod,Pub->PublisherCod,HieCod);
-   Pub->Type         = Tml_Pub_ORIGINAL_NOTE;
-   Tml_Pub_PublishPubInTimeline (Pub);
+   Pub->Type         = TmlPub_ORIGINAL_NOTE;
+   TmlPub_PublishPubInTimeline (Pub);
   }
 
 /*****************************************************************************/
 /****************** Mark notes of one file as unavailable ********************/
 /*****************************************************************************/
 
-void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path)
+void TmlNot_MarkNoteOneFileAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
 
-   if (Tml_Not_NoteType[FileBrowser])
+   if (TmlNot_NoteType[FileBrowser])
       /***** Get file code *****/
       if ((FilCod = Brw_DB_GetFilCodByPath (Path,
                                             true)) > 0)	// Only public files
 	 /***** Mark possible note as unavailable *****/
-	 Tml_DB_MarkNoteAsUnavailable (Tml_Not_NoteType[FileBrowser],FilCod);
+	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[FileBrowser],FilCod);
   }
 
 /*****************************************************************************/
 /***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
+void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_DB_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_DB_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
-   if (Tml_Not_NoteType[FileBrowser])
-      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_NoteType[FileBrowser],FileBrowser,
+   if (TmlNot_NoteType[FileBrowser])
+      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[FileBrowser],FileBrowser,
 						     Brw_GetCodForFileBrowser (),
 						     Path);
   }
@@ -962,7 +962,7 @@ void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
 /****************** Put parameter with the code of a note ********************/
 /*****************************************************************************/
 
-void Tml_Not_PutHiddenParamNotCod (long NotCod)
+void TmlNot_PutHiddenParamNotCod (long NotCod)
   {
    Par_PutHiddenParamLong (NULL,"NotCod",NotCod);
   }
@@ -971,7 +971,7 @@ void Tml_Not_PutHiddenParamNotCod (long NotCod)
 /****************** Get parameter with the code of a note ********************/
 /*****************************************************************************/
 
-long Tml_Not_GetParamNotCod (void)
+long TmlNot_GetParamNotCod (void)
   {
    /***** Get note code *****/
    return Par_GetParToLong ("NotCod");
@@ -981,7 +981,7 @@ long Tml_Not_GetParamNotCod (void)
 /*********************** Request the removal of a note ***********************/
 /*****************************************************************************/
 
-void Tml_Not_RequestRemNoteUsr (void)
+void TmlNot_RequestRemNoteUsr (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -998,7 +998,7 @@ void Tml_Not_RequestRemNoteUsr (void)
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Request the removal of note *****/
-      Tml_Not_RequestRemovalNote (&Timeline);
+      TmlNot_RequestRemovalNote (&Timeline);
 
       /***** Write timeline again (user) *****/
       Tml_ShowTimelineUsr (&Timeline);
@@ -1007,7 +1007,7 @@ void Tml_Not_RequestRemNoteUsr (void)
    HTM_SECTION_End ();
   }
 
-void Tml_Not_RequestRemNoteGbl (void)
+void TmlNot_RequestRemNoteGbl (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -1015,35 +1015,35 @@ void Tml_Not_RequestRemNoteGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Request the removal of note *****/
-   Tml_Not_RequestRemovalNote (&Timeline);
+   TmlNot_RequestRemovalNote (&Timeline);
 
    /***** Write timeline again (global) *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void Tml_Not_RequestRemovalNote (struct Tml_Timeline *Timeline)
+static void TmlNot_RequestRemovalNote (struct Tml_Timeline *Timeline)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
-   struct Tml_Not_Note Not;
+   struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = Tml_Not_GetParamNotCod ();
-   Tml_Not_GetDataOfNoteByCod (&Not);
+   Not.NotCod = TmlNot_GetParamNotCod ();
+   TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Do some checks *****/
-   if (!Tml_Usr_CheckIfICanRemove (Not.NotCod,Not.UsrCod))
+   if (!TmlUsr_CheckIfICanRemove (Not.NotCod,Not.UsrCod))
       return;
 
    /***** Show question and button to remove note *****/
    /* Begin alert */
-   Tml_Frm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
+   TmlFrm_BeginAlertRemove (Txt_Do_you_really_want_to_remove_the_following_post);
 
    /* Show note */
    Box_BoxBegin (NULL,NULL,
 		 NULL,NULL,
 		 NULL,Box_CLOSABLE);
       HTM_DIV_Begin ("class=\"Tml_WIDTH\"");
-	 Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+	 TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
 					      Tml_TOP_MESSAGE_NONE,
 					      -1L);
       HTM_DIV_End ();
@@ -1051,15 +1051,15 @@ static void Tml_Not_RequestRemovalNote (struct Tml_Timeline *Timeline)
 
    /* End alert */
    Timeline->NotCod = Not.NotCod;	// Note to be removed
-   Tml_Frm_EndAlertRemove (Timeline,Tml_Frm_REM_NOTE,
-			   Tml_Not_PutParamsRemoveNote);
+   TmlFrm_EndAlertRemove (Timeline,TmlFrm_REM_NOTE,
+			   TmlNot_PutParamsRemoveNote);
   }
 
 /*****************************************************************************/
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void Tml_Not_PutParamsRemoveNote (void *Timeline)
+static void TmlNot_PutParamsRemoveNote (void *Timeline)
   {
    if (Timeline)
      {
@@ -1067,7 +1067,7 @@ static void Tml_Not_PutParamsRemoveNote (void *Timeline)
 	 Usr_PutParamOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
       else					// Global timeline
 	 Usr_PutHiddenParamWho (((struct Tml_Timeline *) Timeline)->Who);
-      Tml_Not_PutHiddenParamNotCod (((struct Tml_Timeline *) Timeline)->NotCod);
+      TmlNot_PutHiddenParamNotCod (((struct Tml_Timeline *) Timeline)->NotCod);
      }
   }
 
@@ -1075,7 +1075,7 @@ static void Tml_Not_PutParamsRemoveNote (void *Timeline)
 /******************************* Remove a note *******************************/
 /*****************************************************************************/
 
-void Tml_Not_RemoveNoteUsr (void)
+void TmlNot_RemoveNoteUsr (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -1092,7 +1092,7 @@ void Tml_Not_RemoveNoteUsr (void)
    HTM_SECTION_Begin (Tml_TIMELINE_SECTION_ID);
 
       /***** Remove a note *****/
-      Tml_Not_RemoveNote ();
+      TmlNot_RemoveNote ();
 
       /***** Write updated timeline after removing (user) *****/
       Tml_ShowTimelineUsr (&Timeline);
@@ -1101,7 +1101,7 @@ void Tml_Not_RemoveNoteUsr (void)
    HTM_SECTION_End ();
   }
 
-void Tml_Not_RemoveNoteGbl (void)
+void TmlNot_RemoveNoteGbl (void)
   {
    struct Tml_Timeline Timeline;
 
@@ -1109,21 +1109,21 @@ void Tml_Not_RemoveNoteGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Remove a note *****/
-   Tml_Not_RemoveNote ();
+   TmlNot_RemoveNote ();
 
    /***** Write updated timeline after removing (global) *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
   }
 
-static void Tml_Not_RemoveNote (void)
+static void TmlNot_RemoveNote (void)
   {
    extern const char *Txt_The_post_no_longer_exists;
    extern const char *Txt_TIMELINE_Post_removed;
-   struct Tml_Not_Note Not;
+   struct TmlNot_Note Not;
 
    /***** Get data of note *****/
-   Not.NotCod = Tml_Not_GetParamNotCod ();
-   Tml_Not_GetDataOfNoteByCod (&Not);
+   Not.NotCod = TmlNot_GetParamNotCod ();
+   TmlNot_GetDataOfNoteByCod (&Not);
 
    /***** Trivial check 1: note code should be > 0 *****/
    if (Not.NotCod <= 0)
@@ -1140,10 +1140,10 @@ static void Tml_Not_RemoveNote (void)
      }
 
    /***** Delete note from database *****/
-   Tml_Not_RemoveNoteMediaAndDBEntries (&Not);
+   TmlNot_RemoveNoteMediaAndDBEntries (&Not);
 
    /***** Reset note *****/
-   Tml_Not_ResetNote (&Not);
+   TmlNot_ResetNote (&Not);
 
    /***** Message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
@@ -1153,7 +1153,7 @@ static void Tml_Not_RemoveNote (void)
 /*********************** Remove a note from database *************************/
 /*****************************************************************************/
 
-static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
+static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not)
   {
    MYSQL_RES *mysql_res;
    long PubCod;
@@ -1175,7 +1175,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
 
       /* Remove media associated to comment
 	 and delete comment from database */
-      Tml_Com_RemoveCommMediaAndDBEntries (PubCod);
+      TmlCom_RemoveCommMediaAndDBEntries (PubCod);
      }
 
    /* Free structure that stores the query result */
@@ -1213,7 +1213,7 @@ static void Tml_Not_RemoveNoteMediaAndDBEntries (struct Tml_Not_Note *Not)
 /************************ Get data of note from row **************************/
 /*****************************************************************************/
 
-static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not)
+static void TmlNot_GetDataOfNoteFromRow (MYSQL_ROW row,struct TmlNot_Note *Not)
   {
    /*
    row[0]: NotCod
@@ -1228,7 +1228,7 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
    Not->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get note type (row[1]) *****/
-   Not->Type        = Tml_Not_GetNoteTypeFromStr (row[1]);
+   Not->Type        = TmlNot_GetNoteTypeFromStr (row[1]);
 
    /***** Get file/post... code (row[2]),
               (from) user code (row[3])
@@ -1245,7 +1245,7 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
 
    /***** Get number of times this note has been shared and favourited *****/
    Not->NumShared   = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);
-   Not->NumFavs     = Tml_DB_GetNumFavers (Tml_Usr_FAV_UNF_NOTE,
+   Not->NumFavs     = Tml_DB_GetNumFavers (TmlUsr_FAV_UNF_NOTE,
                                            Not->NotCod,Not->UsrCod);
   }
 
@@ -1253,13 +1253,13 @@ static void Tml_Not_GetDataOfNoteFromRow (MYSQL_ROW row,struct Tml_Not_Note *Not
 /********* Get note type from string number coming from database *************/
 /*****************************************************************************/
 
-static Tml_Not_Type_t Tml_Not_GetNoteTypeFromStr (const char *Str)
+static TmlNot_Type_t TmlNot_GetNoteTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Tml_NOT_NUM_NOTE_TYPES)
-         return (Tml_Not_Type_t) UnsignedNum;
+         return (TmlNot_Type_t) UnsignedNum;
 
    return Tml_NOTE_UNKNOWN;
   }
@@ -1268,7 +1268,7 @@ static Tml_Not_Type_t Tml_Not_GetNoteTypeFromStr (const char *Str)
 /*************************** Reset fields of note ****************************/
 /*****************************************************************************/
 
-static void Tml_Not_ResetNote (struct Tml_Not_Note *Not)
+static void TmlNot_ResetNote (struct TmlNot_Note *Not)
   {
    Not->NotCod      = -1L;
    Not->Type        = Tml_NOTE_UNKNOWN;
@@ -1284,7 +1284,7 @@ static void Tml_Not_ResetNote (struct Tml_Not_Note *Not)
 /******************** Get data of note using its code ************************/
 /*****************************************************************************/
 
-void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not)
+void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1293,7 +1293,7 @@ void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not)
    if (Not->NotCod <= 0)
      {
       /* Reset fields of note */
-      Tml_Not_ResetNote (Not);
+      TmlNot_ResetNote (Not);
       return;
      }
 
@@ -1302,11 +1302,11 @@ void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not)
      {
       /* Get data of note */
       row = mysql_fetch_row (mysql_res);
-      Tml_Not_GetDataOfNoteFromRow (row,Not);
+      TmlNot_GetDataOfNoteFromRow (row,Not);
      }
    else
       /* Reset fields of note */
-      Tml_Not_ResetNote (Not);
+      TmlNot_ResetNote (Not);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

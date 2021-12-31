@@ -124,7 +124,7 @@ void Set_EditSettings (void)
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
-	 Pho_PutIconsToSelectPhotoShape ();		// 8. User photos
+	 PhoSha_PutIconsToSelectPhotoShape ();		// 8. User photos
       HTM_DIV_End ();
 
    Box_BoxEnd ();
@@ -178,7 +178,7 @@ void Set_GetSettingsFromIP (void)
 	 Gbl.Prefs.SideCols = Set_GetSideColsFromStr (row[5]);
 
 	 /* Get user photo shape (row[6]) */
-	 Gbl.Prefs.PhotoShape = Pho_GetShapeFromStr (row[6]);
+	 Gbl.Prefs.PhotoShape = PhoSha_GetShapeFromStr (row[6]);
 	}
 
       /***** Free structure that stores the query result *****/

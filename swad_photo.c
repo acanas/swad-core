@@ -421,12 +421,12 @@ void Pho_ReqRemoveMyPhoto (void)
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOR186x248",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOR186x248",
-      [Pho_SHAPE_OVAL     ] = "PHOTOR186x248",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR186x248",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOR186x248",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOR186x248",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOR186x248",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR186x248",
      };
 
    /***** Show current photo and help message *****/
@@ -498,12 +498,12 @@ void Pho_ReqRemoveUsrPhoto (void)
       [Rol_INS_ADM] = ActRemOthPho,
       [Rol_SYS_ADM] = ActRemOthPho,
      };
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC186x248",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE186x248",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO186x248",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR186x248",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC186x248",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE186x248",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO186x248",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR186x248",
      };
    char PhotoURL[PATH_MAX + 1];
 

@@ -34,43 +34,43 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-struct Tml_Com_Comment
+struct TmlCom_Comment
   {
    long PubCod;			// Unique code/identifier for each publication
    long UsrCod;			// Publisher
    long NotCod;			// Note code to which this comment belongs
    time_t DateTimeUTC;		// Date-time of publication in UTC time
    unsigned NumFavs;		// Number of times (users) this comment has been favourited
-   struct Tml_Pst_Content Content;
+   struct TmlPst_Content Content;
   };
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Com_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
-void Tml_Com_PutIconCommDisabled (void);
+void TmlCom_PutIconToToggleComm (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
+void TmlCom_PutIconCommDisabled (void);
 
-void Tml_Com_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
-	                                    long NotCod,
-                                            const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
+void TmlCom_PutPhotoAndFormToWriteNewComm (const struct Tml_Timeline *Timeline,
+	                                   long NotCod,
+                                           const char IdNewComm[Frm_MAX_BYTES_ID + 1]);
 
-void Tml_Com_WriteCommsInNote (const struct Tml_Timeline *Timeline,
-			       const struct Tml_Not_Note *Not);
+void TmlCom_WriteCommsInNote (const struct Tml_Timeline *Timeline,
+			      const struct TmlNot_Note *Not);
 
-void Tml_Com_ShowHiddenCommsUsr (void);
-void Tml_Com_ShowHiddenCommsGbl (void);
+void TmlCom_ShowHiddenCommsUsr (void);
+void TmlCom_ShowHiddenCommsGbl (void);
 
-void Tml_Com_ReceiveCommUsr (void);
-void Tml_Com_ReceiveCommGbl (void);
+void TmlCom_ReceiveCommUsr (void);
+void TmlCom_ReceiveCommGbl (void);
 
-void Tml_Com_RequestRemComUsr (void);
-void Tml_Com_RequestRemComGbl (void);
-void Tml_Com_RemoveComUsr (void);
-void Tml_Com_RemoveComGbl (void);
+void TmlCom_RequestRemComUsr (void);
+void TmlCom_RequestRemComGbl (void);
+void TmlCom_RemoveComUsr (void);
+void TmlCom_RemoveComGbl (void);
 
-void Tml_Com_RemoveCommMediaAndDBEntries (long PubCod);
+void TmlCom_RemoveCommMediaAndDBEntries (long PubCod);
 
-void Tml_Com_GetDataOfCommByCod (struct Tml_Com_Comment *Com);
+void TmlCom_GetDataOfCommByCod (struct TmlCom_Comment *Com);
 
 #endif

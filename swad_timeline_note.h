@@ -61,12 +61,12 @@ typedef enum
    Tml_NOTE_FORUM_POST		= 11,	// Post in global/swad forums
    /* Analytics tab */
    /* Profile tab */
-  } Tml_Not_Type_t;
+  } TmlNot_Type_t;
 
-struct Tml_Not_Note
+struct TmlNot_Note
   {
    long NotCod;		// Unique code/identifier for each note
-   Tml_Not_Type_t Type;	// Timeline post, public file,
+   TmlNot_Type_t Type;	// Timeline post, public file,
 			// call for exam, notice, forum post...
    long UsrCod;		// Publisher
    long HieCod;		// Hierarchy code
@@ -86,34 +86,34 @@ struct Tml_Not_Note
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Not_ShowHighlightedNote (struct Tml_Timeline *Timeline,
-                                  struct Tml_Not_Note *Not);
+void TmlNot_ShowHighlightedNote (struct Tml_Timeline *Timeline,
+                                  struct TmlNot_Note *Not);
 
-void Tml_Not_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
-	                                  const struct Tml_Not_Note *Not,
+void TmlNot_CheckAndWriteNoteWithTopMsg (const struct Tml_Timeline *Timeline,
+	                                  const struct TmlNot_Note *Not,
                                           Tml_TopMessage_t TopMessage,
                                           long PublisherCod);
-void Tml_Not_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
-void Tml_Not_WriteAuthorName (const struct UsrData *UsrDat,
+void TmlNot_ShowAuthorPhoto (struct UsrData *UsrDat,bool FormUnique);
+void TmlNot_WriteAuthorName (const struct UsrData *UsrDat,
                               const char *Class);
 
-void Tml_Not_GetNoteSummary (const struct Tml_Not_Note *Not,
+void TmlNot_GetNoteSummary (const struct TmlNot_Note *Not,
                              char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 
-void Tml_Not_StoreAndPublishNote (Tml_Not_Type_t NoteType,long Cod);
-void Tml_Not_StoreAndPublishNoteInternal (Tml_Not_Type_t NoteType,long Cod,
-                                          struct Tml_Pub_Publication *Pub);
-void Tml_Not_MarkNoteOneFileAsUnavailable (const char *Path);
-void Tml_Not_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
+void TmlNot_StoreAndPublishNote (TmlNot_Type_t NoteType,long Cod);
+void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
+                                          struct TmlPub_Publication *Pub);
+void TmlNot_MarkNoteOneFileAsUnavailable (const char *Path);
+void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
-void Tml_Not_PutHiddenParamNotCod (long NotCod);
-long Tml_Not_GetParamNotCod (void);
+void TmlNot_PutHiddenParamNotCod (long NotCod);
+long TmlNot_GetParamNotCod (void);
 
-void Tml_Not_RequestRemNoteUsr (void);
-void Tml_Not_RequestRemNoteGbl (void);
-void Tml_Not_RemoveNoteUsr (void);
-void Tml_Not_RemoveNoteGbl (void);
+void TmlNot_RequestRemNoteUsr (void);
+void TmlNot_RequestRemNoteGbl (void);
+void TmlNot_RemoveNoteUsr (void);
+void TmlNot_RemoveNoteGbl (void);
 
-void Tml_Not_GetDataOfNoteByCod (struct Tml_Not_Note *Not);
+void TmlNot_GetDataOfNoteByCod (struct TmlNot_Note *Not);
 
 #endif

@@ -50,41 +50,41 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
+static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
                                                long Cod,long UsrCod,unsigned NumUsrs,
-				               Tml_Usr_HowManyUsrs_t HowManyUsrs);
-static void Tml_Usr_ShowNumSharersOrFavers (unsigned NumUsrs);
-static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
+				               TmlUsr_HowManyUsrs_t HowManyUsrs);
+static void TmlUsr_ShowNumSharersOrFavers (unsigned NumUsrs);
+static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 			                 unsigned NumUsrs,unsigned NumFirstUsrs);
-static unsigned Tml_Usr_GetListFaversOrSharers (Tml_Usr_FavSha_t FavSha,
+static unsigned TmlUsr_GetListFaversOrSharers (TmlUsr_FavSha_t FavSha,
                                                 long Cod,long UsrCod,unsigned MaxUsrs,
                                                 MYSQL_RES **mysql_res);
 
-static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
+static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
                                            unsigned NumUsrs);
 
 /*****************************************************************************/
 /*************** Remove all content of a user from database ******************/
 /*****************************************************************************/
 
-void Tml_Usr_RemoveUsrContent (long UsrCod)
+void TmlUsr_RemoveUsrContent (long UsrCod)
   {
    /***** Remove favs for comments *****/
    /* Remove all favs made by this user to any comment */
-   Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FAV_UNF_COMM,UsrCod);
+   Tml_DB_RemoveAllFavsMadeByUsr (TmlUsr_FAV_UNF_COMM,UsrCod);
 
    /* Remove all favs to comments of this user */
-   Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FAV_UNF_COMM,UsrCod);
+   Tml_DB_RemoveAllFavsToPubsBy (TmlUsr_FAV_UNF_COMM,UsrCod);
 
    /* Remove all favs to all comments in all notes authored by this user */
    Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (UsrCod);
 
    /***** Remove favs for notes *****/
    /* Remove all favs made by this user to any note */
-   Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FAV_UNF_NOTE,UsrCod);
+   Tml_DB_RemoveAllFavsMadeByUsr (TmlUsr_FAV_UNF_NOTE,UsrCod);
 
    /* Remove all favs to notes of this user */
-   Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FAV_UNF_NOTE,UsrCod);
+   Tml_DB_RemoveAllFavsToPubsBy (TmlUsr_FAV_UNF_NOTE,UsrCod);
 
    /***** Remove comments *****/
    /* Remove all comments in all notes of this user */
@@ -115,21 +115,21 @@ void Tml_Usr_RemoveUsrContent (long UsrCod)
 /************** Show users who have faved/shared a note/comment **************/
 /*****************************************************************************/
 
-static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
+static void TmlUsr_GetAndShowSharersOrFavers (TmlUsr_FavSha_t FavSha,
                                                long Cod,long UsrCod,unsigned NumUsrs,
-				               Tml_Usr_HowManyUsrs_t HowManyUsrs)
+				               TmlUsr_HowManyUsrs_t HowManyUsrs)
   {
-   static const Tml_Frm_Action_t Action[Tml_Usr_NUM_FAV_SHA] =
+   static const TmlFrm_Action_t Action[TmlUsr_NUM_FAV_SHA] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] = Tml_Frm_ALL_FAV_NOTE,
-      [Tml_Usr_FAV_UNF_COMM] = Tml_Frm_ALL_FAV_COMM,
-      [Tml_Usr_SHA_UNS_NOTE] = Tml_Frm_ALL_SHA_NOTE,
+      [TmlUsr_FAV_UNF_NOTE] = TmlFrm_ALL_FAV_NOTE,
+      [TmlUsr_FAV_UNF_COMM] = TmlFrm_ALL_FAV_COMM,
+      [TmlUsr_SHA_UNS_NOTE] = TmlFrm_ALL_SHA_NOTE,
      };
-   static const char *ParamFormat[Tml_Usr_NUM_FAV_SHA] =
+   static const char *ParamFormat[TmlUsr_NUM_FAV_SHA] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] = "NotCod=%ld",
-      [Tml_Usr_FAV_UNF_COMM] = "PubCod=%ld",
-      [Tml_Usr_SHA_UNS_NOTE] = "NotCod=%ld",
+      [TmlUsr_FAV_UNF_NOTE] = "NotCod=%ld",
+      [TmlUsr_FAV_UNF_COMM] = "PubCod=%ld",
+      [TmlUsr_SHA_UNS_NOTE] = "NotCod=%ld",
      };
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs;
@@ -137,9 +137,9 @@ static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
    /***** Get users who have faved/shared *****/
    if (NumUsrs)
       NumFirstUsrs =
-      Tml_Usr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
-                                      HowManyUsrs == Tml_Usr_SHOW_FEW_USRS ? Tml_Usr_DEF_USRS_SHOWN :
-				                                             Tml_Usr_MAX_USRS_SHOWN,
+      TmlUsr_GetListFaversOrSharers (FavSha,Cod,UsrCod,
+                                      HowManyUsrs == TmlUsr_SHOW_FEW_USRS ? TmlUsr_DEF_USRS_SHOWN :
+				                                             TmlUsr_MAX_USRS_SHOWN,
                                       &mysql_res);
    else
       NumFirstUsrs = 0;
@@ -147,15 +147,15 @@ static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
    /***** Show users *****/
    /* Number of users */
    HTM_DIV_Begin ("class=\"Tml_NUM_USRS\"");
-      Tml_Usr_ShowNumSharersOrFavers (NumUsrs);
+      TmlUsr_ShowNumSharersOrFavers (NumUsrs);
    HTM_DIV_End ();
 
    /* List users one by one */
    HTM_DIV_Begin ("class=\"Tml_USRS\"");
-      Tml_Usr_ListSharersOrFavers (&mysql_res,NumUsrs,NumFirstUsrs);
+      TmlUsr_ListSharersOrFavers (&mysql_res,NumUsrs,NumFirstUsrs);
       if (NumFirstUsrs < NumUsrs)		// Not all are shown
 	 /* Clickable ellipsis to show all users */
-	 Tml_Frm_PutFormToSeeAllFaversSharers (Action[FavSha],
+	 TmlFrm_PutFormToSeeAllFaversSharers (Action[FavSha],
 					       ParamFormat[FavSha],Cod,
 					       HowManyUsrs);
    HTM_DIV_End ();
@@ -169,22 +169,22 @@ static void Tml_Usr_GetAndShowSharersOrFavers (Tml_Usr_FavSha_t FavSha,
 /************************ Show sharers or favouriters ************************/
 /*****************************************************************************/
 
-static void Tml_Usr_ShowNumSharersOrFavers (unsigned NumUsrs)
+static void TmlUsr_ShowNumSharersOrFavers (unsigned NumUsrs)
   {
    /***** Show number of sharers or favers
           (users who have shared or marked this note as favourite) *****/
    HTM_TxtF ("&nbsp;%u",NumUsrs);
   }
 
-static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
+static void TmlUsr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 			                 unsigned NumUsrs,unsigned NumFirstUsrs)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC12x16",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE12x16",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO12x16",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR12x16",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC12x16",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE12x16",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO12x16",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR12x16",
      };
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -234,14 +234,14 @@ static void Tml_Usr_ListSharersOrFavers (MYSQL_RES **mysql_res,
 /************* Check if a user has faved/shared a note/comment ***************/
 /*****************************************************************************/
 
-bool Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
+bool TmlUsr_CheckIfFavedSharedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    switch (FavSha)
      {
-      case Tml_Usr_FAV_UNF_NOTE:
-      case Tml_Usr_FAV_UNF_COMM:
+      case TmlUsr_FAV_UNF_NOTE:
+      case TmlUsr_FAV_UNF_COMM:
 	 return Tml_DB_CheckIfFavedByUsr (FavSha,Cod,UsrCod);
-      case Tml_Usr_SHA_UNS_NOTE:
+      case TmlUsr_SHA_UNS_NOTE:
 	 return Tml_DB_CheckIfSharedByUsr (Cod,UsrCod);
       default:
          Err_ShowErrorAndExit ("Wrong fav/share action.");
@@ -254,16 +254,16 @@ bool Tml_Usr_CheckIfFavedSharedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrC
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-static unsigned Tml_Usr_GetListFaversOrSharers (Tml_Usr_FavSha_t FavSha,
+static unsigned TmlUsr_GetListFaversOrSharers (TmlUsr_FavSha_t FavSha,
                                                 long Cod,long UsrCod,unsigned MaxUsrs,
                                                 MYSQL_RES **mysql_res)
   {
    switch (FavSha)
      {
-      case Tml_Usr_FAV_UNF_NOTE:
-      case Tml_Usr_FAV_UNF_COMM:
+      case TmlUsr_FAV_UNF_NOTE:
+      case TmlUsr_FAV_UNF_COMM:
 	 return Tml_DB_GetFavers (FavSha,Cod,UsrCod,MaxUsrs,mysql_res);
-      case Tml_Usr_SHA_UNS_NOTE:
+      case TmlUsr_SHA_UNS_NOTE:
 	 return Tml_DB_GetSharers (Cod,UsrCod,MaxUsrs,mysql_res);
       default:
          Err_ShowErrorAndExit ("Wrong fav/share action.");
@@ -276,9 +276,9 @@ static unsigned Tml_Usr_GetListFaversOrSharers (Tml_Usr_FavSha_t FavSha,
 /**************** Put icon to fav/unfav and list of favers *******************/
 /*****************************************************************************/
 
-void Tml_Usr_PutIconFavSha (Tml_Usr_FavSha_t FavSha,
-                            long Cod,long UsrCod,unsigned NumUsrs,
-                            Tml_Usr_HowManyUsrs_t HowManyUsrs)
+void TmlUsr_PutIconFavSha (TmlUsr_FavSha_t FavSha,
+                           long Cod,long UsrCod,unsigned NumUsrs,
+                           TmlUsr_HowManyUsrs_t HowManyUsrs)
   {
    /***** Put form to fav/unfav or share/unshare this note/comment *****/
    /* Begin container */
@@ -286,22 +286,22 @@ void Tml_Usr_PutIconFavSha (Tml_Usr_FavSha_t FavSha,
 
       /* Icon to fav/unfav or share/unshare this note/comment */
       if (Usr_ItsMe (UsrCod))	// I am the author ==> I can not fav/unfav or share/unshare
-         Tml_Usr_PutDisabledIconFavSha (FavSha,NumUsrs);
+         TmlUsr_PutDisabledIconFavSha (FavSha,NumUsrs);
       else			// I am not the author
-	 Tml_Frm_PutFormToFavUnfShaUns (FavSha,Cod);
+	 TmlFrm_PutFormToFavUnfShaUns (FavSha,Cod);
 
    /* End container */
    HTM_DIV_End ();
 
    /***** Show who have faved/shared this note/comment *****/
-   Tml_Usr_GetAndShowSharersOrFavers (FavSha,Cod,UsrCod,NumUsrs,HowManyUsrs);
+   TmlUsr_GetAndShowSharersOrFavers (FavSha,Cod,UsrCod,NumUsrs,HowManyUsrs);
   }
 
 /*****************************************************************************/
 /****************** Put disabled icon to mark as favourite *******************/
 /*****************************************************************************/
 
-static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
+static void TmlUsr_PutDisabledIconFavSha (TmlUsr_FavSha_t FavSha,
                                            unsigned NumUsrs)
   {
    extern const char *Txt_TIMELINE_Favourited_by_X_USERS;
@@ -316,29 +316,29 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
          const char **WithUsrs;
          const char **WithoutUsrs;
         } Title;
-     } Ico[Tml_Usr_NUM_FAV_SHA] =
+     } Ico[TmlUsr_NUM_FAV_SHA] =
      {
-      [Tml_Usr_FAV_UNF_NOTE] =
+      [TmlUsr_FAV_UNF_NOTE] =
 	 {
-	  .Icon = Tml_Fav_ICON_FAV,
+	  .Icon = TmlFav_ICON_FAV,
 	  .Title =
 	    {
              .WithUsrs    = &Txt_TIMELINE_Favourited_by_X_USERS,
              .WithoutUsrs = &Txt_TIMELINE_Not_favourited_by_anyone,
 	    },
 	 },
-      [Tml_Usr_FAV_UNF_COMM] =
+      [TmlUsr_FAV_UNF_COMM] =
 	 {
-	  .Icon = Tml_Fav_ICON_FAV,
+	  .Icon = TmlFav_ICON_FAV,
 	  .Title =
 	    {
              .WithUsrs    = &Txt_TIMELINE_Favourited_by_X_USERS,
              .WithoutUsrs = &Txt_TIMELINE_Not_favourited_by_anyone,
 	    },
 	 },
-      [Tml_Usr_SHA_UNS_NOTE] =
+      [TmlUsr_SHA_UNS_NOTE] =
 	 {
-	  .Icon = Tml_Sha_ICON_SHARE,
+	  .Icon = TmlSha_ICON_SHARE,
 	  .Title =
 	    {
              .WithUsrs    = &Txt_TIMELINE_Shared_by_X_USERS,
@@ -365,7 +365,7 @@ static void Tml_Usr_PutDisabledIconFavSha (Tml_Usr_FavSha_t FavSha,
 /***************** Check if I can fav/share a note/comment *******************/
 /*****************************************************************************/
 
-bool Tml_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
+bool TmlUsr_CheckIfICanFavSha (long Cod,long UsrCod)
   {
    extern const char *Txt_The_post_no_longer_exists;
 
@@ -391,7 +391,7 @@ bool Tml_Usr_CheckIfICanFavSha (long Cod,long UsrCod)
 /***************** Check if I can fav/share a note/comment *******************/
 /*****************************************************************************/
 
-bool Tml_Usr_CheckIfICanRemove (long Cod,long UsrCod)
+bool TmlUsr_CheckIfICanRemove (long Cod,long UsrCod)
   {
    extern const char *Txt_The_post_no_longer_exists;
 

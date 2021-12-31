@@ -47,8 +47,8 @@ extern struct Globals Gbl;
 /*********** Create a notification for the author of a post/comment **********/
 /*****************************************************************************/
 
-void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                  Ntf_NotifyEvent_t NotifyEvent)
+void TmlNtf_CreateNotifToAuthor (long AuthorCod,long PubCod,
+                                 Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
    bool CreateNotif;
@@ -88,27 +88,27 @@ void Tml_Ntf_CreateNotifToAuthor (long AuthorCod,long PubCod,
 /***************** Get notification of a new publication *********************/
 /*****************************************************************************/
 
-void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                  char **ContentStr,
-                                  long PubCod,bool GetContent)
+void TmlNtf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                 char **ContentStr,
+                                 long PubCod,bool GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Tml_Pub_Publication Pub;
-   struct Tml_Not_Note Not;
-   struct Tml_Pst_Content Content;
+   struct TmlPub_Publication Pub;
+   struct TmlNot_Note Not;
+   struct TmlPst_Content Content;
    size_t Length;
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
-   Pub.Type = Tml_Pub_UNKNOWN;
+   Pub.Type = TmlPub_UNKNOWN;
    SummaryStr[0]  = '\0';	// Return nothing on error
    Content.Txt[0] = '\0';
 
    /***** Get summary and content from post from database *****/
    if (Tml_DB_GetDataOfPubByCod (PubCod,&mysql_res) == 1)   // Result should have a unique row
       /* Get data of publication from row */
-      Tml_Pub_GetDataOfPubFromNextRow (mysql_res,&Pub);
+      TmlPub_GetDataOfPubFromNextRow (mysql_res,&Pub);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -116,13 +116,13 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get summary and content *****/
    switch (Pub.Type)
      {
-      case Tml_Pub_UNKNOWN:
+      case TmlPub_UNKNOWN:
 	 break;
-      case Tml_Pub_ORIGINAL_NOTE:
-      case Tml_Pub_SHARED_NOTE:
+      case TmlPub_ORIGINAL_NOTE:
+      case TmlPub_SHARED_NOTE:
 	 /* Get data of note */
 	 Not.NotCod = Pub.NotCod;
-	 Tml_Not_GetDataOfNoteByCod (&Not);
+	 TmlNot_GetDataOfNoteByCod (&Not);
 
 	 if (Not.Type == Tml_NOTE_POST)
 	   {
@@ -155,9 +155,9 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    Str_Copy (SummaryStr,Content.Txt,Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
-	    Tml_Not_GetNoteSummary (&Not,SummaryStr);
+	    TmlNot_GetNoteSummary (&Not,SummaryStr);
 	 break;
-      case Tml_Pub_COMMENT_TO_NOTE:
+      case TmlPub_COMMENT_TO_NOTE:
 	 /***** Get content of comment from database *****/
 	 if (Tml_DB_GetDataOfCommByCod (Pub.PubCod,&mysql_res) == 1)   // Result should have a unique row
 	   {
@@ -199,7 +199,7 @@ void Tml_Ntf_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /*****************************************************************************/
 // Must be executed as a priori function
 
-void Tml_Ntf_MarkMyNotifAsSeen (void)
+void TmlNtf_MarkMyNotifAsSeen (void)
   {
    Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TML_COMMENT);
    Ntf_DB_MarkNotifsAsSeen (Ntf_EVENT_TML_FAV    );

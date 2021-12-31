@@ -2083,12 +2083,12 @@ static void Prj_ShowOneProjectMembersWithARole (struct Prj_Projects *Projects,
       [Prj_ROLE_TUT] = ActReqAddTutPrj,	// Tutor
       [Prj_ROLE_EVL] = ActReqAddEvlPrj,	// Evaluator
      };
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

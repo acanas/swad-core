@@ -215,7 +215,7 @@ struct UsrData
       Ico_IconSet_t IconSet;
       Mnu_Menu_t Menu;
       unsigned SideCols;
-      Pho_Shape_t PhotoShape;
+      PhoSha_Shape_t PhotoShape;
       bool AcceptCookies;	// User has accepted third party cookies
      } Prefs;
   };

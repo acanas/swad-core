@@ -731,7 +731,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TML_MENTION:
 	 // Cod is the code of the social publishing
          Frm_BeginForm (ActSeeGblTL);
-	    Tml_Pub_PutHiddenParamPubCod (Cod);
+	    TmlPub_PutHiddenParamPubCod (Cod);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
@@ -883,7 +883,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_TML_SHARE:
       case Ntf_EVENT_TML_MENTION:
 	 // Cod is the code of the social publishing
-	 Tml_Ntf_GetNotifPublication (SummaryStr,ContentStr,Cod,GetContent);
+	 TmlNtf_GetNotifPublication (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_FOLLOWER:
          Fol_GetNotifFollower (SummaryStr,ContentStr);

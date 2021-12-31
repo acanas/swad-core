@@ -37,66 +37,66 @@
 /*****************************************************************************/
 
 // Number of recent publishings got and shown the first time, before refreshing
-#define Tml_Pub_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// New publishings retrieved (big number)
-#define Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
-#define Tml_Pub_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
+#define TmlPub_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// New publishings retrieved (big number)
+#define TmlPub_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
+#define TmlPub_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Tml_Pub_NUM_PUB_TYPES	4
+#define TmlPub_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table tml_notes
 typedef enum
   {
-   Tml_Pub_UNKNOWN		= 0,
-   Tml_Pub_ORIGINAL_NOTE	= 1,
-   Tml_Pub_SHARED_NOTE		= 2,
-   Tml_Pub_COMMENT_TO_NOTE	= 3,
-  } Tml_Pub_Type_t;
+   TmlPub_UNKNOWN		= 0,
+   TmlPub_ORIGINAL_NOTE	= 1,
+   TmlPub_SHARED_NOTE		= 2,
+   TmlPub_COMMENT_TO_NOTE	= 3,
+  } TmlPub_Type_t;
 
-struct Tml_Pub_Publication
+struct TmlPub_Publication
   {
    long PubCod;				// Publication code
    long NotCod;				// Note code
    long PublisherCod;			// Sharer or writer of the publication
-   Tml_Pub_Type_t Type;			// Original note, shared note, comment
-   struct Tml_Pub_Publication *Next;	// Used for chained list
+   TmlPub_Type_t Type;			// Original note, shared note, comment
+   struct TmlPub_Publication *Next;	// Used for chained list
   };
 
-#define Tml_Pub_NUM_RANGES 2
+#define TmlPub_NUM_RANGES 2
 typedef enum
   {
-   Tml_Pub_TOP    = 0,
-   Tml_Pub_BOTTOM = 1,
-  } Tml_Pub_Range_t;
+   TmlPub_TOP    = 0,
+   TmlPub_BOTTOM = 1,
+  } TmlPub_Range_t;
 
-struct Tml_Pub_RangePubsToGet
+struct TmlPub_RangePubsToGet
   {
    long Top;	// Top pub code
    long Bottom;	// Bottom pub code
   };
 
-#define Tml_Pub_NUM_FIRST_LAST 2
+#define TmlPub_NUM_FIRST_LAST 2
 typedef enum
   {
-   Tml_Pub_FIRST = 0,
-   Tml_Pub_LAST  = 1,
-  } Tml_Pub_FirstLast_t;
+   TmlPub_FIRST = 0,
+   TmlPub_LAST  = 1,
+  } TmlPub_FirstLast_t;
 
-#define Tml_Pub_MAX_BYTES_SUBQUERY (128 - 1)
-struct Tml_Pub_SubQueries
+#define TmlPub_MAX_BYTES_SUBQUERY (128 - 1)
+struct TmlPub_SubQueries
   {
    struct
      {
       char *Table;
-      char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+      char SubQuery[TmlPub_MAX_BYTES_SUBQUERY + 1];
      } Publishers;
    struct
      {
-      char Top   [Tml_Pub_MAX_BYTES_SUBQUERY + 1];
-      char Bottom[Tml_Pub_MAX_BYTES_SUBQUERY + 1];
+      char Top   [TmlPub_MAX_BYTES_SUBQUERY + 1];
+      char Bottom[TmlPub_MAX_BYTES_SUBQUERY + 1];
      } Range;
   };
 
@@ -104,23 +104,23 @@ struct Tml_Pub_SubQueries
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Pub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline);
-void Tml_Pub_FreeListPubs (struct Tml_Timeline *Timeline);
+void TmlPub_GetListPubsToShowInTimeline (struct Tml_Timeline *Timeline);
+void TmlPub_FreeListPubs (struct Tml_Timeline *Timeline);
 
-void Tml_Pub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline);
-void Tml_Pub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline);
+void TmlPub_InsertNewPubsInTimeline (struct Tml_Timeline *Timeline);
+void TmlPub_ShowOldPubsInTimeline (struct Tml_Timeline *Timeline);
 
-Tml_TopMessage_t Tml_Pub_GetTopMessage (Tml_Pub_Type_t PubType);
+Tml_TopMessage_t TmlPub_GetTopMessage (TmlPub_Type_t PubType);
 
-void Tml_Pub_PutLinkToViewNewPubs (void);
-void Tml_Pub_PutLinkToViewOldPubs (void);
+void TmlPub_PutLinkToViewNewPubs (void);
+void TmlPub_PutLinkToViewOldPubs (void);
 
-void Tml_Pub_PutHiddenParamPubCod (long PubCod);
-long Tml_Pub_GetParamPubCod (void);
+void TmlPub_PutHiddenParamPubCod (long PubCod);
+long TmlPub_GetParamPubCod (void);
 
-void Tml_Pub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
-                                      struct Tml_Pub_Publication *Pub);
+void TmlPub_GetDataOfPubFromNextRow (MYSQL_RES *mysql_res,
+                                     struct TmlPub_Publication *Pub);
 
-void Tml_Pub_PublishPubInTimeline (struct Tml_Pub_Publication *Pub);
+void TmlPub_PublishPubInTimeline (struct TmlPub_Publication *Pub);
 
 #endif

@@ -358,7 +358,7 @@ void Cfe_ReceiveCallForExam2 (void)
       Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->HighlightExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new call for exam *****/
-   Tml_Not_StoreAndPublishNote (Tml_NOTE_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
+   TmlNot_StoreAndPublishNote (Tml_NOTE_CALL_FOR_EXAM,CallsForExams->HighlightExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);

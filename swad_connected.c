@@ -562,12 +562,12 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    const char *ClassTxt;
    long UsrCod;
@@ -656,12 +656,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
       [Rol_NET] = ActSeeRecOneTch,
       [Rol_TCH] = ActSeeRecOneTch,
      };
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;

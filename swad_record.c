@@ -2604,12 +2604,12 @@ static void Rec_ShowInstitutionInHead (struct Ins_Instit *Ins,bool PutFormLinks)
 
 static void Rec_ShowPhoto (struct UsrData *UsrDat)
   {
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOR186x248",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOR186x248",
-      [Pho_SHAPE_OVAL     ] = "PHOTOR186x248",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR186x248",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOR186x248",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOR186x248",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOR186x248",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR186x248",
      };
 
    /***** User's photo *****/

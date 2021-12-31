@@ -27,24 +27,24 @@
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-#define Tml_Fav_ICON_FAV	"heart.svg"
+#define TmlFav_ICON_FAV	"heart.svg"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Tml_Fav_ShowAllFaversNoteUsr (void);
-void Tml_Fav_ShowAllFaversNoteGbl (void);
-void Tml_Fav_FavNoteUsr (void);
-void Tml_Fav_FavNoteGbl (void);
-void Tml_Fav_UnfNoteUsr (void);
-void Tml_Fav_UnfNoteGbl (void);
+void TmlFav_ShowAllFaversNoteUsr (void);
+void TmlFav_ShowAllFaversNoteGbl (void);
+void TmlFav_FavNoteUsr (void);
+void TmlFav_FavNoteGbl (void);
+void TmlFav_UnfNoteUsr (void);
+void TmlFav_UnfNoteGbl (void);
 
-void Tml_Fav_ShowAllFaversComUsr (void);
-void Tml_Fav_ShowAllFaversComGbl (void);
-void Tml_Fav_FavCommUsr (void);
-void Tml_Fav_FavCommGbl (void);
-void Tml_Fav_UnfCommUsr (void);
-void Tml_Fav_UnfCommGbl (void);
+void TmlFav_ShowAllFaversComUsr (void);
+void TmlFav_ShowAllFaversComGbl (void);
+void TmlFav_FavCommUsr (void);
+void TmlFav_FavCommGbl (void);
+void TmlFav_UnfCommUsr (void);
+void TmlFav_UnfCommGbl (void);
 
 #endif

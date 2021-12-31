@@ -27,17 +27,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Tml_Sha_ICON_SHARE	"share-alt.svg"
+#define TmlSha_ICON_SHARE	"share-alt.svg"
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tml_Sha_ShowAllSharersNoteUsr (void);
-void Tml_Sha_ShowAllSharersNoteGbl (void);
-void Tml_Sha_ShaNoteUsr (void);
-void Tml_Sha_ShaNoteGbl (void);
-void Tml_Sha_UnsNoteUsr (void);
-void Tml_Sha_UnsNoteGbl (void);
+void TmlSha_ShowAllSharersNoteUsr (void);
+void TmlSha_ShowAllSharersNoteGbl (void);
+void TmlSha_ShaNoteUsr (void);
+void TmlSha_ShaNoteGbl (void);
+void TmlSha_UnsNoteUsr (void);
+void TmlSha_UnsNoteGbl (void);
 
 #endif

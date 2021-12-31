@@ -438,7 +438,7 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,Ico_Color_t Color,con
 
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
 
-      if (asprintf (&Class,"CONTEXT_ICO_16x16 %s",
+      if (asprintf (&Class,"CONTEXT_ICO16x16 %s",
                     Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Ico_PutIcon (Icon,Color,Title,Class);
@@ -455,7 +455,7 @@ void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,const char *Title)
   {
    char *Class;
 
-   if (asprintf (&Class,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16 %s",
+   if (asprintf (&Class,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 %s",
 		 Ico_ClassColor[Color][Gbl.Prefs.Theme]) < 0)
       Err_NotEnoughMemoryExit ();
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Title,Class);
@@ -470,7 +470,7 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
   {
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-      Ico_PutIcon (Icon,Color,Text,"CONTEXT_ICO_x16");
+      Ico_PutIcon (Icon,Color,Text,"CONTEXT_ICOx16");
       HTM_TxtF ("&nbsp;%s",Text);
    HTM_DIV_End ();
   }
@@ -496,12 +496,12 @@ void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Titl
 
 void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO_16x16");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO16x16");
   }
 
 void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO_16x16 ICO_HIDDEN");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO16x16 ICO_HIDDEN");
   }
 
 /*****************************************************************************/

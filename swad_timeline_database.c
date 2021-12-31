@@ -38,23 +38,23 @@
 /************************* Private constants and types ***********************/
 /*****************************************************************************/
 
-static const char *Tml_DB_TableFav[Tml_Usr_NUM_FAV_SHA] =
+static const char *Tml_DB_TableFav[TmlUsr_NUM_FAV_SHA] =
   {
-   [Tml_Usr_FAV_UNF_NOTE] = "tml_notes_fav",
-   [Tml_Usr_FAV_UNF_COMM] = "tml_comments_fav",
-   [Tml_Usr_SHA_UNS_NOTE] = NULL,		// Not used
+   [TmlUsr_FAV_UNF_NOTE] = "tml_notes_fav",
+   [TmlUsr_FAV_UNF_COMM] = "tml_comments_fav",
+   [TmlUsr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static const char *Tml_DB_FieldFav[Tml_Usr_NUM_FAV_SHA] =
+static const char *Tml_DB_FieldFav[TmlUsr_NUM_FAV_SHA] =
   {
-   [Tml_Usr_FAV_UNF_NOTE] = "NotCod",
-   [Tml_Usr_FAV_UNF_COMM] = "PubCod",
-   [Tml_Usr_SHA_UNS_NOTE] = NULL,		// Not used
+   [TmlUsr_FAV_UNF_NOTE] = "NotCod",
+   [TmlUsr_FAV_UNF_COMM] = "PubCod",
+   [TmlUsr_SHA_UNS_NOTE] = NULL,		// Not used
   };
-static Tml_Pub_Type_t Tml_DB_PubTypeFav[Tml_Usr_NUM_FAV_SHA] =
+static TmlPub_Type_t Tml_DB_PubTypeFav[TmlUsr_NUM_FAV_SHA] =
   {
-   [Tml_Usr_FAV_UNF_NOTE] = Tml_Pub_ORIGINAL_NOTE,
-   [Tml_Usr_FAV_UNF_COMM] = Tml_Pub_COMMENT_TO_NOTE,
-   [Tml_Usr_SHA_UNS_NOTE] = Tml_Pub_UNKNOWN,	// Not used
+   [TmlUsr_FAV_UNF_NOTE] = TmlPub_ORIGINAL_NOTE,
+   [TmlUsr_FAV_UNF_COMM] = TmlPub_COMMENT_TO_NOTE,
+   [TmlUsr_SHA_UNS_NOTE] = TmlPub_UNKNOWN,	// Not used
   };
 
 /*****************************************************************************/
@@ -136,7 +136,7 @@ long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
 			      " WHERE NotCod=%ld"
 			        " AND PubType=%u",
 			      NotCod,
-			      (unsigned) Tml_Pub_ORIGINAL_NOTE);
+			      (unsigned) TmlPub_ORIGINAL_NOTE);
   }
 
 /*****************************************************************************/
@@ -144,7 +144,7 @@ long Tml_DB_GetPubCodOfOriginalNote (long NotCod)
 /*****************************************************************************/
 // Returns code of note just created
 
-long Tml_DB_CreateNewNote (Tml_Not_Type_t NoteType,long Cod,
+long Tml_DB_CreateNewNote (TmlNot_Type_t NoteType,long Cod,
                            long PublisherCod,long HieCod)
   {
    return
@@ -165,7 +165,7 @@ long Tml_DB_CreateNewNote (Tml_Not_Type_t NoteType,long Cod,
 /************************* Mark a note as unavailable ************************/
 /*****************************************************************************/
 
-void Tml_DB_MarkNoteAsUnavailable (Tml_Not_Type_t NoteType,long Cod)
+void Tml_DB_MarkNoteAsUnavailable (TmlNot_Type_t NoteType,long Cod)
   {
    DB_QueryUPDATE ("can not mark note as unavailable",
 		   "UPDATE tml_notes"
@@ -180,7 +180,7 @@ void Tml_DB_MarkNoteAsUnavailable (Tml_Not_Type_t NoteType,long Cod)
 /***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_Type_t NoteType,
+void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_Type_t NoteType,
                                                     Brw_FileBrowser_t FileBrowser,
                                                     long Cod,const char *Path)
   {
@@ -205,7 +205,7 @@ void Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (Tml_Not_Type_t NoteType,
 /*****************************************************************************/
 
 unsigned Tml_DB_GetNumNotesAndUsrsByType (MYSQL_RES **mysql_res,
-                                          Tml_Not_Type_t NoteType)
+                                          TmlNot_Type_t NoteType)
   {
    switch (Gbl.Scope.Current)
      {
@@ -580,7 +580,7 @@ long Tml_DB_GetMedCodFromPost (long PstCod)
 /*****************************************************************************/
 // Returns code of just created post
 
-long Tml_DB_CreateNewPost (const struct Tml_Pst_Content *Content)
+long Tml_DB_CreateNewPost (const struct TmlPst_Content *Content)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create post",
@@ -633,7 +633,7 @@ unsigned Tml_DB_GetNumCommsInNote (long NotCod)
 		  " WHERE NotCod=%ld"
 		    " AND PubType=%u",
 		  NotCod,
-		  (unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		  (unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -649,7 +649,7 @@ unsigned Tml_DB_GetComms (long NotCod,MYSQL_RES **mysql_res)
 		    " FROM tml_pubs"
 		   " WHERE NotCod=%ld"
 		     " AND PubType=%u",
-		   NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		   NotCod,(unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -674,7 +674,7 @@ unsigned Tml_DB_GetInitialComms (long NotCod,unsigned NumInitialCommsToGet,
 		     " AND tml_pubs.PubCod=tml_comments.PubCod"
 		   " ORDER BY tml_pubs.PubCod"
 		   " LIMIT %lu",
-		   NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE,
+		   NotCod,(unsigned) TmlPub_COMMENT_TO_NOTE,
 		   NumInitialCommsToGet);
   }
 
@@ -702,7 +702,7 @@ unsigned Tml_DB_GetFinalComms (long NotCod,unsigned NumFinalCommsToGet,
 			   " ORDER BY tml_pubs.PubCod DESC"
 			   " LIMIT %u) AS comments"
 		  " ORDER BY PubCod",
-		  NotCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE,
+		  NotCod,(unsigned) TmlPub_COMMENT_TO_NOTE,
 		  NumFinalCommsToGet);
   }
 
@@ -730,7 +730,7 @@ unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 		   " WHERE tml_pubs.PubCod=%ld"
 		     " AND tml_pubs.PubType=%u"
 		     " AND tml_pubs.PubCod=tml_comments.PubCod",
-		   PubCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		   PubCod,(unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -738,7 +738,7 @@ unsigned Tml_DB_GetDataOfCommByCod (long PubCod,MYSQL_RES **mysql_res)
 /*****************************************************************************/
 
 void Tml_DB_InsertCommContent (long PubCod,
-			       const struct Tml_Pst_Content *Content)
+			       const struct TmlPst_Content *Content)
   {
    DB_QueryINSERT ("can not store comment content",
 		   "INSERT INTO tml_comments"
@@ -796,7 +796,7 @@ void Tml_DB_RemoveCommPub (long PubCod)
 	             " AND PubType=%u",		// Extra check: it's a comment
 		   PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		   (unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -814,7 +814,7 @@ void Tml_DB_RemoveAllCommsInAllNotesOf (long UsrCod)
 		     " AND tml_notes.NotCod=tml_pubs.NotCod"
                      " AND tml_pubs.PubType=%u"
 	             " AND tml_pubs.PubCod=tml_comments.PubCod",
-		   UsrCod,(unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -831,7 +831,7 @@ void Tml_DB_RemoveAllCommsMadeBy (long UsrCod)
 	             " AND tml_pubs.PubType=%u"
 	             " AND tml_pubs.PubCod=tml_comments.PubCod",
 		   UsrCod,
-		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		   (unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -852,23 +852,23 @@ static long Tml_DB_GetMedCod (const char *Table,const char *Field,long Cod)
 /******* Create temporary table and subquery with potential publishers *******/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
+void Tml_DB_CreateSubQueryPublishers (TmlUsr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
                                       char **Table,
-                                      char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
+                                      char SubQuery[TmlPub_MAX_BYTES_SUBQUERY + 1])
   {
    switch (UsrOrGbl)
      {
-      case Tml_Usr_TIMELINE_USR:	// Show the timeline of a user
+      case TmlUsr_TIMELINE_USR:	// Show the timeline of a user
 	 *Table = "";
 	 sprintf (SubQuery,"tml_pubs.PublisherCod=%ld AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
-      case Tml_Usr_TIMELINE_GBL:	// Show the global timeline
+      case TmlUsr_TIMELINE_GBL:	// Show the global timeline
 	 switch (Who)
 	   {
 	    case Usr_WHO_ME:		// Show my timeline
 	       *Table = "";
-	       snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
+	       snprintf (SubQuery,TmlPub_MAX_BYTES_SUBQUERY + 1,
 	                 "tml_pubs.PublisherCod=%ld AND ",
 	                 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
@@ -877,7 +877,7 @@ void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
 	       *Table = ",fol_tmp_me_and_followed";
 	       Str_Copy (SubQuery,
 			 "tml_pubs.PublisherCod=fol_tmp_me_and_followed.UsrCod AND ",
-			 Tml_Pub_MAX_BYTES_SUBQUERY);
+			 TmlPub_MAX_BYTES_SUBQUERY);
 	       break;
 	    case Usr_WHO_ALL:		// Show the timeline of all users
 	       *Table = "";
@@ -895,17 +895,17 @@ void Tml_DB_CreateSubQueryPublishers (Tml_Usr_UsrOrGbl_t UsrOrGbl,Usr_Who_t Who,
 /***** Create subqueries with range of publications to get from tml_pubs *****/
 /*****************************************************************************/
 
-void Tml_DB_CreateSubQueryRange (Tml_Pub_Range_t Range,long PubCod,
-                                 char SubQuery[Tml_Pub_MAX_BYTES_SUBQUERY + 1])
+void Tml_DB_CreateSubQueryRange (TmlPub_Range_t Range,long PubCod,
+                                 char SubQuery[TmlPub_MAX_BYTES_SUBQUERY + 1])
   {
-   static const char Operator[Tml_Pub_NUM_RANGES] =
+   static const char Operator[TmlPub_NUM_RANGES] =
      {
-      [Tml_Pub_TOP   ] = '<',
-      [Tml_Pub_BOTTOM] = '>',
+      [TmlPub_TOP   ] = '<',
+      [TmlPub_BOTTOM] = '>',
      };
 
    if (PubCod > 0)
-      snprintf (SubQuery,Tml_Pub_MAX_BYTES_SUBQUERY + 1,
+      snprintf (SubQuery,TmlPub_MAX_BYTES_SUBQUERY + 1,
                 "tml_pubs.PubCod%c%ld AND ",Operator[Range],PubCod);
    else
       SubQuery[0] = '\0';
@@ -917,7 +917,7 @@ void Tml_DB_CreateSubQueryRange (Tml_Pub_Range_t Range,long PubCod,
 // Returns the number of rows got
 
 unsigned Tml_DB_SelectTheMostRecentPub (MYSQL_RES **mysql_res,
-                                        const struct Tml_Pub_SubQueries *SubQueries)
+                                        const struct TmlPub_SubQueries *SubQueries)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get publication",
@@ -978,12 +978,12 @@ long Tml_DB_GetNotCodFromPubCod (long PubCod)
 /************* Get first/last publication code stored in session *************/
 /*****************************************************************************/
 
-long Tml_DB_GetPubCodFromSession (Tml_Pub_FirstLast_t FirstLast)
+long Tml_DB_GetPubCodFromSession (TmlPub_FirstLast_t FirstLast)
   {
-   static const char *FieldName[Tml_Pub_NUM_FIRST_LAST] =
+   static const char *FieldName[TmlPub_NUM_FIRST_LAST] =
      {
-      [Tml_Pub_FIRST] = "FirstPubCod",
-      [Tml_Pub_LAST ] = "LastPubCod",
+      [TmlPub_FIRST] = "FirstPubCod",
+      [TmlPub_LAST ] = "LastPubCod",
      };
    long PubCod;
 
@@ -1038,7 +1038,7 @@ unsigned Tml_DB_GetPublishersInNoteExceptMe (MYSQL_RES **mysql_res,long PubCod)
 /*****************************************************************************/
 // Return just created publication code
 
-long Tml_DB_CreateNewPub (const struct Tml_Pub_Publication *Pub)
+long Tml_DB_CreateNewPub (const struct TmlPub_Publication *Pub)
   {
    return
    DB_QueryINSERTandReturnCode ("can not publish note/comment",
@@ -1129,7 +1129,7 @@ void Tml_DB_RemoveAllPubsPublishedBy (long UsrCod)
 /****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
 
-bool Tml_DB_CheckIfFavedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
+bool Tml_DB_CheckIfFavedByUsr (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    return
    DB_QueryEXISTS ("can not check if a user has favourited",
@@ -1146,7 +1146,7 @@ bool Tml_DB_CheckIfFavedByUsr (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
 /********* Get number of times a note/comment has been favourited ************/
 /*****************************************************************************/
 
-unsigned Tml_DB_GetNumFavers (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
+unsigned Tml_DB_GetNumFavers (TmlUsr_FavSha_t FavSha,long Cod,long UsrCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of times has been favourited",
@@ -1163,7 +1163,7 @@ unsigned Tml_DB_GetNumFavers (Tml_Usr_FavSha_t FavSha,long Cod,long UsrCod)
 /******* Get list of users who have marked a note/comment as favourite *******/
 /*****************************************************************************/
 
-unsigned Tml_DB_GetFavers (Tml_Usr_FavSha_t FavSha,
+unsigned Tml_DB_GetFavers (TmlUsr_FavSha_t FavSha,
                            long Cod,long UsrCod,unsigned MaxUsrs,
                            MYSQL_RES **mysql_res)
   {
@@ -1185,7 +1185,7 @@ unsigned Tml_DB_GetFavers (Tml_Usr_FavSha_t FavSha,
 /**************** Mark note/comment as favourite in database *****************/
 /*****************************************************************************/
 
-void Tml_DB_MarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
+void Tml_DB_MarkAsFav (TmlUsr_FavSha_t FavSha,long Cod)
   {
    DB_QueryINSERT ("can not favourite comment",
 		   "INSERT IGNORE INTO %s"
@@ -1201,7 +1201,7 @@ void Tml_DB_MarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
 /*************** Unmark note/comment as favourite in database ****************/
 /*****************************************************************************/
 
-void Tml_DB_UnmarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
+void Tml_DB_UnmarkAsFav (TmlUsr_FavSha_t FavSha,long Cod)
   {
    DB_QueryDELETE ("can not unfavourite",
 		   "DELETE FROM %s"
@@ -1216,7 +1216,7 @@ void Tml_DB_UnmarkAsFav (Tml_Usr_FavSha_t FavSha,long Cod)
 /********** Remove all favs made by a given user to any comment **************/
 /*****************************************************************************/
 
-void Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FavSha_t FavSha,long UsrCod)
+void Tml_DB_RemoveAllFavsMadeByUsr (TmlUsr_FavSha_t FavSha,long UsrCod)
   {
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s"
@@ -1229,7 +1229,7 @@ void Tml_DB_RemoveAllFavsMadeByUsr (Tml_Usr_FavSha_t FavSha,long UsrCod)
 /************ Remove all favs to notes/comments of a given user **************/
 /*****************************************************************************/
 
-void Tml_DB_RemoveAllFavsToPubsBy (Tml_Usr_FavSha_t FavSha,long UsrCod)
+void Tml_DB_RemoveAllFavsToPubsBy (TmlUsr_FavSha_t FavSha,long UsrCod)
   {
    DB_QueryDELETE ("can not remove favs",
 		   "DELETE FROM %s"
@@ -1263,7 +1263,7 @@ void Tml_DB_RemoveAllFavsToAllCommsInAllNotesBy (long UsrCod)
                      " AND tml_pubs.PubType=%u"
 	             " AND tml_pubs.PubCod=tml_comments_fav.PubCod",
 		   UsrCod,
-		   (unsigned) Tml_Pub_COMMENT_TO_NOTE);
+		   (unsigned) TmlPub_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
@@ -1282,7 +1282,7 @@ bool Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod)
 		      " AND PubType=%u)",
 		   NotCod,
 		   UsrCod,
-		   (unsigned) Tml_Pub_SHARED_NOTE);
+		   (unsigned) TmlPub_SHARED_NOTE);
   }
 
 /*****************************************************************************/
@@ -1300,7 +1300,7 @@ unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod)
 		    " AND PubType=%u",
 		  NotCod,
 		  UsrCod,	// Author of the note
-		  (unsigned) Tml_Pub_SHARED_NOTE);
+		  (unsigned) TmlPub_SHARED_NOTE);
   }
 
 /*****************************************************************************/
@@ -1321,7 +1321,7 @@ unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
 		   " LIMIT %u",
 		   NotCod,
 		   UsrCod,
-		   (unsigned) Tml_Pub_SHARED_NOTE,
+		   (unsigned) TmlPub_SHARED_NOTE,
 		   MaxUsrs);
   }
 
@@ -1338,5 +1338,5 @@ void Tml_DB_RemoveSharedPub (long NotCod)
 		     " AND PubType=%u",	// Extra check: shared note
 		   NotCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Tml_Pub_SHARED_NOTE);
+		   (unsigned) TmlPub_SHARED_NOTE);
   }

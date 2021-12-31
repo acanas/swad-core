@@ -171,10 +171,10 @@ void Tml_InitTimelineGbl (struct Tml_Timeline *Timeline)
    Tml_ResetTimeline (Timeline);
 
    /***** Mark all my notifications about timeline as seen *****/
-   Tml_Ntf_MarkMyNotifAsSeen ();
+   TmlNtf_MarkMyNotifAsSeen ();
 
    /***** Get which users *****/
-   Timeline->Who = Tml_Who_GetGlobalWho ();
+   Timeline->Who = TmlWho_GetGlobalWho ();
   }
 
 /*****************************************************************************/
@@ -183,8 +183,8 @@ void Tml_InitTimelineGbl (struct Tml_Timeline *Timeline)
 
 void Tml_ResetTimeline (struct Tml_Timeline *Timeline)
   {
-   Timeline->UsrOrGbl    = Tml_Usr_TIMELINE_GBL;
-   Timeline->Who         = Tml_Who_DEFAULT_WHO;
+   Timeline->UsrOrGbl    = TmlUsr_TIMELINE_GBL;
+   Timeline->Who         = TmlWho_DEFAULT_WHO;
    Timeline->WhatToGet   = Tml_GET_REC_PUBS;
    Timeline->Pubs.Top    =
    Timeline->Pubs.Bottom = NULL,
@@ -204,7 +204,7 @@ void Tml_ShowTimelineGbl (void)
    Tml_InitTimelineGbl (&Timeline);
 
    /***** Save which users in database *****/
-   Tml_Who_SaveWhoInDB (&Timeline);
+   TmlWho_SaveWhoInDB (&Timeline);
 
    /***** Show highlighted note and global timeline *****/
    Tml_ShowNoteAndTimelineGbl (&Timeline);
@@ -217,16 +217,16 @@ void Tml_ShowTimelineGbl (void)
 void Tml_ShowNoteAndTimelineGbl (struct Tml_Timeline *Timeline)
   {
    long PubCod;
-   struct Tml_Not_Note Not;
+   struct TmlNot_Note Not;
 
    /***** Get parameter with the code of a publication *****/
    // This parameter is optional. It can be provided by a notification.
    // If > 0 ==> the associated note will be shown highlighted
    //            get its code from database and show it above the timeline
-   if ((PubCod = Tml_Pub_GetParamPubCod ()) > 0)
+   if ((PubCod = TmlPub_GetParamPubCod ()) > 0)
      {
       if ((Not.NotCod = Tml_DB_GetNotCodFromPubCod (PubCod)) > 0)
-          Tml_Not_ShowHighlightedNote (Timeline,&Not);
+          TmlNot_ShowHighlightedNote (Timeline,&Not);
      }
    else
       Not.NotCod = -1L;	//  ==> no highlighted note
@@ -244,15 +244,15 @@ void Tml_ShowTimelineGblHighlighting (struct Tml_Timeline *Timeline,long NotCod)
    extern const char *Txt_Timeline;
 
    /***** Get list of pubications to show in timeline *****/
-   Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
+   Timeline->UsrOrGbl  = TmlUsr_TIMELINE_GBL;
    Timeline->WhatToGet = Tml_GET_REC_PUBS;
-   Tml_Pub_GetListPubsToShowInTimeline (Timeline);
+   TmlPub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
    Tml_ShowTimeline (Timeline,NotCod,Txt_Timeline);
 
    /***** Free chained list of publications *****/
-   Tml_Pub_FreeListPubs (Timeline);
+   TmlPub_FreeListPubs (Timeline);
   }
 
 /*****************************************************************************/
@@ -274,9 +274,9 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
    char *Title;
 
    /***** Get list of pubications to show in timeline *****/
-   Timeline->UsrOrGbl  = Tml_Usr_TIMELINE_USR;
+   Timeline->UsrOrGbl  = TmlUsr_TIMELINE_USR;
    Timeline->WhatToGet = Tml_GET_REC_PUBS;
-   Tml_Pub_GetListPubsToShowInTimeline (Timeline);
+   TmlPub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show timeline *****/
    if (asprintf (&Title,Txt_Timeline_OF_A_USER,Gbl.Usrs.Other.UsrDat.FrstName) < 0)
@@ -285,7 +285,7 @@ void Tml_ShowTimelineUsrHighlighting (struct Tml_Timeline *Timeline,long NotCod)
    free (Title);
 
    /***** Free chained list of publications *****/
-   Tml_Pub_FreeListPubs (Timeline);
+   TmlPub_FreeListPubs (Timeline);
   }
 
 /*****************************************************************************/
@@ -304,18 +304,18 @@ void Tml_RefreshNewTimelineGbl (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get which users *****/
-   Timeline.Who = Tml_Who_GetGlobalWho ();
+   Timeline.Who = TmlWho_GetGlobalWho ();
 
    /***** Get list of publications to show in timeline *****/
-   Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
+   Timeline.UsrOrGbl  = TmlUsr_TIMELINE_GBL;
    Timeline.WhatToGet = Tml_GET_NEW_PUBS;
-   Tml_Pub_GetListPubsToShowInTimeline (&Timeline);
+   TmlPub_GetListPubsToShowInTimeline (&Timeline);
 
    /***** Show new timeline *****/
-   Tml_Pub_InsertNewPubsInTimeline (&Timeline);
+   TmlPub_InsertNewPubsInTimeline (&Timeline);
 
    /***** Free chained list of publications *****/
-   Tml_Pub_FreeListPubs (&Timeline);
+   TmlPub_FreeListPubs (&Timeline);
   }
 
 /*****************************************************************************/
@@ -330,10 +330,10 @@ void Tml_RefreshOldTimelineGbl (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** Get which users *****/
-   Timeline.Who = Tml_Who_GetGlobalWho ();
+   Timeline.Who = TmlWho_GetGlobalWho ();
 
    /***** Show old publications *****/
-   Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_GBL;
+   Timeline.UsrOrGbl  = TmlUsr_TIMELINE_GBL;
    Timeline.WhatToGet = Tml_GET_OLD_PUBS;
    Tml_GetAndShowOldTimeline (&Timeline);
   }
@@ -350,7 +350,7 @@ void Tml_RefreshOldTimelineUsr (void)
    Tml_ResetTimeline (&Timeline);
 
    /***** If user exists, show old publications *****/
-   Timeline.UsrOrGbl  = Tml_Usr_TIMELINE_USR;
+   Timeline.UsrOrGbl  = TmlUsr_TIMELINE_USR;
    Timeline.WhatToGet = Tml_GET_OLD_PUBS;
    Tml_GetAndShowOldTimeline (&Timeline);
   }
@@ -362,13 +362,13 @@ void Tml_RefreshOldTimelineUsr (void)
 static void Tml_GetAndShowOldTimeline (struct Tml_Timeline *Timeline)
   {
    /***** Get list of pubications to show in timeline *****/
-   Tml_Pub_GetListPubsToShowInTimeline (Timeline);
+   TmlPub_GetListPubsToShowInTimeline (Timeline);
 
    /***** Show old timeline *****/
-   Tml_Pub_ShowOldPubsInTimeline (Timeline);
+   TmlPub_ShowOldPubsInTimeline (Timeline);
 
    /***** Free chained list of publications *****/
-   Tml_Pub_FreeListPubs (Timeline);
+   TmlPub_FreeListPubs (Timeline);
   }
 
 /*****************************************************************************/
@@ -417,11 +417,11 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
 
       /***** Put form to select users whom public activity is displayed *****/
       if (GlobalTimeline)
-	 Tml_Who_PutFormWho (Timeline);
+	 TmlWho_PutFormWho (Timeline);
 
       /***** Form to write a new post *****/
       if (GlobalTimeline || Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod))
-	 Tml_Pst_PutPhotoAndFormToWriteNewPost (Timeline);
+	 TmlPst_PutPhotoAndFormToWriteNewPost (Timeline);
 
       /***** New publications refreshed dynamically via AJAX *****/
       if (GlobalTimeline)
@@ -433,16 +433,16 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
 	 Tml_PutHiddenList ("new_timeline_list");
 
 	 /* Link to view new publications via AJAX */
-	 Tml_Pub_PutLinkToViewNewPubs ();
+	 TmlPub_PutLinkToViewNewPubs ();
 	}
 
       /***** List recent publications in timeline.
              If the number of publications shown is the maximum,
 	     probably there will be more, so show link to get more *****/
-      if (Tml_ListRecentPubs (Timeline,NotCodToHighlight) == Tml_Pub_MAX_REC_PUBS_TO_GET_AND_SHOW)
+      if (Tml_ListRecentPubs (Timeline,NotCodToHighlight) == TmlPub_MAX_REC_PUBS_TO_GET_AND_SHOW)
 	{
 	 /* Link to view old publications via AJAX */
-	 Tml_Pub_PutLinkToViewOldPubs ();
+	 TmlPub_PutLinkToViewOldPubs ();
 
 	 /* Hidden list to insert old publications via AJAX */
 	 Tml_PutHiddenList ("old_timeline_list");
@@ -470,8 +470,8 @@ static void Tml_PutIconsTimeline (__attribute__((unused)) void *Args)
 static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
                                     long NotCodToHighlight)
   {
-   const struct Tml_Pub_Publication *Pub;
-   struct Tml_Not_Note Not;
+   const struct TmlPub_Publication *Pub;
+   struct TmlNot_Note Not;
    unsigned NumNotesShown;
 
    /***** Begin list *****/
@@ -484,14 +484,14 @@ static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
 	{
 	 /* Get data of note */
 	 Not.NotCod = Pub->NotCod;
-	 Tml_Not_GetDataOfNoteByCod (&Not);
+	 TmlNot_GetDataOfNoteByCod (&Not);
 
 	 /* Write list item (note) */
 	 HTM_LI_Begin ("class=\"%s\"",
 	               Not.NotCod == NotCodToHighlight ? "Tml_WIDTH Tml_SEP Tml_NEW_PUB" :
 							 "Tml_WIDTH Tml_SEP");
-	    Tml_Not_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
-						 Tml_Pub_GetTopMessage (Pub->Type),
+	    TmlNot_CheckAndWriteNoteWithTopMsg (Timeline,&Not,
+						 TmlPub_GetTopMessage (Pub->Type),
 						 Pub->PublisherCod);
 	 HTM_LI_End ();
 	}

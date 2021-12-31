@@ -606,12 +606,12 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_Another_user_s_profile;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC60x80",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE60x80",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO60x80",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR60x80",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC60x80",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE60x80",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO60x80",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR60x80",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
@@ -667,12 +667,12 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   {
    extern const char *Txt_Another_user_s_profile;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 

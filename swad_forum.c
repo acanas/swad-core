@@ -2147,12 +2147,12 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
-   static const char *ClassPhoto[Pho_NUM_SHAPES] =
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
-      [Pho_SHAPE_CIRCLE   ] = "PHOTOC15x20",
-      [Pho_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
-      [Pho_SHAPE_OVAL     ] = "PHOTOO15x20",
-      [Pho_SHAPE_RECTANGLE] = "PHOTOR15x20",
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC15x20",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE15x20",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
@@ -2865,7 +2865,7 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         Tml_Not_StoreAndPublishNote (Tml_NOTE_FORUM_POST,PstCod);
+         TmlNot_StoreAndPublishNote (Tml_NOTE_FORUM_POST,PstCod);
          break;
       default:
 	 break;
