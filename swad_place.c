@@ -95,7 +95,6 @@ void Plc_SeePlaces (void)
   {
    extern const char *Hlp_INSTITUTION_Places;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Places;
    extern const char *Txt_PLACES_HELP_ORDER[2];
    extern const char *Txt_PLACES_ORDER[2];
@@ -129,7 +128,7 @@ void Plc_SeePlaces (void)
 		 Order <= (Plc_Order_t) (Plc_NUM_ORDERS - 1);
 		 Order++)
 	      {
-	       HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+               HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 		  Frm_BeginForm (ActSeePlc);
 		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);

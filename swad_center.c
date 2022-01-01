@@ -130,8 +130,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	 /***** Wrtie heading *****/
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TH (1,1,Txt_Center              ,"LM");
-	    HTM_TH (1,1,Txt_Degrees_ABBREVIATION,"RM");
+            HTM_TH_Title (Txt_Center              ,HTM_HEAD_LEFT );
+            HTM_TH_Title (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
 
 	 HTM_TR_End ();
 
@@ -1416,7 +1416,6 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 
 static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_CENTERS_HELP_ORDER[2];
    extern const char *Txt_CENTERS_ORDER[2];
    extern const char *Txt_Place;
@@ -1424,6 +1423,11 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Ctr_Order_t Order;
+   static HTM_HeadAlign Align[Ctr_NUM_ORDERS] =
+     {
+      [Ctr_ORDER_BY_CENTER  ] = HTM_HEAD_LEFT,
+      [Ctr_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
+     };
 
    HTM_TR_Begin (NULL);
 
@@ -1433,8 +1437,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	   Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTER ? "TIT_TBL_%s LM" :
-							  "TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+         HTM_TH_TitleBegin (Align[Order]);
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
@@ -1455,10 +1458,10 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	 HTM_TH_End ();
 	}
 
-      HTM_TH (1,1,Txt_Place               ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH (1,1,Txt_Degrees_ABBREVIATION,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH (1,1,Txt_Courses_ABBREVIATION,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH_Title (Txt_Place               ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH_TitleBegin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
@@ -1487,20 +1490,20 @@ static void Ctr_PutHeadCentersForEdition (void)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Code                    ,"RM");
+      HTM_TH_Title (Txt_Code                    ,HTM_HEAD_RIGHT);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Place                   ,"LM");
-      HTM_TH (1,1,Txt_Short_name_of_the_center,"LM");
-      HTM_TH (1,1,Txt_Full_name_of_the_center ,"LM");
-      HTM_TH (1,1,Txt_WWW                     ,"LM");
-      HTM_TH (1,1,Txt_Users                   ,"RM");
-      HTM_TH (1,1,Txt_Degrees_ABBREVIATION    ,"RM");
+      HTM_TH_Title (Txt_Place                   ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Short_name_of_the_center,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Full_name_of_the_center ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_WWW                     ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Users                   ,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
       HTM_TH_Begin (1,1,"RM");
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
-      HTM_TH (1,1,Txt_Requester               ,"LM");
+      HTM_TH_Title (Txt_Requester               ,HTM_HEAD_LEFT );
       HTM_TH_Empty (1);
 
    HTM_TR_End ();

@@ -939,7 +939,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	               NULL,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 
-      HTM_TABLE_BeginPadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
+      HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
 	 switch (Stats.ClicksGroupedBy)
 	   {
 	    case Sta_CLICKS_CRS_DETAILED_LIST:
@@ -1061,8 +1061,6 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
                                           MYSQL_RES *mysql_res)
   {
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Show_previous_X_clicks;
    extern const char *Txt_PAGES_Previous;
    extern const char *Txt_Clicks;
@@ -1145,31 +1143,27 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-	       HTM_TD_Begin ("class=\"TIT_TBL_%s LM\"",The_Colors[Gbl.Prefs.Theme]);
+               HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 		  if (FirstRow > 1)
 		    {
 		     if (asprintf (&Title,Txt_Show_previous_X_clicks,Stats->RowsPerPage) < 0)
 			Err_NotEnoughMemoryExit ();
 		     HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
 		     free (Title);
-			HTM_STRONG_Begin ();
-			   HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
-			HTM_STRONG_End ();
+			HTM_TxtF ("&lt;%s",Txt_PAGES_Previous);
 		     HTM_BUTTON_End ();
 		    }
-	       HTM_TD_End ();
+	       HTM_TH_End ();
 	       if (FirstRow > 1)
 		  Frm_EndForm ();
 
 	       /* Write number of current page */
-	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
-		  HTM_STRONG_Begin ();
-		     HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
-			       Txt_Clicks,
-			       FirstRow,LastRow,Txt_of_PART_OF_A_TOTAL,NumHits,
-			       Txt_page,NumPagesBefore + 1,Txt_of_PART_OF_A_TOTAL,NumPagsTotal);
-		  HTM_STRONG_End ();
-	       HTM_TD_End ();
+               HTM_TH_TitleBegin (HTM_HEAD_CENTER);
+		  HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
+			    Txt_Clicks,
+			    FirstRow,LastRow,Txt_of_PART_OF_A_TOTAL,NumHits,
+			    Txt_page,NumPagesBefore + 1,Txt_of_PART_OF_A_TOTAL,NumPagsTotal);
+	       HTM_TH_End ();
 
 	       /* Put link to jump to next page (more recent clicks) */
 	       if (LastRow < NumHits)
@@ -1183,19 +1177,17 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-	       HTM_TD_Begin ("class=\"TIT_TBL_%s RM\"",The_Colors[Gbl.Prefs.Theme]);
+               HTM_TH_TitleBegin (HTM_HEAD_RIGHT);
 		  if (LastRow < NumHits)
 		    {
 		     if (asprintf (&Title,Txt_Show_next_X_clicks,Stats->RowsPerPage) < 0)
 			Err_NotEnoughMemoryExit ();
 		     HTM_BUTTON_OnSubmit_Begin (Title,"BT_LINK",NULL);
 		     free (Title);
-			HTM_STRONG_Begin ();
-			   HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
-			HTM_STRONG_End ();
+			HTM_TxtF ("%s&gt;",Txt_PAGES_Next);
 		     HTM_BUTTON_End ();
 		    }
-	       HTM_TD_End ();
+	       HTM_TH_End ();
 	       if (LastRow < NumHits)
 		  Frm_EndForm ();
 

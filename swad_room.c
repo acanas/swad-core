@@ -146,7 +146,6 @@ void Roo_SeeRooms (void)
   {
    extern const char *Hlp_CENTER_Rooms;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Rooms;
    extern const char *Txt_ROOMS_HELP_ORDER[Roo_NUM_ORDERS];
    extern const char *Txt_ROOMS_ORDER[Roo_NUM_ORDERS];
@@ -184,7 +183,7 @@ void Roo_SeeRooms (void)
 	      Order <= (Roo_Order_t) (Roo_NUM_ORDERS - 1);
 	      Order++)
 	   {
-	    HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+            HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 	       Frm_BeginForm (ActSeeRoo);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_OnSubmit_Begin (Txt_ROOMS_HELP_ORDER[Order],

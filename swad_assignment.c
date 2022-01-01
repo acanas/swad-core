@@ -214,7 +214,6 @@ static void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
                                   bool PrintView)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Assignment;
@@ -225,12 +224,12 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
    HTM_TR_Begin (NULL);
 
       HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
-      for (Order  = Dat_STR_TIME;
-	   Order <= Dat_END_TIME;
+      for (Order  = (Dat_StartEndTime_t) 0;
+	   Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   Order++)
 	{
 	 /* Begin head cell */
-	 HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 	    if (!PrintView)
 	      {
@@ -265,8 +264,8 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	 /* End head cell */
 	 HTM_TH_End ();
 	}
-      HTM_TH (1,1,Txt_Assignment,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH (1,1,Txt_Folder    ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH_Title (Txt_Assignment,HTM_HEAD_LEFT);
+      HTM_TH_Title (Txt_Folder    ,HTM_HEAD_LEFT);
 
    HTM_TR_End ();
   }

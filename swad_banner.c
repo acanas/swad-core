@@ -945,11 +945,11 @@ static void Ban_PutHeadBanners (void)
       /****** Head cells *****/
       HTM_TH (1,1,NULL          ,"BM");
       HTM_TH (1,1,NULL          ,"BM");
-      HTM_TH (1,1,Txt_Code      ,"RM");
-      HTM_TH (1,1,Txt_Short_name,"LM");
-      HTM_TH (1,1,Txt_Full_name ,"LM");
-      HTM_TH (1,1,Txt_Image     ,"LM");
-      HTM_TH (1,1,Txt_WWW       ,"LM");
+      HTM_TH_Title (Txt_Code      ,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Short_name,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Full_name ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Image     ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_WWW       ,HTM_HEAD_LEFT );
 
    /***** End table row *****/
    HTM_TR_End ();

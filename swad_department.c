@@ -100,7 +100,6 @@ void Dpt_SeeDepts (void)
   {
    extern const char *Hlp_INSTITUTION_Departments;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Departments_of_INSTITUTION_X;
    extern const char *Txt_DEPARTMENTS_HELP_ORDER[2];
    extern const char *Txt_DEPARTMENTS_ORDER[2];
@@ -109,6 +108,11 @@ void Dpt_SeeDepts (void)
    struct Dpt_Departments Departments;
    char *Title;
    Dpt_Order_t Order;
+   static HTM_HeadAlign Align[Dpt_NUM_ORDERS] =
+     {
+      [Dpt_ORDER_BY_DEPARTMENT] = HTM_HEAD_LEFT,
+      [Dpt_ORDER_BY_NUM_TCHS  ] = HTM_HEAD_RIGHT
+     };
    unsigned NumDpt;
    unsigned NumTchsInsInOtherDpts;
    unsigned NumTchsInsWithNoDpt;
@@ -138,12 +142,11 @@ void Dpt_SeeDepts (void)
 
       /***** Write heading *****/
       HTM_TR_Begin (NULL);
-	 for (Order  = Dpt_ORDER_BY_DEPARTMENT;
-	      Order <= Dpt_ORDER_BY_NUM_TCHS;
+	 for (Order  = (Dpt_Order_t) 0;
+	      Order <= (Dpt_Order_t) (Dpt_NUM_ORDERS - 1);
 	      Order++)
 	   {
-	    HTM_TH_Begin (1,1,Order == Dpt_ORDER_BY_NUM_TCHS ? "TIT_TBL_%s RM" :
-							       "TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+            HTM_TH_TitleBegin (Align[Order]);
 
 	       Frm_BeginForm (ActSeeDpt);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
@@ -821,12 +824,10 @@ static void Dpt_PutFormToCreateDepartment (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-
-	    HTM_TH (1,1,Txt_Institution,"LM");
-	    HTM_TH (1,1,Txt_Short_name ,"LM");
-	    HTM_TH (1,1,Txt_Full_name  ,"LM");
-	    HTM_TH (1,1,Txt_WWW        ,"LM");
-
+            HTM_TH_Title (Txt_Institution,HTM_HEAD_LEFT );
+            HTM_TH_Title (Txt_Short_name ,HTM_HEAD_LEFT );
+            HTM_TH_Title (Txt_Full_name  ,HTM_HEAD_LEFT );
+            HTM_TH_Title (Txt_WWW        ,HTM_HEAD_LEFT );
 	 HTM_TR_End ();
 
 	 HTM_TR_Begin (NULL);
@@ -897,15 +898,13 @@ static void Dpt_PutHeadDepartments (void)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    HTM_TR_Begin (NULL);
-
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Code                           ,"RM");
-      HTM_TH (1,1,Txt_Institution                    ,"LM");
-      HTM_TH (1,1,Txt_Short_name                     ,"LM");
-      HTM_TH (1,1,Txt_Full_name                      ,"LM");
-      HTM_TH (1,1,Txt_WWW                            ,"LM");
-      HTM_TH (1,1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],"RM");
-
+      HTM_TH_Title (Txt_Code                           ,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Institution                    ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Short_name                     ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Full_name                      ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_WWW                            ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT);
    HTM_TR_End ();
   }
 

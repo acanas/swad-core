@@ -607,8 +607,8 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 
 	    /***** Heading row *****/
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (1,2,NULL    ,NULL);
-	       HTM_TH (1,1,Txt_Exam,"LM");
+	       HTM_TH_Empty (2);
+	       HTM_TH_Title (Txt_Exam,HTM_HEAD_LEFT);
 	    HTM_TR_End ();
 
 	    /***** List the sessions *****/

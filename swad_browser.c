@@ -9824,12 +9824,12 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
 	    HTM_TH (1,1,NULL           ,"BM");
-	    HTM_TH (1,1,Txt_Institution,"LM");
-	    HTM_TH (1,1,Txt_Center     ,"LM");
-	    HTM_TH (1,1,Txt_Degree     ,"LM");
-	    HTM_TH (1,1,Txt_Course     ,"LM");
-	    HTM_TH (1,1,Txt_File_zone  ,"LM");
-	    HTM_TH (1,1,Txt_Document   ,"LM");
+            HTM_TH_Title (Txt_Institution,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_Center     ,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_Degree     ,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_Course     ,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_File_zone  ,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_Document   ,HTM_HEAD_LEFT);
 	 HTM_TR_End ();
 
 	 /***** List documents found *****/

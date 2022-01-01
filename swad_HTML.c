@@ -41,7 +41,18 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Private vatiables *****************************/
+/**************************** Private constants ******************************/
+/*****************************************************************************/
+
+static const char *ClassAlign[HTM_NUM_HEAD_ALIGN] =
+  {
+   [HTM_HEAD_LEFT  ] = "LT",
+   [HTM_HEAD_CENTER] = "CT",
+   [HTM_HEAD_RIGHT ] = "RT",
+  };
+
+/*****************************************************************************/
+/************************* Private global variables **************************/
 /*****************************************************************************/
 
 static unsigned HTM_TABLE_NestingLevel    = 0;
@@ -315,6 +326,14 @@ void HTM_TR_End (void)
 /***************************** Table heading cells ***************************/
 /*****************************************************************************/
 
+void HTM_TH_Title (const char *Title,HTM_HeadAlign HeadAlign)
+  {
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_TH (1,1,Title,"TIT_TBL_%s %s",
+           The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+  }
+
 void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *ClassFmt,...)
   {
    va_list ap;
@@ -373,6 +392,14 @@ void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *Class
 
    HTM_Txt (Txt);
    HTM_Txt ("</th>");
+  }
+
+void HTM_TH_TitleBegin (HTM_HeadAlign HeadAlign)
+  {
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_TH_Begin (1,1,"TIT_TBL_%s %s",
+                 The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
   }
 
 void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...)

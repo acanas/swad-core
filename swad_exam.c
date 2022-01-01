@@ -210,7 +210,6 @@ void Exa_SeeAllExams (void)
 static void Exa_ListAllExams (struct Exa_Exams *Exams)
   {
    extern const char *Hlp_ASSESSMENT_Exams;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Exams;
    extern const char *Txt_EXAMS_ORDER_HELP[Exa_NUM_ORDERS];
    extern const char *Txt_EXAMS_ORDER[Exa_NUM_ORDERS];
@@ -255,7 +254,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 		    Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllExa);
@@ -274,7 +273,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,Txt_Sessions,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TH_Title (Txt_Sessions,HTM_HEAD_RIGHT);
 
 	    HTM_TR_End ();
 

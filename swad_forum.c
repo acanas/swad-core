@@ -2045,12 +2045,12 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	    HTM_TABLE_BeginWideMarginPadding (2);
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TH (1,1,NULL           ,"BT");
-		  HTM_TH (1,1,NULL           ,"CONTEXT_COL");	// Column for contextual icons
-		  HTM_TH (1,1,Txt_MSG_Subject,"LM");
+		  HTM_TH (1,1,NULL,"BT");
+		  HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
+                  HTM_TH_Title (Txt_MSG_Subject,HTM_HEAD_LEFT);
 
-		  for (Order  = Dat_STR_TIME;
-		       Order <= Dat_END_TIME;
+		  for (Order  = (Dat_StartEndTime_t) 0;
+		       Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 		       Order++)
 		    {
 		     HTM_TH_Begin (1,2,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
@@ -2077,10 +2077,10 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		     HTM_TH_End ();
 		    }
 
-		  HTM_TH (1,1,Txt_Number_BR_msgs,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-		  HTM_TH (1,1,Txt_Unread_BR_msgs,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-		  HTM_TH (1,1,Txt_WriBRters     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-		  HTM_TH (1,1,Txt_ReaBRders     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+	          HTM_TH_Title (Txt_Number_BR_msgs,HTM_HEAD_RIGHT);
+	          HTM_TH_Title (Txt_Unread_BR_msgs,HTM_HEAD_RIGHT);
+	          HTM_TH_Title (Txt_WriBRters     ,HTM_HEAD_RIGHT);
+	          HTM_TH_Title (Txt_ReaBRders     ,HTM_HEAD_RIGHT);
 
 	       HTM_TR_End ();
 
@@ -2258,8 +2258,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	 HTM_TD_End ();
 
 	 /***** Write the authors and date-times of first and last posts *****/
-	 for (Order  = Dat_STR_TIME;
-	      Order <= Dat_END_TIME;
+	 for (Order  = (Dat_StartEndTime_t) 0;
+	      Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      Order++)
 	   {
 	    if (Order == Dat_STR_TIME || Thr.NumPosts > 1)	// Don't write twice the same author when thread has only one thread
@@ -2369,8 +2369,8 @@ static void For_GetThreadData (struct For_Thread *Thr)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Get if first or last message are enabled *****/
-   for (Order  = Dat_STR_TIME;
-	Order <= Dat_END_TIME;
+   for (Order  = (Dat_StartEndTime_t) 0;
+	Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	Order++)
       Thr->Enabled[Order] = !For_DB_GetIfPstIsDisabled (Thr->PstCod[Order]);
 

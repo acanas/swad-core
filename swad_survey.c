@@ -195,7 +195,6 @@ void Svy_SeeAllSurveys (void)
 static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
   {
    extern const char *Hlp_ASSESSMENT_Surveys;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Surveys;
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -246,11 +245,11 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 
 	       HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
 
-	       for (Order  = Dat_STR_TIME;
-		    Order <= Dat_END_TIME;
+	       for (Order  = (Dat_StartEndTime_t) 0;
+		    Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllSvy);
@@ -271,8 +270,8 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH (1,1,Txt_Survey,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
-	       HTM_TH (1,1,Txt_Status,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TH_Title (Txt_Survey,HTM_HEAD_LEFT  );
+	       HTM_TH_Title (Txt_Status,HTM_HEAD_CENTER);
 
 	    HTM_TR_End ();
 

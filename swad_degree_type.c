@@ -514,22 +514,25 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
                                                 HieLvl_Level_t Scope,
                                                 DegTyp_Order_t SelectedOrder)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DegTyp_NUM_ORDERS];
    extern const char *Txt_DEGREE_TYPES_ORDER[DegTyp_NUM_ORDERS];
    DegTyp_Order_t Order;
+   static HTM_HeadAlign Align[DegTyp_NUM_ORDERS] =
+     {
+      [DegTyp_ORDER_BY_DEGREE_TYPE] = HTM_HEAD_LEFT,
+      [DegTyp_ORDER_BY_NUM_DEGREES] = HTM_HEAD_RIGHT
+     };
    struct Fig_Figures Figures;
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
 
-      for (Order  = DegTyp_ORDER_BY_DEGREE_TYPE;
-	   Order <= DegTyp_ORDER_BY_NUM_DEGREES;
+      for (Order  = (DegTyp_Order_t) 0;
+	   Order <= (DegTyp_Order_t) (DegTyp_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == DegTyp_ORDER_BY_DEGREE_TYPE ? "TIT_TBL_%s LM" :
-							          "TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+         HTM_TH_TitleBegin (Align[Order]);
 
 	    /* Begin form to change order */
 	    Frm_BeginForm (NextAction);
@@ -572,10 +575,10 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL              ,"BM");
-      HTM_TH (1,1,Txt_Code          ,"CM");
-      HTM_TH (1,1,Txt_Type_of_degree,"CM");
-      HTM_TH (1,1,Txt_Degrees       ,"RM");
+      HTM_TH (1,1,NULL,"BM");
+      HTM_TH_Title (Txt_Code          ,HTM_HEAD_CENTER);
+      HTM_TH_Title (Txt_Type_of_degree,HTM_HEAD_CENTER);
+      HTM_TH_Title (Txt_Degrees       ,HTM_HEAD_RIGHT );
 
    HTM_TR_End ();
   }

@@ -104,7 +104,6 @@ void Mai_SeeMailDomains (void)
   {
    extern const char *Hlp_START_Domains;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
@@ -129,11 +128,11 @@ void Mai_SeeMailDomains (void)
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      for (Order  = Mai_ORDER_BY_DOMAIN;
-	   Order <= Mai_ORDER_BY_USERS;
+      for (Order  = (Mai_DomainsOrder_t) 0;
+	   Order <= (Mai_DomainsOrder_t) (Mai_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 	    Frm_BeginForm (ActSeeMai);
 	       Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);

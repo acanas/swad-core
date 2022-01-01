@@ -46,6 +46,14 @@ typedef enum
    HTM_SUBMIT_ON_CHANGE,
   } HTM_SubmitOnChange_t;
 
+#define HTM_NUM_HEAD_ALIGN 3
+typedef enum
+  {
+   HTM_HEAD_LEFT   = 0,
+   HTM_HEAD_CENTER = 1,
+   HTM_HEAD_RIGHT  = 2,
+  } HTM_HeadAlign;
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
@@ -66,7 +74,9 @@ void HTM_TBODY_End (void);
 void HTM_TR_Begin (const char *fmt,...);
 void HTM_TR_End (void);
 
+void HTM_TH_Title (const char *Txt,HTM_HeadAlign HeadAlign);
 void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *ClassFmt,...);
+void HTM_TH_TitleBegin (HTM_HeadAlign HeadAlign);
 void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...);
 void HTM_TH_End (void);
 void HTM_TH_Empty (unsigned NumColumns);

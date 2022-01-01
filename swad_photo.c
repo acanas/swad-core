@@ -2221,12 +2221,12 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
       /***** Write heading *****/
       HTM_TABLE_BeginCenterPadding (2);
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,Txt_No_INDEX,"TIT_TBL_%s RT",The_Colors[Gbl.Prefs.Theme]);
-	    HTM_TH (1,1,Txt_Degree  ,"TIT_TBL_%s CT",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TH_Title (Txt_No_INDEX,HTM_HEAD_RIGHT);
+	    HTM_TH_Title (Txt_Degree  ,HTM_HEAD_CENTER);
 	    for (Sex  = (Usr_Sex_t) 0;
 		 Sex <= (Usr_Sex_t) (Usr_NUM_SEXS - 1);
 		 Sex++)
-	       HTM_TH (1,1,Txt_SEX_PLURAL_Abc[Sex],"TIT_TBL_%s CT",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TH_Title (Txt_SEX_PLURAL_Abc[Sex],HTM_HEAD_CENTER);
 	 HTM_TR_End ();
 
 	 /***** Get degrees *****/

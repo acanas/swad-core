@@ -96,7 +96,6 @@ void Hld_SeeHolidays (void)
   {
    extern const char *Hlp_INSTITUTION_Holidays;
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Holidays;
    extern const char *Txt_HOLIDAYS_HELP_ORDER[2];
    extern const char *Txt_HOLIDAYS_ORDER[2];
@@ -131,11 +130,11 @@ void Hld_SeeHolidays (void)
 	    HTM_TABLE_BeginWideMarginPadding (2);
 	       HTM_TR_Begin (NULL);
 
-		  for (Order  = Hld_ORDER_BY_PLACE;
-		       Order <= Hld_ORDER_BY_START_DATE;
+		  for (Order  = (Hld_Order_t) 0;
+		       Order <= (Hld_Order_t) (Hld_NUM_ORDERS - 1);
 		       Order++)
 		    {
-		     HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+                     HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 			Frm_BeginForm (ActSeeHld);
 			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 			   HTM_BUTTON_OnSubmit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],
@@ -149,10 +148,10 @@ void Hld_SeeHolidays (void)
 			Frm_EndForm ();
 		     HTM_TH_End ();
 		    }
-		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 		     HTM_TxtF ("&nbsp;%s&nbsp;",Txt_End_date);
 		  HTM_TH_End ();
-		  HTM_TH (1,1,Txt_Holiday,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	          HTM_TH_Title (Txt_Holiday,HTM_HEAD_LEFT);
 
 	       HTM_TR_End ();
 
@@ -924,11 +923,11 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,Txt_Place                       ,"LM");
-	    HTM_TH (1,1,Txt_Type                        ,"LM");
-	    HTM_TH (1,1,Txt_START_END_TIME[Dat_STR_TIME],"LM");
-	    HTM_TH (1,1,Txt_START_END_TIME[Dat_END_TIME],"LM");
-	    HTM_TH (1,1,Txt_Holiday                     ,"LM");
+            HTM_TH_Title (Txt_Place                       ,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_Type                        ,HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT);
+            HTM_TH_Title (Txt_Holiday                     ,HTM_HEAD_LEFT);
 	 HTM_TR_End ();
 
 	 HTM_TR_Begin (NULL);
@@ -1017,13 +1016,13 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_Holiday;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,NULL                            ,"BM");
-      HTM_TH (1,1,Txt_Code                        ,"RM");
-      HTM_TH (1,1,Txt_Place                       ,"LM");
-      HTM_TH (1,1,Txt_Type                        ,"LM");
-      HTM_TH (1,1,Txt_START_END_TIME[Dat_STR_TIME],"LM");
-      HTM_TH (1,1,Txt_START_END_TIME[Dat_END_TIME],"LM");
-      HTM_TH (1,1,Txt_Holiday                     ,"LM");
+      HTM_TH (1,1,NULL,"BM");
+      HTM_TH_Title (Txt_Code                        ,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Place                       ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Type                        ,HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT );
+      HTM_TH_Title (Txt_Holiday                     ,HTM_HEAD_LEFT );
    HTM_TR_End ();
   }
 

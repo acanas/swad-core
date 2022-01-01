@@ -976,7 +976,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TH (1,1,Txt_No_INDEX,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+	    HTM_TH_Title (Txt_No_INDEX,HTM_HEAD_CENTER);
 	    break;
 	 default:
 	    break;
@@ -998,7 +998,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 	    switch (ProjectView)
 	      {

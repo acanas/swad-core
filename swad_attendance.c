@@ -211,7 +211,6 @@ void Att_SeeAttEvents (void)
 static void Att_ShowAllAttEvents (struct Att_Events *Events)
   {
    extern const char *Hlp_USERS_Attendance;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -258,11 +257,11 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
-	       for (Order  = Dat_STR_TIME;
-		    Order <= Dat_END_TIME;
+	       for (Order  = (Dat_StartEndTime_t) 0;
+		    Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 		    Order++)
 		 {
-		  HTM_TH_Begin (1,1,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
 
 		     Frm_BeginForm (ActSeeAtt);
 			WhichGroups = Grp_GetParamWhichGroups ();
@@ -285,8 +284,8 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 
 		  HTM_TH_End ();
 		 }
-	       HTM_TH (1,1,Txt_Event                                     ,"LM");
-	       HTM_TH (1,1,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],"RM");
+	       HTM_TH_Title (Txt_Event                                     ,HTM_HEAD_LEFT );
+	       HTM_TH_Title (Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_RIGHT);
 
 	    HTM_TR_End ();
 
@@ -1561,8 +1560,8 @@ static void Att_ListAttOnlyMeAsStudent (struct Att_Event *Event)
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		  HTM_TH_Empty (1);
 	       HTM_TH (1,2,Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
-	       HTM_TH (1,1,Txt_Student_comment                           ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
-	       HTM_TH (1,1,Txt_Teachers_comment                          ,"TIT_TBL_%s LM",The_Colors[Gbl.Prefs.Theme]);
+	       HTM_TH_Title (Txt_Student_comment ,HTM_HEAD_LEFT);
+	       HTM_TH_Title (Txt_Teachers_comment,HTM_HEAD_LEFT);
 
 	    HTM_TR_End ();
 
@@ -1641,8 +1640,8 @@ static void Att_ListAttStudents (struct Att_Events *Events,
 		     if (Gbl.Usrs.Listing.WithPhotos)
 			HTM_TH_Empty (1);
 		     HTM_TH (1,2,Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],"LM");
-		     HTM_TH (1,1,Txt_Student_comment                           ,"LM");
-		     HTM_TH (1,1,Txt_Teachers_comment                          ,"LM");
+		     HTM_TH_Title (Txt_Student_comment ,HTM_HEAD_LEFT);
+		     HTM_TH_Title (Txt_Teachers_comment,HTM_HEAD_LEFT);
 
 		  HTM_TR_End ();
 
@@ -2702,7 +2701,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TH (1,4,Txt_Event                                     ,"LM");
-	    HTM_TH (1,1,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],"RM");
+	    HTM_TH_Title (Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],HTM_HEAD_RIGHT);
 
 	 HTM_TR_End ();
 
@@ -2931,7 +2930,7 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 	    Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
 
 	    /***** Put link to this attendance event *****/
-	    HTM_TH_Begin (1,1,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+            HTM_TH_TitleBegin (HTM_HEAD_CENTER);
 	       snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),"%u",NumAttEvent + 1);
 	       Att_PutLinkAttEvent (&Events->Lst[NumAttEvent],
 				    Events->Lst[NumAttEvent].Title,
@@ -2939,7 +2938,7 @@ static void Att_WriteTableHeadSeveralAttEvents (const struct Att_Events *Events)
 	    HTM_TH_End ();
 	   }
 
-      HTM_TH (1,1,Txt_Attendance,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH_Title (Txt_Attendance ,HTM_HEAD_RIGHT);
 
    HTM_TR_End ();
   }

@@ -263,8 +263,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,Txt_CHAT_Room_code ,"CM");
-	    HTM_TH (1,1,Txt_Number_of_users,"LM");
+	    HTM_TH_Title (Txt_CHAT_Room_code ,HTM_HEAD_CENTER);
+	    HTM_TH_Title (Txt_Number_of_users,HTM_HEAD_LEFT  );
 	 HTM_TR_End ();
 
 	 /***** Loop over chat rooms *****/

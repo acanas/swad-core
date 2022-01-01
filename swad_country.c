@@ -129,8 +129,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,Txt_Country                  ,"LM");
-	    HTM_TH (1,1,Txt_Institutions_ABBREVIATION,"RM");
+	    HTM_TH_Title (Txt_Country                  ,HTM_HEAD_LEFT );
+	    HTM_TH_Title (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
 	 /***** List the countries *****/
@@ -343,7 +343,6 @@ void Cty_ListCountries2 (void)
 
 static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
    extern const char *Txt_Institutions_ABBREVIATION;
@@ -352,16 +351,20 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Cty_Order_t Order;
+   static HTM_HeadAlign Align[Cty_NUM_ORDERS] =
+     {
+      [Cty_ORDER_BY_COUNTRY ] = HTM_HEAD_LEFT,
+      [Cty_ORDER_BY_NUM_USRS] = HTM_HEAD_RIGHT
+     };
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      for (Order = Cty_ORDER_BY_COUNTRY;
-	   Order <= Cty_ORDER_BY_NUM_USRS;
+      for (Order  = (Cty_Order_t) 0;
+	   Order <= (Cty_Order_t) (Cty_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 HTM_TH_Begin (1,1,Order == Cty_ORDER_BY_COUNTRY ? "TIT_TBL_%s LM" :
-							   "TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+         HTM_TH_TitleBegin (Align[Order]);
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCty);
@@ -381,12 +384,11 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	      }
 	 HTM_TH_End ();
 	}
-
-      HTM_TH (1,1,Txt_Institutions_ABBREVIATION,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH (1,1,Txt_Centers_ABBREVIATION     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH (1,1,Txt_Degrees_ABBREVIATION     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH (1,1,Txt_Courses_ABBREVIATION     ,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
-      HTM_TH_Begin (1,1,"TIT_TBL_%s RM",The_Colors[Gbl.Prefs.Theme]);
+      HTM_TH_Title (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Centers_ABBREVIATION     ,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Degrees_ABBREVIATION     ,HTM_HEAD_RIGHT);
+      HTM_TH_Title (Txt_Courses_ABBREVIATION     ,HTM_HEAD_RIGHT);
+      HTM_TH_TitleBegin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
