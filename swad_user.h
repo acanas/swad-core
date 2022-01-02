@@ -440,4 +440,8 @@ void Usr_PutWhoIcon (Usr_Who_t Who);
 void Usr_PutHiddenParamWho (Usr_Who_t Who);
 Usr_Who_t Usr_GetHiddenParamWho (void);
 
+//-------------------------------- Figures ------------------------------------
+void Usr_GetAndShowUsersStats (void);
+void Usr_GetAndShowUsersRanking (void);
+
 #endif

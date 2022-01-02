@@ -101,6 +101,15 @@ static void Ins_EditingInstitutionDestructor ();
 
 static void Ins_FormToGoToMap (struct Ins_Instit *Ins);
 
+static void Ins_GetAndShowInssOrderedByNumCtrs (void);
+static void Ins_GetAndShowInssOrderedByNumDegs (void);
+static void Ins_GetAndShowInssOrderedByNumCrss (void);
+static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void);
+static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
+static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
+		          const char *TxtFigure);
+static unsigned Ins_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res);
+
 /*****************************************************************************/
 /***************** List institutions with pending centers ********************/
 /*****************************************************************************/
@@ -228,7 +237,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Ins_Instit *Ins,Act_Action_t Acti
 
       /***** Link to action *****/
       HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Ins->FullName),
-                                 "BT_LINK",NULL);
+                                 "BT_LINK LT",NULL);
       Str_FreeGoToTitle ();
 
 	 /***** Institution logo and name *****/
@@ -391,7 +400,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
       HTM_TD_End ();
 
       /***** Institution logo and name *****/
-      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
 	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM");
       HTM_TD_End ();
 
@@ -2065,4 +2074,326 @@ unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins)
       NumUsrsIns = Ins_GetNumUsrsWhoClaimToBelongToIns (Ins);
 
    return NumUsrsIns;
+  }
+
+/*****************************************************************************/
+/****************** Get and show stats about institutions ********************/
+/*****************************************************************************/
+
+void Ins_GetAndShowInstitutionsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_institutions;
+   extern const char *Txt_Institutions;
+   struct Fig_Figures Figures;
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_Institutions,
+                 NULL,NULL,
+                 Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
+
+      /***** Form to select type of list used to display degree photos *****/
+      Set_GetAndUpdatePrefsAboutUsrList ();
+      Figures.Scope      = Gbl.Scope.Current;
+      Figures.FigureType = Fig_INSTITS;
+      Usr_ShowFormsToSelectUsrListType (Fig_PutHiddenParamFigures,&Figures);
+
+      /***** Institutions ordered by number of centers *****/
+      Ins_GetAndShowInssOrderedByNumCtrs ();
+
+      /***** Institutions ordered by number of degrees *****/
+      Ins_GetAndShowInssOrderedByNumDegs ();
+
+      /***** Institutions ordered by number of courses *****/
+      Ins_GetAndShowInssOrderedByNumCrss ();
+
+      /***** Institutions ordered by number of users in courses *****/
+      Ins_GetAndShowInssOrderedByNumUsrsInCrss ();
+
+      /***** Institutions ordered by number of users who claim to belong to them *****/
+      Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/**** Get and show stats about institutions ordered by number of centers *****/
+/*****************************************************************************/
+
+static void Ins_GetAndShowInssOrderedByNumCtrs (void)
+  {
+   extern const char *Txt_Institutions_by_number_of_centers;
+   extern const char *Txt_Centers;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_centers,
+                      NULL,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
+
+      /***** Get institutions ordered by number of centers *****/
+      NumInss = Ins_DB_GetInssOrderedByNumCtrs (&mysql_res);
+
+      /***** Show institutions *****/
+      Ins_ShowInss (&mysql_res,NumInss,Txt_Centers);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/**** Get and show stats about institutions ordered by number of degrees *****/
+/*****************************************************************************/
+
+static void Ins_GetAndShowInssOrderedByNumDegs (void)
+  {
+   extern const char *Txt_Institutions_by_number_of_degrees;
+   extern const char *Txt_Degrees;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_degrees,
+                      NULL,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
+
+      /***** Get institutions ordered by number of degrees *****/
+      NumInss = Ins_DB_GetInssOrderedByNumDegs (&mysql_res);
+
+      /***** Show institutions *****/
+      Ins_ShowInss (&mysql_res,NumInss,Txt_Degrees);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/**** Get and show stats about institutions ordered by number of courses *****/
+/*****************************************************************************/
+
+static void Ins_GetAndShowInssOrderedByNumCrss (void)
+  {
+   extern const char *Txt_Institutions_by_number_of_courses;
+   extern const char *Txt_Courses;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_courses,
+                      NULL,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
+
+      /***** Get institutions ordered by number of courses *****/
+      NumInss = Ins_DB_GetInssOrderedByNumCrss (&mysql_res);
+
+      /***** Show institutions *****/
+      Ins_ShowInss (&mysql_res,NumInss,Txt_Courses);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/***** Get and show stats about institutions ordered by users in courses *****/
+/*****************************************************************************/
+
+static void Ins_GetAndShowInssOrderedByNumUsrsInCrss (void)
+  {
+   extern const char *Txt_Institutions_by_number_of_users_in_courses;
+   extern const char *Txt_Users;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_users_in_courses,
+                      NULL,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
+
+      /***** Get institutions ordered by number of users in courses *****/
+      NumInss = Ins_DB_GetInssOrderedByNumUsrsInCrss (&mysql_res);
+
+      /***** Show institutions *****/
+      Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/************* Get and show stats about institutions ordered by **************/
+/************* number of users who claim to belong to them      **************/
+/*****************************************************************************/
+
+static void Ins_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
+  {
+   extern const char *Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them;
+   extern const char *Txt_Users;
+   MYSQL_RES *mysql_res;
+   unsigned NumInss;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
+                      NULL,NULL,
+                      NULL,Box_NOT_CLOSABLE,2);
+
+      /***** Get institutions ordered by number of users who claim to belong to them *****/
+      NumInss = Ins_DB_GetInssOrderedByNumUsrsWhoClaimToBelongToThem (&mysql_res);
+
+      /***** Show institutions *****/
+      Ins_ShowInss (&mysql_res,NumInss,Txt_Users);
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/****************** Get and show stats about institutions ********************/
+/*****************************************************************************/
+
+static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
+		          const char *TxtFigure)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_Institution;
+   unsigned NumIns;
+   unsigned NumOrder;
+   unsigned NumberLastRow;
+   unsigned NumberThisRow;
+   struct Ins_Instit Ins;
+   bool TRIsOpen = false;
+
+   /***** Query database *****/
+   if (NumInss)
+     {
+      /* Draw the classphoto/list */
+      switch (Gbl.Usrs.Me.ListType)
+	{
+	 case Set_USR_LIST_AS_CLASS_PHOTO:
+	    /***** Draw institutions as a class photo *****/
+	    for (NumIns = 0;
+		 NumIns < NumInss;)
+	      {
+	       if ((NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
+		 {
+		  HTM_TR_Begin (NULL);
+		  TRIsOpen = true;
+		 }
+
+	       /***** Get institution data and statistic *****/
+	       NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
+
+	       /***** Write link to institution *****/
+	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+		  Ins_DrawInstitutionLogoWithLink (&Ins,40);
+		  HTM_BR ();
+		  HTM_Unsigned (NumberThisRow);
+               HTM_TD_End ();
+
+	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
+		 {
+		  HTM_TR_End ();
+		  TRIsOpen = false;
+		 }
+	      }
+	    if (TRIsOpen)
+	       HTM_TR_End ();
+
+	    break;
+	 case Set_USR_LIST_AS_LISTING:
+	    /***** Draw institutions as a list *****/
+	    HTM_TR_Begin (NULL);
+	       HTM_TH_Empty (1);
+	       HTM_TH (Txt_Institution,HTM_HEAD_LEFT);
+	       HTM_TH (TxtFigure      ,HTM_HEAD_RIGHT);
+	    HTM_TR_End ();
+
+	    for (NumIns  = 1, NumOrder = 1, NumberLastRow = 0;
+		 NumIns <= NumInss;
+		 NumIns++)
+	      {
+	       /***** Get institution data and statistic *****/
+	       NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
+
+	       HTM_TR_Begin (NULL);
+
+		  /***** Number of order *****/
+		  if (NumberThisRow != NumberLastRow)
+		     NumOrder = NumIns;
+		  HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		     HTM_Unsigned (NumOrder);
+		  HTM_TD_End ();
+
+		  /***** Write link to institution *****/
+		  HTM_TD_Begin ("class=\"%s LM\"",
+				The_ClassFormInBox[Gbl.Prefs.Theme]);
+		     /* Icon and name of this institution */
+		     Frm_BeginForm (ActSeeInsInf);
+			Ins_PutParamInsCod (Ins.InsCod);
+			HTM_BUTTON_OnSubmit_Begin (Ins.ShrtName,"BT_LINK",NULL);
+			   if (Gbl.Usrs.Listing.WithPhotos)
+			     {
+			      Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.ShrtName,
+					    40,NULL,true);
+			      HTM_NBSP ();
+			     }
+			   HTM_Txt (Ins.FullName);
+			HTM_BUTTON_End ();
+		     Frm_EndForm ();
+		  HTM_TD_End ();
+
+		  /***** Write statistic *****/
+		  HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		     HTM_Unsigned (NumberThisRow);
+		  HTM_TD_End ();
+
+	       HTM_TR_End ();
+
+	       NumberLastRow = NumberThisRow;
+	      }
+	    break;
+	 default:
+	    break;
+	}
+     }
+  }
+
+/*****************************************************************************/
+/******************** Get institution data and statistic *********************/
+/*****************************************************************************/
+
+static unsigned Ins_GetInsAndStat (struct Ins_Instit *Ins,MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   unsigned NumberThisRow;
+
+   /***** Get next institution *****/
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Get data of this institution (row[0]) *****/
+   Ins->InsCod = Str_ConvertStrCodToLongCod (row[0]);
+   if (!Ins_GetDataOfInstitByCod (Ins))
+      Err_WrongInstitExit ();
+
+   /***** Get statistic (row[1]) *****/
+   if (sscanf (row[1],"%u",&NumberThisRow) != 1)
+      Err_ShowErrorAndExit ("Error in statistic");
+
+   return NumberThisRow;
   }

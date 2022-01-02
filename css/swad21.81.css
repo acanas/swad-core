@@ -2320,8 +2320,23 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /************************** Listing of users *********************************/
-.USR_LIST_NUM	{color:#A0A0A0; font-size:15pt; font-weight:bold;}
-.USR_LIST_NUM_N	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM		{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_WHITE	{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_GREY	{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_PURPLE	{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_BLUE	{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_YELLOW	{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_PINK	{color:#a0a0a0; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_DARK	{color:#808080; font-size:15pt; font-weight:bold;}
+
+.USR_LIST_NUM_N		{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_WHITE	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_GREY	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_PURPLE	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_BLUE	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_YELLOW	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_PINK	{color:#202020; font-size:15pt; font-weight:bold;}
+.USR_LIST_NUM_N_DARK	{color:#e0e0e0; font-size:15pt; font-weight:bold;}
 
 /*****************************************************************************/
 .TITLE_WHITE	{color:#505050; font-size:18pt;}
@@ -2364,7 +2379,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .FORM_IN_BLUE		{color:#4d88a1; font-size:13pt;}
 .FORM_IN_YELLOW		{color:#7c4d2a; font-size:13pt;}
 .FORM_IN_PINK		{color:#4d88a1; font-size:13pt;}
-.FORM_IN_DARK		{color:#a6c4d0; font-size:13pt;}
+.FORM_IN_DARK		{color:#afc4cc; font-size:13pt;}
 
 /* Outside white box */
 .FORM_OUT_WHITE		{color:#4d88a1; font-size:13pt;}
@@ -2551,6 +2566,43 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_LIGHT_PINK		{color:#a0a0a0; font-size:13pt;}
 .DAT_LIGHT_DARK		{color:#909090; font-size:13pt;}
 
+.DAT_SMALL			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_GREY			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_BLUE			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_PINK			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
+.DAT_SMALL_DARK			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#d0d0d0; font-size:12pt;}
+
+.DAT_SMALL_N			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_N_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt;}
+
+.DAT_SMALL_NOBR			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#d0d0d0; font-size:12pt; white-space:nowrap;}
+
+.DAT_SMALL_NOBR_N		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_N_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt; white-space:nowrap;}
+
 .DAT_GREEN	{color:#246600; font-size:13pt;}
 .DAT_RED	{color:#660000; font-size:13pt;}
 
@@ -2579,11 +2631,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	border-width:1px;
 	}
 
-.DAT_SMALL		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
 .DAT_SMALL_LIGHT	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
-.DAT_SMALL_NOBR		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_N		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_NOBR_N	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
 
 .DAT_SMALL_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
 .DAT_SMALL_RED		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
@@ -2749,7 +2797,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .TIT_TBL_BLUE		{color:#4d88a1;}
 .TIT_TBL_YELLOW		{color:#4d88a1;}
 .TIT_TBL_PINK		{color:#4d88a1;}
-.TIT_TBL_DARK		{color:#8cbcce;}
+.TIT_TBL_DARK		{color:#afc4cc;}
 
 .GRP_TITLE		{color:#4d88a1; font-size:15pt; font-weight:bold;}
 

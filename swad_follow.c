@@ -754,7 +754,7 @@ static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_
    /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-      if (asprintf (&Class,"FOLLOW_USR_ICO %s ICO_HIGHLIGHT ICO16x16",
+      if (asprintf (&Class,"FOLLOW_USR_ICO ICO16x16 %s ICO_HIGHLIGHT",
 		    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",Txt_Follow,Class);

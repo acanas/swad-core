@@ -78,6 +78,7 @@
 #include "swad_password.h"
 #include "swad_photo.h"
 #include "swad_privacy.h"
+#include "swad_profile.h"
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_record_database.h"
@@ -248,6 +249,9 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,
 				struct SelectedUsrs *SelectedUsrs,
 				bool PutCheckBoxToSelectUsr);
+
+static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role);
+static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
 
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
@@ -2150,6 +2154,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -2184,16 +2189,18 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
       /***** User has accepted enrolment? *****/
       if (UsrIsTheMsgSender)
-	 HTM_TD_Begin ("class=\"BM_SEL %s\" title=\"%s\"",
+	 HTM_TD_Begin ("class=\"BM_SEL %s_%s\" title=\"%s\"",
 		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
 					  "USR_LIST_NUM",
+		       The_Colors[Gbl.Prefs.Theme],
 		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
 					  Txt_Enrolment_not_confirmed);
       else
-	 HTM_TD_Begin ("class=\"BM%u %s\" title=\"%s\"",
-		       Gbl.RowEvenOdd,
+	 HTM_TD_Begin ("class=\"BM %s_%s %s\" title=\"%s\"",
 		       UsrDat->Accepted ? "USR_LIST_NUM_N" :
 					  "USR_LIST_NUM",
+		       The_Colors[Gbl.Prefs.Theme],
+		       BgColor,
 		       UsrDat->Accepted ? Txt_Enrolment_confirmed :
 					  Txt_Enrolment_not_confirmed);
       HTM_Txt (UsrDat->Accepted ? "&check;" :
@@ -2201,9 +2208,10 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       HTM_TD_End ();
 
       /***** Write number of user in the list *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",
+      HTM_TD_Begin ("class=\"%s_%s RM %s\"",
 		    UsrDat->Accepted ? "USR_LIST_NUM_N" :
 				       "USR_LIST_NUM",
+		    The_Colors[Gbl.Prefs.Theme],
 		    BgColor);
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
@@ -2635,12 +2643,15 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
+
    /***** Begin table cell *****/
-   HTM_TD_Begin ("class=\"%s LM %s\"",
+   HTM_TD_Begin ("class=\"%s_%s LM %s\"",
 		 Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
 				        "DAT_SMALL_N") :
 			    (NonBreak ? "DAT_SMALL_NOBR" :
 				        "DAT_SMALL"),
+		 The_Colors[Gbl.Prefs.Theme],
 		 BgColor);
 
       /***** Container to limit length *****/
@@ -4767,7 +4778,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	 /***** List data of users *****/
 	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
 	      NumUsr < NumUsrs;
-	      NumUsr++)
+	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
 	    UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
@@ -4806,8 +4817,6 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 
 	       HTM_TR_End ();
 	      }
-
-	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	   }
 
 	 /***** Free memory used for user's data *****/
@@ -6532,4 +6541,211 @@ Usr_Who_t Usr_GetHiddenParamWho (void)
                                                 1,
                                                 Usr_NUM_WHO - 1,
                                                 Usr_WHO_UNKNOWN);
+  }
+
+/*****************************************************************************/
+/********************** Show stats about number of users *********************/
+/*****************************************************************************/
+
+void Usr_GetAndShowUsersStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_users;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Users;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
+   extern const char *Txt_Average_number_of_users_belonging_to_a_course;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_USERS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
+
+      /***** Write heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Users                                            ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_users                                  ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_of_courses_to_which_a_user_belongs,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_of_users_belonging_to_a_course    ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Figures *****/
+      Usr_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
+      Usr_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
+      Usr_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
+      Usr_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
+
+      /***** Separator *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,4,"SEPAR_ROW");
+      HTM_TR_End ();
+
+      Usr_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/**************** Get and show number of users in courses ********************/
+/*****************************************************************************/
+// Rol_UNK means any role in courses
+
+static void Usr_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_Total;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   long Cod = Sco_GetCurrentCod ();
+   char *Class;
+   unsigned Roles;
+
+   /***** Initializations depending on role *****/
+   if (Role == Rol_UNK)
+     {
+      if (asprintf (&Class,"RB %s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Roles = (1 << Rol_STD) |
+	      (1 << Rol_NET) |
+	      (1 << Rol_TCH);
+     }
+   else
+     {
+      if (asprintf (&Class,"RB %s",The_ClassDat[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Roles = (1 << Role);
+     }
+
+   /***** Write the total number of users *****/
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Txt ((Role == Rol_UNK) ? Txt_Total :
+				      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+      HTM_TD_End ();
+
+      /* Number of users in courses */
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Gbl.Scope.Current,Cod,Roles));
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (Enr_GetCachedAverageNumCrssPerUsr (Gbl.Scope.Current,Cod,Role));
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (Enr_GetCachedAverageNumUsrsPerCrs (Gbl.Scope.Current,Cod,Role));
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   free (Class);
+  }
+
+/*****************************************************************************/
+/**************** Get and show number of users in courses ********************/
+/*****************************************************************************/
+
+static void Usr_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char *Class;
+
+   if (asprintf (&Class,"%s RB",The_ClassDat[Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
+
+   /***** Write the total number of users not belonging to any course *****/
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Unsigned (Enr_GetCachedNumUsrsNotBelongingToAnyCrs ());
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (0.0);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s\"",Class);
+	 HTM_Double2Decimals (0.0);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   free (Class);
+  }
+
+/*****************************************************************************/
+/****************************** Show users' ranking **************************/
+/*****************************************************************************/
+
+void Usr_GetAndShowUsersRanking (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_ranking;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Clicks;
+   extern const char *Txt_Clicks_per_day;
+   extern const char *Txt_Timeline;
+   extern const char *Txt_Downloads;
+   extern const char *Txt_Forums;
+   extern const char *Txt_Messages;
+   extern const char *Txt_Followers;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_USERS_RANKING],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
+
+      /***** Write heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Clicks        ,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Clicks_per_day,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Timeline      ,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Followers     ,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Downloads     ,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Forums        ,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Messages      ,HTM_HEAD_CENTER);
+      HTM_TR_End ();
+
+      /***** Rankings *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Prf_GetAndShowRankingClicks ();
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Prf_GetAndShowRankingClicksPerDay ();
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Prf_GetAndShowRankingTimelinePubs ();
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Fol_GetAndShowRankingFollowers ();
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Prf_GetAndShowRankingFileViews ();
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Prf_GetAndShowRankingForPsts ();
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    Prf_GetAndShowRankingMsgsSnt ();
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

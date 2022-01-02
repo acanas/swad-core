@@ -128,4 +128,7 @@ void Ins_FlushCacheNumUsrsWhoClaimToBelongToIns (void);
 unsigned Ins_GetNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
 unsigned Ins_GetCachedNumUsrsWhoClaimToBelongToIns (struct Ins_Instit *Ins);
 
+//-------------------------------- Figures ------------------------------------
+void Ins_GetAndShowInstitutionsStats (void);
+
 #endif

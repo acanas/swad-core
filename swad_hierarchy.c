@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_degree_database.h"
 #include "swad_error.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group_database.h"
@@ -53,6 +54,22 @@ extern struct Globals Gbl;
 
 static Hie_StatusTxt_t Hie_GetStatusTxtFromStatusBits (Hie_Status_t Status);
 static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt);
+
+static void Hie_WriteHeadHierarchy (void);
+static void Hie_GetAndShowHierarchyWithInss (void);
+static void Hie_GetAndShowHierarchyWithCtrs (void);
+static void Hie_GetAndShowHierarchyWithDegs (void);
+static void Hie_GetAndShowHierarchyWithCrss (void);
+static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role);
+static void Hie_GetAndShowHierarchyTotal (void);
+static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
+				  const char *ClassTxt,
+				  int NumCtys,	// < 0 ==> do not show number
+				  int NumInss,	// < 0 ==> do not show number
+				  int NumCtrs,	// < 0 ==> do not show number
+				  int NumDegs,	// < 0 ==> do not show number
+				  int NumCrss);	// < 0 ==> do not show number
+static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num);
 
 /*****************************************************************************/
 /********** List pending institutions, centers, degrees and courses **********/
@@ -869,4 +886,403 @@ long Hie_GetAndCheckParamOtherHieCod (long MinCodAllowed)
       Err_WrongHierarchyExit ();
 
    return HieCod;
+  }
+
+/*****************************************************************************/
+/*********            Get and show stats about hierarchy           ***********/
+/********* (countries, institutions, centers, degrees and courses) ***********/
+/*****************************************************************************/
+
+void Hie_GetAndShowHierarchyStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_hierarchy;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   Rol_Role_t Role;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_HIERARCHY],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
+
+      Hie_WriteHeadHierarchy ();
+      Hie_GetAndShowHierarchyWithInss ();
+      Hie_GetAndShowHierarchyWithCtrs ();
+      Hie_GetAndShowHierarchyWithDegs ();
+      Hie_GetAndShowHierarchyWithCrss ();
+      for (Role  = Rol_TCH;
+	   Role >= Rol_STD;
+	   Role--)
+	 Hie_GetAndShowHierarchyWithUsrs (Role);
+      Hie_GetAndShowHierarchyTotal ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/************************ Write head of hierarchy table **********************/
+/*****************************************************************************/
+
+static void Hie_WriteHeadHierarchy (void)
+  {
+   extern const char *Txt_Countries;
+   extern const char *Txt_Institutions;
+   extern const char *Txt_Centers;
+   extern const char *Txt_Degrees;
+   extern const char *Txt_Courses;
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TH_Empty (1);
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 Ico_PutIcon ("globe-americas.svg",Ico_BLACK,
+	              Txt_Countries,"ICOx16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Countries);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 Ico_PutIcon ("university.svg",Ico_BLACK,
+	              Txt_Institutions,"ICOx16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Institutions);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 Ico_PutIcon ("building.svg",Ico_BLACK,
+	              Txt_Centers,"ICOx16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Centers);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 Ico_PutIcon ("graduation-cap.svg",Ico_BLACK,
+	              Txt_Degrees,"ICOx16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Degrees);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 Ico_PutIcon ("chalkboard-teacher.svg",Ico_BLACK,
+	              Txt_Courses,"ICOx16");
+	 HTM_BR ();
+	 HTM_Txt (Txt_Courses);
+      HTM_TH_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/****** Get and show number of elements in hierarchy with institutions *******/
+/*****************************************************************************/
+
+static void Hie_GetAndShowHierarchyWithInss (void)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_With_;
+   extern const char *Txt_institutions;
+   unsigned NumCtysWithInss = 1;
+
+   /***** Get number of elements with institutions *****/
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 NumCtysWithInss = Cty_GetCachedNumCtysWithInss ();
+         break;
+      case HieLvl_CTY:
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 break;
+      default:
+	 Err_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Write number of elements with institutions *****/
+   Hie_ShowHierarchyRow (Txt_With_,Txt_institutions,
+			 The_ClassDat[Gbl.Prefs.Theme],
+                         (int) NumCtysWithInss,
+                         -1,		// < 0 ==> do not show number
+                         -1,		// < 0 ==> do not show number
+                         -1,		// < 0 ==> do not show number
+			 -1);		// < 0 ==> do not show number
+  }
+
+/*****************************************************************************/
+/******** Get and show number of elements in hierarchy with centers **********/
+/*****************************************************************************/
+
+static void Hie_GetAndShowHierarchyWithCtrs (void)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_With_;
+   extern const char *Txt_centers;
+   unsigned NumCtysWithCtrs = 1;
+   unsigned NumInssWithCtrs = 1;
+
+   /***** Get number of elements with centers *****/
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 NumCtysWithCtrs = Cty_GetCachedNumCtysWithCtrs ();
+	 /* falls through */
+	 /* no break */
+      case HieLvl_CTY:
+	 NumInssWithCtrs = Ins_GetCachedNumInssWithCtrs ();
+         break;
+      case HieLvl_INS:
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 break;
+      default:
+	 Err_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Write number of elements with centers *****/
+   Hie_ShowHierarchyRow (Txt_With_,Txt_centers,
+			 The_ClassDat[Gbl.Prefs.Theme],
+                         (int) NumCtysWithCtrs,
+                         (int) NumInssWithCtrs,
+                         -1,		// < 0 ==> do not show number
+                         -1,		// < 0 ==> do not show number
+			 -1);		// < 0 ==> do not show number
+  }
+
+/*****************************************************************************/
+/******** Get and show number of elements in hierarchy with degrees **********/
+/*****************************************************************************/
+
+static void Hie_GetAndShowHierarchyWithDegs (void)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_With_;
+   extern const char *Txt_degrees;
+   unsigned NumCtysWithDegs = 1;
+   unsigned NumInssWithDegs = 1;
+   unsigned NumCtrsWithDegs = 1;
+
+   /***** Get number of elements with degrees *****/
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 NumCtysWithDegs = Cty_GetCachedNumCtysWithDegs ();
+	 /* falls through */
+	 /* no break */
+         break;
+      case HieLvl_CTY:
+	 NumInssWithDegs = Ins_GetCachedNumInssWithDegs ();
+	 /* falls through */
+	 /* no break */
+      case HieLvl_INS:
+         NumCtrsWithDegs = Ctr_GetCachedNumCtrsWithDegs ();
+         break;
+      case HieLvl_CTR:
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 break;
+      default:
+	 Err_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Write number of elements with degrees *****/
+   Hie_ShowHierarchyRow (Txt_With_,Txt_degrees,
+			 The_ClassDat[Gbl.Prefs.Theme],
+                         (int) NumCtysWithDegs,
+                         (int) NumInssWithDegs,
+                         (int) NumCtrsWithDegs,
+                         -1,		// < 0 ==> do not show number
+			 -1);		// < 0 ==> do not show number
+  }
+
+/*****************************************************************************/
+/******** Get and show number of elements in hierarchy with courses **********/
+/*****************************************************************************/
+
+static void Hie_GetAndShowHierarchyWithCrss (void)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_With_;
+   extern const char *Txt_courses;
+   unsigned NumCtysWithCrss = 1;
+   unsigned NumInssWithCrss = 1;
+   unsigned NumCtrsWithCrss = 1;
+   unsigned NumDegsWithCrss = 1;
+
+   /***** Get number of elements with courses *****/
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 NumCtysWithCrss = Cty_GetCachedNumCtysWithCrss ();
+	 /* falls through */
+	 /* no break */
+      case HieLvl_CTY:
+	 NumInssWithCrss = Ins_GetCachedNumInssWithCrss ();
+	 /* falls through */
+	 /* no break */
+      case HieLvl_INS:
+         NumCtrsWithCrss = Ctr_GetCachedNumCtrsWithCrss ();
+	 /* falls through */
+	 /* no break */
+      case HieLvl_CTR:
+	 NumDegsWithCrss = Deg_GetCachedNumDegsWithCrss ();
+	 break;
+      case HieLvl_DEG:
+      case HieLvl_CRS:
+	 break;
+      default:
+	 Err_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Write number of elements with courses *****/
+   Hie_ShowHierarchyRow (Txt_With_,Txt_courses,
+			 The_ClassDat[Gbl.Prefs.Theme],
+                         (int) NumCtysWithCrss,
+                         (int) NumInssWithCrss,
+                         (int) NumCtrsWithCrss,
+                         (int) NumDegsWithCrss,
+			 -1);		// < 0 ==> do not show number
+  }
+
+/*****************************************************************************/
+/********** Get and show number of elements in hierarchy with users **********/
+/*****************************************************************************/
+
+static void Hie_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_With_;
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumCtysWithUsrs;
+   unsigned NumInssWithUsrs;
+   unsigned NumCtrsWithUsrs;
+   unsigned NumDegsWithUsrs;
+   unsigned NumCrssWithUsrs;
+
+   /***** Get number of elements with students *****/
+   NumCtysWithUsrs = Cty_GetCachedNumCtysWithUsrs (Role);
+   NumInssWithUsrs = Ins_GetCachedNumInssWithUsrs (Role);
+   NumCtrsWithUsrs = Ctr_GetCachedNumCtrsWithUsrs (Role);
+   NumDegsWithUsrs = Deg_GetCachedNumDegsWithUsrs (Role);
+   NumCrssWithUsrs = Crs_GetCachedNumCrssWithUsrs (Role);
+
+   /***** Write number of elements with students *****/
+   Hie_ShowHierarchyRow (Txt_With_,Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN],
+			 The_ClassDat[Gbl.Prefs.Theme],
+                         (int) NumCtysWithUsrs,
+                         (int) NumInssWithUsrs,
+                         (int) NumCtrsWithUsrs,
+                         (int) NumDegsWithUsrs,
+			 (int) NumCrssWithUsrs);
+  }
+
+/*****************************************************************************/
+/************ Get and show total number of elements in hierarchy *************/
+/*****************************************************************************/
+
+static void Hie_GetAndShowHierarchyTotal (void)
+  {
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_Total;
+   char *ClassTxt;
+   unsigned NumCtysTotal = 1;
+   unsigned NumInssTotal = 1;
+   unsigned NumCtrsTotal = 1;
+   unsigned NumDegsTotal = 1;
+   unsigned NumCrssTotal = 1;
+
+   /***** Get total number of elements *****/
+   switch (Gbl.Scope.Current)
+     {
+      case HieLvl_SYS:
+	 NumCtysTotal = Cty_GetCachedNumCtysInSys ();
+	 NumInssTotal = Ins_GetCachedNumInssInSys ();
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInSys ();
+	 NumDegsTotal = Deg_GetCachedNumDegsInSys ();
+	 NumCrssTotal = Crs_GetCachedNumCrssInSys ();
+         break;
+      case HieLvl_CTY:
+	 NumInssTotal = Ins_GetCachedNumInssInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod);
+         break;
+      case HieLvl_INS:
+	 NumCtrsTotal = Ctr_GetCachedNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumDegsTotal = Deg_GetCachedNumDegsInIns (Gbl.Hierarchy.Ins.InsCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInIns (Gbl.Hierarchy.Ins.InsCod);
+         break;
+      case HieLvl_CTR:
+	 NumDegsTotal = Deg_GetCachedNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod);
+	 NumCrssTotal = Crs_GetCachedNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod);
+	 break;
+      case HieLvl_DEG:
+	 NumCrssTotal = Crs_GetCachedNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod);
+	 break;
+     case HieLvl_CRS:
+	 break;
+      default:
+	 Err_WrongScopeExit ();
+	 break;
+     }
+
+   /***** Write total number of elements *****/
+   if (asprintf (&ClassTxt,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+      Err_NotEnoughMemoryExit ();
+   Hie_ShowHierarchyRow ("",Txt_Total,ClassTxt,
+                         (int) NumCtysTotal,
+                         (int) NumInssTotal,
+                         (int) NumCtrsTotal,
+                         (int) NumDegsTotal,
+			 (int) NumCrssTotal);
+   free (ClassTxt);
+  }
+
+/*****************************************************************************/
+/************** Show row with number of elements in hierarchy ****************/
+/*****************************************************************************/
+
+static void Hie_ShowHierarchyRow (const char *Text1,const char *Text2,
+				  const char *ClassTxt,
+				  int NumCtys,	// < 0 ==> do not show number
+				  int NumInss,	// < 0 ==> do not show number
+				  int NumCtrs,	// < 0 ==> do not show number
+				  int NumDegs,	// < 0 ==> do not show number
+				  int NumCrss)	// < 0 ==> do not show number
+  {
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Write text *****/
+      HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
+	 HTM_Txt (Text1);
+	 HTM_Txt (Text2);
+      HTM_TD_End ();
+
+      /***** Write number of countries *****/
+      Hie_ShowHierarchyCell (ClassTxt,NumCtys);
+      Hie_ShowHierarchyCell (ClassTxt,NumInss);
+      Hie_ShowHierarchyCell (ClassTxt,NumCtrs);
+      Hie_ShowHierarchyCell (ClassTxt,NumDegs);
+      Hie_ShowHierarchyCell (ClassTxt,NumCrss);
+
+   /***** End row *****/
+   HTM_TR_End ();
+  }
+
+static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num)
+  {
+   /***** Write number *****/
+   HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
+      if (Num >= 0)
+	 HTM_Unsigned ((unsigned) Num);
+      else		// < 0 ==> do not show number
+	 HTM_Hyphen ();
+   HTM_TD_End ();
   }

@@ -72,4 +72,7 @@ Hie_Status_t Hie_GetParamStatus (void);
 void Hie_PutParamOtherHieCod (void *HieCod);
 long Hie_GetAndCheckParamOtherHieCod (long MinCodAllowed);
 
+//-------------------------------- Figures ------------------------------------
+void Hie_GetAndShowHierarchyStats (void);
+
 #endif
