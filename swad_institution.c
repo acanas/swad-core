@@ -144,8 +144,8 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,Txt_Institution         ,"LM");
-	    HTM_TH (1,1,Txt_Centers_ABBREVIATION,"RM");
+	    HTM_TH (Txt_Institution         ,HTM_HEAD_LEFT );
+	    HTM_TH (Txt_Centers_ABBREVIATION,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
 	 /***** List the institutions *****/
@@ -464,7 +464,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	   Order <= (Ins_Order_t) (Ins_NUM_ORDERS - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (Align[Order]);
+         HTM_TH_Begin (Align[Order]);
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeIns);
@@ -484,11 +484,11 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	      }
 	 HTM_TH_End ();
 	}
-      HTM_TH (1,1,Txt_Centers_ABBREVIATION    ,"RM");
-      HTM_TH (1,1,Txt_Degrees_ABBREVIATION    ,"RM");
-      HTM_TH (1,1,Txt_Courses_ABBREVIATION    ,"RM");
-      HTM_TH (1,1,Txt_Departments_ABBREVIATION,"RM");
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH (Txt_Centers_ABBREVIATION    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Courses_ABBREVIATION    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Departments_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
@@ -1549,19 +1549,19 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Code                         ,"RM");
+      HTM_TH (Txt_Code                         ,HTM_HEAD_RIGHT);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Short_name_of_the_institution,"LM");
-      HTM_TH (1,1,Txt_Full_name_of_the_institution ,"LM");
-      HTM_TH (1,1,Txt_WWW                          ,"LM");
-      HTM_TH (1,1,Txt_Users                        ,"RM");
-      HTM_TH (1,1,Txt_Centers_ABBREVIATION         ,"RM");
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH (Txt_Short_name_of_the_institution,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Full_name_of_the_institution ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_WWW                          ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Users                        ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Centers_ABBREVIATION         ,HTM_HEAD_RIGHT);
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
-      HTM_TH (1,1,Txt_Requester                    ,"LM");
+      HTM_TH (Txt_Requester                    ,HTM_HEAD_LEFT );
       HTM_TH_Empty (1);
 
    HTM_TR_End ();

@@ -290,7 +290,7 @@ unsigned Log_DB_GetMyCrssAndHitsPerCrs (MYSQL_RES **mysql_res,Rol_Role_t Role)
 			   " WHERE UsrCod=%ld"
 			     " AND Role=%u) AS my_courses"	// It's imperative to use a derived table to not block crs_usr!
 		    " LEFT JOIN log"
-		      " ON (my_courses.CrsCod=log.CrsCod)"
+		      " ON my_courses.CrsCod=log.CrsCod"
 		   " WHERE log.UsrCod=%ld"
 		     " AND log.Role=%u"
 		   " GROUP BY my_courses.CrsCod"

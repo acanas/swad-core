@@ -915,10 +915,10 @@ static void ExaSet_PutTableHeadingForSets (void)
 
       /***** Header cells *****/
       HTM_TH_Empty (1);
-      HTM_TH_Title (Txt_No_INDEX                   ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Set_of_questions           ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Number_of_questions        ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Number_of_questions_to_show,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_No_INDEX                   ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Set_of_questions           ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Number_of_questions        ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Number_of_questions_to_show,HTM_HEAD_RIGHT);
 
    /***** End row *****/
    HTM_TR_End ();
@@ -973,8 +973,8 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       HTM_TR_Begin (NULL);
 
 	 HTM_TH_Empty (1);
-         HTM_TH_Title (Txt_No_INDEX,HTM_HEAD_CENTER);
-         HTM_TH_Title (Txt_Question,HTM_HEAD_CENTER);
+         HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+         HTM_TH (Txt_Question,HTM_HEAD_CENTER);
 
       HTM_TR_End ();
 

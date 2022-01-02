@@ -130,8 +130,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	 /***** Wrtie heading *****/
 	 HTM_TR_Begin (NULL);
 
-            HTM_TH_Title (Txt_Center              ,HTM_HEAD_LEFT );
-            HTM_TH_Title (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
+            HTM_TH (Txt_Center              ,HTM_HEAD_LEFT );
+            HTM_TH (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
 
 	 HTM_TR_End ();
 
@@ -1437,7 +1437,7 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	   Order <= (Ctr_Order_t) (Ctr_NUM_ORDERS - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (Align[Order]);
+         HTM_TH_Begin (Align[Order]);
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCtr);
@@ -1458,10 +1458,10 @@ static void Ctr_PutHeadCentersForSeeing (bool OrderSelectable)
 	 HTM_TH_End ();
 	}
 
-      HTM_TH_Title (Txt_Place               ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT);
-      HTM_TH_TitleBegin (HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Place               ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Degrees_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Courses_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
@@ -1490,20 +1490,20 @@ static void Ctr_PutHeadCentersForEdition (void)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (1);
-      HTM_TH_Title (Txt_Code                    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Code                    ,HTM_HEAD_RIGHT);
       HTM_TH_Empty (1);
-      HTM_TH_Title (Txt_Place                   ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Short_name_of_the_center,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Full_name_of_the_center ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_WWW                     ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Users                   ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
-      HTM_TH_Begin (1,1,"RM");
+      HTM_TH (Txt_Place                   ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Short_name_of_the_center,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Full_name_of_the_center ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_WWW                     ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Users                   ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Degrees_ABBREVIATION    ,HTM_HEAD_RIGHT);
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
       HTM_TH_End ();
-      HTM_TH_Title (Txt_Requester               ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Requester               ,HTM_HEAD_LEFT );
       HTM_TH_Empty (1);
 
    HTM_TR_End ();

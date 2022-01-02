@@ -388,11 +388,11 @@ void Ntf_ShowMyNotifications (void)
 
 	    /***** Heading *****/
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (1,2,Txt_Event   ,"LM");
-	       HTM_TH (1,1,Txt_MSG_From,"LM");
-	       HTM_TH (1,1,Txt_Location,"LM");
-	       HTM_TH (1,1,Txt_Date    ,"CM");
-	       HTM_TH (1,1,Txt_Email   ,"LM");
+	       HTM_TH_Span (Txt_Event   ,HTM_HEAD_LEFT  ,1,2,NULL);
+	       HTM_TH      (Txt_MSG_From,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_Location,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_Date    ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Email   ,HTM_HEAD_LEFT  );
 	    HTM_TR_End ();
 
 	    /***** List notifications one by one *****/
@@ -1524,8 +1524,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
 	       HTM_TR_Begin (NULL);
 		  HTM_TH_Empty (1);
-		  HTM_TH (1,1,Txt_Create_BR_notification,"CM");
-		  HTM_TH (1,1,Txt_Notify_me_BR_by_email ,"CM");
+		  HTM_TH (Txt_Create_BR_notification,HTM_HEAD_CENTER);
+		  HTM_TH (Txt_Notify_me_BR_by_email ,HTM_HEAD_CENTER);
 	       HTM_TR_End ();
 
 	       /***** Checkbox to activate internal notifications and email notifications

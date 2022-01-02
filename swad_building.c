@@ -126,7 +126,7 @@ void Bld_SeeBuildings (void)
 		 Order <= (Bld_Order_t) (Bld_NUM_ORDERS - 1);
 		 Order++)
 	      {
-               HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+               HTM_TH_Begin (HTM_HEAD_LEFT);
 		  Frm_BeginForm (ActSeeBld);
 		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		     HTM_BUTTON_OnSubmit_Begin (Txt_BUILDINGS_HELP_ORDER[Order],
@@ -778,11 +778,11 @@ static void Bld_PutHeadBuildings (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL          ,"BM");
-      HTM_TH_Title (Txt_Code      ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Short_name,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Full_name ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Location  ,HTM_HEAD_LEFT );
+      HTM_TH_Span (NULL     ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code      ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Short_name,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Full_name ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Location  ,HTM_HEAD_LEFT );
 
    HTM_TR_End ();
   }

@@ -243,13 +243,13 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 	 HTM_TABLE_BeginWideMarginPadding (5);
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
+               HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Dat_StartEndTime_t) 0;
 		    Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 		    Order++)
 		 {
-                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+                  HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllSvy);
@@ -270,8 +270,8 @@ static void Svy_ListAllSurveys (struct Svy_Surveys *Surveys)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH_Title (Txt_Survey,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_Status,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Survey,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Status,HTM_HEAD_CENTER);
 
 	    HTM_TR_End ();
 
@@ -2792,9 +2792,9 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	 HTM_TR_Begin (NULL);
 	    if (Svy->Status.ICanEdit)
 	       HTM_TH_Empty (1);
-	    HTM_TH (1,1,Txt_No_INDEX,"CT");
-	    HTM_TH (1,1,Txt_Type    ,"CT");
-	    HTM_TH (1,1,Txt_Question,"LT");
+	    HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+	    HTM_TH (Txt_Type    ,HTM_HEAD_CENTER);
+	    HTM_TH (Txt_Question,HTM_HEAD_LEFT  );
 	 HTM_TR_End ();
 
 	 /***** Write questions one by one *****/

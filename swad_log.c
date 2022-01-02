@@ -159,7 +159,6 @@ void Log_ShowLastClicks (void)
 
 void Log_GetAndShowLastClicks (void)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
@@ -187,14 +186,14 @@ void Log_GetAndShowLastClicks (void)
 
       /* Heading row */
       HTM_TR_Begin (NULL);
-	 HTM_TH (1,1,Txt_Click       ,"LC_CLK TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Click
-	 HTM_TH (1,1,Txt_ELAPSED_TIME,"LC_TIM TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Elapsed time
-	 HTM_TH (1,1,Txt_Role        ,"LC_ROL TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Role
-	 HTM_TH (1,1,Txt_Country     ,"LC_CTY TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Country
-	 HTM_TH (1,1,Txt_Institution ,"LC_INS TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Institution
-	 HTM_TH (1,1,Txt_Center      ,"LC_CTR TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Center
-	 HTM_TH (1,1,Txt_Degree      ,"LC_DEG TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Degree
-	 HTM_TH (1,1,Txt_Action      ,"LC_ACT TIT_TBL_%s",The_Colors[Gbl.Prefs.Theme]);	// Action
+	 HTM_TH_Span (Txt_Click       ,HTM_HEAD_RIGHT,1,1,"LC_CLK");	// Click
+	 HTM_TH_Span (Txt_ELAPSED_TIME,HTM_HEAD_RIGHT,1,1,"LC_TIM");	// Elapsed time
+	 HTM_TH_Span (Txt_Role        ,HTM_HEAD_LEFT ,1,1,"LC_ROL");	// Role
+	 HTM_TH_Span (Txt_Country     ,HTM_HEAD_LEFT ,1,1,"LC_CTY");	// Country
+	 HTM_TH_Span (Txt_Institution ,HTM_HEAD_LEFT ,1,1,"LC_INS");	// Institution
+	 HTM_TH_Span (Txt_Center      ,HTM_HEAD_LEFT ,1,1,"LC_CTR");	// Center
+	 HTM_TH_Span (Txt_Degree      ,HTM_HEAD_LEFT ,1,1,"LC_DEG");	// Degree
+	 HTM_TH_Span (Txt_Action      ,HTM_HEAD_LEFT ,1,1,"LC_ACT");	// Action
       HTM_TR_End ();
 
       for (NumClick = 0;

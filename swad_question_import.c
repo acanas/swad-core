@@ -837,11 +837,11 @@ static void QstImp_WriteHeadingListImportedQst (void)
    /***** Write the heading *****/
    HTM_TR_Begin (NULL);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_No_INDEX,"CT");
-      HTM_TH (1,1,Txt_Tags    ,"CT");
-      HTM_TH (1,1,Txt_Type    ,"CT");
-      HTM_TH (1,1,Txt_Shuffle ,"CT");
-      HTM_TH (1,1,Txt_Question,"LT");
+      HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Tags    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Type    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Shuffle ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Question,HTM_HEAD_LEFT  );
    HTM_TR_End ();
   }
 

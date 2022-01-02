@@ -9823,13 +9823,13 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,NULL           ,"BM");
-            HTM_TH_Title (Txt_Institution,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_Center     ,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_Degree     ,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_Course     ,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_File_zone  ,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_Document   ,HTM_HEAD_LEFT);
+	    HTM_TH_Span (NULL      ,HTM_HEAD_CENTER,1,1,"BT");
+            HTM_TH (Txt_Institution,HTM_HEAD_LEFT  );
+            HTM_TH (Txt_Center     ,HTM_HEAD_LEFT  );
+            HTM_TH (Txt_Degree     ,HTM_HEAD_LEFT  );
+            HTM_TH (Txt_Course     ,HTM_HEAD_LEFT  );
+            HTM_TH (Txt_File_zone  ,HTM_HEAD_LEFT  );
+            HTM_TH (Txt_Document   ,HTM_HEAD_LEFT  );
 	 HTM_TR_End ();
 
 	 /***** List documents found *****/
@@ -9848,7 +9848,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned NumDocs,
 	 HTM_TR_Begin (NULL);
 
 	    /* Number of documents not hidden found */
-	    HTM_TH_Begin (1,7,"CM");
+	    HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,7,NULL);
 	       HTM_Txt ("(");
 	       NumDocsHidden = NumDocs - NumDocsNotHidden;
 	       HTM_TxtF ("%u %s",

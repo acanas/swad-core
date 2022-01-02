@@ -112,7 +112,7 @@ void Plg_ListPlugins (void)
       /***** Write table heading *****/
       HTM_TR_Begin (NULL);
 	 HTM_TH_Empty (1);
-	 HTM_TH (1,1,Txt_Plugin,"LM");
+	 HTM_TH (Txt_Plugin,HTM_HEAD_LEFT);
       HTM_TR_End ();
 
       /***** Write all plugins *****/
@@ -788,12 +788,12 @@ static void Plg_PutFormToCreatePlugin (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH (1,1,Txt_Name           ,"LM");
-	    HTM_TH (1,1,Txt_Description    ,"LM");
-	    HTM_TH (1,1,Txt_Logo           ,"LM");
-	    HTM_TH (1,1,Txt_Application_key,"LM");
-	    HTM_TH (1,1,Txt_URL            ,"LM");
-	    HTM_TH (1,1,Txt_IP             ,"LM");
+	    HTM_TH (Txt_Name           ,HTM_HEAD_LEFT);
+	    HTM_TH (Txt_Description    ,HTM_HEAD_LEFT);
+	    HTM_TH (Txt_Logo           ,HTM_HEAD_LEFT);
+	    HTM_TH (Txt_Application_key,HTM_HEAD_LEFT);
+	    HTM_TH (Txt_URL            ,HTM_HEAD_LEFT);
+	    HTM_TH (Txt_IP             ,HTM_HEAD_LEFT);
 	 HTM_TR_End ();
 
 	 /***** Row begin *****/
@@ -867,14 +867,14 @@ static void Plg_PutHeadPlugins (void)
 
    HTM_TR_Begin (NULL);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Code           ,"RM");
+      HTM_TH (Txt_Code           ,HTM_HEAD_RIGHT);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Name           ,"LM");
-      HTM_TH (1,1,Txt_Description    ,"LM");
-      HTM_TH (1,1,Txt_Logo           ,"LM");
-      HTM_TH (1,1,Txt_Application_key,"LM");
-      HTM_TH (1,1,Txt_URL            ,"LM");
-      HTM_TH (1,1,Txt_IP             ,"LM");
+      HTM_TH (Txt_Name           ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Description    ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Logo           ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Application_key,HTM_HEAD_LEFT );
+      HTM_TH (Txt_URL            ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_IP             ,HTM_HEAD_LEFT );
    HTM_TR_End ();
   }
 

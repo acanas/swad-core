@@ -74,10 +74,14 @@ void HTM_TBODY_End (void);
 void HTM_TR_Begin (const char *fmt,...);
 void HTM_TR_End (void);
 
-void HTM_TH_Title (const char *Txt,HTM_HeadAlign HeadAlign);
-void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *ClassFmt,...);
-void HTM_TH_TitleBegin (HTM_HeadAlign HeadAlign);
-void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...);
+void HTM_TH (const char *Txt,HTM_HeadAlign HeadAlign);
+void HTM_TH_Begin (HTM_HeadAlign HeadAlign);
+void HTM_TH_Span (const char *Title,HTM_HeadAlign HeadAlign,
+                  unsigned RowSpan,unsigned ColSpan,
+                  const char *ClassFmt,...);
+void HTM_TH_Span_Begin (HTM_HeadAlign HeadAlign,
+                        unsigned RowSpan,unsigned ColSpan,
+                        const char *ClassFmt,...);
 void HTM_TH_End (void);
 void HTM_TH_Empty (unsigned NumColumns);
 

@@ -326,16 +326,21 @@ void HTM_TR_End (void)
 /***************************** Table heading cells ***************************/
 /*****************************************************************************/
 
-void HTM_TH_Title (const char *Title,HTM_HeadAlign HeadAlign)
+void HTM_TH (const char *Title,HTM_HeadAlign HeadAlign)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
-
-   HTM_TH (1,1,Title,"TIT_TBL_%s %s",
-           The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
+   HTM_TH_Span (Title,HeadAlign,1,1,NULL);
   }
 
-void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *ClassFmt,...)
+void HTM_TH_Begin (HTM_HeadAlign HeadAlign)
   {
+   HTM_TH_Span_Begin (HeadAlign,1,1,NULL);
+  }
+
+void HTM_TH_Span (const char *Title,HTM_HeadAlign HeadAlign,
+                  unsigned RowSpan,unsigned ColSpan,
+                  const char *ClassFmt,...)
+  {
+   extern const char *The_Colors[The_NUM_THEMES];
    va_list ap;
    int NumBytesPrinted;
    char *Attr = NULL;
@@ -353,57 +358,59 @@ void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Txt,const char *Class
    if (RowSpan > 1 && ColSpan > 1)
      {
       if (Attr)
-	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"%s\">",
-		   RowSpan,ColSpan,Attr);
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
+		   RowSpan,ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\">",
-		   RowSpan,ColSpan);
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
+		   RowSpan,ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
    else if (RowSpan > 1)
      {
       if (Attr)
-	 HTM_TxtF ("<th rowspan=\"%u\" class=\"%s\">",
-		   RowSpan,Attr);
+	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
+		   RowSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-	 HTM_TxtF ("<th rowspan=\"%u\">",
-		   RowSpan);
+	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s\">",
+		   RowSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
    else if (ColSpan > 1)
      {
       if (Attr)
-	 HTM_TxtF ("<th colspan=\"%u\" class=\"%s\">",
-		   ColSpan,Attr);
+	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
+		   ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-	 HTM_TxtF ("<th colspan=\"%u\">",
-		   ColSpan);
+	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
+		   ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
    else
      {
       if (Attr)
-         HTM_TxtF ("<th class=\"%s\">",
-		   Attr);
+	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s %s\">",
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-         HTM_Txt ("<th>");
+	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s\">",
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
 
    if (ClassFmt)
       if (ClassFmt[0])
 	 free (Attr);
 
-   HTM_Txt (Txt);
+   HTM_Txt (Title);
    HTM_Txt ("</th>");
   }
 
-void HTM_TH_TitleBegin (HTM_HeadAlign HeadAlign)
+void HTM_TH_Span_Begin (HTM_HeadAlign HeadAlign,
+                        unsigned RowSpan,unsigned ColSpan,
+                        const char *ClassFmt,...)
   {
    extern const char *The_Colors[The_NUM_THEMES];
-
-   HTM_TH_Begin (1,1,"TIT_TBL_%s %s",
-                 The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
-  }
-
-void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...)
-  {
    va_list ap;
    int NumBytesPrinted;
    char *Attr = NULL;
@@ -421,37 +428,44 @@ void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *ClassFmt,...)
    if (RowSpan > 1 && ColSpan > 1)
      {
       if (Attr)
-	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"%s\">",
-		   RowSpan,ColSpan,Attr);
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
+		   RowSpan,ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\">",
-		   RowSpan,ColSpan);
+	 HTM_TxtF ("<th rowspan=\"%u\" colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
+		   RowSpan,ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
    else if (RowSpan > 1)
      {
       if (Attr)
-	 HTM_TxtF ("<th rowspan=\"%u\" class=\"%s\">",
-		   RowSpan,Attr);
+	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
+		   RowSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-	 HTM_TxtF ("<th rowspan=\"%u\">",
-		   RowSpan);
+	 HTM_TxtF ("<th rowspan=\"%u\" class=\"TIT_TBL_%s %s\">",
+		   RowSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
    else if (ColSpan > 1)
      {
       if (Attr)
-	 HTM_TxtF ("<th colspan=\"%u\" class=\"%s\">",
-		   ColSpan,Attr);
+	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s %s\">",
+		   ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-	 HTM_TxtF ("<th colspan=\"%u\">",
-		   ColSpan);
+	 HTM_TxtF ("<th colspan=\"%u\" class=\"TIT_TBL_%s %s\">",
+		   ColSpan,
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
    else
      {
       if (Attr)
-         HTM_TxtF ("<th class=\"%s\">",
-		   Attr);
+	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s %s\">",
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign],Attr);
       else
-         HTM_Txt ("<th>");
+	 HTM_TxtF ("<th class=\"TIT_TBL_%s %s\">",
+		   The_Colors[Gbl.Prefs.Theme],ClassAlign[HeadAlign]);
      }
 
    if (ClassFmt)

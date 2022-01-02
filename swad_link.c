@@ -737,11 +737,11 @@ static void Lnk_PutHeadLinks (void)
    extern const char *Txt_WWW;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,NULL          ,"BM");
-      HTM_TH (1,1,Txt_Code      ,"RM");
-      HTM_TH (1,1,Txt_Short_name,"LM");
-      HTM_TH (1,1,Txt_Full_name ,"LM");
-      HTM_TH (1,1,Txt_WWW       ,"LM");
+      HTM_TH_Span (NULL     ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code      ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Short_name,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Full_name ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_WWW       ,HTM_HEAD_LEFT  );
    HTM_TR_End ();
   }
 

@@ -190,9 +190,9 @@ void PhoSha_GetAndShowNumUsrsPerPhotoShape (void)
 
       /***** Heading row *****/
       HTM_TR_Begin (NULL);
-	 HTM_TH_Title (Txt_User_photos     ,HTM_HEAD_CENTER);
-	 HTM_TH_Title (Txt_Number_of_users ,HTM_HEAD_RIGHT);
-	 HTM_TH_Title (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_User_photos     ,HTM_HEAD_CENTER);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
       HTM_TR_End ();
 
       /***** For each user photo shape... *****/

@@ -266,14 +266,14 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 
 	    /***** Write heading *****/
 	    HTM_TR_Begin (NULL);
-	       HTM_TH_Title (Txt_Click        ,HTM_HEAD_RIGHT );
-	       HTM_TH_Title (Txt_Date_and_time,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_Action       ,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_Question     ,HTM_HEAD_RIGHT );
-	       HTM_TH_Title (Txt_EXAM_Open    ,HTM_HEAD_CENTER);
-	       HTM_TH_Title (Txt_IP           ,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_Session      ,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_Web_browser  ,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Click        ,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_Date_and_time,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Action       ,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Question     ,HTM_HEAD_RIGHT );
+	       HTM_TH (Txt_EXAM_Open    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_IP           ,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Session      ,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Web_browser  ,HTM_HEAD_LEFT  );
 	    HTM_TR_End ();
 
 	    /***** Write clicks *****/

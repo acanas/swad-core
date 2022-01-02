@@ -915,11 +915,11 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 
       /***** First columns *****/
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_No_INDEX,"CT");
-      HTM_TH (1,1,Txt_Code    ,"CT");
-      HTM_TH (1,1,Txt_Date    ,"CT");
-      HTM_TH (1,1,Txt_Tags    ,"CT");
-      HTM_TH (1,1,Txt_Shuffle ,"CT");
+      HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Code    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Date    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Tags    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Shuffle ,HTM_HEAD_CENTER);
 
       /***** Columns which data can be ordered *****/
       /* Stem and answers of question */
@@ -929,7 +929,7 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 	   Order <= (Qst_QuestionsOrder_t) (Qst_NUM_TYPES_ORDER_QST - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+         HTM_TH_Begin (HTM_HEAD_LEFT);
 
 	    if (Questions->NumQsts > 1)
 	      {
@@ -1116,13 +1116,13 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	    /***** Write the heading *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH (1,1,Txt_No_INDEX,"CT");
-	       HTM_TH (1,1,Txt_Code    ,"CT");
-	       HTM_TH (1,1,Txt_Date    ,"CT");
-	       HTM_TH (1,1,Txt_Tags    ,"LT");
-	       HTM_TH (1,1,Txt_Type    ,"CT");
-	       HTM_TH (1,1,Txt_Shuffle ,"CT");
-	       HTM_TH (1,1,Txt_Question,"CT");
+	       HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Code    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Date    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Tags    ,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Type    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Shuffle ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Question,HTM_HEAD_CENTER);
 	    HTM_TR_End ();
 
 	    /***** Write rows *****/
@@ -1200,13 +1200,13 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	    /***** Write the heading *****/
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH (1,1,Txt_No_INDEX,"CT");
-	       HTM_TH (1,1,Txt_Code    ,"CT");
-	       HTM_TH (1,1,Txt_Date    ,"CT");
-	       HTM_TH (1,1,Txt_Tags    ,"LT");
-	       HTM_TH (1,1,Txt_Type    ,"CT");
-	       HTM_TH (1,1,Txt_Shuffle ,"CT");
-	       HTM_TH (1,1,Txt_Question,"CT");
+	       HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Code    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Date    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Tags    ,HTM_HEAD_LEFT  );
+	       HTM_TH (Txt_Type    ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Shuffle ,HTM_HEAD_CENTER);
+	       HTM_TH (Txt_Question,HTM_HEAD_CENTER);
 	    HTM_TR_End ();
 
 	    /***** Write rows *****/

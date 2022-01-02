@@ -368,11 +368,11 @@ static void ExaSes_ListOneOrMoreSessionsHeading (bool ICanEditSessions)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH_Title (Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT  );
-      HTM_TH_Title (Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
-      HTM_TH_Title (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
-      HTM_TH_Title (Txt_Session                                   ,HTM_HEAD_LEFT  );
-      HTM_TH_Title (Txt_Results                                   ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Session                                   ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Results                                   ,HTM_HEAD_CENTER);
 
    /***** End row *****/
    HTM_TR_End ();

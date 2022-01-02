@@ -223,13 +223,13 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
+      HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
       for (Order  = (Dat_StartEndTime_t) 0;
 	   Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   Order++)
 	{
 	 /* Begin head cell */
-         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+         HTM_TH_Begin (HTM_HEAD_LEFT);
 
 	    if (!PrintView)
 	      {
@@ -264,8 +264,8 @@ static void Asg_PutHeadForSeeing (struct Asg_Assignments *Assignments,
 	 /* End head cell */
 	 HTM_TH_End ();
 	}
-      HTM_TH_Title (Txt_Assignment,HTM_HEAD_LEFT);
-      HTM_TH_Title (Txt_Folder    ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Assignment,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Folder    ,HTM_HEAD_LEFT);
 
    HTM_TR_End ();
   }

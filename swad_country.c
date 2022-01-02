@@ -129,8 +129,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TH_Title (Txt_Country                  ,HTM_HEAD_LEFT );
-	    HTM_TH_Title (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
+	    HTM_TH (Txt_Country                  ,HTM_HEAD_LEFT );
+	    HTM_TH (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
 	 HTM_TR_End ();
 
 	 /***** List the countries *****/
@@ -364,7 +364,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	   Order <= (Cty_Order_t) (Cty_NUM_ORDERS - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (Align[Order]);
+         HTM_TH_Begin (Align[Order]);
 	    if (OrderSelectable)
 	      {
 	       Frm_BeginForm (ActSeeCty);
@@ -384,11 +384,11 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	      }
 	 HTM_TH_End ();
 	}
-      HTM_TH_Title (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Centers_ABBREVIATION     ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Degrees_ABBREVIATION     ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Courses_ABBREVIATION     ,HTM_HEAD_RIGHT);
-      HTM_TH_TitleBegin (HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Institutions_ABBREVIATION,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Centers_ABBREVIATION     ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Degrees_ABBREVIATION     ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Courses_ABBREVIATION     ,HTM_HEAD_RIGHT);
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
 	 HTM_TxtF ("%s+",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 	 HTM_BR ();
 	 HTM_Txt (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
@@ -1553,14 +1553,14 @@ static void Cty_PutHeadCountriesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL                                ,"BM");
-      HTM_TH (1,1,Txt_Numeric_BR_code_BR_ISO_3166_1   ,"RM");
-      HTM_TH (1,1,Txt_Alphabetic_BR_code_BR_ISO_3166_1,"RM");
+      HTM_TH_Span (NULL                           ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Numeric_BR_code_BR_ISO_3166_1   ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Alphabetic_BR_code_BR_ISO_3166_1,HTM_HEAD_RIGHT );
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Name                            ,"LM");
-      HTM_TH (1,1,Txt_WWW                             ,"LM");
-      HTM_TH (1,1,Txt_Users                           ,"RM");
-      HTM_TH (1,1,Txt_Institutions_ABBREVIATION       ,"RM");
+      HTM_TH (Txt_Name                            ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_WWW                             ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Users                           ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Institutions_ABBREVIATION       ,HTM_HEAD_RIGHT );
 
    HTM_TR_End ();
   }

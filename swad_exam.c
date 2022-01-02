@@ -248,13 +248,13 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 	 HTM_TABLE_BeginWideMarginPadding (5);
 	    HTM_TR_Begin (NULL);
 	       if (Exa_CheckIfICanEditExams ())
-		  HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
+		  HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Exa_Order_t) 0;
 		    Order <= (Exa_Order_t) (Exa_NUM_ORDERS - 1);
 		    Order++)
 		 {
-                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+                  HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllExa);
@@ -273,7 +273,7 @@ static void Exa_ListAllExams (struct Exa_Exams *Exams)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH_Title (Txt_Sessions,HTM_HEAD_RIGHT);
+	       HTM_TH (Txt_Sessions,HTM_HEAD_RIGHT);
 
 	    HTM_TR_End ();
 

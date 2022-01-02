@@ -183,7 +183,7 @@ void Roo_SeeRooms (void)
 	      Order <= (Roo_Order_t) (Roo_NUM_ORDERS - 1);
 	      Order++)
 	   {
-            HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+            HTM_TH_Begin (HTM_HEAD_LEFT);
 	       Frm_BeginForm (ActSeeRoo);
 		  Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_OnSubmit_Begin (Txt_ROOMS_HELP_ORDER[Order],
@@ -204,9 +204,7 @@ void Roo_SeeRooms (void)
 	    case Rol_CTR_ADM:
 	    case Rol_INS_ADM:
 	    case Rol_SYS_ADM:
-	       HTM_TH_Begin (1,1,"LM");
-		  HTM_Txt (Txt_MAC_address);
-	       HTM_TH_End ();
+	       HTM_TH (Txt_MAC_address,HTM_HEAD_LEFT);
 	       break;
 	    default:
 	       break;
@@ -1358,15 +1356,15 @@ static void Roo_PutHeadRooms (void)
    extern const char *Txt_MAC_address;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,NULL                  ,"BM");
-      HTM_TH (1,1,Txt_Code              ,"RM");
-      HTM_TH (1,1,Txt_Building          ,"LM");
-      HTM_TH (1,1,Txt_Floor             ,"LM");
-      HTM_TH (1,1,Txt_Type              ,"LM");
-      HTM_TH (1,1,Txt_Short_name        ,"LM");
-      HTM_TH (1,1,Txt_Full_name         ,"LM");
-      HTM_TH (1,1,Txt_Capacity_OF_A_ROOM,"LM");
-      HTM_TH (1,1,Txt_MAC_address       ,"LM");
+      HTM_TH_Span (NULL             ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code              ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Building          ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Floor             ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Type              ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Short_name        ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Full_name         ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Capacity_OF_A_ROOM,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_MAC_address       ,HTM_HEAD_LEFT  );
    HTM_TR_End ();
   }
 

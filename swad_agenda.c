@@ -640,7 +640,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	   Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+         HTM_TH_Begin (HTM_HEAD_LEFT);
 	    switch (AgendaType)
 	      {
 	       case Agd_MY_AGENDA_TODAY:
@@ -677,8 +677,8 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	 HTM_TH_End ();
 	}
 
-      HTM_TH_Title (Txt_Event   ,HTM_HEAD_LEFT);
-      HTM_TH_Title (Txt_Location,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Event   ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Location,HTM_HEAD_LEFT);
 
    HTM_TR_End ();
   }

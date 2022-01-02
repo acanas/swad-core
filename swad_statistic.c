@@ -1143,7 +1143,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage",Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-               HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+               HTM_TH_Begin (HTM_HEAD_LEFT);
 		  if (FirstRow > 1)
 		    {
 		     if (asprintf (&Title,Txt_Show_previous_X_clicks,Stats->RowsPerPage) < 0)
@@ -1158,7 +1158,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		  Frm_EndForm ();
 
 	       /* Write number of current page */
-               HTM_TH_TitleBegin (HTM_HEAD_CENTER);
+               HTM_TH_Begin (HTM_HEAD_CENTER);
 		  HTM_TxtF ("%s %u-%u %s %u (%s %u %s %u)",
 			    Txt_Clicks,
 			    FirstRow,LastRow,Txt_of_PART_OF_A_TOTAL,NumHits,
@@ -1177,7 +1177,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 		     Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Stats->RowsPerPage);
 		     Usr_PutHiddenParSelectedUsrsCods (&Gbl.Usrs.Selected);
 		 }
-               HTM_TH_TitleBegin (HTM_HEAD_RIGHT);
+               HTM_TH_Begin (HTM_HEAD_RIGHT);
 		  if (LastRow < NumHits)
 		    {
 		     if (asprintf (&Title,Txt_Show_next_X_clicks,Stats->RowsPerPage) < 0)
@@ -1198,13 +1198,13 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX     ,"RT");
-      HTM_TH (1,1,Txt_User_ID      ,"CT");
-      HTM_TH (1,1,Txt_Name         ,"LT");
-      HTM_TH (1,1,Txt_Role         ,"CT");
-      HTM_TH (1,1,Txt_Date         ,"CT");
-      HTM_TH (1,1,Txt_Action       ,"LT");
-      HTM_TH (1,1,Txt_LOG_More_info,"LT");
+      HTM_TH (Txt_No_INDEX     ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_User_ID      ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Name         ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Role         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Date         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Action       ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_LOG_More_info,HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Write rows back *****/
@@ -1334,12 +1334,12 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX                       ,"RT");
-      HTM_TH (1,1,Txt_Photo                          ,"CT");
-      HTM_TH (1,1,Txt_ID                             ,"LT");
-      HTM_TH (1,1,Txt_Name                           ,"LT");
-      HTM_TH (1,1,Txt_Role                           ,"CT");
-      HTM_TH (1,2,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH      (Txt_No_INDEX                       ,HTM_HEAD_RIGHT );
+      HTM_TH      (Txt_Photo                          ,HTM_HEAD_CENTER);
+      HTM_TH      (Txt_ID                             ,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Name                           ,HTM_HEAD_LEFT  );
+      HTM_TH      (Txt_Role                           ,HTM_HEAD_CENTER);
+      HTM_TH_Span (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  ,1,2,NULL);
    HTM_TR_End ();
 
    /***** Write rows *****/
@@ -1447,9 +1447,9 @@ static void Sta_ShowNumHitsPerDay (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Date                           ,"CT");
-      HTM_TH (1,1,Txt_Day                            ,"LT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Date                           ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Day                            ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -1637,9 +1637,9 @@ static void Sta_ShowDistrAccessesPerDayAndHour (const struct Sta_Stats *Stats,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (3, 1,Txt_Date                                  ,"CT");
-      HTM_TH (3, 1,Txt_Day                                   ,"LT");
-      HTM_TH (1,24,Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType],"LT");
+      HTM_TH_Span (Txt_Date                                  ,HTM_HEAD_CENTER,3, 1,NULL);
+      HTM_TH_Span (Txt_Day                                   ,HTM_HEAD_LEFT  ,3, 1,NULL);
+      HTM_TH_Span (Txt_STAT_TYPE_COUNT_CAPS[Stats->CountType],HTM_HEAD_LEFT  ,1,24,NULL);
    HTM_TR_End ();
 
    HTM_TR_Begin (NULL);
@@ -2025,8 +2025,8 @@ static void Sta_ShowNumHitsPerWeek (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Week                           ,"LT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Week                           ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per week *****/
@@ -2124,8 +2124,8 @@ static void Sta_ShowNumHitsPerMonth (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Month                          ,"LT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Month                          ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per month *****/
@@ -2223,8 +2223,8 @@ static void Sta_ShowNumHitsPerYear (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Year                           ,"LT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Year                           ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per year *****/
@@ -2642,8 +2642,8 @@ static void Sta_ShowNumHitsPerAction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Action                         ,"RT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Action                         ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per day *****/
@@ -2695,8 +2695,8 @@ static void Sta_ShowNumHitsPerPlugin (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Plugin                         ,"RT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Plugin                         ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per plugin *****/
@@ -2749,8 +2749,8 @@ static void Sta_ShowNumHitsPerWSFunction (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Function                       ,"LT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Function                       ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT);
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per function *****/
@@ -2803,8 +2803,8 @@ static void Sta_ShowNumHitsPerBanner (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_Banner                         ,"CT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_Banner                         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of clicks per banner *****/
@@ -2873,9 +2873,9 @@ static void Sta_ShowNumHitsPerCountry (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
-      HTM_TH (1,1,Txt_Country                        ,"CT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Country                        ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per country *****/
@@ -2961,9 +2961,9 @@ static void Sta_ShowNumHitsPerInstitution (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
-      HTM_TH (1,1,Txt_Institution                    ,"CT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Institution                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per institution *****/
@@ -3051,9 +3051,9 @@ static void Sta_ShowNumHitsPerCenter (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
-      HTM_TH (1,1,Txt_Center                         ,"CT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Center                         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per center *****/
@@ -3141,9 +3141,9 @@ static void Sta_ShowNumHitsPerDegree (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
-      HTM_TH (1,1,Txt_Degree                         ,"CT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Degree                         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of hits per degree *****/
@@ -3235,11 +3235,11 @@ static void Sta_ShowNumHitsPerCourse (Sta_CountType_t CountType,
 
    /***** Write heading *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_No_INDEX                       ,"CT");
-      HTM_TH (1,1,Txt_Degree                         ,"CT");
-      HTM_TH (1,1,Txt_Year_OF_A_DEGREE               ,"CT");
-      HTM_TH (1,1,Txt_Course                         ,"CT");
-      HTM_TH (1,1,Txt_STAT_TYPE_COUNT_CAPS[CountType],"LT");
+      HTM_TH (Txt_No_INDEX                       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Degree                         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Year_OF_A_DEGREE               ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Course                         ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_STAT_TYPE_COUNT_CAPS[CountType],HTM_HEAD_LEFT  );
    HTM_TR_End ();
 
    /***** Compute maximum number of pages generated per course *****/

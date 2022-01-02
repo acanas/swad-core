@@ -943,13 +943,13 @@ static void Ban_PutHeadBanners (void)
    HTM_TR_Begin (NULL);
 
       /****** Head cells *****/
-      HTM_TH (1,1,NULL          ,"BM");
-      HTM_TH (1,1,NULL          ,"BM");
-      HTM_TH_Title (Txt_Code      ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Short_name,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Full_name ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Image     ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_WWW       ,HTM_HEAD_LEFT );
+      HTM_TH_Span (NULL     ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL     ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code      ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Short_name,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Full_name ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Image     ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_WWW       ,HTM_HEAD_LEFT  );
 
    /***** End table row *****/
    HTM_TR_End ();

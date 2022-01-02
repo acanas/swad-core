@@ -1976,7 +1976,6 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
                                                        Ale_AlertType_t AlertType,const char *Message)
   {
    extern const char *Hlp_COMMUNICATION_Forums_threads;
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[Dat_NUM_START_END_TIME];
@@ -2045,15 +2044,15 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 	    HTM_TABLE_BeginWideMarginPadding (2);
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TH (1,1,NULL,"BT");
-		  HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
-                  HTM_TH_Title (Txt_MSG_Subject,HTM_HEAD_LEFT);
+		  HTM_TH_Span (NULL      ,HTM_HEAD_CENTER,1,1,"BT");
+		  HTM_TH_Span (NULL      ,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
+                  HTM_TH (Txt_MSG_Subject,HTM_HEAD_LEFT  );
 
 		  for (Order  = (Dat_StartEndTime_t) 0;
 		       Order <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 		       Order++)
 		    {
-		     HTM_TH_Begin (1,2,"TIT_TBL_%s CM",The_Colors[Gbl.Prefs.Theme]);
+		     HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
 
 			Frm_BeginFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
 					     For_FORUM_THREADS_SECTION_ID);
@@ -2077,10 +2076,10 @@ static void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums
 		     HTM_TH_End ();
 		    }
 
-	          HTM_TH_Title (Txt_Number_BR_msgs,HTM_HEAD_RIGHT);
-	          HTM_TH_Title (Txt_Unread_BR_msgs,HTM_HEAD_RIGHT);
-	          HTM_TH_Title (Txt_WriBRters     ,HTM_HEAD_RIGHT);
-	          HTM_TH_Title (Txt_ReaBRders     ,HTM_HEAD_RIGHT);
+	          HTM_TH (Txt_Number_BR_msgs,HTM_HEAD_RIGHT);
+	          HTM_TH (Txt_Unread_BR_msgs,HTM_HEAD_RIGHT);
+	          HTM_TH (Txt_WriBRters     ,HTM_HEAD_RIGHT);
+	          HTM_TH (Txt_ReaBRders     ,HTM_HEAD_RIGHT);
 
 	       HTM_TR_End ();
 

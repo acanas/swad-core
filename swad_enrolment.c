@@ -2177,11 +2177,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 	    /* Table heading */
 	    HTM_TR_Begin (NULL);
 	       HTM_TH_Empty (1);
-	       HTM_TH_Title (Txt_Course                         ,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
-	       HTM_TH (1,2,Txt_Requester                        ,"LT");
-	       HTM_TH_Title (Txt_Role                           ,HTM_HEAD_LEFT  );
-	       HTM_TH_Title (Txt_Date                           ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Course                         ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_RIGHT );
+	       HTM_TH_Span (Txt_Requester                      ,HTM_HEAD_LEFT  ,1,2,NULL);
+	       HTM_TH      (Txt_Role                           ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_Date                           ,HTM_HEAD_CENTER);
 	       HTM_TH_Empty (2);
 	    HTM_TR_End ();
 

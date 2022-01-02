@@ -976,7 +976,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TH_Title (Txt_No_INDEX,HTM_HEAD_CENTER);
+	    HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
 	    break;
 	 default:
 	    break;
@@ -987,7 +987,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	{
 	 case Prj_LIST_PROJECTS:
 	 case Prj_FILE_BROWSER_PROJECT:
-	    HTM_TH (1,1,NULL,"CONTEXT_COL");
+            HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");
 	    break;
 	 default:
 	    break;
@@ -998,7 +998,7 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+         HTM_TH_Begin (HTM_HEAD_LEFT);
 
 	    switch (ProjectView)
 	      {
@@ -1032,7 +1032,6 @@ static void Prj_ShowProjectsHead (struct Prj_Projects *Projects,
 
 static void Prj_ShowTableAllProjectsHead (void)
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Number_of_students;
@@ -1044,30 +1043,24 @@ static void Prj_ShowTableAllProjectsHead (void)
    extern const char *Txt_URL;
    Prj_Order_t Order;
    unsigned NumRoleToShow;
-   char *Class;
-
-   if (asprintf (&Class,"LT %s",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
-      Err_NotEnoughMemoryExit ();
 
    HTM_TR_Begin (NULL);
       for (Order  = (Prj_Order_t) 0;
 	   Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	   Order++)
-	 HTM_TH (1,1,Txt_PROJECT_ORDER[Order],Class);
-      HTM_TH (1,1,Txt_Assigned_QUESTION ,Class);
-      HTM_TH (1,1,Txt_Number_of_students,Class);
+	 HTM_TH (Txt_PROJECT_ORDER[Order],HTM_HEAD_LEFT);
+      HTM_TH (Txt_Assigned_QUESTION ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Number_of_students,HTM_HEAD_LEFT);
       for (NumRoleToShow = 0;
 	   NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
 	   NumRoleToShow++)
-	 HTM_TH (1,1,Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]],Class);
-      HTM_TH (1,1,Txt_Proposal          ,Class);
-      HTM_TH (1,1,Txt_Description       ,Class);
-      HTM_TH (1,1,Txt_Required_knowledge,Class);
-      HTM_TH (1,1,Txt_Required_materials,Class);
-      HTM_TH (1,1,Txt_URL               ,Class);
+	 HTM_TH (Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]],HTM_HEAD_LEFT);
+      HTM_TH (Txt_Proposal          ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Description       ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Required_knowledge,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Required_materials,HTM_HEAD_LEFT);
+      HTM_TH (Txt_URL               ,HTM_HEAD_LEFT);
    HTM_TR_End ();
-
-   free (Class);
   }
 
 /*****************************************************************************/

@@ -1396,16 +1396,16 @@ static void Grp_WriteHeadingGroupTypes (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL,"BM");
-      HTM_TH_TitleBegin (HTM_HEAD_CENTER);
+      HTM_TH_Span (NULL               ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Begin (HTM_HEAD_CENTER);
 	 HTM_Txt (Txt_Type_of_group);
 	 HTM_BR ();
 	 HTM_TxtF ("(%s)",Txt_eg_Lectures_Practicals);
       HTM_TH_End ();
-      HTM_TH_Title (Txt_Mandatory_enrolment,HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Multiple_enrolment ,HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Opening_of_groups  ,HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Number_of_BR_groups,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Mandatory_enrolment,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Multiple_enrolment ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Opening_of_groups  ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Number_of_BR_groups,HTM_HEAD_CENTER);
 
    HTM_TR_End ();
   }
@@ -1615,21 +1615,21 @@ static void Grp_WriteHeadingGroups (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL,"BM");
-      HTM_TH (1,1,NULL,"BM");
-      HTM_TH (1,1,NULL,"BM");
-      HTM_TH_Title (Txt_Type_BR_of_group,HTM_HEAD_CENTER);
-      HTM_TH_Begin (1,1,"CM");
+      HTM_TH_Span (NULL           ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL           ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH_Span (NULL           ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Type_BR_of_group,HTM_HEAD_CENTER);
+      HTM_TH_Begin (HTM_HEAD_CENTER);
 	 HTM_Txt (Txt_Group_name);
 	 HTM_BR ();
 	 HTM_TxtF ("(%s)",Txt_eg_A_B);
       HTM_TH_End ();
-      HTM_TH_Title (Txt_Room,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Room,HTM_HEAD_CENTER);
       for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
-         HTM_TH_Title (Txt_ROLES_PLURAL_BRIEF_Abc[Role],HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Max_BR_students ,HTM_HEAD_CENTER);
+         HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Role],HTM_HEAD_CENTER);
+      HTM_TH (Txt_Max_BR_students ,HTM_HEAD_CENTER);
 
    HTM_TR_End ();
   }
@@ -2326,14 +2326,14 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    HTM_TR_Begin (NULL);
 
       HTM_TH_Empty (2);
-      HTM_TH_Title (Txt_Group          ,HTM_HEAD_LEFT  );
-      HTM_TH_Title (Txt_Room           ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Group          ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Room           ,HTM_HEAD_LEFT  );
       for (Role  = Rol_TCH;
 	   Role >= Rol_STD;
 	   Role--)
-         HTM_TH_Title (Txt_ROLES_PLURAL_BRIEF_Abc[Role],HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Max_BR_students,HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Vacants        ,HTM_HEAD_CENTER);
+         HTM_TH (Txt_ROLES_PLURAL_BRIEF_Abc[Role],HTM_HEAD_CENTER);
+      HTM_TH (Txt_Max_BR_students,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Vacants        ,HTM_HEAD_CENTER);
 
    HTM_TR_End ();
   }

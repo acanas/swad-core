@@ -326,9 +326,10 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	       NumPrjsFromDB = (unsigned)
 	       DB_QuerySELECT (mysql_res,"can not get projects",
 			       "SELECT prj_projects.PrjCod"
-				" FROM prj_projects LEFT JOIN dpt_departments,"
-				      "prj_users"
+				" FROM prj_projects LEFT JOIN dpt_departments"
 				  " ON prj_projects.DptCod=dpt_departments.DptCod"
+	                                          " LEFT JOIN prj_users"
+				  " ON prj_projects.PrjCod=prj_users.PrjCod"
 			       " WHERE prj_projects.CrsCod=%ld"
 				 "%s"
 				 "%s"
@@ -379,9 +380,10 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 		  NumPrjsFromDB = (unsigned)
 		  DB_QuerySELECT (mysql_res,"can not get projects",
 				  "SELECT prj_projects.PrjCod"
-				   " FROM prj_projects LEFT JOIN dpt_departments,"
-					 "prj_users"
+				   " FROM prj_projects LEFT JOIN dpt_departments"
 				     " ON prj_projects.DptCod=dpt_departments.DptCod"
+	                                             " LEFT JOIN prj_users"
+				     " ON prj_projects.PrjCod=prj_users.PrjCod"
 				  " WHERE prj_projects.CrsCod=%ld"
 				    "%s"
 				    "%s"

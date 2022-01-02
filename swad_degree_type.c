@@ -532,7 +532,7 @@ static void DegTyp_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,
 	   Order <= (DegTyp_Order_t) (DegTyp_NUM_ORDERS - 1);
 	   Order++)
 	{
-         HTM_TH_TitleBegin (Align[Order]);
+         HTM_TH_Begin (Align[Order]);
 
 	    /* Begin form to change order */
 	    Frm_BeginForm (NextAction);
@@ -575,10 +575,10 @@ static void DegTyp_PutHeadDegreeTypesForEdition (void)
 
    HTM_TR_Begin (NULL);
 
-      HTM_TH (1,1,NULL,"BM");
-      HTM_TH_Title (Txt_Code          ,HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Type_of_degree,HTM_HEAD_CENTER);
-      HTM_TH_Title (Txt_Degrees       ,HTM_HEAD_RIGHT );
+      HTM_TH_Span (NULL         ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code          ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Type_of_degree,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Degrees       ,HTM_HEAD_RIGHT );
 
    HTM_TR_End ();
   }

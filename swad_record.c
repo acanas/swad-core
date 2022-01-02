@@ -406,9 +406,9 @@ static void Rec_WriteHeadingRecordFields (void)
 
    HTM_TR_Begin (NULL);
       HTM_TH_Empty (1);
-      HTM_TH (1,1,Txt_Field_BR_name            ,"CM");
-      HTM_TH (1,1,Txt_Number_of_BR_lines       ,"CM");
-      HTM_TH (1,1,Txt_Visible_by_BR_the_student,"CM");
+      HTM_TH (Txt_Field_BR_name            ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Number_of_BR_lines       ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Visible_by_BR_the_student,HTM_HEAD_CENTER);
    HTM_TR_End ();
   }
 

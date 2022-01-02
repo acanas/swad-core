@@ -1789,34 +1789,34 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 
    /***** First row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (3,2,Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
-						 Usr_SEX_UNKNOWN]
-                                                  ,"CT LINE_BOTTOM");
-      HTM_TH (3,1,Txt_START_END_TIME[Dat_STR_TIME],"LT LINE_BOTTOM");
-      HTM_TH (3,1,Txt_START_END_TIME[Dat_END_TIME],"LT LINE_BOTTOM");
-      HTM_TH (3,1,Txt_Questions                   ,"RT LINE_BOTTOM LINE_LEFT");
-      HTM_TH (1,2,Txt_Answers                     ,"CT LINE_LEFT");
-      HTM_TH (1,2,Txt_Score                       ,"CT LINE_LEFT");
-      HTM_TH (3,1,Txt_Grade                       ,"RT LINE_BOTTOM LINE_LEFT");
-      HTM_TH (3,1,NULL                            ,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (Txt_User[MeOrOther == Usr_ME ?
+	                       Gbl.Usrs.Me.UsrDat.Sex :
+		  	       Usr_SEX_UNKNOWN         ],HTM_HEAD_CENTER,3,2,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_START_END_TIME[Dat_STR_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_START_END_TIME[Dat_END_TIME]     ,HTM_HEAD_LEFT  ,3,1,"LINE_BOTTOM");
+      HTM_TH_Span (Txt_Questions                        ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (Txt_Answers                          ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
+      HTM_TH_Span (Txt_Score                            ,HTM_HEAD_CENTER,1,2,"LINE_LEFT");
+      HTM_TH_Span (Txt_Grade                            ,HTM_HEAD_RIGHT ,3,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span (NULL                                 ,HTM_HEAD_CENTER,3,1,"LINE_BOTTOM LINE_LEFT");
    HTM_TR_End ();
 
    /***** Second row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,Txt_ANSWERS_non_blank,"RT LINE_LEFT");
-      HTM_TH (1,1,Txt_ANSWERS_blank    ,"RT");
-      HTM_TH (1,1,Txt_total            ,"RT LINE_LEFT");
-      HTM_TH (1,1,Txt_average          ,"RT");
+      HTM_TH_Span (Txt_ANSWERS_non_blank                ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
+      HTM_TH      (Txt_ANSWERS_blank                    ,HTM_HEAD_RIGHT );
+      HTM_TH_Span (Txt_total                            ,HTM_HEAD_RIGHT ,1,1,"LINE_LEFT");
+      HTM_TH      (Txt_average                          ,HTM_HEAD_RIGHT );
    HTM_TR_End ();
 
    /***** Third row *****/
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,"{-1&le;<em>p<sub>i</sub></em>&le;1}","RT LINE_BOTTOM LINE_LEFT");
-      HTM_TH (1,1,"{<em>p<sub>i</sub></em>=0}"         ,"RT LINE_BOTTOM");
-      HTM_TH (1,1,"<em>&Sigma;p<sub>i</sub></em>"      ,"RT LINE_BOTTOM LINE_LEFT");
-      HTM_TH (1,1,"-1&le;"
-	          "<em style=\"text-decoration:overline;\">p</em>"
-	          "&le;1"                              ,"RT LINE_BOTTOM");
+      HTM_TH_Span ("{-1&le;<em>p<sub>i</sub></em>&le;1}",HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span ("{<em>p<sub>i</sub></em>=0}"         ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
+      HTM_TH_Span ("<em>&Sigma;p<sub>i</sub></em>"      ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM LINE_LEFT");
+      HTM_TH_Span ("-1&le;"
+	           "<em style=\"text-decoration:overline;\">p</em>"
+	           "&le;1"                              ,HTM_HEAD_RIGHT ,1,1,"LINE_BOTTOM");
    HTM_TR_End ();
   }
 

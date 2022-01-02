@@ -128,7 +128,7 @@ void Plc_SeePlaces (void)
 		 Order <= (Plc_Order_t) (Plc_NUM_ORDERS - 1);
 		 Order++)
 	      {
-               HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+               HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		  Frm_BeginForm (ActSeePlc);
 		     Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
@@ -776,11 +776,11 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Centers;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,NULL          ,"BM");
-      HTM_TH (1,1,Txt_Code      ,"RM");
-      HTM_TH (1,1,Txt_Short_name,"LM");
-      HTM_TH (1,1,Txt_Full_name ,"LM");
-      HTM_TH (1,1,Txt_Centers   ,"RM");
+      HTM_TH_Span (NULL     ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code      ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Short_name,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Full_name ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Centers   ,HTM_HEAD_RIGHT );
    HTM_TR_End ();
   }
 

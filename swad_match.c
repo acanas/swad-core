@@ -492,13 +492,13 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
 	 HTM_TH_Empty (1);
 
       /***** The rest of columns *****/
-      HTM_TH (1,1,Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],"LT");
-      HTM_TH (1,1,Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]   ,"LT");
-      HTM_TH (1,1,Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]   ,"LT");
-      HTM_TH (1,1,Txt_Match                                     ,"LT");
-      HTM_TH (1,1,Txt_Players                                   ,"RT");
-      HTM_TH (1,1,Txt_Status                                    ,"CT");
-      HTM_TH (1,1,Txt_Results                                   ,"CT");
+      HTM_TH (Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]   ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_START_END_TIME[Gam_ORDER_BY_END_DATE  ]   ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Match                                     ,HTM_HEAD_LEFT  );
+      HTM_TH (Txt_Players                                   ,HTM_HEAD_RIGHT );
+      HTM_TH (Txt_Status                                    ,HTM_HEAD_CENTER);
+      HTM_TH (Txt_Results                                   ,HTM_HEAD_CENTER);
 
    /***** End row *****/
    HTM_TR_End ();

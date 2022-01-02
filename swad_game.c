@@ -270,13 +270,13 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 
 	       if (Gam_CheckIfICanEditGames () ||
 		   Gam_CheckIfICanListGameQuestions ())
-		  HTM_TH (1,1,NULL,"CONTEXT_COL");	// Column for contextual icons
+		  HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"CONTEXT_COL");	// Column for contextual icons
 
 	       for (Order  = (Gam_Order_t) 0;
 		    Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
 		    Order++)
 		 {
-                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+                  HTM_TH_Begin (HTM_HEAD_LEFT);
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllGam);
@@ -297,7 +297,7 @@ static void Gam_ListAllGames (struct Gam_Games *Games)
 		  HTM_TH_End ();
 		 }
 
-	       HTM_TH_Title (Txt_Matches,HTM_HEAD_RIGHT);
+	       HTM_TH (Txt_Matches,HTM_HEAD_RIGHT);
 
 	    HTM_TR_End ();
 
@@ -1718,10 +1718,10 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
       HTM_TR_Begin (NULL);
 	 HTM_TH_Empty (1);
-         HTM_TH_Title (Txt_No_INDEX,HTM_HEAD_CENTER);
-         HTM_TH_Title (Txt_Code    ,HTM_HEAD_CENTER);
-         HTM_TH_Title (Txt_Tags    ,HTM_HEAD_CENTER);
-         HTM_TH_Title (Txt_Question,HTM_HEAD_CENTER);
+         HTM_TH (Txt_No_INDEX,HTM_HEAD_CENTER);
+         HTM_TH (Txt_Code    ,HTM_HEAD_CENTER);
+         HTM_TH (Txt_Tags    ,HTM_HEAD_CENTER);
+         HTM_TH (Txt_Question,HTM_HEAD_CENTER);
       HTM_TR_End ();
 
       /***** Write rows *****/

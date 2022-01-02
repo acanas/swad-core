@@ -134,7 +134,7 @@ void Hld_SeeHolidays (void)
 		       Order <= (Hld_Order_t) (Hld_NUM_ORDERS - 1);
 		       Order++)
 		    {
-                     HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+                     HTM_TH_Begin (HTM_HEAD_LEFT);
 			Frm_BeginForm (ActSeeHld);
 			   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 			   HTM_BUTTON_OnSubmit_Begin (Txt_HOLIDAYS_HELP_ORDER[Order],
@@ -148,10 +148,10 @@ void Hld_SeeHolidays (void)
 			Frm_EndForm ();
 		     HTM_TH_End ();
 		    }
-                  HTM_TH_TitleBegin (HTM_HEAD_LEFT);
+                  HTM_TH_Begin (HTM_HEAD_LEFT);
 		     HTM_TxtF ("&nbsp;%s&nbsp;",Txt_End_date);
 		  HTM_TH_End ();
-	          HTM_TH_Title (Txt_Holiday,HTM_HEAD_LEFT);
+	          HTM_TH (Txt_Holiday,HTM_HEAD_LEFT);
 
 	       HTM_TR_End ();
 
@@ -923,11 +923,11 @@ static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places)
 
 	 /***** Write heading *****/
 	 HTM_TR_Begin (NULL);
-            HTM_TH_Title (Txt_Place                       ,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_Type                        ,HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT);
-            HTM_TH_Title (Txt_Holiday                     ,HTM_HEAD_LEFT);
+            HTM_TH (Txt_Place                       ,HTM_HEAD_LEFT);
+            HTM_TH (Txt_Type                        ,HTM_HEAD_LEFT);
+            HTM_TH (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT);
+            HTM_TH (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT);
+            HTM_TH (Txt_Holiday                     ,HTM_HEAD_LEFT);
 	 HTM_TR_End ();
 
 	 HTM_TR_Begin (NULL);
@@ -1016,13 +1016,13 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_Holiday;
 
    HTM_TR_Begin (NULL);
-      HTM_TH (1,1,NULL,"BM");
-      HTM_TH_Title (Txt_Code                        ,HTM_HEAD_RIGHT);
-      HTM_TH_Title (Txt_Place                       ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Type                        ,HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT );
-      HTM_TH_Title (Txt_Holiday                     ,HTM_HEAD_LEFT );
+      HTM_TH_Span (NULL                       ,HTM_HEAD_CENTER,1,1,"BT");
+      HTM_TH (Txt_Code                        ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Place                       ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_Type                        ,HTM_HEAD_LEFT );
+      HTM_TH (Txt_START_END_TIME[Dat_STR_TIME],HTM_HEAD_LEFT );
+      HTM_TH (Txt_START_END_TIME[Dat_END_TIME],HTM_HEAD_LEFT );
+      HTM_TH (Txt_Holiday                     ,HTM_HEAD_LEFT );
    HTM_TR_End ();
   }
 

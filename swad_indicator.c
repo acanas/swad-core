@@ -460,8 +460,8 @@ static void Ind_ShowNumCoursesWithIndicators (const struct Ind_Indicators *Indic
       HTM_TR_Begin (NULL);
 	 if (PutForm)
 	    HTM_TH_Empty (1);
-	 HTM_TH (1,1,Txt_Indicators,"RM");
-	 HTM_TH (1,2,Txt_Courses   ,"RM");
+	 HTM_TH      (Txt_Indicators,HTM_HEAD_RIGHT);
+	 HTM_TH_Span (Txt_Courses   ,HTM_HEAD_RIGHT,1,2,NULL);
       HTM_TR_End ();
 
       for (Ind  = 0;
@@ -537,7 +537,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 	                                          Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res)
   {
-   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Institutional_BR_code;
@@ -571,118 +570,111 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
    unsigned NumIndicators;
    struct Ind_IndicatorsCrs IndicatorsCrs;
    long ActCod;
-   char *ClassHead;
 
    /***** Begin table *****/
    HTM_TABLE_Begin ("INDICATORS");
 
       /***** Write table heading *****/
-      if (asprintf (&ClassHead,"TIT_TBL_%s %s",
-		    The_Colors[Gbl.Prefs.Theme],Gbl.ColorRows[0]) < 0)
-	 Err_NotEnoughMemoryExit ();
-
       switch (IndicatorsLayout)
 	{
 	 case Ind_INDICATORS_BRIEF:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (3, 1,Txt_Degree                ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_Course                ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_Institutional_BR_code ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_Web_page_of_the_course,"%s LM",ClassHead);
-	       HTM_TH (1,11,Txt_Indicators            ,"%s CM",ClassHead);
+	       HTM_TH_Span (Txt_Degree                ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Course                ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Institutional_BR_code ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Web_page_of_the_course,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Indicators            ,HTM_HEAD_CENTER,1,11,NULL);
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (2,1,Txt_No_INDEX,"%s CT",ClassHead);
-	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
+	       HTM_TH_Span (Txt_No_INDEX              ,HTM_HEAD_CENTER,2, 1,NULL);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
 		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
 		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
 		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
 		  HTM_TxtF ("(D) %s",Txt_Materials);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,2,"%s CT",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,2,NULL);
 		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
 	       HTM_TH_End ();
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_YES,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO ,"%s CM",ClassHead);
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
 	    HTM_TR_End ();
 	    break;
 	 case Ind_INDICATORS_FULL:
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (3, 1,Txt_Degree                         ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_Course                         ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_Institutional_BR_code          ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_Web_page_of_the_course         ,"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],"%s LM",ClassHead);
-	       HTM_TH (3, 1,Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],"%s LM",ClassHead);
-	       HTM_TH (1,24,Txt_Indicators                     ,"%s CM",ClassHead);
+	       HTM_TH_Span (Txt_Degree                         ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Course                         ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Institutional_BR_code          ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Web_page_of_the_course         ,HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],HTM_HEAD_LEFT  ,3, 1,NULL);
+	       HTM_TH_Span (Txt_Indicators                     ,HTM_HEAD_CENTER,1,24,NULL);
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (2,1,Txt_No_INDEX,"CT %s",ClassHead);
-	       HTM_TH_Begin (1,5,"CT %s",ClassHead);
+	       HTM_TH_Span (Txt_No_INDEX                       ,HTM_HEAD_CENTER,2,1,NULL);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,5,NULL);
 		  HTM_TxtF ("(A) %s",Txt_Syllabus_of_the_course);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,5,"CT %s",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,5,NULL);
 		  HTM_TxtF ("(B) %s",Txt_Guided_academic_assignments);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,5,"CT %s",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,5,NULL);
 		  HTM_TxtF ("(C) %s",Txt_Online_tutoring);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,4,"CT %s",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,4,NULL);
 		  HTM_TxtF ("(D) %s",Txt_Materials);
 	       HTM_TH_End ();
-	       HTM_TH_Begin (1,4,"CT %s",ClassHead);
+	       HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,4,NULL);
 		  HTM_TxtF ("(E) %s",Txt_Assessment_criteria);
 	       HTM_TH_End ();
 	    HTM_TR_End ();
 
 	    HTM_TR_Begin (NULL);
-	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_LECTURES]      ,"%s LM",ClassHead);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_PRACTICALS]    ,"%s LM",ClassHead);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_TEACHING_GUIDE],"%s LM",ClassHead);
-	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_Assignments                   ,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_Files_assignments             ,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_Files_works                   ,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_Forum_threads                 ,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_Forum_posts                   ,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_Messages_sent_by_teachers     ,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_Number_of_files_in_DOCUM_zones,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_Number_of_files_in_SHARE_zones,"%s RM",ClassHead);
-	       HTM_TH (1,1,Txt_YES                           ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_NO                            ,"%s CM",ClassHead);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_ASSESSMENT]    ,"%s LM",ClassHead);
-	       HTM_TH (1,1,Txt_INFO_TITLE[Inf_TEACHING_GUIDE],"%s LM",ClassHead);
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_INFO_TITLE[Inf_LECTURES]       ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_INFO_TITLE[Inf_PRACTICALS]     ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACHING_GUIDE] ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Assignments                    ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Files_assignments              ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Files_works                    ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Forum_threads                  ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Forum_posts                    ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Messages_sent_by_teachers      ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_Number_of_files_in_DOCUM_zones ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_Number_of_files_in_SHARE_zones ,HTM_HEAD_RIGHT );
+	       HTM_TH      (Txt_YES                            ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_NO                             ,HTM_HEAD_CENTER);
+	       HTM_TH      (Txt_INFO_TITLE[Inf_ASSESSMENT]     ,HTM_HEAD_LEFT  );
+	       HTM_TH      (Txt_INFO_TITLE[Inf_TEACHING_GUIDE] ,HTM_HEAD_LEFT  );
 	    HTM_TR_End ();
 	 break;
 	}
-
-      free (ClassHead);
 
       /***** List courses *****/
       mysql_data_seek (mysql_res,0);
