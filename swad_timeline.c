@@ -537,3 +537,160 @@ void Tml_WriteDateTime (time_t TimeUTC)
 		                 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				 true,true,false,0x6);
   }
+
+/*****************************************************************************/
+/******************* Get and show number of timeline notes *******************/
+/*****************************************************************************/
+
+void Tml_GetAndShowTimelineActivityStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_timeline;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Type;
+   extern const char *Txt_Number_of_posts;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_Number_of_posts_BR_per_user;
+   extern const char *Txt_TIMELINE_NOTE[Tml_NOT_NUM_NOTE_TYPES];
+   extern const char *Txt_Total;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   TmlNot_Type_t NoteType;
+   unsigned NumNotes;
+   unsigned NumUsrs;
+   unsigned NumUsrsTotal;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_TIMELINE],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Type                       ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_posts            ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_users            ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users           ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_posts_BR_per_user,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Get total number of users *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+
+      /***** Get total number of timeline notes and users for each note type *****/
+      for (NoteType  = (TmlNot_Type_t) 0;
+	   NoteType <= (TmlNot_Type_t) (Tml_NOT_NUM_NOTE_TYPES - 1);
+	   NoteType++)
+	{
+	 /***** Get number of timeline notes and users for this type *****/
+	 if (Tml_DB_GetNumNotesAndUsrsByType (&mysql_res,NoteType))
+	   {
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get number of timeline notes */
+	    if (row[0])
+	       if (sscanf (row[0],"%u",&NumNotes) != 1)
+		  NumNotes = 0;
+
+	    /* Get number of users */
+	    if (row[1])
+	       if (sscanf (row[1],"%u",&NumUsrs) != 1)
+		  NumUsrs = 0;
+	   }
+	 else
+	   {
+	    NumNotes = 0;
+	    NumUsrs = 0;
+	   }
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+
+	 /***** Write number of timeline notes and number of users *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_TIMELINE_NOTE[NoteType]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumNotes);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Double2Decimals (NumUsrs ? (double) NumNotes /
+			                      (double) NumUsrs :
+				              0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Get and write totals *****/
+      if (Tml_DB_GetNumNotesAndUsrsTotal (&mysql_res))
+	{
+	 /* Get number of social notes and number of users */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get number of social notes */
+	 if (row[0])
+	    if (sscanf (row[0],"%u",&NumNotes) != 1)
+	       NumNotes = 0;
+
+	 /* Get number of users */
+	 if (row[1])
+	    if (sscanf (row[1],"%u",&NumUsrs) != 1)
+	       NumUsrs = 0;
+	}
+      else
+	{
+	 NumNotes = 0;
+	 NumUsrs = 0;
+	}
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      /* Write totals */
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumNotes);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumUsrs);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					   (double) NumUsrsTotal :
+					   0.0);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumUsrs ? (double) NumNotes / (double) NumUsrs :
+				 0.0);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

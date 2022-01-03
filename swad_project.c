@@ -4210,3 +4210,58 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
    if (Usr_ItsMe (UsrCod))
       Prj_FlushCacheMyRolesInProject ();
   }
+
+/*****************************************************************************/
+/************************ Show figures about projects ************************/
+/*****************************************************************************/
+
+void Prj_GetAndShowProjectsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_projects;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_projects;
+   extern const char *Txt_Number_of_BR_courses_with_BR_projects;
+   extern const char *Txt_Average_number_BR_of_projects_BR_per_course;
+   unsigned NumProjects;
+   unsigned NumCoursesWithProjects = 0;
+   double NumProjectsPerCourse = 0.0;
+
+   /***** Get the number of projects from this location *****/
+   if ((NumProjects = Prj_DB_GetNumProjects (Gbl.Scope.Current)))
+      if ((NumCoursesWithProjects = Prj_DB_GetNumCoursesWithProjects (Gbl.Scope.Current)) != 0)
+         NumProjectsPerCourse = (double) NumProjects /
+	                        (double) NumCoursesWithProjects;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PROJECTS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_BR_projects                      ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_projects      ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_projects_BR_per_course,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of projects *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumProjects);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumCoursesWithProjects);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumProjectsPerCourse);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

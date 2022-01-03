@@ -132,7 +132,7 @@ void DegTyp_WriteSelectorDegreeTypes (long SelectedDegTypCod)
 void DegTyp_SeeDegreeTypesInDegTab (void)
   {
    DegTyp_SeeDegreeTypes (ActSeeDegTyp,HieLvl_SYS,
-                      DegTyp_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
+                          DegTyp_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
   }
 
 void DegTyp_SeeDegreeTypesInStaTab (void)
@@ -911,4 +911,14 @@ static void DegTyp_EditingDegreeTypeDestructor (void)
       free (DegTyp_EditingDegTyp);
       DegTyp_EditingDegTyp = NULL;
      }
+  }
+
+/*****************************************************************************/
+/****************** Get and show stats about institutions ********************/
+/*****************************************************************************/
+
+void DegTyp_GetAndShowDegreeTypesStats (void)
+  {
+   /***** Show statistic about number of degrees in each type of degree *****/
+   DegTyp_SeeDegreeTypesInStaTab ();
   }

@@ -836,3 +836,81 @@ static long Not_GetParamNotCod (void)
    /***** Get notice code *****/
    return Par_GetParToLong ("NotCod");
   }
+
+/*****************************************************************************/
+/************************** Show figures about notices ***********************/
+/*****************************************************************************/
+
+void Not_GetAndShowNoticesStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_notices;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_NOTICE_Active_BR_notices;
+   extern const char *Txt_NOTICE_Obsolete_BR_notices;
+   extern const char *Txt_NOTICE_Deleted_BR_notices;
+   extern const char *Txt_Total;
+   extern const char *Txt_Number_of_BR_notifications;
+   Not_Status_t NoticeStatus;
+   unsigned NumNotices[Not_NUM_STATUS];
+   unsigned NumNoticesDeleted;
+   unsigned NumTotalNotices = 0;
+   unsigned NumNotif;
+   unsigned NumTotalNotifications = 0;
+
+   /***** Get the number of notices active and obsolete *****/
+   for (NoticeStatus  = (Not_Status_t) 0;
+	NoticeStatus <= (Not_Status_t) (Not_NUM_STATUS - 1);
+	NoticeStatus++)
+     {
+      NumNotices[NoticeStatus] = Not_GetNumNotices (Gbl.Scope.Current,NoticeStatus,&NumNotif);
+      NumTotalNotices += NumNotices[NoticeStatus];
+      NumTotalNotifications += NumNotif;
+     }
+   NumNoticesDeleted = Not_GetNumNoticesDeleted (Gbl.Scope.Current,&NumNotif);
+   NumTotalNotices += NumNoticesDeleted;
+   NumTotalNotifications += NumNotif;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_NOTICES],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_NOTICE_Active_BR_notices  ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_NOTICE_Obsolete_BR_notices,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_NOTICE_Deleted_BR_notices ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Total                     ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_notifications,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of notices *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumNotices[Not_ACTIVE_NOTICE]);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumNotices[Not_OBSOLETE_NOTICE]);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumNoticesDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned ( NumTotalNotices);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumTotalNotifications);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

@@ -109,4 +109,7 @@ void Ico_PutIconPaste (void);
 
 void Ico_PutIconNotVisible (void);
 
+//-------------------------------- Figures ------------------------------------
+void Ico_GetAndShowNumUsrsPerIconSet (void);
+
 #endif

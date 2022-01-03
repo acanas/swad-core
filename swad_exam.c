@@ -1581,3 +1581,57 @@ bool Exa_CheckIfEditable (const struct Exa_Exam *Exam)
    else
       return false;	// Questions are not editable
   }
+
+/*****************************************************************************/
+/*************************** Show stats about exams **************************/
+/*****************************************************************************/
+
+void Exa_GetAndShowExamsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_exams;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_exams;
+   extern const char *Txt_Number_of_BR_courses_with_BR_exams;
+   extern const char *Txt_Average_number_BR_of_exams_BR_per_course;
+   unsigned NumExams;
+   unsigned NumCoursesWithExams = 0;
+   double NumExamsPerCourse = 0.0;
+
+   /***** Get the number of exams from this location *****/
+   if ((NumExams = Exa_DB_GetNumExams (Gbl.Scope.Current)))
+      if ((NumCoursesWithExams = Exa_DB_GetNumCoursesWithExams (Gbl.Scope.Current)) != 0)
+         NumExamsPerCourse = (double) NumExams / (double) NumCoursesWithExams;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_EXAMS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_exams,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_BR_exams                      ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_exams      ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_exams_BR_per_course,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of exams *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumExams);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumCoursesWithExams);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumExamsPerCourse);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

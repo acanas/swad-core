@@ -1636,3 +1636,65 @@ unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif)
 
    return NumAssignments;
   }
+
+/*****************************************************************************/
+/************************ Show stats about assignments ***********************/
+/*****************************************************************************/
+
+void Asg_GetAndShowAssignmentsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_assignments;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_assignments;
+   extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
+   extern const char *Txt_Average_number_BR_of_ASSIG_BR_per_course;
+   extern const char *Txt_Number_of_BR_notifications;
+   unsigned NumAssignments;
+   unsigned NumNotif;
+   unsigned NumCoursesWithAssignments = 0;
+   double NumAssignmentsPerCourse = 0.0;
+
+   /***** Get the number of assignments from this location *****/
+   if ((NumAssignments = Asg_GetNumAssignments (Gbl.Scope.Current,&NumNotif)))
+      if ((NumCoursesWithAssignments = Asg_DB_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
+         NumAssignmentsPerCourse = (double) NumAssignments /
+	                           (double) NumCoursesWithAssignments;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_BR_assignments                ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_assignments,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_ASSIG_BR_per_course,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_notifications              ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of assignments *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumAssignments);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumCoursesWithAssignments);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumAssignmentsPerCourse);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumNotif);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

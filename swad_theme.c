@@ -25,11 +25,14 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>
 
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -39,6 +42,7 @@
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_theme.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -381,4 +385,85 @@ void The_SetColorRows (void)
 
    Gbl.ColorRows[0] = The_ClassColorRows[0][Gbl.Prefs.Theme];	// Darker
    Gbl.ColorRows[1] = The_ClassColorRows[1][Gbl.Prefs.Theme];	// Lighter
+  }
+
+/*****************************************************************************/
+/********** Get and show number of users who have chosen a theme *************/
+/*****************************************************************************/
+
+void The_GetAndShowNumUsrsPerTheme (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_theme;
+   extern const char *The_ThemeId[The_NUM_THEMES];
+   extern const char *The_ThemeNames[The_NUM_THEMES];
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Theme_SKIN;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   The_Theme_t Theme;
+   char *SubQuery;
+   char *URL;
+   unsigned NumUsrs[The_NUM_THEMES];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_THEMES],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Theme_SKIN      ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** For each theme... *****/
+      for (Theme  = (The_Theme_t) 0;
+	   Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
+	   Theme++)
+	{
+	 /* Get number of users who have chosen this theme from database */
+	 if (asprintf (&SubQuery,"usr_data.Theme='%s'",
+		       The_ThemeId[Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Theme] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Theme];
+	}
+
+      /***** Write number of users who have chosen each theme *****/
+      for (Theme  = (The_Theme_t) 0;
+	   Theme <= (The_Theme_t) (The_NUM_THEMES - 1);
+	   Theme++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"CM\"");
+	       if (asprintf (&URL,"%s/%s",
+			     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
+			"style=\"width:40px;height:25px;\"");
+	       free (URL);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[Theme]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Theme] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

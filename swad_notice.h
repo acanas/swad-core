@@ -73,4 +73,7 @@ unsigned Not_GetNumNoticesDeleted (HieLvl_Level_t Scope,unsigned *NumNotif);
 
 void Not_PutHiddenParamNotCod (long NotCod);
 
+//-------------------------------- Figures ------------------------------------
+void Not_GetAndShowNoticesStats (void);
+
 #endif

@@ -56,4 +56,7 @@ The_Theme_t The_GetThemeFromStr (const char *Str);
 
 void The_SetColorRows (void);
 
+//-------------------------------- Figures ------------------------------------
+void The_GetAndShowNumUsrsPerTheme (void);
+
 #endif

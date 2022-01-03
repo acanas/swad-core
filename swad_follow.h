@@ -76,4 +76,7 @@ void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Fol_RemoveUsrFromUsrFollow (long UsrCod);
 
+//-------------------------------- Figures ------------------------------------
+void Fol_GetAndShowFollowStats (void);
+
 #endif

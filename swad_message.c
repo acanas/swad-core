@@ -2976,3 +2976,99 @@ void Msg_ListBannedUsrs (void)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
+
+/*****************************************************************************/
+/************************ Show figures about messages ************************/
+/*****************************************************************************/
+
+void Msg_GetAndShowMsgsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_messages;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Messages;
+   extern const char *Txt_MSGS_Not_deleted;
+   extern const char *Txt_MSGS_Deleted;
+   extern const char *Txt_Total;
+   extern const char *Txt_Number_of_BR_notifications;
+   extern const char *Txt_MSGS_Sent;
+   extern const char *Txt_MSGS_Received;
+   unsigned NumMsgsSentNotDeleted,NumMsgsSentDeleted;
+   unsigned NumMsgsReceivedNotDeleted,NumMsgsReceivedAndDeleted;
+   unsigned NumMsgsReceivedAndNotified;
+
+   /***** Get the number of unique messages sent from this location *****/
+   NumMsgsSentNotDeleted      = Msg_DB_GetNumSntMsgs     (Gbl.Scope.Current,Msg_STATUS_ALL     );
+   NumMsgsSentDeleted         = Msg_DB_GetNumSntMsgs     (Gbl.Scope.Current,Msg_STATUS_DELETED );
+
+   NumMsgsReceivedNotDeleted  = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_ALL     );
+   NumMsgsReceivedAndDeleted  = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_DELETED );
+   NumMsgsReceivedAndNotified = Msg_DB_GetNumRcvMsgs (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_MESSAGES],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Messages                  ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_MSGS_Not_deleted          ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_MSGS_Deleted              ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Total                     ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_notifications,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of messages *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"LM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_MSGS_Sent);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsSentNotDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsSentDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsSentNotDeleted + NumMsgsSentDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Hyphen ();
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"LM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_MSGS_Received);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsReceivedNotDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsReceivedAndDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMsgsReceivedAndNotified);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

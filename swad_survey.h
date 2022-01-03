@@ -114,4 +114,7 @@ void Svy_ReceiveSurveyAnswers (void);
 
 unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif);
 
+//-------------------------------- Figures ------------------------------------
+void Svy_GetAndShowSurveysStats (void);
+
 #endif

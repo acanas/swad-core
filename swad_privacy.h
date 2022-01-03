@@ -67,4 +67,7 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
 
 bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat);
 
+//-------------------------------- Figures ------------------------------------
+void Pri_GetAndShowNumUsrsPerPrivacy (void);
+
 #endif

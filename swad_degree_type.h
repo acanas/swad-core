@@ -82,4 +82,7 @@ void DegTyp_RenameDegreeType (void);
 
 void DegTyp_ContEditAfterChgDegTyp (void);
 
+//-------------------------------- Figures ------------------------------------
+void DegTyp_GetAndShowDegreeTypesStats (void);
+
 #endif

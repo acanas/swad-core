@@ -296,6 +296,14 @@ static const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
 #define For_IMAGE_SAVED_MAX_HEIGHT	768
 #define For_IMAGE_SAVED_QUALITY		 90	// 1 to 100
 
+struct For_FiguresForum
+  {
+   unsigned NumForums;
+   unsigned NumThreads;
+   unsigned NumPosts;
+   unsigned NumUsrsToBeNotifiedByEMail;
+  };
+
 /*****************************************************************************/
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
@@ -384,6 +392,15 @@ static void For_PutAllHiddenParamsRemThread (void *Forums);
 
 static bool For_CheckIfICanMoveThreads (void);
 static void For_InsertThrInClipboard (long ThrCod);
+
+static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
+                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                      struct For_FiguresForum *FiguresForum);
+static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
+                                         long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                         const char *Icon,struct For_FiguresForum *FiguresForum,
+                                         const char *ForumName1,const char *ForumName2);
+static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum);
 
 /*****************************************************************************/
 /********************************** Reset forum ******************************/
@@ -3178,4 +3195,310 @@ static void For_InsertThrInClipboard (long ThrCod)
 
    /***** Add thread to my clipboard *****/
    For_DB_InsertThrInMyClipboard (ThrCod);
+  }
+
+
+/*****************************************************************************/
+/************************** Show figures about forums ************************/
+/*****************************************************************************/
+
+void For_GetAndShowForumStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_forums;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Scope;
+   extern const char *Txt_Forums;
+   extern const char *Txt_Number_of_forums;
+   extern const char *Txt_Number_of_threads;
+   extern const char *Txt_Number_of_posts;
+   extern const char *Txt_Number_of_BR_notifications;
+   extern const char *Txt_Number_of_threads_BR_per_forum;
+   extern const char *Txt_Number_of_posts_BR_per_thread;
+   extern const char *Txt_Number_of_posts_BR_per_forum;
+   struct For_FiguresForum FiguresForum;
+
+   /***** Reset total stats *****/
+   FiguresForum.NumForums           = 0;
+   FiguresForum.NumThreads          = 0;
+   FiguresForum.NumPosts            = 0;
+   FiguresForum.NumUsrsToBeNotifiedByEMail = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_FORUMS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH_Span_Begin (HTM_HEAD_CENTER,1,1,"BT");
+	    Ico_PutIcon ("comments.svg",Ico_BLACK,Txt_Scope,"ICOx16");
+	 HTM_TH_End ();
+	 HTM_TH (Txt_Forums                        ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_forums              ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_threads             ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_posts               ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_notifications    ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_threads_BR_per_forum,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_posts_BR_per_thread ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_posts_BR_per_forum  ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write a row for each type of forum *****/
+      switch (Gbl.Scope.Current)
+	{
+	 case HieLvl_SYS:
+	    For_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM__SWAD__USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM__SWAD__TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_CTY:
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_INS:
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_CTR:
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_CENTER_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_DEG:
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
+	    break;
+	 case HieLvl_CRS:
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
+	    For_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
+	    break;
+	 default:
+	    Err_WrongScopeExit ();
+	    break;
+	}
+
+      For_WriteForumTotalStats (&FiguresForum);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/************************* Show stats of a forum type ************************/
+/*****************************************************************************/
+
+static void For_ShowStatOfAForumType (For_ForumType_t ForumType,
+                                      long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                      struct For_FiguresForum *FiguresForum)
+  {
+   extern const char *Txt_Courses;
+   extern const char *Txt_Degrees;
+   extern const char *Txt_Centers;
+   extern const char *Txt_Institutions;
+   extern const char *Txt_General;
+   extern const char *Txt_only_teachers;
+   static const char *PlatformShortName = Cfg_PLATFORM_SHORT_NAME;
+   static const char *EmptyName = "";
+   static const struct
+     {
+      const char *Icon;
+      const char **ForumName1;
+      const char **ForumName2;
+     } Params[For_NUM_TYPES_FORUM] =
+     {
+      [For_FORUM_COURSE_USRS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&EmptyName        },
+      [For_FORUM_COURSE_TCHS] = {"chalkboard-teacher.svg",&Txt_Courses      ,&Txt_only_teachers},
+      [For_FORUM_DEGREE_USRS] = {"graduation-cap.svg"    ,&Txt_Degrees      ,&EmptyName        },
+      [For_FORUM_DEGREE_TCHS] = {"graduation-cap.svg"    ,&Txt_Degrees      ,&Txt_only_teachers},
+      [For_FORUM_CENTER_USRS] = {"building.svg"          ,&Txt_Centers      ,&EmptyName        },
+      [For_FORUM_CENTER_TCHS] = {"building.svg"          ,&Txt_Centers      ,&Txt_only_teachers},
+      [For_FORUM_INSTIT_USRS] = {"university.svg"        ,&Txt_Institutions ,&EmptyName        },
+      [For_FORUM_INSTIT_TCHS] = {"university.svg"        ,&Txt_Institutions ,&Txt_only_teachers},
+      [For_FORUM_GLOBAL_USRS] = {"comments.svg"          ,&Txt_General      ,&EmptyName        },
+      [For_FORUM_GLOBAL_TCHS] = {"comments.svg"          ,&Txt_General      ,&Txt_only_teachers},
+      [For_FORUM__SWAD__USRS] = {"swad64x64.png"         ,&PlatformShortName,&EmptyName        },
+      [For_FORUM__SWAD__TCHS] = {"swad64x64.png"         ,&PlatformShortName,&Txt_only_teachers},
+     };
+
+   if (Params[ForumType].Icon)
+      For_WriteForumTitleAndStats (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,
+				    Params[ForumType].Icon,FiguresForum,
+				   *Params[ForumType].ForumName1,
+				   *Params[ForumType].ForumName2);
+  }
+
+/*****************************************************************************/
+/******************* Write title and stats of a forum type *******************/
+/*****************************************************************************/
+
+static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
+                                         long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
+                                         const char *Icon,struct For_FiguresForum *FiguresForum,
+                                         const char *ForumName1,const char *ForumName2)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   unsigned NumForums;
+   unsigned NumThreads;
+   unsigned NumPosts;
+   unsigned NumUsrsToBeNotifiedByEMail;
+   double NumThrsPerForum;
+   double NumPostsPerThread;
+   double NumPostsPerForum;
+   char *ForumName;
+
+   /***** Compute number of forums, number of threads and number of posts *****/
+   NumForums  = For_DB_GetNumTotalForumsOfType       (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
+   NumThreads = For_DB_GetNumTotalThrsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
+   NumPosts   = For_DB_GetNumTotalPstsInForumsOfType (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod,&NumUsrsToBeNotifiedByEMail);
+
+   /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
+   NumThrsPerForum = (NumForums ? (double) NumThreads / (double) NumForums :
+	                          0.0);
+   NumPostsPerThread = (NumThreads ? (double) NumPosts / (double) NumThreads :
+	                             0.0);
+   NumPostsPerForum = (NumForums ? (double) NumPosts / (double) NumForums :
+	                           0.0);
+
+   /***** Update total stats *****/
+   FiguresForum->NumForums                  += NumForums;
+   FiguresForum->NumThreads                 += NumThreads;
+   FiguresForum->NumPosts                   += NumPosts;
+   FiguresForum->NumUsrsToBeNotifiedByEMail += NumUsrsToBeNotifiedByEMail;
+
+   /***** Write forum name and stats *****/
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"BT\"");
+	 if (asprintf (&ForumName,"%s%s",
+		       ForumName1,ForumName2) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 Ico_PutIcon (Icon,Ico_BLACK,ForumName,"ICOx16");
+	 free (ForumName);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Txt (ForumName1);
+	 HTM_Txt (ForumName2);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_Unsigned (NumForums);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (NumThreads);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (NumPosts);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Double2Decimals (NumThrsPerForum);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Double2Decimals (NumPostsPerThread);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_Double2Decimals (NumPostsPerForum);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/******************* Write title and stats of a forum type *******************/
+/*****************************************************************************/
+
+static void For_WriteForumTotalStats (struct For_FiguresForum *FiguresForum)
+  {
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_Total;
+   double NumThrsPerForum;
+   double NumPostsPerThread;
+   double NumPostsPerForum;
+
+   /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
+   NumThrsPerForum  = (FiguresForum->NumForums ? (double) FiguresForum->NumThreads /
+	                                         (double) FiguresForum->NumForums :
+	                                         0.0);
+   NumPostsPerThread = (FiguresForum->NumThreads ? (double) FiguresForum->NumPosts /
+	                                           (double) FiguresForum->NumThreads :
+	                                           0.0);
+   NumPostsPerForum = (FiguresForum->NumForums ? (double) FiguresForum->NumPosts /
+	                                         (double) FiguresForum->NumForums :
+	                                         0.0);
+
+   /***** Write forum name and stats *****/
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"%s LINE_TOP\" style=\"width:20px;\"",
+                    The_ClassDatStrong[Gbl.Prefs.Theme]);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Txt (Txt_Total);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (FiguresForum->NumForums);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (FiguresForum->NumThreads);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (FiguresForum->NumPosts);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP RM\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Unsigned (FiguresForum->NumUsrsToBeNotifiedByEMail);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Double2Decimals (NumThrsPerForum);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Double2Decimals (NumPostsPerThread);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_Double2Decimals (NumPostsPerForum);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
   }

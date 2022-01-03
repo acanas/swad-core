@@ -84,4 +84,7 @@ void Exa_ReceiveFormExam (void);
 
 bool Exa_CheckIfEditable (const struct Exa_Exam *Exam);
 
+//-------------------------------- Figures ------------------------------------
+void Exa_GetAndShowExamsStats (void);
+
 #endif

@@ -80,4 +80,7 @@ void Lay_HelpRichEditor (void);
 
 void Lay_BeginHTMLFile (FILE *File,const char *Title);
 
+//-------------------------------- Figures ------------------------------------
+void Lay_GetAndShowNumUsrsPerSideColumns (void);
+
 #endif

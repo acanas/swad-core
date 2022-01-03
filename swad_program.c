@@ -1964,3 +1964,58 @@ static void Prg_InsertItem (const struct Prg_Item *ParentItem,
    /***** Free list items *****/
    Prg_FreeListItems ();
   }
+
+/*****************************************************************************/
+/********************** Show stats about schedule items **********************/
+/*****************************************************************************/
+
+void Prg_GetAndShowCourseProgramStats (void)	// TODO: Change function from assignments to course program items
+  {
+   extern const char *Hlp_ANALYTICS_Figures_course_programs;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_program_items;
+   extern const char *Txt_Number_of_BR_courses_with_BR_program_items;
+   extern const char *Txt_Average_number_BR_of_items_BR_per_course;
+   unsigned NumItems;
+   unsigned NumCoursesWithItems = 0;
+   double NumItemsPerCourse = 0.0;
+
+   /***** Get the number of program items from this location *****/
+   if ((NumItems = Prg_DB_GetNumItems (Gbl.Scope.Current)))
+      if ((NumCoursesWithItems = Prg_DB_GetNumCoursesWithItems (Gbl.Scope.Current)) != 0)
+         NumItemsPerCourse = (double) NumItems /
+	                     (double) NumCoursesWithItems;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_course_programs,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_BR_program_items                ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_program_items,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_items_BR_per_course  ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of assignments *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumItems);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumCoursesWithItems);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumItemsPerCourse);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

@@ -56,4 +56,7 @@ Mnu_Menu_t Mnu_GetMenuFromStr (const char *Str);
 void Mnu_ContextMenuBegin (void);
 void Mnu_ContextMenuEnd (void);
 
+//-------------------------------- Figures ------------------------------------
+void Mnu_GetAndShowNumUsrsPerMenu (void);
+
 #endif

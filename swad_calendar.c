@@ -43,6 +43,7 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -331,4 +332,92 @@ void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args)
 				  NULL,NULL,
 				  "calendar.svg",Ico_BLACK,
 				  Txt_Calendar);
+  }
+
+/*****************************************************************************/
+/***** Get and show number of users who have chosen a first day of week ******/
+/*****************************************************************************/
+
+void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void)
+  {
+   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
+   extern const char *Hlp_ANALYTICS_Figures_calendar;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Calendar;
+   extern const char *Txt_First_day_of_the_week_X;
+   extern const char *Txt_DAYS_SMALL[7];
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   unsigned FirstDayOfWeek;
+   char *SubQuery;
+   char *Icon;
+   char *Title;
+   unsigned NumUsrs[7];	// 7: seven days in a week
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_FIRST_DAY_OF_WEEK],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Calendar        ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** For each day... *****/
+      for (FirstDayOfWeek = 0;	// Monday
+	   FirstDayOfWeek <= 6;	// Sunday
+	   FirstDayOfWeek++)
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	   {
+	    /* Get number of users who have chosen this first day of week from database */
+	    if (asprintf (&SubQuery,"usr_data.FirstDayOfWeek=%u",
+			  (unsigned) FirstDayOfWeek) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    NumUsrs[FirstDayOfWeek] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	    free (SubQuery);
+
+	    /* Update total number of users */
+	    NumUsrsTotal += NumUsrs[FirstDayOfWeek];
+	   }
+
+      /***** Write number of users who have chosen each first day of week *****/
+      for (FirstDayOfWeek = 0;	// Monday
+	   FirstDayOfWeek <= 6;	// Sunday
+	   FirstDayOfWeek++)
+	 if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+	   {
+	    HTM_TR_Begin (NULL);
+
+	       HTM_TD_Begin ("class=\"CM\"");
+		  if (asprintf (&Icon,"first-day-of-week-%u.png",
+				FirstDayOfWeek) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  if (asprintf (&Title,Txt_First_day_of_the_week_X,
+		                Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  Ico_PutIcon (Icon,Ico_BLACK,Title,"ICOx20");
+		  free (Title);
+		  free (Icon);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_Unsigned (NumUsrs[FirstDayOfWeek]);
+	       HTM_TD_End ();
+
+	       HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+		  HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[FirstDayOfWeek] * 100.0 /
+						 (double) NumUsrsTotal :
+						  0.0);
+	       HTM_TD_End ();
+
+	    HTM_TR_End ();
+	   }
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

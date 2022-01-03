@@ -237,4 +237,7 @@ void Prj_UnloProjectEdition (void);
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
 
+//-------------------------------- Figures ------------------------------------
+void Prj_GetAndShowProjectsStats (void);
+
 #endif

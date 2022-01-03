@@ -2316,3 +2316,57 @@ void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
+
+/*****************************************************************************/
+/*************************** Show stats about games **************************/
+/*****************************************************************************/
+
+void Gam_GetAndShowGamesStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_games;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_games;
+   extern const char *Txt_Number_of_BR_courses_with_BR_games;
+   extern const char *Txt_Average_number_BR_of_games_BR_per_course;
+   unsigned NumGames;
+   unsigned NumCoursesWithGames = 0;
+   double NumGamesPerCourse = 0.0;
+
+   /***** Get the number of games from this location *****/
+   if ((NumGames = Gam_DB_GetNumGames (Gbl.Scope.Current)))
+      if ((NumCoursesWithGames = Gam_DB_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
+         NumGamesPerCourse = (double) NumGames / (double) NumCoursesWithGames;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_GAMES],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_BR_games                      ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_games      ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_games_BR_per_course,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of games *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumGames);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumCoursesWithGames);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumGamesPerCourse);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

@@ -147,4 +147,7 @@ void For_RemoveThread (void);
 void For_CutThread (void);
 void For_PasteThread (void);
 
+//-------------------------------- Figures ------------------------------------
+void For_GetAndShowForumStats (void);
+
 #endif

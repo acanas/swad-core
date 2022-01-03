@@ -133,4 +133,7 @@ void Ntf_ChangeNotifyEvents (void);
 
 void Ntf_WriteNumberOfNewNtfs (void);
 
+//-------------------------------- Figures ------------------------------------
+void Ntf_GetAndShowNumUsrsPerNotifyEvent (void);
+
 #endif

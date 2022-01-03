@@ -92,4 +92,7 @@ void Prg_MoveDownItem (void);
 void Prg_MoveLeftItem (void);
 void Prg_MoveRightItem (void);
 
+//-------------------------------- Figures ------------------------------------
+void Prg_GetAndShowCourseProgramStats (void); // TODO: Change function from assignments to schedule
+
 #endif

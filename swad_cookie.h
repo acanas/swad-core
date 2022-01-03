@@ -36,4 +36,7 @@
 void Coo_EditMyPrefsOnCookies (void);
 void Coo_ChangeMyPrefsCookies (void);
 
+//-------------------------------- Figures ------------------------------------
+void Coo_GetAndShowNumUsrsPerCookies (void);
+
 #endif

@@ -25,10 +25,13 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>	// For strcasecmp
 
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -36,6 +39,7 @@
 #include "swad_language.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -236,4 +240,79 @@ Lan_Language_t Lan_GetLanguageFromStr (const char *Str)
 	 return Lan;
 
    return Lan_LANGUAGE_UNKNOWN;
+  }
+
+/*****************************************************************************/
+/********* Get and show number of users who have chosen a language ***********/
+/*****************************************************************************/
+
+void Lan_GetAndShowNumUsrsPerLanguage (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_language;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Language;
+   extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   Lan_Language_t Lan;
+   char *SubQuery;
+   unsigned NumUsrs[1 + Lan_NUM_LANGUAGES];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_LANGUAGES],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Language        ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** For each language... *****/
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	   Lan++)
+	{
+	 /* Get the number of users who have chosen this language from database */
+	 if (asprintf (&SubQuery,"usr_data.Language='%s'",
+		       Lan_STR_LANG_ID[Lan]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Lan] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Lan];
+	}
+
+      /***** Write number of users who have chosen each language *****/
+      for (Lan  = (Lan_Language_t) 1;
+	   Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
+	   Lan++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_STR_LANG_NAME[Lan]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[Lan]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Lan] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

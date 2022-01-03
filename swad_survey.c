@@ -3365,3 +3365,75 @@ unsigned Svy_GetNumCrsSurveys (HieLvl_Level_t Scope,unsigned *NumNotif)
 
    return NumSurveys;
   }
+
+/*****************************************************************************/
+/***************************** Show stats of surveys *************************/
+/*****************************************************************************/
+
+void Svy_GetAndShowSurveysStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_surveys;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_BR_surveys;
+   extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
+   extern const char *Txt_Average_number_BR_of_surveys_BR_per_course;
+   extern const char *Txt_Average_number_BR_of_questions_BR_per_survey;
+   extern const char *Txt_Number_of_BR_notifications;
+   unsigned NumSurveys;
+   unsigned NumNotif;
+   unsigned NumCoursesWithSurveys = 0;
+   double NumSurveysPerCourse = 0.0;
+   double NumQstsPerSurvey = 0.0;
+
+   /***** Get the number of surveys and the average number of questions per survey from this location *****/
+   if ((NumSurveys = Svy_GetNumCrsSurveys (Gbl.Scope.Current,&NumNotif)))
+     {
+      if ((NumCoursesWithSurveys = Svy_DB_GetNumCrssWithCrsSurveys (Gbl.Scope.Current)) != 0)
+         NumSurveysPerCourse = (double) NumSurveys /
+	                       (double) NumCoursesWithSurveys;
+      NumQstsPerSurvey = Svy_DB_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
+     }
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_SURVEYS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_BR_surveys                        ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_surveys        ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_surveys_BR_per_course  ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_number_BR_of_questions_BR_per_survey,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_notifications                  ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Write number of surveys *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumSurveys);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumCoursesWithSurveys);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumSurveysPerCourse);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumQstsPerSurvey);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumNotif);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

@@ -1335,6 +1335,24 @@ static void Brw_RemoveFileFromDiskAndDB (const char Path[PATH_MAX + 1],
 static int Brw_RemoveFolderFromDiskAndDB (const char Path[PATH_MAX + 1],
                                           const char FullPathInTree[PATH_MAX + 1]);
 
+static void Brw_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
+                                   struct Brw_SizeOfFileZones *SizeOfFileZones);
+static void Brw_WriteStatsFileZonesTableHead1 (void);
+static void Brw_WriteStatsFileZonesTableHead2 (void);
+static void Brw_WriteStatsFileZonesTableHead3 (void);
+static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
+					    Brw_FileBrowser_t FileZone,
+                                            struct Brw_SizeOfFileZones *SizeOfFileZones);
+static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
+					    Brw_FileBrowser_t FileZone,
+                                            struct Brw_SizeOfFileZones *SizeOfFileZones);
+static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
+					    Brw_FileBrowser_t FileZone,
+                                            struct Brw_SizeOfFileZones *SizeOfFileZones);
+
+static void Brw_GetNumberOfOERs (Brw_License_t License,
+                                 unsigned long NumFiles[2]);
+
 /*****************************************************************************/
 /***************** Get parameters related to file browser ********************/
 /*****************************************************************************/
@@ -10429,4 +10447,554 @@ Act_Action_t Brw_GetActionExpand (void)
 Act_Action_t Brw_GetActionContract (void)
   {
    return Brw_ActContractFolder[Gbl.FileBrowser.Type];
+  }
+
+
+/*****************************************************************************/
+/********************* Show stats about exploration trees ********************/
+/*****************************************************************************/
+// TODO: add links to statistic
+
+void Brw_GetAndShowFileBrowsersStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_folders_and_files;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_STAT_COURSE_FILE_ZONES[Fig_NUM_STAT_CRS_FILE_ZONES];
+   static const Brw_FileBrowser_t StatCrsFileZones[Fig_NUM_STAT_CRS_FILE_ZONES] =
+     {
+      Brw_ADMI_DOC_CRS,
+      Brw_ADMI_DOC_GRP,
+      Brw_ADMI_TCH_CRS,
+      Brw_ADMI_TCH_GRP,
+      Brw_ADMI_SHR_CRS,
+      Brw_ADMI_SHR_GRP,
+      Brw_ADMI_MRK_CRS,
+      Brw_ADMI_MRK_GRP,
+      Brw_ADMI_ASG_USR,
+      Brw_ADMI_WRK_USR,
+      Brw_UNKNOWN,
+      Brw_ADMI_BRF_USR,
+     };
+   struct Brw_SizeOfFileZones SizeOfFileZones[Fig_NUM_STAT_CRS_FILE_ZONES];
+   unsigned NumStat;
+
+   /***** Get sizes of all file zones *****/
+   for (NumStat = 0;
+	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	NumStat++)
+      Brw_GetSizeOfFileZone (StatCrsFileZones[NumStat],
+				   &SizeOfFileZones[NumStat]);
+
+   /***** Begin box *****/
+   Box_BoxBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],
+                 NULL,NULL,
+                 Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
+
+      /***** Write sizes of all file zones *****/
+      HTM_TABLE_BeginCenterPadding (2);
+	 Brw_WriteStatsFileZonesTableHead1 ();
+	 for (NumStat = 0;
+	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	      NumStat++)
+	    Brw_WriteRowStatsFileBrowsers1 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
+					    StatCrsFileZones[NumStat],
+					    &SizeOfFileZones[NumStat]);
+      HTM_TABLE_End ();
+
+      /***** Write sizes of all file zones per course *****/
+      HTM_TABLE_BeginCenterPadding (2);
+	 Brw_WriteStatsFileZonesTableHead2 ();
+	 for (NumStat = 0;
+	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	      NumStat++)
+	    Brw_WriteRowStatsFileBrowsers2 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
+					    StatCrsFileZones[NumStat],
+					    &SizeOfFileZones[NumStat]);
+      HTM_TABLE_End ();
+
+      /***** Write sizes of all file zones per user *****/
+      HTM_TABLE_BeginCenterPadding (2);
+	 Brw_WriteStatsFileZonesTableHead3 ();
+	 for (NumStat = 0;
+	      NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
+	      NumStat++)
+	    Brw_WriteRowStatsFileBrowsers3 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
+					    StatCrsFileZones[NumStat],
+					    &SizeOfFileZones[NumStat]);
+      HTM_TABLE_End ();
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/**************** Get the size of a file zone from database ******************/
+/*****************************************************************************/
+
+static void Brw_GetSizeOfFileZone (Brw_FileBrowser_t FileBrowser,
+                                   struct Brw_SizeOfFileZones *SizeOfFileZones)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get the size of a file browser *****/
+   /* Query database */
+   Brw_DB_GetSizeOfFileBrowser (&mysql_res,FileBrowser);
+
+   /* Get row */
+   row = mysql_fetch_row (mysql_res);
+
+   /* Reset default values to zero */
+   SizeOfFileZones->NumCrss    =
+   SizeOfFileZones->NumUsrs    = 0;
+   SizeOfFileZones->MaxLevels  = 0;
+   SizeOfFileZones->NumFolders =
+   SizeOfFileZones->NumFiles   = 0;
+   SizeOfFileZones->Size       = 0;
+
+   /* Get number of courses (row[0]) */
+   if (row[0])
+      if (sscanf (row[0],"%d",&(SizeOfFileZones->NumCrss)) != 1)
+         Err_ShowErrorAndExit ("Error when getting number of courses.");
+
+   /* Get number of groups (row[1]) */
+   if (row[1])
+      if (sscanf (row[1],"%d",&(SizeOfFileZones->NumGrps)) != 1)
+         Err_ShowErrorAndExit ("Error when getting number of groups.");
+
+   /* Get number of users (row[2]) */
+   if (row[2])
+      if (sscanf (row[2],"%d",&(SizeOfFileZones->NumUsrs)) != 1)
+         Err_ShowErrorAndExit ("Error when getting number of users.");
+
+   /* Get maximum number of levels (row[3]) */
+   if (row[3])
+      if (sscanf (row[3],"%u",&(SizeOfFileZones->MaxLevels)) != 1)
+         Err_ShowErrorAndExit ("Error when getting maximum number of levels.");
+
+   /* Get number of folders (row[4]) */
+   if (row[4])
+      if (sscanf (row[4],"%lu",&(SizeOfFileZones->NumFolders)) != 1)
+         Err_ShowErrorAndExit ("Error when getting number of folders.");
+
+   /* Get number of files (row[5]) */
+   if (row[5])
+      if (sscanf (row[5],"%lu",&(SizeOfFileZones->NumFiles)) != 1)
+         Err_ShowErrorAndExit ("Error when getting number of files.");
+
+   /* Get total size (row[6]) */
+   if (row[6])
+      if (sscanf (row[6],"%llu",&(SizeOfFileZones->Size)) != 1)
+         Err_ShowErrorAndExit ("Error when getting toal size.");
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*************** Write table heading for stats of file zones *****************/
+/*****************************************************************************/
+
+static void Brw_WriteStatsFileZonesTableHead1 (void)
+  {
+   extern const char *Txt_File_zones;
+   extern const char *Txt_Courses;
+   extern const char *Txt_Groups;
+   extern const char *Txt_Users;
+   extern const char *Txt_Max_levels;
+   extern const char *Txt_Folders;
+   extern const char *Txt_Files;
+   extern const char *Txt_Size;
+
+   HTM_TR_Begin (NULL);
+      HTM_TH (Txt_File_zones,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Courses   ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Groups    ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Users     ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Max_levels,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Folders   ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Files     ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Size      ,HTM_HEAD_RIGHT);
+   HTM_TR_End ();
+  }
+
+static void Brw_WriteStatsFileZonesTableHead2 (void)
+  {
+   extern const char *Txt_File_zones;
+   extern const char *Txt_Folders;
+   extern const char *Txt_Files;
+   extern const char *Txt_Size;
+   extern const char *Txt_course;
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TH (Txt_File_zones,HTM_HEAD_LEFT);
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 HTM_TxtF ("%s/",Txt_Folders);
+	 HTM_BR ();
+	 HTM_Txt (Txt_course);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 HTM_TxtF ("%s/",Txt_Files);
+	 HTM_BR ();
+	 HTM_Txt (Txt_course);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 HTM_TxtF ("%s/",Txt_Size);
+	 HTM_BR ();
+	 HTM_Txt (Txt_course);
+      HTM_TH_End ();
+
+   HTM_TR_End ();
+  }
+
+static void Brw_WriteStatsFileZonesTableHead3 (void)
+  {
+   extern const char *Txt_File_zones;
+   extern const char *Txt_Folders;
+   extern const char *Txt_Files;
+   extern const char *Txt_Size;
+   extern const char *Txt_user[Usr_NUM_SEXS];
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TH (Txt_File_zones,HTM_HEAD_LEFT);
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 HTM_TxtF ("%s/",Txt_Folders);
+	 HTM_BR ();
+	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 HTM_TxtF ("%s/",Txt_Files);
+	 HTM_BR ();
+	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
+      HTM_TH_End ();
+
+      HTM_TH_Begin (HTM_HEAD_RIGHT);
+	 HTM_TxtF ("%s/",Txt_Size);
+	 HTM_BR ();
+	 HTM_Txt (Txt_user[Usr_SEX_UNKNOWN]);
+      HTM_TH_End ();
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/*************** Write a row of stats of exploration trees *******************/
+/*****************************************************************************/
+
+static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
+					    Brw_FileBrowser_t FileZone,
+                                            struct Brw_SizeOfFileZones *SizeOfFileZones)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   char StrNumCrss[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumGrps[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumUsrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
+   char *Cl;
+   const char *Class;
+
+   if (FileZone == Brw_UNKNOWN)
+     {
+      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Class = Cl;
+     }
+   else
+      Class = The_ClassDat[Gbl.Prefs.Theme];
+
+   Fil_WriteFileSizeFull ((double) SizeOfFileZones->Size,FileSizeStr);
+
+   if (SizeOfFileZones->NumCrss == -1)	// Not applicable
+      Str_Copy (StrNumCrss,"-",sizeof (StrNumCrss) - 1);
+   else
+      snprintf (StrNumCrss,sizeof (StrNumCrss),"%d",
+		SizeOfFileZones->NumCrss);
+
+   if (SizeOfFileZones->NumGrps == -1)	// Not applicable
+      Str_Copy (StrNumGrps,"-",sizeof (StrNumGrps) - 1);
+   else
+      snprintf (StrNumGrps,sizeof (StrNumGrps),"%d",
+		SizeOfFileZones->NumGrps);
+
+   if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
+      Str_Copy (StrNumUsrs,"-",sizeof (StrNumUsrs) - 1);
+   else
+      snprintf (StrNumUsrs,sizeof (StrNumUsrs),"%d",
+		SizeOfFileZones->NumUsrs);
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"%s LM\"",Class);
+	 HTM_Txt (NameOfFileZones);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumCrss);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumGrps);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumUsrs);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Unsigned (SizeOfFileZones->MaxLevels);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_UnsignedLong (SizeOfFileZones->NumFolders);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_UnsignedLong (SizeOfFileZones->NumFiles);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (FileSizeStr);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   if (FileZone == Brw_UNKNOWN)
+      free (Cl);
+  }
+
+static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
+					    Brw_FileBrowser_t FileZone,
+                                            struct Brw_SizeOfFileZones *SizeOfFileZones)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   char StrNumFoldersPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumFilesPerCrs[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
+   char *Cl;
+   const char *Class;
+
+   if (FileZone == Brw_UNKNOWN)
+     {
+      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Class = Cl;
+     }
+   else
+      Class = The_ClassDat[Gbl.Prefs.Theme];
+
+   if (SizeOfFileZones->NumCrss == -1)	// Not applicable
+     {
+      Str_Copy (StrNumFoldersPerCrs,"-",sizeof (StrNumFoldersPerCrs) - 1);
+      Str_Copy (StrNumFilesPerCrs  ,"-",sizeof (StrNumFilesPerCrs  ) - 1);
+      Str_Copy (FileSizePerCrsStr  ,"-",sizeof (FileSizePerCrsStr  ) - 1);
+     }
+   else
+     {
+      snprintf (StrNumFoldersPerCrs,sizeof (StrNumFoldersPerCrs),"%.1f",
+                SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->NumFolders /
+        	                           (double) SizeOfFileZones->NumCrss :
+        	                           0.0);
+      snprintf (StrNumFilesPerCrs,sizeof (StrNumFilesPerCrs),"%.1f",
+                SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->NumFiles /
+        	                           (double) SizeOfFileZones->NumCrss :
+        	                           0.0);
+      Fil_WriteFileSizeFull (SizeOfFileZones->NumCrss ? (double) SizeOfFileZones->Size /
+	                                                (double) SizeOfFileZones->NumCrss :
+	                                                0.0,
+	                     FileSizePerCrsStr);
+     }
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"%s LM\"",Class);
+	 HTM_Txt (NameOfFileZones);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFoldersPerCrs);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFilesPerCrs);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (FileSizePerCrsStr);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   if (FileZone == Brw_UNKNOWN)
+      free (Cl);
+  }
+
+static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
+					    Brw_FileBrowser_t FileZone,
+                                            struct Brw_SizeOfFileZones *SizeOfFileZones)
+  {
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   char StrNumFoldersPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char StrNumFilesPerUsr[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
+   char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
+   char *Cl;
+   const char *Class;
+
+   if (FileZone == Brw_UNKNOWN)
+     {
+      if (asprintf (&Cl,"%s LINE_TOP",The_ClassDatStrong[Gbl.Prefs.Theme]) < 0)
+	 Err_NotEnoughMemoryExit ();
+      Class = Cl;
+     }
+   else
+      Class = The_ClassDat[Gbl.Prefs.Theme];
+
+   if (SizeOfFileZones->NumUsrs == -1)	// Not applicable
+     {
+      Str_Copy (StrNumFoldersPerUsr,"-",sizeof (StrNumFoldersPerUsr) - 1);
+      Str_Copy (StrNumFilesPerUsr  ,"-",sizeof (StrNumFilesPerUsr  ) - 1);
+      Str_Copy (FileSizePerUsrStr  ,"-",sizeof (FileSizePerUsrStr  ) - 1);
+     }
+   else
+     {
+      snprintf (StrNumFoldersPerUsr,sizeof (StrNumFoldersPerUsr),"%.1f",
+                SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->NumFolders /
+        	                           (double) SizeOfFileZones->NumUsrs :
+        	                           0.0);
+      snprintf (StrNumFilesPerUsr,sizeof (StrNumFilesPerUsr),"%.1f",
+                SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->NumFiles /
+        	                           (double) SizeOfFileZones->NumUsrs :
+        	                           0.0);
+      Fil_WriteFileSizeFull (SizeOfFileZones->NumUsrs ? (double) SizeOfFileZones->Size /
+	                                                (double) SizeOfFileZones->NumUsrs :
+	                                                0.0,
+	                     FileSizePerUsrStr);
+     }
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TD_Begin ("class=\"%s LM\"",Class);
+	 HTM_Txt (NameOfFileZones);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFoldersPerUsr);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (StrNumFilesPerUsr);
+      HTM_TD_End ();
+
+      HTM_TD_Begin ("class=\"%s RM\"",Class);
+	 HTM_Txt (FileSizePerUsrStr);
+      HTM_TD_End ();
+
+   HTM_TR_End ();
+
+   if (FileZone == Brw_UNKNOWN)
+      free (Cl);
+  }
+
+/*****************************************************************************/
+/************ Show stats about Open Educational Resources (OERs) *************/
+/*****************************************************************************/
+
+void Brw_GetAndShowOERsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_open_educational_resources_oer;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_License;
+   extern const char *Txt_Number_of_private_files;
+   extern const char *Txt_Number_of_public_files;
+   extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
+   Brw_License_t License;
+   unsigned long NumFiles[2];
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_OER],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_License                ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_private_files,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_public_files ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      for (License  = (Brw_License_t) 0;
+	   License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
+	   License++)
+	{
+	 Brw_GetNumberOfOERs (License,NumFiles);
+
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_LICENSES[License]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_UnsignedLong (NumFiles[0]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_UnsignedLong (NumFiles[1]);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/**************** Get the size of a file zone from database ******************/
+/*****************************************************************************/
+
+static void Brw_GetNumberOfOERs (Brw_License_t License,
+                                 unsigned long NumFiles[2])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows = 0;	// Initialized to avoid warning
+   unsigned NumRow;
+   unsigned Public;
+
+   /***** Get the size of a file browser *****/
+   /* Query database */
+   NumRows = Brw_DB_GetNumberOfPublicFiles (&mysql_res,License);
+
+   /* Reset values to zero */
+   NumFiles[0] = NumFiles[1] = 0L;
+
+   for (NumRow = 0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get if public (row[0]) */
+      Public = (row[0][0] == 'Y') ? 1 :
+	                            0;
+
+      /* Get number of files (row[1]) */
+      if (sscanf (row[1],"%lu",&NumFiles[Public]) != 1)
+         Err_ShowErrorAndExit ("Error when getting number of files.");
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
   }

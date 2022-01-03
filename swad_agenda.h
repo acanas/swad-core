@@ -136,4 +136,7 @@ void Agd_ReceiveFormEvent (void);
 
 void Agd_PrintAgdQRCode (void);
 
+//-------------------------------- Figures ------------------------------------
+void Agd_GetAndShowAgendasStats (void);
+
 #endif

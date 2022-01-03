@@ -52,4 +52,7 @@ void Cal_PrintCalendar (void);
 
 void Cal_PutIconToSeeCalendar (__attribute__((unused)) void *Args);
 
+//-------------------------------- Figures ------------------------------------
+void Cal_GetAndShowNumUsrsPerFirstDayOfWeek (void);
+
 #endif

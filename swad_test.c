@@ -738,3 +738,150 @@ static unsigned Tst_GetParamNumQsts (void)
 	                                       (unsigned long) TstCfg_GetConfigMax (),
 	                                       (unsigned long) TstCfg_GetConfigDef ());
   }
+
+/*****************************************************************************/
+/********************** Show figures about test questions ********************/
+/*****************************************************************************/
+
+void Tst_GetAndShowTestsStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_tests;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Type_of_BR_answers;
+   extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
+   extern const char *Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions;
+   extern const char *Txt_Number_BR_of_test_BR_questions;
+   extern const char *Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course;
+   extern const char *Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded;
+   extern const char *Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course;
+   extern const char *Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded;
+   extern const char *Txt_Average_BR_score_BR_per_question;
+   extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
+   extern const char *Txt_Total;
+   Qst_AnswerType_t AnsType;
+   struct Qst_Stats Stats;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_TESTS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
+
+      /***** Write table heading *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Type_of_BR_answers                                                                     ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_BR_courses_BR_with_test_BR_questions                                         ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions                           ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_BR_of_test_BR_questions                                                         ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course                                ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded                         ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded              ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Average_BR_score_BR_per_question                                                       ,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      for (AnsType  = (Qst_AnswerType_t) 0;
+	   AnsType <= (Qst_AnswerType_t) (Qst_NUM_ANS_TYPES - 1);
+	   AnsType++)
+	{
+	 /***** Get the stats about test questions from this location *****/
+	 Qst_GetTestStats (AnsType,&Stats);
+
+	 /***** Write stats *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnsType]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (Stats.NumCoursesWithQuestions);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_TxtF ("%u (%.1lf%%)",
+			 Stats.NumCoursesWithPluggableQuestions,
+			 Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+							 (double) Stats.NumCoursesWithQuestions :
+							 0.0);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (Stats.NumQsts);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Double2Decimals (Stats.AvgQstsPerCourse);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_UnsignedLong (Stats.NumHits);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Double2Decimals (Stats.AvgHitsPerCourse);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Double2Decimals (Stats.AvgScorePerQuestion);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Get the stats about test questions from this location *****/
+      Qst_GetTestStats (Qst_ANS_UNKNOWN,&Stats);
+
+      /***** Write stats *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (Stats.NumCoursesWithQuestions);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_TxtF ("%u (%.1f%%)",
+		      Stats.NumCoursesWithPluggableQuestions,
+		      Stats.NumCoursesWithQuestions ? (double) Stats.NumCoursesWithPluggableQuestions * 100.0 /
+						      (double) Stats.NumCoursesWithQuestions :
+						      0.0);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (Stats.NumQsts);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (Stats.AvgQstsPerCourse);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_UnsignedLong (Stats.NumHits);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (Stats.AvgHitsPerCourse);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (Stats.AvgHitsPerQuestion);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (Stats.AvgScorePerQuestion);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

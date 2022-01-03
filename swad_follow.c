@@ -1194,3 +1194,93 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
    /***** Flush cache *****/
    Fol_FlushCacheFollow ();
   }
+
+/*****************************************************************************/
+/************** Get and show number of following and followers ***************/
+/*****************************************************************************/
+
+void Fol_GetAndShowFollowStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_followed_followers;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Users;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_Followed;
+   extern const char *Txt_Followers;
+   extern const char *Txt_FollowPerFollow[2];
+   unsigned Fol;
+   unsigned NumUsrsTotal;
+   unsigned NumUsrs;
+   double Average;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLLOW],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Users           ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Get total number of users *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+
+      /***** Get total number of following/followers from database *****/
+      for (Fol = 0;
+	   Fol < 2;
+	   Fol++)
+	{
+	 NumUsrs = Fol_DB_GetNumFollowinFollowers (Fol);
+
+	 /***** Write number of followed / followers *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Fol == 0 ? Txt_Followed :
+				   Txt_Followers);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Write number of followed/followers per follower/followed *****/
+      for (Fol = 0;
+	   Fol < 2;
+	   Fol++)
+	{
+	 Average = Fol_DB_GetNumFollowedPerFollower (Fol);
+
+	 /***** Write number of followed per follower *****/
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_FollowPerFollow[Fol]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Double2Decimals (Average);
+	    HTM_TD_End ();
+
+	    HTM_TD_Empty (1);
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }

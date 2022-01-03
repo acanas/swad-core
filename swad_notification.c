@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <stddef.h>		// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system
 #include <string.h>
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -68,6 +70,7 @@
 #include "swad_timeline_database.h"
 #include "swad_timeline_notification.h"
 #include "swad_timeline_publication.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1669,4 +1672,167 @@ void Ntf_WriteNumberOfNewNtfs (void)
 
    /***** End form *****/
    Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/****** Get and show number of users who want to be notified by email ********/
+/*****************************************************************************/
+
+void Ntf_GetAndShowNumUsrsPerNotifyEvent (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_notifications;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Event;
+   extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_Number_of_events;
+   extern const char *Txt_Number_of_emails;
+   extern const char *Txt_Total;
+   Ntf_NotifyEvent_t NotifyEvent;
+   char *SubQuery;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumUsrsTotal;
+   unsigned NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent;
+   unsigned NumUsrs[Ntf_NUM_NOTIFY_EVENTS];
+   unsigned NumEventsTotal = 0;
+   unsigned NumEvents[Ntf_NUM_NOTIFY_EVENTS];
+   unsigned NumMailsTotal = 0;
+   unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_NOTIFY_EVENTS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Event           ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_events,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_emails,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Get total number of users *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+
+      /***** Get total number of users who want to be
+	     notified by email on some event, from database *****/
+      NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent =
+      Usr_DB_GetNumUsrsWhoChoseAnOption ("usr_data.EmailNtfEvents<>0");
+
+      /***** For each notify event... *****/
+      for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	   NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
+	   NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+	{
+	 /* Get the number of users who want to be notified by email on this event, from database */
+	 if (asprintf (&SubQuery,"((usr_data.EmailNtfEvents & %u)<>0)",
+		       (1 << NotifyEvent)) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[NotifyEvent] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Get number of notifications by email from database */
+	 if (Ntf_DB_GetNumNotifs (&mysql_res,NotifyEvent))
+	   {
+	    row = mysql_fetch_row (mysql_res);
+
+	    /* Get number of events notified */
+	    if (row[0])
+	      {
+	       if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
+		  Err_ShowErrorAndExit ("Error when getting the number of notifications by email.");
+	      }
+	    else
+	       NumEvents[NotifyEvent] = 0;
+
+	    /* Get number of mails sent */
+	    if (row[1])
+	      {
+	       if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
+		  Err_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
+	      }
+	    else
+	       NumMails[NotifyEvent] = 0;
+	   }
+	 else
+	   {
+	    NumEvents[NotifyEvent] = 0;
+	    NumMails[NotifyEvent]  = 0;
+	   }
+
+	 /* Free structure that stores the query result */
+	 DB_FreeMySQLResult (&mysql_res);
+
+	 /* Update total number of events and mails */
+	 NumEventsTotal += NumEvents[NotifyEvent];
+	 NumMailsTotal  += NumMails [NotifyEvent];
+	}
+
+      /***** Write number of users who want to be notified by email on each event *****/
+      for (NotifyEvent  = (Ntf_NotifyEvent_t) 1;
+	   NotifyEvent <= (Ntf_NotifyEvent_t) (Ntf_NUM_NOTIFY_EVENTS - 1);
+	   NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[NotifyEvent]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[NotifyEvent] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumEvents[NotifyEvent]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumMails[NotifyEvent]);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+      /***** Write total number of users who want to be notified by email on some event *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"LM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Txt (Txt_Total);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
+					   (double) NumUsrsTotal :
+					   0.0);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumEventsTotal);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"RM %s LINE_TOP\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumMailsTotal);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

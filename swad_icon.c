@@ -42,6 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -558,4 +559,101 @@ void Ico_PutIconNotVisible (void)
    extern const char *Txt_Not_visible;
 
    Ico_PutIconOff ("eye-slash.svg",Ico_RED,Txt_Not_visible);
+  }
+
+/*****************************************************************************/
+/********* Get and show number of users who have chosen an icon set **********/
+/*****************************************************************************/
+
+void Ico_GetAndShowNumUsrsPerIconSet (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_icons;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Icons;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   static const char *ClassIco[Ico_NUM_ICON_SETS][The_NUM_THEMES] =
+     {
+      [Ico_ICON_SET_AWESOME][The_THEME_WHITE ] = "ICO20x20 BLACK_ICO_WHITE",
+      [Ico_ICON_SET_AWESOME][The_THEME_GREY  ] = "ICO20x20 BLACK_ICO_GREY",
+      [Ico_ICON_SET_AWESOME][The_THEME_PURPLE] = "ICO20x20 BLACK_ICO_PURPLE",
+      [Ico_ICON_SET_AWESOME][The_THEME_BLUE  ] = "ICO20x20 BLACK_ICO_BLUE",
+      [Ico_ICON_SET_AWESOME][The_THEME_YELLOW] = "ICO20x20 BLACK_ICO_YELLOW",
+      [Ico_ICON_SET_AWESOME][The_THEME_PINK  ] = "ICO20x20 BLACK_ICO_PINK",
+      [Ico_ICON_SET_AWESOME][The_THEME_DARK  ] = "ICO20x20 BLACK_ICO_DARK",
+
+      [Ico_ICON_SET_NUVOLA ][The_THEME_WHITE ] = "ICO20x20",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_GREY  ] = "ICO20x20",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_PURPLE] = "ICO20x20",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_BLUE  ] = "ICO20x20",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_YELLOW] = "ICO20x20",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_PINK  ] = "ICO20x20",
+      [Ico_ICON_SET_NUVOLA ][The_THEME_DARK  ] = "ICO20x20",
+     };
+   Ico_IconSet_t IconSet;
+   char *SubQuery;
+   char *URL;
+   unsigned NumUsrs[Ico_NUM_ICON_SETS];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_ICON_SETS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Icons           ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** For each icon set... *****/
+      for (IconSet  = (Ico_IconSet_t) 0;
+	   IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
+	   IconSet++)
+	{
+	 /* Get the number of users who have chosen this icon set from database */
+	 if (asprintf (&SubQuery,"usr_data.IconSet='%s'",
+		       Ico_IconSetId[IconSet]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[IconSet] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[IconSet];
+	}
+
+      /***** Write number of users who have chosen each icon set *****/
+      for (IconSet  = (Ico_IconSet_t) 0;
+	   IconSet <= (Ico_IconSet_t) (Ico_NUM_ICON_SETS - 1);
+	   IconSet++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"LM\"");
+	       if (asprintf (&URL,"%s/%s",
+			     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
+		  Err_NotEnoughMemoryExit ();
+	       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
+			"class=\"%s\"",ClassIco[IconSet][Gbl.Prefs.Theme]);
+	       free (URL);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[IconSet]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[IconSet] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

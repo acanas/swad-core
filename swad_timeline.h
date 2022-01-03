@@ -113,4 +113,7 @@ void Tml_RefreshOldTimelineUsr (void);
 
 void Tml_WriteDateTime (time_t TimeUTC);
 
+//-------------------------------- Figures ------------------------------------
+void Tml_GetAndShowTimelineActivityStats (void);
+
 #endif

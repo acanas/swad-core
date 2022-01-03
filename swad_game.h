@@ -164,4 +164,7 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod);
 
 void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore);
 
+//-------------------------------- Figures ------------------------------------
+void Gam_GetAndShowGamesStats (void);
+
 #endif

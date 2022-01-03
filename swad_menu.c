@@ -25,8 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_box.h"
 #include "swad_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -37,6 +41,7 @@
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_tab.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -401,4 +406,80 @@ void Mnu_ContextMenuBegin (void)
 void Mnu_ContextMenuEnd (void)
   {
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/*********** Get and show number of users who have chosen a menu *************/
+/*****************************************************************************/
+
+void Mnu_GetAndShowNumUsrsPerMenu (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_menu;
+   extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Menu;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
+   Mnu_Menu_t Menu;
+   char *SubQuery;
+   unsigned NumUsrs[Mnu_NUM_MENUS];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_MENUS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Menu            ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** For each menu... *****/
+      for (Menu  = (Mnu_Menu_t) 0;
+	   Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
+	   Menu++)
+	{
+	 /* Get number of users who have chosen this menu from database */
+	 if (asprintf (&SubQuery,"usr_data.Menu=%u",
+		       (unsigned) Menu) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Menu] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Menu];
+	}
+
+      /***** Write number of users who have chosen each menu *****/
+      for (Menu  = (Mnu_Menu_t) 0;
+	   Menu <= (Mnu_Menu_t) (Mnu_NUM_MENUS - 1);
+	   Menu++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"CM\"");
+	       Ico_PutIcon (Mnu_MenuIcons[Menu],Ico_BLACK,
+	                    Txt_MENU_NAMES[Menu],"ICOx20");
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[Menu]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Menu] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

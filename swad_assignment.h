@@ -100,4 +100,7 @@ void Asg_RemoveCrsAssignments (long CrsCod);
 
 unsigned Asg_GetNumAssignments (HieLvl_Level_t Scope,unsigned *NumNotif);
 
+//-------------------------------- Figures ------------------------------------
+void Asg_GetAndShowAssignmentsStats (void);
+
 #endif

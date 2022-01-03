@@ -25,11 +25,14 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>
 
 #include "swad_action.h"
 #include "swad_box.h"
 #include "swad_enrolment_database.h"
+#include "swad_error.h"
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
@@ -37,6 +40,7 @@
 #include "swad_parameter.h"
 #include "swad_privacy.h"
 #include "swad_theme.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -74,6 +78,10 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Act_Action_t Action,const char *ParamName,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility);
+
+static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
+                                                        const char *FieldName,
+                                                        unsigned MaskAllowedVisibility);
 
 /*****************************************************************************/
 /******************************* Edit my privacy *****************************/
@@ -275,3 +283,105 @@ bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
 
    return false;	// Never reached. To avoid warning
   }
+
+/*****************************************************************************/
+/********** Get and show number of users who have chosen a privacy ***********/
+/*****************************************************************************/
+
+void Pri_GetAndShowNumUsrsPerPrivacy (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_privacy;
+   extern const char *Txt_Photo;
+   extern const char *Txt_Basic_public_profile;
+   extern const char *Txt_Extended_public_profile;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_PRIVACY],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
+
+      /***** Privacy for photo *****/
+      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,
+						  "PhotoVisibility",
+						  Pri_PHOTO_ALLOWED_VIS);
+
+      /***** Privacy for public profile *****/
+      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Basic_public_profile,
+						  "BaPrfVisibility",
+						  Pri_BASIC_PROFILE_ALLOWED_VIS);
+      Pri_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Extended_public_profile,
+						  "ExPrfVisibility",
+						  Pri_EXTENDED_PROFILE_ALLOWED_VIS);
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
+  }
+
+/*****************************************************************************/
+/********** Get and show number of users who have chosen a privacy ***********/
+/*****************************************************************************/
+
+static void Pri_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
+                                                        const char *FieldName,
+                                                        unsigned MaskAllowedVisibility)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
+   Pri_Visibility_t Visibility;
+   char *SubQuery;
+   unsigned NumUsrs[Pri_NUM_OPTIONS_PRIVACY];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Heading row *****/
+   HTM_TR_Begin (NULL);
+      HTM_TH (TxtObject           ,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+   HTM_TR_End ();
+
+   /***** For each privacy option... *****/
+   for (Visibility  = (Pri_Visibility_t) 0;
+	Visibility <= (Pri_Visibility_t) (Pri_NUM_OPTIONS_PRIVACY - 1);
+	Visibility++)
+      if (MaskAllowedVisibility & (1 << Visibility))
+	{
+	 /* Get the number of users who have chosen this privacy option from database */
+	 if (asprintf (&SubQuery,"usr_data.%s='%s'",
+		       FieldName,Pri_VisibilityDB[Visibility]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Visibility] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Visibility];
+	}
+
+   /***** Write number of users who have chosen each privacy option *****/
+   for (Visibility  = (Pri_Visibility_t) 0;
+	Visibility <= (Pri_Visibility_t) (Pri_NUM_OPTIONS_PRIVACY - 1);
+	Visibility++)
+      if (MaskAllowedVisibility & (1 << Visibility))
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"%s LM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Txt (Txt_PRIVACY_OPTIONS[Visibility]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[Visibility]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Visibility] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+         HTM_TR_End ();
+	}
+   }

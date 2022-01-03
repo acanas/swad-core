@@ -39,6 +39,7 @@
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_error.h"
+#include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -1658,4 +1659,72 @@ void Agd_PrintAgdQRCode (void)
 
    /***** End box *****/
    Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/********* Get and show number of users who have chosen a language ***********/
+/*****************************************************************************/
+
+void Agd_GetAndShowAgendasStats (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_agendas;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Number_of_events;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   extern const char *Txt_Number_of_events_per_user;
+   unsigned NumEvents;
+   unsigned NumUsrs;
+   unsigned NumUsrsTotal;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_AGENDAS],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_agendas,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Number_of_events         ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_users          ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users         ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_Number_of_events_per_user,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** Number of agenda events *****/
+      NumEvents = Agd_DB_GetNumEvents (Gbl.Scope.Current);
+
+      /***** Number of users with agenda events *****/
+      NumUsrs = Agd_DB_GetNumUsrsWithEvents (Gbl.Scope.Current);
+
+      /***** Get total number of users in current scope *****/
+      NumUsrsTotal = Usr_GetTotalNumberOfUsers ();
+
+      /***** Write number of users who have chosen each language *****/
+      HTM_TR_Begin (NULL);
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumEvents);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Unsigned (NumUsrs);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Percentage (NumUsrsTotal ? (double) NumUsrs * 100.0 /
+					   (double) NumUsrsTotal :
+					   0);
+	 HTM_TD_End ();
+
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_Double2Decimals (NumUsrs ? (double) NumEvents /
+					   (double) NumUsrs :
+					   0);
+	 HTM_TD_End ();
+
+      HTM_TR_End ();
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }

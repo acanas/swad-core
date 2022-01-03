@@ -147,6 +147,17 @@ struct FileMetadata
    unsigned NumLoggedUsrs;
   };
 
+struct Brw_SizeOfFileZones
+  {
+   int NumCrss;	// -1 stands for not aplicable
+   int NumGrps;	// -1 stands for not aplicable
+   int NumUsrs;	// -1 stands for not aplicable
+   unsigned MaxLevels;
+   unsigned long NumFolders;
+   unsigned long NumFiles;
+   unsigned long long int Size;	// Total size in bytes
+  };
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -265,5 +276,9 @@ void Brw_RemoveOldFilesBriefcase (void);
 
 Act_Action_t Brw_GetActionExpand (void);
 Act_Action_t Brw_GetActionContract (void);
+
+//-------------------------------- Figures ------------------------------------
+void Brw_GetAndShowFileBrowsersStats (void);
+void Brw_GetAndShowOERsStats (void);
 
 #endif

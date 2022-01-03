@@ -125,4 +125,7 @@ void Msg_UnbanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenListingUsrs (void);
 void Msg_ListBannedUsrs (void);
 
+//-------------------------------- Figures ------------------------------------
+void Msg_GetAndShowMsgsStats (void);
+
 #endif

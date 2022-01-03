@@ -44,6 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_setting_database.h"
+#include "swad_user_database.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1742,4 +1743,79 @@ void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
 void Dat_PutHiddenParamOrder (Dat_StartEndTime_t SelectedOrder)
   {
    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) SelectedOrder);
+  }
+
+/*****************************************************************************/
+/******** Get and show number of users who have chosen a date format *********/
+/*****************************************************************************/
+
+void Dat_GetAndShowNumUsrsPerDateFormat (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_dates;
+   extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Format;
+   extern const char *Txt_Number_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   unsigned Format;
+   char *SubQuery;
+   unsigned NumUsrs[Dat_NUM_OPTIONS_FORMAT];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Begin box and table *****/
+   Box_BoxTableBegin (NULL,Txt_FIGURE_TYPES[Fig_DATE_FORMAT],
+                      NULL,NULL,
+                      Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
+
+      /***** Heading row *****/
+      HTM_TR_Begin (NULL);
+	 HTM_TH (Txt_Format          ,HTM_HEAD_LEFT);
+	 HTM_TH (Txt_Number_of_users ,HTM_HEAD_RIGHT);
+	 HTM_TH (Txt_PERCENT_of_users,HTM_HEAD_RIGHT);
+      HTM_TR_End ();
+
+      /***** For each format... *****/
+      for (Format  = (Dat_Format_t) 0;
+	   Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
+	   Format++)
+	{
+	 /* Get number of users who have chosen this date format from database */
+	 if (asprintf (&SubQuery,"usr_data.DateFormat=%u",
+		       (unsigned) Format) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 NumUsrs[Format] = Usr_DB_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free (SubQuery);
+
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Format];
+	}
+
+      /***** Write number of users who have chosen each date format *****/
+      for (Format  = (Dat_Format_t) 0;
+	   Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
+	   Format++)
+	{
+	 HTM_TR_Begin (NULL);
+
+	    HTM_TD_Begin ("class=\"LM %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
+	       Dat_PutSpanDateFormat (Format);
+	       Dat_PutScriptDateFormat (Format);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Unsigned (NumUsrs[Format]);
+	    HTM_TD_End ();
+
+	    HTM_TD_Begin ("class=\"RM %s\"",The_ClassDat[Gbl.Prefs.Theme]);
+	       HTM_Percentage (NumUsrsTotal ? (double) NumUsrs[Format] * 100.0 /
+					      (double) NumUsrsTotal :
+					      0.0);
+	    HTM_TD_End ();
+
+	 HTM_TR_End ();
+	}
+
+   /***** End table and box *****/
+   Box_BoxTableEnd ();
   }
