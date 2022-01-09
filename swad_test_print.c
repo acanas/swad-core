@@ -285,13 +285,16 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
                                          unsigned QstInd,
                                          struct Qst_Question *Question)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,
+	                      The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -588,6 +591,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       bool QuestionExists,
 				       unsigned Visibility)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_Score;
    extern const char *Txt_Question_removed;
    extern const char *Txt_Question_modified;
@@ -636,7 +640,8 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
 	 if (QuestionUneditedAfterExam)
-	    Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	    Qst_WriteAnswerType (Question->Answer.Type,
+	                         The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -668,7 +673,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
 	   {
-	    HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
+	    HTM_DIV_Begin ("class=\"%s LM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_SPAN_Begin ("class=\"%s\"",
 			       PrintedQuestions[QstInd].StrAnswers[0] ?
@@ -1620,14 +1625,15 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 
 static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   HTM_TD_Begin ("class=\"DAT_SMALL CM\"");
+   HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_Txt (Txt_User[UsrDat->Sex]);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"DAT_SMALL CM\"");
+   HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
   }

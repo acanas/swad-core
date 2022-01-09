@@ -1062,6 +1062,8 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
   {
    extern const char *Rol_Icons[Rol_NUM_ROLES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
    unsigned NumFollowing;
@@ -1107,9 +1109,10 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       /* Nickname */
       if (UsrDat->Nickname[0])
 	{
-	 if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
+	 if (asprintf (&Caption.Nick,"<div class=\"ZOOM_TXT_LINE %s\">"
 					"@%s"
 				     "</div>",
+		       The_ClassDatSmallStrong[Gbl.Prefs.Theme],
 		       UsrDat->Nickname) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1124,9 +1127,10 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
 	 /* Write institution short name and country name */
-	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE %s\">"
 					  "%s&nbsp;(%s)"
 				       "</div>",
+		       The_ClassDatSmall[Gbl.Prefs.Theme],
 		       Ins.ShrtName,CtyName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -1136,10 +1140,11 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 Cty_GetCountryName (UsrDat->CtyCod,Gbl.Prefs.Language,CtyName);
 
 	 /* Write country name */
-	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT_LINE %s\">"
 					  "%s"
 				       "</div>",
-				  CtyName) < 0)
+		       The_ClassDatSmall[Gbl.Prefs.Theme],
+		       CtyName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
       else if (asprintf (&Caption.InsCty,"%s","") < 0)
@@ -1149,13 +1154,15 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Deg_GetUsrMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
       if (MainDegreeShrtName[0])
 	{
-	 if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
-					    "<div class=\"ZOOM_DEG\" style=\"background-image:url('%s/%s');\">"
+	 if (asprintf (&Caption.MainDeg,"<div class=\"ZOOM_TXT_LINE %s\">"
+					    "<div class=\"ZOOM_DEG\""
+					        " style=\"background-image:url('%s/%s');\">"
 					       "%s"
 					    "</div>"
 					 "</div>",
-				   Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
-				   MainDegreeShrtName) < 0)
+		       The_ClassDatSmall[Gbl.Prefs.Theme],
+		       Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
+		       MainDegreeShrtName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
       else if (asprintf (&Caption.MainDeg,"%s","") < 0)
@@ -1169,21 +1176,23 @@ void Pho_BuildHTMLUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 					   "<span class=\"%s BOLD\">"
 					      "%u"
 					   "</span>"
-					   "<span class=\"DAT_SMALL\">"
+					   "<span class=\"%s\">"
 					      "&nbsp;%s&nbsp;"
 					   "</span>"
 					   "<span class=\"%s BOLD\">"
 					      "%u"
 					   "</span>"
-					   "<span class=\"DAT_SMALL\">"
+					   "<span class=\"%s\">"
 					      "&nbsp;%s"
 					   "</span>"
 					"</div>",
 		       The_ClassDatStrong[Gbl.Prefs.Theme],
 		       NumFollowing,
+		       The_ClassDatSmall[Gbl.Prefs.Theme],
 		       Txt_Following,
 		       The_ClassDatStrong[Gbl.Prefs.Theme],
 		       NumFollowers,
+		       The_ClassDatSmall[Gbl.Prefs.Theme],
 		       Txt_Followers) < 0)
 	    Err_NotEnoughMemoryExit ();
 	}
@@ -2334,13 +2343,14 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,
 static void Pho_ShowDegreeStat (int NumStds,int NumStdsWithPhoto)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_photos;
 
    HTM_SPAN_Begin ("class=\"%s\"",The_ClassDat[Gbl.Prefs.Theme]);
       HTM_TxtF ("%d&nbsp;",NumStds);
    HTM_SPAN_End ();
 
-   HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+   HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_TxtF ("(%d&nbsp;%s,&nbsp;%d%%)",
 		NumStdsWithPhoto,Txt_photos,
 		NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :

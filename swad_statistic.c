@@ -751,6 +751,7 @@ void Sta_SeeCrsAccesses (void)
 
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
    extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
@@ -1043,7 +1044,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       case Sta_CLICKS_GBL_PER_HOUR:
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
-	 HTM_TxtF ("<p class=\"DAT_SMALL CM\">%s: %s</p>",
+	 HTM_TxtF ("<p class=\"%s CM\">%s: %s</p>",
+	           The_ClassDatSmall[Gbl.Prefs.Theme],
 		   Txt_Time_zone_used_in_the_calculation_of_these_statistics,
 		   BrowserTimeZone);
 	 break;
@@ -2368,9 +2370,12 @@ static void Sta_ShowNumHitsPerHour (unsigned NumHits,
 
 static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned ColumnWidth)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    unsigned BarHeight;
 
-   HTM_TD_Begin ("class=\"DAT_SMALL CB\" style=\"width:%upx;\"",ColumnWidth);
+   HTM_TD_Begin ("class=\"%s CB\" style=\"width:%upx;\"",
+                 The_ClassDatSmall[Gbl.Prefs.Theme],
+                 ColumnWidth);
 
       /* Draw bar with a height porportional to the number of clicks */
       if (Hits->Num > 0.0)

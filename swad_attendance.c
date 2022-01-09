@@ -1697,6 +1697,9 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -1746,7 +1749,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TR_Begin (NULL);
 
       /***** Icon to show if the user is already present *****/
-      HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
 	    Att_PutCheckOrCross (Present);
 	 HTM_LABEL_End ();
@@ -1758,7 +1761,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 			     "id=\"Std%u\" value=\"%s\"%s%s",
 			     NumUsr,UsrDat->EnUsrCod,
 			     Present ? " checked=\"checked\"" : "",
-			     ICanChangeStdAttendance ? "" : " disabled=\"disabled\"");
+			     ICanChangeStdAttendance ? "" :
+				                       " disabled=\"disabled\"");
       HTM_TD_End ();
 
       /***** Write number of student in the list *****/
@@ -1772,7 +1776,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       /***** Show student's photo *****/
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LT\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
@@ -1780,17 +1784,17 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	}
 
       /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"%s LT %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+      HTM_TD_Begin ("class=\"%s %s LT\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write student's name *****/
       HTM_TD_Begin ("class=\"%s LT %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
@@ -1799,11 +1803,16 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Student's comment: write form or text */
-      HTM_TD_Begin ("class=\"DAT_SMALL LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s LT %s\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
+		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanEditStdComment)	// Show with form
 	   {
-	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\"",
-				UsrDat->EnUsrCod);
+	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
+				" class=\"%s\"",
+				UsrDat->EnUsrCod,
+				The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_Txt (CommentStd);
 	    HTM_TEXTAREA_End ();
 	   }
@@ -1816,11 +1825,16 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Teacher's comment: write form, text or nothing */
-      HTM_TD_Begin ("class=\"DAT_SMALL LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s LT %s\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
+		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (ICanEditTchComment)		// Show with form
 	   {
-	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\"",
-				UsrDat->EnUsrCod);
+	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
+				" class=\"%s\"",
+				UsrDat->EnUsrCod,
+				The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_Txt (CommentTch);
 	    HTM_TEXTAREA_End ();
 	   }
@@ -2947,6 +2961,8 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2980,16 +2996,16 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 
       /***** Write user's ID ******/
       HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write user's name *****/
       HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
@@ -3009,7 +3025,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 							 UsrDat->UsrCod);
 
 	    /* Write check or cross */
-	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 
@@ -3035,17 +3051,20 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 
 static void Att_PutCheckOrCross (bool Present)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
 
    if (Present)
      {
-      HTM_DIV_Begin ("class=\"ATT_CHECK\" title=\"%s\"",Txt_Present);
+      HTM_DIV_Begin ("class=\"ATT_CHECK ATT_CHECK_%s\" title=\"%s\"",
+                     The_Colors[Gbl.Prefs.Theme],Txt_Present);
 	 HTM_Txt ("&check;");
      }
    else
      {
-      HTM_DIV_Begin ("class=\"ATT_CROSS\" title=\"%s\"",Txt_Absent);
+      HTM_DIV_Begin ("class=\"ATT_CROSS ATT_CROSS_%s\" title=\"%s\"",
+                     The_Colors[Gbl.Prefs.Theme],Txt_Absent);
 	 HTM_Txt ("&cross;");
      }
 
@@ -3110,6 +3129,9 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
@@ -3154,15 +3176,15 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 
 	       /***** Write user's ID ******/
 	       HTM_TD_Begin ("class=\"%s LM\"",
-			     UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
-						The_ClassDat[Gbl.Prefs.Theme]);
+			     UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+						The_ClassDatSmall[Gbl.Prefs.Theme]);
 		  ID_WriteUsrIDs (UsrDat,NULL);
 	       HTM_TD_End ();
 
 	       /***** Write student's name *****/
 	       HTM_TD_Begin ("class=\"%s LM\"",
-			     UsrDat->Accepted ? "DAT_SMALL_N" :
-						"DAT_SMALL");
+			     UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+						The_ClassDatSmall[Gbl.Prefs.Theme]);
 		  HTM_Txt (UsrDat->Surname1);
 		  if (UsrDat->Surname2[0])
 		     HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
@@ -3205,7 +3227,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	       HTM_TxtF ("%u:",NumAttEvent + 1);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 

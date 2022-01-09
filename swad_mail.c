@@ -798,6 +798,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
    extern const char *Hlp_COMMUNICATION_Email;
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_Email_addresses;
    extern const char *Txt_X_users_who_have_email;
    extern const char *Txt_X_users_who_have_accepted_and_who_have_email;
@@ -815,7 +816,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		 Hlp_COMMUNICATION_Email,Box_NOT_CLOSABLE);
 
       /***** Begin list with users' email addresses *****/
-      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
+      HTM_DIV_Begin ("class=\"%s CM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);

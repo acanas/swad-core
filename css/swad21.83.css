@@ -1430,7 +1430,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	margin-bottom:15px;
-	color:#A0A0A0;
+	color:#a0a0a0;
 	font-size:8pt;
 	text-align:center;
 	}
@@ -1965,7 +1965,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .GREEN_ICO_BLUE		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
 .GREEN_ICO_YELLOW	{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
 .GREEN_ICO_PINK		{filter: invert(31%) sepia(16%) saturate(3727%) hue-rotate(60deg) brightness(94%) contrast(104%);}	/* #246600 */
-.GREEN_ICO_DARK		{filter: invert(49%) sepia(97%) saturate(781%) hue-rotate(55deg) brightness(95%) contrast(104%);}	/* #50b800 */
+.GREEN_ICO_DARK		{filter: invert(75%) sepia(13%) saturate(1915%) hue-rotate(46deg) brightness(89%) contrast(89%);}	/* #80c040 */
 
 .RED_ICO_WHITE		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
 .RED_ICO_GREY		{filter: invert(8%) sepia(61%) saturate(5373%) hue-rotate(0deg) brightness(92%) contrast(114%);}	/* #660000 */
@@ -2566,7 +2566,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_LIGHT_PINK		{color:#a0a0a0; font-size:13pt;}
 .DAT_LIGHT_DARK		{color:#909090; font-size:13pt;}
 
-.DAT_SMALL			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
 .DAT_SMALL_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
 .DAT_SMALL_GREY			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
 .DAT_SMALL_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
@@ -2575,33 +2574,29 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_SMALL_PINK			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt;}
 .DAT_SMALL_DARK			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#d0d0d0; font-size:12pt;}
 
-.DAT_SMALL_N			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
-.DAT_SMALL_N_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt;}
+.DAT_SMALL_STRONG_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_STRONG_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_STRONG_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_STRONG_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_STRONG_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_STRONG_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt;}
+.DAT_SMALL_STRONG_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt;}
 
-.DAT_SMALL_NOBR			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
 .DAT_SMALL_NOBR_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#404040; font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#d0d0d0; font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#d0d0d0; font-size:12pt; white-space:nowrap;}
 
-.DAT_SMALL_NOBR_N		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
-.DAT_SMALL_NOBR_N_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_WHITE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_GREY	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_BLUE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_PINK	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:black;   font-size:12pt; white-space:nowrap;}
+.DAT_SMALL_NOBR_STRONG_DARK	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:white;   font-size:12pt; white-space:nowrap;}
 
 .DAT_GREEN	{color:#246600; font-size:13pt;}
 .DAT_RED	{color:#660000; font-size:13pt;}
@@ -2631,13 +2626,45 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	border-width:1px;
 	}
 
-.DAT_SMALL_LIGHT	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_WHITE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_GREY	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_BLUE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_PINK	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
+.DAT_SMALL_LIGHT_DARK	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#A0A0A0; font-size:12pt;}
 
-.DAT_SMALL_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#707070; font-size:12pt;}
-.DAT_SMALL_RED		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
-.DAT_SMALL_GREEN	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
-.DAT_SMALL_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
-.DAT_SMALL_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_BLUE_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+.DAT_SMALL_BLUE_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+.DAT_SMALL_BLUE_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+.DAT_SMALL_BLUE_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+.DAT_SMALL_BLUE_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+.DAT_SMALL_BLUE_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+.DAT_SMALL_BLUE_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#0080FF; font-size:12pt;}
+
+.DAT_SMALL_GREEN_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+
+.DAT_SMALL_RED_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_PURPLE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+
+.DAT_SMALL_YELLOW_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_YELLOW_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_YELLOW_PURPLE	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_YELLOW_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_YELLOW_YELLOW	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_YELLOW_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
+.DAT_SMALL_YELLOW_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
 
 /******************************** User's IDs *********************************/
 .USR_ID		{font-size:18pt; font-weight:bold;}
@@ -3650,16 +3677,31 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	display:inline-block;
 	font-size:13pt;
 	font-weight:bold;
-	color:darkgreen;
 	}
+.ATT_CHECK		{color:#246600;}
+.ATT_CHECK_WHITE	{color:#246600;}
+.ATT_CHECK_GREY		{color:#246600;}
+.ATT_CHECK_PURPLE	{color:#246600;}
+.ATT_CHECK_BLUE		{color:#246600;}
+.ATT_CHECK_YELLOW	{color:#246600;}
+.ATT_CHECK_PINK		{color:#246600;}
+.ATT_CHECK_DARK		{color:#80c040;}
+
 .ATT_CROSS
 	{
 	display:inline-block;
 	font-size:13pt;
 	font-weight:bold;
-	color:darkred;
-	opacity:0.1;
+	opacity:0.2;
 	}
+.ATT_CROSS		{color:#660000;}
+.ATT_CROSS_WHITE	{color:#660000;}
+.ATT_CROSS_GREY		{color:#660000;}
+.ATT_CROSS_PURPLE	{color:#660000;}
+.ATT_CROSS_BLUE		{color:#660000;}
+.ATT_CROSS_YELLOW	{color:#660000;}
+.ATT_CROSS_PINK		{color:#660000;}
+.ATT_CROSS_DARK		{color:#ff8080;}
 	
 /********************* Edition of attendance events, games *******************/
 .TITLE_DESCRIPTION_WIDTH

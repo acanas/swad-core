@@ -2154,6 +2154,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr,Rol_Role_t Role,
 			      struct SelectedUsrs *SelectedUsrs)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
@@ -2227,9 +2229,9 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 	}
 
       /****** Write user's IDs ******/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+      HTM_TD_Begin ("class=\"%s %s LM\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    BgColor);
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
@@ -2253,6 +2255,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2270,7 +2273,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 /***** Show guest's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LM\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
@@ -2278,7 +2281,9 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	}
 
       /****** Write user's ID ******/
-      HTM_TD_Begin ("class=\"DAT_SMALL LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s %s LM\"",
+                    The_ClassDatSmall[Gbl.Prefs.Theme],
+                    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2342,6 +2347,9 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2371,9 +2379,9 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	}
 
       /****** Write user's ID ******/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+      HTM_TD_Begin ("class=\"%s %s LM\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2453,6 +2461,9 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2480,9 +2491,9 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 	}
 
       /****** Write the user's ID ******/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+      HTM_TD_Begin ("class=\"%s %s LM\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2534,6 +2545,9 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2563,9 +2577,9 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 	}
 
       /****** Write the user's ID ******/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? "DAT_SMALL_N" :
-				       "DAT_SMALL",
+      HTM_TD_Begin ("class=\"%s %s LM\"",
+		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
+				       The_ClassDatSmall[Gbl.Prefs.Theme],
 		    Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
@@ -2643,15 +2657,18 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallNoBR[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallNoBRStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
 
    /***** Begin table cell *****/
-   HTM_TD_Begin ("class=\"%s_%s LM %s\"",
-		 Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
-				        "DAT_SMALL_N") :
-			    (NonBreak ? "DAT_SMALL_NOBR" :
-				        "DAT_SMALL"),
-		 The_Colors[Gbl.Prefs.Theme],
+   HTM_TD_Begin ("class=\"%s LM %s\"",
+		 Accepted ? (NonBreak ? The_ClassDatSmallNoBRStrong[Gbl.Prefs.Theme] :
+				        The_ClassDatSmallStrong[Gbl.Prefs.Theme]) :
+			    (NonBreak ? The_ClassDatSmallNoBR[Gbl.Prefs.Theme] :
+				        The_ClassDatSmall[Gbl.Prefs.Theme]),
 		 BgColor);
 
       /***** Container to limit length *****/
@@ -2660,8 +2677,8 @@ static void Usr_WriteUsrData (const char *BgColor,
 	 /***** Begin link *****/
 	 if (Link)
 	    HTM_A_Begin ("href=\"%s\" class=\"%s\" target=\"_blank\"",
-			 Link,Accepted ? "DAT_SMALL_NOBR_N" :
-					 "DAT_SMALL_NOBR");
+			 Link,Accepted ? The_ClassDatSmallNoBRStrong[Gbl.Prefs.Theme] :
+					 The_ClassDatSmallNoBR[Gbl.Prefs.Theme]);
 
 	 /***** Write data *****/
 	 HTM_Txt (Data);
@@ -6485,7 +6502,7 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
   {
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_WHO[Usr_NUM_WHO];
-   static char *Icon[Usr_NUM_WHO] =
+   static const char *Icon[Usr_NUM_WHO] =
      {
       [Usr_WHO_UNKNOWN ] = NULL,
       [Usr_WHO_ME      ] = NULL,

@@ -629,6 +629,7 @@ static void ExaPrn_ShowExamPrintToFillIt (struct Exa_Exams *Exams,
 
 static void ExaPrn_GetAndWriteDescription (long ExaCod)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get description from database *****/
@@ -638,7 +639,8 @@ static void ExaPrn_GetAndWriteDescription (long ExaCod)
    ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);			// Insert links
 
    /***** Write description *****/
-   HTM_DIV_Begin ("class=\"EXA_PRN_DESC DAT_SMALL\"");
+   HTM_DIV_Begin ("class=\"EXA_PRN_DESC %s\"",
+                  The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_Txt (Txt);
    HTM_DIV_End ();
   }
@@ -694,6 +696,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned QstInd,
                                          struct Qst_Question *Question)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    static struct ExaSet_Set CurrentSet =
      {
       .ExaCod = -1L,
@@ -723,7 +726,8 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT\"");
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
+	 Qst_WriteAnswerType (Question->Answer.Type,
+	                      The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/

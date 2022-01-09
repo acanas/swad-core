@@ -509,6 +509,7 @@ static void Tag_PutIconDisable (long TagCod,const char *TagTxt)
 
 void Tag_GetAndWriteTagsQst (long QstCod)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_no_tags;
    unsigned NumTags;
    unsigned NumTag;
@@ -518,7 +519,8 @@ void Tag_GetAndWriteTagsQst (long QstCod)
    if ((NumTags = Tag_DB_GetTagsQst (&mysql_res,QstCod)))
      {
       /***** Write the tags *****/
-      HTM_UL_Begin ("class=\"TEST_TAG_LIST DAT_SMALL\"");
+      HTM_UL_Begin ("class=\"TEST_TAG_LIST %s\"",
+                    The_ClassDatSmall[Gbl.Prefs.Theme]);
 	 for (NumTag = 0;
 	      NumTag < NumTags;
 	      NumTag++)
@@ -532,7 +534,8 @@ void Tag_GetAndWriteTagsQst (long QstCod)
      }
    else
      {
-      HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+      HTM_SPAN_Begin ("class=\"%s\"",
+                      The_ClassDatSmall[Gbl.Prefs.Theme]);
 	 HTM_TxtF ("(%s)",Txt_no_tags);
       HTM_SPAN_End ();
      }

@@ -159,6 +159,11 @@ void Log_ShowLastClicks (void)
 
 void Log_GetAndShowLastClicks (void)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallBlue[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallGreen[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallYellow[The_NUM_THEMES];
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
@@ -207,12 +212,12 @@ void Log_GetAndShowLastClicks (void)
 	 Action = Act_GetActionFromActCod (ActCod);
 
 	 /* Use a special color for this row depending on the action */
-	 ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
+	 ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? The_ClassDatSmallYellow[Gbl.Prefs.Theme] :
 		    (ActCod == Act_GetActCod (ActLogIn   ) ||
-		     ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
-		    (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
-		    (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
-							      "DAT_SMALL_GREY";
+		     ActCod == Act_GetActCod (ActLogInNew)) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
+		    (ActCod == Act_GetActCod (ActLogOut  )) ? The_ClassDatSmallRed[Gbl.Prefs.Theme] :
+		    (ActCod == Act_GetActCod (ActWebSvc  )) ? The_ClassDatSmallBlue[Gbl.Prefs.Theme] :
+							      The_ClassDatSmall[Gbl.Prefs.Theme];
 
 	 /* Compute elapsed time from last access */
 	 if (sscanf (row[2],"%ld",&TimeDiff) != 1)

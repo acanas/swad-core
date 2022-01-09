@@ -439,7 +439,6 @@ static void CtrCfg_Altitude (void)
 static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
 			  const char PathPhoto[PATH_MAX + 1])
   {
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    char *PhotoAttribution = NULL;
    char *URL;
    char *Icon;
@@ -454,10 +453,9 @@ static void CtrCfg_Photo (bool PrintView,bool PutForm,bool PutLink,
    CtrCfg_GetPhotoAttr (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
 
    /***** Photo image *****/
-   HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
+   HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink)
-	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
-		      Gbl.Hierarchy.Ctr.WWW,The_ClassDatStrong[Gbl.Prefs.Theme]);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Gbl.Hierarchy.Ctr.WWW);
       if (asprintf (&URL,"%s/%02u/%u",
 		    Cfg_URL_CTR_PUBLIC,
 		    (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),

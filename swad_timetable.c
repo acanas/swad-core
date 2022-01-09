@@ -1303,6 +1303,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
                                    long CrsCod,Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,long GrpCod,const char *Info)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
@@ -1386,12 +1387,16 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
      }
    if (ClassType == Tmt_FREE)
      {
-      if (asprintf (&ClassStr,"%s%u",TimeTableClasses[ClassType],Interval % 4) < 0)
+      if (asprintf (&ClassStr,"%s%u",
+                    TimeTableClasses[ClassType],
+                    Interval % 4) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else
      {
-      if (asprintf (&ClassStr,"%s CM DAT_SMALL",TimeTableClasses[ClassType]) < 0)
+      if (asprintf (&ClassStr,"%s %s CM",
+                    TimeTableClasses[ClassType],
+                    The_ClassDatSmall[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
 
@@ -1598,7 +1603,9 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 		 {
 		  /***** Info *****/
 		  HTM_BR ();
-		  HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
+		  HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"%s\"",
+		                   CellStr,
+		                   The_ClassDatSmall[Gbl.Prefs.Theme]);
 		     HTM_Txt (Txt_Info);
 		  HTM_LABEL_End ();
 		  HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,

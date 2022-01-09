@@ -320,7 +320,7 @@ static void CtyCfg_MapImage (bool PrintView,bool PutLink)
    CtyCfg_GetMapAttr (Gbl.Hierarchy.Cty.CtyCod,&MapAttribution);
 
    /***** Map image *****/
-   HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
+   HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
 		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);

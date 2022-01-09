@@ -1188,22 +1188,24 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
                                            unsigned QstInd,const char *Anchor)
   {
-   static char *ClassNumQst[Qst_NUM_VALIDITIES] =
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
+   static const char *ClassNumQst[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
       [Qst_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   static char *ClassAnswerType[Qst_NUM_VALIDITIES] =
+   const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "DAT_SMALL_RED",
-      [Qst_VALID_QUESTION  ] = "DAT_SMALL",
+      [Qst_INVALID_QUESTION] = The_ClassDatSmallRed[Gbl.Prefs.Theme],
+      [Qst_VALID_QUESTION  ] = The_ClassDatSmall[Gbl.Prefs.Theme],
      };
-   static char *ClassTxt[Qst_NUM_VALIDITIES] =
+   static const char *ClassTxt[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "TEST_TXT_RED",
       [Qst_VALID_QUESTION  ] = "TEST_TXT",
      };
-   static char *ClassFeedback[Qst_NUM_VALIDITIES] =
+   static const char *ClassFeedback[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "TEST_TXT_LIGHT_RED",
       [Qst_VALID_QUESTION  ] = "TEST_TXT_LIGHT",

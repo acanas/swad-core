@@ -2747,6 +2747,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -2833,13 +2834,15 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 		 }
 
 	       /* Write index of question inside survey */
-	       HTM_TD_Begin ("class=\"DAT_SMALL CT %s\"",
+	       HTM_TD_Begin ("class=\"%s CT %s\"",
+	                     The_ClassDatSmall[Gbl.Prefs.Theme],
 	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_Unsigned (SvyQst.QstInd + 1);
 	       HTM_TD_End ();
 
 	       /* Write the question type (row[2]) */
-	       HTM_TD_Begin ("class=\"DAT_SMALL CT %s\"",
+	       HTM_TD_Begin ("class=\"%s CT %s\"",
+	                     The_ClassDatSmall[Gbl.Prefs.Theme],
 	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
 		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
 	       HTM_TD_End ();

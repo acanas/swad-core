@@ -1863,25 +1863,27 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct Qst_Question *Question,
 				       unsigned Visibility)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
    extern const char *Txt_Score;
    extern const char *Txt_Invalid_question;
    bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
-   static char *ClassNumQst[Qst_NUM_VALIDITIES] =
+   static const char *ClassNumQst[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
       [Qst_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   static char *ClassAnswerType[Qst_NUM_VALIDITIES] =
+   const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "DAT_SMALL_RED",
-      [Qst_VALID_QUESTION  ] = "DAT_SMALL",
+      [Qst_INVALID_QUESTION] = The_ClassDatSmallRed[Gbl.Prefs.Theme],
+      [Qst_VALID_QUESTION  ] = The_ClassDatSmall[Gbl.Prefs.Theme],
      };
-   static char *ClassTxt[Qst_NUM_VALIDITIES] =
+   static const char *ClassTxt[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "TEST_TXT_RED",
       [Qst_VALID_QUESTION  ] = "TEST_TXT",
      };
-   static char *ClassFeedback[Qst_NUM_VALIDITIES] =
+   static const char *ClassFeedback[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "TEST_TXT_LIGHT_RED",
       [Qst_VALID_QUESTION  ] = "TEST_TXT_LIGHT",
@@ -1947,13 +1949,14 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
 	   {
-	    HTM_DIV_Begin ("class=\"DAT_SMALL LM\"");
+	    HTM_DIV_Begin ("class=\"%s LM\"",
+	                   The_ClassDatSmall[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Score);
 	       HTM_SPAN_Begin ("class=\"%s\"",
 			       Print->PrintedQuestions[QstInd].StrAnswers[0] ?
-			       (Print->PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :	// Correct/semicorrect
+			       (Print->PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :		// Correct/semicorrect
 									    "ANS_BAD") :	// Wrong
-									    "ANS_0");	// Blank answer
+									    "ANS_0");		// Blank answer
 		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
 		  if (Question->Validity == Qst_INVALID_QUESTION)
 		     HTM_TxtF (" (%s)",Txt_Invalid_question);

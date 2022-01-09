@@ -854,6 +854,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         const struct Qst_Question *Question,
                                         bool QuestionExists)
   {
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_ClassDatSmallLight[The_NUM_THEMES];
    extern const char *Txt_Existing_question;
    extern const char *Txt_New_question;
    extern const char *Txt_no_tags;
@@ -871,8 +873,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    size_t AnswerTextLength;
    char *AnswerFeedback;
    size_t AnswerFeedbackLength;
-   const char *ClassData = QuestionExists ? "DAT_SMALL_LIGHT" :
-	                                    "DAT_SMALL";
+   const char *ClassData = QuestionExists ? The_ClassDatSmallLight[Gbl.Prefs.Theme] :
+	                                    The_ClassDatSmall[Gbl.Prefs.Theme];
    const char *ClassStem = QuestionExists ? "TEST_TXT_LIGHT" :
 	                                    "TEST_TXT";
 
@@ -892,13 +894,14 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write number of question *****/
-      HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s %s CT\"",ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (!QuestionExists)
 	    HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
       HTM_TD_End ();
 
       /***** Write the question tags *****/
-      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s LT\"",
+                    Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	 if (Question->Tags.Num)
 	   {

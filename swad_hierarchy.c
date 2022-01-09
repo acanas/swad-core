@@ -661,6 +661,7 @@ void Hie_ResetHierarchy (void)
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
+   extern const char *The_ClassDatSmallNoBR[The_NUM_THEMES];
    extern const char *Txt_all_degrees;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -686,8 +687,10 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 HTM_TD_End ();
 
 	 /***** Write institution, center, degree *****/
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT %s\"",
-		       ColSpan - 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"%s %s LT\"",
+		       ColSpan - 1,
+		       The_ClassDatSmallNoBR[Gbl.Prefs.Theme],
+		       Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	    /* Get next institution, center, degree */
 	    row = mysql_fetch_row (mysql_res);

@@ -1569,6 +1569,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
@@ -1716,9 +1718,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		    {
-		     HTM_SPAN_Begin ("class=\"DAT_SMALL\"");
+		     HTM_SPAN_Begin ("class=\"%s\"",
+		                     The_ClassDatSmall[Gbl.Prefs.Theme]);
 			HTM_NBSP ();
-			HTM_TxtF ("(%s)",Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
+			HTM_TxtF ("(%s)",
+			          Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
 		     HTM_SPAN_End ();
 		    }
 	       HTM_TD_End ();
@@ -1742,9 +1746,10 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  if (ICanEditThisField)	// Show with form
 		    {
 		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
-					 " class=\"REC_C2_BOT_INPUT\"",
+					 " class=\"REC_C2_BOT_INPUT %s\"",
 					 Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-					 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
+					 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
+					 The_ClassInput[Gbl.Prefs.Theme]);
 			if (ThisFieldHasText)
 			   HTM_Txt (row[0]);
 		     HTM_TEXTAREA_End ();
@@ -3289,7 +3294,8 @@ static void Rec_ShowPhone (struct UsrData *UsrDat,bool ShowData,bool PutForm,
 	       HTM_INPUT_TEL (Name,UsrDat->Phone[NumPhone],
 			      HTM_DONT_SUBMIT_ON_CHANGE,
 			      "id=\"%s\" class=\"REC_C2_BOT_INPUT %s\"",
-			      Name,The_ClassInput[Gbl.Prefs.Theme]);
+			      Name,
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    else if (UsrDat->Phone[NumPhone][0])
 	      {
 	       HTM_A_Begin ("href=\"tel:%s\" class=\"%s\"",
