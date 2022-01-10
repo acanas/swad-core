@@ -776,7 +776,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",
+	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	       /* Put icon to remove the set */
 	       if (ICanEditSets)
@@ -1000,7 +1001,7 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	       /* Put icon to remove the question */
 	       if (ICanEditQuestions)

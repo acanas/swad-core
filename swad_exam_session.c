@@ -438,7 +438,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    Exams->SesCod = Session->SesCod;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Icon to remove the exam session *****/
       Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,

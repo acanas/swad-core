@@ -979,7 +979,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
       HTM_TR_Begin (NULL);
 
 	 /***** Icons *****/
-	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	    /* Write icon to remove the question */
 	    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
@@ -1304,7 +1304,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
       HTM_TR_Begin (NULL);
 
 	 /* Write checkbox to select the question */
-	 HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	    HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"%ld\" onclick=\"checkParent(this,'AllQsts');\"",
 				Question->QstCod);
@@ -1535,7 +1535,7 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
 	 HTM_TR_Begin (NULL);
 
 	    /* Put an icon that indicates whether the answer is correct or wrong */
-	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       if (Question->Answer.Options[NumOpt].Correct)
 		  Ico_PutIcon ("check.svg",Ico_BLACK,
 		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");

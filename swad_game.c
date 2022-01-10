@@ -1758,7 +1758,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 	       /* Put icon to remove the question */
 	       if (ICanEditQuestions)

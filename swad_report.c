@@ -245,8 +245,8 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
       Rep_TitleReport (&Report->CurrentTimeUTC);
 
       /***** Put anchor and report filename *****/
-      HTM_DIV_Begin ("class=\"FILENAME_TXT CM\"");
-	 HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
+      HTM_DIV_Begin ("class=\"FILENAME_BIG CM\"");
+	 HTM_A_Begin ("href=\"%s\" class=\"FILENAME_BIG\" title=\"%s\" target=\"_blank\"",
 		      Report->Permalink,
 		      Txt_Report);
 	    Ico_PutIcon ("file-alt.svg",Ico_BLACK,Txt_Report,"ICO64x64");

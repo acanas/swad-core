@@ -3255,7 +3255,7 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 
 	       HTM_TD_ColouredEmpty (2);
 
-	       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+	       HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"%s LM %s\"",

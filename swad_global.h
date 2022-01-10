@@ -421,7 +421,7 @@ struct Globals
          char R[NAME_MAX + 1];	// Right directory: rest of chars
         } TmpPubDir;
       bool HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
-      const char *TxtStyle;
+      char TxtStyle[64];
       const char *InputStyle;
       struct Asg_Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone.
 				        // TODO: Remove from global?

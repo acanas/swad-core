@@ -2502,7 +2502,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.FILENAME_TXT
+
+.FILENAME_BIG
 	{
 	color:#202020;
 	font-size:18pt;
@@ -2516,12 +2517,40 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	box-sizing:border-box;
 	width:100%;
 	}
-.LST			{color:#202020; font-size:11pt; white-space:nowrap;}
-.LST_HID		{color:#A0A0A0; font-size:11pt; white-space:nowrap;}
-.LST_REC		{color:#008000; font-size:11pt; white-space:nowrap;}
-.LST_REC_HID		{color:#89be87; font-size:11pt; white-space:nowrap;}
+.LST_WHITE		{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_GREY		{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_PURPLE		{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_BLUE		{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_YELLOW		{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_PINK		{color:#202020; font-size:11pt; white-space:nowrap;}
+.LST_DARK		{color:#e0e0e0; font-size:11pt; white-space:nowrap;}
+
+.LST_HID_WHITE		{color:#a0a0a0; font-size:11pt; white-space:nowrap;}
+.LST_HID_GREY		{color:#a0a0a0; font-size:11pt; white-space:nowrap;}
+.LST_HID_PURPLE		{color:#a0a0a0; font-size:11pt; white-space:nowrap;}
+.LST_HID_BLUE		{color:#a0a0a0; font-size:11pt; white-space:nowrap;}
+.LST_HID_YELLOW		{color:#a0a0a0; font-size:11pt; white-space:nowrap;}
+.LST_HID_PINK		{color:#a0a0a0; font-size:11pt; white-space:nowrap;}
+.LST_HID_DARK		{color:#909090; font-size:11pt; white-space:nowrap;}
+
+.LST_REC_WHITE		{color:#246600; font-size:11pt; white-space:nowrap;}
+.LST_REC_GREY		{color:#246600; font-size:11pt; white-space:nowrap;}
+.LST_REC_PURPLE		{color:#246600; font-size:11pt; white-space:nowrap;}
+.LST_REC_BLUE		{color:#246600; font-size:11pt; white-space:nowrap;}
+.LST_REC_YELLOW		{color:#246600; font-size:11pt; white-space:nowrap;}
+.LST_REC_PINK		{color:#246600; font-size:11pt; white-space:nowrap;}
+.LST_REC_DARK		{color:#80c040; font-size:11pt; white-space:nowrap;}
+
+.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#92b380; font-size:11pt; white-space:nowrap;}
+.LST_REC_HID		{color:#406020; font-size:11pt; white-space:nowrap;}
+
 .LST_EDIT		{width:250px; color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
-.LST_EDIT_HID		{width:250px; color:#A0A0A0; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
+.LST_EDIT_HID		{width:250px; color:#a0a0a0; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_REC		{width:250px; color:#008000; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_REC_HID	{width:250px; color:#89be87; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
 .LST_EDIT_ROWS		{width:30px;  color:#202020; font-weight:bold; font-size:11pt; height:20px; padding:0; margin:-1px; border-width:1px; border-style:solid; border-color:#ECE9D8;}
@@ -2648,7 +2677,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_SMALL_GREEN_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
 .DAT_SMALL_GREEN_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
 .DAT_SMALL_GREEN_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
-.DAT_SMALL_GREEN_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#246600; font-size:12pt;}
+.DAT_SMALL_GREEN_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#80c040; font-size:12pt;}
 
 .DAT_SMALL_RED_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
 .DAT_SMALL_RED_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
@@ -2656,7 +2685,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .DAT_SMALL_RED_BLUE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
 .DAT_SMALL_RED_YELLOW		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
 .DAT_SMALL_RED_PINK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
-.DAT_SMALL_RED_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#660000; font-size:12pt;}
+.DAT_SMALL_RED_DARK		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#ff8080; font-size:12pt;}
 
 .DAT_SMALL_YELLOW_WHITE		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
 .DAT_SMALL_YELLOW_GREY		{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#C0C000; font-size:12pt;}
@@ -2837,15 +2866,15 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
 .DATE_RED		{color:#660000; font-size:13pt;}
 .DATE_RED_LIGHT		{color:#f98a8a; font-size:13pt;}
-.DATE_GREEN		{color:#008000; font-size:13pt;}
+.DATE_GREEN		{color:#246600; font-size:13pt;}
 .DATE_GREEN_LIGHT	{color:#89be87; font-size:13pt;}
 .DATE_BLUE		{color:#4d88a1; font-size:13pt;}
 .DATE_BLUE_LIGHT	{color:#afc4cc; font-size:13pt;}
 
-.ASG_LST_DATE_GREEN	{color:#008000; font-size:11pt; white-space:nowrap;}
+.ASG_LST_DATE_GREEN	{color:#246600; font-size:11pt; white-space:nowrap;}
 .ASG_LST_DATE_RED	{color:#660000; font-size:11pt; white-space:nowrap;}
 
-.STATUS_GREEN		{color:#008000; font-size:12pt;}
+.STATUS_GREEN		{color:#246600; font-size:12pt;}
 .STATUS_GREEN_LIGHT	{color:#89be87; font-size:12pt;}
 .STATUS_RED		{color:#660000; font-size:12pt;}
 .STATUS_RED_LIGHT	{color:#f98a8a; font-size:12pt;}
@@ -4144,14 +4173,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .MSG_DATE_NEW	{color:#4d88a1; font-size:11pt; font-weight:bold;}
 
 .BT		{width:20px; text-align:center; vertical-align:top;}
-.BT0		{width:20px; text-align:center; vertical-align:top; background-color:#F4F2EA;}
-.BT1		{width:20px; text-align:center; vertical-align:top; background-color:#FBFAF7;}
-
 .BM		{width:20px; text-align:center; vertical-align:middle;}
-.BM_SEL		{width:20px; text-align:center; vertical-align:middle; background-color:#C0FF40;}
-
-.BM0		{width:20px; text-align:center; vertical-align:middle; background-color:#F4F2EA;}
-.BM1		{width:20px; text-align:center; vertical-align:middle; background-color:#FBFAF7;}
+.BM_SEL		{width:20px; text-align:center; vertical-align:middle; background-color:#c0ff40;}
 
 /******************************** Pagination *********************************/
 .PAG
@@ -4163,7 +4186,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	border-style:solid;
 	border-width:1px;
 	border-radius:2px;
-	border-color:#C0DAE4;
+	border-color:#c0dae4;
 	}
 a.PAG:hover, .PAG_CUR
 	{
@@ -4174,8 +4197,8 @@ a.PAG:hover, .PAG_CUR
 	border-style:solid;
 	border-width:1px;
 	border-radius:2px;
-	border-color:#C0DAE4;
-	background-color:#DDECF1;
+	border-color:#c0dae4;
+	background-color:#ddecf1;
 	text-decoration:none;
 	}
 .PAG_TXT

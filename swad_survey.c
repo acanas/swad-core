@@ -2816,7 +2816,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
 	       if (Svy->Status.ICanEdit)
 		 {
-		  HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+		  HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
 		     /* Initialize context */
 		     Surveys->SvyCod = Svy->SvyCod;

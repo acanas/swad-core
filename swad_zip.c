@@ -537,8 +537,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
       /***** Link to download the file *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
-	    HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_BIG CM\"");
+	    HTM_A_Begin ("href=\"%s\" class=\"FILENAME_BIG\" title=\"%s\" target=\"_blank\"",
 			 URL,FileName);
 	       HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
 			"class=\"ICO40x40\"");

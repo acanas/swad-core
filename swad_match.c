@@ -560,7 +560,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
                                            const char *Anchor)
   {
-   HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Mch_CheckIfICanEditThisMatch (Match))
 	{

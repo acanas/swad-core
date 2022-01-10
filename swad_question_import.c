@@ -884,7 +884,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    HTM_TR_Begin (NULL);
 
       /***** Put icon to indicate that a question does not exist in database *****/
-      HTM_TD_Begin ("class=\"BT%u CT\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
          if (QuestionExists)
 	    Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
 			 Txt_Existing_question,"CONTEXT_ICO16x16");
@@ -1017,7 +1017,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		     HTM_TR_Begin (NULL);
 
 			/* Put an icon that indicates whether the answer is correct or wrong */
-			HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
+			HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 			   if (Question->Answer.Options[NumOpt].Correct)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,

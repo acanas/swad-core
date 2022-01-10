@@ -4432,6 +4432,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      bool TreeContracted,
                                      Brw_IconTree_t IconThisRow)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    char *Anchor;
    bool RowSetAsHidden = false;
    bool RowSetAsPublic = false;
@@ -4508,10 +4509,13 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       IsRecent = true;
 
    /* Style of the text in this row */
-   Gbl.FileBrowser.TxtStyle   = (LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_HID" :
-	                                                                                                      "LST_REC_HID") :
-                                              (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST" :
-                                        	                                                              "LST_REC"));
+   snprintf (Gbl.FileBrowser.TxtStyle,sizeof (Gbl.FileBrowser.TxtStyle),
+             "%s_%s",
+             LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_HID" :
+											  "LST_REC_HID") :
+			  (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST" :
+											  "LST_REC"),
+	     The_Colors[Gbl.Prefs.Theme]);
    Gbl.FileBrowser.InputStyle = (LightStyle ? (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_EDIT_HID" :
 	                                                                                                      "LST_EDIT_REC_HID") :
                                               (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER || !IsRecent ? "LST_EDIT" :
@@ -4652,7 +4656,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
      {
       /***** Put icon to download ZIP of folder *****/
-      HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	     !SeeMarks &&				// Do not ZIP folders when seeing marks
 	     !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
@@ -4748,7 +4752,7 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
 
 static void Brw_PutIconRemove (void)
   {
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
 	 switch (Gbl.FileBrowser.FilFolLnk.Type)
@@ -4779,7 +4783,7 @@ static void Brw_PutIconRemove (void)
 
 static void Brw_PutIconCopy (void)
   {
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Form to copy into the clipboard *****/
       Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
@@ -4796,7 +4800,7 @@ static void Brw_PutIconPaste (unsigned Level)
   {
    extern const char *Txt_Copy_not_allowed;
 
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)	// Can't paste in a file or link
 	{
@@ -4829,7 +4833,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
 	    Brw_IndentDependingOnLevel (Level);
 
 	    /***** Icon to expand/contract *****/
-	    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	       switch (IconThisRow)
 		 {
 		  case Brw_ICON_TREE_NOTHING:
@@ -4873,7 +4877,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i < Level;
 	i++)
      {
-      HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 	 Ico_PutIcon ("tr16x16.gif",Ico_UNCHANGED,"","ICO20x20");
       HTM_TD_End ();
      }
@@ -4950,7 +4954,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 
 static void Brw_PutIconShow (const char *Anchor)
   {
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
 				     Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
    HTM_TD_End ();
@@ -4962,7 +4966,7 @@ static void Brw_PutIconShow (const char *Anchor)
 
 static void Brw_PutIconHide (const char *Anchor)
   {
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
 				   Brw_PutImplicitParamsFileBrowser,&Gbl.FileBrowser.FilFolLnk);
    HTM_TD_End ();
@@ -4996,7 +5000,7 @@ static void Brw_PutIconFolder (unsigned Level,
    bool ICanCreate;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Put icon to create a new file or folder *****/
       if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
@@ -5068,11 +5072,13 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
    extern const char *Txt_Folder;
 
    /***** Begin container *****/
-   HTM_DIV_Begin (Hidden ? "id=\"folder_%s_%s_%s\" style=\"display:none;\"" :
-			   "id=\"folder_%s_%s_%s\"",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\" %s",
 		  Open ? "open" :
 			 "closed",
-		  FileBrowserId,RowId);
+		  FileBrowserId,RowId,
+		  Gbl.ColorRows[Gbl.RowEvenOdd],
+                  Hidden ? " style=\"display:none;\"" :
+			   "");
 
       /***** Icon *****/
       Ico_PutIcon (Open ? "folder-open-yellow.png" :
@@ -5092,11 +5098,13 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       bool Open,bool Hidden)
   {
    /***** Begin container *****/
-   HTM_DIV_Begin (Hidden ? "id=\"folder_%s_%s_%s\" style=\"display:none;\"" :
-			   "id=\"folder_%s_%s_%s\"",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\" %s",
 		  Open ? "open" :
 			 "closed",
-		  FileBrowserId,RowId);
+		  FileBrowserId,RowId,
+		  Gbl.ColorRows[Gbl.RowEvenOdd],
+                  Hidden ? " style=\"display:none;\"" :
+			   "");
 
       /***** Form and icon *****/
       Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
@@ -5116,7 +5124,7 @@ static void Brw_PutIconNewFileOrFolder (void)
    extern const char *Txt_New_FILE_OR_FOLDER;
 
    /***** Icon that indicates new file *****/
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
       Ico_PutIcon ("star16x16.gif",Ico_UNCHANGED,Txt_New_FILE_OR_FOLDER,"ICO20x20");
    HTM_TD_End ();
   }
@@ -5129,7 +5137,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata)
   {
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Begin form *****/
       Frm_BeginForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
@@ -5493,7 +5501,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,long UsrCod)
                                                          Usr_DONT_GET_ROLE_IN_CURRENT_CRS);
      }
 
-   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       if (ShowUsr)
 	 /***** Show photo *****/
@@ -8012,7 +8020,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Link to download the file *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
+	       HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_BIG CM\"");
 		  Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	       HTM_TD_End ();
 
@@ -8547,7 +8555,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                                         Txt_Download;
 
       /* Put anchor and filename */
-      HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
+      HTM_A_Begin ("href=\"%s\" class=\"FILENAME_BIG\" title=\"%s\" target=\"_blank\"",
 	           URL,Title);
 	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
 			  "ICO40x40",false);
