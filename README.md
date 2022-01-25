@@ -1,4 +1,4 @@
-swad-core
+swad-core ![](https://tokei.rs/b1/github/acanas/swad-core)
 =========
 
 Main core for SWAD platform (Shared Workspace At a Distance)
