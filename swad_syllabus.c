@@ -834,6 +834,7 @@ void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
                                      bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Enter_a_new_item_here;
 
    if (Level < 1)
@@ -879,7 +880,8 @@ static void Syl_PutFormItemSyllabus (struct Syl_Syllabus *Syllabus,
 	 Syl_PutParamNumItem (&Syllabus->ParamNumItem);
 	 HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
 			 HTM_SUBMIT_ON_CHANGE,
-			 "size=\"60\" placeholder=\"%s\"%s",
+			 "size=\"60\" class=\"%s\" placeholder=\"%s\"%s",
+			 The_ClassInput[Gbl.Prefs.Theme],
 			 Txt_Enter_a_new_item_here,
 			 NewItem ? " autofocus=\"autofocus\"" :
 				   "");

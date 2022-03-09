@@ -193,7 +193,7 @@ static void TmlPst_PutFormToWriteNewPost (struct Tml_Timeline *Timeline)
 
          /* Form with textarea */
 	 TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_POST);
-	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
+	    if (asprintf (&Class,"Tml_COM_TEXTAREA Tml_RIGHT_WIDTH %s",
 	                  The_ClassInput[Gbl.Prefs.Theme]) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    TmlPst_PutTextarea (Txt_New_TIMELINE_post,Class);

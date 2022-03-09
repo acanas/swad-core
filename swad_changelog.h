@@ -601,11 +601,19 @@ TODO: Salvador Romero Cortés: @acanas opción para editar posts
 TODO: FIX BUG, URGENT! En las fechas como parámetro Dat_WriteParamsIniEndDates(), por ejemplo al cambiar el color de la gráfica de accesos por día y hora, no se respeta la zona horaria.
 
 TODO: En las encuestas, que los estudiantes no puedan ver los resultados hasta que no finalice el plazo.
+
+TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate key... Reportado por Salvador Romero Cortés.
+
+TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.83.1 (2022-01-10)"
-#define CSS_FILE		"swad21.83.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 21.83.2 (2022-03-10)"
+#define CSS_FILE		"swad21.83.2.css"
 #define JS_FILE			"swad21.78.2.js"
 /*
+	Version 21.83.2:  Mar 10, 2022  Working on design of dark theme. (323488 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/theme/dark/theme_32x20.gif /var/www/html/swad/icon/theme/dark/
+
 	Version 21.83.1:  Jan 10, 2022  Working on design of dark theme. (322887 lines)
 	Version 21.83:    Jan 09, 2022  Working on design of dark theme. (322857 lines)
 	Version 21.82:    Jan 03, 2022  Functions moved from swad_figure to other modules. (322550 lines)

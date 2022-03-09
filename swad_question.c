@@ -2296,6 +2296,7 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
                              unsigned Index)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    char StrDouble[32];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -2304,7 +2305,8 @@ void Qst_PutFloatInputField (const char *Label,const char *Field,
 		Question->Answer.FloatingPoint[Index]);
       HTM_INPUT_TEXT (Field,Qst_MAX_BYTES_FLOAT_ANSWER,StrDouble,
 		      HTM_DONT_SUBMIT_ON_CHANGE,
-		      "size=\"11\" required=\"required\"%s",
+		      "size=\"11\" class=\"%s\" required=\"required\"%s",
+		      The_ClassInput[Gbl.Prefs.Theme],
 		      Question->Answer.Type == Qst_ANS_FLOAT ? "" :
 							       " disabled=\"disabled\"");
    HTM_LABEL_End ();

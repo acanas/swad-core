@@ -218,14 +218,14 @@ static void TmlCom_PutFormToWriteNewComm (const struct Tml_Timeline *Timeline,
    char *ClassTextArea;
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COM_WIDTH\"");
 
       /***** Begin form to write the post *****/
       TmlFrm_BeginForm (Timeline,TmlFrm_RECEIVE_COMM);
 	 TmlNot_PutHiddenParamNotCod (NotCod);
 
 	 /***** Textarea and button *****/
-	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COMM_WIDTH %s",
+	 if (asprintf (&ClassTextArea,"Tml_COM_TEXTAREA Tml_COM_WIDTH %s",
 	               The_ClassInput[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 TmlPst_PutTextarea (Txt_New_TIMELINE_comment,ClassTextArea);
@@ -582,7 +582,7 @@ static void TmlCom_WriteComm (const struct Tml_Timeline *Timeline,
 
    /***** Right: author's name, time, content, and buttons *****/
    /* Begin container */
-   HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COMM_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_COM_CONT Tml_COM_WIDTH\"");
 
       /* Right top: author's name, time, and content */
       TmlCom_WriteAuthorTimeAndContent (Com,&UsrDat);
@@ -631,7 +631,7 @@ static void TmlCom_WriteAuthorName (const struct UsrData *UsrDat)	// Author
       Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 
       /* Author's name */
-      if (asprintf (&Class,"Tml_COM_AUTHOR Tml_COMM_AUTHOR_WIDTH BT_LINK %s BOLD",
+      if (asprintf (&Class,"Tml_COM_AUTHOR Tml_COM_AUTHOR_WIDTH BT_LINK %s BOLD",
                     The_ClassDat[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_OnSubmit_Begin (Usr_ItsMe (UsrDat->UsrCod) ? Txt_My_public_profile :
@@ -663,8 +663,8 @@ static void TmlCom_WriteContent (struct TmlCom_Comment *Com)
      }
 
    /***** Show image *****/
-   Med_ShowMedia (&Com->Content.Media,"Tml_COM_MED_CONT Tml_COMM_WIDTH",
-				      "Tml_COM_MED Tml_COMM_WIDTH");
+   Med_ShowMedia (&Com->Content.Media,"Tml_COM_MED_CONT Tml_COM_WIDTH",
+				      "Tml_COM_MED Tml_COM_WIDTH");
   }
 
 /*****************************************************************************/
@@ -680,7 +680,7 @@ static void TmlCom_WriteButtons (const struct Tml_Timeline *Timeline,
    NumDiv++;
 
    /***** Begin buttons container *****/
-   HTM_DIV_Begin ("class=\"Tml_FOOT Tml_COMM_WIDTH\"");
+   HTM_DIV_Begin ("class=\"Tml_FOOT Tml_COM_WIDTH\"");
 
       /***** Foot column 1: fav zone *****/
       HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"Tml_FAV_COM Tml_FAV_WIDTH\"",

@@ -327,6 +327,7 @@ void Plg_FreeListPlugins (void)
 static void Plg_ListPluginsForEdition (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumPlg;
    struct Plugin *Plg;
    char *Icon;
@@ -374,7 +375,8 @@ static void Plg_ListPluginsForEdition (void)
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\"");
+				  "size=\"10\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -384,7 +386,8 @@ static void Plg_ListPluginsForEdition (void)
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"30\"");
+				  "size=\"30\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -394,7 +397,8 @@ static void Plg_ListPluginsForEdition (void)
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"4\"");
+				  "size=\"4\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -404,7 +408,8 @@ static void Plg_ListPluginsForEdition (void)
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"16\"");
+				  "size=\"16\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -413,7 +418,8 @@ static void Plg_ListPluginsForEdition (void)
 	       Frm_BeginForm (ActChgPlgURL);
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_URL ("URL",Plg->URL,HTM_SUBMIT_ON_CHANGE,
-				 "size=\"15\"");
+				 "size=\"15\" class=\"%s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -422,7 +428,8 @@ static void Plg_ListPluginsForEdition (void)
 	       Frm_BeginForm (ActChgPlgIP);
 		  Plg_PutParamPlgCod (&Plg->PlgCod);
 		  HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,HTM_SUBMIT_ON_CHANGE,
-				  "size=\"10\"");
+				  "size=\"10\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -769,6 +776,7 @@ void Plg_ContEditAfterChgPlg (void)
 
 static void Plg_PutFormToCreatePlugin (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_plugin;
    extern const char *Txt_Name;
    extern const char *Txt_Description;
@@ -803,7 +811,8 @@ static void Plg_PutFormToCreatePlugin (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" required=\"required\"");
+			       "size=\"10\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Plugin description *****/
@@ -811,34 +820,39 @@ static void Plg_PutFormToCreatePlugin (void)
 	       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,
 			       Plg_EditingPlg->Description,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"30\" required=\"required\"");
+			       "size=\"30\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Plugin logo *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"4\" required=\"required\"");
+			       "size=\"4\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Plugin application key *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"16\" required=\"required\"");
+			       "size=\"16\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Plugin URL *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,HTM_DONT_SUBMIT_ON_CHANGE,
-			      "size=\"15\" required=\"required\"");
+			      "size=\"15\" class=\"%s\" required=\"required\"",
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Plugin IP address *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"10\" required=\"required\"");
+			       "size=\"10\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	 /***** Row end *****/

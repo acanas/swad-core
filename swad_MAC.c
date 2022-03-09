@@ -30,6 +30,7 @@
 #include "swad_action.h"
 #include "swad_database.h"
 #include "swad_form.h"
+#include "swad_global.h"
 #include "swad_HTML.h"
 #include "swad_MAC.h"
 #include "swad_parameter.h"
@@ -44,6 +45,12 @@ struct MAC_Params
    long Cod;					// Code (i.e. room code)
    char MACstr[MAC_LENGTH_MAC_ADDRESS + 1];	// MAC address
   };
+
+/*****************************************************************************/
+/************** External global variables from others modules ****************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -73,12 +80,15 @@ static void MAC_PutParams (void *Args)
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
                                          void (*FuncParams) (void *Args),void *Args)
   {
-   /* Form to enter a new MAC address */
+   extern const char *The_ClassInput[The_NUM_THEMES];
+
+   /***** Form to enter a new MAC address *****/
    Frm_BeginFormAnchor (NextAction,Anchor);
       FuncParams (Args);
       HTM_INPUT_TEXT ("NewMAC",MAC_LENGTH_MAC_ADDRESS,((struct MAC_Params *) Args)->MACstr,
 		      HTM_SUBMIT_ON_CHANGE,
-		      "size=\"8\"");
+		      "size=\"8\" class=\"%s\"",
+		      The_ClassInput[Gbl.Prefs.Theme]);
    Frm_EndForm ();
   }
 

@@ -406,6 +406,7 @@ static void Mai_ListMailDomainsForEdition (void)
   {
    extern const char *Hlp_START_Domains_edit;
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
@@ -444,7 +445,8 @@ static void Mai_ListMailDomainsForEdition (void)
 		  Mai_PutParamMaiCod (&Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"15\"");
+				  "size=\"15\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -454,7 +456,8 @@ static void Mai_ListMailDomainsForEdition (void)
 		  Mai_PutParamMaiCod (&Mai->MaiCod);
 		  HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"40\"");
+				  "size=\"40\" class=\"%s\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -643,6 +646,7 @@ void Mai_ContEditAfterChgMai (void)
 static void Mai_PutFormToCreateMailDomain (void)
   {
    extern const char *Hlp_START_Domains_edit;
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
@@ -668,14 +672,16 @@ static void Mai_PutFormToCreateMailDomain (void)
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"15\" required=\"required\"");
+			       "size=\"15\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /* Mail domain info */
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"40\" required=\"required\"");
+			       "size=\"40\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    HTM_TD_Empty (1);

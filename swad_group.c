@@ -2457,7 +2457,8 @@ static void Grp_PutFormToCreateGroupType (void)
 	       HTM_TD_Begin ("class=\"LM\"");
 		  HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
 				  Gbl.Crs.Grps.GrpTyp.GrpTypName,HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"12\" class=\"%s\" required=\"required\"",
+				  "size=\"12\" class=\"%s\""
+				  " required=\"required\"",
 				  The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 
@@ -2611,8 +2612,8 @@ static void Grp_PutFormToCreateGroup (const struct Roo_Rooms *Rooms)
 	       HTM_TD_Begin ("class=\"CM\"");
 		  HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
-				  "size=\"20\""
-				  " class=\"%s\" required=\"required\"",
+				  "size=\"20\" class=\"%s\""
+				  " required=\"required\"",
 				  The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_TD_End ();
 

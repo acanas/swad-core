@@ -389,6 +389,7 @@ static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
 static void DegTyp_ListDegreeTypesForEdition (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumDegTyp;
 
    /***** Begin table *****/
@@ -426,7 +427,8 @@ static void DegTyp_ListDegreeTypesForEdition (void)
 		  HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,
 				  Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
 				  HTM_SUBMIT_ON_CHANGE,
-				  "size=\"25\" required=\"required\"");
+				  "size=\"25\" class=\"%s\" required=\"required\"",
+				  The_ClassInput[Gbl.Prefs.Theme]);
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 
@@ -459,6 +461,7 @@ bool DegTyp_CheckIfICanCreateDegreeTypes (void)
 static void DegTyp_PutFormToCreateDegreeType (void)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
@@ -488,7 +491,8 @@ static void DegTyp_PutFormToCreateDegreeType (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("DegTypName",DegTyp_MAX_CHARS_DEGREE_TYPE_NAME,DegTyp_EditingDegTyp->DegTypName,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"25\" required=\"required\"");
+			       "size=\"25\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Number of degrees of this degree type ****/

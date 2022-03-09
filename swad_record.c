@@ -176,7 +176,7 @@ void Rec_ReqEditRecordFields (void)
                          NULL,NULL,
                          Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
-      Rec_ListFieldsRecordsForEdition ();
+	 Rec_ListFieldsRecordsForEdition ();
 
       /* End table and box */
       Box_BoxTableEnd ();
@@ -253,6 +253,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
 void Rec_ListFieldsRecordsForEdition (void)
   {
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
@@ -282,7 +283,8 @@ void Rec_ListFieldsRecordsForEdition (void)
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,
 			       Gbl.Crs.Records.LstFields.Lst[NumField].Name,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "class=\"REC_FIELDNAME\"");
+			       "class=\"REC_FIELDNAME %s\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -294,7 +296,8 @@ void Rec_ListFieldsRecordsForEdition (void)
 			 Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
 			       HTM_SUBMIT_ON_CHANGE,
-			       "size=\"2\"");
+			       "size=\"2\" class=\"%s\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -303,7 +306,8 @@ void Rec_ListFieldsRecordsForEdition (void)
 	    Frm_BeginForm (ActChgVisFie);
 	       Rec_PutParamFieldCod (&Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
 	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-				 "name=\"Visibility\"");
+				 "name=\"Visibility\" class=\"%s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 		       Vis++)
@@ -328,6 +332,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 void Rec_ShowFormCreateRecordField (void)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_New_record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
@@ -357,7 +362,8 @@ void Rec_ShowFormCreateRecordField (void)
 	    HTM_TD_Begin ("class=\"LM\"");
 	       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "class=\"REC_FIELDNAME\" required=\"required\"");
+			       "class=\"REC_FIELDNAME %s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Number of lines in form ******/
@@ -366,13 +372,15 @@ void Rec_ShowFormCreateRecordField (void)
 			 Gbl.Crs.Records.Field.NumLines);
 	       HTM_INPUT_TEXT ("NumLines",Cns_MAX_DECIMAL_DIGITS_UINT,StrNumLines,
 			       HTM_DONT_SUBMIT_ON_CHANGE,
-			       "size=\"2\" required=\"required\"");
+			       "size=\"2\" class=\"%s\" required=\"required\"",
+			       The_ClassInput[Gbl.Prefs.Theme]);
 	    HTM_TD_End ();
 
 	    /***** Visibility to students *****/
 	    HTM_TD_Begin ("class=\"CM\"");
 	       HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
-				 "name=\"Visibility\"");
+				 "name=\"Visibility\" class=\"%s\"",
+				 The_ClassInput[Gbl.Prefs.Theme]);
 		  for (Vis  = (Rec_VisibilityRecordFields_t) 0;
 		       Vis <= (Rec_VisibilityRecordFields_t) (Rec_NUM_TYPES_VISIBILITY - 1);
 		       Vis++)

@@ -3782,8 +3782,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.Tml_WIDTH		{width:316px;}	/* 556-240 */
 	.Tml_RIGHT_WIDTH	{width:260px;}	/* 500-240 */
 	.Tml_RIGHT_AUTHOR_WIDTH	{width:100px;}	/* 340-240 */
-	.Tml_COMM_WIDTH		{width:220px;}	/* 460-240 */
-	.Tml_COMM_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
+	.Tml_COM_WIDTH		{width:220px;}	/* 460-240 */
+	.Tml_COM_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
 	.Tml_MED_INPUT_WIDTH	{width:160px;}	/* 400-240 */
 	.Tml_NOTE_FOOT_WIDTH	{width:260px;}	/* 500-240 */
 	.Tml_COMM_FOOT_WIDTH	{width:220px;}	/* 460-240 */
@@ -3796,8 +3796,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	.Tml_WIDTH		{width:556px;}
 	.Tml_RIGHT_WIDTH	{width:500px;}
 	.Tml_RIGHT_AUTHOR_WIDTH	{width:340px;}
-	.Tml_COMM_WIDTH		{width:460px;}
-	.Tml_COMM_AUTHOR_WIDTH	{width:300px;}
+	.Tml_COM_WIDTH		{width:460px;}
+	.Tml_COM_AUTHOR_WIDTH	{width:300px;}
 	.Tml_MED_INPUT_WIDTH	{width:400px;}
 	.Tml_FAV_NOT_WIDTH	{width:240px;}
 	.Tml_SHA_NOT_WIDTH	{width:240px;}
@@ -3869,12 +3869,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	width:160px;
 	text-align:right;
 	vertical-align:top;
-	}
-.Tml_PST_TEXTAREA
-	{
-	box-sizing:border-box;
-	margin:0;
-	resize:none;
 	}
 .Tml_PST_MED_CONT
 	{

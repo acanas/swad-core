@@ -668,6 +668,7 @@ void Pwd_ShowFormChgMyPwd (void)
 void Pwd_PutFormToGetNewPasswordOnce (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
@@ -680,7 +681,8 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
       /* Data */
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_INPUT_PASSWORD ("Paswd",Txt_HELP_password,NULL,true,
-			     "id=\"Paswd\"");
+			     "id=\"Paswd\" class=\"%s\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -810,7 +812,8 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 HTM_TxtColonNBSP (Txt_For_security_enter_your_password);
 	 HTM_INPUT_PASSWORD ("OthUsrPwd",NULL,"off",true,
-			     "class=\"%s\"",The_ClassInput[Gbl.Prefs.Theme]);
+			     "class=\"%s\"",
+			     The_ClassInput[Gbl.Prefs.Theme]);
       HTM_LABEL_End ();
 
    HTM_DIV_End ();
