@@ -135,7 +135,7 @@ static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timet
                                                unsigned Weekday,unsigned Interval);
 static void Tmt_DrawCellAlignTimeTable (void);
 static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
-				   unsigned Weekday,unsigned Interval,unsigned Column,unsigned ColSpan,
+				   const struct Tmt_WhichCell *WhichCell,unsigned ColSpan,
                                    long CrsCod,long GrpCod,
                                    Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,const char *Info);
@@ -145,7 +145,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
                                        unsigned DurationNumIntervals,
                                        const char *Info);
 static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
-				       unsigned Weekday,unsigned Interval,unsigned Column,
+				       const struct Tmt_WhichCell *WhichCell,
                                        long GrpCod,
                                        Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,const char *Info);
@@ -178,7 +178,7 @@ static void Tmt_TimeTableConfigureIntervalsAndAllocateTimeTable (struct Tmt_Time
 	   Weekday < Tmt_DAYS_PER_WEEK;
 	   Weekday++)
 	 if ((Tmt_TimeTable[Weekday] = malloc (Timetable->Config.IntervalsPerDay *
-					      sizeof (*Tmt_TimeTable[Weekday]))) == NULL)
+					       sizeof (*Tmt_TimeTable[Weekday]))) == NULL)
             Err_NotEnoughMemoryExit ();
      }
    else
@@ -256,25 +256,25 @@ static void Tmt_GetParamsTimeTable (struct Tmt_Timetable *Timetable)
    unsigned Minutes;
 
    /***** Get day (0: monday, 1: tuesday,..., 6: sunday *****/
-   Timetable->Weekday = (unsigned)
-			Par_GetParToUnsignedLong ("TTDay",
-						  0,
-						  Tmt_DAYS_PER_WEEK - 1,
-						  0);
+   Timetable->WhichCell.Weekday = (unsigned)
+				  Par_GetParToUnsignedLong ("TTDay",
+							    0,
+							    Tmt_DAYS_PER_WEEK - 1,
+							    0);
 
    /***** Get hour *****/
-   Timetable->Interval = (unsigned)
-			 Par_GetParToUnsignedLong ("TTInt",
-						   0,
-						   Timetable->Config.IntervalsPerDay - 1,
-						   0);
+   Timetable->WhichCell.Interval = (unsigned)
+				   Par_GetParToUnsignedLong ("TTInt",
+							     0,
+							     Timetable->Config.IntervalsPerDay - 1,
+							     0);
 
    /***** Get number of column *****/
-   Timetable->Column = (unsigned)
-		       Par_GetParToUnsignedLong ("TTCol",
-						 0,
-						 Tmt_MAX_COLUMNS_PER_CELL - 1,
-						 0);
+   Timetable->WhichCell.Column = (unsigned)
+				 Par_GetParToUnsignedLong ("TTCol",
+							   0,
+							   Tmt_MAX_COLUMNS_PER_CELL - 1,
+							   0);
 
    /***** Get class type *****/
    Par_GetParToText ("TTTyp",StrClassType,Tmt_MAX_BYTES_STR_CLASS_TYPE);
@@ -960,30 +960,30 @@ static unsigned Tmt_CalculateMinutesPerInterval (unsigned Seconds)
 
 static void Tmt_ModifTimeTable (struct Tmt_Timetable *Timetable)
   {
-   if (Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].IntervalType == Tmt_FIRST_INTERVAL)
+   if (Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].IntervalType == Tmt_FIRST_INTERVAL)
      {
       /***** Free this cell *****/
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].GrpCod            = -1L;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].IntervalType      = Tmt_FREE_INTERVAL;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].ClassType         = Tmt_FREE;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].DurationIntervals = 0;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].Info[0]          = '\0';
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].NumColumns--;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].GrpCod            = -1L;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].IntervalType      = Tmt_FREE_INTERVAL;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].ClassType         = Tmt_FREE;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].DurationIntervals = 0;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].Info[0]          = '\0';
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].NumColumns--;
      }
 
    if (Timetable->ClassType != Tmt_FREE &&
        Timetable->DurationIntervals > 0 &&
-       Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].NumColumns < Tmt_MAX_COLUMNS_PER_CELL)
+       Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].NumColumns < Tmt_MAX_COLUMNS_PER_CELL)
      {
       /***** Change this cell *****/
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].NumColumns++;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].GrpCod            = Timetable->GrpCod;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].IntervalType      = Tmt_FIRST_INTERVAL;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].ClassType         = Timetable->ClassType;
-      Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].DurationIntervals = Timetable->DurationIntervals;
-      Str_Copy (Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].Info,
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].NumColumns++;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].GrpCod            = Timetable->GrpCod;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].IntervalType      = Tmt_FIRST_INTERVAL;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].ClassType         = Timetable->ClassType;
+      Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].DurationIntervals = Timetable->DurationIntervals;
+      Str_Copy (Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].Info,
                 Timetable->Info,
-                sizeof (Tmt_TimeTable[Timetable->Weekday][Timetable->Interval].Columns[Timetable->Column].Info) - 1);
+                sizeof (Tmt_TimeTable[Timetable->WhichCell.Weekday][Timetable->WhichCell.Interval].Columns[Timetable->WhichCell.Column].Info) - 1);
      }
   }
 
@@ -994,10 +994,8 @@ static void Tmt_ModifTimeTable (struct Tmt_Timetable *Timetable)
 static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
   {
    unsigned DayColumn;	// Column from left (0) to right (6)
-   unsigned Weekday;	// Day of week
-   unsigned Interval;
+   struct Tmt_WhichCell WhichCell;
    unsigned Min;
-   unsigned Column;
    unsigned ColumnsToDraw;
    unsigned ColumnsToDrawIncludingExtraColumn;
    unsigned ContinuousFreeMinicolumns;
@@ -1033,20 +1031,20 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** Write the table row by row *****/
-      for (Interval = 0, Min = Timetable->Config.Range.MinutesPerInterval;
-	   Interval < Timetable->Config.IntervalsPerDay;
-	   Interval++,
+      for (WhichCell.Interval = 0, Min = Timetable->Config.Range.MinutesPerInterval;
+	   WhichCell.Interval < Timetable->Config.IntervalsPerDay;
+	   WhichCell.Interval++,
 	   Min = (Min + Timetable->Config.Range.MinutesPerInterval) %
 		 Tmt_SECONDS_PER_MINUTE)
 	{
 	 HTM_TR_Begin (NULL);
 
 	    /* Left hour:minutes cell */
-	    if (Interval % 2)
+	    if (WhichCell.Interval % 2)
 	       Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
-					 (Interval + 2) / Timetable->Config.IntervalsPerHour,
-					 Min,
-					 "RM");
+					  (WhichCell.Interval + 2) / Timetable->Config.IntervalsPerHour,
+					  Min,
+					  "RM");
 
 	    /* Empty column used to adjust height */
 	    Tmt_DrawCellAlignTimeTable ();
@@ -1059,14 +1057,14 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 	       /* Weekday == 0 ==> monday,
 			  ...
 		  Weekday == 6 ==> sunday */
-	       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
+	       WhichCell.Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
 
 	       /* Check how many colums are needed.
 		  For each item (class) in this hour from left to right,
 		  we must check the maximum of columns */
 	       ColumnsToDraw = Tmt_CalculateColsToDrawInCell (Timetable,
-							     true,	// Top call, non recursive
-							     Weekday,Interval);
+							      true,	// Top call, non recursive
+							      WhichCell.Weekday,WhichCell.Interval);
 	       if (ColumnsToDraw == 0 &&
 		   (Timetable->View == Tmt_CRS_VIEW ||
 		    Timetable->View == Tmt_TUT_VIEW))
@@ -1080,45 +1078,51 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 		  ColumnsToDrawIncludingExtraColumn++;
 
 	       /* Draw cells */
-	       for (Column = 0, ContinuousFreeMinicolumns = 0;
-		    Column < ColumnsToDrawIncludingExtraColumn;
-		    Column++)
-		  if (Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType == Tmt_FREE_INTERVAL)
+	       for (WhichCell.Column = 0, ContinuousFreeMinicolumns = 0;
+		    WhichCell.Column < ColumnsToDrawIncludingExtraColumn;
+		    WhichCell.Column++)
+		  if (Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].IntervalType == Tmt_FREE_INTERVAL)
 		     ContinuousFreeMinicolumns += Tmt_NUM_MINICOLUMNS_PER_DAY /
 						  ColumnsToDrawIncludingExtraColumn;
 		  else
 		    {
 		     if (ContinuousFreeMinicolumns)
 		       {
+			WhichCell.Column--;
 			Tmt_TimeTableDrawCell (Timetable,
-					       Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
+					       &WhichCell,ContinuousFreeMinicolumns,
 					       -1L,-1L,Tmt_FREE_INTERVAL,Tmt_FREE,0,NULL);
+			WhichCell.Column++;
 			ContinuousFreeMinicolumns = 0;
 		       }
 		     Tmt_TimeTableDrawCell (Timetable,
-					    Weekday,Interval,Column,
+					    &WhichCell,
 					    Tmt_NUM_MINICOLUMNS_PER_DAY /
 					    ColumnsToDrawIncludingExtraColumn,
-					    Tmt_TimeTable[Weekday][Interval].Columns[Column].CrsCod,
-					    Tmt_TimeTable[Weekday][Interval].Columns[Column].GrpCod,
-					    Tmt_TimeTable[Weekday][Interval].Columns[Column].IntervalType,
-					    Tmt_TimeTable[Weekday][Interval].Columns[Column].ClassType,
-					    Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals,
-					    Tmt_TimeTable[Weekday][Interval].Columns[Column].Info);
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].CrsCod,
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].GrpCod,
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].IntervalType,
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].ClassType,
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].DurationIntervals,
+					    Tmt_TimeTable[WhichCell.Weekday][WhichCell.Interval].Columns[WhichCell.Column].Info);
 		    }
 	       if (ContinuousFreeMinicolumns)
+		 {
+		  WhichCell.Column--;
 		  Tmt_TimeTableDrawCell (Timetable,
-					 Weekday,Interval,Column - 1,ContinuousFreeMinicolumns,
+					 &WhichCell,ContinuousFreeMinicolumns,
 					 -1L,-1L,Tmt_FREE_INTERVAL,Tmt_FREE,0,NULL);
+		  WhichCell.Column++;
+		 }
 	      }
 
 	    /* Empty column used to adjust height */
 	    Tmt_DrawCellAlignTimeTable ();
 
 	    /* Right hour:minutes cell */
-	    if (Interval % 2)
+	    if (WhichCell.Interval % 2)
 	       Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
-					  (Interval + 2) / Timetable->Config.IntervalsPerHour,
+					  (WhichCell.Interval + 2) / Timetable->Config.IntervalsPerHour,
 					  Min,
 					  "LM");
 
@@ -1310,7 +1314,7 @@ static void Tmt_DrawCellAlignTimeTable (void)
 /*****************************************************************************/
 
 static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
-				   unsigned Weekday,unsigned Interval,unsigned Column,unsigned ColSpan,
+				   const struct Tmt_WhichCell *WhichCell,unsigned ColSpan,
                                    long CrsCod,long GrpCod,
                                    Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,const char *Info)
@@ -1384,7 +1388,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
      {
       if (asprintf (&ClassStr,"%s%u",
                     TimeTableClasses[ClassType],
-                    Interval % 4) < 0)
+                    WhichCell->Interval % 4) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
    else
@@ -1417,8 +1421,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
 	    break;
 	 case Tmt_CRS_EDIT:	// Edit course timetable
 	 case Tmt_TUT_EDIT:	// Edit tutoring timetable
-	    Tmt_TimeTableDrawCellEdit (Timetable,
-				       Weekday,Interval,Column,
+	    Tmt_TimeTableDrawCellEdit (Timetable,WhichCell,
                                        GrpCod,
                                        IntervalType,ClassType,
                                        DurationNumIntervals,
@@ -1493,7 +1496,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
   }
 
 static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
-				       unsigned Weekday,unsigned Interval,unsigned Column,
+				       const struct Tmt_WhichCell *WhichCell,
                                        long GrpCod,
                                        Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,const char *Info)
@@ -1505,6 +1508,13 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    extern const char *Txt_Group;
    extern const char *Txt_All_groups;
    extern const char *Txt_Info;
+   static Act_Action_t NextAction[Tmt_NUM_VIEW_EDIT] =
+     {
+      [Tmt_CRS_VIEW] = ActUnk,		// course view
+      [Tmt_TUT_VIEW] = ActUnk,		// tutorials view
+      [Tmt_CRS_EDIT] = ActChgCrsTT,	// course edit
+      [Tmt_TUT_EDIT] = ActChgTut,	// tutorials edit
+     };
    char *CellStr;	// Unique string for this cell used in labels
    Tmt_ClassType_t CT;
    unsigned i;
@@ -1518,18 +1528,17 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    char *Room;
 
    /***** Form to modify this cell *****/
-   Frm_BeginForm (Timetable->View == Tmt_CRS_EDIT ? ActChgCrsTT :
-						    ActChgTut);
+   Frm_BeginForm (NextAction[Timetable->View]);
 
       /***** Create unique string for this cell used in labels *****/
       if (asprintf (&CellStr,"%02u%02u%02u",
-		    Weekday,Interval,Column) < 0)
+		    WhichCell->Weekday,WhichCell->Interval,WhichCell->Column) < 0)
 	 Err_NotEnoughMemoryExit ();
 
       /***** Put hidden parameters *****/
-      Par_PutHiddenParamUnsigned (NULL,"TTDay",Weekday);
-      Par_PutHiddenParamUnsigned (NULL,"TTInt",Interval);
-      Par_PutHiddenParamUnsigned (NULL,"TTCol",Column);
+      Par_PutHiddenParamUnsigned (NULL,"TTDay",WhichCell->Weekday );
+      Par_PutHiddenParamUnsigned (NULL,"TTInt",WhichCell->Interval);
+      Par_PutHiddenParamUnsigned (NULL,"TTCol",WhichCell->Column  );
 
       /***** Class type *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
@@ -1547,12 +1556,12 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 
       if (IntervalType == Tmt_FREE_INTERVAL)
 	{
-	 for (i = Interval + 1;
+	 for (i = WhichCell->Interval + 1;
 	      i < Timetable->Config.IntervalsPerDay;
 	      i++)
-	   if (Tmt_TimeTable[Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
+	   if (Tmt_TimeTable[WhichCell->Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
 	       break;
-	 MaxDuration = i - Interval;
+	 MaxDuration = i - WhichCell->Interval;
 	 Dur = (MaxDuration >= Timetable->Config.IntervalsPerHour) ? Timetable->Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
 								     MaxDuration;				// MaxDuration  < 1h ==> Dur = MaxDuration
 	 if (asprintf (&TTDur,"%u:%02u",
@@ -1568,15 +1577,16 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	 /***** Class duration *****/
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			   "name=\"TTDur\" class=\"Tmt_DUR\"");
-	    for (i = Interval + Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
+	    for (i = WhichCell->Interval +
+		     Tmt_TimeTable[WhichCell->Weekday][WhichCell->Interval].Columns[WhichCell->Column].DurationIntervals;
 		 i < Timetable->Config.IntervalsPerDay;
 		 i++)
-	       if (Tmt_TimeTable[Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
+	       if (Tmt_TimeTable[WhichCell->Weekday][i].NumColumns == Tmt_MAX_COLUMNS_PER_CELL)
 		  break;
-	    MaxDuration = i - Interval;
-	    if (Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals > MaxDuration)
-	       MaxDuration = Tmt_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
-	    for (Dur = 0;
+	    MaxDuration = i - WhichCell->Interval;
+	    if (Tmt_TimeTable[WhichCell->Weekday][WhichCell->Interval].Columns[WhichCell->Column].DurationIntervals > MaxDuration)
+	       MaxDuration = Tmt_TimeTable[WhichCell->Weekday][WhichCell->Interval].Columns[WhichCell->Column].DurationIntervals;
+	    for (Dur  = 0;
 		 Dur <= MaxDuration;
 		 Dur++)
 	      {

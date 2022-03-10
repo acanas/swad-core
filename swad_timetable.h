@@ -36,12 +36,13 @@
 #define Tmt_MAX_CHARS_INFO	(128 - 1)	// 127
 #define Tmt_MAX_BYTES_INFO	((Tmt_MAX_CHARS_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
+#define Tmt_NUM_VIEW_EDIT 4
 typedef enum
   {
-   Tmt_CRS_VIEW,
-   Tmt_TUT_VIEW,
-   Tmt_CRS_EDIT,
-   Tmt_TUT_EDIT,
+   Tmt_CRS_VIEW = 0,	// course view
+   Tmt_TUT_VIEW = 1,	// tutorials view
+   Tmt_CRS_EDIT = 2,	// course edit
+   Tmt_TUT_EDIT = 3,	// tutorials edit
   } Tmt_TimeTableView_t;
 
 #define Tmt_NUM_TIMETABLE_TYPES 3
@@ -78,6 +79,13 @@ struct Tmt_Range
    unsigned MinutesPerInterval;	// 5, 15 or 30 minutes
   };
 
+struct Tmt_WhichCell
+  {
+   unsigned Weekday;
+   unsigned Interval;
+   unsigned Column;
+  };
+
 struct Tmt_Timetable
   {
    struct
@@ -91,9 +99,7 @@ struct Tmt_Timetable
      } Config;
    Tmt_TimeTableType_t Type;
    Tmt_TimeTableView_t View;
-   unsigned Weekday;
-   unsigned Interval;
-   unsigned Column;
+   struct Tmt_WhichCell WhichCell;
    Tmt_ClassType_t ClassType;
    unsigned DurationIntervals;
    char Info[Tmt_MAX_BYTES_INFO + 1];
