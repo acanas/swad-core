@@ -606,10 +606,11 @@ TODO: Fix bug: error al enviar un mensaje a dos recipientes, error on duplicate 
 
 TODO: Attach pdf files in multimedia.
 */
-#define Log_PLATFORM_VERSION	"SWAD 21.83.2 (2022-03-10)"
+#define Log_PLATFORM_VERSION	"SWAD 21.83.3 (2022-03-10)"
 #define CSS_FILE		"swad21.83.2.css"
 #define JS_FILE			"swad21.78.2.js"
 /*
+	Version 21.83.3:  Mar 10, 2022  Code refactoring in timetable. (323527 lines)
 	Version 21.83.2:  Mar 10, 2022  Working on design of dark theme. (323488 lines)
 Copy the following icon to icon public directory:
 sudo cp icon/theme/dark/theme_32x20.gif /var/www/html/swad/icon/theme/dark/
