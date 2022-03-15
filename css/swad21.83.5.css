@@ -3460,38 +3460,58 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	line-height:100%;
 	letter-spacing:0;
 	}
+
 .Tmt_DAY
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
-	color:#202020;
 	font-size:10pt;
 	letter-spacing:0;
 	}
-.Tmt_SUNDAY
+
+.Tmt_DAY_WHITE		{color:#202020;}
+.Tmt_DAY_GREY		{color:#202020;}
+.Tmt_DAY_PURPLE		{color:#202020;}
+.Tmt_DAY_BLUE		{color:#202020;}
+.Tmt_DAY_YELLOW		{color:#202020;}
+.Tmt_DAY_PINK		{color:#202020;}
+.Tmt_DAY_DARK		{color:#e0e0e0;}
+
+.Tmt_SUNDAY_WHITE	{color:#660000;}
+.Tmt_SUNDAY_GREY	{color:#660000;}
+.Tmt_SUNDAY_PURPLE	{color:#660000;}
+.Tmt_SUNDAY_BLUE	{color:#660000;}
+.Tmt_SUNDAY_YELLOW	{color:#660000;}
+.Tmt_SUNDAY_PINK	{color:#660000;}
+.Tmt_SUNDAY_DARK	{color:#ff8080;}
+
+.Tmt_HOUR
 	{
-	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
-	color:red;
-	font-size:10pt;
-	letter-spacing:0;
-	}
-.Tmt_HOUR_BIG
-	{
-	color:#808080;
+	box-sizing:border-box;
+	height:32px;
+	width:7%;
 	font-size:10pt;
 	font-weight:bold;
 	line-height:100%;
 	letter-spacing:0;
 	}
-.Tmt_HOUR_SMALL
-	{
-	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
-	color:#A0A0A0;
-	font-size:10pt;
-	line-height:100%;
-	letter-spacing:0;
-	}
+
+.Tmt_HOUR00_WHITE	{color:#808080;}
+.Tmt_HOUR00_GREY	{color:#808080;}
+.Tmt_HOUR00_PURPLE	{color:#808080;}
+.Tmt_HOUR00_BLUE	{color:#808080;}
+.Tmt_HOUR00_YELLOW	{color:#808080;}
+.Tmt_HOUR00_PINK	{color:#808080;}
+.Tmt_HOUR00_DARK	{color:#d0d0d0;}
+
+.Tmt_HOURXX_WHITE	{color:#d0d0d0;}
+.Tmt_HOURXX_GREY	{color:#d0d0d0;}
+.Tmt_HOURXX_PURPLE	{color:#d0d0d0;}
+.Tmt_HOURXX_BLUE	{color:#d0d0d0;}
+.Tmt_HOURXX_YELLOW	{color:#d0d0d0;}
+.Tmt_HOURXX_PINK	{color:#d0d0d0;}
+.Tmt_HOURXX_DARK	{color:#808080;}
+
 .Tmt_HOURCOL	{box-sizing:border-box; height:16px; width:7%;}
-.Tmt_HOUR	{box-sizing:border-box; height:32px; width:7%;}
 .Tmt_MINICOL	{box-sizing:border-box; height:16px; width:2%;}
 .Tmt_ALIGN	{box-sizing:border-box; height:16px; width:1%;}
 .Tmt_FREE0	{box-sizing:border-box; height:16px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}

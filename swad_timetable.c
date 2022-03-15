@@ -73,7 +73,6 @@ extern struct Globals Gbl;
 #define Tmt_PERCENT_WIDTH_OF_A_DAY		(Tmt_PERCENT_WIDTH_OF_A_MINICOLUMN * Tmt_NUM_MINICOLUMNS_PER_DAY)	// Width (%) of each day
 #define Tmt_PERCENT_WIDTH_OF_ALL_DAYS		(Tmt_PERCENT_WIDTH_OF_A_DAY * Tmt_DAYS_PER_WEEK)			// Width (%) of all days
 #define Tmt_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN	  1								// Width (%) of left and right columns
-#define Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100 - Tmt_PERCENT_WIDTH_OF_ALL_DAYS - Tmt_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN * 2) / 2)	// Width (%) of the separation columns
 
 #define Tmt_MAX_BYTES_STR_CLASS_TYPE		256
 #define Tmt_MAX_BYTES_STR_DURATION		 32	// "hh:mm h"
@@ -129,7 +128,7 @@ static void Tmt_ModifTimeTable (struct Tmt_Timetable *Timetable);
 static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable);
 static void Tmt_TimeTableDrawAdjustRow (void);
 static void Tmt_TimeTableDrawDaysCells (void);
-static void Tmt_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Align);
+static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align);
 static unsigned Tmt_CalculateColsToDrawInCell (const struct Tmt_Timetable *Timetable,
 					       bool TopCall,
                                                unsigned Weekday,unsigned Interval);
@@ -1008,21 +1007,11 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 
       /***** Row with day names *****/
       HTM_TR_Begin (NULL);
-
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR_BIG RM\" style=\"width:%u%%;\"",
-		       Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-	    HTM_TxtF ("%02u:00",Timetable->Config.Range.Hours.Start);
-	 HTM_TD_End ();
-
+         Tmt_DrawHourCell (Timetable->Config.Range.Hours.Start,0,"RM");
 	 Tmt_DrawCellAlignTimeTable ();
 	 Tmt_TimeTableDrawDaysCells ();
 	 Tmt_DrawCellAlignTimeTable ();
-
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR_BIG LM\" style=\"width:%u%%;\"",
-		       Tmt_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
-	    HTM_TxtF ("%02u:00",Timetable->Config.Range.Hours.Start);
-	 HTM_TD_End ();
-
+         Tmt_DrawHourCell (Timetable->Config.Range.Hours.Start,0,"LM");
       HTM_TR_End ();
 
       /***** Get list of groups types and groups in this course *****/
@@ -1041,10 +1030,10 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 
 	    /* Left hour:minutes cell */
 	    if (WhichCell.Interval % 2)
-	       Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
-					  (WhichCell.Interval + 2) / Timetable->Config.IntervalsPerHour,
-					  Min,
-					  "RM");
+	       Tmt_DrawHourCell (Timetable->Config.Range.Hours.Start +
+				 (WhichCell.Interval + 2) / Timetable->Config.IntervalsPerHour,
+				 Min,
+				 "RM");
 
 	    /* Empty column used to adjust height */
 	    Tmt_DrawCellAlignTimeTable ();
@@ -1121,10 +1110,10 @@ static void Tmt_DrawTimeTable (const struct Tmt_Timetable *Timetable)
 
 	    /* Right hour:minutes cell */
 	    if (WhichCell.Interval % 2)
-	       Tmt_TimeTableDrawHourCell (Timetable->Config.Range.Hours.Start +
-					  (WhichCell.Interval + 2) / Timetable->Config.IntervalsPerHour,
-					  Min,
-					  "LM");
+	       Tmt_DrawHourCell (Timetable->Config.Range.Hours.Start +
+				 (WhichCell.Interval + 2) / Timetable->Config.IntervalsPerHour,
+				 Min,
+				 "LM");
 
 	 HTM_TR_End ();
 	}
@@ -1187,6 +1176,7 @@ static void Tmt_TimeTableDrawAdjustRow (void)
 
 static void Tmt_TimeTableDrawDaysCells (void)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DAYS_CAPS[7];
    unsigned DayColumn;
    unsigned Weekday;
@@ -1196,10 +1186,11 @@ static void Tmt_TimeTableDrawDaysCells (void)
 	DayColumn++)
      {
       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
-      HTM_TD_Begin ("colspan=\"%u\" class=\"%s CM\" style=\"width:%u%%;\"",
+      HTM_TD_Begin ("colspan=\"%u\" class=\"Tmt_DAY %s%s CM\" style=\"width:%u%%;\"",
 		    Tmt_NUM_MINICOLUMNS_PER_DAY,
-		    Weekday == 6 ? "Tmt_SUNDAY" :	// Sunday drawn in red
-				   "Tmt_DAY",	// Monday to Saturday
+		    Weekday == 6 ? "Tmt_SUNDAY_" :	// Sunday drawn in red
+				   "Tmt_DAY_",		// Monday to Saturday
+		    The_Colors[Gbl.Prefs.Theme],
 		    Tmt_PERCENT_WIDTH_OF_A_DAY);
 	 HTM_Txt (Txt_DAYS_CAPS[Weekday]);
       HTM_TD_End ();
@@ -1210,11 +1201,14 @@ static void Tmt_TimeTableDrawDaysCells (void)
 /****************** Draw cells with day names in a time table ****************/
 /*****************************************************************************/
 
-static void Tmt_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Align)
+static void Tmt_DrawHourCell (unsigned Hour,unsigned Min,const char *Align)
   {
-   HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR %s %s\"",
-		 Min ? "Tmt_HOUR_SMALL" :
-		       "Tmt_HOUR_BIG",
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_TD_Begin ("rowspan=\"2\" class=\"Tmt_HOUR %s_%s %s\"",
+		 Min ? "Tmt_HOURXX" :
+		       "Tmt_HOUR00",
+		 The_Colors[Gbl.Prefs.Theme],
 		 Align);
       HTM_TxtF ("%02u:%02u",Hour,Min);
    HTM_TD_End ();
@@ -1530,11 +1524,6 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
    /***** Form to modify this cell *****/
    Frm_BeginForm (NextAction[Timetable->View]);
 
-      /***** Create unique string for this cell used in labels *****/
-      if (asprintf (&CellStr,"%02u%02u%02u",
-		    WhichCell->Weekday,WhichCell->Interval,WhichCell->Column) < 0)
-	 Err_NotEnoughMemoryExit ();
-
       /***** Put hidden parameters *****/
       Par_PutHiddenParamUnsigned (NULL,"TTDay",WhichCell->Weekday );
       Par_PutHiddenParamUnsigned (NULL,"TTInt",WhichCell->Interval);
@@ -1542,7 +1531,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 
       /***** Class type *****/
       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			"name=\"TTTyp\" class=\"Tmt_TYP\"");
+			"name=\"TTTyp\" class=\"Tmt_TYP %s\"",
+			The_ClassInput[Gbl.Prefs.Theme]);
 	 for (CT  = (Tmt_ClassType_t) 0;
 	      CT <= (Tmt_ClassType_t) (Tmt_NUM_CLASS_TYPES - 1);
 	      CT++)
@@ -1565,7 +1555,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	 Dur = (MaxDuration >= Timetable->Config.IntervalsPerHour) ? Timetable->Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
 								     MaxDuration;				// MaxDuration  < 1h ==> Dur = MaxDuration
 	 if (asprintf (&TTDur,"%u:%02u",
-		       (Dur / Timetable->Config.IntervalsPerHour),		// Hours
+		       (Dur / Timetable->Config.IntervalsPerHour),	// Hours
 		       (Dur % Timetable->Config.IntervalsPerHour) *
 		       Timetable->Config.Range.MinutesPerInterval) < 0)	// Minutes
 	    Err_NotEnoughMemoryExit ();
@@ -1576,7 +1566,8 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	{
 	 /***** Class duration *****/
 	 HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
-			   "name=\"TTDur\" class=\"Tmt_DUR\"");
+			   "name=\"TTDur\" class=\"Tmt_DUR %s\"",
+			   The_ClassInput[Gbl.Prefs.Theme]);
 	    for (i = WhichCell->Interval +
 		     Tmt_TimeTable[WhichCell->Weekday][WhichCell->Interval].Columns[WhichCell->Column].DurationIntervals;
 		 i < Timetable->Config.IntervalsPerDay;
@@ -1602,6 +1593,13 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	      }
 	 HTM_SELECT_End ();
 
+	 /***** Create unique string for this cell used in labels *****/
+	 if (asprintf (&CellStr,"%02u%02u%02u",
+		       WhichCell->Weekday,
+		       WhichCell->Interval,
+		       WhichCell->Column) < 0)
+	    Err_NotEnoughMemoryExit ();
+
 	 if (Timetable->View == Tmt_CRS_EDIT)
 	   {
 	    /***** Group *****/
@@ -1611,8 +1609,9 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	    HTM_LABEL_End ();
 	    HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,
 			      "id=\"TTGrp%s\" name=\"TTGrp\""
-			      " class=\"Tmt_GRP\"",
-			      CellStr);
+			      " class=\"Tmt_GRP %s\"",
+			      CellStr,
+			      The_ClassInput[Gbl.Prefs.Theme]);
 	       HTM_OPTION (HTM_Type_STRING,"-1",GrpCod <= 0,false,
 			   "%s",Txt_All_groups);
 	       for (NumGrpTyp = 0;
@@ -1672,10 +1671,10 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 			    " class=\"Tmt_INF %s\"",
 			    CellStr,The_ClassInput[Gbl.Prefs.Theme]);
 	   }
-	}
 
-      /***** Free allocated unique string for this cell used in labels *****/
-      free (CellStr);
+	 /***** Free allocated unique string for this cell used in labels *****/
+	 free (CellStr);
+	}
 
    /***** End form *****/
    Frm_EndForm ();
