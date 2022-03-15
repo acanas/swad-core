@@ -1250,8 +1250,8 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata);
-static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
-			     const char *Class,bool Input);
+static void Brw_PutIconFile (const char *FileName,
+			     const char *Class,bool PutLinkToViewMetadata);
 
 static void Brw_PutButtonToDownloadZIPOfAFolder (void);
 
@@ -5136,6 +5136,10 @@ static void Brw_PutIconNewFileOrFolder (void)
 
 static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata)
   {
+   extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
+   extern const char *Txt_Link;
+   char *Class;
+
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
 
@@ -5147,8 +5151,18 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMeta
 				   FileMetadata->FilCod);
 
 	 /***** Icon depending on the file extension *****/
-	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",true);
+      if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
+	 Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
+			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
+			  true);	// Put link to view metadata
+      else
+        {
+	 if (asprintf (&Class,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 %s",
+		       Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,Class);
+	 free (Class);
+        }
 
       /***** End form *****/
       Frm_EndForm ();
@@ -5161,12 +5175,11 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMeta
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
 
-static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
-			     const char *Class,bool Input)
+static void Brw_PutIconFile (const char *FileName,
+			     const char *Class,bool PutLinkToViewMetadata)
   {
    extern const unsigned Ext_NUM_FILE_EXT_ALLOWED;
    extern const char *Ext_FileExtensionsAllowed[];
-   extern const char *Txt_Link;
    extern const char *Txt_X_file;
    char *URL;
    char *Icon;
@@ -5174,49 +5187,38 @@ static void Brw_PutIconFile (Brw_FileType_t FileType,const char *FileName,
    unsigned DocType;
    bool NotFound;
 
-   /***** Icon depending on the file extension *****/
-   if (FileType == Brw_IS_LINK)
-     {
-      if (Input)
-	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,Class);
-      else
-	 Ico_PutIcon ("link.svg",Ico_BLACK,Txt_Link,Class);
-     }
-   else	// FileType == Brw_IS_FILE
-     {
-      if (asprintf (&URL,"%s32x32",
-		    CfG_URL_ICON_FILEXT_PUBLIC) < 0)
-	 Err_NotEnoughMemoryExit ();
-      for (DocType = 0, NotFound = true;
-	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
-	   DocType++)
-	 if (Str_FileIs (FileName,Ext_FileExtensionsAllowed[DocType]))
-	   {
-	    if (asprintf (&Icon,"%s32x32.gif",
-			  Ext_FileExtensionsAllowed[DocType]) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    if (asprintf (&Title,Txt_X_file,
-			  Ext_FileExtensionsAllowed[DocType]) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    NotFound = false;
-	   }
-      if (NotFound)
+   if (asprintf (&URL,"%s32x32",
+		 CfG_URL_ICON_FILEXT_PUBLIC) < 0)
+      Err_NotEnoughMemoryExit ();
+   for (DocType = 0, NotFound = true;
+	DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
+	DocType++)
+      if (Str_FileIs (FileName,Ext_FileExtensionsAllowed[DocType]))
 	{
-	 if (asprintf (&Icon,"xxx32x32.gif") < 0)
+	 if (asprintf (&Icon,"%s32x32.gif",
+		       Ext_FileExtensionsAllowed[DocType]) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 if (asprintf (&Title,"%s","") < 0)
+	 if (asprintf (&Title,Txt_X_file,
+		       Ext_FileExtensionsAllowed[DocType]) < 0)
 	    Err_NotEnoughMemoryExit ();
+	 NotFound = false;
 	}
-
-      if (Input)
-	 HTM_INPUT_IMAGE (URL,Icon,Title,Class);
-      else
-	 HTM_IMG (URL,Icon,Title,
-		  "class=\"%s\"",Class);
-      free (Title);
-      free (Icon);
-      free (URL);
+   if (NotFound)
+     {
+      if (asprintf (&Icon,"xxx32x32.gif") < 0)
+	 Err_NotEnoughMemoryExit ();
+      if (asprintf (&Title,"%s","") < 0)
+	 Err_NotEnoughMemoryExit ();
      }
+
+   if (PutLinkToViewMetadata)
+      HTM_INPUT_IMAGE (URL,Icon,Title,Class);
+   else
+      HTM_IMG (URL,Icon,Title,
+	       "class=\"%s\"",Class);
+   free (Title);
+   free (Icon);
+   free (URL);
   }
 
 /*****************************************************************************/
@@ -8516,6 +8518,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
   {
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
+   extern const char *Txt_Link;
    const char *Title;
 
    /***** On the screen a link will be shown to download the file *****/
@@ -8537,8 +8540,12 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 HTM_BUTTON_OnSubmit_Begin (Txt_Check_marks_in_the_file,
 	                            "BT_LINK",NULL);
 
-	    Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-			     "ICO40x40",false);
+	    if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
+	       Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
+				"ICO40x40",
+				false);	// Don't put link to view metadata
+	    else
+	       Ico_PutIcon ("link.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 
 	    /* Name of the file of marks, link end and form end */
 	    HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
@@ -8557,8 +8564,12 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       /* Put anchor and filename */
       HTM_A_Begin ("href=\"%s\" class=\"FILENAME_BIG\" title=\"%s\" target=\"_blank\"",
 	           URL,Title);
-	 Brw_PutIconFile (FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name,
-			  "ICO40x40",false);
+	 if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
+	    Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
+			     "ICO40x40",
+			     false);	// Don't put link to view metadata
+	 else
+	    Ico_PutIcon ("link.svg",Ico_BLACK,Txt_Link,"ICO40x40");
 	 HTM_TxtF ("&nbsp;%s&nbsp;",FileNameToShow);
 	 Ico_PutIcon ("download.svg",Ico_BLACK,Title,"ICO40x40");
       HTM_A_End ();
@@ -9911,6 +9922,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Marks_area;
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Folder;
+   extern const char *Txt_Link;
    struct FileMetadata FileMetadata;
    long InsCod;
    long CtrCod;
@@ -10137,14 +10149,24 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
 	    /* File or folder icon */
 	    HTM_BUTTON_OnSubmit_Begin (FileNameToShow,"BT_LINK",NULL);
-	       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
-		  /* Icon with folder */
-		  Ico_PutIcon ("folder-yellow.png",Ico_UNCHANGED,
-		               Txt_Folder,"CONTEXT_ICO16x16");
-	       else
-		  /* Icon with file type or link */
-		  Brw_PutIconFile (FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name,
-				   "CONTEXT_ICO16x16",false);
+	       switch (FileMetadata.FilFolLnk.Type)
+	         {
+		  case Brw_IS_FILE:
+		     Brw_PutIconFile (FileMetadata.FilFolLnk.Name,
+				      "CONTEXT_ICO16x16",
+				      false);	// Don't put link to view metadata
+		     break;
+		  case Brw_IS_FOLDER:
+		     Ico_PutIcon ("folder-yellow.png",Ico_UNCHANGED,
+				  Txt_Folder,"CONTEXT_ICO16x16");
+		     break;
+		  case Brw_IS_LINK:
+	             Ico_PutIcon ("link.svg",Ico_BLACK,
+	                          Txt_Link,"CONTEXT_ICO16x16");
+		     break;
+		  default:
+		     break;
+	         }
 	       HTM_TxtF ("&nbsp;%s",FileNameToShow);
 	    HTM_BUTTON_End ();
 
