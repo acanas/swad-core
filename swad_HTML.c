@@ -1246,17 +1246,40 @@ void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
 	     Attr);
   }
 
-void HTM_INPUT_IMAGE (const char *URL,const char *Icon,
-                      const char *Title,const char *Class)
+void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
+	              const char *fmt,...)
   {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
    HTM_TxtF ("<input type=\"image\" src=\"%s",URL);
    if (Icon)
       if (Icon[0])
          HTM_TxtF ("/%s",Icon);
    HTM_Txt ("\"");
 
-   HTM_TxtF (" alt=\"%s\" title=\"%s\" class=\"%s\" />",
-	     Title,Title,Class);
+   HTM_TxtF (" alt=\"%s\" title=\"%s\"",
+	     Title,Title);
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 HTM_SPTxt (Attr);
+
+	 free (Attr);
+	}
+     }
+
+   HTM_Txt (" />");
   }
 
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,

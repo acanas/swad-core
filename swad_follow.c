@@ -368,7 +368,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 						   "user-plus.svg",
 				      IFollowUsr ? Txt_Following_unfollow :
 						   Txt_Follow,
-				      "ICO_HIGHLIGHT ICO40x40");
+				      "class=\"ICO_HIGHLIGHT ICO40x40\"");
 		  Frm_EndForm ();
 		 }
 	    HTM_DIV_End ();
@@ -749,16 +749,13 @@ static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_
   {
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_Follow;
-   char *Class;
 
    /***** Form to unfollow *****/
    Frm_BeginForm (ActFolUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-      if (asprintf (&Class,"FOLLOW_USR_ICO ICO16x16 %s ICO_HIGHLIGHT",
-		    Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
-      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",Txt_Follow,Class);
-      free (Class);
+      HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",Txt_Follow,
+                       "class=\"FOLLOW_USR_ICO ICO16x16 %s ICO_HIGHLIGHT\"",
+                       Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
    Frm_EndForm ();
   }
 
@@ -774,7 +771,8 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
    Frm_BeginForm (ActUnfUsr);
       Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-		       Txt_Unfollow,"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16");
+		       Txt_Unfollow,
+		       "class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT ICO16x16\"");
    Frm_EndForm ();
   }
 

@@ -1051,7 +1051,8 @@ void Ban_WriteMenuWithBanners (void)
 
 	    /* Banner image */
 	    HTM_INPUT_IMAGE (Cfg_URL_BANNER_PUBLIC,Banners.Lst[NumBan].Img,
-			     Banners.Lst[NumBan].FullName,"BANNER");
+			     Banners.Lst[NumBan].FullName,
+			     "class=\"BANNER\"");
 
 	 /* End form */
 	 Frm_EndForm ();

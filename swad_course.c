@@ -2220,7 +2220,7 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
 	 /***** Put icon with link *****/
 	 HTM_INPUT_IMAGE (Gbl.Prefs.URLTheme,"sitemap.svg",Txt_My_courses,
-			  "BC_ICON ICO_HIGHLIGHT");
+			  "class=\"BC_ICON ICO_HIGHLIGHT\"");
 
       /***** End form *****/
       Frm_EndForm ();

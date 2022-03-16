@@ -5138,7 +5138,6 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMeta
   {
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_Link;
-   char *Class;
 
    /***** Begin cell *****/
    HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
@@ -5151,18 +5150,14 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMeta
 				   FileMetadata->FilCod);
 
 	 /***** Icon depending on the file extension *****/
-      if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
-	 Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
-			  "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
-			  true);	// Put link to view metadata
-      else
-        {
-	 if (asprintf (&Class,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 %s",
-		       Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,Class);
-	 free (Class);
-        }
+	 if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
+	    Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
+			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
+			     true);	// Put link to view metadata
+	 else
+	    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"link.svg",Txt_Link,
+			     "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 %s\"",
+			     Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
 
       /***** End form *****/
       Frm_EndForm ();
@@ -5212,10 +5207,9 @@ static void Brw_PutIconFile (const char *FileName,
      }
 
    if (PutLinkToViewMetadata)
-      HTM_INPUT_IMAGE (URL,Icon,Title,Class);
+      HTM_INPUT_IMAGE (URL,Icon,Title,"class=\"%s\"",Class);
    else
-      HTM_IMG (URL,Icon,Title,
-	       "class=\"%s\"",Class);
+      HTM_IMG (URL,Icon,Title,"class=\"%s\"",Class);
    free (Title);
    free (Icon);
    free (URL);

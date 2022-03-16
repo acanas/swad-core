@@ -1319,7 +1319,8 @@ static void Mch_PutFormNewMatch (const struct Gam_Game *Game)
 
 	 /***** Put icon to submit the form *****/
 	 HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"play.svg",
-			  Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
+			  Txt_Play,
+			  "class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\"");
 
 	 /***** End box *****/
 	 Box_BoxEnd ();

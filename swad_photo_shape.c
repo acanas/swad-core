@@ -70,7 +70,6 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
       [PhoSha_SHAPE_RECTANGLE] = "ICO_HIGHLIGHT PHOTOR15x20B",
      };
    PhoSha_Shape_t Shape;
-   char *Class;
 
    Box_BoxBegin (NULL,Txt_User_photos,
                  PhoSha_PutIconsPhotoShape,NULL,
@@ -88,13 +87,11 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 	       HTM_DIV_Begin ("class=\"PREF_OFF\"");
 	    Frm_BeginForm (ActChgUsrPho);
 	       Par_PutHiddenParamUnsigned (NULL,"PhotoShape",Shape);
-	       if (asprintf (&Class,"%s %s",
-			     ClassPhoto[Shape],
-			     Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
-		  Err_NotEnoughMemoryExit ();
 	       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user.svg",
-	                        Txt_PHOTO_SHAPES[Shape],Class);
-	       free (Class);
+	                        Txt_PHOTO_SHAPES[Shape],
+	                        "class=\"%s %s\"",
+	                        ClassPhoto[Shape],
+			        Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
 	    Frm_EndForm ();
 	    HTM_DIV_End ();
 	   }

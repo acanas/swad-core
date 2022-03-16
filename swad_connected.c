@@ -425,7 +425,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						      // is dynamically updated via AJAX
 		  Sco_PutParamScope ("ScopeCon",HieLvl_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
-				   Txt_Connected_users,"ICO16x16");
+				   Txt_Connected_users,
+				   "class=\"ICO16x16\"");
 	       Frm_EndForm ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();

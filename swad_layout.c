@@ -1007,12 +1007,14 @@ static void Lay_WritePageTopHeading (void)
 
 	       HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
-				   Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_SMALL_CLASS);
+				   Cfg_PLATFORM_SHORT_NAME,
+				   "class=\"%s\"",Cfg_PLATFORM_LOGO_SMALL_CLASS);
 	       HTM_DIV_End ();	// head_row_1_logo_small
 
 	       HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
-				   Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_LOGO_BIG_CLASS);
+				   Cfg_PLATFORM_SHORT_NAME,
+				   "class=\"%s\"",Cfg_PLATFORM_LOGO_BIG_CLASS);
 	       HTM_DIV_End ();	// head_row_1_logo_big
 
 	       HTM_DIV_Begin ("id=\"head_row_1_tagline\" class=\"TAGLINE_%s\"",

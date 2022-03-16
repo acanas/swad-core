@@ -148,8 +148,8 @@ void HTM_INPUT_FILE (const char *Name,const char *Accept,
                      HTM_SubmitOnChange_t SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
-void HTM_INPUT_IMAGE (const char *URL,const char *Icon,
-                      const char *Title,const char *Class);
+void HTM_INPUT_IMAGE (const char *URL,const char *Icon,const char *Title,
+	              const char *fmt,...);
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,bool Required,
 	                 const char *fmt,...);

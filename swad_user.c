@@ -6510,7 +6510,6 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
       [Usr_WHO_FOLLOWED] = "user-check.svg",
       [Usr_WHO_ALL     ] = "users.svg",
      };
-   char *Class;
 
    switch (Who)
      {
@@ -6522,16 +6521,14 @@ void Usr_PutWhoIcon (Usr_Who_t Who)
 			  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
 						    "usr_bl.jpg",
 		          Txt_WHO[Who],
-	                  "ICO_HIGHLIGHT PHOTOR15x20");
+	                  "class=\"ICO_HIGHLIGHT PHOTOR15x20\"");
 	 break;
       case Usr_WHO_SELECTED:
       case Usr_WHO_FOLLOWED:
       case Usr_WHO_ALL:
-	 if (asprintf (&Class,"ICO_HIGHLIGHT ICOx20 %s",
-		       Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]) < 0)
-	    Err_NotEnoughMemoryExit ();
-         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon[Who],Txt_WHO[Who],Class);
-         free (Class);
+         HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon[Who],Txt_WHO[Who],
+                          "class=\"ICO_HIGHLIGHT ICOx20 %s\"",
+                          Ico_ClassColor[Ico_BLACK][Gbl.Prefs.Theme]);
          break;
       default:
 	 Err_WrongWhoExit ();
