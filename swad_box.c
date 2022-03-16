@@ -103,10 +103,21 @@ void Box_BoxShadowBegin (const char *Width,const char *Title,
                          void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
                          const char *HelpLink)
   {
+   static const char *BgColor[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "FRAME_SHADOW FRAME_SHADOW_WHITE",
+      [The_THEME_GREY  ] = "FRAME_SHADOW FRAME_SHADOW_GREY",
+      [The_THEME_PURPLE] = "FRAME_SHADOW FRAME_SHADOW_PURPLE",
+      [The_THEME_BLUE  ] = "FRAME_SHADOW FRAME_SHADOW_BLUE",
+      [The_THEME_YELLOW] = "FRAME_SHADOW FRAME_SHADOW_YELLOW",
+      [The_THEME_PINK  ] = "FRAME_SHADOW FRAME_SHADOW_PINK",
+      [The_THEME_DARK  ] = "FRAME_SHADOW FRAME_SHADOW_DARK",
+     };
+
    Box_BoxInternalBegin (Width,Title,
                          FunctionToDrawContextualIcons,Args,
 			 HelpLink,Box_NOT_CLOSABLE,
-			 "FRAME_SHADOW");
+			 BgColor[Gbl.Prefs.Theme]);
   }
 
 // Return pointer to box id string

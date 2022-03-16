@@ -886,6 +886,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
   {
    extern const char *Hlp_ASSESSMENT_Calls_for_exam_new_call;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
+   extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_CALL_FOR_EXAM;
@@ -930,6 +931,16 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
       [Cfe_FORM_VIEW  ][Cfe_VISIBLE_CALL_FOR_EXAM] = "CALL_FOR_EXAM_VISIBLE",
       [Cfe_FORM_VIEW  ][Cfe_HIDDEN_CALL_FOR_EXAM ] = "CALL_FOR_EXAM_VISIBLE",
       [Cfe_FORM_VIEW  ][Cfe_DELETED_CALL_FOR_EXAM] = NULL,	// Not applicable here
+     };
+   static const char *ClassTitle[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "EXAM_TIT_WHITE",
+      [The_THEME_GREY  ] = "EXAM_TIT_GREY",
+      [The_THEME_PURPLE] = "EXAM_TIT_PURPLE",
+      [The_THEME_BLUE  ] = "EXAM_TIT_BLUE",
+      [The_THEME_YELLOW] = "EXAM_TIT_YELLOW",
+      [The_THEME_PINK  ] = "EXAM_TIT_PINK",
+      [The_THEME_DARK  ] = "EXAM_TIT_DARK",
      };
 
    /***** Get data of institution of this degree *****/
@@ -982,28 +993,27 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Institution logo *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-	       if (TypeViewCallForExam == Cfe_PRINT_VIEW)
-		  HTM_SPAN_Begin ("class=\"EXAM_TIT\"");
-	       else
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
-			       Ins.WWW);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM %s\"",
+	                  ClassTitle[Gbl.Prefs.Theme]);
+	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			       Ins.WWW,ClassTitle[Gbl.Prefs.Theme]);
 	       Lgo_DrawLogo (HieLvl_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
 	       HTM_BR ();
 	       HTM_Txt (Ins.FullName);
-	       if (TypeViewCallForExam == Cfe_PRINT_VIEW)
-		  HTM_SPAN_End ();
-	       else
+	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
 	 /***** Degree *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"EXAM_TIT CM\"");
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM %s\"",
+	                  ClassTitle[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
-		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT\"",
-			       Gbl.Hierarchy.Deg.WWW);
+		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+			       Gbl.Hierarchy.Deg.WWW,
+			       ClassTitle[Gbl.Prefs.Theme]);
 	       HTM_Txt (Gbl.Hierarchy.Deg.FullName);
 	       if (TypeViewCallForExam == Cfe_NORMAL_VIEW)
 		  HTM_A_End ();
@@ -1012,17 +1022,14 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /***** Title *****/
 	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"EXAM CM\"");
+	    HTM_TD_Begin ("colspan=\"2\" class=\"CM %s\"",
+	                  The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       HTM_NBSP ();
 	       HTM_BR ();
 	       HTM_STRONG_Begin ();
 		  HTM_Txt (Txt_CALL_FOR_EXAM);
 	       HTM_STRONG_End ();
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"2\" class=\"EXAM LM\"");
+	       HTM_BR ();
 	       HTM_NBSP ();
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -1037,7 +1044,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Course);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		  HTM_INPUT_TEXT ("CrsName",Cns_HIERARCHY_MAX_CHARS_FULL_NAME,CallsForExams->CallForExam.CrsFullName,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1063,7 +1070,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Year_or_semester);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1093,7 +1100,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Session);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		  HTM_INPUT_TEXT ("ExamSession",Cfe_MAX_CHARS_SESSION,CallsForExams->CallForExam.Session,
 				  HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1129,7 +1136,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	      {
 	       Dat_ConvDateToDateStr (&CallsForExams->CallForExam.ExamDate,
 				      StrExamDate);
-	       HTM_TD_Begin ("class=\"EXAM LB\"");
+	       HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 		  HTM_Txt (StrExamDate);
 	       HTM_TD_End ();
 	      }
@@ -1145,7 +1152,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Start_time);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1191,7 +1198,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Approximate_duration);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_SELECT_Begin (HTM_DONT_SUBMIT_ON_CHANGE,
@@ -1252,7 +1259,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Place_of_exam);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\""
@@ -1282,7 +1289,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Mode);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	    if (TypeViewCallForExam == Cfe_FORM_VIEW)
 	      {
 	       HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\""
@@ -1312,7 +1319,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Structure_of_the_exam);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\""
@@ -1342,7 +1349,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Documentation_required);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\""
@@ -1372,7 +1379,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Material_required);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\""
@@ -1402,7 +1409,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Material_allowed);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\""
@@ -1432,7 +1439,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 			     Txt_CALL_FOR_EXAM_Other_information);
 
 	    /* Data */
-	    HTM_TD_Begin ("class=\"EXAM LB\"");
+	    HTM_TD_Begin ("class=\"LB %s\"",The_ClassDatStrong[Gbl.Prefs.Theme]);
 	       if (TypeViewCallForExam == Cfe_FORM_VIEW)
 		 {
 		  HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\""

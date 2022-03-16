@@ -1249,7 +1249,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       bool Open,bool Hidden);
 
 static void Brw_PutIconNewFileOrFolder (void);
-static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata);
+static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *FileMetadata);
 static void Brw_PutIconFile (const char *FileName,
 			     const char *Class,bool PutLinkToViewMetadata);
 
@@ -4620,12 +4620,20 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	      }
 
 	    /***** File or folder icon *****/
-	    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-	       /* Icon with folder */
-	       Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow);
-	    else	// File or link
-	       /* Icon with file type or link */
-	       Brw_PutIconFileWithLinkToViewMetadata (&FileMetadata);
+	    switch (Gbl.FileBrowser.FilFolLnk.Type)
+	      {
+	       case Brw_IS_FILE:
+	       case Brw_IS_LINK:
+		  /* Icon with file type or link */
+		  Brw_PutIconFileWithLinkToViewMetadata (&FileMetadata);
+		  break;
+	       case Brw_IS_FOLDER:
+		  /* Icon with folder */
+		  Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow);
+		  break;
+	       default:
+		  break;
+	      }
 
 	    /* Check if is a new file or folder */
 	    // If our last access was before the last modify ==>
@@ -5132,9 +5140,8 @@ static void Brw_PutIconNewFileOrFolder (void)
 /*****************************************************************************/
 /***************************** Put icon of a file ****************************/
 /*****************************************************************************/
-// FileType can be Brw_IS_FILE or Brw_IS_LINK
 
-static void Brw_PutIconFileWithLinkToViewMetadata (struct FileMetadata *FileMetadata)
+static void Brw_PutIconFileWithLinkToViewMetadata (const struct FileMetadata *FileMetadata)
   {
    extern const char *Ico_ClassColor[Ico_NUM_COLORS][The_NUM_THEMES];
    extern const char *Txt_Link;
@@ -7857,7 +7864,6 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
 void Brw_ShowFileMetadata (void)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
@@ -8016,7 +8022,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Link to download the file *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_BIG CM\"");
+	       HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
 		  Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	       HTM_TD_End ();
 
@@ -8025,9 +8031,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Filename *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Filename);
-	       HTM_TD_End ();
+	       Frm_LabelColumn ("RT",NULL,Txt_Filename);
 
 	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
@@ -8038,9 +8042,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Publisher's data *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Uploaded_by);
-	       HTM_TD_End ();
+	       Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
 
 	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  if (FileHasPublisher)
@@ -8069,9 +8071,7 @@ void Brw_ShowFileMetadata (void)
 	    Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_File_size);
-	       HTM_TD_End ();
+	       Frm_LabelColumn ("RT",NULL,Txt_File_size);
 
 	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Txt (FileSizeStr);
@@ -8082,9 +8082,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Write the date *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Date_of_creation);
-	       HTM_TD_End ();
+	       Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
 
 	       HTM_TD_Begin ("id=\"filedate\" class=\"%s LB\"",
 	                     The_ClassDat[Gbl.Prefs.Theme]);
@@ -8099,7 +8097,9 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT","PublicFile",Txt_Availability);
+	       Frm_LabelColumn ("RT",ICanChangePublic ? "PublicFile" :
+			                                NULL,
+			        Txt_Availability);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
@@ -8126,7 +8126,9 @@ void Brw_ShowFileMetadata (void)
 	    HTM_TR_Begin (NULL);
 
 	       /* Label */
-	       Frm_LabelColumn ("RT","License",Txt_License);
+	       Frm_LabelColumn ("RT",ICanEdit ? "License" :
+			                        NULL,
+			        Txt_License);
 
 	       /* Data */
 	       HTM_TD_Begin ("class=\"%s LT\"",The_ClassDat[Gbl.Prefs.Theme]);
@@ -8156,9 +8158,7 @@ void Brw_ShowFileMetadata (void)
 	      {
 	       HTM_TR_Begin (NULL);
 
-		  HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		     HTM_TxtColon (Txt_My_views);
-		  HTM_TD_End ();
+	          Frm_LabelColumn ("RT",NULL,Txt_My_views);
 
 		  HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		     HTM_Unsigned (FileMetadata.NumMyViews);
@@ -8170,9 +8170,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Write number of identificated views *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Identified_views);
-	       HTM_TD_End ();
+	       Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
 
 	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%u&nbsp;",FileMetadata.NumViewsFromLoggedUsrs);
@@ -8187,9 +8185,7 @@ void Brw_ShowFileMetadata (void)
 	    /***** Write number of public views *****/
 	    HTM_TR_Begin (NULL);
 
-	       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-		  HTM_TxtColon (Txt_Public_views);
-	       HTM_TD_End ();
+	       Frm_LabelColumn ("RT",NULL,Txt_Public_views);
 
 	       HTM_TD_Begin ("class=\"%s LB\"",The_ClassDat[Gbl.Prefs.Theme]);
 		  HTM_Unsigned (FileMetadata.NumPublicViews);
@@ -8513,6 +8509,16 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
    extern const char *Txt_Link;
+   static const char *ClassFilename[The_NUM_THEMES] =
+     {
+      [The_THEME_WHITE ] = "FILENAME_BIG_WHITE",
+      [The_THEME_GREY  ] = "FILENAME_BIG_GREY",
+      [The_THEME_PURPLE] = "FILENAME_BIG_PURPLE",
+      [The_THEME_BLUE  ] = "FILENAME_BIG_BLUE",
+      [The_THEME_YELLOW] = "FILENAME_BIG_YELLOW",
+      [The_THEME_PINK  ] = "FILENAME_BIG_PINK",
+      [The_THEME_DARK  ] = "FILENAME_BIG_DARK",
+     };
    const char *Title;
 
    /***** On the screen a link will be shown to download the file *****/
@@ -8532,7 +8538,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
 	 /* Begin link */
 	 HTM_BUTTON_OnSubmit_Begin (Txt_Check_marks_in_the_file,
-	                            "BT_LINK",NULL);
+	                            ClassFilename[Gbl.Prefs.Theme],NULL);
 
 	    if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	       Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
@@ -8553,11 +8559,11 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
    else
      {
       Title = (FileMetadata->FilFolLnk.Type == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
-                                                        Txt_Download;
+                                                              Txt_Download;
 
       /* Put anchor and filename */
-      HTM_A_Begin ("href=\"%s\" class=\"FILENAME_BIG\" title=\"%s\" target=\"_blank\"",
-	           URL,Title);
+      HTM_A_Begin ("href=\"%s\" class=\"%s\" title=\"%s\" target=\"_blank\"",
+	           URL,ClassFilename[Gbl.Prefs.Theme],Title);
 	 if (FileMetadata->FilFolLnk.Type == Brw_IS_FILE)
 	    Brw_PutIconFile (FileMetadata->FilFolLnk.Name,
 			     "ICO40x40",

@@ -1647,7 +1647,7 @@ a:hover img.CENTER_PHOTO_SHOW
 .BT_LINK:hover
 	{
 	cursor:pointer;
-	text-decoration:underline;
+	/* text-decoration:underline; */
 	}
 
 /****************************** Course program *******************************/
@@ -2025,18 +2025,22 @@ a:hover img.CENTER_PHOTO_SHOW
 	padding:8px 12px 20px 12px;
 	border-width:1px;
 	border-style:solid;
-	border-color:#C0C0C0;
+	border-color:#c0c0c0;
 	border-radius:2px;
 	box-shadow:2px 5px 15px #888;
 	text-align:center;
 	overflow:hidden;
-	background-color:#ddecf1;
-	animation:fadein 2s linear forwards;
 	}
-@keyframes fadein
-	{
-	to {background-color:white;}
-	}
+.FRAME_SHADOW_WHITE	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.FRAME_SHADOW_GREY	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.FRAME_SHADOW_PURPLE	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.FRAME_SHADOW_BLUE	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.FRAME_SHADOW_YELLOW	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.FRAME_SHADOW_PINK	{background-color:#ddecf1; animation:fadetowhite 2s linear forwards;}
+.FRAME_SHADOW_DARK	{background-color:#707070; animation:fadetodark 2s linear forwards;}
+@keyframes fadetowhite	{to {background-color:white;}}
+@keyframes fadetodark	{to {background-color:#444444;}}
+
 .FRAME_ICO
 	{
 	box-sizing:border-box;
@@ -2503,12 +2507,14 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	text-overflow:ellipsis;
 	}
 
-.FILENAME_BIG
-	{
-	color:#202020;
-	font-size:18pt;
-	font-weight:bold;
-	}
+.FILENAME_BIG_WHITE	{color:#202020; font-size:18pt; font-weight:bold;}
+.FILENAME_BIG_GREY	{color:#202020; font-size:18pt; font-weight:bold;}
+.FILENAME_BIG_PURPLE	{color:#202020; font-size:18pt; font-weight:bold;}
+.FILENAME_BIG_BLUE	{color:#202020; font-size:18pt; font-weight:bold;}
+.FILENAME_BIG_YELLOW	{color:#202020; font-size:18pt; font-weight:bold;}
+.FILENAME_BIG_PINK	{color:#202020; font-size:18pt; font-weight:bold;}
+.FILENAME_BIG_DARK	{color:#f0f0f0; font-size:18pt; font-weight:bold;}
+
 .BROWSER_TITLE		{color:#94745C; font-size:13pt; font-weight:bold;}
 .BROWSER_TITLE_LIGHT	{color:#D5C6BB; font-size:13pt; font-weight:bold;}
 .BROWSER_SUBTITLE	{color:#94745C; font-size:12pt;}
@@ -4223,17 +4229,13 @@ a.PAG:hover, .PAG_CUR
 	}
 
 /***************************** Calls for exams *******************************/
-.EXAM_TIT
-	{
- 	color:#202020;
- 	font-weight:bold;
- 	font-size:18pt;
- 	}
-.EXAM
-	{
-	color:#202020;
-	font-size:13pt;
-	}
+.EXAM_TIT_WHITE		{color:#202020; font-size:18pt; font-weight:bold;}
+.EXAM_TIT_GREY		{color:#202020; font-size:18pt; font-weight:bold;}
+.EXAM_TIT_PURPLE	{color:#202020; font-size:18pt; font-weight:bold;}
+.EXAM_TIT_BLUE		{color:#202020; font-size:18pt; font-weight:bold;}
+.EXAM_TIT_YELLOW	{color:#202020; font-size:18pt; font-weight:bold;}
+.EXAM_TIT_PINK		{color:#202020; font-size:18pt; font-weight:bold;}
+.EXAM_TIT_DARK		{color:#f0f0f0; font-size:18pt; font-weight:bold;}
 
 /******************************** Separation row *****************************/
 .SEPAR_ROW
