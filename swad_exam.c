@@ -505,7 +505,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	 else
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  The_GetColorRows ());
 
 	 /* Icons to remove/edit this exam */
 	 Exa_PutIconsToRemEditOneExam (Exams,Exam,Anchor);
@@ -530,7 +530,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 			  Id,Color);
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-			  Id,Color,Gbl.ColorRows[Gbl.RowEvenOdd]);
+			  Id,Color,The_GetColorRows ());
 	 if (Exam->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Exam->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -548,7 +548,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"%s LT %s\"",
 	               Exam->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 
       /* Exam title */
       Exams->ExaCod = Exam->ExaCod;
@@ -583,7 +583,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("class=\"%s RT %s\"",
 	               Exam->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 
       Exams->ExaCod = Exam->ExaCod;
       Frm_BeginForm (ActSeeExa);
@@ -608,7 +608,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Exa_WriteAuthor (Exam);
       HTM_TD_End ();
 
@@ -617,7 +617,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Exa_DB_GetExamTxt (Exam->ExaCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML

@@ -55156,7 +55156,7 @@ const char *Txt_UPLOAD_FILE_X_invalid_name =	// Warning: it is very important to
 
 const char *Txt_Upload_file =
 #if   L==1	// ca
-	"Enviar archivo";	// Necessita traduccio
+	"Enviar arxiu";
 #elif L==2	// de
 	"Upload Datei";
 #elif L==3	// en
@@ -55170,14 +55170,14 @@ const char *Txt_Upload_file =
 #elif L==7	// it
 	"Caricare file";
 #elif L==8	// pl
-	"Upload file";		// Potrzebujesz tlumaczenie
+	"Przesy&lstrok;anie pliku";
 #elif L==9	// pt
 	"Fazer upload de arquivo";
 #endif
 
 const char *Txt_Upload_file_or_create_folder =
 #if   L==1	// ca
-	"A&ntilde;adir archivos o crear carpeta";	// Necessita traduccio
+	"Afegir fitxers o crear carpeta";
 #elif L==2	// de
 	"Datei uploaden oder Verzeichnis erstellen";
 #elif L==3	// en
@@ -55191,7 +55191,7 @@ const char *Txt_Upload_file_or_create_folder =
 #elif L==7	// it
 	"Caricare file o creare cartella";
 #elif L==8	// pl
-	"Upload file or create folder";		// Potrzebujesz tlumaczenie
+	"Prze&sacute;lij pliki lub utw&oacute;rz folder";
 #elif L==9	// pt
 	"Fazer upload de arquivos ou criar diret&oacute;rio";
 #endif
@@ -55212,7 +55212,7 @@ const char *Txt_Upload_files =
 #elif L==7	// it
 	"Caricare file";
 #elif L==8	// pl
-	"Upload files";		// Potrzebujesz tlumaczenie
+	"Prze&sacute;lij pliki";
 #elif L==9	// pt
 	"Fazer upload de arquivos";
 #endif
@@ -55254,7 +55254,7 @@ const char *Txt_Upload_logo =
 #elif L==7	// it
 	"Caricare logo";
 #elif L==8	// pl
-	"Upload logo";		// Potrzebujesz tlumaczenie
+	"Prze&sacute;lij logo";
 #elif L==9	// pt
 	"Fazer upload de logotipo";
 #endif
@@ -55296,7 +55296,7 @@ const char *Txt_Upload_photo =
 #elif L==7	// it
 	"Caricare foto";
 #elif L==8	// pl
-	"Upload photo";		// Potrzebujesz tlumaczenie
+	"Prze&sacute;lij zdj&eogon;cie";
 #elif L==9	// pt
 	"Upload foto";
 #endif

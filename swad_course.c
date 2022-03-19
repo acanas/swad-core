@@ -958,7 +958,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 /* Check if this course is one of my courses */
 	 BgColor = (Enr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "BG_HIGHLIGHT" :
-				                             Gbl.ColorRows[Gbl.RowEvenOdd];
+				                             The_GetColorRows ();
 
 	 HTM_TR_Begin (NULL);
 
@@ -2410,7 +2410,6 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    const char *ClassTxt;
    const char *BgColor;
    bool Accepted;
-   static unsigned RowEvenOdd = 1;
    /*
    row[0]: deg_degrees.DegCod
    row[1]: crs_courses.CrsCod
@@ -2440,7 +2439,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    ClassTxt = NumUsrs ? The_ClassDatStrong[Gbl.Prefs.Theme] :
 	                The_ClassDat[Gbl.Prefs.Theme];
    BgColor = (CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "BG_HIGHLIGHT" :
-                                                    Gbl.ColorRows[RowEvenOdd];
+                                                    The_GetColorRows ();
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
@@ -2511,7 +2510,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    HTM_TR_End ();
 
-   RowEvenOdd = 1 - RowEvenOdd;
+   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/

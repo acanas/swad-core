@@ -229,7 +229,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List users found *****/
-	 for (NumUsr  = 1, Gbl.RowEvenOdd = 0;
+	 for (NumUsr  = 1;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -288,14 +288,14 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
       /***** Write number of user in the list *****/
       HTM_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT %s\"",
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Write user's ID and name *****/
       HTM_TD_Begin ("class=\"%s LT %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 HTM_TxtF ("%s:&nbsp;%s",Txt_ID,ID);
 	 HTM_BR ();
 	 HTM_TxtColonNBSP (Txt_Name);
@@ -314,7 +314,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
       HTM_TD_End ();
 
       /***** Button to login with this account *****/
-      HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Frm_BeginForm (ActLogInNew);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Btn_PutCreateButtonInline (Txt_Its_me);
@@ -328,7 +328,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    HTM_TR_Begin (NULL);
 
    /***** Courses of this user *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       UsrDat->Sex = Usr_SEX_UNKNOWN;
       Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
       Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);

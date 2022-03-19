@@ -2239,7 +2239,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	 HTM_TR_End ();
 
 	 /***** Get degrees *****/
-	 for (NumDeg = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
+	 for (NumDeg = 0, NumDegsNotEmpty = 0;
 	      NumDeg < NumDegs;
 	      NumDeg++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -2258,14 +2258,14 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	       /***** Show logo and name of this degree *****/
 	       HTM_TD_Begin ("class=\"%s RM %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
 	       HTM_TD_Begin ("class=\"%s LM %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT");
 		  else	// Pho_DEGREES_PRINT
@@ -2283,7 +2283,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		  Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
 		  HTM_TD_Begin ("class=\"CLASSPHOTO CLASSPHOTO_%s RM %s\"",
 		                The_Colors[Gbl.Prefs.Theme],
-		                Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                The_GetColorRows ());
 		     if (Gbl.Usrs.Listing.WithPhotos)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,

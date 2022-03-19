@@ -155,7 +155,6 @@ void Roo_SeeRooms (void)
    struct Roo_Rooms Rooms;
    Roo_Order_t Order;
    unsigned NumRoom;
-   unsigned RowEvenOdd;
    char StrCapacity[Cns_MAX_DECIMAL_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
@@ -213,30 +212,30 @@ void Roo_SeeRooms (void)
 	 HTM_TR_End ();
 
 	 /***** Write list of rooms *****/
-	 for (NumRoom = 0, RowEvenOdd = 1;
+	 for (NumRoom = 0;
 	      NumRoom < Rooms.Num;
-	      NumRoom++, RowEvenOdd = 1 - RowEvenOdd)
+	      NumRoom++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
 	    HTM_TR_Begin (NULL);
 
 	       /* Building short name */
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
 	       HTM_TD_End ();
 
 	       /* Floor */
 	       HTM_TD_Begin ("class=\"%s RT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Int (Rooms.Lst[NumRoom].Floor);
 	       HTM_TD_End ();
 
 	       /* Type */
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[RowEvenOdd]);
+	                     The_GetColorRows ());
 		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Ico_BLACK,
 		                 Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
 	       HTM_TD_End ();
@@ -244,21 +243,21 @@ void Roo_SeeRooms (void)
 	       /* Short name */
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Txt (Rooms.Lst[NumRoom].FullName);
 	       HTM_TD_End ();
 
 	       /* Capacity */
 	       HTM_TD_Begin ("class=\"%s RT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[RowEvenOdd]);
+	                     The_GetColorRows ());
 		  Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
 		  HTM_Txt (StrCapacity);
 	       HTM_TD_End ();
@@ -271,7 +270,7 @@ void Roo_SeeRooms (void)
 		  case Rol_SYS_ADM:
 		     HTM_TD_Begin ("class=\"%s LT %s\"",
 		                   The_ClassDat[Gbl.Prefs.Theme],
-		                   Gbl.ColorRows[RowEvenOdd]);
+		                   The_GetColorRows ());
 			Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
 		     HTM_TD_End ();
 		     break;

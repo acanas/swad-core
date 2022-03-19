@@ -326,7 +326,7 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
      {
       BgColor = (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod ==
 	         Gbl.Hierarchy.Deg.DegTypCod) ? "BG_HIGHLIGHT" :
-                                                Gbl.ColorRows[Gbl.RowEvenOdd];
+                                                The_GetColorRows ();
 
       /* Begin table row */
       HTM_TR_Begin (NULL);

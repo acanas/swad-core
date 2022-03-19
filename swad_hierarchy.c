@@ -680,7 +680,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
       HTM_TR_Begin (NULL);
 
 	 /***** Indent *****/
-	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	    Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
 					     "submid20x20.gif",Ico_BLACK,
 			 "","ICO25x25");
@@ -690,7 +690,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 HTM_TD_Begin ("colspan=\"%u\" class=\"%s %s LT\"",
 		       ColSpan - 1,
 		       The_ClassDatSmallNoBR[Gbl.Prefs.Theme],
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
 
 	    /* Get next institution, center, degree */
 	    row = mysql_fetch_row (mysql_res);

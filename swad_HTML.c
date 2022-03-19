@@ -565,7 +565,7 @@ void HTM_TD_ColouredEmpty (unsigned NumColumns)
 	NumCol < NumColumns;
 	NumCol++)
      {
-      HTM_TD_Begin ("class=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s\"",The_GetColorRows ());
       HTM_TD_End ();
      }
   }

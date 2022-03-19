@@ -139,7 +139,7 @@ void Dup_ListDuplicateUsrs (void)
 	    Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
 	    /***** List users *****/
-	    for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	    for (NumUsr = 0;
 		 NumUsr < NumUsrs;
 		 NumUsr++)
 	      {
@@ -164,13 +164,13 @@ void Dup_ListDuplicateUsrs (void)
 		  HTM_TR_Begin (NULL);
 
 		     HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                   Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                   The_GetColorRows ());
 		     HTM_TD_End ();
 
 		     HTM_TD_Begin ("colspan=\"%u\" class=\"%s LM %s\"",
 				   Usr_NUM_MAIN_FIELDS_DATA_USR - 2,
 				   The_ClassDat[Gbl.Prefs.Theme],
-				   Gbl.ColorRows[Gbl.RowEvenOdd]);
+				   The_GetColorRows ());
 
 			/* Write number of informants (row[1]) if greater than 1 */
 			if (sscanf (row[1],"%u",&NumInformants) != 1)
@@ -260,7 +260,7 @@ static void Dup_ListSimilarUsrs (void)
 	 Usr_WriteHeaderFieldsUsrDat (false);	// Columns for the data
 
 	 /***** List users *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;
 	      NumUsr++)
 	   {
@@ -284,12 +284,12 @@ static void Dup_ListSimilarUsrs (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                The_GetColorRows ());
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("colspan=\"%u\" class=\"%s\"",
 				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				Gbl.ColorRows[Gbl.RowEvenOdd]);
+				The_GetColorRows ());
 		     /* Show details of user's profile */
 		     Prf_ShowDetailsUserProfile (&UsrDat);
 		     /* Write all courses this user belongs to */
@@ -304,12 +304,12 @@ static void Dup_ListSimilarUsrs (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                The_GetColorRows ());
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("colspan=\"%u\" class=\"LT %s\"",
 				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				Gbl.ColorRows[Gbl.RowEvenOdd]);
+				The_GetColorRows ());
 		     /* Button to remove this user */
 		     if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))
 			Dup_PutButtonToEliminateUsrAccount (&UsrDat);

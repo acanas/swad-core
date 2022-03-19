@@ -123,7 +123,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.DateFormat     = Dat_FORMAT_DEFAULT;		// Default date format
    Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu
    Gbl.Prefs.Theme          = The_THEME_DEFAULT;		// Default theme
-   The_SetColorRows ();
    Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
    snprintf (Gbl.Prefs.URLTheme,sizeof (Gbl.Prefs.URLTheme),"%s/%s",
              Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);

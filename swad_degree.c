@@ -148,7 +148,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	    /* Get degree code (row[0]) */
 	    Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
 	    BgColor = (Deg.DegCod == Gbl.Hierarchy.Deg.DegCod) ? "BG_HIGHLIGHT" :
-								 Gbl.ColorRows[Gbl.RowEvenOdd];
+								 The_GetColorRows ();
 
 	    /* Get data of degree */
 	    Deg_GetDataOfDegreeByCod (&Deg);
@@ -822,7 +822,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
       TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "BG_HIGHLIGHT" :
-                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
+                                                         The_GetColorRows ();
 
    /***** Begin table row *****/
    HTM_TR_Begin (NULL);

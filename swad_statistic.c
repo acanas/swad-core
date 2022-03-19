@@ -1210,7 +1210,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    HTM_TR_End ();
 
    /***** Write rows back *****/
-   for (NumRow  = LastRow, UniqueId = 1, Gbl.RowEvenOdd = 0;
+   for (NumRow  = LastRow, UniqueId = 1;
 	NumRow >= FirstRow;
 	NumRow--, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
@@ -1233,23 +1233,23 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
       HTM_TR_Begin (NULL);
 
 	 /* Write the number of row */
-	 HTM_TD_Begin ("class=\"LOG RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG RT %s\"",The_GetColorRows ());
 	    HTM_TxtF ("%u&nbsp;",NumRow);
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student */
-	 HTM_TD_Begin ("class=\"LOG CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG CT %s\"",The_GetColorRows ());
 	    ID_WriteUsrIDs (&UsrDat,NULL);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the first name and the surnames */
-	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",The_GetColorRows ());
 	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
 	 HTM_TD_End ();
 
 	 /* Write the user's role */
-	 HTM_TD_Begin ("class=\"LOG CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG CT %s\"",The_GetColorRows ());
 	    HTM_TxtF ("%s&nbsp;",RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
 							       "?");
 	 HTM_TD_End ();
@@ -1258,7 +1258,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"LOG RT %s\"",
-	               Id,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               Id,The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 					  true,true,false,0x7);
@@ -1268,7 +1268,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 /* Write the action */
 	 if (sscanf (row[4],"%ld",&ActCod) != 1)
 	    Err_WrongActionExit ();
-	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",The_GetColorRows ());
 	    if (ActCod >= 0)
 	       HTM_TxtF ("%s&nbsp;",Act_GetActionText (Act_FromActCodToAction[ActCod]));
 	    else
@@ -1276,7 +1276,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	 HTM_TD_End ();
 
 	 /* Write the comments of the access */
-	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",The_GetColorRows ());
 	    Sta_WriteLogComments (LogCod);
 	 HTM_TD_End ();
 
@@ -1345,7 +1345,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    HTM_TR_End ();
 
    /***** Write rows *****/
-   for (NumHit  = 1, Hits.Max = 0.0, Gbl.RowEvenOdd = 0;
+   for (NumHit  = 1, Hits.Max = 0.0;
 	NumHit <= NumHits;
 	NumHit++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
@@ -1360,30 +1360,30 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
       HTM_TR_Begin (NULL);
 
 	 /* Write the number of row */
-	 HTM_TD_Begin ("class=\"LOG RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG RT %s\"",The_GetColorRows ());
 	    HTM_TxtF ("%u&nbsp;",NumHit);
 	 HTM_TD_End ();
 
 	 /* Show the photo */
-	 HTM_TD_Begin ("class=\"CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (&UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
 	 HTM_TD_End ();
 
 	 /* Write the user's ID if user is a student in current course */
-	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",The_GetColorRows ());
 	    ID_WriteUsrIDs (&UsrDat,NULL);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /* Write the name and the surnames */
-	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",The_GetColorRows ());
 	    HTM_TxtF ("%s&nbsp;",UsrDat.FullName);
 	 HTM_TD_End ();
 
 	 /* Write user's role */
-	 HTM_TD_Begin ("class=\"LOG CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG CT %s\"",The_GetColorRows ());
 	    HTM_TxtF ("%s&nbsp;",Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
 	 HTM_TD_End ();
 
@@ -1400,7 +1400,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
 	 else
 	    BarWidth = 0;
 
-	 HTM_TD_Begin ("class=\"LOG LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LOG LT %s\"",The_GetColorRows ());
 	    if (BarWidth)
 	      {
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,

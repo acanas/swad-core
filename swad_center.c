@@ -146,7 +146,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    /* Get center code (row[0]) */
 	    Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 	    BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "BG_HIGHLIGHT" :
-								 Gbl.ColorRows[Gbl.RowEvenOdd];
+								 The_GetColorRows ();
 
 	    /* Get data of center */
 	    Ctr_GetDataOfCenterByCod (&Ctr);
@@ -353,7 +353,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
       TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "BG_HIGHLIGHT" :
-                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
+                                                         The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 

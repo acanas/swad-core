@@ -714,7 +714,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
@@ -722,7 +722,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
@@ -730,13 +730,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      The_ClassDatSmall[Gbl.Prefs.Theme],
-			              Gbl.ColorRows[Gbl.RowEvenOdd]);
+			              The_GetColorRows ());
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
@@ -748,76 +748,76 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 			              The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -838,7 +838,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (row[0]);
 			HTM_TD_End ();
 
@@ -846,7 +846,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (row[1]);
 			HTM_TD_End ();
 
@@ -854,13 +854,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (row[3]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      The_ClassDatSmall[Gbl.Prefs.Theme],
-			              Gbl.ColorRows[Gbl.RowEvenOdd]);
+			              The_GetColorRows ());
 			   HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
 					Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 			      HTM_TxtF ("%s/?crs=%ld&amp;act=%ld",
@@ -871,14 +871,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      NumTchs != 0 ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 						     The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (NumTchs);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      NumStds != 0 ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 						     The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (NumStds);
 			HTM_TD_End ();
 
@@ -886,20 +886,20 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 				      IndicatorsCrs.CourseAllOK ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 				      (IndicatorsCrs.CoursePartiallyOK ? The_ClassDatSmall[Gbl.Prefs.Theme] :
 									 The_ClassDatSmallRed[Gbl.Prefs.Theme]),
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumIndicators);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsSyllabus)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -907,34 +907,34 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.SyllabusLecSrc != Inf_NONE) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										   The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusLecSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.SyllabusPraSrc != Inf_NONE) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										   The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.SyllabusPraSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										     The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreAssignments)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -942,34 +942,34 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumAssignments != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 									    The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumAssignments);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesAssignments != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										 The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesAssignments);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesWorks != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 									   The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesWorks);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsOnlineTutoring)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -977,34 +977,34 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumThreads != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 									The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumThreads);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumPosts != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 								      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumPosts);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumMsgsSentByTchs != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 									       The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumMsgsSentByTchs);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereAreMaterials)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -1012,27 +1012,27 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesInDocumentZones != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										     The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInDocumentZones);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s RM\"",
 				      (IndicatorsCrs.NumFilesInSharedZones != 0) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										   The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Unsigned (IndicatorsCrs.NumFilesInSharedZones);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallGreen[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_YES);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s CM\"",
 				      The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   if (!IndicatorsCrs.ThereIsAssessment)
 			      HTM_Txt (Txt_NO);
 			HTM_TD_End ();
@@ -1040,14 +1040,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.AssessmentSrc != Inf_NONE) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										  The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.AssessmentSrc]);
 			HTM_TD_End ();
 
 			HTM_TD_Begin ("class=\"%s %s LM\"",
 				      (IndicatorsCrs.TeachingGuideSrc != Inf_NONE) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
 										     The_ClassDatSmallRed[Gbl.Prefs.Theme],
-				      Gbl.ColorRows[Gbl.RowEvenOdd]);
+				      The_GetColorRows ());
 			   HTM_Txt (Txt_INFO_SRC_SHORT_TEXT[IndicatorsCrs.TeachingGuideSrc]);
 			HTM_TD_End ();
 

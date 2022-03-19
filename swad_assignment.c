@@ -419,7 +419,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       else
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 Asg_PutFormsToRemEditOneAsg (Assignments,&Asg,Anchor);
 	}
       HTM_TD_End ();
@@ -447,7 +447,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 						   "DATE_RED_LIGHT") :
 				       (Asg.Open ? "DATE_GREEN" :
 						   "DATE_RED"),
-			  Gbl.ColorRows[Gbl.RowEvenOdd]);
+			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -464,7 +464,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 HTM_TD_Begin ("class=\"%s LT %s\"",
 		       Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				    "ASG_TITLE",
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
       HTM_Txt (Asg.Title);
       HTM_ARTICLE_End ();
@@ -477,7 +477,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       else
 	 HTM_TD_Begin ("class=\"%s LT %s\"",
 	               The_ClassDat[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       if (Asg.SendWork == Asg_SEND_WORK)
 	 Asg_WriteAssignmentFolder (&Asg,PrintView);
       HTM_TD_End ();
@@ -492,7 +492,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Asg_WriteAsgAuthor (&Asg);
       HTM_TD_End ();
 
@@ -504,8 +504,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       if (PrintView)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       if (Gbl.Crs.Grps.NumGrps)
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
@@ -573,15 +572,18 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,bool PrintView
             Err_WrongRoleExit ();
 	    break;
         }
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-   	        sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
-   	        sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
-      Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
-      Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
-      Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,
-		       Txt_Upload_file_or_create_folder);
+
+	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   sizeof (Gbl.FileBrowser.FilFolLnk.Path) - 1);
+	 Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
+		   sizeof (Gbl.FileBrowser.FilFolLnk.Name) - 1);
+	 Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
+	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
+	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,
+			  Txt_Upload_file_or_create_folder);
+
       Frm_EndForm ();
+
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_STD:

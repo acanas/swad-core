@@ -100,7 +100,6 @@ void Bld_SeeBuildings (void)
    struct Bld_Buildings Buildings;
    Bld_Order_t Order;
    unsigned NumBuilding;
-   unsigned RowEvenOdd;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No center selected
@@ -143,27 +142,28 @@ void Bld_SeeBuildings (void)
 	 HTM_TR_End ();
 
 	 /***** Write list of buildings *****/
-	 for (NumBuilding = 0, RowEvenOdd = 1;
+	 for (NumBuilding = 0;
 	      NumBuilding < Buildings.Num;
-	      NumBuilding++, RowEvenOdd = 1 - RowEvenOdd)
+	      NumBuilding++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
 	    HTM_TR_Begin (NULL);
 
 	       /* Short name */
 	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[RowEvenOdd]);
+	                     The_ClassDat[Gbl.Prefs.Theme],
+	                     The_GetColorRows ());
 		  HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
 	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[RowEvenOdd]);
+	                     The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
 		  HTM_Txt (Buildings.Lst[NumBuilding].FullName);
 	       HTM_TD_End ();
 
 	       /* Location */
 	       HTM_TD_Begin ("class=\"%s LM %s\"",
-	                     The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[RowEvenOdd]);
+	                     The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
 		  HTM_Txt (Buildings.Lst[NumBuilding].Location);
 	       HTM_TD_End ();
 

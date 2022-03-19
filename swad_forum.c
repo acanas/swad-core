@@ -2193,7 +2193,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List threads *****/
-   for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0, Gbl.RowEvenOdd = 0;
+   for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0;
         NumThr <= PaginationThrs->LastItemVisible;
         NumThr++, NumThrInScreen++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
@@ -2205,7 +2205,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	                            "AUTHOR_TXT");
       BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
 	        ((Thr.ThrCod == ThrCodHighlighted)   ? "BG_HIGHLIGHT" :
-                                                       Gbl.ColorRows[Gbl.RowEvenOdd]);
+                                                       The_GetColorRows ());
 
       HTM_TR_Begin (NULL);
 

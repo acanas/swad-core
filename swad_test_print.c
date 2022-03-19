@@ -291,14 +291,14 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
    HTM_TR_Begin (NULL);
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
 	 Qst_WriteAnswerType (Question->Answer.Type,
 	                      The_ClassDatSmall[Gbl.Prefs.Theme]);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
 	 /* Write parameter with question code */
 	 Qst_WriteParamQstCod (QstInd,Question->QstCod);
@@ -645,7 +645,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
    HTM_TR_Begin (NULL);
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
 	 if (QuestionUneditedAfterExam)
 	    Qst_WriteAnswerType (Question->Answer.Type,
@@ -653,7 +653,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 if (QuestionExists)
 	   {
 	    if (QuestionUneditedAfterExam)
@@ -1901,7 +1901,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	       if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-			     Id,ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+			     Id,ClassDat,The_GetColorRows ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						true,true,false,0x7);
@@ -1919,7 +1919,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Write number of questions */
 	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  ClassDat,The_GetColorRows ());
 	       if (ICanView.Result)
 		  HTM_Unsigned (Print.NumQsts.All);
 	       else
@@ -1928,7 +1928,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Write number of non-blank answers */
 	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  ClassDat,The_GetColorRows ());
 	       if (ICanView.Result)
 		 {
 		  if (Print.NumQsts.NotBlank)
@@ -1942,7 +1942,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Write number of blank answers */
 	    HTM_TD_Begin ("class=\"%s RT %s\"",
-	                  ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  ClassDat,The_GetColorRows ());
 	       if (ICanView.Result)
 		 {
 		  NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
@@ -1957,7 +1957,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Write score */
 	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  ClassDat,The_GetColorRows ());
 	       if (ICanView.Score)
 		 {
 		  HTM_Double2Decimals (Print.Score);
@@ -1970,7 +1970,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Write average score per question */
 	    HTM_TD_Begin ("class=\"%s RT %s\"",
-	                  ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  ClassDat,The_GetColorRows ());
 	       if (ICanView.Score)
 		  HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
 							   (double) Print.NumQsts.All :
@@ -1981,7 +1981,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Write grade */
 	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  ClassDat,The_GetColorRows ());
 	       if (ICanView.Score)
 		  TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	       else
@@ -1990,7 +1990,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Link to show this test */
 	    HTM_TD_Begin ("class=\"RT LINE_LEFT %s\"",
-	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  The_GetColorRows ());
 	       if (ICanView.Result)
 		 {
 		  Frm_BeginForm (Gbl.Action.Act == ActSeeMyTstResCrs ? ActSeeOneTstResMe :
@@ -2017,32 +2017,32 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	{
 	 /* Columns for dates */
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Column for questions */
 	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Columns for answers */
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Columns for score */
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Column for grade */
 	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 HTM_TD_End ();
 
 	 /* Column for link to show the result */
 	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	 HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2114,7 +2114,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Row title *****/
       HTM_TD_Begin ("colspan=\"2\" class=\"RM %s LINE_TOP LINE_BOTTOM %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 HTM_TxtColonNBSP (Txt_Visible_tests);
 	 HTM_Unsigned (NumPrints);
       HTM_TD_End ();
@@ -2122,7 +2122,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Write total number of questions *****/
       HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
@@ -2130,7 +2130,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Write total number of non-blank answers *****/
       HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->NotBlank);
       HTM_TD_End ();
@@ -2138,7 +2138,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Write total number of blank answers *****/
       HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
       HTM_TD_End ();
@@ -2146,7 +2146,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Write total score *****/
       HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (ICanViewTotalScore)
 	   {
 	    HTM_Double2Decimals (TotalScore);
@@ -2158,7 +2158,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Write average score per question *****/
       HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (ICanViewTotalScore)
 	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore / (double) NumTotalQsts->All :
 						     0.0);
@@ -2167,7 +2167,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Write grade over Tst_SCORE_MAX *****/
       HTM_TD_Begin ("class=\"RM %s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (ICanViewTotalScore)
 	    TstPrn_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
@@ -2175,7 +2175,7 @@ static void TstPrn_ShowPrintsSummaryRow (bool ItsMe,
       /***** Last cell *****/
       HTM_TD_Begin ("class=\"%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
       HTM_TD_End ();
 
    /***** End row *****/

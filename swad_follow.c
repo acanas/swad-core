@@ -679,7 +679,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    /***** Show user's photo *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"CON_PHOTO %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
 	 if (Visible)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
@@ -688,7 +688,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 
       /***** User's name *****/
       HTM_TD_Begin ("class=\"CON_NAME_FOLLOW %s\"",
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (Visible)
 	   {
 	    /* Put form to go to public profile */
@@ -706,7 +706,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 
       /***** Icon to follow *****/
       HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM %s\"",
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 if (!Gbl.Usrs.Me.Logged ||	// Not logged
 	     Usr_ItsMe (UsrDat->UsrCod))	// It's me
 	    /* Inactive icon to follow/unfollow */

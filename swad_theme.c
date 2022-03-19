@@ -408,7 +408,6 @@ void The_ChangeTheme (void)
 
    /***** Get param theme *****/
    Gbl.Prefs.Theme = The_GetParamTheme ();
-   The_SetColorRows ();
    snprintf (Path,sizeof (Path),"%s/%s",
              Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
    Str_Copy (Gbl.Prefs.URLTheme,Path,sizeof (Gbl.Prefs.URLTheme) - 1);
@@ -458,10 +457,10 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
   }
 
 /*****************************************************************************/
-/******** Set background colors for rows depending on selected theme *********/
+/******** Get background colors for rows depending on selected theme *********/
 /*****************************************************************************/
 
-void The_SetColorRows (void)
+const char *The_GetColorRows (void)
   {
    static const char *The_ClassColorRows[2][The_NUM_THEMES] =
      {
@@ -482,8 +481,7 @@ void The_SetColorRows (void)
       [1][The_THEME_DARK  ] = "COLOR1_DARK",
      };
 
-   Gbl.ColorRows[0] = The_ClassColorRows[0][Gbl.Prefs.Theme];	// Darker
-   Gbl.ColorRows[1] = The_ClassColorRows[1][Gbl.Prefs.Theme];	// Lighter
+   return The_ClassColorRows[Gbl.RowEvenOdd][Gbl.Prefs.Theme];
   }
 
 /*****************************************************************************/

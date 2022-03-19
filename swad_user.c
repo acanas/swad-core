@@ -1967,7 +1967,6 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.IconSet        = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
    Gbl.Prefs.Menu           = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
    Gbl.Prefs.Theme          = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
-   The_SetColorRows ();
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
    Gbl.Prefs.PhotoShape     = Gbl.Usrs.Me.UsrDat.Prefs.PhotoShape;
    snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),"%s/%s",
@@ -2179,7 +2178,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       if (UsrIsTheMsgSender)
 	 Str_Copy (BgColor,"LIGHT_GREEN",sizeof (BgColor) - 1);
       else
-	 snprintf (BgColor,sizeof (BgColor),"%s",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 snprintf (BgColor,sizeof (BgColor),"%s",The_GetColorRows ());
 
       if (PutCheckBoxToSelectUsr)
 	{
@@ -2273,7 +2272,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 /***** Show guest's photo *****/
-	 HTM_TD_Begin ("class=\"%s LM\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LM\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
@@ -2283,7 +2282,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       /****** Write user's ID ******/
       HTM_TD_Begin ("class=\"%s %s LM\"",
                     The_ClassDatSmall[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2291,9 +2290,9 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       /***** Write rest of guest's main data *****/
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitByCod (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-      Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteEmail (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
 			NULL,true,false);
 
@@ -2303,7 +2302,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
 	 Ctr_GetDataOfCenterByCod (&Ctr);
 	}
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.CtrCod > 0 ? Ctr.FullName :
 						 "&nbsp;",
 			NULL,true,false);
@@ -2312,27 +2311,27 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDataOfDepartmentByCod (&Dpt);
 	}
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
 						 "&nbsp;",
 			NULL,true,false);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
 						"&nbsp;",
 			NULL,true,false);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
 						     "&nbsp;",
 			NULL,true,false);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
 					      "&nbsp;",
 			NULL,true,false);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
 					      "&nbsp;",
 			NULL,true,false);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
 						 "&nbsp;",
 			NULL,true,false);
@@ -2371,7 +2370,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 /***** Show student's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
@@ -2382,7 +2381,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       HTM_TD_Begin ("class=\"%s %s LM\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2390,24 +2389,24 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       /***** Write rest of main student's data *****/
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitByCod (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-      Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteEmail (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
 			NULL,true,UsrDat->Accepted);
 
       /***** Write the rest of the data of the student *****/
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[0][0] ? (ShowData ? UsrDat->Phone[0] :
 							  "********") :
 					      "&nbsp;",
 			NULL,true,UsrDat->Accepted);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Phone[1][0] ? (ShowData ? UsrDat->Phone[1] :
 							  "********") :
 					      "&nbsp;",
 			NULL,true,UsrDat->Accepted);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->StrBirthday[0] ? (ShowData ? UsrDat->StrBirthday :
 							     "********") :
 						 "&nbsp;",
@@ -2424,7 +2423,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,
 					     Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
 					     GroupNames);
-	       Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],GroupNames,NULL,true,UsrDat->Accepted);
+	       Usr_WriteUsrData (The_GetColorRows (),GroupNames,NULL,true,UsrDat->Accepted);
 	      }
 
 	 /***** Fields of the record dependientes of the course *****/
@@ -2444,7 +2443,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 	      }
 	    else
 	       Text[0] = '\0';
-	    Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],Text,NULL,false,UsrDat->Accepted);
+	    Usr_WriteUsrData (The_GetColorRows (),Text,NULL,false,UsrDat->Accepted);
 
 	    /* Free structure that stores the query result */
 	    DB_FreeMySQLResult (&mysql_res);
@@ -2483,7 +2482,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 /***** Show teacher's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM,
 	                               false);
@@ -2494,7 +2493,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       HTM_TD_Begin ("class=\"%s %s LM\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2502,9 +2501,9 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       /***** Write rest of main teacher's data *****/
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitByCod (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-      Usr_WriteEmail (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
+      Usr_WriteEmail (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrData (The_GetColorRows (),
 			Ins.FullName,
 			NULL,true,UsrDat->Accepted);
 
@@ -2514,7 +2513,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
 	 Ctr_GetDataOfCenterByCod (&Ctr);
 	}
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.CtrCod > 0) ? Ctr.FullName :
 							       "&nbsp;",
 			NULL,true,UsrDat->Accepted);
@@ -2523,15 +2522,15 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDataOfDepartmentByCod (&Dpt);
 	}
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.DptCod > 0) ? Dpt.FullName :
 							       "&nbsp;",
 			NULL,true,UsrDat->Accepted);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.Office[0]) ? UsrDat->Tch.Office :
 							      "&nbsp;",
 			NULL,true,UsrDat->Accepted);
-      Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],
+      Usr_WriteUsrData (The_GetColorRows (),
 			(ShowData && UsrDat->Tch.OfficePhone[0]) ? UsrDat->Tch.OfficePhone :
 								   "&nbsp;",
 			NULL,true,UsrDat->Accepted);
@@ -2562,14 +2561,14 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
       /***** Write number of user *****/
       HTM_TD_Begin ("class=\"USR_LIST_NUM_N CM %s\"",
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
 	 /***** Show administrator's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
@@ -2580,7 +2579,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       HTM_TD_Begin ("class=\"%s %s LM\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2588,9 +2587,9 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       /***** Write rest of main administrator's data *****/
       Ins.InsCod = UsrDat->InsCod;
       Ins_GetDataOfInstitByCod (&Ins);
-      Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      Usr_WriteMainUsrDataExceptUsrID (UsrDat,The_GetColorRows ());
 
-      HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	 Ins_DrawInstitutionLogoWithLink (&Ins,25);
       HTM_TD_End ();
 
@@ -4078,7 +4077,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List guests' data *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -4148,7 +4147,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List students' data *****/
-      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+      for (NumUsr = 0;
            NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
            NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
@@ -4220,7 +4219,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List teachers' data *****/
-      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+      for (NumUsr = 0;
            NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
            NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
@@ -4318,7 +4317,7 @@ void Usr_ListAllDataGsts (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List guests' data *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs; )
 	   {
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
@@ -4519,7 +4518,7 @@ void Usr_ListAllDataStds (void)
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List students' data *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs; )
 	   {
 	    UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
@@ -4584,7 +4583,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** List users' data *****/
-      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+      for (NumUsr = 0;
 	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
 	{
 	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
@@ -4679,7 +4678,6 @@ void Usr_ListAllDataTchs (void)
       HTM_TABLE_BeginWide ();
 
 	 /***** List teachers and non-editing teachers *****/
-	 Gbl.RowEvenOdd = 0;
 	 Usr_ListRowsAllDataTchs (Rol_TCH,FieldNames,NumColumns);
 	 Usr_ListRowsAllDataTchs (Rol_NET,FieldNames,NumColumns);
 
@@ -4793,7 +4791,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	 Usr_UsrDataConstructor (&UsrDat);
 
 	 /***** List data of users *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -4816,12 +4814,12 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                The_GetColorRows ());
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("colspan=\"%u\" class=\"%s\"",
 				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				Gbl.ColorRows[Gbl.RowEvenOdd]);
+				The_GetColorRows ());
 		     if (Role == Rol_UNK)
 		       {
 			Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
@@ -4969,7 +4967,7 @@ void Usr_ListDataAdms (void)
 	    Usr_UsrDataConstructor (&UsrDat);
 
 	    /***** List data of administrators *****/
-	    for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	    for (NumUsr = 0;
 		 NumUsr < Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs; )
 	      {
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;
@@ -6437,9 +6435,9 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    /***** Show user's photo *****/
    if (NumRows)
       HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM %s\"",
-	            NumRows + 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	            NumRows + 1,The_GetColorRows ());
    else
-      HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
    Pho_ShowUsrPhotoIfAllowed (UsrDat,
                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
                               false);
@@ -6449,9 +6447,9 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    /* Begin cell */
    if (NumRows)
       HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM %s\"",
-	            NumRows + 1,Gbl.ColorRows[Gbl.RowEvenOdd]);
+	            NumRows + 1,The_GetColorRows ());
    else
-      HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
 
    /* Action to go to user's record depending on role in course */
    if (!NextAction[UsrDat->Roles.InCurrentCrs])

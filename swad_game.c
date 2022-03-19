@@ -551,7 +551,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	 else
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  The_GetColorRows ());
 
 	 if (ICanEditGames)
 	    /* Icons to remove/edit this game */
@@ -581,7 +581,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 			  Id,Color);
 	 else
 	    HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-			  Id,Color,Gbl.ColorRows[Gbl.RowEvenOdd]);
+			  Id,Color,The_GetColorRows ());
 	 if (Game->TimeUTC[Dat_STR_TIME])
 	    Dat_WriteLocalDateHMSFromUTC (Id,Game->TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -599,7 +599,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"%s LT %s\"",
 	               Game->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 
       /* Game title */
       Games->GamCod = Game->GamCod;
@@ -634,7 +634,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("class=\"%s RT %s\"",
 	               Game->Hidden ? "ASG_TITLE_LIGHT":
 				      "ASG_TITLE",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 
       Games->GamCod = Game->GamCod;
       Frm_BeginForm (ActSeeGam);
@@ -659,7 +659,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Gam_WriteAuthor (Game);
       HTM_TD_End ();
 
@@ -668,7 +668,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Gam_DB_GetGameTxt (Game->GamCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
@@ -1758,7 +1758,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	 HTM_TR_Begin (NULL);
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 	       /* Put icon to remove the question */
 	       if (ICanEditQuestions)

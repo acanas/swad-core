@@ -714,7 +714,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
       /***** Title for this set *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",Gbl.ColorRows[0]);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",The_GetColorRows ());
 	    ExaSet_WriteSetTitle (&CurrentSet);
 	 HTM_TD_End ();
       HTM_TR_End ();

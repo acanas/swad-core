@@ -1189,7 +1189,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
       HTM_TABLE_Begin (NULL);
 
-	 for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 1, Rank = 1;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -1219,7 +1219,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	       HTM_TD_Begin ("class=\"%s %s RM\"",
 			     ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				     The_ClassDatSmall[Gbl.Prefs.Theme],
-			     Gbl.ColorRows[Gbl.RowEvenOdd]);
+			     The_GetColorRows ());
 		  HTM_Long (Figure);
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -1261,7 +1261,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
       HTM_TABLE_Begin (NULL);
 
-	 for (NumUsr  = 1, Rank = 1, Gbl.RowEvenOdd = 0;
+	 for (NumUsr  = 1, Rank = 1;
 	      NumUsr <= NumUsrs;
 	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -1289,7 +1289,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	       HTM_TD_Begin ("class=\"%s %s RM\"",
 			     ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				     The_ClassDatSmall[Gbl.Prefs.Theme],
-			     Gbl.ColorRows[Gbl.RowEvenOdd]);
+			     The_GetColorRows ());
 		  HTM_DoubleFewDigits (NumClicksPerDay);
 	       HTM_TD_End ();
 	    HTM_TR_End ();
@@ -1326,12 +1326,12 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_Begin ("class=\"%s %s RM\"",
 		 ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 		         The_ClassDatSmall[Gbl.Prefs.Theme],
-                 Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_GetColorRows ());
       HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
 
    /***** Check if I can see the public profile *****/
-   HTM_TD_Begin ("class=\"RANK_PHOTO %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"RANK_PHOTO %s\"",The_GetColorRows ());
       if (Visible)
 	 /***** User's photo *****/
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
@@ -1343,7 +1343,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_Begin ("class=\"RANK_USR %s %s\"",	// Limited width
                  ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 			 The_ClassDatSmall[Gbl.Prefs.Theme],
-                 Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_GetColorRows ());
       if (Visible)
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);

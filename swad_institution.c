@@ -168,7 +168,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    /* Get institution code (row[0]) */
 	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
 	    BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? "BG_HIGHLIGHT" :
-								 Gbl.ColorRows[Gbl.RowEvenOdd];
+								 The_GetColorRows ();
 
 	    /* Get data of institution */
 	    Ins_GetDataOfInstitByCod (&Ins);
@@ -390,7 +390,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
       TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "BG_HIGHLIGHT" :
-                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
+                                                         The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 

@@ -144,7 +144,7 @@ void Cty_SeeCtyWithPendingInss (void)
 	    /* Get country code (row[0]) */
 	    Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
 	    BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
-								 Gbl.ColorRows[Gbl.RowEvenOdd];
+								 The_GetColorRows ();
 
 	    /* Get data of country */
 	    Cty_GetDataOfCountryByCod (&Cty);
@@ -408,7 +408,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
    const char *BgColor;
 
    BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "BG_HIGHLIGHT" :
-							 Gbl.ColorRows[Gbl.RowEvenOdd];
+							 The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
 

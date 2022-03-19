@@ -884,7 +884,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    HTM_TR_Begin (NULL);
 
       /***** Put icon to indicate that a question does not exist in database *****/
-      HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
          if (QuestionExists)
 	    Ico_PutIcon ("tr16x16.gif"     ,Ico_UNCHANGED,
 			 Txt_Existing_question,"CONTEXT_ICO16x16");
@@ -894,14 +894,14 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write number of question *****/
-      HTM_TD_Begin ("class=\"%s %s CT\"",ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s %s CT\"",ClassData,The_GetColorRows ());
 	 if (!QuestionExists)
 	    HTM_TxtF ("%u&nbsp;",++NumNonExistingQst);
       HTM_TD_End ();
 
       /***** Write the question tags *****/
       HTM_TD_Begin ("class=\"%s LT\"",
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 
 	 if (Question->Tags.Num)
 	   {
@@ -935,12 +935,12 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write the question type *****/
-      HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,The_GetColorRows ());
 	 HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
       HTM_TD_End ();
 
       /***** Write if shuffle is enabled *****/
-      HTM_TD_Begin ("class=\"CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	 if (Question->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 	     Question->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	    /* Put an icon that indicates whether shuffle is enabled or not */
@@ -952,7 +952,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write the stem and the answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 Qst_WriteQstStem (Stem,ClassStem,
 			   true);	// Visible
 	 Qst_WriteQstFeedback (Feedback,"TEST_TXT_LIGHT");
@@ -1017,7 +1017,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		     HTM_TR_Begin (NULL);
 
 			/* Put an icon that indicates whether the answer is correct or wrong */
-			HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+			HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 			   if (Question->Answer.Options[NumOpt].Correct)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,

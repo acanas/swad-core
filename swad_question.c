@@ -523,7 +523,7 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
    extern const char *Txt_Question_removed;
 
    /***** Number of question and answer type (row[1]) *****/
-   HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       Qst_WriteNumQst (QstInd,"BIG_INDEX");
       if (QuestionExists)
 	 Qst_WriteAnswerType (Question->Answer.Type,
@@ -533,18 +533,18 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
    /***** Write question code *****/
    HTM_TD_Begin ("class=\"%s %s CT\"",
                  The_ClassDatSmall[Gbl.Prefs.Theme],
-                 Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_GetColorRows ());
       HTM_TxtF ("%ld&nbsp;",Question->QstCod);
    HTM_TD_End ();
 
    /***** Write the question tags *****/
-   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       if (QuestionExists)
 	 Tag_GetAndWriteTagsQst (Question->QstCod);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
-   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
 	 if (QuestionExists)
 	   {
@@ -979,7 +979,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
       HTM_TR_Begin (NULL);
 
 	 /***** Icons *****/
-	 HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 	    /* Write icon to remove the question */
 	    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
@@ -992,7 +992,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Number of question and answer type */
-	 HTM_TD_Begin ("class=\"RT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	    Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
 	    if (asprintf (&Class,"%s",
 			  The_ClassDatSmall[Gbl.Prefs.Theme]) < 0)
@@ -1004,7 +1004,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Question code */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_TxtF ("%ld&nbsp;",Questions->Question.QstCod);
 	 HTM_TD_End ();
 
@@ -1014,7 +1014,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s %s CT\"",
 		       Id,
 		       The_ClassDatSmall[Gbl.Prefs.Theme],
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Questions->Question.EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,false,0x7);
@@ -1022,14 +1022,14 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 free (Id);
 
 	 /* Question tags */
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	    Tag_GetAndWriteTagsQst (Questions->Question.QstCod);
 	 HTM_TD_End ();
 
 	 /* Shuffle (row[2]) */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    if (Questions->Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 		Questions->Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	      {
@@ -1045,7 +1045,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Stem (row[3]) */
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	    Qst_WriteQstStem (Questions->Question.Stem,"TEST_TXT",
 			      true);	// Visible
 
@@ -1062,14 +1062,14 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Number of times this question has been answered */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_UnsignedLong (Questions->Question.NumHits);
 	 HTM_TD_End ();
 
 	 /* Average score */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    if (Questions->Question.NumHits)
 	       HTM_Double2Decimals (Questions->Question.Score /
 				    (double) Questions->Question.NumHits);
@@ -1080,14 +1080,14 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Number of times this question has been answered (not blank) */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_UnsignedLong (Questions->Question.NumHitsNotBlank);
 	 HTM_TD_End ();
 
 	 /* Average score (not blank) */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    if (Questions->Question.NumHitsNotBlank)
 	       HTM_Double2Decimals (Questions->Question.Score /
 				    (double) Questions->Question.NumHitsNotBlank);
@@ -1304,7 +1304,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
       HTM_TR_Begin (NULL);
 
 	 /* Write checkbox to select the question */
-	 HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	    HTM_INPUT_CHECKBOX ("QstCods",HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"%ld\" onclick=\"checkParent(this,'AllQsts');\"",
 				Question->QstCod);
@@ -1313,14 +1313,14 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write number of question */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_TxtF ("%u&nbsp;",QstInd + 1);
 	 HTM_TD_End ();
 
 	 /* Write question code */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_TxtF ("%ld&nbsp;",Question->QstCod);
 	 HTM_TD_End ();
 
@@ -1330,7 +1330,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s %s CT\">",
 		       Id,
 		       The_ClassDatSmall[Gbl.Prefs.Theme],
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Question->EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,false,0x7);
@@ -1338,21 +1338,21 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 free (Id);
 
 	 /* Write the question tags */
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	    Tag_GetAndWriteTagsQst (Question->QstCod);
 	 HTM_TD_End ();
 
 	 /* Write the question type */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
 	 HTM_TD_End ();
 
 	 /* Write if shuffle is enabled */
 	 HTM_TD_Begin ("class=\"%s %s CT\"",
 	               The_ClassDatSmall[Gbl.Prefs.Theme],
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
 	    HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"Y\"%s  disabled=\"disabled\"",
 				Question->Answer.Shuffle ? " checked=\"checked\"" :
@@ -1360,7 +1360,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 HTM_TD_End ();
 
 	 /* Write stem */
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	    Qst_WriteQstStem (Question->Stem,"TEST_TXT",
 			      true);	// Visible
 
@@ -1535,7 +1535,7 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
 	 HTM_TR_Begin (NULL);
 
 	    /* Put an icon that indicates whether the answer is correct or wrong */
-	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	       if (Question->Answer.Options[NumOpt].Correct)
 		  Ico_PutIcon ("check.svg",Ico_BLACK,
 		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
@@ -2163,7 +2163,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 		     /***** Left column: selectors *****/
 		     HTM_TD_Begin ("class=\"TEST_EDI_ANS_LEFT_COL %s\"",
-		                   Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                   The_GetColorRows ());
 
 			/* Radio selector for unique choice answers */
 			HTM_INPUT_RADIO ("AnsUni",false,
@@ -2190,7 +2190,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     /***** Center column: letter of the answer and expand / contract icon *****/
 		     HTM_TD_Begin ("class=\"%s TEST_EDI_ANS_CENTER_COL %s\"",
 				   The_ClassFormInBox[Gbl.Prefs.Theme],
-				   Gbl.ColorRows[Gbl.RowEvenOdd]);
+				   The_GetColorRows ());
 			HTM_TxtF ("%c)",'a' + (char) NumOpt);
 
 			/* Icon to expand (show the answer) */
@@ -2223,7 +2223,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 
 		     /***** Right column: content of the answer *****/
 		     HTM_TD_Begin ("class=\"TEST_EDI_ANS_RIGHT_COL %s\"",
-		                   Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                   The_GetColorRows ());
 			HTM_DIV_Begin ("id=\"ans_%u\"%s",
 				       NumOpt,
 				       DisplayRightColumn ? "" :

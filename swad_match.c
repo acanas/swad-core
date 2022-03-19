@@ -454,7 +454,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 		     /* Form to edit match */
 		     HTM_TD_Begin ("colspan=\"8\" class=\"LT %s\"",
-		                   Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                   The_GetColorRows ());
 			Mch_PutFormExistingMatch (Games,&Match,Anchor);	// Form to fill in data and edit this match
 		     HTM_TD_End ();
 
@@ -560,7 +560,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
                                            const char *Anchor)
   {
-   HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
       if (Mch_CheckIfICanEditThisMatch (Match))
 	{
@@ -588,7 +588,7 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 void Mch_ListOneOrMoreMatchesAuthor (const struct Mch_Match *Match)
   {
    /***** Match author (teacher) *****/
-   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       Usr_WriteAuthor1Line (Match->UsrCod,false);
    HTM_TD_End ();
   }
@@ -612,7 +612,7 @@ void Mch_ListOneOrMoreMatchesTimes (const struct Mch_Match *Match,unsigned Uniqu
 		    Id,
 		    Match->Status.Showing == Mch_END ? "DATE_RED" :
 						       "DATE_GREEN",
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -631,7 +631,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Mch_Match *Match,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
 
 	 /***** Match title *****/
@@ -722,7 +722,7 @@ void Mch_ListOneOrMoreMatchesNumPlayers (const struct Mch_Match *Match)
 
    /***** Number of players who have answered any question in the match ******/
    HTM_TD_Begin ("class=\"%s RT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
@@ -738,7 +738,7 @@ static void Mch_ListOneOrMoreMatchesStatus (struct Mch_Match *Match,unsigned Num
    extern const char *Txt_Resume;
 
    HTM_TD_Begin ("class=\"%s CT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
 
       if (Match->Status.Showing != Mch_END)	// Match not over
 	{
@@ -779,7 +779,7 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
      };
 
    HTM_TD_Begin ("class=\"%s CT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);

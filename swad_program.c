@@ -401,7 +401,7 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
       /***** Forms to remove/edit this program item *****/
       if (!PrintView)
 	{
-	 HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
 	    Prg_PutFormsToRemEditOneItem (NumItem,Item);
 	 HTM_TD_End ();
 	}
@@ -411,13 +411,13 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 	   NumCol < Item->Hierarchy.Level;
 	   NumCol++)
 	{
-	 HTM_TD_Begin ("class=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 	}
 
       /***** Item number *****/
       HTM_TD_Begin ("class=\"PRG_NUM %s RT %s\"",
-		    TitleClass,Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    TitleClass,The_GetColorRows ());
 	 Prg_WriteNumItem (Item->Hierarchy.Level);
       HTM_TD_End ();
 
@@ -429,7 +429,7 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 		       ColSpan);
       else
 	 HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-		       ColSpan,Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       ColSpan,The_GetColorRows ());
 
       /* Title */
       HTM_DIV_Begin ("class=\"%s\"",TitleClass);
@@ -473,7 +473,7 @@ static void Prg_WriteRowItem (unsigned NumItem,struct Prg_Item *Item,
 						     "DATE_RED_LIGHT") :
 				       (Item->Open ? "DATE_GREEN" :
 						     "DATE_RED"),
-			  Gbl.ColorRows[Gbl.RowEvenOdd]);
+			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Item->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -520,7 +520,7 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
    HTM_TR_Begin (NULL);
 
       /***** Column under icons *****/
-      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"PRG_COL1 LT %s\"",The_GetColorRows ());
       HTM_TD_End ();
 
       /***** Indent depending on the level *****/
@@ -528,13 +528,13 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
 	   NumCol < FormLevel;
 	   NumCol++)
 	{
-	 HTM_TD_Begin ("class=\"%s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s\"",The_GetColorRows ());
 	 HTM_TD_End ();
 	}
 
       /***** Item number *****/
       HTM_TD_Begin ("class=\"PRG_NUM %s RT %s\"",
-                    TitleClass,Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    TitleClass,The_GetColorRows ());
 	 if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
 	    Prg_WriteNumNewItem (FormLevel);
       HTM_TD_End ();
@@ -542,7 +542,7 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
       /***** Show form to create new item as child *****/
       ColSpan = (Prg_GetMaxItemLevel () + 4) - FormLevel;
       HTM_TD_Begin ("colspan=\"%u\" class=\"PRG_MAIN %s\"",
-		    ColSpan,Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    ColSpan,The_GetColorRows ());
 	 HTM_ARTICLE_Begin ("item_form");
 	    ShowForm[CreateOrChangeItem] (ItmCod);
 	 HTM_ARTICLE_End ();

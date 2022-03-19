@@ -334,7 +334,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	      {
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("colspan=\"6\" class=\"CT %s\"",
-		                Gbl.ColorRows[Gbl.RowEvenOdd]);
+		                The_GetColorRows ());
 		     ExaSes_PutFormSession (&Session);	// Form to edit existing session
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -438,7 +438,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
    Exams->SesCod = Session->SesCod;
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
       /***** Icon to remove the exam session *****/
       Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
@@ -467,7 +467,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session)
   {
    /***** Session author (teacher) *****/
-   HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
    HTM_TD_End ();
   }
@@ -495,7 +495,7 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-		    Id,Color,Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    Id,Color,The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x6);
@@ -519,7 +519,7 @@ static void ExaSes_ListOneOrMoreSessionsTitleGrps (struct Exa_Exams *Exams,
    HTM_TD_Begin ("class=\"%s LT %s\"",
                  Session->Hidden ? "ASG_TITLE_LIGHT":
 				   "ASG_TITLE",
-		 Gbl.ColorRows[Gbl.RowEvenOdd]);
+		 The_GetColorRows ());
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
@@ -622,7 +622,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
      };
 
    HTM_TD_Begin ("class=\"%s CT %s\"",
-                 The_ClassDat[Gbl.Prefs.Theme],Gbl.ColorRows[Gbl.RowEvenOdd]);
+                 The_ClassDat[Gbl.Prefs.Theme],The_GetColorRows ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);

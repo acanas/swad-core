@@ -838,7 +838,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 		       Id,
 		       AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
 					 Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,true,0x6);
@@ -850,14 +850,14 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_Begin ("class=\"%s LT %s\"",
 		    AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 				      "ASG_TITLE",
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 HTM_ARTICLE_Begin (Anchor);
 	    HTM_Txt (AgdEvent.Event);
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Location */
-      HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 HTM_DIV_Begin ("class=\"%s\"",AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 							 "ASG_TITLE");
 	    HTM_Txt (AgdEvent.Location);
@@ -869,7 +869,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    /***** Write second row of data of this event *****/
    HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 	 switch (AgendaType)
 	   {
 	    case Agd_MY_AGENDA_TODAY:
@@ -883,7 +883,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_End ();
 
       /* Text of the event */
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
 	 HTM_DIV_Begin ("class=\"PAR %s\"",
 	                AgdEvent.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
 					  The_ClassDat[Gbl.Prefs.Theme]);

@@ -1688,7 +1688,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       HTM_TR_End ();
 
       /***** Fields of the record that depends on the course *****/
-      for (NumField = 0, Gbl.RowEvenOdd = 0;
+      for (NumField = 0;
 	   NumField < Gbl.Crs.Records.LstFields.Num;
 	   NumField++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	{
@@ -1721,7 +1721,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TD_Begin ("class=\"REC_C1_BOT %s RT %s\"",
 			     ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
 						 "REC_DAT_SMALL",
-			     Gbl.ColorRows[Gbl.RowEvenOdd]);
+			     The_GetColorRows ());
 		  HTM_TxtColon (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
@@ -1750,7 +1750,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  the user's role and the visibility of the field */
 	       HTM_TD_Begin ("class=\"REC_C2_BOT LT %s %s\"",
 	                     The_ClassDatStrong[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  if (ICanEditThisField)	// Show with form
 		    {
 		     HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""

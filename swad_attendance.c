@@ -290,7 +290,7 @@ static void Att_ShowAllAttEvents (struct Att_Events *Events)
 	    HTM_TR_End ();
 
 	    /***** Write all attendance events *****/
-	    for (NumAttEvent  = Pagination.FirstItemVisible, Gbl.RowEvenOdd = 0;
+	    for (NumAttEvent  = Pagination.FirstItemVisible;
 		 NumAttEvent <= Pagination.LastItemVisible;
 		 NumAttEvent++)
 	       Att_ShowOneAttEvent (Events,
@@ -471,7 +471,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_TCH:
@@ -505,7 +505,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 							 "DATE_RED_LIGHT") :
 					  (Event->Open ? "DATE_GREEN" :
 							 "DATE_RED"),
-			  Gbl.ColorRows[Gbl.RowEvenOdd]);
+			  The_GetColorRows ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Event->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
@@ -522,7 +522,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 	 HTM_TD_Begin ("class=\"%s LT %s\"",
 	               Event->Hidden ? "ASG_TITLE_LIGHT" :
 				       "ASG_TITLE",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
 	 Att_PutLinkAttEvent (Event,Txt_View_event,Event->Title);
       HTM_ARTICLE_End ();
@@ -537,7 +537,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
 	 HTM_TD_Begin ("class=\"%s RT %s\"",
 		       Event->Hidden ? "ASG_TITLE_LIGHT" :
 				       "ASG_TITLE",
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
       HTM_Unsigned (Event->NumStdsTotal);
       HTM_TD_End ();
 
@@ -550,8 +550,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
       if (ShowOnlyThisAttEventComplete)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       Att_WriteAttEventAuthor (Event);
       HTM_TD_End ();
 
@@ -563,8 +562,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
       if (ShowOnlyThisAttEventComplete)
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
       if (Gbl.Crs.Grps.NumGrps)
 	 Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Event);
 
@@ -1645,7 +1643,7 @@ static void Att_ListAttStudents (struct Att_Events *Events,
 		  HTM_TR_End ();
 
 		  /* List of students */
-		  for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+		  for (NumUsr = 0;
 		       NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 		       NumUsr++)
 		    {
@@ -1749,14 +1747,14 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TR_Begin (NULL);
 
       /***** Icon to show if the user is already present *****/
-      HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	 HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
 	    Att_PutCheckOrCross (Present);
 	 HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Checkbox to select user *****/
-      HTM_TD_Begin ("class=\"CT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
 	 HTM_INPUT_CHECKBOX ("UsrCodStd",HTM_DONT_SUBMIT_ON_CHANGE,
 			     "id=\"Std%u\" value=\"%s\"%s%s",
 			     NumUsr,UsrDat->EnUsrCod,
@@ -1769,14 +1767,14 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"%s RT %s\"",
 		    UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
 				       The_ClassDat[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Show student's photo *****/
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
-	 HTM_TD_Begin ("class=\"%s LT\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"%s LT\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
@@ -1787,7 +1785,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"%s %s LT\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
@@ -1795,7 +1793,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"%s LT %s\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
@@ -1806,7 +1804,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"%s LT %s\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 if (ICanEditStdComment)	// Show with form
 	   {
 	    HTM_TEXTAREA_Begin ("name=\"CommentStd%s\" cols=\"40\" rows=\"3\""
@@ -1828,7 +1826,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_Begin ("class=\"%s LT %s\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 if (ICanEditTchComment)		// Show with form
 	   {
 	    HTM_TEXTAREA_Begin ("name=\"CommentTch%s\" cols=\"40\" rows=\"3\""
@@ -2717,7 +2715,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	 HTM_TR_End ();
 
 	 /***** List the events *****/
-	 for (NumAttEvent = 0, UniqueId = 1, Gbl.RowEvenOdd = 0;
+	 for (NumAttEvent = 0, UniqueId = 1;
 	      NumAttEvent < Events->Num;
 	      NumAttEvent++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
 	   {
@@ -2730,7 +2728,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 
 	       HTM_TD_Begin ("class=\"%s CT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_INPUT_CHECKBOX ("AttCods",HTM_DONT_SUBMIT_ON_CHANGE,
 				      "id=\"Event%u\" value=\"%ld\"%s",
 				      NumAttEvent,Events->Lst[NumAttEvent].AttCod,
@@ -2740,7 +2738,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 
 	       HTM_TD_Begin ("class=\"%s RT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
 		     HTM_TxtF ("%u:",NumAttEvent + 1);
 		  HTM_LABEL_End ();
@@ -2748,7 +2746,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
@@ -2763,13 +2761,13 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Txt (Events->Lst[NumAttEvent].Title);
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"%s RT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Unsigned (Events->Lst[NumAttEvent].NumStdsTotal);
 	       HTM_TD_End ();
 
@@ -2851,7 +2849,7 @@ static void Att_ListUsrsAttendanceTable (const struct Att_Events *Events,
 	 Att_WriteTableHeadSeveralAttEvents (Events);
 
 	 /***** List the users *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < NumUsrsInList;
 	      NumUsr++)
 	   {
@@ -2980,14 +2978,14 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"%s RM %s\"",
 		    UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
 				       The_ClassDat[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
 
       /***** Show user's photo *****/
       if (Gbl.Usrs.Listing.WithPhotos)
 	{
-	 HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                               false);
@@ -2998,7 +2996,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"%s LM %s\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
@@ -3006,7 +3004,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"%s LM %s\"",
 		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
 				       The_ClassDatSmall[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	    HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);
@@ -3025,7 +3023,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 							 UsrDat->UsrCod);
 
 	    /* Write check or cross */
-	    HTM_TD_Begin ("class=\"BM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 
@@ -3036,7 +3034,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
       /***** Last column with the number of times this user is present *****/
       HTM_TD_Begin ("class=\"%s RM %s\"",
                     The_ClassDatStrong[Gbl.Prefs.Theme],
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 HTM_Unsigned (NumTimesPresent);
       HTM_TD_End ();
 
@@ -3095,7 +3093,7 @@ static void Att_ListStdsWithAttEventsDetails (const struct Att_Events *Events,
 			 NULL,Box_NOT_CLOSABLE,2);
 
 	 /***** List students with attendance details *****/
-	 for (NumUsr = 0, Gbl.RowEvenOdd = 0;
+	 for (NumUsr = 0;
 	      NumUsr < NumUsrsInList;
 	      NumUsr++)
 	   {
@@ -3157,19 +3155,19 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
       HTM_TD_Begin ("class=\"%s RM %s\"",
 		    UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
 				       The_ClassDat[Gbl.Prefs.Theme],
-		    Gbl.ColorRows[Gbl.RowEvenOdd]);
+		    The_GetColorRows ());
 	 HTM_TxtF ("%u:",NumUsr);
       HTM_TD_End ();
 
       /***** Show student's photo *****/
       HTM_TD_Begin ("colspan=\"2\" class=\"RM %s\"",
-                    Gbl.ColorRows[Gbl.RowEvenOdd]);
+                    The_GetColorRows ());
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM,
 	                            false);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+      HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
 
 	 HTM_TABLE_Begin (NULL);
 	    HTM_TR_Begin (NULL);
@@ -3223,17 +3221,17 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	    HTM_TD_Begin ("class=\"%s RT %s\"",
 			  Present ? "DAT_GREEN" :
 				    "DAT_RED",
-			  Gbl.ColorRows[Gbl.RowEvenOdd]);
+			  The_GetColorRows ());
 	       HTM_TxtF ("%u:",NumAttEvent + 1);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"%s LT %s\"",
 	                  The_ClassDat[Gbl.Prefs.Theme],
-	                  Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                  The_GetColorRows ());
 	       if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_SPAN_Begin ("id=\"%s\"",Id);
@@ -3255,12 +3253,12 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 
 	       HTM_TD_ColouredEmpty (2);
 
-	       HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"%s LM %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 
 		  HTM_DL_Begin ();
 		     if (ShowCommentStd)

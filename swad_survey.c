@@ -471,7 +471,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       if (Svy.Status.ICanEdit)
 	 Svy_PutFormsToRemEditOneSvy (Surveys,&Svy,Anchor);
       HTM_TD_End ();
@@ -494,7 +494,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 							       "DATE_RED") :
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"),
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Dat_STR_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
@@ -518,7 +518,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 							       "DATE_RED") :
 					    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							       "DATE_RED_LIGHT"),
-		       Gbl.ColorRows[Gbl.RowEvenOdd]);
+		       The_GetColorRows ());
       Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Dat_END_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,false,true,0x7);
@@ -531,7 +531,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	               Svy.Status.Visible ? "ASG_TITLE" :
 					    "ASG_TITLE_LIGHT");
       else
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
       HTM_ARTICLE_Begin (Anchor);
 	 Frm_BeginForm (ActSeeSvy);
 	    Svy_PutParamSvyCod (SvyCod);
@@ -563,7 +563,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Svy_WriteStatus (&Svy);
 
       if (!ShowOnlyThisSvyComplete)
@@ -613,7 +613,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       else
 	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
-	               Gbl.ColorRows[Gbl.RowEvenOdd]);
+	               The_GetColorRows ());
       Svy_WriteAuthor (&Svy);
       HTM_TD_End ();
 
@@ -621,7 +621,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       if (ShowOnlyThisSvyComplete)
 	 HTM_TD_Begin ("class=\"LT\"");
       else
-	 HTM_TD_Begin ("class=\"LT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 
       /* Scope of the survey */
       HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
@@ -2816,7 +2816,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 
 	       if (Svy->Status.ICanEdit)
 		 {
-		  HTM_TD_Begin ("class=\"BT %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+		  HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
 
 		     /* Initialize context */
 		     Surveys->SvyCod = Svy->SvyCod;
@@ -2836,21 +2836,21 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	       /* Write index of question inside survey */
 	       HTM_TD_Begin ("class=\"%s CT %s\"",
 	                     The_ClassDatSmall[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Unsigned (SvyQst.QstInd + 1);
 	       HTM_TD_End ();
 
 	       /* Write the question type (row[2]) */
 	       HTM_TD_Begin ("class=\"%s CT %s\"",
 	                     The_ClassDatSmall[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  HTM_Txt (Txt_SURVEY_STR_ANSWER_TYPES[SvyQst.AnswerType]);
 	       HTM_TD_End ();
 
 	       /* Write the stem and the answers of this question */
 	       HTM_TD_Begin ("class=\"%s LT %s\"",
 	                     The_ClassDat[Gbl.Prefs.Theme],
-	                     Gbl.ColorRows[Gbl.RowEvenOdd]);
+	                     The_GetColorRows ());
 		  Svy_WriteQstStem (Stem);
 		  Svy_WriteAnswersOfAQst (Svy,&SvyQst,PutFormAnswerSurvey);
 	       HTM_TD_End ();
