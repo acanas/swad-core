@@ -518,22 +518,19 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
                                  unsigned QstInd,bool QuestionExists,
                                  const char *Anchor)
   {
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Question_removed;
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       Qst_WriteNumQst (QstInd,"BIG_INDEX");
       if (QuestionExists)
-	 Qst_WriteAnswerType (Question->Answer.Type,
-	                      The_ClassDatSmall[Gbl.Prefs.Theme]);
+	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
    HTM_TD_End ();
 
    /***** Write question code *****/
-   HTM_TD_Begin ("class=\"%s %s CT\"",
-                 The_ClassDatSmall[Gbl.Prefs.Theme],
-                 The_GetColorRows ());
+   HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s CT\"",
+                 The_Colors[Gbl.Prefs.Theme],The_GetColorRows ());
       HTM_TxtF ("%ld&nbsp;",Question->QstCod);
    HTM_TD_End ();
 
@@ -549,23 +546,24 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 	 if (QuestionExists)
 	   {
 	    /* Write stem */
-	    Qst_WriteQstStem (Question->Stem,"TEST_TXT",
+	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",
 			      true);	// Visible
 
 	    /* Show media */
 	    Med_ShowMedia (&Question->Media,
-			   "TEST_MED_EDIT_LIST_CONT",
-			   "TEST_MED_EDIT_LIST");
+			   "Tst_MED_EDIT_LIST_CONT",
+			   "Tst_MED_EDIT_LIST");
 
 	    /* Show feedback */
-	    Qst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
+	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
 	    /* Show answers */
-	    Qst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
+	    Qst_WriteAnswersBank (Question,"Qst_TXT","Qst_TXT_LIGHT");
 	   }
 	 else
 	   {
-	    HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
+	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",
+	                    The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_Question_removed);
 	    HTM_SPAN_End ();
 	   }
@@ -580,7 +578,9 @@ void Qst_ListQuestionForEdition (struct Qst_Question *Question,
 
 void Qst_WriteNumQst (unsigned NumQst,const char *Class)
   {
-   HTM_DIV_Begin ("class=\"%s\"",Class);
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_DIV_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
       HTM_Unsigned (NumQst);
    HTM_DIV_End ();
   }
@@ -591,9 +591,10 @@ void Qst_WriteNumQst (unsigned NumQst,const char *Class)
 
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
 
-   HTM_DIV_Begin ("class=\"%s\"",Class);
+   HTM_DIV_Begin ("class=\"%s_%s\"",Class,The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt (Txt_TST_STR_ANSWER_TYPES[AnswerType]);
    HTM_DIV_End ();
   }
@@ -604,11 +605,12 @@ void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,const char *Class)
 
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,bool Visible)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned long StemLength;
    char *StemRigorousHTML;
 
    /***** DIV begin *****/
-   HTM_DIV_Begin ("class=\"%s\"",ClassStem);
+   HTM_DIV_Begin ("class=\"%s_%s\"",ClassStem,The_Colors[Gbl.Prefs.Theme]);
 
       /***** Write stem *****/
       if (Stem && Visible)
@@ -660,7 +662,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
       Med_SetParamNames (&ParamUploadMedia,NumMedia);
 
       /***** Begin container *****/
-      HTM_DIV_Begin ("class=\"TEST_MED_EDIT_FORM\"");
+      HTM_DIV_Begin ("class=\"Tst_MED_EDIT_FORM\"");
 
 	 /***** Choice 1: No media *****/
 	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -681,8 +683,8 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 	    HTM_Txt (Txt_Current_image_video);
 	 HTM_LABEL_End ();
 	 Med_ShowMedia (Media,
-			"TEST_MED_EDIT_ONE_CONT",
-			"TEST_MED_EDIT_ONE");
+			"Tst_MED_EDIT_ONE_CONT",
+			"Tst_MED_EDIT_ONE");
 
 	 /***** Choice 3: Change media *****/
 	 UniqueId++;
@@ -694,7 +696,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 			     OptionsDisabled ? " disabled=\"disabled\"" : "");
 	    HTM_TxtColonNBSP (Txt_Change_image_video);
 	 HTM_LABEL_End ();
-	 if (asprintf (&ClassInput,"TEST_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+	 if (asprintf (&ClassInput,"Tst_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 Med_PutMediaUploader (NumMedia,ClassInput);
 	 free (ClassInput);
@@ -705,7 +707,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
    else	// No current image
      {
       /***** Attached media *****/
-      if (asprintf (&ClassInput,"TEST_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
+      if (asprintf (&ClassInput,"Tst_MED_INPUT %s",The_ClassInput[Gbl.Prefs.Theme]) < 0)
 	 Err_NotEnoughMemoryExit ();
       Med_PutMediaUploader (NumMedia,ClassInput);
       free (ClassInput);
@@ -718,6 +720,7 @@ void Qst_PutFormToEditQstMedia (const struct Med_Media *Media,int NumMedia,
 
 void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned long FeedbackLength;
    char *FeedbackRigorousHTML;
 
@@ -733,7 +736,8 @@ void Qst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
 	 /***** Write the feedback *****/
-	 HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
+	 HTM_DIV_Begin ("class=\"%s_%s\"",
+	                ClassFeedback,The_Colors[Gbl.Prefs.Theme]);
 	    HTM_Txt (FeedbackRigorousHTML);
 	 HTM_DIV_End ();
 
@@ -967,7 +971,6 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
   {
    extern const char *The_ClassDatSmall[The_NUM_THEMES];
    static unsigned UniqueId = 0;
-   char *Class;
    char *Id;
 
    /***** Get and show question data *****/
@@ -992,11 +995,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Number of question and answer type */
 	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	    Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-	    if (asprintf (&Class,"%s",
-			  The_ClassDatSmall[Gbl.Prefs.Theme]) < 0)
-	       Err_NotEnoughMemoryExit ();
-	    Qst_WriteAnswerType (Questions->Question.Answer.Type,Class);
-	    free (Class);
+	    Qst_WriteAnswerType (Questions->Question.Answer.Type,"DAT_SMALL");
 	 HTM_TD_End ();
 
 	 /* Question code */
@@ -1044,17 +1043,17 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 
 	 /* Stem (row[3]) */
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    Qst_WriteQstStem (Questions->Question.Stem,"TEST_TXT",
+	    Qst_WriteQstStem (Questions->Question.Stem,"Qst_TXT",
 			      true);	// Visible
 
 	    /***** Get and show media (row[5]) *****/
 	    Med_ShowMedia (&Questions->Question.Media,
-			   "TEST_MED_EDIT_LIST_CONT",
-			   "TEST_MED_EDIT_LIST");
+			   "Tst_MED_EDIT_LIST_CONT",
+			   "Tst_MED_EDIT_LIST");
 
 	    /* Feedback (row[4]) and answers */
-	    Qst_WriteQstFeedback (Questions->Question.Feedback,"TEST_TXT_LIGHT");
-	    Qst_WriteAnswersBank (&Questions->Question,"TEST_TXT","TEST_TXT_LIGHT");
+	    Qst_WriteQstFeedback (Questions->Question.Feedback,"Qst_TXT_LIGHT");
+	    Qst_WriteAnswersBank (&Questions->Question,"Qst_TXT","Qst_TXT_LIGHT");
 	 HTM_TD_End ();
 
 	 /* Number of times this question has been answered */
@@ -1355,19 +1354,19 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 
 	 /* Write stem */
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    Qst_WriteQstStem (Question->Stem,"TEST_TXT",
+	    Qst_WriteQstStem (Question->Stem,"Qst_TXT",
 			      true);	// Visible
 
 	    /***** Get and show media *****/
 	    Med_ShowMedia (&Question->Media,
-			   "TEST_MED_EDIT_LIST_CONT",
-			   "TEST_MED_EDIT_LIST");
+			   "Tst_MED_EDIT_LIST_CONT",
+			   "Tst_MED_EDIT_LIST");
 
 	    /* Write feedback */
-	    Qst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
+	    Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
 	    /* Write answers */
-	    Qst_WriteAnswersBank (Question,"TEST_TXT","TEST_TXT_LIGHT");
+	    Qst_WriteAnswersBank (Question,"Qst_TXT","Qst_TXT_LIGHT");
 	 HTM_TD_End ();
 
       /***** End table row *****/
@@ -1466,7 +1465,9 @@ void Qst_WriteIntAnsBank (struct Qst_Question *Question,
                           const char *ClassTxt,
                           __attribute__((unused)) const char *ClassFeedback)
   {
-   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_Colors[Gbl.Prefs.Theme]);
       HTM_TxtF ("(%ld)",Question->Answer.Integer);
    HTM_SPAN_End ();
   }
@@ -1479,7 +1480,9 @@ void Qst_WriteFltAnsBank (struct Qst_Question *Question,
                           const char *ClassTxt,
                           __attribute__((unused)) const char *ClassFeedback)
   {
-   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+   extern const char *The_Colors[The_NUM_THEMES];
+
+   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt ("([");
       HTM_Double (Question->Answer.FloatingPoint[0]);
       HTM_Txt ("; ");
@@ -1496,8 +1499,10 @@ void Qst_WriteTF_AnsBank (struct Qst_Question *Question,
                           const char *ClassTxt,
                           __attribute__((unused)) const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
+
    /***** Write answer *****/
-   HTM_SPAN_Begin ("class=\"%s\"",ClassTxt);
+   HTM_SPAN_Begin ("class=\"%s_%s\"",ClassTxt,The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt ("(");
       Qst_WriteAnsTF (Question->Answer.TF);
       HTM_Txt (")");
@@ -1512,6 +1517,7 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
                           const char *ClassTxt,
                           const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
 
@@ -1536,22 +1542,25 @@ void Qst_WriteChoAnsBank (struct Qst_Question *Question,
 	    HTM_TD_End ();
 
 	    /* Write the number of option */
-	    HTM_TD_Begin ("class=\"%s LT\"",ClassTxt);
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",
+	                  ClassTxt,The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
 
 	       /* Write the text of the answer and the media */
-	       HTM_DIV_Begin ("class=\"%s\"",ClassTxt);
+	       HTM_DIV_Begin ("class=\"%s_%s\"",
+	                      ClassTxt,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Question->Answer.Options[NumOpt].Text);
 		  Med_ShowMedia (&Question->Answer.Options[NumOpt].Media,
-				 "TEST_MED_EDIT_LIST_CONT",
-				 "TEST_MED_EDIT_LIST");
+				 "Tst_MED_EDIT_LIST_CONT",
+				 "Tst_MED_EDIT_LIST");
 	       HTM_DIV_End ();
 
 	       /* Write the text of the feedback */
-	       HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
+	       HTM_DIV_Begin ("class=\"%s_%s\"",
+	                      ClassFeedback,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
 	       HTM_DIV_End ();
 
@@ -2154,7 +2163,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		  HTM_TR_Begin (NULL);
 
 		     /***** Left column: selectors *****/
-		     HTM_TD_Begin ("class=\"TEST_EDI_ANS_LEFT_COL %s\"",
+		     HTM_TD_Begin ("class=\"Tst_EDI_ANS_LEFT_COL %s\"",
 		                   The_GetColorRows ());
 
 			/* Radio selector for unique choice answers */
@@ -2180,7 +2189,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TD_End ();
 
 		     /***** Center column: letter of the answer and expand / contract icon *****/
-		     HTM_TD_Begin ("class=\"%s TEST_EDI_ANS_CENTER_COL %s\"",
+		     HTM_TD_Begin ("class=\"%s Tst_EDI_ANS_CENTER_COL %s\"",
 				   The_ClassFormInBox[Gbl.Prefs.Theme],
 				   The_GetColorRows ());
 			HTM_TxtF ("%c)",'a' + (char) NumOpt);
@@ -2214,7 +2223,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 		     HTM_TD_End ();
 
 		     /***** Right column: content of the answer *****/
-		     HTM_TD_Begin ("class=\"TEST_EDI_ANS_RIGHT_COL %s\"",
+		     HTM_TD_Begin ("class=\"Tst_EDI_ANS_RIGHT_COL %s\"",
 		                   The_GetColorRows ());
 			HTM_DIV_Begin ("id=\"ans_%u\"%s",
 				       NumOpt,

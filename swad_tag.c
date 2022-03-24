@@ -519,7 +519,7 @@ void Tag_GetAndWriteTagsQst (long QstCod)
    if ((NumTags = Tag_DB_GetTagsQst (&mysql_res,QstCod)))
      {
       /***** Write the tags *****/
-      HTM_UL_Begin ("class=\"TEST_TAG_LIST %s\"",
+      HTM_UL_Begin ("class=\"Tst_TAG_LIST %s\"",
                     The_ClassDatSmall[Gbl.Prefs.Theme]);
 	 for (NumTag = 0;
 	      NumTag < NumTags;

@@ -283,16 +283,13 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
                                          unsigned QstInd,
                                          struct Qst_Question *Question)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-
    /***** Begin row *****/
    HTM_TR_Begin (NULL);
 
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,
-	                      The_ClassDatSmall[Gbl.Prefs.Theme]);
+	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -302,12 +299,12 @@ static void TstPrn_WriteQstAndAnsToFill (struct TstPrn_PrintedQuestion *PrintedQ
 	 Qst_WriteParamQstCod (QstInd,Question->QstCod);
 
 	 /* Stem */
-	 Qst_WriteQstStem (Question->Stem,"TEST_TXT",true);
+	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",true);
 
 	 /* Media */
 	 Med_ShowMedia (&Question->Media,
-			"TEST_MED_SHOW_CONT",
-			"TEST_MED_SHOW");
+			"Tst_MED_SHOW_CONT",
+			"Tst_MED_SHOW");
 
 	 /* Answers */
 	 TstPrn_WriteAnswersToFill (PrintedQuestion,QstInd,Question);
@@ -412,6 +409,7 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
@@ -464,19 +462,21 @@ static void TstPrn_WriteChoAnsToFill (const struct TstPrn_PrintedQuestion *Print
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
+	                        QstInd,NumOpt,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
 	    /***** Write the option text *****/
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
+	                        QstInd,NumOpt,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "TEST_MED_SHOW_CONT",
-			      "TEST_MED_SHOW");
+			      "Tst_MED_SHOW_CONT",
+			      "Tst_MED_SHOW");
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -595,7 +595,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       bool QuestionExists,
 				       unsigned Visibility)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Score;
    extern const char *Txt_Question_removed;
    extern const char *Txt_Question_modified;
@@ -644,8 +644,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
 	 if (QuestionUneditedAfterExam)
-	    Qst_WriteAnswerType (Question->Answer.Type,
-	                         The_ClassDatSmall[Gbl.Prefs.Theme]);
+	    Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -655,18 +654,19 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	    if (QuestionUneditedAfterExam)
 	      {
 	       /* Stem */
-	       Qst_WriteQstStem (Question->Stem,"TEST_TXT",ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
+	       Qst_WriteQstStem (Question->Stem,"Qst_TXT",
+	                         ICanView[TstVis_VISIBLE_QST_ANS_TXT]);
 
 	       /* Media */
 	       if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
 		  Med_ShowMedia (&Question->Media,
-				 "TEST_MED_SHOW_CONT",
-				 "TEST_MED_SHOW");
+				 "Tst_MED_SHOW_CONT",
+				 "Tst_MED_SHOW");
 
 	       /* Answers */
 	       TstPrn_ComputeAnswerScore (&PrintedQuestions[QstInd],Question);
 	       TstPrn_WriteAnswersExam (UsrDat,&PrintedQuestions[QstInd],Question,
-					ICanView,"TEST_TXT","TEST_TXT_LIGHT");
+					ICanView,"Qst_TXT","Qst_TXT_LIGHT");
 	      }
 	    else
 	       Ale_ShowAlert (Ale_WARNING,Txt_Question_modified);
@@ -677,13 +677,15 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
 	   {
-	    HTM_DIV_Begin ("class=\"%s LM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Score);
-	       HTM_SPAN_Begin ("class=\"%s\"",
+	       HTM_SPAN_Begin ("class=\"%s_%s\"",
 			       PrintedQuestions[QstInd].StrAnswers[0] ?
-			       (PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :		// Correct/semicorrect
-								     "ANS_BAD") :	// Wrong
-								     "ANS_0");		// Blank answer
+			       (PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
+								     "Qst_ANS_BAD") :	// Wrong
+								     "Qst_ANS_0",	// Blank answer
+			       The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Double2Decimals (PrintedQuestions[QstInd].Score);
 	       HTM_SPAN_End ();
 	    HTM_DIV_End ();
@@ -692,7 +694,7 @@ static void TstPrn_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Question feedback */
 	 if (QuestionUneditedAfterExam)
 	    if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
-	       Qst_WriteQstFeedback (Question->Feedback,"TEST_TXT_LIGHT");
+	       Qst_WriteQstFeedback (Question->Feedback,"Qst_TXT_LIGHT");
 
       HTM_TD_End ();
 
@@ -1197,6 +1199,7 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    long IntAnswerUsr;
 
    /***** Check if number of rows is correct *****/
@@ -1217,17 +1220,19 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 	   {
 	    if (sscanf (PrintedQuestion->StrAnswers,"%ld",&IntAnswerUsr) == 1)
 	      {
-	       HTM_TD_Begin ("class=\"%s CM\"",
+	       HTM_TD_Begin ("class=\"CM %s_%s\"",
 			     ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ?
-				(IntAnswerUsr == Question->Answer.Integer ? "ANS_OK" :
-									    "ANS_BAD") :
-				"ANS_0");
+				(IntAnswerUsr == Question->Answer.Integer ? "Qst_ANS_OK" :	// Correct
+									    "Qst_ANS_BAD") :	// Wrong
+									    "Qst_ANS_0",	// Blank answer
+			     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Long (IntAnswerUsr);
 	       HTM_TD_End ();
 	      }
 	    else
 	      {
-	       HTM_TD_Begin ("class=\"ANS_0 CM\"");
+	       HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt ("?");
 	       HTM_TD_End ();
 	      }
@@ -1236,7 +1241,7 @@ static void TstPrn_WriteIntAnsPrint (struct UsrData *UsrDat,
 	    HTM_TD_Empty (1);
 
 	 /***** Write the correct answer *****/
-	 HTM_TD_Begin ("class=\"ANS_0 CM\"");
+	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	       HTM_Long (Question->Answer.Integer);
 	    else
@@ -1259,6 +1264,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    double FloatAnsUsr = 0.0;
 
    /***** Check if number of rows is correct *****/
@@ -1280,12 +1286,13 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 	   {
 	    FloatAnsUsr = Str_GetDoubleFromStr (PrintedQuestion->StrAnswers);
 	    // A bad formatted floating point answer will interpreted as 0.0
-	    HTM_TD_Begin ("class=\"%s CM\"",
+	    HTM_TD_Begin ("class=\"CM %s_%s\"",
 			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ?
 			     ((FloatAnsUsr >= Question->Answer.FloatingPoint[0] &&
-			       FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "ANS_OK" :
-										   "ANS_BAD") :
-			     "ANS_0");
+			       FloatAnsUsr <= Question->Answer.FloatingPoint[1]) ? "Qst_ANS_OK" :	// Correct
+										   "Qst_ANS_BAD") :	// Wrong
+										   "Qst_ANS_0",		// Blank answer
+			  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Double (FloatAnsUsr);
 	    HTM_TD_End ();
 	   }
@@ -1293,7 +1300,7 @@ static void TstPrn_WriteFltAnsPrint (struct UsrData *UsrDat,
 	    HTM_TD_Empty (1);
 
 	 /***** Write the correct answer *****/
-	 HTM_TD_Begin ("class=\"ANS_0 CM\"");
+	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	      {
 	       HTM_Txt ("[");
@@ -1322,6 +1329,7 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    char AnsTFUsr;
 
    /***** Check if number of rows is correct *****/
@@ -1341,16 +1349,17 @@ static void TstPrn_WriteTF_AnsPrint (struct UsrData *UsrDat,
       HTM_TR_Begin (NULL);
 
 	 /***** Write the user answer *****/
-	 HTM_TD_Begin ("class=\"%s CM\"",
+	 HTM_TD_Begin ("class=\"CM %s_%s\"",
 		       ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ?
-			  (AnsTFUsr == Question->Answer.TF ? "ANS_OK" :
-							     "ANS_BAD") :
-			  "ANS_0");
+			  (AnsTFUsr == Question->Answer.TF ? "Qst_ANS_OK" :	// Correct
+							     "Qst_ANS_BAD") :	// Wrong
+							     "Qst_ANS_0",	// Blank answer
+		       The_Colors[Gbl.Prefs.Theme]);
 	    Qst_WriteAnsTF (AnsTFUsr);
 	 HTM_TD_End ();
 
 	 /***** Write the correct answer *****/
-	 HTM_TD_Begin ("class=\"ANS_0 CM\"");
+	 HTM_TD_Begin ("class=\"CM Qst_ANS_0_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	    if (ICanView[TstVis_VISIBLE_CORRECT_ANSWER])
 	       Qst_WriteAnsTF (Question->Answer.TF);
 	    else
@@ -1373,6 +1382,7 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 				     const char *ClassTxt,
 				     const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
@@ -1419,23 +1429,24 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 		 {
 		  if (Question->Answer.Options[Indexes[NumOpt]].Correct)
 		    {
-		     Ans.Class = "ANS_OK";
+		     Ans.Class = "Qst_ANS_OK";	// Correct
 		     Ans.Str   = "&check;";
 		    }
 		  else
 		    {
-		     Ans.Class = "ANS_BAD";
+		     Ans.Class = "Qst_ANS_BAD";	// Wrong
 		     Ans.Str   = "&cross;";
 		    }
 		 }
 	       else
 		 {
-		  Ans.Class = "ANS_0";
+		  Ans.Class = "Qst_ANS_0";		// Blank answer
 		  Ans.Str   = "&bull;";
 		 }
 
-	       HTM_TD_Begin ("class=\"%s CT\" title=\"%s\"",
-			     Ans.Class,Txt_TST_Answer_given_by_the_user);
+	       HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
+			     Ans.Class,The_Colors[Gbl.Prefs.Theme],
+			     Txt_TST_Answer_given_by_the_user);
 		  HTM_Txt (Ans.Str);
 	       HTM_TD_End ();
 	      }
@@ -1447,7 +1458,8 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 	      {
 	       if (Question->Answer.Options[Indexes[NumOpt]].Correct)
 		 {
-		  HTM_TD_Begin ("class=\"ANS_0 CT\" title=\"%s\"",
+		  HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\" title=\"%s\"",
+		                The_Colors[Gbl.Prefs.Theme],
 				Txt_TST_Answer_given_by_the_teachers);
 		     HTM_Txt ("&bull;");
 		  HTM_TD_End ();
@@ -1457,26 +1469,29 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 	      }
 	    else
 	      {
-	       HTM_TD_Begin ("class=\"ANS_0 CT\"");
+	       HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",
+	                     The_Colors[Gbl.Prefs.Theme]);
 		  Ico_PutIconNotVisible ();
 	       HTM_TD_End ();
 	      }
 
 	    /* Answer letter (a, b, c,...) */
-	    HTM_TD_Begin ("class=\"%s LT\"",ClassTxt);
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",
+	                  ClassTxt,The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	    HTM_TD_End ();
 
 	    /* Answer text and feedback */
 	    HTM_TD_Begin ("class=\"LT\"");
 
-	       HTM_DIV_Begin ("class=\"%s\"",ClassTxt);
+	       HTM_DIV_Begin ("class=\"%s_%s\"",
+	                      ClassTxt,The_Colors[Gbl.Prefs.Theme]);
 		  if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
 		    {
 		     HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 		     Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-				    "TEST_MED_SHOW_CONT",
-				    "TEST_MED_SHOW");
+				    "Tst_MED_SHOW_CONT",
+				    "Tst_MED_SHOW");
 		    }
 		  else
 		     Ico_PutIconNotVisible ();
@@ -1486,7 +1501,8 @@ static void TstPrn_WriteChoAnsPrint (struct UsrData *UsrDat,
 		  if (Question->Answer.Options[Indexes[NumOpt]].Feedback)
 		     if (Question->Answer.Options[Indexes[NumOpt]].Feedback[0])
 		       {
-			HTM_DIV_Begin ("class=\"%s\"",ClassFeedback);
+			HTM_DIV_Begin ("class=\"%s_%s\"",
+			               ClassFeedback,The_Colors[Gbl.Prefs.Theme]);
 			   HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Feedback);
 			HTM_DIV_End ();
 		       }
@@ -1511,6 +1527,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 				     __attribute__((unused)) const char *ClassTxt,
 				     __attribute__((unused)) const char *ClassFeedback)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumOpt;
    char TextAnsUsr[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TextAnsOK[Qst_MAX_BYTES_ANSWERS_ONE_QST + 1];
@@ -1560,10 +1577,11 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 		  break;
 		 }
 	      }
-	    HTM_TD_Begin ("class=\"%s CT\"",
-			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ? (Correct ? "ANS_OK" :
-							                       "ANS_BAD") :
-						                    "ANS_0");
+	    HTM_TD_Begin ("class=\"CT %s_%s\"",
+			  ICanView[TstVis_VISIBLE_CORRECT_ANSWER] ? (Correct ? "Qst_ANS_OK" :	// Correct
+							                       "Qst_ANS_BAD") :	// Wrong
+									       "Qst_ANS_0",	// Blank answer
+			  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (PrintedQuestion->StrAnswers);
 	    HTM_TD_End ();
 	   }
@@ -1583,14 +1601,16 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 		     HTM_TR_Begin (NULL);
 
 			/* Answer letter (a, b, c,...) */
-			HTM_TD_Begin ("class=\"ANS_0 LT\"");
+			HTM_TD_Begin ("class=\"LT Qst_ANS_0_%s\"",
+			              The_Colors[Gbl.Prefs.Theme]);
 			   HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 			HTM_TD_End ();
 
 			/* Answer text and feedback */
 			HTM_TD_Begin ("class=\"LT\"");
 
-			   HTM_DIV_Begin ("class=\"ANS_0\"");
+			   HTM_DIV_Begin ("class=\"Qst_ANS_0_%s\"",
+			                  The_Colors[Gbl.Prefs.Theme]);
 			      HTM_Txt (Question->Answer.Options[NumOpt].Text);
 			   HTM_DIV_End ();
 
@@ -1598,7 +1618,7 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 			      if (Question->Answer.Options[NumOpt].Feedback)
 				 if (Question->Answer.Options[NumOpt].Feedback[0])
 				   {
-				    HTM_DIV_Begin ("class=\"TEST_TXT_LIGHT\"");
+				    HTM_DIV_Begin ("class=\"Qst_TXT_LIGHT\"");
 				       HTM_Txt (Question->Answer.Options[NumOpt].Feedback);
 				    HTM_DIV_End ();
 				   }
@@ -1613,7 +1633,8 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 	   }
 	 else
 	   {
-	    HTM_TD_Begin ("class=\"ANS_0 CT\"");
+	    HTM_TD_Begin ("class=\"CT Qst_ANS_0_%s\"",
+	                  The_Colors[Gbl.Prefs.Theme]);
 	       Ico_PutIconNotVisible ();
 	    HTM_TD_End ();
 	   }

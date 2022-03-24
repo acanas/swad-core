@@ -304,6 +304,7 @@ void Tst_AssessTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
    extern const char *Txt_Score;
@@ -361,7 +362,8 @@ void Tst_AssessTest (void)
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	   {
-	    HTM_DIV_Begin ("class=\"TEST_SUBTITLE\"");
+	    HTM_DIV_Begin ("class=\"Tst_SUBTITLE DAT_%s\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);
 	    HTM_DIV_End ();
 	   }

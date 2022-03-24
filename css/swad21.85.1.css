@@ -2914,8 +2914,21 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 .STATUS_RED_LIGHT	{color:#f98a8a; font-size:12pt;}
 
 /********************** Number of question, project, etc. ********************/
-.BIG_INDEX	{color:#808080; font-size:20pt; font-weight:bold;}
-.BIG_INDEX_RED	{color:#660000; font-size:20pt; font-weight:bold;}
+.BIG_INDEX_WHITE,
+.BIG_INDEX_GREY,
+.BIG_INDEX_PURPLE,
+.BIG_INDEX_BLUE,
+.BIG_INDEX_YELLOW,
+.BIG_INDEX_PINK		{color:#808080; font-size:20pt; font-weight:bold;}
+.BIG_INDEX_DARK		{color:#d0d0d0; font-size:20pt; font-weight:bold;}
+
+.BIG_INDEX_RED_WHITE,
+.BIG_INDEX_RED_GREY,
+.BIG_INDEX_RED_PURPLE,
+.BIG_INDEX_RED_BLUE,
+.BIG_INDEX_RED_YELLOW,
+.BIG_INDEX_RED_PINK	{color:#660000; font-size:20pt; font-weight:bold;}
+.BIG_INDEX_RED_DARK	{color:#ff8080; font-size:20pt; font-weight:bold;}
 
 /******************************** Update links *******************************/
 .UPD
@@ -2974,94 +2987,142 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	{
 	width:596px;
 	}
-.ANS_0		{color:#202020; font-size:12pt; font-weight:bold;}
-.ANS_OK		{color:#008000; font-size:12pt; font-weight:bold;}
-.ANS_BAD	{color:red;     font-size:12pt; font-weight:bold;}
-.TEST_SUBTITLE
+
+.Tst_SUBTITLE
 	{
 	margin:10px;
-	color:#202020;
-	font-size:13pt;
 	text-align:center;
 	vertical-align:middle;
 	}
-.TEST_TXT		{color:#202020; font-size:12pt;}
-.TEST_TXT_RED		{color:#660000; font-size:12pt;}
-.TEST_TXT_LIGHT		{color:#a0a0a0; font-size:12pt;}
-.TEST_TXT_LIGHT_RED	{color:#f98a8a; font-size:12pt;}
 
-.TEST_TAG_LIST
+.Qst_TXT_WHITE,
+.Qst_TXT_GREY,
+.Qst_TXT_PURPLE,
+.Qst_TXT_BLUE,
+.Qst_TXT_YELLOW,
+.Qst_TXT_PINK			{color:#202020; font-size:12pt;}
+.Qst_TXT_DARK			{color:#e0e0e0; font-size:12pt;}
+
+.Qst_TXT_RED_WHITE,
+.Qst_TXT_RED_GREY,
+.Qst_TXT_RED_PURPLE,
+.Qst_TXT_RED_BLUE,
+.Qst_TXT_RED_YELLOW,
+.Qst_TXT_RED_PINK		{color:#660000; font-size:12pt;}
+.Qst_TXT_RED_DARK		{color:#ff8080; font-size:12pt;}
+
+.Qst_TXT_LIGHT_WHITE,
+.Qst_TXT_LIGHT_GREY,
+.Qst_TXT_LIGHT_PURPLE,
+.Qst_TXT_LIGHT_BLUE,
+.Qst_TXT_LIGHT_YELLOW,
+.Qst_TXT_LIGHT_PINK		{color:#a0a0a0; font-size:12pt;}
+.Qst_TXT_LIGHT_DARK		{color:#808080; font-size:12pt;}
+
+.Qst_TXT_LIGHT_RED_WHITE,
+.Qst_TXT_LIGHT_RED_GREY,
+.Qst_TXT_LIGHT_RED_PURPLE,
+.Qst_TXT_LIGHT_RED_BLUE,
+.Qst_TXT_LIGHT_RED_YELLOW,
+.Qst_TXT_LIGHT_RED_PINK		{color:#f98a8a; font-size:12pt;}
+.Qst_TXT_LIGHT_RED_DARK		{color:#f98a8a; font-size:12pt;}
+
+.Qst_ANS_0_WHITE,
+.Qst_ANS_0_GREY,
+.Qst_ANS_0_PURPLE,
+.Qst_ANS_0_BLUE,
+.Qst_ANS_0_YELLOW,
+.Qst_ANS_0_PINK		{color:#202020; font-size:12pt; font-weight:bold;}
+.Qst_ANS_0_DARK		{color:#e0e0e0; font-size:12pt; font-weight:bold;}
+
+.Qst_ANS_OK_WHITE,
+.Qst_ANS_OK_GREY,
+.Qst_ANS_OK_PURPLE,
+.Qst_ANS_OK_BLUE,
+.Qst_ANS_OK_YELLOW,
+.Qst_ANS_OK_PINK	{color:#246600; font-size:12pt; font-weight:bold;}
+.Qst_ANS_OK_DARK	{color:#80c040; font-size:12pt; font-weight:bold;}
+
+.Qst_ANS_BAD_WHITE,
+.Qst_ANS_BAD_GREY,
+.Qst_ANS_BAD_PURPLE,
+.Qst_ANS_BAD_BLUE,
+.Qst_ANS_BAD_YELLOW,
+.Qst_ANS_BAD_PINK	{color:#660000; font-size:12pt; font-weight:bold;}
+.Qst_ANS_BAD_DARK	{color:#ff8080; font-size:12pt; font-weight:bold;}
+
+.Tst_TAG_LIST
 	{
 	padding:0;
 	margin:0 0 0 1em;
 	}
 
-.TEST_MED_SHOW_CONT
+.Tst_MED_SHOW_CONT
 	{
 	box-sizing:border-box;
 	width:50%;
 	margin:10px 0;
 	}
-.TEST_MED_SHOW
+.Tst_MED_SHOW
 	{
 	box-sizing:border-box;
 	width:100%;
 	border-radius:2px;
 	}
-.TEST_MED_EDIT_LIST_CONT
+.Tst_MED_EDIT_LIST_CONT
 	{
 	box-sizing:border-box;
 	width:50%;
 	margin:5px 0;
 	}
-.TEST_MED_EDIT_LIST
+.Tst_MED_EDIT_LIST
 	{
 	box-sizing:border-box;
 	width:100%;
 	border-radius:2px;
 	}
 
-.TEST_MED_EDIT_FORM
+.Tst_MED_EDIT_FORM
 	{
 	box-sizing:border-box;
 	margin:15px 0;
 	text-align:left;
 	vertical-align:top;
 	}
-.TEST_MED_INPUT
+.Tst_MED_INPUT
 	{
 	box-sizing:border-box;
 	margin:0 auto;
 	width:400px;
 	}
 
-.TEST_MED_EDIT_ONE_CONT
+.Tst_MED_EDIT_ONE_CONT
 	{
 	box-sizing:border-box;
 	width:100%;
 	}
-.TEST_MED_EDIT_ONE
+.Tst_MED_EDIT_ONE
 	{
 	box-sizing:border-box;
 	width:100%;
 	border-radius:2px;
 	}
 
-.TEST_EDI_ANS_LEFT_COL
+.Tst_EDI_ANS_LEFT_COL
 	{
 	box-sizing:border-box;
 	width:48px;
 	text-align:left;
 	vertical-align:top;
 	}
-.TEST_EDI_ANS_CENTER_COL
+.Tst_EDI_ANS_CENTER_COL
 	{
 	box-sizing:border-box;
 	width:48px;
 	text-align:right;
 	vertical-align:top;
 	}
-.TEST_EDI_ANS_RIGHT_COL
+.Tst_EDI_ANS_RIGHT_COL
 	{
 	box-sizing:border-box;
 	width:600px;
@@ -3069,7 +3130,7 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	vertical-align:top;
 	}
 	
-.TEST_FILE_CONTENT
+.Tst_FILE_CONTENT
 	{
 	padding-bottom:20px;
 	}

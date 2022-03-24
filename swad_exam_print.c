@@ -696,7 +696,6 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned QstInd,
                                          struct Qst_Question *Question)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
    static struct ExaSet_Set CurrentSet =
      {
       .ExaCod = -1L,
@@ -726,20 +725,19 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT\"");
 	 Qst_WriteNumQst (QstInd + 1,"BIG_INDEX");
-	 Qst_WriteAnswerType (Question->Answer.Type,
-	                      The_ClassDatSmall[Gbl.Prefs.Theme]);
+	 Qst_WriteAnswerType (Question->Answer.Type,"DAT_SMALL");
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
       HTM_TD_Begin ("class=\"LT\"");
 
 	 /* Stem */
-	 Qst_WriteQstStem (Question->Stem,"TEST_TXT",true);
+	 Qst_WriteQstStem (Question->Stem,"Qst_TXT",true);
 
 	 /* Media */
 	 Med_ShowMedia (&Question->Media,
-			"TEST_MED_SHOW_CONT",
-			"TEST_MED_SHOW");
+			"Tst_MED_SHOW_CONT",
+			"Tst_MED_SHOW");
 
 	 /* Answers */
 	 Frm_BeginFormNoAction ();	// Form that can not be submitted, to avoid enter key to send it
@@ -848,6 +846,7 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
                                       unsigned QstInd,
                                       struct Qst_Question *Question)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    unsigned NumOpt;
    unsigned Indexes[Qst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool UsrAnswers[Qst_MAX_OPTIONS_PER_QUESTION];
@@ -890,19 +889,21 @@ static void ExaPrn_WriteChoAnsToFill (const struct ExaPrn_Print *Print,
 	    HTM_TD_End ();
 
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
+	                        QstInd,NumOpt,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_TxtF ("%c)&nbsp;",'a' + (char) NumOpt);
 	       HTM_LABEL_End ();
 	    HTM_TD_End ();
 
 	    /***** Write the option text *****/
 	    HTM_TD_Begin ("class=\"LT\"");
-	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"TEST_TXT\"",QstInd,NumOpt);
+	       HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"Qst_TXT_%s\"",
+	                        QstInd,NumOpt,The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (Question->Answer.Options[Indexes[NumOpt]].Text);
 	       HTM_LABEL_End ();
 	       Med_ShowMedia (&Question->Answer.Options[Indexes[NumOpt]].Media,
-			      "TEST_MED_SHOW_CONT",
-			      "TEST_MED_SHOW");
+			      "Tst_MED_SHOW_CONT",
+			      "Tst_MED_SHOW");
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

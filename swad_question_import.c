@@ -489,7 +489,7 @@ static void QstImp_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
       /***** Print XML tree *****/
-      HTM_DIV_Begin ("class=\"TEST_FILE_CONTENT\"");
+      HTM_DIV_Begin ("class=\"Tst_FILE_CONTENT\"");
 	 HTM_TEXTAREA_Begin ("title=\"%s\" cols=\"60\" rows=\"5\""
 			     " spellcheck=\"false\" readonly",
 			     Txt_XML_file_content);
@@ -856,6 +856,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
   {
    extern const char *The_ClassDatSmall[The_NUM_THEMES];
    extern const char *The_ClassDatSmallLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Existing_question;
    extern const char *Txt_New_question;
    extern const char *Txt_no_tags;
@@ -875,8 +876,8 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    size_t AnswerFeedbackLength;
    const char *ClassData = QuestionExists ? The_ClassDatSmallLight[Gbl.Prefs.Theme] :
 	                                    The_ClassDatSmall[Gbl.Prefs.Theme];
-   const char *ClassStem = QuestionExists ? "TEST_TXT_LIGHT" :
-	                                    "TEST_TXT";
+   const char *ClassStem = QuestionExists ? "Qst_TXT_LIGHT" :
+	                                    "Qst_TXT";
 
    NumQst++;
 
@@ -954,7 +955,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
 	 Qst_WriteQstStem (Stem,ClassStem,
 			   true);	// Visible
-	 Qst_WriteQstFeedback (Feedback,"TEST_TXT_LIGHT");
+	 Qst_WriteQstFeedback (Feedback,"Qst_TXT_LIGHT");
 	 switch (Question->Answer.Type)
 	   {
 	    case Qst_ANS_INT:
@@ -1032,13 +1033,15 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 			/* Write the text and the feedback of the answer */
 			HTM_TD_Begin ("class=\"LT\"");
 
-			   HTM_DIV_Begin ("class=\"%s\"",ClassStem);
+			   HTM_DIV_Begin ("class=\"%s_%s\"",
+			                  ClassStem,The_Colors[Gbl.Prefs.Theme]);
 			      HTM_Txt (AnswerText);
 			   HTM_DIV_End ();
 
 			   if (AnswerFeedbackLength)
 			     {
-			      HTM_DIV_Begin ("class=\"TEST_TXT_LIGHT\"");
+			      HTM_DIV_Begin ("class=\"Qst_TXT_LIGHT_%s\"",
+			                     The_Colors[Gbl.Prefs.Theme]);
 				 HTM_Txt (AnswerFeedback);
 			      HTM_DIV_End ();
 			     }

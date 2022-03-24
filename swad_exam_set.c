@@ -1185,8 +1185,6 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Question)
 static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
                                            unsigned QstInd,const char *Anchor)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
    static const char *ClassNumQst[Qst_NUM_VALIDITIES] =
      {
       [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
@@ -1194,24 +1192,25 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
      };
    const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = The_ClassDatSmallRed[Gbl.Prefs.Theme],
-      [Qst_VALID_QUESTION  ] = The_ClassDatSmall[Gbl.Prefs.Theme],
+      [Qst_INVALID_QUESTION] = "DAT_SMALL_RED",
+      [Qst_VALID_QUESTION  ] = "DAT_SMALL",
      };
    static const char *ClassTxt[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "TEST_TXT_RED",
-      [Qst_VALID_QUESTION  ] = "TEST_TXT",
+      [Qst_INVALID_QUESTION] = "Qst_TXT_RED",
+      [Qst_VALID_QUESTION  ] = "Qst_TXT",
      };
    static const char *ClassFeedback[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "TEST_TXT_LIGHT_RED",
-      [Qst_VALID_QUESTION  ] = "TEST_TXT_LIGHT",
+      [Qst_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
+      [Qst_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
      };
 
    /***** Number of question and answer type (row[1]) *****/
    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
       Qst_WriteNumQst (QstInd,ClassNumQst[Question->Validity]);
-      Qst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
+      Qst_WriteAnswerType (Question->Answer.Type,
+                           ClassAnswerType[Question->Validity]);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
@@ -1224,11 +1223,12 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Question,
 
 	 /* Show media */
 	 Med_ShowMedia (&Question->Media,
-			"TEST_MED_EDIT_LIST_CONT",
-			"TEST_MED_EDIT_LIST");
+			"Tst_MED_EDIT_LIST_CONT",
+			"Tst_MED_EDIT_LIST");
 
 	 /* Show feedback */
-	 Qst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
+	 Qst_WriteQstFeedback (Question->Feedback,
+	                       ClassFeedback[Question->Validity]);
 
 	 /* Show answers */
 	 Qst_WriteAnswersBank (Question,

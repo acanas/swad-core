@@ -1243,6 +1243,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Project_files;
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
@@ -1290,7 +1291,8 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RT %s\"",
+	    HTM_TD_Begin ("rowspan=\"3\" class=\"RT BIG_INDEX_%s %s\"",
+	                  The_Colors[Gbl.Prefs.Theme],
 			  The_GetColorRows ());
 	       HTM_Unsigned (NumIndex);
 	       if (PrjIsFaulty)

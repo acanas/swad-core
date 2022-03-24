@@ -1861,8 +1861,7 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 				       struct Qst_Question *Question,
 				       unsigned Visibility)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Score;
    extern const char *Txt_Invalid_question;
    bool ICanView[TstVis_NUM_ITEMS_VISIBILITY];
@@ -1871,20 +1870,20 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
       [Qst_INVALID_QUESTION] = "BIG_INDEX_RED",
       [Qst_VALID_QUESTION  ] = "BIG_INDEX",
      };
-   const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
+   static const char *ClassAnswerType[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = The_ClassDatSmallRed[Gbl.Prefs.Theme],
-      [Qst_VALID_QUESTION  ] = The_ClassDatSmall[Gbl.Prefs.Theme],
+      [Qst_INVALID_QUESTION] = "DAT_SMALL_RED",
+      [Qst_VALID_QUESTION  ] = "DAT_SMALL",
      };
    static const char *ClassTxt[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "TEST_TXT_RED",
-      [Qst_VALID_QUESTION  ] = "TEST_TXT",
+      [Qst_INVALID_QUESTION] = "Qst_TXT_RED",
+      [Qst_VALID_QUESTION  ] = "Qst_TXT",
      };
    static const char *ClassFeedback[Qst_NUM_VALIDITIES] =
      {
-      [Qst_INVALID_QUESTION] = "TEST_TXT_LIGHT_RED",
-      [Qst_VALID_QUESTION  ] = "TEST_TXT_LIGHT",
+      [Qst_INVALID_QUESTION] = "Qst_TXT_LIGHT_RED",
+      [Qst_VALID_QUESTION  ] = "Qst_TXT_LIGHT",
      };
 
    /***** Check if I can view each part of the question *****/
@@ -1921,7 +1920,8 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
       /***** Number of question and answer type *****/
       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
 	 Qst_WriteNumQst (QstInd + 1,ClassNumQst[Question->Validity]);
-	 Qst_WriteAnswerType (Question->Answer.Type,ClassAnswerType[Question->Validity]);
+	 Qst_WriteAnswerType (Question->Answer.Type,
+	                      ClassAnswerType[Question->Validity]);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
@@ -1934,8 +1934,8 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Media */
 	 if (ICanView[TstVis_VISIBLE_QST_ANS_TXT])
 	    Med_ShowMedia (&Question->Media,
-			   "TEST_MED_SHOW_CONT",
-			   "TEST_MED_SHOW");
+			   "Tst_MED_SHOW_CONT",
+			   "Tst_MED_SHOW");
 
 	 /* Answers */
 	 ExaPrn_ComputeAnswerScore (&Print->PrintedQuestions[QstInd],Question);
@@ -1947,14 +1947,15 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 	 /* Write score retrieved from database */
 	 if (ICanView[TstVis_VISIBLE_EACH_QST_SCORE])
 	   {
-	    HTM_DIV_Begin ("class=\"%s LM\"",
-	                   The_ClassDatSmall[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("class=\"LM DAT_SMALL_%s\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	       HTM_TxtColonNBSP (Txt_Score);
-	       HTM_SPAN_Begin ("class=\"%s\"",
+	       HTM_SPAN_Begin ("class=\"%s_%s\"",
 			       Print->PrintedQuestions[QstInd].StrAnswers[0] ?
-			       (Print->PrintedQuestions[QstInd].Score > 0 ? "ANS_OK" :		// Correct/semicorrect
-									    "ANS_BAD") :	// Wrong
-									    "ANS_0");		// Blank answer
+			       (Print->PrintedQuestions[QstInd].Score > 0 ? "Qst_ANS_OK" :	// Correct
+									    "Qst_ANS_BAD") :	// Wrong
+									    "Qst_ANS_0",	// Blank answer
+			       The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Double2Decimals (Print->PrintedQuestions[QstInd].Score);
 		  if (Question->Validity == Qst_INVALID_QUESTION)
 		     HTM_TxtF (" (%s)",Txt_Invalid_question);
@@ -1964,7 +1965,8 @@ static void ExaRes_WriteQstAndAnsExam (struct UsrData *UsrDat,
 
 	 /* Question feedback */
 	 if (ICanView[TstVis_VISIBLE_FEEDBACK_TXT])
-	    Qst_WriteQstFeedback (Question->Feedback,ClassFeedback[Question->Validity]);
+	    Qst_WriteQstFeedback (Question->Feedback,
+	                          ClassFeedback[Question->Validity]);
 
       HTM_TD_End ();
 
