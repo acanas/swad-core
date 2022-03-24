@@ -394,7 +394,7 @@ static unsigned ExaPrn_GetSomeQstsFromSetToPrint (struct ExaPrn_Print *Print,
 	NumQstInSet < NumQstsInSet;
 	NumQstInSet++, (*NumQstsInPrint)++)
      {
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+      The_ChangeRowColor ();
 
       /***** Get question data *****/
       row = mysql_fetch_row (mysql_res);

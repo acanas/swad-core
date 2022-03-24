@@ -2560,7 +2560,8 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    HTM_TR_Begin (NULL);
 
       /***** Write number of user *****/
-      HTM_TD_Begin ("class=\"USR_LIST_NUM_N CM %s\"",
+      HTM_TD_Begin ("class=\"CM USR_LIST_NUM_N_%s %s\"",
+		    The_Colors[Gbl.Prefs.Theme],
                     The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
@@ -4079,7 +4080,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 	 /***** List guests' data *****/
 	 for (NumUsr = 0;
 	      NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs;
-	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumUsr++, The_ChangeRowColor ())
 	   {
 	    /* Copy user's basic data from list */
 	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
@@ -4149,7 +4150,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** List students' data *****/
       for (NumUsr = 0;
            NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-           NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+           NumUsr++, The_ChangeRowColor ())
         {
 	 /* Copy user's basic data from list */
          Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
@@ -4221,7 +4222,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,
       /***** List teachers' data *****/
       for (NumUsr = 0;
            NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs;
-           NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+           NumUsr++, The_ChangeRowColor ())
         {
 	 /* Copy user's basic data from list */
          Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Role].Lst[NumUsr]);
@@ -4331,7 +4332,7 @@ void Usr_ListAllDataGsts (void)
 	       NumUsr++;
 	       Usr_WriteRowGstAllData (&UsrDat);
 
-	       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	       The_ChangeRowColor ();
 	      }
 	   }
 
@@ -4530,7 +4531,7 @@ void Usr_ListAllDataStds (void)
 	       NumUsr++;
 	       Usr_WriteRowStdAllData (&UsrDat,GroupNames);
 
-	       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	       The_ChangeRowColor ();
 	      }
 	   }
 
@@ -4594,7 +4595,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role,
 	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role,SelectedUsrs);
 
-	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	    The_ChangeRowColor ();
 	   }
 	}
 
@@ -4732,7 +4733,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 	 NumUsr++;
 	 Usr_WriteRowTchAllData (&UsrDat);
 
-	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	 The_ChangeRowColor ();
 	}
      }
 
@@ -4793,7 +4794,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	 /***** List data of users *****/
 	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;
-	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumUsr++, The_ChangeRowColor ())
 	   {
 	    UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
@@ -4978,7 +4979,7 @@ void Usr_ListDataAdms (void)
 		  UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
 		  Usr_WriteRowAdmData (++NumUsr,&UsrDat);
 
-		  Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+		  The_ChangeRowColor ();
 		 }
 	      }
 

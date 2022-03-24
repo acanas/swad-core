@@ -175,7 +175,6 @@ struct Globals
    time_t StartExecutionTimeUTC;
    struct Dat_DateTime Now;
    struct Dat_Date Yesterday;
-   unsigned RowEvenOdd;	// To alternate row colors in listings
    const char *XMLPtr;
    struct
      {

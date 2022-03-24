@@ -758,7 +758,7 @@ static void Syl_ShowRowSyllabus (struct Syl_Syllabus *Syllabus,unsigned NumItem,
    /***** End of the row *****/
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

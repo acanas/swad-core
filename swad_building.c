@@ -144,7 +144,7 @@ void Bld_SeeBuildings (void)
 	 /***** Write list of buildings *****/
 	 for (NumBuilding = 0;
 	      NumBuilding < Buildings.Num;
-	      NumBuilding++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumBuilding++, The_ChangeRowColor ())
 	   {
 	    HTM_TR_Begin (NULL);
 

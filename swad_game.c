@@ -686,7 +686,7 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
    if (ShowOnlyThisGame)
       HTM_TABLE_End ();
    else
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+      The_ChangeRowColor ();
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -1727,10 +1727,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
       /***** Write rows *****/
       for (NumQst = 0;
 	   NumQst < NumQsts;
-	   NumQst++)
+	   NumQst++, The_ChangeRowColor ())
 	{
-	 Gbl.RowEvenOdd = NumQst % 2;
-
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Question);
 

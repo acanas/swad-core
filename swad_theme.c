@@ -460,6 +460,8 @@ The_Theme_t The_GetThemeFromStr (const char *Str)
 /******** Get background colors for rows depending on selected theme *********/
 /*****************************************************************************/
 
+static unsigned The_RowEvenOdd = 0;	// To alternate row colors in listings
+
 const char *The_GetColorRows (void)
   {
    static const char *The_ClassColorRows[2][The_NUM_THEMES] =
@@ -481,7 +483,12 @@ const char *The_GetColorRows (void)
       [1][The_THEME_DARK  ] = "COLOR1_DARK",
      };
 
-   return The_ClassColorRows[Gbl.RowEvenOdd][Gbl.Prefs.Theme];
+   return The_ClassColorRows[The_RowEvenOdd][Gbl.Prefs.Theme];
+  }
+
+void The_ChangeRowColor (void)
+  {
+   The_RowEvenOdd = 1 - The_RowEvenOdd;
   }
 
 /*****************************************************************************/

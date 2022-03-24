@@ -231,10 +231,8 @@ void TstPrn_ShowTestPrintToFillIt (struct TstPrn_Print *Print,
 	    /***** Write one row for each question *****/
 	    for (QstInd = 0;
 		 QstInd < Print->NumQsts.All;
-		 QstInd++)
+		 QstInd++, The_ChangeRowColor ())
 	      {
-	       Gbl.RowEvenOdd = QstInd % 2;
-
 	       /* Create test question */
 	       Qst_QstConstructor (&Question);
 	       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
@@ -547,10 +545,8 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 
       for (QstInd = 0;
 	   QstInd < Print->NumQsts.All;
-	   QstInd++)
+	   QstInd++, The_ChangeRowColor ())
 	{
-	 Gbl.RowEvenOdd = QstInd % 2;
-
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Question);
 	 Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;
@@ -2051,7 +2047,7 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -2474,10 +2470,8 @@ void TstPrn_ShowPrintAnswers (struct UsrData *UsrDat,
 
    for (QstInd = 0;
 	QstInd < NumQsts;
-	QstInd++)
+	QstInd++, The_ChangeRowColor ())
      {
-      Gbl.RowEvenOdd = QstInd % 2;
-
       /***** Create test question *****/
       Qst_QstConstructor (&Question);
       Question.QstCod = PrintedQuestions[QstInd].QstCod;

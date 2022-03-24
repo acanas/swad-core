@@ -136,7 +136,7 @@ void Cty_SeeCtyWithPendingInss (void)
 	 /***** List the countries *****/
 	 for (NumCty = 0;
 	      NumCty < NumCtys;
-	      NumCty++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumCty++, The_ChangeRowColor ())
 	   {
 	    /* Get next country */
 	    row = mysql_fetch_row (mysql_res);
@@ -460,7 +460,7 @@ static void Cty_ListOneCountryForSeeing (struct Cty_Countr *Cty,unsigned NumCty)
 
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

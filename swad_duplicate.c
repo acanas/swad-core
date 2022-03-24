@@ -192,7 +192,7 @@ void Dup_ListDuplicateUsrs (void)
 
 		  HTM_TR_End ();
 
-		  Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+		  The_ChangeRowColor ();
 		 }
 	       else        // User does not exists ==>
 			   // remove user from table of possible duplicate users
@@ -320,7 +320,7 @@ static void Dup_ListSimilarUsrs (void)
 
 	       HTM_TR_End ();
 
-	       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	       The_ChangeRowColor ();
 	      }
 	   }
 

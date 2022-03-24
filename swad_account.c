@@ -231,7 +231,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	 /***** List users found *****/
 	 for (NumUsr  = 1;
 	      NumUsr <= NumUsrs;
-	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumUsr++, The_ChangeRowColor ())
 	   {
 	    /***** Get user's data from query result *****/
 	    /* Get user's code */
@@ -277,6 +277,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat)
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_Name;
@@ -287,7 +288,8 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    HTM_TR_Begin (NULL);
 
       /***** Write number of user in the list *****/
-      HTM_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT %s\"",
+      HTM_TD_Begin ("rowspan=\"2\" class=\"RT USR_LIST_NUM_N_%s %s\"",
+		    The_Colors[Gbl.Prefs.Theme],
                     The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();

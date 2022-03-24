@@ -4679,7 +4679,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    free (Anchor);
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
 
    if (RowSetAsHidden && (SeeDocsZone || SeeMarks))
       return false;
@@ -10176,7 +10176,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 HTM_TD_End ();
       HTM_TR_End ();
 
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+      The_ChangeRowColor ();
      }
   }
 

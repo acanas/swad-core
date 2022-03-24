@@ -870,10 +870,8 @@ void Qst_ListOneOrMoreQstsForEdition (struct Qst_Questions *Questions,
 	 /***** Write rows *****/
 	 for (QstInd = 0;
 	      QstInd < Questions->NumQsts;
-	      QstInd++)
+	      QstInd++, The_ChangeRowColor ())
 	   {
-	    Gbl.RowEvenOdd = QstInd % 2;
-
 	    /***** Create test question *****/
 	    Qst_QstConstructor (&Questions->Question);
 
@@ -1152,10 +1150,8 @@ void Qst_ListOneOrMoreQstsForSelectionForExamSet (struct Exa_Exams *Exams,
 	    /***** Write rows *****/
 	    for (QstInd = 0;
 		 QstInd < NumQsts;
-		 QstInd++)
+		 QstInd++, The_ChangeRowColor ())
 	      {
-	       Gbl.RowEvenOdd = QstInd % 2;
-
 	       /* Create test question */
 	       Qst_QstConstructor (&Question);
 
@@ -1236,10 +1232,8 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 	    /***** Write rows *****/
 	    for (QstInd = 0;
 		 QstInd < NumQsts;
-		 QstInd++)
+		 QstInd++, The_ChangeRowColor ())
 	      {
-	       Gbl.RowEvenOdd = QstInd % 2;
-
 	       /* Create test question */
 	       Qst_QstConstructor (&Question);
 
@@ -2147,10 +2141,8 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Question)
 				 Question->Answer.Type != Qst_ANS_TEXT;
 	       for (NumOpt = 0;
 		    NumOpt < Qst_MAX_OPTIONS_PER_QUESTION;
-		    NumOpt++)
+		    NumOpt++, The_ChangeRowColor ())
 		 {
-		  Gbl.RowEvenOdd = NumOpt % 2;
-
 		  AnswerHasContent = false;
 		  if (Question->Answer.Options[NumOpt].Text)
 		     if (Question->Answer.Options[NumOpt].Text[0] ||			// Text

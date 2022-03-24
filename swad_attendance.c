@@ -578,7 +578,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1847,7 +1847,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    /***** End table row *****/
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -2717,7 +2717,7 @@ static void Att_ListEventsToSelect (const struct Att_Events *Events,
 	 /***** List the events *****/
 	 for (NumAttEvent = 0, UniqueId = 1;
 	      NumAttEvent < Events->Num;
-	      NumAttEvent++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumAttEvent++, UniqueId++, The_ChangeRowColor ())
 	   {
 	    /* Get data of the attendance event from database */
 	    Att_GetDataOfAttEventByCodAndCheckCrs (&Events->Lst[NumAttEvent]);
@@ -3040,7 +3040,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -3291,5 +3291,5 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	   }
 	}
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }

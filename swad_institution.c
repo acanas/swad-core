@@ -188,7 +188,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    HTM_TR_End ();
 
-	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	    The_ChangeRowColor ();
 	   }
 
       /***** End table and box *****/
@@ -443,7 +443,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
 
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

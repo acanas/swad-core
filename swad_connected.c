@@ -642,7 +642,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&OtherUsrDat);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -749,7 +749,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 	    HTM_TR_End ();
 
-	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	    The_ChangeRowColor ();
 	   }
         }
 

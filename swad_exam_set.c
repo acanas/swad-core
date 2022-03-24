@@ -737,10 +737,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       /***** Write rows *****/
       for (NumSet = 0;
 	   NumSet < NumSets;
-	   NumSet++)
+	   NumSet++, The_ChangeRowColor ())
 	{
-	 Gbl.RowEvenOdd = NumSet % 2;
-
 	 /***** Create set of questions *****/
 	 ExaSet_ResetSet (&Set);
 
@@ -982,10 +980,8 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
       /***** Write rows *****/
       for (QstInd = 0;
 	   QstInd < NumQsts;
-	   QstInd++)
+	   QstInd++, The_ChangeRowColor ())
 	{
-	 Gbl.RowEvenOdd = QstInd % 2;
-
 	 /***** Create test question *****/
 	 Qst_QstConstructor (&Question);
 

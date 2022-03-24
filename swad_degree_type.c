@@ -322,7 +322,7 @@ static void DegTyp_ListDegreeTypesForSeeing (void)
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
-	NumDegTyp++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	NumDegTyp++, The_ChangeRowColor ())
      {
       BgColor = (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod ==
 	         Gbl.Hierarchy.Deg.DegTypCod) ? "BG_HIGHLIGHT" :

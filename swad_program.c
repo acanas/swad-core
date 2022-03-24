@@ -290,7 +290,7 @@ static void Prg_ShowAllItems (Prg_CreateOrChangeItem_t CreateOrChangeItem,
 		  HTM_TBODY_Begin (NULL);			// 3rd tbody begin
 	      }
 
-	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	    The_ChangeRowColor ();
 	   }
 
 	 /***** Create item at the end? *****/
@@ -514,7 +514,7 @@ static void Prg_WriteRowWithItemForm (Prg_CreateOrChangeItem_t CreateOrChangeIte
 
    /***** Change color row? *****/
    if (CreateOrChangeItem == Prg_PUT_FORM_CREATE_ITEM)
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+      The_ChangeRowColor ();
 
    /***** Begin row *****/
    HTM_TR_Begin (NULL);

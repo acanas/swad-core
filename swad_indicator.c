@@ -411,9 +411,9 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 
       NumCrssWithIndicatorYes[Ind] = 0;
 
    /***** List courses *****/
-   for (Gbl.RowEvenOdd = 1, NumCrs = 0;
+   for (NumCrs = 0;
 	NumCrs < NumCrss;
-	NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	NumCrs++, The_ChangeRowColor ())
      {
       /* Get next course */
       row = mysql_fetch_row (mysql_res);
@@ -681,9 +681,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (const struct Ind_Indicators *I
 
       /***** List courses *****/
       mysql_data_seek (mysql_res,0);
-      for (NumCrs = 0, Gbl.RowEvenOdd = 1;
+      for (NumCrs = 0;
 	   NumCrs < NumCrss;
-	   NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	   NumCrs++, The_ChangeRowColor ())
 	{
 	 /* Get next course */
 	 row = mysql_fetch_row (mysql_res);

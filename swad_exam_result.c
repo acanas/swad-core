@@ -614,7 +614,7 @@ static void ExaRes_ListExamsToSelect (struct Exa_Exams *Exams)
 	    /***** List the sessions *****/
 	    for (NumExam = 0, UniqueId = 1;
 		 NumExam < Exams->Num;
-		 NumExam++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+		 NumExam++, UniqueId++, The_ChangeRowColor ())
 	      {
 	       /* Get data of this exam */
 	       Exam.ExaCod = Exams->Lst[NumExam].ExaCod;
@@ -1110,7 +1110,7 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1834,10 +1834,8 @@ static void ExaRes_ShowExamAnswers (struct UsrData *UsrDat,
 
    for (QstInd = 0;
 	QstInd < Print->NumQsts.All;
-	QstInd++)
+	QstInd++, The_ChangeRowColor ())
      {
-      Gbl.RowEvenOdd = QstInd % 2;
-
       /***** Create test question *****/
       Qst_QstConstructor (&Question);
       Question.QstCod = Print->PrintedQuestions[QstInd].QstCod;

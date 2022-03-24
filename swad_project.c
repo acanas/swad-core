@@ -1571,7 +1571,7 @@ static void Prj_ShowOneProject (struct Prj_Projects *Projects,
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/
@@ -1776,7 +1776,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Prj_Project *Prj)
    /***** End row *****/
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

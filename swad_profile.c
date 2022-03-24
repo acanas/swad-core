@@ -1191,7 +1191,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	 for (NumUsr = 1, Rank = 1;
 	      NumUsr <= NumUsrs;
-	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumUsr++, The_ChangeRowColor ())
 	   {
 	    /***** Get user and number of clicks *****/
 	    row = mysql_fetch_row (*mysql_res);
@@ -1263,7 +1263,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 	 for (NumUsr  = 1, Rank = 1;
 	      NumUsr <= NumUsrs;
-	      NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumUsr++, The_ChangeRowColor ())
 	   {
 	    /***** Get user and number of clicks *****/
 	    row = mysql_fetch_row (mysql_res);

@@ -2195,7 +2195,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    /***** List threads *****/
    for (NumThr  = PaginationThrs->FirstItemVisible, NumThrInScreen = 0, UniqueId = 0;
         NumThr <= PaginationThrs->LastItemVisible;
-        NumThr++, NumThrInScreen++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+        NumThr++, NumThrInScreen++, The_ChangeRowColor ())
      {
       /***** Get the data of this thread *****/
       Thr.ThrCod = ThrCods[NumThrInScreen];

@@ -859,7 +859,7 @@ static void Crs_ListCourses (void)
 		 Year <= Deg_MAX_YEARS_PER_DEGREE;
 		 Year++)
 	       if (Crs_ListCoursesOfAYearForSeeing (Year))	// If this year has courses ==>
-		  Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;	// ==> change color for the next year
+		  The_ChangeRowColor ();	// ==> change color for the next year
 	    Crs_ListCoursesOfAYearForSeeing (0);		// Courses without a year selected
 
 	 /***** End table *****/
@@ -2510,7 +2510,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

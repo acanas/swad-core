@@ -571,7 +571,7 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	    /***** List the events *****/
 	    for (NumGame = 0, UniqueId = 1;
 		 NumGame < Games->Num;
-		 NumGame++, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+		 NumGame++, UniqueId++, The_ChangeRowColor ())
 	      {
 	       /* Get data of this game */
 	       Game.GamCod = Games->Lst[NumGame].GamCod;
@@ -970,7 +970,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

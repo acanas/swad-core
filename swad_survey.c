@@ -693,7 +693,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       HTM_TR_End ();
      }
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
 
    /***** Mark possible notification as seen *****/
    if (Svy.Scope == HieLvl_CRS)	// Only course surveys are notified
@@ -2801,10 +2801,8 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Surveys,
 	 /***** Write questions one by one *****/
 	 for (NumQst = 0;
 	      NumQst < NumQsts;
-	      NumQst++)
+	      NumQst++, The_ChangeRowColor ())
 	   {
-	    Gbl.RowEvenOdd = (int) (NumQst % 2);
-
 	    /* Initialize question to zero */
 	    Svy_InitQst (&SvyQst);
 

@@ -293,10 +293,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
       /***** Write rows *****/
       for (NumSession = 0, UniqueId = 1;
 	   NumSession < NumSessions;
-	   NumSession++, UniqueId++)
+	   NumSession++, UniqueId++, The_ChangeRowColor ())
 	{
-	 Gbl.RowEvenOdd = NumSession % 2;
-
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
 

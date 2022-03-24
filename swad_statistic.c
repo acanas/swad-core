@@ -1212,7 +1212,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
    /***** Write rows back *****/
    for (NumRow  = LastRow, UniqueId = 1;
 	NumRow >= FirstRow;
-	NumRow--, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	NumRow--, UniqueId++, The_ChangeRowColor ())
      {
       mysql_data_seek (mysql_res,(my_ulonglong) (NumRow - 1));
       row = mysql_fetch_row (mysql_res);
@@ -1347,7 +1347,7 @@ static void Sta_ShowNumHitsPerUsr (Sta_CountType_t CountType,
    /***** Write rows *****/
    for (NumHit  = 1, Hits.Max = 0.0;
 	NumHit <= NumHits;
-	NumHit++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	NumHit++, The_ChangeRowColor ())
      {
       row = mysql_fetch_row (mysql_res);
 

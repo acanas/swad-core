@@ -1690,7 +1690,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       /***** Fields of the record that depends on the course *****/
       for (NumField = 0;
 	   NumField < Gbl.Crs.Records.LstFields.Num;
-	   NumField++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	   NumField++, The_ChangeRowColor ())
 	{
 	 ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
 		       TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||

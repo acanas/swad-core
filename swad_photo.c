@@ -2241,7 +2241,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	 /***** Get degrees *****/
 	 for (NumDeg = 0, NumDegsNotEmpty = 0;
 	      NumDeg < NumDegs;
-	      NumDeg++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumDeg++, The_ChangeRowColor ())
 	   {
 	    /***** Get next degree *****/
 	    row = mysql_fetch_row (mysql_res);

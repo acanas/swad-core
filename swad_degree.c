@@ -140,7 +140,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	 /***** List the degrees *****/
 	 for (NumDeg = 0;
 	      NumDeg < NumDegs;
-	      NumDeg++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumDeg++, The_ChangeRowColor ())
 	   {
 	    /* Get next degree */
 	    row = mysql_fetch_row (mysql_res);
@@ -870,7 +870,7 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    /***** End table row *****/
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

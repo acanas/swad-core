@@ -280,9 +280,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_UNKNOWN;
    Gbl.FileBrowser.UploadingWithDropzone = false;
 
-   /* To alternate colors where listing rows */
-   Gbl.RowEvenOdd = 0;
-
    Gbl.WebService.Function = API_unknown;
 
    /* Flush caches */

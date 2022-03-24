@@ -635,7 +635,7 @@ static void Exa_ShowOneExam (struct Exa_Exams *Exams,
    if (ShowOnlyThisExam)
       HTM_TABLE_End ();
    else
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+      The_ChangeRowColor ();
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);

@@ -138,7 +138,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	 /***** List the centers *****/
 	 for (NumCtr = 0;
 	      NumCtr < NumCtrs;
-	      NumCtr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
+	      NumCtr++, The_ChangeRowColor ())
 	   {
 	    /* Get next center */
 	    row = mysql_fetch_row (mysql_res);
@@ -400,7 +400,7 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
 
    HTM_TR_End ();
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

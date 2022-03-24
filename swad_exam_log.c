@@ -284,10 +284,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 	    /***** Write clicks *****/
 	    for (NumClick = 0;
 		 NumClick < NumClicks;
-		 NumClick++)
+		 NumClick++, The_ChangeRowColor ())
 	      {
-	       Gbl.RowEvenOdd = NumClick % 2;
-
 	       /***** Get row *****/
 	       row = mysql_fetch_row (mysql_res);
 

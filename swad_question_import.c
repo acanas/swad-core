@@ -878,7 +878,6 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    const char *ClassStem = QuestionExists ? "TEST_TXT_LIGHT" :
 	                                    "TEST_TXT";
 
-   Gbl.RowEvenOdd = NumQst % 2;
    NumQst++;
 
    HTM_TR_Begin (NULL);
@@ -1061,4 +1060,6 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
    HTM_TR_End ();
+
+   The_ChangeRowColor ();
   }

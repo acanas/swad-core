@@ -900,7 +900,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

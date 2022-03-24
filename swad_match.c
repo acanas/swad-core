@@ -401,10 +401,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
       /***** Write rows *****/
       for (NumMatch = 0, UniqueId = 1;
 	   NumMatch < NumMatches;
-	   NumMatch++, UniqueId++)
+	   NumMatch++, UniqueId++, The_ChangeRowColor ())
 	{
-	 Gbl.RowEvenOdd = NumMatch % 2;
-
 	 /***** Get match data from row *****/
 	 Mch_GetMatchDataFromRow (mysql_res,&Match);
 

@@ -1313,7 +1313,7 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
                                    Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                    unsigned DurationNumIntervals,const char *Info)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_All_groups;
    static const char *TimeTableClasses[Tmt_NUM_CLASS_TYPES] =
      {
@@ -1378,19 +1378,19 @@ static void Tmt_TimeTableDrawCell (const struct Tmt_Timetable *Timetable,
       if (asprintf (&ColSpanStr,"%s","") < 0)
 	 Err_NotEnoughMemoryExit ();
      }
-   if (ClassType == Tmt_FREE)
+   switch (ClassType)
      {
-      if (asprintf (&ClassStr,"%s%u",
-                    TimeTableClasses[ClassType],
-                    WhichCell->Interval % 4) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
-   else
-     {
-      if (asprintf (&ClassStr,"%s %s CM",
-                    TimeTableClasses[ClassType],
-                    The_ClassDatSmall[Gbl.Prefs.Theme]) < 0)
-	 Err_NotEnoughMemoryExit ();
+      case Tmt_FREE:
+	 if (asprintf (&ClassStr,"Tmt_CELL Tmt_FREE%u_%s",
+		       WhichCell->Interval % 4,
+		       The_Colors[Gbl.Prefs.Theme]) < 0)
+	    Err_NotEnoughMemoryExit ();
+         break;
+      default:
+	 if (asprintf (&ClassStr,"Tmt_CELL %s",
+		       TimeTableClasses[ClassType]) < 0)
+	    Err_NotEnoughMemoryExit ();
+	 break;
      }
 
    /* Begin cell */
@@ -1439,7 +1439,7 @@ static void Tmt_TimeTableDrawCellView (const struct Tmt_Timetable *Timetable,
    struct GroupData GrpDat;
 
    /***** Begin cell *****/
-   HTM_DIV_Begin ("class=\"Tmt_CELL Tmt_TXT\"");
+   HTM_DIV_Begin ("class=\"Tmt_TXT\"");
 
       /***** Course name *****/
       if (Timetable->Type == Tmt_MY_TIMETABLE)

@@ -520,7 +520,7 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
-   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+   The_ChangeRowColor ();
 
    /***** Mark possible notification as seen *****/
    Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_ASSIGNMENT,AsgCod);
