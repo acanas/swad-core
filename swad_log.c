@@ -159,11 +159,7 @@ void Log_ShowLastClicks (void)
 
 void Log_GetAndShowLastClicks (void)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallBlue[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallGreen[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallYellow[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
@@ -212,12 +208,12 @@ void Log_GetAndShowLastClicks (void)
 	 Action = Act_GetActionFromActCod (ActCod);
 
 	 /* Use a special color for this row depending on the action */
-	 ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? The_ClassDatSmallYellow[Gbl.Prefs.Theme] :
+	 ClassRow = (Act_GetBrowserTab (Action) == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW" :
 		    (ActCod == Act_GetActCod (ActLogIn   ) ||
-		     ActCod == Act_GetActCod (ActLogInNew)) ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
-		    (ActCod == Act_GetActCod (ActLogOut  )) ? The_ClassDatSmallRed[Gbl.Prefs.Theme] :
-		    (ActCod == Act_GetActCod (ActWebSvc  )) ? The_ClassDatSmallBlue[Gbl.Prefs.Theme] :
-							      The_ClassDatSmall[Gbl.Prefs.Theme];
+		     ActCod == Act_GetActCod (ActLogInNew)) ? "DAT_SMALL_GREEN" :
+		    (ActCod == Act_GetActCod (ActLogOut  )) ? "DAT_SMALL_RED" :
+		    (ActCod == Act_GetActCod (ActWebSvc  )) ? "DAT_SMALL_BLUE" :
+							      "DAT_SMALL";
 
 	 /* Compute elapsed time from last access */
 	 if (sscanf (row[2],"%ld",&TimeDiff) != 1)
@@ -241,36 +237,44 @@ void Log_GetAndShowLastClicks (void)
 	 /* Print table row */
 	 HTM_TR_Begin (NULL);
 
-	    HTM_TD_Begin ("class=\"LC_CLK %s\"",ClassRow);
-	       HTM_Txt (row[0]);				// Click
+	    HTM_TD_Begin ("class=\"LC_CLK %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       HTM_Txt (row[0]);					// Click
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_TIM %s\"",ClassRow);	// Elapsed time
-	       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
+	    HTM_TD_Begin ("class=\"LC_TIM %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);	// Elapsed time
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_ROL %s\"",ClassRow);
+	    HTM_TD_Begin ("class=\"LC_ROL %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);	// Role
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_CTY %s\"",ClassRow);
-	       HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);	// Country
+	    HTM_TD_Begin ("class=\"LC_CTY %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       HTM_Txt (Hie.Cty.Name[Gbl.Prefs.Language]);		// Country
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_INS %s\"",ClassRow);
-	       HTM_Txt (Hie.Ins.ShrtName);			// Institution
+	    HTM_TD_Begin ("class=\"LC_INS %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       HTM_Txt (Hie.Ins.ShrtName);				// Institution
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_CTR %s\"",ClassRow);
-	       HTM_Txt (Hie.Ctr.ShrtName);			// Center
+	    HTM_TD_Begin ("class=\"LC_CTR %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       HTM_Txt (Hie.Ctr.ShrtName);				// Center
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_DEG %s\"",ClassRow);
-	       HTM_Txt (Hie.Deg.ShrtName);			// Degree
+	    HTM_TD_Begin ("class=\"LC_DEG %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       HTM_Txt (Hie.Deg.ShrtName);				// Degree
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LC_ACT %s\"",ClassRow);
-	       HTM_Txt (Act_GetActionText (Action));		// Action
+	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",
+	                  ClassRow,The_Colors[Gbl.Prefs.Theme]);
+	       HTM_Txt (Act_GetActionText (Action));			// Action
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

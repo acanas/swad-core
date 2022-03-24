@@ -1172,8 +1172,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 
 void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_ROW row;
    unsigned NumUsr;
    unsigned Rank;
@@ -1216,9 +1215,10 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	    /***** Show row *****/
 	    HTM_TR_Begin (NULL);
 	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	       HTM_TD_Begin ("class=\"%s %s RM\"",
-			     ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				     The_ClassDatSmall[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+			     ItsMe ? "DAT_SMALL_STRONG" :
+				     "DAT_SMALL",
+		             The_Colors[Gbl.Prefs.Theme],
 			     The_GetColorRows ());
 		  HTM_Long (Figure);
 	       HTM_TD_End ();
@@ -1241,8 +1241,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 void Prf_GetAndShowRankingClicksPerDay (void)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;	// Initialized to avoid warning
@@ -1286,9 +1285,10 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	    /***** Show row *****/
 	    HTM_TR_Begin (NULL);
 	       Prf_ShowUsrInRanking (&UsrDat,Rank,ItsMe);
-	       HTM_TD_Begin ("class=\"%s %s RM\"",
-			     ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				     The_ClassDatSmall[Gbl.Prefs.Theme],
+	       HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+			     ItsMe ? "DAT_SMALL_STRONG" :
+				     "DAT_SMALL",
+			     The_Colors[Gbl.Prefs.Theme],
 			     The_GetColorRows ());
 		  HTM_DoubleFewDigits (NumClicksPerDay);
 	       HTM_TD_End ();
@@ -1311,8 +1311,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsMe)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Another_user_s_profile;
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -1323,9 +1322,10 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
      };
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   HTM_TD_Begin ("class=\"%s %s RM\"",
-		 ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-		         The_ClassDatSmall[Gbl.Prefs.Theme],
+   HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+		 ItsMe ? "DAT_SMALL_STRONG" :
+		         "DAT_SMALL",
+		 The_Colors[Gbl.Prefs.Theme],
                  The_GetColorRows ());
       HTM_TxtF ("#%u",Rank);
    HTM_TD_End ();
@@ -1340,9 +1340,10 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank,bool ItsM
    HTM_TD_End ();
 
    /***** Put form to go to public profile *****/
-   HTM_TD_Begin ("class=\"RANK_USR %s %s\"",	// Limited width
-                 ItsMe ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-			 The_ClassDatSmall[Gbl.Prefs.Theme],
+   HTM_TD_Begin ("class=\"RANK_USR %s_%s %s\"",	// Limited width
+                 ItsMe ? "DAT_SMALL_STRONG" :
+			 "DAT_SMALL",
+	         The_Colors[Gbl.Prefs.Theme],
                  The_GetColorRows ());
       if (Visible)
 	{

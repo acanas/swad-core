@@ -1650,15 +1650,15 @@ static void TstPrn_WriteTxtAnsPrint (struct UsrData *UsrDat,
 
 static void TstPrn_WriteHeadUserCorrect (struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"CM DAT_SMALL_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt (Txt_User[UsrDat->Sex]);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s CM\"",The_ClassDatSmall[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"CM DAT_SMALL_%s\"",The_Colors[Gbl.Prefs.Theme]);
       HTM_Txt (Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    HTM_TD_End ();
   }

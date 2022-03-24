@@ -969,7 +969,7 @@ void Qst_WriteHeadingRowQuestionsForEdition (struct Qst_Questions *Questions)
 
 void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -999,8 +999,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Question code */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_TxtF ("%ld&nbsp;",Questions->Question.QstCod);
 	 HTM_TD_End ();
@@ -1008,9 +1008,9 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 /* Date (row[0] has the UTC date-time) */
 	 if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s %s CT\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"CT DAT_SMALL_%s %s\"",
 		       Id,
-		       The_ClassDatSmall[Gbl.Prefs.Theme],
+		       The_Colors[Gbl.Prefs.Theme],
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Questions->Question.EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -1024,8 +1024,8 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Shuffle (row[2]) */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    if (Questions->Question.Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 		Questions->Question.Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
@@ -1057,15 +1057,15 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Number of times this question has been answered */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_UnsignedLong (Questions->Question.NumHits);
 	 HTM_TD_End ();
 
 	 /* Average score */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    if (Questions->Question.NumHits)
 	       HTM_Double2Decimals (Questions->Question.Score /
@@ -1075,15 +1075,15 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Questions,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Number of times this question has been answered (not blank) */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_UnsignedLong (Questions->Question.NumHitsNotBlank);
 	 HTM_TD_End ();
 
 	 /* Average score (not blank) */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    if (Questions->Question.NumHitsNotBlank)
 	       HTM_Double2Decimals (Questions->Question.Score /
@@ -1285,7 +1285,7 @@ void Qst_PutCheckboxToSelectAllQuestions (void)
 void Qst_WriteQuestionRowForSelection (unsigned QstInd,
                                        struct Qst_Question *Question)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_TST_STR_ANSWER_TYPES[Qst_NUM_ANS_TYPES];
    static unsigned UniqueId = 0;
    char *Id;
@@ -1304,15 +1304,15 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
    	 HTM_TD_End ();
 
 	 /* Write number of question */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_TxtF ("%u&nbsp;",QstInd + 1);
 	 HTM_TD_End ();
 
 	 /* Write question code */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_TxtF ("%ld&nbsp;",Question->QstCod);
 	 HTM_TD_End ();
@@ -1320,9 +1320,9 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 /* Write the date (row[0] has the UTC date-time) */
 	 if (asprintf (&Id,"tst_date_%u",++UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"%s %s CT\">",
+	 HTM_TD_Begin ("id=\"%s\" class=\"CT DAT_SMALL_%s %s\">",
 		       Id,
-		       The_ClassDatSmall[Gbl.Prefs.Theme],
+		       The_Colors[Gbl.Prefs.Theme],
 		       The_GetColorRows ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,Question->EditTime,
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
@@ -1336,15 +1336,15 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,
 	 HTM_TD_End ();
 
 	 /* Write the question type */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_TxtF ("%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Question->Answer.Type]);
 	 HTM_TD_End ();
 
 	 /* Write if shuffle is enabled */
-	 HTM_TD_Begin ("class=\"%s %s CT\"",
-	               The_ClassDatSmall[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
 	    HTM_INPUT_CHECKBOX ("Shuffle",HTM_DONT_SUBMIT_ON_CHANGE,
 				"value=\"Y\"%s  disabled=\"disabled\"",

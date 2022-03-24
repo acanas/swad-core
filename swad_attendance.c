@@ -1694,10 +1694,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
                                           struct Att_Event *Event)
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
@@ -1764,9 +1762,10 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Write number of student in the list *****/
-      HTM_TD_Begin ("class=\"%s RT %s\"",
-		    UsrDat->Accepted ? The_ClassDatStrong[Gbl.Prefs.Theme] :
-				       The_ClassDat[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_STRONG" :
+				       "DAT",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
@@ -1782,17 +1781,19 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	}
 
       /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"%s %s LT\"",
-		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				       The_ClassDatSmall[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write student's name *****/
-      HTM_TD_Begin ("class=\"%s LT %s\"",
-		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				       The_ClassDatSmall[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
@@ -1801,9 +1802,10 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Student's comment: write form or text */
-      HTM_TD_Begin ("class=\"%s LT %s\"",
-		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				       The_ClassDatSmall[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 if (ICanEditStdComment)	// Show with form
 	   {
@@ -1823,9 +1825,10 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Teacher's comment: write form, text or nothing */
-      HTM_TD_Begin ("class=\"%s LT %s\"",
-		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				       The_ClassDatSmall[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 if (ICanEditTchComment)		// Show with form
 	   {
@@ -2959,8 +2962,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
       [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
@@ -2993,17 +2995,19 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 	}
 
       /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				       The_ClassDatSmall[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 ID_WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write user's name *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",
-		    UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-				       The_ClassDatSmall[Gbl.Prefs.Theme],
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+		    UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+				       "DAT_SMALL",
+		    The_Colors[Gbl.Prefs.Theme],
 		    The_GetColorRows ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
@@ -3127,8 +3131,6 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
   {
    extern const char *The_ClassDat[The_NUM_THEMES];
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallStrong[The_NUM_THEMES];
    extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
@@ -3173,16 +3175,18 @@ static void Att_ListAttEventsForAStd (const struct Att_Events *Events,
 	    HTM_TR_Begin (NULL);
 
 	       /***** Write user's ID ******/
-	       HTM_TD_Begin ("class=\"%s LM\"",
-			     UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-						The_ClassDatSmall[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LM %s_%s\"",
+			     UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+						"DAT_SMALL",
+			     The_Colors[Gbl.Prefs.Theme]);
 		  ID_WriteUsrIDs (UsrDat,NULL);
 	       HTM_TD_End ();
 
 	       /***** Write student's name *****/
-	       HTM_TD_Begin ("class=\"%s LM\"",
-			     UsrDat->Accepted ? The_ClassDatSmallStrong[Gbl.Prefs.Theme] :
-						The_ClassDatSmall[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"LM %s_%s\"",
+			     UsrDat->Accepted ? "DAT_SMALL_STRONG" :
+						"DAT_SMALL",
+			     The_Colors[Gbl.Prefs.Theme]);
 		  HTM_Txt (UsrDat->Surname1);
 		  if (UsrDat->Surname2[0])
 		     HTM_TxtF ("&nbsp;%s",UsrDat->Surname2);

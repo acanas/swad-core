@@ -1578,7 +1578,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    extern const char *The_ClassDatStrong[The_NUM_THEMES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
@@ -1726,8 +1726,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
 		      TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 		    {
-		     HTM_SPAN_Begin ("class=\"%s\"",
-		                     The_ClassDatSmall[Gbl.Prefs.Theme]);
+		     HTM_SPAN_Begin ("class=\"DAT_SMALL_%s\"",
+		                     The_Colors[Gbl.Prefs.Theme]);
 			HTM_NBSP ();
 			HTM_TxtF ("(%s)",
 			          Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);

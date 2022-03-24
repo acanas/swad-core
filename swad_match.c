@@ -2720,8 +2720,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 
 static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
   {
-   extern const char *The_ClassDatSmallGreen[The_NUM_THEMES];
-   extern const char *The_ClassDatSmallRed[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_my_answer;
    extern const char *Txt_MATCH_QUESTION_Answered;
    extern const char *Txt_MATCH_QUESTION_Unanswered;
@@ -2739,7 +2738,8 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
 	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-	    if (asprintf (&Class,"BT_LINK %s",The_ClassDatSmallGreen[Gbl.Prefs.Theme]) < 0)	// Background
+	    if (asprintf (&Class,"BT_LINK DAT_SMALL_GREEN_%s",
+	                  The_Colors[Gbl.Prefs.Theme]) < 0)	// Background
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_OnMouseDown_Begin (Txt_View_my_answer,Class);
 	    free (Class);
@@ -2752,8 +2752,9 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,bool Answered)
 	}
       else
 	{
-	 HTM_DIV_Begin ("class=\"%s\"",Answered ? The_ClassDatSmallGreen[Gbl.Prefs.Theme] :
-						  The_ClassDatSmallRed[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"%s_%s\"",Answered ? "DAT_SMALL_GREEN" :
+		                                     "DAT_SMALL_RED",
+			The_Colors[Gbl.Prefs.Theme]);
 	    HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
 		      Answered ? "fas fa-check-circle" :
 				 "fas fa-exclamation-circle",

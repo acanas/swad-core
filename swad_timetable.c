@@ -1495,7 +1495,7 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
                                        Tmt_IntervalType_t IntervalType,Tmt_ClassType_t ClassType,
                                        unsigned DurationNumIntervals,const char *Info)
   {
-   extern const char *The_ClassDatSmall[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_TIMETABLE_CLASS_TYPES[Tmt_NUM_CLASS_TYPES];
@@ -1660,9 +1660,9 @@ static void Tmt_TimeTableDrawCellEdit (const struct Tmt_Timetable *Timetable,
 	   {
 	    /***** Info *****/
 	    HTM_BR ();
-	    HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"%s\"",
+	    HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL_%s\"",
 			     CellStr,
-			     The_ClassDatSmall[Gbl.Prefs.Theme]);
+			     The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_Info);
 	    HTM_LABEL_End ();
 	    HTM_INPUT_TEXT ("TTInf",Tmt_MAX_CHARS_INFO,Info,
