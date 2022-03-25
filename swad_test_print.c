@@ -1857,8 +1857,7 @@ static void TstPrn_ShowHeaderPrints (Usr_MeOrOther_t MeOrOther)
 
 static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    unsigned NumPrints;
@@ -1900,8 +1899,8 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 
 	    /* Get print data */
 	    TstPrn_GetPrintDataByPrnCod (&Print);
-	    ClassDat = Print.AllowTeachers ? The_ClassDat[Gbl.Prefs.Theme] :
-					     The_ClassDatLight[Gbl.Prefs.Theme];
+	    ClassDat = Print.AllowTeachers ? "DAT" :
+					     "DAT_LIGHT";
 
 	    /* Get if I can see print result and score */
 	    TstRes_CheckIfICanSeePrintResult (&Print,UsrDat->UsrCod,&ICanView);
@@ -1917,8 +1916,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	      {
 	       if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",
-			     Id,ClassDat,The_GetColorRows ());
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+			     Id,ClassDat,The_Colors[Gbl.Prefs.Theme],
+			     The_GetColorRows ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						true,true,false,0x7);
@@ -1935,8 +1935,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	      }
 
 	    /* Write number of questions */
-	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	                  ClassDat,The_Colors[Gbl.Prefs.Theme],
+	                  The_GetColorRows ());
 	       if (ICanView.Result)
 		  HTM_Unsigned (Print.NumQsts.All);
 	       else
@@ -1944,8 +1945,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write number of non-blank answers */
-	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	                  ClassDat,The_Colors[Gbl.Prefs.Theme],
+	                  The_GetColorRows ());
 	       if (ICanView.Result)
 		 {
 		  if (Print.NumQsts.NotBlank)
@@ -1958,8 +1960,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write number of blank answers */
-	    HTM_TD_Begin ("class=\"%s RT %s\"",
-	                  ClassDat,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+	                  ClassDat,The_Colors[Gbl.Prefs.Theme],
+	                  The_GetColorRows ());
 	       if (ICanView.Result)
 		 {
 		  NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
@@ -1973,8 +1976,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write score */
-	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	                  ClassDat,The_Colors[Gbl.Prefs.Theme],
+	                  The_GetColorRows ());
 	       if (ICanView.Score)
 		 {
 		  HTM_Double2Decimals (Print.Score);
@@ -1986,8 +1990,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write average score per question */
-	    HTM_TD_Begin ("class=\"%s RT %s\"",
-	                  ClassDat,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
+	                  ClassDat,The_Colors[Gbl.Prefs.Theme],
+	                  The_GetColorRows ());
 	       if (ICanView.Score)
 		  HTM_Double2Decimals (Print.NumQsts.All ? Print.Score /
 							   (double) Print.NumQsts.All :
@@ -1997,8 +2002,9 @@ static void TstPrn_ShowUsrPrints (struct UsrData *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write grade */
-	    HTM_TD_Begin ("class=\"%s RT LINE_LEFT %s\"",
-	                  ClassDat,The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
+	                  ClassDat,The_Colors[Gbl.Prefs.Theme],
+	                  The_GetColorRows ());
 	       if (ICanView.Score)
 		  TstPrn_ComputeAndShowGrade (Print.NumQsts.All,Print.Score,Tst_SCORE_MAX);
 	       else

@@ -317,7 +317,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,
                                     bool UsrFollowsMe,bool IFollowUsr)
   {
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_FOLLOWS_YOU;
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
@@ -332,7 +332,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
 
 	    /* User follows me? */
-	    HTM_DIV_Begin ("id=\"follows_me\" class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
+	    HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT_%s\"",
+	                   The_Colors[Gbl.Prefs.Theme]);
 	       if (UsrFollowsMe)
 		  HTM_Txt (Txt_FOLLOWS_YOU);
 	    HTM_DIV_End ();

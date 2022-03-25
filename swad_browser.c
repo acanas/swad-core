@@ -6912,7 +6912,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
   {
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Upload_files;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
@@ -6946,7 +6946,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 	 Brw_PutImplicitParamsFileBrowser (&Gbl.FileBrowser.FilFolLnk);
 
 	 HTM_DIV_Begin ("class=\"dz-message\"");
-	    HTM_SPAN_Begin ("class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
+	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",
+	                    The_Colors[Gbl.Prefs.Theme]);
 	       HTM_Txt (Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
 	    HTM_SPAN_End ();
 	 HTM_DIV_End ();

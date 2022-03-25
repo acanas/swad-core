@@ -394,8 +394,7 @@ void Asg_PrintOneAssignment (void)
 static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
                                    long AsgCod,bool PrintView)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -472,11 +471,11 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
 
       /* Assignment folder */
       if (PrintView)
-	 HTM_TD_Begin ("class=\"%s LT\"",
-	               The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",
+	               The_Colors[Gbl.Prefs.Theme]);
       else
-	 HTM_TD_Begin ("class=\"%s LT %s\"",
-	               The_ClassDat[Gbl.Prefs.Theme],
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
+	               The_Colors[Gbl.Prefs.Theme],
 	               The_GetColorRows ());
       if (Asg.SendWork == Asg_SEND_WORK)
 	 Asg_WriteAssignmentFolder (&Asg,PrintView);
@@ -508,8 +507,10 @@ static void Asg_ShowOneAssignment (struct Asg_Assignments *Assignments,
       if (Gbl.Crs.Grps.NumGrps)
 	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
-      HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
-						     The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+                     Asg.Hidden ? "DAT_LIGHT" :
+				  "DAT",
+		     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
 

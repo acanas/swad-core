@@ -329,9 +329,7 @@ static void Ctr_PutIconToEditCenters (void)
 
 static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    struct Plc_Place Plc;
    const char *TxtClassNormal;
@@ -345,12 +343,12 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal =
-      TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
+      TxtClassStrong = "DAT_LIGHT";
      }
    else
      {
-      TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "BG_HIGHLIGHT" :
                                                          The_GetColorRows ();
@@ -358,37 +356,44 @@ static void Ctr_ListOneCenterForSeeing (struct Ctr_Center *Ctr,unsigned NumCtr)
    HTM_TR_Begin (NULL);
 
       /***** Number of center in this list *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumCtr);
       HTM_TD_End ();
 
       /***** Center logo and name *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+                    TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ctr_GetCachedNumUsrsWhoClaimToBelongToCtr (Ctr));
       HTM_TD_End ();
 
       /***** Place *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInCtr (Ctr->CtrCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInCtr (Ctr->CtrCod));
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_CTR,Ctr->CtrCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |

@@ -229,7 +229,7 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
   {
    extern const char *Hlp_ANALYTICS_Report;
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
@@ -255,7 +255,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	 HTM_A_End ();
       HTM_DIV_End ();
 
-      HTM_DIV_Begin ("class=\"%s\"",The_ClassDatLight[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"DAT_LIGHT_%s\"",The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
       HTM_DIV_End ();
 

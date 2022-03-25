@@ -796,8 +796,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
   {
    extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
    extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -884,9 +883,10 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 
       /* Text of the event */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	 HTM_DIV_Begin ("class=\"PAR %s\"",
-	                AgdEvent.Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
-					  The_ClassDat[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+	                AgdEvent.Hidden ? "DAT_LIGHT" :
+	                	          "DAT",
+	                The_Colors[Gbl.Prefs.Theme]);
 	    Agd_DB_GetEventTxt (&AgdEvent,Txt);
 	    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML

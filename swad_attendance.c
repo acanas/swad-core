@@ -447,8 +447,7 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
                                  struct Att_Event *Event,
                                  bool ShowOnlyThisAttEventComplete)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_event;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -566,8 +565,10 @@ static void Att_ShowOneAttEvent (struct Att_Events *Events,
       if (Gbl.Crs.Grps.NumGrps)
 	 Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Event);
 
-      HTM_DIV_Begin ("class=\"%s\"",Event->Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
-						    The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"%s_%s\"",
+                     Event->Hidden ? "DAT_LIGHT" :
+				     "DAT",
+		     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Description);
       HTM_DIV_End ();
 

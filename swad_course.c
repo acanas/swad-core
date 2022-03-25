@@ -921,9 +921,7 @@ static void Crs_PutIconToEditCourses (void)
 
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -948,12 +946,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 if (Crs->Status & Hie_STATUS_BIT_PENDING)
 	   {
 	    TxtClassNormal =
-	    TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
+	    TxtClassStrong = "DAT_LIGHT";
 	   }
 	 else
 	   {
-	    TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-	    TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
+	    TxtClassNormal = "DAT";
+	    TxtClassStrong = "DAT_STRONG";
 	   }
 
 	 /* Check if this course is one of my courses */
@@ -971,8 +969,8 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			       NumUsrs[Rol_TCH];
 
 	    /* Put green tip if course has users */
-	    HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
-			  TxtClassNormal,BgColor,
+	    HTM_TD_Begin ("class=\"CM %s_%s %s\" title=\"%s\"",
+			  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor,
 			  NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					     Txt_COURSE_Without_users);
 	       HTM_Txt (NumUsrs[Rol_UNK] ? "&check;" :
@@ -980,17 +978,20 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
+	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
+	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	       HTM_Txt (Crs->InstitutionalCrsCod);
 	    HTM_TD_End ();
 
 	    /* Course year */
-	    HTM_TD_Begin ("class=\"%s CM %s\"",TxtClassNormal,BgColor);
+	    HTM_TD_Begin ("class=\"CM %s_%s %s\"",
+	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Year]);
 	    HTM_TD_End ();
 
 	    /* Course full name */
-	    HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
+	    HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+	                  TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  Crs_PutParamCrsCod (Crs->CrsCod);
 		  HTM_BUTTON_OnSubmit_Begin (Str_BuildGoToTitle (Crs->FullName),
@@ -1002,13 +1003,15 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Number of teachers in this course */
-	    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	       HTM_Unsigned (NumUsrs[Rol_TCH] +
 			     NumUsrs[Rol_NET]);
 	    HTM_TD_End ();
 
 	    /* Number of students in this course */
-	    HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	    HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+	                  TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	       HTM_Unsigned (NumUsrs[Rol_STD]);
 	    HTM_TD_End ();
 

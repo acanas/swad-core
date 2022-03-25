@@ -371,9 +371,7 @@ static void Ins_PutIconToEditInstitutions (void)
 
 static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned NumIns)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
@@ -382,12 +380,12 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
    if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal =
-      TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
+      TxtClassStrong = "DAT_LIGHT";
      }
    else
      {
-      TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "BG_HIGHLIGHT" :
                                                          The_GetColorRows ();
@@ -395,43 +393,51 @@ static void Ins_ListOneInstitutionForSeeing (struct Ins_Instit *Ins,unsigned Num
    HTM_TR_Begin (NULL);
 
       /***** Number of institution in this list *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumIns);
       HTM_TD_End ();
 
       /***** Institution logo and name *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+                    TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CM");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ins_GetCachedNumUsrsWhoClaimToBelongToIns (Ins));
       HTM_TD_End ();
 
       /***** Other stats *****/
       /* Number of centers in this institution */
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Ctr_GetCachedNumCtrsInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Deg_GetCachedNumDegsInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Crs_GetCachedNumCrssInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of departments in this institution */
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->InsCod));
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_INS,Ins->InsCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |

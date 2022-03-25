@@ -794,9 +794,7 @@ static void Deg_PutIconToEditDegrees (void)
 
 static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatStrong[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
@@ -814,12 +812,12 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    if (Deg->Status & Hie_STATUS_BIT_PENDING)
      {
       TxtClassNormal =
-      TxtClassStrong = The_ClassDatLight[Gbl.Prefs.Theme];
+      TxtClassStrong = "DAT_LIGHT";
      }
    else
      {
-      TxtClassNormal = The_ClassDat[Gbl.Prefs.Theme];
-      TxtClassStrong = The_ClassDatStrong[Gbl.Prefs.Theme];
+      TxtClassNormal = "DAT";
+      TxtClassStrong = "DAT_STRONG";
      }
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "BG_HIGHLIGHT" :
                                                          The_GetColorRows ();
@@ -828,8 +826,8 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
    HTM_TR_Begin (NULL);
 
       /***** Put tip if degree has courses *****/
-      HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
-		    TxtClassNormal,BgColor,
+      HTM_TD_Begin ("class=\"CM %s_%s %s\" title=\"%s\"",
+		    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor,
 		    NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
 	 HTM_Txt (NumCrss ? "&check;" :
@@ -837,27 +835,32 @@ static void Deg_ListOneDegreeForSeeing (struct Deg_Degree *Deg,unsigned NumDeg)
       HTM_TD_End ();
 
       /***** Number of degree in this list *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumDeg);
       HTM_TD_End ();
 
       /***** Degree logo and name *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+                    TxtClassStrong,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM");
       HTM_TD_End ();
 
       /***** Type of degree *****/
-      HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Txt (DegTyp.DegTypName);
       HTM_TD_End ();
 
       /***** Current number of courses in this degree *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (NumCrss);
       HTM_TD_End ();
 
       /***** Number of users in courses of this degree *****/
-      HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
+                    TxtClassNormal,The_Colors[Gbl.Prefs.Theme],BgColor);
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (HieLvl_DEG,Deg->DegCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |

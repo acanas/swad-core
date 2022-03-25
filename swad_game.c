@@ -515,8 +515,7 @@ void Gam_ShowOnlyOneGameEnd (void)
 static void Gam_ShowOneGame (struct Gam_Games *Games,
                              struct Gam_Game *Game,bool ShowOnlyThisGame)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_View_game;
    extern const char *Txt_Number_of_questions;
    extern const char *Txt_Maximum_grade;
@@ -673,8 +672,10 @@ static void Gam_ShowOneGame (struct Gam_Games *Games,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR %s\"",Game->Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
-						       The_ClassDat[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+                     Game->Hidden ? "DAT_LIGHT" :
+				    "DAT",
+		     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();

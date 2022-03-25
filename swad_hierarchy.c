@@ -754,9 +754,11 @@ void Hie_WriteStatusCell (Hie_Status_t Status,
 			  const char *Class,const char *BgColor,
 			  const char *Txt[Hie_NUM_STATUS_TXT])
   {
+   extern const char *The_Colors[The_NUM_THEMES];
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
 
-   HTM_TD_Begin ("class=\"%s LM %s\"",Class,BgColor);
+   HTM_TD_Begin ("class=\"LM %s_%s %s\"",
+                 Class,The_Colors[Gbl.Prefs.Theme],BgColor);
       if (StatusTxt != Hie_STATUS_ACTIVE) // If active ==> do not show anything
 	 HTM_Txt (Txt[StatusTxt]);
    HTM_TD_End ();

@@ -424,8 +424,7 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
                                long SvyCod,bool ShowOnlyThisSvyComplete)
   {
    extern const char *Hlp_ASSESSMENT_Surveys;
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *Txt_Survey;
    extern const char *Txt_View_survey;
    extern const char *Txt_Number_of_questions;
@@ -675,8 +674,10 @@ static void Svy_ShowOneSurvey (struct Svy_Surveys *Surveys,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? The_ClassDat[Gbl.Prefs.Theme] :
-							     The_ClassDatLight[Gbl.Prefs.Theme]);
+      HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+                     Svy.Status.Visible ? "DAT" :
+					  "DAT_LIGHT",
+		     The_Colors[Gbl.Prefs.Theme]);
 	 HTM_Txt (Txt);
       HTM_DIV_End ();
       HTM_TD_End ();

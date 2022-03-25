@@ -402,8 +402,7 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
   {
-   extern const char *The_ClassDat[The_NUM_THEMES];
-   extern const char *The_ClassDatLight[The_NUM_THEMES];
+   extern const char *The_Colors[The_NUM_THEMES];
    extern const char *The_ClassInput[The_NUM_THEMES];
    unsigned NumBan;
    struct Ban_Banner *Ban;
@@ -449,9 +448,10 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 	    HTM_TD_End ();
 
 	    /* Banner code */
-	    HTM_TD_Begin ("class=\"%s RM\"",
-			  Ban->Hidden ? The_ClassDatLight[Gbl.Prefs.Theme] :
-					The_ClassDat[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"RM %s_%s\"",
+			  Ban->Hidden ? "DAT_LIGHT" :
+					"DAT",
+			  The_Colors[Gbl.Prefs.Theme]);
 	       HTM_ARTICLE_Begin (Anchor);
 		  HTM_Long (Ban->BanCod);
 	       HTM_ARTICLE_End ();
